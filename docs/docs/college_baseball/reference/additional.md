@@ -1,10 +1,10 @@
 ---
-title: COLLEGE_BASEBALL — additional Python functions
+title: College baseball — additional Python functions
 sidebar_label: Additional functions
-description: "COLLEGE_BASEBALL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "College baseball — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# COLLEGE_BASEBALL — additional Python functions
+# College baseball — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.baseball.college_baseball` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -31,10 +31,10 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `base_state` | character | 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third. |
-| `outs` | integer | Outs at the start of the base-out state (0-2). |
-| `run_expectancy` | double | Empirical mean runs scored from this state through the end of the half-inning (RE24). |
-| `n` | integer | Number of plate appearances observed starting in this base-out state. |
+| `base_state` | String | 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third. |
+| `outs` | Int64 | Outs at the start of the base-out state (0-2). |
+| `run_expectancy` | Float64 | Empirical mean runs scored from this state through the end of the half-inning (RE24). |
+| `n` | Int64 | Number of plate appearances observed starting in this base-out state. |
 
 **Example**
 
@@ -62,16 +62,16 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `inning` | integer |  |
-| `half` | character |  |
-| `base_state` | character |  |
-| `outs` | integer |  |
-| `runs_before` | integer |  |
-| `runs_after` | integer |  |
-| `batting_team_id` | character |  |
-| `play_seq` | integer |  |
-| `score_diff` | integer |  |
+| `game_id` | String |  |
+| `inning` | Int64 |  |
+| `half` | String |  |
+| `base_state` | String |  |
+| `outs` | Int64 |  |
+| `runs_before` | Int64 |  |
+| `runs_after` | Int64 |  |
+| `batting_team_id` | String |  |
+| `play_seq` | Int64 |  |
+| `score_diff` | Int64 |  |
 
 **Example**
 
@@ -101,12 +101,12 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id for the game (join key to the schedule). |
-| `play_seq` | integer | Game-global sequential plate-appearance order. |
-| `re_before` | double | RE24 of the base-out state before the PA. |
-| `re_after` | double | RE24 of the base-out state after the PA. |
-| `run_value` | double | re_after minus re_before, plus runs scored on the play. |
-| `wpa` | double | Home-perspective win-probability added. |
+| `game_id` | String | ESPN event id for the game (join key to the schedule). |
+| `play_seq` | Int64 | Game-global sequential plate-appearance order. |
+| `re_before` | Float64 | RE24 of the base-out state before the PA. |
+| `re_after` | Float64 | RE24 of the base-out state after the PA. |
+| `run_value` | Float64 | re_after minus re_before, plus runs scored on the play. |
+| `wpa` | Float64 | Home-perspective win-probability added. |
 
 **Example**
 
@@ -143,36 +143,36 @@ One row per input play with every text-derivable `PBP_SCHEMA` column populated (
 
 | col_name | type | description |
 |---|---|---|
-| `contest_id` | character |  |
-| `inning` | integer |  |
-| `inning_top_bot` | character |  |
-| `batting` | character |  |
-| `fielding` | character |  |
-| `play_number` | integer |  |
-| `score_away` | integer |  |
-| `score_home` | integer |  |
-| `batter` | character | MLBAM player id of the batter. |
-| `play_type` | character |  |
-| `hit_trajectory` | character |  |
-| `fielded_position` | character |  |
-| `is_hit` | logical |  |
-| `is_out` | logical |  |
-| `strikeout_type` | character |  |
-| `is_sacrifice` | logical |  |
-| `sac_type` | character |  |
-| `is_double_play` | logical |  |
-| `rbi` | integer |  |
-| `count_balls` | integer |  |
-| `count_strikes` | integer |  |
-| `pitch_sequence` | character |  |
-| `error_position` | character |  |
-| `unearned` | logical |  |
-| `runs_scored` | integer |  |
-| `scoring_runners` | character |  |
-| `runners_advanced` | character |  |
-| `outs_on_play` | integer |  |
-| `is_scoring_play` | logical | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
-| `description` | character |  |
+| `contest_id` | String |  |
+| `inning` | Int64 |  |
+| `inning_top_bot` | String |  |
+| `batting` | String |  |
+| `fielding` | String |  |
+| `play_number` | Int64 |  |
+| `score_away` | Int64 |  |
+| `score_home` | Int64 |  |
+| `batter` | String | MLBAM player id of the batter. |
+| `play_type` | String |  |
+| `hit_trajectory` | String |  |
+| `fielded_position` | String |  |
+| `is_hit` | Boolean |  |
+| `is_out` | Boolean |  |
+| `strikeout_type` | String |  |
+| `is_sacrifice` | Boolean |  |
+| `sac_type` | String |  |
+| `is_double_play` | Boolean |  |
+| `rbi` | Int64 |  |
+| `count_balls` | Int64 |  |
+| `count_strikes` | Int64 |  |
+| `pitch_sequence` | String |  |
+| `error_position` | String |  |
+| `unearned` | Boolean |  |
+| `runs_scored` | Int64 |  |
+| `scoring_runners` | String |  |
+| `runners_advanced` | String |  |
+| `outs_on_play` | Int64 |  |
+| `is_scoring_play` | Boolean | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
+| `description` | String |  |
 
 **Example**
 

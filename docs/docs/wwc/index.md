@@ -1,9 +1,9 @@
 ---
-title: WWC
-sidebar_label: WWC
-description: "sdv-py WWC: endpoint references, dataset loaders and parsers for WWC in the SportsDataverse Python package."
+title: FIFA Women's World Cup
+sidebar_label: FIFA Women's World Cup
+description: "sdv-py FIFA Women's World Cup: endpoint references, dataset loaders and parsers for FIFA Women's World Cup in the SportsDataverse Python package."
 ---
-# WWC (`sportsdataverse.soccer.wwc`)
+# FIFA Women's World Cup (`sportsdataverse.soccer.wwc`)
 
 ## Data sources
 

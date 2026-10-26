@@ -26,11 +26,11 @@ Polars dataframe of valid game dates.
 
 | col_name | type | description |
 |---|---|---|
-| `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
-| `year` | integer | Season (4-digit year). |
-| `month` | integer | Month of the game day, as an integer (1-12). |
-| `day` | integer | Day of the month of the game day, as an integer. |
-| `season` | integer | Season year. |
+| `event_date` | String | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
+| `year` | Int64 | Season (4-digit year). |
+| `month` | Int64 | Month of the game day, as an integer (1-12). |
+| `day` | Int64 | Day of the month of the game day, as an integer. |
+| `season` | Int64 | Season year. |
 
 **Example**
 
@@ -61,17 +61,17 @@ One row per (game × team × athlete) with columns `game_id, team_id, home_away,
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN game (event) id the roster belongs to. |
-| `team_id` | integer | ESPN team id of the competitor whose roster the row comes from. |
-| `home_away` | character | Whether the row's team is the home or the away side of the game ("home" / "away"). |
-| `athlete_id` | integer | ESPN athlete id, from the roster entry's playerId (else the id in its athlete $ref). |
-| `athlete_full_name` | character | The athlete's full name, from his ESPN athlete record (the roster entry carries only a short name). |
-| `athlete_jersey` | character | The athlete's jersey number as text, from his ESPN athlete record. |
-| `athlete_position_id` | integer | ESPN position id of the athlete's listed position on his athlete record, i.e. his season position, not necessarily where he played in this game (see game_position_id). |
-| `athlete_position_abbreviation` | character | Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS. |
-| `athlete_position_name` | character | Name of the athlete's listed (season) position on his athlete record, e.g. Right Field. |
-| `game_position_id` | integer | ESPN position id the player entered this game at, from the roster entry's own position $ref (e.g. 8 for a center fielder; 11 is a pinch hitter and 12 a pinch runner). It is the entry position only, not any later move in the game; differs from athlete_position_id when he played out of his listed position. |
-| `athlete_starter` | logical | Whether the athlete started this game, from the roster entry. |
+| `game_id` | Int64 | ESPN game (event) id the roster belongs to. |
+| `team_id` | Int64 | ESPN team id of the competitor whose roster the row comes from. |
+| `home_away` | String | Whether the row's team is the home or the away side of the game ("home" / "away"). |
+| `athlete_id` | Int64 | ESPN athlete id, from the roster entry's playerId (else the id in its athlete $ref). |
+| `athlete_full_name` | String | The athlete's full name, from his ESPN athlete record (the roster entry carries only a short name). |
+| `athlete_jersey` | String | The athlete's jersey number as text, from his ESPN athlete record. |
+| `athlete_position_id` | Int64 | ESPN position id of the athlete's listed position on his athlete record, i.e. his season position, not necessarily where he played in this game (see game_position_id). |
+| `athlete_position_abbreviation` | String | Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS. |
+| `athlete_position_name` | String | Name of the athlete's listed (season) position on his athlete record, e.g. Right Field. |
+| `game_position_id` | Int64 | ESPN position id the player entered this game at, from the roster entry's own position $ref (e.g. 8 for a center fielder; 11 is a pinch hitter and 12 a pinch runner). It is the entry position only, not any later move in the game; differs from athlete_position_id when he played out of his listed position. |
+| `athlete_starter` | Boolean | Whether the athlete started this game, from the roster entry. |
 
 **Raises**
 
@@ -152,141 +152,141 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `season_type` | character | Season-type id. |
-| `total` | logical | Total. |
-| `athlete_id` | integer | Unique ESPN athlete identifier. |
-| `athlete_uid` | character | Athlete uid. |
-| `athlete_guid` | character | Athlete guid. |
-| `athlete_type` | character | Athlete type. |
-| `first_name` | character | Player first name. |
-| `last_name` | character | Player last name. |
-| `full_name` | character | Player's full name. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short display name. |
-| `weight` | double | Weight in pounds. |
-| `display_weight` | character | Display weight. |
-| `height` | double | Height (feet and inches). |
-| `display_height` | character | Display height. |
-| `age` | integer | Player age (in years). |
-| `date_of_birth` | character | Date of birth. |
-| `jersey` | character | Jersey number worn by the player. |
-| `slug` | character | URL-safe identifier. |
-| `active` | logical | Whether the player is currently active. |
-| `position_id` | integer | Unique position identifier. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_abbreviation` | character | Position abbreviation. |
-| `college_name` | character |  |
-| `status_id` | integer | Status id. |
-| `status_name` | character | Game status (e.g. 'STATUS_FINAL'). |
-| `batting_games_played` | double | Team batting: batting games played. |
-| `batting_team_games_played` | double | Team batting: batting team games played. |
-| `batting_hit_by_pitch` | double | Team batting: batting hit by pitch. |
-| `batting_ground_balls` | double | Team batting: batting ground balls. |
-| `batting_strikeouts` | double | Team batting: batting strikeouts. |
-| `batting_rb_is` | double | Team batting: batting rb is. |
-| `batting_sac_hits` | double | Team batting: batting sac hits. |
-| `batting_hits` | double | Team batting: batting hits. |
-| `batting_stolen_bases` | double | Team batting: batting stolen bases. |
-| `batting_walks` | double | Team batting: batting walks. |
-| `batting_catcher_interference` | double | Team batting: batting catcher interference. |
-| `batting_runs` | double | Team batting: batting runs. |
-| `batting_gid_ps` | double | Team batting: batting gid ps. |
-| `batting_sac_flies` | double | Team batting: batting sac flies. |
-| `batting_at_bats` | double | Team batting: batting at bats. |
-| `batting_home_runs` | double | Team batting: batting home runs. |
-| `batting_grand_slam_home_runs` | double | Team batting: batting grand slam home runs. |
-| `batting_runners_left_on_base` | double | Team batting: batting runners left on base. |
-| `batting_triples` | double | Team batting: batting triples. |
-| `batting_game_winning_rb_is` | double | Team batting: batting game winning rb is. |
-| `batting_intentional_walks` | double | Team batting: batting intentional walks. |
-| `batting_doubles` | double | Team batting: batting doubles. |
-| `batting_fly_balls` | double | Team batting: batting fly balls. |
-| `batting_caught_stealing` | double | Team batting: batting caught stealing. |
-| `batting_pitches` | double | Team batting: batting pitches. |
-| `batting_games_started` | double | Team batting: batting games started. |
-| `batting_pinch_at_bats` | double | Team batting: batting pinch at bats. |
-| `batting_pinch_hits` | double | Team batting: batting pinch hits. |
-| `batting_player_rating` | double | Team batting: batting player rating. |
-| `batting_is_qualified` | double | Team batting: batting is qualified. |
-| `batting_is_qualified_steals` | double | Team batting: batting is qualified steals. |
-| `batting_total_bases` | double | Team batting: batting total bases. |
-| `batting_plate_appearances` | double | Team batting: batting plate appearances. |
-| `batting_projected_home_runs` | double | Team batting: batting projected home runs. |
-| `batting_extra_base_hits` | double | Team batting: batting extra base hits. |
-| `batting_runs_created` | double | Team batting: batting runs created. |
-| `batting_avg` | double | Team batting: batting average. |
-| `batting_pinch_avg` | double | Team batting: batting pinch avg. |
-| `batting_slug_avg` | double | Team batting: batting slug avg. |
-| `batting_secondary_avg` | double | Team batting: batting secondary avg. |
-| `batting_on_base_pct` | double | Team batting: batting on base pct. |
-| `batting_ops` | double | Team batting: batting ops. |
-| `batting_ground_to_fly_ratio` | double | Team batting: batting ground to fly ratio. |
-| `batting_runs_created_per27_outs` | double | Bill James Runs Created per 27 outs, estimating how many runs a lineup of this batter would score per game. |
-| `batting_batter_rating` | double | Team batting: batting batter rating. |
-| `batting_at_bats_per_home_run` | double | Team batting: batting at bats per home run. |
-| `batting_stolen_base_pct` | double | Team batting: batting stolen base pct. |
-| `batting_pitches_per_plate_appearance` | double | Team batting: batting pitches per plate appearance. |
-| `batting_isolated_power` | double | Team batting: batting isolated power. |
-| `batting_walk_to_strikeout_ratio` | double | Team batting: batting walk to strikeout ratio. |
-| `batting_walks_per_plate_appearance` | double | Team batting: batting walks per plate appearance. |
-| `batting_secondary_avg_minus_ba` | double | Team batting: batting secondary avg minus ba. |
-| `batting_runs_produced` | double | Team batting: batting runs produced. |
-| `batting_runs_ratio` | double | Team batting: batting runs ratio. |
-| `batting_patience_ratio` | double | Ratio of walks to strikeouts, measuring a batter's plate discipline and ability to work counts. |
-| `batting_bipa` | double | Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact. |
-| `batting_mlb_rating` | double | ESPN's composite MLB rating for the batter reflecting overall offensive performance. |
-| `batting_off_warbr` | double | Offensive Wins Above Replacement (Baseball Reference methodology) attributable to the batter's hitting contributions. |
-| `batting_warbr` | double | Total Wins Above Replacement (Baseball Reference methodology) for the batter including offense and baserunning. |
-| `fielding_games_played` | double | Number of games in which the player appeared defensively at their position. |
-| `fielding_team_games_played` | double | Number of games the player's team played while the player was on the active roster. |
-| `fielding_double_plays` | double | Number of double plays the fielder participated in during the season. |
-| `fielding_opportunities` | double | Total fielding opportunities defined as putouts plus assists plus errors for the player. |
-| `fielding_errors` | double | Number of fielding errors charged to the player during the season. |
-| `fielding_passed_balls` | double | Number of pitches ruled as passed balls charged to the catcher during the season. |
-| `fielding_assists` | double | Number of assists recorded by the fielder when a thrown ball contributes to an out. |
-| `fielding_outfield_assists` | double | Number of outfield assists, recorded when an outfielder throws out a runner. |
-| `fielding_pickoffs` | double | Number of baserunners picked off by pitchers while this catcher was behind the plate or this fielder was at their position. |
-| `fielding_putouts` | double | Number of putouts recorded by the fielder where they made the final play to retire a batter or runner. |
-| `fielding_outs_on_field` | double | Total outs recorded across all innings the player was present on the field. |
-| `fielding_triple_plays` | double | Number of triple plays in which the fielder participated during the season. |
-| `fielding_balls_in_zone` | double | Number of batted balls that entered the fielder's defined defensive zone. |
-| `fielding_extra_bases` | double | Extra bases allowed by the outfielder due to errors or misplays on balls hit into their zone. |
-| `fielding_outs_made` | double | Total outs the fielder was directly responsible for recording during the season. |
-| `fielding_hits` | double | Number of hits recorded while this fielder was positioned, relevant for zone-rating calculations. |
-| `fielding_total_bases` | double | Total bases allowed by the outfielder on balls hit into their zone, used in advanced defensive metrics. |
-| `fielding_games_started` | double | Number of games the player started at their primary defensive position. |
-| `fielding_catcher_third_innings_played` | double | Total one-third innings played behind the plate by the catcher, expressed in thirds. |
-| `fielding_catcher_caught_stealing` | double | Number of opposing baserunners thrown out attempting to steal a base by this catcher. |
-| `fielding_catcher_stolen_bases_allowed` | double | Number of successful stolen bases allowed by the catcher during the season. |
-| `fielding_catcher_earned_runs` | double | Earned runs allowed while this catcher was behind the plate, used in catcher ERA calculations. |
-| `fielding_is_qualified` | double | Indicator flag for whether the player meets minimum innings requirements to qualify for fielding rate stats. |
-| `fielding_is_qualified_catcher` | double | Indicator flag for whether the catcher meets the minimum innings threshold to qualify for catcher-specific rate stats. |
-| `fielding_is_qualified_pitcher` | double | Indicator flag for whether the pitcher qualifies for pitcher fielding rate statistics. |
-| `fielding_successful_chances` | double | Total successful fielding chances defined as putouts plus assists (errors excluded). |
-| `fielding_total_chances` | double | Total fielding chances (putouts + assists + errors) offered to the player during the season. |
-| `fielding_full_innings_played` | double | Number of complete innings (three outs per side) the player appeared in the field. |
-| `fielding_part_innings_played` | double | Number of fractional (partial) innings the player appeared in the field, expressed as a count of thirds. |
-| `fielding_fielding_pct` | double | Fielding percentage calculated as successful chances divided by total chances (putouts + assists + errors). |
-| `fielding_range_factor` | double | Range factor per nine innings (putouts + assists) / innings * 9, measuring a fielder's defensive range. |
-| `fielding_zone_rating` | double | Percentage of batted balls in the fielder's defined zone that were successfully converted into outs. |
-| `fielding_catcher_caught_stealing_pct` | double | Percentage of opposing stolen base attempts that resulted in the catcher throwing out the runner. |
-| `fielding_catcher_era` | double | ERA of pitchers while this specific catcher was behind the plate over the season. |
-| `fielding_def_warbr` | double | Defensive Wins Above Replacement (Baseball Reference methodology) attributable to the player's fielding. |
-| `team_id` | integer | Unique ESPN team identifier. |
-| `team_uid` | character | ESPN universal team identifier (UID). |
-| `team_guid` | character | ESPN team GUID. |
-| `team_slug` | character | URL-safe team identifier. |
-| `team_location` | character | Team city / location. |
-| `team_name` | character | Team name. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'NYY'). |
-| `team_display_name` | character | Full team display name (e.g. 'New York Yankees'). |
-| `team_short_display_name` | character | Short team display name. |
-| `team_color` | character | Team primary color (hex, no leading '#'). |
-| `team_alternate_color` | character | Team alternate color (hex). |
-| `team_is_active` | logical | Team is active. |
-| `team_logo_href` | character |  |
+| `season` | Int64 | Season year. |
+| `season_type` | String | Season-type id. |
+| `total` | Boolean | Total. |
+| `athlete_id` | Int64 | Unique ESPN athlete identifier. |
+| `athlete_uid` | String | Athlete uid. |
+| `athlete_guid` | String | Athlete guid. |
+| `athlete_type` | String | Athlete type. |
+| `first_name` | String | Player first name. |
+| `last_name` | String | Player last name. |
+| `full_name` | String | Player's full name. |
+| `display_name` | String | Display name. |
+| `short_name` | String | Short display name. |
+| `weight` | Float64 | Weight in pounds. |
+| `display_weight` | String | Display weight. |
+| `height` | Float64 | Height (feet and inches). |
+| `display_height` | String | Display height. |
+| `age` | Int64 | Player age (in years). |
+| `date_of_birth` | String | Date of birth. |
+| `jersey` | String | Jersey number worn by the player. |
+| `slug` | String | URL-safe identifier. |
+| `active` | Boolean | Whether the player is currently active. |
+| `position_id` | Int64 | Unique position identifier. |
+| `position_name` | String | Position name. |
+| `position_display_name` | String | Position display name. |
+| `position_abbreviation` | String | Position abbreviation. |
+| `college_name` | String |  |
+| `status_id` | Int64 | Status id. |
+| `status_name` | String | Game status (e.g. 'STATUS_FINAL'). |
+| `batting_games_played` | Float64 | Team batting: batting games played. |
+| `batting_team_games_played` | Float64 | Team batting: batting team games played. |
+| `batting_hit_by_pitch` | Float64 | Team batting: batting hit by pitch. |
+| `batting_ground_balls` | Float64 | Team batting: batting ground balls. |
+| `batting_strikeouts` | Float64 | Team batting: batting strikeouts. |
+| `batting_rb_is` | Float64 | Team batting: batting rb is. |
+| `batting_sac_hits` | Float64 | Team batting: batting sac hits. |
+| `batting_hits` | Float64 | Team batting: batting hits. |
+| `batting_stolen_bases` | Float64 | Team batting: batting stolen bases. |
+| `batting_walks` | Float64 | Team batting: batting walks. |
+| `batting_catcher_interference` | Float64 | Team batting: batting catcher interference. |
+| `batting_runs` | Float64 | Team batting: batting runs. |
+| `batting_gid_ps` | Float64 | Team batting: batting gid ps. |
+| `batting_sac_flies` | Float64 | Team batting: batting sac flies. |
+| `batting_at_bats` | Float64 | Team batting: batting at bats. |
+| `batting_home_runs` | Float64 | Team batting: batting home runs. |
+| `batting_grand_slam_home_runs` | Float64 | Team batting: batting grand slam home runs. |
+| `batting_runners_left_on_base` | Float64 | Team batting: batting runners left on base. |
+| `batting_triples` | Float64 | Team batting: batting triples. |
+| `batting_game_winning_rb_is` | Float64 | Team batting: batting game winning rb is. |
+| `batting_intentional_walks` | Float64 | Team batting: batting intentional walks. |
+| `batting_doubles` | Float64 | Team batting: batting doubles. |
+| `batting_fly_balls` | Float64 | Team batting: batting fly balls. |
+| `batting_caught_stealing` | Float64 | Team batting: batting caught stealing. |
+| `batting_pitches` | Float64 | Team batting: batting pitches. |
+| `batting_games_started` | Float64 | Team batting: batting games started. |
+| `batting_pinch_at_bats` | Float64 | Team batting: batting pinch at bats. |
+| `batting_pinch_hits` | Float64 | Team batting: batting pinch hits. |
+| `batting_player_rating` | Float64 | Team batting: batting player rating. |
+| `batting_is_qualified` | Float64 | Team batting: batting is qualified. |
+| `batting_is_qualified_steals` | Float64 | Team batting: batting is qualified steals. |
+| `batting_total_bases` | Float64 | Team batting: batting total bases. |
+| `batting_plate_appearances` | Float64 | Team batting: batting plate appearances. |
+| `batting_projected_home_runs` | Float64 | Team batting: batting projected home runs. |
+| `batting_extra_base_hits` | Float64 | Team batting: batting extra base hits. |
+| `batting_runs_created` | Float64 | Team batting: batting runs created. |
+| `batting_avg` | Float64 | Team batting: batting average. |
+| `batting_pinch_avg` | Float64 | Team batting: batting pinch avg. |
+| `batting_slug_avg` | Float64 | Team batting: batting slug avg. |
+| `batting_secondary_avg` | Float64 | Team batting: batting secondary avg. |
+| `batting_on_base_pct` | Float64 | Team batting: batting on base pct. |
+| `batting_ops` | Float64 | Team batting: batting ops. |
+| `batting_ground_to_fly_ratio` | Float64 | Team batting: batting ground to fly ratio. |
+| `batting_runs_created_per27_outs` | Float64 | Bill James Runs Created per 27 outs, estimating how many runs a lineup of this batter would score per game. |
+| `batting_batter_rating` | Float64 | Team batting: batting batter rating. |
+| `batting_at_bats_per_home_run` | Float64 | Team batting: batting at bats per home run. |
+| `batting_stolen_base_pct` | Float64 | Team batting: batting stolen base pct. |
+| `batting_pitches_per_plate_appearance` | Float64 | Team batting: batting pitches per plate appearance. |
+| `batting_isolated_power` | Float64 | Team batting: batting isolated power. |
+| `batting_walk_to_strikeout_ratio` | Float64 | Team batting: batting walk to strikeout ratio. |
+| `batting_walks_per_plate_appearance` | Float64 | Team batting: batting walks per plate appearance. |
+| `batting_secondary_avg_minus_ba` | Float64 | Team batting: batting secondary avg minus ba. |
+| `batting_runs_produced` | Float64 | Team batting: batting runs produced. |
+| `batting_runs_ratio` | Float64 | Team batting: batting runs ratio. |
+| `batting_patience_ratio` | Float64 | Ratio of walks to strikeouts, measuring a batter's plate discipline and ability to work counts. |
+| `batting_bipa` | Float64 | Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact. |
+| `batting_mlb_rating` | Float64 | ESPN's composite MLB rating for the batter reflecting overall offensive performance. |
+| `batting_off_warbr` | Float64 | Offensive Wins Above Replacement (Baseball Reference methodology) attributable to the batter's hitting contributions. |
+| `batting_warbr` | Float64 | Total Wins Above Replacement (Baseball Reference methodology) for the batter including offense and baserunning. |
+| `fielding_games_played` | Float64 | Number of games in which the player appeared defensively at their position. |
+| `fielding_team_games_played` | Float64 | Number of games the player's team played while the player was on the active roster. |
+| `fielding_double_plays` | Float64 | Number of double plays the fielder participated in during the season. |
+| `fielding_opportunities` | Float64 | Total fielding opportunities defined as putouts plus assists plus errors for the player. |
+| `fielding_errors` | Float64 | Number of fielding errors charged to the player during the season. |
+| `fielding_passed_balls` | Float64 | Number of pitches ruled as passed balls charged to the catcher during the season. |
+| `fielding_assists` | Float64 | Number of assists recorded by the fielder when a thrown ball contributes to an out. |
+| `fielding_outfield_assists` | Float64 | Number of outfield assists, recorded when an outfielder throws out a runner. |
+| `fielding_pickoffs` | Float64 | Number of baserunners picked off by pitchers while this catcher was behind the plate or this fielder was at their position. |
+| `fielding_putouts` | Float64 | Number of putouts recorded by the fielder where they made the final play to retire a batter or runner. |
+| `fielding_outs_on_field` | Float64 | Total outs recorded across all innings the player was present on the field. |
+| `fielding_triple_plays` | Float64 | Number of triple plays in which the fielder participated during the season. |
+| `fielding_balls_in_zone` | Float64 | Number of batted balls that entered the fielder's defined defensive zone. |
+| `fielding_extra_bases` | Float64 | Extra bases allowed by the outfielder due to errors or misplays on balls hit into their zone. |
+| `fielding_outs_made` | Float64 | Total outs the fielder was directly responsible for recording during the season. |
+| `fielding_hits` | Float64 | Number of hits recorded while this fielder was positioned, relevant for zone-rating calculations. |
+| `fielding_total_bases` | Float64 | Total bases allowed by the outfielder on balls hit into their zone, used in advanced defensive metrics. |
+| `fielding_games_started` | Float64 | Number of games the player started at their primary defensive position. |
+| `fielding_catcher_third_innings_played` | Float64 | Total one-third innings played behind the plate by the catcher, expressed in thirds. |
+| `fielding_catcher_caught_stealing` | Float64 | Number of opposing baserunners thrown out attempting to steal a base by this catcher. |
+| `fielding_catcher_stolen_bases_allowed` | Float64 | Number of successful stolen bases allowed by the catcher during the season. |
+| `fielding_catcher_earned_runs` | Float64 | Earned runs allowed while this catcher was behind the plate, used in catcher ERA calculations. |
+| `fielding_is_qualified` | Float64 | Indicator flag for whether the player meets minimum innings requirements to qualify for fielding rate stats. |
+| `fielding_is_qualified_catcher` | Float64 | Indicator flag for whether the catcher meets the minimum innings threshold to qualify for catcher-specific rate stats. |
+| `fielding_is_qualified_pitcher` | Float64 | Indicator flag for whether the pitcher qualifies for pitcher fielding rate statistics. |
+| `fielding_successful_chances` | Float64 | Total successful fielding chances defined as putouts plus assists (errors excluded). |
+| `fielding_total_chances` | Float64 | Total fielding chances (putouts + assists + errors) offered to the player during the season. |
+| `fielding_full_innings_played` | Float64 | Number of complete innings (three outs per side) the player appeared in the field. |
+| `fielding_part_innings_played` | Float64 | Number of fractional (partial) innings the player appeared in the field, expressed as a count of thirds. |
+| `fielding_fielding_pct` | Float64 | Fielding percentage calculated as successful chances divided by total chances (putouts + assists + errors). |
+| `fielding_range_factor` | Float64 | Range factor per nine innings (putouts + assists) / innings * 9, measuring a fielder's defensive range. |
+| `fielding_zone_rating` | Float64 | Percentage of batted balls in the fielder's defined zone that were successfully converted into outs. |
+| `fielding_catcher_caught_stealing_pct` | Float64 | Percentage of opposing stolen base attempts that resulted in the catcher throwing out the runner. |
+| `fielding_catcher_era` | Float64 | ERA of pitchers while this specific catcher was behind the plate over the season. |
+| `fielding_def_warbr` | Float64 | Defensive Wins Above Replacement (Baseball Reference methodology) attributable to the player's fielding. |
+| `team_id` | Int64 | Unique ESPN team identifier. |
+| `team_uid` | String | ESPN universal team identifier (UID). |
+| `team_guid` | String | ESPN team GUID. |
+| `team_slug` | String | URL-safe team identifier. |
+| `team_location` | String | Team city / location. |
+| `team_name` | String | Team name. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'NYY'). |
+| `team_display_name` | String | Full team display name (e.g. 'New York Yankees'). |
+| `team_short_display_name` | String | Short team display name. |
+| `team_color` | String | Team primary color (hex, no leading '#'). |
+| `team_alternate_color` | String | Team alternate color (hex). |
+| `team_is_active` | Boolean | Team is active. |
+| `team_logo_href` | String |  |
 
 **Raises**
 
@@ -325,29 +325,29 @@ Polars dataframe containing the schedule. A day with no games returns a zero-row
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique ESPN game/event identifier. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `season_year` | integer |  |
-| `season_type` | integer | Season-type id. |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `venue_id` | integer | MLBAM venue ID. |
-| `venue_full_name` | character |  |
-| `venue_city` | character | Venue city. |
-| `venue_state` | character | Venue state / province. |
-| `home_id` | integer |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_score` | character | Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
-| `home_winner` | logical |  |
-| `away_id` | integer |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_score` | character | Away team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
-| `away_winner` | logical |  |
+| `game_id` | Int64 | Unique ESPN game/event identifier. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `season_year` | Int64 |  |
+| `season_type` | Int64 | Season-type id. |
+| `status_type_state` | String |  |
+| `status_type_completed` | Boolean |  |
+| `status_type_description` | String |  |
+| `venue_id` | Int64 | MLBAM venue ID. |
+| `venue_full_name` | String |  |
+| `venue_city` | String | Venue city. |
+| `venue_state` | String | Venue state / province. |
+| `home_id` | Int64 |  |
+| `home_name` | String |  |
+| `home_abbreviation` | String |  |
+| `home_display_name` | String |  |
+| `home_score` | String | Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
+| `home_winner` | Boolean |  |
+| `away_id` | Int64 |  |
+| `away_name` | String |  |
+| `away_abbreviation` | String |  |
+| `away_display_name` | String |  |
+| `away_score` | String | Away team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
+| `away_winner` | Boolean |  |
 
 **Example**
 
@@ -385,20 +385,20 @@ Polars dataframe of the MLB teams, one row per team, with the columns in the ret
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'NYY'). |
-| `team_alternate_color` | character | Team alternate color (hex). |
-| `team_color` | character | Team primary color (hex, no leading '#'). |
-| `team_display_name` | character | Full team display name (e.g. 'New York Yankees'). |
-| `team_id` | integer | Unique ESPN team identifier. |
-| `team_is_active` | logical | Team is active. |
-| `team_is_all_star` | logical | Team is all star. |
-| `team_location` | character | Team city / location. |
-| `team_logos` | integer |  |
-| `team_name` | character | Team name. |
-| `team_nickname` | character |  |
-| `team_short_display_name` | character | Short team display name. |
-| `team_slug` | character | URL-safe team identifier. |
-| `team_uid` | character | ESPN universal team identifier (UID). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'NYY'). |
+| `team_alternate_color` | String | Team alternate color (hex). |
+| `team_color` | String | Team primary color (hex, no leading '#'). |
+| `team_display_name` | String | Full team display name (e.g. 'New York Yankees'). |
+| `team_id` | Int64 | Unique ESPN team identifier. |
+| `team_is_active` | Boolean | Team is active. |
+| `team_is_all_star` | Boolean | Team is all star. |
+| `team_location` | String | Team city / location. |
+| `team_logos` | Int64 |  |
+| `team_name` | String | Team name. |
+| `team_nickname` | String |  |
+| `team_short_display_name` | String | Short team display name. |
+| `team_slug` | String | URL-safe team identifier. |
+| `team_uid` | String | ESPN universal team identifier (UID). |
 
 **Raises**
 

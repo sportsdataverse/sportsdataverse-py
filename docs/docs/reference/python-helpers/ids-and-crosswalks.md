@@ -161,7 +161,7 @@ Return an index of callable functions exposed by the package.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `None` | League slug (`"nba"` / `"wnba"` / `"mbb"` / `"wbb"` / `"cfb"` / `"nfl"` / `"mlb"` / `"nhl"`). When given, returns a flat list of function names for that league. With no league, returns a dict keyed by league. |
+| `league` | `Optional[str]` | `None` | League prefix, as the docs site names it (`"nba"`, `"ufl"`, `"epl"`, `"liiga"`, `"euroleague"`, ...). When given, returns a flat list of function names for that league. With no league, returns a dict keyed by league. |
 | `search` | `Optional[str]` | `None` | Case-insensitive substring to filter function names. `search="roster"` matches every `*_roster` / `roster_*` / `parse_*_roster` function across leagues. |
 | `parsers_only` | `bool` | `False` | If `True`, restrict the result to `parse_*` callables. |
 | `wrappers_only` | `bool` | `False` | If `True`, exclude `parse_*` callables. |

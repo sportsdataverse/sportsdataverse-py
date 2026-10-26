@@ -122,21 +122,21 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank of the streak. |
-| `player_id` | integer | Unique player identifier. |
-| `jersey_number` | character | Jersey number. |
-| `name` | character | Team mascot name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `team_code` | character | Team abbreviation. |
-| `team_logo` | character | URL to the team logo image. |
-| `team_logo_small` | character | URL of the logo of the leader's team; the host and path vary by league and team (an lscluster.hockeytech.com download.php link or an assets.leaguestat.com logos path), and it can be the same URL as team_logo. |
-| `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
-| `type_formatted` | character | Leaderboard the row belongs to, 'Points' or 'Goals': the function requests those two skater stat types and stacks both leaderboards into one frame. |
-| `photo` | character | URL to the player photo. |
-| `photo_small` | character | URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'), or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'. |
-| `position` | character | Player position. |
-| `division` | character | Division identifier. |
+| `rank` | Int64 | Rank of the streak. |
+| `player_id` | Int64 | Unique player identifier. |
+| `jersey_number` | String | Jersey number. |
+| `name` | String | Team mascot name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `team_code` | String | Team abbreviation. |
+| `team_logo` | String | URL to the team logo image. |
+| `team_logo_small` | String | URL of the logo of the leader's team; the host and path vary by league and team (an lscluster.hockeytech.com download.php link or an assets.leaguestat.com logos path), and it can be the same URL as team_logo. |
+| `stat_formatted` | String | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
+| `type_formatted` | String | Leaderboard the row belongs to, 'Points' or 'Goals': the function requests those two skater stat types and stacks both leaderboards into one frame. |
+| `photo` | String | URL to the player photo. |
+| `photo_small` | String | URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'), or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'. |
+| `position` | String | Player position. |
+| `division` | String | Division identifier. |
 
 **Raises**
 
@@ -237,18 +237,18 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
-| `game_date` | character | Game date. |
-| `game_status` | character | Game status text. |
-| `home_team` | character | Home team name. |
-| `home_team_id` | integer | Home team identifier. |
-| `home_score` | character | Home team final score. |
-| `away_team` | character | Away team name. |
-| `away_team_id` | integer | Away team identifier. |
-| `away_score` | character | Away team final score. |
-| `venue` | character | Venue where the game was played. |
-| `season_id` | integer | Season identifier. |
-| `game_type` | character | Game type the row belongs to. |
+| `game_id` | Int64 | Unique game identifier. |
+| `game_date` | String | Game date. |
+| `game_status` | String | Game status text. |
+| `home_team` | String | Home team name. |
+| `home_team_id` | Int64 | Home team identifier. |
+| `home_score` | String | Home team final score. |
+| `away_team` | String | Away team name. |
+| `away_team_id` | Int64 | Away team identifier. |
+| `away_score` | String | Away team final score. |
+| `venue` | String | Venue where the game was played. |
+| `season_id` | Int64 | Season identifier. |
+| `game_type` | String | Game type the row belongs to. |
 
 **Raises**
 
@@ -278,22 +278,22 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 
 | col_name | type | description |
 |---|---|---|
-| `team_code` | character | Team abbreviation. |
-| `wins` | character | Wins. |
-| `losses` | character | Losses. |
-| `ot_losses` | character | Overtime losses. |
-| `shootout_losses` | character | Shootout losses. |
-| `row` | character |  |
-| `points` | integer | Total points (goals + assists). |
-| `penalty_minutes` | character | Penalty minutes. |
-| `goals_for` | character | Goals for. |
-| `goals_against` | character | Goals against. |
-| `goals_diff` | character | Goal differential, goals_for minus goals_against (feed header 'Goal Differential'), as a signed integer string such as '14' or '-10'. |
-| `games_remaining` | character | Games remaining in the season. |
-| `percentage` | character | Points percentage (feed header 'Percentage'): points earned divided by the maximum points available from games played, as a three-decimal string, e.g. '0.833' for 5 of 6 possible points; '0.000' before a team has played. |
-| `games_played` | character | Games played. |
-| `team_rank` | integer | Team rank in the standings. |
-| `team` | character | Team name. |
+| `team_code` | String | Team abbreviation. |
+| `wins` | String | Wins. |
+| `losses` | String | Losses. |
+| `ot_losses` | String | Overtime losses. |
+| `shootout_losses` | String | Shootout losses. |
+| `row` | String |  |
+| `points` | Int64 | Total points (goals + assists). |
+| `penalty_minutes` | String | Penalty minutes. |
+| `goals_for` | String | Goals for. |
+| `goals_against` | String | Goals against. |
+| `goals_diff` | String | Goal differential, goals_for minus goals_against (feed header 'Goal Differential'), as a signed integer string such as '14' or '-10'. |
+| `games_remaining` | String | Games remaining in the season. |
+| `percentage` | String | Points percentage (feed header 'Percentage'): points earned divided by the maximum points available from games played, as a three-decimal string, e.g. '0.833' for 5 of 6 possible points; '0.000' before a team has played. |
+| `games_played` | String | Games played. |
+| `team_rank` | Int64 | Team rank in the standings. |
+| `team` | String | Team name. |
 
 **Raises**
 
@@ -348,13 +348,13 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character | Team name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_code` | character | Team abbreviation. |
-| `team_nickname` | character | Team nickname. |
-| `team_label` | character | Short city label. |
-| `division` | character | Division identifier. |
-| `team_logo` | character | URL to the team logo image. |
+| `team_name` | String | Team name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_code` | String | Team abbreviation. |
+| `team_nickname` | String | Team nickname. |
+| `team_label` | String | Short city label. |
+| `division` | String | Division identifier. |
+| `team_logo` | String | URL to the team logo image. |
 
 **Raises**
 
@@ -383,15 +383,15 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Season start date. |
-| `end_date` | character | Season end date. |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+| `season_id` | Int64 | Season identifier. |
+| `season_name` | String | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | String | Short season name. |
+| `career` | String | Whether this is a career-stats season. |
+| `playoff` | String | Whether the row is playoff statistics. |
+| `start_date` | String | Season start date. |
+| `end_date` | String | Season end date. |
+| `season_yr` | Int64 | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | String | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 **Raises**
 

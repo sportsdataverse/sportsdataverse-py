@@ -1,9 +1,9 @@
 ---
-title: NBAGL
-sidebar_label: NBAGL
-description: "sdv-py NBAGL: endpoint references, dataset loaders and parsers for NBAGL in the SportsDataverse Python package."
+title: NBA G League
+sidebar_label: NBA G League
+description: "sdv-py NBA G League: endpoint references, dataset loaders and parsers for NBA G League in the SportsDataverse Python package."
 ---
-# NBAGL (`sportsdataverse.nbagl`)
+# NBA G League (`sportsdataverse.nbagl`)
 
 ## Data sources
 

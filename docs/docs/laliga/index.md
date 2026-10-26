@@ -1,9 +1,9 @@
 ---
-title: LALIGA
-sidebar_label: LALIGA
-description: "sdv-py LALIGA: endpoint references, dataset loaders and parsers for LALIGA in the SportsDataverse Python package."
+title: LaLiga
+sidebar_label: LaLiga
+description: "sdv-py LaLiga: endpoint references, dataset loaders and parsers for LaLiga in the SportsDataverse Python package."
 ---
-# LALIGA (`sportsdataverse.soccer.laliga`)
+# LaLiga (`sportsdataverse.soccer.laliga`)
 
 ## Data sources
 

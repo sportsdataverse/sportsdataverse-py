@@ -1,9 +1,9 @@
 ---
-title: MAGNUS
-sidebar_label: MAGNUS
-description: "sdv-py MAGNUS: endpoint references, dataset loaders and parsers for MAGNUS in the SportsDataverse Python package."
+title: Ligue Magnus
+sidebar_label: Ligue Magnus
+description: "sdv-py Ligue Magnus: endpoint references, dataset loaders and parsers for Ligue Magnus in the SportsDataverse Python package."
 ---
-# MAGNUS (`sportsdataverse.hockey.magnus`)
+# Ligue Magnus (`sportsdataverse.hockey.magnus`)
 
 ## Data sources
 

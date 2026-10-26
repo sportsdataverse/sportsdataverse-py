@@ -24,43 +24,43 @@ Goaltender career statistics (regular season).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `first_name` | character | Player first name. |
-| `first_season_for_game_type` | integer | First season ID for the game type. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_seven_games_played` | character | Game seven games played. |
-| `game_seven_losses` | character | Game seven losses. |
-| `game_seven_wins` | character | Game seven wins. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `games_played` | integer | Games played. |
-| `goals_against` | integer | Goals against. |
-| `goals_against_average` | double | Goals against average. |
-| `last_name` | character | Player last name. |
-| `last_season_for_game_type` | integer | Last season ID for the game type. |
-| `losses` | integer | Losses. |
-| `overtime_games_played` | integer | Overtime games played. |
-| `overtime_goals_against` | integer | Overtime goals against. |
-| `overtime_goals_against_average` | character | Overtime goals against average. |
-| `overtime_losses` | character | Total overtime losses. |
-| `overtime_save_pctg` | double | Overtime save percentage. |
-| `overtime_shots_against` | integer | Overtime shots against. |
-| `overtime_ties` | integer | Overtime ties. |
-| `overtime_time_on_ice` | double | Overtime time on ice (seconds). |
-| `overtime_wins` | integer | Overtime wins. |
-| `player_id` | integer | Unique player identifier. |
-| `position_code` | character | Player position code. |
-| `save_pctg` | double | Save percentage. |
-| `saves` | integer | Saves made. |
-| `seasons_played` | integer | Number of seasons played. |
-| `shots_against` | integer | Shots faced. |
-| `shutouts` | integer | Shutouts recorded. |
-| `team_abbrevs` | character | Team abbreviation(s). |
-| `team_names` | character | Team names. |
-| `ties` | integer | Total ties. |
-| `time_on_ice` | integer | Time on ice in seconds. |
-| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `first_name` | String | Player first name. |
+| `first_season_for_game_type` | Int64 | First season ID for the game type. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_seven_games_played` | String | Game seven games played. |
+| `game_seven_losses` | String | Game seven losses. |
+| `game_seven_wins` | String | Game seven wins. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `games_played` | Int64 | Games played. |
+| `goals_against` | Int64 | Goals against. |
+| `goals_against_average` | Float64 | Goals against average. |
+| `last_name` | String | Player last name. |
+| `last_season_for_game_type` | Int64 | Last season ID for the game type. |
+| `losses` | Int64 | Losses. |
+| `overtime_games_played` | Int64 | Overtime games played. |
+| `overtime_goals_against` | Int64 | Overtime goals against. |
+| `overtime_goals_against_average` | String | Overtime goals against average. |
+| `overtime_losses` | String | Total overtime losses. |
+| `overtime_save_pctg` | Float64 | Overtime save percentage. |
+| `overtime_shots_against` | Int64 | Overtime shots against. |
+| `overtime_ties` | Int64 | Overtime ties. |
+| `overtime_time_on_ice` | Float64 | Overtime time on ice (seconds). |
+| `overtime_wins` | Int64 | Overtime wins. |
+| `player_id` | Int64 | Unique player identifier. |
+| `position_code` | String | Player position code. |
+| `save_pctg` | Float64 | Save percentage. |
+| `saves` | Int64 | Saves made. |
+| `seasons_played` | Int64 | Number of seasons played. |
+| `shots_against` | Int64 | Shots faced. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `team_abbrevs` | String | Team abbreviation(s). |
+| `team_names` | String | Team names. |
+| `ties` | Int64 | Total ties. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
+| `time_on_ice_min_sec` | String | Total time on ice (MM:SS). |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -95,28 +95,28 @@ Goaltender career stats inclusive of regular season and playoffs.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | integer | Indicator of whether the player is active. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `games_played` | integer | Games played. |
-| `goals_against` | integer | Goals against. |
-| `goals_against_average` | double | Goals against average. |
-| `last_name` | character | Player last name. |
-| `losses` | integer | Losses. |
-| `overtime_losses` | character | Total overtime losses. |
-| `player_id` | integer | Unique player identifier. |
-| `position_code` | character | Player position code. |
-| `save_pctg` | double | Save percentage. |
-| `saves` | integer | Saves made. |
-| `shots_against` | integer | Shots faced. |
-| `shutouts` | integer | Shutouts recorded. |
-| `team_abbrevs` | character | Team abbreviation(s). |
-| `team_names` | character | Team names. |
-| `ties` | integer | Total ties. |
-| `time_on_ice` | integer | Time on ice in seconds. |
-| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Int64 | Indicator of whether the player is active. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `games_played` | Int64 | Games played. |
+| `goals_against` | Int64 | Goals against. |
+| `goals_against_average` | Float64 | Goals against average. |
+| `last_name` | String | Player last name. |
+| `losses` | Int64 | Losses. |
+| `overtime_losses` | String | Total overtime losses. |
+| `player_id` | Int64 | Unique player identifier. |
+| `position_code` | String | Player position code. |
+| `save_pctg` | Float64 | Save percentage. |
+| `saves` | Int64 | Saves made. |
+| `shots_against` | Int64 | Shots faced. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `team_abbrevs` | String | Team abbreviation(s). |
+| `team_names` | String | Team names. |
+| `ties` | Int64 | Total ties. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
+| `time_on_ice_min_sec` | String | Total time on ice (MM:SS). |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -151,40 +151,40 @@ Goaltender single-season statistics.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_seven_games_played` | character | Game seven games played. |
-| `game_seven_losses` | character | Game seven losses. |
-| `game_seven_wins` | character | Game seven wins. |
-| `game_type` | integer | Game type the row belongs to. |
-| `games_played` | integer | Games played. |
-| `games_started` | integer | Games started (goalies). |
-| `goals_against` | integer | Goals against. |
-| `goals_against_average` | double | Goals against average. |
-| `last_name` | character | Player last name. |
-| `losses` | integer | Losses. |
-| `number_of_games_in_season` | integer | Number of games in the season. |
-| `overtime_games_played` | integer | Overtime games played. |
-| `overtime_goals_against` | integer | Overtime goals against. |
-| `overtime_losses` | character | Total overtime losses. |
-| `overtime_ties` | integer | Overtime ties. |
-| `overtime_wins` | integer | Overtime wins. |
-| `player_id` | integer | Unique player identifier. |
-| `position_code` | character | Player position code. |
-| `rookie_flag` | logical | Indicator of whether the player was a rookie. |
-| `save_pctg` | double | Save percentage. |
-| `saves` | integer | Saves made. |
-| `season_id` | integer | Season identifier. |
-| `shots_against` | integer | Shots faced. |
-| `shutouts` | integer | Shutouts recorded. |
-| `team_abbrevs` | character | Team abbreviation(s). |
-| `team_names` | character | Team names. |
-| `ties` | integer | Total ties. |
-| `time_on_ice` | integer | Time on ice in seconds. |
-| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_seven_games_played` | String | Game seven games played. |
+| `game_seven_losses` | String | Game seven losses. |
+| `game_seven_wins` | String | Game seven wins. |
+| `game_type` | Int64 | Game type the row belongs to. |
+| `games_played` | Int64 | Games played. |
+| `games_started` | Int64 | Games started (goalies). |
+| `goals_against` | Int64 | Goals against. |
+| `goals_against_average` | Float64 | Goals against average. |
+| `last_name` | String | Player last name. |
+| `losses` | Int64 | Losses. |
+| `number_of_games_in_season` | Int64 | Number of games in the season. |
+| `overtime_games_played` | Int64 | Overtime games played. |
+| `overtime_goals_against` | Int64 | Overtime goals against. |
+| `overtime_losses` | String | Total overtime losses. |
+| `overtime_ties` | Int64 | Overtime ties. |
+| `overtime_wins` | Int64 | Overtime wins. |
+| `player_id` | Int64 | Unique player identifier. |
+| `position_code` | String | Player position code. |
+| `rookie_flag` | Boolean | Indicator of whether the player was a rookie. |
+| `save_pctg` | Float64 | Save percentage. |
+| `saves` | Int64 | Saves made. |
+| `season_id` | Int64 | Season identifier. |
+| `shots_against` | Int64 | Shots faced. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `team_abbrevs` | String | Team abbreviation(s). |
+| `team_names` | String | Team names. |
+| `ties` | Int64 | Total ties. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
+| `time_on_ice_min_sec` | String | Total time on ice (MM:SS). |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -219,22 +219,22 @@ Goaltenders with the longest consecutive-win streaks.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `active_streak` | logical | Indicator of whether the streak is active. |
-| `end_date` | character | Season end date. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `last_name` | character | Player last name. |
-| `player_id` | integer | Unique player identifier. |
-| `rookie` | logical | Whether the player is a rookie. |
-| `season_id` | integer | Season identifier. |
-| `start_date` | character | Season start date. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `win_streak` | integer | Number of consecutive wins recorded by the goalie in this streak. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `active_streak` | Boolean | Indicator of whether the streak is active. |
+| `end_date` | String | Season end date. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `last_name` | String | Player last name. |
+| `player_id` | Int64 | Unique player identifier. |
+| `rookie` | Boolean | Whether the player is a rookie. |
+| `season_id` | Int64 | Season identifier. |
+| `start_date` | String | Season start date. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `win_streak` | Int64 | Number of consecutive wins recorded by the goalie in this streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -269,23 +269,23 @@ Goaltenders with the longest consecutive-shutout streaks.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `active_streak` | logical | Indicator of whether the streak is active. |
-| `duration_min_sec` | character | Streak duration (MM:SS). |
-| `duration_seconds` | integer | Streak duration in seconds. |
-| `end_date` | character | Season end date. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `last_name` | character | Player last name. |
-| `player_id` | integer | Unique player identifier. |
-| `saves` | character | Saves made. |
-| `season_id` | integer | Season identifier. |
-| `start_date` | character | Season start date. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `active_streak` | Boolean | Indicator of whether the streak is active. |
+| `duration_min_sec` | String | Streak duration (MM:SS). |
+| `duration_seconds` | Int64 | Streak duration in seconds. |
+| `end_date` | String | Season end date. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `last_name` | String | Player last name. |
+| `player_id` | Int64 | Unique player identifier. |
+| `saves` | String | Saves made. |
+| `season_id` | Int64 | Season identifier. |
+| `start_date` | String | Season start date. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -320,18 +320,18 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `first_name` | character | Player first name. |
-| `forty_win_seasons` | integer | Number of seasons in which the goalie recorded 40 or more wins, a rare single-season achievement. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `last_name` | character | Player last name. |
-| `player_id` | integer | Unique player identifier. |
-| `seasons_played` | integer | Number of seasons played. |
-| `team_abbrevs` | character | Team abbreviation(s). |
-| `team_names` | character | Team names. |
-| `thirty_win_seasons` | integer | Number of seasons in which the goalie recorded 30 or more wins. |
-| `twenty_win_seasons` | integer | Number of seasons in which the goalie recorded 20 or more wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `first_name` | String | Player first name. |
+| `forty_win_seasons` | Int64 | Number of seasons in which the goalie recorded 40 or more wins, a rare single-season achievement. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `last_name` | String | Player last name. |
+| `player_id` | Int64 | Unique player identifier. |
+| `seasons_played` | Int64 | Number of seasons played. |
+| `team_abbrevs` | String | Team abbreviation(s). |
+| `team_names` | String | Team names. |
+| `thirty_win_seasons` | Int64 | Number of seasons in which the goalie recorded 30 or more wins. |
+| `twenty_win_seasons` | Int64 | Number of seasons in which the goalie recorded 20 or more wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -366,19 +366,19 @@ Goaltender consecutive playoff-win streaks.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `active_streak` | logical | Indicator of whether the streak is active. |
-| `consecutive_playoff_seasons` | integer | Number of consecutive playoff seasons in which the goalie appeared for the franchise during this streak. |
-| `end_season` | integer | Last season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `last_name` | character | Player last name. |
-| `player_id` | integer | Unique player identifier. |
-| `playoff_seasons` | integer | Number of playoff seasons. |
-| `stanley_cup_wins` | integer | Number of Stanley Cup championships. |
-| `start_season` | integer | First season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
-| `team_abbrevs` | character | Team abbreviation(s). |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `active_streak` | Boolean | Indicator of whether the streak is active. |
+| `consecutive_playoff_seasons` | Int64 | Number of consecutive playoff seasons in which the goalie appeared for the franchise during this streak. |
+| `end_season` | Int64 | Last season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `last_name` | String | Player last name. |
+| `player_id` | Int64 | Unique player identifier. |
+| `playoff_seasons` | Int64 | Number of playoff seasons. |
+| `stanley_cup_wins` | Int64 | Number of Stanley Cup championships. |
+| `start_season` | Int64 | First season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
+| `team_abbrevs` | String | Team abbreviation(s). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -413,21 +413,21 @@ Goaltender longest undefeated streaks (wins + ties).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_player` | logical | Indicator of whether the player is active. |
-| `active_streak` | logical | Indicator of whether the streak is active. |
-| `end_date` | character | Season end date. |
-| `first_name` | character | Player first name. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `last_name` | character | Player last name. |
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | integer | Season identifier. |
-| `start_date` | character | Season start date. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `undefeated_streak` | integer | Number of consecutive games without a regulation loss (wins plus overtime or shootout losses) in the goalie's record streak. |
+| `id` | Int64 | Unique player identifier. |
+| `active_player` | Boolean | Indicator of whether the player is active. |
+| `active_streak` | Boolean | Indicator of whether the streak is active. |
+| `end_date` | String | Season end date. |
+| `first_name` | String | Player first name. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `last_name` | String | Player last name. |
+| `player_id` | Int64 | Unique player identifier. |
+| `season_id` | Int64 | Season identifier. |
+| `start_date` | String | Season start date. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `undefeated_streak` | Int64 | Number of consecutive games without a regulation loss (wins plus overtime or shootout losses) in the goalie's record streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

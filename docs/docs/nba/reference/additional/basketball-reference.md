@@ -29,16 +29,16 @@ One row per candidate per award: `award` (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | character | Rank. |
-| `player` | character | Player name. |
-| `age` | double | Player age (in years). |
-| `team` | character | Team-side label or team identifier. |
-| `votes_first` | double | First-place votes. |
-| `points_won` | double | Voting points won. |
-| `points_max` | double | Maximum possible voting points. |
-| `award_share` | double | Share of the maximum voting points. |
-| `award` | character | Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`). |
-| `season` | integer | Season year. |
+| `rank` | String | Rank. |
+| `player` | String | Player name. |
+| `age` | Float64 | Player age (in years). |
+| `team` | String | Team-side label or team identifier. |
+| `votes_first` | Float64 | First-place votes. |
+| `points_won` | Float64 | Voting points won. |
+| `points_max` | Float64 | Maximum possible voting points. |
+| `award_share` | Float64 | Share of the maximum voting points. |
+| `award` | String | Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`). |
+| `season` | Int64 | Season year. |
 
 **Raises**
 
@@ -85,29 +85,29 @@ One row per pick: `pick_overall`, `round`, `team`, `player`, `college_name`, `se
 
 | col_name | type | description |
 |---|---|---|
-| `ranker` | double | Row rank. |
-| `pick_overall` | double | Overall draft pick number. |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `college_name` | character | College / pre-draft team. |
-| `seasons` | character | NBA seasons played. |
-| `g` | character | Games played. |
-| `mp` | character | Minutes played. |
-| `pts` | character | Points scored. |
-| `trb` | character | Career total rebounds. |
-| `ast` | character | Assists. |
-| `fg_pct` | character | Field goal percentage (0-1). |
-| `fg3_pct` | character | Three-point field goal percentage (0-1). |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `mp_per_g` | character | Minutes (per_game table) / `mp` total (totals table). |
-| `pts_per_g` | character | Points (scaled to the chosen `table`). |
-| `trb_per_g` | character | Career total rebounds per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
-| `ast_per_g` | character | Career assists per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
-| `ws` | character | Career win shares. |
-| `ws_per_48` | character | Career win shares per 48 minutes for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
-| `bpm` | character | Career box plus/minus. |
-| `vorp` | character | Career value over replacement player. |
-| `season` | integer | Season year. |
+| `ranker` | Float64 | Row rank. |
+| `pick_overall` | Float64 | Overall draft pick number. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `college_name` | String | College / pre-draft team. |
+| `seasons` | String | NBA seasons played. |
+| `g` | String | Games played. |
+| `mp` | String | Minutes played. |
+| `pts` | String | Points scored. |
+| `trb` | String | Career total rebounds. |
+| `ast` | String | Assists. |
+| `fg_pct` | String | Field goal percentage (0-1). |
+| `fg3_pct` | String | Three-point field goal percentage (0-1). |
+| `ft_pct` | String | Free throw percentage (0-1). |
+| `mp_per_g` | String | Minutes (per_game table) / `mp` total (totals table). |
+| `pts_per_g` | String | Points (scaled to the chosen `table`). |
+| `trb_per_g` | String | Career total rebounds per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `ast_per_g` | String | Career assists per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `ws` | String | Career win shares. |
+| `ws_per_48` | String | Career win shares per 48 minutes for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `bpm` | String | Career box plus/minus. |
+| `vorp` | String | Career value over replacement player. |
+| `season` | Int64 | Season year. |
 
 **Raises**
 
@@ -155,10 +155,10 @@ One row per injured player: `player`, `team_name`, `date_update` and `note` (sta
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `date_update` | character | Date the status was last updated. |
-| `note` | character | Injury status and description. |
+| `player` | String | Player name. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `date_update` | String | Date the status was last updated. |
+| `note` | String | Injury status and description. |
 
 **Raises**
 
@@ -207,16 +207,16 @@ One row per player: `player`, `player_id` (e.g. `jamesle01`), `year_min`, `year_
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `player_id` | character | Unique player identifier. |
-| `year_min` | double | First season played. |
-| `year_max` | double | Last season played. |
-| `pos` | character | Position. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | double | Player weight in pounds. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `colleges` | character | College(s). |
-| `letter` | character | Last-name initial (echoes the `letter` argument). |
+| `player` | String | Player name. |
+| `player_id` | String | Unique player identifier. |
+| `year_min` | Float64 | First season played. |
+| `year_max` | Float64 | Last season played. |
+| `pos` | String | Position. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Float64 | Player weight in pounds. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `colleges` | String | College(s). |
+| `letter` | String | Last-name initial (echoes the `letter` argument). |
 
 **Raises**
 
@@ -266,42 +266,42 @@ One row per regular-season game: `ranker`, `player_game_num_career`, `date`, `te
 
 | col_name | type | description |
 |---|---|---|
-| `ranker` | double | Row rank. |
-| `player_game_num_career` | double | Career game number. |
-| `team_game_num_season` | double |  |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `team` | character | Team-side label or team identifier. |
-| `location` | character | Location. |
-| `opp` | character | Opponent abbreviation. |
-| `result` | character | Result. |
-| `is_starter` | character | 1 if the player started. |
-| `mp` | character | Minutes played. |
-| `fg` | double |  |
-| `fga` | double | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `fg3` | double |  |
-| `fg3a` | double | Three-point field goal attempts. |
-| `fg3_pct` | double | Three-point field goal percentage (0-1). |
-| `fg2` | double |  |
-| `fg2a` | double |  |
-| `fg2_pct` | double |  |
-| `efg_pct` | double |  |
-| `ft` | double |  |
-| `fta` | double | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `orb` | double |  |
-| `drb` | double |  |
-| `trb` | double | Career total rebounds. |
-| `ast` | double | Assists. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `tov` | double | Turnovers. |
-| `pf` | double | Personal fouls. |
-| `pts` | double | Points scored. |
-| `game_score` | double | Bart Torvik single-game quality score. |
-| `plus_minus` | double | Plus/minus point differential while on court. |
-| `player_id` | character | Unique player identifier. |
-| `season` | integer | Season year. |
+| `ranker` | Float64 | Row rank. |
+| `player_game_num_career` | Float64 | Career game number. |
+| `team_game_num_season` | Float64 |  |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team` | String | Team-side label or team identifier. |
+| `location` | String | Location. |
+| `opp` | String | Opponent abbreviation. |
+| `result` | String | Result. |
+| `is_starter` | String | 1 if the player started. |
+| `mp` | String | Minutes played. |
+| `fg` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3` | Float64 |  |
+| `fg3a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `fg2` | Float64 |  |
+| `fg2a` | Float64 |  |
+| `fg2_pct` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `ft` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `trb` | Float64 | Career total rebounds. |
+| `ast` | Float64 | Assists. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `pts` | Float64 | Points scored. |
+| `game_score` | Float64 | Bart Torvik single-game quality score. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `player_id` | String | Unique player identifier. |
+| `season` | Int64 | Season year. |
 
 **Raises**
 
@@ -349,17 +349,17 @@ One row per rostered player: `number`, `player`, `pos`, `height`, `weight`, `bir
 
 | col_name | type | description |
 |---|---|---|
-| `number` | character | Number. |
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | double | Player weight in pounds. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `flag` | character |  |
-| `years_experience` | character | Years of NBA experience (`R` for rookies). |
-| `college` | character | College. |
-| `team` | character | Team-side label or team identifier. |
-| `season` | integer | Season year. |
+| `number` | String | Number. |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Float64 | Player weight in pounds. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `flag` | String |  |
+| `years_experience` | String | Years of NBA experience (`R` for rookies). |
+| `college` | String | College. |
+| `team` | String | Team-side label or team identifier. |
+| `season` | Int64 | Season year. |
 
 **Raises**
 

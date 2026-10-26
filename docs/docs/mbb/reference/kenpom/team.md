@@ -1,11 +1,11 @@
 ---
-title: "MBB — KenPom (kenpom.com, subscription) — Team"
+title: "Men's college basketball — KenPom (kenpom.com, subscription) — Team"
 sidebar_label: "Team"
 sidebar_position: 1
-description: "MBB — KenPom (kenpom.com, subscription) — Team — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — KenPom (kenpom.com, subscription) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MBB — KenPom (kenpom.com, subscription) — Team
+# Men's college basketball — KenPom (kenpom.com, subscription) — Team
 
 ## kenpom_team_stats
 
@@ -28,29 +28,29 @@ GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' f
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `conf` | character | character. |
-| `3_p_pct` | character |  |
-| `3_p_pct_rk` | character |  |
-| `2_p_pct` | character |  |
-| `2_p_pct_rk` | character |  |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `ft_pct_rk` | character | Ft pct rk. |
-| `blk_pct` | character | Blocks percentage (0-1 decimal). |
-| `blk_pct_rk` | character | Blk pct rk. |
-| `stl_pct` | character | Steals percentage (0-1 decimal). |
-| `stl_pct_rk` | character | Stl pct rk. |
-| `nst_pct` | character |  |
-| `nst_pct_rk` | character |  |
-| `2_p_dist` | character |  |
-| `2_p_dist_rk` | character |  |
-| `a_pct` | character | A percentage (0-1 decimal). |
-| `a_pct_rk` | character | A pct rk. |
-| `3_pa_pct` | character |  |
-| `3_pa_pct_rk` | character |  |
-| `adj_oe` | character | Adjusted offensive efficiency. |
-| `adj_oe_rk` | character | Adj oe rk. |
-| `ncaa_seed` | integer | Ncaa seed. |
+| `team` | String | Team-side label or team identifier. |
+| `conf` | String | character. |
+| `3_p_pct` | String |  |
+| `3_p_pct_rk` | String |  |
+| `2_p_pct` | String |  |
+| `2_p_pct_rk` | String |  |
+| `ft_pct` | String | Free throw percentage (0-1). |
+| `ft_pct_rk` | String | Ft pct rk. |
+| `blk_pct` | String | Blocks percentage (0-1 decimal). |
+| `blk_pct_rk` | String | Blk pct rk. |
+| `stl_pct` | String | Steals percentage (0-1 decimal). |
+| `stl_pct_rk` | String | Stl pct rk. |
+| `nst_pct` | String |  |
+| `nst_pct_rk` | String |  |
+| `2_p_dist` | String |  |
+| `2_p_dist_rk` | String |  |
+| `a_pct` | String | A percentage (0-1 decimal). |
+| `a_pct_rk` | String | A pct rk. |
+| `3_pa_pct` | String |  |
+| `3_pa_pct_rk` | String |  |
+| `adj_oe` | String | Adjusted offensive efficiency. |
+| `adj_oe_rk` | String | Adj oe rk. |
+| `ncaa_seed` | Int64 | Ncaa seed. |
 
 **`return_parsed=False`** — the raw page HTML (`str`).
 
@@ -90,78 +90,78 @@ GET /team.php - a team's full season page. Returns EVERY table on it, so one cal
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
-| `offense` | character |  |
-| `defense` | character |  |
-| `d_i_avg` | double |  |
+| `category` | String | Category label. |
+| `offense` | String |  |
+| `defense` | String |  |
+| `d_i_avg` | Float64 |  |
 
 **schedule_table**
 
 | col_name | type | description |
 |---|---|---|
-| `0` | character |  |
-| `1` | integer |  |
-| `2` | integer |  |
-| `3` | character |  |
-| `4` | character |  |
-| `5` | integer |  |
-| `6` | character |  |
-| `7` | character |  |
-| `8` | character |  |
-| `9` | character |  |
-| `10` | character |  |
+| `0` | String |  |
+| `1` | Int64 |  |
+| `2` | Int64 |  |
+| `3` | String |  |
+| `4` | String |  |
+| `5` | Int64 |  |
+| `6` | String |  |
+| `7` | String |  |
+| `8` | String |  |
+| `9` | String |  |
+| `10` | String |  |
 
 **player_table**
 
 | col_name | type | description |
 |---|---|---|
-| `jersey` | character | Jersey number worn by the player. |
-| `column_0_rk` | character |  |
-| `ht` | character | Listed height. |
-| `wt` | double | Listed weight (lbs). |
-| `yr` | character | Yr. |
-| `g` | double | Games played. |
-| `s` | double | S. |
-| `pct_min` | double |  |
-| `o_rtg` | double | O rtg. |
-| `pct_poss` | double |  |
-| `pct_shots` | double |  |
-| `e_fg_pct` | double | E field goals percentage (0-1 decimal). |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `or_pct` | double | Or percentage (0-1 decimal). |
-| `dr_pct` | double | Dr percentage (0-1 decimal). |
-| `a_rate` | double | A rate. |
-| `to_rate` | double | To rate. |
-| `blk_pct` | double | Blocks percentage (0-1 decimal). |
-| `stl_pct` | double | Steals percentage (0-1 decimal). |
-| `fc_40` | double |  |
-| `fd_40` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `ftm_a` | character |  |
-| `pct` | double | Win percentage. |
-| `2_pm_a` | character |  |
-| `pct_1` | double |  |
-| `3_pm_a` | character |  |
-| `pct_2` | double |  |
+| `jersey` | String | Jersey number worn by the player. |
+| `column_0_rk` | String |  |
+| `ht` | String | Listed height. |
+| `wt` | Float64 | Listed weight (lbs). |
+| `yr` | String | Yr. |
+| `g` | Float64 | Games played. |
+| `s` | Float64 | S. |
+| `pct_min` | Float64 |  |
+| `o_rtg` | Float64 | O rtg. |
+| `pct_poss` | Float64 |  |
+| `pct_shots` | Float64 |  |
+| `e_fg_pct` | Float64 | E field goals percentage (0-1 decimal). |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `or_pct` | Float64 | Or percentage (0-1 decimal). |
+| `dr_pct` | Float64 | Dr percentage (0-1 decimal). |
+| `a_rate` | Float64 | A rate. |
+| `to_rate` | Float64 | To rate. |
+| `blk_pct` | Float64 | Blocks percentage (0-1 decimal). |
+| `stl_pct` | Float64 | Steals percentage (0-1 decimal). |
+| `fc_40` | Float64 |  |
+| `fd_40` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `ftm_a` | String |  |
+| `pct` | Float64 | Win percentage. |
+| `2_pm_a` | String |  |
+| `pct_1` | Float64 |  |
+| `3_pm_a` | String |  |
+| `pct_2` | Float64 |  |
 
 **depth_chart**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `pct_pg` | double |  |
-| `pct_sg` | double |  |
-| `pct_sf` | double |  |
-| `pct_pf` | double |  |
-| `pct_c` | double |  |
-| `name` | character | Display name. |
-| `pct_poss` | double |  |
-| `fta` | integer | Free throw attempts. |
-| `fg2_a` | integer |  |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | integer | Player weight in pounds. |
-| `year` | character | 4-digit year. |
+| `player_id` | Int64 | Unique player identifier. |
+| `pct_pg` | Float64 |  |
+| `pct_sg` | Float64 |  |
+| `pct_sf` | Float64 |  |
+| `pct_pf` | Float64 |  |
+| `pct_c` | Float64 |  |
+| `name` | String | Display name. |
+| `pct_poss` | Float64 |  |
+| `fta` | Int64 | Free throw attempts. |
+| `fg2_a` | Int64 |  |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Int64 | Player weight in pounds. |
+| `year` | String | 4-digit year. |
 
 **`return_parsed=False`** — the raw page HTML (`str`).
 
@@ -201,86 +201,86 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 
 | col_name | type | description |
 |---|---|---|
-| `jersey` | character | Jersey number worn by the player. |
-| `column_0_rk` | character |  |
-| `ht` | character | Listed height. |
-| `wt` | double | Listed weight (lbs). |
-| `yr` | character | Yr. |
-| `g` | double | Games played. |
-| `pct_min` | double |  |
-| `o_rtg` | character | O rtg. |
-| `pct_poss` | character |  |
-| `pct_shots` | character |  |
-| `e_fg_pct` | character | E field goals percentage (0-1 decimal). |
-| `ts_pct` | character | True shooting percentage (0-1). |
-| `or_pct` | double | Or percentage (0-1 decimal). |
-| `dr_pct` | character | Dr percentage (0-1 decimal). |
-| `a_rate` | character | A rate. |
-| `to_rate` | double | To rate. |
-| `blk_pct` | character | Blocks percentage (0-1 decimal). |
-| `stl_pct` | character | Steals percentage (0-1 decimal). |
-| `fc_40` | double |  |
-| `fd_40` | character |  |
-| `ft_rate` | character | Ft rate. |
-| `ftm_a` | character |  |
-| `pct` | character | Win percentage. |
-| `2_pm_a` | character |  |
-| `pct_1` | double |  |
-| `3_pm_a` | character |  |
-| `pct_2` | character |  |
+| `jersey` | String | Jersey number worn by the player. |
+| `column_0_rk` | String |  |
+| `ht` | String | Listed height. |
+| `wt` | Float64 | Listed weight (lbs). |
+| `yr` | String | Yr. |
+| `g` | Float64 | Games played. |
+| `pct_min` | Float64 |  |
+| `o_rtg` | String | O rtg. |
+| `pct_poss` | String |  |
+| `pct_shots` | String |  |
+| `e_fg_pct` | String | E field goals percentage (0-1 decimal). |
+| `ts_pct` | String | True shooting percentage (0-1). |
+| `or_pct` | Float64 | Or percentage (0-1 decimal). |
+| `dr_pct` | String | Dr percentage (0-1 decimal). |
+| `a_rate` | String | A rate. |
+| `to_rate` | Float64 | To rate. |
+| `blk_pct` | String | Blocks percentage (0-1 decimal). |
+| `stl_pct` | String | Steals percentage (0-1 decimal). |
+| `fc_40` | Float64 |  |
+| `fd_40` | String |  |
+| `ft_rate` | String | Ft rate. |
+| `ftm_a` | String |  |
+| `pct` | String | Win percentage. |
+| `2_pm_a` | String |  |
+| `pct_1` | Float64 |  |
+| `3_pm_a` | String |  |
+| `pct_2` | String |  |
 
 **player_table_2**
 
 | col_name | type | description |
 |---|---|---|
-| `jersey` | character | Jersey number worn by the player. |
-| `column_0_rk` | character |  |
-| `ht` | character | Listed height. |
-| `wt` | double | Listed weight (lbs). |
-| `yr` | character | Yr. |
-| `g` | double | Games played. |
-| `pct_min` | character |  |
-| `o_rtg` | character | O rtg. |
-| `pct_poss` | character |  |
-| `pct_shots` | character |  |
-| `e_fg_pct` | character | E field goals percentage (0-1 decimal). |
-| `ts_pct` | character | True shooting percentage (0-1). |
-| `or_pct` | double | Or percentage (0-1 decimal). |
-| `dr_pct` | character | Dr percentage (0-1 decimal). |
-| `a_rate` | character | A rate. |
-| `to_rate` | double | To rate. |
-| `blk_pct` | character | Blocks percentage (0-1 decimal). |
-| `stl_pct` | character | Steals percentage (0-1 decimal). |
-| `fc_40` | double |  |
-| `fd_40` | character |  |
-| `ft_rate` | character | Ft rate. |
-| `ftm_a` | character |  |
-| `pct` | character | Win percentage. |
-| `2_pm_a` | character |  |
-| `pct_1` | character |  |
-| `3_pm_a` | character |  |
-| `pct_2` | character |  |
+| `jersey` | String | Jersey number worn by the player. |
+| `column_0_rk` | String |  |
+| `ht` | String | Listed height. |
+| `wt` | Float64 | Listed weight (lbs). |
+| `yr` | String | Yr. |
+| `g` | Float64 | Games played. |
+| `pct_min` | String |  |
+| `o_rtg` | String | O rtg. |
+| `pct_poss` | String |  |
+| `pct_shots` | String |  |
+| `e_fg_pct` | String | E field goals percentage (0-1 decimal). |
+| `ts_pct` | String | True shooting percentage (0-1). |
+| `or_pct` | Float64 | Or percentage (0-1 decimal). |
+| `dr_pct` | String | Dr percentage (0-1 decimal). |
+| `a_rate` | String | A rate. |
+| `to_rate` | Float64 | To rate. |
+| `blk_pct` | String | Blocks percentage (0-1 decimal). |
+| `stl_pct` | String | Steals percentage (0-1 decimal). |
+| `fc_40` | Float64 |  |
+| `fd_40` | String |  |
+| `ft_rate` | String | Ft rate. |
+| `ftm_a` | String |  |
+| `pct` | String | Win percentage. |
+| `2_pm_a` | String |  |
+| `pct_1` | String |  |
+| `3_pm_a` | String |  |
+| `pct_2` | String |  |
 
 **minutes_table**
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | character |  |
-| `column_0_rk` | integer |  |
-| `column_0_rk_rk` | character |  |
-| `column_0_rk_rk_rk` | character |  |
-| `caleb_foster` | integer |  |
-| `darren_harris` | double |  |
-| `isaiah_evans` | double |  |
-| `mason_gillis` | integer |  |
-| `sion_james` | integer |  |
-| `tyrese_proctor` | integer |  |
-| `kon_knueppel` | integer |  |
-| `cooper_flagg` | integer |  |
-| `maliq_brown` | integer |  |
-| `patrick_ngongba` | double |  |
-| `khaman_maluach` | integer |  |
-| `starting_lineup_number` | integer |  |
+| `column_0` | String |  |
+| `column_0_rk` | Int64 |  |
+| `column_0_rk_rk` | String |  |
+| `column_0_rk_rk_rk` | String |  |
+| `caleb_foster` | Int64 |  |
+| `darren_harris` | Float64 |  |
+| `isaiah_evans` | Float64 |  |
+| `mason_gillis` | Int64 |  |
+| `sion_james` | Int64 |  |
+| `tyrese_proctor` | Int64 |  |
+| `kon_knueppel` | Int64 |  |
+| `cooper_flagg` | Int64 |  |
+| `maliq_brown` | Int64 |  |
+| `patrick_ngongba` | Float64 |  |
+| `khaman_maluach` | Int64 |  |
+| `starting_lineup_number` | Int64 |  |
 
 **`return_parsed=False`** — the raw page HTML (`str`).
 
@@ -319,35 +319,35 @@ GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_tea
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | integer |  |
-| `pre_rk` | character |  |
-| `coach` | character | Coach. |
-| `conf` | character | character. |
-| `w_l` | character | W l. |
-| `adj_t` | double | Adj t. |
-| `adj_o` | double | Adj o. |
-| `adj_d` | double | Adj d. |
-| `offense_e_fg_pct` | double |  |
-| `offense_to_pct` | double |  |
-| `offense_or_pct` | double |  |
-| `offense_ftr` | double |  |
-| `offense_2_p_pct` | double |  |
-| `offense_3_p_pct` | double |  |
-| `offense_ft_pct` | double |  |
-| `offense_3_pa_pct` | double |  |
-| `offense_a_pct` | double |  |
-| `offense_apl` | double |  |
-| `defense_e_fg_pct` | double |  |
-| `defense_to_pct` | double |  |
-| `defense_or_pct` | double |  |
-| `defense_ftr` | double |  |
-| `defense_2_p_pct` | double |  |
-| `defense_3_p_pct` | double |  |
-| `defense_blk_pct` | double |  |
-| `defense_3_pa_pct` | double |  |
-| `defense_a_pct` | double |  |
-| `defense_apl` | double |  |
-| `2_fp_pct` | double |  |
+| `column_0` | Int64 |  |
+| `pre_rk` | String |  |
+| `coach` | String | Coach. |
+| `conf` | String | character. |
+| `w_l` | String | W l. |
+| `adj_t` | Float64 | Adj t. |
+| `adj_o` | Float64 | Adj o. |
+| `adj_d` | Float64 | Adj d. |
+| `offense_e_fg_pct` | Float64 |  |
+| `offense_to_pct` | Float64 |  |
+| `offense_or_pct` | Float64 |  |
+| `offense_ftr` | Float64 |  |
+| `offense_2_p_pct` | Float64 |  |
+| `offense_3_p_pct` | Float64 |  |
+| `offense_ft_pct` | Float64 |  |
+| `offense_3_pa_pct` | Float64 |  |
+| `offense_a_pct` | Float64 |  |
+| `offense_apl` | Float64 |  |
+| `defense_e_fg_pct` | Float64 |  |
+| `defense_to_pct` | Float64 |  |
+| `defense_or_pct` | Float64 |  |
+| `defense_ftr` | Float64 |  |
+| `defense_2_p_pct` | Float64 |  |
+| `defense_3_p_pct` | Float64 |  |
+| `defense_blk_pct` | Float64 |  |
+| `defense_3_pa_pct` | Float64 |  |
+| `defense_a_pct` | Float64 |  |
+| `defense_apl` | Float64 |  |
+| `2_fp_pct` | Float64 |  |
 
 **`return_parsed=False`** — the raw page HTML (`str`).
 

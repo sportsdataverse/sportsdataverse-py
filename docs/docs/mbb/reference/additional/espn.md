@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — ESPN"
+title: "Men's college basketball — additional Python functions — ESPN"
 sidebar_label: "ESPN"
 sidebar_position: 2
-description: "MBB — additional Python functions — ESPN — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — ESPN — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — ESPN
+# Men's college basketball — additional Python functions — ESPN
 
 ### espn_mbb_calendar {#espn_mbb_calendar}
 
@@ -26,14 +26,14 @@ Polars dataframe containing calendar dates for the requested season.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `datetime` | character | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z). |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `year` | character | 4-digit year. |
-| `month` | character | Month of the calendar day as a two-digit string, e.g. 11. |
-| `day` | character | Day number within the month. |
-| `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
-| `url` | character | RotoWire player page URL. |
+| `season` | Int64 | Season year. |
+| `datetime` | String | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z). |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `year` | String | 4-digit year. |
+| `month` | String | Month of the calendar day as a two-digit string, e.g. 11. |
+| `day` | String | Day number within the month. |
+| `dateURL` | String | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
+| `url` | String | RotoWire player page URL. |
 
 **Raises**
 

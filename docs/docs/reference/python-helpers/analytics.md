@@ -50,21 +50,21 @@ one row per `(season, team_id, position_group)` the defense faced, `OUTPUT_SCHEM
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the plays, keyed as the source pbp keys it (CFB and NFL starting year). |
-| `team_id` | character | The DEFENSE, as text: its ESPN team id (CFB def_pos_team_id) or its nflverse abbreviation (NFL defteam). |
-| `position_group` | character | Group of the offensive player the plays went to: QB (every dropback, plus carries and targets of roster QBs), RB (roster RB or FB), WR or TE, from the season roster position. |
-| `plays` | integer | Plays in the cell, each counted once per group; a completion counts for QB and for its receiver's group. |
-| `games` | integer | Games with at least one of the cell's plays; the qualified floor counts these. |
-| `epa_per_play_allowed` | double | Mean offensive EPA of the cell's plays (higher is worse for the defense). |
-| `success_rate_allowed` | double | Share of the cell's plays with EPA > 0. |
-| `explosive_rate_allowed` | double | Share of the cell's plays that were explosive (a dropback with EPA >= 2.4 or a carry with EPA >= 1.8, as cfb_pbp's EPA_explosive). |
-| `dropbacks` | integer | QB rows only, null for other groups; dropbacks faced (pass attempts and sacks, plus NFL scrambles). |
-| `sack_rate_allowed` | double | QB rows only, null for other groups; sacks per dropback. |
-| `carries` | integer | RB rows only, null for other groups; carries by roster RBs and FBs. |
-| `rush_yards_per_carry_allowed` | double | RB rows only, null for other groups; rushing yards per carry (CFB yds_rushed, statYardage where ESPN left it null). |
-| `targets` | integer | WR and TE rows only, null for other groups; targets to the group's players that name a receiver. |
-| `yards_per_target_allowed` | double | WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly completions and run high. |
-| `qualified` | logical | True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile. |
+| `season` | Int64 | Season of the plays, keyed as the source pbp keys it (CFB and NFL starting year). |
+| `team_id` | String | The DEFENSE, as text: its ESPN team id (CFB def_pos_team_id) or its nflverse abbreviation (NFL defteam). |
+| `position_group` | String | Group of the offensive player the plays went to: QB (every dropback, plus carries and targets of roster QBs), RB (roster RB or FB), WR or TE, from the season roster position. |
+| `plays` | Int64 | Plays in the cell, each counted once per group; a completion counts for QB and for its receiver's group. |
+| `games` | Int64 | Games with at least one of the cell's plays; the qualified floor counts these. |
+| `epa_per_play_allowed` | Float64 | Mean offensive EPA of the cell's plays (higher is worse for the defense). |
+| `success_rate_allowed` | Float64 | Share of the cell's plays with EPA > 0. |
+| `explosive_rate_allowed` | Float64 | Share of the cell's plays that were explosive (a dropback with EPA >= 2.4 or a carry with EPA >= 1.8, as cfb_pbp's EPA_explosive). |
+| `dropbacks` | Int64 | QB rows only, null for other groups; dropbacks faced (pass attempts and sacks, plus NFL scrambles). |
+| `sack_rate_allowed` | Float64 | QB rows only, null for other groups; sacks per dropback. |
+| `carries` | Int64 | RB rows only, null for other groups; carries by roster RBs and FBs. |
+| `rush_yards_per_carry_allowed` | Float64 | RB rows only, null for other groups; rushing yards per carry (CFB yds_rushed, statYardage where ESPN left it null). |
+| `targets` | Int64 | WR and TE rows only, null for other groups; targets to the group's players that name a receiver. |
+| `yards_per_target_allowed` | Float64 | WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly completions and run high. |
+| `qualified` | Boolean | True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile. |
 
 **Raises**
 
@@ -129,17 +129,17 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
-| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
-| `player_id` | character | ESPN athlete id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
-| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
-| `team_id` | character | ESPN id (text) of the team on offense, from pos_team_id. |
-| `team_name` | character | Offense's team label from the released pbp (pos_team). |
-| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
-| `x` | double | Position on the metric's axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go. |
-| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
-| `epa` | double | EPA of the play from the released pbp. |
-| `id_source` | character | Always "espn": the ids are ESPN athlete and team ids. |
+| `season` | Int64 | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | String | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | String | ESPN athlete id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
+| `player_name` | String | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | String | ESPN id (text) of the team on offense, from pos_team_id. |
+| `team_name` | String | Offense's team label from the released pbp (pos_team). |
+| `down` | Int64 | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | Float64 | Position on the metric's axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go. |
+| `success` | Boolean | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | Float64 | EPA of the play from the released pbp. |
+| `id_source` | String | Always "espn": the ids are ESPN athlete and team ids. |
 
 **Raises**
 
@@ -237,20 +237,20 @@ one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_t
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year). |
-| `entity_type` | character | Aggregation level of the row: "league" (every attempt), "team" or "player". |
-| `entity_id` | character | Text id of the entity the row describes, per entity_type: team rows carry the source's team id (ESPN pos_team_id, nflfastR posteam, stats.nba team_id) and player rows the source's player id (ESPN athlete id, nflfastR gsis id until the NFL producer re-keys it to ESPN, stats.nba person_id); null on league rows. |
-| `entity_name` | character | Display name of the player or team as the source pbp/shots carry it; null on league rows. |
-| `team_id` | character | On player rows, the team of most of the player's attempts that season (text id); null on league and team rows. |
-| `id_source` | character | Id system of the row's ids, stamped by the adapter that built the attempts (espn, gsis, nba_stats or wnba_stats); the league argument only supplies the default when the attempts frame carries no id_source column. |
-| `metric` | character | Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance. |
-| `down` | integer | Down (1-4), the second axis of success_by_down_distance; null for every other metric. |
-| `x_lo` | double | Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES. |
-| `x_hi` | double | Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up. |
-| `attempts` | integer | Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row. |
-| `successes` | integer | Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots. |
-| `rate` | double | successes divided by attempts, computed exactly (no smoothing). |
-| `epa_per_att` | double | Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA. |
+| `season` | Int64 | Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year). |
+| `entity_type` | String | Aggregation level of the row: "league" (every attempt), "team" or "player". |
+| `entity_id` | String | Text id of the entity the row describes, per entity_type: team rows carry the source's team id (ESPN pos_team_id, nflfastR posteam, stats.nba team_id) and player rows the source's player id (ESPN athlete id, nflfastR gsis id until the NFL producer re-keys it to ESPN, stats.nba person_id); null on league rows. |
+| `entity_name` | String | Display name of the player or team as the source pbp/shots carry it; null on league rows. |
+| `team_id` | String | On player rows, the team of most of the player's attempts that season (text id); null on league and team rows. |
+| `id_source` | String | Id system of the row's ids, stamped by the adapter that built the attempts (espn, gsis, nba_stats or wnba_stats); the league argument only supplies the default when the attempts frame carries no id_source column. |
+| `metric` | String | Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance. |
+| `down` | Int64 | Down (1-4), the second axis of success_by_down_distance; null for every other metric. |
+| `x_lo` | Float64 | Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES. |
+| `x_hi` | Float64 | Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up. |
+| `attempts` | Int64 | Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row. |
+| `successes` | Int64 | Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots. |
+| `rate` | Float64 | successes divided by attempts, computed exactly (no smoothing). |
+| `epa_per_att` | Float64 | Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA. |
 
 **Raises**
 
@@ -310,17 +310,17 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
-| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
-| `player_id` | character | nflfastR gsis id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
-| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
-| `team_id` | character | nflfastR abbreviation of the team on offense (posteam). |
-| `team_name` | character | nflfastR abbreviation of the team on offense (posteam), repeated as the label. |
-| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
-| `x` | double | Position on the metric's axis in yards: kick_distance, air_yards or ydstogo. |
-| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
-| `epa` | double | EPA of the play from nfl_model_pbp. |
-| `id_source` | character | Always "gsis": player ids are nflfastR gsis ids and teams are nflfastR abbreviations. |
+| `season` | Int64 | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | String | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | String | nflfastR gsis id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
+| `player_name` | String | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | String | nflfastR abbreviation of the team on offense (posteam). |
+| `team_name` | String | nflfastR abbreviation of the team on offense (posteam), repeated as the label. |
+| `down` | Int64 | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | Float64 | Position on the metric's axis in yards: kick_distance, air_yards or ydstogo. |
+| `success` | Boolean | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | Float64 | EPA of the play from nfl_model_pbp. |
+| `id_source` | String | Always "gsis": player ids are nflfastR gsis ids and teams are nflfastR abbreviations. |
 
 **Raises**
 
@@ -360,26 +360,26 @@ one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN eve
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `entity_type` | character | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `entity_name` | character |  |
-| `team_id` | character |  |
-| `metric` | character |  |
-| `window_unit` | character |  |
-| `window_n` | integer |  |
-| `cur` | double |  |
-| `prev` | double |  |
-| `season_start` | double |  |
-| `career_baseline` | double |  |
-| `delta_prev` | double |  |
-| `delta_season` | double |  |
-| `delta_career` | double |  |
-| `delta_prev_rank` | integer |  |
-| `n` | integer |  |
-| `qualified` | logical |  |
-| `last_event_date` | character |  |
-| `as_of_date` | character |  |
+| `season` | Int64 |  |
+| `entity_type` | String | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `entity_name` | String |  |
+| `team_id` | String |  |
+| `metric` | String |  |
+| `window_unit` | String |  |
+| `window_n` | Int64 |  |
+| `cur` | Float64 |  |
+| `prev` | Float64 |  |
+| `season_start` | Float64 |  |
+| `career_baseline` | Float64 |  |
+| `delta_prev` | Float64 |  |
+| `delta_season` | Float64 |  |
+| `delta_career` | Float64 |  |
+| `delta_prev_rank` | Int64 |  |
+| `n` | Int64 |  |
+| `qualified` | Boolean |  |
+| `last_event_date` | String |  |
+| `as_of_date` | String |  |
 
 **Example**
 
@@ -439,17 +439,17 @@ one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for th
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
-| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
-| `player_id` | character | stats.nba person_id (text) of the shooter. |
-| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
-| `team_id` | character | stats.nba team_id (text) of the shooting team. |
-| `team_name` | character | Shooting team's tricode from the shot row (team_tricode). |
-| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
-| `x` | double | Shot distance in feet, as stats.nba records it. |
-| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
-| `epa` | double | Always null: shots carry no EPA. |
-| `id_source` | character | "nba_stats" or "wnba_stats" per the league argument: the stats site whose person_id and team_id the row carries. |
+| `season` | Int64 | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | String | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | String | stats.nba person_id (text) of the shooter. |
+| `player_name` | String | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | String | stats.nba team_id (text) of the shooting team. |
+| `team_name` | String | Shooting team's tricode from the shot row (team_tricode). |
+| `down` | Int64 | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | Float64 | Shot distance in feet, as stats.nba records it. |
+| `success` | Boolean | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | Float64 | Always null: shots carry no EPA. |
+| `id_source` | String | "nba_stats" or "wnba_stats" per the league argument: the stats site whose person_id and team_id the row carries. |
 
 **Raises**
 
@@ -496,17 +496,17 @@ one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `entity_type` | character | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `entity_name` | character |  |
-| `team_id` | character |  |
-| `window_unit` | character |  |
-| `metric` | character |  |
-| `game_id` | character |  |
-| `event_date` | character |  |
-| `seq` | integer |  |
-| `value` | double |  |
+| `season` | Int64 |  |
+| `entity_type` | String | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `entity_name` | String |  |
+| `team_id` | String |  |
+| `window_unit` | String |  |
+| `metric` | String |  |
+| `game_id` | String |  |
+| `event_date` | String |  |
+| `seq` | Int64 |  |
+| `value` | Float64 |  |
 
 **Raises**
 

@@ -27,12 +27,12 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | character | Composite Competition id (Utf8 join key). |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `name` | character | Stage display name. |
-| `official_name` | character | Official team name. |
-| `short_name` | character | Short team name. |
-| `acronym_name` | character | 3-letter team code. |
+| `competition_id` | String | Composite Competition id (Utf8 join key). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `name` | String | Stage display name. |
+| `official_name` | String | Official team name. |
+| `short_name` | String | Short team name. |
+| `acronym_name` | String | 3-letter team code. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -70,29 +70,29 @@ Team lineups (starting XI + bench + staff) for a match.
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | character | Composite Match id (Utf8 join key). |
-| `side` | character |  |
-| `team_id` | character | Composite Team id (Utf8 join key). |
-| `selection` | character |  |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `player_id` | character | Composite Player id (Utf8 join key). |
-| `bib_number` | character | Shirt/bib number. |
-| `role_label` | character | Human position label (e.g. `Forward`). |
-| `role` | integer | Numeric position/role code. |
-| `media_first_name` | character | Media-style first name. |
-| `media_last_name` | character | Media-style last name. |
-| `shirt_name` | character | Name printed on the shirt. |
-| `short_name` | character | Short team name. |
-| `display_name` | character |  |
-| `nationality` | character | Nationality name. |
-| `nationality_iso_code` | character | ISO country code. |
-| `is_captain` | logical | Whether the player wears the captain's armband. |
-| `is_goalkeeper` | logical | Whether the player is the goalkeeper. |
-| `events` | character | In-match events attributed to the player (goals/cards/subs). |
-| `tactical_x_position` | character | Formation-grid X (0-1 normalized canvas). |
-| `tactical_y_position` | character | Formation-grid Y (0-1 normalized canvas). |
-| `average_x_position` | character | Average pitch x-coordinate of the player over the match. |
-| `average_y_position` | character | Average pitch y-coordinate of the player over the match. |
+| `match_id` | String | Composite Match id (Utf8 join key). |
+| `side` | String |  |
+| `team_id` | String | Composite Team id (Utf8 join key). |
+| `selection` | String |  |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `player_id` | String | Composite Player id (Utf8 join key). |
+| `bib_number` | String | Shirt/bib number. |
+| `role_label` | String | Human position label (e.g. `Forward`). |
+| `role` | Int64 | Numeric position/role code. |
+| `media_first_name` | String | Media-style first name. |
+| `media_last_name` | String | Media-style last name. |
+| `shirt_name` | String | Name printed on the shirt. |
+| `short_name` | String | Short team name. |
+| `display_name` | String |  |
+| `nationality` | String | Nationality name. |
+| `nationality_iso_code` | String | ISO country code. |
+| `is_captain` | Boolean | Whether the player wears the captain's armband. |
+| `is_goalkeeper` | Boolean | Whether the player is the goalkeeper. |
+| `events` | String | In-match events attributed to the player (goals/cards/subs). |
+| `tactical_x_position` | String | Formation-grid X (0-1 normalized canvas). |
+| `tactical_y_position` | String | Formation-grid Y (0-1 normalized canvas). |
+| `average_x_position` | String | Average pitch x-coordinate of the player over the match. |
+| `average_y_position` | String | Average pitch y-coordinate of the player over the match. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -129,20 +129,20 @@ Match days (rounds) for a season.
 
 | col_name | type | description |
 |---|---|---|
-| `match_set_id` | character | Composite match-day (match set) id. |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `name` | character | Stage display name. |
-| `season_id` | character | Composite Season id (Utf8 join key). |
-| `competition_id` | character | Composite Competition id (Utf8 join key). |
-| `round_id` | character | Composite id of the round. |
-| `stage_id` | character | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
-| `index` | character | Ordinal position of the match day within the season. |
-| `short_name` | character | Short team name. |
-| `match_set_format_id` | character | Identifier of the match-day format. |
-| `type` | character | Type discriminator for the record. |
-| `start_date_utc` | character | Season window start (ISO-8601 UTC). |
-| `end_date_utc` | character | Season window end (ISO-8601 UTC). |
-| `matchday_status` | character | Status of the match day (scheduled, in progress, completed). |
+| `match_set_id` | String | Composite match-day (match set) id. |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `name` | String | Stage display name. |
+| `season_id` | String | Composite Season id (Utf8 join key). |
+| `competition_id` | String | Composite Competition id (Utf8 join key). |
+| `round_id` | String | Composite id of the round. |
+| `stage_id` | String | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
+| `index` | String | Ordinal position of the match day within the season. |
+| `short_name` | String | Short team name. |
+| `match_set_format_id` | String | Identifier of the match-day format. |
+| `type` | String | Type discriminator for the record. |
+| `start_date_utc` | String | Season window start (ISO-8601 UTC). |
+| `end_date_utc` | String | Season window end (ISO-8601 UTC). |
+| `matchday_status` | String | Status of the match day (scheduled, in progress, completed). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -184,53 +184,53 @@ Player-stats leaderboard for a season (paginated).
 
 | col_name | type | description |
 |---|---|---|
-| `rank_label` | character | Leaderboard rank label (null unless ranked view). |
-| `player_id` | character | Composite Player id (Utf8 join key). |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `bib_number` | character | Shirt/bib number. |
-| `role_label` | character | Human position label (e.g. `Forward`). |
-| `role` | integer | Numeric position/role code. |
-| `media_first_name` | character | Media-style first name. |
-| `media_last_name` | character | Media-style last name. |
-| `shirt_name` | character | Name printed on the shirt. |
-| `short_name` | character | Short team name. |
-| `display_name` | character |  |
-| `nationality` | character | Nationality name. |
-| `nationality_iso_code` | character | ISO country code. |
-| `api_call_request_time` | character | Server timestamp the payload was assembled (ISO-8601). |
-| `stats_id` | character | Stable stat key (e.g. `goals`, `points`, `Xg`). |
-| `stats_label` | character | Human stat name. |
-| `stats_label_abbreviation` | character | Short label (e.g. `PTS`, `GD`). |
-| `stats_value` | character | Stat value - integer, string, or array (e.g. `form`). |
-| `stats_unit` | character | Unit name (usually null). |
-| `stats_unit_abbreviation` | character | Unit abbreviation (usually null). |
-| `team_team_id` | character | Club: Composite Team id (Utf8 join key). |
-| `team_provider_id` | character | Club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `team_short_name` | character | Club: short team name. |
-| `team_official_name` | character | Club: official team name. |
-| `team_acronym_name` | character | Club: 3-letter team code. |
-| `team_acronym_name_localized` | character | Club: localized 3-letter code. |
-| `team_is_team_fake` | logical | Club: true for placeholder/TBD teams. |
-| `team_media_name` | character | Club: media-style display name. |
-| `team_media_short_name` | character | Club: short media-style display name. |
-| `team_country_code` | character | Club: ISO country code. |
-| `team_team_type` | character | Club: team type (e.g. `club`). |
-| `team_overall_summary` | character | Club: Season summary blurb. |
-| `team_stadium` | character | Club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
-| `team_all_season_imagery` | character | Club: per-season crest variants. |
-| `team_editorial_social_facebook` | character | Club editorial: facebook handle or URL. |
-| `team_editorial_social_instagram` | character | Club editorial: instagram handle or URL. |
-| `team_editorial_social_x` | character | Club editorial: x (Twitter) handle or URL. |
-| `team_editorial_social_tik_tok` | character | Club editorial: tikTok handle or URL. |
-| `team_editorial_social_you_tube` | character | Club editorial: youTube handle or URL. |
-| `team_editorial_social_linked_in` | character | Club editorial: linkedIn handle or URL. |
-| `team_editorial_website_url` | character | Club editorial: official website URL. |
-| `team_editorial_shop_url` | character | Club editorial: club shop URL. |
-| `team_editorial_tickets_url` | character | Club editorial: ticketing URL. |
-| `team_editorial_club_primary_colour` | character | Club editorial: club primary colour (hex). |
-| `team_editorial_club_secondary_colour` | character | Club editorial: club secondary colour (hex). |
-| `team_editorial_club_text_colour` | character | Club editorial: club text colour (hex). |
-| `editorial_player_role_within_team` | character | Editorial metadata: editorial description of the player's role in the side. |
+| `rank_label` | String | Leaderboard rank label (null unless ranked view). |
+| `player_id` | String | Composite Player id (Utf8 join key). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `bib_number` | String | Shirt/bib number. |
+| `role_label` | String | Human position label (e.g. `Forward`). |
+| `role` | Int64 | Numeric position/role code. |
+| `media_first_name` | String | Media-style first name. |
+| `media_last_name` | String | Media-style last name. |
+| `shirt_name` | String | Name printed on the shirt. |
+| `short_name` | String | Short team name. |
+| `display_name` | String |  |
+| `nationality` | String | Nationality name. |
+| `nationality_iso_code` | String | ISO country code. |
+| `api_call_request_time` | String | Server timestamp the payload was assembled (ISO-8601). |
+| `stats_id` | String | Stable stat key (e.g. `goals`, `points`, `Xg`). |
+| `stats_label` | String | Human stat name. |
+| `stats_label_abbreviation` | String | Short label (e.g. `PTS`, `GD`). |
+| `stats_value` | String | Stat value - integer, string, or array (e.g. `form`). |
+| `stats_unit` | String | Unit name (usually null). |
+| `stats_unit_abbreviation` | String | Unit abbreviation (usually null). |
+| `team_team_id` | String | Club: Composite Team id (Utf8 join key). |
+| `team_provider_id` | String | Club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `team_short_name` | String | Club: short team name. |
+| `team_official_name` | String | Club: official team name. |
+| `team_acronym_name` | String | Club: 3-letter team code. |
+| `team_acronym_name_localized` | String | Club: localized 3-letter code. |
+| `team_is_team_fake` | Boolean | Club: true for placeholder/TBD teams. |
+| `team_media_name` | String | Club: media-style display name. |
+| `team_media_short_name` | String | Club: short media-style display name. |
+| `team_country_code` | String | Club: ISO country code. |
+| `team_team_type` | String | Club: team type (e.g. `club`). |
+| `team_overall_summary` | String | Club: Season summary blurb. |
+| `team_stadium` | String | Club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
+| `team_all_season_imagery` | String | Club: per-season crest variants. |
+| `team_editorial_social_facebook` | String | Club editorial: facebook handle or URL. |
+| `team_editorial_social_instagram` | String | Club editorial: instagram handle or URL. |
+| `team_editorial_social_x` | String | Club editorial: x (Twitter) handle or URL. |
+| `team_editorial_social_tik_tok` | String | Club editorial: tikTok handle or URL. |
+| `team_editorial_social_you_tube` | String | Club editorial: youTube handle or URL. |
+| `team_editorial_social_linked_in` | String | Club editorial: linkedIn handle or URL. |
+| `team_editorial_website_url` | String | Club editorial: official website URL. |
+| `team_editorial_shop_url` | String | Club editorial: club shop URL. |
+| `team_editorial_tickets_url` | String | Club editorial: ticketing URL. |
+| `team_editorial_club_primary_colour` | String | Club editorial: club primary colour (hex). |
+| `team_editorial_club_secondary_colour` | String | Club editorial: club secondary colour (hex). |
+| `team_editorial_club_text_colour` | String | Club editorial: club text colour (hex). |
+| `editorial_player_role_within_team` | String | Editorial metadata: editorial description of the player's role in the side. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -269,118 +269,118 @@ Matches across one or more seasons within a US-format date window.
 
 | col_name | type | description |
 |---|---|---|
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `season_id` | character | Composite Season id (Utf8 join key). |
-| `match_id` | character | Composite Match id (Utf8 join key). |
-| `status` | character | Normalized match status (e.g. `PostMatch`, `PreMatch`, `Live`). |
-| `provider_status` | character | Raw provider status string. |
-| `phase` | character | Season phase (e.g. `RegularSeason`, `Final Series`). |
-| `match_date_utc` | character | Kickoff time in UTC (ISO-8601). |
-| `match_date_local` | character | Kickoff time in venue-local time. |
-| `local_time_utc_offset` | character | Venue UTC offset. |
-| `is_unknown_kick_off_time` | logical | True if kickoff time is TBD. |
-| `home_score_push` | integer | Home club: live score pushed by the feed for this side. |
-| `away_score_push` | integer | Away club: live score pushed by the feed for this side. |
-| `provider_penalty_score_home` | character | Provider-reported: home side's penalty-shootout score. |
-| `provider_penalty_score_away` | character | Provider-reported: away side's penalty-shootout score. |
-| `aggregate` | character | Two-leg aggregate label. |
-| `win_reason` | character | How the result was decided. |
-| `win_team_id` | character | Composite Team id of the winner (null if draw/unplayed). |
-| `previous_legs_result` | character | Aggregate result of previous legs in a two-legged tie. |
-| `stadium_id` | character | Composite Stadium id for the venue. |
-| `stadium_name` | character | Stadium: stage display name. |
-| `city_name` | character | City the stadium is in. |
-| `group` | character |  |
-| `group_name` | character |  |
-| `round_id` | character | Composite id of the round. |
-| `round_name` | character | Name of the round or series this match belongs to. |
-| `schedule_status` | character | Scheduling status. |
-| `provider_home_score` | integer | Provider-reported: home side's score. |
-| `provider_away_score` | integer | Provider-reported: away side's score. |
-| `group_id` | character |  |
-| `sub_league` | character | Sub-league label. |
-| `time` | character |  |
-| `additional_time` | character | Stoppage time added, in minutes. |
-| `previous_leg_id` | character | Composite Match id of the previous leg (two-legged ties). |
-| `editorial_broadcasters_broadcaster_national1` | character | Broadcast listing: first national broadcaster carrying the match. |
-| `editorial_broadcasters_broadcaster_national2` | character | Broadcast listing: second national broadcaster carrying the match. |
-| `editorial_broadcasters_broadcaster_national3` | character | Broadcast listing: third national broadcaster carrying the match. |
-| `editorial_broadcasters_broadcaster_international1` | character | Broadcast listing: first international broadcaster carrying the match. |
-| `editorial_broadcasters_broadcaster_international2` | character | Broadcast listing: second international broadcaster carrying the match. |
-| `editorial_broadcasters_broadcaster_international3` | character | Broadcast listing: third international broadcaster carrying the match. |
-| `editorial_highlights_url` | character | Editorial metadata: Match highlights URL. |
-| `editorial_highlights_national_url` | character | Editorial metadata: nationally-geofenced match highlights URL. |
-| `editorial_highlights_international_url` | character | Editorial metadata: internationally-geofenced match highlights URL. |
-| `editorial_tickets_url` | character | Editorial metadata: ticketing URL. |
-| `editorial_sponsor_image` | character | Editorial metadata: sponsor image asset, JSON-encoded. |
-| `editorial_theme_night` | character | Editorial metadata: theme-night promotion attached to the match. |
-| `editorial_editorials` | character | Editorial metadata: editorial blurbs attached to the record, JSON-encoded. |
-| `home_team_id` | character | Home club: Composite Team id (Utf8 join key). |
-| `home_provider_id` | character | Home club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `home_short_name` | character | Home club: short team name. |
-| `home_official_name` | character | Home club: official team name. |
-| `home_acronym_name` | character | Home club: 3-letter team code. |
-| `home_acronym_name_localized` | character | Home club: localized 3-letter code. |
-| `home_is_team_fake` | logical | Home club: true for placeholder/TBD teams. |
-| `home_media_name` | character | Home club: media-style display name. |
-| `home_media_short_name` | character | Home club: short media-style display name. |
-| `home_country_code` | character | Home club: ISO country code. |
-| `home_team_type` | character | Home club: team type (e.g. `club`). |
-| `home_overall_summary` | character | Home club: Season summary blurb. |
-| `home_stadium` | character | Home club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
-| `home_all_season_imagery` | character | Home club: per-season crest variants. |
-| `home_editorial_social_facebook` | character | Home club editorial: facebook handle or URL. |
-| `home_editorial_social_instagram` | character | Home club editorial: instagram handle or URL. |
-| `home_editorial_social_x` | character | Home club editorial: x (Twitter) handle or URL. |
-| `home_editorial_social_tik_tok` | character | Home club editorial: tikTok handle or URL. |
-| `home_editorial_social_you_tube` | character | Home club editorial: youTube handle or URL. |
-| `home_editorial_social_linked_in` | character | Home club editorial: linkedIn handle or URL. |
-| `home_editorial_website_url` | character | Home club editorial: official website URL. |
-| `home_editorial_shop_url` | character | Home club editorial: club shop URL. |
-| `home_editorial_tickets_url` | character | Home club editorial: ticketing URL. |
-| `home_editorial_club_primary_colour` | character | Home club editorial: club primary colour (hex). |
-| `home_editorial_club_secondary_colour` | character | Home club editorial: club secondary colour (hex). |
-| `home_editorial_club_text_colour` | character | Home club editorial: club text colour (hex). |
-| `away_team_id` | character | Away club: Composite Team id (Utf8 join key). |
-| `away_provider_id` | character | Away club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `away_short_name` | character | Away club: short team name. |
-| `away_official_name` | character | Away club: official team name. |
-| `away_acronym_name` | character | Away club: 3-letter team code. |
-| `away_acronym_name_localized` | character | Away club: localized 3-letter code. |
-| `away_is_team_fake` | logical | Away club: true for placeholder/TBD teams. |
-| `away_media_name` | character | Away club: media-style display name. |
-| `away_media_short_name` | character | Away club: short media-style display name. |
-| `away_country_code` | character | Away club: ISO country code. |
-| `away_team_type` | character | Away club: team type (e.g. `club`). |
-| `away_overall_summary` | character | Away club: Season summary blurb. |
-| `away_stadium` | character | Away club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
-| `away_all_season_imagery` | character | Away club: per-season crest variants. |
-| `away_editorial_social_facebook` | character | Away club editorial: facebook handle or URL. |
-| `away_editorial_social_instagram` | character | Away club editorial: instagram handle or URL. |
-| `away_editorial_social_x` | character | Away club editorial: x (Twitter) handle or URL. |
-| `away_editorial_social_tik_tok` | character | Away club editorial: tikTok handle or URL. |
-| `away_editorial_social_you_tube` | character | Away club editorial: youTube handle or URL. |
-| `away_editorial_social_linked_in` | character | Away club editorial: linkedIn handle or URL. |
-| `away_editorial_website_url` | character | Away club editorial: official website URL. |
-| `away_editorial_shop_url` | character | Away club editorial: club shop URL. |
-| `away_editorial_tickets_url` | character | Away club editorial: ticketing URL. |
-| `away_editorial_club_primary_colour` | character | Away club editorial: club primary colour (hex). |
-| `away_editorial_club_secondary_colour` | character | Away club editorial: club secondary colour (hex). |
-| `away_editorial_club_text_colour` | character | Away club editorial: club text colour (hex). |
-| `match_set_match_set_id` | character | Match day (round): Composite match-day (match set) id. |
-| `match_set_provider_id` | character | Match day (round): underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `match_set_name` | character | Match day (round): stage display name. |
-| `match_set_season_id` | character | Match day (round): Composite Season id (Utf8 join key). |
-| `match_set_competition_id` | character | Match day (round): Composite Competition id (Utf8 join key). |
-| `match_set_round_id` | character | Match day (round): Composite id of the round. |
-| `match_set_stage_id` | character | Match day (round): Composite Stage id (`nwsl::Football_Stage::{hex}`). |
-| `match_set_index` | character | Match day (round): ordinal position of the match day within the season. |
-| `match_set_short_name` | character | Match day (round): short team name. |
-| `match_set_match_set_format_id` | character | Match day (round): identifier of the match-day format. |
-| `match_set_type` | character | Match day (round): type discriminator for the record. |
-| `match_set_start_date_utc` | character | Match day (round): Season window start (ISO-8601 UTC). |
-| `match_set_end_date_utc` | character | Match day (round): Season window end (ISO-8601 UTC). |
-| `match_set_matchday_status` | character | Match day (round): status of the match day (scheduled, in progress, completed). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `season_id` | String | Composite Season id (Utf8 join key). |
+| `match_id` | String | Composite Match id (Utf8 join key). |
+| `status` | String | Normalized match status (e.g. `PostMatch`, `PreMatch`, `Live`). |
+| `provider_status` | String | Raw provider status string. |
+| `phase` | String | Season phase (e.g. `RegularSeason`, `Final Series`). |
+| `match_date_utc` | String | Kickoff time in UTC (ISO-8601). |
+| `match_date_local` | String | Kickoff time in venue-local time. |
+| `local_time_utc_offset` | String | Venue UTC offset. |
+| `is_unknown_kick_off_time` | Boolean | True if kickoff time is TBD. |
+| `home_score_push` | Int64 | Home club: live score pushed by the feed for this side. |
+| `away_score_push` | Int64 | Away club: live score pushed by the feed for this side. |
+| `provider_penalty_score_home` | String | Provider-reported: home side's penalty-shootout score. |
+| `provider_penalty_score_away` | String | Provider-reported: away side's penalty-shootout score. |
+| `aggregate` | String | Two-leg aggregate label. |
+| `win_reason` | String | How the result was decided. |
+| `win_team_id` | String | Composite Team id of the winner (null if draw/unplayed). |
+| `previous_legs_result` | String | Aggregate result of previous legs in a two-legged tie. |
+| `stadium_id` | String | Composite Stadium id for the venue. |
+| `stadium_name` | String | Stadium: stage display name. |
+| `city_name` | String | City the stadium is in. |
+| `group` | String |  |
+| `group_name` | String |  |
+| `round_id` | String | Composite id of the round. |
+| `round_name` | String | Name of the round or series this match belongs to. |
+| `schedule_status` | String | Scheduling status. |
+| `provider_home_score` | Int64 | Provider-reported: home side's score. |
+| `provider_away_score` | Int64 | Provider-reported: away side's score. |
+| `group_id` | String |  |
+| `sub_league` | String | Sub-league label. |
+| `time` | String |  |
+| `additional_time` | String | Stoppage time added, in minutes. |
+| `previous_leg_id` | String | Composite Match id of the previous leg (two-legged ties). |
+| `editorial_broadcasters_broadcaster_national1` | String | Broadcast listing: first national broadcaster carrying the match. |
+| `editorial_broadcasters_broadcaster_national2` | String | Broadcast listing: second national broadcaster carrying the match. |
+| `editorial_broadcasters_broadcaster_national3` | String | Broadcast listing: third national broadcaster carrying the match. |
+| `editorial_broadcasters_broadcaster_international1` | String | Broadcast listing: first international broadcaster carrying the match. |
+| `editorial_broadcasters_broadcaster_international2` | String | Broadcast listing: second international broadcaster carrying the match. |
+| `editorial_broadcasters_broadcaster_international3` | String | Broadcast listing: third international broadcaster carrying the match. |
+| `editorial_highlights_url` | String | Editorial metadata: Match highlights URL. |
+| `editorial_highlights_national_url` | String | Editorial metadata: nationally-geofenced match highlights URL. |
+| `editorial_highlights_international_url` | String | Editorial metadata: internationally-geofenced match highlights URL. |
+| `editorial_tickets_url` | String | Editorial metadata: ticketing URL. |
+| `editorial_sponsor_image` | String | Editorial metadata: sponsor image asset, JSON-encoded. |
+| `editorial_theme_night` | String | Editorial metadata: theme-night promotion attached to the match. |
+| `editorial_editorials` | String | Editorial metadata: editorial blurbs attached to the record, JSON-encoded. |
+| `home_team_id` | String | Home club: Composite Team id (Utf8 join key). |
+| `home_provider_id` | String | Home club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `home_short_name` | String | Home club: short team name. |
+| `home_official_name` | String | Home club: official team name. |
+| `home_acronym_name` | String | Home club: 3-letter team code. |
+| `home_acronym_name_localized` | String | Home club: localized 3-letter code. |
+| `home_is_team_fake` | Boolean | Home club: true for placeholder/TBD teams. |
+| `home_media_name` | String | Home club: media-style display name. |
+| `home_media_short_name` | String | Home club: short media-style display name. |
+| `home_country_code` | String | Home club: ISO country code. |
+| `home_team_type` | String | Home club: team type (e.g. `club`). |
+| `home_overall_summary` | String | Home club: Season summary blurb. |
+| `home_stadium` | String | Home club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
+| `home_all_season_imagery` | String | Home club: per-season crest variants. |
+| `home_editorial_social_facebook` | String | Home club editorial: facebook handle or URL. |
+| `home_editorial_social_instagram` | String | Home club editorial: instagram handle or URL. |
+| `home_editorial_social_x` | String | Home club editorial: x (Twitter) handle or URL. |
+| `home_editorial_social_tik_tok` | String | Home club editorial: tikTok handle or URL. |
+| `home_editorial_social_you_tube` | String | Home club editorial: youTube handle or URL. |
+| `home_editorial_social_linked_in` | String | Home club editorial: linkedIn handle or URL. |
+| `home_editorial_website_url` | String | Home club editorial: official website URL. |
+| `home_editorial_shop_url` | String | Home club editorial: club shop URL. |
+| `home_editorial_tickets_url` | String | Home club editorial: ticketing URL. |
+| `home_editorial_club_primary_colour` | String | Home club editorial: club primary colour (hex). |
+| `home_editorial_club_secondary_colour` | String | Home club editorial: club secondary colour (hex). |
+| `home_editorial_club_text_colour` | String | Home club editorial: club text colour (hex). |
+| `away_team_id` | String | Away club: Composite Team id (Utf8 join key). |
+| `away_provider_id` | String | Away club: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `away_short_name` | String | Away club: short team name. |
+| `away_official_name` | String | Away club: official team name. |
+| `away_acronym_name` | String | Away club: 3-letter team code. |
+| `away_acronym_name_localized` | String | Away club: localized 3-letter code. |
+| `away_is_team_fake` | Boolean | Away club: true for placeholder/TBD teams. |
+| `away_media_name` | String | Away club: media-style display name. |
+| `away_media_short_name` | String | Away club: short media-style display name. |
+| `away_country_code` | String | Away club: ISO country code. |
+| `away_team_type` | String | Away club: team type (e.g. `club`). |
+| `away_overall_summary` | String | Away club: Season summary blurb. |
+| `away_stadium` | String | Away club: home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
+| `away_all_season_imagery` | String | Away club: per-season crest variants. |
+| `away_editorial_social_facebook` | String | Away club editorial: facebook handle or URL. |
+| `away_editorial_social_instagram` | String | Away club editorial: instagram handle or URL. |
+| `away_editorial_social_x` | String | Away club editorial: x (Twitter) handle or URL. |
+| `away_editorial_social_tik_tok` | String | Away club editorial: tikTok handle or URL. |
+| `away_editorial_social_you_tube` | String | Away club editorial: youTube handle or URL. |
+| `away_editorial_social_linked_in` | String | Away club editorial: linkedIn handle or URL. |
+| `away_editorial_website_url` | String | Away club editorial: official website URL. |
+| `away_editorial_shop_url` | String | Away club editorial: club shop URL. |
+| `away_editorial_tickets_url` | String | Away club editorial: ticketing URL. |
+| `away_editorial_club_primary_colour` | String | Away club editorial: club primary colour (hex). |
+| `away_editorial_club_secondary_colour` | String | Away club editorial: club secondary colour (hex). |
+| `away_editorial_club_text_colour` | String | Away club editorial: club text colour (hex). |
+| `match_set_match_set_id` | String | Match day (round): Composite match-day (match set) id. |
+| `match_set_provider_id` | String | Match day (round): underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `match_set_name` | String | Match day (round): stage display name. |
+| `match_set_season_id` | String | Match day (round): Composite Season id (Utf8 join key). |
+| `match_set_competition_id` | String | Match day (round): Composite Competition id (Utf8 join key). |
+| `match_set_round_id` | String | Match day (round): Composite id of the round. |
+| `match_set_stage_id` | String | Match day (round): Composite Stage id (`nwsl::Football_Stage::{hex}`). |
+| `match_set_index` | String | Match day (round): ordinal position of the match day within the season. |
+| `match_set_short_name` | String | Match day (round): short team name. |
+| `match_set_match_set_format_id` | String | Match day (round): identifier of the match-day format. |
+| `match_set_type` | String | Match day (round): type discriminator for the record. |
+| `match_set_start_date_utc` | String | Match day (round): Season window start (ISO-8601 UTC). |
+| `match_set_end_date_utc` | String | Match day (round): Season window end (ISO-8601 UTC). |
+| `match_set_matchday_status` | String | Match day (round): status of the match day (scheduled, in progress, completed). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -417,8 +417,8 @@ Competition stages for a season (may be empty for league play).
 
 | col_name | type | description |
 |---|---|---|
-| `stage_id` | character | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
-| `name` | character | Stage display name. |
+| `stage_id` | String | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
+| `name` | String | Stage display name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -457,38 +457,38 @@ Overall standings table for a season (table/home/away splits).
 
 | col_name | type | description |
 |---|---|---|
-| `split_type` | character |  |
-| `achievement_statuses` | character | Achievement flags (champion, clinched, etc.). |
-| `note` | character | Free-text standings note (null when none). |
-| `team_id` | character | Composite Team id (Utf8 join key). |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `short_name` | character | Short team name. |
-| `official_name` | character | Official team name. |
-| `acronym_name` | character | 3-letter team code. |
-| `acronym_name_localized` | character | Localized 3-letter code. |
-| `is_team_fake` | logical | True for placeholder/TBD teams. |
-| `media_name` | character | Media-style display name. |
-| `media_short_name` | character | Short media-style display name. |
-| `country_code` | character | ISO country code. |
-| `team_type` | character | Team type (e.g. `club`). |
-| `overall_summary` | character | Season summary blurb. |
-| `stadium` | character | Home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
-| `all_season_imagery` | character | Per-season crest variants. |
-| `rank` | integer | Position within the group/table. |
-| `team` | character | Team identity block the player belongs to. |
-| `points` | integer | Competition points. |
-| `qualification_qualification_id` | character | Qualification band: identifier of the qualification band. |
-| `qualification_qualification_label` | character | Qualification band: display label of the qualification band. |
-| `qualification` | character | Qualification band (e.g. playoff/Final Series). |
-| `matches_played` | integer | Matches played in this split. |
-| `win` | integer | Matches won. |
-| `draw` | integer | Matches drawn. |
-| `lose` | integer | Matches lost. |
-| `goals_for` | integer | Goals scored. |
-| `goals_against` | integer | Goals conceded. |
-| `goal_difference` | integer | Goals scored minus goals conceded. |
-| `movement` | character | Position movement versus the previous matchday. |
-| `form` | character | Recent results sequence, JSON-encoded (the API sends an array). |
+| `split_type` | String |  |
+| `achievement_statuses` | String | Achievement flags (champion, clinched, etc.). |
+| `note` | String | Free-text standings note (null when none). |
+| `team_id` | String | Composite Team id (Utf8 join key). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `short_name` | String | Short team name. |
+| `official_name` | String | Official team name. |
+| `acronym_name` | String | 3-letter team code. |
+| `acronym_name_localized` | String | Localized 3-letter code. |
+| `is_team_fake` | Boolean | True for placeholder/TBD teams. |
+| `media_name` | String | Media-style display name. |
+| `media_short_name` | String | Short media-style display name. |
+| `country_code` | String | ISO country code. |
+| `team_type` | String | Team type (e.g. `club`). |
+| `overall_summary` | String | Season summary blurb. |
+| `stadium` | String | Home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
+| `all_season_imagery` | String | Per-season crest variants. |
+| `rank` | Int64 | Position within the group/table. |
+| `team` | String | Team identity block the player belongs to. |
+| `points` | Int64 | Competition points. |
+| `qualification_qualification_id` | String | Qualification band: identifier of the qualification band. |
+| `qualification_qualification_label` | String | Qualification band: display label of the qualification band. |
+| `qualification` | String | Qualification band (e.g. playoff/Final Series). |
+| `matches_played` | Int64 | Matches played in this split. |
+| `win` | Int64 | Matches won. |
+| `draw` | Int64 | Matches drawn. |
+| `lose` | Int64 | Matches lost. |
+| `goals_for` | Int64 | Goals scored. |
+| `goals_against` | Int64 | Goals conceded. |
+| `goal_difference` | Int64 | Goals scored minus goals conceded. |
+| `movement` | String | Position movement versus the previous matchday. |
+| `form` | String | Recent results sequence, JSON-encoded (the API sends an array). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -526,39 +526,39 @@ Team-stats leaderboard for a season.
 
 | col_name | type | description |
 |---|---|---|
-| `rank_label` | character | Leaderboard rank label (null unless ranked view). |
-| `team_id` | character | Composite Team id (Utf8 join key). |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `short_name` | character | Short team name. |
-| `official_name` | character | Official team name. |
-| `acronym_name` | character | 3-letter team code. |
-| `acronym_name_localized` | character | Localized 3-letter code. |
-| `is_team_fake` | logical | True for placeholder/TBD teams. |
-| `media_name` | character | Media-style display name. |
-| `media_short_name` | character | Short media-style display name. |
-| `country_code` | character | ISO country code. |
-| `team_type` | character | Team type (e.g. `club`). |
-| `overall_summary` | character | Season summary blurb. |
-| `stadium` | character | Home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
-| `all_season_imagery` | character | Per-season crest variants. |
-| `stats_id` | character | Stable stat key (e.g. `goals`, `points`, `Xg`). |
-| `stats_label` | character | Human stat name. |
-| `stats_label_abbreviation` | character | Short label (e.g. `PTS`, `GD`). |
-| `stats_value` | character | Stat value - integer, string, or array (e.g. `form`). |
-| `stats_unit` | character | Unit name (usually null). |
-| `stats_unit_abbreviation` | character | Unit abbreviation (usually null). |
-| `editorial_social_facebook` | character | Editorial metadata: facebook handle or URL. |
-| `editorial_social_instagram` | character | Editorial metadata: instagram handle or URL. |
-| `editorial_social_x` | character | Editorial metadata: x (Twitter) handle or URL. |
-| `editorial_social_tik_tok` | character | Editorial metadata: tikTok handle or URL. |
-| `editorial_social_you_tube` | character | Editorial metadata: youTube handle or URL. |
-| `editorial_social_linked_in` | character | Editorial metadata: linkedIn handle or URL. |
-| `editorial_website_url` | character | Editorial metadata: official website URL. |
-| `editorial_shop_url` | character | Editorial metadata: club shop URL. |
-| `editorial_tickets_url` | character | Editorial metadata: ticketing URL. |
-| `editorial_club_primary_colour` | character | Editorial metadata: club primary colour (hex). |
-| `editorial_club_secondary_colour` | character | Editorial metadata: club secondary colour (hex). |
-| `editorial_club_text_colour` | character | Editorial metadata: club text colour (hex). |
+| `rank_label` | String | Leaderboard rank label (null unless ranked view). |
+| `team_id` | String | Composite Team id (Utf8 join key). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `short_name` | String | Short team name. |
+| `official_name` | String | Official team name. |
+| `acronym_name` | String | 3-letter team code. |
+| `acronym_name_localized` | String | Localized 3-letter code. |
+| `is_team_fake` | Boolean | True for placeholder/TBD teams. |
+| `media_name` | String | Media-style display name. |
+| `media_short_name` | String | Short media-style display name. |
+| `country_code` | String | ISO country code. |
+| `team_type` | String | Team type (e.g. `club`). |
+| `overall_summary` | String | Season summary blurb. |
+| `stadium` | String | Home venue: `{id, providerId, name, cityName, country, address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`. |
+| `all_season_imagery` | String | Per-season crest variants. |
+| `stats_id` | String | Stable stat key (e.g. `goals`, `points`, `Xg`). |
+| `stats_label` | String | Human stat name. |
+| `stats_label_abbreviation` | String | Short label (e.g. `PTS`, `GD`). |
+| `stats_value` | String | Stat value - integer, string, or array (e.g. `form`). |
+| `stats_unit` | String | Unit name (usually null). |
+| `stats_unit_abbreviation` | String | Unit abbreviation (usually null). |
+| `editorial_social_facebook` | String | Editorial metadata: facebook handle or URL. |
+| `editorial_social_instagram` | String | Editorial metadata: instagram handle or URL. |
+| `editorial_social_x` | String | Editorial metadata: x (Twitter) handle or URL. |
+| `editorial_social_tik_tok` | String | Editorial metadata: tikTok handle or URL. |
+| `editorial_social_you_tube` | String | Editorial metadata: youTube handle or URL. |
+| `editorial_social_linked_in` | String | Editorial metadata: linkedIn handle or URL. |
+| `editorial_website_url` | String | Editorial metadata: official website URL. |
+| `editorial_shop_url` | String | Editorial metadata: club shop URL. |
+| `editorial_tickets_url` | String | Editorial metadata: ticketing URL. |
+| `editorial_club_primary_colour` | String | Editorial metadata: club primary colour (hex). |
+| `editorial_club_secondary_colour` | String | Editorial metadata: club secondary colour (hex). |
+| `editorial_club_text_colour` | String | Editorial metadata: club text colour (hex). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -595,41 +595,41 @@ Teams participating in a season.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Composite Team id (Utf8 join key). |
-| `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `short_name` | character | Short team name. |
-| `official_name` | character | Official team name. |
-| `acronym_name` | character | 3-letter team code. |
-| `acronym_name_localized` | character | Localized 3-letter code. |
-| `is_team_fake` | logical | True for placeholder/TBD teams. |
-| `media_name` | character | Media-style display name. |
-| `media_short_name` | character | Short media-style display name. |
-| `country_code` | character | ISO country code. |
-| `team_type` | character | Team type (e.g. `club`). |
-| `overall_summary` | character | Season summary blurb. |
-| `all_season_imagery` | character | Per-season crest variants. |
-| `stadium_id` | character | Composite Stadium id for the venue. |
-| `stadium_provider_id` | character | Stadium: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
-| `stadium_name` | character | Stadium: stage display name. |
-| `stadium_city_name` | character | Stadium: city the stadium is in. |
-| `stadium_country` | character | Stadium: country the stadium is in. |
-| `stadium_address` | character | Stadium: street address of the stadium. |
-| `stadium_capacity` | integer | Stadium: seating capacity of the stadium. |
-| `stadium_year_of_construction` | integer | Stadium: year the stadium was built. |
-| `stadium_maps_geo_code_latitude` | character | Stadium: latitude in decimal degrees. |
-| `stadium_maps_geo_code_longitude` | character | Stadium: longitude in decimal degrees. |
-| `editorial_social_facebook` | character | Editorial metadata: facebook handle or URL. |
-| `editorial_social_instagram` | character | Editorial metadata: instagram handle or URL. |
-| `editorial_social_x` | character | Editorial metadata: x (Twitter) handle or URL. |
-| `editorial_social_tik_tok` | character | Editorial metadata: tikTok handle or URL. |
-| `editorial_social_you_tube` | character | Editorial metadata: youTube handle or URL. |
-| `editorial_social_linked_in` | character | Editorial metadata: linkedIn handle or URL. |
-| `editorial_website_url` | character | Editorial metadata: official website URL. |
-| `editorial_shop_url` | character | Editorial metadata: club shop URL. |
-| `editorial_tickets_url` | character | Editorial metadata: ticketing URL. |
-| `editorial_club_primary_colour` | character | Editorial metadata: club primary colour (hex). |
-| `editorial_club_secondary_colour` | character | Editorial metadata: club secondary colour (hex). |
-| `editorial_club_text_colour` | character | Editorial metadata: club text colour (hex). |
+| `team_id` | String | Composite Team id (Utf8 join key). |
+| `provider_id` | String | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `short_name` | String | Short team name. |
+| `official_name` | String | Official team name. |
+| `acronym_name` | String | 3-letter team code. |
+| `acronym_name_localized` | String | Localized 3-letter code. |
+| `is_team_fake` | Boolean | True for placeholder/TBD teams. |
+| `media_name` | String | Media-style display name. |
+| `media_short_name` | String | Short media-style display name. |
+| `country_code` | String | ISO country code. |
+| `team_type` | String | Team type (e.g. `club`). |
+| `overall_summary` | String | Season summary blurb. |
+| `all_season_imagery` | String | Per-season crest variants. |
+| `stadium_id` | String | Composite Stadium id for the venue. |
+| `stadium_provider_id` | String | Stadium: underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
+| `stadium_name` | String | Stadium: stage display name. |
+| `stadium_city_name` | String | Stadium: city the stadium is in. |
+| `stadium_country` | String | Stadium: country the stadium is in. |
+| `stadium_address` | String | Stadium: street address of the stadium. |
+| `stadium_capacity` | Int64 | Stadium: seating capacity of the stadium. |
+| `stadium_year_of_construction` | Int64 | Stadium: year the stadium was built. |
+| `stadium_maps_geo_code_latitude` | String | Stadium: latitude in decimal degrees. |
+| `stadium_maps_geo_code_longitude` | String | Stadium: longitude in decimal degrees. |
+| `editorial_social_facebook` | String | Editorial metadata: facebook handle or URL. |
+| `editorial_social_instagram` | String | Editorial metadata: instagram handle or URL. |
+| `editorial_social_x` | String | Editorial metadata: x (Twitter) handle or URL. |
+| `editorial_social_tik_tok` | String | Editorial metadata: tikTok handle or URL. |
+| `editorial_social_you_tube` | String | Editorial metadata: youTube handle or URL. |
+| `editorial_social_linked_in` | String | Editorial metadata: linkedIn handle or URL. |
+| `editorial_website_url` | String | Editorial metadata: official website URL. |
+| `editorial_shop_url` | String | Editorial metadata: club shop URL. |
+| `editorial_tickets_url` | String | Editorial metadata: ticketing URL. |
+| `editorial_club_primary_colour` | String | Editorial metadata: club primary colour (hex). |
+| `editorial_club_secondary_colour` | String | Editorial metadata: club secondary colour (hex). |
+| `editorial_club_text_colour` | String | Editorial metadata: club text colour (hex). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

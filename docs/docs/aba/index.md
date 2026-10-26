@@ -1,9 +1,9 @@
 ---
-title: ABA
-sidebar_label: ABA
-description: "sdv-py ABA: endpoint references, dataset loaders and parsers for ABA in the SportsDataverse Python package."
+title: ABA League
+sidebar_label: ABA League
+description: "sdv-py ABA League: endpoint references, dataset loaders and parsers for ABA League in the SportsDataverse Python package."
 ---
-# ABA (`sportsdataverse.basketball.aba`)
+# ABA League (`sportsdataverse.basketball.aba`)
 
 ## Data sources
 

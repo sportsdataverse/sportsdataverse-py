@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team"
+title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team"
 sidebar_label: "Team"
-sidebar_position: 9
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
+sidebar_position: 8
+description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team
+# Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team
 
 ## yahoo_team_injuries
 
@@ -25,18 +25,18 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `nickname` | character |  |
-| `full_name` | character |  |
-| `location` | character |  |
-| `display_name` | character |  |
-| `primary_color` | character |  |
-| `abbreviation` | character |  |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `players` | character |  |
+| `team_id` | String |  |
+| `nickname` | String |  |
+| `full_name` | String |  |
+| `location` | String |  |
+| `display_name` | String |  |
+| `primary_color` | String |  |
+| `abbreviation` | String |  |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `players` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -106,8 +106,8 @@ Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `league_current_season` | character | Yahoo league-season identifier for the league's season currently in progress. |
-| `roster` | character | JSON-encoded roster of the players on the team for the requested season. |
+| `league_current_season` | String | Yahoo league-season identifier for the league's season currently in progress. |
+| `roster` | String | JSON-encoded roster of the players on the team for the requested season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -144,21 +144,21 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `display_name` | character |  |
-| `primary_color` | character |  |
-| `secondary_color` | character |  |
-| `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
-| `bye_weeks` | character | JSON-encoded list of the week numbers in which the team has no scheduled game. |
-| `games` | character |  |
-| `leagues` | character | JSON-encoded list of the league nodes the team's schedule spans. |
-| `full_name` | character |  |
-| `abbreviation` | character |  |
-| `nickname` | character |  |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_standings_team_record` | character | Formatted overall record for the team (e.g., "8-2"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `team_id` | String |  |
+| `display_name` | String |  |
+| `primary_color` | String |  |
+| `secondary_color` | String |  |
+| `gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the event or team. |
+| `bye_weeks` | String | JSON-encoded list of the week numbers in which the team has no scheduled game. |
+| `games` | String |  |
+| `leagues` | String | JSON-encoded list of the league nodes the team's schedule spans. |
+| `full_name` | String |  |
+| `abbreviation` | String |  |
+| `nickname` | String |  |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `team_standings_team_record` | String | Formatted overall record for the team (e.g., "8-2"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -196,19 +196,19 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `display_name` | character |  |
-| `full_name` | character |  |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `primary_color` | character |  |
-| `secondary_color` | character |  |
-| `abbreviation` | character |  |
-| `league_short_name` | character |  |
-| `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_name` | character |  |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `team_id` | String |  |
+| `display_name` | String |  |
+| `full_name` | String |  |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `primary_color` | String |  |
+| `secondary_color` | String |  |
+| `abbreviation` | String |  |
+| `league_short_name` | String |  |
+| `league_display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `league_name` | String |  |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -254,11 +254,11 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
 | col_name | type | description |
 |---|---|---|
-| `display_name` | character |  |
-| `full_name` | character |  |
-| `nickname` | character |  |
-| `team_football` | character | JSON-encoded team-level football leader board for the team. |
-| `individual_football` | character | JSON-encoded player-level football leader board for the team. |
+| `display_name` | String |  |
+| `full_name` | String |  |
+| `nickname` | String |  |
+| `team_football` | String | JSON-encoded team-level football leader board for the team. |
+| `individual_football` | String | JSON-encoded player-level football leader board for the team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -294,19 +294,19 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `nickname` | character |  |
-| `full_name` | character |  |
-| `location` | character |  |
-| `display_name` | character |  |
-| `primary_color` | character |  |
-| `abbreviation` | character |  |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `transactions` | character | JSON-encoded list of the team's roster transactions over the requested window. |
+| `team_id` | String |  |
+| `nickname` | String |  |
+| `full_name` | String |  |
+| `location` | String |  |
+| `display_name` | String |  |
+| `primary_color` | String |  |
+| `abbreviation` | String |  |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_domain` | String | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `transactions` | String | JSON-encoded list of the team's roster transactions over the requested window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -344,20 +344,20 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `display_name` | character |  |
-| `full_name` | character |  |
-| `nickname` | character |  |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `primary_color` | character |  |
-| `secondary_color` | character |  |
-| `abbreviation` | character |  |
-| `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_name` | character |  |
-| `league_short_name` | character |  |
+| `team_id` | String |  |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `display_name` | String |  |
+| `full_name` | String |  |
+| `nickname` | String |  |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `primary_color` | String |  |
+| `secondary_color` | String |  |
+| `abbreviation` | String |  |
+| `league_display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `league_name` | String |  |
+| `league_short_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,9 +1,9 @@
 ---
-title: DBL
-sidebar_label: DBL
-description: "sdv-py DBL: endpoint references, dataset loaders and parsers for DBL in the SportsDataverse Python package."
+title: Basketligaen
+sidebar_label: Basketligaen
+description: "sdv-py Basketligaen: endpoint references, dataset loaders and parsers for Basketligaen in the SportsDataverse Python package."
 ---
-# DBL (`sportsdataverse.basketball.dbl`)
+# Basketligaen (`sportsdataverse.basketball.dbl`)
 
 ## Data sources
 

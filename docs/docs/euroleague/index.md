@@ -1,9 +1,9 @@
 ---
-title: EUROLEAGUE
-sidebar_label: EUROLEAGUE
-description: "sdv-py EUROLEAGUE: endpoint references, dataset loaders and parsers for EUROLEAGUE in the SportsDataverse Python package."
+title: EuroLeague
+sidebar_label: EuroLeague
+description: "sdv-py EuroLeague: endpoint references, dataset loaders and parsers for EuroLeague in the SportsDataverse Python package."
 ---
-# EUROLEAGUE (`sportsdataverse.basketball.euroleague`)
+# EuroLeague (`sportsdataverse.basketball.euroleague`)
 
 ## Data sources
 

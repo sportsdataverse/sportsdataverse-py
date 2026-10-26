@@ -1,9 +1,9 @@
 ---
-title: BLEAGUE
-sidebar_label: BLEAGUE
-description: "sdv-py BLEAGUE: endpoint references, dataset loaders and parsers for BLEAGUE in the SportsDataverse Python package."
+title: B.LEAGUE
+sidebar_label: B.LEAGUE
+description: "sdv-py B.LEAGUE: endpoint references, dataset loaders and parsers for B.LEAGUE in the SportsDataverse Python package."
 ---
-# BLEAGUE (`sportsdataverse.basketball.bleague`)
+# B.LEAGUE (`sportsdataverse.basketball.bleague`)
 
 ## Data sources
 

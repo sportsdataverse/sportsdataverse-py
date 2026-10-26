@@ -1,11 +1,11 @@
 ---
-title: WWC — ESPN core API (v2)
+title: FIFA Women's World Cup — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "WWC — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "FIFA Women's World Cup — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# WWC — ESPN core API (v2)
+# FIFA Women's World Cup — ESPN core API (v2)
 
 `sportsdataverse.soccer.wwc` — 82 endpoints.
 

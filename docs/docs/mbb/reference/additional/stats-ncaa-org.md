@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot"
-sidebar_label: "stats.ncaa.org: BadLineupClump–create_shot"
+title: "Men's college basketball — additional Python functions — stats.ncaa.org: BadLineupClump–current_ncaa"
+sidebar_label: "stats.ncaa.org: BadLineupClump–current_ncaa"
 sidebar_position: 3
-description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — stats.ncaa.org: BadLineupClump–current_ncaa — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot
+# Men's college basketball — additional Python functions — stats.ncaa.org: BadLineupClump–current_ncaa
 
 ### BadLineupClump {#BadLineupClump}
 
@@ -13,10 +13,10 @@ description: "MBB — additional Python functions — stats.ncaa.org: BadLineupC
 A run of consecutive bad :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
 .LineupEvent`\ s that were merged together, plus the first following
-good event (`LineupErrorAnalysisUtils.BadLineupClump`, `:223-226`).
+good event (`LineupErrorAnalysisUtils.BadLineupClump`).
 
 The Scala case class is `protected` (module-private), but this port
-exports it: the Task 5d.3 fixers and the (not-yet-ported) Task 5e
+exports it: the lineup fixers and the play-by-play
 orchestrator both consume `BadLineupClump` instances directly, so
 keeping it private here would just force every caller to reach past a
 leading underscore.
@@ -26,7 +26,7 @@ leading underscore.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `evs` | `list[LineupEvent]` |  | The clumped lineup events, in chronological order. |
-| `next_good` | `Optional[LineupEvent]` | `None` | The first known-good lineup event following the clump, if any -- used by the Task 5d.3 fixers to reason about a player who should have subbed back in. |
+| `next_good` | `Optional[LineupEvent]` | `None` | The first known-good lineup event following the clump, if any -- used by the lineup fixers to reason about a player who should have subbed back in. |
 
 ### FieldAverage {#FieldAverage}
 
@@ -53,7 +53,7 @@ home-court advantages the solver converged on.
 
 A break in play (timeout, end of period, etc.) short of the end of
 
-the game (`Model.GameBreakEvent`, `ExtractorUtils.scala:874-877`).
+the game (`Model.GameBreakEvent`).
 
 **Parameters**
 
@@ -68,7 +68,7 @@ the game (`Model.GameBreakEvent`, `ExtractorUtils.scala:874-877`).
 
 `GameBreakEvent.with_min(new_min: 'float') -> "'GameBreakEvent'"`
 
-Return a copy with `min` replaced (`:876`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -80,7 +80,7 @@ Return a copy with `min` replaced (`:876`).
 
 `GameEndEvent(min: 'float', score: 'Score') -> None`
 
-The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`).
+The end of the game (`Model.GameEndEvent`).
 
 **Parameters**
 
@@ -95,7 +95,7 @@ The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`).
 
 `GameEndEvent.with_min(new_min: 'float') -> "'GameEndEvent'"`
 
-Return a copy with `min` replaced (`:880`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -126,7 +126,7 @@ strength-of-schedule adjustment); `hca_per_field` maps `field ->
 
 State for building raw lineup data across a fold over play-by-play
 
-events (`Model.LineupBuildingState`, `ExtractorUtils.scala:735-819`).
+events (`Model.LineupBuildingState`).
 
 See the module docstring's "`with_*` methods return NEW instances"
 note -- every mutator below returns a fresh `LineupBuildingState`
@@ -147,9 +147,7 @@ rather than mutating `self`.
 
 `LineupBuildingState.build() -> 'list[LineupEvent]'`
 
-The full chronological lineup-event list (`:742-744`:
-
-`(curr :: prev).reverse`).
+The full chronological lineup-event list (`(curr :: prev).reverse`).
 
 #### LineupBuildingState.is_active
 
@@ -157,7 +155,7 @@ The full chronological lineup-event list (`:742-744`:
 
 Whether the current lineup has non-sub activity, or has simply
 
-been on the floor long enough to trust (`:760-766`).
+been on the floor long enough to trust.
 
 **Parameters**
 
@@ -173,9 +171,7 @@ been on the floor long enough to trust (`:760-766`).
 
 `LineupBuildingState.is_sub(raw: 'RawGameEvent') -> 'bool'`
 
-Whether `raw` is an *opponent*-side substitution line
-
-(`:749-758`).
+Whether `raw` is an *opponent*-side substitution line.
 
 Only `~sportsdataverse.mbb.mbb_ncaa_models.RawGameEvent.opponent`
 is inspected -- per the Scala scaladoc, "opposition subs are
@@ -199,7 +195,7 @@ needs to look at the opponent side. Ported verbatim, quirk and all.
 
 `LineupBuildingState.with_latest_score(score: 'Score') -> "'LineupBuildingState'"`
 
-Update `curr`'s running end-of-event score (`:788-796`).
+Update `curr`'s running end-of-event score.
 
 **Parameters**
 
@@ -211,7 +207,7 @@ Update `curr`'s running end-of-event score (`:788-796`).
 
 `LineupBuildingState.with_opponent_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
 
-Append an opponent-side raw event and bump `end_min` (`:808-818`).
+Append an opponent-side raw event and bump `end_min`.
 
 **Parameters**
 
@@ -224,7 +220,7 @@ Append an opponent-side raw event and bump `end_min` (`:808-818`).
 
 `LineupBuildingState.with_player_in(player_name: 'str') -> "'LineupBuildingState'"`
 
-Prepend a new "subbed in" player code onto `curr` (`:770-778`).
+Prepend a new "subbed in" player code onto `curr`.
 
 **Parameters**
 
@@ -236,7 +232,7 @@ Prepend a new "subbed in" player code onto `curr` (`:770-778`).
 
 `LineupBuildingState.with_player_out(player_name: 'str') -> "'LineupBuildingState'"`
 
-Prepend a new "subbed out" player code onto `curr` (`:779-787`).
+Prepend a new "subbed out" player code onto `curr`.
 
 **Parameters**
 
@@ -248,7 +244,7 @@ Prepend a new "subbed out" player code onto `curr` (`:779-787`).
 
 `LineupBuildingState.with_team_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
 
-Append a team-side raw event and bump `end_min` (`:797-807`).
+Append a team-side raw event and bump `end_min`.
 
 **Parameters**
 
@@ -369,9 +365,9 @@ This is the page `~sportsdataverse.mbb.mbb_ncaa_boxscore_parser
 .get_box_lineup` parses on current markup (`format_version=1`): two
 `table.dataTable.small_font#competitor_*` per-team player tables.
 The server ignores `?period_no` here (returns the full-game box), so
-no period arg -- see `dev/phase5f-live-proof.md`.
+there is no period argument.
 
-ponytail: the modern box split out of `box_score` into this tab; the
+The modern box split out of `box_score` into this tab; the
 legacy (pre-2018) layout has no separate individual-stats page, so
 `legacy=True` falls back to the legacy `box_score` path.
 
@@ -430,9 +426,8 @@ The response HTML, decoded as UTF-8.
 
 Fetch a team's roster page for *year_id*.
 
-ponytail: URL shape by analogy to the confirmed team-id scheme, not
-independently live-confirmed -- see module docstring; fix in Task
-5f.2 if the real path differs.
+The URL shape follows the confirmed team-id scheme by analogy; it has
+not been confirmed live on its own (see the module docstring).
 
 **Parameters**
 
@@ -449,8 +444,8 @@ independently live-confirmed -- see module docstring; fix in Task
 
 Fetch a team's game-by-game schedule page.
 
-Modern shape (`teams/{id}/game_by_game`) is confirmed by
-`dev/phase5-ncaa-proxy-proof.md`; the legacy shape is by analogy
+The modern shape (`teams/{id}/game_by_game`) is confirmed live; the
+legacy shape is by analogy
 (see `fetch_team_roster`'s note).
 
 **Parameters**
@@ -481,9 +476,7 @@ The go-to constructor for scraping game-detail pages
 
 `OtherOpponentEvent(min: 'float', score: 'Score', event_string: 'str') -> None`
 
-A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`,
-
-`ExtractorUtils.scala:866-873`).
+A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`).
 
 **Parameters**
 
@@ -499,7 +492,7 @@ A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`,
 
 `OtherOpponentEvent.with_min(new_min: 'float') -> "'OtherOpponentEvent'"`
 
-Return a copy with `min` replaced (`:871`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -513,7 +506,7 @@ Return a copy with `min` replaced (`:871`).
 
 A non-sub event belonging to the team under analysis
 
-(`Model.OtherTeamEvent`, `ExtractorUtils.scala:858-865`).
+(`Model.OtherTeamEvent`).
 
 **Parameters**
 
@@ -529,7 +522,7 @@ A non-sub event belonging to the team under analysis
 
 `OtherTeamEvent.with_min(new_min: 'float') -> "'OtherTeamEvent'"`
 
-Return a copy with `min` replaced (`:863`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -541,7 +534,7 @@ Return a copy with `min` replaced (`:863`).
 
 `ParseError(location: 'str', id: 'str', messages: 'list[str]') -> None`
 
-A parse-time error (`ParseError`, `ParseError.scala:9`).
+A parse-time error (`ParseError`).
 
 **Parameters**
 
@@ -557,9 +550,8 @@ A parse-time error (`ParseError`, `ParseError.scala:9`).
 
 `ParseError.single(location: 'str', id: 'str', message: 'str') -> "'ParseError'"`
 
-Single-message convenience constructor (`ParseError.apply`,
+Single-message convenience constructor (`ParseError.apply` -- the companion object's single-`message`
 
-`ParseError.scala:19-21` -- the companion object's single-`message`
 overload). Python has no method overloading, so this is a
 `classmethod` rather than a second constructor signature.
 
@@ -581,7 +573,7 @@ A `ParseError` with `messages=[message]`.
 
 One version-era's HTML finder functions (``PlayByPlayParser
 
-.base_builders`, `PlayByPlayParser.scala:37-51``).
+.base_builders``).
 
 **Parameters**
 
@@ -671,7 +663,7 @@ imbalance `(home - away) / total` off these totals.
 
 One version-era's HTML finder functions (``TeamScheduleParser
 
-.base_builders`, `TeamScheduleParser.scala:36-39``).
+.base_builders``).
 
 **Parameters**
 
@@ -684,9 +676,8 @@ One version-era's HTML finder functions (``TeamScheduleParser
 
 `ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[str], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None`
 
-The HTML finder-function table (`ShotEventParser.base_builders`,
+The HTML finder-function table (`ShotEventParser.base_builders`). v1-only -- SVG shot maps did not exist in the v0 page
 
-`:37-50`). v1-only -- SVG shot maps did not exist in the v0 page
 format, so there is exactly one instance (`v1_builders`), unlike
 the v0/v1 pairs in every other 5e parser.
 
@@ -712,8 +703,7 @@ the v0/v1 pairs in every other 5e parser.
 
 SVG shot-map pixel<->feet conversion constants, taken from the
 
-`svg#court` element (`ShotEventParser.ShotMapDimensions`,
-`:568-582`). A plain class (not a dataclass) used purely as a
+`svg#court` element (`ShotEventParser.ShotMapDimensions`). A plain class (not a dataclass) used purely as a
 namespace, mirroring the Scala `object`'s "static singleton" role --
 field names are kept snake_case to match the Scala vals verbatim,
 letting the ported oracle tests reference e.g.
@@ -739,7 +729,7 @@ the `lastUpdated`/`gender`/`year` serialization wrapper.
 
 `SubInEvent(min: 'float', score: 'Score', player_name: 'str') -> None`
 
-A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`).
+A player subs into the game (`Model.SubInEvent`).
 
 **Parameters**
 
@@ -755,7 +745,7 @@ A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`)
 
 `SubInEvent.with_min(new_min: 'float') -> "'SubInEvent'"`
 
-Return a copy with `min` replaced (`:852`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -767,7 +757,7 @@ Return a copy with `min` replaced (`:852`).
 
 `SubOutEvent(min: 'float', score: 'Score', player_name: 'str') -> None`
 
-A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-857`).
+A player subs out of the game (`Model.SubOutEvent`).
 
 **Parameters**
 
@@ -783,7 +773,7 @@ A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-85
 
 `SubOutEvent.with_min(new_min: 'float') -> "'SubOutEvent'"`
 
-Return a copy with `min` replaced (`:856`).
+Return a copy with `min` replaced.
 
 **Parameters**
 
@@ -818,7 +808,7 @@ the home-court term (`off + hca_off`, `def - hca_def`).
 
 The 3 ways a lineup can be declared invalid, in Scala declaration
 
-(ordinal) order (`LineupErrorAnalysisUtils.ValidationError`, `:18-20`).
+(ordinal) order (`LineupErrorAnalysisUtils.ValidationError`).
 Member order is load-bearing -- see the module docstring's "Return
 shape" note.
 
@@ -828,17 +818,16 @@ shape" note.
 
 Back-fills a clump whose lineups carry TOO FEW players
 
-(`LineupErrorAnalysisUtils.add_missing_players`, `:315-401`).
+(`LineupErrorAnalysisUtils.add_missing_players`).
 
 Fires only when the clump's first event has `<= 4` on-floor players
-(`:324-325`: `players_in.size > 4` is a no-op). The candidate pool is
-every box-score player NOT already on the first event's floor
-(`:328`), **seeded** with a heuristic (`:352-357`): the `next_good`
+(`players_in.size > 4` is a no-op). The candidate pool is
+every box-score player NOT already on the first event's floor, **seeded** with a heuristic: the `next_good`
 lineup's sub-outs minus anyone appearing anywhere in the clump -- a good
 lineup that opens by subbing out a player who was never actually on the
 floor is a strong signal that player belongs to this under-filled clump.
 
-Walking the clump chronologically (`:359-385`): a candidate who subs IN
+Walking the clump chronologically: a candidate who subs IN
 is dropped from the pool (they're accounted for), and any remaining
 candidate named in a team-side raw play (same `parse_any_play` ->
 `tidy_player` -> `build_player_code` chain as
@@ -878,7 +867,7 @@ fixed, still = add_missing_players(clump, box_lineup, valid_codes)
 
 Enrich a lineup with play-by-play stats for both team and opponent
 
-(`add_stats_to_lineups`, `LineupUtils.scala:1441-1451`).
+(`add_stats_to_lineups`).
 
 **Parameters**
 
@@ -908,13 +897,13 @@ One row per unique `(offense five, defense five, home/away offense)` with `n_pos
 
 | col_name | type | description |
 |---|---|---|
-| `off_ids` | list | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
-| `def_ids` | list | Sorted player ids of the five defensive players in the stint (a list). |
-| `off_team` | character | Team on offense during the stint. |
-| `def_team` | character | Team on defense during the stint. |
-| `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |
-| `n_poss` | integer | Possessions the five-on-five unit played together in this offensive direction. |
-| `pts` | integer | Points scored. |
+| `off_ids` | List | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | List | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_team` | String | Team on offense during the stint. |
+| `def_team` | String | Team on defense during the stint. |
+| `is_home_offense` | Boolean | True when the home team is on offense, the home-court term of the RAPM design matrix. |
+| `n_poss` | Int64 | Possessions the five-on-five unit played together in this offensive direction. |
+| `pts` | Int64 | Points scored. |
 
 **Raises**
 
@@ -940,7 +929,7 @@ stints = aggregate_stints(resolved)
 
 Pair each of `combos`' three name variants with a shared alias
 
-target (`DataQualityIssues.alias_combos`, `DataQualityIssues.scala:351-356`).
+target (`DataQualityIssues.alias_combos`).
 
 **Parameters**
 
@@ -960,7 +949,7 @@ A dict mapping each of the three name variants to `to_name`.
 
 Runs the full self-healing fixer pipeline over one bad-lineup clump
 
-(`LineupErrorAnalysisUtils.analyze_and_fix_clumps`, `:556-610`).
+(`LineupErrorAnalysisUtils.analyze_and_fix_clumps`).
 
 The strict, order-dependent sequence (each stage threads
 `(fixed_so_far + newly_fixed, still_to_fix)`):
@@ -968,16 +957,15 @@ The strict, order-dependent sequence (each stage threads
 1. `handle_common_sub_bug`,
 2. `find_missing_subs`,
 3. `add_missing_players`,
-4. `find_missing_subs` **again** -- the Scala's own comment
-   (`:587-588`) explains: "Try this again since add_missing_players can
+4. `find_missing_subs` **again** -- the Scala's own comment explains: "Try this again since add_missing_players can
    go too far". Step 3 back-fills onto every event and can push some past
    5 players; the second trim pass removes the over-add.
 
 Finally every accumulated `fixed` lineup gets a fresh `lineup_id` via
-`~sportsdataverse.mbb.mbb_ncaa_stints.build_lineup_id` (`:597-605`)
+`~sportsdataverse.mbb.mbb_ncaa_stints.build_lineup_id`
 -- the fixers changed the on-floor `players`, so the id computed during
 stint construction is stale. The Scala's `debug`-gated
-`analyze_unfixed_clumps` call (`:593-596`) is dropped (see the module
+`analyze_unfixed_clumps` call is dropped (see the module
 docstring's "Debug-only" note); it only prints.
 
 The Scala wraps the whole pipeline in `Some(clump).map { ... }
@@ -1041,8 +1029,7 @@ attr_regex_filter(soup.find_all("div"), "width", r"^\[?4?5")
 
 Builds a per-conference team-index JSON fragment for
 
-`cbb-on-off-analyzer` (`TeamIdParser.build_available_team_list`,
-`TeamIdParser.scala:105-124`) -- the caller inserts the app-specific
+`cbb-on-off-analyzer` (`TeamIdParser.build_available_team_list`) -- the caller inserts the app-specific
 index key to get the final JSON string.
 
 See `build_lineup_cli_array`'s docstring for why this port doesn't
@@ -1077,7 +1064,7 @@ build_available_team_list(by_year)[ConferenceId("SEC")]("test")
 Fills in the fields a shot event can borrow straight from the
 
 box-score lineup, leaving the shot-specific fields as overridable
-placeholders (`ShotEventParser.build_base_event`, `:379-410`).
+placeholders (`ShotEventParser.build_base_event`).
 
 **Parameters**
 
@@ -1102,7 +1089,7 @@ base = build_base_event(box_lineup)
 
 Builds the per-conference team array for `lineups-cli.sh` files
 
-(`TeamIdParser.build_lineup_cli_array`, `TeamIdParser.scala:94-100`).
+(`TeamIdParser.build_lineup_cli_array`).
 
 **Iteration-order note (upstream-DISABLED context).** Scala's
 `List.groupBy` returns an immutable `Map` whose iteration order is
@@ -1139,7 +1126,7 @@ build_lineup_cli_array(triples)[ConferenceId("B1G")]
 
 `build_lineup_id(players: 'list[PlayerCodeId]') -> 'LineupId'`
 
-Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`):
+Builds a lineup id from a list of players:
 
 every player's `code`, sorted, joined with `"_"`.
 
@@ -1168,7 +1155,7 @@ build_lineup_id([PlayerCodeId("BbBob", PlayerId("Bob")), PlayerCodeId("AaAl", Pl
 
 Builds a player list from the previous (or current, if pre-initialized)
 
-lineup and the current lineup's in/out subs (`ExtractorUtils.scala:654-693`).
+lineup and the current lineup's in/out subs.
 
 Three candidate reconciliations are computed --
 
@@ -1209,7 +1196,7 @@ build_new_player_list(curr_lineup_event, prev_lineup_event)
 
 Converts a stream of partially parsed events into a list of lineup
 
-events (`ExtractorUtils.scala:118-227`).
+events.
 
 `box_lineup` is expected to carry every player on the team's roster,
 with the top 5 (by whatever order the caller supplies) being the
@@ -1283,24 +1270,24 @@ The input columns plus `player_key` and a `Utf8` `person_id` that is stable acro
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `clean_name` | character | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
-| `name` | character | Display name. |
-| `jersey` | character | Jersey number worn by the player. |
-| `class` | character | College class / draft eligibility note. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `ht_inches` | integer | Player height converted to total inches from the stats.ncaa.org roster listing. |
-| `hometown` | character | Player hometown. |
-| `high_school` | character | High school the player attended, from the stats.ncaa.org roster listing. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
+| `season` | String | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `clean_name` | String | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
+| `name` | String | Display name. |
+| `jersey` | String | Jersey number worn by the player. |
+| `class` | String | College class / draft eligibility note. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `ht_inches` | Int64 | Player height converted to total inches from the stats.ncaa.org roster listing. |
+| `hometown` | String | Player hometown. |
+| `high_school` | String | High school the player attended, from the stats.ncaa.org roster listing. |
+| `gp` | String | Games played. |
+| `gs` | String | Games started. |
+| `player_key` | String | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `person_id` | String | Unique player identifier (V3 endpoints). |
 
 **Example**
 
@@ -1316,9 +1303,7 @@ keys = build_person_keys(all_season_rosters, name_changes=changes)
 
 `build_player_code(in_name: 'str', team: 'Optional[TeamId]') -> 'PlayerCodeId'`
 
-Build a short player code from a name, in any of the NCAA formats
-
-(`ExtractorUtils.scala:290-391`).
+Build a short player code from a name, in any of the NCAA formats.
 
 The code is a compact `FirstInitials + [Middle] + Lastname` string
 (e.g. `"Mitchell, Makhi"` -> `"MiMitchell"`) unique within a team +
@@ -1375,9 +1360,9 @@ Frame of `team`, `player_key`, `player_id` (all `Utf8`), unique on `(team, playe
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
-| `player_id` | character | Unique player identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `player_key` | String | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `player_id` | String | Unique player identifier. |
 
 **Example**
 
@@ -1429,7 +1414,7 @@ print(result.teams[0].adj["3p"])  # {"off": ..., "def": ...}
 
 Build a location-less `ParseError` from id fragments
 
-(`ParseUtils.build_sub_error`, `ParseUtils.scala:83-85`, delegating
+(`ParseUtils.build_sub_error`, delegating
 through `build_error`/`build_errors`/`build_error_id` with
 `location=""`/`base_id=""`; the `shapeless`-based
 `sequence_kv_results` accumulation machinery in the same file is out
@@ -1499,7 +1484,7 @@ cached_path("contests/4690813/box_score?period_no=2")
 
 Aggregates bad lineup events for display, by clump-leader player count
 
-(`LineupErrorAnalysisUtils.categorize_bad_lineups`, `:617-633`,
+(`LineupErrorAnalysisUtils.categorize_bad_lineups`,
 display-only -- the Scala doc comment says "can live without tests").
 
 Re-clumps `lineup_events` (each paired with `next_good=None` --
@@ -1532,7 +1517,7 @@ categorize_bad_lineups([bad_ev])  # {5: (1, bad_ev.team_stats.num_possessions)}
 
 Groups consecutive bad lineup events into `BadLineupClump`\ s
 
-(`LineupErrorAnalysisUtils.clump_bad_lineups`, `:229-263`).
+(`LineupErrorAnalysisUtils.clump_bad_lineups`).
 
 The Scala original is a bespoke `foldLeft` (NOT the generic
 `Clumper` utility used elsewhere in the codebase) that prepends onto
@@ -1547,7 +1532,7 @@ reversing a prepend-built list restores insertion order.
 
 The current clump extends to cover the next `(lineup, next_good)` pair
 iff ALL 5 conditions hold, compared against the clump's LAST-ADDED event
-(`last`, not its first event) (`:242-249`):
+(`last`, not its first event):
 
 1. `lineup.team == last.team`
 2. `lineup.opponent == last.opponent`
@@ -1565,15 +1550,14 @@ predicate only compares team identities and player-list lengths, never a
 set of `PlayerCodeId`.
 
 Each time a clump is extended, `next_good` is REPLACED with the
-incoming pair's own second element (`:251`) -- the final clump's
+incoming pair's own second element -- the final clump's
 `next_good` is always the LAST-extended event's `next`, discarding
 whatever `next_good` an earlier extension set.
 
-Starting a new clump uses the incoming pair's own `next` too (`:234`,
-`:253`) -- a fresh clump's `next_good` is never inherited from the
+Starting a new clump uses the incoming pair's own `next` too -- a fresh clump's `next_good` is never inherited from the
 clump before it.
 
-The Scala's third `foldLeft` case (`:255-259`, matching a head clump
+The Scala's third `foldLeft` case (matching a head clump
 whose `evs` is empty) is dead code in practice -- every
 `BadLineupClump` this function ever constructs starts with exactly one
 event and is only ever appended to, so `evs` can never be empty. Omitted
@@ -1603,7 +1587,7 @@ clumps[0].evs  # [bad_ev]
 
 Generate the three name-string variants NCAA sources use for one
 
-player (`DataQualityIssues.combos`, `DataQualityIssues.scala:330-337`).
+player (`DataQualityIssues.combos`).
 
 The Scala signature takes a single `(String, String)` tuple, but every
 call site (including the `fix_combos`/`alias_combos` helpers below
@@ -1734,8 +1718,8 @@ print(compute_possession_splits(team).home_off_poss)  # 70.0
 
 Combines the different methods to build a set of lineup events
 
-(`PlayByPlayParser.create_lineup_data`, `:153-217`) -- the
-orchestrator that chains the ENTIRE Phase 5a-5d surface:
+(`PlayByPlayParser.create_lineup_data`) -- the
+orchestrator that chains the whole ported parsing surface:
 
 1. `parse_game_events` -- HTML -> reversed
    `~sportsdataverse.mbb.mbb_ncaa_stints.PlayByPlayEvent`\ s.
@@ -1801,7 +1785,7 @@ result = create_lineup_data("test.html", pbp_html, box_lineup, format_version=0)
 Split a lineup event into one :class:`~sportsdataverse.mbb
 
 .mbb_ncaa_models.PlayerEvent` per player on the floor
-(`create_player_events`, `LineupUtils.scala:1454-1529`).
+(`create_player_events`).
 
 First re-tidies `lineup_event_maybe_bad`'s `players`/`players_in`/
 `players_out` against `box_lineup` (via `_player_tidier`),
@@ -1838,8 +1822,7 @@ player_events[0].player_stats.fg_3p.made.total
 
 Parses a game page's SVG shot map into a list of :class:`~sportsdataverse
 
-.mbb.mbb_ncaa_models.ShotEvent` (`ShotEventParser.create_shot_event_data`,
-`:175-259`).
+.mbb.mbb_ncaa_models.ShotEvent` (`ShotEventParser.create_shot_event_data`).
 
 **Parameters**
 
@@ -1864,4 +1847,42 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import create_shot_event_data
 box_html = Path("tests/fixtures/ncaa/test_lineup.html").read_text(encoding="utf-8")
 box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=1)
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
+```
+
+### current_ncaa_team_alts {#current_ncaa_team_alts}
+
+`current_ncaa_team_alts(doc: 'Tag') -> 'list[str]'`
+
+The two team names from a *current* (2026) stats.ncaa.org game page.
+
+Both team logos render as `a.skipMask > img[alt]` on the modern
+play-by-play / box-score / individual-stats pages -- the `alt` is the
+short team name (e.g. `"Illinois"`), in `[home_or_first, second]`
+document order, deduped (the individual-stats page repeats each team).
+
+This is the current-markup counterpart to the cbb-explorer `:2018+`
+`team_finder` selectors (`div.card-header img[alt]` for the box,
+`table[align=center] > tbody a > img[alt]` for the pbp), which no
+longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
+The v1 `team_finder`\ s try their ported selector first, then fall
+back here, so both the vendored-era and current pages resolve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `doc` | `Tag` |  | A parsed stats.ncaa.org game page (`parse_html`). |
+
+**Returns**
+
+The distinct team-logo `alt` texts in document order: `[]` when the page carries no team logos, one name when only one team has a logo.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import current_ncaa_team_alts, parse_html
+
+html = '<a class="skipMask"><img alt="Illinois"></a><a class="skipMask"><img alt="Purdue"></a>'
+current_ncaa_team_alts(parse_html(html))
+# ['Illinois', 'Purdue']
 ```

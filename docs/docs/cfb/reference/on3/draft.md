@@ -1,15 +1,15 @@
 ---
-title: "CFB — On3 Recruit Database (api.on3.com) — Draft"
+title: "College football — On3 Recruit Database (api.on3.com) — Draft"
 sidebar_label: "Draft"
 sidebar_position: 3
-description: "CFB — On3 Recruit Database (api.on3.com) — Draft — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — On3 Recruit Database (api.on3.com) — Draft — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — On3 Recruit Database (api.on3.com) — Draft
+# College football — On3 Recruit Database (api.on3.com) — Draft
 
 ## on3_draft_organization_rank
 
-GET /rdb/v1/draft-organization-rank
+Draft organization rank.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/draft-organization-rank`
 
@@ -46,7 +46,7 @@ on3_draft_organization_rank()
 
 ## on3_draft_pick_organization_rank
 
-GET /rdb/v1/draft-pick-organization-rank
+Draft pick organization rank.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/draft-pick-organization-rank`
 
@@ -83,7 +83,7 @@ on3_draft_pick_organization_rank()
 
 ## on3_drafts
 
-GET /rdb/v1/drafts
+Drafts.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts`
 
@@ -119,7 +119,7 @@ on3_drafts()
 
 ## on3_drafts_by_stars
 
-GET /rdb/v1/drafts-by-stars
+Drafts by stars.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts-by-stars`
 
@@ -137,18 +137,18 @@ GET /rdb/v1/drafts-by-stars
 
 | col_name | type | description |
 |---|---|---|
-| `blue_chip_percent` | numeric | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
-| `population_percent` | numeric | Percent of the overall recruit population holding this star rating. |
-| `talent_ratio` | numeric | Ratio of the star tier's draft share to its population share (On3's talent ratio). |
-| `five_stars` | integer | Number of drafted players who were five-star recruits. |
-| `four_stars` | integer | Number of drafted players who were four-star recruits. |
-| `three_stars` | integer | Number of drafted players who were three-star recruits. |
-| `zero_stars` | integer | Number of drafted players who were unrated (zero-star) recruits. |
-| `total` | integer | Total drafted players counted in the row. |
-| `state_key` | integer | On3 numeric key of the state. |
-| `state_name` | character | Name of the state the row aggregates (e.g. Alabama). |
-| `state_abbreviation` | character | Two-letter state abbreviation. |
-| `state_country_key` | integer | On3 numeric key of the state's country. |
+| `blue_chip_percent` | Float64 | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
+| `population_percent` | Float64 | Percent of the overall recruit population holding this star rating. |
+| `talent_ratio` | Float64 | Ratio of the star tier's draft share to its population share (On3's talent ratio). |
+| `five_stars` | Int64 | Number of drafted players who were five-star recruits. |
+| `four_stars` | Int64 | Number of drafted players who were four-star recruits. |
+| `three_stars` | Int64 | Number of drafted players who were three-star recruits. |
+| `zero_stars` | Int64 | Number of drafted players who were unrated (zero-star) recruits. |
+| `total` | Int64 | Total drafted players counted in the row. |
+| `state_key` | Int64 | On3 numeric key of the state. |
+| `state_name` | String | Name of the state the row aggregates (e.g. Alabama). |
+| `state_abbreviation` | String | Two-letter state abbreviation. |
+| `state_country_key` | Int64 | On3 numeric key of the state's country. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -168,7 +168,7 @@ on3_drafts_by_stars()
 
 ## on3_drafts_by_stars_summary
 
-GET /rdb/v1/drafts-by-stars-summary
+Drafts by stars summary.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts-by-stars-summary`
 
@@ -203,7 +203,7 @@ on3_drafts_by_stars_summary()
 
 ## on3_drafts_players
 
-GET /rdb/v1/drafts/{orgKey}/players
+Drafts players.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts/{org_key}/players`
 

@@ -1,10 +1,10 @@
 ---
-title: IBBA — additional Python functions
+title: Israeli Premier League — additional Python functions
 sidebar_label: Additional functions
-description: "IBBA — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Israeli Premier League — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# IBBA — additional Python functions
+# Israeli Premier League — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.ibba` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -30,8 +30,8 @@ polars.DataFrame | pandas.DataFrame: `game_id` (IBBA) and `segev_game_id` (the `
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | IBBA game id (the game_id of the ibba_games frame). |
-| `segev_game_id` | integer | Segev game id of the same game (the game_id every ibba_segev_* wrapper takes). |
+| `game_id` | Int64 | IBBA game id (the game_id of the ibba_games frame). |
+| `segev_game_id` | Int64 | Segev game id of the same game (the game_id every ibba_segev_* wrapper takes). |
 
 **Raises**
 

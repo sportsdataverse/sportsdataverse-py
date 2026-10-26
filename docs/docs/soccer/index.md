@@ -1,9 +1,9 @@
 ---
-title: SOCCER
-sidebar_label: SOCCER
-description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers for SOCCER in the SportsDataverse Python package."
+title: Soccer (all)
+sidebar_label: Soccer (all)
+description: "sdv-py Soccer (all): endpoint references, dataset loaders and parsers for Soccer (all) in the SportsDataverse Python package."
 ---
-# SOCCER (`sportsdataverse.soccer`)
+# Soccer (all) (`sportsdataverse.soccer`)
 
 ## Data sources
 

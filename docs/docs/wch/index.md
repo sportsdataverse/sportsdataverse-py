@@ -1,9 +1,9 @@
 ---
-title: WCH
-sidebar_label: WCH
-description: "sdv-py WCH: endpoint references, dataset loaders and parsers for WCH in the SportsDataverse Python package."
+title: Women's college hockey
+sidebar_label: Women's college hockey
+description: "sdv-py Women's college hockey: endpoint references, dataset loaders and parsers for Women's college hockey in the SportsDataverse Python package."
 ---
-# WCH (`sportsdataverse.hockey.wch`)
+# Women's college hockey (`sportsdataverse.hockey.wch`)
 
 ## Data sources
 

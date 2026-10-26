@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nba_stats_teamdashboardbyshootingsplits
 
-GET /stats/teamdashboardbyshootingsplits
+Team dashboard by shooting splits.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyshootingsplits`
 
@@ -49,247 +49,247 @@ GET /stats/teamdashboardbyshootingsplits
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **Shot5FTTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **Shot8FTTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **ShotAreaTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **AssitedShotTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **ShotTypeTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | String |  |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **AssistedBy**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_2_pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_3_pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
-| `pct_uast_3_pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
-| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
-| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_2_pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_2_pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_3_pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_3_pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `group_set` | String | Name of the grouping family used for this dashboard or split row. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `efg_pct` | Float64 | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | Int64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2_pm` | Float64 | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2_pm` | Float64 | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3_pm` | Float64 | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3_pm` | Float64 | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | Float64 | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | Float64 | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | Int64 | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2_pm_rank` | Int64 | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2_pm_rank` | Int64 | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3_pm_rank` | Int64 | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3_pm_rank` | Int64 | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | Int64 | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | Int64 | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -310,7 +310,7 @@ nba_stats_teamdashboardbyshootingsplits(league_id='00', season='2024-25')
 
 ## nba_stats_teamdashboardbyteamperformance
 
-GET /stats/teamdashboardbyteamperformance
+Team dashboard by team performance.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyteamperformance`
 
@@ -350,243 +350,243 @@ GET /stats/teamdashboardbyteamperformance
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **ScoreDifferentialTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value_order` | integer | Sort order of the split value within its group. |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `group_value_2` | character | Secondary split value for the row when the group uses two dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value_order` | Int64 | Sort order of the split value within its group. |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `group_value_2` | String | Secondary split value for the row when the group uses two dimensions. |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **PointsScoredTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value_order` | integer | Sort order of the split value within its group. |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `group_value_2` | character | Secondary split value for the row when the group uses two dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value_order` | Int64 | Sort order of the split value within its group. |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `group_value_2` | String | Secondary split value for the row when the group uses two dimensions. |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **PontsAgainstTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value_order` | integer | Sort order of the split value within its group. |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `group_value_2` | character | Secondary split value for the row when the group uses two dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value_order` | Int64 | Sort order of the split value within its group. |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `group_value_2` | String | Secondary split value for the row when the group uses two dimensions. |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -607,7 +607,7 @@ nba_stats_teamdashboardbyteamperformance(league_id='00', season='2024-25')
 
 ## nba_stats_teamdashboardbyyearoveryear
 
-GET /stats/teamdashboardbyyearoveryear
+Team dashboard by year over year.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyyearoveryear`
 
@@ -647,119 +647,119 @@ GET /stats/teamdashboardbyyearoveryear
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **ByYearTeamDashboard**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 | Personal fouls. |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

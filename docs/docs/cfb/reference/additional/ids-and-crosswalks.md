@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — IDs and crosswalks"
+title: "College football — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
 sidebar_position: 14
-description: "CFB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — IDs and crosswalks
+# College football — additional Python functions — IDs and crosswalks
 
 ### cfb_odds_events_crosswalk {#cfb_odds_events_crosswalk}
 
@@ -35,14 +35,14 @@ A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event
 
 | col_name | type | description |
 |---|---|---|
-| `matchup_key` | character | Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a pipe (e.g. 'akron zips\|minnesota golden gophers'). Built from the Odds API home_team and away_team names. |
-| `odds_event_id` | character | The Odds API event id, a 32-character lowercase hex string (e.g. 'f06e90b4212fb514f3564ded9f190107'); the id column of toa_sports_events. |
-| `espn_game_id` | integer |  |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
-| `commence_time` | character | Scheduled kickoff of the Odds API event, an ISO-8601 UTC string with a trailing Z (e.g. '2026-09-19T16:00:00Z'), kept as text. |
-| `espn_date` | character | Kickoff date as YYYY-MM-DD: the first ten characters of the matched ESPN game's UTC start timestamp; null when no ESPN game matched. |
-| `matched_sources` | character | 'odds+espn' when the Odds API event matched an ESPN game on matchup_key, 'odds' when it did not; all 88 sampled rows were 'odds+espn'. |
+| `matchup_key` | String | Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a pipe (e.g. 'akron zips\|minnesota golden gophers'). Built from the Odds API home_team and away_team names. |
+| `odds_event_id` | String | The Odds API event id, a 32-character lowercase hex string (e.g. 'f06e90b4212fb514f3564ded9f190107'); the id column of toa_sports_events. |
+| `espn_game_id` | Int64 |  |
+| `home_team` | String | Home team name. |
+| `away_team` | String | Away team name. |
+| `commence_time` | String | Scheduled kickoff of the Odds API event, an ISO-8601 UTC string with a trailing Z (e.g. '2026-09-19T16:00:00Z'), kept as text. |
+| `espn_date` | String | Kickoff date as YYYY-MM-DD: the first ten characters of the matched ESPN game's UTC start timestamp; null when no ESPN game matched. |
+| `matched_sources` | String | 'odds+espn' when the Odds API event matched an ESPN game on matchup_key, 'odds' when it did not; all 88 sampled rows were 'odds+espn'. |
 
 **Raises**
 
@@ -97,18 +97,18 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_ke
 
 | col_name | type | description |
 |---|---|---|
-| `person_key` | character |  |
-| `espn_athlete_id` | integer |  |
-| `fox_athlete_id` | character |  |
-| `yahoo_athlete_id` | character |  |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `espn_jersey` | character |  |
-| `fox_jersey` | character |  |
-| `espn_position` | character |  |
-| `fox_position` | character |  |
-| `yahoo_position` | character |  |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `matched_sources` | character |  |
+| `person_key` | String |  |
+| `espn_athlete_id` | Int64 |  |
+| `fox_athlete_id` | String |  |
+| `yahoo_athlete_id` | String |  |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `espn_jersey` | String |  |
+| `fox_jersey` | String |  |
+| `espn_position` | String |  |
+| `fox_position` | String |  |
+| `yahoo_position` | String |  |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `matched_sources` | String |  |
 
 **Example**
 
@@ -164,17 +164,17 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_k
 
 | col_name | type | description |
 |---|---|---|
-| `matchup_key` | character |  |
-| `espn_game_id` | integer |  |
-| `fox_game_id` | character |  |
-| `yahoo_game_id` | character |  |
-| `yahoo_global_game_id` | character |  |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
-| `espn_date` | character |  |
-| `fox_date` | character |  |
-| `yahoo_date` | character |  |
-| `matched_sources` | character |  |
+| `matchup_key` | String |  |
+| `espn_game_id` | Int64 |  |
+| `fox_game_id` | String |  |
+| `yahoo_game_id` | String |  |
+| `yahoo_global_game_id` | String |  |
+| `home_team` | String | Home team name. |
+| `away_team` | String | Away team name. |
+| `espn_date` | String |  |
+| `fox_date` | String |  |
+| `yahoo_date` | String |  |
+| `matched_sources` | String |  |
 
 **Raises**
 
@@ -220,17 +220,17 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `norm_key`
 
 | col_name | type | description |
 |---|---|---|
-| `norm_key` | character | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed and alias-mapped (e.g. 'alabama a m bulldogs'). |
-| `espn_team_id` | integer |  |
-| `espn_team` | character | ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team. |
-| `espn_abbreviation` | character |  |
-| `fox_team_id` | character |  |
-| `fox_team` | character | Fox Sports' team name, which that feed ships in all capitals (e.g. 'AIR FORCE FALCONS'); null when no Fox team matched. |
-| `fox_abbreviation` | character | Fox Sports' short team code from its teamnav directory (e.g. 'AC', 'AKRON'), which can differ from the Yahoo code for the same school ('AKRON' vs 'AKR'); null when no Fox team matched. |
-| `yahoo_team_id` | character |  |
-| `yahoo_team` | character | Yahoo Sports' team display name, school plus mascot (e.g. 'Akron Zips'); null when no Yahoo team matched. |
-| `yahoo_abbreviation` | character | Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched. |
-| `matched_sources` | character | Plus-joined provenance tag naming which of espn, fox and yahoo contributed a directory row for this team, e.g. 'espn+fox+yahoo', 'espn', 'fox+yahoo'. |
+| `norm_key` | String | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed and alias-mapped (e.g. 'alabama a m bulldogs'). |
+| `espn_team_id` | Int64 |  |
+| `espn_team` | String | ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team. |
+| `espn_abbreviation` | String |  |
+| `fox_team_id` | String |  |
+| `fox_team` | String | Fox Sports' team name, which that feed ships in all capitals (e.g. 'AIR FORCE FALCONS'); null when no Fox team matched. |
+| `fox_abbreviation` | String | Fox Sports' short team code from its teamnav directory (e.g. 'AC', 'AKRON'), which can differ from the Yahoo code for the same school ('AKRON' vs 'AKR'); null when no Fox team matched. |
+| `yahoo_team_id` | String |  |
+| `yahoo_team` | String | Yahoo Sports' team display name, school plus mascot (e.g. 'Akron Zips'); null when no Yahoo team matched. |
+| `yahoo_abbreviation` | String | Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched. |
+| `matched_sources` | String | Plus-joined provenance tag naming which of espn, fox and yahoo contributed a directory row for this team, e.g. 'espn+fox+yahoo', 'espn', 'fox+yahoo'. |
 
 **Example**
 

@@ -1,9 +1,9 @@
 ---
-title: FEB
-sidebar_label: FEB
-description: "sdv-py FEB: endpoint references, dataset loaders and parsers for FEB in the SportsDataverse Python package."
+title: Spanish FEB
+sidebar_label: Spanish FEB
+description: "sdv-py Spanish FEB: endpoint references, dataset loaders and parsers for Spanish FEB in the SportsDataverse Python package."
 ---
-# FEB (`sportsdataverse.basketball.feb`)
+# Spanish FEB (`sportsdataverse.basketball.feb`)
 
 ## Data sources
 

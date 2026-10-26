@@ -1,9 +1,9 @@
 ---
-title: IBBA
-sidebar_label: IBBA
-description: "sdv-py IBBA: endpoint references, dataset loaders and parsers for IBBA in the SportsDataverse Python package."
+title: Israeli Premier League
+sidebar_label: Israeli Premier League
+description: "sdv-py Israeli Premier League: endpoint references, dataset loaders and parsers for Israeli Premier League in the SportsDataverse Python package."
 ---
-# IBBA (`sportsdataverse.basketball.ibba`)
+# Israeli Premier League (`sportsdataverse.basketball.ibba`)
 
 ## Data sources
 

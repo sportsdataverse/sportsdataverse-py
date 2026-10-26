@@ -31,56 +31,56 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `uid` | character |  |
-| `date` | character | Match start timestamp (ISO 8601, UTC). |
-| `name` | character | Full event name (e.g. 'Team A at Team B'). |
-| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
-| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
-| `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | integer |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
-| `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character |  |
-| `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
-| `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | logical |  |
-| `attendance` | integer |  |
-| `venue_id` | integer |  |
-| `venue_full_name` | character |  |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `venue_indoor` | logical |  |
-| `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
-| `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | integer |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_location` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_logo` | character |  |
-| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical |  |
-| `home_rank` | character |  |
-| `away_id` | integer |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_location` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_logo` | character |  |
-| `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical |  |
-| `away_rank` | character |  |
+| `game_id` | Int64 | ESPN event id. |
+| `uid` | String |  |
+| `date` | String | Match start timestamp (ISO 8601, UTC). |
+| `name` | String | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | String | Abbreviated event name (e.g. 'TA @ TB'). |
+| `season_year` | Int64 | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
+| `season_type` | Int64 | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
+| `season_slug` | String | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
+| `status_type_id` | Int64 |  |
+| `status_type_name` | String |  |
+| `status_type_state` | String |  |
+| `status_type_completed` | Boolean |  |
+| `status_type_description` | String |  |
+| `status_type_detail` | String |  |
+| `status_type_short_detail` | String |  |
+| `status_clock` | Float64 | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
+| `status_display_clock` | String |  |
+| `status_period` | Int64 | Current or final period number (quarter, half, inning or period, depending on the sport). |
+| `neutral_site` | Boolean | Whether the match is played at a neutral venue. |
+| `conference_competition` | Boolean |  |
+| `attendance` | Int64 |  |
+| `venue_id` | Int64 |  |
+| `venue_full_name` | String |  |
+| `venue_city` | String |  |
+| `venue_state` | String |  |
+| `venue_indoor` | Boolean |  |
+| `broadcast` | String | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
+| `note` | String | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
+| `home_id` | Int64 |  |
+| `home_name` | String |  |
+| `home_abbreviation` | String |  |
+| `home_display_name` | String |  |
+| `home_location` | String |  |
+| `home_color` | String |  |
+| `home_alternate_color` | String |  |
+| `home_logo` | String |  |
+| `home_score` | String | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `home_winner` | Boolean |  |
+| `home_rank` | String |  |
+| `away_id` | Int64 |  |
+| `away_name` | String |  |
+| `away_abbreviation` | String |  |
+| `away_display_name` | String |  |
+| `away_location` | String |  |
+| `away_color` | String |  |
+| `away_alternate_color` | String |  |
+| `away_logo` | String |  |
+| `away_score` | String | Away team's score. For cricket, the innings string. |
+| `away_winner` | Boolean |  |
+| `away_rank` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -118,364 +118,364 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `athlete_id` | integer | Athlete id. |
-| `athlete_display_name` | character | Athlete display name. |
-| `athlete_short_name` | character | Athlete short name. |
-| `athlete_jersey` | character | Athlete jersey. |
-| `athlete_position` | character | Athlete position. |
-| `starter` | character | Starter. |
-| `active` | character | Active. |
-| `did_not_play` | character | Did not play. |
-| `ejected` | character | Ejected. |
-| `reason` | character | Reason. |
-| `completions/passing_attempts` | character | Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts. |
-| `passing_yards` | character | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `yards_per_pass_attempt` | character | Average passing yards gained per pass attempt by the player in the box score. |
-| `passing_touchdowns` | character | Number of touchdown passes thrown by the player in the box score. |
-| `interceptions` | character | The number of interceptions thrown. |
-| `sacks_sack_yards_lost` | character | Combined sack statistics for the player, including sack count and total yards lost by the opposing offense. |
-| `adj_qbr` | character | ESPN's Adjusted Quarterback Rating for the player, measuring overall passing efficiency on a 0-100 scale. |
-| `qb_rating` | character | Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions. |
-| `rushing_attempts` | character |  |
-| `rushing_yards` | character | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `yards_per_rush_attempt` | character |  |
-| `rushing_touchdowns` | character | Number of rushing touchdowns scored by the player in the box score. |
-| `long_rushing` | character | Longest single rushing gain recorded by the player in the game. |
-| `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `receiving_yards` | character | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `yards_per_reception` | character | Average receiving yards gained per reception by the player in the box score. |
-| `receiving_touchdowns` | character | Number of receiving touchdowns scored by the player in the box score. |
-| `long_reception` | character | Longest single reception recorded by the player in the game. |
-| `receiving_targets` | character | Number of passing targets directed at the receiver during the game. |
-| `fumbles` | character | Number of fumbles committed by the player in the box score. |
-| `fumbles_lost` | character |  |
-| `fumbles_recovered` | character |  |
-| `total_tackles` | character | Total tackles recorded by the player, including both solo and assisted tackles. |
-| `solo_tackles` | character | Number of unassisted tackles recorded by the player in the box score. |
-| `sacks` | character | The Number of times sacked. |
-| `tackles_for_loss` | character |  |
-| `passes_defended` | character | Number of pass plays disrupted or broken up by the defensive player in the game. |
-| `qb_hits` | character | Number of times the player made contact with the opposing quarterback after or during a pass attempt. |
-| `defensive_touchdowns` | character | Number of touchdowns scored by the player via defensive plays such as interception or fumble returns. |
-| `interception_yards` | character |  |
-| `interception_touchdowns` | character | Number of touchdowns scored by the player on interception return plays. |
-| `kick_returns` | character |  |
-| `kick_return_yards` | character |  |
-| `yards_per_kick_return` | character | Average yards gained per kick return by the player in the box score. |
-| `long_kick_return` | character | Longest single kick return yardage recorded by the player in the game. |
-| `kick_return_touchdowns` | character | Number of touchdowns scored on kick returns by the player in the box score. |
-| `punt_returns` | character |  |
-| `punt_return_yards` | character |  |
-| `yards_per_punt_return` | character | Average yards gained per punt return by the player in the box score. |
-| `long_punt_return` | character | Longest single punt return yardage recorded by the player in the game. |
-| `punt_return_touchdowns` | character | Number of touchdowns scored on punt returns by the player in the box score. |
-| `punts` | character | Total number of punts executed by the player in the box score. |
-| `punt_yards` | character | Total yardage of all punts executed by the player in the game. |
-| `gross_avg_punt_yards` | character | Average gross punt distance before accounting for returns, recorded for the player in the game. |
-| `touchbacks` | character | Number of punts or kick-offs by the player that resulted in the opposing team starting from their own end zone. |
-| `punts_inside20` | character | Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line. |
-| `long_punt` | character | Distance of the longest individual punt executed by the player in the game. |
-| `field_goals_made/field_goal_attempts` | character | Field goal conversion ratio for the player, expressed as field goals made divided by attempts. |
-| `field_goal_pct` | character |  |
-| `long_field_goal_made` | character | Distance of the longest successful field goal kicked by the player in the game. |
-| `extra_points_made/extra_point_attempts` | character | Extra point conversion ratio for the player, expressed as extra points made divided by attempts. |
-| `total_kicking_points` | character | Total points contributed by the player through field goals and extra points in the game. |
+| `team_id` | Int64 | Team id. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Team display name. |
+| `team_location` | String | Team location. |
+| `athlete_id` | Int64 | Athlete id. |
+| `athlete_display_name` | String | Athlete display name. |
+| `athlete_short_name` | String | Athlete short name. |
+| `athlete_jersey` | String | Athlete jersey. |
+| `athlete_position` | String | Athlete position. |
+| `starter` | String | Starter. |
+| `active` | String | Active. |
+| `did_not_play` | String | Did not play. |
+| `ejected` | String | Ejected. |
+| `reason` | String | Reason. |
+| `completions/passing_attempts` | String | Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts. |
+| `passing_yards` | String | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `yards_per_pass_attempt` | String | Average passing yards gained per pass attempt by the player in the box score. |
+| `passing_touchdowns` | String | Number of touchdown passes thrown by the player in the box score. |
+| `interceptions` | String | The number of interceptions thrown. |
+| `sacks_sack_yards_lost` | String | Combined sack statistics for the player, including sack count and total yards lost by the opposing offense. |
+| `adj_qbr` | String | ESPN's Adjusted Quarterback Rating for the player, measuring overall passing efficiency on a 0-100 scale. |
+| `qb_rating` | String | Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions. |
+| `rushing_attempts` | String |  |
+| `rushing_yards` | String | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `yards_per_rush_attempt` | String |  |
+| `rushing_touchdowns` | String | Number of rushing touchdowns scored by the player in the box score. |
+| `long_rushing` | String | Longest single rushing gain recorded by the player in the game. |
+| `receptions` | String | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `receiving_yards` | String | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `yards_per_reception` | String | Average receiving yards gained per reception by the player in the box score. |
+| `receiving_touchdowns` | String | Number of receiving touchdowns scored by the player in the box score. |
+| `long_reception` | String | Longest single reception recorded by the player in the game. |
+| `receiving_targets` | String | Number of passing targets directed at the receiver during the game. |
+| `fumbles` | String | Number of fumbles committed by the player in the box score. |
+| `fumbles_lost` | String |  |
+| `fumbles_recovered` | String |  |
+| `total_tackles` | String | Total tackles recorded by the player, including both solo and assisted tackles. |
+| `solo_tackles` | String | Number of unassisted tackles recorded by the player in the box score. |
+| `sacks` | String | The Number of times sacked. |
+| `tackles_for_loss` | String |  |
+| `passes_defended` | String | Number of pass plays disrupted or broken up by the defensive player in the game. |
+| `qb_hits` | String | Number of times the player made contact with the opposing quarterback after or during a pass attempt. |
+| `defensive_touchdowns` | String | Number of touchdowns scored by the player via defensive plays such as interception or fumble returns. |
+| `interception_yards` | String |  |
+| `interception_touchdowns` | String | Number of touchdowns scored by the player on interception return plays. |
+| `kick_returns` | String |  |
+| `kick_return_yards` | String |  |
+| `yards_per_kick_return` | String | Average yards gained per kick return by the player in the box score. |
+| `long_kick_return` | String | Longest single kick return yardage recorded by the player in the game. |
+| `kick_return_touchdowns` | String | Number of touchdowns scored on kick returns by the player in the box score. |
+| `punt_returns` | String |  |
+| `punt_return_yards` | String |  |
+| `yards_per_punt_return` | String | Average yards gained per punt return by the player in the box score. |
+| `long_punt_return` | String | Longest single punt return yardage recorded by the player in the game. |
+| `punt_return_touchdowns` | String | Number of touchdowns scored on punt returns by the player in the box score. |
+| `punts` | String | Total number of punts executed by the player in the box score. |
+| `punt_yards` | String | Total yardage of all punts executed by the player in the game. |
+| `gross_avg_punt_yards` | String | Average gross punt distance before accounting for returns, recorded for the player in the game. |
+| `touchbacks` | String | Number of punts or kick-offs by the player that resulted in the opposing team starting from their own end zone. |
+| `punts_inside20` | String | Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line. |
+| `long_punt` | String | Distance of the longest individual punt executed by the player in the game. |
+| `field_goals_made/field_goal_attempts` | String | Field goal conversion ratio for the player, expressed as field goals made divided by attempts. |
+| `field_goal_pct` | String |  |
+| `long_field_goal_made` | String | Distance of the longest successful field goal kicked by the player in the game. |
+| `extra_points_made/extra_point_attempts` | String | Extra point conversion ratio for the player, expressed as extra points made divided by attempts. |
+| `total_kicking_points` | String | Total points contributed by the player through field goals and extra points in the game. |
 
 **boxscore_team**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `home_away` | character | Home away. |
-| `display_order` | integer | Display order. |
-| `stat_name` | character | Stat name. |
-| `stat_label` | character | Stat label. |
-| `stat_display_value` | character | Stat display value. |
-| `stat_value` | character | Stat value. |
+| `team_id` | Int64 | Team id. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Team display name. |
+| `home_away` | String | Home away. |
+| `display_order` | Int64 | Display order. |
+| `stat_name` | String | Stat name. |
+| `stat_label` | String | Stat label. |
+| `stat_display_value` | String | Stat display value. |
+| `stat_value` | String | Stat value. |
 
 **winprobability**
 
 | col_name | type | description |
 |---|---|---|
-| `home_win_percentage` | double | Home win percentage. |
-| `tie_percentage` | double | Tie percentage. |
-| `play_id` | integer | Play id. |
+| `home_win_percentage` | Float64 | Home win percentage. |
+| `tie_percentage` | Float64 | Tie percentage. |
+| `play_id` | Int64 | Play id. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `category_name` | character | Category name. |
-| `category_display_name` | character | Category display name. |
-| `athlete_id` | integer | Athlete id. |
-| `athlete_display_name` | character | Athlete display name. |
-| `athlete_position` | character | Athlete position. |
-| `value` | double | Value. |
-| `display_value` | character | Display value. |
-| `main_stat` | character | Main stat. |
-| `summary` | character | Summary. |
+| `team_id` | Int64 | Team id. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `category_name` | String | Category name. |
+| `category_display_name` | String | Category display name. |
+| `athlete_id` | Int64 | Athlete id. |
+| `athlete_display_name` | String | Athlete display name. |
+| `athlete_position` | String | Athlete position. |
+| `value` | Float64 | Value. |
+| `display_value` | String | Display value. |
+| `main_stat` | String | Main stat. |
+| `summary` | String | Summary. |
 
 **game_info**
 
 | col_name | type | description |
 |---|---|---|
-| `attendance` | integer | Attendance. |
-| `venue_id` | integer | Venue id. |
-| `venue_guid` | character | Venue guid. |
-| `venue_full_name` | character | Venue full name. |
-| `venue_address_city` | character | Venue address city. |
-| `venue_address_state` | character | Venue address state. |
-| `venue_address_zip_code` | character | Postal zip code of the venue where the game was played. |
-| `venue_address_country` | character | Country of the venue where the game was played. |
-| `venue_grass` | logical | Venue grass. |
+| `attendance` | Int64 | Attendance. |
+| `venue_id` | Int64 | Venue id. |
+| `venue_guid` | String | Venue guid. |
+| `venue_full_name` | String | Venue full name. |
+| `venue_address_city` | String | Venue address city. |
+| `venue_address_state` | String | Venue address state. |
+| `venue_address_zip_code` | String | Postal zip code of the venue where the game was played. |
+| `venue_address_country` | String | Country of the venue where the game was played. |
+| `venue_grass` | Boolean | Venue grass. |
 
 **officials**
 
 | col_name | type | description |
 |---|---|---|
-| `full_name` | character | Full name. |
-| `display_name` | character | Display name. |
-| `order` | integer | Order. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_id` | integer | Position id. |
+| `full_name` | String | Full name. |
+| `display_name` | String | Display name. |
+| `order` | Int64 | Order. |
+| `position_name` | String | Position name. |
+| `position_display_name` | String | Position display name. |
+| `position_id` | Int64 | Position id. |
 
 **header**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `uid` | character | Uid. |
-| `time_valid` | logical | Time valid. |
-| `competitions` | character | Competitions. |
-| `links` | character | Links. |
-| `week` | integer | Season week. |
-| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
-| `season_year` | integer | Season year. |
-| `season_current` | logical | Season current. |
-| `season_type` | integer | Season type. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_is_tournament` | logical | League is tournament. |
-| `league_links` | character | League links. |
-| `league_logos` | character | League logos. |
+| `id` | Int64 | Id. |
+| `uid` | String | Uid. |
+| `time_valid` | Boolean | Time valid. |
+| `competitions` | String | Competitions. |
+| `links` | String | Links. |
+| `week` | Int64 | Season week. |
+| `game_note` | String | Optional editorial note or context annotation attached to the game in the header. |
+| `season_year` | Int64 | Season year. |
+| `season_current` | Boolean | Season current. |
+| `season_type` | Int64 | Season type. |
+| `league_id` | Int64 | League id. |
+| `league_uid` | String | League uid. |
+| `league_name` | String | League name. |
+| `league_abbreviation` | String | League abbreviation. |
+| `league_slug` | String | League slug. |
+| `league_is_tournament` | Boolean | League is tournament. |
+| `league_links` | String | League links. |
+| `league_logos` | String | League logos. |
 
 **standings**
 
 | col_name | type | description |
 |---|---|---|
-| `group_header` | character | Group header. |
-| `conference_header` | character | Conference header. |
-| `division_header` | character | Division header. |
-| `team_id` | integer | Team id. |
-| `team_uid` | character | Team uid. |
-| `team_location` | character | Team location. |
-| `losses` | character | Losses. |
-| `points_against` | character |  |
-| `points_for` | character |  |
-| `ties` | character |  |
-| `win_percent` | character | Win percent. |
-| `wins` | character | Wins. |
-| `overall` | character |  |
+| `group_header` | String | Group header. |
+| `conference_header` | String | Conference header. |
+| `division_header` | String | Division header. |
+| `team_id` | Int64 | Team id. |
+| `team_uid` | String | Team uid. |
+| `team_location` | String | Team location. |
+| `losses` | String | Losses. |
+| `points_against` | String |  |
+| `points_for` | String |  |
+| `ties` | String |  |
+| `win_percent` | String | Win percent. |
+| `wins` | String | Wins. |
+| `overall` | String |  |
 
 **format**
 
 | col_name | type | description |
 |---|---|---|
-| `regulation_periods` | integer | Regulation periods. |
-| `regulation_display_name` | character | Regulation display name. |
-| `regulation_slug` | character | Regulation slug. |
-| `regulation_clock` | double | Regulation clock. |
-| `overtime_display_name` | character | Overtime display name. |
-| `overtime_slug` | character | Overtime slug. |
-| `overtime_clock` | double | Overtime clock. |
-| `sudden_death_periods` | integer | Number of sudden-death overtime periods defined in the game format rules. |
-| `sudden_death_clock` | double | Clock duration or time limit for sudden-death overtime periods as defined in the game format. |
+| `regulation_periods` | Int64 | Regulation periods. |
+| `regulation_display_name` | String | Regulation display name. |
+| `regulation_slug` | String | Regulation slug. |
+| `regulation_clock` | Float64 | Regulation clock. |
+| `overtime_display_name` | String | Overtime display name. |
+| `overtime_slug` | String | Overtime slug. |
+| `overtime_clock` | Float64 | Overtime clock. |
+| `sudden_death_periods` | Int64 | Number of sudden-death overtime periods defined in the game format rules. |
+| `sudden_death_clock` | Float64 | Clock duration or time limit for sudden-death overtime periods as defined in the game format. |
 
 **article**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `now_id` | character | Now id. |
-| `content_key` | character | Content key. |
-| `data_source_identifier` | character | Data source identifier. |
-| `publishedkey` | character | Publishedkey. |
-| `type` | character | Type. |
-| `game_id` | integer | Game id. |
-| `headline` | character | Headline. |
-| `description` | character | Description. |
-| `link_text` | character | Link text. |
-| `categorized` | character | Categorized. |
-| `originally_posted` | character | Originally posted. |
-| `last_modified` | character | Last modified. |
-| `published` | character | Published. |
-| `section` | character | Section. |
-| `source` | character | Source. |
-| `images` | character | Images. |
-| `video` | character | Video. |
-| `categories` | character | Categories. |
-| `keywords` | character | Keywords. |
-| `story` | character | Story. |
-| `premium` | logical | Premium. |
-| `is_live_blog` | logical | Is live blog. |
-| `allow_comments` | logical | Allow comments. |
-| `allow_search` | logical | Allow search. |
-| `allow_content_reactions` | logical | Allow content reactions. |
-| `links_web_href` | character | Links web href. |
-| `links_mobile_href` | character | Links mobile href. |
-| `links_api_self_href` | character | Links api self href. |
-| `links_app_sportscenter_href` | character | Links app sportscenter href. |
+| `id` | Int64 | Id. |
+| `now_id` | String | Now id. |
+| `content_key` | String | Content key. |
+| `data_source_identifier` | String | Data source identifier. |
+| `publishedkey` | String | Publishedkey. |
+| `type` | String | Type. |
+| `game_id` | Int64 | Game id. |
+| `headline` | String | Headline. |
+| `description` | String | Description. |
+| `link_text` | String | Link text. |
+| `categorized` | String | Categorized. |
+| `originally_posted` | String | Originally posted. |
+| `last_modified` | String | Last modified. |
+| `published` | String | Published. |
+| `section` | String | Section. |
+| `source` | String | Source. |
+| `images` | String | Images. |
+| `video` | String | Video. |
+| `categories` | String | Categories. |
+| `keywords` | String | Keywords. |
+| `story` | String | Story. |
+| `premium` | Boolean | Premium. |
+| `is_live_blog` | Boolean | Is live blog. |
+| `allow_comments` | Boolean | Allow comments. |
+| `allow_search` | Boolean | Allow search. |
+| `allow_content_reactions` | Boolean | Allow content reactions. |
+| `links_web_href` | String | Links web href. |
+| `links_mobile_href` | String | Links mobile href. |
+| `links_api_self_href` | String | Links api self href. |
+| `links_app_sportscenter_href` | String | Links app sportscenter href. |
 
 **injuries**
 
 | col_name | type | description |
 |---|---|---|
-| `injuries` | character | Injuries. |
-| `team_id` | integer | Team id. |
-| `team_uid` | character | Team uid. |
-| `team_display_name` | character | Team display name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_links` | character | Team links. |
-| `team_logo` | character | Team logo. |
-| `team_logos` | character | Team logos. |
+| `injuries` | String | Injuries. |
+| `team_id` | Int64 | Team id. |
+| `team_uid` | String | Team uid. |
+| `team_display_name` | String | Team display name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_links` | String | Team links. |
+| `team_logo` | String | Team logo. |
+| `team_logos` | String | Team logos. |
 
 **news**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `now_id` | character | Now id. |
-| `content_key` | character | Content key. |
-| `data_source_identifier` | character | Data source identifier. |
-| `type` | character | Type. |
-| `headline` | character | Headline. |
-| `description` | character | Description. |
-| `last_modified` | character | Last modified. |
-| `published` | character | Published. |
-| `images` | character | Images. |
-| `categories` | character | Categories. |
-| `premium` | logical | Premium. |
-| `byline` | character | Byline. |
-| `links_web_href` | character | Links web href. |
-| `links_mobile_href` | character | Links mobile href. |
-| `links_api_self_href` | character | Links api self href. |
-| `links_app_sportscenter_href` | character | Links app sportscenter href. |
+| `id` | Int64 | Id. |
+| `now_id` | String | Now id. |
+| `content_key` | String | Content key. |
+| `data_source_identifier` | String | Data source identifier. |
+| `type` | String | Type. |
+| `headline` | String | Headline. |
+| `description` | String | Description. |
+| `last_modified` | String | Last modified. |
+| `published` | String | Published. |
+| `images` | String | Images. |
+| `categories` | String | Categories. |
+| `premium` | Boolean | Premium. |
+| `byline` | String | Byline. |
+| `links_web_href` | String | Links web href. |
+| `links_mobile_href` | String | Links mobile href. |
+| `links_api_self_href` | String | Links api self href. |
+| `links_app_sportscenter_href` | String | Links app sportscenter href. |
 
 **drives**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `description` | character | Description. |
-| `yards` | integer | The number of receiving yards |
-| `is_score` | logical |  |
-| `offensive_plays` | integer |  |
-| `result` | character | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `short_display_result` | character |  |
-| `display_result` | character |  |
-| `plays` | character |  |
-| `team_id` | integer | Team id. |
-| `team_name` | character | Full display name of the team. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character |  |
-| `team_logos` | character | Team logos. |
-| `start_period_type` | character |  |
-| `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
-| `start_clock_display_value` | character | Game clock time displayed at the start of the drive or scoring sequence. |
-| `start_yard_line` | integer |  |
-| `start_text` | character |  |
-| `end_period_type` | character |  |
-| `end_period_number` | integer | Period or quarter number in which the drive or sequence ended. |
-| `end_clock_display_value` | character | Game clock time displayed at the end of the drive or scoring sequence. |
-| `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
-| `end_text` | character |  |
-| `time_elapsed_display_value` | character | Human-readable duration of time elapsed during the drive or scoring sequence. |
+| `id` | Int64 | Id. |
+| `description` | String | Description. |
+| `yards` | Int64 | The number of receiving yards |
+| `is_score` | Boolean |  |
+| `offensive_plays` | Int64 |  |
+| `result` | String | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
+| `short_display_result` | String |  |
+| `display_result` | String |  |
+| `plays` | String |  |
+| `team_id` | Int64 | Team id. |
+| `team_name` | String | Full display name of the team. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Team display name. |
+| `team_short_display_name` | String |  |
+| `team_logos` | String | Team logos. |
+| `start_period_type` | String |  |
+| `start_period_number` | Int64 | Period or quarter number in which the drive or sequence began. |
+| `start_clock_display_value` | String | Game clock time displayed at the start of the drive or scoring sequence. |
+| `start_yard_line` | Int64 |  |
+| `start_text` | String |  |
+| `end_period_type` | String |  |
+| `end_period_number` | Int64 | Period or quarter number in which the drive or sequence ended. |
+| `end_clock_display_value` | String | Game clock time displayed at the end of the drive or scoring sequence. |
+| `end_yard_line` | Int64 | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
+| `end_text` | String |  |
+| `time_elapsed_display_value` | String | Human-readable duration of time elapsed during the drive or scoring sequence. |
 
 **drive_plays**
 
 | col_name | type | description |
 |---|---|---|
-| `drive_id` | integer |  |
-| `drive_sequence` | integer | Sequential position of the drive within the game's broadcast or play-by-play listing. |
-| `id` | integer | Id. |
-| `sequence_number` | character | Sequence number. |
-| `text` | character | Text. |
-| `away_score` | integer | Away score. |
-| `home_score` | integer | Home score. |
-| `scoring_play` | logical | Scoring play. |
-| `priority` | logical |  |
-| `modified` | character |  |
-| `wallclock` | character | Wallclock. |
-| `team_participants` | character | Teams or participants associated with a specific drive or sequence in the broadcast record. |
-| `is_penalty` | logical |  |
-| `stat_yardage` | integer |  |
-| `is_turnover` | logical |  |
-| `type_id` | integer | Type id. |
-| `type_text` | character | Type text. |
-| `type_abbreviation` | character |  |
-| `period_number` | integer | Period number. |
-| `clock_display_value` | character | Clock display value. |
-| `start_down` | integer |  |
-| `start_distance` | integer |  |
-| `start_yard_line` | integer |  |
-| `start_yards_to_endzone` | integer |  |
-| `start_team_id` | integer |  |
-| `end_down` | integer |  |
-| `end_distance` | integer |  |
-| `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
-| `end_yards_to_endzone` | integer |  |
-| `end_down_distance_text` | character |  |
-| `end_short_down_distance_text` | character |  |
-| `end_possession_text` | character |  |
-| `end_team_id` | integer |  |
-| `start_down_distance_text` | character |  |
-| `start_short_down_distance_text` | character |  |
-| `start_possession_text` | character |  |
-| `scoring_type_name` | character |  |
-| `scoring_type_display_name` | character |  |
-| `scoring_type_abbreviation` | character |  |
-| `point_after_attempt_id` | integer |  |
-| `point_after_attempt_text` | character |  |
-| `point_after_attempt_abbreviation` | character |  |
-| `point_after_attempt_value` | double |  |
+| `drive_id` | Int64 |  |
+| `drive_sequence` | Int64 | Sequential position of the drive within the game's broadcast or play-by-play listing. |
+| `id` | Int64 | Id. |
+| `sequence_number` | String | Sequence number. |
+| `text` | String | Text. |
+| `away_score` | Int64 | Away score. |
+| `home_score` | Int64 | Home score. |
+| `scoring_play` | Boolean | Scoring play. |
+| `priority` | Boolean |  |
+| `modified` | String |  |
+| `wallclock` | String | Wallclock. |
+| `team_participants` | String | Teams or participants associated with a specific drive or sequence in the broadcast record. |
+| `is_penalty` | Boolean |  |
+| `stat_yardage` | Int64 |  |
+| `is_turnover` | Boolean |  |
+| `type_id` | Int64 | Type id. |
+| `type_text` | String | Type text. |
+| `type_abbreviation` | String |  |
+| `period_number` | Int64 | Period number. |
+| `clock_display_value` | String | Clock display value. |
+| `start_down` | Int64 |  |
+| `start_distance` | Int64 |  |
+| `start_yard_line` | Int64 |  |
+| `start_yards_to_endzone` | Int64 |  |
+| `start_team_id` | Int64 |  |
+| `end_down` | Int64 |  |
+| `end_distance` | Int64 |  |
+| `end_yard_line` | Int64 | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
+| `end_yards_to_endzone` | Int64 |  |
+| `end_down_distance_text` | String |  |
+| `end_short_down_distance_text` | String |  |
+| `end_possession_text` | String |  |
+| `end_team_id` | Int64 |  |
+| `start_down_distance_text` | String |  |
+| `start_short_down_distance_text` | String |  |
+| `start_possession_text` | String |  |
+| `scoring_type_name` | String |  |
+| `scoring_type_display_name` | String |  |
+| `scoring_type_abbreviation` | String |  |
+| `point_after_attempt_id` | Int64 |  |
+| `point_after_attempt_text` | String |  |
+| `point_after_attempt_abbreviation` | String |  |
+| `point_after_attempt_value` | Float64 |  |
 
 **scoring_plays**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `text` | character | Text. |
-| `away_score` | integer | Away score. |
-| `home_score` | integer | Home score. |
-| `type_id` | integer | Type id. |
-| `type_text` | character | Type text. |
-| `type_abbreviation` | character |  |
-| `period_number` | integer | Period number. |
-| `clock_value` | double |  |
-| `clock_display_value` | character | Clock display value. |
-| `team_id` | integer | Team id. |
-| `team_uid` | character | Team uid. |
-| `team_display_name` | character | Team display name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_links` | character | Team links. |
-| `team_logo` | character | Team logo. |
-| `team_logos` | character | Team logos. |
-| `scoring_type_name` | character |  |
-| `scoring_type_display_name` | character |  |
-| `scoring_type_abbreviation` | character |  |
+| `id` | Int64 | Id. |
+| `text` | String | Text. |
+| `away_score` | Int64 | Away score. |
+| `home_score` | Int64 | Home score. |
+| `type_id` | Int64 | Type id. |
+| `type_text` | String | Type text. |
+| `type_abbreviation` | String |  |
+| `period_number` | Int64 | Period number. |
+| `clock_value` | Float64 |  |
+| `clock_display_value` | String | Clock display value. |
+| `team_id` | Int64 | Team id. |
+| `team_uid` | String | Team uid. |
+| `team_display_name` | String | Team display name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_links` | String | Team links. |
+| `team_logo` | String | Team logo. |
+| `team_logos` | String | Team logos. |
+| `scoring_type_name` | String |  |
+| `scoring_type_display_name` | String |  |
+| `scoring_type_abbreviation` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -544,23 +544,23 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the article. |
-| `now_id` | character | ESPN 'now' feed id. |
-| `content_key` | character | Internal content key. |
-| `data_source_identifier` | character | Source-system identifier. |
-| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
-| `headline` | character | Article headline. |
-| `description` | character | Article summary/description. |
-| `last_modified` | character | Last-modified timestamp (ISO 8601). |
-| `published` | character | Publish timestamp (ISO 8601). |
-| `images` | character | Article images (list, stringified). |
-| `categories` | character | Article categories (list, stringified). |
-| `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline string as published by ESPN. |
-| `links_web_href` | character | Web article URL. |
-| `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `id` | Int64 | ESPN numeric identifier for the article. |
+| `now_id` | String | ESPN 'now' feed id. |
+| `content_key` | String | Internal content key. |
+| `data_source_identifier` | String | Source-system identifier. |
+| `type` | String | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | String | Article headline. |
+| `description` | String | Article summary/description. |
+| `last_modified` | String | Last-modified timestamp (ISO 8601). |
+| `published` | String | Publish timestamp (ISO 8601). |
+| `images` | String | Article images (list, stringified). |
+| `categories` | String | Article categories (list, stringified). |
+| `premium` | Boolean | Whether the article is premium/paywalled. |
+| `byline` | String | Author byline string as published by ESPN. |
+| `links_web_href` | String | Web article URL. |
+| `links_mobile_href` | String | Mobile article URL. |
+| `links_api_self_href` | String | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | String | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -595,9 +595,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the athlete. |
-| `display_name` | character | Athlete's full display name as shown on ESPN. |
-| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+| `id` | Int64 | ESPN numeric identifier for the athlete. |
+| `display_name` | String | Athlete's full display name as shown on ESPN. |
+| `injuries` | String | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -633,17 +633,17 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `date` | character |  |
-| `description` | character |  |
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_id` | integer |  |
-| `team_links` | character |  |
-| `team_location` | character |  |
-| `team_logos` | character |  |
-| `team_name` | character |  |
+| `date` | String |  |
+| `description` | String |  |
+| `team_abbreviation` | String |  |
+| `team_alternate_color` | String |  |
+| `team_color` | String |  |
+| `team_display_name` | String |  |
+| `team_id` | Int64 |  |
+| `team_links` | String |  |
+| `team_location` | String |  |
+| `team_logos` | String |  |
+| `team_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -678,14 +678,14 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | integer |  |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `abbreviation` | character |  |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `is_conference` | logical |  |
-| `parent_group_id` | integer |  |
-| `depth` | integer |  |
-| `children_count` | integer |  |
+| `group_id` | Int64 |  |
+| `name` | String | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `abbreviation` | String |  |
+| `short_name` | String | Player short name (i.e. "F.Last") |
+| `is_conference` | Boolean |  |
+| `parent_group_id` | Int64 |  |
+| `depth` | Int64 |  |
+| `children_count` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -787,20 +787,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
-| `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
-| `team_color` | character | Primary team color as a hex string (no leading '#'). |
-| `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
-| `team_is_active` | logical | Whether the team is currently active. |
-| `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
-| `team_location` | character | Team location / city (e.g. "Boston"). |
-| `team_logos` | character | Pipe-delimited logo image URLs. |
-| `team_name` | character | Team nickname/mascot (e.g. "Celtics"). |
-| `team_nickname` | character | Team nickname as ESPN labels it (often equals team_name). |
-| `team_short_display_name` | character | Abbreviated display name for compact UIs. |
-| `team_slug` | character | URL slug used in ESPN web paths. |
-| `team_uid` | character | ESPN global UID (encodes sport/league/team). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. "BOS"). |
+| `team_alternate_color` | String | Secondary team color as a hex string (no leading '#'). |
+| `team_color` | String | Primary team color as a hex string (no leading '#'). |
+| `team_display_name` | String | Full team display name (location + nickname). |
+| `team_id` | Int64 | ESPN team id (stable join key across ESPN endpoints). |
+| `team_is_active` | Boolean | Whether the team is currently active. |
+| `team_is_all_star` | Boolean | Whether the entry is an all-star squad rather than a franchise. |
+| `team_location` | String | Team location / city (e.g. "Boston"). |
+| `team_logos` | String | Pipe-delimited logo image URLs. |
+| `team_name` | String | Team nickname/mascot (e.g. "Celtics"). |
+| `team_nickname` | String | Team nickname as ESPN labels it (often equals team_name). |
+| `team_short_display_name` | String | Abbreviated display name for compact UIs. |
+| `team_slug` | String | URL slug used in ESPN web paths. |
+| `team_uid` | String | ESPN global UID (encodes sport/league/team). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -836,47 +836,47 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_franchise_$ref` | character |  |
-| `team_franchise_abbreviation` | character |  |
-| `team_franchise_color` | character |  |
-| `team_franchise_display_name` | character |  |
-| `team_franchise_id` | integer |  |
-| `team_franchise_is_active` | logical |  |
-| `team_franchise_location` | character |  |
-| `team_franchise_name` | character |  |
-| `team_franchise_short_display_name` | character |  |
-| `team_franchise_slug` | character |  |
-| `team_franchise_team_$ref` | character |  |
-| `team_franchise_uid` | character |  |
-| `team_franchise_venue_$ref` | character |  |
-| `team_franchise_venue_address_city` | character |  |
-| `team_franchise_venue_address_state` | character |  |
-| `team_franchise_venue_full_name` | character |  |
-| `team_franchise_venue_grass` | logical |  |
-| `team_franchise_venue_guid` | character |  |
-| `team_franchise_venue_id` | integer |  |
-| `team_franchise_venue_images` | character |  |
-| `team_franchise_venue_indoor` | logical |  |
-| `team_franchise_venue_short_name` | character |  |
-| `team_groups_id` | integer |  |
-| `team_groups_is_conference` | logical |  |
-| `team_groups_parent_id` | integer |  |
-| `team_id` | integer |  |
-| `team_is_active` | logical |  |
-| `team_links` | character |  |
-| `team_location` | character |  |
-| `team_logos` | character |  |
-| `team_name` | character |  |
-| `team_next_event` | character |  |
-| `team_record_items` | character |  |
-| `team_short_display_name` | character |  |
-| `team_slug` | character |  |
-| `team_standing_summary` | character |  |
-| `team_uid` | character |  |
+| `team_abbreviation` | String |  |
+| `team_alternate_color` | String |  |
+| `team_color` | String |  |
+| `team_display_name` | String |  |
+| `team_franchise_$ref` | String |  |
+| `team_franchise_abbreviation` | String |  |
+| `team_franchise_color` | String |  |
+| `team_franchise_display_name` | String |  |
+| `team_franchise_id` | Int64 |  |
+| `team_franchise_is_active` | Boolean |  |
+| `team_franchise_location` | String |  |
+| `team_franchise_name` | String |  |
+| `team_franchise_short_display_name` | String |  |
+| `team_franchise_slug` | String |  |
+| `team_franchise_team_$ref` | String |  |
+| `team_franchise_uid` | String |  |
+| `team_franchise_venue_$ref` | String |  |
+| `team_franchise_venue_address_city` | String |  |
+| `team_franchise_venue_address_state` | String |  |
+| `team_franchise_venue_full_name` | String |  |
+| `team_franchise_venue_grass` | Boolean |  |
+| `team_franchise_venue_guid` | String |  |
+| `team_franchise_venue_id` | Int64 |  |
+| `team_franchise_venue_images` | String |  |
+| `team_franchise_venue_indoor` | Boolean |  |
+| `team_franchise_venue_short_name` | String |  |
+| `team_groups_id` | Int64 |  |
+| `team_groups_is_conference` | Boolean |  |
+| `team_groups_parent_id` | Int64 |  |
+| `team_id` | Int64 |  |
+| `team_is_active` | Boolean |  |
+| `team_links` | String |  |
+| `team_location` | String |  |
+| `team_logos` | String |  |
+| `team_name` | String |  |
+| `team_next_event` | String |  |
+| `team_record_items` | String |  |
+| `team_short_display_name` | String |  |
+| `team_slug` | String |  |
+| `team_standing_summary` | String |  |
+| `team_uid` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -913,58 +913,58 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character | Postion group of player as listed by NFL |
-| `id` | integer | Id. |
-| `uid` | character | Uid. |
-| `guid` | character | Guid. |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
-| `full_name` | character | Full name. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short name. |
-| `weight` | double | Weight. |
-| `display_weight` | character | Display weight. |
-| `height` | double | Height. |
-| `display_height` | character | Display height. |
-| `links` | character | Links. |
-| `slug` | character | Slug. |
-| `jersey` | character | Jersey. |
-| `injuries` | character | Injuries. |
-| `contracts` | character | Contracts. |
-| `alternate_ids_sdr` | character | Alternate ids sdr. |
-| `birth_place_city` | character | Birth place city. |
-| `birth_place_state` | character | Birth place state. |
-| `birth_place_country` | character | Birth place country. |
-| `college_id` | integer | College id. |
-| `college_guid` | character | College guid. |
-| `college_mascot` | character | College mascot. |
-| `college_name` | character | College name. |
-| `college_short_name` | character | College short name. |
-| `college_abbrev` | character | College abbrev. |
-| `college_logos` | character | College logos. |
-| `headshot_href` | character | Headshot href. |
-| `headshot_alt` | character | Headshot alt. |
-| `position_id` | integer | Position id. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_abbreviation` | character | Position abbreviation. |
-| `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | integer |  |
-| `position_parent_name` | character |  |
-| `position_parent_display_name` | character |  |
-| `position_parent_abbreviation` | character |  |
-| `position_parent_leaf` | logical |  |
-| `experience_years` | integer | Experience years. |
-| `status_id` | integer | Status id. |
-| `status_name` | character | Status name. |
-| `status_type` | character | Status type. |
-| `status_abbreviation` | character | Status abbreviation. |
-| `age` | double | Age. |
-| `date_of_birth` | character | Date of birth. |
-| `debut_year` | double | Debut year. |
-| `hand_type` | character | Hand type. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
+| `position_group` | String | Postion group of player as listed by NFL |
+| `id` | Int64 | Id. |
+| `uid` | String | Uid. |
+| `guid` | String | Guid. |
+| `first_name` | String | First name. |
+| `last_name` | String | Last name. |
+| `full_name` | String | Full name. |
+| `display_name` | String | Display name. |
+| `short_name` | String | Short name. |
+| `weight` | Float64 | Weight. |
+| `display_weight` | String | Display weight. |
+| `height` | Float64 | Height. |
+| `display_height` | String | Display height. |
+| `links` | String | Links. |
+| `slug` | String | Slug. |
+| `jersey` | String | Jersey. |
+| `injuries` | String | Injuries. |
+| `contracts` | String | Contracts. |
+| `alternate_ids_sdr` | String | Alternate ids sdr. |
+| `birth_place_city` | String | Birth place city. |
+| `birth_place_state` | String | Birth place state. |
+| `birth_place_country` | String | Birth place country. |
+| `college_id` | Int64 | College id. |
+| `college_guid` | String | College guid. |
+| `college_mascot` | String | College mascot. |
+| `college_name` | String | College name. |
+| `college_short_name` | String | College short name. |
+| `college_abbrev` | String | College abbrev. |
+| `college_logos` | String | College logos. |
+| `headshot_href` | String | Headshot href. |
+| `headshot_alt` | String | Headshot alt. |
+| `position_id` | Int64 | Position id. |
+| `position_name` | String | Position name. |
+| `position_display_name` | String | Position display name. |
+| `position_abbreviation` | String | Position abbreviation. |
+| `position_leaf` | Boolean | Position leaf. |
+| `position_parent_id` | Int64 |  |
+| `position_parent_name` | String |  |
+| `position_parent_display_name` | String |  |
+| `position_parent_abbreviation` | String |  |
+| `position_parent_leaf` | Boolean |  |
+| `experience_years` | Int64 | Experience years. |
+| `status_id` | Int64 | Status id. |
+| `status_name` | String | Status name. |
+| `status_type` | String | Status type. |
+| `status_abbreviation` | String | Status abbreviation. |
+| `age` | Float64 | Age. |
+| `date_of_birth` | String | Date of birth. |
+| `debut_year` | Float64 | Debut year. |
+| `hand_type` | String | Hand type. |
+| `hand_abbreviation` | String | Hand abbreviation. |
+| `hand_display_value` | String | Hand display value. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1001,21 +1001,21 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric event identifier. |
-| `date` | character | Event timestamp (ISO 8601, UTC). |
-| `name` | character | Full event name (e.g. 'Team A at Team B'). |
-| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `time_valid` | logical | Whether the event time is confirmed. |
-| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
-| `links` | character | Related links (list, stringified). |
-| `season_year` | integer | Four-digit season year. |
-| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
-| `season_type_id` | integer | ESPN numeric identifier for the season type. |
-| `season_type_type` | integer | Season type numeric code. |
-| `season_type_name` | character | Season type name (e.g. Regular Season). |
-| `season_type_abbreviation` | character | Season type abbreviation. |
-| `week_number` | integer |  |
-| `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
+| `id` | Int64 | ESPN numeric event identifier. |
+| `date` | String | Event timestamp (ISO 8601, UTC). |
+| `name` | String | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | String | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | Boolean | Whether the event time is confirmed. |
+| `competitions` | String | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | String | Related links (list, stringified). |
+| `season_year` | Int64 | Four-digit season year. |
+| `season_display_name` | String | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | Int64 | ESPN numeric identifier for the season type. |
+| `season_type_type` | Int64 | Season type numeric code. |
+| `season_type_name` | String | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | String | Season type abbreviation. |
+| `week_number` | Int64 |  |
+| `week_text` | String | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1119,9 +1119,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the athlete. |
-| `display_name` | character | Athlete's full display name as shown on ESPN. |
-| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+| `id` | Int64 | ESPN numeric identifier for the athlete. |
+| `display_name` | String | Athlete's full display name as shown on ESPN. |
+| `injuries` | String | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1226,23 +1226,23 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the article. |
-| `now_id` | character | ESPN 'now' feed id. |
-| `content_key` | character | Internal content key. |
-| `data_source_identifier` | character | Source-system identifier. |
-| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
-| `headline` | character | Article headline. |
-| `description` | character | Article summary/description. |
-| `last_modified` | character | Last-modified timestamp (ISO 8601). |
-| `published` | character | Publish timestamp (ISO 8601). |
-| `images` | character | Article images (list, stringified). |
-| `categories` | character | Article categories (list, stringified). |
-| `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline string as published by ESPN. |
-| `links_web_href` | character | Web article URL. |
-| `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `id` | Int64 | ESPN numeric identifier for the article. |
+| `now_id` | String | ESPN 'now' feed id. |
+| `content_key` | String | Internal content key. |
+| `data_source_identifier` | String | Source-system identifier. |
+| `type` | String | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | String | Article headline. |
+| `description` | String | Article summary/description. |
+| `last_modified` | String | Last-modified timestamp (ISO 8601). |
+| `published` | String | Publish timestamp (ISO 8601). |
+| `images` | String | Article images (list, stringified). |
+| `categories` | String | Article categories (list, stringified). |
+| `premium` | Boolean | Whether the article is premium/paywalled. |
+| `byline` | String | Author byline string as published by ESPN. |
+| `links_web_href` | String | Web article URL. |
+| `links_mobile_href` | String | Mobile article URL. |
+| `links_api_self_href` | String | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | String | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1380,23 +1380,23 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the article. |
-| `now_id` | character | ESPN 'now' feed id. |
-| `content_key` | character | Internal content key. |
-| `data_source_identifier` | character | Source-system identifier. |
-| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
-| `headline` | character | Article headline. |
-| `description` | character | Article summary/description. |
-| `last_modified` | character | Last-modified timestamp (ISO 8601). |
-| `published` | character | Publish timestamp (ISO 8601). |
-| `images` | character | Article images (list, stringified). |
-| `categories` | character | Article categories (list, stringified). |
-| `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline string as published by ESPN. |
-| `links_web_href` | character | Web article URL. |
-| `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `id` | Int64 | ESPN numeric identifier for the article. |
+| `now_id` | String | ESPN 'now' feed id. |
+| `content_key` | String | Internal content key. |
+| `data_source_identifier` | String | Source-system identifier. |
+| `type` | String | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | String | Article headline. |
+| `description` | String | Article summary/description. |
+| `last_modified` | String | Last-modified timestamp (ISO 8601). |
+| `published` | String | Publish timestamp (ISO 8601). |
+| `images` | String | Article images (list, stringified). |
+| `categories` | String | Article categories (list, stringified). |
+| `premium` | Boolean | Whether the article is premium/paywalled. |
+| `byline` | String | Author byline string as published by ESPN. |
+| `links_web_href` | String | Web article URL. |
+| `links_mobile_href` | String | Mobile article URL. |
+| `links_api_self_href` | String | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | String | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1434,35 +1434,35 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name. |
-| `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | integer | Team id. |
-| `team_name` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `team_logo` | character | Team logo. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `games_behind` | double | Games behind. |
-| `losses` | double | Losses. |
-| `playoff_seed` | double | Playoff seed. |
-| `point_differential` | double | Point differential. |
-| `points_against` | double | Points against. |
-| `points_for` | double | Points for. |
-| `streak` | double | Streak. |
-| `ties` | double | Number of matches the team has drawn. |
-| `win_percent` | double | Win percent. |
-| `wins` | double | Wins. |
-| `division_losses` | double | Number of games the team has lost against opponents within their own division. |
-| `division_record` | double | The team's composite win-loss-tie record against division opponents, serialized as a numeric value. |
-| `division_ties` | double | Number of games the team has tied against opponents within their own division. |
-| `division_wins` | double | Number of games the team has won against opponents within their own division. |
-| `overall` | character | Overall. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
+| `group_name` | String | Group name. |
+| `group_abbreviation` | String | Group abbreviation. |
+| `team_id` | Int64 | Team id. |
+| `team_name` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Team display name. |
+| `team_location` | String | Team location. |
+| `team_logo` | String | Team logo. |
+| `clincher` | Float64 | Clincher. |
+| `differential` | Float64 | Differential. |
+| `games_behind` | Float64 | Games behind. |
+| `losses` | Float64 | Losses. |
+| `playoff_seed` | Float64 | Playoff seed. |
+| `point_differential` | Float64 | Point differential. |
+| `points_against` | Float64 | Points against. |
+| `points_for` | Float64 | Points for. |
+| `streak` | Float64 | Streak. |
+| `ties` | Float64 | Number of matches the team has drawn. |
+| `win_percent` | Float64 | Win percent. |
+| `wins` | Float64 | Wins. |
+| `division_losses` | Float64 | Number of games the team has lost against opponents within their own division. |
+| `division_record` | Float64 | The team's composite win-loss-tie record against division opponents, serialized as a numeric value. |
+| `division_ties` | Float64 | Number of games the team has tied against opponents within their own division. |
+| `division_wins` | Float64 | Number of games the team has won against opponents within their own division. |
+| `overall` | String | Overall. |
+| `home` | String | Home. |
+| `road` | String | Road. |
+| `vs. div.` | String | Vs. div.. |
+| `vs. conf.` | String | Vs. conf.. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

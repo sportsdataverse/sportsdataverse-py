@@ -139,7 +139,7 @@ def wnba_stats_alltimeleadersgrids(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/alltimeleadersgrids
+    """All time leaders grids.
 
     Endpoint: ``GET https://stats.wnba.com/stats/alltimeleadersgrids``
     Example URL: https://stats.wnba.com/stats/alltimeleadersgrids?LeagueID=10&PerMode=PerGame&SeasonType=Regular+Season&TopX=10
@@ -196,7 +196,7 @@ def wnba_stats_assistleaders(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/assistleaders
+    """Assist leaders.
 
     Endpoint: ``GET https://stats.wnba.com/stats/assistleaders``
     Example URL: https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&Season=2024&SeasonType=Regular+Season
@@ -277,7 +277,7 @@ def wnba_stats_assisttracker(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/assisttracker
+    """Assist tracker.
 
     Endpoint: ``GET https://stats.wnba.com/stats/assisttracker``
     Example URL: https://stats.wnba.com/stats/assisttracker?LeagueID=10&OpponentTeamID=0&PerMode=PerGame&Season=2024&SeasonType=Regular+Season&TeamID=0
@@ -382,7 +382,7 @@ def wnba_stats_boxscoreadvancedv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoreadvancedv2
+    """Box score advanced v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreadvancedv2``
     Example URL: https://stats.wnba.com/stats/boxscoreadvancedv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -444,7 +444,7 @@ def wnba_stats_boxscoreadvancedv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoreadvancedv3
+    """Box score advanced v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreadvancedv3``
     Example URL: https://stats.wnba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -501,7 +501,7 @@ def wnba_stats_boxscoredefensivev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoredefensivev2
+    """Box score defensive v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoredefensivev2``
     Example URL: https://stats.wnba.com/stats/boxscoredefensivev2?GameID=1022200034
@@ -553,7 +553,7 @@ def wnba_stats_boxscorefourfactorsv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorefourfactorsv2
+    """Box score four factors v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorefourfactorsv2``
     Example URL: https://stats.wnba.com/stats/boxscorefourfactorsv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -615,7 +615,7 @@ def wnba_stats_boxscorefourfactorsv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorefourfactorsv3
+    """Box score four factors v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorefourfactorsv3``
     Example URL: https://stats.wnba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -672,7 +672,7 @@ def wnba_stats_boxscorehustlev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorehustlev2
+    """Box score hustle v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorehustlev2``
     Example URL: https://stats.wnba.com/stats/boxscorehustlev2
@@ -719,7 +719,7 @@ def wnba_stats_boxscorematchupsv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorematchupsv3
+    """Box score matchups v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorematchupsv3``
     Example URL: https://stats.wnba.com/stats/boxscorematchupsv3?GameID=1022200034
@@ -771,7 +771,7 @@ def wnba_stats_boxscoremiscv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoremiscv2
+    """Box score misc v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoremiscv2``
     Example URL: https://stats.wnba.com/stats/boxscoremiscv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -833,7 +833,7 @@ def wnba_stats_boxscoremiscv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoremiscv3
+    """Box score misc v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoremiscv3``
     Example URL: https://stats.wnba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -890,7 +890,7 @@ def wnba_stats_boxscoreplayertrackv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoreplayertrackv3
+    """Box score player track v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreplayertrackv3``
     Example URL: https://stats.wnba.com/stats/boxscoreplayertrackv3?GameID=1022200034
@@ -942,7 +942,7 @@ def wnba_stats_boxscorescoringv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorescoringv2
+    """Box score scoring v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorescoringv2``
     Example URL: https://stats.wnba.com/stats/boxscorescoringv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1004,7 +1004,7 @@ def wnba_stats_boxscorescoringv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscorescoringv3
+    """Box score scoring v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorescoringv3``
     Example URL: https://stats.wnba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1061,7 +1061,7 @@ def wnba_stats_boxscoresummaryv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoresummaryv2
+    """Box score summary v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoresummaryv2``
     Example URL: https://stats.wnba.com/stats/boxscoresummaryv2?GameID=1022200034
@@ -1108,7 +1108,7 @@ def wnba_stats_boxscoresummaryv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoresummaryv3
+    """Box score summary v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoresummaryv3``
     Example URL: https://stats.wnba.com/stats/boxscoresummaryv3?GameID=1022200034
@@ -1160,7 +1160,7 @@ def wnba_stats_boxscoretraditionalv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoretraditionalv2
+    """Box score traditional v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoretraditionalv2``
     Example URL: https://stats.wnba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1222,7 +1222,7 @@ def wnba_stats_boxscoretraditionalv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoretraditionalv3
+    """Box score traditional v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoretraditionalv3``
     Example URL: https://stats.wnba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1284,7 +1284,7 @@ def wnba_stats_boxscoreusagev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoreusagev2
+    """Box score usage v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreusagev2``
     Example URL: https://stats.wnba.com/stats/boxscoreusagev2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1346,7 +1346,7 @@ def wnba_stats_boxscoreusagev3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/boxscoreusagev3
+    """Box score usage v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreusagev3``
     Example URL: https://stats.wnba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
@@ -1405,7 +1405,7 @@ def wnba_stats_commonallplayers(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/commonallplayers
+    """Common all players.
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonallplayers``
     Example URL: https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10&Season=2024
@@ -1456,7 +1456,7 @@ def wnba_stats_commonplayerinfo(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/commonplayerinfo
+    """Common player info.
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonplayerinfo``
     Example URL: https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10&PlayerID=1628932
@@ -1507,7 +1507,7 @@ def wnba_stats_commonplayoffseries(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/commonplayoffseries
+    """Common playoff series.
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonplayoffseries``
     Example URL: https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&Season=2024&SeriesID=
@@ -1559,7 +1559,7 @@ def wnba_stats_commonteamroster(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/commonteamroster
+    """Common team roster.
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonteamroster``
     Example URL: https://stats.wnba.com/stats/commonteamroster?LeagueID=10&Season=2024&TeamID=1611661317
@@ -1610,7 +1610,7 @@ def wnba_stats_commonteamyears(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/commonteamyears
+    """Common team years.
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonteamyears``
     Example URL: https://stats.wnba.com/stats/commonteamyears?LeagueID=10
@@ -1660,7 +1660,7 @@ def wnba_stats_cumestatsplayer(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/cumestatsplayer
+    """Cume stats player.
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsplayer``
     Example URL: https://stats.wnba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=10&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season
@@ -1723,7 +1723,7 @@ def wnba_stats_cumestatsplayergames(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/cumestatsplayergames
+    """Cume stats player games.
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsplayergames``
     Example URL: https://stats.wnba.com/stats/cumestatsplayergames?LeagueID=10&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0
@@ -1789,7 +1789,7 @@ def wnba_stats_cumestatsteam(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/cumestatsteam
+    """Cume stats team.
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsteam``
     Example URL: https://stats.wnba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=10&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317
@@ -1853,7 +1853,7 @@ def wnba_stats_cumestatsteamgames(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/cumestatsteamgames
+    """Cume stats team games.
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsteamgames``
     Example URL: https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0
@@ -1918,7 +1918,7 @@ def wnba_stats_draftcombinestats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/draftcombinestats
+    """Draft combine stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/draftcombinestats``
     Example URL: https://stats.wnba.com/stats/draftcombinestats?LeagueID=10&SeasonYear=2024
@@ -1973,7 +1973,7 @@ def wnba_stats_drafthistory(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/drafthistory
+    """Draft history.
 
     Endpoint: ``GET https://stats.wnba.com/stats/drafthistory``
     Example URL: https://stats.wnba.com/stats/drafthistory?College=&LeagueID=10&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=
@@ -2062,7 +2062,7 @@ def wnba_stats_fantasywidget(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/fantasywidget
+    """Fantasy widget.
 
     Endpoint: ``GET https://stats.wnba.com/stats/fantasywidget``
     Example URL: https://stats.wnba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=10&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=
@@ -2144,7 +2144,7 @@ def wnba_stats_franchisehistory(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/franchisehistory
+    """Franchise history.
 
     Endpoint: ``GET https://stats.wnba.com/stats/franchisehistory``
     Example URL: https://stats.wnba.com/stats/franchisehistory?LeagueID=10
@@ -2192,7 +2192,7 @@ def wnba_stats_franchiseleaders(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/franchiseleaders
+    """Franchise leaders.
 
     Endpoint: ``GET https://stats.wnba.com/stats/franchiseleaders``
     Example URL: https://stats.wnba.com/stats/franchiseleaders?LeagueID=10&TeamID=1611661324
@@ -2243,7 +2243,7 @@ def wnba_stats_franchiseleaderswrank(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/franchiseleaderswrank
+    """Franchise leaders w rank.
 
     Endpoint: ``GET https://stats.wnba.com/stats/franchiseleaderswrank``
     Example URL: https://stats.wnba.com/stats/franchiseleaderswrank?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324
@@ -2298,7 +2298,7 @@ def wnba_stats_franchiseplayers(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/franchiseplayers
+    """Franchise players.
 
     Endpoint: ``GET https://stats.wnba.com/stats/franchiseplayers``
     Example URL: https://stats.wnba.com/stats/franchiseplayers?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319
@@ -2351,7 +2351,7 @@ def wnba_stats_gamerotation(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/gamerotation
+    """Game rotation.
 
     Endpoint: ``GET https://stats.wnba.com/stats/gamerotation``
     Example URL: https://stats.wnba.com/stats/gamerotation?GameID=1022200034&LeagueID=10
@@ -2406,7 +2406,7 @@ def wnba_stats_homepageleaders(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/homepageleaders
+    """Homepage leaders.
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepageleaders``
     Example URL: https://stats.wnba.com/stats/homepageleaders?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&StatCategory=Points
@@ -2471,7 +2471,7 @@ def wnba_stats_homepagev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/homepagev2
+    """Homepage v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepagev2``
     Example URL: https://stats.wnba.com/stats/homepagev2?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&StatType=Traditional
@@ -2530,7 +2530,7 @@ def wnba_stats_hustlestatsboxscore(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/hustlestatsboxscore
+    """Hustle stats box score.
 
     Endpoint: ``GET https://stats.wnba.com/stats/hustlestatsboxscore``
     Example URL: https://stats.wnba.com/stats/hustlestatsboxscore
@@ -2577,7 +2577,7 @@ def wnba_stats_infographicfanduelplayer(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/infographicfanduelplayer
+    """Infographic fanduel player.
 
     Endpoint: ``GET https://stats.wnba.com/stats/infographicfanduelplayer``
     Example URL: https://stats.wnba.com/stats/infographicfanduelplayer?GameID=1022200034
@@ -2629,7 +2629,7 @@ def wnba_stats_leaderstiles(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/leaderstiles
+    """Leaders tiles.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaderstiles``
     Example URL: https://stats.wnba.com/stats/leaderstiles?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&Stat=PTS
@@ -2713,7 +2713,7 @@ def wnba_stats_leaguedashlineups(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashlineups
+    """League dash lineups.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashlineups``
     Example URL: https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
@@ -2839,7 +2839,7 @@ def wnba_stats_leaguedashplayerbiostats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashplayerbiostats
+    """League dash player bio stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerbiostats``
     Example URL: https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
@@ -2982,7 +2982,7 @@ def wnba_stats_leaguedashplayerclutch(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashplayerclutch
+    """League dash player clutch.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerclutch``
     Example URL: https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
@@ -3137,7 +3137,7 @@ def wnba_stats_leaguedashplayershotlocations(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashplayershotlocations
+    """League dash player shot locations.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayershotlocations``
     Example URL: https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
@@ -3288,7 +3288,7 @@ def wnba_stats_leaguedashplayerstats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashplayerstats
+    """League dash player stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerstats``
     Example URL: https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
@@ -3434,7 +3434,7 @@ def wnba_stats_leaguedashptdefend(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashptdefend
+    """League dash PT defend.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashptdefend``
     Example URL: https://stats.wnba.com/stats/leaguedashptdefend?College=&Conference=&Country=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&DraftPick=&DraftYear=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerID=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
@@ -3571,7 +3571,7 @@ def wnba_stats_leaguedashteamclutch(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashteamclutch
+    """League dash team clutch.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamclutch``
     Example URL: https://stats.wnba.com/stats/leaguedashteamclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
@@ -3708,7 +3708,7 @@ def wnba_stats_leaguedashteamshotlocations(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashteamshotlocations
+    """League dash team shot locations.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamshotlocations``
     Example URL: https://stats.wnba.com/stats/leaguedashteamshotlocations?Conference=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
@@ -3841,7 +3841,7 @@ def wnba_stats_leaguedashteamstats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguedashteamstats
+    """League dash team stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamstats``
     Example URL: https://stats.wnba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=
@@ -4032,7 +4032,7 @@ def wnba_stats_leaguegamefinder(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguegamefinder
+    """League game finder.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguegamefinder``
     Example URL: https://stats.wnba.com/stats/leaguegamefinder?Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&Outcome=&PORound=&PlayerID=&PlayerOrTeam=T&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
@@ -4260,7 +4260,7 @@ def wnba_stats_leaguegamelog(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguegamelog
+    """League game log.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguegamelog``
     Example URL: https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&Season=2024&SeasonType=Regular+Season&Sorter=DATE
@@ -4328,7 +4328,7 @@ def wnba_stats_leagueleaders(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leagueleaders
+    """League leaders.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueleaders``
     Example URL: https://stats.wnba.com/stats/leagueleaders?ActiveFlag=&LeagueID=10&PerMode=Totals&Scope=S&Season=2024&SeasonType=Regular+Season&StatCategory=PTS
@@ -4412,7 +4412,7 @@ def wnba_stats_leaguelineupviz(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguelineupviz
+    """League lineup viz.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguelineupviz``
     Example URL: https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
@@ -4530,7 +4530,7 @@ def wnba_stats_leagueplayerondetails(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leagueplayerondetails
+    """League player on details.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueplayerondetails``
     Example URL: https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=
@@ -4623,7 +4623,7 @@ def wnba_stats_leagueseasonmatchups(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leagueseasonmatchups
+    """League season matchups.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueseasonmatchups``
     Example URL: https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024&SeasonType=Regular+Season
@@ -4686,7 +4686,7 @@ def wnba_stats_leaguestandingsv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/leaguestandingsv3
+    """League standings v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguestandingsv3``
     Example URL: https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&Season=2024&SeasonType=Regular+Season&SeasonYear=
@@ -4740,7 +4740,7 @@ def wnba_stats_playbyplayv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playbyplayv2
+    """Play by play v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playbyplayv2``
     Example URL: https://stats.wnba.com/stats/playbyplayv2?EndPeriod=0&GameID=1022200034&StartPeriod=0
@@ -4793,7 +4793,7 @@ def wnba_stats_playbyplayv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playbyplayv3
+    """Play by play v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playbyplayv3``
     Example URL: https://stats.wnba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0
@@ -4843,7 +4843,7 @@ def wnba_stats_playerawards(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playerawards
+    """Player awards.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerawards``
     Example URL: https://stats.wnba.com/stats/playerawards?PlayerID=1628932
@@ -4892,7 +4892,7 @@ def wnba_stats_playercareerbycollegerollup(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playercareerbycollegerollup
+    """Player career by college rollup.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercareerbycollegerollup``
     Example URL: https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&Season=2024&SeasonType=Regular+Season
@@ -4947,7 +4947,7 @@ def wnba_stats_playercareerstats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playercareerstats
+    """Player career stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercareerstats``
     Example URL: https://stats.wnba.com/stats/playercareerstats?LeagueID=10&PerMode=Totals&PlayerID=1628932
@@ -5022,7 +5022,7 @@ def wnba_stats_playercompare(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playercompare
+    """Player compare.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercompare``
     Example URL: https://stats.wnba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerIDList=100720%2C202250%2C204319%2C1627668%2C1628931&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&VsPlayerIDList=202252%2C203399%2C1631022%2C1628878%2C204333
@@ -5139,7 +5139,7 @@ def wnba_stats_playerdashboardbyclutch(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbyclutch
+    """Player dashboard by clutch.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyclutch``
     Example URL: https://stats.wnba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5252,7 +5252,7 @@ def wnba_stats_playerdashboardbygamesplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbygamesplits
+    """Player dashboard by game splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygamesplits``
     Example URL: https://stats.wnba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5365,7 +5365,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbygeneralsplits
+    """Player dashboard by general splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygeneralsplits``
     Example URL: https://stats.wnba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5478,7 +5478,7 @@ def wnba_stats_playerdashboardbylastngames(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbylastngames
+    """Player dashboard by last n games.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbylastngames``
     Example URL: https://stats.wnba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5591,7 +5591,7 @@ def wnba_stats_playerdashboardbyopponent(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbyopponent
+    """Player dashboard by opponent.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyopponent``
     Example URL: https://stats.wnba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5704,7 +5704,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbyshootingsplits
+    """Player dashboard by shooting splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyshootingsplits``
     Example URL: https://stats.wnba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5817,7 +5817,7 @@ def wnba_stats_playerdashboardbyteamperformance(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbyteamperformance
+    """Player dashboard by team performance.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyteamperformance``
     Example URL: https://stats.wnba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -5930,7 +5930,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerdashboardbyyearoveryear
+    """Player dashboard by year over year.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyyearoveryear``
     Example URL: https://stats.wnba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
@@ -6038,7 +6038,7 @@ def wnba_stats_playerdashptshotdefend(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playerdashptshotdefend
+    """Player dash PT shot defend.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashptshotdefend``
     Example URL: https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
@@ -6120,7 +6120,7 @@ def wnba_stats_playerestimatedmetrics(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playerestimatedmetrics
+    """Player estimated metrics.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerestimatedmetrics``
     Example URL: https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season
@@ -6178,7 +6178,7 @@ def wnba_stats_playerfantasyprofile(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerfantasyprofile
+    """Player fantasy profile.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofile``
     Example URL: https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonType=Regular+Season
@@ -6244,7 +6244,7 @@ def wnba_stats_playerfantasyprofilebargraph(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerfantasyprofilebargraph
+    """Player fantasy profile bar graph.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofilebargraph``
     Example URL: https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
@@ -6302,7 +6302,7 @@ def wnba_stats_playergamelog(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playergamelog
+    """Player game log.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamelog``
     Example URL: https://stats.wnba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=10&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
@@ -6378,7 +6378,7 @@ def wnba_stats_playergamelogs(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playergamelogs
+    """Player game logs.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamelogs``
     Example URL: https://stats.wnba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
@@ -6552,7 +6552,7 @@ def wnba_stats_playergamestreakfinder(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playergamestreakfinder
+    """Player game streak finder.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamestreakfinder``
     Example URL: https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
@@ -6786,7 +6786,7 @@ def wnba_stats_playerindex(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playerindex
+    """Player index.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerindex``
     Example URL: https://stats.wnba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=10&Season=2024&TeamID=0&Weight=
@@ -6860,7 +6860,7 @@ def wnba_stats_playernextngames(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/playernextngames
+    """Playernextngames.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playernextngames``
     Example URL: https://stats.wnba.com/stats/playernextngames?LeagueID=10&NumberOfGames=2147483647&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
@@ -6916,7 +6916,7 @@ def wnba_stats_playerprofilev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playerprofilev2
+    """Player profile v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerprofilev2``
     Example URL: https://stats.wnba.com/stats/playerprofilev2?LeagueID=10&PerMode=Totals&PlayerID=1628932
@@ -6988,7 +6988,7 @@ def wnba_stats_playervsplayer(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/playervsplayer
+    """Player vs player.
 
     Endpoint: ``GET https://stats.wnba.com/stats/playervsplayer``
     Example URL: https://stats.wnba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488
@@ -7078,7 +7078,7 @@ def wnba_stats_scheduleleaguev2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/scheduleleaguev2
+    """Schedule league v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/scheduleleaguev2``
     Example URL: https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024
@@ -7127,7 +7127,7 @@ def wnba_stats_scheduleleaguev2int(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/scheduleleaguev2int
+    """Schedule league v2 int.
 
     Endpoint: ``GET https://stats.wnba.com/stats/scheduleleaguev2int``
     Example URL: https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024
@@ -7177,7 +7177,7 @@ def wnba_stats_scoreboardv2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/scoreboardv2
+    """Scoreboard v2.
 
     Endpoint: ``GET https://stats.wnba.com/stats/scoreboardv2``
     Example URL: https://stats.wnba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=10
@@ -7229,7 +7229,7 @@ def wnba_stats_scoreboardv3(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/scoreboardv3
+    """Scoreboard v3.
 
     Endpoint: ``GET https://stats.wnba.com/stats/scoreboardv3``
     Example URL: https://stats.wnba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=10
@@ -7307,7 +7307,7 @@ def wnba_stats_shotchartdetail(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/shotchartdetail
+    """Shot chart detail.
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartdetail``
     Example URL: https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
@@ -7415,7 +7415,7 @@ def wnba_stats_shotchartleaguewide(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/shotchartleaguewide
+    """Shot chart league wide.
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartleaguewide``
     Example URL: https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10&Season=2024
@@ -7482,7 +7482,7 @@ def wnba_stats_shotchartlineupdetail(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/shotchartlineupdetail
+    """Shot chart lineup detail.
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartlineupdetail``
     Example URL: https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
@@ -7589,7 +7589,7 @@ def wnba_stats_teamdashboardbyclutch(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbyclutch
+    """Team dashboard by clutch.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyclutch``
     Example URL: https://stats.wnba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -7702,7 +7702,7 @@ def wnba_stats_teamdashboardbygamesplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbygamesplits
+    """Team dashboard by game splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygamesplits``
     Example URL: https://stats.wnba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -7815,7 +7815,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbygeneralsplits
+    """Team dashboard by general splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygeneralsplits``
     Example URL: https://stats.wnba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -7928,7 +7928,7 @@ def wnba_stats_teamdashboardbylastngames(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbylastngames
+    """Team dashboard by last n games.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbylastngames``
     Example URL: https://stats.wnba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8041,7 +8041,7 @@ def wnba_stats_teamdashboardbyopponent(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbyopponent
+    """Team dashboard by opponent.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyopponent``
     Example URL: https://stats.wnba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8154,7 +8154,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbyshootingsplits
+    """Team dashboard by shooting splits.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyshootingsplits``
     Example URL: https://stats.wnba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8267,7 +8267,7 @@ def wnba_stats_teamdashboardbyteamperformance(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbyteamperformance
+    """Team dashboard by team performance.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyteamperformance``
     Example URL: https://stats.wnba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8380,7 +8380,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashboardbyyearoveryear
+    """Team dashboard by year over year.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyyearoveryear``
     Example URL: https://stats.wnba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8495,7 +8495,7 @@ def wnba_stats_teamdashlineups(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdashlineups
+    """Team dash lineups.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashlineups``
     Example URL: https://stats.wnba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -8590,7 +8590,7 @@ def wnba_stats_teamdetails(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamdetails
+    """Team details.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdetails``
     Example URL: https://stats.wnba.com/stats/teamdetails?TeamID=1611661328
@@ -8639,7 +8639,7 @@ def wnba_stats_teamestimatedmetrics(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/teamestimatedmetrics
+    """Team estimated metrics.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamestimatedmetrics``
     Example URL: https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season
@@ -8694,7 +8694,7 @@ def wnba_stats_teamgamelog(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/teamgamelog
+    """Team game log.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamgamelog``
     Example URL: https://stats.wnba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328
@@ -8770,7 +8770,7 @@ def wnba_stats_teamgamelogs(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/teamgamelogs
+    """Team game logs.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamgamelogs``
     Example URL: https://stats.wnba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
@@ -8859,7 +8859,7 @@ def wnba_stats_teaminfocommon(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teaminfocommon
+    """Team info common.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teaminfocommon``
     Example URL: https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328
@@ -8934,7 +8934,7 @@ def wnba_stats_teamplayerdashboard(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamplayerdashboard
+    """Team player dashboard.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayerdashboard``
     Example URL: https://stats.wnba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
@@ -9045,7 +9045,7 @@ def wnba_stats_teamplayeronoffdetails(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamplayeronoffdetails
+    """Team player on off details.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffdetails``
     Example URL: https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
@@ -9152,7 +9152,7 @@ def wnba_stats_teamplayeronoffsummary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamplayeronoffsummary
+    """Team player on off summary.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffsummary``
     Example URL: https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
@@ -9261,7 +9261,7 @@ def wnba_stats_teamvsplayer(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """GET /stats/teamvsplayer
+    """Team vs player.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamvsplayer``
     Example URL: https://stats.wnba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932
@@ -9355,7 +9355,7 @@ def wnba_stats_teamyearbyyearstats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/teamyearbyyearstats
+    """Team year by year stats.
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamyearbyyearstats``
     Example URL: https://stats.wnba.com/stats/teamyearbyyearstats?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328
@@ -9408,7 +9408,7 @@ def wnba_stats_videostatus(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /stats/videostatus
+    """Video status.
 
     Endpoint: ``GET https://stats.wnba.com/stats/videostatus``
     Example URL: https://stats.wnba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=10

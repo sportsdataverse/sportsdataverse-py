@@ -1,10 +1,10 @@
 ---
-title: ELH — additional Python functions
+title: Czech Extraliga — additional Python functions
 sidebar_label: Additional functions
-description: "ELH — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Czech Extraliga — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# ELH — additional Python functions
+# Czech Extraliga — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.elh` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -33,11 +33,11 @@ One row per file: `hokejcz_game_id` (Int64), `season` (END year), `key`, `last_m
 
 | col_name | type | description |
 |---|---|---|
-| `hokejcz_game_id` | integer | hokej.cz game id, the file name of the match/{season}/full/{id}.json key. |
-| `season` | integer | Season as its END year (the season the call asked for). |
-| `key` | character | Full S3 object key of the play-by-play file. |
-| `last_modified` | character | Time the file was last written, an ISO 8601 UTC timestamp string from the S3 listing. |
-| `size` | integer | File size in bytes; a file of a few hundred bytes is written ahead of a game and holds no events. |
+| `hokejcz_game_id` | Int64 | hokej.cz game id, the file name of the match/{season}/full/{id}.json key. |
+| `season` | Int64 | Season as its END year (the season the call asked for). |
+| `key` | String | Full S3 object key of the play-by-play file. |
+| `last_modified` | String | Time the file was last written, an ISO 8601 UTC timestamp string from the S3 listing. |
+| `size` | Int64 | File size in bytes; a file of a few hundred bytes is written ahead of a game and holds no events. |
 
 **Raises**
 

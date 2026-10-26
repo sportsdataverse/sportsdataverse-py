@@ -1,11 +1,11 @@
 ---
-title: ICEHL — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)
+title: ICE Hockey League — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)
 sidebar_label: ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)
-description: "ICEHL — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "ICE Hockey League — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# ICEHL — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)
+# ICE Hockey League — ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)
 
 `sportsdataverse.hockey.icehl` — 12 endpoints.
 

@@ -1,10 +1,10 @@
 ---
-title: HA — additional Python functions
+title: HockeyAllsvenskan — additional Python functions
 sidebar_label: Additional functions
-description: "HA — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "HockeyAllsvenskan — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# HA — additional Python functions
+# HockeyAllsvenskan — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.ha` that are not
 generated API-endpoint wrappers (those have their own reference pages).

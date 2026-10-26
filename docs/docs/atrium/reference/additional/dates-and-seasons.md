@@ -1,10 +1,10 @@
 ---
-title: "ATRIUM — additional Python functions — Dates and seasons"
+title: "Sportradar Atrium — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
 sidebar_position: 5
-description: "ATRIUM — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
+description: "Sportradar Atrium — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Dates and seasons
+# Sportradar Atrium — additional Python functions — Dates and seasons
 
 ### atrium_season_id {#atrium_season_id}
 

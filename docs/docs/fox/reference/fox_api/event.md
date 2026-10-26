@@ -1,11 +1,11 @@
 ---
-title: "FOX — Fox Sports API (api.foxsports.com) — Event"
+title: "Fox Sports — Fox Sports API (api.foxsports.com) — Event"
 sidebar_label: "Event"
 sidebar_position: 1
-description: "FOX — Fox Sports API (api.foxsports.com) — Event — function reference in sdv-py, the SportsDataverse Python package."
+description: "Fox Sports — Fox Sports API (api.foxsports.com) — Event — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# FOX — Fox Sports API (api.foxsports.com) — Event
+# Fox Sports — Fox Sports API (api.foxsports.com) — Event
 
 ## fox_api_event_data
 
@@ -28,25 +28,25 @@ GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
 
 | col_name | type | description |
 |---|---|---|
-| `columns` | character |  |
-| `entity_link_alternate_image_url` | character |  |
-| `entity_link_analytics_name` | character |  |
-| `entity_link_analytics_sport` | character |  |
-| `entity_link_color` | character |  |
-| `entity_link_content_type` | character |  |
-| `entity_link_content_uri` | character |  |
-| `entity_link_image_alt_text` | character |  |
-| `entity_link_image_type` | character |  |
-| `entity_link_image_url` | character |  |
-| `entity_link_layout_path` | character |  |
-| `entity_link_layout_tokens_content_uri` | character |  |
-| `entity_link_layout_tokens_id` | character |  |
-| `entity_link_title` | character |  |
-| `entity_link_type` | character |  |
-| `entity_link_web_url` | character |  |
-| `is_cutoff` | logical |  |
-| `is_faded` | logical |  |
-| `selected` | logical |  |
+| `columns` | String |  |
+| `entity_link_alternate_image_url` | String |  |
+| `entity_link_analytics_name` | String |  |
+| `entity_link_analytics_sport` | String |  |
+| `entity_link_color` | String |  |
+| `entity_link_content_type` | String |  |
+| `entity_link_content_uri` | String |  |
+| `entity_link_image_alt_text` | String |  |
+| `entity_link_image_type` | String |  |
+| `entity_link_image_url` | String |  |
+| `entity_link_layout_path` | String |  |
+| `entity_link_layout_tokens_content_uri` | String |  |
+| `entity_link_layout_tokens_id` | String |  |
+| `entity_link_title` | String |  |
+| `entity_link_type` | String |  |
+| `entity_link_web_url` | String |  |
+| `is_cutoff` | Boolean |  |
+| `is_faded` | Boolean |  |
+| `selected` | Boolean |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -85,27 +85,27 @@ GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup
 
 | col_name | type | description |
 |---|---|---|
-| `entity_image_alt_text` | character |  |
-| `entity_image_alt_url` | character |  |
-| `entity_image_type` | character |  |
-| `entity_image_url` | character |  |
-| `entity_link_alternate_image_url` | character |  |
-| `entity_link_analytics_name` | character |  |
-| `entity_link_analytics_sport` | character |  |
-| `entity_link_color` | character |  |
-| `entity_link_content_type` | character |  |
-| `entity_link_content_uri` | character |  |
-| `entity_link_image_alt_text` | character |  |
-| `entity_link_image_type` | character |  |
-| `entity_link_image_url` | character |  |
-| `entity_link_layout_path` | character |  |
-| `entity_link_layout_tokens_content_uri` | character |  |
-| `entity_link_layout_tokens_id` | character |  |
-| `entity_link_title` | character |  |
-| `entity_link_type` | character |  |
-| `entity_link_web_url` | character |  |
-| `text` | character |  |
-| `title` | character |  |
+| `entity_image_alt_text` | String |  |
+| `entity_image_alt_url` | String |  |
+| `entity_image_type` | String |  |
+| `entity_image_url` | String |  |
+| `entity_link_alternate_image_url` | String |  |
+| `entity_link_analytics_name` | String |  |
+| `entity_link_analytics_sport` | String |  |
+| `entity_link_color` | String |  |
+| `entity_link_content_type` | String |  |
+| `entity_link_content_uri` | String |  |
+| `entity_link_image_alt_text` | String |  |
+| `entity_link_image_type` | String |  |
+| `entity_link_image_url` | String |  |
+| `entity_link_layout_path` | String |  |
+| `entity_link_layout_tokens_content_uri` | String |  |
+| `entity_link_layout_tokens_id` | String |  |
+| `entity_link_title` | String |  |
+| `entity_link_type` | String |  |
+| `entity_link_web_url` | String |  |
+| `text` | String |  |
+| `title` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -144,16 +144,16 @@ GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
 
 | col_name | type | description |
 |---|---|---|
-| `odds1` | character |  |
-| `odds2` | character |  |
-| `point` | integer |  |
-| `text` | character |  |
-| `text1` | character |  |
-| `text2` | character |  |
-| `timestamp` | character |  |
-| `annotation_color` | character |  |
-| `annotation_text` | character |  |
-| `annotation_type` | character |  |
+| `odds1` | String |  |
+| `odds2` | String |  |
+| `point` | Int64 |  |
+| `text` | String |  |
+| `text1` | String |  |
+| `text2` | String |  |
+| `timestamp` | String |  |
+| `annotation_color` | String |  |
+| `annotation_text` | String |  |
+| `annotation_type` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -192,27 +192,27 @@ GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
 
 | col_name | type | description |
 |---|---|---|
-| `entity_image_alt_text` | character |  |
-| `entity_image_alt_url` | character |  |
-| `entity_image_type` | character |  |
-| `entity_image_url` | character |  |
-| `entity_link_alternate_image_url` | character |  |
-| `entity_link_analytics_name` | character |  |
-| `entity_link_analytics_sport` | character |  |
-| `entity_link_color` | character |  |
-| `entity_link_content_type` | character |  |
-| `entity_link_content_uri` | character |  |
-| `entity_link_image_alt_text` | character |  |
-| `entity_link_image_type` | character |  |
-| `entity_link_image_url` | character |  |
-| `entity_link_layout_path` | character |  |
-| `entity_link_layout_tokens_content_uri` | character |  |
-| `entity_link_layout_tokens_id` | character |  |
-| `entity_link_title` | character |  |
-| `entity_link_type` | character |  |
-| `entity_link_web_url` | character |  |
-| `text` | character |  |
-| `title` | character |  |
+| `entity_image_alt_text` | String |  |
+| `entity_image_alt_url` | String |  |
+| `entity_image_type` | String |  |
+| `entity_image_url` | String |  |
+| `entity_link_alternate_image_url` | String |  |
+| `entity_link_analytics_name` | String |  |
+| `entity_link_analytics_sport` | String |  |
+| `entity_link_color` | String |  |
+| `entity_link_content_type` | String |  |
+| `entity_link_content_uri` | String |  |
+| `entity_link_image_alt_text` | String |  |
+| `entity_link_image_type` | String |  |
+| `entity_link_image_url` | String |  |
+| `entity_link_layout_path` | String |  |
+| `entity_link_layout_tokens_content_uri` | String |  |
+| `entity_link_layout_tokens_id` | String |  |
+| `entity_link_title` | String |  |
+| `entity_link_type` | String |  |
+| `entity_link_web_url` | String |  |
+| `text` | String |  |
+| `title` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -251,14 +251,14 @@ GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event stand
 
 | col_name | type | description |
 |---|---|---|
-| `section` | character |  |
-| `nfc_north` | character |  |
-| `v1` | character |  |
-| `w_l_t` | character |  |
-| `div` | character |  |
-| `strk` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `nfc_south` | character |  |
+| `section` | String |  |
+| `nfc_north` | String |  |
+| `v1` | String |  |
+| `w_l_t` | String |  |
+| `div` | String |  |
+| `strk` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `nfc_south` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

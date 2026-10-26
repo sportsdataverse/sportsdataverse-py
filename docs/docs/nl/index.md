@@ -1,9 +1,9 @@
 ---
-title: NL
-sidebar_label: NL
-description: "sdv-py NL: endpoint references, dataset loaders and parsers for NL in the SportsDataverse Python package."
+title: National League
+sidebar_label: National League
+description: "sdv-py National League: endpoint references, dataset loaders and parsers for National League in the SportsDataverse Python package."
 ---
-# NL (`sportsdataverse.hockey.nl`)
+# National League (`sportsdataverse.hockey.nl`)
 
 ## Data sources
 

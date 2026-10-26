@@ -1,15 +1,15 @@
 ---
-title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer"
+title: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer"
 sidebar_label: "Player: playerprofilev2–playervsplayer"
 sidebar_position: 8
-description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer
+# NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Player: playerprofilev2–playervsplayer
 
 ## nbagl_stats_playerprofilev2
 
-GET /stats/playerprofilev2
+Player profile v2.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playerprofilev2`
 
@@ -29,417 +29,417 @@ GET /stats/playerprofilev2
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | numeric | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | Float64 | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **CareerTotalsRegularSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **SeasonTotalsPostSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | numeric | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | Float64 | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **CareerTotalsPostSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **SeasonTotalsAllStarSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | numeric | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | Float64 | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **CareerTotalsAllStarSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **SeasonTotalsCollegeSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `organization_id` | character |  |
-| `school_name` | character | College or school of the season row (SeasonTotalsCollegeSeason set). |
-| `player_age` | character | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | character |  |
-| `gs` | character |  |
-| `min` | character |  |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
-| `fg3_m` | character | Three-point field goals made. |
-| `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character |  |
-| `ftm` | character |  |
-| `fta` | character |  |
-| `ft_pct` | character |  |
-| `oreb` | character |  |
-| `dreb` | character |  |
-| `reb` | character |  |
-| `ast` | character |  |
-| `stl` | character |  |
-| `blk` | character |  |
-| `tov` | character |  |
-| `pf` | character |  |
-| `pts` | character |  |
+| `player_id` | String |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `organization_id` | String |  |
+| `school_name` | String | College or school of the season row (SeasonTotalsCollegeSeason set). |
+| `player_age` | String | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | String |  |
+| `gs` | String |  |
+| `min` | String |  |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
+| `fg3_m` | String | Three-point field goals made. |
+| `fg3_a` | String | Three-point field goal attempts. |
+| `fg3_pct` | String |  |
+| `ftm` | String |  |
+| `fta` | String |  |
+| `ft_pct` | String |  |
+| `oreb` | String |  |
+| `dreb` | String |  |
+| `reb` | String |  |
+| `ast` | String |  |
+| `stl` | String |  |
+| `blk` | String |  |
+| `tov` | String |  |
+| `pf` | String |  |
+| `pts` | String |  |
 
 **CareerTotalsCollegeSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character |  |
-| `league_id` | character |  |
-| `organization_id` | character |  |
-| `gp` | character |  |
-| `gs` | character |  |
-| `min` | character |  |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
-| `fg3_m` | character | Three-point field goals made. |
-| `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character |  |
-| `ftm` | character |  |
-| `fta` | character |  |
-| `ft_pct` | character |  |
-| `oreb` | character |  |
-| `dreb` | character |  |
-| `reb` | character |  |
-| `ast` | character |  |
-| `stl` | character |  |
-| `blk` | character |  |
-| `tov` | character |  |
-| `pf` | character |  |
-| `pts` | character |  |
+| `player_id` | String |  |
+| `league_id` | String |  |
+| `organization_id` | String |  |
+| `gp` | String |  |
+| `gs` | String |  |
+| `min` | String |  |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
+| `fg3_m` | String | Three-point field goals made. |
+| `fg3_a` | String | Three-point field goal attempts. |
+| `fg3_pct` | String |  |
+| `ftm` | String |  |
+| `fta` | String |  |
+| `ft_pct` | String |  |
+| `oreb` | String |  |
+| `dreb` | String |  |
+| `reb` | String |  |
+| `ast` | String |  |
+| `stl` | String |  |
+| `blk` | String |  |
+| `tov` | String |  |
+| `pf` | String |  |
+| `pts` | String |  |
 
 **SeasonTotalsPreseason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | numeric | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | Float64 | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **CareerTotalsPreseason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `gp` | integer |  |
-| `gs` | integer |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `tov` | numeric |  |
-| `pf` | numeric |  |
-| `pts` | numeric |  |
+| `player_id` | Int64 |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `gs` | Int64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `tov` | Float64 |  |
+| `pf` | Float64 |  |
+| `pts` | Float64 |  |
 
 **SeasonRankingsRegularSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | character | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | character |  |
-| `gs` | character |  |
-| `rank_pg_min` | integer |  |
-| `rank_pg_fgm` | integer |  |
-| `rank_pg_fga` | integer |  |
-| `rank_fg_pct` | integer |  |
-| `rank_pg_fg3_m` | integer |  |
-| `rank_pg_fg3_a` | integer |  |
-| `rank_fg3_pct` | integer |  |
-| `rank_pg_ftm` | integer |  |
-| `rank_pg_fta` | integer |  |
-| `rank_ft_pct` | integer |  |
-| `rank_pg_oreb` | integer |  |
-| `rank_pg_dreb` | integer |  |
-| `rank_pg_reb` | integer |  |
-| `rank_pg_ast` | integer |  |
-| `rank_pg_stl` | integer |  |
-| `rank_pg_blk` | integer |  |
-| `rank_pg_tov` | integer |  |
-| `rank_pg_pts` | integer |  |
-| `rank_pg_eff` | integer |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | String | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | String |  |
+| `gs` | String |  |
+| `rank_pg_min` | Int64 |  |
+| `rank_pg_fgm` | Int64 |  |
+| `rank_pg_fga` | Int64 |  |
+| `rank_fg_pct` | Int64 |  |
+| `rank_pg_fg3_m` | Int64 |  |
+| `rank_pg_fg3_a` | Int64 |  |
+| `rank_fg3_pct` | Int64 |  |
+| `rank_pg_ftm` | Int64 |  |
+| `rank_pg_fta` | Int64 |  |
+| `rank_ft_pct` | Int64 |  |
+| `rank_pg_oreb` | Int64 |  |
+| `rank_pg_dreb` | Int64 |  |
+| `rank_pg_reb` | Int64 |  |
+| `rank_pg_ast` | Int64 |  |
+| `rank_pg_stl` | Int64 |  |
+| `rank_pg_blk` | Int64 |  |
+| `rank_pg_tov` | Int64 |  |
+| `rank_pg_pts` | Int64 |  |
+| `rank_pg_eff` | Int64 |  |
 
 **SeasonRankingsPostSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `season_id` | character |  |
-| `league_id` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `player_age` | character | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
-| `gp` | character |  |
-| `gs` | character |  |
-| `rank_pg_min` | integer |  |
-| `rank_pg_fgm` | integer |  |
-| `rank_pg_fga` | integer |  |
-| `rank_fg_pct` | integer |  |
-| `rank_pg_fg3_m` | integer |  |
-| `rank_pg_fg3_a` | integer |  |
-| `rank_fg3_pct` | integer |  |
-| `rank_pg_ftm` | integer |  |
-| `rank_pg_fta` | integer |  |
-| `rank_ft_pct` | integer |  |
-| `rank_pg_oreb` | integer |  |
-| `rank_pg_dreb` | integer |  |
-| `rank_pg_reb` | integer |  |
-| `rank_pg_ast` | integer |  |
-| `rank_pg_stl` | integer |  |
-| `rank_pg_blk` | integer |  |
-| `rank_pg_tov` | integer |  |
-| `rank_pg_pts` | integer |  |
-| `rank_pg_eff` | integer |  |
+| `player_id` | Int64 |  |
+| `season_id` | String |  |
+| `league_id` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `player_age` | String | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | String |  |
+| `gs` | String |  |
+| `rank_pg_min` | Int64 |  |
+| `rank_pg_fgm` | Int64 |  |
+| `rank_pg_fga` | Int64 |  |
+| `rank_fg_pct` | Int64 |  |
+| `rank_pg_fg3_m` | Int64 |  |
+| `rank_pg_fg3_a` | Int64 |  |
+| `rank_fg3_pct` | Int64 |  |
+| `rank_pg_ftm` | Int64 |  |
+| `rank_pg_fta` | Int64 |  |
+| `rank_ft_pct` | Int64 |  |
+| `rank_pg_oreb` | Int64 |  |
+| `rank_pg_dreb` | Int64 |  |
+| `rank_pg_reb` | Int64 |  |
+| `rank_pg_ast` | Int64 |  |
+| `rank_pg_stl` | Int64 |  |
+| `rank_pg_blk` | Int64 |  |
+| `rank_pg_tov` | Int64 |  |
+| `rank_pg_pts` | Int64 |  |
+| `rank_pg_eff` | Int64 |  |
 
 **SeasonHighs**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `game_date` | character |  |
-| `vs_team_id` | integer |  |
-| `vs_team_city` | character |  |
-| `vs_team_name` | character |  |
-| `vs_team_abbreviation` | character |  |
-| `stat` | character |  |
-| `stats_value` | integer |  |
-| `stat_order` | integer |  |
-| `date_est` | character |  |
+| `player_id` | Int64 |  |
+| `game_date` | String |  |
+| `vs_team_id` | Int64 |  |
+| `vs_team_city` | String |  |
+| `vs_team_name` | String |  |
+| `vs_team_abbreviation` | String |  |
+| `stat` | String |  |
+| `stats_value` | Int64 |  |
+| `stat_order` | Int64 |  |
+| `date_est` | String |  |
 
 **CareerHighs**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer |  |
-| `game_date` | character |  |
-| `vs_team_id` | integer |  |
-| `vs_team_city` | character |  |
-| `vs_team_name` | character |  |
-| `vs_team_abbreviation` | character |  |
-| `stat` | character |  |
-| `stats_value` | integer |  |
-| `stat_order` | integer |  |
-| `date_est` | character |  |
+| `player_id` | Int64 |  |
+| `game_date` | String |  |
+| `vs_team_id` | Int64 |  |
+| `vs_team_city` | String |  |
+| `vs_team_name` | String |  |
+| `vs_team_abbreviation` | String |  |
+| `stat` | String |  |
+| `stats_value` | Int64 |  |
+| `stat_order` | Int64 |  |
+| `date_est` | String |  |
 
 **NextGame**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `game_date` | character |  |
-| `game_time` | character |  |
-| `location` | character |  |
-| `player_team_id` | integer | Team id of the player's current team in the NextGame set. |
-| `player_team_city` | character |  |
-| `player_team_nickname` | character |  |
-| `player_team_abbreviation` | character |  |
-| `vs_team_id` | integer |  |
-| `vs_team_city` | character |  |
-| `vs_team_nickname` | character |  |
-| `vs_team_abbreviation` | character |  |
+| `game_id` | String |  |
+| `game_date` | String |  |
+| `game_time` | String |  |
+| `location` | String |  |
+| `player_team_id` | Int64 | Team id of the player's current team in the NextGame set. |
+| `player_team_city` | String |  |
+| `player_team_nickname` | String |  |
+| `player_team_abbreviation` | String |  |
+| `vs_team_id` | Int64 |  |
+| `vs_team_city` | String |  |
+| `vs_team_nickname` | String |  |
+| `vs_team_abbreviation` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -460,7 +460,7 @@ nbagl_stats_playerprofilev2(league_id='20')
 
 ## nbagl_stats_playervsplayer
 
-GET /stats/playervsplayer
+Player vs player.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playervsplayer`
 
@@ -499,189 +499,189 @@ GET /stats/playervsplayer
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character |  |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `tov` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric |  |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric |  |
-| `plus_minus` | numeric |  |
-| `nba_fantasy_pts` | numeric | Fantasy points under the NBA's fantasy scoring formula. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String |  |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `gp` | Int64 |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `tov` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 |  |
+| `plus_minus` | Float64 |  |
+| `nba_fantasy_pts` | Float64 | Fantasy points under the NBA's fantasy scoring formula. |
 
 **OnOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `vs_player_id` | integer | Stats API player id of the comparison (vs.) player. |
-| `vs_player_name` | character | Name of the comparison (vs.) player. |
-| `court_status` | character | Whether the split covers minutes with the vs. player on or off the court. |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `tov` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric |  |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric |  |
-| `plus_minus` | numeric |  |
-| `nba_fantasy_pts` | numeric | Fantasy points under the NBA's fantasy scoring formula. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `vs_player_id` | Int64 | Stats API player id of the comparison (vs.) player. |
+| `vs_player_name` | String | Name of the comparison (vs.) player. |
+| `court_status` | String | Whether the split covers minutes with the vs. player on or off the court. |
+| `gp` | Int64 |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `tov` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 |  |
+| `plus_minus` | Float64 |  |
+| `nba_fantasy_pts` | Float64 | Fantasy points under the NBA's fantasy scoring formula. |
 
 **ShotDistanceOverall**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character |  |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String |  |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotDistanceOnCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `vs_player_id` | integer | Stats API player id of the comparison (vs.) player. |
-| `vs_player_name` | character | Name of the comparison (vs.) player. |
-| `court_status` | character | Whether the split covers minutes with the vs. player on or off the court. |
-| `group_value` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `vs_player_id` | Int64 | Stats API player id of the comparison (vs.) player. |
+| `vs_player_name` | String | Name of the comparison (vs.) player. |
+| `court_status` | String | Whether the split covers minutes with the vs. player on or off the court. |
+| `group_value` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotDistanceOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `vs_player_id` | integer | Stats API player id of the comparison (vs.) player. |
-| `vs_player_name` | character | Name of the comparison (vs.) player. |
-| `court_status` | character | Whether the split covers minutes with the vs. player on or off the court. |
-| `group_value` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `vs_player_id` | Int64 | Stats API player id of the comparison (vs.) player. |
+| `vs_player_name` | String | Name of the comparison (vs.) player. |
+| `court_status` | String | Whether the split covers minutes with the vs. player on or off the court. |
+| `group_value` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotAreaOverall**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character |  |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String |  |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotAreaOnCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `vs_player_id` | integer | Stats API player id of the comparison (vs.) player. |
-| `vs_player_name` | character | Name of the comparison (vs.) player. |
-| `court_status` | character | Whether the split covers minutes with the vs. player on or off the court. |
-| `group_value` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `vs_player_id` | Int64 | Stats API player id of the comparison (vs.) player. |
+| `vs_player_name` | String | Name of the comparison (vs.) player. |
+| `court_status` | String | Whether the split covers minutes with the vs. player on or off the court. |
+| `group_value` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotAreaOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `player_id` | integer |  |
-| `player_name` | character |  |
-| `vs_player_id` | integer | Stats API player id of the comparison (vs.) player. |
-| `vs_player_name` | character | Name of the comparison (vs.) player. |
-| `court_status` | character | Whether the split covers minutes with the vs. player on or off the court. |
-| `group_value` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `player_id` | Int64 |  |
+| `player_name` | String |  |
+| `vs_player_id` | Int64 | Stats API player id of the comparison (vs.) player. |
+| `vs_player_name` | String | Name of the comparison (vs.) player. |
+| `court_status` | String | Whether the split covers minutes with the vs. player on or off the court. |
+| `group_value` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **PlayerInfo**
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `display_first_last` | character |  |
-| `display_last_comma_first` | character |  |
-| `display_fi_last` | character |  |
-| `birthdate` | character | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
-| `school` | character |  |
-| `country` | character |  |
-| `last_affiliation` | character |  |
+| `person_id` | Int64 |  |
+| `first_name` | String |  |
+| `last_name` | String |  |
+| `display_first_last` | String |  |
+| `display_last_comma_first` | String |  |
+| `display_fi_last` | String |  |
+| `birthdate` | String | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
+| `school` | String |  |
+| `country` | String |  |
+| `last_affiliation` | String |  |
 
 **VsPlayerInfo**
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `display_first_last` | character |  |
-| `display_last_comma_first` | character |  |
-| `display_fi_last` | character |  |
-| `birthdate` | character | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
-| `school` | character |  |
-| `country` | character |  |
-| `last_affiliation` | character |  |
+| `person_id` | Int64 |  |
+| `first_name` | String |  |
+| `last_name` | String |  |
+| `display_first_last` | String |  |
+| `display_last_comma_first` | String |  |
+| `display_fi_last` | String |  |
+| `birthdate` | String | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
+| `school` | String |  |
+| `country` | String |  |
+| `last_affiliation` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

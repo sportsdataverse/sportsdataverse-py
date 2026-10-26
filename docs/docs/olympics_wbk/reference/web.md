@@ -1,11 +1,11 @@
 ---
-title: OLYMPICS_WBK — ESPN web API (v3)
+title: Olympics women's basketball — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
-description: "OLYMPICS_WBK — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Olympics women's basketball — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
 toc_max_heading_level: 2
 ---
-# OLYMPICS_WBK — ESPN web API (v3)
+# Olympics women's basketball — ESPN web API (v3)
 
 `sportsdataverse.basketball.olympics_wbk` — 5 endpoints.
 
@@ -27,27 +27,27 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | integer |  |
-| `athlete_display_name` | character |  |
-| `athlete_short_name` | character |  |
-| `athlete_position` | character |  |
-| `athlete_jersey` | character |  |
-| `athlete_team_id` | integer |  |
-| `athlete_team_abbreviation` | character |  |
-| `split_name` | character |  |
-| `split_category` | character |  |
-| `games_played` | character |  |
-| `avg_minutes` | character |  |
-| `field_goal_pct` | character |  |
-| `three_point_pct` | character |  |
-| `free_throw_pct` | character |  |
-| `avg_rebounds` | character |  |
-| `avg_assists` | character |  |
-| `avg_blocks` | character |  |
-| `avg_steals` | character |  |
-| `avg_fouls` | character |  |
-| `avg_turnovers` | character |  |
-| `avg_points` | character |  |
+| `athlete_id` | Int64 |  |
+| `athlete_display_name` | String |  |
+| `athlete_short_name` | String |  |
+| `athlete_position` | String |  |
+| `athlete_jersey` | String |  |
+| `athlete_team_id` | Int64 |  |
+| `athlete_team_abbreviation` | String |  |
+| `split_name` | String |  |
+| `split_category` | String |  |
+| `games_played` | String |  |
+| `avg_minutes` | String |  |
+| `field_goal_pct` | String |  |
+| `three_point_pct` | String |  |
+| `free_throw_pct` | String |  |
+| `avg_rebounds` | String |  |
+| `avg_assists` | String |  |
+| `avg_blocks` | String |  |
+| `avg_steals` | String |  |
+| `avg_fouls` | String |  |
+| `avg_turnovers` | String |  |
+| `avg_points` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -84,13 +84,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
-| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
-| `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
-| `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
-| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
-| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
-| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
+| `category` | String | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
+| `split_name` | String | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
+| `split_category` | String | Category of a named split; null on the Web v3 per-season rows. |
+| `split_value` | String | Value of a named split; null on the Web v3 per-season rows. |
+| `season` | Int64 | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
+| `team_id` | Int64 | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
+| `position` | String | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -127,32 +127,32 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `season_type_id` | integer |  |
-| `season_type_name` | character |  |
-| `category` | character |  |
-| `event_id` | integer |  |
-| `event_date` | character |  |
-| `home_away` | character |  |
-| `score` | character |  |
-| `opponent_id` | integer |  |
-| `opponent_abbreviation` | character |  |
-| `opponent_display_name` | character |  |
-| `game_result` | character |  |
-| `game_processed` | character |  |
-| `stat_0` | character |  |
-| `stat_1` | character |  |
-| `stat_2` | character |  |
-| `stat_3` | character |  |
-| `stat_4` | character |  |
-| `stat_5` | character |  |
-| `stat_6` | character |  |
-| `stat_7` | character |  |
-| `stat_8` | character |  |
-| `stat_9` | character |  |
-| `stat_10` | character |  |
-| `stat_11` | character |  |
-| `stat_12` | character |  |
-| `stat_13` | character |  |
+| `season_type_id` | Int64 |  |
+| `season_type_name` | String |  |
+| `category` | String |  |
+| `event_id` | Int64 |  |
+| `event_date` | String |  |
+| `home_away` | String |  |
+| `score` | String |  |
+| `opponent_id` | Int64 |  |
+| `opponent_abbreviation` | String |  |
+| `opponent_display_name` | String |  |
+| `game_result` | String |  |
+| `game_processed` | String |  |
+| `stat_0` | String |  |
+| `stat_1` | String |  |
+| `stat_2` | String |  |
+| `stat_3` | String |  |
+| `stat_4` | String |  |
+| `stat_5` | String |  |
+| `stat_6` | String |  |
+| `stat_7` | String |  |
+| `stat_8` | String |  |
+| `stat_9` | String |  |
+| `stat_10` | String |  |
+| `stat_11` | String |  |
+| `stat_12` | String |  |
+| `stat_13` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -189,13 +189,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `descriptions` | character |  |
-| `display_name` | character |  |
-| `display_names` | character |  |
-| `filters` | character |  |
-| `labels` | character |  |
-| `names` | character |  |
-| `split_categories` | character |  |
+| `descriptions` | String |  |
+| `display_name` | String |  |
+| `display_names` | String |  |
+| `filters` | String |  |
+| `labels` | String |  |
+| `names` | String |  |
+| `split_categories` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -236,18 +236,18 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `sort_order` | integer | Position of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN's per-stat ranks stay in the raw payload (return_parsed=False). |
-| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
-| `athlete_uid` | character | ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text. |
-| `athlete_display_name` | character | Athlete's full display name. |
-| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
-| `athlete_first_name` | character | Athlete's first name. |
-| `athlete_last_name` | character | Athlete's last name. |
-| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
-| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
-| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
-| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
-| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
+| `sort_order` | Int64 | Position of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN's per-stat ranks stay in the raw payload (return_parsed=False). |
+| `athlete_id` | Int64 | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | String | ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text. |
+| `athlete_display_name` | String | Athlete's full display name. |
+| `athlete_short_name` | String | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | String | Athlete's first name. |
+| `athlete_last_name` | String | Athlete's last name. |
+| `athlete_position` | String | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | String | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | Int64 | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | String | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | String | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

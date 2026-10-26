@@ -1,10 +1,10 @@
 ---
-title: ATRIUM — additional Python functions
+title: Sportradar Atrium — additional Python functions
 sidebar_label: Additional functions
-description: "ATRIUM — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Sportradar Atrium — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# ATRIUM — additional Python functions
+# Sportradar Atrium — additional Python functions
 
 Additional functions in `sportsdataverse.basketball.atrium` that are not generated API-endpoint wrappers (those
 have their own reference pages): per-competition functions minted from the competition registry
@@ -27,7 +27,7 @@ have their own reference pages): per-competition functions minted from the compe
 | [lnb_player_box](additional/sportradar-atrium-embed-api.md#lnb_player_box) | Player box score of a LNB (France) game. |
 | [lnb_schedule](additional/sportradar-atrium-embed-api.md#lnb_schedule) | Fixtures (schedule and results) of a LNB (France) season. |
 | [lnb_seasons](additional/sportradar-atrium-embed-api.md#lnb_seasons) | Every season and competition id of LNB (France). |
-| [lnb_shots](additional/sportradar-atrium-embed-api-2.md#lnb_shots) | Shot chart of a LNB (France) game. |
+| [lnb_shots](additional/sportradar-atrium-embed-api.md#lnb_shots) | Shot chart of a LNB (France) game. |
 | [lnb_standings](additional/sportradar-atrium-embed-api-2.md#lnb_standings) | Standings of a LNB (France) season. |
 | [lnb_team_box](additional/sportradar-atrium-embed-api-2.md#lnb_team_box) | Team box score of a LNB (France) game. |
 | [lnb_teams](additional/sportradar-atrium-embed-api-2.md#lnb_teams) | Teams of a LNB (France) season. |

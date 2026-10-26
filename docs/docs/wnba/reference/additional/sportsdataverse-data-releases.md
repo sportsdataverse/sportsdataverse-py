@@ -39,89 +39,89 @@ Polars dataframe with one row per player / team / lineup per requested season fo
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `age` | double | Player age (in years). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | double | Wins percentage (0-1 decimal). |
-| `min` | double | Minutes played. |
-| `e_off_rating` | double |  |
-| `off_rating` | double |  |
-| `sp_work_off_rating` | double |  |
-| `e_def_rating` | double |  |
-| `def_rating` | double |  |
-| `sp_work_def_rating` | double |  |
-| `e_net_rating` | double |  |
-| `net_rating` | double | Net rating (off rating - def rating). |
-| `sp_work_net_rating` | double |  |
-| `ast_pct` | double | Assist percentage. |
-| `ast_to` | double |  |
-| `ast_ratio` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `reb_pct` | double |  |
-| `tm_tov_pct` | double |  |
-| `e_tov_pct` | double |  |
-| `efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `usg_pct` | double |  |
-| `e_usg_pct` | double |  |
-| `e_pace` | double |  |
-| `pace` | double | Possessions per 48 minutes. |
-| `pace_per40` | double | Pace per40. |
-| `sp_work_pace` | double |  |
-| `pie` | double | Player Impact Estimate (0-1). |
-| `poss` | integer | Poss. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fgm_pg` | double |  |
-| `fga_pg` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `e_off_rating_rank` | integer |  |
-| `off_rating_rank` | integer |  |
-| `sp_work_off_rating_rank` | integer |  |
-| `e_def_rating_rank` | integer |  |
-| `def_rating_rank` | integer |  |
-| `sp_work_def_rating_rank` | integer |  |
-| `e_net_rating_rank` | integer |  |
-| `net_rating_rank` | integer |  |
-| `sp_work_net_rating_rank` | integer |  |
-| `ast_pct_rank` | integer |  |
-| `ast_to_rank` | integer |  |
-| `ast_ratio_rank` | integer |  |
-| `oreb_pct_rank` | integer |  |
-| `dreb_pct_rank` | integer |  |
-| `reb_pct_rank` | integer |  |
-| `tm_tov_pct_rank` | integer |  |
-| `e_tov_pct_rank` | integer |  |
-| `efg_pct_rank` | integer |  |
-| `ts_pct_rank` | integer |  |
-| `usg_pct_rank` | integer |  |
-| `e_usg_pct_rank` | integer |  |
-| `e_pace_rank` | integer |  |
-| `pace_rank` | integer |  |
-| `sp_work_pace_rank` | integer |  |
-| `pie_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fgm_pg_rank` | integer |  |
-| `fga_pg_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `team_count` | integer |  |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `per_mode` | character |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `nickname` | String | Team or athlete nickname. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `age` | Float64 | Player age (in years). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `e_off_rating` | Float64 |  |
+| `off_rating` | Float64 |  |
+| `sp_work_off_rating` | Float64 |  |
+| `e_def_rating` | Float64 |  |
+| `def_rating` | Float64 |  |
+| `sp_work_def_rating` | Float64 |  |
+| `e_net_rating` | Float64 |  |
+| `net_rating` | Float64 | Net rating (off rating - def rating). |
+| `sp_work_net_rating` | Float64 |  |
+| `ast_pct` | Float64 | Assist percentage. |
+| `ast_to` | Float64 |  |
+| `ast_ratio` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `reb_pct` | Float64 |  |
+| `tm_tov_pct` | Float64 |  |
+| `e_tov_pct` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `usg_pct` | Float64 |  |
+| `e_usg_pct` | Float64 |  |
+| `e_pace` | Float64 |  |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `pace_per40` | Float64 | Pace per40. |
+| `sp_work_pace` | Float64 |  |
+| `pie` | Float64 | Player Impact Estimate (0-1). |
+| `poss` | Int64 | Poss. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fgm_pg` | Float64 |  |
+| `fga_pg` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `gp_rank` | Int64 |  |
+| `w_rank` | Int64 |  |
+| `l_rank` | Int64 |  |
+| `w_pct_rank` | Int64 |  |
+| `min_rank` | Int64 |  |
+| `e_off_rating_rank` | Int64 |  |
+| `off_rating_rank` | Int64 |  |
+| `sp_work_off_rating_rank` | Int64 |  |
+| `e_def_rating_rank` | Int64 |  |
+| `def_rating_rank` | Int64 |  |
+| `sp_work_def_rating_rank` | Int64 |  |
+| `e_net_rating_rank` | Int64 |  |
+| `net_rating_rank` | Int64 |  |
+| `sp_work_net_rating_rank` | Int64 |  |
+| `ast_pct_rank` | Int64 |  |
+| `ast_to_rank` | Int64 |  |
+| `ast_ratio_rank` | Int64 |  |
+| `oreb_pct_rank` | Int64 |  |
+| `dreb_pct_rank` | Int64 |  |
+| `reb_pct_rank` | Int64 |  |
+| `tm_tov_pct_rank` | Int64 |  |
+| `e_tov_pct_rank` | Int64 |  |
+| `efg_pct_rank` | Int64 |  |
+| `ts_pct_rank` | Int64 |  |
+| `usg_pct_rank` | Int64 |  |
+| `e_usg_pct_rank` | Int64 |  |
+| `e_pace_rank` | Int64 |  |
+| `pace_rank` | Int64 |  |
+| `sp_work_pace_rank` | Int64 |  |
+| `pie_rank` | Int64 |  |
+| `fgm_rank` | Int64 |  |
+| `fga_rank` | Int64 |  |
+| `fgm_pg_rank` | Int64 |  |
+| `fga_pg_rank` | Int64 |  |
+| `fg_pct_rank` | Int64 |  |
+| `team_count` | Int64 |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `per_mode` | String |  |
 
 **Raises**
 
@@ -176,104 +176,104 @@ A polars (or pandas) DataFrame, one row per lineup-season-measure_type, stacked 
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_id` | character | ESPN group id. |
-| `group_name` | character |  |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | double | Wins percentage (0-1 decimal). |
-| `min` | double | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | double | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Total rebounds. |
-| `ast` | integer | Assists. |
-| `tov` | double | Turnovers. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `blka` | integer |  |
-| `pf` | integer | Personal fouls. |
-| `pfd` | integer |  |
-| `pts` | integer | Points scored. |
-| `plus_minus` | double | Plus/minus point differential while on court. |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3_m_rank` | integer |  |
-| `fg3_a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
-| `sum_time_played` | integer |  |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `per_mode` | character |  |
-| `group_quantity` | integer |  |
-| `measure_type` | character |  |
-| `e_off_rating` | double |  |
-| `off_rating` | double |  |
-| `e_def_rating` | double |  |
-| `def_rating` | double |  |
-| `e_net_rating` | double |  |
-| `net_rating` | double | Net rating (off rating - def rating). |
-| `ast_pct` | double | Assist percentage. |
-| `ast_to` | double |  |
-| `ast_ratio` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `reb_pct` | double |  |
-| `tm_tov_pct` | double |  |
-| `efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `e_pace` | double |  |
-| `pace` | double | Possessions per 48 minutes. |
-| `pace_per40` | double | Pace per40. |
-| `poss` | integer | Poss. |
-| `pie` | double | Player Impact Estimate (0-1). |
-| `off_rating_rank` | integer |  |
-| `def_rating_rank` | integer |  |
-| `net_rating_rank` | integer |  |
-| `ast_pct_rank` | integer |  |
-| `ast_to_rank` | integer |  |
-| `ast_ratio_rank` | integer |  |
-| `oreb_pct_rank` | integer |  |
-| `dreb_pct_rank` | integer |  |
-| `reb_pct_rank` | integer |  |
-| `tm_tov_pct_rank` | integer |  |
-| `efg_pct_rank` | integer |  |
-| `ts_pct_rank` | integer |  |
-| `pace_rank` | integer |  |
-| `pie_rank` | integer |  |
+| `group_set` | String |  |
+| `group_id` | String | ESPN group id. |
+| `group_name` | String |  |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Total rebounds. |
+| `ast` | Int64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `blka` | Int64 |  |
+| `pf` | Int64 | Personal fouls. |
+| `pfd` | Int64 |  |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 |  |
+| `w_rank` | Int64 |  |
+| `l_rank` | Int64 |  |
+| `w_pct_rank` | Int64 |  |
+| `min_rank` | Int64 |  |
+| `fgm_rank` | Int64 |  |
+| `fga_rank` | Int64 |  |
+| `fg_pct_rank` | Int64 |  |
+| `fg3_m_rank` | Int64 |  |
+| `fg3_a_rank` | Int64 |  |
+| `fg3_pct_rank` | Int64 |  |
+| `ftm_rank` | Int64 |  |
+| `fta_rank` | Int64 |  |
+| `ft_pct_rank` | Int64 |  |
+| `oreb_rank` | Int64 |  |
+| `dreb_rank` | Int64 |  |
+| `reb_rank` | Int64 |  |
+| `ast_rank` | Int64 |  |
+| `tov_rank` | Int64 |  |
+| `stl_rank` | Int64 |  |
+| `blk_rank` | Int64 |  |
+| `blka_rank` | Int64 |  |
+| `pf_rank` | Int64 |  |
+| `pfd_rank` | Int64 |  |
+| `pts_rank` | Int64 |  |
+| `plus_minus_rank` | Int64 |  |
+| `sum_time_played` | Int64 |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `per_mode` | String |  |
+| `group_quantity` | Int64 |  |
+| `measure_type` | String |  |
+| `e_off_rating` | Float64 |  |
+| `off_rating` | Float64 |  |
+| `e_def_rating` | Float64 |  |
+| `def_rating` | Float64 |  |
+| `e_net_rating` | Float64 |  |
+| `net_rating` | Float64 | Net rating (off rating - def rating). |
+| `ast_pct` | Float64 | Assist percentage. |
+| `ast_to` | Float64 |  |
+| `ast_ratio` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `reb_pct` | Float64 |  |
+| `tm_tov_pct` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `e_pace` | Float64 |  |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `pace_per40` | Float64 | Pace per40. |
+| `poss` | Int64 | Poss. |
+| `pie` | Float64 | Player Impact Estimate (0-1). |
+| `off_rating_rank` | Int64 |  |
+| `def_rating_rank` | Int64 |  |
+| `net_rating_rank` | Int64 |  |
+| `ast_pct_rank` | Int64 |  |
+| `ast_to_rank` | Int64 |  |
+| `ast_ratio_rank` | Int64 |  |
+| `oreb_pct_rank` | Int64 |  |
+| `dreb_pct_rank` | Int64 |  |
+| `reb_pct_rank` | Int64 |  |
+| `tm_tov_pct_rank` | Int64 |  |
+| `efg_pct_rank` | Int64 |  |
+| `ts_pct_rank` | Int64 |  |
+| `pace_rank` | Int64 |  |
+| `pie_rank` | Int64 |  |
 
 **Example**
 
@@ -302,217 +302,217 @@ A polars (or pandas) DataFrame, one row per player-season-measure_type, stacked 
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `age` | double | Player age (in years). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | double | Wins percentage (0-1 decimal). |
-| `min` | double | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | double | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Total rebounds. |
-| `ast` | integer | Assists. |
-| `tov` | integer | Turnovers. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `blka` | integer |  |
-| `pf` | integer | Personal fouls. |
-| `pfd` | integer |  |
-| `pts` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | double |  |
-| `dd2` | integer |  |
-| `td3` | integer |  |
-| `wnba_fantasy_pts` | double |  |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3_m_rank` | integer |  |
-| `fg3_a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
-| `nba_fantasy_pts_rank` | integer |  |
-| `dd2_rank` | integer |  |
-| `td3_rank` | integer |  |
-| `wnba_fantasy_pts_rank` | integer |  |
-| `team_count` | integer |  |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `per_mode` | character |  |
-| `measure_type` | character |  |
-| `e_off_rating` | double |  |
-| `off_rating` | double |  |
-| `sp_work_off_rating` | double |  |
-| `e_def_rating` | double |  |
-| `def_rating` | double |  |
-| `sp_work_def_rating` | double |  |
-| `e_net_rating` | double |  |
-| `net_rating` | double | Net rating (off rating - def rating). |
-| `sp_work_net_rating` | double |  |
-| `ast_pct` | double | Assist percentage. |
-| `ast_to` | double |  |
-| `ast_ratio` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `reb_pct` | double |  |
-| `tm_tov_pct` | double |  |
-| `e_tov_pct` | double |  |
-| `efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `usg_pct` | double |  |
-| `e_usg_pct` | double |  |
-| `e_pace` | double |  |
-| `pace` | double | Possessions per 48 minutes. |
-| `pace_per40` | double | Pace per40. |
-| `sp_work_pace` | double |  |
-| `pie` | double | Player Impact Estimate (0-1). |
-| `poss` | integer | Poss. |
-| `fgm_pg` | double |  |
-| `fga_pg` | double |  |
-| `e_off_rating_rank` | integer |  |
-| `off_rating_rank` | integer |  |
-| `sp_work_off_rating_rank` | integer |  |
-| `e_def_rating_rank` | integer |  |
-| `def_rating_rank` | integer |  |
-| `sp_work_def_rating_rank` | integer |  |
-| `e_net_rating_rank` | integer |  |
-| `net_rating_rank` | integer |  |
-| `sp_work_net_rating_rank` | integer |  |
-| `ast_pct_rank` | integer |  |
-| `ast_to_rank` | integer |  |
-| `ast_ratio_rank` | integer |  |
-| `oreb_pct_rank` | integer |  |
-| `dreb_pct_rank` | integer |  |
-| `reb_pct_rank` | integer |  |
-| `tm_tov_pct_rank` | integer |  |
-| `e_tov_pct_rank` | integer |  |
-| `efg_pct_rank` | integer |  |
-| `ts_pct_rank` | integer |  |
-| `usg_pct_rank` | integer |  |
-| `e_usg_pct_rank` | integer |  |
-| `e_pace_rank` | integer |  |
-| `pace_rank` | integer |  |
-| `sp_work_pace_rank` | integer |  |
-| `pie_rank` | integer |  |
-| `fgm_pg_rank` | integer |  |
-| `fga_pg_rank` | integer |  |
-| `pts_off_tov` | integer |  |
-| `pts_2_nd_chance` | integer |  |
-| `pts_fb` | integer |  |
-| `pts_paint` | integer |  |
-| `opp_pts_off_tov` | double |  |
-| `opp_pts_2_nd_chance` | double |  |
-| `opp_pts_fb` | double |  |
-| `opp_pts_paint` | double |  |
-| `pts_off_tov_rank` | integer |  |
-| `pts_2_nd_chance_rank` | integer |  |
-| `pts_fb_rank` | integer |  |
-| `pts_paint_rank` | integer |  |
-| `opp_pts_off_tov_rank` | integer |  |
-| `opp_pts_2_nd_chance_rank` | integer |  |
-| `opp_pts_fb_rank` | integer |  |
-| `opp_pts_paint_rank` | integer |  |
-| `pct_fga_2_pt` | double |  |
-| `pct_fga_3_pt` | double |  |
-| `pct_pts_2_pt` | double |  |
-| `pct_pts_2_pt_mr` | double |  |
-| `pct_pts_3_pt` | double |  |
-| `pct_pts_fb` | double |  |
-| `pct_pts_ft` | double |  |
-| `pct_pts_off_tov` | double |  |
-| `pct_pts_paint` | double |  |
-| `pct_ast_2_pm` | double |  |
-| `pct_uast_2_pm` | double |  |
-| `pct_ast_3_pm` | double |  |
-| `pct_uast_3_pm` | double |  |
-| `pct_ast_fgm` | double |  |
-| `pct_uast_fgm` | double |  |
-| `pct_fga_2_pt_rank` | integer |  |
-| `pct_fga_3_pt_rank` | integer |  |
-| `pct_pts_2_pt_rank` | integer |  |
-| `pct_pts_2_pt_mr_rank` | integer |  |
-| `pct_pts_3_pt_rank` | integer |  |
-| `pct_pts_fb_rank` | integer |  |
-| `pct_pts_ft_rank` | integer |  |
-| `pct_pts_off_tov_rank` | integer |  |
-| `pct_pts_paint_rank` | integer |  |
-| `pct_ast_2_pm_rank` | integer |  |
-| `pct_uast_2_pm_rank` | integer |  |
-| `pct_ast_3_pm_rank` | integer |  |
-| `pct_uast_3_pm_rank` | integer |  |
-| `pct_ast_fgm_rank` | integer |  |
-| `pct_uast_fgm_rank` | integer |  |
-| `pct_fgm` | double |  |
-| `pct_fga` | double |  |
-| `pct_fg3_m` | double |  |
-| `pct_fg3_a` | double |  |
-| `pct_ftm` | double |  |
-| `pct_fta` | double |  |
-| `pct_oreb` | double |  |
-| `pct_dreb` | double |  |
-| `pct_reb` | double |  |
-| `pct_ast` | double |  |
-| `pct_tov` | double |  |
-| `pct_stl` | double |  |
-| `pct_blk` | double |  |
-| `pct_blka` | double |  |
-| `pct_pf` | double |  |
-| `pct_pfd` | double |  |
-| `pct_pts` | double |  |
-| `pct_fgm_rank` | integer |  |
-| `pct_fga_rank` | integer |  |
-| `pct_fg3_m_rank` | integer |  |
-| `pct_fg3_a_rank` | integer |  |
-| `pct_ftm_rank` | integer |  |
-| `pct_fta_rank` | integer |  |
-| `pct_oreb_rank` | integer |  |
-| `pct_dreb_rank` | integer |  |
-| `pct_reb_rank` | integer |  |
-| `pct_ast_rank` | integer |  |
-| `pct_tov_rank` | integer |  |
-| `pct_stl_rank` | integer |  |
-| `pct_blk_rank` | integer |  |
-| `pct_blka_rank` | integer |  |
-| `pct_pf_rank` | integer |  |
-| `pct_pfd_rank` | integer |  |
-| `pct_pts_rank` | integer |  |
-| `def_ws` | double |  |
-| `def_ws_raw` | double |  |
-| `def_ws_rank` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `nickname` | String | Team or athlete nickname. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `age` | Float64 | Player age (in years). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Total rebounds. |
+| `ast` | Int64 | Assists. |
+| `tov` | Int64 | Turnovers. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `blka` | Int64 |  |
+| `pf` | Int64 | Personal fouls. |
+| `pfd` | Int64 |  |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Int64 | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | Float64 |  |
+| `dd2` | Int64 |  |
+| `td3` | Int64 |  |
+| `wnba_fantasy_pts` | Float64 |  |
+| `gp_rank` | Int64 |  |
+| `w_rank` | Int64 |  |
+| `l_rank` | Int64 |  |
+| `w_pct_rank` | Int64 |  |
+| `min_rank` | Int64 |  |
+| `fgm_rank` | Int64 |  |
+| `fga_rank` | Int64 |  |
+| `fg_pct_rank` | Int64 |  |
+| `fg3_m_rank` | Int64 |  |
+| `fg3_a_rank` | Int64 |  |
+| `fg3_pct_rank` | Int64 |  |
+| `ftm_rank` | Int64 |  |
+| `fta_rank` | Int64 |  |
+| `ft_pct_rank` | Int64 |  |
+| `oreb_rank` | Int64 |  |
+| `dreb_rank` | Int64 |  |
+| `reb_rank` | Int64 |  |
+| `ast_rank` | Int64 |  |
+| `tov_rank` | Int64 |  |
+| `stl_rank` | Int64 |  |
+| `blk_rank` | Int64 |  |
+| `blka_rank` | Int64 |  |
+| `pf_rank` | Int64 |  |
+| `pfd_rank` | Int64 |  |
+| `pts_rank` | Int64 |  |
+| `plus_minus_rank` | Int64 |  |
+| `nba_fantasy_pts_rank` | Int64 |  |
+| `dd2_rank` | Int64 |  |
+| `td3_rank` | Int64 |  |
+| `wnba_fantasy_pts_rank` | Int64 |  |
+| `team_count` | Int64 |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `per_mode` | String |  |
+| `measure_type` | String |  |
+| `e_off_rating` | Float64 |  |
+| `off_rating` | Float64 |  |
+| `sp_work_off_rating` | Float64 |  |
+| `e_def_rating` | Float64 |  |
+| `def_rating` | Float64 |  |
+| `sp_work_def_rating` | Float64 |  |
+| `e_net_rating` | Float64 |  |
+| `net_rating` | Float64 | Net rating (off rating - def rating). |
+| `sp_work_net_rating` | Float64 |  |
+| `ast_pct` | Float64 | Assist percentage. |
+| `ast_to` | Float64 |  |
+| `ast_ratio` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `reb_pct` | Float64 |  |
+| `tm_tov_pct` | Float64 |  |
+| `e_tov_pct` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `usg_pct` | Float64 |  |
+| `e_usg_pct` | Float64 |  |
+| `e_pace` | Float64 |  |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `pace_per40` | Float64 | Pace per40. |
+| `sp_work_pace` | Float64 |  |
+| `pie` | Float64 | Player Impact Estimate (0-1). |
+| `poss` | Int64 | Poss. |
+| `fgm_pg` | Float64 |  |
+| `fga_pg` | Float64 |  |
+| `e_off_rating_rank` | Int64 |  |
+| `off_rating_rank` | Int64 |  |
+| `sp_work_off_rating_rank` | Int64 |  |
+| `e_def_rating_rank` | Int64 |  |
+| `def_rating_rank` | Int64 |  |
+| `sp_work_def_rating_rank` | Int64 |  |
+| `e_net_rating_rank` | Int64 |  |
+| `net_rating_rank` | Int64 |  |
+| `sp_work_net_rating_rank` | Int64 |  |
+| `ast_pct_rank` | Int64 |  |
+| `ast_to_rank` | Int64 |  |
+| `ast_ratio_rank` | Int64 |  |
+| `oreb_pct_rank` | Int64 |  |
+| `dreb_pct_rank` | Int64 |  |
+| `reb_pct_rank` | Int64 |  |
+| `tm_tov_pct_rank` | Int64 |  |
+| `e_tov_pct_rank` | Int64 |  |
+| `efg_pct_rank` | Int64 |  |
+| `ts_pct_rank` | Int64 |  |
+| `usg_pct_rank` | Int64 |  |
+| `e_usg_pct_rank` | Int64 |  |
+| `e_pace_rank` | Int64 |  |
+| `pace_rank` | Int64 |  |
+| `sp_work_pace_rank` | Int64 |  |
+| `pie_rank` | Int64 |  |
+| `fgm_pg_rank` | Int64 |  |
+| `fga_pg_rank` | Int64 |  |
+| `pts_off_tov` | Int64 |  |
+| `pts_2_nd_chance` | Int64 |  |
+| `pts_fb` | Int64 |  |
+| `pts_paint` | Int64 |  |
+| `opp_pts_off_tov` | Float64 |  |
+| `opp_pts_2_nd_chance` | Float64 |  |
+| `opp_pts_fb` | Float64 |  |
+| `opp_pts_paint` | Float64 |  |
+| `pts_off_tov_rank` | Int64 |  |
+| `pts_2_nd_chance_rank` | Int64 |  |
+| `pts_fb_rank` | Int64 |  |
+| `pts_paint_rank` | Int64 |  |
+| `opp_pts_off_tov_rank` | Int64 |  |
+| `opp_pts_2_nd_chance_rank` | Int64 |  |
+| `opp_pts_fb_rank` | Int64 |  |
+| `opp_pts_paint_rank` | Int64 |  |
+| `pct_fga_2_pt` | Float64 |  |
+| `pct_fga_3_pt` | Float64 |  |
+| `pct_pts_2_pt` | Float64 |  |
+| `pct_pts_2_pt_mr` | Float64 |  |
+| `pct_pts_3_pt` | Float64 |  |
+| `pct_pts_fb` | Float64 |  |
+| `pct_pts_ft` | Float64 |  |
+| `pct_pts_off_tov` | Float64 |  |
+| `pct_pts_paint` | Float64 |  |
+| `pct_ast_2_pm` | Float64 |  |
+| `pct_uast_2_pm` | Float64 |  |
+| `pct_ast_3_pm` | Float64 |  |
+| `pct_uast_3_pm` | Float64 |  |
+| `pct_ast_fgm` | Float64 |  |
+| `pct_uast_fgm` | Float64 |  |
+| `pct_fga_2_pt_rank` | Int64 |  |
+| `pct_fga_3_pt_rank` | Int64 |  |
+| `pct_pts_2_pt_rank` | Int64 |  |
+| `pct_pts_2_pt_mr_rank` | Int64 |  |
+| `pct_pts_3_pt_rank` | Int64 |  |
+| `pct_pts_fb_rank` | Int64 |  |
+| `pct_pts_ft_rank` | Int64 |  |
+| `pct_pts_off_tov_rank` | Int64 |  |
+| `pct_pts_paint_rank` | Int64 |  |
+| `pct_ast_2_pm_rank` | Int64 |  |
+| `pct_uast_2_pm_rank` | Int64 |  |
+| `pct_ast_3_pm_rank` | Int64 |  |
+| `pct_uast_3_pm_rank` | Int64 |  |
+| `pct_ast_fgm_rank` | Int64 |  |
+| `pct_uast_fgm_rank` | Int64 |  |
+| `pct_fgm` | Float64 |  |
+| `pct_fga` | Float64 |  |
+| `pct_fg3_m` | Float64 |  |
+| `pct_fg3_a` | Float64 |  |
+| `pct_ftm` | Float64 |  |
+| `pct_fta` | Float64 |  |
+| `pct_oreb` | Float64 |  |
+| `pct_dreb` | Float64 |  |
+| `pct_reb` | Float64 |  |
+| `pct_ast` | Float64 |  |
+| `pct_tov` | Float64 |  |
+| `pct_stl` | Float64 |  |
+| `pct_blk` | Float64 |  |
+| `pct_blka` | Float64 |  |
+| `pct_pf` | Float64 |  |
+| `pct_pfd` | Float64 |  |
+| `pct_pts` | Float64 |  |
+| `pct_fgm_rank` | Int64 |  |
+| `pct_fga_rank` | Int64 |  |
+| `pct_fg3_m_rank` | Int64 |  |
+| `pct_fg3_a_rank` | Int64 |  |
+| `pct_ftm_rank` | Int64 |  |
+| `pct_fta_rank` | Int64 |  |
+| `pct_oreb_rank` | Int64 |  |
+| `pct_dreb_rank` | Int64 |  |
+| `pct_reb_rank` | Int64 |  |
+| `pct_ast_rank` | Int64 |  |
+| `pct_tov_rank` | Int64 |  |
+| `pct_stl_rank` | Int64 |  |
+| `pct_blk_rank` | Int64 |  |
+| `pct_blka_rank` | Int64 |  |
+| `pct_pf_rank` | Int64 |  |
+| `pct_pfd_rank` | Int64 |  |
+| `pct_pts_rank` | Int64 |  |
+| `def_ws` | Float64 |  |
+| `def_ws_raw` | Float64 |  |
+| `def_ws_rank` | Int64 |  |
 
 **Example**
 
@@ -546,100 +546,100 @@ A polars (or pandas) DataFrame, one row per team-season, read from the `wnba_sta
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `season_id` | character | Unique season identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `conference` | character | Filter players or teams by conference. |
-| `conference_record` | character | Conference win-loss record. |
-| `playoff_rank` | integer | League/season rank for playoff. |
-| `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
-| `division` | character | Team division. |
-| `division_record` | character |  |
-| `division_rank` | integer |  |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
-| `win_pct` | double | Win percentage (0-1 decimal). |
-| `league_rank` | integer |  |
-| `record` | character | Record string (e.g. '12-4'). |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `l10` | character | L10. |
-| `last10_home` | character |  |
-| `last10_road` | character |  |
-| `ot` | character | Ot. |
-| `three_pts_or_less` | character |  |
-| `ten_pts_or_more` | character |  |
-| `long_home_streak` | integer |  |
-| `str_long_home_streak` | character |  |
-| `long_road_streak` | integer |  |
-| `str_long_road_streak` | character |  |
-| `long_win_streak` | integer |  |
-| `long_loss_streak` | integer |  |
-| `current_home_streak` | integer |  |
-| `str_current_home_streak` | character |  |
-| `current_road_streak` | integer |  |
-| `str_current_road_streak` | character |  |
-| `current_streak` | integer |  |
-| `str_current_streak` | character |  |
-| `conference_games_back` | double |  |
-| `division_games_back` | double |  |
-| `clinched_conference_title` | integer |  |
-| `clinched_division_title` | integer |  |
-| `clinched_playoff_birth` | integer |  |
-| `clinched_play_in` | integer |  |
-| `eliminated_conference` | integer |  |
-| `eliminated_division` | integer |  |
-| `ahead_at_half` | character |  |
-| `behind_at_half` | character |  |
-| `tied_at_half` | character |  |
-| `ahead_at_third` | character |  |
-| `behind_at_third` | character |  |
-| `tied_at_third` | character |  |
-| `score100_pts` | character |  |
-| `opp_score100_pts` | character |  |
-| `opp_over500` | character |  |
-| `lead_in_fgpct` | character |  |
-| `lead_in_reb` | character |  |
-| `fewer_turnovers` | character |  |
-| `points_pg` | double | Points pg. |
-| `opp_points_pg` | double | Opponent points pg. |
-| `diff_points_pg` | double | Diff points pg. |
-| `vs_east` | character |  |
-| `vs_atlantic` | character |  |
-| `vs_central` | character |  |
-| `vs_southeast` | character |  |
-| `vs_west` | character |  |
-| `vs_northwest` | character |  |
-| `vs_pacific` | character |  |
-| `vs_southwest` | character |  |
-| `jan` | character |  |
-| `feb` | character |  |
-| `mar` | character |  |
-| `apr` | character |  |
-| `may` | character |  |
-| `jun` | character |  |
-| `jul` | character |  |
-| `aug` | character |  |
-| `sep` | character |  |
-| `oct` | character |  |
-| `nov` | character |  |
-| `dec` | character |  |
-| `score_80_plus` | character |  |
-| `opp_score_80_plus` | character |  |
-| `score_below_80` | character |  |
-| `opp_score_below_80` | character |  |
-| `total_points` | integer |  |
-| `opp_total_points` | integer |  |
-| `diff_total_points` | integer |  |
-| `league_games_back` | double |  |
-| `playoff_seeding` | character |  |
-| `clinched_post_season` | integer |  |
-| `neutral` | character | Neutral. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `season_id` | String | Unique season identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_city` | String | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `conference` | String | Filter players or teams by conference. |
+| `conference_record` | String | Conference win-loss record. |
+| `playoff_rank` | Int64 | League/season rank for playoff. |
+| `clinch_indicator` | String | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
+| `division` | String | Team division. |
+| `division_record` | String |  |
+| `division_rank` | Int64 |  |
+| `wins` | Int64 | Total wins. |
+| `losses` | Int64 | Total losses. |
+| `win_pct` | Float64 | Win percentage (0-1 decimal). |
+| `league_rank` | Int64 |  |
+| `record` | String | Record string (e.g. '12-4'). |
+| `home` | String | Home. |
+| `road` | String | Road. |
+| `l10` | String | L10. |
+| `last10_home` | String |  |
+| `last10_road` | String |  |
+| `ot` | String | Ot. |
+| `three_pts_or_less` | String |  |
+| `ten_pts_or_more` | String |  |
+| `long_home_streak` | Int64 |  |
+| `str_long_home_streak` | String |  |
+| `long_road_streak` | Int64 |  |
+| `str_long_road_streak` | String |  |
+| `long_win_streak` | Int64 |  |
+| `long_loss_streak` | Int64 |  |
+| `current_home_streak` | Int64 |  |
+| `str_current_home_streak` | String |  |
+| `current_road_streak` | Int64 |  |
+| `str_current_road_streak` | String |  |
+| `current_streak` | Int64 |  |
+| `str_current_streak` | String |  |
+| `conference_games_back` | Float64 |  |
+| `division_games_back` | Float64 |  |
+| `clinched_conference_title` | Int64 |  |
+| `clinched_division_title` | Int64 |  |
+| `clinched_playoff_birth` | Int64 |  |
+| `clinched_play_in` | Int64 |  |
+| `eliminated_conference` | Int64 |  |
+| `eliminated_division` | Int64 |  |
+| `ahead_at_half` | String |  |
+| `behind_at_half` | String |  |
+| `tied_at_half` | String |  |
+| `ahead_at_third` | String |  |
+| `behind_at_third` | String |  |
+| `tied_at_third` | String |  |
+| `score100_pts` | String |  |
+| `opp_score100_pts` | String |  |
+| `opp_over500` | String |  |
+| `lead_in_fgpct` | String |  |
+| `lead_in_reb` | String |  |
+| `fewer_turnovers` | String |  |
+| `points_pg` | Float64 | Points pg. |
+| `opp_points_pg` | Float64 | Opponent points pg. |
+| `diff_points_pg` | Float64 | Diff points pg. |
+| `vs_east` | String |  |
+| `vs_atlantic` | String |  |
+| `vs_central` | String |  |
+| `vs_southeast` | String |  |
+| `vs_west` | String |  |
+| `vs_northwest` | String |  |
+| `vs_pacific` | String |  |
+| `vs_southwest` | String |  |
+| `jan` | String |  |
+| `feb` | String |  |
+| `mar` | String |  |
+| `apr` | String |  |
+| `may` | String |  |
+| `jun` | String |  |
+| `jul` | String |  |
+| `aug` | String |  |
+| `sep` | String |  |
+| `oct` | String |  |
+| `nov` | String |  |
+| `dec` | String |  |
+| `score_80_plus` | String |  |
+| `opp_score_80_plus` | String |  |
+| `score_below_80` | String |  |
+| `opp_score_below_80` | String |  |
+| `total_points` | Int64 |  |
+| `opp_total_points` | Int64 |  |
+| `diff_total_points` | Int64 |  |
+| `league_games_back` | Float64 |  |
+| `playoff_seeding` | String |  |
+| `clinched_post_season` | Int64 |  |
+| `neutral` | String | Neutral. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 **Example**
 
@@ -668,185 +668,185 @@ A polars (or pandas) DataFrame, one row per team-season-measure_type, stacked fr
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | double | Wins percentage (0-1 decimal). |
-| `min` | double | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | double | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Total rebounds. |
-| `ast` | integer | Assists. |
-| `tov` | double | Turnovers. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `blka` | integer |  |
-| `pf` | integer | Personal fouls. |
-| `pfd` | integer |  |
-| `pts` | integer | Points scored. |
-| `plus_minus` | double | Plus/minus point differential while on court. |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3_m_rank` | integer |  |
-| `fg3_a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `per_mode` | character |  |
-| `measure_type` | character |  |
-| `e_off_rating` | double |  |
-| `off_rating` | double |  |
-| `e_def_rating` | double |  |
-| `def_rating` | double |  |
-| `e_net_rating` | double |  |
-| `net_rating` | double | Net rating (off rating - def rating). |
-| `ast_pct` | double | Assist percentage. |
-| `ast_to` | double |  |
-| `ast_ratio` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `reb_pct` | double |  |
-| `tm_tov_pct` | double |  |
-| `efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `e_pace` | double |  |
-| `pace` | double | Possessions per 48 minutes. |
-| `pace_per40` | double | Pace per40. |
-| `poss` | integer | Poss. |
-| `pie` | double | Player Impact Estimate (0-1). |
-| `off_rating_rank` | integer |  |
-| `def_rating_rank` | integer |  |
-| `net_rating_rank` | integer |  |
-| `ast_pct_rank` | integer |  |
-| `ast_to_rank` | integer |  |
-| `ast_ratio_rank` | integer |  |
-| `oreb_pct_rank` | integer |  |
-| `dreb_pct_rank` | integer |  |
-| `reb_pct_rank` | integer |  |
-| `tm_tov_pct_rank` | integer |  |
-| `efg_pct_rank` | integer |  |
-| `ts_pct_rank` | integer |  |
-| `pace_rank` | integer |  |
-| `pie_rank` | integer |  |
-| `pts_off_tov` | double |  |
-| `pts_2_nd_chance` | double |  |
-| `pts_fb` | double |  |
-| `pts_paint` | double |  |
-| `opp_pts_off_tov` | double |  |
-| `opp_pts_2_nd_chance` | double |  |
-| `opp_pts_fb` | double |  |
-| `opp_pts_paint` | double |  |
-| `pts_off_tov_rank` | integer |  |
-| `pts_2_nd_chance_rank` | integer |  |
-| `pts_fb_rank` | integer |  |
-| `pts_paint_rank` | integer |  |
-| `opp_pts_off_tov_rank` | integer |  |
-| `opp_pts_2_nd_chance_rank` | integer |  |
-| `opp_pts_fb_rank` | integer |  |
-| `opp_pts_paint_rank` | integer |  |
-| `pct_fga_2_pt` | double |  |
-| `pct_fga_3_pt` | double |  |
-| `pct_pts_2_pt` | double |  |
-| `pct_pts_2_pt_mr` | double |  |
-| `pct_pts_3_pt` | double |  |
-| `pct_pts_fb` | double |  |
-| `pct_pts_ft` | double |  |
-| `pct_pts_off_tov` | double |  |
-| `pct_pts_paint` | double |  |
-| `pct_ast_2_pm` | double |  |
-| `pct_uast_2_pm` | double |  |
-| `pct_ast_3_pm` | double |  |
-| `pct_uast_3_pm` | double |  |
-| `pct_ast_fgm` | double |  |
-| `pct_uast_fgm` | double |  |
-| `pct_fga_2_pt_rank` | integer |  |
-| `pct_fga_3_pt_rank` | integer |  |
-| `pct_pts_2_pt_rank` | integer |  |
-| `pct_pts_2_pt_mr_rank` | integer |  |
-| `pct_pts_3_pt_rank` | integer |  |
-| `pct_pts_fb_rank` | integer |  |
-| `pct_pts_ft_rank` | integer |  |
-| `pct_pts_off_tov_rank` | integer |  |
-| `pct_pts_paint_rank` | integer |  |
-| `pct_ast_2_pm_rank` | integer |  |
-| `pct_uast_2_pm_rank` | integer |  |
-| `pct_ast_3_pm_rank` | integer |  |
-| `pct_uast_3_pm_rank` | integer |  |
-| `pct_ast_fgm_rank` | integer |  |
-| `pct_uast_fgm_rank` | integer |  |
-| `opp_fgm` | double |  |
-| `opp_fga` | double |  |
-| `opp_fg_pct` | double |  |
-| `opp_fg3_m` | double |  |
-| `opp_fg3_a` | double |  |
-| `opp_fg3_pct` | double |  |
-| `opp_ftm` | double |  |
-| `opp_fta` | double |  |
-| `opp_ft_pct` | double |  |
-| `opp_oreb` | double |  |
-| `opp_dreb` | double |  |
-| `opp_reb` | double |  |
-| `opp_ast` | double |  |
-| `opp_tov` | double |  |
-| `opp_stl` | double |  |
-| `opp_blk` | double |  |
-| `opp_blka` | double |  |
-| `opp_pf` | double |  |
-| `opp_pfd` | double |  |
-| `opp_pts` | double | Opponent points. |
-| `opp_fgm_rank` | integer |  |
-| `opp_fga_rank` | integer |  |
-| `opp_fg_pct_rank` | integer |  |
-| `opp_fg3_m_rank` | integer |  |
-| `opp_fg3_a_rank` | integer |  |
-| `opp_fg3_pct_rank` | integer |  |
-| `opp_ftm_rank` | integer |  |
-| `opp_fta_rank` | integer |  |
-| `opp_ft_pct_rank` | integer |  |
-| `opp_oreb_rank` | integer |  |
-| `opp_dreb_rank` | integer |  |
-| `opp_reb_rank` | integer |  |
-| `opp_ast_rank` | integer |  |
-| `opp_tov_rank` | integer |  |
-| `opp_stl_rank` | integer |  |
-| `opp_blk_rank` | integer |  |
-| `opp_blka_rank` | integer |  |
-| `opp_pf_rank` | integer |  |
-| `opp_pfd_rank` | integer |  |
-| `opp_pts_rank` | integer |  |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `gp` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_pct` | Float64 | Wins percentage (0-1 decimal). |
+| `min` | Float64 | Minutes played. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Total rebounds. |
+| `ast` | Int64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `blka` | Int64 |  |
+| `pf` | Int64 | Personal fouls. |
+| `pfd` | Int64 |  |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Float64 | Plus/minus point differential while on court. |
+| `gp_rank` | Int64 |  |
+| `w_rank` | Int64 |  |
+| `l_rank` | Int64 |  |
+| `w_pct_rank` | Int64 |  |
+| `min_rank` | Int64 |  |
+| `fgm_rank` | Int64 |  |
+| `fga_rank` | Int64 |  |
+| `fg_pct_rank` | Int64 |  |
+| `fg3_m_rank` | Int64 |  |
+| `fg3_a_rank` | Int64 |  |
+| `fg3_pct_rank` | Int64 |  |
+| `ftm_rank` | Int64 |  |
+| `fta_rank` | Int64 |  |
+| `ft_pct_rank` | Int64 |  |
+| `oreb_rank` | Int64 |  |
+| `dreb_rank` | Int64 |  |
+| `reb_rank` | Int64 |  |
+| `ast_rank` | Int64 |  |
+| `tov_rank` | Int64 |  |
+| `stl_rank` | Int64 |  |
+| `blk_rank` | Int64 |  |
+| `blka_rank` | Int64 |  |
+| `pf_rank` | Int64 |  |
+| `pfd_rank` | Int64 |  |
+| `pts_rank` | Int64 |  |
+| `plus_minus_rank` | Int64 |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `per_mode` | String |  |
+| `measure_type` | String |  |
+| `e_off_rating` | Float64 |  |
+| `off_rating` | Float64 |  |
+| `e_def_rating` | Float64 |  |
+| `def_rating` | Float64 |  |
+| `e_net_rating` | Float64 |  |
+| `net_rating` | Float64 | Net rating (off rating - def rating). |
+| `ast_pct` | Float64 | Assist percentage. |
+| `ast_to` | Float64 |  |
+| `ast_ratio` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `reb_pct` | Float64 |  |
+| `tm_tov_pct` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `e_pace` | Float64 |  |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `pace_per40` | Float64 | Pace per40. |
+| `poss` | Int64 | Poss. |
+| `pie` | Float64 | Player Impact Estimate (0-1). |
+| `off_rating_rank` | Int64 |  |
+| `def_rating_rank` | Int64 |  |
+| `net_rating_rank` | Int64 |  |
+| `ast_pct_rank` | Int64 |  |
+| `ast_to_rank` | Int64 |  |
+| `ast_ratio_rank` | Int64 |  |
+| `oreb_pct_rank` | Int64 |  |
+| `dreb_pct_rank` | Int64 |  |
+| `reb_pct_rank` | Int64 |  |
+| `tm_tov_pct_rank` | Int64 |  |
+| `efg_pct_rank` | Int64 |  |
+| `ts_pct_rank` | Int64 |  |
+| `pace_rank` | Int64 |  |
+| `pie_rank` | Int64 |  |
+| `pts_off_tov` | Float64 |  |
+| `pts_2_nd_chance` | Float64 |  |
+| `pts_fb` | Float64 |  |
+| `pts_paint` | Float64 |  |
+| `opp_pts_off_tov` | Float64 |  |
+| `opp_pts_2_nd_chance` | Float64 |  |
+| `opp_pts_fb` | Float64 |  |
+| `opp_pts_paint` | Float64 |  |
+| `pts_off_tov_rank` | Int64 |  |
+| `pts_2_nd_chance_rank` | Int64 |  |
+| `pts_fb_rank` | Int64 |  |
+| `pts_paint_rank` | Int64 |  |
+| `opp_pts_off_tov_rank` | Int64 |  |
+| `opp_pts_2_nd_chance_rank` | Int64 |  |
+| `opp_pts_fb_rank` | Int64 |  |
+| `opp_pts_paint_rank` | Int64 |  |
+| `pct_fga_2_pt` | Float64 |  |
+| `pct_fga_3_pt` | Float64 |  |
+| `pct_pts_2_pt` | Float64 |  |
+| `pct_pts_2_pt_mr` | Float64 |  |
+| `pct_pts_3_pt` | Float64 |  |
+| `pct_pts_fb` | Float64 |  |
+| `pct_pts_ft` | Float64 |  |
+| `pct_pts_off_tov` | Float64 |  |
+| `pct_pts_paint` | Float64 |  |
+| `pct_ast_2_pm` | Float64 |  |
+| `pct_uast_2_pm` | Float64 |  |
+| `pct_ast_3_pm` | Float64 |  |
+| `pct_uast_3_pm` | Float64 |  |
+| `pct_ast_fgm` | Float64 |  |
+| `pct_uast_fgm` | Float64 |  |
+| `pct_fga_2_pt_rank` | Int64 |  |
+| `pct_fga_3_pt_rank` | Int64 |  |
+| `pct_pts_2_pt_rank` | Int64 |  |
+| `pct_pts_2_pt_mr_rank` | Int64 |  |
+| `pct_pts_3_pt_rank` | Int64 |  |
+| `pct_pts_fb_rank` | Int64 |  |
+| `pct_pts_ft_rank` | Int64 |  |
+| `pct_pts_off_tov_rank` | Int64 |  |
+| `pct_pts_paint_rank` | Int64 |  |
+| `pct_ast_2_pm_rank` | Int64 |  |
+| `pct_uast_2_pm_rank` | Int64 |  |
+| `pct_ast_3_pm_rank` | Int64 |  |
+| `pct_uast_3_pm_rank` | Int64 |  |
+| `pct_ast_fgm_rank` | Int64 |  |
+| `pct_uast_fgm_rank` | Int64 |  |
+| `opp_fgm` | Float64 |  |
+| `opp_fga` | Float64 |  |
+| `opp_fg_pct` | Float64 |  |
+| `opp_fg3_m` | Float64 |  |
+| `opp_fg3_a` | Float64 |  |
+| `opp_fg3_pct` | Float64 |  |
+| `opp_ftm` | Float64 |  |
+| `opp_fta` | Float64 |  |
+| `opp_ft_pct` | Float64 |  |
+| `opp_oreb` | Float64 |  |
+| `opp_dreb` | Float64 |  |
+| `opp_reb` | Float64 |  |
+| `opp_ast` | Float64 |  |
+| `opp_tov` | Float64 |  |
+| `opp_stl` | Float64 |  |
+| `opp_blk` | Float64 |  |
+| `opp_blka` | Float64 |  |
+| `opp_pf` | Float64 |  |
+| `opp_pfd` | Float64 |  |
+| `opp_pts` | Float64 | Opponent points. |
+| `opp_fgm_rank` | Int64 |  |
+| `opp_fga_rank` | Int64 |  |
+| `opp_fg_pct_rank` | Int64 |  |
+| `opp_fg3_m_rank` | Int64 |  |
+| `opp_fg3_a_rank` | Int64 |  |
+| `opp_fg3_pct_rank` | Int64 |  |
+| `opp_ftm_rank` | Int64 |  |
+| `opp_fta_rank` | Int64 |  |
+| `opp_ft_pct_rank` | Int64 |  |
+| `opp_oreb_rank` | Int64 |  |
+| `opp_dreb_rank` | Int64 |  |
+| `opp_reb_rank` | Int64 |  |
+| `opp_ast_rank` | Int64 |  |
+| `opp_tov_rank` | Int64 |  |
+| `opp_stl_rank` | Int64 |  |
+| `opp_blk_rank` | Int64 |  |
+| `opp_blka_rank` | Int64 |  |
+| `opp_pf_rank` | Int64 |  |
+| `opp_pfd_rank` | Int64 |  |
+| `opp_pts_rank` | Int64 |  |
 
 **Example**
 

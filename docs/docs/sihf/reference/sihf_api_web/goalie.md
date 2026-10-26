@@ -1,11 +1,11 @@
 ---
-title: "SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie"
+title: "SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie"
 sidebar_label: "Goalie"
 sidebar_position: 2
-description: "SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie — function reference in sdv-py, the SportsDataverse Python package."
+description: "SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie
+# SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — Goalie
 
 ## sihf_goalie_stats
 
@@ -28,25 +28,25 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
-| `rank` | integer | Rank in the table; null on a summary row. |
-| `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"). |
-| `team_id` | integer | SIHF team id (Int64 join key). |
-| `team_name` | character | Team display name as SIHF publishes it. |
-| `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"). |
-| `games_played` | integer | Games the goaltender dressed for. |
-| `first_keeper` | integer | Games listed as the starting goaltender. |
-| `goals_against` | integer | Goals allowed by the goaltender. |
-| `goals_against_average` | double | Goals against per 60 minutes. |
-| `shots_against` | integer | Shots on goal faced. |
-| `saves` | integer | Shots on goal saved by the goaltender. |
-| `saves_percentage` | double | Save percentage on a 0-100 scale (91.25 = .9125). |
-| `seconds_played` | character | Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02". |
-| `penalty_in_minutes` | integer | Penalty minutes. |
-| `goals` | integer | Goals scored by the goaltender (almost always 0). |
-| `assists` | integer | Assists by the goaltender. |
-| `row_type` | character | "data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table. |
+| `season` | Int64 | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
+| `phase_id` | Int64 | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
+| `rank` | Int64 | Rank in the table; null on a summary row. |
+| `player` | String | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"). |
+| `team_id` | Int64 | SIHF team id (Int64 join key). |
+| `team_name` | String | Team display name as SIHF publishes it. |
+| `team_acronym` | String | Team abbreviation as SIHF publishes it (e.g., "HCD"). |
+| `games_played` | Int64 | Games the goaltender dressed for. |
+| `first_keeper` | Int64 | Games listed as the starting goaltender. |
+| `goals_against` | Int64 | Goals allowed by the goaltender. |
+| `goals_against_average` | Float64 | Goals against per 60 minutes. |
+| `shots_against` | Int64 | Shots on goal faced. |
+| `saves` | Int64 | Shots on goal saved by the goaltender. |
+| `saves_percentage` | Float64 | Save percentage on a 0-100 scale (91.25 = .9125). |
+| `seconds_played` | String | Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02". |
+| `penalty_in_minutes` | Int64 | Penalty minutes. |
+| `goals` | Int64 | Goals scored by the goaltender (almost always 0). |
+| `assists` | Int64 | Assists by the goaltender. |
+| `row_type` | String | "data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -85,24 +85,24 @@ Goaltender shots against: on goal (total, slot), missed, post, with per-game rat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
-| `rank` | integer | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
-| `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
-| `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
-| `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
-| `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played in the table's scope. |
-| `soga_sog` | integer | Shots on goal against, total. |
-| `soga_sog_per_game` | double | Shots on goal against per game. |
-| `soga_sog_slot` | integer | Slot shots on goal against. |
-| `soga_sog_slot_per_game` | double | Slot shots on goal against per game. |
-| `soga_missed` | integer | Missed shots against. |
-| `soga_missed_per_game` | double | Missed shots against per game. |
-| `soga_post` | integer | Post/crossbar shots against. |
-| `soga_post_per_game` | double | Post/crossbar shots against per game. |
-| `saves_slot_percentage` | double | Save percentage on slot shots. |
-| `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
+| `season` | Int64 | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
+| `phase_id` | Int64 | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
+| `rank` | Int64 | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
+| `player` | String | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
+| `team_id` | Int64 | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
+| `team_name` | String | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
+| `team_acronym` | String | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
+| `games_played` | Int64 | Games played in the table's scope. |
+| `soga_sog` | Int64 | Shots on goal against, total. |
+| `soga_sog_per_game` | Float64 | Shots on goal against per game. |
+| `soga_sog_slot` | Int64 | Slot shots on goal against. |
+| `soga_sog_slot_per_game` | Float64 | Slot shots on goal against per game. |
+| `soga_missed` | Int64 | Missed shots against. |
+| `soga_missed_per_game` | Float64 | Missed shots against per game. |
+| `soga_post` | Int64 | Post/crossbar shots against. |
+| `soga_post_per_game` | Float64 | Post/crossbar shots against per game. |
+| `saves_slot_percentage` | Float64 | Save percentage on slot shots. |
+| `row_type` | String | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -141,25 +141,25 @@ Goaltender decisions: starts, wins and losses in regulation, overtime and shooto
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
-| `rank` | integer | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
-| `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
-| `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
-| `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
-| `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played in the table's scope. |
-| `first_keeper` | integer | Games started as goalkeeper (GPI). |
-| `wins` | integer | Wins, all decision types. |
-| `wins_intime` | integer | Wins in regulation. |
-| `wins_overtime` | integer | Games won in overtime. |
-| `wins_penalty` | integer | Games won in a shootout. |
-| `losses` | integer | Losses, all decision types. |
-| `losses_intime` | integer | Losses in regulation. |
-| `losses_overtime` | integer | Overtime losses. |
-| `losses_penalty` | integer | Shootout losses. |
-| `shutout` | integer | Shutouts (games with no goal against). |
-| `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
+| `season` | Int64 | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
+| `phase_id` | Int64 | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
+| `rank` | Int64 | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
+| `player` | String | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
+| `team_id` | Int64 | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
+| `team_name` | String | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
+| `team_acronym` | String | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
+| `games_played` | Int64 | Games played in the table's scope. |
+| `first_keeper` | Int64 | Games started as goalkeeper (GPI). |
+| `wins` | Int64 | Wins, all decision types. |
+| `wins_intime` | Int64 | Wins in regulation. |
+| `wins_overtime` | Int64 | Games won in overtime. |
+| `wins_penalty` | Int64 | Games won in a shootout. |
+| `losses` | Int64 | Losses, all decision types. |
+| `losses_intime` | Int64 | Losses in regulation. |
+| `losses_overtime` | Int64 | Overtime losses. |
+| `losses_penalty` | Int64 | Shootout losses. |
+| `shutout` | Int64 | Shutouts (games with no goal against). |
+| `row_type` | String | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -198,19 +198,19 @@ Goaltender shootouts: attempts faced, goals against, saves and save percentage.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
-| `rank` | integer | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
-| `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
-| `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
-| `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
-| `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played in the table's scope. |
-| `pen_shots_against` | integer | Shootout/penalty shots faced. |
-| `pen_shot_goals_against` | integer | Shootout/penalty goals allowed. |
-| `pen_shot_saves` | integer | Shootout/penalty shots saved. |
-| `pen_shot_saves_percent` | double | Shootout/penalty save percentage. |
-| `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
+| `season` | Int64 | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
+| `phase_id` | Int64 | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
+| `rank` | Int64 | Rank in the table; null on a summary row, and on a goaltender below the qualification line. |
+| `player` | String | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id. |
+| `team_id` | Int64 | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
+| `team_name` | String | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
+| `team_acronym` | String | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
+| `games_played` | Int64 | Games played in the table's scope. |
+| `pen_shots_against` | Int64 | Shootout/penalty shots faced. |
+| `pen_shot_goals_against` | Int64 | Shootout/penalty goals allowed. |
+| `pen_shot_saves` | Int64 | Shootout/penalty shots saved. |
+| `pen_shot_saves_percent` | Float64 | Shootout/penalty save percentage. |
+| `row_type` | String | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

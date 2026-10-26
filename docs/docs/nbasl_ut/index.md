@@ -1,9 +1,9 @@
 ---
-title: NBASL_UT
-sidebar_label: NBASL_UT
-description: "sdv-py NBASL_UT: endpoint references, dataset loaders and parsers for NBASL_UT in the SportsDataverse Python package."
+title: NBA Summer League (Utah)
+sidebar_label: NBA Summer League (Utah)
+description: "sdv-py NBA Summer League (Utah): endpoint references, dataset loaders and parsers for NBA Summer League (Utah) in the SportsDataverse Python package."
 ---
-# NBASL_UT (`sportsdataverse.basketball.nbasl_ut`)
+# NBA Summer League (Utah) (`sportsdataverse.basketball.nbasl_ut`)
 
 ## Data sources
 

@@ -24,27 +24,27 @@ All-Star Game career statistics for skaters.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer | Identifier for the All-Star team roster to which the skater was assigned during the All-Star event. |
-| `assists` | integer | Assists. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `games_played` | integer | Games played. |
-| `goals` | integer | Goals scored. |
-| `is_active` | logical | Whether the team is active. |
-| `is_rookie` | logical | Whether the player is a rookie. |
-| `last_name` | character | Player last name. |
-| `losses` | integer | Losses. |
-| `nhl_team_id` | integer | NHL identifier for the skater's regular-season team at the time of All-Star selection. |
-| `penalties` | double | Penalty count. |
-| `penalty_minutes` | double | Penalty minutes. |
-| `player_id` | integer | Unique player identifier. |
-| `points` | integer | Total points (goals + assists). |
-| `position` | character | Player position. |
-| `power_play_goals` | integer | Power-play goals. |
-| `season_id` | integer | Season identifier. |
-| `short_handed_goals` | integer | Short-handed goals. |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `all_star_team_id` | Int64 | Identifier for the All-Star team roster to which the skater was assigned during the All-Star event. |
+| `assists` | Int64 | Assists. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `games_played` | Int64 | Games played. |
+| `goals` | Int64 | Goals scored. |
+| `is_active` | Boolean | Whether the team is active. |
+| `is_rookie` | Boolean | Whether the player is a rookie. |
+| `last_name` | String | Player last name. |
+| `losses` | Int64 | Losses. |
+| `nhl_team_id` | Int64 | NHL identifier for the skater's regular-season team at the time of All-Star selection. |
+| `penalties` | Float64 | Penalty count. |
+| `penalty_minutes` | Float64 | Penalty minutes. |
+| `player_id` | Int64 | Unique player identifier. |
+| `points` | Int64 | Total points (goals + assists). |
+| `position` | String | Player position. |
+| `power_play_goals` | Int64 | Power-play goals. |
+| `season_id` | Int64 | Season identifier. |
+| `short_handed_goals` | Int64 | Short-handed goals. |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -79,28 +79,28 @@ All-Star Game career statistics for goaltenders.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer | Identifier for the NHL All-Star team the goalie represented in their career All-Star appearances. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `games_played` | integer | Games played. |
-| `goals_against` | integer | Goals against. |
-| `goals_against_average` | double | Goals against average. |
-| `is_active` | logical | Whether the team is active. |
-| `is_rookie` | logical | Whether the player is a rookie. |
-| `last_name` | character | Player last name. |
-| `losses` | integer | Losses. |
-| `nhl_team_id` | integer | NHL identifier for the regular-season franchise the goalie was affiliated with during their All-Star career. |
-| `ot_losses` | integer | Overtime losses. |
-| `player_id` | integer | Unique player identifier. |
-| `save_percentage` | double | Save percentage (goalies). |
-| `season_id` | integer | Season identifier. |
-| `shots_against` | integer | Shots faced. |
-| `team_losses` | integer |  |
-| `team_wins` | integer |  |
-| `ties` | integer | Total ties. |
-| `time_on_ice` | integer | Time on ice in seconds. |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `all_star_team_id` | Int64 | Identifier for the NHL All-Star team the goalie represented in their career All-Star appearances. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `games_played` | Int64 | Games played. |
+| `goals_against` | Int64 | Goals against. |
+| `goals_against_average` | Float64 | Goals against average. |
+| `is_active` | Boolean | Whether the team is active. |
+| `is_rookie` | Boolean | Whether the player is a rookie. |
+| `last_name` | String | Player last name. |
+| `losses` | Int64 | Losses. |
+| `nhl_team_id` | Int64 | NHL identifier for the regular-season franchise the goalie was affiliated with during their All-Star career. |
+| `ot_losses` | Int64 | Overtime losses. |
+| `player_id` | Int64 | Unique player identifier. |
+| `save_percentage` | Float64 | Save percentage (goalies). |
+| `season_id` | Int64 | Season identifier. |
+| `shots_against` | Int64 | Shots faced. |
+| `team_losses` | Int64 |  |
+| `team_wins` | Int64 |  |
+| `ties` | Int64 | Total ties. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -135,19 +135,19 @@ All-Star Game career records for coaches.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer | NHL identifier for the All-Star team the coach was assigned to in a given All-Star game. |
-| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `games_coached` | integer | Total number of All-Star games the coach has coached across their career. |
-| `is_active` | logical | Whether the team is active. |
-| `last_name` | character | Player last name. |
-| `losses` | integer | Losses. |
-| `ot_losses` | integer | Overtime losses. |
-| `season_id` | integer | Season identifier. |
-| `ties` | integer | Total ties. |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `all_star_team_id` | Int64 | NHL identifier for the All-Star team the coach was assigned to in a given All-Star game. |
+| `coach_id` | Int64 | ESPN coach id parsed from the `$ref` URL. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `games_coached` | Int64 | Total number of All-Star games the coach has coached across their career. |
+| `is_active` | Boolean | Whether the team is active. |
+| `last_name` | String | Player last name. |
+| `losses` | Int64 | Losses. |
+| `ot_losses` | Int64 | Overtime losses. |
+| `season_id` | Int64 | Season identifier. |
+| `ties` | Int64 | Total ties. |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -182,35 +182,35 @@ All-Star Game single-game scoring records for skaters.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer | Identifier for the All-Star team roster to which the skater was assigned for this game. |
-| `all_star_team_score` | integer | Goals scored by the skater's All-Star team in this specific All-Star game. |
-| `arena_name` | character |  |
-| `assists` | integer | Assists. |
-| `city` | character | City where the venue is located. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `game_date` | character | Game date. |
-| `game_id` | integer | Unique game identifier. |
-| `game_name` | character |  |
-| `goals` | integer | Goals scored. |
-| `home_road` | character | Designation indicating whether the skater's All-Star team was the home or road side for this game. |
-| `is_active` | logical | Whether the team is active. |
-| `is_rookie` | logical | Whether the player is a rookie. |
-| `last_name` | character | Player last name. |
-| `mvp` | character |  |
-| `nhl_team_id` | integer | NHL identifier for the skater's regular-season team at the time this All-Star game was played. |
-| `opponent_score` | integer |  |
-| `opponent_team_id` | integer | Opponent team identifier. |
-| `penalties` | double | Penalty count. |
-| `penalty_minutes` | double | Penalty minutes. |
-| `player_id` | integer | Unique player identifier. |
-| `points` | integer | Total points (goals + assists). |
-| `position` | character | Player position. |
-| `power_play_goals` | integer | Power-play goals. |
-| `season_id` | integer | Season identifier. |
-| `short_handed_goals` | integer | Short-handed goals. |
-| `state_province_code` | character | State or province code of the official. |
+| `id` | Int64 | Unique player identifier. |
+| `all_star_team_id` | Int64 | Identifier for the All-Star team roster to which the skater was assigned for this game. |
+| `all_star_team_score` | Int64 | Goals scored by the skater's All-Star team in this specific All-Star game. |
+| `arena_name` | String |  |
+| `assists` | Int64 | Assists. |
+| `city` | String | City where the venue is located. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `game_date` | String | Game date. |
+| `game_id` | Int64 | Unique game identifier. |
+| `game_name` | String |  |
+| `goals` | Int64 | Goals scored. |
+| `home_road` | String | Designation indicating whether the skater's All-Star team was the home or road side for this game. |
+| `is_active` | Boolean | Whether the team is active. |
+| `is_rookie` | Boolean | Whether the player is a rookie. |
+| `last_name` | String | Player last name. |
+| `mvp` | String |  |
+| `nhl_team_id` | Int64 | NHL identifier for the skater's regular-season team at the time this All-Star game was played. |
+| `opponent_score` | Int64 |  |
+| `opponent_team_id` | Int64 | Opponent team identifier. |
+| `penalties` | Float64 | Penalty count. |
+| `penalty_minutes` | Float64 | Penalty minutes. |
+| `player_id` | Int64 | Unique player identifier. |
+| `points` | Int64 | Total points (goals + assists). |
+| `position` | String | Player position. |
+| `power_play_goals` | Int64 | Power-play goals. |
+| `season_id` | Int64 | Season identifier. |
+| `short_handed_goals` | Int64 | Short-handed goals. |
+| `state_province_code` | String | State or province code of the official. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -245,32 +245,32 @@ All-Star Game single-game stats for goaltenders.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer | NHL identifier for the All-Star team the goalie was assigned to in the game. |
-| `all_star_team_score` | integer | Goals scored by the goalie's All-Star team in that game. |
-| `arena_name` | character |  |
-| `city` | character | City where the venue is located. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `game_date` | character | Game date. |
-| `game_id` | integer | Unique game identifier. |
-| `game_name` | character |  |
-| `goals_against` | integer | Goals against. |
-| `home_road` | character | Indicates whether the goalie's All-Star team was the designated home or road squad for the game. |
-| `is_active` | logical | Whether the team is active. |
-| `is_rookie` | logical | Whether the player is a rookie. |
-| `last_name` | character | Player last name. |
-| `mvp` | character |  |
-| `nhl_team_id` | integer | NHL identifier for the goalie's regular-season franchise at the time of the All-Star game. |
-| `opponent_score` | integer |  |
-| `opponent_team_id` | integer | Opponent team identifier. |
-| `player_id` | integer | Unique player identifier. |
-| `save_percentage` | double | Save percentage (goalies). |
-| `saves` | integer | Saves made. |
-| `season_id` | integer | Season identifier. |
-| `shots_against` | integer | Shots faced. |
-| `state_province_code` | character | State or province code of the official. |
-| `time_on_ice` | integer | Time on ice in seconds. |
+| `id` | Int64 | Unique player identifier. |
+| `all_star_team_id` | Int64 | NHL identifier for the All-Star team the goalie was assigned to in the game. |
+| `all_star_team_score` | Int64 | Goals scored by the goalie's All-Star team in that game. |
+| `arena_name` | String |  |
+| `city` | String | City where the venue is located. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `game_date` | String | Game date. |
+| `game_id` | Int64 | Unique game identifier. |
+| `game_name` | String |  |
+| `goals_against` | Int64 | Goals against. |
+| `home_road` | String | Indicates whether the goalie's All-Star team was the designated home or road squad for the game. |
+| `is_active` | Boolean | Whether the team is active. |
+| `is_rookie` | Boolean | Whether the player is a rookie. |
+| `last_name` | String | Player last name. |
+| `mvp` | String |  |
+| `nhl_team_id` | Int64 | NHL identifier for the goalie's regular-season franchise at the time of the All-Star game. |
+| `opponent_score` | Int64 |  |
+| `opponent_team_id` | Int64 | Opponent team identifier. |
+| `player_id` | Int64 | Unique player identifier. |
+| `save_percentage` | Float64 | Save percentage (goalies). |
+| `saves` | Int64 | Saves made. |
+| `season_id` | Int64 | Season identifier. |
+| `shots_against` | Int64 | Shots faced. |
+| `state_province_code` | String | State or province code of the official. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

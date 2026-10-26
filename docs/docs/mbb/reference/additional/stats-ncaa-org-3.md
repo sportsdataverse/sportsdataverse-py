@@ -1,106 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time"
-sidebar_label: "stats.ncaa.org: ncaa_mbb–start_time"
+title: "Men's college basketball — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at"
+sidebar_label: "stats.ncaa.org: ncaa_mbb–td_at"
 sidebar_position: 5
-description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time
-
-### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
-
-`ncaa_mbb_join_pbp_shots(pbp: 'pl.DataFrame', shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
-
-Attach shot-chart coordinates to play-by-play rows (bigballR
-
-`join_pbp_shots`, `get_shot_locations.R:93-135`).
-
-FG attempts (`shot_value` 2/3) are matched to chart shots on
-`(game_id, game_seconds, event_result == shot_result, shot_no)` where
-`shot_no` is the within-second same-result sequence number on BOTH
-sides — free throws and non-shot rows are deliberately excluded from
-matching (the chart plots FGs only) and pass through NA-filled. Row
-count and per-game row order are preserved; the explicit `shot_dist`
-carry-through is fork-skew fix #11 (wbigballR's unexported copy drops
-it). Works identically for the WBB extension — feed it quarter-model
-pbp + shots frames.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | The 35-column snake_case pbp contract frame (see `~sportsdataverse.mbb.mbb_ncaa_game_pbp.PBP_SCHEMA`). |
-| `shots` | `DataFrame` |  | A `SHOTS_SCHEMA` frame (from `parse_ncaa_bb_shots` / `ncaa_mbb_shot_locations`) covering exactly the same game ids. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The input pbp frame + `team`, `player`, `x`, `y`, `shot_dist` (null on non-FG rows and unmatched FG rows), sorted by (game_id, original per-game row order) exactly as R's `arrange(row, .by_group = TRUE)`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `game_time` | character | Game start time. |
-| `game_seconds` | integer |  |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `event_team` | character |  |
-| `event_description` | character |  |
-| `player_1` | character |  |
-| `player_2` | character |  |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `event_result` | character |  |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `event_length` | integer |  |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `poss_length` | integer |  |
-| `is_transition` | logical |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
-| `status` | character | Status label. |
-| `is_garbage_time` | logical |  |
-| `sub_deviate` | integer |  |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `x` | double | X. |
-| `y` | double | Y. |
-| `shot_dist` | double |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the pbp and shots game-id sets differ (R `stop("PBP and Shot Locations do not match.")`, `:97-99`), or if a join-key dtype disagrees between the two frames. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_game_pbp import ncaa_mbb_play_by_play
-from sportsdataverse.mbb.mbb_ncaa_shots import (
-    ncaa_mbb_join_pbp_shots,
-    ncaa_mbb_shot_locations,
-)
-pbp = ncaa_mbb_play_by_play(["6470186"])
-shots = ncaa_mbb_shot_locations(["6470186"])
-joined = ncaa_mbb_join_pbp_shots(pbp, shots)
-
-# Pipeline next step (one line)
-
-joined.filter(pl.col("x").is_not_null()).head()
-```
+# Men's college basketball — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at
 
 ### ncaa_mbb_player_stats {#ncaa_mbb_player_stats}
 
@@ -134,121 +38,121 @@ every rate is recomputed from the summed counters (never averaged), and
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `mins` | double |  |
-| `o_poss` | double |  |
-| `pts` | double | Points scored. |
-| `orb` | double |  |
-| `drb` | double |  |
-| `ast` | double | Assists. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `tov` | double | Turnovers. |
-| `pf` | double | Personal fouls. |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `efg_pct` | double |  |
-| `fgm` | double | Field goals made. |
-| `fga` | double | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `tpm` | double |  |
-| `tpa` | double |  |
-| `tp_pct` | double |  |
-| `ftm` | double | Free throws made. |
-| `fta` | double | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `rimm` | double |  |
-| `rima` | double |  |
-| `rim_pct` | double |  |
-| `midm` | double |  |
-| `mida` | double |  |
-| `mid_pct` | double |  |
-| `pbackm` | double |  |
-| `pbacka` | double |  |
-| `pback_pct` | double |  |
-| `blk_rim` | double |  |
-| `blk_mid` | double |  |
-| `blk_three` | double |  |
-| `pct_fga_trans` | double |  |
-| `pct_tpa_trans` | double |  |
-| `pct_rima_trans` | double |  |
-| `pct_fgm_trans` | double |  |
-| `pct_tpm_trans` | double |  |
-| `pct_rimm_trans` | double |  |
-| `pct_fgm_ast` | double |  |
-| `pct_tpm_ast` | double |  |
-| `pct_rimm_ast` | double |  |
-| `pts_trans` | double |  |
-| `orb_trans` | double |  |
-| `drb_trans` | double |  |
-| `ast_trans` | double |  |
-| `stl_trans` | double |  |
-| `blk_trans` | double |  |
-| `tov_trans` | double |  |
-| `ts_pct_trans` | double |  |
-| `efg_pct_trans` | double |  |
-| `fgm_trans` | double |  |
-| `fga_trans` | double |  |
-| `fg_pct_trans` | double |  |
-| `tpm_trans` | double |  |
-| `tpa_trans` | double |  |
-| `tp_pct_trans` | double |  |
-| `ftm_trans` | double |  |
-| `fta_trans` | double |  |
-| `ft_pct_trans` | double |  |
-| `rimm_trans` | double |  |
-| `rima_trans` | double |  |
-| `rim_pct_trans` | double |  |
-| `midm_trans` | double |  |
-| `mida_trans` | double |  |
-| `mid_pct_trans` | double |  |
-| `pts_half` | double |  |
-| `orb_half` | double |  |
-| `drb_half` | double |  |
-| `ast_half` | double |  |
-| `stl_half` | double |  |
-| `blk_half` | double |  |
-| `tov_half` | double |  |
-| `ts_pct_half` | double |  |
-| `efg_pct_half` | double |  |
-| `fgm_half` | double |  |
-| `fga_half` | double |  |
-| `fg_pct_half` | double |  |
-| `tpm_half` | double |  |
-| `tpa_half` | double |  |
-| `tp_pct_half` | double |  |
-| `ftm_half` | double |  |
-| `fta_half` | double |  |
-| `ft_pct_half` | double |  |
-| `rimm_half` | double |  |
-| `rima_half` | double |  |
-| `rim_pct_half` | double |  |
-| `midm_half` | double |  |
-| `mida_half` | double |  |
-| `mid_pct_half` | double |  |
-| `pts_ast` | double |  |
-| `fgm_ast` | double |  |
-| `tpm_ast` | double |  |
-| `rimm_ast` | double |  |
-| `midm_ast` | double |  |
-| `pts_unast` | double |  |
-| `efg_pct_unast` | double |  |
-| `fgm_unast` | double |  |
-| `fga_unast` | double |  |
-| `fg_pct_unast` | double |  |
-| `tpm_unast` | double |  |
-| `tpa_unast` | double |  |
-| `tp_pct_unast` | double |  |
-| `rimm_unast` | double |  |
-| `rima_unast` | double |  |
-| `rim_pct_unast` | double |  |
-| `midm_unast` | double |  |
-| `mida_unast` | double |  |
-| `mid_pct_unast` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `tpm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `tp_pct` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `rimm` | Float64 |  |
+| `rima` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `midm` | Float64 |  |
+| `mida` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `pbackm` | Float64 |  |
+| `pbacka` | Float64 |  |
+| `pback_pct` | Float64 |  |
+| `blk_rim` | Float64 |  |
+| `blk_mid` | Float64 |  |
+| `blk_three` | Float64 |  |
+| `pct_fga_trans` | Float64 |  |
+| `pct_tpa_trans` | Float64 |  |
+| `pct_rima_trans` | Float64 |  |
+| `pct_fgm_trans` | Float64 |  |
+| `pct_tpm_trans` | Float64 |  |
+| `pct_rimm_trans` | Float64 |  |
+| `pct_fgm_ast` | Float64 |  |
+| `pct_tpm_ast` | Float64 |  |
+| `pct_rimm_ast` | Float64 |  |
+| `pts_trans` | Float64 |  |
+| `orb_trans` | Float64 |  |
+| `drb_trans` | Float64 |  |
+| `ast_trans` | Float64 |  |
+| `stl_trans` | Float64 |  |
+| `blk_trans` | Float64 |  |
+| `tov_trans` | Float64 |  |
+| `ts_pct_trans` | Float64 |  |
+| `efg_pct_trans` | Float64 |  |
+| `fgm_trans` | Float64 |  |
+| `fga_trans` | Float64 |  |
+| `fg_pct_trans` | Float64 |  |
+| `tpm_trans` | Float64 |  |
+| `tpa_trans` | Float64 |  |
+| `tp_pct_trans` | Float64 |  |
+| `ftm_trans` | Float64 |  |
+| `fta_trans` | Float64 |  |
+| `ft_pct_trans` | Float64 |  |
+| `rimm_trans` | Float64 |  |
+| `rima_trans` | Float64 |  |
+| `rim_pct_trans` | Float64 |  |
+| `midm_trans` | Float64 |  |
+| `mida_trans` | Float64 |  |
+| `mid_pct_trans` | Float64 |  |
+| `pts_half` | Float64 |  |
+| `orb_half` | Float64 |  |
+| `drb_half` | Float64 |  |
+| `ast_half` | Float64 |  |
+| `stl_half` | Float64 |  |
+| `blk_half` | Float64 |  |
+| `tov_half` | Float64 |  |
+| `ts_pct_half` | Float64 |  |
+| `efg_pct_half` | Float64 |  |
+| `fgm_half` | Float64 |  |
+| `fga_half` | Float64 |  |
+| `fg_pct_half` | Float64 |  |
+| `tpm_half` | Float64 |  |
+| `tpa_half` | Float64 |  |
+| `tp_pct_half` | Float64 |  |
+| `ftm_half` | Float64 |  |
+| `fta_half` | Float64 |  |
+| `ft_pct_half` | Float64 |  |
+| `rimm_half` | Float64 |  |
+| `rima_half` | Float64 |  |
+| `rim_pct_half` | Float64 |  |
+| `midm_half` | Float64 |  |
+| `mida_half` | Float64 |  |
+| `mid_pct_half` | Float64 |  |
+| `pts_ast` | Float64 |  |
+| `fgm_ast` | Float64 |  |
+| `tpm_ast` | Float64 |  |
+| `rimm_ast` | Float64 |  |
+| `midm_ast` | Float64 |  |
+| `pts_unast` | Float64 |  |
+| `efg_pct_unast` | Float64 |  |
+| `fgm_unast` | Float64 |  |
+| `fga_unast` | Float64 |  |
+| `fg_pct_unast` | Float64 |  |
+| `tpm_unast` | Float64 |  |
+| `tpa_unast` | Float64 |  |
+| `tp_pct_unast` | Float64 |  |
+| `rimm_unast` | Float64 |  |
+| `rima_unast` | Float64 |  |
+| `rim_pct_unast` | Float64 |  |
+| `midm_unast` | Float64 |  |
+| `mida_unast` | Float64 |  |
+| `mid_pct_unast` | Float64 |  |
 
 **Example**
 
@@ -294,34 +198,34 @@ given lineup always occupies the same columns.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | stats.ncaa.org game id of the play-by-play page the possession comes from. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home team's name as the stats.ncaa.org play-by-play page lists it. |
-| `away` | character | Away team's name as the stats.ncaa.org play-by-play page lists it. |
-| `period` | integer | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
-| `poss_num` | integer | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
-| `poss_team` | character | Name of the team in possession. |
-| `home_1` | character | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
-| `home_2` | character | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_3` | character | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_4` | character | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_5` | character | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_1` | character | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
-| `away_2` | character | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_3` | character | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_4` | character | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_5` | character | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_score` | integer | Home team's score on the possession's first event row (the page's running score after that event). |
-| `away_score` | integer | Away team's score on the possession's first event row (the page's running score after that event). |
-| `pts` | integer | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
-| `is_assisted` | integer | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
-| `is_transition` | integer | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
-| `is_garbage_time` | integer | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
-| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
-| `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
-| `first_shot_type` | character | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
-| `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
-| `last_event_type` | character | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
+| `game_id` | String | stats.ncaa.org game id of the play-by-play page the possession comes from. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home team's name as the stats.ncaa.org play-by-play page lists it. |
+| `away` | String | Away team's name as the stats.ncaa.org play-by-play page lists it. |
+| `period` | Int64 | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
+| `poss_num` | Int64 | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
+| `poss_team` | String | Name of the team in possession. |
+| `home_1` | String | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `home_2` | String | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_3` | String | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_4` | String | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_5` | String | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_1` | String | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `away_2` | String | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_3` | String | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_4` | String | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_5` | String | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_score` | Int64 | Home team's score on the possession's first event row (the page's running score after that event). |
+| `away_score` | Int64 | Away team's score on the possession's first event row (the page's running score after that event). |
+| `pts` | Int64 | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
+| `is_assisted` | Int64 | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
+| `is_transition` | Int64 | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
+| `is_garbage_time` | Int64 | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
+| `start_event_type` | String | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
+| `first_shot_time` | Int64 | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
+| `first_shot_type` | String | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
+| `last_event_time` | Int64 | Seconds into the possession (poss_length) at its final event. |
+| `last_event_type` | String | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
 
 **Example**
 
@@ -366,16 +270,16 @@ All games' shots row-bound (zero-row `SHOTS_SCHEMA` frame when no ids survive or
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `game_seconds` | integer |  |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `shot_result` | character | Shot result ('Made' / 'Missed'). |
-| `x` | double | X. |
-| `y` | double | Y. |
-| `shot_dist` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | String | Game clock value. |
+| `game_seconds` | Int64 |  |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `x` | Float64 | X. |
+| `y` | Float64 | Y. |
+| `shot_dist` | Float64 |  |
 
 **Example**
 
@@ -419,79 +323,79 @@ key columns are dropped — yielding two rows (one per team) per game.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `team` | character | Team-side label or team identifier. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 
@@ -563,8 +467,8 @@ Unique `team`/`player` frame, the input `expand_xwalk_aliases` expects.
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
 
 **Example**
 
@@ -583,7 +487,7 @@ pairs = observed_pairs(possessions)
 The court-geometry enrichment pass: ascending time, coordinate
 
 transform + geo synthesis, and the self-correcting side-flip re-run
-(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
+(`ShotEventParser.phase1_shot_event_enrichment`).
 
 For each shot: compute the ascending game time, decide (from
 `is_team_shooting_left_to_start` + which half the period falls in)
@@ -685,22 +589,22 @@ One row per bin, sorted: `decile` (0 = fewest possessions), `n`, `poss_min`, `po
 
 | col_name | type | description |
 |---|---|---|
-| `decile` | integer | Possession-exposure bin, 0 = the players with the fewest possessions. |
-| `n` | integer | Number of players in the bin. |
-| `poss_min` | integer | Fewest possessions of any player in the bin. |
-| `poss_max` | integer | Most possessions of any player in the bin. |
-| `median_orapm_se` | double | Median orapm_se of the players in the bin. |
-| `median_drapm_se` | double | Median drapm_se of the players in the bin. |
-| `median_rapm_net_se` | double | Median rapm_net_se of the players in the bin. |
-| `median_orapm_se_sampling` | double | Median orapm_se_sampling of the players in the bin. |
-| `median_drapm_se_sampling` | double | Median drapm_se_sampling of the players in the bin. |
-| `median_rapm_net_se_sampling` | double | Median rapm_net_se_sampling of the players in the bin. |
-| `coverage_orapm` | double | Share of the bin's players whose split-half orapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
-| `coverage_orapm_sampling` | double | Share of the bin's players whose split-half orapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
-| `coverage_drapm` | double | Share of the bin's players whose split-half drapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
-| `coverage_drapm_sampling` | double | Share of the bin's players whose split-half drapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
-| `coverage_rapm_net` | double | Share of the bin's players whose split-half rapm_net difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
-| `coverage_rapm_net_sampling` | double | Share of the bin's players whose split-half rapm_net difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `decile` | Int64 | Possession-exposure bin, 0 = the players with the fewest possessions. |
+| `n` | Int64 | Number of players in the bin. |
+| `poss_min` | Int64 | Fewest possessions of any player in the bin. |
+| `poss_max` | Int64 | Most possessions of any player in the bin. |
+| `median_orapm_se` | Float64 | Median orapm_se of the players in the bin. |
+| `median_drapm_se` | Float64 | Median drapm_se of the players in the bin. |
+| `median_rapm_net_se` | Float64 | Median rapm_net_se of the players in the bin. |
+| `median_orapm_se_sampling` | Float64 | Median orapm_se_sampling of the players in the bin. |
+| `median_drapm_se_sampling` | Float64 | Median drapm_se_sampling of the players in the bin. |
+| `median_rapm_net_se_sampling` | Float64 | Median rapm_net_se_sampling of the players in the bin. |
+| `coverage_orapm` | Float64 | Share of the bin's players whose split-half orapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_orapm_sampling` | Float64 | Share of the bin's players whose split-half orapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_drapm` | Float64 | Share of the bin's players whose split-half drapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_drapm_sampling` | Float64 | Share of the bin's players whose split-half drapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_rapm_net` | Float64 | Share of the bin's players whose split-half rapm_net difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_rapm_net_sampling` | Float64 | Share of the bin's players whose split-half rapm_net difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
 
 **Example**
 
@@ -715,7 +619,7 @@ assert d["median_rapm_net_se"][0] > d["median_rapm_net_se"][-1]
 
 Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"`
 
-(`ExtractorUtils.scala:38-43`: NFD normalization then removal of the
+(NFD normalization then removal of the
 combining-diacritical-marks block).
 
 **Parameters**
@@ -741,8 +645,8 @@ print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
 
 Undo a handful of literal HTML entity escapes (``ExtractorUtils
 
-.remove_html_encoding`, `ExtractorUtils.scala:25-33`). **Scope
-addition, Task 5e.5** -- the first consumer is
+.remove_html_encoding`). **Scope
+addition** -- the first consumer is
 `mbb_ncaa_shot_parser.parse_shot_html` (the `player` name / shooting
 team name extracted from an SVG shot's `<title>` text).
 
@@ -777,7 +681,7 @@ remove_html_encoding("Plain Name")  # "Plain Name" (unchanged)
 
 Orders same-minute play-by-play events so subs never enclose the plays
 
-they logically precede/follow (`ExtractorUtils.scala:435-599`).
+they logically precede/follow.
 
 Groups consecutive events sharing the same `min` into a block (the
 input arrives in descending/reverse-chronological order, so blocks are
@@ -857,72 +761,72 @@ Attach a `player_id` to each of the ten on-floor slots.
 
 | col_name | type | description |
 |---|---|---|
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `poss_num` | integer | Sequential possession number within the game. |
-| `poss_team` | character | Name of the team in possession. |
-| `home_1` | character | Name of the home team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
-| `home_2` | character | Name of the home team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
-| `home_3` | character | Name of the home team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
-| `home_4` | character | Name of the home team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
-| `home_5` | character | Name of the home team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
-| `away_1` | character | Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
-| `away_2` | character | Name of the away team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
-| `away_3` | character | Name of the away team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
-| `away_4` | character | Name of the away team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
-| `away_5` | character | Name of the away team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `pts` | integer | Points scored. |
-| `is_assisted` | integer | Count of the possession's events that carry an assisting second player (0, 1, rarely 2) -- a count, not a flag, kept from the R source for parity. |
-| `is_transition` | integer | 1 for transition possessions, else 0. |
-| `is_garbage_time` | integer | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
-| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket), not the possession's own first event. |
-| `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
-| `first_shot_type` | character | stats.ncaa.org event name of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
-| `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
-| `last_event_type` | character | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
-| `contest_id` | character | stats.ncaa.org contest (game) identifier. |
-| `home_ncaa_team_id` | character | stats.ncaa.org team identifier for the home team. |
-| `home_espn_team_id` | character | ESPN home team id (NA for bart-only rows). |
-| `away_ncaa_team_id` | character | stats.ncaa.org team identifier for the away team. |
-| `away_espn_team_id` | character | ESPN away team id (NA for bart-only rows). |
-| `poss_team_ncaa_team_id` | character | stats.ncaa.org team identifier of the team in possession. |
-| `poss_team_espn_team_id` | character | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
-| `home_1_player_id` | character | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
-| `home_1_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
-| `home_2_player_id` | character | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
-| `home_2_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player. |
-| `home_3_player_id` | character | stats.ncaa.org player identifier for the home slot-3 on-floor player. |
-| `home_3_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player. |
-| `home_4_player_id` | character | stats.ncaa.org player identifier for the home slot-4 on-floor player. |
-| `home_4_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player. |
-| `home_5_player_id` | character | stats.ncaa.org player identifier for the home slot-5 on-floor player. |
-| `home_5_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player. |
-| `away_1_player_id` | character | stats.ncaa.org player identifier for the away slot-1 on-floor player. |
-| `away_1_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player. |
-| `away_2_player_id` | character | stats.ncaa.org player identifier for the away slot-2 on-floor player. |
-| `away_2_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player. |
-| `away_3_player_id` | character | stats.ncaa.org player identifier for the away slot-3 on-floor player. |
-| `away_3_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player. |
-| `away_4_player_id` | character | stats.ncaa.org player identifier for the away slot-4 on-floor player. |
-| `away_4_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
-| `away_5_player_id` | character | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
-| `away_5_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
-| `espn_game_id` | character | ESPN game id (NA for bart-only rows). |
-| `season` | integer | Season year. |
-| `home_1_id` | character | Resolved player_id of the home slot-1 player; null for a TEAM slot or an unresolved name. |
-| `home_2_id` | character | Resolved player_id of the home slot-2 player; null for a TEAM slot or an unresolved name. |
-| `home_3_id` | character | Resolved player_id of the home slot-3 player; null for a TEAM slot or an unresolved name. |
-| `home_4_id` | character | Resolved player_id of the home slot-4 player; null for a TEAM slot or an unresolved name. |
-| `home_5_id` | character | Resolved player_id of the home slot-5 player; null for a TEAM slot or an unresolved name. |
-| `away_1_id` | character | Resolved player_id of the away slot-1 player; null for a TEAM slot or an unresolved name. |
-| `away_2_id` | character | Resolved player_id of the away slot-2 player; null for a TEAM slot or an unresolved name. |
-| `away_3_id` | character | Resolved player_id of the away slot-3 player; null for a TEAM slot or an unresolved name. |
-| `away_4_id` | character | Resolved player_id of the away slot-4 player; null for a TEAM slot or an unresolved name. |
-| `away_5_id` | character | Resolved player_id of the away slot-5 player; null for a TEAM slot or an unresolved name. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | Int64 | Sequential possession number within the game. |
+| `poss_team` | String | Name of the team in possession. |
+| `home_1` | String | Name of the home team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `home_2` | String | Name of the home team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `home_3` | String | Name of the home team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `home_4` | String | Name of the home team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `home_5` | String | Name of the home team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
+| `away_1` | String | Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `away_2` | String | Name of the away team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `away_3` | String | Name of the away team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `away_4` | String | Name of the away team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `away_5` | String | Name of the away team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `pts` | Int64 | Points scored. |
+| `is_assisted` | Int64 | Count of the possession's events that carry an assisting second player (0, 1, rarely 2) -- a count, not a flag, kept from the R source for parity. |
+| `is_transition` | Int64 | 1 for transition possessions, else 0. |
+| `is_garbage_time` | Int64 | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
+| `start_event_type` | String | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket), not the possession's own first event. |
+| `first_shot_time` | Int64 | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
+| `first_shot_type` | String | stats.ncaa.org event name of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
+| `last_event_time` | Int64 | Seconds into the possession (poss_length) at its final event. |
+| `last_event_type` | String | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
+| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
+| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `poss_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team in possession. |
+| `poss_team_espn_team_id` | String | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `home_1_player_id` | String | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
+| `home_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
+| `home_2_player_id` | String | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
+| `home_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player. |
+| `home_3_player_id` | String | stats.ncaa.org player identifier for the home slot-3 on-floor player. |
+| `home_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player. |
+| `home_4_player_id` | String | stats.ncaa.org player identifier for the home slot-4 on-floor player. |
+| `home_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player. |
+| `home_5_player_id` | String | stats.ncaa.org player identifier for the home slot-5 on-floor player. |
+| `home_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player. |
+| `away_1_player_id` | String | stats.ncaa.org player identifier for the away slot-1 on-floor player. |
+| `away_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player. |
+| `away_2_player_id` | String | stats.ncaa.org player identifier for the away slot-2 on-floor player. |
+| `away_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player. |
+| `away_3_player_id` | String | stats.ncaa.org player identifier for the away slot-3 on-floor player. |
+| `away_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player. |
+| `away_4_player_id` | String | stats.ncaa.org player identifier for the away slot-4 on-floor player. |
+| `away_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
+| `away_5_player_id` | String | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
+| `away_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season year. |
+| `home_1_id` | String | Resolved player_id of the home slot-1 player; null for a TEAM slot or an unresolved name. |
+| `home_2_id` | String | Resolved player_id of the home slot-2 player; null for a TEAM slot or an unresolved name. |
+| `home_3_id` | String | Resolved player_id of the home slot-3 player; null for a TEAM slot or an unresolved name. |
+| `home_4_id` | String | Resolved player_id of the home slot-4 player; null for a TEAM slot or an unresolved name. |
+| `home_5_id` | String | Resolved player_id of the home slot-5 player; null for a TEAM slot or an unresolved name. |
+| `away_1_id` | String | Resolved player_id of the away slot-1 player; null for a TEAM slot or an unresolved name. |
+| `away_2_id` | String | Resolved player_id of the away slot-2 player; null for a TEAM slot or an unresolved name. |
+| `away_3_id` | String | Resolved player_id of the away slot-3 player; null for a TEAM slot or an unresolved name. |
+| `away_4_id` | String | Resolved player_id of the away slot-4 player; null for a TEAM slot or an unresolved name. |
+| `away_5_id` | String | Resolved player_id of the away slot-5 player; null for a TEAM slot or an unresolved name. |
 
 **Raises**
 
@@ -936,8 +840,7 @@ Attach a `player_id` to each of the ten on-floor slots.
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
 
-distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`,
-`PlayByPlayUtils.scala:659-679`).
+distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`).
 
 The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
 impossible; this only rules out the *obvious* mismatches (a clearly-short
@@ -1074,18 +977,18 @@ which are properties of the pooled fit -- is carried through untouched.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `orapm` | double | Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor. |
-| `drapm` | double | Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense), adjusted for the other 9 players on the floor. |
-| `rapm_net` | double | Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net == orapm + drapm exactly. |
-| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
-| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
-| `orapm_se` | double | Posterior standard error of orapm (per 100 possessions) from the ridge fit. |
-| `drapm_se` | double | Posterior standard error of drapm (per 100 possessions) from the ridge fit. |
-| `rapm_net_se` | double | Posterior standard error of rapm_net (per 100 possessions) from the ridge fit. |
-| `orapm_se_sampling` | double | Frequentist (sandwich) standard error of the shrunk orapm estimate -- its refit-to-refit repeatability, not an interval for the true effect (see orapm_se); near 0 for a player the ridge holds at zero. |
-| `drapm_se_sampling` | double | Frequentist (sandwich) standard error of the shrunk drapm estimate -- its refit-to-refit repeatability, not an interval for the true effect (see drapm_se); near 0 for a player the ridge holds at zero. |
-| `rapm_net_se_sampling` | double | Frequentist (sandwich) standard error of the shrunk rapm_net estimate -- its refit-to-refit repeatability, not an interval for the true effect (see rapm_net_se); near 0 for a player the ridge holds at zero. |
+| `player_id` | String | Unique player identifier. |
+| `orapm` | Float64 | Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor. |
+| `drapm` | Float64 | Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense), adjusted for the other 9 players on the floor. |
+| `rapm_net` | Float64 | Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net == orapm + drapm exactly. |
+| `off_poss` | Int64 | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | Int64 | Defensive possessions the player was on court for; the regression weight behind drapm. |
+| `orapm_se` | Float64 | Posterior standard error of orapm (per 100 possessions) from the ridge fit. |
+| `drapm_se` | Float64 | Posterior standard error of drapm (per 100 possessions) from the ridge fit. |
+| `rapm_net_se` | Float64 | Posterior standard error of rapm_net (per 100 possessions) from the ridge fit. |
+| `orapm_se_sampling` | Float64 | Frequentist (sandwich) standard error of the shrunk orapm estimate -- its refit-to-refit repeatability, not an interval for the true effect (see orapm_se); near 0 for a player the ridge holds at zero. |
+| `drapm_se_sampling` | Float64 | Frequentist (sandwich) standard error of the shrunk drapm estimate -- its refit-to-refit repeatability, not an interval for the true effect (see drapm_se); near 0 for a player the ridge holds at zero. |
+| `rapm_net_se_sampling` | Float64 | Frequentist (sandwich) standard error of the shrunk rapm_net estimate -- its refit-to-refit repeatability, not an interval for the true effect (see rapm_net_se); near 0 for a player the ridge holds at zero. |
 
 **Example**
 
@@ -1102,7 +1005,7 @@ season_2024 = season_slice(players, s24)
 JSoup `root.select(sel + ":contains(text)")`: candidates whose full
 
 text (own + every descendant's) case-insensitively CONTAINS `text` as
-a plain substring -- **not** a regex (Task 5e.2 addition; see the module
+a plain substring -- **not** a regex (see the module
 docstring's "Critical divergence" note).
 
 JSoup's `:contains()` is documented case-insensitive substring
@@ -1207,7 +1110,7 @@ Converts client-side `addShot(...)` JS calls into parseable
 
 `circle.shot` HTML, for pages where the shot map is built on the fly
 rather than baked into the initial HTML (`ShotEventParser
-.shot_js_to_html`, `:266-283`). See the module docstring's "Scala
+.shot_js_to_html`). See the module docstring's "Scala
 idiom decision" note -- the Scala's `builders`/`browser` parameters
 are dropped here since the Scala body never actually uses them.
 
@@ -1235,7 +1138,7 @@ circles = shot_js_to_html(js)
 
 Classify a play-by-play event string as a 3, a 2, or an assist
 
-(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+(`ShotEnrichmentUtils.shot_value`).
 
 Ported as an ordered first-match cascade, exactly mirroring the Scala
 `match` arm order (assist is tested first, so an assist string never
@@ -1418,15 +1321,15 @@ One vertically concatenated stint frame carrying the extra `fit_weight` / `y_off
 
 | col_name | type | description |
 |---|---|---|
-| `off_ids` | list | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
-| `def_ids` | list | Sorted player ids of the five defensive players in the stint (a list). |
-| `off_team` | character | Team on offense during the stint. |
-| `def_team` | character | Team on defense during the stint. |
-| `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |
-| `n_poss` | integer | Possessions the five-on-five unit played together in this offensive direction. |
-| `pts` | integer | Points scored. |
-| `fit_weight` | double | Season weight in the pooled fit: decay ** (target - season). |
-| `y_offset` | double | The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace. |
+| `off_ids` | List | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | List | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_team` | String | Team on offense during the stint. |
+| `def_team` | String | Team on defense during the stint. |
+| `is_home_offense` | Boolean | True when the home team is on offense, the home-court term of the RAPM design matrix. |
+| `n_poss` | Int64 | Possessions the five-on-five unit played together in this offensive direction. |
+| `pts` | Int64 | Points scored. |
+| `fit_weight` | Float64 | Season weight in the pooled fit: decay ** (target - season). |
+| `y_offset` | Float64 | The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace. |
 
 **Raises**
 
@@ -1445,9 +1348,7 @@ players, info = solve_rapm_league(pooled)
 
 `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
 
-The game-clock time (minutes elapsed) a period starts at
-
-(`ExtractorUtils.scala:272-281`).
+The game-clock time (minutes elapsed) a period starts at.
 
 Women's games play four 10-minute quarters then 5-minute overtimes; men's
 games play two 20-minute halves then 5-minute overtimes.
@@ -1470,4 +1371,128 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
+
+### stint_exposure {#stint_exposure}
+
+`stint_exposure(stints: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+`player_id` -> `off_poss` / `def_poss` from a stint frame's REAL possessions.
+
+`fit_weight` is deliberately ignored: exposure is a count of possessions
+PLAYED, never a count of possessions the fit chose to believe. Callers that
+need a possession total (an SPM prior's exposure shrink, a possession bin)
+use this so the count means the same thing everywhere.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | `aggregate_stints` output (one season, or a pooled design). |
+
+**Returns**
+
+One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `off_poss` | Int64 | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | Int64 | Defensive possessions the player was on court for; the regression weight behind drapm. |
+
+**Example**
+
+```python
+stint_exposure(stints).sort("off_poss", descending=True).head()
+```
+
+### sum_event_stats {#sum_event_stats}
+
+`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
+
+Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.LineupEventStats` (`protected def sum_event_stats`, debug-only -- the Scala's own docstring says "just used for
+debug"). The Scala builds this via `shapeless.Generic` field-zipping;
+this port is an explicit field-by-field call since Python has no
+equivalent generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
+| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private `_sum_*` helpers for the `Optional`/nested-field summing rules).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
+from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
+
+sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
+```
+
+### sum_shot_infos {#sum_shot_infos}
+
+`sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'`
+
+Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.PlayerShotInfo`\ s (`sum_shot_infos`,
+debug-only).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot_infos` | `list[PlayerShotInfo]` |  | The list to combine, in order. |
+
+**Returns**
+
+`None` if `shot_infos` is empty; the single element if there's exactly one; otherwise a left-fold of pairwise field-wise sums (`reduceOption`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
+from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
+
+sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
+```
+
+### td_at {#td_at}
+
+`td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'`
+
+JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child.
+
+Soupsieve has no `:eq()` positional pseudo-class (unlike JSoup), so
+this is a plain 0-indexed lookup into `row.find_all("td")`, guarded
+against an out-of-range index (JSoup's `>?>` returns `None` rather
+than raising when the selector matches nothing).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `row` | `Tag` |  | The row (or other container) element to search. |
+| `n` | `int` |  | The 0-indexed `<td>` position. |
+
+**Returns**
+
+The `n`-th `<td>` descendant, or `None` if `row` has fewer than `n + 1` of them.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, td_at
+soup = parse_html("<tr><td>A</td><td>B</td></tr>")
+row = soup.find("tr")
+td_at(row, 1).get_text()  # "B"
+td_at(row, 5)  # None
 ```

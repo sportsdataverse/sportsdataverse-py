@@ -1,11 +1,11 @@
 ---
-title: ATRIUM — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)
+title: Sportradar Atrium — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)
 sidebar_label: Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)
-description: "ATRIUM — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Sportradar Atrium — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# ATRIUM — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)
+# Sportradar Atrium — Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)
 
 `sportsdataverse.basketball.atrium` — 22 endpoints.
 

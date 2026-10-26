@@ -29,39 +29,39 @@ GET /api/v1/teams/{teamId} — single team detail.
 
 | col_name | type | description |
 |---|---|---|
-| `all_star_status` | character | All-star status flag. |
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `season` | integer | Season year. |
-| `team_code` | character | Internal team code. |
-| `file_code` | character | File code abbreviation. |
-| `abbreviation` | character | Short abbreviation. |
-| `team_name` | character | Team name. |
-| `location_name` | character | Team location (city). |
-| `first_year_of_play` | character | First year the franchise played. |
-| `short_name` | character | Short display name. |
-| `franchise_name` | character | Franchise name. |
-| `club_name` | character | Club name. |
-| `active` | logical | Whether the player is currently active. |
-| `spring_league_id` | integer | Spring league MLBAM ID. |
-| `spring_league_name` | character | Spring league name. |
-| `spring_league_link` | character | API link to the spring league. |
-| `spring_league_abbreviation` | character | Spring league abbreviation. |
-| `venue_id` | integer | MLBAM venue ID. |
-| `venue_name` | character | Venue name. |
-| `venue_link` | character | API link to the venue. |
-| `spring_venue_id` | integer | Spring training venue MLBAM ID. |
-| `spring_venue_link` | character | API link to the spring venue. |
-| `league_id` | integer | League MLBAM ID. |
-| `league_name` | character | League name. |
-| `league_link` | character | API link to the league. |
-| `division_id` | integer | Division MLBAM ID. |
-| `division_name` | character | Division name. |
-| `division_link` | character | API link to the division. |
-| `sport_id` | integer | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+| `all_star_status` | String | All-star status flag. |
+| `id` | Int64 | Id. |
+| `name` | String | Display name. |
+| `link` | String | API link to the game feed. |
+| `season` | Int64 | Season year. |
+| `team_code` | String | Internal team code. |
+| `file_code` | String | File code abbreviation. |
+| `abbreviation` | String | Short abbreviation. |
+| `team_name` | String | Team name. |
+| `location_name` | String | Team location (city). |
+| `first_year_of_play` | String | First year the franchise played. |
+| `short_name` | String | Short display name. |
+| `franchise_name` | String | Franchise name. |
+| `club_name` | String | Club name. |
+| `active` | Boolean | Whether the player is currently active. |
+| `spring_league_id` | Int64 | Spring league MLBAM ID. |
+| `spring_league_name` | String | Spring league name. |
+| `spring_league_link` | String | API link to the spring league. |
+| `spring_league_abbreviation` | String | Spring league abbreviation. |
+| `venue_id` | Int64 | MLBAM venue ID. |
+| `venue_name` | String | Venue name. |
+| `venue_link` | String | API link to the venue. |
+| `spring_venue_id` | Int64 | Spring training venue MLBAM ID. |
+| `spring_venue_link` | String | API link to the spring venue. |
+| `league_id` | Int64 | League MLBAM ID. |
+| `league_name` | String | League name. |
+| `league_link` | String | API link to the league. |
+| `division_id` | Int64 | Division MLBAM ID. |
+| `division_name` | String | Division name. |
+| `division_link` | String | API link to the division. |
+| `sport_id` | Int64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
+| `sport_name` | String | Sport name (e.g., Major League Baseball). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -102,16 +102,16 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
-| `position_code` | character | Numeric scorekeeping position code. |
-| `position_name` | character | Full position name (e.g. 'Point Guard', 'Goalkeeper'). |
-| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
-| `position_abbreviation` | character | Position abbreviation. |
-| `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
-| `status_description` | character | Roster status description (e.g. 'Active'). |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
+| `position_code` | String | Numeric scorekeeping position code. |
+| `position_name` | String | Full position name (e.g. 'Point Guard', 'Goalkeeper'). |
+| `position_type` | String | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | String | Position abbreviation. |
+| `status_code` | String | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
+| `status_description` | String | Roster status description (e.g. 'Active'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -150,52 +150,52 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `full_name` | character | Player's full name. |
-| `link` | character | API link to the game feed. |
-| `first_name` | character | Player first name. |
-| `last_name` | character | Player last name. |
-| `primary_number` | character | Player uniform number. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `current_age` | integer | Current age in years. |
-| `birth_city` | character | City of birth. |
-| `birth_country` | character | Country of birth. |
-| `height` | character | Height (feet and inches). |
-| `weight` | integer | Weight in pounds. |
-| `active` | logical | Whether the player is currently active. |
-| `use_name` | character | Preferred first name. |
-| `use_last_name` | character | Preferred last name. |
-| `middle_name` | character | Player middle name. |
-| `boxscore_name` | character | Name as shown in box scores. |
-| `nick_name` | character | Player nickname. |
-| `gender` | character | Player gender. |
-| `is_player` | logical | Whether the person is a player. |
-| `is_verified` | logical | Whether the player profile is verified. |
-| `pronunciation` | character | Phonetic name pronunciation. |
-| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
-| `name_first_last` | character | Name in first-last order. |
-| `name_slug` | character | URL-friendly name slug. |
-| `first_last_name` | character | First and last name. |
-| `last_first_name` | character | Name in last, first order. |
-| `last_init_name` | character | Last name with first initial. |
-| `init_last_name` | character | First initial with last name. |
-| `full_fml_name` | character | Full name (first-middle-last). |
-| `full_lfm_name` | character | Full name (last-first-middle). |
-| `strike_zone_top` | double | Top of the player's strike zone (feet). |
-| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
-| `alumni_last_season` | character | Last season the player was with the team. |
-| `primary_position_code` | character | Primary position code. |
-| `primary_position_name` | character | Primary fielding position name. |
-| `primary_position_type` | character | Primary position type (e.g. Infielder). |
-| `primary_position_abbreviation` | character | Primary position abbreviation. |
-| `bat_side_code` | character | Batting side code (L/R/S). |
-| `bat_side_description` | character | Batting side description. |
-| `pitch_hand_code` | character | Throwing hand code (L/R). |
-| `pitch_hand_description` | character | Throwing hand description. |
-| `birth_state_province` | character | State or province of birth. |
-| `draft_year` | double | Year the player was drafted. |
-| `last_played_date` | character | Date of last MLB game played. |
-| `name_matrilineal` | character | Maternal family name. |
+| `id` | Int64 | Id. |
+| `full_name` | String | Player's full name. |
+| `link` | String | API link to the game feed. |
+| `first_name` | String | Player first name. |
+| `last_name` | String | Player last name. |
+| `primary_number` | String | Player uniform number. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `current_age` | Int64 | Current age in years. |
+| `birth_city` | String | City of birth. |
+| `birth_country` | String | Country of birth. |
+| `height` | String | Height (feet and inches). |
+| `weight` | Int64 | Weight in pounds. |
+| `active` | Boolean | Whether the player is currently active. |
+| `use_name` | String | Preferred first name. |
+| `use_last_name` | String | Preferred last name. |
+| `middle_name` | String | Player middle name. |
+| `boxscore_name` | String | Name as shown in box scores. |
+| `nick_name` | String | Player nickname. |
+| `gender` | String | Player gender. |
+| `is_player` | Boolean | Whether the person is a player. |
+| `is_verified` | Boolean | Whether the player profile is verified. |
+| `pronunciation` | String | Phonetic name pronunciation. |
+| `mlb_debut_date` | String | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | String | Name in first-last order. |
+| `name_slug` | String | URL-friendly name slug. |
+| `first_last_name` | String | First and last name. |
+| `last_first_name` | String | Name in last, first order. |
+| `last_init_name` | String | Last name with first initial. |
+| `init_last_name` | String | First initial with last name. |
+| `full_fml_name` | String | Full name (first-middle-last). |
+| `full_lfm_name` | String | Full name (last-first-middle). |
+| `strike_zone_top` | Float64 | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | Float64 | Bottom of the player's strike zone (feet). |
+| `alumni_last_season` | String | Last season the player was with the team. |
+| `primary_position_code` | String | Primary position code. |
+| `primary_position_name` | String | Primary fielding position name. |
+| `primary_position_type` | String | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | String | Primary position abbreviation. |
+| `bat_side_code` | String | Batting side code (L/R/S). |
+| `bat_side_description` | String | Batting side description. |
+| `pitch_hand_code` | String | Throwing hand code (L/R). |
+| `pitch_hand_description` | String | Throwing hand description. |
+| `birth_state_province` | String | State or province of birth. |
+| `draft_year` | Float64 | Year the player was drafted. |
+| `last_played_date` | String | Date of last MLB game played. |
+| `name_matrilineal` | String | Maternal family name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -234,41 +234,41 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 
 | col_name | type | description |
 |---|---|---|
-| `all_star_status` | character | All-star status flag. |
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `season` | integer | Season year. |
-| `team_code` | character | Internal team code. |
-| `file_code` | character | File code abbreviation. |
-| `abbreviation` | character | Short abbreviation. |
-| `team_name` | character | Team name. |
-| `location_name` | character | Team location (city). |
-| `first_year_of_play` | character | First year the franchise played. |
-| `short_name` | character | Short display name. |
-| `franchise_name` | character | Franchise name. |
-| `club_name` | character | Club name. |
-| `active` | logical | Whether the player is currently active. |
-| `spring_league_id` | double | Spring league MLBAM ID. |
-| `spring_league_name` | character | Spring league name. |
-| `spring_league_link` | character | API link to the spring league. |
-| `spring_league_abbreviation` | character | Spring league abbreviation. |
-| `venue_id` | integer | MLBAM venue ID. |
-| `venue_name` | character | Venue name. |
-| `venue_link` | character | API link to the venue. |
-| `spring_venue_id` | double | Spring training venue MLBAM ID. |
-| `spring_venue_link` | character | API link to the spring venue. |
-| `league_id` | double | League MLBAM ID. |
-| `league_name` | character | League name. |
-| `league_link` | character | API link to the league. |
-| `division_id` | double | Division MLBAM ID. |
-| `division_name` | character | Division name. |
-| `division_link` | character | API link to the division. |
-| `sport_id` | integer | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `parent_org_name` | character | Parent organization name. |
-| `parent_org_id` | double | Parent organization MLBAM ID. |
+| `all_star_status` | String | All-star status flag. |
+| `id` | Int64 | Id. |
+| `name` | String | Display name. |
+| `link` | String | API link to the game feed. |
+| `season` | Int64 | Season year. |
+| `team_code` | String | Internal team code. |
+| `file_code` | String | File code abbreviation. |
+| `abbreviation` | String | Short abbreviation. |
+| `team_name` | String | Team name. |
+| `location_name` | String | Team location (city). |
+| `first_year_of_play` | String | First year the franchise played. |
+| `short_name` | String | Short display name. |
+| `franchise_name` | String | Franchise name. |
+| `club_name` | String | Club name. |
+| `active` | Boolean | Whether the player is currently active. |
+| `spring_league_id` | Float64 | Spring league MLBAM ID. |
+| `spring_league_name` | String | Spring league name. |
+| `spring_league_link` | String | API link to the spring league. |
+| `spring_league_abbreviation` | String | Spring league abbreviation. |
+| `venue_id` | Int64 | MLBAM venue ID. |
+| `venue_name` | String | Venue name. |
+| `venue_link` | String | API link to the venue. |
+| `spring_venue_id` | Float64 | Spring training venue MLBAM ID. |
+| `spring_venue_link` | String | API link to the spring venue. |
+| `league_id` | Float64 | League MLBAM ID. |
+| `league_name` | String | League name. |
+| `league_link` | String | API link to the league. |
+| `division_id` | Float64 | Division MLBAM ID. |
+| `division_name` | String | Division name. |
+| `division_link` | String | API link to the division. |
+| `sport_id` | Int64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
+| `sport_name` | String | Sport name (e.g., Major League Baseball). |
+| `parent_org_name` | String | Parent organization name. |
+| `parent_org_id` | Float64 | Parent organization MLBAM ID. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -307,32 +307,32 @@ View historical records for a list of teams.
 
 | col_name | type | description |
 |---|---|---|
-| `all_star_status` | character | All-star status flag. |
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `season` | integer | Season year. |
-| `team_code` | character | Internal team code. |
-| `file_code` | character | File code abbreviation. |
-| `abbreviation` | character | Short abbreviation. |
-| `team_name` | character | Team name. |
-| `location_name` | character | Team location (city). |
-| `first_year_of_play` | character | First year the franchise played. |
-| `short_name` | character | Short display name. |
-| `franchise_name` | character | Franchise name. |
-| `club_name` | character | Club name. |
-| `active` | logical | Whether the player is currently active. |
-| `venue_id` | integer | MLBAM venue ID. |
-| `venue_name` | character | Venue name. |
-| `venue_link` | character | API link to the venue. |
-| `spring_venue_id` | double | Spring training venue MLBAM ID. |
-| `spring_venue_link` | character | API link to the spring venue. |
-| `league_id` | integer | League MLBAM ID. |
-| `league_name` | character | League name. |
-| `league_link` | character | API link to the league. |
-| `sport_id` | integer | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+| `all_star_status` | String | All-star status flag. |
+| `id` | Int64 | Id. |
+| `name` | String | Display name. |
+| `link` | String | API link to the game feed. |
+| `season` | Int64 | Season year. |
+| `team_code` | String | Internal team code. |
+| `file_code` | String | File code abbreviation. |
+| `abbreviation` | String | Short abbreviation. |
+| `team_name` | String | Team name. |
+| `location_name` | String | Team location (city). |
+| `first_year_of_play` | String | First year the franchise played. |
+| `short_name` | String | Short display name. |
+| `franchise_name` | String | Franchise name. |
+| `club_name` | String | Club name. |
+| `active` | Boolean | Whether the player is currently active. |
+| `venue_id` | Int64 | MLBAM venue ID. |
+| `venue_name` | String | Venue name. |
+| `venue_link` | String | API link to the venue. |
+| `spring_venue_id` | Float64 | Spring training venue MLBAM ID. |
+| `spring_venue_link` | String | API link to the spring venue. |
+| `league_id` | Int64 | League MLBAM ID. |
+| `league_name` | String | League name. |
+| `league_link` | String | API link to the league. |
+| `sport_id` | Int64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
+| `sport_name` | String | Sport name (e.g., Major League Baseball). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -375,13 +375,13 @@ View team stats.
 
 | col_name | type | description |
 |---|---|---|
-| `total_splits` | integer | Total number of splits in the leaderboard. |
-| `exemptions` | character | A serialized list of any statistical exemption notes or flags associated with the team's stat splits (e.g., players exempt from qualifying thresholds). |
-| `splits` | character | Splits. |
-| `splits_tied_with_offset` | character | Players tied at the offset boundary. |
-| `splits_tied_with_limit` | character | Players tied at the limit boundary. |
-| `type_display_name` | character | Stat type display name. |
-| `group_display_name` | character | Stat group display name. |
+| `total_splits` | Int64 | Total number of splits in the leaderboard. |
+| `exemptions` | String | A serialized list of any statistical exemption notes or flags associated with the team's stat splits (e.g., players exempt from qualifying thresholds). |
+| `splits` | String | Splits. |
+| `splits_tied_with_offset` | String | Players tied at the offset boundary. |
+| `splits_tied_with_limit` | String | Players tied at the limit boundary. |
+| `type_display_name` | String | Stat type display name. |
+| `group_display_name` | String | Stat group display name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -428,13 +428,13 @@ View leaders for a statistic.
 
 | col_name | type | description |
 |---|---|---|
-| `leader_category` | character | Team leader category (e.g., homeRuns). |
-| `season` | character | Season year. |
-| `leaders` | character | Serialized representation of the statistical leaders entries for the team stat category returned by the MLB Stats API. |
-| `stat_group` | character | Stat group (e.g., hitting). |
-| `total_splits` | integer | Total number of splits in the leaderboard. |
-| `game_type_id` | character | Game type code (e.g., R for regular season). |
-| `game_type_description` | character | Game type description. |
+| `leader_category` | String | Team leader category (e.g., homeRuns). |
+| `season` | String | Season year. |
+| `leaders` | String | Serialized representation of the statistical leaders entries for the team stat category returned by the MLB Stats API. |
+| `stat_group` | String | Stat group (e.g., hitting). |
+| `total_splits` | Int64 | Total number of splits in the leaderboard. |
+| `game_type_id` | String | Game type code (e.g., R for regular season). |
+| `game_type_description` | String | Game type description. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -473,13 +473,13 @@ View biographical  information on all coaches for a given club.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -517,13 +517,13 @@ View biographical  information on all personnel for a given club.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -564,16 +564,16 @@ View biographical and statistical information for a club's roster based on roste
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
-| `position_code` | character | Numeric scorekeeping position code. |
-| `position_name` | character | Position name. |
-| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
-| `position_abbreviation` | character | Position abbreviation. |
-| `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
-| `status_description` | character | Roster status description (e.g. 'Active'). |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
+| `position_code` | String | Numeric scorekeeping position code. |
+| `position_name` | String | Position name. |
+| `position_type` | String | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | String | Position abbreviation. |
+| `status_code` | String | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
+| `status_description` | String | Roster status description (e.g. 'Active'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

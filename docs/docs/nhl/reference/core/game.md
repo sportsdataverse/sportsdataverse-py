@@ -26,87 +26,87 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `attendance` | integer | Game attendance. |
-| `boxscore_available` | logical | Whether boxscore data is available. |
-| `bracket_available` | logical |  |
-| `commentary_available` | logical |  |
-| `competitors` | character |  |
-| `conference_competition` | logical | Whether it is a conference competition. |
-| `conversation_available` | logical |  |
-| `date` | character | Game date (ISO 8601 datetime string). |
-| `division_competition` | logical |  |
-| `gamecast_available` | logical |  |
-| `guid` | character | Athlete global unique identifier. |
-| `highlights_available` | logical |  |
-| `id` | integer | Unique player identifier. |
-| `lineup_available` | logical |  |
-| `links` | character |  |
-| `live_available` | logical |  |
-| `necessary` | logical |  |
-| `neutral_site` | logical | Whether the game is at a neutral site. |
-| `notes` | character | Notes flag for the pick. |
-| `on_watch_espn` | logical | Whether the game is/was on WatchESPN. |
-| `pickcenter_available` | logical |  |
-| `play_by_play_available` | logical | Whether play-by-play data is available. |
-| `possession_arrow_available` | logical |  |
-| `preview_available` | logical |  |
-| `recap_available` | logical |  |
-| `recent` | logical | Whether the game is recent. |
-| `series` | character | Nested list of series within the round. |
-| `shot_chart_available` | logical |  |
-| `summary_available` | logical |  |
-| `tickets_available` | logical |  |
-| `time_valid` | logical | Whether the start time is confirmed. |
-| `timeouts_available` | logical |  |
-| `uid` | character | Competitor uid string. |
-| `wallclock_available` | logical |  |
-| `boxscore_source_description` | character |  |
-| `boxscore_source_id` | integer |  |
-| `boxscore_source_state` | character |  |
-| `broadcasts_$ref` | character |  |
-| `details_$ref` | character |  |
-| `format_overtime_clock` | double |  |
-| `format_overtime_display_name` | character |  |
-| `format_overtime_slug` | character |  |
-| `format_regulation_clock` | double |  |
-| `format_regulation_display_name` | character |  |
-| `format_regulation_periods` | integer |  |
-| `format_regulation_slug` | character |  |
-| `game_source_description` | character |  |
-| `game_source_id` | integer |  |
-| `game_source_state` | character |  |
-| `linescore_source_description` | character |  |
-| `linescore_source_id` | integer |  |
-| `linescore_source_state` | character |  |
-| `odds_$ref` | character |  |
-| `officials_$ref` | character |  |
-| `play_by_play_source_description` | character |  |
-| `play_by_play_source_id` | integer |  |
-| `play_by_play_source_state` | character |  |
-| `power_indexes_$ref` | character |  |
-| `predictor_$ref` | character |  |
-| `probabilities_$ref` | character |  |
-| `relevancy_$ref` | character |  |
-| `situation_$ref` | character |  |
-| `stats_source_description` | character |  |
-| `stats_source_id` | integer |  |
-| `stats_source_state` | character |  |
-| `status_$ref` | character |  |
-| `type_abbreviation` | character | Play type abbreviation. |
-| `type_id` | integer | Play type id. |
-| `type_slug` | character | Broadcast type slug. |
-| `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
-| `type_type` | character |  |
-| `venue_$ref` | character |  |
-| `venue_address_city` | character |  |
-| `venue_address_state` | character |  |
-| `venue_full_name` | character | Venue full name. |
-| `venue_grass` | logical |  |
-| `venue_guid` | character |  |
-| `venue_id` | integer | Venue identifier. |
-| `venue_images` | character |  |
-| `venue_indoor` | logical | Whether the venue is indoors. |
+| `$ref` | String |  |
+| `attendance` | Int64 | Game attendance. |
+| `boxscore_available` | Boolean | Whether boxscore data is available. |
+| `bracket_available` | Boolean |  |
+| `commentary_available` | Boolean |  |
+| `competitors` | String |  |
+| `conference_competition` | Boolean | Whether it is a conference competition. |
+| `conversation_available` | Boolean |  |
+| `date` | String | Game date (ISO 8601 datetime string). |
+| `division_competition` | Boolean |  |
+| `gamecast_available` | Boolean |  |
+| `guid` | String | Athlete global unique identifier. |
+| `highlights_available` | Boolean |  |
+| `id` | Int64 | Unique player identifier. |
+| `lineup_available` | Boolean |  |
+| `links` | String |  |
+| `live_available` | Boolean |  |
+| `necessary` | Boolean |  |
+| `neutral_site` | Boolean | Whether the game is at a neutral site. |
+| `notes` | String | Notes flag for the pick. |
+| `on_watch_espn` | Boolean | Whether the game is/was on WatchESPN. |
+| `pickcenter_available` | Boolean |  |
+| `play_by_play_available` | Boolean | Whether play-by-play data is available. |
+| `possession_arrow_available` | Boolean |  |
+| `preview_available` | Boolean |  |
+| `recap_available` | Boolean |  |
+| `recent` | Boolean | Whether the game is recent. |
+| `series` | String | Nested list of series within the round. |
+| `shot_chart_available` | Boolean |  |
+| `summary_available` | Boolean |  |
+| `tickets_available` | Boolean |  |
+| `time_valid` | Boolean | Whether the start time is confirmed. |
+| `timeouts_available` | Boolean |  |
+| `uid` | String | Competitor uid string. |
+| `wallclock_available` | Boolean |  |
+| `boxscore_source_description` | String |  |
+| `boxscore_source_id` | Int64 |  |
+| `boxscore_source_state` | String |  |
+| `broadcasts_$ref` | String |  |
+| `details_$ref` | String |  |
+| `format_overtime_clock` | Float64 |  |
+| `format_overtime_display_name` | String |  |
+| `format_overtime_slug` | String |  |
+| `format_regulation_clock` | Float64 |  |
+| `format_regulation_display_name` | String |  |
+| `format_regulation_periods` | Int64 |  |
+| `format_regulation_slug` | String |  |
+| `game_source_description` | String |  |
+| `game_source_id` | Int64 |  |
+| `game_source_state` | String |  |
+| `linescore_source_description` | String |  |
+| `linescore_source_id` | Int64 |  |
+| `linescore_source_state` | String |  |
+| `odds_$ref` | String |  |
+| `officials_$ref` | String |  |
+| `play_by_play_source_description` | String |  |
+| `play_by_play_source_id` | Int64 |  |
+| `play_by_play_source_state` | String |  |
+| `power_indexes_$ref` | String |  |
+| `predictor_$ref` | String |  |
+| `probabilities_$ref` | String |  |
+| `relevancy_$ref` | String |  |
+| `situation_$ref` | String |  |
+| `stats_source_description` | String |  |
+| `stats_source_id` | Int64 |  |
+| `stats_source_state` | String |  |
+| `status_$ref` | String |  |
+| `type_abbreviation` | String | Play type abbreviation. |
+| `type_id` | Int64 | Play type id. |
+| `type_slug` | String | Broadcast type slug. |
+| `type_text` | String | Play type label (e.g. "Goal", "Shot", "Face Off"). |
+| `type_type` | String |  |
+| `venue_$ref` | String |  |
+| `venue_address_city` | String |  |
+| `venue_address_state` | String |  |
+| `venue_full_name` | String | Venue full name. |
+| `venue_grass` | Boolean |  |
+| `venue_guid` | String |  |
+| `venue_id` | Int64 | Venue identifier. |
+| `venue_images` | String |  |
+| `venue_indoor` | Boolean | Whether the venue is indoors. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -143,22 +143,22 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `home_away` | character | Home or away indicator. |
-| `id` | integer | Unique player identifier. |
-| `order` | integer | Display order within officials list. |
-| `type` | character | Competitor type (e.g. "team"). |
-| `uid` | character | Competitor uid string. |
-| `winner` | logical | Whether this competitor won the game. |
-| `leaders_$ref` | character |  |
-| `linescores_$ref` | character |  |
-| `record_$ref` | character |  |
-| `roster_$ref` | character |  |
-| `score_$ref` | character |  |
-| `statistics_$ref` | character |  |
-| `team_$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `home_away` | String | Home or away indicator. |
+| `id` | Int64 | Unique player identifier. |
+| `order` | Int64 | Display order within officials list. |
+| `type` | String | Competitor type (e.g. "team"). |
+| `uid` | String | Competitor uid string. |
+| `winner` | Boolean | Whether this competitor won the game. |
+| `leaders_$ref` | String |  |
+| `linescores_$ref` | String |  |
+| `record_$ref` | String |  |
+| `roster_$ref` | String |  |
+| `score_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `team_$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -196,20 +196,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `home_away` | character | Home or away indicator. |
-| `id` | integer | Unique player identifier. |
-| `order` | integer | Display order within officials list. |
-| `type` | character | Competitor type (e.g. "team"). |
-| `uid` | character | Competitor uid string. |
-| `winner` | logical | Whether this competitor won the game. |
-| `leaders_$ref` | character |  |
-| `linescores_$ref` | character |  |
-| `record_$ref` | character |  |
-| `roster_$ref` | character |  |
-| `score_$ref` | character |  |
-| `statistics_$ref` | character |  |
-| `team_$ref` | character |  |
+| `$ref` | String |  |
+| `home_away` | String | Home or away indicator. |
+| `id` | Int64 | Unique player identifier. |
+| `order` | Int64 | Display order within officials list. |
+| `type` | String | Competitor type (e.g. "team"). |
+| `uid` | String | Competitor uid string. |
+| `winner` | Boolean | Whether this competitor won the game. |
+| `leaders_$ref` | String |  |
+| `linescores_$ref` | String |  |
+| `record_$ref` | String |  |
+| `roster_$ref` | String |  |
+| `score_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `team_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -247,11 +247,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `active` | logical | Whether athlete is currently active. |
-| `starter` | logical | Whether the goalie started the game. |
-| `did_not_play` | logical |  |
-| `ejected` | logical |  |
+| `$ref` | String |  |
+| `active` | Boolean | Whether athlete is currently active. |
+| `starter` | Boolean | Whether the goalie started the game. |
+| `did_not_play` | Boolean |  |
+| `ejected` | Boolean |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -325,13 +325,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `split_name` | character | Name of the stat split (Core v2 answers one, "All Splits"). |
-| `category_name` | character | ESPN stat category of the row (e.g., "defensive", "general", "offensive"). |
-| `stat_name` | character | ESPN stat key in camelCase (e.g., "blocks", "defensiveRebounds"). |
-| `stat_abbreviation` | character | Short label of the stat (e.g., "BLK"). |
-| `stat_value` | double | Numeric value of the team's stat in this game. |
-| `stat_display_value` | character | The value as ESPN displays it (a string, e.g., "7"). |
-| `stat_description` | character | ESPN's one-sentence definition of the stat. |
+| `split_name` | String | Name of the stat split (Core v2 answers one, "All Splits"). |
+| `category_name` | String | ESPN stat category of the row (e.g., "defensive", "general", "offensive"). |
+| `stat_name` | String | ESPN stat key in camelCase (e.g., "blocks", "defensiveRebounds"). |
+| `stat_abbreviation` | String | Short label of the stat (e.g., "BLK"). |
+| `stat_value` | Float64 | Numeric value of the team's stat in this game. |
+| `stat_display_value` | String | The value as ESPN displays it (a string, e.g., "7"). |
+| `stat_description` | String | ESPN's one-sentence definition of the stat. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -440,183 +440,183 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `details` | character | Odds detail string (e.g. "DET -185"). |
-| `moneyline_winner` | logical | Whether the moneyline winner was determined. |
-| `over_odds` | double | Over moneyline odds (American format). |
-| `over_under` | double | Over/under total line. |
-| `spread` | double | Point spread. |
-| `spread_winner` | logical | Whether the spread winner was determined. |
-| `under_odds` | double | Under moneyline odds (American format). |
-| `away_team_odds_close_money_line_alternate_display_value` | character |  |
-| `away_team_odds_close_money_line_american` | character |  |
-| `away_team_odds_close_money_line_decimal` | double |  |
-| `away_team_odds_close_money_line_display_value` | character |  |
-| `away_team_odds_close_money_line_fraction` | character |  |
-| `away_team_odds_close_money_line_value` | double |  |
-| `away_team_odds_close_point_spread_alternate_display_value` | character |  |
-| `away_team_odds_close_point_spread_american` | character |  |
-| `away_team_odds_close_spread_alternate_display_value` | character |  |
-| `away_team_odds_close_spread_american` | character |  |
-| `away_team_odds_close_spread_decimal` | double |  |
-| `away_team_odds_close_spread_display_value` | character |  |
-| `away_team_odds_close_spread_fraction` | character |  |
-| `away_team_odds_close_spread_value` | double |  |
-| `away_team_odds_current_money_line_alternate_display_value` | character |  |
-| `away_team_odds_current_money_line_american` | character |  |
-| `away_team_odds_current_money_line_decimal` | double |  |
-| `away_team_odds_current_money_line_display_value` | character |  |
-| `away_team_odds_current_money_line_fraction` | character |  |
-| `away_team_odds_current_money_line_value` | double |  |
-| `away_team_odds_current_point_spread_alternate_display_value` | character |  |
-| `away_team_odds_current_point_spread_american` | character |  |
-| `away_team_odds_current_spread_alternate_display_value` | character |  |
-| `away_team_odds_current_spread_american` | character |  |
-| `away_team_odds_current_spread_decimal` | double |  |
-| `away_team_odds_current_spread_display_value` | character |  |
-| `away_team_odds_current_spread_fraction` | character |  |
-| `away_team_odds_current_spread_value` | double |  |
-| `away_team_odds_favorite` | logical |  |
-| `away_team_odds_money_line` | integer |  |
-| `away_team_odds_open_favorite` | logical |  |
-| `away_team_odds_open_money_line_alternate_display_value` | character |  |
-| `away_team_odds_open_money_line_american` | character |  |
-| `away_team_odds_open_money_line_decimal` | double |  |
-| `away_team_odds_open_money_line_display_value` | character |  |
-| `away_team_odds_open_money_line_fraction` | character |  |
-| `away_team_odds_open_money_line_value` | double |  |
-| `away_team_odds_open_point_spread_alternate_display_value` | character |  |
-| `away_team_odds_open_point_spread_american` | character |  |
-| `away_team_odds_open_spread_alternate_display_value` | character |  |
-| `away_team_odds_open_spread_american` | character |  |
-| `away_team_odds_open_spread_decimal` | double |  |
-| `away_team_odds_open_spread_display_value` | character |  |
-| `away_team_odds_open_spread_fraction` | character |  |
-| `away_team_odds_open_spread_value` | double |  |
-| `away_team_odds_spread_odds` | double |  |
-| `away_team_odds_team_$ref` | character |  |
-| `away_team_odds_underdog` | logical |  |
-| `close_over_alternate_display_value` | character |  |
-| `close_over_american` | character |  |
-| `close_over_decimal` | double |  |
-| `close_over_display_value` | character |  |
-| `close_over_fraction` | character |  |
-| `close_over_value` | double |  |
-| `close_total_alternate_display_value` | character |  |
-| `close_total_american` | character |  |
-| `close_total_decimal` | double |  |
-| `close_total_display_value` | character |  |
-| `close_total_fraction` | character |  |
-| `close_total_value` | double |  |
-| `close_under_alternate_display_value` | character |  |
-| `close_under_american` | character |  |
-| `close_under_decimal` | double |  |
-| `close_under_display_value` | character |  |
-| `close_under_fraction` | character |  |
-| `close_under_value` | double |  |
-| `current_over_alternate_display_value` | character |  |
-| `current_over_american` | character |  |
-| `current_over_decimal` | double |  |
-| `current_over_display_value` | character |  |
-| `current_over_fraction` | character |  |
-| `current_over_value` | double |  |
-| `current_total_alternate_display_value` | character |  |
-| `current_total_american` | character |  |
-| `current_total_decimal` | double |  |
-| `current_total_display_value` | character |  |
-| `current_total_fraction` | character |  |
-| `current_total_value` | double |  |
-| `current_under_alternate_display_value` | character |  |
-| `current_under_american` | character |  |
-| `current_under_decimal` | double |  |
-| `current_under_display_value` | character |  |
-| `current_under_fraction` | character |  |
-| `current_under_value` | double |  |
-| `home_team_odds_close_money_line_alternate_display_value` | character |  |
-| `home_team_odds_close_money_line_american` | character |  |
-| `home_team_odds_close_money_line_decimal` | double |  |
-| `home_team_odds_close_money_line_display_value` | character |  |
-| `home_team_odds_close_money_line_fraction` | character |  |
-| `home_team_odds_close_money_line_value` | double |  |
-| `home_team_odds_close_point_spread_alternate_display_value` | character |  |
-| `home_team_odds_close_point_spread_american` | character |  |
-| `home_team_odds_close_point_spread_decimal` | double |  |
-| `home_team_odds_close_point_spread_display_value` | character |  |
-| `home_team_odds_close_point_spread_fraction` | character |  |
-| `home_team_odds_close_point_spread_value` | double |  |
-| `home_team_odds_close_spread_alternate_display_value` | character |  |
-| `home_team_odds_close_spread_american` | character |  |
-| `home_team_odds_close_spread_decimal` | double |  |
-| `home_team_odds_close_spread_display_value` | character |  |
-| `home_team_odds_close_spread_fraction` | character |  |
-| `home_team_odds_close_spread_value` | double |  |
-| `home_team_odds_current_money_line_alternate_display_value` | character |  |
-| `home_team_odds_current_money_line_american` | character |  |
-| `home_team_odds_current_money_line_decimal` | double |  |
-| `home_team_odds_current_money_line_display_value` | character |  |
-| `home_team_odds_current_money_line_fraction` | character |  |
-| `home_team_odds_current_money_line_value` | double |  |
-| `home_team_odds_current_point_spread_alternate_display_value` | character |  |
-| `home_team_odds_current_point_spread_american` | character |  |
-| `home_team_odds_current_point_spread_decimal` | double |  |
-| `home_team_odds_current_point_spread_display_value` | character |  |
-| `home_team_odds_current_point_spread_fraction` | character |  |
-| `home_team_odds_current_point_spread_value` | double |  |
-| `home_team_odds_current_spread_alternate_display_value` | character |  |
-| `home_team_odds_current_spread_american` | character |  |
-| `home_team_odds_current_spread_decimal` | double |  |
-| `home_team_odds_current_spread_display_value` | character |  |
-| `home_team_odds_current_spread_fraction` | character |  |
-| `home_team_odds_current_spread_value` | double |  |
-| `home_team_odds_favorite` | logical |  |
-| `home_team_odds_money_line` | integer |  |
-| `home_team_odds_open_favorite` | logical |  |
-| `home_team_odds_open_money_line_alternate_display_value` | character |  |
-| `home_team_odds_open_money_line_american` | character |  |
-| `home_team_odds_open_money_line_decimal` | double |  |
-| `home_team_odds_open_money_line_display_value` | character |  |
-| `home_team_odds_open_money_line_fraction` | character |  |
-| `home_team_odds_open_money_line_value` | double |  |
-| `home_team_odds_open_point_spread_alternate_display_value` | character |  |
-| `home_team_odds_open_point_spread_american` | character |  |
-| `home_team_odds_open_point_spread_decimal` | double |  |
-| `home_team_odds_open_point_spread_display_value` | character |  |
-| `home_team_odds_open_point_spread_fraction` | character |  |
-| `home_team_odds_open_point_spread_value` | double |  |
-| `home_team_odds_open_spread_alternate_display_value` | character |  |
-| `home_team_odds_open_spread_american` | character |  |
-| `home_team_odds_open_spread_decimal` | double |  |
-| `home_team_odds_open_spread_display_value` | character |  |
-| `home_team_odds_open_spread_fraction` | character |  |
-| `home_team_odds_open_spread_value` | double |  |
-| `home_team_odds_spread_odds` | double |  |
-| `home_team_odds_team_$ref` | character |  |
-| `home_team_odds_underdog` | logical |  |
-| `open_over_alternate_display_value` | character |  |
-| `open_over_american` | character |  |
-| `open_over_decimal` | double |  |
-| `open_over_display_value` | character |  |
-| `open_over_fraction` | character |  |
-| `open_over_value` | double |  |
-| `open_total_alternate_display_value` | character |  |
-| `open_total_american` | character | Opening total line in American format (e.g. "5.5"). |
-| `open_total_decimal` | double |  |
-| `open_total_display_value` | character |  |
-| `open_total_fraction` | character |  |
-| `open_total_value` | double |  |
-| `open_under_alternate_display_value` | character |  |
-| `open_under_american` | character |  |
-| `open_under_decimal` | double |  |
-| `open_under_display_value` | character |  |
-| `open_under_fraction` | character |  |
-| `open_under_value` | double |  |
-| `provider_$ref` | character |  |
-| `provider_id` | integer | ESPN provider id parsed from the `$ref` URL. |
-| `provider_name` | character | Betting provider name (e.g. "ESPN BET"). |
-| `provider_priority` | integer | Provider display priority. |
-| `prop_bets_$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `details` | String | Odds detail string (e.g. "DET -185"). |
+| `moneyline_winner` | Boolean | Whether the moneyline winner was determined. |
+| `over_odds` | Float64 | Over moneyline odds (American format). |
+| `over_under` | Float64 | Over/under total line. |
+| `spread` | Float64 | Point spread. |
+| `spread_winner` | Boolean | Whether the spread winner was determined. |
+| `under_odds` | Float64 | Under moneyline odds (American format). |
+| `away_team_odds_close_money_line_alternate_display_value` | String |  |
+| `away_team_odds_close_money_line_american` | String |  |
+| `away_team_odds_close_money_line_decimal` | Float64 |  |
+| `away_team_odds_close_money_line_display_value` | String |  |
+| `away_team_odds_close_money_line_fraction` | String |  |
+| `away_team_odds_close_money_line_value` | Float64 |  |
+| `away_team_odds_close_point_spread_alternate_display_value` | String |  |
+| `away_team_odds_close_point_spread_american` | String |  |
+| `away_team_odds_close_spread_alternate_display_value` | String |  |
+| `away_team_odds_close_spread_american` | String |  |
+| `away_team_odds_close_spread_decimal` | Float64 |  |
+| `away_team_odds_close_spread_display_value` | String |  |
+| `away_team_odds_close_spread_fraction` | String |  |
+| `away_team_odds_close_spread_value` | Float64 |  |
+| `away_team_odds_current_money_line_alternate_display_value` | String |  |
+| `away_team_odds_current_money_line_american` | String |  |
+| `away_team_odds_current_money_line_decimal` | Float64 |  |
+| `away_team_odds_current_money_line_display_value` | String |  |
+| `away_team_odds_current_money_line_fraction` | String |  |
+| `away_team_odds_current_money_line_value` | Float64 |  |
+| `away_team_odds_current_point_spread_alternate_display_value` | String |  |
+| `away_team_odds_current_point_spread_american` | String |  |
+| `away_team_odds_current_spread_alternate_display_value` | String |  |
+| `away_team_odds_current_spread_american` | String |  |
+| `away_team_odds_current_spread_decimal` | Float64 |  |
+| `away_team_odds_current_spread_display_value` | String |  |
+| `away_team_odds_current_spread_fraction` | String |  |
+| `away_team_odds_current_spread_value` | Float64 |  |
+| `away_team_odds_favorite` | Boolean |  |
+| `away_team_odds_money_line` | Int64 |  |
+| `away_team_odds_open_favorite` | Boolean |  |
+| `away_team_odds_open_money_line_alternate_display_value` | String |  |
+| `away_team_odds_open_money_line_american` | String |  |
+| `away_team_odds_open_money_line_decimal` | Float64 |  |
+| `away_team_odds_open_money_line_display_value` | String |  |
+| `away_team_odds_open_money_line_fraction` | String |  |
+| `away_team_odds_open_money_line_value` | Float64 |  |
+| `away_team_odds_open_point_spread_alternate_display_value` | String |  |
+| `away_team_odds_open_point_spread_american` | String |  |
+| `away_team_odds_open_spread_alternate_display_value` | String |  |
+| `away_team_odds_open_spread_american` | String |  |
+| `away_team_odds_open_spread_decimal` | Float64 |  |
+| `away_team_odds_open_spread_display_value` | String |  |
+| `away_team_odds_open_spread_fraction` | String |  |
+| `away_team_odds_open_spread_value` | Float64 |  |
+| `away_team_odds_spread_odds` | Float64 |  |
+| `away_team_odds_team_$ref` | String |  |
+| `away_team_odds_underdog` | Boolean |  |
+| `close_over_alternate_display_value` | String |  |
+| `close_over_american` | String |  |
+| `close_over_decimal` | Float64 |  |
+| `close_over_display_value` | String |  |
+| `close_over_fraction` | String |  |
+| `close_over_value` | Float64 |  |
+| `close_total_alternate_display_value` | String |  |
+| `close_total_american` | String |  |
+| `close_total_decimal` | Float64 |  |
+| `close_total_display_value` | String |  |
+| `close_total_fraction` | String |  |
+| `close_total_value` | Float64 |  |
+| `close_under_alternate_display_value` | String |  |
+| `close_under_american` | String |  |
+| `close_under_decimal` | Float64 |  |
+| `close_under_display_value` | String |  |
+| `close_under_fraction` | String |  |
+| `close_under_value` | Float64 |  |
+| `current_over_alternate_display_value` | String |  |
+| `current_over_american` | String |  |
+| `current_over_decimal` | Float64 |  |
+| `current_over_display_value` | String |  |
+| `current_over_fraction` | String |  |
+| `current_over_value` | Float64 |  |
+| `current_total_alternate_display_value` | String |  |
+| `current_total_american` | String |  |
+| `current_total_decimal` | Float64 |  |
+| `current_total_display_value` | String |  |
+| `current_total_fraction` | String |  |
+| `current_total_value` | Float64 |  |
+| `current_under_alternate_display_value` | String |  |
+| `current_under_american` | String |  |
+| `current_under_decimal` | Float64 |  |
+| `current_under_display_value` | String |  |
+| `current_under_fraction` | String |  |
+| `current_under_value` | Float64 |  |
+| `home_team_odds_close_money_line_alternate_display_value` | String |  |
+| `home_team_odds_close_money_line_american` | String |  |
+| `home_team_odds_close_money_line_decimal` | Float64 |  |
+| `home_team_odds_close_money_line_display_value` | String |  |
+| `home_team_odds_close_money_line_fraction` | String |  |
+| `home_team_odds_close_money_line_value` | Float64 |  |
+| `home_team_odds_close_point_spread_alternate_display_value` | String |  |
+| `home_team_odds_close_point_spread_american` | String |  |
+| `home_team_odds_close_point_spread_decimal` | Float64 |  |
+| `home_team_odds_close_point_spread_display_value` | String |  |
+| `home_team_odds_close_point_spread_fraction` | String |  |
+| `home_team_odds_close_point_spread_value` | Float64 |  |
+| `home_team_odds_close_spread_alternate_display_value` | String |  |
+| `home_team_odds_close_spread_american` | String |  |
+| `home_team_odds_close_spread_decimal` | Float64 |  |
+| `home_team_odds_close_spread_display_value` | String |  |
+| `home_team_odds_close_spread_fraction` | String |  |
+| `home_team_odds_close_spread_value` | Float64 |  |
+| `home_team_odds_current_money_line_alternate_display_value` | String |  |
+| `home_team_odds_current_money_line_american` | String |  |
+| `home_team_odds_current_money_line_decimal` | Float64 |  |
+| `home_team_odds_current_money_line_display_value` | String |  |
+| `home_team_odds_current_money_line_fraction` | String |  |
+| `home_team_odds_current_money_line_value` | Float64 |  |
+| `home_team_odds_current_point_spread_alternate_display_value` | String |  |
+| `home_team_odds_current_point_spread_american` | String |  |
+| `home_team_odds_current_point_spread_decimal` | Float64 |  |
+| `home_team_odds_current_point_spread_display_value` | String |  |
+| `home_team_odds_current_point_spread_fraction` | String |  |
+| `home_team_odds_current_point_spread_value` | Float64 |  |
+| `home_team_odds_current_spread_alternate_display_value` | String |  |
+| `home_team_odds_current_spread_american` | String |  |
+| `home_team_odds_current_spread_decimal` | Float64 |  |
+| `home_team_odds_current_spread_display_value` | String |  |
+| `home_team_odds_current_spread_fraction` | String |  |
+| `home_team_odds_current_spread_value` | Float64 |  |
+| `home_team_odds_favorite` | Boolean |  |
+| `home_team_odds_money_line` | Int64 |  |
+| `home_team_odds_open_favorite` | Boolean |  |
+| `home_team_odds_open_money_line_alternate_display_value` | String |  |
+| `home_team_odds_open_money_line_american` | String |  |
+| `home_team_odds_open_money_line_decimal` | Float64 |  |
+| `home_team_odds_open_money_line_display_value` | String |  |
+| `home_team_odds_open_money_line_fraction` | String |  |
+| `home_team_odds_open_money_line_value` | Float64 |  |
+| `home_team_odds_open_point_spread_alternate_display_value` | String |  |
+| `home_team_odds_open_point_spread_american` | String |  |
+| `home_team_odds_open_point_spread_decimal` | Float64 |  |
+| `home_team_odds_open_point_spread_display_value` | String |  |
+| `home_team_odds_open_point_spread_fraction` | String |  |
+| `home_team_odds_open_point_spread_value` | Float64 |  |
+| `home_team_odds_open_spread_alternate_display_value` | String |  |
+| `home_team_odds_open_spread_american` | String |  |
+| `home_team_odds_open_spread_decimal` | Float64 |  |
+| `home_team_odds_open_spread_display_value` | String |  |
+| `home_team_odds_open_spread_fraction` | String |  |
+| `home_team_odds_open_spread_value` | Float64 |  |
+| `home_team_odds_spread_odds` | Float64 |  |
+| `home_team_odds_team_$ref` | String |  |
+| `home_team_odds_underdog` | Boolean |  |
+| `open_over_alternate_display_value` | String |  |
+| `open_over_american` | String |  |
+| `open_over_decimal` | Float64 |  |
+| `open_over_display_value` | String |  |
+| `open_over_fraction` | String |  |
+| `open_over_value` | Float64 |  |
+| `open_total_alternate_display_value` | String |  |
+| `open_total_american` | String | Opening total line in American format (e.g. "5.5"). |
+| `open_total_decimal` | Float64 |  |
+| `open_total_display_value` | String |  |
+| `open_total_fraction` | String |  |
+| `open_total_value` | Float64 |  |
+| `open_under_alternate_display_value` | String |  |
+| `open_under_american` | String |  |
+| `open_under_decimal` | Float64 |  |
+| `open_under_display_value` | String |  |
+| `open_under_fraction` | String |  |
+| `open_under_value` | Float64 |  |
+| `provider_$ref` | String |  |
+| `provider_id` | Int64 | ESPN provider id parsed from the `$ref` URL. |
+| `provider_name` | String | Betting provider name (e.g. "ESPN BET"). |
+| `provider_priority` | Int64 | Provider display priority. |
+| `prop_bets_$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -654,24 +654,24 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `away_win_percentage` | double | Away team win probability (0-1). |
-| `home_win_percentage` | double | Home team win probability (0-1). |
-| `last_modified` | character | Last-modified datetime (ISO 8601). |
-| `sequence_number` | character | Play sequence number within the game. |
-| `spread_cover_prob_home` | double |  |
-| `spread_push_prob` | double |  |
-| `tie_percentage` | double | Tie probability (0-1; typically 0 for NHL). |
-| `total_over_prob` | double |  |
-| `away_team_$ref` | character |  |
-| `competition_$ref` | character |  |
-| `home_team_$ref` | character |  |
-| `play_$ref` | character |  |
-| `source_description` | character |  |
-| `source_id` | integer | Data source identifier. |
-| `source_state` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `away_win_percentage` | Float64 | Away team win probability (0-1). |
+| `home_win_percentage` | Float64 | Home team win probability (0-1). |
+| `last_modified` | String | Last-modified datetime (ISO 8601). |
+| `sequence_number` | String | Play sequence number within the game. |
+| `spread_cover_prob_home` | Float64 |  |
+| `spread_push_prob` | Float64 |  |
+| `tie_percentage` | Float64 | Tie probability (0-1; typically 0 for NHL). |
+| `total_over_prob` | Float64 |  |
+| `away_team_$ref` | String |  |
+| `competition_$ref` | String |  |
+| `home_team_$ref` | String |  |
+| `play_$ref` | String |  |
+| `source_description` | String |  |
+| `source_id` | Int64 | Data source identifier. |
+| `source_state` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -709,33 +709,33 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `alternative_text` | character |  |
-| `away_score` | integer | Away team final score. |
-| `clock_display_value` | character | Game clock display string (e.g. "14:32"). |
-| `clock_value` | double | Clock value in seconds. |
-| `coordinate_x` | integer | X coordinate on the ice surface. |
-| `coordinate_y` | integer | Y coordinate on the ice surface. |
-| `home_score` | integer | Home team final score. |
-| `id` | integer | Unique player identifier. |
-| `modified` | character |  |
-| `period_display_value` | character | Period display label (e.g. "1st Period"). |
-| `period_number` | integer | Period number (1-3 regulation, 4+ OT). |
-| `points_attempted` | integer |  |
-| `priority` | logical | Whether this is a priority play for display. |
-| `probability_$ref` | character |  |
-| `score_value` | integer | Point value of the scoring play (1 for a goal). |
-| `scoring_play` | logical | Whether this play resulted in a goal. |
-| `sequence_number` | character | Play sequence number within the game. |
-| `shooting_play` | logical | Whether this is a shot on goal. |
-| `team_$ref` | character |  |
-| `text` | character | Full play description text. |
-| `type_id` | integer | Play type id. |
-| `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
-| `valid` | logical |  |
-| `wallclock` | character | Wall-clock UTC timestamp of the play. |
-| `short_alternative_text` | character |  |
-| `short_text` | character | Short play description text. |
+| `$ref` | String |  |
+| `alternative_text` | String |  |
+| `away_score` | Int64 | Away team final score. |
+| `clock_display_value` | String | Game clock display string (e.g. "14:32"). |
+| `clock_value` | Float64 | Clock value in seconds. |
+| `coordinate_x` | Int64 | X coordinate on the ice surface. |
+| `coordinate_y` | Int64 | Y coordinate on the ice surface. |
+| `home_score` | Int64 | Home team final score. |
+| `id` | Int64 | Unique player identifier. |
+| `modified` | String |  |
+| `period_display_value` | String | Period display label (e.g. "1st Period"). |
+| `period_number` | Int64 | Period number (1-3 regulation, 4+ OT). |
+| `points_attempted` | Int64 |  |
+| `priority` | Boolean | Whether this is a priority play for display. |
+| `probability_$ref` | String |  |
+| `score_value` | Int64 | Point value of the scoring play (1 for a goal). |
+| `scoring_play` | Boolean | Whether this play resulted in a goal. |
+| `sequence_number` | String | Play sequence number within the game. |
+| `shooting_play` | Boolean | Whether this is a shot on goal. |
+| `team_$ref` | String |  |
+| `text` | String | Full play description text. |
+| `type_id` | Int64 | Play type id. |
+| `type_text` | String | Play type label (e.g. "Goal", "Shot", "Face Off"). |
+| `valid` | Boolean |  |
+| `wallclock` | String | Wall-clock UTC timestamp of the play. |
+| `short_alternative_text` | String |  |
+| `short_text` | String | Short play description text. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -773,32 +773,32 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `alternative_text` | character |  |
-| `away_score` | integer | Away team final score. |
-| `home_score` | integer | Home team final score. |
-| `id` | integer | Unique player identifier. |
-| `modified` | character |  |
-| `participants` | character |  |
-| `points_attempted` | integer |  |
-| `priority` | logical | Whether this is a priority play for display. |
-| `score_value` | integer | Point value of the scoring play (1 for a goal). |
-| `scoring_play` | logical | Whether this play resulted in a goal. |
-| `sequence_number` | character | Play sequence number within the game. |
-| `shooting_play` | logical | Whether this is a shot on goal. |
-| `text` | character | Full play description text. |
-| `valid` | logical |  |
-| `wallclock` | character | Wall-clock UTC timestamp of the play. |
-| `clock_display_value` | character | Game clock display string (e.g. "14:32"). |
-| `clock_value` | double | Clock value in seconds. |
-| `coordinate_x` | integer | X coordinate on the ice surface. |
-| `coordinate_y` | integer | Y coordinate on the ice surface. |
-| `period_display_value` | character | Period display label (e.g. "1st Period"). |
-| `period_number` | integer | Period number (1-3 regulation, 4+ OT). |
-| `probability_$ref` | character |  |
-| `team_$ref` | character |  |
-| `type_id` | integer | Play type id. |
-| `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
+| `$ref` | String |  |
+| `alternative_text` | String |  |
+| `away_score` | Int64 | Away team final score. |
+| `home_score` | Int64 | Home team final score. |
+| `id` | Int64 | Unique player identifier. |
+| `modified` | String |  |
+| `participants` | String |  |
+| `points_attempted` | Int64 |  |
+| `priority` | Boolean | Whether this is a priority play for display. |
+| `score_value` | Int64 | Point value of the scoring play (1 for a goal). |
+| `scoring_play` | Boolean | Whether this play resulted in a goal. |
+| `sequence_number` | String | Play sequence number within the game. |
+| `shooting_play` | Boolean | Whether this is a shot on goal. |
+| `text` | String | Full play description text. |
+| `valid` | Boolean |  |
+| `wallclock` | String | Wall-clock UTC timestamp of the play. |
+| `clock_display_value` | String | Game clock display string (e.g. "14:32"). |
+| `clock_value` | Float64 | Clock value in seconds. |
+| `coordinate_x` | Int64 | X coordinate on the ice surface. |
+| `coordinate_y` | Int64 | Y coordinate on the ice surface. |
+| `period_display_value` | String | Period display label (e.g. "1st Period"). |
+| `period_number` | Int64 | Period number (1-3 regulation, 4+ OT). |
+| `probability_$ref` | String |  |
+| `team_$ref` | String |  |
+| `type_id` | Int64 | Play type id. |
+| `type_text` | String | Play type label (e.g. "Goal", "Shot", "Face Off"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -871,20 +871,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `away_fouls_bonus_state` | character |  |
-| `away_fouls_fouls_to_give` | integer |  |
-| `away_fouls_team_fouls` | integer |  |
-| `away_fouls_team_fouls_current` | integer |  |
-| `away_timeouts_timeouts_current` | integer |  |
-| `away_timeouts_timeouts_remaining_current` | integer |  |
-| `home_fouls_bonus_state` | character |  |
-| `home_fouls_fouls_to_give` | integer |  |
-| `home_fouls_team_fouls` | integer |  |
-| `home_fouls_team_fouls_current` | integer |  |
-| `home_timeouts_timeouts_current` | integer |  |
-| `home_timeouts_timeouts_remaining_current` | integer |  |
-| `last_play_$ref` | character |  |
+| `$ref` | String |  |
+| `away_fouls_bonus_state` | String |  |
+| `away_fouls_fouls_to_give` | Int64 |  |
+| `away_fouls_team_fouls` | Int64 |  |
+| `away_fouls_team_fouls_current` | Int64 |  |
+| `away_timeouts_timeouts_current` | Int64 |  |
+| `away_timeouts_timeouts_remaining_current` | Int64 |  |
+| `home_fouls_bonus_state` | String |  |
+| `home_fouls_fouls_to_give` | Int64 |  |
+| `home_fouls_team_fouls` | Int64 |  |
+| `home_fouls_team_fouls_current` | Int64 |  |
+| `home_timeouts_timeouts_current` | Int64 |  |
+| `home_timeouts_timeouts_remaining_current` | Int64 |  |
+| `last_play_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -921,17 +921,17 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `clock` | double | Game clock time remaining (MM:SS). |
-| `display_clock` | character | Game clock display string (e.g. "0:00"). |
-| `period` | integer | Period number. |
-| `type_completed` | logical | Whether the game is complete. |
-| `type_description` | character | Status description (e.g. "Final"). |
-| `type_detail` | character | Status detail string. |
-| `type_id` | integer | Play type id. |
-| `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
-| `type_short_detail` | character | Short status detail string. |
-| `type_state` | character | Status state (e.g. "pre", "in", "post"). |
+| `$ref` | String |  |
+| `clock` | Float64 | Game clock time remaining (MM:SS). |
+| `display_clock` | String | Game clock display string (e.g. "0:00"). |
+| `period` | Int64 | Period number. |
+| `type_completed` | Boolean | Whether the game is complete. |
+| `type_description` | String | Status description (e.g. "Final"). |
+| `type_detail` | String | Status detail string. |
+| `type_id` | Int64 | Play type id. |
+| `type_name` | String | Status type name (e.g. "STATUS_FINAL"). |
+| `type_short_detail` | String | Short status detail string. |
+| `type_state` | String | Status state (e.g. "pre", "in", "post"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -968,18 +968,18 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `display_name` | character | Player display name. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `id` | integer | Unique player identifier. |
-| `last_name` | character | Player last name. |
-| `order` | integer | Display order within officials list. |
-| `position_display_name` | character | Position display name. |
-| `position_id` | integer | Official position identifier. |
-| `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `display_name` | String | Player display name. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `id` | Int64 | Unique player identifier. |
+| `last_name` | String | Player last name. |
+| `order` | Int64 | Display order within officials list. |
+| `position_display_name` | String | Position display name. |
+| `position_id` | Int64 | Official position identifier. |
+| `position_name` | String | Official position name (e.g. "Referee", "Linesman"). |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1016,29 +1016,29 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `channel` | integer | Channel number identifier. |
-| `lang` | character | Broadcast language (e.g. "en"). |
-| `partnered` | logical | Whether this is a partnered broadcast. |
-| `priority` | integer | Whether this is a priority play for display. |
-| `region` | character | Broadcast region (e.g. "us"). |
-| `slug` | character | URL slug. |
-| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
-| `competition_$ref` | character |  |
-| `market_id` | integer | Market identifier. |
-| `market_type` | character | Market type. |
-| `media_$ref` | character |  |
-| `media_call_letters` | character | Media outlet call letters. |
-| `media_id` | integer | Media outlet identifier. |
-| `media_logos` | character |  |
-| `media_name` | character | Media outlet full name. |
-| `media_short_name` | character | Media outlet short name. |
-| `media_slug` | character | Media outlet slug. |
-| `type_id` | integer | Play type id. |
-| `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
-| `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
-| `type_slug` | character | Broadcast type slug. |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `channel` | Int64 | Channel number identifier. |
+| `lang` | String | Broadcast language (e.g. "en"). |
+| `partnered` | Boolean | Whether this is a partnered broadcast. |
+| `priority` | Int64 | Whether this is a priority play for display. |
+| `region` | String | Broadcast region (e.g. "us"). |
+| `slug` | String | URL slug. |
+| `station` | String | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `competition_$ref` | String |  |
+| `market_id` | Int64 | Market identifier. |
+| `market_type` | String | Market type. |
+| `media_$ref` | String |  |
+| `media_call_letters` | String | Media outlet call letters. |
+| `media_id` | Int64 | Media outlet identifier. |
+| `media_logos` | String |  |
+| `media_name` | String | Media outlet full name. |
+| `media_short_name` | String | Media outlet short name. |
+| `media_slug` | String | Media outlet slug. |
+| `type_id` | Int64 | Play type id. |
+| `type_long_name` | String | Broadcast type long name (e.g. "Television"). |
+| `type_short_name` | String | Broadcast type short name (e.g. "TV"). |
+| `type_slug` | String | Broadcast type slug. |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1075,13 +1075,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `last_modified` | character | Last-modified datetime (ISO 8601). |
-| `name` | character | Team mascot name. |
-| `short_name` | character | Short game name. |
-| `away_team_statistics` | character |  |
-| `away_team_team_$ref` | character |  |
-| `home_team_team_$ref` | character |  |
+| `$ref` | String |  |
+| `last_modified` | String | Last-modified datetime (ISO 8601). |
+| `name` | String | Team mascot name. |
+| `short_name` | String | Short game name. |
+| `away_team_statistics` | String |  |
+| `away_team_team_$ref` | String |  |
+| `home_team_team_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1118,11 +1118,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `count` | integer | Total athlete count matching the filter. |
-| `items` | character |  |
-| `page_count` | integer | Total pages in the collection. |
-| `page_index` | integer |  |
-| `page_size` | integer |  |
+| `count` | Int64 | Total athlete count matching the filter. |
+| `items` | String |  |
+| `page_count` | Int64 | Total pages in the collection. |
+| `page_index` | Int64 |  |
+| `page_size` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1265,16 +1265,16 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `display_name` | character | Player display name. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `id` | integer | Unique player identifier. |
-| `last_name` | character | Player last name. |
-| `order` | integer | Display order within officials list. |
-| `position_display_name` | character | Position display name. |
-| `position_id` | integer | Official position identifier. |
-| `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
+| `$ref` | String |  |
+| `display_name` | String | Player display name. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `id` | Int64 | Unique player identifier. |
+| `last_name` | String | Player last name. |
+| `order` | Int64 | Display order within officials list. |
+| `position_display_name` | String | Position display name. |
+| `position_id` | Int64 | Official position identifier. |
+| `position_name` | String | Official position name (e.g. "Referee", "Linesman"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

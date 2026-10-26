@@ -1,10 +1,10 @@
 ---
-title: DBL — additional Python functions
+title: Basketligaen — additional Python functions
 sidebar_label: Additional functions
-description: "DBL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Basketligaen — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# DBL — additional Python functions
+# Basketligaen — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.dbl` that are not
 generated API-endpoint wrappers (those have their own reference pages).

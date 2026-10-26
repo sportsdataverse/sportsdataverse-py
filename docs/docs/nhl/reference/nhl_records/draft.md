@@ -25,37 +25,37 @@ Retrieve NHL Entry Draft picks.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `age_in_days` | character | Player age in days. |
-| `age_in_days_for_year` | character | Player age in days for the draft year. |
-| `age_in_years` | character | Player age in years. |
-| `amateur_club_name` | character | Amateur club the player played for. |
-| `amateur_league` | character | Amateur league the player played in. |
-| `birth_date` | character | Player birth date. |
-| `birth_place` | character | Player birth place. |
-| `country_code` | character | Player country code. |
-| `cs_player_id` | integer | Central Scouting player identifier. |
-| `draft_date` | character | Date the player was drafted. |
-| `draft_master_id` | integer | Draft master record identifier. |
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `drafted_by_team_id` | integer | Identifier of the drafting team. |
-| `first_name` | character | Player first name. |
-| `height` | character | Player height in inches. |
-| `last_name` | character | Player last name. |
-| `notes` | character | Notes flag for the pick. |
-| `overall_pick_number` | integer | Overall pick number in the draft. |
-| `pick_in_round` | integer | Pick number within the round. |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `position` | character | Player position. |
-| `removed_outright` | character | Removed-outright indicator. |
-| `removed_outright_why` | character | Reason the pick was removed outright. |
-| `round_number` | integer | Draft round number. |
-| `shoots_catches` | character | Handedness (shoots/catches). |
-| `supplemental_draft` | character | Supplemental draft indicator. |
-| `team_pick_history` | character | History of the team's picks at this slot. |
-| `tri_code` | character | Team three-letter code. |
-| `weight` | character | Player weight in pounds. |
+| `id` | Int64 | Unique player identifier. |
+| `age_in_days` | String | Player age in days. |
+| `age_in_days_for_year` | String | Player age in days for the draft year. |
+| `age_in_years` | String | Player age in years. |
+| `amateur_club_name` | String | Amateur club the player played for. |
+| `amateur_league` | String | Amateur league the player played in. |
+| `birth_date` | String | Player birth date. |
+| `birth_place` | String | Player birth place. |
+| `country_code` | String | Player country code. |
+| `cs_player_id` | Int64 | Central Scouting player identifier. |
+| `draft_date` | String | Date the player was drafted. |
+| `draft_master_id` | Int64 | Draft master record identifier. |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `drafted_by_team_id` | Int64 | Identifier of the drafting team. |
+| `first_name` | String | Player first name. |
+| `height` | String | Player height in inches. |
+| `last_name` | String | Player last name. |
+| `notes` | String | Notes flag for the pick. |
+| `overall_pick_number` | Int64 | Overall pick number in the draft. |
+| `pick_in_round` | Int64 | Pick number within the round. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `position` | String | Player position. |
+| `removed_outright` | String | Removed-outright indicator. |
+| `removed_outright_why` | String | Reason the pick was removed outright. |
+| `round_number` | Int64 | Draft round number. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
+| `supplemental_draft` | String | Supplemental draft indicator. |
+| `team_pick_history` | String | History of the team's picks at this slot. |
+| `tri_code` | String | Team three-letter code. |
+| `weight` | String | Player weight in pounds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -91,37 +91,37 @@ All draft picks made by a single team.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `age_in_days` | integer | Player age in days. |
-| `age_in_days_for_year` | integer | Player age in days for the draft year. |
-| `age_in_years` | integer | Player age in years. |
-| `amateur_club_name` | character | Amateur club the player played for. |
-| `amateur_league` | character | Amateur league the player played in. |
-| `birth_date` | character | Player birth date. |
-| `birth_place` | character | Player birth place. |
-| `country_code` | character | Player country code. |
-| `cs_player_id` | integer | Central Scouting player identifier. |
-| `draft_date` | character | Date the player was drafted. |
-| `draft_master_id` | integer | Draft master record identifier. |
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `drafted_by_team_id` | integer | Identifier of the drafting team. |
-| `first_name` | character | Player first name. |
-| `height` | double | Player height in inches. |
-| `last_name` | character | Player last name. |
-| `notes` | character | Notes flag for the pick. |
-| `overall_pick_number` | integer | Overall pick number in the draft. |
-| `pick_in_round` | integer | Pick number within the round. |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `position` | character | Player position. |
-| `removed_outright` | character | Removed-outright indicator. |
-| `removed_outright_why` | character | Reason the pick was removed outright. |
-| `round_number` | integer | Draft round number. |
-| `shoots_catches` | character | Handedness (shoots/catches). |
-| `supplemental_draft` | character | Supplemental draft indicator. |
-| `team_pick_history` | character | History of the team's picks at this slot. |
-| `tri_code` | character | Team three-letter code. |
-| `weight` | double | Player weight in pounds. |
+| `id` | Int64 | Unique player identifier. |
+| `age_in_days` | Int64 | Player age in days. |
+| `age_in_days_for_year` | Int64 | Player age in days for the draft year. |
+| `age_in_years` | Int64 | Player age in years. |
+| `amateur_club_name` | String | Amateur club the player played for. |
+| `amateur_league` | String | Amateur league the player played in. |
+| `birth_date` | String | Player birth date. |
+| `birth_place` | String | Player birth place. |
+| `country_code` | String | Player country code. |
+| `cs_player_id` | Int64 | Central Scouting player identifier. |
+| `draft_date` | String | Date the player was drafted. |
+| `draft_master_id` | Int64 | Draft master record identifier. |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `drafted_by_team_id` | Int64 | Identifier of the drafting team. |
+| `first_name` | String | Player first name. |
+| `height` | Float64 | Player height in inches. |
+| `last_name` | String | Player last name. |
+| `notes` | String | Notes flag for the pick. |
+| `overall_pick_number` | Int64 | Overall pick number in the draft. |
+| `pick_in_round` | Int64 | Pick number within the round. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `position` | String | Player position. |
+| `removed_outright` | String | Removed-outright indicator. |
+| `removed_outright_why` | String | Reason the pick was removed outright. |
+| `round_number` | Int64 | Draft round number. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
+| `supplemental_draft` | String | Supplemental draft indicator. |
+| `team_pick_history` | String | History of the team's picks at this slot. |
+| `tri_code` | String | Team three-letter code. |
+| `weight` | Float64 | Player weight in pounds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -157,34 +157,34 @@ Draft prospect records.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `birth_city` | character | Birth city. |
-| `birth_country3code` | character | Prospect birth country three-letter code. |
-| `birth_date` | character | Player birth date. |
-| `birth_state_prov_code` | character | Prospect birth state/province code. |
-| `category_id` | integer | Prospect category identifier. |
-| `created_on` | character | Date the trophy record was created. |
-| `cs_player_id` | integer | Central Scouting player identifier. |
-| `draft_status_code` | character | Draft eligibility status code. |
-| `ep_player_id` | integer | EliteProspects player identifier. |
-| `first_name` | character | Player first name. |
-| `headshot_id` | integer | Headshot image identifier. |
-| `height` | integer | Player height in inches. |
-| `hometown` | character | Prospect hometown. |
-| `last_club_name` | character | Most recent club name. |
-| `last_league_abbr` | character | Most recent league abbreviation. |
-| `last_name` | character | Player last name. |
-| `nationality_code` | character | Nationality code of the official. |
-| `news_articles` | character | Associated news articles. |
-| `playerid` | integer | Unique player identifier. |
-| `position_desc` | character | Player position description. |
-| `profile` | character | Prospect profile text. |
-| `quotes` | character | Quotes about the prospect. |
-| `scouting_report` | character | Scouting report text. |
-| `shoots_catches` | character | Handedness (shoots/catches). |
-| `stats_text` | character | Statistical summary text. |
-| `video` | character | Associated video content. |
-| `weight` | integer | Player weight in pounds. |
+| `id` | Int64 | Unique player identifier. |
+| `birth_city` | String | Birth city. |
+| `birth_country3code` | String | Prospect birth country three-letter code. |
+| `birth_date` | String | Player birth date. |
+| `birth_state_prov_code` | String | Prospect birth state/province code. |
+| `category_id` | Int64 | Prospect category identifier. |
+| `created_on` | String | Date the trophy record was created. |
+| `cs_player_id` | Int64 | Central Scouting player identifier. |
+| `draft_status_code` | String | Draft eligibility status code. |
+| `ep_player_id` | Int64 | EliteProspects player identifier. |
+| `first_name` | String | Player first name. |
+| `headshot_id` | Int64 | Headshot image identifier. |
+| `height` | Int64 | Player height in inches. |
+| `hometown` | String | Prospect hometown. |
+| `last_club_name` | String | Most recent club name. |
+| `last_league_abbr` | String | Most recent league abbreviation. |
+| `last_name` | String | Player last name. |
+| `nationality_code` | String | Nationality code of the official. |
+| `news_articles` | String | Associated news articles. |
+| `playerid` | Int64 | Unique player identifier. |
+| `position_desc` | String | Player position description. |
+| `profile` | String | Prospect profile text. |
+| `quotes` | String | Quotes about the prospect. |
+| `scouting_report` | String | Scouting report text. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
+| `stats_text` | String | Statistical summary text. |
+| `video` | String | Associated video content. |
+| `weight` | Int64 | Player weight in pounds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -219,11 +219,11 @@ Draft lottery odds (current year or filtered by season).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `format_content` | character | Description of the lottery format. |
-| `odds_content` | character | Description of the lottery odds. |
-| `result_notes` | character | Notes on the lottery results. |
+| `id` | Int64 | Unique player identifier. |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `format_content` | String | Description of the lottery format. |
+| `odds_content` | String | Description of the lottery odds. |
+| `result_notes` | String | Notes on the lottery results. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

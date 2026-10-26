@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — sportsdataverse-data releases"
+title: "College football — additional Python functions — sportsdataverse-data releases"
 sidebar_label: "sportsdataverse-data releases"
 sidebar_position: 3
-description: "CFB — additional Python functions — sportsdataverse-data releases — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — sportsdataverse-data releases — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — sportsdataverse-data releases
+# College football — additional Python functions — sportsdataverse-data releases
 
 ### load_cfb_betting_lines {#load_cfb_betting_lines}
 
@@ -24,22 +24,22 @@ Polars dataframe containing betting lines available for the available seasons.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | double | 247Sports referencing id for the recruit. |
-| `game_id` | integer | ESPN game identifier. |
-| `season` | double | Season (4-digit year). |
-| `game_desc` | character | Human-readable description of the game, typically including team names and context. |
-| `date_time` | character | Date and time of the game to which the betting line applies, as a string. |
-| `market_type` | character | Geographic market type (e.g. `National`). |
-| `abbr` | character | Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under' for total markets (the data is long-format, one row per book per selection per market_type). |
-| `lines` | double | Numeric line for this row's market — the per-side point spread for spread markets or the over/under total points for total markets; null for moneyline rows. |
-| `odds` | integer | American-odds price for this selection — the juice/vig on spread and total rows, or the moneyline price itself on moneyline rows. |
-| `opening_lines` | double | Opening numeric line for this row's market (per-side spread or over/under total points) before line movement; null for moneyline rows. |
-| `opening_odds` | integer | Opening American-odds price for this selection before line movement (vig on spread/total rows, moneyline price on moneyline rows). |
-| `book` | character | Name of the sportsbook or oddsmaker that provided the betting line. |
-| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
-| `week` | integer | Game week of the season. |
-| `home_team_id` | integer | ESPN home team id (parsed from `home_team_ref`). |
-| `away_team_id` | integer | ESPN away team id (parsed from `away_team_ref`). |
+| `id` | Float64 | 247Sports referencing id for the recruit. |
+| `game_id` | Int64 | ESPN game identifier. |
+| `season` | Float64 | Season (4-digit year). |
+| `game_desc` | String | Human-readable description of the game, typically including team names and context. |
+| `date_time` | String | Date and time of the game to which the betting line applies, as a string. |
+| `market_type` | String | Geographic market type (e.g. `National`). |
+| `abbr` | String | Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under' for total markets (the data is long-format, one row per book per selection per market_type). |
+| `lines` | Float64 | Numeric line for this row's market — the per-side point spread for spread markets or the over/under total points for total markets; null for moneyline rows. |
+| `odds` | Int64 | American-odds price for this selection — the juice/vig on spread and total rows, or the moneyline price itself on moneyline rows. |
+| `opening_lines` | Float64 | Opening numeric line for this row's market (per-side spread or over/under total points) before line movement; null for moneyline rows. |
+| `opening_odds` | Int64 | Opening American-odds price for this selection before line movement (vig on spread/total rows, moneyline price on moneyline rows). |
+| `book` | String | Name of the sportsbook or oddsmaker that provided the betting line. |
+| `season_type` | String | ESPN season type (2 = regular, 3 = postseason). |
+| `week` | Int64 | Game week of the season. |
+| `home_team_id` | Int64 | ESPN home team id (parsed from `home_team_ref`). |
+| `away_team_id` | Int64 | ESPN away team id (parsed from `away_team_ref`). |
 
 **Example**
 
@@ -88,20 +88,20 @@ one row per matched player, carrying `espn_team_id` / `fox_team_id` provenance p
 
 | col_name | type | description |
 |---|---|---|
-| `espn_team_id` | integer |  |
-| `fox_team_id` | character |  |
-| `person_key` | character | Normalized player-name join key: 'Last, First' flipped, lowercased, ASCII-folded, punctuation stripped and runs of initials merged, so 'C.J.' and 'CJ' both give 'cj' (e.g. 'josh brown'). |
-| `espn_athlete_id` | integer |  |
-| `fox_athlete_id` | character |  |
-| `yahoo_athlete_id` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo ids are joined. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `espn_jersey` | character |  |
-| `fox_jersey` | character |  |
-| `espn_position` | character |  |
-| `fox_position` | character | Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null when the player has no Fox roster match or Fox lists no position. |
-| `yahoo_position` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo positions are joined. |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `matched_sources` | character | Plus-joined provenance tag naming which rosters listed the player: 'espn+fox', 'espn' or 'fox'. The published asset is built without Yahoo, so 'yahoo' never appears. |
+| `espn_team_id` | Int64 |  |
+| `fox_team_id` | String |  |
+| `person_key` | String | Normalized player-name join key: 'Last, First' flipped, lowercased, ASCII-folded, punctuation stripped and runs of initials merged, so 'C.J.' and 'CJ' both give 'cj' (e.g. 'josh brown'). |
+| `espn_athlete_id` | Int64 |  |
+| `fox_athlete_id` | String |  |
+| `yahoo_athlete_id` | String | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo ids are joined. |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `espn_jersey` | String |  |
+| `fox_jersey` | String |  |
+| `espn_position` | String |  |
+| `fox_position` | String | Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null when the player has no Fox roster match or Fox lists no position. |
+| `yahoo_position` | String | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo positions are joined. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `matched_sources` | String | Plus-joined provenance tag naming which rosters listed the player: 'espn+fox', 'espn' or 'fox'. The published asset is built without Yahoo, so 'yahoo' never appears. |
 
 **Example**
 

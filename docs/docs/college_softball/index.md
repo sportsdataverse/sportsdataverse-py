@@ -1,9 +1,9 @@
 ---
-title: COLLEGE_SOFTBALL
-sidebar_label: COLLEGE_SOFTBALL
-description: "sdv-py COLLEGE_SOFTBALL: endpoint references, dataset loaders and parsers for COLLEGE_SOFTBALL in the SportsDataverse Python package."
+title: College softball
+sidebar_label: College softball
+description: "sdv-py College softball: endpoint references, dataset loaders and parsers for College softball in the SportsDataverse Python package."
 ---
-# COLLEGE_SOFTBALL (`sportsdataverse.baseball.college_softball`)
+# College softball (`sportsdataverse.baseball.college_softball`)
 
 ## Data sources
 

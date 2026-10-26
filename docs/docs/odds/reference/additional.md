@@ -1,10 +1,10 @@
 ---
-title: ODDS — additional Python functions
+title: Betting odds — additional Python functions
 sidebar_label: Additional functions
-description: "ODDS — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Betting odds — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# ODDS — additional Python functions
+# Betting odds — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.odds` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -38,16 +38,16 @@ A `polars`/`pandas` `DataFrame` (one row per bookmaker x available market) by de
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `sport_key` | character |  |
-| `sport_title` | character |  |
-| `commence_time` | character |  |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `bookmaker_key` | character |  |
-| `bookmaker_title` | character |  |
-| `market_key` | character |  |
-| `market_last_update` | character |  |
+| `event_id` | String |  |
+| `sport_key` | String |  |
+| `sport_title` | String |  |
+| `commence_time` | String |  |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `bookmaker_key` | String |  |
+| `bookmaker_title` | String |  |
+| `market_key` | String |  |
+| `market_last_update` | String |  |
 
 **Example**
 
@@ -91,23 +91,23 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `sport_key` | character |  |
-| `sport_title` | character |  |
-| `commence_time` | character |  |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `bookmaker_key` | character |  |
-| `bookmaker_title` | character |  |
-| `bookmaker_last_update` | character |  |
-| `market_key` | character |  |
-| `market_last_update` | character |  |
-| `outcome_name` | character |  |
-| `outcome_description` | character |  |
-| `outcome_price` | integer |  |
-| `outcome_point` | double |  |
-| `outcome_link` | character |  |
-| `outcome_sid` | character |  |
+| `event_id` | String |  |
+| `sport_key` | String |  |
+| `sport_title` | String |  |
+| `commence_time` | String |  |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `bookmaker_key` | String |  |
+| `bookmaker_title` | String |  |
+| `bookmaker_last_update` | String |  |
+| `market_key` | String |  |
+| `market_last_update` | String |  |
+| `outcome_name` | String |  |
+| `outcome_description` | String |  |
+| `outcome_price` | Int64 |  |
+| `outcome_point` | Float64 |  |
+| `outcome_link` | String |  |
+| `outcome_sid` | String |  |
 
 **Example**
 
@@ -149,26 +149,26 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 
 | col_name | type | description |
 |---|---|---|
-| `snapshot_timestamp` | character |  |
-| `previous_timestamp` | character |  |
-| `next_timestamp` | character |  |
-| `event_id` | character |  |
-| `sport_key` | character |  |
-| `sport_title` | character |  |
-| `commence_time` | character |  |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `bookmaker_key` | character |  |
-| `bookmaker_title` | character |  |
-| `bookmaker_last_update` | character |  |
-| `market_key` | character |  |
-| `market_last_update` | character |  |
-| `outcome_name` | character |  |
-| `outcome_description` | character |  |
-| `outcome_price` | integer |  |
-| `outcome_point` | double |  |
-| `outcome_link` | character |  |
-| `outcome_sid` | character |  |
+| `snapshot_timestamp` | String |  |
+| `previous_timestamp` | String |  |
+| `next_timestamp` | String |  |
+| `event_id` | String |  |
+| `sport_key` | String |  |
+| `sport_title` | String |  |
+| `commence_time` | String |  |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `bookmaker_key` | String |  |
+| `bookmaker_title` | String |  |
+| `bookmaker_last_update` | String |  |
+| `market_key` | String |  |
+| `market_last_update` | String |  |
+| `outcome_name` | String |  |
+| `outcome_description` | String |  |
+| `outcome_price` | Int64 |  |
+| `outcome_point` | Float64 |  |
+| `outcome_link` | String |  |
+| `outcome_sid` | String |  |
 
 **Example**
 
@@ -199,12 +199,12 @@ A `polars`/`pandas` `DataFrame` (one row per sport) by default; the raw JSON `li
 
 | col_name | type | description |
 |---|---|---|
-| `key` | character | The Odds API sport key, a lowercase slug such as 'americanfootball_ncaaf' or 'aussierules_afl', with futures keys ending in a suffix like '_championship_winner'; pass it as sport= to the other toa_* functions. |
-| `group` | character |  |
-| `title` | character |  |
-| `description` | character |  |
-| `active` | logical |  |
-| `has_outrights` | logical | True for futures keys such as 'americanfootball_ncaaf_championship_winner' or 'americanfootball_nfl_super_bowl_winner', False for game leagues such as 'americanfootball_ncaaf'. |
+| `key` | String | The Odds API sport key, a lowercase slug such as 'americanfootball_ncaaf' or 'aussierules_afl', with futures keys ending in a suffix like '_championship_winner'; pass it as sport= to the other toa_* functions. |
+| `group` | String |  |
+| `title` | String |  |
+| `description` | String |  |
+| `active` | Boolean |  |
+| `has_outrights` | Boolean | True for futures keys such as 'americanfootball_ncaaf_championship_winner' or 'americanfootball_nfl_super_bowl_winner', False for game leagues such as 'americanfootball_ncaaf'. |
 
 **Example**
 
@@ -239,12 +239,12 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
-| `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
-| `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character |  |
-| `away_team` | character |  |
+| `id` | String |  |
+| `sport_key` | String | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
+| `sport_title` | String | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
+| `commence_time` | String | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
+| `home_team` | String |  |
+| `away_team` | String |  |
 
 **Example**
 
@@ -282,15 +282,15 @@ A `polars`/`pandas` `DataFrame` (one row per event, stamped with the snapshot ti
 
 | col_name | type | description |
 |---|---|---|
-| `snapshot_timestamp` | character | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
-| `previous_timestamp` | character | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
-| `next_timestamp` | character | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
-| `id` | character |  |
-| `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
-| `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
-| `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character |  |
-| `away_team` | character |  |
+| `snapshot_timestamp` | String | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
+| `previous_timestamp` | String | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
+| `next_timestamp` | String | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
+| `id` | String |  |
+| `sport_key` | String | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
+| `sport_title` | String | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
+| `commence_time` | String | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
+| `home_team` | String |  |
+| `away_team` | String |  |
 
 **Example**
 
@@ -332,23 +332,23 @@ A long-form `polars`/`pandas` `DataFrame` (one row per event x bookmaker x marke
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
-| `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
-| `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `bookmaker_key` | character | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
-| `bookmaker_title` | character | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
-| `bookmaker_last_update` | character | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
-| `market_key` | character | Betting market of the outcome row; only 'h2h' (moneyline) appears in the sampled data, which used the default markets='h2h'. |
-| `market_last_update` | character | When the bookmaker last updated this market for the event, an ISO-8601 UTC string with a trailing Z. |
-| `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
-| `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
-| `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | double | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
-| `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
-| `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
+| `event_id` | String |  |
+| `sport_key` | String | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
+| `sport_title` | String | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
+| `commence_time` | String | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `bookmaker_key` | String | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
+| `bookmaker_title` | String | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
+| `bookmaker_last_update` | String | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
+| `market_key` | String | Betting market of the outcome row; only 'h2h' (moneyline) appears in the sampled data, which used the default markets='h2h'. |
+| `market_last_update` | String | When the bookmaker last updated this market for the event, an ISO-8601 UTC string with a trailing Z. |
+| `outcome_name` | String | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
+| `outcome_description` | String | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
+| `outcome_price` | Int64 | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
+| `outcome_point` | Float64 | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
+| `outcome_link` | String | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
+| `outcome_sid` | String | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 
 **Example**
 
@@ -387,26 +387,26 @@ A long-form `polars`/`pandas` `DataFrame` (one row per outcome, stamped with the
 
 | col_name | type | description |
 |---|---|---|
-| `snapshot_timestamp` | character | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
-| `previous_timestamp` | character | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
-| `next_timestamp` | character | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
-| `event_id` | character |  |
-| `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
-| `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
-| `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `bookmaker_key` | character | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
-| `bookmaker_title` | character | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
-| `bookmaker_last_update` | character | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
-| `market_key` | character | Betting market of the outcome row; only 'h2h' (moneyline) appears in the sampled data, which used the default markets='h2h'. |
-| `market_last_update` | character | When the bookmaker last updated this market for the event, an ISO-8601 UTC string with a trailing Z. |
-| `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
-| `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
-| `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | double | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
-| `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
-| `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
+| `snapshot_timestamp` | String | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
+| `previous_timestamp` | String | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
+| `next_timestamp` | String | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
+| `event_id` | String |  |
+| `sport_key` | String | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
+| `sport_title` | String | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
+| `commence_time` | String | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `bookmaker_key` | String | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
+| `bookmaker_title` | String | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
+| `bookmaker_last_update` | String | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
+| `market_key` | String | Betting market of the outcome row; only 'h2h' (moneyline) appears in the sampled data, which used the default markets='h2h'. |
+| `market_last_update` | String | When the bookmaker last updated this market for the event, an ISO-8601 UTC string with a trailing Z. |
+| `outcome_name` | String | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
+| `outcome_description` | String | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
+| `outcome_price` | Int64 | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
+| `outcome_point` | Float64 | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
+| `outcome_link` | String | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
+| `outcome_sid` | String | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 
 **Example**
 
@@ -436,8 +436,8 @@ A `polars`/`pandas` `DataFrame` (one row per participant) by default; raw JSON `
 
 | col_name | type | description |
 |---|---|---|
-| `full_name` | character |  |
-| `id` | character |  |
+| `full_name` | String |  |
+| `id` | String |  |
 
 **Example**
 
@@ -470,15 +470,15 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
-| `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
-| `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `completed` | logical |  |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `scores` | character | Event scores as the parser's str() rendering of the API's list value (Python repr, not JSON); null on all 32 sampled events, none of which had started. |
-| `last_update` | character | Time of the event's last score update; null on all 32 sampled events, none of which had started when the data was pulled. |
+| `id` | String |  |
+| `sport_key` | String | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
+| `sport_title` | String | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
+| `commence_time` | String | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
+| `completed` | Boolean |  |
+| `home_team` | String |  |
+| `away_team` | String |  |
+| `scores` | String | Event scores as the parser's str() rendering of the API's list value (Python repr, not JSON); null on all 32 sampled events, none of which had started. |
+| `last_update` | String | Time of the event's last score update; null on all 32 sampled events, none of which had started when the data was pulled. |
 
 **Example**
 
@@ -509,9 +509,9 @@ A one-row `polars` (or `pandas`) `DataFrame` with `requests_remaining`, `request
 
 | col_name | type | description |
 |---|---|---|
-| `requests_remaining` | integer | Requests left on the API key, from the x-requests-remaining header of the most recent call in this Python session; null until a call has been made. |
-| `requests_used` | integer | Requests the API key has used, from the x-requests-used header of the most recent call in this Python session; null until a call has been made. |
-| `last_cost` | integer | Quota credits the most recent The Odds API call in this Python session used, from its x-requests-last header; 0 in the sample. Null until a call has been made. |
+| `requests_remaining` | Int64 | Requests left on the API key, from the x-requests-remaining header of the most recent call in this Python session; null until a call has been made. |
+| `requests_used` | Int64 | Requests the API key has used, from the x-requests-used header of the most recent call in this Python session; null until a call has been made. |
+| `last_cost` | Int64 | Quota credits the most recent The Odds API call in this Python session used, from its x-requests-last header; 0 in the sample. Null until a call has been made. |
 
 **Example**
 

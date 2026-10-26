@@ -1,11 +1,11 @@
 ---
-title: SERIEA — ESPN core API (v2)
+title: Serie A — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "SERIEA — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Serie A — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# SERIEA — ESPN core API (v2)
+# Serie A — ESPN core API (v2)
 
 `sportsdataverse.soccer.seriea` — 82 endpoints.
 

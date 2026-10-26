@@ -1,65 +1,10 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup"
+title: "Women's college basketball — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup"
 sidebar_label: "stats.ncaa.org: ncaa_wbb–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
-
-### ncaa_wbb_team_roster {#ncaa_wbb_team_roster}
-
-`ncaa_wbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Scrape a women's team roster from stats.ncaa.org.
-
-Port of wbigballR `get_team_roster` with name resolution fixed to the
-WBB crosswalk (see the module docstring). The roster parser itself is
-league-agnostic; algorithm detail:
-`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_roster`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
-| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
-| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
-| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_roster` for the column contract.
-
-| col_name | type | description |
-|---|---|---|
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `jersey` | character | Jersey number worn by the player. |
-| `name` | character | Display name. |
-| `class` | character | College class / draft eligibility note. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `hometown` | character | Player hometown. |
-| `high_school` | character |  |
-| `player` | character | Player name. |
-| `clean_name` | character |  |
-| `ht_inches` | integer |  |
-| `player_id` | character | Unique player identifier. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_roster
-df = ncaa_wbb_team_roster(team="South Carolina", season="2024-25")
-print(df.select("jersey", "player", "ht_inches").head())
-```
+# Women's college basketball — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
 
 ### ncaa_wbb_team_schedule {#ncaa_wbb_team_schedule}
 
@@ -87,16 +32,16 @@ One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse
 
 | col_name | type | description |
 |---|---|---|
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away` | character | Away record. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `box_id` | character |  |
-| `game_id` | character | Unique game identifier. |
-| `is_neutral` | logical |  |
-| `detail` | character | Detail. |
-| `attendance` | integer | Reported attendance. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away` | String | Away record. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `box_id` | String |  |
+| `game_id` | String | Unique game identifier. |
+| `is_neutral` | Boolean |  |
+| `detail` | String | Detail. |
+| `attendance` | Int64 | Reported attendance. |
 
 **Raises**
 
@@ -137,79 +82,79 @@ One row per team per game.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `team` | character | Team-side label or team identifier. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 
@@ -226,7 +171,7 @@ print(team.shape)
 The court-geometry enrichment pass: ascending time, coordinate
 
 transform + geo synthesis, and the self-correcting side-flip re-run
-(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
+(`ShotEventParser.phase1_shot_event_enrichment`).
 
 For each shot: compute the ascending game time, decide (from
 `is_team_shooting_left_to_start` + which half the period falls in)
@@ -305,7 +250,7 @@ with NcaaFetcher.with_browser() as fetcher:
 
 Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"`
 
-(`ExtractorUtils.scala:38-43`: NFD normalization then removal of the
+(NFD normalization then removal of the
 combining-diacritical-marks block).
 
 **Parameters**
@@ -331,7 +276,7 @@ print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
 
 Orders same-minute play-by-play events so subs never enclose the plays
 
-they logically precede/follow (`ExtractorUtils.scala:435-599`).
+they logically precede/follow.
 
 Groups consecutive events sharing the same `min` into a block (the
 input arrives in descending/reverse-chronological order, so blocks are
@@ -397,8 +342,7 @@ reset_config()
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
 
-distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`,
-`PlayByPlayUtils.scala:659-679`).
+distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`).
 
 The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
 impossible; this only rules out the *obvious* mismatches (a clearly-short
@@ -488,7 +432,7 @@ print(result.hca_per_field["3p"]["hca_off"])
 JSoup `root.select(sel + ":contains(text)")`: candidates whose full
 
 text (own + every descendant's) case-insensitively CONTAINS `text` as
-a plain substring -- **not** a regex (Task 5e.2 addition; see the module
+a plain substring -- **not** a regex (see the module
 docstring's "Critical divergence" note).
 
 JSoup's `:contains()` is documented case-insensitive substring
@@ -593,7 +537,7 @@ Converts client-side `addShot(...)` JS calls into parseable
 
 `circle.shot` HTML, for pages where the shot map is built on the fly
 rather than baked into the initial HTML (`ShotEventParser
-.shot_js_to_html`, `:266-283`). See the module docstring's "Scala
+.shot_js_to_html`). See the module docstring's "Scala
 idiom decision" note -- the Scala's `builders`/`browser` parameters
 are dropped here since the Scala body never actually uses them.
 
@@ -621,7 +565,7 @@ circles = shot_js_to_html(js)
 
 Classify a play-by-play event string as a 3, a 2, or an assist
 
-(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+(`ShotEnrichmentUtils.shot_value`).
 
 Ported as an ordered first-match cascade, exactly mirroring the Scala
 `match` arm order (assist is tested first, so an assist string never
@@ -650,9 +594,7 @@ shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 
 `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
 
-The game-clock time (minutes elapsed) a period starts at
-
-(`ExtractorUtils.scala:272-281`).
+The game-clock time (minutes elapsed) a period starts at.
 
 Women's games play four 10-minute quarters then 5-minute overtimes; men's
 games play two 20-minute halves then 5-minute overtimes.
@@ -683,8 +625,7 @@ start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
 
 Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
-.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
-:1534-1622`, debug-only -- the Scala's own docstring says "just used for
+.LineupEventStats` (`protected def sum_event_stats`, debug-only -- the Scala's own docstring says "just used for
 debug"). The Scala builds this via `shapeless.Generic` field-zipping;
 this port is an explicit field-by-field call since Python has no
 equivalent generic-programming machinery.
@@ -715,7 +656,7 @@ sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
 
 Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
-.PlayerShotInfo`\ s (`sum_shot_infos`, `LineupUtils.scala:1625-1655`,
+.PlayerShotInfo`\ s (`sum_shot_infos`,
 debug-only).
 
 **Parameters**
@@ -776,7 +717,7 @@ td_at(row, 5)  # None
 Transforms a raw SVG pixel location into feet from the basket, always
 
 oriented as if shooting towards the left goal (`ShotEventParser
-.transform_shot_location`, `:588-620`).
+.transform_shot_location`).
 
 **Parameters**
 
@@ -828,7 +769,7 @@ update_config(proxy_url="http://user:pass@1.2.3.4:8080")
 
 Checks there are no duplicates in the lineup (``BoxscoreParser
 
-.validate_box_score`, `:388-404``).
+.validate_box_score``).
 
 **Parameters**
 
@@ -855,7 +796,7 @@ validate_box_score(TeamId("Team"), ["Player One", "Player Two"])
 
 Flags a lineup stint as internally inconsistent, via 3 independent
 
-checks (`LineupErrorAnalysisUtils.validate_lineup`, `:181-218`).
+checks (`LineupErrorAnalysisUtils.validate_lineup`).
 
 **Parameters**
 

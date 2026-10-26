@@ -1,11 +1,11 @@
 ---
-title: CFB — ESPN site API (v2)
+title: College football — ESPN site API (v2)
 sidebar_label: ESPN site API (v2)
-description: "CFB — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "College football — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 20
 toc_max_heading_level: 2
 ---
-# CFB — ESPN site API (v2)
+# College football — ESPN site API (v2)
 
 `sportsdataverse.cfb` — 25 endpoints.
 

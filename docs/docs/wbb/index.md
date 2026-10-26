@@ -1,9 +1,9 @@
 ---
-title: WBB
-sidebar_label: WBB
-description: "sdv-py WBB: endpoint references, dataset loaders and parsers for WBB in the SportsDataverse Python package."
+title: Women's college basketball
+sidebar_label: Women's college basketball
+description: "sdv-py Women's college basketball: endpoint references, dataset loaders and parsers for Women's college basketball in the SportsDataverse Python package."
 ---
-# WBB (`sportsdataverse.wbb`)
+# Women's college basketball (`sportsdataverse.wbb`)
 
 ## Data sources
 

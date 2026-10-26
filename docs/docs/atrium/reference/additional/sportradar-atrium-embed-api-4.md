@@ -1,10 +1,10 @@
 ---
-title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams"
+title: "Sportradar Atrium — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams"
 sidebar_label: "Sportradar Atrium embed API: nbl1_standings–nbl1_teams"
 sidebar_position: 4
-description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams — function reference in sdv-py, the SportsDataverse Python package."
+description: "Sportradar Atrium — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams
+# Sportradar Atrium — additional Python functions — Sportradar Atrium embed API: nbl1_standings–nbl1_teams
 
 ### nbl1_standings {#nbl1_standings}
 
@@ -36,34 +36,34 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | col_name | type | description |
 |---|---|---|
-| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
-| `season_id` | character | Season UUID of the table. |
-| `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
-| `group` | character | Label of the table when the standings hold several groups; null for a single table. |
-| `position` | integer | League table position (1 = first). |
-| `entity_id` | character | Team UUID of the row. |
-| `team_name` | character | Team name as the site prints it. |
-| `is_current_team` | logical | True for the team the page was opened for (team context); false on a plain standings request. |
-| `logo_url` | character | URL of the team logo image. |
-| `wins` | integer | Games won; -1 for two teams in the 2025-26 LNB table (an administrative ranking, unverified), kept as sent (team, this table). |
-| `losses` | integer | Games lost (team, this table). |
-| `played` | integer | Games played (LNBP and the compact standings) (team, this table). |
-| `standing_points` | integer | League table points (LNBP) (team, this table). |
-| `win_percentage` | numeric | Share of games won as a 0-1 fraction (not 0-100) (team, this table). |
-| `scored_for` | integer | Points scored over the season (team, this table). |
-| `scored_against` | integer | Points conceded over the season (team, this table). |
-| `point_difference` | integer | Point differential over the season (team, this table). |
-| `result_string_home` | character | Home results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
-| `scored_for_home` | integer | Points scored in home games (team, this table). |
-| `scored_against_home` | integer | Points conceded in home games (team, this table). |
-| `point_difference_home` | integer | Point differential in home games (team, this table). |
-| `result_string_away` | character | Away results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
-| `scored_for_away` | integer | Points scored in away games (team, this table). |
-| `scored_against_away` | integer | Points conceded in away games (team, this table). |
-| `point_difference_away` | integer | Point differential in away games (team, this table). |
-| `streak` | integer | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
-| `streak_home` | integer | Length of the current run of home results (sign convention unverified) (team, this table). |
-| `streak_away` | integer | Length of the current run of away results (sign convention unverified) (team, this table). |
+| `website_id` | Int64 | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `season_id` | String | Season UUID of the table. |
+| `season_end_year` | Int64 | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
+| `group` | String | Label of the table when the standings hold several groups; null for a single table. |
+| `position` | Int64 | League table position (1 = first). |
+| `entity_id` | String | Team UUID of the row. |
+| `team_name` | String | Team name as the site prints it. |
+| `is_current_team` | Boolean | True for the team the page was opened for (team context); false on a plain standings request. |
+| `logo_url` | String | URL of the team logo image. |
+| `wins` | Int64 | Games won; -1 for two teams in the 2025-26 LNB table (an administrative ranking, unverified), kept as sent (team, this table). |
+| `losses` | Int64 | Games lost (team, this table). |
+| `played` | Int64 | Games played (LNBP and the compact standings) (team, this table). |
+| `standing_points` | Int64 | League table points (LNBP) (team, this table). |
+| `win_percentage` | Float64 | Share of games won as a 0-1 fraction (not 0-100) (team, this table). |
+| `scored_for` | Int64 | Points scored over the season (team, this table). |
+| `scored_against` | Int64 | Points conceded over the season (team, this table). |
+| `point_difference` | Int64 | Point differential over the season (team, this table). |
+| `result_string_home` | String | Home results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
+| `scored_for_home` | Int64 | Points scored in home games (team, this table). |
+| `scored_against_home` | Int64 | Points conceded in home games (team, this table). |
+| `point_difference_home` | Int64 | Point differential in home games (team, this table). |
+| `result_string_away` | String | Away results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
+| `scored_for_away` | Int64 | Points scored in away games (team, this table). |
+| `scored_against_away` | Int64 | Points conceded in away games (team, this table). |
+| `point_difference_away` | Int64 | Point differential in away games (team, this table). |
+| `streak` | Int64 | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
+| `streak_home` | Int64 | Length of the current run of home results (sign convention unverified) (team, this table). |
+| `streak_away` | Int64 | Length of the current run of away results (sign convention unverified) (team, this table). |
 
 **Raises**
 
@@ -108,55 +108,55 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | col_name | type | description |
 |---|---|---|
-| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
-| `fixture_id` | character | Game UUID (fixture); the key of every game frame and of the fixture_detail routes. |
-| `season_id` | character | Season UUID of the game. |
-| `entity_id` | character | Team UUID (from the fixture's isHome flag). |
-| `side` | character | Side of the game the row belongs to: home or away (from the fixture's isHome flag). |
-| `minutes` | character | Time played as an ISO 8601 duration (PT7M23S); a team's is the sum over its players (PT200M) (team, this game). |
-| `seconds_played` | integer | Time played in whole seconds, parsed from minutes (team, this game). |
-| `points` | integer | Points scored (team, this game). |
-| `rebounds` | integer | Total rebounds (team, this game). |
-| `rebounds_offensive` | integer | Offensive rebounds (team, this game). |
-| `rebounds_defensive` | integer | Defensive rebounds (team, this game). |
-| `assists` | integer | Assists (team, this game). |
-| `steals` | integer | Steals (team, this game). |
-| `blocks` | integer | Shots blocked (team, this game). |
-| `blocks_received` | integer | Own shots blocked by an opponent (LNB only) (team, this game). |
-| `turnovers` | integer | Turnovers (team, this game). |
-| `fouls_total` | integer | Fouls committed (team, this game). |
-| `fouls_drawn` | integer | Fouls drawn (committed against the player or team; LNBP only) (team, this game). |
-| `plus_minus` | integer | Plus/minus, the point differential while on court (LNB only; null in some team lines) (team, this game). |
-| `efficiency` | integer | Efficiency rating, from the site's own formula (team, this game). |
-| `field_goals_made` | integer | Field goals made, two- and three-pointers together (LNBP only) (team, this game). |
-| `field_goals_attempted` | integer | Field goals attempted (LNBP only) (team, this game). |
-| `field_goals_percentage` | numeric | Field-goal percentage, 0-100 (LNBP only) (team, this game). |
-| `points_two_made` | integer | Two-point field goals made (team, this game). |
-| `points_two_attempted` | integer | Two-point field goals attempted (team, this game). |
-| `points_two_percentage` | numeric | Two-point percentage, 0-100 (team, this game). |
-| `points_three_made` | integer | Three-point field goals made (team, this game). |
-| `points_three_attempted` | integer | Three-point field goals attempted (team, this game). |
-| `points_three_percentage` | numeric | Three-point percentage, 0-100 (team, this game). |
-| `free_throws_made` | integer | Free throws made (team, this game). |
-| `free_throws_attempted` | integer | Free throws attempted (team, this game). |
-| `free_throws_percentage` | numeric | Free-throw percentage, 0-100 (team, this game). |
-| `points_fast_break` | integer | Fast-break points (LNBP only) (team, this game). |
-| `extra_fouls_total` | integer | Fouls committed (team, credited to the team rather than a player). |
-| `extra_rebounds` | integer | Total rebounds (team, credited to the team rather than a player). |
-| `extra_rebounds_defensive` | integer | Defensive rebounds (team, credited to the team rather than a player). |
-| `extra_rebounds_offensive` | integer | Offensive rebounds (team, credited to the team rather than a player). |
-| `extra_turnovers` | integer | Turnovers (team, credited to the team rather than a player). |
-| `total_biggest_lead` | integer | Biggest lead of the game, in points (team, game total). |
-| `total_biggest_scoring_run` | integer | Longest unanswered scoring run of the game, in points (team, game total). |
-| `total_field_goals_percentage` | numeric | Field-goal percentage, 0-100 (LNBP only) (team, game total). |
-| `total_free_throws_percentage` | numeric | Free-throw percentage, 0-100 (team, game total). |
-| `total_lead_changes` | integer | Number of lead changes in the game (team, game total). |
-| `total_points_fast_break` | integer | Fast-break points (LNBP only) (team, game total). |
-| `total_points_from_bench` | integer | Points scored by non-starters (LNBP only) (team, game total). |
-| `total_points_from_turnover` | integer | Points scored off opponent turnovers (LNBP only) (team, game total). |
-| `total_time_in_lead` | character | Time the team led, as an ISO 8601 duration (PT36M11S) (team, game total). |
-| `total_time_in_lead_seconds` | integer | Time the team led, in whole seconds (team, game total). |
-| `total_turnovers` | integer | Turnovers (team, game total). |
+| `website_id` | Int64 | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `fixture_id` | String | Game UUID (fixture); the key of every game frame and of the fixture_detail routes. |
+| `season_id` | String | Season UUID of the game. |
+| `entity_id` | String | Team UUID (from the fixture's isHome flag). |
+| `side` | String | Side of the game the row belongs to: home or away (from the fixture's isHome flag). |
+| `minutes` | String | Time played as an ISO 8601 duration (PT7M23S); a team's is the sum over its players (PT200M) (team, this game). |
+| `seconds_played` | Int64 | Time played in whole seconds, parsed from minutes (team, this game). |
+| `points` | Int64 | Points scored (team, this game). |
+| `rebounds` | Int64 | Total rebounds (team, this game). |
+| `rebounds_offensive` | Int64 | Offensive rebounds (team, this game). |
+| `rebounds_defensive` | Int64 | Defensive rebounds (team, this game). |
+| `assists` | Int64 | Assists (team, this game). |
+| `steals` | Int64 | Steals (team, this game). |
+| `blocks` | Int64 | Shots blocked (team, this game). |
+| `blocks_received` | Int64 | Own shots blocked by an opponent (LNB only) (team, this game). |
+| `turnovers` | Int64 | Turnovers (team, this game). |
+| `fouls_total` | Int64 | Fouls committed (team, this game). |
+| `fouls_drawn` | Int64 | Fouls drawn (committed against the player or team; LNBP only) (team, this game). |
+| `plus_minus` | Int64 | Plus/minus, the point differential while on court (LNB only; null in some team lines) (team, this game). |
+| `efficiency` | Int64 | Efficiency rating, from the site's own formula (team, this game). |
+| `field_goals_made` | Int64 | Field goals made, two- and three-pointers together (LNBP only) (team, this game). |
+| `field_goals_attempted` | Int64 | Field goals attempted (LNBP only) (team, this game). |
+| `field_goals_percentage` | Float64 | Field-goal percentage, 0-100 (LNBP only) (team, this game). |
+| `points_two_made` | Int64 | Two-point field goals made (team, this game). |
+| `points_two_attempted` | Int64 | Two-point field goals attempted (team, this game). |
+| `points_two_percentage` | Float64 | Two-point percentage, 0-100 (team, this game). |
+| `points_three_made` | Int64 | Three-point field goals made (team, this game). |
+| `points_three_attempted` | Int64 | Three-point field goals attempted (team, this game). |
+| `points_three_percentage` | Float64 | Three-point percentage, 0-100 (team, this game). |
+| `free_throws_made` | Int64 | Free throws made (team, this game). |
+| `free_throws_attempted` | Int64 | Free throws attempted (team, this game). |
+| `free_throws_percentage` | Float64 | Free-throw percentage, 0-100 (team, this game). |
+| `points_fast_break` | Int64 | Fast-break points (LNBP only) (team, this game). |
+| `extra_fouls_total` | Int64 | Fouls committed (team, credited to the team rather than a player). |
+| `extra_rebounds` | Int64 | Total rebounds (team, credited to the team rather than a player). |
+| `extra_rebounds_defensive` | Int64 | Defensive rebounds (team, credited to the team rather than a player). |
+| `extra_rebounds_offensive` | Int64 | Offensive rebounds (team, credited to the team rather than a player). |
+| `extra_turnovers` | Int64 | Turnovers (team, credited to the team rather than a player). |
+| `total_biggest_lead` | Int64 | Biggest lead of the game, in points (team, game total). |
+| `total_biggest_scoring_run` | Int64 | Longest unanswered scoring run of the game, in points (team, game total). |
+| `total_field_goals_percentage` | Float64 | Field-goal percentage, 0-100 (LNBP only) (team, game total). |
+| `total_free_throws_percentage` | Float64 | Free-throw percentage, 0-100 (team, game total). |
+| `total_lead_changes` | Int64 | Number of lead changes in the game (team, game total). |
+| `total_points_fast_break` | Int64 | Fast-break points (LNBP only) (team, game total). |
+| `total_points_from_bench` | Int64 | Points scored by non-starters (LNBP only) (team, game total). |
+| `total_points_from_turnover` | Int64 | Points scored off opponent turnovers (LNBP only) (team, game total). |
+| `total_time_in_lead` | String | Time the team led, as an ISO 8601 duration (PT36M11S) (team, game total). |
+| `total_time_in_lead_seconds` | Int64 | Time the team led, in whole seconds (team, game total). |
+| `total_turnovers` | Int64 | Turnovers (team, game total). |
 
 **Raises**
 
@@ -204,11 +204,11 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | col_name | type | description |
 |---|---|---|
-| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
-| `season_id` | character | Season UUID of the team list. |
-| `entity_id` | character | Team UUID (entity): one id per club across seasons, shared by every site that shows the team. |
-| `name` | character | Team name in the site's language. |
-| `image_url` | character | URL of the Sportradar-hosted image (400 px). |
+| `website_id` | Int64 | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `season_id` | String | Season UUID of the team list. |
+| `entity_id` | String | Team UUID (entity): one id per club across seasons, shared by every site that shows the team. |
+| `name` | String | Team name in the site's language. |
+| `image_url` | String | URL of the Sportradar-hosted image (400 px). |
 
 **Raises**
 

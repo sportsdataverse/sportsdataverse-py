@@ -26,85 +26,85 @@ Pull a team's full-season schedule.
 
 | col_name | type | description |
 |---|---|---|
-| `club_previous_season` | integer | Indicator for whether the game belongs to the club's prior completed season (1 = previous season, 0 otherwise). |
-| `club_current_season` | integer | Indicator for whether the game falls within the current season for the requesting club (1 = current season, 0 otherwise). |
-| `club_next_season` | integer | Indicator for whether the game belongs to the club's next upcoming season (1 = next season, 0 otherwise). |
-| `club_timezone` | character | IANA timezone identifier for the home club's arena, used to localise game start times in the schedule. |
-| `id` | integer | Unique player identifier. |
-| `season` | integer | Season year (echoed from arg). |
-| `game_type` | integer | Game type the row belongs to. |
-| `game_date` | character | Game date. |
-| `neutral_site` | logical | Whether the game is at a neutral site. |
-| `start_time_utc` | character | Scheduled start time in UTC. |
-| `eastern_utc_offset` | character | Eastern time UTC offset. |
-| `venue_utc_offset` | character | Venue UTC offset. |
-| `venue_timezone` | character | Venue time zone. |
-| `game_state` | character | Game state (e.g., FINAL, LIVE). |
-| `game_schedule_state` | character | Schedule state of the game. |
-| `tv_broadcasts` | character | Nested list of TV broadcast details. |
-| `game_center_link` | character | Link to the NHL game center page. |
-| `venue_default` | character | Venue name (default language). |
-| `away_team_id` | integer | Away team identifier. |
-| `away_team_common_name_default` | character | Away team common name (default language). |
-| `away_team_place_name_default` | character | Away team place name (default language). |
-| `away_team_place_name_with_preposition_default` | character | Away team place name with preposition (default). |
-| `away_team_place_name_with_preposition_fr` | character | Away team place name with preposition (French). |
-| `away_team_abbrev` | character | Away team abbreviation. |
-| `away_team_logo` | character | URL to the away team logo. |
-| `away_team_dark_logo` | character | URL to the away team dark logo. |
-| `away_team_away_split_squad` | logical | Whether the away team is a split squad. |
-| `away_team_score` | integer | Away team final score. |
-| `home_team_id` | integer | Home team identifier. |
-| `home_team_common_name_default` | character | Home team common name (default language). |
-| `home_team_place_name_default` | character | Home team place name (default language). |
-| `home_team_place_name_with_preposition_default` | character | Home team place name with preposition (default). |
-| `home_team_place_name_with_preposition_fr` | character | Home team place name with preposition (French). |
-| `home_team_abbrev` | character | Home team abbreviation. |
-| `home_team_logo` | character | URL to the home team logo. |
-| `home_team_dark_logo` | character | URL to the home team dark logo. |
-| `home_team_home_split_squad` | logical | Whether the home team is a split squad. |
-| `home_team_airline_link` | character | Link to home team airline info. |
-| `home_team_airline_desc` | character | Home team airline description. |
-| `home_team_hotel_link` | character | Link to home team hotel info. |
-| `home_team_hotel_desc` | character | Home team hotel description. |
-| `home_team_score` | integer | Home team final score. |
-| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
-| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
-| `game_outcome_last_period_type` | character | Period type in which the game ended. |
-| `winning_goalie_player_id` | integer | Winning goalie player identifier. |
-| `winning_goalie_first_initial_default` | character | Winning goalie first initial (default language). |
-| `winning_goalie_last_name_default` | character | Winning goalie last name (default language). |
-| `away_team_airline_link` | character | Link to away team airline info. |
-| `away_team_airline_desc` | character | Away team airline description. |
-| `winning_goal_scorer_player_id` | integer | Winning goal scorer player identifier. |
-| `winning_goal_scorer_first_initial_default` | character | Winning goal scorer first initial (default). |
-| `winning_goal_scorer_last_name_default` | character | Winning goal scorer last name (default language). |
-| `three_min_recap` | character | Link to the three-minute recap. |
-| `home_team_place_name_fr` | character | Home team place name (French). |
-| `condensed_game` | character | Link to the condensed game video. |
-| `venue_es` | character | Venue name (Spanish). |
-| `venue_fr` | character | Venue name (French). |
-| `special_event_parent_id` | integer | NHL api-web identifier for the parent special-event record grouping multiple games under the same marquee event umbrella. |
-| `special_event_name_default` | character | English display name for a special promotional or marquee event designation attached to the game (e.g., 'Winter Classic', 'Heritage Classic'). |
-| `special_event_name_fr` | character | French display name for a special promotional or marquee event designation attached to the game, used in bilingual NHL communications. |
-| `away_team_hotel_link` | character | Link to away team hotel info. |
-| `away_team_hotel_desc` | character | Away team hotel description. |
-| `three_min_recap_fr` | character | Link to the French three-minute recap. |
-| `winning_goalie_last_name_cs` | character | Winning goalie last name (Czech). |
-| `winning_goalie_last_name_fi` | character | Winning goalie last name (Finnish). |
-| `winning_goalie_last_name_sk` | character | Winning goalie last name (Slovak). |
-| `away_team_place_name_fr` | character | Away team place name (French). |
-| `away_team_common_name_fr` | character | Away team common name (French). |
-| `home_team_common_name_fr` | character | Home team common name (French). |
-| `series_url` | character | NHL api-web URL path to the dedicated page for the current playoff series associated with this scheduled game. |
-| `series_status_round` | double | Playoff round number to which the current series belongs (1 = first round, 4 = Stanley Cup Final). |
-| `series_status_series_abbrev` | character | Short abbreviation identifying the specific playoff series slot (e.g., 'A', 'B') within the bracket for this game. |
-| `series_status_series_title` | character | Human-readable display title for the playoff series (e.g., 'Eastern Conference First Round'). |
-| `series_status_series_letter` | character | Single-letter label assigned to the playoff series in the bracket structure, used to pair teams across rounds. |
-| `series_status_needed_to_win` | double | Wins still required by the leading team to clinch and advance in the current playoff series. |
-| `series_status_top_seed_wins` | double | Number of wins accumulated by the higher-seeded team in the current playoff series as of this scheduled game. |
-| `series_status_bottom_seed_wins` | double | Number of wins accumulated by the lower-seeded team in the current playoff series as of this scheduled game. |
-| `series_status_game_number_of_series` | double | Sequential game number within the playoff series (e.g., 1 through 7 for a best-of-seven). |
+| `club_previous_season` | Int64 | Indicator for whether the game belongs to the club's prior completed season (1 = previous season, 0 otherwise). |
+| `club_current_season` | Int64 | Indicator for whether the game falls within the current season for the requesting club (1 = current season, 0 otherwise). |
+| `club_next_season` | Int64 | Indicator for whether the game belongs to the club's next upcoming season (1 = next season, 0 otherwise). |
+| `club_timezone` | String | IANA timezone identifier for the home club's arena, used to localise game start times in the schedule. |
+| `id` | Int64 | Unique player identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_type` | Int64 | Game type the row belongs to. |
+| `game_date` | String | Game date. |
+| `neutral_site` | Boolean | Whether the game is at a neutral site. |
+| `start_time_utc` | String | Scheduled start time in UTC. |
+| `eastern_utc_offset` | String | Eastern time UTC offset. |
+| `venue_utc_offset` | String | Venue UTC offset. |
+| `venue_timezone` | String | Venue time zone. |
+| `game_state` | String | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | String | Schedule state of the game. |
+| `tv_broadcasts` | String | Nested list of TV broadcast details. |
+| `game_center_link` | String | Link to the NHL game center page. |
+| `venue_default` | String | Venue name (default language). |
+| `away_team_id` | Int64 | Away team identifier. |
+| `away_team_common_name_default` | String | Away team common name (default language). |
+| `away_team_place_name_default` | String | Away team place name (default language). |
+| `away_team_place_name_with_preposition_default` | String | Away team place name with preposition (default). |
+| `away_team_place_name_with_preposition_fr` | String | Away team place name with preposition (French). |
+| `away_team_abbrev` | String | Away team abbreviation. |
+| `away_team_logo` | String | URL to the away team logo. |
+| `away_team_dark_logo` | String | URL to the away team dark logo. |
+| `away_team_away_split_squad` | Boolean | Whether the away team is a split squad. |
+| `away_team_score` | Int64 | Away team final score. |
+| `home_team_id` | Int64 | Home team identifier. |
+| `home_team_common_name_default` | String | Home team common name (default language). |
+| `home_team_place_name_default` | String | Home team place name (default language). |
+| `home_team_place_name_with_preposition_default` | String | Home team place name with preposition (default). |
+| `home_team_place_name_with_preposition_fr` | String | Home team place name with preposition (French). |
+| `home_team_abbrev` | String | Home team abbreviation. |
+| `home_team_logo` | String | URL to the home team logo. |
+| `home_team_dark_logo` | String | URL to the home team dark logo. |
+| `home_team_home_split_squad` | Boolean | Whether the home team is a split squad. |
+| `home_team_airline_link` | String | Link to home team airline info. |
+| `home_team_airline_desc` | String | Home team airline description. |
+| `home_team_hotel_link` | String | Link to home team hotel info. |
+| `home_team_hotel_desc` | String | Home team hotel description. |
+| `home_team_score` | Int64 | Home team final score. |
+| `period_descriptor_period_type` | String | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | Int64 | Maximum number of regulation periods. |
+| `game_outcome_last_period_type` | String | Period type in which the game ended. |
+| `winning_goalie_player_id` | Int64 | Winning goalie player identifier. |
+| `winning_goalie_first_initial_default` | String | Winning goalie first initial (default language). |
+| `winning_goalie_last_name_default` | String | Winning goalie last name (default language). |
+| `away_team_airline_link` | String | Link to away team airline info. |
+| `away_team_airline_desc` | String | Away team airline description. |
+| `winning_goal_scorer_player_id` | Int64 | Winning goal scorer player identifier. |
+| `winning_goal_scorer_first_initial_default` | String | Winning goal scorer first initial (default). |
+| `winning_goal_scorer_last_name_default` | String | Winning goal scorer last name (default language). |
+| `three_min_recap` | String | Link to the three-minute recap. |
+| `home_team_place_name_fr` | String | Home team place name (French). |
+| `condensed_game` | String | Link to the condensed game video. |
+| `venue_es` | String | Venue name (Spanish). |
+| `venue_fr` | String | Venue name (French). |
+| `special_event_parent_id` | Int64 | NHL api-web identifier for the parent special-event record grouping multiple games under the same marquee event umbrella. |
+| `special_event_name_default` | String | English display name for a special promotional or marquee event designation attached to the game (e.g., 'Winter Classic', 'Heritage Classic'). |
+| `special_event_name_fr` | String | French display name for a special promotional or marquee event designation attached to the game, used in bilingual NHL communications. |
+| `away_team_hotel_link` | String | Link to away team hotel info. |
+| `away_team_hotel_desc` | String | Away team hotel description. |
+| `three_min_recap_fr` | String | Link to the French three-minute recap. |
+| `winning_goalie_last_name_cs` | String | Winning goalie last name (Czech). |
+| `winning_goalie_last_name_fi` | String | Winning goalie last name (Finnish). |
+| `winning_goalie_last_name_sk` | String | Winning goalie last name (Slovak). |
+| `away_team_place_name_fr` | String | Away team place name (French). |
+| `away_team_common_name_fr` | String | Away team common name (French). |
+| `home_team_common_name_fr` | String | Home team common name (French). |
+| `series_url` | String | NHL api-web URL path to the dedicated page for the current playoff series associated with this scheduled game. |
+| `series_status_round` | Float64 | Playoff round number to which the current series belongs (1 = first round, 4 = Stanley Cup Final). |
+| `series_status_series_abbrev` | String | Short abbreviation identifying the specific playoff series slot (e.g., 'A', 'B') within the bracket for this game. |
+| `series_status_series_title` | String | Human-readable display title for the playoff series (e.g., 'Eastern Conference First Round'). |
+| `series_status_series_letter` | String | Single-letter label assigned to the playoff series in the bracket structure, used to pair teams across rounds. |
+| `series_status_needed_to_win` | Float64 | Wins still required by the leading team to clinch and advance in the current playoff series. |
+| `series_status_top_seed_wins` | Float64 | Number of wins accumulated by the higher-seeded team in the current playoff series as of this scheduled game. |
+| `series_status_bottom_seed_wins` | Float64 | Number of wins accumulated by the lower-seeded team in the current playoff series as of this scheduled game. |
+| `series_status_game_number_of_series` | Float64 | Sequential game number within the playoff series (e.g., 1 through 7 for a best-of-seven). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -208,51 +208,51 @@ Pull a team's season stat block.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `headshot` | character | URL to the player headshot image. |
-| `position_code` | character | Player position code. |
-| `games_played` | integer | Games played. |
-| `goals` | integer | Goals scored. |
-| `assists` | integer | Assists. |
-| `points` | integer | Total points (goals + assists). |
-| `plus_minus` | integer | Plus/minus rating. |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `power_play_goals` | integer | Power-play goals. |
-| `shorthanded_goals` | integer | Shorthanded goals. |
-| `game_winning_goals` | integer | Game-winning goals. |
-| `overtime_goals` | integer | Overtime goals. |
-| `shots` | integer | Shots on goal. |
-| `shooting_pctg` | double | Shooting percentage from the area. |
-| `avg_time_on_ice_per_game` | double | Average time on ice per game. |
-| `avg_shifts_per_game` | double | Average shifts per game. |
-| `faceoff_win_pctg` | double | Faceoff win percentage. |
-| `first_name_default` | character | Player first name (default language). |
-| `last_name_default` | character | Player last name (default language). |
+| `player_id` | Int64 | Unique player identifier. |
+| `headshot` | String | URL to the player headshot image. |
+| `position_code` | String | Player position code. |
+| `games_played` | Int64 | Games played. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `plus_minus` | Int64 | Plus/minus rating. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `power_play_goals` | Int64 | Power-play goals. |
+| `shorthanded_goals` | Int64 | Shorthanded goals. |
+| `game_winning_goals` | Int64 | Game-winning goals. |
+| `overtime_goals` | Int64 | Overtime goals. |
+| `shots` | Int64 | Shots on goal. |
+| `shooting_pctg` | Float64 | Shooting percentage from the area. |
+| `avg_time_on_ice_per_game` | Float64 | Average time on ice per game. |
+| `avg_shifts_per_game` | Float64 | Average shifts per game. |
+| `faceoff_win_pctg` | Float64 | Faceoff win percentage. |
+| `first_name_default` | String | Player first name (default language). |
+| `last_name_default` | String | Player last name (default language). |
 
 **goalies**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `headshot` | character | URL to the player headshot image. |
-| `games_played` | integer | Games played. |
-| `games_started` | integer | Games started (goalies). |
-| `wins` | integer | Wins. |
-| `losses` | integer | Losses. |
-| `overtime_losses` | integer | Total overtime losses. |
-| `goals_against_average` | double | Goals against average. |
-| `save_percentage` | double | Save percentage (goalies). |
-| `shots_against` | integer | Shots faced. |
-| `saves` | integer | Saves made. |
-| `goals_against` | integer | Goals against. |
-| `shutouts` | integer | Shutouts recorded. |
-| `goals` | integer | Goals scored. |
-| `assists` | integer | Assists. |
-| `points` | integer | Total points (goals + assists). |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `time_on_ice` | integer | Time on ice in seconds. |
-| `first_name_default` | character | Player first name (default language). |
-| `last_name_default` | character | Player last name (default language). |
+| `player_id` | Int64 | Unique player identifier. |
+| `headshot` | String | URL to the player headshot image. |
+| `games_played` | Int64 | Games played. |
+| `games_started` | Int64 | Games started (goalies). |
+| `wins` | Int64 | Wins. |
+| `losses` | Int64 | Losses. |
+| `overtime_losses` | Int64 | Total overtime losses. |
+| `goals_against_average` | Float64 | Goals against average. |
+| `save_percentage` | Float64 | Save percentage (goalies). |
+| `shots_against` | Int64 | Shots faced. |
+| `saves` | Int64 | Saves made. |
+| `goals_against` | Int64 | Goals against. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `time_on_ice` | Int64 | Time on ice in seconds. |
+| `first_name_default` | String | Player first name (default language). |
+| `last_name_default` | String | Player last name (default language). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

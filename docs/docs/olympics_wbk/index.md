@@ -1,9 +1,9 @@
 ---
-title: OLYMPICS_WBK
-sidebar_label: OLYMPICS_WBK
-description: "sdv-py OLYMPICS_WBK: endpoint references, dataset loaders and parsers for OLYMPICS_WBK in the SportsDataverse Python package."
+title: Olympics women's basketball
+sidebar_label: Olympics women's basketball
+description: "sdv-py Olympics women's basketball: endpoint references, dataset loaders and parsers for Olympics women's basketball in the SportsDataverse Python package."
 ---
-# OLYMPICS_WBK (`sportsdataverse.basketball.olympics_wbk`)
+# Olympics women's basketball (`sportsdataverse.basketball.olympics_wbk`)
 
 ## Data sources
 

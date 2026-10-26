@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule"
+title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule"
 sidebar_label: "Other: oly_medal–racing_schedule"
-sidebar_position: 10
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule — function reference in sdv-py, the SportsDataverse Python package."
+sidebar_position: 9
+description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule
+# Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule
 
 ## yahoo_oly_medal_count
 
@@ -26,13 +26,13 @@ Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 
 | col_name | type | description |
 |---|---|---|
-| `display_name` | character |  |
-| `short_display_name` | character |  |
-| `start_date` | character |  |
-| `end_date` | character |  |
-| `season` | integer |  |
-| `alias` | character | JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page. |
-| `olympic_team` | character | JSON-encoded national team node whose medal count this row reports. |
+| `display_name` | String |  |
+| `short_display_name` | String |  |
+| `start_date` | String |  |
+| `end_date` | String |  |
+| `season` | Int64 |  |
+| `alias` | String | JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page. |
+| `olympic_team` | String | JSON-encoded national team node whose medal count this row reports. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -68,9 +68,9 @@ Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `display_name` | character |  |
-| `type` | character |  |
+| `season` | Int64 |  |
+| `display_name` | String |  |
+| `type` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -106,27 +106,27 @@ Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 
 | col_name | type | description |
 |---|---|---|
-| `page_type` | character |  |
-| `league_short_name` | character |  |
-| `league_display_name` | character | Display name of the league as rendered on the aliased page. |
-| `entity_type` | character | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
-| `subpage_translation` | character | Localized display label for the subpage this alias record describes. |
-| `entity_alias` | character | Alias template Yahoo serves the entity's own page under. |
-| `subpage_alias` | character | Alias template for the subpage this alias record describes. |
-| `hotlist_data_desktop_space_id` | character | Content-space identifier for the desktop hotlist module rendered on the aliased page. |
-| `hotlist_data_tablet_space_id` | character | Content-space identifier for the tablet hotlist module rendered on the aliased page. |
-| `hotlist_data_mobile_space_id` | character | Content-space identifier for the mobile hotlist module rendered on the aliased page. |
-| `entity_list_id_desktop_list_id` | character | Identifier of the curated desktop entity list rendered on the aliased page. |
-| `entity_list_id_mobile_list_id` | character | Identifier of the curated mobile entity list rendered on the aliased page. |
-| `entity_list_id_tablet_list_id` | character | Identifier of the curated tablet entity list rendered on the aliased page. |
-| `game` | character |  |
-| `match` | character | Alias template Yahoo serves the match page under for this league. |
-| `race` | character | Alias template Yahoo serves the motorsport race page under for this league. |
-| `league` | character |  |
-| `team` | character |  |
-| `golf_tournament` | character | Alias template Yahoo serves the golf-tournament page under for this league. |
-| `tennis_tournament` | character | Alias template Yahoo serves the tennis-tournament page under for this league. |
-| `player` | character |  |
+| `page_type` | String |  |
+| `league_short_name` | String |  |
+| `league_display_name` | String | Display name of the league as rendered on the aliased page. |
+| `entity_type` | String | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
+| `subpage_translation` | String | Localized display label for the subpage this alias record describes. |
+| `entity_alias` | String | Alias template Yahoo serves the entity's own page under. |
+| `subpage_alias` | String | Alias template for the subpage this alias record describes. |
+| `hotlist_data_desktop_space_id` | String | Content-space identifier for the desktop hotlist module rendered on the aliased page. |
+| `hotlist_data_tablet_space_id` | String | Content-space identifier for the tablet hotlist module rendered on the aliased page. |
+| `hotlist_data_mobile_space_id` | String | Content-space identifier for the mobile hotlist module rendered on the aliased page. |
+| `entity_list_id_desktop_list_id` | String | Identifier of the curated desktop entity list rendered on the aliased page. |
+| `entity_list_id_mobile_list_id` | String | Identifier of the curated mobile entity list rendered on the aliased page. |
+| `entity_list_id_tablet_list_id` | String | Identifier of the curated tablet entity list rendered on the aliased page. |
+| `game` | String |  |
+| `match` | String | Alias template Yahoo serves the match page under for this league. |
+| `race` | String | Alias template Yahoo serves the motorsport race page under for this league. |
+| `league` | String |  |
+| `team` | String |  |
+| `golf_tournament` | String | Alias template Yahoo serves the golf-tournament page under for this league. |
+| `tennis_tournament` | String | Alias template Yahoo serves the tennis-tournament page under for this league. |
+| `player` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -162,22 +162,22 @@ Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players
 
 | col_name | type | description |
 |---|---|---|
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_lang` | character | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `player_id` | character |  |
-| `display_name` | character |  |
-| `short_display_name` | character |  |
-| `player_cutout` | character | JSON-encoded image node for the player's transparent cut-out portrait. |
-| `team_alias` | character | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
-| `team_display_name` | character |  |
-| `team_primary_color` | character | Primary brand color of the entity's team, as a hex RGB string without the leading hash. |
-| `team_secondary_color` | character | Secondary brand color of the entity's team, as a hex RGB string without the leading hash. |
-| `team_team_id` | character |  |
-| `team_team_logo_white` | character | JSON-encoded image node for the team's white knockout logo. |
-| `team_team_logo` | character | JSON-encoded image node for the team's standard logo. |
-| `team_gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the team's home games. |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_lang` | String | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_domain` | String | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
+| `player_id` | String |  |
+| `display_name` | String |  |
+| `short_display_name` | String |  |
+| `player_cutout` | String | JSON-encoded image node for the player's transparent cut-out portrait. |
+| `team_alias` | String | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
+| `team_display_name` | String |  |
+| `team_primary_color` | String | Primary brand color of the entity's team, as a hex RGB string without the leading hash. |
+| `team_secondary_color` | String | Secondary brand color of the entity's team, as a hex RGB string without the leading hash. |
+| `team_team_id` | String |  |
+| `team_team_logo_white` | String | JSON-encoded image node for the team's white knockout logo. |
+| `team_team_logo` | String | JSON-encoded image node for the team's standard logo. |
+| `team_gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the team's home games. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -213,28 +213,28 @@ Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` en
 
 | col_name | type | description |
 |---|---|---|
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_lang` | character | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `display_name` | character |  |
-| `nickname` | character |  |
-| `primary_color` | character |  |
-| `secondary_color` | character |  |
-| `team_id` | character |  |
-| `team_logo_white_width` | character | Pixel width of the team's white knockout logo image. |
-| `team_logo_white_last_updated` | character | Timestamp at which the team's white knockout logo asset was last refreshed. |
-| `team_logo_white_image_type` | character | File format of the team's white knockout logo asset (e.g., "png"). |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `team_logo_white_height` | character | Pixel height of the team's white knockout logo image. |
-| `team_logo_white_team_id` | character | Yahoo composite team id the white knockout logo asset belongs to. |
-| `team_logo_width` | character | Pixel width of the team's standard logo image. |
-| `team_logo_last_updated` | character | Timestamp at which the team's standard logo asset was last refreshed. |
-| `team_logo_image_type` | character | File format of the team's standard logo asset (e.g., "png"). |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_logo_height` | character | Pixel height of the team's standard logo image. |
-| `team_logo_team_id` | character | Yahoo composite team id the standard logo asset belongs to. |
-| `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_lang` | String | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_domain` | String | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
+| `display_name` | String |  |
+| `nickname` | String |  |
+| `primary_color` | String |  |
+| `secondary_color` | String |  |
+| `team_id` | String |  |
+| `team_logo_white_width` | String | Pixel width of the team's white knockout logo image. |
+| `team_logo_white_last_updated` | String | Timestamp at which the team's white knockout logo asset was last refreshed. |
+| `team_logo_white_image_type` | String | File format of the team's white knockout logo asset (e.g., "png"). |
+| `team_logo_white_url` | String | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
+| `team_logo_white_height` | String | Pixel height of the team's white knockout logo image. |
+| `team_logo_white_team_id` | String | Yahoo composite team id the white knockout logo asset belongs to. |
+| `team_logo_width` | String | Pixel width of the team's standard logo image. |
+| `team_logo_last_updated` | String | Timestamp at which the team's standard logo asset was last refreshed. |
+| `team_logo_image_type` | String | File format of the team's standard logo asset (e.g., "png"). |
+| `team_logo_url` | String | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
+| `team_logo_height` | String | Pixel height of the team's standard logo image. |
+| `team_logo_team_id` | String | Yahoo composite team id the standard logo asset belongs to. |
+| `gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the event or team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -270,10 +270,10 @@ Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character |  |
-| `display_name` | character |  |
-| `suggested_headshot` | character | JSON-encoded image node for the headshot Yahoo recommends for this player. |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `player_id` | String |  |
+| `display_name` | String |  |
+| `suggested_headshot` | String | JSON-encoded image node for the headshot Yahoo recommends for this player. |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -309,8 +309,8 @@ Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDiscl
 
 | col_name | type | description |
 |---|---|---|
-| `disclaimer_id` | character | Identifier of the responsible-gambling disclaimer block to render alongside the odds. |
-| `text` | character |  |
+| `disclaimer_id` | String | Identifier of the responsible-gambling disclaimer block to render alongside the odds. |
+| `text` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -348,8 +348,8 @@ Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` ent
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `full_name` | character |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -386,8 +386,8 @@ Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `full_name` | character |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -620,7 +620,7 @@ Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
+| `game_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -656,9 +656,9 @@ Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
-| `game_ticket_price` | character | Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars. |
+| `game_id` | String |  |
+| `gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the event or team. |
+| `game_ticket_price` | String | Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -694,8 +694,8 @@ Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
-| `team_id` | character |  |
+| `gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the event or team. |
+| `team_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -764,25 +764,25 @@ Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournament
 
 | col_name | type | description |
 |---|---|---|
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `event_group_id` | character | Yahoo identifier that groups the rounds or legs making up a single tournament. |
-| `name` | character |  |
-| `display_name` | character |  |
-| `start_time` | character |  |
-| `start_date` | character |  |
-| `end_date` | character |  |
-| `status` | character |  |
-| `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `player_tournament_stats` | character | JSON-encoded per-player statistics recorded at the golf tournament. |
-| `purse` | character | Total prize money on offer at the tournament, in US dollars. |
-| `major` | logical | Flag indicating that the golf tournament is one of the sport's majors. |
-| `venue_display_name` | character | Name of the venue hosting the event. |
-| `venue_country` | character | Country the venue is located in. |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `par` | integer | Par of the golf course in play for the tournament. |
-| `yardage` | integer | Total yardage of the golf course in play for the tournament. |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `event_group_id` | String | Yahoo identifier that groups the rounds or legs making up a single tournament. |
+| `name` | String |  |
+| `display_name` | String |  |
+| `start_time` | String |  |
+| `start_date` | String |  |
+| `end_date` | String |  |
+| `status` | String |  |
+| `status_display_name` | String | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
+| `player_tournament_stats` | String | JSON-encoded per-player statistics recorded at the golf tournament. |
+| `purse` | String | Total prize money on offer at the tournament, in US dollars. |
+| `major` | Boolean | Flag indicating that the golf tournament is one of the sport's majors. |
+| `venue_display_name` | String | Name of the venue hosting the event. |
+| `venue_country` | String | Country the venue is located in. |
+| `venue_city` | String |  |
+| `venue_state` | String |  |
+| `par` | Int64 | Par of the golf course in play for the tournament. |
+| `yardage` | Int64 | Total yardage of the golf course in play for the tournament. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -820,22 +820,22 @@ Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTourn
 
 | col_name | type | description |
 |---|---|---|
-| `event_group_id` | character | Yahoo identifier that groups the rounds or legs making up a single tournament. |
-| `start_time` | character |  |
-| `start_date` | character |  |
-| `end_date` | character |  |
-| `season` | integer |  |
-| `clubs` | character | JSON-encoded list of the golf clubs hosting the tournament. |
-| `courses` | character | JSON-encoded list of the courses in play at the tournament, with their par and yardage. |
-| `name` | character |  |
-| `status` | character |  |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `association` | character | Governing tour that sanctions the event (e.g., "pga"). |
-| `league_short_name` | character |  |
-| `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
-| `league_alias` | character | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
-| `purse` | character | Total prize money on offer at the tournament, in US dollars. |
+| `event_group_id` | String | Yahoo identifier that groups the rounds or legs making up a single tournament. |
+| `start_time` | String |  |
+| `start_date` | String |  |
+| `end_date` | String |  |
+| `season` | Int64 |  |
+| `clubs` | String | JSON-encoded list of the golf clubs hosting the tournament. |
+| `courses` | String | JSON-encoded list of the courses in play at the tournament, with their par and yardage. |
+| `name` | String |  |
+| `status` | String |  |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `association` | String | Governing tour that sanctions the event (e.g., "pga"). |
+| `league_short_name` | String |  |
+| `league_full_name` | String | Full league name (e.g., "NCAA Football"). |
+| `league_alias` | String | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
+| `purse` | String | Total prize money on offer at the tournament, in US dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -873,95 +873,95 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `display_name` | character |  |
-| `league_name` | character |  |
-| `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
-| `league_display_abbr` | character | Compact league abbreviation used in dense UI alongside the game. |
-| `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_short_name` | character |  |
-| `league_sport` | character | Sport the league belongs to (e.g., "football"). |
-| `league_alias` | character | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `away_team_id` | character |  |
-| `away_team_record` | character |  |
-| `away_team_full_name` | character |  |
-| `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
-| `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character |  |
-| `away_team_abbreviation` | character |  |
-| `away_team_location` | character |  |
-| `away_team_gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the away team's games. |
-| `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character |  |
-| `away_team_last_games` | character | JSON-encoded list of the away team's most recently completed games. |
-| `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
-| `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
-| `away_team_team_standings` | character | JSON-encoded standings node for the away team, carrying its record, position and streak. |
-| `away_team_rank_polls` | character | JSON-encoded list of the poll rankings the away team currently holds. |
-| `away_team_playoff_seeds` | character | JSON-encoded list of the away team's playoff-seed entries for the season. |
-| `home_team_id` | character |  |
-| `home_team_record` | character |  |
-| `home_team_full_name` | character |  |
-| `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
-| `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character |  |
-| `home_team_abbreviation` | character |  |
-| `home_team_location` | character |  |
-| `home_team_gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the home team's games. |
-| `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character |  |
-| `home_team_last_games` | character | JSON-encoded list of the home team's most recently completed games. |
-| `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
-| `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
-| `home_team_team_standings` | character | JSON-encoded standings node for the home team, carrying its record, position and streak. |
-| `home_team_rank_polls` | character | JSON-encoded list of the poll rankings the home team currently holds. |
-| `home_team_playoff_seeds` | character | JSON-encoded list of the home team's playoff-seed entries for the season. |
-| `away_score` | integer |  |
-| `home_score` | integer |  |
-| `start_time` | character |  |
-| `start_date` | character |  |
-| `if_necessary` | character |  |
-| `status` | character |  |
-| `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `season` | integer |  |
-| `season_phase` | character | Phase of the season the game falls in (e.g., "season.phase.season"). |
-| `time_left` | character |  |
-| `tournament_id` | character |  |
-| `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
-| `game_ticket_price` | character | Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars. |
-| `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
-| `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
-| `broadcast_channels` | character | JSON-encoded list of the channels broadcasting the event. |
-| `news_break_subtext` | character | Secondary line of the news-break banner attached to the game. |
-| `news_break_title` | character | Headline of the news-break banner attached to the game. |
-| `news_break_url` | character | URL of the article behind the game's news-break banner. |
-| `news_break_uuid` | character | Yahoo content UUID of the article behind the game's news-break banner. |
-| `brief` | character | Short editorial blurb summarizing the game's state or result. |
-| `event_extended_display_name` | character | Long-form event title used for marquee games, such as a bowl or rivalry name. |
-| `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
-| `venue_display_name` | character | Name of the venue hosting the event. |
-| `venue_city` | character |  |
-| `venue_cover_type` | character | Whether the venue is open-air, domed or fitted with a retractable roof. |
-| `venue_state` | character |  |
-| `venue_venue_id` | character | Yahoo identifier of the venue hosting the event. |
-| `venue_country` | character | Country the venue is located in. |
-| `tv_coverage` | character | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
-| `weather` | character |  |
-| `away_line_score` | character | JSON-encoded per-period scoring line for the away team. |
-| `current_period_period` | character | Ordinal number of the period currently in progress within the game. |
-| `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
-| `field_position_display_name` | character | Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35"). |
-| `home_line_score` | character | JSON-encoded per-period scoring line for the home team. |
-| `home_timeouts_remaining` | integer |  |
-| `away_timeouts_remaining` | integer |  |
-| `last_play` | character |  |
-| `game_stat_leaders` | character | JSON-encoded pointer to the per-category statistical leaders for the game. |
-| `team_possessing_ball` | character | Yahoo team id of the side currently possessing the ball. |
-| `recap_videos` | character | JSON-encoded list of recap videos published for the game. |
-| `week` | integer |  |
+| `game_id` | String |  |
+| `display_name` | String |  |
+| `league_name` | String |  |
+| `league_full_name` | String | Full league name (e.g., "NCAA Football"). |
+| `league_display_abbr` | String | Compact league abbreviation used in dense UI alongside the game. |
+| `league_display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `league_short_name` | String |  |
+| `league_sport` | String | Sport the league belongs to (e.g., "football"). |
+| `league_alias` | String | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `away_team_id` | String |  |
+| `away_team_record` | String |  |
+| `away_team_full_name` | String |  |
+| `away_team_team_id` | String | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
+| `away_team_primary_color` | String | Primary brand color of the away team, as a hex RGB string without the leading hash. |
+| `away_team_secondary_color` | String | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
+| `away_team_display_name` | String |  |
+| `away_team_abbreviation` | String |  |
+| `away_team_location` | String |  |
+| `away_team_gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the away team's games. |
+| `away_team_alias` | String | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
+| `away_team_nickname` | String |  |
+| `away_team_last_games` | String | JSON-encoded list of the away team's most recently completed games. |
+| `away_team_team_logo_white` | String | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
+| `away_team_team_logo` | String | JSON-encoded image node for the away team's standard logo. |
+| `away_team_team_standings` | String | JSON-encoded standings node for the away team, carrying its record, position and streak. |
+| `away_team_rank_polls` | String | JSON-encoded list of the poll rankings the away team currently holds. |
+| `away_team_playoff_seeds` | String | JSON-encoded list of the away team's playoff-seed entries for the season. |
+| `home_team_id` | String |  |
+| `home_team_record` | String |  |
+| `home_team_full_name` | String |  |
+| `home_team_team_id` | String | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
+| `home_team_primary_color` | String | Primary brand color of the home team, as a hex RGB string without the leading hash. |
+| `home_team_secondary_color` | String | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
+| `home_team_display_name` | String |  |
+| `home_team_abbreviation` | String |  |
+| `home_team_location` | String |  |
+| `home_team_gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the home team's games. |
+| `home_team_alias` | String | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
+| `home_team_nickname` | String |  |
+| `home_team_last_games` | String | JSON-encoded list of the home team's most recently completed games. |
+| `home_team_team_logo_white` | String | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
+| `home_team_team_logo` | String | JSON-encoded image node for the home team's standard logo. |
+| `home_team_team_standings` | String | JSON-encoded standings node for the home team, carrying its record, position and streak. |
+| `home_team_rank_polls` | String | JSON-encoded list of the poll rankings the home team currently holds. |
+| `home_team_playoff_seeds` | String | JSON-encoded list of the home team's playoff-seed entries for the season. |
+| `away_score` | Int64 |  |
+| `home_score` | Int64 |  |
+| `start_time` | String |  |
+| `start_date` | String |  |
+| `if_necessary` | String |  |
+| `status` | String |  |
+| `status_display_name` | String | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
+| `season` | Int64 |  |
+| `season_phase` | String | Phase of the season the game falls in (e.g., "season.phase.season"). |
+| `time_left` | String |  |
+| `tournament_id` | String |  |
+| `gametime_ticket_url` | String | Gametime affiliate ticket-purchase URL for the event or team. |
+| `game_ticket_price` | String | Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars. |
+| `playoff_series` | String | JSON-encoded playoff-series node the game belongs to. |
+| `winning_team_id` | String | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
+| `broadcast_channels` | String | JSON-encoded list of the channels broadcasting the event. |
+| `news_break_subtext` | String | Secondary line of the news-break banner attached to the game. |
+| `news_break_title` | String | Headline of the news-break banner attached to the game. |
+| `news_break_url` | String | URL of the article behind the game's news-break banner. |
+| `news_break_uuid` | String | Yahoo content UUID of the article behind the game's news-break banner. |
+| `brief` | String | Short editorial blurb summarizing the game's state or result. |
+| `event_extended_display_name` | String | Long-form event title used for marquee games, such as a bowl or rivalry name. |
+| `bets` | String | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
+| `venue_display_name` | String | Name of the venue hosting the event. |
+| `venue_city` | String |  |
+| `venue_cover_type` | String | Whether the venue is open-air, domed or fitted with a retractable roof. |
+| `venue_state` | String |  |
+| `venue_venue_id` | String | Yahoo identifier of the venue hosting the event. |
+| `venue_country` | String | Country the venue is located in. |
+| `tv_coverage` | String | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
+| `weather` | String |  |
+| `away_line_score` | String | JSON-encoded per-period scoring line for the away team. |
+| `current_period_period` | String | Ordinal number of the period currently in progress within the game. |
+| `field_position` | String | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
+| `field_position_display_name` | String | Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35"). |
+| `home_line_score` | String | JSON-encoded per-period scoring line for the home team. |
+| `home_timeouts_remaining` | Int64 |  |
+| `away_timeouts_remaining` | Int64 |  |
+| `last_play` | String |  |
+| `game_stat_leaders` | String | JSON-encoded pointer to the per-category statistical leaders for the game. |
+| `team_possessing_ball` | String | Yahoo team id of the side currently possessing the ball. |
+| `recap_videos` | String | JSON-encoded list of recap videos published for the game. |
+| `week` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -998,9 +998,9 @@ Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` e
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character |  |
-| `full_name` | character |  |
-| `current_league_season` | character | Yahoo league-season identifier for the season currently in progress. |
+| `name` | String |  |
+| `full_name` | String |  |
+| `current_league_season` | String | Yahoo league-season identifier for the season currently in progress. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1036,8 +1036,8 @@ Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `players` | character |  |
+| `short_name` | String |  |
+| `players` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1077,63 +1077,63 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **nhl**
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **nba**
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **mlb**
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **wnba**
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **ncaab**
 
 | col_name | type | description |
 |---|---|---|
-| `poll_name` | character |  |
-| `rank` | character |  |
-| `team_id` | character |  |
-| `team` | character |  |
+| `poll_name` | String |  |
+| `rank` | String |  |
+| `team_id` | String |  |
+| `team` | String |  |
 
 **ncaaf**
 
 | col_name | type | description |
 |---|---|---|
-| `poll_name` | character |  |
-| `rank` | character |  |
-| `team_id` | character |  |
-| `team` | character |  |
+| `poll_name` | String |  |
+| `rank` | String |  |
+| `team_id` | String |  |
+| `team` | String |  |
 
 **ncaaw**
 
 | col_name | type | description |
 |---|---|---|
-| `poll_name` | character |  |
-| `rank` | character |  |
-| `team_id` | character |  |
-| `team` | character |  |
+| `poll_name` | String |  |
+| `rank` | String |  |
+| `team_id` | String |  |
+| `team` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1171,8 +1171,8 @@ Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entr
 
 | col_name | type | description |
 |---|---|---|
-| `ncaaf_games` | character | JSON-encoded list of NCAAF game nodes carrying the pick or odds distribution for the slate. |
-| `conferences` | character | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
+| `ncaaf_games` | String | JSON-encoded list of NCAAF game nodes carrying the pick or odds distribution for the slate. |
+| `conferences` | String | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1212,15 +1212,15 @@ Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracket
 
 | col_name | type | description |
 |---|---|---|
-| `conference` | character |  |
-| `id` | character |  |
-| `location` | character |  |
-| `playoff_round` | character |  |
-| `display_order` | character | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
-| `season` | character |  |
-| `max_games` | character | Maximum number of games the playoff series can run to. |
-| `winner_bracket_slot_id` | character | Identifier of the bracket slot the winner of this slot advances into. |
-| `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
+| `conference` | String |  |
+| `id` | String |  |
+| `location` | String |  |
+| `playoff_round` | String |  |
+| `display_order` | String | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
+| `season` | String |  |
+| `max_games` | String | Maximum number of games the playoff series can run to. |
+| `winner_bracket_slot_id` | String | Identifier of the bracket slot the winner of this slot advances into. |
+| `playoff_series` | String | JSON-encoded playoff-series node the game belongs to. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1256,8 +1256,8 @@ Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
+| `game_id` | String |  |
+| `playoff_series` | String | JSON-encoded playoff-series node the game belongs to. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1293,8 +1293,8 @@ Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `polymarket_url` | character | Polymarket prediction-market URL for wagering on the game. |
+| `game_id` | String |  |
+| `polymarket_url` | String | Polymarket prediction-market URL for wagering on the game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1333,8 +1333,8 @@ Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `league_seasons` | character | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
-| `current_season` | integer | Season the league is currently playing, as the four-digit starting year. |
+| `league_seasons` | String | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
+| `current_season` | Int64 | Season the league is currently playing, as the four-digit starting year. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

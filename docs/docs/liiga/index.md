@@ -1,9 +1,9 @@
 ---
-title: LIIGA
-sidebar_label: LIIGA
-description: "sdv-py LIIGA: endpoint references, dataset loaders and parsers for LIIGA in the SportsDataverse Python package."
+title: Liiga
+sidebar_label: Liiga
+description: "sdv-py Liiga: endpoint references, dataset loaders and parsers for Liiga in the SportsDataverse Python package."
 ---
-# LIIGA (`sportsdataverse.hockey.liiga`)
+# Liiga (`sportsdataverse.hockey.liiga`)
 
 ## Data sources
 

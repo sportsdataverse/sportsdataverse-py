@@ -1,11 +1,11 @@
 ---
-title: UEL — ESPN core API (v2)
+title: UEFA Europa League — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "UEL — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "UEFA Europa League — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# UEL — ESPN core API (v2)
+# UEFA Europa League — ESPN core API (v2)
 
 `sportsdataverse.soccer.uel` — 82 endpoints.
 

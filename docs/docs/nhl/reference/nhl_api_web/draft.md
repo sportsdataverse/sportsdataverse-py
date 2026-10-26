@@ -26,29 +26,29 @@ Pull NHL draft picks for a year (and optionally one round).
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Draft round the pick was made in (1 = first round). |
-| `pick_in_round` | integer | Pick number within the round. |
-| `overall_pick` | integer | Overall pick number in the draft. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_logo_light` | character | URL to the team logo (light variant). |
-| `team_logo_dark` | character | URL to the team logo (dark variant). |
-| `team_pick_history` | character | History of the team's picks at this slot. |
-| `position_code` | character | Player position code. |
-| `country_code` | character | Player country code. |
-| `height` | integer | Player height in inches. |
-| `weight` | integer | Player weight in pounds. |
-| `amateur_league` | character | Amateur league the player played in. |
-| `amateur_club_name` | character | Amateur club the player played for. |
-| `team_name_default` | character | Team name (default locale). |
-| `team_name_fr` | character | Team name (French locale). |
-| `team_common_name_default` | character | Team common name (default language). |
-| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
-| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
-| `display_abbrev_default` | character | Short display abbreviation for the selected player's nationality or amateur league affiliation shown in the NHL draft picks listing. |
-| `first_name_default` | character | Player first name (default language). |
-| `last_name_default` | character | Player last name (default language). |
-| `team_common_name_fr` | character | Team common name (French localization). |
+| `round` | Int64 | Draft round the pick was made in (1 = first round). |
+| `pick_in_round` | Int64 | Pick number within the round. |
+| `overall_pick` | Int64 | Overall pick number in the draft. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_logo_light` | String | URL to the team logo (light variant). |
+| `team_logo_dark` | String | URL to the team logo (dark variant). |
+| `team_pick_history` | String | History of the team's picks at this slot. |
+| `position_code` | String | Player position code. |
+| `country_code` | String | Player country code. |
+| `height` | Int64 | Player height in inches. |
+| `weight` | Int64 | Player weight in pounds. |
+| `amateur_league` | String | Amateur league the player played in. |
+| `amateur_club_name` | String | Amateur club the player played for. |
+| `team_name_default` | String | Team name (default locale). |
+| `team_name_fr` | String | Team name (French locale). |
+| `team_common_name_default` | String | Team common name (default language). |
+| `team_place_name_with_preposition_default` | String | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | String | Team place name with preposition (French). |
+| `display_abbrev_default` | String | Short display abbreviation for the selected player's nationality or amateur league affiliation shown in the NHL draft picks listing. |
+| `first_name_default` | String | Player first name (default language). |
+| `last_name_default` | String | Player last name (default language). |
+| `team_common_name_fr` | String | Team common name (French localization). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -85,23 +85,23 @@ Pull NHL Central Scouting rankings for a draft year.
 
 | col_name | type | description |
 |---|---|---|
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `category_id` | integer | Prospect category identifier. |
-| `category_key` | character | Machine-readable slug identifying the scouting or ranking category (e.g., 'north-american-skater', 'international-skater') that the prospect belongs to in the NHL draft rankings. |
-| `last_name` | character | Player last name. |
-| `first_name` | character | Player first name. |
-| `position_code` | character | Player position code. |
-| `shoots_catches` | character | Handedness (shoots/catches). |
-| `height_in_inches` | integer | Height in inches. |
-| `weight_in_pounds` | integer | Weight in pounds. |
-| `last_amateur_club` | character | Prospect's most recent amateur club. |
-| `last_amateur_league` | character | Prospect's most recent amateur league. |
-| `birth_date` | character | Player birth date. |
-| `birth_city` | character | Birth city. |
-| `birth_state_province` | character | Birth state or province of the player. |
-| `birth_country` | character | Player birth country. |
-| `midterm_rank` | double | Prospect's midterm draft ranking. |
-| `final_rank` | double | Prospect's final draft ranking. |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `category_id` | Int64 | Prospect category identifier. |
+| `category_key` | String | Machine-readable slug identifying the scouting or ranking category (e.g., 'north-american-skater', 'international-skater') that the prospect belongs to in the NHL draft rankings. |
+| `last_name` | String | Player last name. |
+| `first_name` | String | Player first name. |
+| `position_code` | String | Player position code. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
+| `height_in_inches` | Int64 | Height in inches. |
+| `weight_in_pounds` | Int64 | Weight in pounds. |
+| `last_amateur_club` | String | Prospect's most recent amateur club. |
+| `last_amateur_league` | String | Prospect's most recent amateur league. |
+| `birth_date` | String | Player birth date. |
+| `birth_city` | String | Birth city. |
+| `birth_state_province` | String | Birth state or province of the player. |
+| `birth_country` | String | Player birth country. |
+| `midterm_rank` | Float64 | Prospect's midterm draft ranking. |
+| `final_rank` | Float64 | Prospect's final draft ranking. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -136,28 +136,28 @@ Pull the current / most recent draft pick set.
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Shootout round number. |
-| `pick_in_round` | integer | Pick number within the round. |
-| `overall_pick` | integer | Overall pick number in the draft. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_logo_light` | character | URL to the team logo (light variant). |
-| `team_logo_dark` | character | URL to the team logo (dark variant). |
-| `team_pick_history` | character | History of the team's picks at this slot. |
-| `position_code` | character | Player position code. |
-| `country_code` | character | Player country code. |
-| `height` | integer | Player height in inches. |
-| `weight` | integer | Player weight in pounds. |
-| `amateur_league` | character | Amateur league the player played in. |
-| `amateur_club_name` | character | Amateur club the player played for. |
-| `team_name_default` | character | Team name (default locale). |
-| `team_name_fr` | character | Team name (French locale). |
-| `team_common_name_default` | character | Team common name (default language). |
-| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
-| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
-| `display_abbrev_default` | character | Default-language display abbreviation for the team that currently holds this draft pick. |
-| `first_name_default` | character | Player first name (default language). |
-| `last_name_default` | character | Player last name (default language). |
+| `round` | Int64 | Shootout round number. |
+| `pick_in_round` | Int64 | Pick number within the round. |
+| `overall_pick` | Int64 | Overall pick number in the draft. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_logo_light` | String | URL to the team logo (light variant). |
+| `team_logo_dark` | String | URL to the team logo (dark variant). |
+| `team_pick_history` | String | History of the team's picks at this slot. |
+| `position_code` | String | Player position code. |
+| `country_code` | String | Player country code. |
+| `height` | Int64 | Player height in inches. |
+| `weight` | Int64 | Player weight in pounds. |
+| `amateur_league` | String | Amateur league the player played in. |
+| `amateur_club_name` | String | Amateur club the player played for. |
+| `team_name_default` | String | Team name (default locale). |
+| `team_name_fr` | String | Team name (French locale). |
+| `team_common_name_default` | String | Team common name (default language). |
+| `team_place_name_with_preposition_default` | String | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | String | Team place name with preposition (French). |
+| `display_abbrev_default` | String | Default-language display abbreviation for the team that currently holds this draft pick. |
+| `first_name_default` | String | Player first name (default language). |
+| `last_name_default` | String | Player last name (default language). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -192,23 +192,23 @@ Pull the current Central Scouting rankings.
 
 | col_name | type | description |
 |---|---|---|
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `category_id` | integer | Prospect category identifier. |
-| `category_key` | character | Short identifier string for the scouting category or ranking list under which the prospect is evaluated (e.g., 'NA-SKATER', 'GOALIE'). |
-| `last_name` | character | Player last name. |
-| `first_name` | character | Player first name. |
-| `position_code` | character | Player position code. |
-| `shoots_catches` | character | Handedness (shoots/catches). |
-| `height_in_inches` | integer | Height in inches. |
-| `weight_in_pounds` | integer | Weight in pounds. |
-| `last_amateur_club` | character | Prospect's most recent amateur club. |
-| `last_amateur_league` | character | Prospect's most recent amateur league. |
-| `birth_date` | character | Player birth date. |
-| `birth_city` | character | Birth city. |
-| `birth_state_province` | character | Birth state or province of the player. |
-| `birth_country` | character | Player birth country. |
-| `midterm_rank` | double | Prospect's midterm draft ranking. |
-| `final_rank` | double | Prospect's final draft ranking. |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `category_id` | Int64 | Prospect category identifier. |
+| `category_key` | String | Short identifier string for the scouting category or ranking list under which the prospect is evaluated (e.g., 'NA-SKATER', 'GOALIE'). |
+| `last_name` | String | Player last name. |
+| `first_name` | String | Player first name. |
+| `position_code` | String | Player position code. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
+| `height_in_inches` | Int64 | Height in inches. |
+| `weight_in_pounds` | Int64 | Weight in pounds. |
+| `last_amateur_club` | String | Prospect's most recent amateur club. |
+| `last_amateur_league` | String | Prospect's most recent amateur league. |
+| `birth_date` | String | Player birth date. |
+| `birth_city` | String | Birth city. |
+| `birth_state_province` | String | Birth state or province of the player. |
+| `birth_country` | String | Player birth country. |
+| `midterm_rank` | Float64 | Prospect's midterm draft ranking. |
+| `final_rank` | Float64 | Prospect's final draft ranking. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -243,21 +243,21 @@ Pull the live draft-tracker pick list (during the draft itself).
 
 | col_name | type | description |
 |---|---|---|
-| `pick_in_round` | integer | Pick number within the round. |
-| `overall_pick` | integer | Overall pick number in the draft. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_logo_light` | character | URL to the team logo (light variant). |
-| `team_logo_dark` | character | URL to the team logo (dark variant). |
-| `state` | character | Pick state (e.g., on the clock, complete). |
-| `position_code` | character | Player position code. |
-| `team_full_name_default` | character | Team full name (default language). |
-| `team_full_name_fr` | character | Team full name (French). |
-| `team_common_name_default` | character | Team common name (default language). |
-| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
-| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
-| `last_name_default` | character | Player last name (default language). |
-| `first_name_default` | character | Player first name (default language). |
+| `pick_in_round` | Int64 | Pick number within the round. |
+| `overall_pick` | Int64 | Overall pick number in the draft. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_logo_light` | String | URL to the team logo (light variant). |
+| `team_logo_dark` | String | URL to the team logo (dark variant). |
+| `state` | String | Pick state (e.g., on the clock, complete). |
+| `position_code` | String | Player position code. |
+| `team_full_name_default` | String | Team full name (default language). |
+| `team_full_name_fr` | String | Team full name (French). |
+| `team_common_name_default` | String | Team common name (default language). |
+| `team_place_name_with_preposition_default` | String | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | String | Team place name with preposition (French). |
+| `last_name_default` | String | Player last name (default language). |
+| `first_name_default` | String | Player first name (default language). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

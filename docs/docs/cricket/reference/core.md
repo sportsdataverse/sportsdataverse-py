@@ -1,11 +1,11 @@
 ---
-title: CRICKET — ESPN core API (v2)
+title: Cricket — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "CRICKET — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Cricket — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# CRICKET — ESPN core API (v2)
+# Cricket — ESPN core API (v2)
 
 `sportsdataverse.cricket` — 82 endpoints.
 

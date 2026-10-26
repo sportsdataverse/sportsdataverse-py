@@ -1,15 +1,15 @@
 ---
-title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3"
+title: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3"
 sidebar_label: "Other: playbyplayv3–scoreboardv3"
 sidebar_position: 24
-description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3 — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3
+# NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3
 
 ## nbagl_stats_playbyplayv3
 
-GET /stats/playbyplayv3
+Play by play v3.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playbyplayv3`
 
@@ -46,7 +46,7 @@ nbagl_stats_playbyplayv3()
 
 ## nbagl_stats_scoreboardv3
 
-GET /stats/scoreboardv3
+Scoreboard v3.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
 
@@ -63,86 +63,86 @@ GET /stats/scoreboardv3
 
 | col_name | type | description |
 |---|---|---|
-| `awayteam_inbonus` | character | Whether the away team is currently in the bonus (penalty) foul situation. |
-| `awayteam_losses` | integer | Away team's loss total entering the game. |
-| `awayteam_score` | integer | Current or final points scored by the away team. |
-| `awayteam_seed` | integer | Playoff seed of the away team, populated for postseason games. |
-| `awayteam_teamcity` | character | City name of the away team. |
-| `awayteam_teamid` | integer | Team identifier of the away team from the league's stats API. |
-| `awayteam_teamname` | character | Nickname of the away team. |
-| `awayteam_teamslug` | character | URL-friendly slug for the away team's name. |
-| `awayteam_teamtricode` | character | Three-letter abbreviation of the away team. |
-| `awayteam_timeoutsremaining` | integer | Timeouts the away team has remaining. |
-| `awayteam_wins` | integer | Away team's win total entering the game. |
-| `gameclock` | character | Current game clock display for a live game. |
-| `gamecode` | character |  |
-| `gamedate` | character | Game date the scoreboard was requested for (YYYY-MM-DD). |
-| `gameet` | character | Scheduled game start time in US Eastern time. |
-| `gameid` | character | Unique 10-character game identifier from the league's stats API. |
-| `gamelabel` | character | Display label for the game (e.g. a playoff series or event name). |
-| `gameleaders_awayleaders_assists` | integer | Assist total of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_jerseynum` | character | Jersey number of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_name` | character | Name of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_personid` | integer | Stats API player id of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_playerslug` | character | URL name slug of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_points` | integer | Point total of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_position` | character | Position of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_rebounds` | integer | Rebound total of the away team's in-game statistical leader. |
-| `gameleaders_awayleaders_teamtricode` | character | Team tricode of the away team's in-game statistical leader. |
-| `gameleaders_homeleaders_assists` | integer | Assist total of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_jerseynum` | character | Jersey number of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_name` | character | Name of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_personid` | integer | Stats API player id of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_playerslug` | character | URL name slug of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_points` | integer | Point total of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_position` | character | Position of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_rebounds` | integer | Rebound total of the home team's in-game statistical leader. |
-| `gameleaders_homeleaders_teamtricode` | character | Team tricode of the home team's in-game statistical leader. |
-| `gamestatus` | integer | Numeric game status code (1 = scheduled, 2 = in progress, 3 = final). |
-| `gamestatustext` | character | Human-readable game status (e.g. "Final", "7:00 pm ET"). |
-| `gamesublabel` | character | Secondary display label for the game (e.g. game number within a series). |
-| `gamesubtype` | character | Subtype code for the game as reported by the stats API (e.g. in-season tournament flags). |
-| `gametimeutc` | character | Scheduled game start time in UTC. |
-| `hometeam_inbonus` | character | Whether the home team is currently in the bonus (penalty) foul situation. |
-| `hometeam_losses` | integer | Home team's loss total entering the game. |
-| `hometeam_score` | integer | Current or final points scored by the home team. |
-| `hometeam_seed` | integer | Playoff seed of the home team, populated for postseason games. |
-| `hometeam_teamcity` | character | City name of the home team. |
-| `hometeam_teamid` | integer | Team identifier of the home team from the league's stats API. |
-| `hometeam_teamname` | character | Nickname of the home team. |
-| `hometeam_teamslug` | character | URL-friendly slug for the home team's name. |
-| `hometeam_teamtricode` | character | Three-letter abbreviation of the home team. |
-| `hometeam_timeoutsremaining` | integer | Timeouts the home team has remaining. |
-| `hometeam_wins` | integer | Home team's win total entering the game. |
-| `ifnecessary` | logical | Whether the game is an if-necessary playoff series game. |
-| `isneutral` | logical | Whether the game is played at a neutral site. |
-| `leagueid` | character | League identifier from the stats API ("00" = NBA, "10" = WNBA). |
-| `leaguename` | character | Display name of the league. |
-| `period` | integer |  |
-| `porounddesc` | character | Playoff round description (e.g. Conference Finals). |
-| `regulationperiods` | integer | Number of regulation periods for the game (4). |
-| `seriesconference` | character | Conference of the playoff series the game belongs to. |
-| `seriesgamenumber` | character | Game number within the playoff series. |
-| `seriestext` | character | Display text summarizing the series state (e.g. "BOS leads 2-1"). |
-| `teamleaders_awayleaders_assists` | numeric | Assist total of the away team's season statistical leader. |
-| `teamleaders_awayleaders_jerseynum` | character | Jersey number of the away team's season statistical leader. |
-| `teamleaders_awayleaders_name` | character | Name of the away team's season statistical leader. |
-| `teamleaders_awayleaders_personid` | integer | Stats API player id of the away team's season statistical leader. |
-| `teamleaders_awayleaders_playerslug` | character | URL name slug of the away team's season statistical leader. |
-| `teamleaders_awayleaders_points` | numeric | Point total of the away team's season statistical leader. |
-| `teamleaders_awayleaders_position` | character | Position of the away team's season statistical leader. |
-| `teamleaders_awayleaders_rebounds` | numeric | Rebound total of the away team's season statistical leader. |
-| `teamleaders_awayleaders_teamtricode` | character | Team tricode of the away team's season statistical leader. |
-| `teamleaders_homeleaders_assists` | numeric | Assist total of the home team's season statistical leader. |
-| `teamleaders_homeleaders_jerseynum` | character | Jersey number of the home team's season statistical leader. |
-| `teamleaders_homeleaders_name` | character | Name of the home team's season statistical leader. |
-| `teamleaders_homeleaders_personid` | integer | Stats API player id of the home team's season statistical leader. |
-| `teamleaders_homeleaders_playerslug` | character | URL name slug of the home team's season statistical leader. |
-| `teamleaders_homeleaders_points` | numeric | Point total of the home team's season statistical leader. |
-| `teamleaders_homeleaders_position` | character | Position of the home team's season statistical leader. |
-| `teamleaders_homeleaders_rebounds` | numeric | Rebound total of the home team's season statistical leader. |
-| `teamleaders_homeleaders_teamtricode` | character | Team tricode of the home team's season statistical leader. |
-| `teamleaders_seasonleadersflag` | integer | Flag indicating the team-leaders block carries season-long leaders rather than in-game leaders. |
+| `awayteam_inbonus` | String | Whether the away team is currently in the bonus (penalty) foul situation. |
+| `awayteam_losses` | Int64 | Away team's loss total entering the game. |
+| `awayteam_score` | Int64 | Current or final points scored by the away team. |
+| `awayteam_seed` | Int64 | Playoff seed of the away team, populated for postseason games. |
+| `awayteam_teamcity` | String | City name of the away team. |
+| `awayteam_teamid` | Int64 | Team identifier of the away team from the league's stats API. |
+| `awayteam_teamname` | String | Nickname of the away team. |
+| `awayteam_teamslug` | String | URL-friendly slug for the away team's name. |
+| `awayteam_teamtricode` | String | Three-letter abbreviation of the away team. |
+| `awayteam_timeoutsremaining` | Int64 | Timeouts the away team has remaining. |
+| `awayteam_wins` | Int64 | Away team's win total entering the game. |
+| `gameclock` | String | Current game clock display for a live game. |
+| `gamecode` | String |  |
+| `gamedate` | String | Game date the scoreboard was requested for (YYYY-MM-DD). |
+| `gameet` | String | Scheduled game start time in US Eastern time. |
+| `gameid` | String | Unique 10-character game identifier from the league's stats API. |
+| `gamelabel` | String | Display label for the game (e.g. a playoff series or event name). |
+| `gameleaders_awayleaders_assists` | Int64 | Assist total of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_jerseynum` | String | Jersey number of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_name` | String | Name of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_personid` | Int64 | Stats API player id of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_playerslug` | String | URL name slug of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_points` | Int64 | Point total of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_position` | String | Position of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_rebounds` | Int64 | Rebound total of the away team's in-game statistical leader. |
+| `gameleaders_awayleaders_teamtricode` | String | Team tricode of the away team's in-game statistical leader. |
+| `gameleaders_homeleaders_assists` | Int64 | Assist total of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_jerseynum` | String | Jersey number of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_name` | String | Name of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_personid` | Int64 | Stats API player id of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_playerslug` | String | URL name slug of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_points` | Int64 | Point total of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_position` | String | Position of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_rebounds` | Int64 | Rebound total of the home team's in-game statistical leader. |
+| `gameleaders_homeleaders_teamtricode` | String | Team tricode of the home team's in-game statistical leader. |
+| `gamestatus` | Int64 | Numeric game status code (1 = scheduled, 2 = in progress, 3 = final). |
+| `gamestatustext` | String | Human-readable game status (e.g. "Final", "7:00 pm ET"). |
+| `gamesublabel` | String | Secondary display label for the game (e.g. game number within a series). |
+| `gamesubtype` | String | Subtype code for the game as reported by the stats API (e.g. in-season tournament flags). |
+| `gametimeutc` | String | Scheduled game start time in UTC. |
+| `hometeam_inbonus` | String | Whether the home team is currently in the bonus (penalty) foul situation. |
+| `hometeam_losses` | Int64 | Home team's loss total entering the game. |
+| `hometeam_score` | Int64 | Current or final points scored by the home team. |
+| `hometeam_seed` | Int64 | Playoff seed of the home team, populated for postseason games. |
+| `hometeam_teamcity` | String | City name of the home team. |
+| `hometeam_teamid` | Int64 | Team identifier of the home team from the league's stats API. |
+| `hometeam_teamname` | String | Nickname of the home team. |
+| `hometeam_teamslug` | String | URL-friendly slug for the home team's name. |
+| `hometeam_teamtricode` | String | Three-letter abbreviation of the home team. |
+| `hometeam_timeoutsremaining` | Int64 | Timeouts the home team has remaining. |
+| `hometeam_wins` | Int64 | Home team's win total entering the game. |
+| `ifnecessary` | Boolean | Whether the game is an if-necessary playoff series game. |
+| `isneutral` | Boolean | Whether the game is played at a neutral site. |
+| `leagueid` | String | League identifier from the stats API ("00" = NBA, "10" = WNBA). |
+| `leaguename` | String | Display name of the league. |
+| `period` | Int64 |  |
+| `porounddesc` | String | Playoff round description (e.g. Conference Finals). |
+| `regulationperiods` | Int64 | Number of regulation periods for the game (4). |
+| `seriesconference` | String | Conference of the playoff series the game belongs to. |
+| `seriesgamenumber` | String | Game number within the playoff series. |
+| `seriestext` | String | Display text summarizing the series state (e.g. "BOS leads 2-1"). |
+| `teamleaders_awayleaders_assists` | Float64 | Assist total of the away team's season statistical leader. |
+| `teamleaders_awayleaders_jerseynum` | String | Jersey number of the away team's season statistical leader. |
+| `teamleaders_awayleaders_name` | String | Name of the away team's season statistical leader. |
+| `teamleaders_awayleaders_personid` | Int64 | Stats API player id of the away team's season statistical leader. |
+| `teamleaders_awayleaders_playerslug` | String | URL name slug of the away team's season statistical leader. |
+| `teamleaders_awayleaders_points` | Float64 | Point total of the away team's season statistical leader. |
+| `teamleaders_awayleaders_position` | String | Position of the away team's season statistical leader. |
+| `teamleaders_awayleaders_rebounds` | Float64 | Rebound total of the away team's season statistical leader. |
+| `teamleaders_awayleaders_teamtricode` | String | Team tricode of the away team's season statistical leader. |
+| `teamleaders_homeleaders_assists` | Float64 | Assist total of the home team's season statistical leader. |
+| `teamleaders_homeleaders_jerseynum` | String | Jersey number of the home team's season statistical leader. |
+| `teamleaders_homeleaders_name` | String | Name of the home team's season statistical leader. |
+| `teamleaders_homeleaders_personid` | Int64 | Stats API player id of the home team's season statistical leader. |
+| `teamleaders_homeleaders_playerslug` | String | URL name slug of the home team's season statistical leader. |
+| `teamleaders_homeleaders_points` | Float64 | Point total of the home team's season statistical leader. |
+| `teamleaders_homeleaders_position` | String | Position of the home team's season statistical leader. |
+| `teamleaders_homeleaders_rebounds` | Float64 | Rebound total of the home team's season statistical leader. |
+| `teamleaders_homeleaders_teamtricode` | String | Team tricode of the home team's season statistical leader. |
+| `teamleaders_seasonleadersflag` | Int64 | Flag indicating the team-leaders block carries season-long leaders rather than in-game leaders. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -33,75 +33,75 @@ The season's `load_wnba_pbp` frame (every column preserved) with the two WP colu
 
 | col_name | type | description |
 |---|---|---|
-| `game_play_number` | integer | Game play number |
-| `id` | integer | Unique play identification number |
-| `sequence_number` | integer | Sequence number representing a shot-possession (V3 PBP). |
-| `type_id` | integer | Type identifier (numeric). |
-| `type_text` | character | Display text for the type field. |
-| `text` | character | Text description of the play / record. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `period_number` | integer | Numeric period (1-4 for quarters; 5+ for OT). |
-| `period_display_value` | character | Period display label (e.g. '1st Quarter', 'OT'). |
-| `clock_display_value` | character | Game clock display string (e.g. '8:32'). |
-| `scoring_play` | logical | TRUE if the play resulted in points scored. |
-| `score_value` | integer | Point value of the play (2 / 3 / 1). |
-| `team_id` | integer | Unique team identifier. |
-| `athlete_id_1` | integer | Primary athlete identifier (e.g. shooter). |
-| `athlete_id_2` | integer | Secondary athlete identifier (e.g. assister / fouler). |
-| `athlete_id_3` | integer | Athlete id 3. |
-| `wallclock` | character | Wallclock. |
-| `shooting_play` | logical | TRUE if the play was a shooting attempt. |
-| `coordinate_x_raw` | double | X coordinate as returned by the API before any adjustment. |
-| `coordinate_y_raw` | double | Y coordinate as returned by the API before any adjustment. |
-| `points_attempted` | integer |  |
-| `short_description` | character |  |
-| `game_id` | integer | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_name` | character | Home team name. |
-| `home_team_mascot` | character | Home team mascot. |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_name_alt` | character | Alternate versions of the home team abbreviation |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_team_name` | character | Away team name. |
-| `away_team_mascot` | character | Away team mascot. |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_name_alt` | character | Alternate versions of the away team abbreviation |
-| `game_spread` | double | Game spread in (-X Team) format. There are almost none, I would recommend not trusting any of these three columns |
-| `home_favorite` | logical | Logical (TRUE/FALSE) indicating whether the home team is favored |
-| `game_spread_available` | logical | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
-| `home_team_spread` | double | The game spread with respect to the home team |
-| `qtr` | integer | Quarter of the game |
-| `time` | character | Time left within the period |
-| `clock_minutes` | integer | Clock minutes split from seconds for developer convenience |
-| `clock_seconds` | double | Clock seconds split from minutes for developer convenience |
-| `home_timeout_called` | logical |  |
-| `away_timeout_called` | logical |  |
-| `half` | integer | Half of the game |
-| `game_half` | integer | Half of the game |
-| `lag_qtr` | integer | A lag column on the quarter |
-| `lead_qtr` | integer | A lead column on the quarter |
-| `lag_half` | integer | A lag column on the half |
-| `lead_half` | integer | A lead column on the half |
-| `start_quarter_seconds_remaining` | double | Quarter seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
-| `start_half_seconds_remaining` | double | Game half seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
-| `start_game_seconds_remaining` | double | Game seconds remaining at the start of the play (''') |
-| `end_quarter_seconds_remaining` | double | Quarter seconds remaining at the end of the play (''') |
-| `end_half_seconds_remaining` | double | Game half seconds remaining at the end of the play (''') |
-| `end_game_seconds_remaining` | double | Game seconds remaining at the end of the play (''') |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `coordinate_x` | double | X coordinate on the court (half-court layout). |
-| `coordinate_y` | double | Y coordinate on the court (half-court layout). |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_date_time` | character | Game start date/time (ISO 8601). |
-| `athlete_name_1` | character |  |
-| `athlete_name_2` | character |  |
-| `athlete_name_3` | character |  |
-| `type_abbreviation` | character | Play type abbreviation |
-| `pregame_home_prob` | double |  |
-| `home_win_prob` | double |  |
+| `game_play_number` | Int64 | Game play number |
+| `id` | Int64 | Unique play identification number |
+| `sequence_number` | Int64 | Sequence number representing a shot-possession (V3 PBP). |
+| `type_id` | Int64 | Type identifier (numeric). |
+| `type_text` | String | Display text for the type field. |
+| `text` | String | Text description of the play / record. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `period_number` | Int64 | Numeric period (1-4 for quarters; 5+ for OT). |
+| `period_display_value` | String | Period display label (e.g. '1st Quarter', 'OT'). |
+| `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
+| `scoring_play` | Boolean | TRUE if the play resulted in points scored. |
+| `score_value` | Int64 | Point value of the play (2 / 3 / 1). |
+| `team_id` | Int64 | Unique team identifier. |
+| `athlete_id_1` | Int64 | Primary athlete identifier (e.g. shooter). |
+| `athlete_id_2` | Int64 | Secondary athlete identifier (e.g. assister / fouler). |
+| `athlete_id_3` | Int64 | Athlete id 3. |
+| `wallclock` | String | Wallclock. |
+| `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
+| `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
+| `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
+| `points_attempted` | Int64 |  |
+| `short_description` | String |  |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | Int64 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_team_id` | Int64 | Unique identifier for the home team. |
+| `home_team_name` | String | Home team name. |
+| `home_team_mascot` | String | Home team mascot. |
+| `home_team_abbrev` | String | Home team three-letter abbreviation. |
+| `home_team_name_alt` | String | Alternate versions of the home team abbreviation |
+| `away_team_id` | Int64 | Unique identifier for the away team. |
+| `away_team_name` | String | Away team name. |
+| `away_team_mascot` | String | Away team mascot. |
+| `away_team_abbrev` | String | Away team three-letter abbreviation. |
+| `away_team_name_alt` | String | Alternate versions of the away team abbreviation |
+| `game_spread` | Float64 | Game spread in (-X Team) format. There are almost none, I would recommend not trusting any of these three columns |
+| `home_favorite` | Boolean | Logical (TRUE/FALSE) indicating whether the home team is favored |
+| `game_spread_available` | Boolean | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
+| `home_team_spread` | Float64 | The game spread with respect to the home team |
+| `qtr` | Int64 | Quarter of the game |
+| `time` | String | Time left within the period |
+| `clock_minutes` | Int64 | Clock minutes split from seconds for developer convenience |
+| `clock_seconds` | Float64 | Clock seconds split from minutes for developer convenience |
+| `home_timeout_called` | Boolean |  |
+| `away_timeout_called` | Boolean |  |
+| `half` | Int64 | Half of the game |
+| `game_half` | Int64 | Half of the game |
+| `lag_qtr` | Int64 | A lag column on the quarter |
+| `lead_qtr` | Int64 | A lead column on the quarter |
+| `lag_half` | Int64 | A lag column on the half |
+| `lead_half` | Int64 | A lead column on the half |
+| `start_quarter_seconds_remaining` | Float64 | Quarter seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
+| `start_half_seconds_remaining` | Float64 | Game half seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
+| `start_game_seconds_remaining` | Float64 | Game seconds remaining at the start of the play (''') |
+| `end_quarter_seconds_remaining` | Float64 | Quarter seconds remaining at the end of the play (''') |
+| `end_half_seconds_remaining` | Float64 | Game half seconds remaining at the end of the play (''') |
+| `end_game_seconds_remaining` | Float64 | Game seconds remaining at the end of the play (''') |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
+| `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `athlete_name_1` | String |  |
+| `athlete_name_2` | String |  |
+| `athlete_name_3` | String |  |
+| `type_abbreviation` | String | Play type abbreviation |
+| `pregame_home_prob` | Float64 |  |
+| `home_win_prob` | Float64 |  |
 
 **Example**
 
@@ -137,9 +137,9 @@ Frame `age:Int64, rel_value:Float64, peak_age:Float64`.
 
 | col_name | type | description |
 |---|---|---|
-| `age` | integer | Player age (in years). |
-| `rel_value` | double | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
-| `peak_age` | double | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
+| `age` | Int64 | Player age (in years). |
+| `rel_value` | Float64 | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
+| `peak_age` | Float64 | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
 
 **Example**
 
@@ -226,12 +226,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
-| `home_win_prob` | double |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
+| `home_win_prob` | Float64 |  |
 
 ### wnba_predict_games {#wnba_predict_games}
 
@@ -344,18 +344,18 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `adj_off_rtg` | double |  |
-| `adj_def_rtg` | double |  |
-| `adj_net_rtg` | double |  |
-| `adj_pace` | double |  |
-| `raw_off_rtg` | double |  |
-| `raw_def_rtg` | double |  |
-| `raw_pace` | double |  |
-| `games` | integer | Games played. |
-| `rank` | integer | Rank. |
-| `adj_net_z` | double |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `adj_off_rtg` | Float64 |  |
+| `adj_def_rtg` | Float64 |  |
+| `adj_net_rtg` | Float64 |  |
+| `adj_pace` | Float64 |  |
+| `raw_off_rtg` | Float64 |  |
+| `raw_def_rtg` | Float64 |  |
+| `raw_pace` | Float64 |  |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_net_z` | Float64 |  |
 
 ### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
 

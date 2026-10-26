@@ -81,63 +81,63 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `visitor_team` | character | Abbreviation or name of the visiting (away) team in this game. |
-| `clockTime` | character | Game clock time at the start of the play, formatted as MM:SS within the quarter. |
-| `down` | integer | The down for the given play. |
-| `driveNetYards` | integer | Net yards gained on the current drive up to and including this play. |
-| `drivePlayCount` | integer | Number of offensive plays run on the current drive up to and including this play. |
-| `driveSequenceNumber` | integer | Sequential identifier for the drive within the game, starting at 1. |
-| `driveTimeOfPossession` | character | Elapsed time of possession for the current drive, formatted as MM:SS. |
-| `endClockTime` | character | Game clock time at the end of the play, formatted as MM:SS within the quarter. |
-| `endYardLine` | character | Yard line where the ball was placed at the conclusion of the play. |
-| `firstDown` | logical | Indicates whether the play resulted in a first down. |
-| `goalToGo` | logical | Indicates whether the offensive team is in a goal-to-go situation at the start of the play. |
-| `isBigPlay` | character | Classification label indicating whether this play is designated as a big play by the NFL. |
-| `latestPlay` | character | Indicates whether this play is the most recent play recorded in the live feed. |
-| `nextPlayIsGoalToGo` | logical | Indicates whether the next play will begin in a goal-to-go situation. |
-| `nextPlayType` | character | Play type category anticipated or assigned to the next play in sequence. |
-| `orderSequence` | integer | Sequential ordering value used to sort plays within the game in chronological order. |
-| `penaltyOnPlay` | logical | Indicates whether a penalty was called on this play. |
-| `playClock` | integer | Play clock value in seconds at the snap of the ball. |
-| `playReviewStatus` | character | Status of any official review of the play (e.g., confirmed, overturned, stands). |
-| `playDeleted` | logical | Indicates whether this play record has been marked as deleted or voided. |
-| `playDescription` | character | Official text description of the play as provided by the NFL. |
-| `playDescriptionWithJerseyNumbers` | character | Play description text augmented with player jersey numbers for participant identification. |
-| `playId` | integer |  |
-| `playStats` | integer | Internal NFL stat identifier linking this play to associated statistical records. |
-| `playType` | character | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
-| `prePlayByPlay` | character | Narrative text describing the game situation or setup immediately before this play. |
-| `quarter` | integer | Game quarter in which the play occurred (1–4 for regulation, 5 for overtime). |
-| `scoringPlay` | logical | Indicates whether this play resulted in points being scored. |
-| `scoringPlayType` | character | Type of scoring event on this play (e.g., TD, FG, SAFETY, PAT). |
-| `scoringTeam` | character | Abbreviation or identifier of the team that scored on this play, if applicable. |
-| `shortDescription` | character | Short narrative summary of the play outcome (e.g., 'PENALTY', 'TOUCHDOWN'). |
-| `specialTeamsPlay` | logical | Indicates whether this play was a special teams play. |
-| `stPlayType` | character | Special teams play sub-type classification (e.g., PUNT, KICKOFF, FG_ATTEMPT) when applicable. |
-| `timeOfDay` | character | Wall-clock time of day when the play occurred, typically in local or Eastern time. |
-| `yardLine` | character | Yard line on the field where the ball was placed at the start of the play. |
-| `yards` | integer | The number of receiving yards |
-| `yardsToGo` | integer | Number of yards needed to gain a first down at the start of the play. |
-| `possessionTeam_id` | character | NFL.com Shield API identifier for the team with offensive possession on this play. |
-| `possessionTeam_abbreviation` | character | Abbreviated team name for the team with offensive possession on this play. |
-| `possessionTeam_nickName` | character | Nickname (mascot name) of the team with offensive possession on this play. |
-| `possessionTeam_franchise_primaryColor` | character | Primary brand color for the possessing team's franchise, expressed as a hex color code. |
-| `possessionTeam_franchise_secondaryColor` | character | Secondary brand color for the possessing team's franchise, expressed as a hex color code. |
-| `possessionTeam_franchise_tertiaryColor` | character | Tertiary brand color for the possessing team's franchise, expressed as a hex color code. |
-| `possessionTeam_franchise_currentLogo` | character | URL of the current primary logo for the possessing team's franchise. |
-| `possessionTeam_franchise_largeTypeColor` | character | Large-type display color for the possessing team's franchise branding, as a hex code. |
-| `possessionTeam_franchise_decorativeElementsColor` | character | Decorative elements color for the possessing team's franchise branding, as a hex code. |
-| `scoringTeam_id` | character | NFL.com Shield API identifier for the team that scored on this play. |
-| `scoringTeam_abbreviation` | character | Abbreviated team name for the team that scored on this play. |
-| `scoringTeam_nickName` | character | Nickname (mascot name) of the team that scored on this play. |
-| `scoringTeam_franchise_primaryColor` | character | Primary brand color for the scoring team's franchise, expressed as a hex color code. |
-| `scoringTeam_franchise_secondaryColor` | character | Secondary brand color for the scoring team's franchise, expressed as a hex color code. |
-| `scoringTeam_franchise_tertiaryColor` | character | Tertiary brand color for the scoring team's franchise, expressed as a hex color code. |
-| `scoringTeam_franchise_currentLogo` | character | URL of the current primary logo for the scoring team's franchise. |
-| `scoringTeam_franchise_largeTypeColor` | character | Large-type display color for the scoring team's franchise branding, as a hex code. |
-| `scoringTeam_franchise_decorativeElementsColor` | character | Decorative elements color for the scoring team's franchise branding, as a hex code. |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `home_team` | String | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
+| `visitor_team` | String | Abbreviation or name of the visiting (away) team in this game. |
+| `clockTime` | String | Game clock time at the start of the play, formatted as MM:SS within the quarter. |
+| `down` | Int64 | The down for the given play. |
+| `driveNetYards` | Int64 | Net yards gained on the current drive up to and including this play. |
+| `drivePlayCount` | Int64 | Number of offensive plays run on the current drive up to and including this play. |
+| `driveSequenceNumber` | Int64 | Sequential identifier for the drive within the game, starting at 1. |
+| `driveTimeOfPossession` | String | Elapsed time of possession for the current drive, formatted as MM:SS. |
+| `endClockTime` | String | Game clock time at the end of the play, formatted as MM:SS within the quarter. |
+| `endYardLine` | String | Yard line where the ball was placed at the conclusion of the play. |
+| `firstDown` | Boolean | Indicates whether the play resulted in a first down. |
+| `goalToGo` | Boolean | Indicates whether the offensive team is in a goal-to-go situation at the start of the play. |
+| `isBigPlay` | String | Classification label indicating whether this play is designated as a big play by the NFL. |
+| `latestPlay` | String | Indicates whether this play is the most recent play recorded in the live feed. |
+| `nextPlayIsGoalToGo` | Boolean | Indicates whether the next play will begin in a goal-to-go situation. |
+| `nextPlayType` | String | Play type category anticipated or assigned to the next play in sequence. |
+| `orderSequence` | Int64 | Sequential ordering value used to sort plays within the game in chronological order. |
+| `penaltyOnPlay` | Boolean | Indicates whether a penalty was called on this play. |
+| `playClock` | Int64 | Play clock value in seconds at the snap of the ball. |
+| `playReviewStatus` | String | Status of any official review of the play (e.g., confirmed, overturned, stands). |
+| `playDeleted` | Boolean | Indicates whether this play record has been marked as deleted or voided. |
+| `playDescription` | String | Official text description of the play as provided by the NFL. |
+| `playDescriptionWithJerseyNumbers` | String | Play description text augmented with player jersey numbers for participant identification. |
+| `playId` | Int64 |  |
+| `playStats` | Int64 | Internal NFL stat identifier linking this play to associated statistical records. |
+| `playType` | String | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
+| `prePlayByPlay` | String | Narrative text describing the game situation or setup immediately before this play. |
+| `quarter` | Int64 | Game quarter in which the play occurred (1–4 for regulation, 5 for overtime). |
+| `scoringPlay` | Boolean | Indicates whether this play resulted in points being scored. |
+| `scoringPlayType` | String | Type of scoring event on this play (e.g., TD, FG, SAFETY, PAT). |
+| `scoringTeam` | String | Abbreviation or identifier of the team that scored on this play, if applicable. |
+| `shortDescription` | String | Short narrative summary of the play outcome (e.g., 'PENALTY', 'TOUCHDOWN'). |
+| `specialTeamsPlay` | Boolean | Indicates whether this play was a special teams play. |
+| `stPlayType` | String | Special teams play sub-type classification (e.g., PUNT, KICKOFF, FG_ATTEMPT) when applicable. |
+| `timeOfDay` | String | Wall-clock time of day when the play occurred, typically in local or Eastern time. |
+| `yardLine` | String | Yard line on the field where the ball was placed at the start of the play. |
+| `yards` | Int64 | The number of receiving yards |
+| `yardsToGo` | Int64 | Number of yards needed to gain a first down at the start of the play. |
+| `possessionTeam_id` | String | NFL.com Shield API identifier for the team with offensive possession on this play. |
+| `possessionTeam_abbreviation` | String | Abbreviated team name for the team with offensive possession on this play. |
+| `possessionTeam_nickName` | String | Nickname (mascot name) of the team with offensive possession on this play. |
+| `possessionTeam_franchise_primaryColor` | String | Primary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_secondaryColor` | String | Secondary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_tertiaryColor` | String | Tertiary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_currentLogo` | String | URL of the current primary logo for the possessing team's franchise. |
+| `possessionTeam_franchise_largeTypeColor` | String | Large-type display color for the possessing team's franchise branding, as a hex code. |
+| `possessionTeam_franchise_decorativeElementsColor` | String | Decorative elements color for the possessing team's franchise branding, as a hex code. |
+| `scoringTeam_id` | String | NFL.com Shield API identifier for the team that scored on this play. |
+| `scoringTeam_abbreviation` | String | Abbreviated team name for the team that scored on this play. |
+| `scoringTeam_nickName` | String | Nickname (mascot name) of the team that scored on this play. |
+| `scoringTeam_franchise_primaryColor` | String | Primary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_secondaryColor` | String | Secondary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_tertiaryColor` | String | Tertiary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_currentLogo` | String | URL of the current primary logo for the scoring team's franchise. |
+| `scoringTeam_franchise_largeTypeColor` | String | Large-type display color for the scoring team's franchise branding, as a hex code. |
+| `scoringTeam_franchise_decorativeElementsColor` | String | Decorative elements color for the scoring team's franchise branding, as a hex code. |
 
 **Example**
 
@@ -288,39 +288,39 @@ A polars (or pandas) `DataFrame`, one row per game.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `category` | character | Broader category of player positions |
-| `date` | character |  |
-| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
-| `gameType` | character |  |
-| `international` | logical | Boolean flag indicating whether this game is designated as an international (outside the United States) game. |
-| `neutralSite` | logical |  |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character | Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE'). |
-| `status` | character |  |
-| `week` | integer | Season week. |
-| `weekType` | character | Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB'). |
-| `externalIds` | character | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
-| `ticketUrl` | character | URL to the official ticket purchasing page for this game. |
-| `ticketVendors` | character | Serialized list of authorized ticket vendors or marketplaces for this game. |
-| `extensions` | character | Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API. |
-| `version` | integer | API response version integer returned by the NFL Shield API for this game record. |
-| `homeTeam_id` | character | NFL Shield team identifier for the home team. |
-| `homeTeam_currentLogo` | character | URL for the home team's current primary logo image as served by the NFL Shield API. |
-| `homeTeam_fullName` | character | Full name of the home team (e.g., 'Dallas Cowboys'). |
-| `awayTeam_id` | character | NFL Shield team identifier for the away team. |
-| `awayTeam_currentLogo` | character | URL for the away team's current primary logo image as served by the NFL Shield API. |
-| `awayTeam_fullName` | character | Full name of the away team (e.g., 'Kansas City Chiefs'). |
-| `broadcastInfo_homeNetworkChannels` | character | Serialized list of TV/streaming channels designated as the home team's local broadcast. |
-| `broadcastInfo_awayNetworkChannels` | character | Serialized list of TV/streaming channels designated as the away team's local broadcast. |
-| `broadcastInfo_internationalWatchOptions` | character | Serialized list of international streaming or broadcast options for viewers outside the United States. |
-| `broadcastInfo_streamingNetworks` | character | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
-| `broadcastInfo_territory` | character | Geographic territory or market designation for which this broadcast record applies. |
-| `broadcastInfo_audioNetworks` | character | Serialized list of radio networks carrying the game's audio broadcast. |
-| `venue_id` | character |  |
-| `venue_name` | character |  |
-| `venue_city` | character |  |
-| `venue_country` | character | Country name or ISO code indicating where the game's venue is located. |
+| `id` | String | ID of the player in the 'name' column. |
+| `category` | String | Broader category of player positions |
+| `date` | String |  |
+| `time` | String | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
+| `gameType` | String |  |
+| `international` | Boolean | Boolean flag indicating whether this game is designated as an international (outside the United States) game. |
+| `neutralSite` | Boolean |  |
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | String | Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE'). |
+| `status` | String |  |
+| `week` | Int64 | Season week. |
+| `weekType` | String | Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB'). |
+| `externalIds` | String | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
+| `ticketUrl` | String | URL to the official ticket purchasing page for this game. |
+| `ticketVendors` | String | Serialized list of authorized ticket vendors or marketplaces for this game. |
+| `extensions` | String | Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API. |
+| `version` | Int64 | API response version integer returned by the NFL Shield API for this game record. |
+| `homeTeam_id` | String | NFL Shield team identifier for the home team. |
+| `homeTeam_currentLogo` | String | URL for the home team's current primary logo image as served by the NFL Shield API. |
+| `homeTeam_fullName` | String | Full name of the home team (e.g., 'Dallas Cowboys'). |
+| `awayTeam_id` | String | NFL Shield team identifier for the away team. |
+| `awayTeam_currentLogo` | String | URL for the away team's current primary logo image as served by the NFL Shield API. |
+| `awayTeam_fullName` | String | Full name of the away team (e.g., 'Kansas City Chiefs'). |
+| `broadcastInfo_homeNetworkChannels` | String | Serialized list of TV/streaming channels designated as the home team's local broadcast. |
+| `broadcastInfo_awayNetworkChannels` | String | Serialized list of TV/streaming channels designated as the away team's local broadcast. |
+| `broadcastInfo_internationalWatchOptions` | String | Serialized list of international streaming or broadcast options for viewers outside the United States. |
+| `broadcastInfo_streamingNetworks` | String | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
+| `broadcastInfo_territory` | String | Geographic territory or market designation for which this broadcast record applies. |
+| `broadcastInfo_audioNetworks` | String | Serialized list of radio networks carrying the game's audio broadcast. |
+| `venue_id` | String |  |
+| `venue_name` | String |  |
+| `venue_city` | String |  |
+| `venue_country` | String | Country name or ISO code indicating where the game's venue is located. |
 
 **Example**
 

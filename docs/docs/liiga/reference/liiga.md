@@ -1,11 +1,11 @@
 ---
-title: LIIGA — Liiga API v2 (liiga.fi/api/v2, Finland)
+title: Liiga — Liiga API v2 (liiga.fi/api/v2, Finland)
 sidebar_label: Liiga API v2 (liiga.fi/api/v2, Finland)
-description: "LIIGA — Liiga API v2 (liiga.fi/api/v2, Finland) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Liiga — Liiga API v2 (liiga.fi/api/v2, Finland) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# LIIGA — Liiga API v2 (liiga.fi/api/v2, Finland)
+# Liiga — Liiga API v2 (liiga.fi/api/v2, Finland)
 
 `sportsdataverse.hockey.liiga` — 23 endpoints.
 

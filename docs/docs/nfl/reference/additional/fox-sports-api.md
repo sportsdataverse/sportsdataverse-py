@@ -26,13 +26,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `stat_group` | character |  |
-| `player` | character | Player name |
-| `athlete_id` | character |  |
-| `stat` | character |  |
-| `value` | character | Total contract value |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `stat_group` | String |  |
+| `player` | String | Player name |
+| `athlete_id` | String |  |
+| `stat` | String |  |
+| `value` | String | Total contract value |
 
 **Example**
 
@@ -131,16 +131,16 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `template` | character | Fox layout template name for the header payload; 'entity-header' in sampled data. |
-| `title` | character |  |
-| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
-| `content_uri` | character | Fox Bifrost content path of the league entity (e.g. 'football/nfl/league/1'); entity_id is its trailing number. |
-| `content_type` | character | Fox entity type of the header's entity; 'league' for the league header. |
-| `color` | character |  |
-| `logo_url` | character |  |
-| `image_alt_text` | character | Alt text Fox supplies for the entity's logo image (e.g. 'National Football League'). |
-| `rank` | character | QBR Rank in specified timeframe |
-| `details` | character |  |
+| `template` | String | Fox layout template name for the header payload; 'entity-header' in sampled data. |
+| `title` | String |  |
+| `entity_id` | String | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | String | Fox Bifrost content path of the league entity (e.g. 'football/nfl/league/1'); entity_id is its trailing number. |
+| `content_type` | String | Fox entity type of the header's entity; 'league' for the league header. |
+| `color` | String |  |
+| `logo_url` | String |  |
+| `image_alt_text` | String | Alt text Fox supplies for the entity's logo image (e.g. 'National Football League'). |
+| `rank` | String | QBR Rank in specified timeframe |
+| `details` | String |  |
 
 **Example**
 
@@ -171,13 +171,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `players` | character |  |
-| `v1` | character | Unlabeled second column of the Fox table (blank header, so named by position): the player's abbreviated name, e.g. 'J. Allen'. |
-| `pts` | character |  |
-| `gp` | character |  |
-| `pts_g` | character | Points per game for the leader, as a one-decimal string (e.g. '24.0'); null on rows stacked in from a leader table that has no such column. |
-| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
-| `td` | character | Touchdowns credited to the leader, as an integer string (e.g. '4'); null on rows stacked in from a leader table that has no such column. |
+| `players` | String |  |
+| `v1` | String | Unlabeled second column of the Fox table (blank header, so named by position): the player's abbreviated name, e.g. 'J. Allen'. |
+| `pts` | String |  |
+| `gp` | String |  |
+| `pts_g` | String | Points per game for the leader, as a one-decimal string (e.g. '24.0'); null on rows stacked in from a leader table that has no such column. |
+| `entity_id` | String | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `td` | String | Touchdowns credited to the leader, as an integer string (e.g. '4'); null on rows stacked in from a leader table that has no such column. |
 
 **Example**
 
@@ -200,14 +200,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `section` | character | Title of the Fox odds-board section the game is listed under; always 'GAMES' in sampled data. |
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `event_time` | character | Scheduled start time of the game as an ISO-8601 UTC timestamp string (e.g. '2026-09-20T17:00:00Z'). |
-| `event_status` | integer | Fox numeric event status code for the game; always 2 in sampled data, captured when every listed game was still to be played. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `spread` | character |  |
-| `to_win` | character | Moneyline for the row's team to win the game, as an American-odds string (e.g. '+196', '-238'). |
-| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+| `section` | String | Title of the Fox odds-board section the game is listed under; always 'GAMES' in sampled data. |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `event_time` | String | Scheduled start time of the game as an ISO-8601 UTC timestamp string (e.g. '2026-09-20T17:00:00Z'). |
+| `event_status` | Int64 | Fox numeric event status code for the game; always 2 in sampled data, captured when every listed game was still to be played. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `spread` | String |  |
+| `to_win` | String | Moneyline for the row's team to win the game, as an American-odds string (e.g. '+196', '-238'). |
+| `total` | String | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **Example**
 
@@ -230,17 +230,17 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `title` | character |  |
-| `subtitle` | character | Player context line in 'TEAM #jersey - POSITION' form (e.g. 'HOU #12 - WR'). |
-| `headline` | character |  |
-| `description` | character |  |
-| `impact_title` | character | Heading Fox shows above the impact paragraph; always 'Impact' in sampled data. |
-| `impact` | character | Free-text analysis paragraph (headed by impact_title) on what the news means for the player's availability or role. |
-| `date` | character |  |
-| `source` | character |  |
-| `athlete_id` | character |  |
-| `content_uri` | character | Fox Bifrost content path of the player the news item is about, in sport/league/entity-type/id form (e.g. 'football/nfl/athletes/22256'). |
-| `web_url` | character | Site-relative foxsports.com path of the player's page (not an absolute URL), e.g. '/nfl/nico-collins-player'. |
+| `title` | String |  |
+| `subtitle` | String | Player context line in 'TEAM #jersey - POSITION' form (e.g. 'HOU #12 - WR'). |
+| `headline` | String |  |
+| `description` | String |  |
+| `impact_title` | String | Heading Fox shows above the impact paragraph; always 'Impact' in sampled data. |
+| `impact` | String | Free-text analysis paragraph (headed by impact_title) on what the news means for the player's availability or role. |
+| `date` | String |  |
+| `source` | String |  |
+| `athlete_id` | String |  |
+| `content_uri` | String | Fox Bifrost content path of the player the news item is about, in sport/league/entity-type/id form (e.g. 'football/nfl/athletes/22256'). |
+| `web_url` | String | Site-relative foxsports.com path of the player's page (not an absolute URL), e.g. '/nfl/nico-collins-player'. |
 
 **Example**
 
@@ -282,14 +282,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
-| `id` | character | ID of the player in the 'name' column. |
-| `title` | character |  |
-| `date` | character |  |
-| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
-| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
-| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
-| `group_id` | character |  |
+| `selection_list` | String | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | String | ID of the player in the 'name' column. |
+| `title` | String |  |
+| `date` | String |  |
+| `uri` | String | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | String | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | String | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | String |  |
 
 **Example**
 
@@ -312,14 +312,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
-| `id` | character | ID of the player in the 'name' column. |
-| `title` | character |  |
-| `date` | character |  |
-| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
-| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
-| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
-| `group_id` | character |  |
+| `selection_list` | String | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | String | ID of the player in the 'name' column. |
+| `title` | String |  |
+| `date` | String |  |
+| `uri` | String | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | String | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | String | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | String |  |
 
 **Example**
 
@@ -342,28 +342,28 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `section` | character | Title of the Fox standings section the row's table belongs to: DIVISION, CONFERENCE or PRESEASON in sampled data. |
-| `afc_east` | character | Team's position number in the AFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `v1` | character | Unlabeled second column of the Fox table (blank header, so named by position): the team nickname, e.g. 'Bills'. |
-| `w_l_t` | character | Team's record as a win-loss-tie string with the tie count shown only when nonzero (e.g. '1-0', '1-1-1'). |
-| `pct` | character |  |
-| `pf` | character |  |
-| `pa` | character | Points allowed by the team, as an integer string (e.g. '31'). |
-| `home` | character |  |
-| `away` | character |  |
-| `conf` | character |  |
-| `div` | character | Team's division record as a 'W-L' string (e.g. '1-0', '0-1'); null on rows from standings tables that have no DIV column. |
-| `strk` | character |  |
-| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
-| `afc_north` | character | Team's position number in the AFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `afc_south` | character | Team's position number in the AFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `afc_west` | character | Team's position number in the AFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `nfc_east` | character | Team's position number in the NFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `nfc_north` | character | Team's position number in the NFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `nfc_south` | character | Team's position number in the NFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `nfc_west` | character | Team's position number in the NFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `american_football_conference` | character | Team's position number in the American Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
-| `national_football_conference` | character | Team's position number in the National Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `section` | String | Title of the Fox standings section the row's table belongs to: DIVISION, CONFERENCE or PRESEASON in sampled data. |
+| `afc_east` | String | Team's position number in the AFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `v1` | String | Unlabeled second column of the Fox table (blank header, so named by position): the team nickname, e.g. 'Bills'. |
+| `w_l_t` | String | Team's record as a win-loss-tie string with the tie count shown only when nonzero (e.g. '1-0', '1-1-1'). |
+| `pct` | String |  |
+| `pf` | String |  |
+| `pa` | String | Points allowed by the team, as an integer string (e.g. '31'). |
+| `home` | String |  |
+| `away` | String |  |
+| `conf` | String |  |
+| `div` | String | Team's division record as a 'W-L' string (e.g. '1-0', '0-1'); null on rows from standings tables that have no DIV column. |
+| `strk` | String |  |
+| `entity_id` | String | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `afc_north` | String | Team's position number in the AFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `afc_south` | String | Team's position number in the AFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `afc_west` | String | Team's position number in the AFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_east` | String | Team's position number in the NFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_north` | String | Team's position number in the NFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_south` | String | Team's position number in the NFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_west` | String | Team's position number in the NFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `american_football_conference` | String | Team's position number in the American Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `national_football_conference` | String | Team's position number in the National Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
 
 **Example**
 
@@ -386,11 +386,11 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Broader category of player positions |
-| `stat` | character |  |
-| `stat_abbreviation` | character | Fox's short code for the leader stat (e.g. 'PYDS', 'RTD', 'K-RET YDS'). |
-| `player` | character | Player name |
-| `value` | character | Total contract value |
+| `category` | String | Broader category of player positions |
+| `stat` | String |  |
+| `stat_abbreviation` | String | Fox's short code for the leader stat (e.g. 'PYDS', 'RTD', 'K-RET YDS'). |
+| `player` | String | Player name |
+| `value` | String | Total contract value |
 
 **Example**
 
@@ -419,11 +419,11 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `spread` | character |  |
-| `to_win` | character |  |
-| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `spread` | String |  |
+| `to_win` | String |  |
+| `total` | String | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **Example**
 
@@ -452,19 +452,19 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `quarter` | character |  |
-| `drive_id` | character |  |
-| `drive_result` | character |  |
-| `drive_summary` | character |  |
-| `drive_team` | character |  |
-| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `period` | character |  |
-| `clock` | character |  |
-| `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
-| `play_text` | character |  |
-| `play_team` | character | Club code from the game header (e.g. 'NYG') of the drive group Fox files the play under, i.e. the possession team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick. |
-| `play_player` | character | Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g. 'DEVIN SINGLETARY'); null on admin rows such as timeouts and period ends. |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `quarter` | String |  |
+| `drive_id` | String |  |
+| `drive_result` | String |  |
+| `drive_summary` | String |  |
+| `drive_team` | String |  |
+| `play_id` | String | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
+| `period` | String |  |
+| `clock` | String |  |
+| `field_position` | String | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
+| `play_text` | String |  |
+| `play_team` | String | Club code from the game header (e.g. 'NYG') of the drive group Fox files the play under, i.e. the possession team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick. |
+| `play_player` | String | Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g. 'DEVIN SINGLETARY'); null on admin rows such as timeouts and period ends. |
 
 **Example**
 
@@ -487,14 +487,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
-| `id` | character | ID of the player in the 'name' column. |
-| `title` | character |  |
-| `date` | character |  |
-| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
-| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
-| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
-| `group_id` | character |  |
+| `selection_list` | String | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | String | ID of the player in the 'name' column. |
+| `title` | String |  |
+| `date` | String |  |
+| `uri` | String | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | String | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | String | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | String |  |
 
 **Example**
 
@@ -561,29 +561,29 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `section` | character |  |
-| `afc_west` | character |  |
-| `v1` | character |  |
-| `w_l_t` | character |  |
-| `pct` | character |  |
-| `pf` | character |  |
-| `pa` | character |  |
-| `home` | character |  |
-| `away` | character |  |
-| `conf` | character |  |
-| `div` | character |  |
-| `strk` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `afc_east` | character |  |
-| `afc_north` | character |  |
-| `afc_south` | character |  |
-| `nfc_east` | character |  |
-| `nfc_north` | character |  |
-| `nfc_south` | character |  |
-| `nfc_west` | character |  |
-| `american_football_conference` | character |  |
-| `national_football_conference` | character |  |
+| `team_id` | String |  |
+| `section` | String |  |
+| `afc_west` | String |  |
+| `v1` | String |  |
+| `w_l_t` | String |  |
+| `pct` | String |  |
+| `pf` | String |  |
+| `pa` | String |  |
+| `home` | String |  |
+| `away` | String |  |
+| `conf` | String |  |
+| `div` | String |  |
+| `strk` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `afc_east` | String |  |
+| `afc_north` | String |  |
+| `afc_south` | String |  |
+| `nfc_east` | String |  |
+| `nfc_north` | String |  |
+| `nfc_south` | String |  |
+| `nfc_west` | String |  |
+| `american_football_conference` | String |  |
+| `national_football_conference` | String |  |
 
 **Example**
 
@@ -612,14 +612,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `category` | character | Broader category of player positions |
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `game_date` | character | Date of the game. |
-| `opponent` | character | Opposing team of player |
-| `stat` | character |  |
-| `value` | character | Total contract value |
+| `team_id` | String |  |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `category` | String | Broader category of player positions |
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `game_date` | String | Date of the game. |
+| `opponent` | String | Opposing team of player |
+| `stat` | String |  |
+| `value` | String | Total contract value |
 
 **Example**
 
@@ -667,15 +667,15 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `player` | character | Player name |
-| `pos` | character | Position as tracked by FP |
-| `age` | character | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `ht` | character | Height of player (feet and inches) |
-| `wt` | character | Weight of player (lbs) |
-| `college` | character | Official college (usually the last one attended) |
-| `athlete_id` | character |  |
+| `team_id` | String |  |
+| `position_group` | String | Postion group of player as listed by NFL |
+| `player` | String | Player name |
+| `pos` | String | Position as tracked by FP |
+| `age` | String | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
+| `ht` | String | Height of player (feet and inches) |
+| `wt` | String | Weight of player (lbs) |
+| `college` | String | Official college (usually the last one attended) |
+| `athlete_id` | String |  |
 
 **Example**
 
@@ -704,12 +704,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `category` | character | Broader category of player positions |
-| `stat` | character |  |
-| `stat_abbreviation` | character |  |
-| `player` | character | Player name |
-| `value` | character | Total contract value |
+| `team_id` | String |  |
+| `category` | String | Broader category of player positions |
+| `stat` | String |  |
+| `stat_abbreviation` | String |  |
+| `player` | String | Player name |
+| `value` | String | Total contract value |
 
 **Example**
 
@@ -732,15 +732,15 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character |  |
-| `fox_id` | character | Fox Sports team id as a string, taken from the trailing number of content_uri (e.g. '17'). |
-| `abbreviation` | character |  |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `content_uri` | character | Fox Bifrost content path of the team in sport/league/entity-type/id form (e.g. 'football/nfl/teams/17'). |
-| `content_type` | character | Fox entity type of the navigation item's entity; 'team' for team rows. |
-| `web_url` | character | Site-relative foxsports.com path of the team's page (not an absolute URL), e.g. '/nfl/detroit-lions-team'. |
-| `color` | character |  |
-| `logo_url` | character |  |
+| `group` | String |  |
+| `fox_id` | String | Fox Sports team id as a string, taken from the trailing number of content_uri (e.g. '17'). |
+| `abbreviation` | String |  |
+| `name` | String | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `content_uri` | String | Fox Bifrost content path of the team in sport/league/entity-type/id form (e.g. 'football/nfl/teams/17'). |
+| `content_type` | String | Fox entity type of the navigation item's entity; 'team' for team rows. |
+| `web_url` | String | Site-relative foxsports.com path of the team's page (not an absolute URL), e.g. '/nfl/detroit-lions-team'. |
+| `color` | String |  |
+| `logo_url` | String |  |
 
 **Example**
 

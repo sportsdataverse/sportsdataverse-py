@@ -1,11 +1,11 @@
 ---
-title: "CFB — ESPN core API (v2) — Season"
+title: "College football — ESPN core API (v2) — Season"
 sidebar_label: "Season"
 sidebar_position: 3
-description: "CFB — ESPN core API (v2) — Season — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — ESPN core API (v2) — Season — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — ESPN core API (v2) — Season
+# College football — ESPN core API (v2) — Season
 
 ## espn_cfb_season_pointer
 
@@ -24,38 +24,38 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `display_name` | character | Human-readable metric name. |
-| `end_date` | character | Season end timestamp (ISO 8601, UTC). |
-| `start_date` | character | Season start timestamp (ISO 8601, UTC). |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `athletes_$ref` | character |  |
-| `coaches_$ref` | character |  |
-| `futures_$ref` | character |  |
-| `power_index_leaders_$ref` | character |  |
-| `power_indexes_$ref` | character |  |
-| `rankings_$ref` | character |  |
-| `type_$ref` | character |  |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
-| `type_corrections_$ref` | character |  |
-| `type_end_date` | character |  |
-| `type_groups_$ref` | character |  |
-| `type_has_groups` | logical |  |
-| `type_has_legs` | logical |  |
-| `type_has_standings` | logical |  |
-| `type_id` | integer | Play-type id. |
-| `type_name` | character | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
-| `type_start_date` | character |  |
-| `type_type` | integer |  |
-| `type_weeks_$ref` | character |  |
-| `type_year` | integer |  |
-| `types_$ref` | character |  |
-| `types_count` | integer |  |
-| `types_items` | character |  |
-| `types_page_count` | integer |  |
-| `types_page_index` | integer |  |
-| `types_page_size` | integer |  |
+| `$ref` | String |  |
+| `display_name` | String | Human-readable metric name. |
+| `end_date` | String | Season end timestamp (ISO 8601, UTC). |
+| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
+| `year` | Int64 | Four-digit season year (e.g. 2019). |
+| `athletes_$ref` | String |  |
+| `coaches_$ref` | String |  |
+| `futures_$ref` | String |  |
+| `power_index_leaders_$ref` | String |  |
+| `power_indexes_$ref` | String |  |
+| `rankings_$ref` | String |  |
+| `type_$ref` | String |  |
+| `type_abbreviation` | String | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_corrections_$ref` | String |  |
+| `type_end_date` | String |  |
+| `type_groups_$ref` | String |  |
+| `type_has_groups` | Boolean |  |
+| `type_has_legs` | Boolean |  |
+| `type_has_standings` | Boolean |  |
+| `type_id` | Int64 | Play-type id. |
+| `type_name` | String | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
+| `type_slug` | String | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_start_date` | String |  |
+| `type_type` | Int64 |  |
+| `type_weeks_$ref` | String |  |
+| `type_year` | Int64 |  |
+| `types_$ref` | String |  |
+| `types_count` | Int64 |  |
+| `types_items` | String |  |
+| `types_page_count` | Int64 |  |
+| `types_page_index` | Int64 |  |
+| `types_page_size` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -91,39 +91,39 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `display_name` | character | Human-readable metric name. |
-| `end_date` | character | Season end timestamp (ISO 8601, UTC). |
-| `start_date` | character | Season start timestamp (ISO 8601, UTC). |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `awards_$ref` | character |  |
-| `futures_$ref` | character |  |
-| `leaders_$ref` | character |  |
-| `power_index_leaders_$ref` | character |  |
-| `power_indexes_$ref` | character |  |
-| `rankings_$ref` | character |  |
-| `type_$ref` | character |  |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
-| `type_corrections_$ref` | character |  |
-| `type_end_date` | character |  |
-| `type_groups_$ref` | character |  |
-| `type_has_groups` | logical |  |
-| `type_has_legs` | logical |  |
-| `type_has_standings` | logical |  |
-| `type_id` | integer | Play-type id. |
-| `type_leaders_$ref` | character |  |
-| `type_name` | character | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
-| `type_start_date` | character |  |
-| `type_type` | integer |  |
-| `type_weeks_$ref` | character |  |
-| `type_year` | integer |  |
-| `types_$ref` | character |  |
-| `types_count` | integer |  |
-| `types_items` | character |  |
-| `types_page_count` | integer |  |
-| `types_page_index` | integer |  |
-| `types_page_size` | integer |  |
+| `$ref` | String |  |
+| `display_name` | String | Human-readable metric name. |
+| `end_date` | String | Season end timestamp (ISO 8601, UTC). |
+| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
+| `year` | Int64 | Four-digit season year (e.g. 2019). |
+| `awards_$ref` | String |  |
+| `futures_$ref` | String |  |
+| `leaders_$ref` | String |  |
+| `power_index_leaders_$ref` | String |  |
+| `power_indexes_$ref` | String |  |
+| `rankings_$ref` | String |  |
+| `type_$ref` | String |  |
+| `type_abbreviation` | String | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_corrections_$ref` | String |  |
+| `type_end_date` | String |  |
+| `type_groups_$ref` | String |  |
+| `type_has_groups` | Boolean |  |
+| `type_has_legs` | Boolean |  |
+| `type_has_standings` | Boolean |  |
+| `type_id` | Int64 | Play-type id. |
+| `type_leaders_$ref` | String |  |
+| `type_name` | String | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
+| `type_slug` | String | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_start_date` | String |  |
+| `type_type` | Int64 |  |
+| `type_weeks_$ref` | String |  |
+| `type_year` | Int64 |  |
+| `types_$ref` | String |  |
+| `types_count` | Int64 |  |
+| `types_items` | String |  |
+| `types_page_count` | Int64 |  |
+| `types_page_index` | Int64 |  |
+| `types_page_size` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -159,9 +159,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -198,22 +198,22 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `abbreviation` | character | Metric abbreviation. |
-| `end_date` | character | Season end timestamp (ISO 8601, UTC). |
-| `has_groups` | logical | Whether the season type exposes a groups resource. |
-| `has_legs` | logical |  |
-| `has_standings` | logical | Whether the season type exposes standings. |
-| `id` | integer | 247Sports referencing id for the recruit. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `slug` | character | URL slug for the team. |
-| `start_date` | character | Season start timestamp (ISO 8601, UTC). |
-| `type` | integer | Record-type category (e.g. `total`, `home`, `road`). |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `corrections_$ref` | character |  |
-| `groups_$ref` | character |  |
-| `leaders_$ref` | character |  |
-| `weeks_$ref` | character |  |
+| `$ref` | String |  |
+| `abbreviation` | String | Metric abbreviation. |
+| `end_date` | String | Season end timestamp (ISO 8601, UTC). |
+| `has_groups` | Boolean | Whether the season type exposes a groups resource. |
+| `has_legs` | Boolean |  |
+| `has_standings` | Boolean | Whether the season type exposes standings. |
+| `id` | Int64 | 247Sports referencing id for the recruit. |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `slug` | String | URL slug for the team. |
+| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
+| `type` | Int64 | Record-type category (e.g. `total`, `home`, `road`). |
+| `year` | Int64 | Four-digit season year (e.g. 2019). |
+| `corrections_$ref` | String |  |
+| `groups_$ref` | String |  |
+| `leaders_$ref` | String |  |
+| `weeks_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -251,20 +251,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `id` | integer | 247Sports referencing id for the recruit. |
-| `is_conference` | logical | `TRUE` for an actual conference, `FALSE` for a division roll-up. |
-| `links` | character |  |
-| `midsize_name` | character |  |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
-| `slug` | character | URL slug for the team. |
-| `uid` | character | ESPN global unique identifier. |
-| `children_$ref` | character |  |
-| `parent_$ref` | character |  |
-| `season_$ref` | character |  |
-| `standings_$ref` | character |  |
-| `teams_$ref` | character |  |
+| `$ref` | String |  |
+| `id` | Int64 | 247Sports referencing id for the recruit. |
+| `is_conference` | Boolean | `TRUE` for an actual conference, `FALSE` for a division roll-up. |
+| `links` | String |  |
+| `midsize_name` | String |  |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `short_name` | String | Ranking source short name (e.g. `AP Poll`). |
+| `slug` | String | URL slug for the team. |
+| `uid` | String | ESPN global unique identifier. |
+| `children_$ref` | String |  |
+| `parent_$ref` | String |  |
+| `season_$ref` | String |  |
+| `standings_$ref` | String |  |
+| `teams_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -303,9 +303,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -344,9 +344,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -418,15 +418,15 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_$ref` | character |  |
-| `competition_$ref` | character |  |
-| `split_stats_abbreviation` | character |  |
-| `split_stats_categories` | character |  |
-| `split_stats_id` | integer |  |
-| `split_stats_name` | character |  |
-| `team_$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `athlete_$ref` | String |  |
+| `competition_$ref` | String |  |
+| `split_stats_abbreviation` | String |  |
+| `split_stats_categories` | String |  |
+| `split_stats_id` | Int64 |  |
+| `split_stats_name` | String |  |
+| `team_$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -463,9 +463,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -503,12 +503,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `end_date` | character | Season end timestamp (ISO 8601, UTC). |
-| `number` | integer |  |
-| `start_date` | character | Season start timestamp (ISO 8601, UTC). |
-| `text` | character | Full play description. |
-| `rankings_$ref` | character |  |
+| `$ref` | String |  |
+| `end_date` | String | Season end timestamp (ISO 8601, UTC). |
+| `number` | Int64 |  |
+| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
+| `text` | String | Full play description. |
+| `rankings_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -547,43 +547,43 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `season` | integer | Season (4-digit year). |
-| `last_updated` | character | Timestamp ESPN last refreshed the power index. |
-| `run_date_time_key` | integer |  |
-| `fpi` | double | ESPN Football Power Index rating (projected scoring margin vs. average team). |
-| `fpirank` | double |  |
-| `projectedw` | double |  |
-| `projectedl` | double |  |
-| `projectedt` | double |  |
-| `record` | double |  |
-| `probwinout` | double |  |
-| `probwinconf` | character |  |
-| `sosremainingrank` | double |  |
-| `accomplishment` | character |  |
-| `accomplishmentrank` | double |  |
-| `adjwins` | character |  |
-| `adjlosses` | character |  |
-| `adjwinpctrank` | double |  |
-| `gamecontrol` | character |  |
-| `gamecontrolrank` | double |  |
-| `adjavgingamewp` | character |  |
-| `adjavgingamewprank` | double |  |
-| `avgingamewp` | double |  |
-| `avgingamewprank` | double |  |
-| `avgsosrank` | double |  |
-| `epaoffense` | double |  |
-| `epadefense` | double |  |
-| `epaspecialteams` | double |  |
-| `probwindiv` | double |  |
-| `offefficiency` | double |  |
-| `offefficiencyrank` | double |  |
-| `defefficiency` | double |  |
-| `defefficiencyrank` | double |  |
-| `stefficiency` | double |  |
-| `stefficiencyrank` | double |  |
-| `totefficiency` | double |  |
-| `totefficiencyrank` | double |  |
+| `team_id` | Int64 | ESPN team id. |
+| `season` | Int64 | Season (4-digit year). |
+| `last_updated` | String | Timestamp ESPN last refreshed the power index. |
+| `run_date_time_key` | Int64 |  |
+| `fpi` | Float64 | ESPN Football Power Index rating (projected scoring margin vs. average team). |
+| `fpirank` | Float64 |  |
+| `projectedw` | Float64 |  |
+| `projectedl` | Float64 |  |
+| `projectedt` | Float64 |  |
+| `record` | Float64 |  |
+| `probwinout` | Float64 |  |
+| `probwinconf` | String |  |
+| `sosremainingrank` | Float64 |  |
+| `accomplishment` | String |  |
+| `accomplishmentrank` | Float64 |  |
+| `adjwins` | String |  |
+| `adjlosses` | String |  |
+| `adjwinpctrank` | Float64 |  |
+| `gamecontrol` | String |  |
+| `gamecontrolrank` | Float64 |  |
+| `adjavgingamewp` | String |  |
+| `adjavgingamewprank` | Float64 |  |
+| `avgingamewp` | Float64 |  |
+| `avgingamewprank` | Float64 |  |
+| `avgsosrank` | Float64 |  |
+| `epaoffense` | Float64 |  |
+| `epadefense` | Float64 |  |
+| `epaspecialteams` | Float64 |  |
+| `probwindiv` | Float64 |  |
+| `offefficiency` | Float64 |  |
+| `offefficiencyrank` | Float64 |  |
+| `defefficiency` | Float64 |  |
+| `defefficiencyrank` | Float64 |  |
+| `stefficiency` | Float64 |  |
+| `stefficiencyrank` | Float64 |  |
+| `totefficiency` | Float64 |  |
+| `totefficiencyrank` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -622,9 +622,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -662,9 +662,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -701,46 +701,46 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `abbreviation` | character | Metric abbreviation. |
-| `alternate_color` | character | Alternate team color (hex, no `#`). |
-| `color` | character | Primary team color (hex, no `#`). |
-| `display_name` | character | Human-readable metric name. |
-| `guid` | character | ESPN athlete GUID. |
-| `id` | integer | 247Sports referencing id for the recruit. |
-| `is_active` | logical | Whether the team is currently active. |
-| `is_all_star` | logical | Whether the team is an all-star team. |
-| `links` | character |  |
-| `location` | character | Team location / school name. |
-| `logos` | character | Team logos. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `short_display_name` | character | Short human-readable metric name. |
-| `slug` | character | URL slug for the team. |
-| `uid` | character | ESPN global unique identifier. |
-| `against_the_spread_records_$ref` | character |  |
-| `awards_$ref` | character |  |
-| `coaches_$ref` | character |  |
-| `depth_charts_$ref` | character |  |
-| `events_$ref` | character |  |
-| `franchise_$ref` | character |  |
-| `groups_$ref` | character |  |
-| `injuries_$ref` | character |  |
-| `leaders_$ref` | character |  |
-| `notes_$ref` | character |  |
-| `ranks_$ref` | character |  |
-| `record_$ref` | character |  |
-| `statistics_$ref` | character |  |
-| `transactions_$ref` | character |  |
-| `venue_$ref` | character |  |
-| `venue_address_city` | character |  |
-| `venue_address_state` | character |  |
-| `venue_full_name` | character |  |
-| `venue_grass` | logical | Whether the home venue has a grass surface. |
-| `venue_guid` | character |  |
-| `venue_id` | integer | Referencing venue id. |
-| `venue_images` | character |  |
-| `venue_indoor` | logical | Whether the home venue is indoors. |
-| `venue_short_name` | character |  |
+| `$ref` | String |  |
+| `abbreviation` | String | Metric abbreviation. |
+| `alternate_color` | String | Alternate team color (hex, no `#`). |
+| `color` | String | Primary team color (hex, no `#`). |
+| `display_name` | String | Human-readable metric name. |
+| `guid` | String | ESPN athlete GUID. |
+| `id` | Int64 | 247Sports referencing id for the recruit. |
+| `is_active` | Boolean | Whether the team is currently active. |
+| `is_all_star` | Boolean | Whether the team is an all-star team. |
+| `links` | String |  |
+| `location` | String | Team location / school name. |
+| `logos` | String | Team logos. |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `short_display_name` | String | Short human-readable metric name. |
+| `slug` | String | URL slug for the team. |
+| `uid` | String | ESPN global unique identifier. |
+| `against_the_spread_records_$ref` | String |  |
+| `awards_$ref` | String |  |
+| `coaches_$ref` | String |  |
+| `depth_charts_$ref` | String |  |
+| `events_$ref` | String |  |
+| `franchise_$ref` | String |  |
+| `groups_$ref` | String |  |
+| `injuries_$ref` | String |  |
+| `leaders_$ref` | String |  |
+| `notes_$ref` | String |  |
+| `ranks_$ref` | String |  |
+| `record_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `transactions_$ref` | String |  |
+| `venue_$ref` | String |  |
+| `venue_address_city` | String |  |
+| `venue_address_state` | String |  |
+| `venue_full_name` | String |  |
+| `venue_grass` | Boolean | Whether the home venue has a grass surface. |
+| `venue_guid` | String |  |
+| `venue_id` | Int64 | Referencing venue id. |
+| `venue_images` | String |  |
+| `venue_indoor` | Boolean | Whether the home venue is indoors. |
+| `venue_short_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -778,9 +778,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -817,7 +817,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
+| `$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -853,17 +853,17 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character | Core v2 URL of this draft resource. |
-| `display_name` | character | Full name of the draft (e.g., "2024 National Basketball Association Draft"). |
-| `links` | character | JSON-encoded list of ESPN web links for the draft (href, rel, text). |
-| `number_of_rounds` | integer | Number of rounds in the draft. |
-| `positions` | character | JSON-encoded list of the position resources the draft uses (Core v2 $ref links with abbreviations). |
-| `short_display_name` | character | Short name of the draft (e.g., "2024 NBA Draft"). |
-| `uid` | character | ESPN universal id of the draft (e.g., "s:40~l:46~e:draft~y:2024"). |
-| `year` | integer | Year the draft was held (e.g., 2024), the season in its Core v2 path. |
-| `athletes_$ref` | character | Core v2 URL of the draft's athlete (prospect) collection. |
-| `rounds_$ref` | character | Core v2 URL of the draft's rounds, which hold the picks. |
-| `status_$ref` | character | Core v2 URL of the draft's status resource. |
+| `$ref` | String | Core v2 URL of this draft resource. |
+| `display_name` | String | Full name of the draft (e.g., "2024 National Basketball Association Draft"). |
+| `links` | String | JSON-encoded list of ESPN web links for the draft (href, rel, text). |
+| `number_of_rounds` | Int64 | Number of rounds in the draft. |
+| `positions` | String | JSON-encoded list of the position resources the draft uses (Core v2 $ref links with abbreviations). |
+| `short_display_name` | String | Short name of the draft (e.g., "2024 NBA Draft"). |
+| `uid` | String | ESPN universal id of the draft (e.g., "s:40~l:46~e:draft~y:2024"). |
+| `year` | Int64 | Year the draft was held (e.g., 2024), the season in its Core v2 path. |
+| `athletes_$ref` | String | Core v2 URL of the draft's athlete (prospect) collection. |
+| `rounds_$ref` | String | Core v2 URL of the draft's rounds, which hold the picks. |
+| `status_$ref` | String | Core v2 URL of the draft's status resource. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -968,11 +968,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `display_name` | character | Human-readable metric name. |
-| `leaders` | character |  |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `display_name` | String | Human-readable metric name. |
+| `leaders` | String |  |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1009,9 +1009,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1087,15 +1087,15 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_$ref` | character |  |
-| `season_$ref` | character |  |
-| `splits_abbreviation` | character |  |
-| `splits_categories` | character |  |
-| `splits_id` | integer |  |
-| `splits_name` | character |  |
-| `team_$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `athlete_$ref` | String |  |
+| `season_$ref` | String |  |
+| `splits_abbreviation` | String |  |
+| `splits_categories` | String |  |
+| `splits_id` | Int64 |  |
+| `splits_name` | String |  |
+| `team_$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

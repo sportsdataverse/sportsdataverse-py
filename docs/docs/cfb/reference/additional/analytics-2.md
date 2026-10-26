@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — Analytics: cfb_season–play_type"
+title: "College football — additional Python functions — Analytics: cfb_season–play_type"
 sidebar_label: "Analytics: cfb_season–play_type"
 sidebar_position: 13
-description: "CFB — additional Python functions — Analytics: cfb_season–play_type — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: cfb_season–play_type — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Analytics: cfb_season–play_type
+# College football — additional Python functions — Analytics: cfb_season–play_type
 
 ### cfb_season_odds {#cfb_season_odds}
 
@@ -40,13 +40,13 @@ One row per team: `season`, `team_id` (Utf8), `exp_wins`, `conf_title_prob`, `pl
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season simulated (null for a pooled multi-season call). |
-| `team_id` | character | Team ESPN id (character join key). |
-| `exp_wins` | double | Mean wins per simulated season. |
-| `conf_title_prob` | double | Share of simulations in which the team won its conference. |
-| `playoff_prob` | double | Share of simulations in which the team made the College Football Playoff field. |
-| `first_round_bye_prob` | double | Share of simulations in which the team earned a CFP first-round bye. |
-| `cfp_champ_prob` | double | Share of simulations in which the team won the College Football Playoff national championship. |
+| `season` | Int64 | Season simulated (null for a pooled multi-season call). |
+| `team_id` | String | Team ESPN id (character join key). |
+| `exp_wins` | Float64 | Mean wins per simulated season. |
+| `conf_title_prob` | Float64 | Share of simulations in which the team won its conference. |
+| `playoff_prob` | Float64 | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye_prob` | Float64 | Share of simulations in which the team earned a CFP first-round bye. |
+| `cfp_champ_prob` | Float64 | Share of simulations in which the team won the College Football Playoff national championship. |
 
 **Example**
 
@@ -81,10 +81,10 @@ Per (season, team_id): `net_transfer_talent` (Float64), `pred_win_delta` (Float6
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season the net transfer talent describes. |
-| `team_id` | character | ESPN team id as a string (rosters team_id, cast Int64 to Utf8). |
-| `net_transfer_talent` | double | Incoming minus outgoing transfer talent points for the season. |
-| `pred_win_delta` | double | Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate). |
+| `season` | Int64 | Season the net transfer talent describes. |
+| `team_id` | String | ESPN team id as a string (rosters team_id, cast Int64 to Utf8). |
+| `net_transfer_talent` | Float64 | Incoming minus outgoing transfer talent points for the season. |
+| `pred_win_delta` | Float64 | Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate). |
 
 **Example**
 
@@ -114,12 +114,12 @@ One row per move side: `season` (Int64, the destination season), `team_id` (Utf8
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Destination season of the move (compares rosters S-1 to S). |
-| `team_id` | character | ESPN team id (as a string) of the side this row describes (destination for "in", origin for "out"). |
-| `player_id` | character | ESPN athlete id as a string. |
-| `direction` | character | Move side - "in" (arriving at team_id) or "out" (leaving team_id). |
-| `prior_team_id` | character | ESPN team id (as a string) of the season S-1 team. |
-| `talent_points` | double | Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated). |
+| `season` | Int64 | Destination season of the move (compares rosters S-1 to S). |
+| `team_id` | String | ESPN team id (as a string) of the side this row describes (destination for "in", origin for "out"). |
+| `player_id` | String | ESPN athlete id as a string. |
+| `direction` | String | Move side - "in" (arriving at team_id) or "out" (leaving team_id). |
+| `prior_team_id` | String | ESPN team id (as a string) of the season S-1 team. |
+| `talent_points` | Float64 | Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated). |
 
 **Example**
 

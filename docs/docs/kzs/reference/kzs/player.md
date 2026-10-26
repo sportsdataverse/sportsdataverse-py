@@ -29,22 +29,22 @@ Player leaderboard of a competition for one stat category (total, per-game avera
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | integer | Competition id: one per competition per season (men's first league 2025/26 = 579, 2026/27 = 608). |
-| `stats_category` | character | Stat category of the board (PTS points, R rebounds, ASS assists ...): the request's, the rows do not echo it. |
-| `club_id` | integer | Club id: the club across seasons and categories (Ilirija = 16). No captured route is keyed by it. |
-| `club_fullname` | character | Club's full legal name. |
-| `club_logo_uuid` | character | Club logo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
-| `club_code` | character | Club 3-letter code. |
-| `team_id` | integer | Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query params. |
-| `team_name` | character | Team name for the season, sponsor included. |
-| `games_played` | integer | Games the player played in the competition. |
-| `sum` | numeric | Season total of the requested statsCategory. |
-| `average` | numeric | Per-game average of the statsCategory. |
-| `max` | numeric | Single-game best of the statsCategory. |
-| `player_id` | integer | Player id (KZS player registry). Joins to /players/{playerId}, box-score and play-by-play `playerId`. |
-| `player_firstname` | character | The player's given name as registered with KZS (lower-case n in this route). |
-| `player_lastname` | character | The player's family name as registered with KZS (lower-case n in this route). |
-| `photo_uuid` | character | Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
+| `competition_id` | Int64 | Competition id: one per competition per season (men's first league 2025/26 = 579, 2026/27 = 608). |
+| `stats_category` | String | Stat category of the board (PTS points, R rebounds, ASS assists ...): the request's, the rows do not echo it. |
+| `club_id` | Int64 | Club id: the club across seasons and categories (Ilirija = 16). No captured route is keyed by it. |
+| `club_fullname` | String | Club's full legal name. |
+| `club_logo_uuid` | String | Club logo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
+| `club_code` | String | Club 3-letter code. |
+| `team_id` | Int64 | Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query params. |
+| `team_name` | String | Team name for the season, sponsor included. |
+| `games_played` | Int64 | Games the player played in the competition. |
+| `sum` | Float64 | Season total of the requested statsCategory. |
+| `average` | Float64 | Per-game average of the statsCategory. |
+| `max` | Float64 | Single-game best of the statsCategory. |
+| `player_id` | Int64 | Player id (KZS player registry). Joins to /players/{playerId}, box-score and play-by-play `playerId`. |
+| `player_firstname` | String | The player's given name as registered with KZS (lower-case n in this route). |
+| `player_lastname` | String | The player's family name as registered with KZS (lower-case n in this route). |
+| `photo_uuid` | String | Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -80,20 +80,20 @@ Player profile: names, year of birth, nationality and positions.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Person id: the federation's person record behind a player, coach or official; a different key space from player, coach and official ids. |
-| `identification_number` | integer | Player's KZS registration (licence) number; a different key space from the player id, used by no captured route. |
-| `person_id` | integer | Person id: the federation's person record behind a player, coach or official; a different key space from player, coach and official ids. |
-| `first_name` | character | The player's given name. |
-| `last_name` | character | The player's family name. |
-| `year_of_birth` | integer | Year of birth (players: public bio). |
-| `nationality_id` | integer | Country id (FMS internal; use the ISO codes). |
-| `nationality_alpha2_code` | character | ISO 3166-1 alpha-2 country code. |
-| `nationality_alpha3_code` | character | ISO 3166-1 alpha-3 country code. |
-| `nationality_name` | character | Country name in Slovenian (e.g. 'Združene države' = United States); use `engName` or the ISO codes. |
-| `nationality_eng_name` | character | Country name in English. |
-| `homegrown` | logical | True when the player counts as homegrown (domači igralec) for roster limits. |
-| `photo_uuid` | character | Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
-| `positions` | character | Unobserved: null, or an empty array, in every sample, so its type and meaning are unconfirmed. |
+| `player_id` | Int64 | Person id: the federation's person record behind a player, coach or official; a different key space from player, coach and official ids. |
+| `identification_number` | Int64 | Player's KZS registration (licence) number; a different key space from the player id, used by no captured route. |
+| `person_id` | Int64 | Person id: the federation's person record behind a player, coach or official; a different key space from player, coach and official ids. |
+| `first_name` | String | The player's given name. |
+| `last_name` | String | The player's family name. |
+| `year_of_birth` | Int64 | Year of birth (players: public bio). |
+| `nationality_id` | Int64 | Country id (FMS internal; use the ISO codes). |
+| `nationality_alpha2_code` | String | ISO 3166-1 alpha-2 country code. |
+| `nationality_alpha3_code` | String | ISO 3166-1 alpha-3 country code. |
+| `nationality_name` | String | Country name in Slovenian (e.g. 'Združene države' = United States); use `engName` or the ISO codes. |
+| `nationality_eng_name` | String | Country name in English. |
+| `homegrown` | Boolean | True when the player counts as homegrown (domači igralec) for roster limits. |
+| `photo_uuid` | String | Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}. |
+| `positions` | String | Unobserved: null, or an empty array, in every sample, so its type and meaning are unconfirmed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -130,57 +130,57 @@ A player's totals and per-game averages in each competition of one season.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player registry id of the request (the body does not echo it). |
-| `season_id` | integer | Opaque KZS season id (27 = 2026/2027); the sdv season is the END year in season. |
-| `season` | integer | Season END year (2026/2027 = 2027), from the row's own season name or id, else from the request. |
-| `competition_id` | integer | Competition id: one per competition per season (men's top league 2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the `competitionId` query params. |
-| `a1` | integer | Season total: free throws attempted. |
-| `a2` | integer | Season total: two-pointers attempted. |
-| `a3` | integer | Season total: three-pointers attempted. |
-| `pts` | integer | Season total: points. |
-| `ass` | integer | Season total: assists. |
-| `blag` | integer | Season total: own shots blocked (blocks against). |
-| `blfv` | integer | Season total: blocks made (blocks in favour). |
-| `captain` | integer | Games as captain. |
-| `m1` | integer | Season total: free throws made. |
-| `m2` | integer | Season total: two-pointers made. |
-| `m3` | integer | Season total: three-pointers made. |
-| `mins` | numeric | Season total: minutes played (decimal minutes). |
-| `pfcm` | integer | Season total: fouls committed. |
-| `pfrv` | integer | Season total: fouls received. |
-| `rd` | integer | Season total: defensive rebounds. |
-| `ro` | integer | Season total: offensive rebounds. |
-| `st` | integer | Season total: steals. |
-| `startinglineup` | integer | Games the player started in the competition. |
-| `tov` | integer | Season total: turnovers. |
-| `played` | integer | Games the player played in the competition. |
-| `plus_minus` | integer | Season total: the team's point difference while the player was on court. |
-| `efficiency` | integer | Season total: efficiency (PIR). |
-| `avgpts` | numeric | Per game: points. |
-| `avga1` | numeric | Per game: free throws attempted. |
-| `avga2` | numeric | Per game: two-pointers attempted. |
-| `avga3` | numeric | Per game: three-pointers attempted. |
-| `avgass` | numeric | Per game: assists. |
-| `avgblag` | numeric | Per game: own shots blocked (blocks against). |
-| `avgblfv` | numeric | Per game: blocks made (blocks in favour). |
-| `avgm1` | numeric | Per game: free throws made. |
-| `avgm2` | numeric | Per game: two-pointers made. |
-| `avgm3` | numeric | Per game: three-pointers made. |
-| `avgmins` | numeric | Per game: minutes played (decimal minutes). |
-| `avgpfcm` | numeric | Per game: fouls committed. |
-| `avgpfrv` | numeric | Per game: fouls received. |
-| `avgrd` | numeric | Per game: defensive rebounds. |
-| `avgro` | numeric | Per game: offensive rebounds. |
-| `avgsecs` | integer | Per game: seconds (0 in every sample: unused). |
-| `avgst` | numeric | Per game: steals. |
-| `avgtov` | numeric | Per game: turnovers. |
-| `avgplus_minus` | numeric | Per game: the team's point difference while the player was on court. |
-| `avgefficiency` | numeric | Per game: efficiency (PIR). |
-| `live_stats` | logical | True when the competition has live stats. |
-| `competition_name` | character | Competition name, Slovenian (e.g. 'Liga OTP banka', 'Pokal Spar'). |
-| `competition_rank` | character | Tier of the competition (code table). |
-| `competition_category` | character | Category of the competition (code table). |
-| `competition_gender` | character | MALE or FEMALE competition. |
+| `player_id` | Int64 | Player registry id of the request (the body does not echo it). |
+| `season_id` | Int64 | Opaque KZS season id (27 = 2026/2027); the sdv season is the END year in season. |
+| `season` | Int64 | Season END year (2026/2027 = 2027), from the row's own season name or id, else from the request. |
+| `competition_id` | Int64 | Competition id: one per competition per season (men's top league 2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the `competitionId` query params. |
+| `a1` | Int64 | Season total: free throws attempted. |
+| `a2` | Int64 | Season total: two-pointers attempted. |
+| `a3` | Int64 | Season total: three-pointers attempted. |
+| `pts` | Int64 | Season total: points. |
+| `ass` | Int64 | Season total: assists. |
+| `blag` | Int64 | Season total: own shots blocked (blocks against). |
+| `blfv` | Int64 | Season total: blocks made (blocks in favour). |
+| `captain` | Int64 | Games as captain. |
+| `m1` | Int64 | Season total: free throws made. |
+| `m2` | Int64 | Season total: two-pointers made. |
+| `m3` | Int64 | Season total: three-pointers made. |
+| `mins` | Float64 | Season total: minutes played (decimal minutes). |
+| `pfcm` | Int64 | Season total: fouls committed. |
+| `pfrv` | Int64 | Season total: fouls received. |
+| `rd` | Int64 | Season total: defensive rebounds. |
+| `ro` | Int64 | Season total: offensive rebounds. |
+| `st` | Int64 | Season total: steals. |
+| `startinglineup` | Int64 | Games the player started in the competition. |
+| `tov` | Int64 | Season total: turnovers. |
+| `played` | Int64 | Games the player played in the competition. |
+| `plus_minus` | Int64 | Season total: the team's point difference while the player was on court. |
+| `efficiency` | Int64 | Season total: efficiency (PIR). |
+| `avgpts` | Float64 | Per game: points. |
+| `avga1` | Float64 | Per game: free throws attempted. |
+| `avga2` | Float64 | Per game: two-pointers attempted. |
+| `avga3` | Float64 | Per game: three-pointers attempted. |
+| `avgass` | Float64 | Per game: assists. |
+| `avgblag` | Float64 | Per game: own shots blocked (blocks against). |
+| `avgblfv` | Float64 | Per game: blocks made (blocks in favour). |
+| `avgm1` | Float64 | Per game: free throws made. |
+| `avgm2` | Float64 | Per game: two-pointers made. |
+| `avgm3` | Float64 | Per game: three-pointers made. |
+| `avgmins` | Float64 | Per game: minutes played (decimal minutes). |
+| `avgpfcm` | Float64 | Per game: fouls committed. |
+| `avgpfrv` | Float64 | Per game: fouls received. |
+| `avgrd` | Float64 | Per game: defensive rebounds. |
+| `avgro` | Float64 | Per game: offensive rebounds. |
+| `avgsecs` | Int64 | Per game: seconds (0 in every sample: unused). |
+| `avgst` | Float64 | Per game: steals. |
+| `avgtov` | Float64 | Per game: turnovers. |
+| `avgplus_minus` | Float64 | Per game: the team's point difference while the player was on court. |
+| `avgefficiency` | Float64 | Per game: efficiency (PIR). |
+| `live_stats` | Boolean | True when the competition has live stats. |
+| `competition_name` | String | Competition name, Slovenian (e.g. 'Liga OTP banka', 'Pokal Spar'). |
+| `competition_rank` | String | Tier of the competition (code table). |
+| `competition_category` | String | Category of the competition (code table). |
+| `competition_gender` | String | MALE or FEMALE competition. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,11 +1,11 @@
 ---
-title: WJBL — W League API (api.wjbl.01core.app, Japan women)
+title: W League (Japan) — W League API (api.wjbl.01core.app, Japan women)
 sidebar_label: W League API (api.wjbl.01core.app, Japan women)
-description: "WJBL — W League API (api.wjbl.01core.app, Japan women) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "W League (Japan) — W League API (api.wjbl.01core.app, Japan women) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# WJBL — W League API (api.wjbl.01core.app, Japan women)
+# W League (Japan) — W League API (api.wjbl.01core.app, Japan women)
 
 `sportsdataverse.basketball.wjbl` — 19 endpoints.
 

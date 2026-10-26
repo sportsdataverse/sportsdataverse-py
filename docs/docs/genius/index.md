@@ -1,9 +1,9 @@
 ---
-title: GENIUS
-sidebar_label: GENIUS
-description: "sdv-py GENIUS: endpoint references, dataset loaders and parsers for GENIUS in the SportsDataverse Python package."
+title: Genius Sports LiveStats
+sidebar_label: Genius Sports LiveStats
+description: "sdv-py Genius Sports LiveStats: endpoint references, dataset loaders and parsers for Genius Sports LiveStats in the SportsDataverse Python package."
 ---
-# GENIUS (`sportsdataverse.basketball.genius`)
+# Genius Sports LiveStats (`sportsdataverse.basketball.genius`)
 
 ## Data sources
 

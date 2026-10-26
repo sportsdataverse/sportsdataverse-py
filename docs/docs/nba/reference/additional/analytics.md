@@ -36,44 +36,44 @@ The input frame with a `ctg_shot_zone` Utf8 column appended (null on non-field-g
 
 | col_name | type | description |
 |---|---|---|
-| `order_index` | integer |  |
-| `action_number` | integer | Sequential action number within a game (V3 PBP). |
-| `clock` | character | Game clock value. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `team_id` | integer | Unique team identifier. |
-| `team_tricode` | character | Three-letter team code (e.g. 'LAS' / 'NYL'). |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player_name` | character | Player name. |
-| `player_name_i` | character | Player name i. |
-| `x_legacy` | integer | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
-| `y_legacy` | integer | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
-| `shot_distance` | integer | Shot distance from the basket, in feet. |
-| `shot_result` | character | Shot result ('Made' / 'Missed'). |
-| `is_field_goal` | integer | 1 if the action was a field goal; 0 otherwise. |
-| `score_home` | character | Score home. |
-| `score_away` | character | Score away. |
-| `points_total` | integer | Running total of points scored. |
-| `location` | character | Location. |
-| `description` | character | Long-form description text. |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `sub_type` | character | Action sub-type label. |
-| `video_available` | integer | Video available. |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `action_id` | integer | Unique action identifier within a game (V3 PBP). |
-| `game_id` | character | Unique game identifier. |
-| `seconds_remaining` | double | Seconds remaining in the period. |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `is_made_shot` | logical |  |
-| `is_missed_shot` | logical |  |
-| `is_free_throw` | logical |  |
-| `is_rebound` | logical |  |
-| `is_turnover` | logical |  |
-| `is_foul` | logical |  |
-| `is_substitution` | logical |  |
-| `is_jump_ball` | logical |  |
-| `is_timeout` | logical |  |
-| `is_period` | logical |  |
-| `ctg_shot_zone` | character |  |
+| `order_index` | Int64 |  |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `clock` | String | Game clock value. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_tricode` | String | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `player_name` | String | Player name. |
+| `player_name_i` | String | Player name i. |
+| `x_legacy` | Int64 | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
+| `y_legacy` | Int64 | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
+| `shot_distance` | Int64 | Shot distance from the basket, in feet. |
+| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `is_field_goal` | Int64 | 1 if the action was a field goal; 0 otherwise. |
+| `score_home` | String | Score home. |
+| `score_away` | String | Score away. |
+| `points_total` | Int64 | Running total of points scored. |
+| `location` | String | Location. |
+| `description` | String | Long-form description text. |
+| `action_type` | String | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `sub_type` | String | Action sub-type label. |
+| `video_available` | Int64 | Video available. |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `action_id` | Int64 | Unique action identifier within a game (V3 PBP). |
+| `game_id` | String | Unique game identifier. |
+| `seconds_remaining` | Float64 | Seconds remaining in the period. |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `is_made_shot` | Boolean |  |
+| `is_missed_shot` | Boolean |  |
+| `is_free_throw` | Boolean |  |
+| `is_rebound` | Boolean |  |
+| `is_turnover` | Boolean |  |
+| `is_foul` | Boolean |  |
+| `is_substitution` | Boolean |  |
+| `is_jump_ball` | Boolean |  |
+| `is_timeout` | Boolean |  |
+| `is_period` | Boolean |  |
+| `ctg_shot_zone` | String |  |
 
 **Example**
 
@@ -111,38 +111,38 @@ The possession frame (`POSSESSIONS_SCHEMA`) plus every column in `PLAY_CONTEXT_P
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `possession_start_type_detail` | character |  |
-| `possession_start_type_ctg` | character |  |
-| `seconds_to_first_play` | double |  |
-| `is_transition` | logical |  |
-| `transition_source` | character |  |
-| `possession_context` | character |  |
-| `is_heave_possession` | logical |  |
-| `is_garbage_time` | logical |  |
-| `garbage_time_basis` | character |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `possession_start_type_detail` | String |  |
+| `possession_start_type_ctg` | String |  |
+| `seconds_to_first_play` | Float64 |  |
+| `is_transition` | Boolean |  |
+| `transition_source` | String |  |
+| `possession_context` | String |  |
+| `is_heave_possession` | Boolean |  |
+| `is_garbage_time` | Boolean |  |
+| `garbage_time_basis` | String |  |
 
 **Example**
 
@@ -187,31 +187,31 @@ possession is `OffTimeout`, not `OffMadeShot`).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `possession_start_type_detail` | character |  |
-| `possession_start_type_ctg` | character |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `possession_start_type_detail` | String |  |
+| `possession_start_type_ctg` | String |  |
 
 **Example**
 
@@ -261,35 +261,35 @@ variant.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `possession_start_type_detail` | character |  |
-| `possession_start_type_ctg` | character |  |
-| `seconds_to_first_play` | double |  |
-| `is_transition` | logical |  |
-| `transition_source` | character |  |
-| `possession_context` | character |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `possession_start_type_detail` | String |  |
+| `possession_start_type_ctg` | String |  |
+| `seconds_to_first_play` | Float64 |  |
+| `is_transition` | Boolean |  |
+| `transition_source` | String |  |
+| `possession_context` | String |  |
 
 **Raises**
 
@@ -333,20 +333,20 @@ One row per player: `player_id`, the `_STATS` per-100 rates, `min` (total), `gp`
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `pts` | double | Points scored. |
-| `fg3m` | double | Three-point field goals made. |
-| `fga` | double | Field goal attempts. |
-| `fta` | double | Free throw attempts. |
-| `ast` | double | Assists. |
-| `oreb` | double | Offensive rebounds. |
-| `dreb` | double | Defensive rebounds. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `tov` | double | Turnovers. |
-| `pf` | double | Personal fouls. |
-| `min` | double | Minutes played. |
-| `gp` | integer | Games played. |
+| `player_id` | Int64 | Unique player identifier. |
+| `pts` | Float64 | Points scored. |
+| `fg3m` | Float64 | Three-point field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fta` | Float64 | Free throw attempts. |
+| `ast` | Float64 | Assists. |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `min` | Float64 | Minutes played. |
+| `gp` | Int64 | Games played. |
 
 ### build_play_context_shots {#build_play_context_shots}
 
@@ -382,19 +382,19 @@ Polars DataFrame with schema `PLAY_CONTEXT_SHOTS_SCHEMA` — one row per field-g
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `possession_number` | integer | Possession number. |
-| `order_index` | integer |  |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `team_id` | integer | Unique team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `shot_made` | logical |  |
-| `ctg_shot_zone` | character |  |
-| `is_assisted` | logical |  |
-| `is_putback` | logical |  |
-| `is_second_chance_shot` | logical |  |
-| `shot_context` | character |  |
+| `game_id` | String | Unique game identifier. |
+| `possession_number` | Int64 | Possession number. |
+| `order_index` | Int64 |  |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | Int64 | Unique team identifier. |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `shot_made` | Boolean |  |
+| `ctg_shot_zone` | String |  |
+| `is_assisted` | Boolean |  |
+| `is_putback` | Boolean |  |
+| `is_second_chance_shot` | Boolean |  |
+| `shot_context` | String |  |
 
 **Example**
 
@@ -430,16 +430,16 @@ Polars DataFrame with schema `POSSESSION_SHOOTING_SCHEMA`. One row per `(possess
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `possession_number` | integer | Possession number. |
-| `player_id` | integer | Unique player identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
+| `game_id` | String | Unique game identifier. |
+| `possession_number` | Int64 | Possession number. |
+| `player_id` | Int64 | Unique player identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
 
 **Example**
 
@@ -533,31 +533,31 @@ CTG-exact.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `is_garbage_time` | logical |  |
-| `garbage_time_basis` | character |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `is_garbage_time` | Boolean |  |
+| `garbage_time_basis` | String |  |
 
 **Example**
 
@@ -592,41 +592,41 @@ late Q4 possession is a real possession.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `off_player_1` | integer |  |
-| `off_player_2` | integer |  |
-| `off_player_3` | integer |  |
-| `off_player_4` | integer |  |
-| `off_player_5` | integer |  |
-| `def_player_1` | integer |  |
-| `def_player_2` | integer |  |
-| `def_player_3` | integer |  |
-| `def_player_4` | integer |  |
-| `def_player_5` | integer |  |
-| `lineup_source` | character |  |
-| `is_heave_possession` | logical |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `def_player_1` | Int64 |  |
+| `def_player_2` | Int64 |  |
+| `def_player_3` | Int64 |  |
+| `def_player_4` | Int64 |  |
+| `def_player_5` | Int64 |  |
+| `lineup_source` | String |  |
+| `is_heave_possession` | Boolean |  |
 
 **Example**
 
@@ -670,19 +670,19 @@ One row per player-season with `player_id`, `player`, `first_name`, `last_name`,
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `team_id` | character | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `season` | integer | Season year. |
-| `salary` | double | Total cap-counting salary for the season ($). |
-| `cap_allocation` | double | Cap allocation for the season (USD). |
-| `team_option` | logical | Whether the season is a team option. |
-| `player_option` | logical | Whether the season is a player option. |
-| `two_way` | logical | Whether it is a two-way contract. |
-| `qualifying_offer` | logical | Whether it is a qualifying offer. |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `team_id` | String | Unique team identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `season` | Int64 | Season year. |
+| `salary` | Float64 | Total cap-counting salary for the season ($). |
+| `cap_allocation` | Float64 | Cap allocation for the season (USD). |
+| `team_option` | Boolean | Whether the season is a team option. |
+| `player_option` | Boolean | Whether the season is a player option. |
+| `two_way` | Boolean | Whether it is a two-way contract. |
+| `qualifying_offer` | Boolean | Whether it is a qualifying offer. |
 
 **Raises**
 
@@ -739,26 +739,26 @@ One row per (team, lineup) with `LINEUP_PLAY_CONTEXT_SCHEMA`. Empty input return
 
 | col_name | type | description |
 |---|---|---|
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `lineup_id` | character |  |
-| `off_player_1` | integer |  |
-| `off_player_2` | integer |  |
-| `off_player_3` | integer |  |
-| `off_player_4` | integer |  |
-| `off_player_5` | integer |  |
-| `poss` | integer | Poss. |
-| `points` | integer | Points scored. |
-| `pts_per_100` | double |  |
-| `transition_poss` | integer |  |
-| `transition_points` | integer |  |
-| `transition_freq` | double |  |
-| `transition_pts_per_100` | double |  |
-| `non_transition_pts_per_100` | double |  |
-| `transition_pts_added_per_100` | double |  |
-| `halfcourt_poss` | integer |  |
-| `halfcourt_pts_per_100` | double |  |
-| `freq_off_steal` | double |  |
-| `freq_off_live_rebound` | double |  |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `lineup_id` | String |  |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `poss` | Int64 | Poss. |
+| `points` | Int64 | Points scored. |
+| `pts_per_100` | Float64 |  |
+| `transition_poss` | Int64 |  |
+| `transition_points` | Int64 |  |
+| `transition_freq` | Float64 |  |
+| `transition_pts_per_100` | Float64 |  |
+| `non_transition_pts_per_100` | Float64 |  |
+| `transition_pts_added_per_100` | Float64 |  |
+| `halfcourt_poss` | Int64 |  |
+| `halfcourt_pts_per_100` | Float64 |  |
+| `freq_off_steal` | Float64 |  |
+| `freq_off_live_rebound` | Float64 |  |
 
 **Raises**
 
@@ -978,41 +978,41 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"
 
 | col_name | type | description |
 |---|---|---|
-| `calls.game_id` | character | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
-| `calls.period` | integer | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
-| `calls.period_name` | character | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
-| `calls.pc_time` | character | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
-| `calls.seconds_remaining` | double | Seconds remaining in the period at the graded play, parsed out of pc_time. |
-| `calls.call_type` | character | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
-| `calls.call` | character | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
-| `calls.type` | character | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
-| `calls.committing` | character | Player, team nickname, or coach responsible for the graded action. |
-| `calls.disadvantaged` | character | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
-| `calls.decision` | character | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
-| `calls.decision_raw` | character | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
-| `calls.comment` | character | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
-| `calls.difficulty` | character | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
-| `calls.video_event_id` | character | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
-| `calls.pos_id` | integer | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
-| `calls.pos_start` | character | Game clock at the start of the possession containing this graded play. |
-| `calls.pos_end` | character | Game clock at the end of the possession containing this graded play. |
-| `calls.pos_team_id` | integer | 10-digit NBA team id of the team in possession during the graded play. |
-| `game.game_id` | character | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
-| `game.game_date` | date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
-| `game.season_type` | character | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `game.home_team_id` | integer | 10-digit NBA team id (1610612xxx) of the home team. |
-| `game.away_team_id` | integer | 10-digit NBA team id (1610612xxx) of the away team. |
-| `game.home_team_abbr` | character | Three-letter abbreviation of the home team. |
-| `game.away_team_abbr` | character | Three-letter abbreviation of the away team. |
-| `game.home_team_name` | character | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
-| `game.away_team_name` | character | Away team nickname as published in the report. |
-| `game.home_score` | integer | Home team's final score for the game. |
-| `game.away_score` | integer | Away team's final score for the game. |
-| `game.l2m_comments` | character | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
-| `stats.game_id` | character | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
-| `stats.stat_name` | character | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
-| `stats.home` | integer | Value of stat_name attributed to the home team. |
-| `stats.away` | integer | Value of stat_name attributed to the away team. |
+| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
+| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
+| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
+| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
+| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
+| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
+| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
+| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
+| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
+| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
+| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
+| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
+| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
+| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
+| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
+| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
+| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
+| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
+| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
+| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
+| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
+| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
+| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
+| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
+| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
+| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
+| `game.away_team_name` | String | Away team nickname as published in the report. |
+| `game.home_score` | Int64 | Home team's final score for the game. |
+| `game.away_score` | Int64 | Away team's final score for the game. |
+| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
+| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
+| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
+| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
+| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
 
 **Raises**
 
@@ -1067,10 +1067,10 @@ A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with s
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
-| `season` | integer | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
-| `season_type` | character | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `label` | character | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
+| `game_id` | String | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
+| `season` | Int64 | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
+| `season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `label` | String | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
 
 **Raises**
 
@@ -1198,12 +1198,12 @@ One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one 
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `teams` | character | Nested list of member-team membership spans. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `teams` | String | Nested list of member-team membership spans. |
 
 **Example**
 
@@ -1294,13 +1294,13 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `team_id` | character | Unique team identifier. |
-| `stat_pts_exp` | double |  |
-| `stat_reb_exp` | double |  |
-| `stat_ast_exp` | double |  |
-| `stat_fg3m_exp` | double |  |
-| `pace_proj` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `stat_pts_exp` | Float64 |  |
+| `stat_reb_exp` | Float64 |  |
+| `stat_ast_exp` | Float64 |  |
+| `stat_fg3m_exp` | Float64 |  |
+| `pace_proj` | Float64 |  |
 
 **Raises**
 
@@ -1453,35 +1453,35 @@ The parsed `polars.DataFrame`, or `None` when the store is unset, the capture is
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `matchup` | character | Matchup. |
-| `wl` | character | Wl. |
-| `min` | integer | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | double | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Rebounds per game. |
-| `ast` | integer | Assists. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `tov` | integer | Turnovers. |
-| `pf` | integer | Personal fouls. |
-| `pts` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
-| `video_available` | integer | Video available. |
+| `season_id` | String | Unique season identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `matchup` | String | Matchup. |
+| `wl` | String | Wl. |
+| `min` | Int64 | Minutes played. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Rebounds per game. |
+| `ast` | Int64 | Assists. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `tov` | Int64 | Turnovers. |
+| `pf` | Int64 | Personal fouls. |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Int64 | Plus/minus point differential while on court. |
+| `video_available` | Int64 | Video available. |
 
 **Example**
 

@@ -1,9 +1,9 @@
 ---
-title: SCB
-sidebar_label: SCB
-description: "sdv-py SCB: endpoint references, dataset loaders and parsers for SCB in the SportsDataverse Python package."
+title: BBL / DBBL (SCB)
+sidebar_label: BBL / DBBL (SCB)
+description: "sdv-py BBL / DBBL (SCB): endpoint references, dataset loaders and parsers for BBL / DBBL (SCB) in the SportsDataverse Python package."
 ---
-# SCB (`sportsdataverse.basketball.scb`)
+# BBL / DBBL (SCB) (`sportsdataverse.basketball.scb`)
 
 ## Data sources
 

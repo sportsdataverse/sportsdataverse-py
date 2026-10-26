@@ -1,11 +1,11 @@
 ---
-title: NL — National League app API (www.nationalleague.ch/api, Switzerland)
+title: National League — National League app API (www.nationalleague.ch/api, Switzerland)
 sidebar_label: National League app API (www.nationalleague.ch/api, Switzerland)
-description: "NL — National League app API (www.nationalleague.ch/api, Switzerland) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "National League — National League app API (www.nationalleague.ch/api, Switzerland) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# NL — National League app API (www.nationalleague.ch/api, Switzerland)
+# National League — National League app API (www.nationalleague.ch/api, Switzerland)
 
 `sportsdataverse.hockey.nl` — 17 endpoints.
 
