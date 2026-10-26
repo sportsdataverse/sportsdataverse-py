@@ -83,8 +83,9 @@ def _to_markdown(nb, stem: str) -> str:
     from traitlets.config import Config
 
     cfg = Config()
-    # Image outputs (if any) are extracted to <stem>_files/ alongside the page.
-    cfg.MarkdownExporter.preprocessors = ["nbconvert.preprocessors.ExtractOutputPreprocessor"]
+    # Image outputs (if any) are extracted to <stem>_files/ alongside the page. MarkdownExporter
+    # already enables ExtractOutputPreprocessor; listing it in `preprocessors` too ran it twice, and
+    # the second pass raised on the first image ("filename ... associated with more than one output").
     cfg.ExtractOutputPreprocessor.output_filename_template = (
         f"{stem}_files/{{unique_key}}_{{cell_index}}_{{index}}{{extension}}"
     )
@@ -259,11 +260,18 @@ def main() -> int:
             try:
                 _execute(nb)
             except Exception as e:  # noqa: BLE001 -- surface which notebook broke
-                print(f"  EXECUTION FAILED for {stem}: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
+                # A CellExecutionError's text starts with the cell source; the error itself is ename/evalue.
+                err = f"{e.ename}: {e.evalue}" if hasattr(e, "ename") else f"{type(e).__name__}: {e}"
+                print(f"  EXECUTION FAILED for {stem}: {err[:600]}", file=sys.stderr)
                 failures.append(stem)
                 continue
         _clean_outputs(nb)
-        body = _fix_links(_to_markdown(nb, stem))
+        try:
+            body = _fix_links(_to_markdown(nb, stem))
+        except Exception as e:  # noqa: BLE001 -- one bad export must not stop the remaining notebooks
+            print(f"  RENDER FAILED for {stem}: {type(e).__name__}: {str(e)[:600]}", file=sys.stderr)
+            failures.append(stem)
+            continue
         (OUT_DIR / f"{stem}.md").write_text(
             _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, body)), encoding="utf-8", newline="\n"
         )

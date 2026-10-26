@@ -49,3 +49,17 @@ def test_relinked_pages_follow_the_anchor_map_generate_passes_not_the_committed_
     assert "](../mlb/reference/mlb_api/other-2.md#mlb_awards)" in out
     pages = rn.relinked_pages({})
     assert pages and all(k.startswith("tutorials/") and k.endswith(".md") for k in pages)
+
+
+def test_a_cell_with_an_image_renders_once_per_output(tmp_path, monkeypatch):
+    """MarkdownExporter enables ExtractOutputPreprocessor itself; listing it again ran it twice and
+    the second pass raised on the first image (notebook 16's EuroLeague shot chart, 2026-10-26)."""
+    import nbformat
+
+    png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+    out = nbformat.v4.new_output("display_data", data={"image/png": png, "text/plain": "<Figure>"})
+    nb = nbformat.v4.new_notebook(cells=[nbformat.v4.new_code_cell("plt.show()", outputs=[out])])
+    monkeypatch.setattr(rn, "OUT_DIR", tmp_path)
+    body = rn._to_markdown(nb, "16_demo")
+    assert "16_demo_files/16_demo_0_0.png" in body
+    assert (tmp_path / "16_demo_files" / "16_demo_0_0.png").exists()
