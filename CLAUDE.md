@@ -80,8 +80,8 @@ fix(cfb): correct kneel-down classification in cfb_pbp parser
 docs(contributing): document uv workflow and skip_if_no_live gate
 test(wnba): add live smoke tests for player_stats canonical categories
 refactor(dl_utils): rewrite download() retry as iterative + raise on exhaustion
-chore(deps): bump polars to >=1.0,<2.0 + re-lock
-ci(actions): add py3.14 to the test matrix
+chore(deps): bump polars to >=2.0,<3 + re-lock
+ci(actions): add a floor-import job on the 3.10 floor
 ```
 
 Prefer scoped commit subjects when useful (e.g., `feat(wbb): ...`,
@@ -228,7 +228,6 @@ tests/
   conftest.py # skip_if_no_live decorator
   cfb/, mbb/, mlb/, nba/, nfl/, nhl/, wbb/, wnba/  # one subdir per source pkg
 docs/                       # Docusaurus site (don't pollute with internal docs)
-docs_instructions.md        # Reference for the docs build workflow
 dev/                        # Local-only working notes (gitignored)
 recipe/                     # Conda-build recipe (meta.yaml + README)
 pyproject.toml              # PEP 621 metadata + tooling (ruff lint+format, mypy)
@@ -729,8 +728,8 @@ registry-driven league families**:
   `echl_schedule`, `echl_pbp`, `echl_standings`, `echl_teams`,
   `echl_team_roster`, `echl_player_stats`, `echl_leaders`, `echl_game_summary`,
   `echl_game_shifts`, `echl_player_toi`, `echl_game_corsi`, `echl_season_id`,
-  `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a 4-line
-  `sportsdataverse/hockey/<lg>/__init__.py` (calls `build_family`) + 3 wiring
+  `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a short
+  `sportsdataverse/hockey/<lg>/__init__.py` (copy `hockey/echl/__init__.py`: it calls `build_family`) + 3 wiring
   lines (the league in `tools/codegen/generate.py`'s `_HOCKEYTECH_MODULE_LEAGUES`,
   which renders the generated `hockey/__init__.py`; the top-level `__init__.py`
   wildcard; and the `_MOVED` back-compat entry). **No new parser code** — see below.

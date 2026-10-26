@@ -73,6 +73,10 @@ _CLAUDE_STALE = [
     "11,446",
     "3,446 wrappers",
     "30 league modules",
+    "docs_instructions.md",
+    "a 4-line",
+    "bump polars to >=1.0,<2.0",
+    "add py3.14 to the test matrix",
 ]
 
 _CLAUDE_CURRENT = [
@@ -212,6 +216,16 @@ def test_claude_md_flat_api_count_matches_the_code():
     assert f"`FLAT_APIS` has {len(generate.FLAT_APIS)} families" in text("claude")
 
 
+@pytest.mark.parametrize("key", ["claude", "copilot"])
+def test_nflreadpy_alias_count_matches_the_code(key):
+    """Counted from the ``load_nfl_* as load_*`` imports in ``sportsdataverse/nfl/__init__.py``."""
+    import re
+
+    init = (ROOT / "sportsdataverse" / "nfl" / "__init__.py").read_text(encoding="utf-8")
+    n = len(re.findall(r"\bload_nfl_\w+ as load_\w+", init))
+    assert f"{n} nflreadpy-style" in flat(key), f"{key} should say {n} nflreadpy-style aliases"
+
+
 # --- .github/copilot-instructions.md ---------------------------------------
 
 _COPILOT_STALE = [
@@ -234,6 +248,11 @@ _COPILOT_STALE = [
     "the floor stays 1.0",
     "`I` rules own import order",
     "import sorting, pyupgrade",
+    "25 nflreadpy-style",
+    "442 entries",
+    "682 of 729",
+    "4-line module",
+    "bump polars to >=1.0,<2.0",
 ]
 
 _COPILOT_CURRENT = [
@@ -305,6 +324,8 @@ _README_STALE = [
     "from the next release (0.1.5+)",
     "git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`",
     "polars 1.x or 2.x",
+    "will become the one-shot",
+    "PFF Developer + Premium clients",
 ]
 
 _README_CURRENT = [

@@ -70,7 +70,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 feat(wbb): add espn_wbb_team_roster() season-level scraper
 fix(cfb): correct kneel-down classification in cfb_pbp parser
 docs(contributing): document uv workflow and skip_if_no_live gate
-chore(deps): bump polars to >=1.0,<2.0 + re-lock
+chore(deps): bump polars to >=2.0,<3 + re-lock
 ```
 
 **Important: Never include AI agents or assistants (e.g., Claude, Copilot,
@@ -98,10 +98,10 @@ is the sole attributable contributor.
 
 - New modules: full type hints required (params + returns); legacy modules
   remain un-typed for now. Append the module path to the `[tool.mypy] files`
-  ratchet in `pyproject.toml` (442 entries, `follow_imports = "skip"`). There
+  ratchet in `pyproject.toml` (`follow_imports = "skip"`). There
   are no `[[tool.mypy.overrides]]` blocks — do not add one; a whole-package
   override would make the gate permanently red on the untyped legacy surface.
-- DO use `from __future__ import annotations`: 682 of 729 modules already do,
+- DO use `from __future__ import annotations`: nearly every module already does,
   and it keeps `X | None` working on the 3.10 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
@@ -208,7 +208,7 @@ See `CLAUDE.md` → "NBA / WNBA — stats.nba.com".
 core (`sportsdataverse/hockeytech/`) + a `LEAGUES` registry mints 13 public
 callables per league via `build_family(league)` — 20 leagues wired (`pwhl`
 flagship top-level; `ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, …). Adding a
-league is a registry entry + a 4-line module — never new parser code. Errors
+league is a registry entry + a short `__init__.py` calling `build_family` — never new parser code. Errors
 are HTTP 200 with an error-in-body sentinel; check bodies, not status. See
 `CLAUDE.md` → "Hockey — HockeyTech multi-league".
 
@@ -231,10 +231,10 @@ silently completing the build from the live API.
 
 `sportsdataverse.nfl` is a near drop-in replacement for nflreadpy.
 
-- 25 nflreadpy-style aliases live INSIDE `sportsdataverse.nfl` (e.g.
+- 24 nflreadpy-style aliases live INSIDE `sportsdataverse.nfl` (e.g.
   `load_pbp`, `load_schedules`, `load_nextgen_stats`, `load_pfr_advstats`,
-  `load_ff_rankings`, `clear_cache`, `get_current_season`,
-  `get_current_week`). Do NOT re-export them at the top-level
+  `load_ff_rankings`), plus the date aliases `get_current_season` /
+  `get_current_week`. Do NOT re-export them at the top-level
   `sportsdataverse` namespace — the prefix-based names handle
   cross-sport disambiguation there.
 - Use unified `load_nfl_nextgen_stats(stat_type=...)` and
