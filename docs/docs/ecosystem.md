@@ -193,9 +193,9 @@ SportsDataverse builds on and complements two neighboring communities:
 
 ## Where to go next
 
-- New here? Browse the **[Tutorials](tutorials/01_quickstart.md)** — fifteen executed
-  example notebooks (Quickstart plus one per sport: NBA, WNBA, MBB, WBB, NFL, CFB,
-  MLB, NHL, PWHL) rendered as pages with real outputs. They are CI-executed weekly
+- New here? Browse the **[Tutorials](tutorials/01_quickstart.md)** — nineteen executed
+  example notebooks (Quickstart, one per sport, and tours of international basketball,
+  European and college hockey, prediction markets and more sources) rendered as pages with real outputs. They are CI-executed weekly
   (`nbmake`) so they stay in sync with the API; the source notebooks live under
   `examples/notebooks/`.
 - Want the design details? [ESPN cross-league architecture](architecture/espn-cross-league.md)

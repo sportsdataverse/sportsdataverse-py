@@ -423,7 +423,7 @@ _SITE_CURRENT = {
     "qol": ["~6,170 callables", "**deprecated**"],
     "espn": ["| CFB | 125 |", "default to `return_parsed=True`"],
     "parsers": ["21-section", "Errors (0.1.5)", "21 sub-frames"],
-    "ecosystem": ["fifteen executed"],
+    "ecosystem": ["nineteen executed"],
 }
 
 
