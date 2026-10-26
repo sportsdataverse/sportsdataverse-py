@@ -1,1 +1,3 @@
-- `parse_soccer_summary` (so `espn_<league>_summary` for every ESPN soccer league) warns (`UserWarning`, naming the event id) when a payload carries a match header but `key_events`, `commentary` and `lineups` are all empty, instead of returning the zero-row frames silently. ESPN lists usa.nwsl 2014-2018 but ships no detail for those seasons. (sdv-internal-refs `rules/nwsl.yaml#nwsl-2013-espn-season-coverage-start`)
+- **ESPN soccer:** `parse_soccer_summary` (every `espn_<league>_summary`) warns `UserWarning`, naming the event id, when
+  a payload has a match header but empty `key_events`, `commentary` and `lineups`, instead of returning zero-row frames
+  silently; ESPN lists usa.nwsl 2014-2018 but ships no detail for those seasons. (#742)
