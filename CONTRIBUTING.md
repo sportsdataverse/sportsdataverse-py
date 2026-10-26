@@ -13,6 +13,7 @@
     - [Mutation registry](#mutation-registry)
   - [Deprecating a public API](#deprecating-a-public-api)
   - [Codegen and the docs site](#codegen-and-the-docs-site)
+  - [Adding a league](#adding-a-league)
   - [Documentation & the docs site](#documentation--the-docs-site)
     - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
     - [At release time](#at-release-time)
@@ -385,6 +386,37 @@ public docstring, an `__all__`, or `CHANGELOG.md`.
 The `sdv-docs` MCP server (`sdv_docs/`, extra `sportsdataverse[mcp]`, Python >=
 3.10) answers questions about this surface from a prebuilt SQLite index. It must
 never import `sportsdataverse` — a test guards that.
+
+## Adding a league
+
+Which steps a new league takes depends on its source. In every case, regenerate
+(`uv run python tools/codegen/generate.py`, then `--check`) and make sure each new public
+function resolves in `tools/codegen/sources.yaml`, or `--check` fails naming it.
+[`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md) has the details.
+
+- **An ESPN league.** Add one line to `tools/codegen/endpoints/leagues.yaml`:
+  `{prefix: <lg>, sport: <espn sport>, league: <espn league slug>, scopes: [...]}`, plus an
+  optional `group:` that nests the module under a container (`hockey`, `baseball`, `football`,
+  `soccer`). An endpoint in the five ESPN YAMLs (`generate.ESPN_APIS`) is emitted for every league
+  whose `scopes` include the endpoint's `scope:` (`universal`, `ncaa`, `football`, `mlb`), minus
+  its `exclude_leagues` (the `espn_cdn` endpoints also take an `include_prefixes` allowlist,
+  so a new league reaches them only when added there). The regen writes `sportsdataverse/<lg>/<lg>_espn_ext.py` and wires
+  the league's `__init__.py`. For a top-level league to reach the flat `sportsdataverse.<fn>`
+  namespace, add its `from sportsdataverse.<lg> import *` line to the hand-written
+  `sportsdataverse/__init__.py`.
+- **A flat-API family** (a non-ESPN host). Write `tools/codegen/endpoints/<stem>.yaml` and add a
+  `("<stem>", "<league prefix>")` tuple to `FLAT_APIS` in `tools/codegen/generate.py`; a family
+  that nests under `hockey/` or `basketball/` also needs its home in `_NESTED_HOMES` (via
+  `_EURO_HOCKEY_HOMES` / `_BASKETBALL_HOMES`). Give each endpoint a parser and a `returns_schema:`
+  validated against a real capture (see "New codegen native-API families" above). Some endpoint
+  YAMLs are written by a `tools/codegen/gen_*.py` generator from a vendor spec; edit the generator's
+  input, not its output.
+- **A HockeyTech league.** No parser code: add a `LeagueConfig` row to `LEAGUES` (and the code to
+  the `LeagueCode` literal) in `sportsdataverse/hockeytech/_leagues.py`; create
+  `sportsdataverse/hockey/<lg>/__init__.py` calling `build_family("<lg>")` (copy
+  `hockey/echl/__init__.py`); add the league to `_HOCKEYTECH_MODULE_LEAGUES` in `generate.py`;
+  add its wildcard import and its `_MOVED` back-compat entry to `sportsdataverse/__init__.py`. See
+  `CLAUDE.md`, "Hockey — HockeyTech multi-league", for the canvas, `league_id` and key caveats.
 
 ## Documentation & the docs site
 
