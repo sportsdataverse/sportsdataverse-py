@@ -263,12 +263,12 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `category` | `category` |  |  | `Y` | category query parameter. |
+| `category` | `category` |  |  | `Y` | Leaderboard population: the athletes ranked in that category, whose values it fills (other categories come back null). Football takes `<group>:<category>` (`offense:passing`, `offense:rushing`, `offense:receiving`, `defense:defensive`, `scoring:scoring`); a bare `passing` is rejected with HTTP 400 (ValueError). Basketball takes the bare name (`offensive`). |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
-| `sort` | `sort` |  |  | `Y` | sort query parameter. |
+| `sort` | `sort` |  |  | `Y` | Sort key `<category>.<statName>:<asc\|desc>`, the names in the payload's categories (`passing.passingYards:desc`, `offensive.avgPoints:desc`). A stat without its category is rejected with HTTP 400 (ValueError). |
 
 ### Returns {#espn_nba_leaders-returns}
 
@@ -276,40 +276,55 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athletes` | character | Athletes. |
-| `glossary` | character | Glossary. |
-| `categories` | character | Categories. |
-| `pagination_count` | integer | Pagination count. |
-| `pagination_limit` | integer | Pagination limit. |
-| `pagination_page` | integer | Pagination page. |
-| `pagination_pages` | integer | Pagination pages. |
-| `pagination_first` | character | Pagination first. |
-| `pagination_next` | character | Pagination next. |
-| `pagination_last` | character | Pagination last. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_short_name` | character | League short name. |
-| `current_season_year` | integer | Current season year. |
-| `current_season_display_name` | character | Current season display name. |
-| `current_season_start_date` | character | Current season start date. |
-| `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | integer | Current season type id. |
-| `current_season_type_type` | integer | Current season type type. |
-| `current_season_type_name` | character | Current season type name. |
-| `current_season_type_start_date` | character | Current season type start date. |
-| `current_season_type_end_date` | character | Current season type end date. |
-| `requested_season_year` | integer | Requested season year. |
-| `requested_season_display_name` | character | Requested season display name. |
-| `requested_season_start_date` | character | Requested season start date. |
-| `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | integer | Requested season type id. |
-| `requested_season_type_type` | integer | Requested season type type. |
-| `requested_season_type_name` | character | Requested season type name. |
-| `requested_season_type_start_date` | character | Requested season type start date. |
-| `requested_season_type_end_date` | character | Requested season type end date. |
+| `sort_order` | integer | Position of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN's per-stat ranks stay in the raw payload (return_parsed=False). |
+| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | character | ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text. |
+| `athlete_display_name` | character | Athlete's full display name. |
+| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | character | Athlete's first name. |
+| `athlete_last_name` | character | Athlete's last name. |
+| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
+| `general_games_played` | double | Games Played (ESPN 'general' category). |
+| `general_avg_minutes` | double | Minutes Per Game (ESPN 'general' category): The average number of minutes per game. |
+| `general_avg_fouls` | double | Fouls Per Game (ESPN 'general' category): The average fouls committed per game. |
+| `general_flagrant_fouls` | double | Flagrant Fouls (ESPN 'general' category): The number of fouls that the officials thought were unnecessary or excessive. |
+| `general_technical_fouls` | double | Technical Fouls (ESPN 'general' category): The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations). |
+| `general_ejections` | double | Ejections (ESPN 'general' category): The number of times a player or coach is removed from the game as a result of a serious offense. |
+| `general_double_double` | double | Double Double (ESPN 'general' category): The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots. |
+| `general_triple_double` | double | Triple Double (ESPN 'general' category): The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots. |
+| `general_minutes` | double | Minutes (ESPN 'general' category): The total number of minutes played. |
+| `general_rebounds` | double | Rebounds (ESPN 'general' category): The total number of rebounds (offensive and defensive). |
+| `general_fouls` | double | Fouls (ESPN 'general' category): The number of times a player had illegal contact with the opponent. |
+| `general_avg_rebounds` | double | Rebounds Per Game (ESPN 'general' category): The average rebounds per game. |
+| `offensive_avg_points` | double | Points Per Game (ESPN 'offensive' category): The average number of points scored per game. |
+| `offensive_avg_field_goals_made` | double | Average Field Goals Made (ESPN 'offensive' category): The average field goals made per game. |
+| `offensive_avg_field_goals_attempted` | double | Average Field Goals Attempted (ESPN 'offensive' category): The average field goals attempted per game. |
+| `offensive_field_goal_pct` | double | Field Goal Percentage (ESPN 'offensive' category): The ratio of field goals made to field goals attempted: FGM / FGA. |
+| `offensive_avg_three_point_field_goals_made` | double | Average 3-Point Field Goals Made (ESPN 'offensive' category): The average three point field goals made per game. |
+| `offensive_avg_three_point_field_goals_attempted` | double | Average 3-Point Field Goals Attempted (ESPN 'offensive' category): The average three point field goals attempted per game. |
+| `offensive_three_point_field_goal_pct` | double | 3-Point Field Goal Percentage (ESPN 'offensive' category): The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA. |
+| `offensive_avg_free_throws_made` | double | Average Free Throws Made (ESPN 'offensive' category): The average free throw shots made per game. |
+| `offensive_avg_free_throws_attempted` | double | Average Free Throws Attempted (ESPN 'offensive' category): The average free throw shots attempted per game. |
+| `offensive_free_throw_pct` | double | Free Throw Percentage (ESPN 'offensive' category): The ratio of free throws made to free throws attempted: FTM / FTA. |
+| `offensive_avg_assists` | double | Assists Per Game (ESPN 'offensive' category): The average assists per game. |
+| `offensive_avg_turnovers` | double | Turnovers Per Game (ESPN 'offensive' category): The average turnovers committed per game. |
+| `offensive_points` | double | Points (ESPN 'Points', offensive category): points scored in basketball; goals plus assists in hockey. |
+| `offensive_field_goals_made` | double | Field Goals Made (ESPN 'offensive' category): The number of times a 2pt field goal was made. |
+| `offensive_field_goals_attempted` | double | Field Goals Attempted (ESPN 'offensive' category): The number of times a 2pt field goal was attempted. |
+| `offensive_three_point_field_goals_made` | double | 3-Point Field Goals Made (ESPN 'offensive' category): The number of times a 3pt field goal was made. |
+| `offensive_three_point_field_goals_attempted` | double | 3-Point Field Goals Attempted (ESPN 'offensive' category): The number of times a 3pt field goal was attempted. |
+| `offensive_free_throws_made` | double | Free Throws Made (ESPN 'offensive' category): The number of times a free throw was made. |
+| `offensive_free_throws_attempted` | double | Free Throws Attempted (ESPN 'offensive' category): The number of times a free throw was attempted. |
+| `offensive_assists` | double | Assists (ESPN 'Assists', offensive category): passes that lead directly to a score in basketball; goal assists in hockey. |
+| `offensive_turnovers` | double | Turnovers (ESPN 'offensive' category): The number of times a player loses possession to the other team. |
+| `defensive_avg_steals` | double | Steals Per Game (ESPN 'defensive' category): The average steals per game. |
+| `defensive_avg_blocks` | double | Blocks Per Game (ESPN 'defensive' category): The average blocks per game. |
+| `defensive_steals` | double | Steals (ESPN 'defensive' category): The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player. |
+| `defensive_blocks` | double | Blocks (ESPN 'defensive' category): Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,117 +1,342 @@
 schema: leaders
 kind: dataframe
 columns:
-- name: athletes
-  type: character
-  description: Athletes.
-- name: glossary
-  type: character
-  description: Glossary.
-- name: categories
-  type: character
-  description: Categories.
-- name: pagination_count
+- name: sort_order
   type: integer
-  description: Pagination count.
-- name: pagination_limit
+  description: 'Position of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across
+    pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN''s
+    per-stat ranks stay in the raw payload (return_parsed=False).'
+- name: athlete_id
   type: integer
-  description: Pagination limit.
-- name: pagination_page
+  description: ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take.
+- name: athlete_uid
+  type: character
+  description: ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text.
+- name: athlete_display_name
+  type: character
+  description: Athlete's full display name.
+- name: athlete_short_name
+  type: character
+  description: Athlete's abbreviated name (e.g. 'B. Nix').
+- name: athlete_first_name
+  type: character
+  description: Athlete's first name.
+- name: athlete_last_name
+  type: character
+  description: Athlete's last name.
+- name: athlete_position
+  type: character
+  description: Athlete's position abbreviation (e.g. QB, G, C).
+- name: athlete_status
+  type: character
+  description: Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested
+    season.
+- name: team_id
   type: integer
-  description: Pagination page.
-- name: pagination_pages
-  type: integer
-  description: Pagination pages.
-- name: pagination_first
+  description: ESPN id of the team the athlete played for in the requested season.
+- name: team_abbreviation
   type: character
-  description: Pagination first.
-- name: pagination_next
+  description: Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE).
+- name: team_name
   type: character
-  description: Pagination next.
-- name: pagination_last
-  type: character
-  description: Pagination last.
-- name: league_id
-  type: integer
-  description: League id.
-- name: league_uid
-  type: character
-  description: League uid.
-- name: league_name
-  type: character
-  description: League name.
-- name: league_abbreviation
-  type: character
-  description: League abbreviation.
-- name: league_slug
-  type: character
-  description: League slug.
-- name: league_short_name
-  type: character
-  description: League short name.
-- name: current_season_year
-  type: integer
-  description: Current season year.
-- name: current_season_display_name
-  type: character
-  description: Current season display name.
-- name: current_season_start_date
-  type: character
-  description: Current season start date.
-- name: current_season_end_date
-  type: character
-  description: Current season end date.
-- name: current_season_type_id
-  type: integer
-  description: Current season type id.
-- name: current_season_type_type
-  type: integer
-  description: Current season type type.
-- name: current_season_type_name
-  type: character
-  description: Current season type name.
-- name: current_season_type_start_date
-  type: character
-  description: Current season type start date.
-- name: current_season_type_end_date
-  type: character
-  description: Current season type end date.
-- name: current_season_type_week_number
-  type: integer
+  description: Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks).
+- name: general_games_played
+  type: double
   description: ''
-- name: current_season_type_week_start_date
-  type: character
+- name: general_fumbles_forced
+  type: double
   description: ''
-- name: current_season_type_week_end_date
-  type: character
+- name: general_fumbles_recovered
+  type: double
   description: ''
-- name: current_season_type_week_text
-  type: character
+- name: general_fumbles_touchdowns
+  type: double
   description: ''
-- name: requested_season_year
-  type: integer
-  description: Requested season year.
-- name: requested_season_display_name
-  type: character
-  description: Requested season display name.
-- name: requested_season_start_date
-  type: character
-  description: Requested season start date.
-- name: requested_season_end_date
-  type: character
-  description: Requested season end date.
-- name: requested_season_type_id
-  type: integer
-  description: Requested season type id.
-- name: requested_season_type_type
-  type: integer
-  description: Requested season type type.
-- name: requested_season_type_name
-  type: character
-  description: Requested season type name.
-- name: requested_season_type_start_date
-  type: character
-  description: Requested season type start date.
-- name: requested_season_type_end_date
-  type: character
-  description: Requested season type end date.
+- name: passing_completions
+  type: double
+  description: ''
+- name: passing_passing_attempts
+  type: double
+  description: ''
+- name: passing_completion_pct
+  type: double
+  description: ''
+- name: passing_passing_yards
+  type: double
+  description: ''
+- name: passing_yards_per_pass_attempt
+  type: double
+  description: ''
+- name: passing_passing_yards_per_game
+  type: double
+  description: ''
+- name: passing_long_passing
+  type: double
+  description: ''
+- name: passing_passing_touchdowns
+  type: double
+  description: ''
+- name: passing_interceptions
+  type: double
+  description: ''
+- name: passing_sacks
+  type: double
+  description: ''
+- name: passing_sack_yards_lost
+  type: double
+  description: ''
+- name: passing_qbr
+  type: double
+  description: ''
+- name: passing_qb_rating
+  type: double
+  description: ''
+- name: passing_adj_qbr
+  type: double
+  description: ''
+- name: rushing_rushing_attempts
+  type: double
+  description: ''
+- name: rushing_rushing_yards
+  type: double
+  description: ''
+- name: rushing_yards_per_rush_attempt
+  type: double
+  description: ''
+- name: rushing_long_rushing
+  type: double
+  description: ''
+- name: rushing_rushing_big_plays
+  type: double
+  description: ''
+- name: rushing_rushing_touchdowns
+  type: double
+  description: ''
+- name: rushing_rushing_yards_per_game
+  type: double
+  description: ''
+- name: rushing_rushing_fumbles
+  type: double
+  description: ''
+- name: rushing_rushing_fumbles_lost
+  type: double
+  description: ''
+- name: rushing_rushing_first_downs
+  type: double
+  description: ''
+- name: receiving_receptions
+  type: double
+  description: ''
+- name: receiving_receiving_targets
+  type: double
+  description: ''
+- name: receiving_receiving_yards
+  type: double
+  description: ''
+- name: receiving_yards_per_reception
+  type: double
+  description: ''
+- name: receiving_receiving_touchdowns
+  type: double
+  description: ''
+- name: receiving_long_reception
+  type: double
+  description: ''
+- name: receiving_receiving_big_plays
+  type: double
+  description: ''
+- name: receiving_receiving_yards_per_game
+  type: double
+  description: ''
+- name: receiving_receiving_fumbles
+  type: double
+  description: ''
+- name: receiving_receiving_fumbles_lost
+  type: double
+  description: ''
+- name: receiving_receiving_yards_after_catch
+  type: double
+  description: ''
+- name: receiving_receiving_first_downs
+  type: double
+  description: ''
+- name: defensive_solo_tackles
+  type: double
+  description: ''
+- name: defensive_assist_tackles
+  type: double
+  description: ''
+- name: defensive_total_tackles
+  type: double
+  description: ''
+- name: defensive_sacks
+  type: double
+  description: ''
+- name: defensive_sack_yards
+  type: double
+  description: ''
+- name: defensive_tackles_for_loss
+  type: double
+  description: ''
+- name: defensive_passes_defended
+  type: double
+  description: ''
+- name: defensive_long_interception
+  type: double
+  description: ''
+- name: defensiveinterceptions_interceptions
+  type: double
+  description: ''
+- name: defensiveinterceptions_interception_yards
+  type: double
+  description: ''
+- name: defensiveinterceptions_interception_touchdowns
+  type: double
+  description: ''
+- name: scoring_rushing_touchdowns
+  type: double
+  description: ''
+- name: scoring_receiving_touchdowns
+  type: double
+  description: ''
+- name: scoring_return_touchdowns
+  type: double
+  description: ''
+- name: scoring_total_touchdowns
+  type: double
+  description: ''
+- name: scoring_field_goals
+  type: double
+  description: ''
+- name: scoring_kick_extra_points
+  type: double
+  description: ''
+- name: scoring_total_two_point_convs
+  type: double
+  description: ''
+- name: scoring_total_points
+  type: double
+  description: ''
+- name: scoring_total_points_per_game
+  type: double
+  description: ''
+- name: returning_kick_returns
+  type: double
+  description: ''
+- name: returning_kick_return_yards
+  type: double
+  description: ''
+- name: returning_yards_per_kick_return
+  type: double
+  description: ''
+- name: returning_long_kick_return
+  type: double
+  description: ''
+- name: returning_kick_return_touchdowns
+  type: double
+  description: ''
+- name: returning_punt_returns
+  type: double
+  description: ''
+- name: returning_punt_return_yards
+  type: double
+  description: ''
+- name: returning_yards_per_punt_return
+  type: double
+  description: ''
+- name: returning_long_punt_return
+  type: double
+  description: ''
+- name: returning_punt_return_touchdowns
+  type: double
+  description: ''
+- name: returning_punt_return_fair_catches
+  type: double
+  description: ''
+- name: kicking_field_goals_made
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts
+  type: double
+  description: ''
+- name: kicking_field_goal_pct
+  type: double
+  description: ''
+- name: kicking_long_field_goal_made
+  type: double
+  description: ''
+- name: kicking_field_goals_made1_19
+  type: double
+  description: ''
+- name: kicking_field_goals_made20_29
+  type: double
+  description: ''
+- name: kicking_field_goals_made30_39
+  type: double
+  description: ''
+- name: kicking_field_goals_made40_49
+  type: double
+  description: ''
+- name: kicking_field_goals_made50
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts1_19
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts20_29
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts30_39
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts40_49
+  type: double
+  description: ''
+- name: kicking_field_goal_attempts50
+  type: double
+  description: ''
+- name: kicking_extra_points_made
+  type: double
+  description: ''
+- name: kicking_extra_point_attempts
+  type: double
+  description: ''
+- name: kicking_extra_point_pct
+  type: double
+  description: ''
+- name: punting_punts
+  type: double
+  description: ''
+- name: punting_punt_yards
+  type: double
+  description: ''
+- name: punting_long_punt
+  type: double
+  description: ''
+- name: punting_gross_avg_punt_yards
+  type: double
+  description: ''
+- name: punting_net_avg_punt_yards
+  type: double
+  description: ''
+- name: punting_punts_blocked
+  type: double
+  description: ''
+- name: punting_punts_inside20
+  type: double
+  description: ''
+- name: punting_touchbacks
+  type: double
+  description: ''
+- name: punting_fair_catches
+  type: double
+  description: ''
+- name: punting_punt_returns
+  type: double
+  description: ''
+- name: punting_punt_return_yards
+  type: double
+  description: ''
+- name: punting_avg_punt_return_yards
+  type: double
+  description: ''

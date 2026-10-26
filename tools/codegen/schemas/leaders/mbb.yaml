@@ -1,108 +1,156 @@
 schema: leaders
 kind: dataframe
 columns:
-- name: athletes
-  type: character
-  description: Athletes.
-- name: glossary
-  type: character
-  description: Glossary.
-- name: categories
-  type: character
-  description: Categories.
-- name: pagination_count
+- name: sort_order
   type: integer
-  description: Pagination count.
-- name: pagination_limit
+  description: 'Position of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across
+    pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN''s
+    per-stat ranks stay in the raw payload (return_parsed=False).'
+- name: athlete_id
   type: integer
-  description: Pagination limit.
-- name: pagination_page
+  description: ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take.
+- name: athlete_uid
+  type: character
+  description: ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text.
+- name: athlete_display_name
+  type: character
+  description: Athlete's full display name.
+- name: athlete_short_name
+  type: character
+  description: Athlete's abbreviated name (e.g. 'B. Nix').
+- name: athlete_first_name
+  type: character
+  description: Athlete's first name.
+- name: athlete_last_name
+  type: character
+  description: Athlete's last name.
+- name: athlete_position
+  type: character
+  description: Athlete's position abbreviation (e.g. QB, G, C).
+- name: athlete_status
+  type: character
+  description: Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested
+    season.
+- name: team_id
   type: integer
-  description: Pagination page.
-- name: pagination_pages
-  type: integer
-  description: Pagination pages.
-- name: pagination_first
+  description: ESPN id of the team the athlete played for in the requested season.
+- name: team_abbreviation
   type: character
-  description: Pagination first.
-- name: pagination_next
+  description: Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE).
+- name: team_name
   type: character
-  description: Pagination next.
-- name: pagination_last
-  type: character
-  description: Pagination last.
-- name: league_id
-  type: integer
-  description: League id.
-- name: league_uid
-  type: character
-  description: League uid.
-- name: league_name
-  type: character
-  description: League name.
-- name: league_abbreviation
-  type: character
-  description: League abbreviation.
-- name: league_slug
-  type: character
-  description: League slug.
-- name: league_midsize_name
-  type: character
+  description: Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks).
+- name: general_games_played
+  type: double
   description: ''
-- name: league_short_name
-  type: character
-  description: League short name.
-- name: current_season_year
-  type: integer
-  description: Current season year.
-- name: current_season_display_name
-  type: character
-  description: Current season display name.
-- name: current_season_start_date
-  type: character
-  description: Current season start date.
-- name: current_season_end_date
-  type: character
-  description: Current season end date.
-- name: current_season_type_id
-  type: integer
-  description: Current season type id.
-- name: current_season_type_type
-  type: integer
-  description: Current season type type.
-- name: current_season_type_name
-  type: character
-  description: Current season type name.
-- name: current_season_type_start_date
-  type: character
-  description: Current season type start date.
-- name: current_season_type_end_date
-  type: character
-  description: Current season type end date.
-- name: requested_season_year
-  type: integer
-  description: Requested season year.
-- name: requested_season_display_name
-  type: character
-  description: Requested season display name.
-- name: requested_season_start_date
-  type: character
-  description: Requested season start date.
-- name: requested_season_end_date
-  type: character
-  description: Requested season end date.
-- name: requested_season_type_id
-  type: integer
-  description: Requested season type id.
-- name: requested_season_type_type
-  type: integer
-  description: Requested season type type.
-- name: requested_season_type_name
-  type: character
-  description: Requested season type name.
-- name: requested_season_type_start_date
-  type: character
-  description: Requested season type start date.
-- name: requested_season_type_end_date
-  type: character
-  description: Requested season type end date.
+- name: general_avg_minutes
+  type: double
+  description: ''
+- name: general_avg_fouls
+  type: double
+  description: ''
+- name: general_flagrant_fouls
+  type: double
+  description: ''
+- name: general_technical_fouls
+  type: double
+  description: ''
+- name: general_ejections
+  type: double
+  description: ''
+- name: general_double_double
+  type: double
+  description: ''
+- name: general_triple_double
+  type: double
+  description: ''
+- name: general_per
+  type: double
+  description: ''
+- name: general_minutes
+  type: double
+  description: ''
+- name: general_rebounds
+  type: double
+  description: ''
+- name: general_fouls
+  type: double
+  description: ''
+- name: general_avg_rebounds
+  type: double
+  description: ''
+- name: offensive_avg_points
+  type: double
+  description: ''
+- name: offensive_avg_field_goals_made
+  type: double
+  description: ''
+- name: offensive_avg_field_goals_attempted
+  type: double
+  description: ''
+- name: offensive_field_goal_pct
+  type: double
+  description: ''
+- name: offensive_avg_three_point_field_goals_made
+  type: double
+  description: ''
+- name: offensive_avg_three_point_field_goals_attempted
+  type: double
+  description: ''
+- name: offensive_three_point_field_goal_pct
+  type: double
+  description: ''
+- name: offensive_avg_free_throws_made
+  type: double
+  description: ''
+- name: offensive_avg_free_throws_attempted
+  type: double
+  description: ''
+- name: offensive_free_throw_pct
+  type: double
+  description: ''
+- name: offensive_avg_assists
+  type: double
+  description: ''
+- name: offensive_avg_turnovers
+  type: double
+  description: ''
+- name: offensive_points
+  type: double
+  description: ''
+- name: offensive_field_goals_made
+  type: double
+  description: ''
+- name: offensive_field_goals_attempted
+  type: double
+  description: ''
+- name: offensive_three_point_field_goals_made
+  type: double
+  description: ''
+- name: offensive_three_point_field_goals_attempted
+  type: double
+  description: ''
+- name: offensive_free_throws_made
+  type: double
+  description: ''
+- name: offensive_free_throws_attempted
+  type: double
+  description: ''
+- name: offensive_assists
+  type: double
+  description: ''
+- name: offensive_turnovers
+  type: double
+  description: ''
+- name: defensive_avg_steals
+  type: double
+  description: ''
+- name: defensive_avg_blocks
+  type: double
+  description: ''
+- name: defensive_steals
+  type: double
+  description: ''
+- name: defensive_blocks
+  type: double
+  description: ''

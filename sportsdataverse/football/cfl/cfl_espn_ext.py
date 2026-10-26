@@ -1537,12 +1537,12 @@ def espn_cfl_leaders(
     Example URL: https://site.web.api.espn.com/apis/common/v3/sports/football/cfl/statistics/byathlete?limit=50&page=1
 
     Args:
-        category: category query parameter.
+        category: Leaderboard population: the athletes ranked in that category, whose values it fills (other categories come back null). Football takes `<group>:<category>` (`offense:passing`, `offense:rushing`, `offense:receiving`, `defense:defensive`, `scoring:scoring`); a bare `passing` is rejected with HTTP 400 (ValueError). Basketball takes the bare name (`offensive`).
         season: Season year (e.g. 2024).
         season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
         limit: Maximum number of items to return.
         page: page query parameter.
-        sort: sort query parameter.
+        sort: Sort key `<category>.<statName>:<asc|desc>`, the names in the payload's categories (`passing.passingYards:desc`, `offensive.avgPoints:desc`). A stat without its category is rejected with HTTP 400 (ValueError).
         return_parsed: parse the payload through parse_leaders -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 

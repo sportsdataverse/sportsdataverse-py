@@ -223,12 +223,12 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `category` | `category` |  |  | `Y` | category query parameter. |
+| `category` | `category` |  |  | `Y` | Leaderboard population: the athletes ranked in that category, whose values it fills (other categories come back null). Football takes `<group>:<category>` (`offense:passing`, `offense:rushing`, `offense:receiving`, `defense:defensive`, `scoring:scoring`); a bare `passing` is rejected with HTTP 400 (ValueError). Basketball takes the bare name (`offensive`). |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
-| `sort` | `sort` |  |  | `Y` | sort query parameter. |
+| `sort` | `sort` |  |  | `Y` | Sort key `<category>.<statName>:<asc\|desc>`, the names in the payload's categories (`passing.passingYards:desc`, `offensive.avgPoints:desc`). A stat without its category is rejected with HTTP 400 (ValueError). |
 
 ### Returns {#espn_nhl_leaders-returns}
 
@@ -236,44 +236,51 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athletes` | character | Athletes. |
-| `glossary` | character | Glossary. |
-| `categories` | character | Categories. |
-| `pagination_count` | integer | Pagination count. |
-| `pagination_limit` | integer | Pagination limit. |
-| `pagination_page` | integer | Pagination page. |
-| `pagination_pages` | integer | Pagination pages. |
-| `pagination_first` | character | Pagination first. |
-| `pagination_next` | character | Pagination next. |
-| `pagination_last` | character | Pagination last. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_short_name` | character | League short name. |
-| `current_season_year` | integer | Current season year. |
-| `current_season_display_name` | character | Current season display name. |
-| `current_season_start_date` | character | Current season start date. |
-| `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | integer | Current season type id. |
-| `current_season_type_type` | integer | Current season type type. |
-| `current_season_type_name` | character | Current season type name. |
-| `current_season_type_start_date` | character | Current season type start date. |
-| `current_season_type_end_date` | character | Current season type end date. |
-| `current_season_type_week_number` | integer | Ordinal week number within the current season type. |
-| `current_season_type_week_start_date` | character | ISO 8601 start date of the current week within the active season type. |
-| `current_season_type_week_end_date` | character | ISO 8601 end date of the current week within the active season type (e.g., regular season, playoffs). |
-| `current_season_type_week_text` | character | Human-readable label for the current week within the active season type (e.g., 'Week 14'). |
-| `requested_season_year` | integer | Requested season year. |
-| `requested_season_display_name` | character | Requested season display name. |
-| `requested_season_start_date` | character | Requested season start date. |
-| `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | integer | Requested season type id. |
-| `requested_season_type_type` | integer | Requested season type type. |
-| `requested_season_type_name` | character | Requested season type name. |
-| `requested_season_type_start_date` | character | Requested season type start date. |
-| `requested_season_type_end_date` | character | Requested season type end date. |
+| `sort_order` | integer | Position of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN's per-stat ranks stay in the raw payload (return_parsed=False). |
+| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | character | ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text. |
+| `athlete_display_name` | character | Athlete's full display name. |
+| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | character | Athlete's first name. |
+| `athlete_last_name` | character | Athlete's last name. |
+| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
+| `general_games` | double | Games Played (ESPN 'general' category): Total games played. |
+| `general_plus_minus` | double | Plus/Minus Rating (ESPN 'general' category). |
+| `general_time_on_ice_per_game` | double | Time On Ice Per Game (ESPN 'general' category): Total time on ice per game. |
+| `general_shifts` | double | Shifts (ESPN 'general' category): Total shifts. |
+| `general_production` | double | Production (ESPN 'general' category): Total production. |
+| `general_wins` | double | Wins (ESPN 'general' category). |
+| `general_losses` | double | Losses (ESPN 'general' category). |
+| `general_time_on_ice` | double | Time On Ice (ESPN 'general' category): Total time on ice. |
+| `offensive_goals` | double | Goals (ESPN 'offensive' category): Total goals scored. |
+| `offensive_assists` | double | Assists (ESPN 'Assists', offensive category): passes that lead directly to a score in basketball; goal assists in hockey. |
+| `offensive_points` | double | Points (ESPN 'Points', offensive category): points scored in basketball; goals plus assists in hockey. |
+| `offensive_power_play_goals` | double | Power Play Goals (ESPN 'offensive' category): Total power play goals. |
+| `offensive_power_play_assists` | double | Power Play Assists (ESPN 'offensive' category): Total power play assists. |
+| `offensive_shots_total` | double | Shots (ESPN 'offensive' category): Total shots. |
+| `offensive_shooting_pct` | double | Shooting Percentage (ESPN 'offensive' category): Percentage of shots scored. |
+| `offensive_game_winning_goals` | double | Game-Winning Goals (ESPN 'offensive' category): Total game-winning goals. |
+| `offensive_faceoffs_won` | double | Faceoffs Won (ESPN 'offensive' category): Total faceoffs won. |
+| `offensive_faceoffs_lost` | double | Faceoffs Lost (ESPN 'offensive' category): Total faceoffs lost. |
+| `offensive_faceoff_percent` | double | Faceoff Win Percent (ESPN 'offensive' category): Percentage of faceoffs won. |
+| `offensive_shootout_attempts` | double | Shootout Attempts (ESPN 'offensive' category): Total shootout attempts. |
+| `offensive_shootout_goals` | double | Shootout Goals (ESPN 'offensive' category): Total shootout goals. |
+| `offensive_shootout_shot_pct` | double | Shootout Shot Percentage (ESPN 'offensive' category): Percentage of shootout goals made. |
+| `defensive_overtime_losses` | double | Overtime Losses (ESPN 'defensive' category): Total games lost in overtime. |
+| `defensive_avg_goals_against` | double | Goals Against Average (ESPN 'defensive' category). |
+| `defensive_shots_against` | double | Shots Against (ESPN 'defensive' category): Total shots against. |
+| `defensive_goals_against` | double | Goals Against (ESPN 'defensive' category): Total goals against. |
+| `defensive_saves` | double | Saves (ESPN 'defensive' category): Total saves. |
+| `defensive_save_pct` | double | Save Percentage (ESPN 'defensive' category): Percentage of shots saved. |
+| `defensive_shootout_shots_against` | double | Shootout Shots Against (ESPN 'defensive' category): Total shootout shots against. |
+| `defensive_shootout_saves` | double | Shootout Saves (ESPN 'defensive' category): Total shootout saves. |
+| `defensive_shootout_save_pct` | double | Shootout Save Percentage (ESPN 'defensive' category): Percentage of shootout shots saved. |
+| `defensive_shutouts` | double | Shutouts (ESPN 'defensive' category): Total shutouts. |
+| `penalties_penalty_minutes` | double | Penalty Minutes (ESPN 'penalties' category): Total penalty minutes. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

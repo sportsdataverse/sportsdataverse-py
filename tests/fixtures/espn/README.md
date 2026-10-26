@@ -8,6 +8,7 @@
   - [Schedule and teams captures (2026-06-08, `tools/capture_espn_fixtures.py`)](#schedule-and-teams-captures-2026-06-08-toolscapture_espn_fixturespy)
   - [Provider-gate captures (2026-10-11, task 1.4)](#provider-gate-captures-2026-10-11-task-14)
   - [MBB bare-year season captures (2026-10-13, task 2.9)](#mbb-bare-year-season-captures-2026-10-13-task-29)
+  - [Leaders (byathlete) captures (2026-10-26)](#leaders-byathlete-captures-2026-10-26)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -205,3 +206,18 @@ then requests each game day.
 | `mbb_season_days_2024.json` | the same URL with `dates=` 20231106, 20231220, 20240120, 20240210, 20240309, 20240321, 20240408 (HTTP 200 each: 184, 43, 145, 155, 102, 16, 1 events) | One object keyed by the requested day; each value is that answer's first 2 `events` (1 on 20240408) plus `eventsDate`. Season 2024 throughout; season type 3 (NCAA tournament) on 20240321 and 20240408. |
 
 - `wbb_calendar_2001.json`: `leagues[0].calendar` of `site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates=2001` (125 dates, 2000-11-10 to 2001-04-01), captured 2026-10-17.
+
+## Leaders (byathlete) captures (2026-10-26)
+
+`urllib` GET from a residential IP on 2026-10-26, no credentials, `User-Agent: Mozilla/5.0`, byte-for-byte.
+They drive the `parse_leaders` tests in `tests/test_espn_universal_parsers.py`. Base:
+`https://site.web.api.espn.com/apis/common/v3/sports`.
+
+| file | request | contents |
+|---|---|---|
+| `leaders_cfb_2023_offense_passing.json` | `/football/college-football/statistics/byathlete?season=2023&seasontype=2&category=offense:passing&limit=10` (HTTP 200, 145 KB) | 10 `athletes` (Bo Nix first, 4,508 passing yards), 10 `categories`, 60 `glossary` entries; `pagination.count` 196. The passing ranks are filled; a bare `category=passing` answers HTTP 400 the same day. |
+| `leaders_mbb_2024_sort_avg_points.json` | `/basketball/mens-college-basketball/statistics/byathlete?season=2024&seasontype=2&sort=offensive.avgPoints:desc&limit=10` (HTTP 200, 72 KB) | 10 `athletes` in descending `offensive.avgPoints` order, 3 `categories`. |
+| `leaders_ufl_no_leaderboard.json` | `/football/ufl/statistics/byathlete?limit=10` (HTTP 200, 285 B) | `{currentSeason}` alone: what every league ESPN keeps no leaderboard for answers (UFL, XFL, CFL, the soccer leagues, college baseball/hockey, the NBA summer leagues, on the same day's sweep). |
+
+The older `leaders_<league>.json` (season 2024, `tools/capture_espn_fixtures.py`) are the same `athletes[]` shape.
+No league answered with the older `categories[].leaders[]` shape on the 2026-10-26 sweep of all 40 wrappers.

@@ -1881,6 +1881,151 @@ def test_leaders_uid_composite_is_text_not_a_refused_id(league):
     assert ids and all(df.schema[c] == pl.Int64 for c in ids), {c: df.schema[c] for c in ids}
 
 
+@pytest.mark.parametrize(
+    "stem",
+    [
+        "leaders_cfb_2023_offense_passing",
+        "leaders_mbb_2024_sort_avg_points",
+        "leaders_nba",
+        "leaders_nfl",
+        "leaders_nhl",
+    ],
+)
+def test_parse_leaders_one_row_per_athlete_with_named_stats(stem):
+    """The byathlete payload ships rows under ``athletes[]`` and the stat names once, under top-level
+    ``categories[].names[]``. The parser used to look for ``categories[].leaders[]`` and fall back to
+    flattening the envelope into one row with ``athletes`` / ``glossary`` stringified."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+    from sportsdataverse.dl_utils import underscore
+
+    raw = _load(stem)
+    df = parse_leaders(raw)
+    assert df.height == len(raw["athletes"]) > 1
+    assert not {"athletes", "glossary", "categories", "pagination_count"} & set(df.columns)
+    assert df["athlete_id"].to_list() == [int(a["athlete"]["id"]) for a in raw["athletes"]]
+    assert df.schema["athlete_id"] == df.schema["team_id"] == pl.Int64
+    # every stat lands under {category}_{name}, Float64 even when no athlete on the page has the category
+    names = {c["name"]: c["names"] for c in raw["categories"]}
+    for i, entry in enumerate(raw["athletes"]):
+        for cat in entry["categories"]:
+            for name, val in zip(names[cat["name"]], cat["values"]):
+                col = f"{underscore(cat['name'])}_{underscore(name)}"
+                assert df.schema[col] == pl.Float64
+                assert df[col][i] == val
+
+
+def test_parse_leaders_category_and_sort_captures_rank_their_stat():
+    """``category=offense:passing`` (cfb) and ``sort=offensive.avgPoints:desc`` (mbb) return the leaderboard in
+    that stat's order; ``sort_order`` is the place in it."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    cfb = parse_leaders(_load("leaders_cfb_2023_offense_passing"))
+    assert cfb["sort_order"].to_list() == list(range(1, 11))
+    assert cfb["athlete_display_name"][0] == "Bo Nix" and cfb["team_abbreviation"][0] == "ORE"
+    assert cfb["passing_passing_yards"][0] == 4508.0
+    mbb = parse_leaders(_load("leaders_mbb_2024_sort_avg_points"))
+    pts = mbb["offensive_avg_points"].to_list()
+    assert pts == sorted(pts, reverse=True)
+
+
+def test_parse_leaders_sort_order_counts_across_pages():
+    """Page 3 starts after two full pages; with no ``limit`` in the pagination block the page's own size stands in,
+    instead of restarting at 1 and repeating page 1's positions."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = copy.deepcopy(_load("leaders_nba"))
+    raw["pagination"]["page"] = 3
+    assert parse_leaders(raw)["sort_order"][0] == 2 * raw["pagination"]["limit"] + 1
+    del raw["pagination"]["limit"]
+    assert parse_leaders(raw)["sort_order"][0] == 2 * len(raw["athletes"]) + 1
+
+
+def test_parse_leaders_league_without_leaderboard_is_zero_rows():
+    """UFL (and the other leagues ESPN keeps no leaderboard for) answer ``{currentSeason}`` alone; that used to
+    flatten into a one-row frame of season metadata."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = _load("leaders_ufl_no_leaderboard")
+    assert set(raw) == {"currentSeason"}
+    assert parse_leaders(raw).height == 0
+
+
+def test_parse_leaders_zero_rows_keep_the_documented_columns():
+    """The wrappers pass ``documented_table``: a league without a leaderboard gets the ``leaders`` table's columns at
+    zero rows, so ``df["athlete_id"]`` works on UFL as on NBA."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    raw = _load("leaders_ufl_no_leaderboard")
+    for as_pandas in (False, True):
+        df = parse_leaders(raw, return_as_pandas=as_pandas, documented_table="leaders")
+        assert len(df) == 0
+        assert list(df.columns) == list(SCHEMAS["leaders"])
+
+
+def test_parse_leaders_pandas_keeps_nullable_int_ids():
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = _load("leaders_nba")
+    pdf = parse_leaders(raw, return_as_pandas=True)
+    assert str(pdf["athlete_id"].dtype) == str(pdf["team_id"].dtype) == "Int64"
+    assert pdf["athlete_id"].tolist() == [int(a["athlete"]["id"]) for a in raw["athletes"]]
+
+
+def test_parse_leaders_keeps_a_declared_category_no_athlete_carries():
+    """Columns come from the top-level ``categories``, so a page where no athlete carries one keeps its width
+    (all-null Float64) and still concatenates with a full page."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = _load("leaders_nba")
+    full = parse_leaders(raw)
+    thin = copy.deepcopy(raw)
+    for a in thin["athletes"]:
+        a["categories"] = [c for c in a["categories"] if c["name"] != "defensive"]
+    df = parse_leaders(thin)
+    assert df.columns == full.columns
+    assert df["defensive_steals"].dtype == pl.Float64 and df["defensive_steals"].null_count() == df.height
+    assert pl.concat([full, df]).height == 2 * full.height
+
+
+def test_parse_leaders_repeated_labels_do_not_overwrite():
+    """Without ``names`` the labels stand in, and they repeat (``PTS`` is points and points per game): the second
+    slot goes to ``stat_{i}`` instead of overwriting the first."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = copy.deepcopy(_load("leaders_nba"))
+    for c in raw["categories"]:
+        c.pop("names", None)
+    full = parse_leaders(_load("leaders_nba"))
+    df = parse_leaders(raw)
+    assert df.width == full.width
+    off = next(c for c in raw["categories"] if c["name"] == "offensive")
+    first_pts = off["labels"].index("PTS")
+    val = next(c for c in raw["athletes"][0]["categories"] if c["name"] == "offensive")["values"][first_pts]
+    assert df["offensive_pts"][0] == val
+
+
+def test_parse_leaders_skips_malformed_entries():
+    """A null athlete entry or a non-numeric page is skipped or ignored, not raised (zero rows, never an error)."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = copy.deepcopy(_load("leaders_nba"))
+    n = len(raw["athletes"])
+    raw["athletes"] = [None, *raw["athletes"], "oops"]
+    raw["pagination"]["page"] = "x"
+    df = parse_leaders(raw)
+    assert df.height == n and df["sort_order"].to_list() == list(range(1, n + 1))
+    assert parse_leaders({"athletes": "oops"}).height == 0
+
+
 def test_fpi_joins_weekly_powerindex_on_team_id():
     """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
     from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex
