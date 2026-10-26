@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 27
+sidebar_position: 28
 description: "NFL — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Dates and seasons

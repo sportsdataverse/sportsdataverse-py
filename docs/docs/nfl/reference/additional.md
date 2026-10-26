@@ -159,31 +159,31 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_xpass](additional/models-and-calculators-6.md#calculate_xpass) | Compute expected dropback probability (`xpass`) and `pass_oe`. |
 | [calculate_xyac](additional/models-and-calculators-7.md#calculate_xyac) | Compute expected yards after catch (xYAC) for intended pass plays. |
 | [efficiency_ratings](additional/models-and-calculators-7.md#efficiency_ratings) | One row per team: opponent-adjusted offense/defense EPA per play. |
-| [enrich_nfl_pbp](additional/models-and-calculators-7.md#enrich_nfl_pbp) | Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC. |
-| [env_adjusted_make_prob](additional/models-and-calculators-7.md#env_adjusted_make_prob) | Add `base_make_prob` + environment-adjusted `exp_make_prob`. |
-| [fg_make_probability](additional/models-and-calculators-7.md#fg_make_probability) | Predict FG make probability from the bundled `fg_model` (public wrapper). |
-| [fit_nfl_field_position_ep](additional/models-and-calculators-7.md#fit_nfl_field_position_ep) | Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays. |
-| [get_2pt_probs](additional/models-and-calculators-7.md#get_2pt_probs) | The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped). |
-| [get_2pt_wp](additional/models-and-calculators-7.md#get_2pt_wp) | Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`). |
-| [get_4th_down_probs](additional/models-and-calculators-8.md#get_4th_down_probs) | Full 4th-down decision surface (nfl4th `add_4th_probs`) + recommendation. |
-| [get_fg_wp](additional/models-and-calculators-9.md#get_fg_wp) | Expected win probability of attempting a field goal (nfl4th `get_fg_wp`). |
-| [get_go_wp](additional/models-and-calculators-9.md#get_go_wp) | Expected win probability of going for it on 4th down (nfl4th `get_go_wp`). |
-| [get_punt_wp](additional/models-and-calculators-9.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
-| [load_nfl_fp_curve](additional/models-and-calculators-9.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
-| [nfl_compute_results](additional/models-and-calculators-9.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
-| [nfl_draft_projection](additional/models-and-calculators-9.md#nfl_draft_projection) | Draft outcome projection for one draft class. |
-| [nfl_fantasy_projection](additional/models-and-calculators-9.md#nfl_fantasy_projection) | Fantasy-points projection: deterministic scoring of the Marcel component |
-| [nfl_kicker_rating](additional/models-and-calculators-9.md#nfl_kicker_rating) | Environment-adjusted kicker FG-over-expected ratings. |
-| [nfl_line_grades](additional/models-and-calculators-9.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
-| [nfl_player_projection](additional/models-and-calculators-9.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
-| [nfl_ratings](additional/models-and-calculators-9.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
-| [nfl_simulations](additional/models-and-calculators-10.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
-| [nfl_usage_projection](additional/models-and-calculators-10.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
-| [opponent_adjusted_ridge](additional/models-and-calculators-10.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
-| [pressure_pairs](additional/models-and-calculators-10.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
-| [special_teams_ratings](additional/models-and-calculators-10.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
-| [team_pressure_rates](additional/models-and-calculators-10.md#team_pressure_rates) | Per (season, team) raw pressure rates, both sides of the ball. |
-| [touchback_yardline_expr](additional/models-and-calculators-10.md#touchback_yardline_expr) | Polars form of `touchback_yardline` for a `season` column expression. |
+| [enrich_nfl_pbp](additional/models-and-calculators-8.md#enrich_nfl_pbp) | Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC. |
+| [env_adjusted_make_prob](additional/models-and-calculators-8.md#env_adjusted_make_prob) | Add `base_make_prob` + environment-adjusted `exp_make_prob`. |
+| [fg_make_probability](additional/models-and-calculators-8.md#fg_make_probability) | Predict FG make probability from the bundled `fg_model` (public wrapper). |
+| [fit_nfl_field_position_ep](additional/models-and-calculators-8.md#fit_nfl_field_position_ep) | Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays. |
+| [get_2pt_probs](additional/models-and-calculators-8.md#get_2pt_probs) | The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped). |
+| [get_2pt_wp](additional/models-and-calculators-8.md#get_2pt_wp) | Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`). |
+| [get_4th_down_probs](additional/models-and-calculators-9.md#get_4th_down_probs) | Full 4th-down decision surface (nfl4th `add_4th_probs`) + recommendation. |
+| [get_fg_wp](additional/models-and-calculators-10.md#get_fg_wp) | Expected win probability of attempting a field goal (nfl4th `get_fg_wp`). |
+| [get_go_wp](additional/models-and-calculators-10.md#get_go_wp) | Expected win probability of going for it on 4th down (nfl4th `get_go_wp`). |
+| [get_punt_wp](additional/models-and-calculators-10.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
+| [load_nfl_fp_curve](additional/models-and-calculators-10.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
+| [nfl_compute_results](additional/models-and-calculators-10.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
+| [nfl_draft_projection](additional/models-and-calculators-10.md#nfl_draft_projection) | Draft outcome projection for one draft class. |
+| [nfl_fantasy_projection](additional/models-and-calculators-10.md#nfl_fantasy_projection) | Fantasy-points projection: deterministic scoring of the Marcel component |
+| [nfl_kicker_rating](additional/models-and-calculators-10.md#nfl_kicker_rating) | Environment-adjusted kicker FG-over-expected ratings. |
+| [nfl_line_grades](additional/models-and-calculators-10.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
+| [nfl_player_projection](additional/models-and-calculators-10.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
+| [nfl_ratings](additional/models-and-calculators-10.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
+| [nfl_simulations](additional/models-and-calculators-11.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
+| [nfl_usage_projection](additional/models-and-calculators-11.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
+| [opponent_adjusted_ridge](additional/models-and-calculators-11.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
+| [pressure_pairs](additional/models-and-calculators-11.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
+| [special_teams_ratings](additional/models-and-calculators-11.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
+| [team_pressure_rates](additional/models-and-calculators-11.md#team_pressure_rates) | Per (season, team) raw pressure rates, both sides of the ball. |
+| [touchback_yardline_expr](additional/models-and-calculators-11.md#touchback_yardline_expr) | Polars form of `touchback_yardline` for a `season` column expression. |
 
 ## Analytics
 
