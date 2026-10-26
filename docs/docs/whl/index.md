@@ -25,6 +25,11 @@ description: "sdv-py WHL: endpoint references, dataset loaders and parsers for W
 - [`whl_season_id`](reference/additional#whl_season_id)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("whl")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids
+- [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

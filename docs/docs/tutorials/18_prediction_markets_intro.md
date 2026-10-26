@@ -1,5 +1,6 @@
 ---
 title: Prediction markets tutorial
+description: "Sportsbooks quote odds; prediction markets quote prices. A YES contract that pays $1 and trades at $0.62 is a 62% implied probability, set by whoever is trading it."
 sidebar_label: Prediction markets
 sidebar_position: 18
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/18_prediction_markets_intro.ipynb

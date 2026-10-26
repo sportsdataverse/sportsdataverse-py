@@ -1,5 +1,6 @@
 ---
 title: NFL tutorial
+description: "Welcome to gridiron data! In a handful of lines you're about to pull standings, rosters, weekly injury reports, NextGen Stats tracking leaderboards, and full play-by-play — straight from the source."
 sidebar_label: NFL
 sidebar_position: 6
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/03_nfl_intro.ipynb
@@ -1315,6 +1316,6 @@ print("shield_pbp:", [n for n in dir(shield_pbp) if not n.startswith("_")][:6])
 
 ```
 
-    ⏭️  nfl_pro passing (season): NFLProAuthError: No NFL Pro credentials: pass email=/password=REDACTED, or set NFLPRO_EMAIL and NFLPRO_PW, or set NFLPRO_TOKEN to an already-obtained token.
+    ⏭️  nfl_pro passing (season): NFLProAuthError: No NFL Pro credentials: pass email=/password=REDACTED, or set NFLPRO_EMAIL and NFLPRO_PW, or set NFLPRO_TOKE…
     no PFF key set - skipping pff_api_* (set SDV_PY_PFF_API_KEY)
     shield_pbp: ['annotations', 'build', 'build_pbp', 'build_pbp_from_file', 'build_playstats_frame', 'build_playstats_season']

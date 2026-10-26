@@ -255,6 +255,11 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`tidy_player`](reference/additional/ids-and-crosswalks#tidy_player)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("mbb")` draws the NCAA court in a team's colors; `team_colors()` takes ESPN ids and abbreviations
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA court sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

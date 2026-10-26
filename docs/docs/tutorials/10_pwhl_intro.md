@@ -1,5 +1,6 @@
 ---
 title: PWHL tutorial
+description: "Welcome to professional women's hockey! The Professional Women's Hockey League (PWHL) dropped its first puck in January 2024 with six clubs — Boston, Minnesota, Montréal, New York, Ottawa and…"
 sidebar_label: PWHL
 sidebar_position: 10
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/10_pwhl_intro.ipynb

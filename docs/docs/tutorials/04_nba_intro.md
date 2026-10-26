@@ -1,5 +1,6 @@
 ---
 title: NBA tutorial
+description: "Welcome to the hardwood! In just a few lines of Python you're about to pull a whole season of NBA data — teams, standings, rosters, play-by-play, box scores, schedules and statistical leaders…"
 sidebar_label: NBA
 sidebar_position: 2
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/04_nba_intro.ipynb

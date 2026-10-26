@@ -1,5 +1,6 @@
 ---
 title: Soccer tutorial
+description: "From the Premier League to the World Cup, sportsdataverse.soccer gives you the global game in tidy polars DataFrames — no API key, no config, just pip and import."
 sidebar_label: Soccer
 sidebar_position: 12
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/13_soccer_intro.ipynb

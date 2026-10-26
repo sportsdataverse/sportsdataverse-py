@@ -179,7 +179,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("nfl")` draws the field with a team's end zones
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("nfl")` draws the field with a team's end zones
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NFL field sdvplot draws with
 
 ## Examples

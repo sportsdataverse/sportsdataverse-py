@@ -1,5 +1,6 @@
 ---
 title: NHL tutorial
+description: "Welcome to the show! sportsdataverse.nhl gives you the NHL's own modern feed — the same api-web.nhle.com data that powers NHL.com — plus the shiny NHL EDGE puck-and-player tracking layer, the…"
 sidebar_label: NHL
 sidebar_position: 9
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/07_nhl_intro.ipynb

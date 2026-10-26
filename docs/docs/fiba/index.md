@@ -20,6 +20,11 @@ description: "sdv-py FIBA: endpoint references, dataset loaders and parsers for 
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("fiba")` draws the FIBA court
+- [sportypy](https://sportypy.sportsdataverse.org/) — the FIBA court sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

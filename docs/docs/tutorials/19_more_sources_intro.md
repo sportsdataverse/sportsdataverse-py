@@ -1,5 +1,6 @@
 ---
 title: More sources tutorial
+description: "Four smaller surfaces, one notebook."
 sidebar_label: More sources
 sidebar_position: 19
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/19_more_sources_intro.ipynb

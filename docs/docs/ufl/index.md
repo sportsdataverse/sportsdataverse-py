@@ -23,6 +23,11 @@ description: "sdv-py UFL: endpoint references, dataset loaders and parsers for U
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 |
 | [Hand-written wrappers](reference/additional) | 1 |
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ufl")` draws the field with a team's end zones
+- [sportypy](https://sportypy.sportsdataverse.org/) — the field sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

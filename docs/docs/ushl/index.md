@@ -25,6 +25,11 @@ description: "sdv-py USHL: endpoint references, dataset loaders and parsers for 
 - [`ushl_season_id`](reference/additional#ushl_season_id)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ushl")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids
+- [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

@@ -35,6 +35,11 @@ description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and 
 - [`decompose_college_baseball_plays`](reference/additional#decompose_college_baseball_plays)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ncaa_baseball")` draws the field and `team_colors("ncaa_baseball", ...)` the school colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the college baseball field sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
