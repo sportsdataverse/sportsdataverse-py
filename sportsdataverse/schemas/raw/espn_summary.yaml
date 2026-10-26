@@ -27,8 +27,11 @@ optional:
   pickcenter: list
   againstTheSpread: list
   odds: list
-  espnWP: dict
-  teamInfo: dict
+  # espnWP is a dict in MBB/WBB captures but an empty list in every sampled
+  # NBA and WNBA capture (raw and final); teamInfo is an empty list in WNBA
+  # json/raw. Sampled 400 captures per league, 2026-10-26.
+  espnWP: dict|list
+  teamInfo: dict|list
   format: dict
   # json/raw and json/final are NOT the same payload plus two keys: the
   # raw->final step also converts `timeouts` and `season` from list to dict.
