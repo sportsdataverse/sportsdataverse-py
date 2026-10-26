@@ -120,12 +120,20 @@ pff = [
     # short-lived Clerk session cookies. Also needs `playwright install chromium`.
     "playwright>=1.40",
 ]
+# ponytail: no `sdvplot` extra yet -- its one release (0.1.0) pins polars<2; sdvplot main lifts the
+# cap (#106), so the extra lands with the next sdvplot release.
+sportypy = [
+    # Rulebook-accurate fields, courts, rinks and pitches to draw play-by-play and shot coordinates
+    # on. GPL-3.0 while this package is MIT, which is fine for an optional install that is never
+    # bundled; pulls matplotlib.
+    "sportypy>=1.0",
+]
 mcp = [
     # sdv-docs MCP server (sdv_docs/); Python >= 3.10 is the package floor.
     "mcp>=2.3,<3",
 ]
 all = [
-    # `tests` + `nflpro` + `pff` + `soccer` + the NCAA browser transport + pyyaml
+    # `tests` + `nflpro` + `pff` + `soccer` + `sportypy` + the NCAA browser transport + pyyaml
     # (NOT `mcp`, the sdv-docs server's extra). Kept explicit (rather than
     # referencing the other groups) because PEP 621 does not have a "union of
     # groups" mechanism that older pip / build-frontends understand uniformly.
@@ -144,6 +152,7 @@ all = [
     # sportsdataverse.schemas.raw_schema() reads the bundled YAML payload schemas and
     # its install hint names this extra; pyyaml was only ever present through pycln.
     "pyyaml>=6.0",
+    "sportypy>=1.0",
 ]
 
 
