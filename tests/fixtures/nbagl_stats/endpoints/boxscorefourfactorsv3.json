@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscorefourfactors?Format=json",
+  "time": "2026-06-29T01:48:45.4845Z"
+ },
+ "boxScoreFourFactors": {
+  "gameId": "2022500137",
+  "awayTeamId": 1612709925,
+  "homeTeamId": 1612709929,
+  "homeTeam": {
+   "teamId": 1612709929,
+   "teamCity": "College Park",
+   "teamName": "Skyhawks",
+   "teamTricode": "CPS",
+   "teamSlug": "skyhawks",
+   "players": [
+    {
+     "personId": 1641881,
+     "firstName": "Javan",
+     "familyName": "Johnson",
+     "nameI": "J. Johnson",
+     "playerSlug": "javan-johnson",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "27:24",
+      "effectiveFieldGoalPercentage": 0.427,
+      "freeThrowAttemptRate": 0.109,
+      "teamTurnoverPercentage": 0.146,
+      "offensiveReboundPercentage": 0.111,
+      "oppEffectiveFieldGoalPercentage": 0.518,
+      "oppFreeThrowAttemptRate": 0.109,
+      "oppTeamTurnoverPercentage": 0.126,
+      "oppOffensiveReboundPercentage": 0.321
+     }
+    },
+    {
+     "personId": 1631216,
+     "firstName": "Caleb",
+     "familyName": "Houstan",
+     "nameI": "C. Houstan",
+     "playerSlug": "caleb-houstan",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "29:38",
+      "effectiveFieldGoalPercentage": 0.482,
+      "freeThrowAttemptRate": 0.105,
+      "teamTurnoverPercentage": 0.192,
+      "offensiveReboundPercentage": 0.0,
+      "oppEffectiveFieldGoalPercentage": 0.575,
+      "oppFreeThrowAttemptRate": 0.117,
+      "oppTeamTurnoverPercentage": 0.143,
+      "oppOffensiveReboundPercentage": 0.346
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "effectiveFieldGoalPercentage": 0.489,
+    "freeThrowAttemptRate": 0.118,
+    "teamTurnoverPercentage": 0.137,
+    "offensiveReboundPercentage": 0.304,
+    "oppEffectiveFieldGoalPercentage": 0.563,
+    "oppFreeThrowAttemptRate": 0.125,
+    "oppTeamTurnoverPercentage": 0.118,
+    "oppOffensiveReboundPercentage": 0.385
+   }
+  },
+  "awayTeam": {
+   "teamId": 1612709925,
+   "teamCity": "Osceola",
+   "teamName": "Magic",
+   "teamTricode": "OSC",
+   "teamSlug": "magic",
+   "players": [
+    {
+     "personId": 1631457,
+     "firstName": "Alex",
+     "familyName": "Morales",
+     "nameI": "A. Morales",
+     "playerSlug": "alex-morales",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:00",
+      "effectiveFieldGoalPercentage": 0.578,
+      "freeThrowAttemptRate": 0.109,
+      "teamTurnoverPercentage": 0.134,
+      "offensiveReboundPercentage": 0.061,
+      "oppEffectiveFieldGoalPercentage": 0.484,
+      "oppFreeThrowAttemptRate": 0.115,
+      "oppTeamTurnoverPercentage": 0.179,
+      "oppOffensiveReboundPercentage": 0.265
+     }
+    },
+    {
+     "personId": 1631303,
+     "firstName": "Justin",
+     "familyName": "Minaya",
+     "nameI": "J. Minaya",
+     "playerSlug": "justin-minaya",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "30:32",
+      "effectiveFieldGoalPercentage": 0.595,
+      "freeThrowAttemptRate": 0.155,
+      "teamTurnoverPercentage": 0.117,
+      "offensiveReboundPercentage": 0.0,
+      "oppEffectiveFieldGoalPercentage": 0.459,
+      "oppFreeThrowAttemptRate": 0.098,
+      "oppTeamTurnoverPercentage": 0.132,
+      "oppOffensiveReboundPercentage": 0.306
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "effectiveFieldGoalPercentage": 0.563,
+    "freeThrowAttemptRate": 0.125,
+    "teamTurnoverPercentage": 0.118,
+    "offensiveReboundPercentage": 0.385,
+    "oppEffectiveFieldGoalPercentage": 0.489,
+    "oppFreeThrowAttemptRate": 0.118,
+    "oppTeamTurnoverPercentage": 0.137,
+    "oppOffensiveReboundPercentage": 0.304
+   }
+  }
+ }
+}

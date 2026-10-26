@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FIBA — ESPN site API (v2)
 
-`sportsdataverse.fiba` — 24 endpoints.
+`sportsdataverse.basketball.fiba` — 24 endpoints.
 
 ## espn_fiba_scoreboard
 

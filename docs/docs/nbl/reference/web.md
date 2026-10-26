@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBL — ESPN web API (v3)
 
-`sportsdataverse.nbl` — 5 endpoints.
+`sportsdataverse.basketball.nbl` — 5 endpoints.
 
 ## espn_nbl_player_overview
 

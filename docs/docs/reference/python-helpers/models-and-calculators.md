@@ -253,7 +253,7 @@ one row per `(season, team_id)`, sorted by them: `games`, `wins`, `deserved_wins
 
 ```python
 from sportsdataverse.cfb import load_cfb_pbp
-from sportsdataverse.paper_index import PBP_COLUMNS, deserved_wins, paper_index_games
+from sportsdataverse.analytics.paper_index import PBP_COLUMNS, deserved_wins, paper_index_games
 
 luck = deserved_wins(paper_index_games(load_cfb_pbp(2024).select(PBP_COLUMNS), "cfb"))
 luck.sort("luck_z", descending=True).head(10)  # the season's luckiest teams
@@ -293,7 +293,7 @@ dict | None: `{"home_share": float, "away_share": float, "margins": {name: float
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp
-from sportsdataverse.paper_index import paper_index_game
+from sportsdataverse.analytics.paper_index import paper_index_game
 
 pbp = load_cfb_pbp(2024).filter(pl.col("game_id") == 401628337)
 out = paper_index_game(pbp, 2, 25, "cfb")  # Auburn (home) vs California
@@ -356,7 +356,7 @@ keyed by `(game_id, team_id)`, sorted by them; `game_id` and `team_id` keep the 
 
 ```python
 import polars as pl
-from sportsdataverse.paper_index import PBP_COLUMNS, paper_index_games
+from sportsdataverse.analytics.paper_index import PBP_COLUMNS, paper_index_games
 
 url = (
     "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"

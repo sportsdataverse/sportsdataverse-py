@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBASL_SAC — ESPN core API (v2)
 
-`sportsdataverse.nbasl_sac` — 82 endpoints.
+`sportsdataverse.basketball.nbasl_sac` — 82 endpoints.
 
 ## Game
 

@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: league_id
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: min_year
+  type: character
+- description: ''
+  name: max_year
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+kind: dataframe
+schema: commonteamyears

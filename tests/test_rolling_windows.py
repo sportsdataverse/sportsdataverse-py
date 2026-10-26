@@ -9,7 +9,13 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.rolling_windows import EVENT_SCHEMA, OUTPUT_SCHEMA, football_events, rolling_windows, shot_events
+from sportsdataverse.analytics.rolling_windows import (
+    EVENT_SCHEMA,
+    OUTPUT_SCHEMA,
+    football_events,
+    rolling_windows,
+    shot_events,
+)
 
 FIX = Path(__file__).parent / "fixtures" / "rolling_windows"
 QB = "4433971"  # Kyle McCord: Ohio State 2021-23, Syracuse 2024

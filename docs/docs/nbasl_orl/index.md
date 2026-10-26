@@ -3,7 +3,7 @@ title: NBASL_ORL
 sidebar_label: NBASL_ORL
 description: "sdv-py NBASL_ORL: endpoint references, dataset loaders and parsers for NBASL_ORL in the SportsDataverse Python package."
 ---
-# NBASL_ORL (`sportsdataverse.nbasl_orl`)
+# NBASL_ORL (`sportsdataverse.basketball.nbasl_orl`)
 
 ## Data sources
 

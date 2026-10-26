@@ -3,7 +3,7 @@ title: FOX
 sidebar_label: FOX
 description: "sdv-py FOX: endpoint references, dataset loaders and parsers for FOX in the SportsDataverse Python package."
 ---
-# FOX (`sportsdataverse.fox`)
+# FOX (`sportsdataverse.providers.fox`)
 
 ## Data sources
 

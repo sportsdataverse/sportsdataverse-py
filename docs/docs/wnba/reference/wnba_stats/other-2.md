@@ -25,7 +25,7 @@ GET /stats/playbyplayv3
 
 **`return_parsed=True`** (default) — the output of `parse_wnba_stats_result_sets`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: the committed capture tests/fixtures/wnba_stats/endpoints/playbyplayv3.json holds no rows, so parse_nba_stats_result_sets emits no columns; a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter IPs) and SDV_PY_NBA_STATS_LIVE=1.
+No returns table is published for this endpoint: the committed capture tests/fixtures/wnba_stats/endpoints/playbyplayv3.json is not a resultSets envelope (top-level keys: game, meta), which parse_nba_stats_result_sets does not read, so the parsed output is empty; use return_parsed=False for the raw payload.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

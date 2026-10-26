@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBASL_CA — ESPN web API (v3)
 
-`sportsdataverse.nbasl_ca` — 5 endpoints.
+`sportsdataverse.basketball.nbasl_ca` — 5 endpoints.
 
 ## espn_nbasl_ca_player_overview
 

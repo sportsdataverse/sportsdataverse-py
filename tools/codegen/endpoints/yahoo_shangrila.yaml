@@ -1,7 +1,7 @@
 api: yahoo_shangrila
 docstring:
   example_import: true
-  example_import_from: sportsdataverse.yahoo.yahoo_shangrila
+  example_import_from: sportsdataverse.providers.yahoo.yahoo_shangrila
   see_also:
   - name: cfbfastR
     note: R sister package for college football
@@ -2492,11 +2492,11 @@ endpoints:
   returns_schema: native/yahoo_shangrila/editorial_scoreboard
   short: editorial_scoreboard
   summary: 'Scoreboard: games + teams + leagues + odds (fat payload)'
-getter_module: sportsdataverse.yahoo.yahoo_shangrila_runtime
+getter_module: sportsdataverse.providers.yahoo.yahoo_shangrila_runtime
 host: https://graphite-secure.sports.yahoo.com/v1/query/shangrila
 module: yahoo_shangrila
 name_pattern: yahoo_{short}
-parser_module: yahoo.yahoo_shangrila_parsers
+parser_module: providers.yahoo.yahoo_shangrila_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

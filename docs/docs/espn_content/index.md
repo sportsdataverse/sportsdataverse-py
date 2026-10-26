@@ -3,7 +3,7 @@ title: ESPN content (news)
 sidebar_label: ESPN content (news)
 description: "sdv-py ESPN content (news): endpoint references, dataset loaders and parsers for ESPN content (news) in the SportsDataverse Python package."
 ---
-# ESPN content (news) (`sportsdataverse.espn_content`)
+# ESPN content (news) (`sportsdataverse.providers.espn_content`)
 
 ## Data sources
 

@@ -1,0 +1,160 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscoremisc?Format=json",
+  "time": "2026-06-29T01:48:54.4854Z"
+ },
+ "boxScoreMisc": {
+  "gameId": "2022500137",
+  "awayTeamId": 1612709925,
+  "homeTeamId": 1612709929,
+  "homeTeam": {
+   "teamId": 1612709929,
+   "teamCity": "College Park",
+   "teamName": "Skyhawks",
+   "teamTricode": "CPS",
+   "teamSlug": "skyhawks",
+   "players": [
+    {
+     "personId": 1641881,
+     "firstName": "Javan",
+     "familyName": "Johnson",
+     "nameI": "J. Johnson",
+     "playerSlug": "javan-johnson",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "27:24",
+      "pointsOffTurnovers": 0,
+      "pointsSecondChance": 2,
+      "pointsFastBreak": 2,
+      "pointsPaint": 6,
+      "oppPointsOffTurnovers": 13,
+      "oppPointsSecondChance": 10,
+      "oppPointsFastBreak": 7,
+      "oppPointsPaint": 36,
+      "blocks": 1,
+      "blocksAgainst": 2,
+      "foulsPersonal": 1,
+      "foulsDrawn": 0
+     }
+    },
+    {
+     "personId": 1631216,
+     "firstName": "Caleb",
+     "familyName": "Houstan",
+     "nameI": "C. Houstan",
+     "playerSlug": "caleb-houstan",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "29:38",
+      "pointsOffTurnovers": 5,
+      "pointsSecondChance": 0,
+      "pointsFastBreak": 0,
+      "pointsPaint": 4,
+      "oppPointsOffTurnovers": 15,
+      "oppPointsSecondChance": 17,
+      "oppPointsFastBreak": 15,
+      "oppPointsPaint": 42,
+      "blocks": 0,
+      "blocksAgainst": 0,
+      "foulsPersonal": 2,
+      "foulsDrawn": 0
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "pointsOffTurnovers": 13,
+    "pointsSecondChance": 12,
+    "pointsFastBreak": 14,
+    "pointsPaint": 46,
+    "oppPointsOffTurnovers": 20,
+    "oppPointsSecondChance": 24,
+    "oppPointsFastBreak": 20,
+    "oppPointsPaint": 60,
+    "blocks": 4,
+    "blocksAgainst": 4,
+    "foulsPersonal": 19,
+    "foulsDrawn": 17
+   }
+  },
+  "awayTeam": {
+   "teamId": 1612709925,
+   "teamCity": "Osceola",
+   "teamName": "Magic",
+   "teamTricode": "OSC",
+   "teamSlug": "magic",
+   "players": [
+    {
+     "personId": 1631457,
+     "firstName": "Alex",
+     "familyName": "Morales",
+     "nameI": "A. Morales",
+     "playerSlug": "alex-morales",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:00",
+      "pointsOffTurnovers": 0,
+      "pointsSecondChance": 4,
+      "pointsFastBreak": 0,
+      "pointsPaint": 10,
+      "oppPointsOffTurnovers": 11,
+      "oppPointsSecondChance": 6,
+      "oppPointsFastBreak": 6,
+      "oppPointsPaint": 26,
+      "blocks": 0,
+      "blocksAgainst": 0,
+      "foulsPersonal": 2,
+      "foulsDrawn": 5
+     }
+    },
+    {
+     "personId": 1631303,
+     "firstName": "Justin",
+     "familyName": "Minaya",
+     "nameI": "J. Minaya",
+     "playerSlug": "justin-minaya",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "30:32",
+      "pointsOffTurnovers": 0,
+      "pointsSecondChance": 0,
+      "pointsFastBreak": 4,
+      "pointsPaint": 4,
+      "oppPointsOffTurnovers": 9,
+      "oppPointsSecondChance": 8,
+      "oppPointsFastBreak": 4,
+      "oppPointsPaint": 28,
+      "blocks": 1,
+      "blocksAgainst": 0,
+      "foulsPersonal": 1,
+      "foulsDrawn": 1
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "pointsOffTurnovers": 20,
+    "pointsSecondChance": 24,
+    "pointsFastBreak": 20,
+    "pointsPaint": 60,
+    "oppPointsOffTurnovers": 13,
+    "oppPointsSecondChance": 12,
+    "oppPointsFastBreak": 14,
+    "oppPointsPaint": 46,
+    "blocks": 4,
+    "blocksAgainst": 4,
+    "foulsPersonal": 17,
+    "foulsDrawn": 19
+   }
+  }
+ }
+}

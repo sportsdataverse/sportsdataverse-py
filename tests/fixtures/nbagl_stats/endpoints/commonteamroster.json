@@ -1,0 +1,84 @@
+{
+ "resource": "commonteamroster",
+ "parameters": {
+  "TeamID": 1612709914,
+  "LeagueID": "20",
+  "Season": "2023-24"
+ },
+ "resultSets": [
+  {
+   "name": "CommonTeamRoster",
+   "headers": [
+    "TeamID",
+    "SEASON",
+    "LeagueID",
+    "PLAYER",
+    "NICKNAME",
+    "PLAYER_SLUG",
+    "NUM",
+    "POSITION",
+    "HEIGHT",
+    "WEIGHT",
+    "BIRTH_DATE",
+    "AGE",
+    "EXP",
+    "SCHOOL",
+    "PLAYER_ID",
+    "HOW_ACQUIRED"
+   ],
+   "rowSet": [
+    [
+     1612709914,
+     "2023",
+     "20",
+     "Gabe Levin",
+     "Gabe",
+     "gabe-levin",
+     "0",
+     "F",
+     "6-8",
+     "235",
+     "AUG 02, 1994",
+     29.0,
+     "1",
+     "Long Beach State",
+     1629792,
+     null
+    ],
+    [
+     1612709914,
+     "2023",
+     "20",
+     "Jordan Ford",
+     "Jordan",
+     "jordan-ford",
+     "1",
+     "G",
+     "6-1",
+     "175",
+     "MAY 26, 1998",
+     26.0,
+     "3",
+     "St. Mary's College",
+     1630259,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "Coaches",
+   "headers": [
+    "COACH_ID",
+    "TEAM_ID",
+    "SEASON",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "COACH_NAME",
+    "IS_ASSISTANT",
+    "COACH_TYPE",
+    "SORT_SEQUENCE"
+   ],
+   "rowSet": []
+  }
+ ]
+}

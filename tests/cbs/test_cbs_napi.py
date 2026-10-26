@@ -20,7 +20,7 @@ import polars as pl
 import pytest
 import yaml
 
-from sportsdataverse.cbs.cbs_napi_parsers import (
+from sportsdataverse.providers.cbs.cbs_napi_parsers import (
     parse_cbs_napi,
     parse_cbs_napi_scoring_drives,
     parse_cbs_napi_scoring_plays,
@@ -324,7 +324,7 @@ def test_scoring_parsers_return_as_pandas():
 
 
 def test_scoring_wrappers_use_row_parsers(monkeypatch):
-    import sportsdataverse.cbs.cbs_napi as mod
+    import sportsdataverse.providers.cbs.cbs_napi as mod
 
     bodies = {"plays": _load("game_scoring_plays_nfl"), "drives": _load("game_scoring_drives_nfl")}
     monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: bodies[url.rsplit("/", 2)[-2]])
@@ -339,7 +339,7 @@ def test_scoring_wrappers_use_row_parsers(monkeypatch):
 
 @pytest.fixture()
 def calls(monkeypatch):
-    import sportsdataverse.cbs.cbs_napi as mod
+    import sportsdataverse.providers.cbs.cbs_napi as mod
 
     seen: List[Dict[str, Any]] = []
 
@@ -374,21 +374,21 @@ def calls(monkeypatch):
     ],
 )
 def test_wrapper_builds_url(calls, fn_name, kwargs, expected):
-    import sportsdataverse.cbs.cbs_napi as mod
+    import sportsdataverse.providers.cbs.cbs_napi as mod
 
     getattr(mod, fn_name)(**kwargs)
     assert calls[0]["url"] == f"https://api.cbssports.com/napi{expected}"
 
 
 def test_wrapper_maps_python_args_to_wire_query_keys(calls):
-    from sportsdataverse.cbs.cbs_napi import cbs_team_standings
+    from sportsdataverse.providers.cbs.cbs_napi import cbs_team_standings
 
     cbs_team_standings(team_id=404, season_type="regular", season_id="59", year=2025)
     assert calls[0]["params"] == {"seasonType": "regular", "seasonId": "59", "year": 2025}
 
 
 def test_wrapper_returns_raw_when_return_parsed_false(calls, monkeypatch):
-    import sportsdataverse.cbs.cbs_napi as mod
+    import sportsdataverse.providers.cbs.cbs_napi as mod
 
     monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: {"data": [{"teamId": 404}]})
     assert mod.cbs_team_players(team_id=404, return_parsed=False) == {"data": [{"teamId": 404}]}
@@ -396,7 +396,7 @@ def test_wrapper_returns_raw_when_return_parsed_false(calls, monkeypatch):
 
 
 def test_error_envelope_from_wrapper_is_zero_rows(monkeypatch):
-    import sportsdataverse.cbs.cbs_napi as mod
+    import sportsdataverse.providers.cbs.cbs_napi as mod
 
     monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: {"errors": [{"code": 404}]})
     assert mod.cbs_team_players(team_id=-1).height == 0
@@ -409,7 +409,7 @@ def test_error_envelope_from_wrapper_is_zero_rows(monkeypatch):
 
 def test_every_yaml_endpoint_is_exported():
     doc = yaml.safe_load(ENDPOINT_YAML.read_text(encoding="utf-8"))
-    from sportsdataverse.cbs import cbs_napi as mod
+    from sportsdataverse.providers.cbs import cbs_napi as mod
 
     assert len(doc["endpoints"]) == 82
     assert sorted(mod.__all__) == sorted(f"cbs_{e['short']}" for e in doc["endpoints"])
@@ -486,7 +486,7 @@ def test_the_captured_unknown_game_body_is_a_404_warning():
 
 @pytest.mark.parametrize("return_parsed", [True, False])
 def test_warnings_404_body_raises_no_data(monkeypatch, return_parsed):
-    from sportsdataverse.cbs.cbs_napi import cbs_game_scoring_plays
+    from sportsdataverse.providers.cbs.cbs_napi import cbs_game_scoring_plays
     from sportsdataverse.errors import NoDataError
     from tests.codegen.test_runtime_errors import _serve
 

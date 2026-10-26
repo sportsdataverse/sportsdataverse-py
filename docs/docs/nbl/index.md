@@ -3,7 +3,7 @@ title: NBL
 sidebar_label: NBL
 description: "sdv-py NBL: endpoint references, dataset loaders and parsers for NBL in the SportsDataverse Python package."
 ---
-# NBL (`sportsdataverse.nbl`)
+# NBL (`sportsdataverse.basketball.nbl`)
 
 ## Data sources
 

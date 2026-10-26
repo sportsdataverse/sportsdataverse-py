@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FIBA — ESPN FPI API (fitt v3)
 
-`sportsdataverse.fiba` — 1 endpoint.
+`sportsdataverse.basketball.fiba` — 1 endpoint.
 
 ## espn_fiba_fpi
 

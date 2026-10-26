@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBASL_UT — ESPN web API (v3)
 
-`sportsdataverse.nbasl_ut` — 5 endpoints.
+`sportsdataverse.basketball.nbasl_ut` — 5 endpoints.
 
 ## espn_nbasl_ut_player_overview
 

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FIBA — ESPN web API (v3)
 
-`sportsdataverse.fiba` — 5 endpoints.
+`sportsdataverse.basketball.fiba` — 5 endpoints.
 
 ## espn_fiba_player_overview
 

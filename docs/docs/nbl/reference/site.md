@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBL — ESPN site API (v2)
 
-`sportsdataverse.nbl` — 24 endpoints.
+`sportsdataverse.basketball.nbl` — 24 endpoints.
 
 ## espn_nbl_scoreboard
 

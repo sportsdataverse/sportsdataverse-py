@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CBS — CBS Sports NAPI (api.cbssports.com/napi)
 
-`sportsdataverse.cbs` — 82 endpoints.
+`sportsdataverse.providers.cbs` — 82 endpoints.
 
 ## Game
 

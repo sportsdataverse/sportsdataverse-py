@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # EUROLEAGUE — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
 
-`sportsdataverse.euroleague` — 15 endpoints.
+`sportsdataverse.basketball.euroleague` — 15 endpoints.
 
 ## Game
 

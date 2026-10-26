@@ -91,18 +91,19 @@ def _endpoint_shorts(stem: str) -> Iterator[dict]:
 
 
 def vendor_nba(refs: Path) -> None:
-    """Every ``nba_stats`` / ``wnba_stats`` endpoint from the 2026-08 capture sweep
-    (except those whose schema comes from an earlier pilot capture)."""
-    from tools.codegen.gen_nba_stats import CAPTURE_OVERRIDES
+    """Every ``nba_stats`` / ``wnba_stats`` / ``nbagl_stats`` endpoint from the 2026-08 capture sweep
+    (except those whose schema comes from an earlier pilot capture). The endpoint list is the
+    generator's own (``_stats_eps``), so a new stem vendors before its YAML exists."""
+    from tools.codegen.gen_nba_stats import CAPTURE_OVERRIDES, STEMS, _stats_eps
 
-    for stem, league_id in (("nba_stats", "00"), ("wnba_stats", "10")):
+    for stem, cfg in STEMS.items():
         n = size = 0
-        for ep in _endpoint_shorts(stem):
-            if (stem, ep["short"]) in CAPTURE_OVERRIDES:
+        for ep in _stats_eps(cfg["league_id"]):
+            if (stem, ep["slug"]) in CAPTURE_OVERRIDES:
                 continue
-            src = refs / "nba/captures/_sample" / league_id / f"{ep['short']}.json"
+            src = refs / "nba/captures/_sample" / cfg["league_id"] / f"{ep['slug']}.json"
             size += _vendor(
-                src, ROOT / f"tests/fixtures/{stem}/endpoints/{ep['short']}.json", parse_nba_stats_result_sets
+                src, ROOT / f"tests/fixtures/{stem}/endpoints/{ep['slug']}.json", parse_nba_stats_result_sets
             )
             n += 1
         print(f"{stem}: vendored {n} captures ({size // 1024} KiB)")

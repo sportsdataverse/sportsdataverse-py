@@ -42,9 +42,9 @@ def test_registry_sports_and_labels():
     assert by_sport["basketball"]["lba"] == "Lega Basket Serie A"
     assert by_sport["basketball"]["plg"] == "P. LEAGUE+"
     assert by_sport["basketball"]["fiba_hub"] == "FIBA (digital API and game pages)"
+    assert by_sport["basketball"]["euroleague"] == "EuroLeague"  # moved from the top level into basketball/
     assert by_sport["soccer"]["laliga"] == "LaLiga"
     assert by_sport["other"] == {
-        "euroleague": "EuroLeague",
         "f1": "Formula 1",
         "espn_content": "ESPN content (news)",
         "thesportsdb": "TheSportsDB",
@@ -98,9 +98,13 @@ def test_basketball_homes_nest_under_basketball_and_register_every_stem():
     assert not taken & set(generate._BASKETBALL_HOMES)
     assert len(generate._BASKETBALL_HOMES) == len(set(generate._BASKETBALL_HOMES))
     basketball = generate._container_groups({})["basketball"]
-    assert basketball == sorted(generate._BASKETBALL_HOMES)
+    assert basketball == sorted([*generate._BASKETBALL_HOMES, "euroleague"])  # EuroLeague moved in from the top level
+    # the container also holds the ESPN leagues grouped under basketball in leagues.yaml (nbl, fiba, ...)
+    groups = {lg.prefix: lg.group for lg in generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues}
+    members = generate._container_groups(groups)["basketball"]
+    assert set(basketball) <= set(members) and {"nbl", "fiba", "nbasl_lv"} <= set(members)
     init = (generate.LIVE / "basketball" / "__init__.py").read_text(encoding="utf-8")
-    assert init == generate._container_init_body("basketball", basketball, False)
+    assert init == generate._container_init_body("basketball", members, False)
     pkg = importlib.import_module("sportsdataverse.basketball")
     for home in generate._BASKETBALL_HOMES:
         assert hasattr(pkg, home) and importlib.import_module(f"sportsdataverse.basketball.{home}")
@@ -153,3 +157,16 @@ def test_no_generated_page_or_example_names_a_deprecated_import_path():
     assert hits == [], f"{len(hits)} deprecated paths, e.g. {hits[:5]}"
     for prefix, home in _MOVED.items():
         assert generate._home_module(prefix) == f"sportsdataverse.{home}"
+
+
+def test_sidebar_group_labels_are_unique_across_sports():
+    """Docusaurus derives a sidebar category's translation key from its label, so two "College" groups (hockey and
+    baseball) collide; every sport label and group label must be distinct."""
+    import json
+    from collections import Counter
+
+    data = json.loads(generate.render_leagues_json())
+    labels = [s["label"] for s in data["sports"]]
+    labels += sorted({lg["group"] for s in data["sports"] for lg in s["leagues"] if "group" in lg})
+    dupes = [label for label, n in Counter(labels).items() if n > 1]
+    assert not dupes, dupes

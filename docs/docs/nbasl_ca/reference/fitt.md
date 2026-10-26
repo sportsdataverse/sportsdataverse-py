@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBASL_CA — ESPN FPI API (fitt v3)
 
-`sportsdataverse.nbasl_ca` — 1 endpoint.
+`sportsdataverse.basketball.nbasl_ca` — 1 endpoint.
 
 ## espn_nbasl_ca_fpi
 

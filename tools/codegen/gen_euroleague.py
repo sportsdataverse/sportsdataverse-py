@@ -12,7 +12,7 @@ The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
   ``servers`` (the v3 standings / season stats / game report, the
   ``live.euroleague.net/api`` per-game routes) gets an endpoint-level ``host``
   (the ``gen_fotmob.py`` / ``gen_mls.py`` mechanism). The getter
-  ``sportsdataverse.euroleague.euroleague_runtime._get`` picks the body contract
+  ``sportsdataverse.basketball.euroleague.euroleague_runtime._get`` picks the body contract
   by host: ``Accept: application/json`` for api-live (it answers XML otherwise),
   and ``{}`` for the live API's empty-200 "no such game" sentinel.
 * ``tools/codegen/schemas/native/euroleague/<short>.yaml`` -- returns-schema per
@@ -54,7 +54,7 @@ from gen_soccer_common import (
 from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.euroleague import euroleague_parsers
+from sportsdataverse.basketball.euroleague import euroleague_parsers
 
 HOST = "https://api-live.euroleague.net/v2"
 LIVE_HOST = "https://live.euroleague.net/api"
@@ -665,8 +665,8 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "euroleague_{short}",
         "module": STEM,
-        "parser_module": "euroleague.euroleague_parsers",
-        "getter_module": "sportsdataverse.euroleague.euroleague_runtime",
+        "parser_module": "basketball.euroleague.euroleague_parsers",
+        "getter_module": "sportsdataverse.basketball.euroleague.euroleague_runtime",
         "qualifier": "",
         "passthrough_query": False,
         "docstring": _docstring(None),

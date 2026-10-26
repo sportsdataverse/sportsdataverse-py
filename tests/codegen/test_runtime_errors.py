@@ -95,7 +95,7 @@ def test_empty_200_is_a_failed_fetch(monkeypatch):
 
 def test_a_json_array_where_a_yahoo_object_belongs_is_a_failed_fetch(monkeypatch):
     # A-L18: it became {} ("nothing here").
-    from sportsdataverse.yahoo import yahoo_shangrila_runtime as rt
+    from sportsdataverse.providers.yahoo import yahoo_shangrila_runtime as rt
 
     _serve(monkeypatch, 200, "[]")
     with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
@@ -157,7 +157,7 @@ def test_espn_200_with_code_404_body_is_no_data(monkeypatch):
 def test_fox_401_error_body_is_a_failed_fetch(monkeypatch):
     # Before: {"fault": {"faultstring": "Invalid ApiKey", ...}} came back as the payload.
     calls = _serve(monkeypatch, 401, _body("fox_bifrost_401_invalid_apikey.json"))
-    from sportsdataverse.fox import fox_api_scoreboard
+    from sportsdataverse.providers.fox import fox_api_scoreboard
 
     with pytest.raises(AssetFetchError) as ei:
         fox_api_scoreboard(sport="nfl", return_parsed=False)
@@ -185,7 +185,7 @@ def test_rejected_request_is_a_value_error(monkeypatch, status):
 @pytest.mark.parametrize("status", [403, 429, 503])
 def test_retryable_status_after_retries_is_a_failed_fetch(monkeypatch, status):
     calls = _serve(monkeypatch, status, '{"error": "rate limited", "token": "s3cr3t-value-123"}')
-    from sportsdataverse.fox import fox_api_scoreboard
+    from sportsdataverse.providers.fox import fox_api_scoreboard
 
     with pytest.raises(AssetFetchError, match=f"HTTP {status}") as ei:
         fox_api_scoreboard(sport="nfl", num_retries=2)  # parsed path: no empty frame either
@@ -251,7 +251,7 @@ def _getter(name: str) -> Callable[[], Any]:
     from sportsdataverse.nhl import nhl_api_web_extra, nhl_records_extra
     from sportsdataverse.soccer.mls import mls_api_runtime
     from sportsdataverse.soccer.nwsl import nwsl_api_runtime
-    from sportsdataverse.yahoo import yahoo_shangrila_runtime
+    from sportsdataverse.providers.yahoo import yahoo_shangrila_runtime
 
     return {
         "mlb_api_extra": lambda: mlb_api_extra._get("/api/v1/teams", num_retries=0),
@@ -508,6 +508,7 @@ _CASES = {  # case -> (status, body, content type, the vocabulary's answer)
 _URL = {
     "nba_stats_runtime": "https://stats.nba.com/stats/x",
     "wnba_stats_runtime": "https://stats.wnba.com/stats/x",
+    "nbagl_stats_runtime": "https://stats.nba.com/stats/x",
     # Route-checked getters (main 10-17/10-18 families): each refuses a path its family does not wrap with
     # ValueError before any fetch, so it is called with one route (the endpoint YAML's path filled from its
     # ``example_args``) that reaches the transport.
@@ -772,9 +773,10 @@ def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
     import inspect
 
     from sportsdataverse.nba import nba_stats
+    from sportsdataverse.nbagl import nbagl_stats
     from sportsdataverse.wnba import wnba_stats
 
-    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_"), (nbagl_stats, "nbagl_stats_")):
         fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
         assert fns
         for fn in fns:

@@ -3,7 +3,7 @@ title: CBS
 sidebar_label: CBS
 description: "sdv-py CBS: endpoint references, dataset loaders and parsers for CBS in the SportsDataverse Python package."
 ---
-# CBS (`sportsdataverse.cbs`)
+# CBS (`sportsdataverse.providers.cbs`)
 
 ## Data sources
 

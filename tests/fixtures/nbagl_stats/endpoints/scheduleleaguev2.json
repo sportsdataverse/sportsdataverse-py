@@ -1,0 +1,576 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/league/20/2023-24/scheduleleaguev2?Format=json",
+  "time": "2025-04-10T14:10:43.1043Z"
+ },
+ "leagueSchedule": {
+  "seasonYear": "2023-24",
+  "leagueId": "20",
+  "gameDates": [
+   {
+    "gameDate": "09/06/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "2012300001",
+      "gameCode": "20230906/PERGLI",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-09-06T00:00:00Z",
+      "gameTimeEst": "1900-01-01T21:00:00Z",
+      "gameDateTimeEst": "2023-09-06T21:00:00Z",
+      "gameDateUTC": "2023-09-06T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T01:00:00Z",
+      "gameDateTimeUTC": "2023-09-07T01:00:00Z",
+      "awayTeamTime": "2023-09-07T11:00:00Z",
+      "homeTeamTime": "2023-09-06T21:00:00Z",
+      "day": "Wed",
+      "monthNum": 9,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": "false",
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "The Dollar Loan Center",
+      "arenaState": "NV",
+      "arenaCity": "Henderson",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        },
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000917,
+         "broadcasterDisplay": "NBA App",
+         "broadcasterAbbreviation": "NBA App",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1612709930,
+       "teamName": "Ignite",
+       "teamCity": "G League",
+       "teamTricode": "GLI",
+       "teamSlug": "ignite",
+       "wins": 1,
+       "losses": 0,
+       "score": 124,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 104,
+       "teamName": "Wildcats",
+       "teamCity": "Perth",
+       "teamTricode": "PER",
+       "teamSlug": "wildcats",
+       "wins": 0,
+       "losses": 1,
+       "score": 105,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1641842,
+        "firstName": "Ronald",
+        "lastName": "Holland II",
+        "teamId": 1612709930,
+        "teamCity": "G League",
+        "teamName": "Ignite",
+        "teamTricode": "GLI",
+        "points": 23.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "09/08/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "2012300002",
+      "gameCode": "20230908/PERGLI",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-09-08T00:00:00Z",
+      "gameTimeEst": "1900-01-01T21:00:00Z",
+      "gameDateTimeEst": "2023-09-08T21:00:00Z",
+      "gameDateUTC": "2023-09-08T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T01:00:00Z",
+      "gameDateTimeUTC": "2023-09-09T01:00:00Z",
+      "awayTeamTime": "2023-09-09T11:00:00Z",
+      "homeTeamTime": "2023-09-08T21:00:00Z",
+      "day": "Fri",
+      "monthNum": 9,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": "false",
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "The Dollar Loan Center",
+      "arenaState": "NV",
+      "arenaCity": "Henderson",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        },
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000917,
+         "broadcasterDisplay": "NBA App",
+         "broadcasterAbbreviation": "NBA App",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1612709930,
+       "teamName": "Ignite",
+       "teamCity": "G League",
+       "teamTricode": "GLI",
+       "teamSlug": "ignite",
+       "wins": 1,
+       "losses": 1,
+       "score": 112,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 104,
+       "teamName": "Wildcats",
+       "teamCity": "Perth",
+       "teamTricode": "PER",
+       "teamSlug": "wildcats",
+       "wins": 1,
+       "losses": 1,
+       "score": 127,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 203955,
+        "firstName": "Bryce",
+        "lastName": "Cotton",
+        "teamId": 104,
+        "teamCity": "Perth",
+        "teamName": "Wildcats",
+        "teamTricode": "PER",
+        "points": 40.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "11/10/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "2052300001",
+      "gameCode": "20231110/MNECCG",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-11-10T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:00:00Z",
+      "gameDateTimeEst": "2023-11-10T19:00:00Z",
+      "gameDateUTC": "2023-11-10T05:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-11-11T00:00:00Z",
+      "awayTeamTime": "2023-11-10T19:00:00Z",
+      "homeTeamTime": "2023-11-10T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 11,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": "false",
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Entertainment and Sports Arena",
+      "arenaState": "DC",
+      "arenaCity": "Washington",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000176,
+         "broadcasterDisplay": "NBAGLeague.com",
+         "broadcasterAbbreviation": "NBAGLeague.com",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1461,
+         "broadcasterDisplay": "Monumental Sports Network Streaming",
+         "broadcasterAbbreviation": "Monumental",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.monumentalsportsnetwork.com/",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1195,
+         "broadcasterDisplay": "96.3 The Big JAB",
+         "broadcasterAbbreviation": "WJJB",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1612709928,
+       "teamName": "Go-Go",
+       "teamCity": "Capital City",
+       "teamTricode": "CCG",
+       "teamSlug": "go-go",
+       "wins": 1,
+       "losses": 0,
+       "score": 137,
+       "seed": 15
+      },
+      "awayTeam": {
+       "teamId": 1612709915,
+       "teamName": "Celtics",
+       "teamCity": "Maine",
+       "teamTricode": "MNE",
+       "teamSlug": "celtics",
+       "wins": 0,
+       "losses": 1,
+       "score": 127,
+       "seed": 18
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1631262,
+        "firstName": "Jules",
+        "lastName": "Bernard",
+        "teamId": 1612709928,
+        "teamCity": "Capital City",
+        "teamName": "Go-Go",
+        "teamTricode": "CCG",
+        "points": 30.0
+       }
+      ]
+     },
+     {
+      "gameId": "2052300002",
+      "gameCode": "20231110/WISCLC",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-11-10T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:00:00Z",
+      "gameDateTimeEst": "2023-11-10T19:00:00Z",
+      "gameDateUTC": "2023-11-10T05:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-11-11T00:00:00Z",
+      "awayTeamTime": "2023-11-10T18:00:00Z",
+      "homeTeamTime": "2023-11-10T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 11,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": "false",
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Wolstein Center",
+      "arenaState": "OH",
+      "arenaCity": "Cleveland",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000176,
+         "broadcasterDisplay": "NBAGLeague.com",
+         "broadcasterAbbreviation": "NBAGLeague.com",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000921,
+         "broadcasterDisplay": "NEO Sports Radio",
+         "broadcasterAbbreviation": "NEOSR",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1612709893,
+       "teamName": "Charge",
+       "teamCity": "Cleveland",
+       "teamTricode": "CLC",
+       "teamSlug": "charge",
+       "wins": 1,
+       "losses": 0,
+       "score": 116,
+       "seed": 24
+      },
+      "awayTeam": {
+       "teamId": 1612709927,
+       "teamName": "Herd",
+       "teamCity": "Wisconsin",
+       "teamTricode": "WIS",
+       "teamSlug": "herd",
+       "wins": 0,
+       "losses": 1,
+       "score": 109,
+       "seed": 28
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1641734,
+        "firstName": "Emoni",
+        "lastName": "Bates",
+        "teamId": 1612709893,
+        "teamCity": "Cleveland",
+        "teamName": "Charge",
+        "teamTricode": "CLC",
+        "points": 29.0
+       }
+      ]
+     },
+     {
+      "gameId": "2052300003",
+      "gameCode": "20231110/WESDEL",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 3,
+      "gameDateEst": "2023-11-10T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:00:00Z",
+      "gameDateTimeEst": "2023-11-10T19:00:00Z",
+      "gameDateUTC": "2023-11-10T05:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-11-11T00:00:00Z",
+      "awayTeamTime": "2023-11-10T19:00:00Z",
+      "homeTeamTime": "2023-11-10T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 11,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": "false",
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Chase Fieldhouse",
+      "arenaState": "DE",
+      "arenaCity": "Wilmington",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1001115,
+         "broadcasterDisplay": "NBA G League TV on Tubi",
+         "broadcasterAbbreviation": "Tubi",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1001106,
+         "broadcasterDisplay": "DETV Channel 28 / Philly 57",
+         "broadcasterAbbreviation": "DETV28/WPSG",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000920,
+         "broadcasterDisplay": "89.7 WGLS - Rowan Radio",
+         "broadcasterAbbreviation": "WGLS",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 100,
+         "broadcasterDisplay": "MSG",
+         "broadcasterAbbreviation": "MSG",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.msggo.com/",
+         "broadcasterTeamId": 1610612752,
+         "broadcasterRanking": 0
+        }
+       ],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1612709909,
+       "teamName": "Blue Coats",
+       "teamCity": "Delaware",
+       "teamTricode": "DEL",
+       "teamSlug": "blue-coats",
+       "wins": 0,
+       "losses": 1,
+       "score": 103,
+       "seed": 13
+      },
+      "awayTeam": {
+       "teamId": 1612709919,
+       "teamName": "Knicks",
+       "teamCity": "Westchester",
+       "teamTricode": "WES",
+       "teamSlug": "knicks",
+       "wins": 1,
+       "losses": 0,
+       "score": 135,
+       "seed": 2
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1631173,
+        "firstName": "Terquavion",
+        "lastName": "Smith",
+        "teamId": 1612709909,
+        "teamCity": "Delaware",
+        "teamName": "Blue Coats",
+        "teamTricode": "DEL",
+        "points": 37.0
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "weeks": []
+ }
+}

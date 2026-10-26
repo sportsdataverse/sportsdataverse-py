@@ -3,7 +3,7 @@ title: NBASL_GS
 sidebar_label: NBASL_GS
 description: "sdv-py NBASL_GS: endpoint references, dataset loaders and parsers for NBASL_GS in the SportsDataverse Python package."
 ---
-# NBASL_GS (`sportsdataverse.nbasl_gs`)
+# NBASL_GS (`sportsdataverse.basketball.nbasl_gs`)
 
 ## Data sources
 

@@ -94,7 +94,7 @@ def _bucket_of(path: str) -> str:
 #   nflverse crosswalk, an identity on the capture or the envelope confirms; the 30 left (avgTTP,
 #   bhPct, twfPct, ...) have no reachable label source (sdv-internal-refs/nfl/nflpro/catalogs/
 #   nfl_pro_secured_returns.md).
-# - native/nba_stats, native/wnba_stats: their tables were rebuilt from what the parser emits on real
+# - native/nba_stats, native/wnba_stats (and native/nbagl_stats, built the same way 2026-10-26): their tables were rebuilt from what the parser emits on real
 #   captures (2026-10-05), which renamed columns and surfaced every result set; the new columns had
 #   no description to carry over. (native/on3, rebuilt the same way, was fully authored 2026-10-07 and
 #   removed from this table.)
@@ -190,6 +190,9 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/nflpro": 30,  # the un-authorable NGS fields only (2026-10-07); was None
     "native/nba_stats": 312,
     "native/wnba_stats": 269,
+    # Measured 2026-10-26 when the G League stem was built from the same parser-on-capture tables
+    # (hoopR's column docs fill the rest, as for native/nba_stats).
+    "native/nbagl_stats": 4442,  # no R package documents the G League; hoopR's NBA (and wehoop's WNBA) text was wrong on its columns, so blank
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,

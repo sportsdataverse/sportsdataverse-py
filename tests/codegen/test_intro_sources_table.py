@@ -30,7 +30,9 @@ def test_table_lists_every_documented_league_with_its_providers():
     body = generate.render_intro_sources_table({p: [] for p in generate._doc_leagues()})
     assert body.startswith("| League | Module | Data sources |")
     for prefix in ("nfl", "nba", "pwhl", "soccer", "fox", "cbs", "yahoo"):
-        assert f"`sportsdataverse.{prefix}`" in body or f"sportsdataverse.hockey.{prefix}" in body
+        assert (
+            f"`{generate._home_module(prefix)}`" in body
+        )  # the league's home, nested or not (providers.fox, basketball.dbl)
     assert "ESPN" in body and "nflverse data releases" in body
 
 

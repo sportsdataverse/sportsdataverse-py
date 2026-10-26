@@ -235,7 +235,7 @@ def _returns_dict(schema_doc: dict) -> bool:
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
-        "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.basketball.euroleague.euroleague_runtime",
         "sportsdataverse.hockey.euro_hockey_runtime",
         "sportsdataverse.basketball.basketball_runtime",
         "sportsdataverse.basketball.fiba_hub.fiba_runtime",
@@ -276,7 +276,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.hockey.nl.nationalleague_runtime",
         "sportsdataverse.hockey.shl.shl_runtime",
         "sportsdataverse.hockey.vhl.vhl_runtime",
-        "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "sportsdataverse.providers.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -287,17 +287,18 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.mbb.torvik_runtime",
         "sportsdataverse.mlb.mlb_statcast_runtime",
         "sportsdataverse.nba.nba_stats_runtime",
+        "sportsdataverse.nbagl.nbagl_stats_runtime",
         "sportsdataverse.nfl.nfl_api_runtime",
         "sportsdataverse.nfl.pff_api_runtime",
         "sportsdataverse.nfl.pff_runtime",
         "sportsdataverse.soccer.mls.mls_api_runtime",
         "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
         "sportsdataverse.wnba.wnba_stats_runtime",
-        "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+        "sportsdataverse.providers.yahoo.yahoo_shangrila_runtime",
         # 4.1b
         "sportsdataverse.nfl.nflpro_runtime",
         # 4.4
-        "sportsdataverse.cbs.cbs_napi_runtime",
+        "sportsdataverse.providers.cbs.cbs_napi_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -311,7 +312,9 @@ _GETTER_RAISES: dict[str, tuple] = {
             "``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).",
         ),
     )
-    for m in ("sportsdataverse.nba.nba_stats_runtime", "sportsdataverse.wnba.wnba_stats_runtime")
+    # the three stats.nba.com stems; built, not spelled out, so the vocab-getters list above stays the only line
+    # naming each runtime (the codegen-vocab-getters-nba-stats mutant must find its snippet exactly once)
+    for m in (f"sportsdataverse.{lg}.{lg}_stats_runtime" for lg in ("nba", "wnba", "nbagl"))
 }
 _VOCAB_RAISES = (
     (
@@ -762,6 +765,9 @@ _NESTED_HOMES = {
     **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
     **{h: f"basketball.{h}" for h in _BASKETBALL_HOMES},
     "del": "hockey.del_",
+    # moved from the top level (old paths alias through sportsdataverse._MOVED)
+    "euroleague": "basketball.euroleague",
+    **{h: f"providers.{h}" for h in ("cbs", "fox", "yahoo", "espn_content", "thesportsdb")},
 }
 
 
@@ -2914,6 +2920,7 @@ FLAT_APIS = [
     ("nflpro", "nfl"),
     ("nba_stats", "nba"),
     ("wnba_stats", "wnba"),
+    ("nbagl_stats", "nbagl"),
     ("on3", "cfb"),
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
@@ -3635,6 +3642,7 @@ _FLAT_API_DOC = {
     "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",
     "nba_stats": "NBA Stats API (stats.nba.com)",
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
+    "nbagl_stats": "G League Stats API (stats.nba.com, LeagueID=20)",
     "on3": "On3 Recruit Database (api.on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
     "sports247_site_pages": "247Sports Site Pages (247sports.com)",
@@ -5692,8 +5700,30 @@ _SPORTS = (
     ("hockey", "Hockey"),
     ("baseball", "Baseball"),
     ("soccer", "Soccer"),
-    ("other", "Other"),
+    ("other", "More sports & sources"),
 )
+
+# The sidebar sub-group of a league inside its sport (docs/sidebars.ts nests them, collapsed, after the
+# headline leagues, which have no group). Built from the home lists, so a new HockeyTech, European or
+# international basketball league lands in its group with no edit here.
+_LEAGUE_GROUPS: dict[str, str] = {
+    **dict.fromkeys(("ufl", "xfl", "cfl"), "Spring & Canadian"),
+    **dict.fromkeys(("nbasl_lv", "nbasl_ut", "nbasl_ca", "nbasl_sac", "nbasl_orl", "nbasl_gs"), "NBA Summer League"),
+    **dict.fromkeys(("nbl", "fiba", "olympics_mbk", "olympics_wbk"), "International (ESPN)"),
+    **dict.fromkeys(("euroleague", *_BASKETBALL_HOMES), "International leagues"),
+    **dict.fromkeys(("mch", "wch"), "College hockey"),
+    **dict.fromkeys(_HOCKEYTECH_MODULE_LEAGUES, "Minor & junior (HockeyTech)"),
+    **dict.fromkeys(("sihf", *_EURO_HOCKEY_HOMES), "Europe"),
+    **dict.fromkeys(("college_baseball", "college_softball"), "College baseball & softball"),
+    **dict.fromkeys(
+        ("epl", "laliga", "bundesliga", "seriea", "ligue1", "mls", "ligamx", "ucl", "uel", "nwsl", "wwc", "wc"),
+        "Leagues",
+    ),
+    "cricket": "Cricket",
+    "f1": "Motorsport",
+    "odds": "Betting & prediction markets",
+    **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "thesportsdb"), "Cross-sport providers"),
+}
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
 _EXTRA_LEAGUE_SPORT = {
     "pwhl": "hockey",
@@ -5755,7 +5785,7 @@ _LEAGUE_LABELS = {
 
 
 def render_leagues_json() -> str:
-    """``{"sports": [{key, label, leagues: [{prefix, label}]}]}`` for every documented league, in
+    """``{"sports": [{key, label, leagues: [{prefix, label, group?}]}]}`` for every documented league, in
     :func:`_doc_leagues` order within each sport. A sport leagues.yaml names but :data:`_SPORTS` does not
     (cricket) is "other"; so is a league with no sport at all (odds, cbs, yahoo)."""
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
@@ -5764,9 +5794,10 @@ def render_leagues_json() -> str:
     leagues: dict[str, list[dict[str, str]]] = {key: [] for key in keys}
     for prefix in _doc_leagues():
         sport = sport_of.get(prefix, "other")
-        leagues[sport if sport in keys else "other"].append(
-            {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
-        )
+        entry = {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
+        if prefix in _LEAGUE_GROUPS:
+            entry["group"] = _LEAGUE_GROUPS[prefix]
+        leagues[sport if sport in keys else "other"].append(entry)
     sports = [{"key": key, "label": label, "leagues": leagues[key]} for key, label in _SPORTS if leagues[key]]
     return json.dumps({"sports": sports}, indent=2)
 

@@ -1,0 +1,95 @@
+{
+ "resource": "commonallplayers",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "IsOnlyCurrentSeason": 0
+ },
+ "resultSets": [
+  {
+   "name": "CommonAllPlayers",
+   "headers": [
+    "PERSON_ID",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FIRST_LAST",
+    "ROSTERSTATUS",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "PLAYERCODE",
+    "PLAYER_SLUG",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_SLUG",
+    "IS_NBA_ASSIGNED",
+    "NBA_ASSIGNED_TEAM_ID",
+    "GAMES_PLAYED_FLAG",
+    "OTHERLEAGUE_EXPERIENCE_CH"
+   ],
+   "rowSet": [
+    [
+     1628690,
+     "Abbott, Tyshawn",
+     "Tyshawn Abbott",
+     0,
+     "2017",
+     "2017",
+     "tyshawn_abbott",
+     "tyshawn_abbott",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     0,
+     0,
+     "Y",
+     "00"
+    ],
+    [
+     1627427,
+     "Abdul-Bassit, Jalil",
+     "Jalil Abdul-Bassit",
+     0,
+     "2015",
+     "2015",
+     "jalil_abdul-bassit",
+     "jalil_abdul-bassit",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     0,
+     0,
+     "Y",
+     "00"
+    ],
+    [
+     1631285,
+     "Abogidi, Efe",
+     "Efe Abogidi",
+     1,
+     "2022",
+     "2025",
+     "efe_abogidi",
+     "efe_abogidi",
+     1612709930,
+     "G League",
+     "Ignite",
+     "GLI",
+     "gleague_ignite",
+     "ignite",
+     0,
+     0,
+     "Y",
+     "00"
+    ]
+   ]
+  }
+ ]
+}

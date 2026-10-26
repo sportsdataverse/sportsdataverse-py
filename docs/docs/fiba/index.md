@@ -3,7 +3,7 @@ title: FIBA
 sidebar_label: FIBA
 description: "sdv-py FIBA: endpoint references, dataset loaders and parsers for FIBA in the SportsDataverse Python package."
 ---
-# FIBA (`sportsdataverse.fiba`)
+# FIBA (`sportsdataverse.basketball.fiba`)
 
 ## Data sources
 

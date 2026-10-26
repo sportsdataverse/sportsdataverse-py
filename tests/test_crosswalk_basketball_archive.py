@@ -275,8 +275,8 @@ def _stub_yahoo(monkeypatch: pytest.MonkeyPatch, *, teams_down: bool = False, id
         assert kw["season"] == "2015"
         return json.loads((F / "yahoo_wnba_game_ids_20151014.json").read_text())
 
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_teams", teams)
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", game_ids)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_teams", teams)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", game_ids)
 
 
 def test_wnba_yahoo_leg_fills_team_and_listed_game_ids(monkeypatch: pytest.MonkeyPatch) -> None:

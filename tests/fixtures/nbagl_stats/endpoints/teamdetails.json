@@ -1,0 +1,207 @@
+{
+ "resource": "teamdetails",
+ "parameters": {
+  "TeamID": 1610612747
+ },
+ "resultSets": [
+  {
+   "name": "TeamBackground",
+   "headers": [
+    "TEAM_ID",
+    "ABBREVIATION",
+    "NICKNAME",
+    "YEARFOUNDED",
+    "CITY",
+    "ARENA",
+    "ARENACAPACITY",
+    "OWNER",
+    "GENERALMANAGER",
+    "HEADCOACH",
+    "DLEAGUEAFFILIATION"
+   ],
+   "rowSet": [
+    [
+     1610612747,
+     "LAL",
+     "Lakers",
+     1948,
+     "Los Angeles",
+     "Crypto.com Arena",
+     "19060",
+     "Mark Walter & Jeanie Buss",
+     "Rob Pelinka",
+     "JJ Redick",
+     "South Bay Lakers"
+    ]
+   ]
+  },
+  {
+   "name": "TeamHistory",
+   "headers": [
+    "TEAM_ID",
+    "CITY",
+    "NICKNAME",
+    "YEARFOUNDED",
+    "YEARACTIVETILL"
+   ],
+   "rowSet": [
+    [
+     1610612747,
+     "Los Angeles",
+     "Lakers",
+     1960,
+     2023
+    ],
+    [
+     1610612747,
+     "Minneapolis",
+     "Lakers",
+     1948,
+     1959
+    ]
+   ]
+  },
+  {
+   "name": "TeamSocialSites",
+   "headers": [
+    "ACCOUNTTYPE",
+    "WEBSITE_LINK"
+   ],
+   "rowSet": [
+    [
+     "Facebook",
+     "https://www.facebook.com/losangeleslakers"
+    ],
+    [
+     "Instagram",
+     "https://instagram.com/lakers"
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsChampionships",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": [
+    [
+     1949,
+     "Washington Capitols"
+    ],
+    [
+     1950,
+     "Syracuse Nationals (76ers)"
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsConf",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": [
+    [
+     1972,
+     null
+    ],
+    [
+     1973,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsDiv",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": [
+    [
+     1950,
+     null
+    ],
+    [
+     1951,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "TeamHof",
+   "headers": [
+    "PLAYERID",
+    "PLAYER",
+    "POSITION",
+    "JERSEY",
+    "SEASONSWITHTEAM",
+    "YEAR"
+   ],
+   "rowSet": [
+    [
+     2546,
+     "Carmelo Anthony",
+     "F",
+     null,
+     "2021",
+     2025
+    ],
+    [
+     2730,
+     "Dwight Howard",
+     "C",
+     null,
+     "2013, 2020, 2022",
+     2025
+    ]
+   ]
+  },
+  {
+   "name": "TeamRetired",
+   "headers": [
+    "PLAYERID",
+    "PLAYER",
+    "POSITION",
+    "JERSEY",
+    "SEASONSWITHTEAM",
+    "YEAR"
+   ],
+   "rowSet": [
+    [
+     2200,
+     "Pau Gasol",
+     "F-C",
+     "16",
+     "2007-2014",
+     2023
+    ],
+    [
+     977,
+     "Kobe Bryant",
+     "G",
+     "8,24",
+     "1996-2016",
+     2017
+    ],
+    [
+     null,
+     "Chick Hearn",
+     "Broadcaster",
+     " ",
+     "1962-2002",
+     2002
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsCommCup",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": []
+  }
+ ]
+}

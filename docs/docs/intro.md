@@ -83,17 +83,17 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 |---|---|---|
 | [NBA](nba/) | `sportsdataverse.nba` | ESPN (123), sportsdataverse-data releases (53), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
 | [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (127), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
-| [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
-| [NBL](nbl/) | `sportsdataverse.nbl` | ESPN (112) |
-| [FIBA](fiba/) | `sportsdataverse.fiba` | ESPN (112) |
-| [Olympics men's basketball](olympics_mbk/) | `sportsdataverse.olympics_mbk` | ESPN (112) |
-| [Olympics women's basketball](olympics_wbk/) | `sportsdataverse.olympics_wbk` | ESPN (112) |
-| [NBA Summer League (Las Vegas)](nbasl_lv/) | `sportsdataverse.nbasl_lv` | ESPN (112) |
-| [NBA Summer League (Utah)](nbasl_ut/) | `sportsdataverse.nbasl_ut` | ESPN (112) |
-| [NBA Summer League (California)](nbasl_ca/) | `sportsdataverse.nbasl_ca` | ESPN (112) |
-| [NBA Summer League (Sacramento)](nbasl_sac/) | `sportsdataverse.nbasl_sac` | ESPN (112) |
-| [NBA Summer League (Orlando)](nbasl_orl/) | `sportsdataverse.nbasl_orl` | ESPN (112) |
-| [NBA Summer League (Golden State)](nbasl_gs/) | `sportsdataverse.nbasl_gs` | ESPN (112) |
+| [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112), G League Stats API (94) |
+| [NBL](nbl/) | `sportsdataverse.basketball.nbl` | ESPN (112) |
+| [FIBA](fiba/) | `sportsdataverse.basketball.fiba` | ESPN (112) |
+| [Olympics men's basketball](olympics_mbk/) | `sportsdataverse.basketball.olympics_mbk` | ESPN (112) |
+| [Olympics women's basketball](olympics_wbk/) | `sportsdataverse.basketball.olympics_wbk` | ESPN (112) |
+| [NBA Summer League (Las Vegas)](nbasl_lv/) | `sportsdataverse.basketball.nbasl_lv` | ESPN (112) |
+| [NBA Summer League (Utah)](nbasl_ut/) | `sportsdataverse.basketball.nbasl_ut` | ESPN (112) |
+| [NBA Summer League (California)](nbasl_ca/) | `sportsdataverse.basketball.nbasl_ca` | ESPN (112) |
+| [NBA Summer League (Sacramento)](nbasl_sac/) | `sportsdataverse.basketball.nbasl_sac` | ESPN (112) |
+| [NBA Summer League (Orlando)](nbasl_orl/) | `sportsdataverse.basketball.nbasl_orl` | ESPN (112) |
+| [NBA Summer League (Golden State)](nbasl_gs/) | `sportsdataverse.basketball.nbasl_gs` | ESPN (112) |
 | [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (136), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
 | [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (132), sportsdataverse-data releases (34), stats.ncaa.org (114), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
 | [CFB](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (74), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
@@ -142,13 +142,13 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (12) |
 | [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (12) |
 | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (8), Kalshi (9) |
-| [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
-| [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |
-| [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
-| [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (15) |
+| [CBS Sports](cbs/) | `sportsdataverse.providers.cbs` | CBS Sports NAPI (82) |
+| [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (107) |
+| [Fox Sports](fox/) | `sportsdataverse.providers.fox` | Fox Sports API (33) |
+| [EuroLeague](euroleague/) | `sportsdataverse.basketball.euroleague` | EuroLeague Competition Engine (15) |
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
-| [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
-| [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
+| [ESPN content (news)](espn_content/) | `sportsdataverse.providers.espn_content` | ESPN (3) |
+| [TheSportsDB](thesportsdb/) | `sportsdataverse.providers.thesportsdb` | TheSportsDB (12) |
 | [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (33) |
 | [DEL](del/) | `sportsdataverse.hockey.del_` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
 | [ICE Hockey League](icehl/) | `sportsdataverse.hockey.icehl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |

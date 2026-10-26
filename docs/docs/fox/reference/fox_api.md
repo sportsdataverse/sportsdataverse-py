@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FOX — Fox Sports API (api.foxsports.com)
 
-`sportsdataverse.fox` — 33 endpoints.
+`sportsdataverse.providers.fox` — 33 endpoints.
 
 ## Event
 
