@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # OLYMPICS_WBK — ESPN FPI API (fitt v3)
 
-`sportsdataverse.olympics_wbk` — 1 endpoint.
+`sportsdataverse.basketball.olympics_wbk` — 1 endpoint.
 
 ## espn_olympics_wbk_fpi
 

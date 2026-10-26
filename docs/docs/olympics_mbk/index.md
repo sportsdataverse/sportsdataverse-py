@@ -3,7 +3,7 @@ title: OLYMPICS_MBK
 sidebar_label: OLYMPICS_MBK
 description: "sdv-py OLYMPICS_MBK: endpoint references, dataset loaders and parsers for OLYMPICS_MBK in the SportsDataverse Python package."
 ---
-# OLYMPICS_MBK (`sportsdataverse.olympics_mbk`)
+# OLYMPICS_MBK (`sportsdataverse.basketball.olympics_mbk`)
 
 ## Data sources
 

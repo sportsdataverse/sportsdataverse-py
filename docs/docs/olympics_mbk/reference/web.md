@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # OLYMPICS_MBK — ESPN web API (v3)
 
-`sportsdataverse.olympics_mbk` — 5 endpoints.
+`sportsdataverse.basketball.olympics_mbk` — 5 endpoints.
 
 ## espn_olympics_mbk_player_overview
 

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBL — ESPN core API (v2)
 
-`sportsdataverse.nbl` — 82 endpoints.
+`sportsdataverse.basketball.nbl` — 82 endpoints.
 
 ## Game
 

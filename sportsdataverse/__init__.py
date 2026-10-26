@@ -85,16 +85,16 @@ from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
 from sportsdataverse.nbagl import *  # noqa: F401,F403,E402
-from sportsdataverse.nbl import *  # noqa: F401,F403,E402
-from sportsdataverse.fiba import *  # noqa: F401,F403,E402
-from sportsdataverse.olympics_mbk import *  # noqa: F401,F403,E402
-from sportsdataverse.olympics_wbk import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_lv import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_ut import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_ca import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_sac import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_orl import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_gs import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.fiba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.olympics_mbk import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.olympics_wbk import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_lv import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_ut import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_ca import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_sac import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_orl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_gs import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ahl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402
@@ -289,6 +289,16 @@ _MOVED = {
     "cfl": "football.cfl",
     "college_baseball": "baseball.college_baseball",
     "college_softball": "baseball.college_softball",
+    "nbl": "basketball.nbl",
+    "fiba": "basketball.fiba",
+    "olympics_mbk": "basketball.olympics_mbk",
+    "olympics_wbk": "basketball.olympics_wbk",
+    "nbasl_lv": "basketball.nbasl_lv",
+    "nbasl_ut": "basketball.nbasl_ut",
+    "nbasl_ca": "basketball.nbasl_ca",
+    "nbasl_sac": "basketball.nbasl_sac",
+    "nbasl_orl": "basketball.nbasl_orl",
+    "nbasl_gs": "basketball.nbasl_gs",
 }
 
 

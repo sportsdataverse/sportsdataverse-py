@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # OLYMPICS_MBK — ESPN core API (v2)
 
-`sportsdataverse.olympics_mbk` — 82 endpoints.
+`sportsdataverse.basketball.olympics_mbk` — 82 endpoints.
 
 ## Game
 

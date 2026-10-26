@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NBASL_UT — ESPN site API (v2)
 
-`sportsdataverse.nbasl_ut` — 24 endpoints.
+`sportsdataverse.basketball.nbasl_ut` — 24 endpoints.
 
 ## espn_nbasl_ut_scoreboard
 

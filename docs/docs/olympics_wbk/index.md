@@ -3,7 +3,7 @@ title: OLYMPICS_WBK
 sidebar_label: OLYMPICS_WBK
 description: "sdv-py OLYMPICS_WBK: endpoint references, dataset loaders and parsers for OLYMPICS_WBK in the SportsDataverse Python package."
 ---
-# OLYMPICS_WBK (`sportsdataverse.olympics_wbk`)
+# OLYMPICS_WBK (`sportsdataverse.basketball.olympics_wbk`)
 
 ## Data sources
 

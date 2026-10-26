@@ -3,7 +3,7 @@ title: NBASL_CA
 sidebar_label: NBASL_CA
 description: "sdv-py NBASL_CA: endpoint references, dataset loaders and parsers for NBASL_CA in the SportsDataverse Python package."
 ---
-# NBASL_CA (`sportsdataverse.nbasl_ca`)
+# NBASL_CA (`sportsdataverse.basketball.nbasl_ca`)
 
 ## Data sources
 

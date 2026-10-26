@@ -3,7 +3,7 @@ title: NBASL_SAC
 sidebar_label: NBASL_SAC
 description: "sdv-py NBASL_SAC: endpoint references, dataset loaders and parsers for NBASL_SAC in the SportsDataverse Python package."
 ---
-# NBASL_SAC (`sportsdataverse.nbasl_sac`)
+# NBASL_SAC (`sportsdataverse.basketball.nbasl_sac`)
 
 ## Data sources
 
