@@ -89,8 +89,9 @@ const sidebars: SidebarsConfig = {
         description:
           'Executed example notebooks rendered as pages — a cross-sport Quickstart, ' +
           'one per sport (NBA, WNBA, MBB, WBB, NFL, CFB, MLB, NHL, PWHL), a combined ' +
-          'junior & minor hockey tour (AHL/OHL/WHL/QMJHL), a betting-odds intro, and ' +
-          'soccer, cricket and the other ESPN leagues. ' +
+          'junior & minor hockey tour (AHL/OHL/WHL/QMJHL), a betting-odds intro, ' +
+          'soccer, cricket and the other ESPN leagues, international basketball, ' +
+          'European and college hockey, prediction markets, and more sources. ' +
           'Refreshed weekly against the live APIs; source notebooks live in ' +
           'examples/notebooks/.',
       },
