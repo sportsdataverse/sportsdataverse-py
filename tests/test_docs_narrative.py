@@ -406,7 +406,7 @@ def test_docs_state_the_polars_floor_pyproject_declares():
 _SITE_STALE = {
     "intro": ["PWHL + 20", "import mlb_api_person_stats", "from sportsdataverse.parsed", '"event_id", "home_name"'],
     "qol": ["~4,400 callables", "remains fully supported", "Explicit parsed namespace (unchanged"],
-    "espn": ["800+", "| NBA | 113 |"],
+    "espn": ["800+", "| NBA | 113 |", "**84** wrappers per league", "plain partial", "30 documented leagues"],
     "parsers": [
         "All 121 wrapper short names",
         "make_league_module",
@@ -421,7 +421,7 @@ _SITE_STALE = {
 _SITE_CURRENT = {
     "intro": ["## Errors (0.1.5)", "AssetFetchError", "sdv-docs", "is deprecated"],
     "qol": ["~6,170 callables", "**deprecated**"],
-    "espn": ["126 short names across 30 leagues", "| CFB | 125 |", "default to `return_parsed=True`"],
+    "espn": ["| CFB | 125 |", "default to `return_parsed=True`"],
     "parsers": ["21-section", "Errors (0.1.5)", "21 sub-frames"],
     "ecosystem": ["fifteen executed"],
 }
@@ -460,6 +460,11 @@ def test_espn_page_per_league_counts_match_the_code():
     cfg = spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
     apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
     body = flat("espn")
+    assert f"126 short names across {len(cfg.leagues)} leagues" in body
+    universal = sum(
+        1 for a in apis if a.api != "espn_cdn" for e in a.endpoints if e.scope == "universal" and not e.include_prefixes
+    )
+    assert f"**{universal}** wrappers per league" in body, f"the universal total should read {universal}"
     for prefix, label in (("cfb", "CFB"), ("mbb", "MBB"), ("nfl", "NFL"), ("nba", "NBA"), ("nhl", "NHL")):
         league = next(x for x in cfg.leagues if x.prefix == prefix)
         n = len(generate._espn_league_views(league, apis, cfg.hosts))

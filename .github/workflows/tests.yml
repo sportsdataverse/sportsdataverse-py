@@ -66,7 +66,7 @@ jobs:
       # saving. The xdist_group marker pins them to one worker.
       #
       # No --cov here: coverage instruments every call and this job exists for fast
-      # feedback. It runs in the live job, which is not on the critical path.
+      # feedback. Coverage runs in live-tests.yml and quality.yml instead, neither on the critical path.
       # Excluded here because codegen.yml ALREADY runs it, on ubuntu, on the same
       # triggers -- running it again costs ~11 min per CI run for no extra signal:
       #   tests/codegen/                     <- codegen.yml "Codegen test suite"

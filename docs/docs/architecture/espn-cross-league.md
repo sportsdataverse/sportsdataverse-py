@@ -6,8 +6,9 @@ sidebar_position: 1
 
 # ESPN cross-league architecture
 
-`sportsdataverse-py` wraps **126 short names across 30 leagues** of ESPN endpoints
-(NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL — *NHL also has its own modern
+`sportsdataverse-py` wraps **126 short names across 40 leagues** of ESPN endpoints
+(NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL, plus college hockey, baseball and softball,
+spring football, soccer, cricket and international basketball — *NHL also has its own modern
 api-web.nhle.com path; see the [NHL section](../nhl/index.md)*) from a
 single set of endpoint specs parameterized by the `{sport}`/`{league}`
 slugs. This page explains why that's possible and how the wrappers are
@@ -28,14 +29,19 @@ https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{a
 
 | API surface | Base | Wrappers per league |
 |---|---|---|
-| Site v2 | `site.api.espn.com/apis/site/v2/...` | 29 |
+| Site v2 | `site.api.espn.com/apis/site/v2/...` | 23 |
 | Site v2 alt | `site.api.espn.com/apis/v2/...` | 1 (standings) |
 | Web v3 | `site.web.api.espn.com/apis/common/v3/...` | 5 (athlete deep dives + leaders) |
-| Core v2 | `sports.core.api.espn.com/v2/...` | 50 |
-| **Total universal** | | **84** wrappers per league |
-| NCAA-only extras | (3 wrappers) | enabled for `mbb`, `wbb`, `cfb` |
+| Core v2 | `sports.core.api.espn.com/v2/...` | 82 |
+| FITT v3 | `site.web.api.espn.com/apis/fitt/v3/...` | 1 (`fpi`) |
+| **Total universal** | | **112** wrappers per league |
+| NCAA-only extras | (6 wrappers — rankings + recruiting) | enabled for `mbb`, `wbb`, `cfb`, `mch`, `wch`, `college_baseball`, `college_softball` |
 | Football-only extras | (2 wrappers — QBR) | enabled for `nfl`, `cfb` |
 | MLB-only extras | (1 wrapper — `athlete_hotzones`) | enabled for `mlb` |
+| CDN extras | (up to 5 — `cdn_*`) | per-endpoint `include_prefixes` allowlist in `espn_cdn.yaml` |
+
+A few leagues drop an endpoint ESPN does not serve for them (`exclude_leagues`), so a
+league's count can sit one below the sum.
 
 ## The implementation: declarative codegen
 
@@ -112,18 +118,17 @@ The two parsing kwargs (`return_parsed` / `return_as_pandas`) are additive.
 Callers from 0.0.50 and earlier that relied on the raw-Dict default should
 add `return_parsed=False` to preserve their existing behavior.
 
-### Wrappers WITHOUT a parser
+### Parsing a raw payload yourself
 
-If you call a wrapper whose short name isn't in `ENDPOINT_PARSERS`
-(e.g. `espn_nba_league_notes`), there's no `return_parsed` kwarg — the
-wrapper stays a plain partial that returns raw `Dict`. You can still
-pass the result through any parser manually:
+Every ESPN short name is registered in `ENDPOINT_PARSERS`, so every generated
+wrapper takes `return_parsed`. Pass `return_parsed=False` to get the raw `Dict`,
+then hand it to any parser yourself:
 
 ```python
 from sportsdataverse._common_espn_parsers import parse_items
 from sportsdataverse.nba import espn_nba_venues
 
-raw = espn_nba_venues(limit=10)
+raw = espn_nba_venues(limit=10, return_parsed=False)
 df  = parse_items(raw)                       # works on any {items: [...]} payload
 ```
 
@@ -160,8 +165,8 @@ vocabulary, applied to **every** league:
 
 ## Per-league function counts
 
-126 ESPN short names, expanded across the 30 documented leagues. The eight
-largest, as `generate._espn_league_views` resolves them today:
+126 ESPN short names, expanded across the 40 leagues. The eight major leagues,
+as `generate._espn_league_views` resolves them today:
 
 | League | `espn_*` wrappers |
 |---|---:|
