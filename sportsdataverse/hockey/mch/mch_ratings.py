@@ -29,7 +29,7 @@ def mch_ratings(
     Args:
         dates: ``YYYYMMDD`` date strings to fetch (ESPN has no single
             "whole season" scoreboard endpoint; the caller supplies the
-            date sweep -- see ``dev/league_ports/capture_wch_and_scoreboards.py``
+            date sweep -- see ``tools/models/league_ports/capture_wch_and_scoreboards.py``
             for the sweep used to build the committed oracle fixture).
         return_as_pandas: Return pandas instead of polars.
 

@@ -5,7 +5,7 @@ deltas (the published "delta method" popularized by Nate Silver / Neil Paine
 at FiveThirtyEight/Basketball-Reference, and used in Kevin Pelton's WARP
 aging-curve research), then applies it to age a player's value forward or
 back to a peak-centered curve. The bundled artifact is fit offline in
-``dev/nba_draft/fit_aging_curve.py``.
+``tools/models/nba_draft/fit_aging_curve.py``.
 """
 
 from __future__ import annotations

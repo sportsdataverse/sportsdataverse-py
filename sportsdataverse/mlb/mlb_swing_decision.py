@@ -249,7 +249,7 @@ def mlb_swing_decision(
         # (delta_run_exp), matching Savant's swing/take methodology. Using the
         # surface-average rv_chosen here instead averages away the batter's own
         # outcome signal and tanks the concurrent-validity correlation (0.30 vs
-        # ~0.90 full-season -- see dev/mlb_hitting/fit_swing_take.py).
+        # ~0.90 full-season -- see tools/models/mlb_hitting/fit_swing_take.py).
         pl.when(pl.col("decision").is_not_null()).then(pl.col("delta_run_exp")).otherwise(None).alias("_decision_rv"),
         (pl.col("rv_chosen") - pl.col("rv_neutral")).alias("_agg_term"),
         (pl.col("decision") == "swing").alias("_is_swing"),

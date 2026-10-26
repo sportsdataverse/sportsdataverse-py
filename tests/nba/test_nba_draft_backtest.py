@@ -46,7 +46,7 @@ exactly this future extension).
 `feature_median` imputation values over the FULL frame *before* the
 as-of-class split. Combine columns are 56-92% null, so this leaked the
 holdout-class distribution into every train row's imputed value. Fixed:
-`dev/nba_draft/fit_draft_model.py` now computes the median on `train` only
+`tools/models/nba_draft/fit_draft_model.py` now computes the median on `train` only
 and bundles it in the artifact; `_load_scored_holdout` below imputes the
 holdout with that stored TRAIN median (mirroring `nba_draft_model._score`).
 The leak was mild -- post-fix observed holdout Spearman **0.1488** (was
@@ -56,7 +56,7 @@ changed.
 
 **Label-construction overlap (transparency, not a leak in the predictive
 sense):** the box-value LABEL formula (`career_value`) is anchored in
-`dev/nba_draft/fit_box_value.py` on the 2016-17..2019-20 `nba_bpm` overlap
+`tools/models/nba_draft/fit_box_value.py` on the 2016-17..2019-20 `nba_bpm` overlap
 seasons -- which coincide with the draft-model's 2016-2019 HOLDOUT classes.
 This is a label-*definition* choice, not a feature leak: the label's box
 coefficients are frozen from an nba_bpm regression and then applied to all
@@ -196,7 +196,7 @@ def test_rookie_projection_holdout_ranks_realized_value() -> None:
     by a *negative* rookie-age ratio silently flipped the sign of every
     projection. Fixed by min-max normalizing the chained curve to
     `[floor_frac=0.4, 1.0]` in both `build_aging_deltas` and
-    `dev/nba_draft/fit_aging_curve.py`'s quadratic smoother, so every age's
+    `tools/models/nba_draft/fit_aging_curve.py`'s quadratic smoother, so every age's
     ratio stays strictly positive. After that fix (and the later
     train-only-median leak fix to the draft artifact this composition
     reuses, which nudged the numbers up), holdout Spearman is **+0.130** --

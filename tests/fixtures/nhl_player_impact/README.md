@@ -60,7 +60,7 @@ are genuinely behind a paid subscription that wasn't available at the time. Both
   flags this package's default identifying UA (`"sportsdataverse-py"`) as a scraper --
   passing a normal browser UA via `download(..., headers=...)` returns the real CSV (no
   JA3/TLS impersonation needed, unlike stats.nba.com). Captured by
-  `dev/nhl_player_impact/capture_moneypuck.py`: `mp_gsax.parquet` is the full 2024-25
+  `tools/models/nhl_player_impact/capture_moneypuck.py`: `mp_gsax.parquet` is the full 2024-25
   regular-season `situation == "all"` goalie table (103 goalies), `gsax = xGoals -
   goals` (same sign convention as `nhl_goalie_gsax`), keyed on MoneyPuck's native NHL
   `playerId` (a true id crosswalk, like the internal data).
@@ -79,10 +79,10 @@ are genuinely behind a paid subscription that wasn't available at the time. Both
 - **EvolvingHockey** (`evolving-hockey.com`) RAPM/GAR/WAR Shiny-app tables require a Pro
   Subscriber login (`EVOLVING_HOCKEY_USER`/`EVOLVING_HOCKEY_PASS` in `~/.Renviron`,
   read at call time only -- never hardcoded/committed). Captured by
-  `dev/nhl_player_impact/eh_capture.py` (Playwright login + Shiny `Download` button,
+  `tools/models/nhl_player_impact/eh_capture.py` (Playwright login + Shiny `Download` button,
   since the tables render client-side and a plain HTTP GET returns "Please Sign In or
   Become a Subscriber to View") and turned into the fixture by
-  `dev/nhl_player_impact/build_eh_fixture.py`. **EH↔NHL id crosswalk caveat**: EH's CSV
+  `tools/models/nhl_player_impact/build_eh_fixture.py`. **EH↔NHL id crosswalk caveat**: EH's CSV
   exports carry no NHL `playerId`, only a display name, so `eh_skaters.parquet`'s
   `player_id` is a **name-based crosswalk against this package's own internal player
   universe** (the skaters in `shifts_sample.parquet`'s `ids_on`/`players_on` +
@@ -130,7 +130,7 @@ frequent values in an unspecified order -- ~9/1241 stints' `strength_state` flip
 `.mode().sort()[0]` tiebreak (`nhl_rapm.py`), so the observed correlations above are now
 stable across runs.
 
-Refresh procedure: re-run `dev/nhl_player_impact/capture_moneypuck.py` (no auth) and/or
-`dev/nhl_player_impact/eh_capture.py` + `build_eh_fixture.py` (needs the account's own
+Refresh procedure: re-run `tools/models/nhl_player_impact/capture_moneypuck.py` (no auth) and/or
+`tools/models/nhl_player_impact/eh_capture.py` + `build_eh_fixture.py` (needs the account's own
 EvolvingHockey Pro Subscriber `~/.Renviron` creds), matching the schemas documented in
 the table above.

@@ -2,7 +2,7 @@
 
 Reuses the draft model (①), aging curve (②), and availability model (③)
 verbatim -- no re-derived features -- and applies a small per-``pro_tier``
-residual correction (fit in ``dev/nba_draft/fit_rookie_residual.py``) on top
+residual correction (fit in ``tools/models/nba_draft/fit_rookie_residual.py``) on top
 of the composed projection.
 """
 
@@ -35,7 +35,7 @@ _SCHEMA = {
 _ROOKIE_AGE = 19.0
 # ponytail: SEEDED PLACEHOLDER, not a fitted constant. These per-tier expected
 # rookie minutes-per-game are hand-set order-of-magnitude values (unlike
-# rookie_fraction/residual, which are fit in dev/nba_draft/fit_rookie_residual.py
+# rookie_fraction/residual, which are fit in tools/models/nba_draft/fit_rookie_residual.py
 # and bundled in nba_rookie_projection.json). They only scale proj_rookie_min
 # (a reported convenience column), never proj_rookie_value/proj_soph_value, so
 # they do not affect any oracle gate. Replace with a fitted mpg-by-tier table

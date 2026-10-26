@@ -35,7 +35,7 @@ def test_bundled_curve_grid_monotone_and_anchors():
     The committed curve is fit on 2018-2021 offense-signed realized drive
     points (TD +7 / FG +3 / SF -2 / return-TD -7) with drive-level starts
     (drive.start.yardLine + homeTeamId orientation; see
-    dev/cfb_advanced/fit_field_position.py). Observed anchors: own-25 1.803
+    tools/models/cfb_advanced/fit_field_position.py). Observed anchors: own-25 1.803
     (ref 1.4), midfield 2.820 (ref 2.8), opp-25 3.674 (ref 4.1), opp-5
     5.387 (ref 5.6) -- all within the +-0.6 published-reference tolerance.
 

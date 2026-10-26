@@ -31,8 +31,8 @@ Oracle/holdout corpora for the T7.3 cricket models (`cricket_win_prob`,
 > `dev/cricket/.cache/`); only the two small holdout fixtures here and the two
 > fitted model artifacts (`sportsdataverse/cricket/models/*.parquet`) are.
 
-Ingest: `dev/cricket/fetch_cricsheet.py` (pure-Python zip parser, no R dep).
-Fit + fixture build: `dev/league_ports/fit_cricket_resource_surface.py`.
+Ingest: `tools/models/cricket/fetch_cricsheet.py` (pure-Python zip parser, no R dep).
+Fit + fixture build: `tools/models/league_ports/fit_cricket_resource_surface.py`.
 
 | file | rows | matches | source | notes |
 |---|---|---|---|---|
@@ -65,7 +65,7 @@ per-decile calibration ≈ 0.031.
 
 These two fixtures **and** the two committed model artifacts
 (`cricket_resource_surface.parquet`, `cricket_winprob_calibration.parquet`) are
-all written by ONE run of `dev/league_ports/fit_cricket_resource_surface.py` from
+all written by ONE run of `tools/models/league_ports/fit_cricket_resource_surface.py` from
 the SAME split. **Never regenerate one without the others** — a stale mix would
 let the holdout silently overlap the training matches (leakage). If the Cricsheet
 corpus is refreshed, re-run the fit script once and commit all four artifacts
@@ -91,7 +91,7 @@ leagues) live in [`FEASIBILITY.md`](FEASIBILITY.md).
 | `nfl_parity_2023_game.parquet` | nfl | `2023_01_ARI_WAS` | 2023-09-10 | 168 (gate-(a) input frame) |
 
 All five are regenerated together by ONE run of
-`dev/league_ports/capture_spring_football_fixtures.py` (`SDV_PY_LIVE_TESTS=1`;
+`tools/models/league_ports/capture_spring_football_fixtures.py` (`SDV_PY_LIVE_TESTS=1`;
 the NFL slice additionally needs the local nfl-data checkout at
 `$SDV_VALIDATION_NFL_DATA_ROOT`). The gate floors in
 `tests/football/test_spring_football_parity.py` (Brier ceiling 0.11, row
@@ -147,15 +147,15 @@ tabulated in that test module's docstring; never lower them. No published
 college RE24 snapshot exists to cross-check against either — capturing a
 multi-game college corpus is a documented follow-up, not done here.
 
-Capture script: `dev/league_ports/capture_college_baseball_softball.py`
+Capture script: `tools/models/league_ports/capture_college_baseball_softball.py`
 (force-added despite the gitignored `dev/` convention — it is the fixtures'
 provenance).
 
 ## NCAA hockey (MCH/WCH) fixtures — Phase 4 (T7.3)
 
-Captured **2026-07-12** via `dev/league_ports/capture_ncaa_hockey_fixtures.py`,
-`dev/league_ports/scan_ncaa_hockey_dates.py`, and
-`dev/league_ports/capture_wch_and_scoreboards.py` against real ESPN endpoints
+Captured **2026-07-12** via `tools/models/league_ports/capture_ncaa_hockey_fixtures.py`,
+`tools/models/league_ports/scan_ncaa_hockey_dates.py`, and
+`tools/models/league_ports/capture_wch_and_scoreboards.py` against real ESPN endpoints
 (`espn_mch_*` / `espn_wch_*`).
 
 | file | content | source event(s) |
@@ -185,7 +185,7 @@ college_hockey_ratings.py`, reusing `_common/ratings.py`'s
 ### WCH coverage caveat
 
 A 24-date sampled sweep of ESPN's WCH scoreboard (Oct 2024–Apr 2025;
-`dev/league_ports/scan_ncaa_hockey_dates.py` +
+`tools/models/league_ports/scan_ncaa_hockey_dates.py` +
 `capture_wch_and_scoreboards.py`) found **zero** completed games outside the
 March 2025 NCAA Tournament window — the 7-game / 8-team bracket in
 `wch_scoreboard_sample.json` is everything ESPN returned. A single-elimination

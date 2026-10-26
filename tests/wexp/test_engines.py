@@ -7,7 +7,7 @@ Floors carry margin off those values — never lower them to pass.
 
 The fixture pools 2024, which sits inside the sweep's 2022+ holdout.
 These numbers are STRUCTURAL sanity gates only and must never inform
-variant selection — tuning reads results/wexp (tune window <= 2021).
+variant selection — tuning reads tools/models/wexp/results (tune window <= 2021).
 """
 
 from pathlib import Path

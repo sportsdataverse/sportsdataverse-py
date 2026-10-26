@@ -12,7 +12,7 @@
 
 Real captures backing `tests/nba/test_nba_tracking_value_*` — no synthetic data
 for the offline oracle gates. Captured 2026-07-08 from a residential IP via
-`SDV_PY_NBA_STATS_LIVE=1 uv run python dev/nba_tracking_value/capture_fixtures.py`.
+`SDV_PY_NBA_STATS_LIVE=1 uv run python tools/models/nba_tracking_value/capture_fixtures.py`.
 
 All from `nba_stats_leaguedashptstats(season="2023-24", league_id="00",
 per_mode_simple="Totals", player_or_team="Player", return_parsed=False)`,
@@ -64,7 +64,7 @@ names; corrections:
 
 ## Regenerating
 
-`dev/nba_tracking_value/capture_fixtures.py` (gitignored `dev/`, not
+`tools/models/nba_tracking_value/capture_fixtures.py` (gitignored `dev/`, not
 committed) reproduces the six `leaguedashptstats` captures + the positions
 parquet; the `Passing` measure was captured separately with an equivalent
 one-off call (same wrapper, `pt_measure_type="Passing"`).

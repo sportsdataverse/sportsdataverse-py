@@ -155,7 +155,7 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `hfa` | `float` |  | Home-court advantage in points (fitted on the as-of-date backtest for the league; see `dev/nba_prediction/fit_pregame.py`). |
+| `hfa` | `float` |  | Home-court advantage in points (fitted on the as-of-date backtest for the league; see `tools/models/nba_prediction/fit_pregame.py`). |
 | `margin_sd` | `float` |  | Std. dev. of the game-margin residual (fitted jointly with `hfa`; the Brier-minimizing sigma agrees to within a documented tolerance). |
 | `avg_pace` | `float` |  | League baseline possessions per team per game (adjusted- pace anchor for `~sportsdataverse.nba.nba_team_ratings.adjust_pace`). |
 | `avg_off_rtg` | `float` |  | League baseline points per 100 possessions. |
@@ -1509,7 +1509,7 @@ Loads the draft-combine wrappers for `draft_year` (or each year in the
 list), builds the shared combine-feature vector
 (`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
 and applies the bundled ridge (`proj_career_value`) / logistic
-(`draft_prob`) heads fit in `dev/nba_draft/fit_draft_model.py`.
+(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
 
 **Parameters**
 

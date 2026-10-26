@@ -94,7 +94,7 @@ def test_expected_plays_mae_floor(oracle_pbp):
     """Gate: HELD-OUT 2023 team-season expected-plays MAE <= 2.0 plays/game.
 
     PACE_CONSTANTS are fit on the 2021-2022 fixture seasons only
-    (dev/nfl_scheme/fit_pace_constants.py), so 2023 is out-of-sample; the
+    (tools/models/nfl_scheme/fit_pace_constants.py), so 2023 is out-of-sample; the
     market total_line path is exercised via the committed schedule fixture.
     Floor from the observed value at gate time (1.77, 2026-07-08); never
     raised to pass.

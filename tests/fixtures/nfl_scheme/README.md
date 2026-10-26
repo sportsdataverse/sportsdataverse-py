@@ -12,7 +12,7 @@ Committed offline validation corpus for the NFL scheme/special-teams model
 spine (`nfl_playcall`, `nfl_gamescript`, `nfl_kicker_rating`,
 `nfl_special_teams`, `nfl_line_grades`).
 
-**Capture:** `dev/nfl_scheme/capture_fixtures.py`, run 2026-07-08 against the
+**Capture:** `tools/models/nfl_scheme/capture_fixtures.py`, run 2026-07-08 against the
 live nflverse data releases via the `sportsdataverse.nfl` loaders.
 `xpass` / `pass_oe` are recomputed with the shipped
 `sportsdataverse.nfl.ep_wp.calculate_xpass` (bundled `xpass_model.ubj`), so

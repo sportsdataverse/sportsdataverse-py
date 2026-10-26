@@ -63,7 +63,7 @@ wrappers), captured **2026-07-10**, ids pinned `Int64` at capture time. No synth
 - Pitcher ids discovered from a live one-week probe (2024-08-01..08-07, top-by-volume),
   **explicitly excluded against the Stuff+/Command+ training corpus's 30 pitcher ids**
   (2023-06-01..06-07 probe) — a genuine out-of-training population, not merely a different date
-  range. See `dev/mlb_pitching/capture_holdout.py` (gitignored) for the exact exclusion set.
+  range. See `tools/models/mlb_pitching/capture_holdout.py` (gitignored) for the exact exclusion set.
 - Rows: 38,874 pitches, full 2024 season, 15 held-out pitchers.
 - **Why it exists**: the single-day (`pitches_2024-06-15`) and 2023-season-sample fixtures were
   each too small/overlapping for a stable oracle check — the day fixture has only a handful of
@@ -71,7 +71,7 @@ wrappers), captured **2026-07-10**, ids pinned `Int64` at capture time. No synth
   pitchers are a subset of the Stuff+/Command+ training corpus (not a fair generalization test).
   This fixture is the primary oracle-gate population for Phases 2-4 (Stuff+, Command+, xERA).
   It is also the source of `STUFF_LEAGUE_MEAN_RV`/`STUFF_LEAGUE_SD_RV`'s "+"-scale centering
-  (see `mlb_pitching_constants.py` and `dev/mlb_pitching/recalibrate_stuff_plus.py` — centering on
+  (see `mlb_pitching_constants.py` and `tools/models/mlb_pitching/recalibrate_stuff_plus.py` — centering on
   the training corpus's own, workhorse-selection-biased mean shifted this population's average
   `stuff_plus` to ~97.6, outside the ±0.5 target; centering on this broader out-of-training
   population is the more defensible choice for a "league average" reference).

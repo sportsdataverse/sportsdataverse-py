@@ -25,7 +25,7 @@ the completed games, and adjusts with
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch (ESPN has no single "whole season" scoreboard endpoint; the caller supplies the date sweep -- see `dev/league_ports/capture_wch_and_scoreboards.py` for the sweep used to build the committed oracle fixture). |
+| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch (ESPN has no single "whole season" scoreboard endpoint; the caller supplies the date sweep -- see `tools/models/league_ports/capture_wch_and_scoreboards.py` for the sweep used to build the committed oracle fixture). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**

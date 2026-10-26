@@ -9,9 +9,9 @@ The EvolvingHockey (skater RAPM / WAR, ``eh_skaters.parquet``) and MoneyPuck (go
 GSAx, ``mp_gsax.parquet``) concurrent-validity fixtures were originally shipped as
 documented zero-row stubs (both sources were believed scrape-blocked/paywalled) but are
 now real captures -- MoneyPuck's season-summary CSVs are a public, license-free-with-
-credit download (``dev/nhl_player_impact/capture_moneypuck.py``), and EvolvingHockey's
+credit download (``tools/models/nhl_player_impact/capture_moneypuck.py``), and EvolvingHockey's
 skater RAPM/GAR exports were captured against the project's own Pro Subscriber login
-(``dev/nhl_player_impact/eh_capture.py`` + ``build_eh_fixture.py``). See
+(``tools/models/nhl_player_impact/eh_capture.py`` + ``build_eh_fixture.py``). See
 ``tests/fixtures/nhl_player_impact/README.md`` for the full capture provenance and
 licensing credit. The external-oracle assertions below still ``pytest.skip`` (not fake
 a pass) if a fixture ever reverts to zero rows; the internal construction-invariant
@@ -102,7 +102,7 @@ def test_gsax_moneypuck_concurrent_validity():
     assert joined.height >= 6, "too few overlapping goalies for a meaningful correlation"
     # Observed (deterministic -- build_stints tiebreak fix in nhl_rapm.py; GSAx doesn't
     # use stints but the value is stable regardless) on the committed 2024-25 MoneyPuck
-    # season goalie table (captured via dev/nhl_player_impact/capture_moneypuck.py, a
+    # season goalie table (captured via tools/models/nhl_player_impact/capture_moneypuck.py, a
     # public/free-with-credit download -- see the fixture README): n=6 overlapping
     # goalies, Spearman(3-game gsax, season gsax) == 0.771. FLOOR is set a bit below
     # that observed value (not invented) -- a 6-goalie sample is sensitive to any single
@@ -151,7 +151,7 @@ def test_rapm_evolvinghockey_concurrent_validity():
     # Observed (reproducible -- the build_stints .mode() tiebreak fix in nhl_rapm.py
     # pins the CV lambda selection, so this no longer bounces run-to-run) on the
     # committed 2024-25 EvolvingHockey EV skater-RAPM export (captured via
-    # dev/nhl_player_impact/eh_capture.py against the account's own Pro Subscriber login
+    # tools/models/nhl_player_impact/eh_capture.py against the account's own Pro Subscriber login
     # -- see the fixture README): n=72 overlapping skaters (name-crosswalked, not
     # id-crosswalked -- EH ships no NHL playerId), Spearman(3-game 5v5 xg_rapm, season
     # EV xG±/60) == 0.406. FLOOR is set well below that observed value (not invented):

@@ -18,7 +18,7 @@ Committed real-data slices used by the offline NGS over-expected oracle tests
 
 - **Loader:** `sportsdataverse.nfl.load_nfl_nextgen_stats` (nflverse
   `nextgen_stats` release parquet, mirrored via `sportsdataverse-data`).
-- **Capture date:** 2026-07-08 (script: `dev/nfl_ngs/capture_fixtures.py`).
+- **Capture date:** 2026-07-08 (script: `tools/models/nfl_ngs/capture_fixtures.py`).
 - **Seasons:** 2022 and 2023.
 - **Grain:** the `*_2022_2023.parquet` files carry season-level rows only
   (`week == 0`); NGS season rows include only qualified players, so counts

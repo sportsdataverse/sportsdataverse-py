@@ -16,7 +16,7 @@ Live findings the spring-football port's tests, docstrings, and gates cite.
 All claims below were verified against the live ESPN API on the dates given;
 the fixtures in this directory are the captured evidence. Regenerate
 everything with ONE run of
-`dev/league_ports/capture_spring_football_fixtures.py` (see the
+`tools/models/league_ports/capture_spring_football_fixtures.py` (see the
 "Regenerate-together" note in `README.md`).
 
 ## Finding 1 — ESPN publishes NO play-by-play for UFL games

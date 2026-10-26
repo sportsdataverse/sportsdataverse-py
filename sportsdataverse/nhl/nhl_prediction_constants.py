@@ -115,7 +115,7 @@ class LeagueConstants:
 
 
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
-    # hfa/margin_sd/total_scale fitted 2026-07-08 by dev/nhl_prediction/fit_pregame.py
+    # hfa/margin_sd/total_scale fitted 2026-07-08 by tools/models/nhl_prediction/fit_pregame.py
     # against the 2023 as-of-date backtest (1174 evaluated games, dates[20:] onward),
     # confirmed converged on a second pass (residual on top of the fitted seed shrank
     # to ~0.0003):
@@ -132,7 +132,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #     avg_total_goals + total_scale * (raw_total - avg_total_goals).
     # avg_xgf/avg_total_goals remain published-reference seeds (not walked/fit).
     #
-    # prop_kappa/pos_priors fitted 2026-07-08 by dev/nhl_prediction/fit_props.py
+    # prop_kappa/pos_priors fitted 2026-07-08 by tools/models/nhl_prediction/fit_props.py
     # against season 2024 skater boxscores (load_nhl_skater_boxscores only
     # publishes seasons >= 2024 -- season 2024 == the 2023-24 season; Phase 4
     # therefore uses 2024 while ratings/market Phases 1-3 stay on 2023, see the
@@ -162,7 +162,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     # margin_sd IS fit (T5.3 flesh-out 2026-07-11; re-fit for the T5.3b
     # coordinate xG 2026-07-12), OUT-OF-SAMPLE, as a byproduct of the PWHL xG
     # backtest (see sportsdataverse.pwhl.pwhl_xg_proxy + the held-out
-    # fitter/report script dev/pwhl_prediction/build_pwhl_xg_fixture.py):
+    # fitter/report script tools/models/pwhl_prediction/build_pwhl_xg_fixture.py):
     # grid-search minimising Brier of Phi(exp_margin/margin_sd) on the 2025
     # season's 78 as-of games ONLY (xG model for that fit from 2024, a
     # strictly-prior season), with the held-out 2026 season kept entirely out

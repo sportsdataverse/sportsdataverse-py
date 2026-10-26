@@ -3,7 +3,7 @@
 Closed-form pythagenpat expected win% (Smyth-Patriot, run-environment
 adaptive exponent) plus an as-of-date iterative Elo run-differential
 rating (538 MLB-Elo-style seeds, refit against a real backtest -- see
-``dev/mlb_game_state/fit_elo.py``).
+``tools/models/mlb_game_state/fit_elo.py``).
 
 See Also:
     * `baseballr`_ -- R sibling package for MLB sabermetrics.

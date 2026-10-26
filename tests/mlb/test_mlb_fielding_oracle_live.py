@@ -10,7 +10,7 @@ these run only when a contributor explicitly enables the live suite.
 FLOORS are the **observed full-season Pearson**, rounded down with margin --
 NOT the design targets (which need Savant's proprietary tracking data this
 public per-pitch feed lacks). Observed values from
-``dev/mlb_fullseason/measure_deferred_gates.py`` on the 2024 season
+``tools/models/mlb_fullseason/measure_deferred_gates.py`` on the 2024 season
 (710,878 pitches):
 
     OAA               Pearson 0.605  (n=272)  -> floor 0.55

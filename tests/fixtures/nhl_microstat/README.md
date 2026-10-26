@@ -32,10 +32,10 @@ suite once these files exist.
   `*_player_id` column are `Utf8` (cast from the raw integer via
   `cast(Float64, strict=False).cast(Int64, strict=False).cast(Utf8)` --
   never a float->Utf8 cast).
-- **Column contract:** see `dev/nhl_microstat/capture_corpus.py::PBP_CONTRACT`.
+- **Column contract:** see `tools/models/nhl_microstat/capture_corpus.py::PBP_CONTRACT`.
   Real api-web field names (`details.zoneCode`, `details.winningPlayerId`,
   etc.) are renamed to the contract names via `PBP_RENAME` in that script.
-- **Regenerate:** `SDV_PY_LIVE_TESTS=1 uv run python dev/nhl_microstat/capture_corpus.py`.
+- **Regenerate:** `SDV_PY_LIVE_TESTS=1 uv run python tools/models/nhl_microstat/capture_corpus.py`.
 
 ## `edge_skater_detail_sample.parquet`
 

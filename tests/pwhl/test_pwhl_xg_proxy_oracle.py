@@ -4,7 +4,7 @@ No external PWHL oracle exists (first-of-its-kind, best-effort): the honest
 internal oracle is a HELD-OUT realized-outcome backtest, run for BOTH xG
 methods over the identical as-of walk. The fixtures are built with a strict
 train/holdout split (see ``tests/fixtures/pwhl_prediction/README.md`` +
-``dev/pwhl_prediction/build_pwhl_xg_fixture.py``):
+``tools/models/pwhl_prediction/build_pwhl_xg_fixture.py``):
 
 - the xG model (tier weights OR coordinate logistic) is fit on strictly-prior
   complete seasons (2024+2025 for the held-out 2026 walk) -- no game sees a
@@ -276,7 +276,7 @@ def test_fit_pwhl_coord_xg_small_sample_falls_back() -> None:
 # shots. Floor conservative below; a big drop means the fixture regressed.
 COORD_FIT_SHOTS_FLOOR = 10_000
 # Observed in-sample AUC 0.6745, logloss 0.2733 vs base-rate 0.2871 on the
-# train pool (dev/pwhl_prediction/build_pwhl_xg_fixture.py's model report).
+# train pool (tools/models/pwhl_prediction/build_pwhl_xg_fixture.py's model report).
 # Floors conservative below/above observed; never lower to pass.
 COORD_AUC_FLOOR = 0.60
 COORD_LOGLOSS_MARGIN = 0.005  # observed base-rate - model logloss ~ 0.0138

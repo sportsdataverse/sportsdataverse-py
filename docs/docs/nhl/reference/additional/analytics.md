@@ -208,7 +208,7 @@ Per-play live home win probability from the bundled in-game logistic.
 Builds `in_game_features` from `pbp`, scores them with the
 committed logistic (`sportsdataverse/nhl/models/<league>_in_game_wp.json`
 -- no first-use download; the coefficients are trained offline by
-`dev/nhl_prediction/train_in_game_wp.py` and committed), and returns
+`tools/models/nhl_prediction/train_in_game_wp.py` and committed), and returns
 `sigmoid(coef . features + intercept)`.
 
 **Parameters**

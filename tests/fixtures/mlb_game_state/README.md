@@ -11,8 +11,8 @@
 
 # MLB game-state oracle corpus (T6.4)
 
-Captured 2026-07-10 via `dev/mlb_game_state/capture_oracle.py`
-(`SDV_PY_LIVE_TESTS=1 uv run python dev/mlb_game_state/capture_oracle.py`).
+Captured 2026-07-10 via `tools/models/mlb_game_state/capture_oracle.py`
+(`SDV_PY_LIVE_TESTS=1 uv run python tools/models/mlb_game_state/capture_oracle.py`).
 All ids (`game_id`, `team_id`, `umpire_id`) are `Utf8`, cast from the raw
 integer (never a float) at capture time.
 
@@ -40,7 +40,7 @@ reconstruction defect). The final capture widens each season's window to
 **April-June** (3x the plate appearances of the one-month pass), which
 brought every state under the 0.05 tolerance. See
 `tests/mlb/test_mlb_run_expectancy_oracle.py` for the gate and
-`dev/mlb_game_state/capture_oracle.py`'s module docstring for the full
+`tools/models/mlb_game_state/capture_oracle.py`'s module docstring for the full
 narrative.
 
 ## Known deviations from a naive literal read of the design docs
@@ -94,7 +94,7 @@ narrative.
   `result_away_score`, `matchup_post_on_{first,second,third}_id`). The raw
   frame carries ~50 columns and is ~46MB across 4726 games -- comfortably
   over the repo's 10MB `check-added-large-files` guard; trimming to the
-  spine's actual inputs (`dev/mlb_game_state/capture_oracle.py`'s
+  spine's actual inputs (`tools/models/mlb_game_state/capture_oracle.py`'s
   `_PBP_KEEP_COLUMNS`) drops it to <1MB with zero loss of test signal.
 - `re24_tango_book.parquet`: `base_state:Utf8` (3-char occupancy, e.g.
   `"1_3"`), `outs:Int64`, `re:Float64` -- 24 rows.

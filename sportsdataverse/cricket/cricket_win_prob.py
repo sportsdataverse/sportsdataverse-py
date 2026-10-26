@@ -3,7 +3,7 @@
 Format-aware (T20 / ODI) probability that the batting/chasing team wins, computed
 from over-level match state and backed by a resource surface + calibration
 lookup fitted on real Cricsheet ball-by-ball data (male T20I + ODI, 2002-2026;
-see ``dev/league_ports/fit_cricket_resource_surface.py``).
+see ``tools/models/league_ports/fit_cricket_resource_surface.py``).
 
 Pipeline for each state row:
 

@@ -38,7 +38,7 @@ import polars as pl
 __all__ = ["clutch_delta", "nba_team_clutch", "shrink_clutch"]
 
 # Per-team clutch-net sampling-variance scale (points²·possessions), FITTED
-# (dev/nba_prediction/fit_clutch_shrinkage.py, 2026-07-08). The direct net-rating
+# (tools/models/nba_prediction/fit_clutch_shrinkage.py, 2026-07-08). The direct net-rating
 # SE over n possessions is σ² = (100·√2·sd_ppp)² / n; with the NBA points-per-poss
 # SD sd_ppp≈0.9 this gives scale = (100·√2·0.9)² ≈ 16200, i.e. σ²≈49 at ~315 clutch
 # poss. Crucially, the observed between-team variance of clutch_delta is ALSO ≈49.6 --

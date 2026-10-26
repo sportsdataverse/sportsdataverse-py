@@ -4,7 +4,7 @@ Consumes nflverse-format pbp (with the shipped ``xpass`` / ``pass_oe``
 columns from :func:`sportsdataverse.nfl.ep_wp.calculate_xpass`) plus the
 optional nflverse participation frame, and scores the bundled
 ``multi:softprob`` classifier (``nfl/models/nfl_playcall.ubj``, trained on
-2016-2021 by ``dev/nfl_scheme/train_playcall.py`` — seasons strictly before
+2016-2021 by ``tools/models/nfl_scheme/train_playcall.py`` — seasons strictly before
 the 2022-2023 evaluation window, the as-of leakage boundary).
 """
 
@@ -21,7 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
 
 #: The 5 play-call families, in the fixed class order the bundled model was
-#: trained with (``dev/nfl_scheme/train_playcall.py``).
+#: trained with (``tools/models/nfl_scheme/train_playcall.py``).
 FAMILIES: List[str] = ["inside_run", "outside_run", "short_pass", "deep_pass", "scramble"]
 
 #: Always-present pre-snap feature columns (nflverse pbp).

@@ -19,8 +19,8 @@ Captured 2026-07-11. All `player_id` columns are `Utf8` (the raw integer id, str
 but degraded partway through the session -- every call started timing out (30s, 0 bytes),
 including a re-try of the cheap bulk call that had succeeded easily before. That is a
 cumulative rate/IP throttle, not a per-request fluke. The bulk of `season_stats_raw.parquet`
-was captured via the ProxyBonanza pool (`dev/wnba_draft/proxy_transport.py`, round-robin over
-~50 exit IPs) at `MAX_WORKERS=6` -- see `dev/wnba_draft/capture_corpus.py`'s module docstring
+was captured via the ProxyBonanza pool (`tools/models/wnba_draft/proxy_transport.py`, round-robin over
+~50 exit IPs) at `MAX_WORKERS=6` -- see `tools/models/wnba_draft/capture_corpus.py`'s module docstring
 and `.superpowers/sdd/wnba-draft-refit/progress.md` for the full debugging record. Report this
 honestly: this corpus needed the proxy, it did not come entirely from the residential IP.
 
@@ -50,7 +50,7 @@ without the fix gave holdout MAE 0.1847, 0.1890, 0.1913 across 3 runs on the sam
   picks in a shallower league than the NBA never make a final roster) -- absence, not a zero
   row, is the correct representation; downstream fit scripts left-join and `fill_null(0.0)`.
 
-- **`career_values.parquet`** (734 rows) -- materialized by `dev/wnba_draft/fit_box_value.py`
+- **`career_values.parquet`** (734 rows) -- materialized by `tools/models/wnba_draft/fit_box_value.py`
   from `season_stats_raw.parquet`, applying (not re-fitting) the existing
   `LEAGUE_CONSTANTS["wnba"].box_value_coef`/`replacement` (still NBA-fit -- there is no
   `wnba_bpm` or other independent advanced-metric anchor to ridge-regress WNBA box rates

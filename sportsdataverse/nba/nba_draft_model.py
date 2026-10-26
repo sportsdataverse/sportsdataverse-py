@@ -1,7 +1,7 @@
 """Draft model ① -- combine measurements -> projected NBA career value.
 
 Applies the bundled ``nba_draft_value.json`` artifact (fit offline in
-``dev/nba_draft/fit_draft_model.py`` against realized career value from
+``tools/models/nba_draft/fit_draft_model.py`` against realized career value from
 ``nba_stats_playercareerstats``) to any draft class's combine measurements.
 Two linear heads share one feature vector: a ridge head for
 ``proj_career_value`` and a logistic head for ``draft_prob``.
@@ -185,7 +185,7 @@ def nba_draft_model(
     list), builds the shared combine-feature vector
     (:func:`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
     and applies the bundled ridge (``proj_career_value``) / logistic
-    (``draft_prob``) heads fit in ``dev/nba_draft/fit_draft_model.py``.
+    (``draft_prob``) heads fit in ``tools/models/nba_draft/fit_draft_model.py``.
 
     Args:
         draft_year: A draft year (e.g. ``2019``) or list of years.

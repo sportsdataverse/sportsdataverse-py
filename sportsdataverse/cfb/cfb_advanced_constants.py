@@ -45,7 +45,7 @@ SUCCESS_COEF: dict[int, float] = {1: 0.5, 2: 0.7, 3: 1.0, 4: 1.0}
 EXPLOSIVE_EPA: dict[str, float] = {"pass": 2.4, "rush": 1.8}
 
 #: Bundled field-position expected-points artifact filename
-#: (sportsdataverse/cfb/models/; fit by dev/cfb_advanced/fit_field_position.py).
+#: (sportsdataverse/cfb/models/; fit by tools/models/cfb_advanced/fit_field_position.py).
 FP_ARTIFACT = "cfb_field_position_ep.parquet"
 
 

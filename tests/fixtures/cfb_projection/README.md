@@ -11,7 +11,7 @@
 Committed validation corpus for the T2.2 CFB projection spine
 (`sportsdataverse/cfb/cfb_roster_talent.py`, `cfb_returning_production.py`,
 `cfb_recruiting_projection.py`, `cfb_transfer_impact.py`, `cfb_draft_projection.py`).
-Captured **2026-07-08** by `dev/cfb_projection/capture_oracle.py`. All id columns are
+Captured **2026-07-08** by `tools/models/cfb_projection/capture_oracle.py`. All id columns are
 `Utf8`. Read offline in the `tests/cfb/` projection tests — no network needed once committed.
 
 | File | Rows | Source | Key columns |

@@ -2,7 +2,7 @@
 
 Values each drive start with a committed EP-by-yardline curve
 (``cfb/models/cfb_field_position_ep.parquet``, isotonic fit on 2018-2021
-next-score drive points by ``dev/cfb_advanced/fit_field_position.py``) and
+next-score drive points by ``tools/models/cfb_advanced/fit_field_position.py``) and
 aggregates per team-season: average starting yard line, drive EP (``fp_ep``),
 field-position margin, and points per drive.
 

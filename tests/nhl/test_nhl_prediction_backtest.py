@@ -198,7 +198,7 @@ def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest,
 
 # --- Task 3.4: in-game WP calibration gate (2023 held-out, trained on 2022) -------
 #
-# Built by dev/nhl_prediction/build_in_game_wp_calibration_fixture.py: every play
+# Built by tools/models/nhl_prediction/build_in_game_wp_calibration_fixture.py: every play
 # of the 2023 season is scored by nhl_in_game_win_prob (using as-of pregame probs
 # as the anchor) and bucketed into predicted deciles via calibration_table.
 #
@@ -237,7 +237,7 @@ def test_in_game_wp_calibration_pulled_goalie_subset():
 
 # --- Task 4.2: player-props backtest gate (2024 season) ---------------------------
 #
-# Built by dev/nhl_prediction/build_player_props_backtest_fixture.py:
+# Built by tools/models/nhl_prediction/build_player_props_backtest_fixture.py:
 # nhl_player_props(2024, stats=("shots","points")) is joined back to the
 # realized load_nhl_skater_boxscores values for the SAME player-game.
 # Leakage scope (see nhl_player_props's module docstring): the per-player USAGE

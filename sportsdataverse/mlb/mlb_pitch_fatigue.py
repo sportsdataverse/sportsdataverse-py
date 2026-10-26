@@ -4,7 +4,7 @@
 ``times_through_order`` (compute-on-demand, no fitted model).
 :func:`mlb_times_through_order` applies the **fitted** per-TTO marginal
 penalty (``mlb_pitching_constants.get_baselines(season).tto_penalty``,
-fitted by ``dev/mlb_pitching/fit_fatigue.py`` via OLS on real Statcast data)
+fitted by ``tools/models/mlb_pitching/fit_fatigue.py`` via OLS on real Statcast data)
 as a per-pitch ``fatigue_rv_adj`` column.
 """
 

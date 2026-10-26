@@ -3,7 +3,7 @@
 Vintage-keyed feature store, market oracles, scoring, baseline oracles,
 axis engines, the walk-forward backtest driver, and post-game deserved-win
 estimation. Committed tune-window leaderboards live under
-``results/wexp/`` on the development branch.
+``tools/models/wexp/results/``.
 """
 
 from sportsdataverse.wexp.market import (

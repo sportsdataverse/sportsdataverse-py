@@ -133,7 +133,7 @@ STADIUM_ALTITUDE: Dict[str, float] = {
 }
 
 #: Environment FG make-prob logit slopes, fitted by
-#: ``dev/nfl_scheme/fit_env_fg_coef.py`` (run 2026-07-08): logistic fit of
+#: ``tools/models/nfl_scheme/fit_env_fg_coef.py`` (run 2026-07-08): logistic fit of
 #: made ~ offset(logit(base_make_prob)) + long_kick + wind + (temp-60) +
 #: altitude_kft on **2010-2018** attempts (n=9277, BFGS converged; wind
 #: hurts, warmth/altitude help), so the committed 2019-2023 fixture stays a
@@ -152,7 +152,7 @@ ENVIRONMENT_FG_COEF: Dict[str, float] = {
 
 #: Expected-plays OLS coefficients (realized offensive plays per team-game ~
 #: [1, neutral_sec_per_play, opp_neutral_sec_per_play, total_line]).  Fitted by
-#: ``dev/nfl_scheme/fit_pace_constants.py`` on the committed **2021-2022**
+#: ``tools/models/nfl_scheme/fit_pace_constants.py`` on the committed **2021-2022**
 #: fixture seasons only (n=1138 team-games, fit MAE 6.49 plays; run
 #: 2026-07-08) so the 2023 fixture season stays a held-out oracle.
 PACE_CONSTANTS: Dict[str, float] = {
@@ -165,7 +165,7 @@ PACE_CONSTANTS: Dict[str, float] = {
 }
 
 #: Empirical-Bayes shrinkage pseudo-counts, fitted by
-#: ``dev/nfl_scheme/fit_eb_priors.py`` (run 2026-07-08) on the committed
+#: ``tools/models/nfl_scheme/fit_eb_priors.py`` (run 2026-07-08) on the committed
 #: fixtures: K_fg via kicker-season split-half MSE (n=170, attempts scale);
 #: K_pressure via 2021->2022 / 2022->2023 season-to-season MSE (dropback
 #: scale).  Kicker-season FGOE is noisy, hence the heavy K_fg.

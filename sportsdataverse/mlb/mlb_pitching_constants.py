@@ -8,7 +8,7 @@ the single leakage boundary shared by the injury-risk model (Phase 8) and the
 out-of-sample skill checks in Phases 2/4.
 
 The ``LEAGUE_BASELINES`` seed values below are **placeholders overwritten by the
-committed fitting scripts** (``dev/mlb_pitching/fit_stuff_plus.py``,
+committed fitting scripts** (``tools/models/mlb_pitching/fit_stuff_plus.py``,
 ``fit_command_plus.py``, ``fit_era_siera.py``, ``fit_fatigue.py``) as each phase
 lands — see each field's docstring note for its fitting task.
 """
@@ -38,7 +38,7 @@ COMMAND_PLUS_ARTIFACT = "mlb_command_plus.ubj"
 PLUS_SCALE: float = 10.0
 
 #: Centering reference for ``stuff_plus``. The model is TRAINED on
-#: ``dev/mlb_pitching/fit_stuff_plus.py``'s 2023-season, 30-pitcher corpus, but
+#: ``tools/models/mlb_pitching/fit_stuff_plus.py``'s 2023-season, 30-pitcher corpus, but
 #: that corpus is itself workhorse-selected (top-N by pitch volume in one
 #: probe week) and is NOT representative of the general league -- centering
 #: the "+"-scale to the training set's own mean run-value shifted a genuinely
@@ -47,14 +47,14 @@ PLUS_SCALE: float = 10.0
 #: over ``tests/fixtures/mlb_pitching/pitcher_holdout_season_2024.parquet``
 #: (15 real, NON-training pitchers, full 2024 season, 38,699 pitches after
 #: dropna) -- a broader, out-of-training reference population. See
-#: ``dev/mlb_pitching/recalibrate_stuff_plus.py`` for the recomputation.
+#: ``tools/models/mlb_pitching/recalibrate_stuff_plus.py`` for the recomputation.
 #: Spearman-based oracle legs are unaffected by this choice (rank correlation
 #: is invariant to any linear recentering with ``sd_rv > 0``).
 STUFF_LEAGUE_MEAN_RV: float = 0.0008117794641293585
 STUFF_LEAGUE_SD_RV: float = 0.022242603823542595
 
 #: Same centering-reference reasoning as ``STUFF_LEAGUE_MEAN_RV``/``_SD_RV``
-#: above: computed from ``dev/mlb_pitching/fit_command_plus.py``'s trained
+#: above: computed from ``tools/models/mlb_pitching/fit_command_plus.py``'s trained
 #: (unchanged) booster re-scored over the held-out
 #: ``pitcher_holdout_season_2024.parquet`` population (38,803 pitches after
 #: dropna), not the workhorse-selected training corpus. Retrained once after
@@ -129,7 +129,7 @@ class PitchingConstants:
         tto_penalty: Times-through-order run-value penalty per TTO level
             ``[tto1, tto2, tto3]`` (``tto1`` is the reference, typically ``0.0``)
             — seeded here, overwritten by Task 5.2's
-            ``dev/mlb_pitching/fit_fatigue.py``.
+            ``tools/models/mlb_pitching/fit_fatigue.py``.
     """
 
     league_woba: float
@@ -140,7 +140,7 @@ class PitchingConstants:
     tto_penalty: List[float]
 
 
-#: Task 5.2 fitting output (``dev/mlb_pitching/fit_fatigue.py``, OLS on the
+#: Task 5.2 fitting output (``tools/models/mlb_pitching/fit_fatigue.py``, OLS on the
 #: real ``pitcher_season_pitches_2023_sample.parquet`` fixture, 13,996 pitches
 #: after dropna): ``run_value ~ C(times_through_order) + cum_pitches_game +
 #: velo_drop_from_start``, TTO=1 reference. Monotone increasing as designed

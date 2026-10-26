@@ -213,7 +213,7 @@ ASSIST_MIN_PLAYERS = 300
 # NOTE (underpowered leg -- ACTUALLY ATTEMPTED, not a faked assert): the
 # plan's primary-rate-stability > secondary-rate-stability finding needs deep
 # per-player exposure. T5.2 flesh-out re-ran the comparison on the full
-# 120-game corpus with dev/nhl_microstat/check_assist_ordering.py (a recon
+# 120-game corpus with tools/models/nhl_microstat/check_assist_ordering.py (a recon
 # script, not production logic -- committed for reproducibility) using the SAME
 # games_appeared-denominator machinery as the gate below, at two exposure
 # floors:
@@ -229,7 +229,7 @@ ASSIST_MIN_PLAYERS = 300
 # game-halves leaves too few events per player per tier to rank-stabilize.
 # Demonstrating primary > secondary requires a corpus with >=~40 games/player
 # (a full single season, or a team-concentrated multi-season slice). Until
-# such a corpus is captured (extend dev/nhl_microstat/capture_corpus.py to a
+# such a corpus is captured (extend tools/models/nhl_microstat/capture_corpus.py to a
 # full-season or fixed-team schedule and re-commit pbp_2024_slice.parquet),
 # this PER-PLAYER ordering is left ungated rather than asserted on noise.
 #

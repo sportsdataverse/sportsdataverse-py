@@ -11,7 +11,7 @@
 # NBA draft/projection oracle corpus (T3.4)
 
 Captured 2026-07-08 from a residential IP via `SDV_PY_NBA_STATS_LIVE=1 uv run
-python dev/nba_draft/capture_corpus.py`. All `player_id` columns are `Utf8`
+python tools/models/nba_draft/capture_corpus.py`. All `player_id` columns are `Utf8`
 (the raw integer id, stringified via `.cast(pl.Int64).cast(pl.Utf8)` -- never
 from a float, per the id/join-key discipline). `draft_year`/`season` are
 `Int64`.
@@ -21,7 +21,7 @@ combine classes 2016-2019 (~250 prospects). The Task-1.4 draft-model backtest
 on that corpus produced a holdout Spearman of essentially zero (and a Phase-2
 aging curve too noisy to interpret) -- exhaustively debugged (see
 `tests/nba/test_nba_draft_backtest.py`'s module docstring) and traced to
-genuine small-sample size, not a bug. `dev/nba_draft/capture_corpus_expand.py`
+genuine small-sample size, not a bug. `tools/models/nba_draft/capture_corpus_expand.py`
 (scratch, gitignored like all of `dev/`) pulled combine classes back to 2000
 (20 classes total, 1328 prospects) and their full season-stats histories
 (7378 player-season rows) -- realizing the design doc's original intent that
@@ -61,7 +61,7 @@ citation, not a live capture).
 - **`season_stats_raw.parquet`** (5773 rows, deduplicated -- see below) --
   `nba_stats_playercareerstats` (`SeasonTotalsRegularSeason` result set) per
   combine player_id, one row per `(player_id, season_id)`. This is the raw
-  box-total corpus consumed by `dev/nba_draft/fit_box_value.py` to derive
+  box-total corpus consumed by `tools/models/nba_draft/fit_box_value.py` to derive
   per-100 rates and, after fitting
   `box_value_coef`, to materialize `career_values.parquet` +
   `rookie_values.parquet` below.
@@ -77,7 +77,7 @@ citation, not a live capture).
   `(player_id, season_id)` group (else the single row), bringing the corpus
   to 5773 rows. 13 further rows carried a malformed `player_id` ("199", an
   upstream id-join glitch) with season labels back to 1987-88 -- excluded via
-  `dev/nba_draft/fit_availability.py`'s `MIN_SEASON=2000` filter, not by
+  `tools/models/nba_draft/fit_availability.py`'s `MIN_SEASON=2000` filter, not by
   further deduplication.
 
 - **`nba_bpm_overlap.parquet`** (418 rows) -- the shipped `nba_bpm` scored via
@@ -89,7 +89,7 @@ citation, not a live capture).
 
 - **`career_values.parquet`** (847 rows) -- `player_id, career_value:Float64,
   seasons_played:Int64, total_minutes:Float64`. Materialized by
-  `dev/nba_draft/fit_box_value.py` (Task 0.3) from `season_stats_raw.parquet`
+  `tools/models/nba_draft/fit_box_value.py` (Task 0.3) from `season_stats_raw.parquet`
   using the fitted `box_value_coef`/`replacement` (all-era: every season a
   combine player played, not just the 2016+ overlap). Combine players with
   no career games (undrafted / never played) are absent, not zero-filled --
@@ -116,7 +116,7 @@ citation, not a live capture).
 `box_value_coef` (intercept + `pts100, reb100, ast100, stl100, blk100,
 tov100, ts_pct, usg`) and `replacement` in `nba_draft_constants.py`'s
 `LEAGUE_CONSTANTS["nba"]` are the printed output of
-`dev/nba_draft/fit_box_value.py` (ridge-fit vs `nba_bpm_overlap.parquet`,
+`tools/models/nba_draft/fit_box_value.py` (ridge-fit vs `nba_bpm_overlap.parquet`,
 lambda chosen by 5-fold CV, `MIN_MINUTES=300`). In-sample
 Spearman(fit, nba_bpm) = 0.94 on the 256-row anchor (re-fit after the
 trade-duplicate dedup above). WNBA/G-League constants

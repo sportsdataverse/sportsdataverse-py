@@ -2,7 +2,7 @@
 
 Mirrors ``tests/nba/test_nba_draft_backtest.py`` (+ the availability/aging-curve gates split
 out into their own NBA test files) but against the real WNBA corpus captured live from
-``stats.wnba.com`` 2026-07-11 (``dev/wnba_draft/capture_corpus.py``) -- see
+``stats.wnba.com`` 2026-07-11 (``tools/models/wnba_draft/capture_corpus.py``) -- see
 ``.superpowers/sdd/wnba-draft-refit/progress.md`` for the full capture/fit debugging record.
 Floors below are calibrated from the OBSERVED holdout numbers on this corpus (never an
 aspirational target, never lowered to pass) -- see each test's docstring for the number and the
@@ -11,7 +11,7 @@ run that produced it.
 **Structural difference from the NBA gate:** there is no ``draft_prob`` AUC gate here.
 ``wnba_stats_drafthistory`` has no undrafted/invitee negative class (``draftcombinestats``
 returns 0 rows for every WNBA season), so ``draft_prob`` is a documented constant, not a fitted
-classifier (see ``dev/wnba_draft/fit_draft_model.py``'s module docstring) -- there is nothing to
+classifier (see ``tools/models/wnba_draft/fit_draft_model.py``'s module docstring) -- there is nothing to
 gate. `test_wnba_draft_prob_is_a_documented_constant` locks in that the artifact stays an
 honest constant instead of silently regressing to a fake-looking fit.
 """
@@ -30,8 +30,8 @@ from sportsdataverse.nba.nba_availability import _FEATURE_COLS, availability_fea
 from sportsdataverse.wnba.wnba_draft_model import _load_artifact, _score
 
 FIXTURE_DIR = "tests/fixtures/wnba_draft"
-DRAFT_CUTOFF_YEAR = 2018  # must match dev/wnba_draft/fit_draft_model.py's CUTOFF_YEAR
-AVAIL_CUTOFF_SEASON = 2018  # must match dev/wnba_draft/fit_availability.py's CUTOFF_SEASON
+DRAFT_CUTOFF_YEAR = 2018  # must match tools/models/wnba_draft/fit_draft_model.py's CUTOFF_YEAR
+AVAIL_CUTOFF_SEASON = 2018  # must match tools/models/wnba_draft/fit_availability.py's CUTOFF_SEASON
 
 
 def _load_scored_draft_holdout() -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -77,7 +77,7 @@ def test_wnba_draft_holdout_ranks_realized_value() -> None:
 def test_wnba_draft_prob_is_a_documented_constant() -> None:
     """`draft_prob` must stay an honest constant, not silently regress to a fake classifier fit.
 
-    See ``dev/wnba_draft/fit_draft_model.py``'s module docstring: ``wnba_stats_drafthistory``
+    See ``tools/models/wnba_draft/fit_draft_model.py``'s module docstring: ``wnba_stats_drafthistory``
     has no undrafted/invitee negative class, so there is no honest way to fit a real
     drafted/undrafted classifier from this corpus. `prob_coef` must stay all-zero (no
     per-feature signal) and the constant probability must stay high (reflecting the true 100%

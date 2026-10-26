@@ -103,7 +103,7 @@ def _p_over(mean: float, line: float) -> float:
     Shots-on-goal and points are non-negative count data, not continuous --
     a Gaussian ``Phi((line - mean) / sd)`` approximation was tried first and
     found to be systematically overconfident against the real 2024 held-out
-    calibration (see ``dev/nhl_prediction/build_player_props_backtest_fixture.py``
+    calibration (see ``tools/models/nhl_prediction/build_player_props_backtest_fixture.py``
     and the fixtures README): predicted probabilities ran ~0.13-0.17 above
     the realized over-rate in the worst bucket. The Poisson form (using
     ``mean`` as the Poisson rate directly, ``sd`` no longer needed since

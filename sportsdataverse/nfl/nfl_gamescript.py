@@ -2,7 +2,7 @@
 
 Descriptive team-game and team-season pace surface on top of ``load_nfl_pbp``
 (EPA / ``pass_oe`` already present).  Expected plays come from the fitted
-``PACE_CONSTANTS`` OLS table (``dev/nfl_scheme/fit_pace_constants.py``).
+``PACE_CONSTANTS`` OLS table (``tools/models/nfl_scheme/fit_pace_constants.py``).
 """
 
 from __future__ import annotations
