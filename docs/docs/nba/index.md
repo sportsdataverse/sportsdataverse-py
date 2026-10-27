@@ -13,11 +13,12 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 53 | none |
 | [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
+| [NBA Official Injury Report](#nba-official-injury-report) | `official.nba.com` | 3 | none (static PDFs on ak-static.cms.nba.com) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 203 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 206 | — |
 
 ## ESPN {#espn}
 
@@ -43,6 +44,12 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 |---|---:|
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 |
 | [Hand-written wrappers](reference/additional/nba-stats-api) | 2 |
+
+## NBA Official Injury Report {#nba-official-injury-report}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional/nba-official-injury-report) | 3 |
 
 ## Fox Sports API {#fox-sports-api}
 

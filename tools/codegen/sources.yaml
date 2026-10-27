@@ -547,6 +547,13 @@ providers:
     modules:
       - sportsdataverse.nbagl.nbagl_stats_runtime
 
+  nba_official:
+    label: NBA Official Injury Report
+    home: https://official.nba.com/nba-injury-report-2026-27-season/
+    auth: none (static PDFs on ak-static.cms.nba.com)
+    modules:
+      - sportsdataverse.nba.nba_official_injury
+
   euroleague:
     label: EuroLeague Competition Engine
     home: https://api-live.euroleague.net

@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 14
+sidebar_position: 15
 description: "NBA — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Dates and seasons

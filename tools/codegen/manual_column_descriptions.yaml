@@ -17173,6 +17173,19 @@ mjhl_season_id:
   season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+nba_injury_report:
+  report_datetime: US Eastern time the league published this report, read from the PDF title (a pre-2021-10-15 HH slot is the HH:30 snapshot).
+  game_date: Date of the game the row's player status applies to.
+  game_time: Scheduled tip as printed on the report, e.g. "07:30 (ET)"; the PDF carries no AM/PM.
+  matchup: Away@home team abbreviations, e.g. "WAS@SAC".
+  away_team_abbr: Away team abbreviation split from matchup.
+  home_team_abbr: Home team abbreviation split from matchup.
+  team: Full name of the team that filed the row, e.g. "Memphis Grizzlies".
+  player_name: Player as printed, "Last, First" (no player id on the report); null on a team's NOT YET SUBMITTED row.
+  current_status: Out, Doubtful, Questionable, Probable or Available; null on a NOT YET SUBMITTED row.
+  reason: Reason for the status (e.g. "Injury/Illness - Right Calf; Strain", "G League - Two-Way"), or "NOT YET SUBMITTED" when the team has not filed.
+  category: 2018-19 layout only - the reason's category (e.g. "Injury/Illness", "G League Team"); null afterwards.
+  previous_status: 2018-19 layout only - the status on the previous report; null afterwards.
 nojhl_season_id:
   game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
     (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season

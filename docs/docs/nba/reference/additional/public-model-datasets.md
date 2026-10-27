@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Public model datasets"
 sidebar_label: "Public model datasets"
-sidebar_position: 8
+sidebar_position: 9
 description: "NBA — additional Python functions — Public model datasets — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Public model datasets

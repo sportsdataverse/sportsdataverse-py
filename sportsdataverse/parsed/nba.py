@@ -328,6 +328,9 @@ from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
+from sportsdataverse.nba import nba_injury_report as nba_injury_report  # noqa: F401
+from sportsdataverse.nba import nba_injury_report_slots as nba_injury_report_slots  # noqa: F401
+from sportsdataverse.nba import nba_injury_report_url as nba_injury_report_url  # noqa: F401
 from sportsdataverse.nba import nba_l2m as nba_l2m  # noqa: F401
 from sportsdataverse.nba import nba_l2m_games as nba_l2m_games  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
@@ -366,6 +369,7 @@ from sportsdataverse.nba import nbadraft_mock_draft as nbadraft_mock_draft  # no
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import ot_adjusted_seconds as ot_adjusted_seconds  # noqa: F401
+from sportsdataverse.nba import parse_nba_injury_report as parse_nba_injury_report  # noqa: F401
 from sportsdataverse.nba import parse_nba_l2m as parse_nba_l2m  # noqa: F401
 from sportsdataverse.nba import parse_nba_l2m_games as parse_nba_l2m_games  # noqa: F401
 from sportsdataverse.nba import parse_nba_live_boxscore as parse_nba_live_boxscore  # noqa: F401
@@ -729,6 +733,9 @@ __all__ = [
     "nba_foul_drawing",
     "nba_four_factor_rapm",
     "nba_in_game_win_prob",
+    "nba_injury_report",
+    "nba_injury_report_slots",
+    "nba_injury_report_url",
     "nba_l2m",
     "nba_l2m_games",
     "nba_la_rapm",
@@ -768,6 +775,7 @@ __all__ = [
     "normalize_player_name",
     "normalize_team_roster_columns",
     "ot_adjusted_seconds",
+    "parse_nba_injury_report",
     "parse_nba_l2m",
     "parse_nba_l2m_games",
     "parse_nba_live_boxscore",

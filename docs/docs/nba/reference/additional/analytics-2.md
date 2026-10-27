@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_referee–zone_value"
 sidebar_label: "Analytics: nba_referee–zone_value"
-sidebar_position: 13
+sidebar_position: 14
 description: "NBA — additional Python functions — Analytics: nba_referee–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_referee–zone_value
