@@ -13,6 +13,7 @@
   - [Games that end on a try (`try_endings/`, task 2.2)](#games-that-end-on-a-try-try_endings-task-22)
   - [Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)](#touchdown-flag-residuals-td_flag_residuals-task-220)
   - [Era play order (`era_play_order/`, task 2.19)](#era-play-order-era_play_order-task-219)
+  - [Roof without a venue id (`roof/`)](#roof-without-a-venue-id-roof)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -320,3 +321,14 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 281012016 (`2008_06_DET_MIN`) | 4b1d90b6 | 923, "Dan Orlovsky tackled in end zone by Jared Allen." at 0:21 of Q1 | `Safety`, `scoringPlay` true, text without the word "safety" | `safety` 1, `epa` 0.230 | task 2.28 (a scored "Safety" row takes the -2 overlay whatever its text) |
 | 400874522 (`2016_01_TB_ATL`) | eb7830dc | 79, D.Freeman's run to the ATL 20 at 14:20 of Q1 | `Rush`, TB's score 0 -> 2 -> 0 over 58 / 79 / 100; ATL snaps next from its own 20 | `safety` 0, `epa` -0.770 | task 2.28 (an untyped safety needs a free kick next) |
 | 271216005 (`2007_15_BUF_CLE`) | 4f540c18 | 961, T.Edwards' pass at 14:15 of Q2; the next row is 996, B.Moorman's intentional safety (ESPN `Safety`, scored) | `Pass`, CLE's score 3 -> 5 on it (a row early); 996 starts at the BUF 24 (`yardsToEndzone` 76) | `safety` 0 (996: 1), `epa` -0.474 | task 2.28 (an untyped safety's free kick is from the kicker's 20) |
+
+## Roof without a venue id (`roof/`)
+
+One ESPN Site v2 summary from `nflverse-dev/nfl-raw` (commit c5bc873c) `nfl/espn/raw/2004/240926011.json.gz` (source
+`https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=240926011`), trimmed to the same keys as the
+whole-game captures, read by `tests/nfl/test_nfl_pbp_game_state.py::test_pre_2006_dome_game_scores_as_a_dome`. It
+sits in a subdirectory so the whole-game oracle (which globs `summary_*` at the top level) does not pick it up.
+
+| game (nflverse) | ESPN `gameInfo.venue` | nflverse `roof` / `stadium` | pins |
+|---|---|---|---|
+| 240926011 (`2004_03_GB_IND`) | absent (no id; ESPN ships venue ids from 2006) | `dome` / RCA Dome | `_nfl_roof` falls back to `model_vars.home_team_roof("IND", 2004)` |

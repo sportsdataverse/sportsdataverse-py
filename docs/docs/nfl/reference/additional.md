@@ -169,6 +169,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [get_fg_wp](additional/models-and-calculators-10.md#get_fg_wp) | Expected win probability of attempting a field goal (nfl4th `get_fg_wp`). |
 | [get_go_wp](additional/models-and-calculators-10.md#get_go_wp) | Expected win probability of going for it on 4th down (nfl4th `get_go_wp`). |
 | [get_punt_wp](additional/models-and-calculators-10.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
+| [home_team_roof](additional/models-and-calculators-10.md#home_team_roof) | The roof of *team*'s home stadium in *season*, from `NFL_HOME_ROOF_BY_SEASON`. |
 | [load_nfl_fp_curve](additional/models-and-calculators-10.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
 | [nfl_compute_results](additional/models-and-calculators-10.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
 | [nfl_draft_projection](additional/models-and-calculators-10.md#nfl_draft_projection) | Draft outcome projection for one draft class. |

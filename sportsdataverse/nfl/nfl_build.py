@@ -41,7 +41,9 @@ if TYPE_CHECKING:
 # 2 -> task 5.2: NFLPlayProcess ids are Int64 (`*_player_id` was String; `pos_team` and its leads/lags
 #      were Int32). A v1 frame from the cache would mix with v2 ones, and the season concat
 #      (`diagonal_relaxed`) would turn those columns back into String for every game.
-PIPELINE_VERSION: int = 2
+# 3 -> an ESPN game with no (or an unknown) venue id takes its home team's roof, not outdoors:
+#      a v2 frame would keep every 2002-2005 dome game's outdoors EP / CP.
+PIPELINE_VERSION: int = 3
 
 logger = logging.getLogger("sdv.nfl_build")
 logger.addHandler(logging.NullHandler())

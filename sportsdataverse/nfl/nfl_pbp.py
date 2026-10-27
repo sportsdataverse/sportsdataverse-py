@@ -93,6 +93,7 @@ from sportsdataverse.nfl.model_vars import (
     ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
+    home_team_roof,
     defense_score_vec,
     end_change_vec,
     ep_class_to_score_mapping,
@@ -502,7 +503,11 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 # (nfl-raw summaries; ESPN ships venue ids from 2006, so earlier games take the default).
 # ESPN doesn't say whether a retractable roof was open: those take "closed", nflverse's
 # state in 83% of their games, which is retractable to EP and a dome to CP / xYAC.
-# Every venue not listed is outdoors.
+# _NFL_OUTDOOR_VENUES lists the other venues of 5+ games. A venue id in neither table
+# (none before 2006, a venue ESPN first used later, a Shield venue) takes the home team's
+# roof that season (model_vars.home_team_roof), outdoors at a neutral site. That is right where
+# games.csv is not: it gives the 2025-26 international games (Berlin, Sao Paulo, Munich, ...)
+# the designated home team's own stadium and roof.
 _NFL_VENUE_ROOF = {
     "16": "dome",  # Mall of America Field
     "1822": "dome",  # Rogers Centre
@@ -521,17 +526,67 @@ _NFL_VENUE_ROOF = {
     "3970": "closed",  # State Farm Stadium
     "5348": "closed",  # Mercedes-Benz Stadium
 }
+_NFL_OUTDOOR_VENUES = frozenset(
+    {
+        "24",  # Monster Park
+        "50",  # Invesco Field
+        "477",  # Los Angeles Memorial Coliseum
+        "538",  # Dignity Health Sports Park
+        "2455",  # Wembley Stadium
+        "3622",  # Arrowhead Stadium
+        "3628",  # Bank of America Stadium
+        "3669",  # Candlestick Park
+        "3673",  # Lumen Field
+        "3679",  # Huntington Bank Field
+        "3712",  # EverBank Stadium
+        "3719",  # Northwest Stadium
+        "3736",  # Giants Stadium
+        "3738",  # Gillette Stadium
+        "3752",  # Acrisure Stadium
+        "3798",  # Lambeau Field
+        "3806",  # Lincoln Financial Field
+        "3810",  # Nissan Stadium (the open-air one; move the id if ESPN keeps it for the 2027 dome)
+        "3814",  # M&T Bank Stadium
+        "3839",  # MetLife Stadium
+        "3867",  # Oakland Coliseum
+        "3874",  # Paycor Stadium
+        "3883",  # Highmark Stadium (Old)
+        "3886",  # Raymond James Stadium
+        "3932",  # SDCCU Stadium
+        "3933",  # Soldier Field
+        "3937",  # Empower Field at Mile High
+        "3948",  # Hard Rock Stadium
+        "3953",  # Huntington Bank Stadium (TCF Bank)
+        "3954",  # Texas Stadium
+        "4738",  # Levi's Stadium
+        "5534",  # Tottenham Hotspur Stadium
+    }
+)
+# ESPN's team abbreviation -> nflverse's, where they differ (every 1999-2025 nfl-raw game
+# joined to games.csv on ESPN's game id: only these two disagree).
+_ESPN_TO_NFLVERSE_TEAM = {"WSH": "WAS", "LAR": "LA"}
 
 
-def _nfl_roof(game_info) -> str:
-    """The game's roof: ``gameInfo.venue.indoor`` when an adapter supplies it, else the venue id."""
+def _nfl_roof(game_info, home_abbrev=None, season=None, neutral=False) -> str:
+    """The game's roof: ``gameInfo.venue.indoor`` from an adapter, else the venue id, else the home team.
+
+    A venue id in neither ``_NFL_VENUE_ROOF`` nor ``_NFL_OUTDOOR_VENUES`` (ESPN ships none before
+    2006) takes ``home_team_roof(home_abbrev, season)``, unless the game is at a neutral site.
+    """
     venue = (game_info or {}).get("venue") or {}
     indoor = venue.get("indoor")
     if indoor is True:
         return "dome"
     if indoor is False:
         return "outdoors"
-    return _NFL_VENUE_ROOF.get(str(venue.get("id")), _DEFAULT_ROOF)
+    venue_id = venue.get("id")
+    venue_id = None if venue_id is None else str(venue_id)
+    if venue_id in _NFL_VENUE_ROOF:
+        return _NFL_VENUE_ROOF[venue_id]
+    if venue_id in _NFL_OUTDOOR_VENUES or neutral is True or home_abbrev is None or season is None:
+        return _DEFAULT_ROOF
+    team = str(home_abbrev).upper()
+    return home_team_roof(_ESPN_TO_NFLVERSE_TEAM.get(team, team), int(season)) or _DEFAULT_ROOF
 
 
 # "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),
@@ -1978,7 +2033,12 @@ class NFLPlayProcess(object):
         init["awayTeamName"] = awayTeamName
         init["awayTeamAbbrev"] = awayTeamAbbrev
         init["awayTeamNameAlt"] = awayTeamNameAlt
-        init["roof"] = self.roof = _nfl_roof(pbp_txt.get("gameInfo"))
+        init["roof"] = self.roof = _nfl_roof(
+            pbp_txt.get("gameInfo"),
+            homeTeamAbbrev,
+            (pbp_txt["header"].get("season") or {}).get("year"),
+            pbp_txt["header"]["competitions"][0].get("neutralSite"),
+        )
         self.homeTeamId = homeTeamId
         self.homeTeamMascot = homeTeamMascot
         self.homeTeamName = homeTeamName

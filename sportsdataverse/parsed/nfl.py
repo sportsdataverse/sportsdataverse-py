@@ -246,6 +246,7 @@ from sportsdataverse.nfl import helper_nfl_athlete_items as helper_nfl_athlete_i
 from sportsdataverse.nfl import helper_nfl_game_items as helper_nfl_game_items  # noqa: F401
 from sportsdataverse.nfl import helper_nfl_roster_items as helper_nfl_roster_items  # noqa: F401
 from sportsdataverse.nfl import helper_nfl_team_items as helper_nfl_team_items  # noqa: F401
+from sportsdataverse.nfl import home_team_roof as home_team_roof  # noqa: F401
 from sportsdataverse.nfl import load_combine as load_combine  # noqa: F401
 from sportsdataverse.nfl import load_contracts as load_contracts  # noqa: F401
 from sportsdataverse.nfl import load_depth_charts as load_depth_charts  # noqa: F401
@@ -575,6 +576,7 @@ __all__ = [
     "helper_nfl_game_items",
     "helper_nfl_roster_items",
     "helper_nfl_team_items",
+    "home_team_roof",
     "load_combine",
     "load_contracts",
     "load_depth_charts",

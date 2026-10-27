@@ -163,6 +163,67 @@ def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
     return expr
 
 
+#: Home stadium roof by franchise, as ``(first_season, roof)`` rows newest first, for every
+#: nflverse ``home_team`` that has played home games under a dome or a retractable roof.
+#: Derived from nflverse ``games.csv`` (nfldata, 1999-2026): the most common ``roof`` of the
+#: team's ``location == "Home"`` games each season, ``open`` / ``closed`` folded to ``"closed"``
+#: (the convention of ``nfl_pbp._NFL_VENUE_ROOF``). A team not listed played outdoors. The
+#: relocated franchises are listed under both codes, so either labelling resolves: ``STL`` /
+#: ``LA`` (the St. Louis dome before 2016), ``SD`` / ``LAC``, ``OAK`` / ``LV``.
+#: Majority-of-season ceiling: New Orleans 2005 (Katrina; 5 outdoor, 3 dome home games) is
+#: outdoors, Buffalo's Toronto games 2008-12 and Minnesota's 2010 TCF Bank game are not seen here
+#: (``nfl_pbp`` reads them from the venue id). Tennessee's row is the one entry ahead of
+#: ``games.csv``: the domed new Nissan Stadium opens for 2027. Refresh from ``games.csv`` when a
+#: team changes stadium.
+NFL_HOME_ROOF_BY_SEASON: dict[str, tuple[tuple[int, str], ...]] = {
+    "ARI": ((2006, "closed"), (0, "outdoors")),
+    "ATL": ((2017, "closed"), (0, "dome")),
+    "DAL": ((2009, "closed"), (0, "outdoors")),
+    "DET": ((0, "dome"),),
+    "HOU": ((0, "closed"),),
+    "IND": ((2008, "closed"), (0, "dome")),
+    "LA": ((2020, "dome"), (2016, "outdoors"), (0, "dome")),
+    "LAC": ((2020, "dome"), (0, "outdoors")),
+    "LV": ((2020, "dome"), (0, "outdoors")),
+    "MIN": ((2016, "dome"), (2014, "outdoors"), (0, "dome")),
+    "NO": ((2006, "dome"), (2005, "outdoors"), (0, "dome")),
+    "SEA": ((2000, "outdoors"), (0, "dome")),
+    "STL": ((0, "dome"),),
+    "TEN": ((2027, "dome"), (0, "outdoors")),
+}
+
+
+def home_team_roof(team: str, season: int) -> str | None:
+    """The roof of *team*'s home stadium in *season*, from :data:`NFL_HOME_ROOF_BY_SEASON`.
+
+    Args:
+        team (str): nflverse team code (``"WAS"``, ``"LA"``; not ESPN's ``"WSH"`` / ``"LAR"``).
+        season (int): NFL season year (the September year).
+
+    Returns:
+        ``"dome"``, ``"closed"`` (a retractable roof) or ``"outdoors"``; ``None`` for a team
+        the table does not list (one that has always played outdoors).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.model_vars import home_team_roof
+
+            print([home_team_roof("MIN", s) for s in (2013, 2014, 2016)])  # ['dome', 'outdoors', 'dome']
+
+        See Also:
+            * `nflreadpy`_ -- ``load_schedules()`` carries the per-game ``roof`` this table summarises
+            * `nflfastR`_ -- the ``roof`` feature its EP / CP models were trained on
+
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+        .. _nflfastR: https://www.nflfastr.com
+    """
+    for first_season, roof in NFL_HOME_ROOF_BY_SEASON.get(team, ()):
+        if season >= first_season:
+            return roof
+    return None
+
+
 #: ``yardline_100`` at which the FG model scores a one-point PAT **before 2015**.
 #: The kick was snapped from the 2; nflfastR ``helper_add_ep_wp.R`` (``add_wp_variables``,
 #: L926) scores it at ``ifelse(season >= 2015, 15, 3)``, and 3 is that FG-model convention,
