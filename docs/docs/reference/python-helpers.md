@@ -13,6 +13,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
+| [espn_depthcharts_snapshot](python-helpers/espn.md#espn_depthcharts_snapshot) | Fetch today's depth chart for every team in a league, stamped with the date. |
+| [espn_injuries_snapshot](python-helpers/espn.md#espn_injuries_snapshot) | Fetch today's injury report for one or more leagues, stamped with the date. |
 | [xfl_pbp](python-helpers/espn.md#xfl_pbp) | Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |
 
 ## PFF Premium Stats (LEGACY)

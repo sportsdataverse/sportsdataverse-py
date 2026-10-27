@@ -15,9 +15,13 @@
 # those resolve by stem in tier 3, and a tier-2 glob over them would file a
 # provider's own wrappers under whichever glob happened to match first.
 
+# `featured: true` puts a provider on the docs home page's Data sources strip (docs/src/data/providers.json);
+# the rest sit behind its "+N more" link to the intro sources table.
+
 providers:
   espn:
     label: ESPN
+    featured: true
     home: https://www.espn.com
     auth: none
     espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
@@ -84,6 +88,7 @@ providers:
 
   nfl_com:
     label: NFL.com Shield API
+    featured: true
     home: https://api.nfl.com
     auth: WEB_DESKTOP bearer token
     flat_apis: [nfl_api]
@@ -108,6 +113,7 @@ providers:
 
   pff_api:
     label: PFF Developer API
+    featured: true
     home: https://api.pff.com
     auth: API key (SDV_PY_PFF_API_KEY)
     flat_apis: [pff_api]
@@ -129,6 +135,7 @@ providers:
 
   nflverse:
     label: nflverse data releases
+    featured: true
     home: https://github.com/nflverse
     auth: none
     release_bases: [nflverse]
@@ -147,6 +154,7 @@ providers:
 
   hockeytech:
     label: HockeyTech / LeagueStat
+    featured: true
     home: https://lscluster.hockeytech.com
     auth: per-league public key (SDV_<LEAGUE>_API_KEY)
     modules:
@@ -286,6 +294,7 @@ providers:
 
   fiba:
     label: FIBA digital API and game pages
+    featured: true
     home: https://www.fiba.basketball
     auth: none  # public APIM key read from the site at run time
     flat_apis: [fiba_gdap, fiba_gamepage]
@@ -438,6 +447,7 @@ providers:
 
   ncaa_stats:
     label: stats.ncaa.org
+    featured: true
     home: https://stats.ncaa.org
     auth: none (Terms gate + rate rotation)
     modules:
@@ -452,6 +462,7 @@ providers:
 
   odds_api:
     label: The Odds API
+    featured: true
     home: https://the-odds-api.com
     auth: API key (SDV_PY_ODDS_API_KEY)
     modules:
@@ -459,18 +470,21 @@ providers:
 
   polymarket:
     label: Polymarket
+    featured: true
     home: https://polymarket.com
     auth: none (read-only Gamma metadata + CLOB order-book routes)
     flat_apis: [polymarket]
 
   kalshi:
     label: Kalshi
+    featured: true
     home: https://kalshi.com
     auth: none (keyless Trade API v2 market-data routes)
     flat_apis: [kalshi]
 
   mlb_stats_api:
     label: MLB Stats API
+    featured: true
     home: https://statsapi.mlb.com
     auth: none
     flat_apis: [mlb_api]
@@ -480,6 +494,7 @@ providers:
 
   statcast:
     label: Baseball Savant (Statcast)
+    featured: true
     home: https://baseballsavant.mlb.com
     auth: none
     flat_apis: [mlb_statcast]
@@ -489,6 +504,7 @@ providers:
 
   nhl_api_web:
     label: NHL Web API
+    featured: true
     home: https://api-web.nhle.com
     auth: none
     flat_apis: [nhl_api_web]
@@ -498,6 +514,7 @@ providers:
 
   nhl_edge:
     label: NHL EDGE
+    featured: true
     home: https://api-web.nhle.com/v1/edge
     auth: none
     flat_apis: [nhl_edge]
@@ -523,6 +540,7 @@ providers:
 
   nba_stats:
     label: NBA Stats API
+    featured: true
     home: https://stats.nba.com
     auth: none (curl_cffi chrome TLS impersonation)
     flat_apis: [nba_stats]
@@ -549,6 +567,7 @@ providers:
 
   euroleague:
     label: EuroLeague Competition Engine
+    featured: true
     home: https://api-live.euroleague.net
     auth: none
     flat_apis: [euroleague]
@@ -565,6 +584,7 @@ providers:
 
   kenpom:
     label: KenPom
+    featured: true
     home: https://kenpom.com
     auth: subscription (KENPOM_EMAIL / KENPOM_PASSWORD)
     flat_apis: [kenpom]
@@ -574,6 +594,7 @@ providers:
 
   torvik:
     label: Bart Torvik T-Rank
+    featured: true
     home: https://barttorvik.com
     auth: none
     flat_apis: [torvik]
@@ -608,6 +629,7 @@ providers:
 
   fotmob:
     label: FotMob
+    featured: true
     home: https://www.fotmob.com
     auth: none (unofficial)
     flat_apis: [fotmob]

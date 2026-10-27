@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Cache and configuration"
 sidebar_label: "Cache and configuration"
-sidebar_position: 26
+sidebar_position: 27
 description: "NFL — additional Python functions — Cache and configuration — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Cache and configuration

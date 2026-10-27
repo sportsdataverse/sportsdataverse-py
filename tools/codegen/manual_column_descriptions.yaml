@@ -3674,6 +3674,60 @@ endpoint_registry:
     division and team resources carry it, each adding a /resource/vendor/{vendorId}/... variant.
   versions_allowed: JSON-encoded list of API versions the endpoint will serve, e.g. ["v1"].
   versions_current: API version the endpoint serves when the caller does not pin one, e.g. v1.
+enrich_nfl_pbp:
+  Diff_Time_Ratio: Win-probability model feature, score_differential divided by exp(-4 * elapsed_share), so a lead weighs
+    more as the game runs down.
+  action_play: True when the play's qb_epa is non-zero, i.e. the play counts toward the QBR model's inputs.
+  dome: 1 when the game is played under a dome or a closed roof, else 0 (model feature; a null roof counts as outdoors).
+  down1: 1 on a first-down play, else 0 (expected-points model feature).
+  down2: 1 on a second-down play, else 0 (expected-points model feature).
+  down3: 1 on a third-down play, else 0 (expected-points model feature).
+  down4: 1 on a fourth-down play, else 0 (expected-points model feature).
+  elapsed_share: Share of regulation elapsed at the snap, (3600 - game_seconds_remaining) / 3600 clipped to [0, 1].
+  era0: 1 for seasons through 2001, else 0 (model era feature).
+  era1: 1 for seasons 2002-2005, else 0 (model era feature).
+  era2: 1 for seasons 2006-2013, else 0 (model era feature).
+  era3: 1 for seasons 2014-2017, else 0 (model era feature).
+  era4: 1 for seasons from 2018 on, else 0 (model era feature).
+  fg_make_prob: Fourth downs only. Probability a field-goal attempt from this spot is good, from the bundled fg_model.
+  fg_wp: Fourth downs only. Possession team's win probability if it attempts a field goal, the make and miss outcomes weighted
+    by fg_make_prob.
+  fg_wp_diff: Fourth downs only. fg_wp minus the recommended option's win probability; 0 when kicking is recommended, negative
+    otherwise.
+  first_down_prob: Fourth downs only. Probability that going for it gains a first down or a touchdown.
+  fourth_down_recommendation: 'Fourth downs only. The option with the highest win probability: "go", "field_goal" or "punt".'
+  go_boost: Fourth downs only. Percentage points of win probability gained by going for it over the better of kicking and
+    punting, 100 * (go_wp - max(fg_wp, punt_wp)) (nfl4th's headline number).
+  go_wp: Fourth downs only. Possession team's win probability if it goes for it, weighted over the distribution of yards
+    gained.
+  go_wp_diff: Fourth downs only. go_wp minus the recommended option's win probability; 0 when going for it is recommended,
+    negative otherwise.
+  home: 1 when the possession team is the home team, else 0 (model feature).
+  make_fg_wp: Fourth downs only. Possession team's win probability if the field goal is good.
+  miss_fg_wp: Fourth downs only. Possession team's win probability if the field goal is missed.
+  non_fumble_sack: True for a sack with no fumble on the play (QBR model input).
+  outdoors: 1 when the game is played outdoors or under an open roof, else 0 (model feature; a null roof counts as outdoors).
+  pass_epa: qbr_epa on pass plays, null otherwise (QBR model input).
+  pass_weight: The play's QBR weight on pass plays, null otherwise.
+  pen_epa: qbr_epa on plays with a penalty, null otherwise (QBR model input).
+  pen_weight: The play's QBR weight on plays with a penalty, null otherwise.
+  posteam_spread: Point spread from the possession team's side, nflverse spread_line for the home team and its negation for
+    the away team.
+  punt_wp: Fourth downs only. Possession team's win probability if it punts, weighted over the punt landing distribution.
+  punt_wp_diff: Fourth downs only. punt_wp minus the recommended option's win probability; 0 when punting is recommended,
+    negative otherwise.
+  qbr_epa: The quarterback's EPA on the play as the QBR model reads it, floored at -5 and set to -3.5 on a fumble.
+  receive_2h_ko: 1 on a first-half play when the possession team receives the second-half kickoff, else 0 (win-probability
+    model feature).
+  retractable: 1 only when the roof is the literal value "retractable", which nflverse does not ship, else 0 (model feature).
+  rush_epa: qbr_epa on rushing plays, null otherwise (QBR model input).
+  rush_weight: The play's QBR weight on rushing plays, null otherwise.
+  sack_epa: qbr_epa on sacks without a fumble, null otherwise (QBR model input).
+  sack_weight: The play's QBR weight on sacks without a fumble, null otherwise.
+  spread_time: Win-probability model feature, posteam_spread * exp(-4 * elapsed_share), so the spread fades as the game runs
+    down; 0 when spread_line is missing.
+  wp_fail: Fourth downs only. Possession team's win probability if going for it fails to convert.
+  wp_succeed: Fourth downs only. Possession team's win probability if going for it converts.
 env_adjusted_make_prob:
   base_make_prob: Shipped fg_model make probability (with nfl4th long-kick clamps applied).
   exp_make_prob: Environment-adjusted make probability (logit shift for long-kick clamp correction, wind, temperature and

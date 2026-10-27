@@ -170,3 +170,14 @@ def test_sidebar_group_labels_are_unique_across_sports():
     labels += sorted({lg["group"] for s in data["sports"] for lg in s["leagues"] if "group" in lg})
     dupes = [label for label, n in Counter(labels).items() if n > 1]
     assert not dupes, dupes
+
+
+def test_the_committed_provider_registry_is_current():
+    """The home page's Data sources strip reads the committed file: a stale one shows a dropped or renamed provider."""
+    committed = (generate.ROOT / "docs" / "src" / "data" / "providers.json").read_text(encoding="utf-8")
+    rendered = generate.render_providers_json(generate._autodoc_names_by_scope())
+    assert committed.rstrip("\n") == rendered.rstrip("\n")
+    registry = json.loads(rendered)
+    keys = {p["key"] for s in registry["sports"] for p in s["providers"]}
+    featured = {p["key"] for s in registry["sports"] for p in s["providers"] if p.get("featured")}
+    assert registry["total"] == len(keys) > len(featured) > 0

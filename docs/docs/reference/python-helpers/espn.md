@@ -6,6 +6,96 @@ description: "Package — additional Python functions — ESPN — function refe
 ---
 # Package — additional Python functions — ESPN
 
+### espn_depthcharts_snapshot {#espn_depthcharts_snapshot}
+
+`espn_depthcharts_snapshot(league: 'str', *, team_ids: 'Optional[Sequence[Union[str, int]]]' = None, as_of_date: 'Optional[date]' = None, request_delay: 'float' = 1.5, return_as_pandas: 'bool' = False) -> 'Any'`
+
+Fetch today's depth chart for every team in a league, stamped with the date.
+
+Unlike `injuries`, this endpoint is **per team**, so a league costs one
+request per team -- NFL 32, NBA 30, MLB 30. Requests are issued
+**sequentially** with `request_delay` seconds between them because ESPN
+answers aggressive polling with 403.
+
+A team that publishes no depth chart contributes zero rows rather than a
+null-filled placeholder, so an empty observation can never be counted or
+persisted as data.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | League slug; see `ESPN_DEPTHCHART_LEAGUES`. |
+| `team_ids` | `Optional[Sequence[Union[str, int]]]` | `None` | Teams to fetch. Defaults to every team from `espn_{league}_teams()` (one extra request). |
+| `as_of_date` | `Optional[date]` | `None` | Observation date stamped on every row; defaults to today (UTC). |
+| `request_delay` | `float` | `1.5` | Seconds to sleep between team requests. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One frame with `DEPTHCHART_SNAPSHOT_SCHEMA`'s columns, long over team.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league has no `espn_{league}_team_depthcharts` wrapper, or if `team_ids` was not supplied and `espn_{league}_teams()` returned no teams -- an empty directory is an upstream outage, and reporting it as zero rows would be indistinguishable from a league ESPN publishes no depth chart for. Passing `team_ids=[]` explicitly is a no-op, not an error. |
+
+**Example**
+
+```python
+from sportsdataverse.espn_snapshots import espn_depthcharts_snapshot
+df = espn_depthcharts_snapshot("nfl")
+
+# Two teams only
+
+df = espn_depthcharts_snapshot("nba", team_ids=[1, 2])
+```
+
+### espn_injuries_snapshot {#espn_injuries_snapshot}
+
+`espn_injuries_snapshot(leagues: 'Union[str, Sequence[str]]' = ('nfl', 'nba', 'wnba', 'nhl', 'mlb', 'cfb', 'mbb', 'wbb'), *, as_of_date: 'Optional[date]' = None, request_delay: 'float' = 1.5, return_as_pandas: 'bool' = False) -> 'Any'`
+
+Fetch today's injury report for one or more leagues, stamped with the date.
+
+One request per league, issued **sequentially** with `request_delay` seconds
+between them: ESPN answers aggressive polling with 403, and this endpoint is
+cheap enough (one call per league per day) that there is nothing to gain from
+concurrency.
+
+A league whose payload reports nothing contributes zero rows rather than a
+null-filled placeholder row, so an empty observation can never be counted or
+persisted as data.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `leagues` | `Union[str, Sequence[str]]` | `('nfl', 'nba', 'wnba', 'nhl', 'mlb', 'cfb', 'mbb', 'wbb')` | One league slug or a sequence of them; defaults to `ESPN_INJURY_LEAGUES`. |
+| `as_of_date` | `Optional[date]` | `None` | Observation date stamped on every row; defaults to today (UTC). |
+| `request_delay` | `float` | `1.5` | Seconds to sleep between league requests. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One frame with `INJURY_SNAPSHOT_SCHEMA`'s columns, long over league.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a league slug has no `espn_{league}_injuries` wrapper. |
+
+**Example**
+
+```python
+df = espn_injuries_snapshot("nfl")
+
+# Every league that reports injuries
+
+df = espn_injuries_snapshot(["nfl", "nba", "nhl", "mlb", "wnba", "cfb"])
+```
+
 ### xfl_pbp {#xfl_pbp}
 
 `xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`

@@ -204,6 +204,7 @@ from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import compose_counting_projection as compose_counting_projection  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
 from sportsdataverse.nfl import efficiency_ratings as efficiency_ratings  # noqa: F401
+from sportsdataverse.nfl import enrich_nfl_pbp as enrich_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import env_adjusted_make_prob as env_adjusted_make_prob  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_game_rosters as espn_nfl_game_rosters  # noqa: F401
@@ -406,6 +407,7 @@ __all__ = [
     "compose_counting_projection",
     "download",
     "efficiency_ratings",
+    "enrich_nfl_pbp",
     "env_adjusted_make_prob",
     "espn_nfl_award",
     "espn_nfl_awards",

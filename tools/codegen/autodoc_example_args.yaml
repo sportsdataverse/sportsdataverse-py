@@ -135,6 +135,7 @@ nfl:
   calculate_expected_points: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 385 cols
   calculate_win_probability: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 390 cols
   calculate_xpass: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 372 cols
+  enrich_nfl_pbp: {df: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 415 cols
   calculate_xyac: {pbp_data: {$call: nfl.shield_nfl_pbp, args: {shield_game_id: "a9a8944e-4feb-11f1-abca-2c54536568a9"}}}  # 176 rows x 329 cols
   clean_nfl_pbp: {df: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 372 cols
   get_2pt_probs: {pbp_df: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 6 cols
