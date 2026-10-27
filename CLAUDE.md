@@ -1370,7 +1370,7 @@ Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL P
 (`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
 (LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
 NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stats` /
-`wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
+`wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference, the official NBA injury report (`nba_official`),
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
