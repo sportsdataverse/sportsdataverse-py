@@ -762,6 +762,11 @@ def shield_to_espn_summary(
     current = previous.pop() if (previous and not is_final(game) and phase is not None and phase != "PREGAME") else None
 
     header = _header(game, summary_block, phase, event_id, home_id, away_id, abbrs, previous, current)
+    # Shield says neutralSite False for most neutral games before 2023 (Wembley, Super Bowls), and
+    # its venue ids are uuids, so ``_nfl_roof`` would give a London game the home team's dome. The
+    # id map's flag wins when set; compared as text so a pandas NA never reaches ``bool()``.
+    if str(idmap_row.get("neutral_site")).lower() in ("true", "1"):
+        header["competitions"][0]["neutralSite"] = True
     summary = {
         "boxscore": _boxscore(header, player_stats, team_stats, previous + ([current] if current else []), notes),
         "format": {},
@@ -952,7 +957,8 @@ def _fill_end_state(emitted: List[Tuple[int, Dict[str, Any]]], home_id: str, sco
 
 
 def _venue(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``gameInfo.venue`` -- Shield never states ``indoor``, so ``_nfl_roof`` reads the home team's roof."""
+    """``gameInfo.venue`` -- Shield never states ``indoor``, so ``_nfl_roof`` reads the home team's roof
+    (outdoors when the header says neutral site, which the id map's ``neutral_site`` can set)."""
     venue = game.get("venue") or {}
     return {
         "id": venue.get("id"),
@@ -1242,6 +1248,7 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
         # pages would resolve as this game. ``gameday`` is a bare ET calendar date, which
         # ``cbs_pbp.game_id._et_date`` already handles.
         "kickoff_utc": game.get("gameday"),
+        "neutral_site": game.get("location") == "Neutral",
         "nflverse_game_id": game.get("game_id"),
         "home_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(home)),
         "away_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(away)),

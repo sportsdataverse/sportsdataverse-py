@@ -505,7 +505,9 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 # state in 83% of their games, which is retractable to EP and a dome to CP / xYAC.
 # _NFL_OUTDOOR_VENUES lists the other venues of 5+ games. A venue id in neither table
 # (none before 2006, a venue ESPN first used later, a Shield venue) takes the home team's
-# roof that season (model_vars.home_team_roof), outdoors at a neutral site.
+# roof that season (model_vars.home_team_roof), outdoors at a neutral site. That is right where
+# games.csv is not: it gives the 2025-26 international games (Berlin, Sao Paulo, Munich, ...)
+# the designated home team's own stadium and roof.
 _NFL_VENUE_ROOF = {
     "16": "dome",  # Mall of America Field
     "1822": "dome",  # Rogers Centre

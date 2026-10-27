@@ -172,8 +172,9 @@ def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
 #: ``LA`` (the St. Louis dome before 2016), ``SD`` / ``LAC``, ``OAK`` / ``LV``.
 #: Majority-of-season ceiling: New Orleans 2005 (Katrina; 5 outdoor, 3 dome home games) is
 #: outdoors, Buffalo's Toronto games 2008-12 and Minnesota's 2010 TCF Bank game are not seen here
-#: (``nfl_pbp`` reads them from the venue id). Refresh from ``games.csv`` when a team changes
-#: stadium (Tennessee's domed Nissan Stadium, 2027).
+#: (``nfl_pbp`` reads them from the venue id). Tennessee's row is the one entry ahead of
+#: ``games.csv``: the domed new Nissan Stadium opens for 2027. Refresh from ``games.csv`` when a
+#: team changes stadium.
 NFL_HOME_ROOF_BY_SEASON: dict[str, tuple[tuple[int, str], ...]] = {
     "ARI": ((2006, "closed"), (0, "outdoors")),
     "ATL": ((2017, "closed"), (0, "dome")),
@@ -188,6 +189,7 @@ NFL_HOME_ROOF_BY_SEASON: dict[str, tuple[tuple[int, str], ...]] = {
     "NO": ((2006, "dome"), (2005, "outdoors"), (0, "dome")),
     "SEA": ((2000, "outdoors"), (0, "dome")),
     "STL": ((0, "dome"),),
+    "TEN": ((2027, "dome"), (0, "outdoors")),
 }
 
 
@@ -195,8 +197,8 @@ def home_team_roof(team: str, season: int) -> str | None:
     """The roof of *team*'s home stadium in *season*, from :data:`NFL_HOME_ROOF_BY_SEASON`.
 
     Args:
-        team: nflverse team code (``"WAS"``, ``"LA"``; not ESPN's ``"WSH"`` / ``"LAR"``).
-        season: NFL season year (the September year).
+        team (str): nflverse team code (``"WAS"``, ``"LA"``; not ESPN's ``"WSH"`` / ``"LAR"``).
+        season (int): NFL season year (the September year).
 
     Returns:
         ``"dome"``, ``"closed"`` (a retractable roof) or ``"outdoors"``; ``None`` for a team
@@ -208,6 +210,13 @@ def home_team_roof(team: str, season: int) -> str | None:
             from sportsdataverse.nfl.model_vars import home_team_roof
 
             print([home_team_roof("MIN", s) for s in (2013, 2014, 2016)])  # ['dome', 'outdoors', 'dome']
+
+        See Also:
+            * `nflreadpy`_ -- ``load_schedules()`` carries the per-game ``roof`` this table summarises
+            * `nflfastR`_ -- the ``roof`` feature its EP / CP models were trained on
+
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+        .. _nflfastR: https://www.nflfastr.com
     """
     for first_season, roof in NFL_HOME_ROOF_BY_SEASON.get(team, ()):
         if season >= first_season:
