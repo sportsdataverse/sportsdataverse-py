@@ -597,6 +597,39 @@ def test_espn_venue_id_sets_the_roof():
     assert _nfl_roof({}) == _nfl_roof(None) == "outdoors"
 
 
+def test_missing_or_unknown_venue_takes_the_home_teams_roof():
+    from sportsdataverse.nfl.nfl_pbp import _nfl_roof
+
+    assert _nfl_roof({}, "IND", 2004) == "dome"  # pre-2006: ESPN ships no venue id
+    assert _nfl_roof({}, "IND", 2008) == "closed"  # Lucas Oil, retractable
+    assert _nfl_roof({"venue": {"id": "99999"}}, "DET", "2030") == "dome"  # a venue id ESPN has not used yet
+    assert _nfl_roof({}, "WSH", 2004) == _nfl_roof({}, "LAR", 2018) == "outdoors"  # ESPN codes fold to nflverse's
+    assert _nfl_roof({}, "LAR", 2021) == _nfl_roof({}, "STL", 2004) == "dome"
+    assert _nfl_roof({}, "MIN", 2014) == "outdoors"  # TCF Bank, between the two domes
+    assert _nfl_roof({}, "NO", 2004, True) == "outdoors"  # a neutral site is not the home stadium
+    assert _nfl_roof({"venue": {"id": "3953"}}, "MIN", 2010) == "outdoors"  # a known outdoor venue wins
+    assert _nfl_roof({}, "IND", None) == "outdoors"
+
+
+def test_pre_2006_dome_game_scores_as_a_dome():
+    """2004 GB @ IND at the RCA Dome: no venue id in ESPN's summary; nflverse roof ``dome``."""
+    import gzip
+
+    import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
+
+    path = Path(__file__).parent / "fixtures" / "roof" / "summary_240926011_trimmed.json.gz"
+    with gzip.open(path, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    assert "id" not in (summary.get("gameInfo") or {}).get("venue", {})
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc = NFLPlayProcess(gameId=240926011)
+        proc.espn_nfl_pbp(summary=summary)
+        proc.run_processing_pipeline()
+    assert proc.roof == "dome"
+    assert proc.plays_frame["roof"].unique().to_list() == ["dome"]
+
+
 # ---------------------------------------------------------------------------
 # N13 -- cleaning and processing pipelines can share one instance, in either order
 # ---------------------------------------------------------------------------

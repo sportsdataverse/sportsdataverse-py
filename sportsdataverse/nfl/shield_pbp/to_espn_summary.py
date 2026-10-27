@@ -952,7 +952,7 @@ def _fill_end_state(emitted: List[Tuple[int, Dict[str, Any]]], home_id: str, sco
 
 
 def _venue(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``gameInfo.venue`` -- ``indoor`` is what ``_nfl_roof`` reads, and Shield never states it."""
+    """``gameInfo.venue`` -- Shield never states ``indoor``, so ``_nfl_roof`` reads the home team's roof."""
     venue = game.get("venue") or {}
     return {
         "id": venue.get("id"),

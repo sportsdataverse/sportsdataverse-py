@@ -520,6 +520,31 @@ out = get_punt_wp(fourth)
 print(out[["punt_wp"]].head())
 ```
 
+### home_team_roof {#home_team_roof}
+
+`home_team_roof(team: 'str', season: 'int') -> 'str | None'`
+
+The roof of *team*'s home stadium in *season*, from `NFL_HOME_ROOF_BY_SEASON`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `str` |  | nflverse team code (`"WAS"`, `"LA"`; not ESPN's `"WSH"` / `"LAR"`). |
+| `season` | `int` |  | NFL season year (the September year). |
+
+**Returns**
+
+`"dome"`, `"closed"` (a retractable roof) or `"outdoors"`; `None` for a team the table does not list (one that has always played outdoors).
+
+**Example**
+
+```python
+from sportsdataverse.nfl.model_vars import home_team_roof
+
+print([home_team_roof("MIN", s) for s in (2013, 2014, 2016)])  # ['dome', 'outdoors', 'dome']
+```
+
 ### load_nfl_fp_curve {#load_nfl_fp_curve}
 
 `load_nfl_fp_curve() -> 'pl.DataFrame'`
