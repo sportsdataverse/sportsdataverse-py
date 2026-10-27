@@ -1,5 +1,5 @@
 {
-  "total": 80,
+  "total": 81,
   "sports": [
     {
       "label": "Football",
@@ -232,6 +232,11 @@
           "key": "nbagl_stats",
           "label": "G League Stats API",
           "href": "https://stats.nba.com"
+        },
+        {
+          "key": "nba_official",
+          "label": "NBA Official Injury Report",
+          "href": "https://official.nba.com/nba-injury-report-2026-27-season/"
         },
         {
           "key": "euroleague",
