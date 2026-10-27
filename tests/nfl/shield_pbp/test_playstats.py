@@ -164,8 +164,9 @@ def test_seasonless_payload_with_explicit_game_id_resolves_era_abbr():
     game["awayTeam"]["currentLogo"] = "https://static.nfl.com/clubs/logos/LV"
     df = build_playstats_frame(game, "2019_01_OAK_BAL")
     assert df["season"].unique().to_list() == [2019]
-    away_rows = df.filter(pl.col("team_abbr") == "OAK")
-    assert away_rows.height > 0  # era-correct abbr, not LV
+    # the season feeds the resolver without raising; team_abbr then folds to the current club, as the pbp frame does
+    away_rows = df.filter(pl.col("team_abbr") == "LV")
+    assert away_rows.height > 0
 
 
 def test_known_rush_row_resolves_team_and_player():

@@ -451,8 +451,9 @@ def test_drive_summary_aggregates():
     assert out["drive_quarter_start"].to_list() == [1, 1, 1]
     assert out["drive_quarter_end"].to_list() == [1, 1, 1]
     assert out["drive_yards_penalized"].to_list() == [5, 5, 5]
-    assert out["drive_start_yard_line"].to_list() == [75, 75, 75]
-    assert out["drive_end_yard_line"].to_list() == [1, 1, 1]
+    # nflverse's text: own half names the possession team, the other half the defense
+    assert out["drive_start_yard_line"].to_list() == ["BUF 25", "BUF 25", "BUF 25"]
+    assert out["drive_end_yard_line"].to_list() == ["NYJ 1", "NYJ 1", "NYJ 1"]
     assert out["drive_play_id_started"].to_list() == [101, 101, 101]
     assert out["drive_play_id_ended"].to_list() == [103, 103, 103]
     assert out["drive_game_clock_start"].to_list() == ["15:00", "15:00", "15:00"]

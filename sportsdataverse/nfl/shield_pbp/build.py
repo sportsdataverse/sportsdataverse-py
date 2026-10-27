@@ -16,6 +16,7 @@ import polars as pl
 
 from sportsdataverse.nfl.shield_pbp.description import add_description_features, add_pass_rush, add_qb_dropback
 from sportsdataverse.nfl.shield_pbp.drives import add_drive_detail
+from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED
 from sportsdataverse.nfl.shield_pbp.features import add_game_state
 from sportsdataverse.nfl.shield_pbp.labels import add_labels
 from sportsdataverse.nfl.shield_pbp.live import add_live_columns, current_situation_row, resolve_context
@@ -50,19 +51,21 @@ def build_pbp(
         return df
     df = apply_game_repairs(df)
     df = add_description_features(df)
-    # fix_scrambles runs right after qb_scramble is string-detected from desc
-    # (add_description_features) and before play_type/qb_dropback would be
-    # re-derived from it downstream — matching nflfastR's ordering (reference
-    # §2): the 1999-2005 charting-data backfill only flips the qb_scramble
-    # flag, it must not retroactively change anything computed from the
-    # un-fixed value. add_pass_rush then derives the nflverse pass/rush 0/1
+    # fix_scrambles runs after qb_scramble is string-detected from desc
+    # (add_description_features) and after qb_dropback has read it (below) —
+    # matching nflfastR's ordering (reference §2): the 1999-2005 charting-data
+    # backfill only flips the qb_scramble flag, it must not retroactively change
+    # anything computed from the un-fixed value. add_pass_rush then derives the nflverse pass/rush 0/1
     # classification from the BACKFILLED qb_scramble (in nflfastR, clean_pbp's
     # pass derivation likewise runs long after fix_scrambles) and applies the
     # fix_weird_pass_plays override (reference §3) internally, between the
     # pass and rush derivations — nflfastR's exact position.
+    # qb_dropback reads the feed's own qb_scramble, before the 1999-2005 backfill: nflfastR derives it in
+    # add_nflscrapr_mutations (helper_add_nflscrapr_mutations.R:439) ahead of fix_scrambles (:747), so a
+    # backfilled scramble is not a dropback (580 such 2005 runs in nflverse).
+    df = add_qb_dropback(df)
     df = fix_scrambles(df)
     df = add_pass_rush(df)
-    df = add_qb_dropback(df)
     df = add_game_state(df, roof=roof, spread_line=spread_line, total_line=total_line)
     df = add_labels(df, game)
     # add_drive_detail (fixed_drive/fixed_drive_result/drive_*) must run after
@@ -78,7 +81,16 @@ def build_pbp(
     # fill_null keeps rows whose shield_play_type is null (null != "TIMEOUT" is null
     # in polars and would otherwise be filtered out).
     df = df.filter(pl.col("shield_play_type").fill_null("") != "TIMEOUT")
-    return df.drop("_points_home", "_points_away")
+    return _fold_relocations(df.drop("_points_home", "_points_away"))
+
+
+def _fold_relocations(df: pl.DataFrame) -> pl.DataFrame:
+    """Relocated clubs by their current abbreviation, as nflverse's team columns have them.
+
+    Folded only on the way out: the parser compares clubs with the feed's own historical yard-line text.
+    """
+    cols = [c for c, t in df.schema.items() if t == pl.Utf8 and (c.endswith("_team") or c in ("posteam", "defteam"))]
+    return df.with_columns(pl.col(c).replace(_RELOCATED) for c in cols)
 
 
 def shield_nfl_pbp(

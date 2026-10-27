@@ -8498,3 +8498,43 @@
   test: tests/nfl/test_nfl_pbp_game_state.py -k "venue_id_sets_the_roof"
   expected: kill
   note: ESPN's NFL venue has no indoor flag, so without the table every game, domes included, scores as outdoors.
+
+- id: nfl-shield-try-after-defensive-td-takes-the-scorer
+  group: nfl-shield
+  finding: SHIELD-PARITY
+  file: sportsdataverse/nfl/shield_pbp/parse.py
+  snippet: '            posteam = last_td_team'
+  mutant: '            posteam = None'
+  test: tests/nfl/shield_pbp/test_build.py -k "pick_six_try"
+  expected: kill
+  note: Without it the kickoff after a pick-six keeps the old fixed drive (2015 fixed_drive 0.984 -> 0.826 vs nflverse).
+
+- id: nfl-shield-relocated-clubs-fold
+  group: nfl-shield
+  finding: SHIELD-PARITY
+  file: sportsdataverse/nfl/shield_pbp/build.py
+  snippet: '    return _fold_relocations(df.drop("_points_home", "_points_away"))'
+  mutant: '    return df.drop("_points_home", "_points_away")'
+  test: tests/nfl/shield_pbp/test_build.py -k "relocated_club"
+  expected: kill
+  note: nflverse names SD / OAK / STL by LAC / LV / LA in its team columns (2005 / 2015 agreement ~0.91 without it).
+
+- id: nfl-shield-drive-columns-from-the-drive-record
+  group: nfl-shield
+  finding: SHIELD-PARITY
+  file: sportsdataverse/nfl/shield_pbp/drives.py
+  snippet: '    return _take_drive_records(df)'
+  mutant: '    return df.drop([c for c in df.columns if c.startswith("_sd_")])'
+  test: tests/nfl/shield_pbp/test_build.py -k "matches_nflverse and 2015_01_DET_SD-drive_play_count"
+  expected: kill
+  note: The aggregate-from-plays drive columns match nflverse on 8% (play count) to 63% (penalty yards) of plays.
+
+- id: nfl-shield-qb-dropback-reads-play-type
+  group: nfl-shield
+  finding: SHIELD-PARITY
+  file: sportsdataverse/nfl/shield_pbp/description.py
+  snippet: '    dropback = (pl.col("play_type") == "pass") | ((pl.col("play_type") == "run") & (pl.col("qb_scramble") == 1))'
+  mutant: '    dropback = (pl.col("pass") == 1) | (pl.col("qb_scramble") == 1)'
+  test: tests/nfl/shield_pbp/test_description.py -k "qb_dropback_truth_table"
+  expected: kill
+  note: A penalty-nullified pass (a no_play) counted as a dropback, ~1,270 rows a season.

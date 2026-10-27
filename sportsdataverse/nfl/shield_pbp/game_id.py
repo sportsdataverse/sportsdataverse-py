@@ -25,6 +25,10 @@ _RELOCATIONS = {
     "LV": (2019, "OAK"),  # Raiders: Oakland through 2019, Las Vegas from 2020
 }
 
+#: The reverse fold: nflverse's team columns name a relocated club by its current abbreviation in every
+#: season, while its ``game_id`` (and the feed's yard-line text) keeps the historical one.
+_RELOCATED = {old: new for new, (_, old) in _RELOCATIONS.items()}
+
 
 def _team_abbr(team: dict) -> str:
     """Return a club's *present-day* abbreviation from a Shield team object.
