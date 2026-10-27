@@ -804,11 +804,14 @@ def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
     or left at the spot of the catch. Of 71 turnover plays more than 0.5 EPA from nflfastR on 154
     games (2009-2026), 45 had the right end team and a yard line the next snap contradicts. nflfastR
     reads the next play's state, so this does too, on the same terms: no score, no kick next, and the
-    clock stoppages in between skipped. ``start.yardsToEndzone`` is final here, so it is the spot read.
+    clock stoppages in between skipped. ``start.yardsToEndzone`` is final here, so it is the spot read,
+    except before a field goal, which ESPN starts at the kick spot, not the line of scrimmage (331124022/1541:
+    a sack fumble the offense keeps at the IND 30, then a field goal "starting" at the 38).
     """
     stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
     score = pl.col("scoringPlay").fill_null(False) | pl.col("type.text").is_in(scores_vec).fill_null(False)
-    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=pl.col("type.text").is_in(kickoff_vec).fill_null(False))
+    kick = pl.col("type.text").is_in(kickoff_vec) | pl.col("type.text").str.contains(r"(?i)field goal")
+    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kick.fill_null(False))
     turnover = pl.col("text").str.contains(r"(?i)fumble|intercept|muff").fill_null(False)
     plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
     n = pl.col("_nxt").struct

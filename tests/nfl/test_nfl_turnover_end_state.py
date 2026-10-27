@@ -8,6 +8,8 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
 * ``summary_401772776_trimmed.json.gz`` -- TB @ BUF, 2025 week 11. A punt returner's fumble the punting team
   recovers, which ESPN types "Fumble Recovery (Opponent)" (the punt flag drops) and writes in NFL wording
   ("R.Dixon punts 46 yards ... M.Hardman to BUF 41 for no gain (J.Hayes). FUMBLES (J.Hayes), RECOVERED by TB").
+* ``summary_331124022_trimmed.json.gz`` -- IND @ ARI, 2013 week 12. A sack fumble the offense keeps, followed by a
+  field goal ESPN starts at the kick spot rather than the line of scrimmage.
 """
 
 from __future__ import annotations
@@ -62,6 +64,14 @@ def test_an_own_recovery_ends_where_the_offense_snaps_next(nyg_no):
     r = _row(nyg_no, 4007916181418)
     assert r["end.yardsToEndzone"] == 91
     assert r["EPA"] == pytest.approx(-2.02, abs=0.5)
+
+
+def test_a_turnover_before_a_field_goal_keeps_its_own_end_spot():
+    # ARZ keeps C.Palmer's sack fumble at the IND 30; the field goal that follows starts at the 38, the kick spot.
+    # nflfastR: EPA -1.92. Reading the field goal's start gave -3.08.
+    r = _row(_plays(331124022), 3311240221541)
+    assert r["end.yardsToEndzone"] == 30
+    assert r["EPA"] == pytest.approx(-1.92, abs=0.3)
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):
