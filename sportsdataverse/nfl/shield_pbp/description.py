@@ -157,21 +157,15 @@ def add_pass_rush(df: pl.DataFrame) -> pl.DataFrame:
 
 def add_qb_dropback(df: pl.DataFrame) -> pl.DataFrame:
     """Add ``qb_dropback`` (reference §14, ``helper_add_nflscrapr_mutations.R``
-    lines 438-445).
+    lines 438-445): ``play_type == "pass" | (play_type == "run" & qb_scramble == 1)``.
 
-    The R source defines ``qb_dropback = play_type == "pass" | (play_type ==
-    "run" & qb_scramble == 1)``. On this frame, ``pass`` (from
-    :func:`add_pass_rush`) is already ``1`` whenever ``qb_scramble == 1`` (its
-    step-1 base detection is ``... | qb_scramble == 1``), so
-    ``play_type == "pass"`` and ``pass == 1`` are equivalent inputs here and
-    the scramble branch is already folded in — this is transcribed directly as
-    ``pass == 1 or qb_scramble == 1`` (the ``qb_scramble`` term is therefore
-    redundant-but-harmless, kept for exactness with the port contract).
+    Read from ``play_type``, not ``pass``: a pass a penalty nullified keeps ``pass == 1`` but is a ``no_play``,
+    and nflfastR does not count it (~1,270 such rows a season were dropbacks here before).
 
-    Must run AFTER :func:`add_pass_rush` (needs the final, fixed ``pass`` value).
+    Must run AFTER :func:`add_pass_rush` (needs the final, fixed ``qb_scramble`` value).
 
     Args:
-        df: A play frame carrying ``pass`` and ``qb_scramble``.
+        df: A play frame carrying ``play_type`` and ``qb_scramble``.
 
     Returns:
         ``df`` with ``qb_dropback`` (Int32 0/1) added. Unchanged if empty or
@@ -179,9 +173,8 @@ def add_qb_dropback(df: pl.DataFrame) -> pl.DataFrame:
     """
     if df.height == 0:
         return df
-    if not {"pass", "qb_scramble"} <= set(df.columns):
+    if not {"play_type", "qb_scramble"} <= set(df.columns):
         return df
-    df = df.with_columns(
-        qb_dropback=pl.when((pl.col("pass") == 1) | (pl.col("qb_scramble") == 1)).then(1).otherwise(0).cast(pl.Int32)
-    )
+    dropback = (pl.col("play_type") == "pass") | ((pl.col("play_type") == "run") & (pl.col("qb_scramble") == 1))
+    df = df.with_columns(qb_dropback=pl.when(dropback).then(1).otherwise(0).cast(pl.Int32))
     return df

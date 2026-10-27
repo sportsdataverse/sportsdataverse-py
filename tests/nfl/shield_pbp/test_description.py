@@ -175,14 +175,17 @@ def test_add_pass_rush_noop_on_empty_frame():
 
 
 def test_qb_dropback_truth_table():
+    # nflfastR: play_type == "pass" | (play_type == "run" & qb_scramble == 1). A pass a penalty nullified is a
+    # no_play and not a dropback, though its pass flag is 1.
     df = pl.DataFrame(
         {
-            "pass": [1, 0, 0],
-            "qb_scramble": [0, 1, 0],
+            "play_type": ["pass", "run", "run", "no_play", "punt"],
+            "pass": [1, 1, 0, 1, 0],
+            "qb_scramble": [0, 1, 0, 0, 0],
         }
     )
     out = add_qb_dropback(df)
-    assert out["qb_dropback"].to_list() == [1, 1, 0]
+    assert out["qb_dropback"].to_list() == [1, 1, 0, 0, 0]
     assert out["qb_dropback"].dtype == pl.Int32
 
 
@@ -192,5 +195,5 @@ def test_add_qb_dropback_noop_without_required_columns():
 
 
 def test_add_qb_dropback_noop_on_empty_frame():
-    df = pl.DataFrame(schema={"pass": pl.Int64, "qb_scramble": pl.Int64})
+    df = pl.DataFrame(schema={"play_type": pl.Utf8, "qb_scramble": pl.Int64})
     assert_frame_equal(add_qb_dropback(df), df)

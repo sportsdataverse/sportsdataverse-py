@@ -121,3 +121,71 @@ def test_build_pipeline_ordering_contract():
     assert set(df["pass"].unique().to_list()) == {0, 1}
     assert set(df["rush"].unique().to_list()) == {0, 1}
     assert df["qb_dropback"].null_count() == 0
+
+
+# ---------------------------------------------------------------------------
+# nflverse parity on a real 2015 game: a pick-six, a relocated club, Shield's own drive records
+# ---------------------------------------------------------------------------
+
+DET_SD = GAME.parent / "2015_01_DET_SD.json.gz"
+DET_SD_NFLVERSE = GAME.parent / "2015_01_DET_SD_nflverse.parquet"
+
+
+def _det_sd(**overrides):
+    game = json.loads(gzip.open(DET_SD).read())
+    game.update(overrides)
+    return game
+
+
+def _det_sd_vs_nflverse() -> pl.DataFrame:
+    ours = build_pbp(_det_sd()).with_columns(pl.col("play_id").cast(pl.Int64))
+    nv = pl.read_parquet(DET_SD_NFLVERSE).with_columns(pl.col("play_id").cast(pl.Int64))
+    return ours.join(nv, on=["game_id", "play_id"], suffix="_nv")
+
+
+@pytest.mark.parametrize(
+    "col",
+    [
+        "posteam",
+        "home_team",
+        "td_team",
+        "fixed_drive",
+        "series",
+        "qb_dropback",
+        "drive",
+        "drive_play_count",
+        "drive_time_of_possession",
+        "drive_start_yard_line",
+        "drive_end_yard_line",
+        "drive_start_transition",
+        "drive_end_transition",
+        "drive_game_clock_start",
+        "drive_yards_penalized",
+        "drive_ended_with_score",
+    ],
+)
+def test_2015_det_sd_matches_nflverse(col):
+    j = _det_sd_vs_nflverse().filter(pl.col(col).is_not_null() & pl.col(f"{col}_nv").is_not_null())
+    a, b = j[col], j[f"{col}_nv"]
+    if a.dtype.is_numeric():
+        a, b = a.cast(pl.Float64), b.cast(pl.Float64)
+    assert j.height >= 5 and (a == b).all(), j.filter(a != b).select("play_id", col, f"{col}_nv").head(5)
+
+
+def test_the_pick_six_try_belongs_to_the_scorer():
+    # 928: Rivers intercepted, returned for DET's touchdown; 950: the try falls between Shield's drive ranges.
+    # Without its posteam, the kickoff back to SD (966) never opened a new fixed drive.
+    rows = {r["play_id"]: r for r in build_pbp(_det_sd()).to_dicts()}
+    assert rows[950]["posteam"] == "DET"
+    assert rows[966]["fixed_drive"] == rows[928]["fixed_drive"] + 1
+
+
+def test_relocated_club_takes_its_current_abbreviation_but_the_game_id_does_not():
+    df = build_pbp(_det_sd())
+    assert df["game_id"].unique().to_list() == ["2015_01_DET_SD"]
+    assert set(df["home_team"].unique()) == {"LAC"} and "SD" not in set(df["posteam"].drop_nulls())
+
+
+def test_postseason_week_continues_the_season():
+    df = build_pbp(_det_sd(seasonType="POST", week=1))
+    assert df["week"].unique().to_list() == [18]  # 2015 had 17 regular-season weeks

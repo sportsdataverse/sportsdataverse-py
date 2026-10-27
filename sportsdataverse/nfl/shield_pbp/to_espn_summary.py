@@ -41,6 +41,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.nfl.shield_pbp.live import game_phase, is_final
+from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED
 from sportsdataverse.nfl.shield_pbp.parse import _GAMEBOOK_TO_NFLVERSE, _SCORING_POINTS, _impute_clock
 
 #: ESPN NFL ``type.id`` -> ``(type.text, type.abbreviation)``. Enumerated from every ESPN
@@ -208,6 +209,7 @@ def _abs_yard_line(yard_line: Optional[str], home_abbr: Optional[str]) -> Option
         return None
     side, number = parts
     side = _GAMEBOOK_TO_NFLVERSE.get(side, side)
+    side = _RELOCATED.get(side, side)  # the parsed home_team is the current abbreviation, the text the old one
     try:
         yards = int(number)
     except ValueError:
@@ -850,6 +852,7 @@ def _possession_team_id(
     side = str(play.get("yardLine") or "").rsplit(" ", 1)
     if len(side) == 2:
         want = _GAMEBOOK_TO_NFLVERSE.get(side[0], side[0])
+        want = _RELOCATED.get(want, want)
         if want == abbrs[0]:
             return next((k for k, v in shield_team_ids.items() if v == home_id), None)
         if want == abbrs[1]:

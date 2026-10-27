@@ -16,6 +16,7 @@ import polars as pl
 
 from sportsdataverse.nfl.shield_pbp.description import add_description_features, add_pass_rush, add_qb_dropback
 from sportsdataverse.nfl.shield_pbp.drives import add_drive_detail
+from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED
 from sportsdataverse.nfl.shield_pbp.features import add_game_state
 from sportsdataverse.nfl.shield_pbp.labels import add_labels
 from sportsdataverse.nfl.shield_pbp.live import add_live_columns, current_situation_row, resolve_context
@@ -78,7 +79,16 @@ def build_pbp(
     # fill_null keeps rows whose shield_play_type is null (null != "TIMEOUT" is null
     # in polars and would otherwise be filtered out).
     df = df.filter(pl.col("shield_play_type").fill_null("") != "TIMEOUT")
-    return df.drop("_points_home", "_points_away")
+    return _fold_relocations(df.drop("_points_home", "_points_away"))
+
+
+def _fold_relocations(df: pl.DataFrame) -> pl.DataFrame:
+    """Relocated clubs by their current abbreviation, as nflverse's team columns have them.
+
+    Folded only on the way out: the parser compares clubs with the feed's own historical yard-line text.
+    """
+    cols = [c for c, t in df.schema.items() if t == pl.Utf8 and (c.endswith("_team") or c in ("posteam", "defteam"))]
+    return df.with_columns(pl.col(c).replace(_RELOCATED) for c in cols)
 
 
 def shield_nfl_pbp(

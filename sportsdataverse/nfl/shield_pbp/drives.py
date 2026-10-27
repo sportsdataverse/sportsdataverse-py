@@ -112,8 +112,8 @@ _OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "drive_end_transition": pl.Utf8,
     "drive_game_clock_start": pl.Utf8,
     "drive_game_clock_end": pl.Utf8,
-    "drive_start_yard_line": pl.Int64,
-    "drive_end_yard_line": pl.Int64,
+    "drive_start_yard_line": pl.Utf8,
+    "drive_end_yard_line": pl.Utf8,
     "drive_play_id_started": pl.Int64,
     "drive_play_id_ended": pl.Int64,
     "drive_time_of_possession": pl.Utf8,
@@ -229,6 +229,7 @@ def add_drive_detail(df: pl.DataFrame) -> pl.DataFrame:
         left untouched, so a degraded re-run cannot null out real values.
     """
     if df.height == 0 or not _REQUIRED_DRIVE_COLUMNS <= set(df.columns):
+        df = _take_drive_records(df)
         return df.with_columns(**{c: pl.lit(None, dtype=t) for c, t in _OUTPUT_SCHEMA.items() if c not in df.columns})
 
     df = df.sort(["game_id", "play_seq"])
@@ -342,9 +343,11 @@ def _add_drive_summary(df: pl.DataFrame) -> pl.DataFrame:
         ).cast(pl.Int64),
         _clock_str=pl.when(pl.col("quarter_seconds_remaining").is_not_null())
         .then(
-            (pl.col("quarter_seconds_remaining") // 60).cast(pl.Int64).cast(pl.Utf8)
-            + pl.lit(":")
-            + (pl.col("quarter_seconds_remaining") % 60).cast(pl.Int64).cast(pl.Utf8).str.zfill(2)
+            (
+                (pl.col("quarter_seconds_remaining") // 60).cast(pl.Int64).cast(pl.Utf8)
+                + pl.lit(":")
+                + (pl.col("quarter_seconds_remaining") % 60).cast(pl.Int64).cast(pl.Utf8).str.zfill(2)
+            ).str.zfill(5)  # nflverse's "09:37"
         )
         .otherwise(None),
     )
@@ -371,8 +374,8 @@ def _add_drive_summary(df: pl.DataFrame) -> pl.DataFrame:
         drive_end_transition=pl.col("fixed_drive_result").first(),
         drive_game_clock_start=pl.col("_clock_str").first(),
         drive_game_clock_end=pl.col("_clock_str").last(),
-        drive_start_yard_line=pl.col("yardline_100").first().cast(pl.Int64),
-        drive_end_yard_line=pl.col("yardline_100").last().cast(pl.Int64),
+        drive_start_yard_line=_yard_line_text(pl.col("yardline_100"), pl.col("posteam"), pl.col("defteam")).first(),
+        drive_end_yard_line=_yard_line_text(pl.col("yardline_100"), pl.col("posteam"), pl.col("defteam")).last(),
         drive_play_id_started=pl.col("play_id").min().cast(pl.Int64),
         drive_play_id_ended=pl.col("play_id").max().cast(pl.Int64),
         _start_gsr=pl.col("game_seconds_remaining").first(),
@@ -393,4 +396,23 @@ def _add_drive_summary(df: pl.DataFrame) -> pl.DataFrame:
     ).select([*grp, *[c for c in _OUTPUT_SCHEMA if c not in ("fixed_drive", "fixed_drive_result")]])
 
     df = df.drop("_fd_play", "_clock_str").join(summary, on=grp, how="left")
-    return df
+    return _take_drive_records(df)
+
+
+def _take_drive_records(df: pl.DataFrame) -> pl.DataFrame:
+    """The parser's per-play copy of the provider's own drive record (``_sd_*``, joined on ``driveSequence`` as
+    nflfastR joins its drives) replaces the aggregate; a frame without one keeps the aggregate."""
+    sd = [c for c in df.columns if c.startswith("_sd_")]
+    return df.drop([c[4:] for c in sd if c[4:] in df.columns]).rename({c: c[4:] for c in sd}) if sd else df
+
+
+def _yard_line_text(yardline_100: pl.Expr, posteam: pl.Expr, defteam: pl.Expr) -> pl.Expr:
+    """nflverse's ``"BAL 20"`` from ``yardline_100``: the possession team's own half names it, midfield is ``"50"``."""
+    y = yardline_100.cast(pl.Int64)
+    return (
+        pl.when(y == 50)
+        .then(pl.lit("50"))
+        .when(y > 50)
+        .then(pl.concat_str([posteam, (100 - y).cast(pl.Utf8)], separator=" "))
+        .otherwise(pl.concat_str([defteam, y.cast(pl.Utf8)], separator=" "))
+    )

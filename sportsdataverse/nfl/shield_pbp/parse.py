@@ -17,7 +17,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 import polars as pl
-from sportsdataverse.nfl.shield_pbp.game_id import _nflverse_abbr, _team_abbr, nflverse_game_id
+from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED, _nflverse_abbr, _team_abbr, nflverse_game_id
 
 from sportsdataverse.nfl.shield_pbp.stat_ids import sum_play_stats
 
@@ -415,6 +415,65 @@ _BASE_PLAYERS = [
 _SCORING_POINTS = {"TOUCHDOWN": 6, "PAT": 1, "PAT2": 2, "FIELD_GOAL": 3, "SAFETY": 2}
 
 
+def _reg_weeks(season: Optional[int]) -> int:
+    """Regular-season weeks: 17 through 2020, 18 from 2021 (nflverse numbers playoff weeks after them)."""
+    return 17 if (season is not None and season <= 2020) else 18
+
+
+def _drive_text(yard_line: Optional[str]) -> Optional[str]:
+    """``"SD 20"`` -> ``"LAC 20"``: nflverse's drive yard lines name the side by its current abbreviation."""
+    parts = (yard_line or "").strip().rsplit(" ", 1)
+    if len(parts) != 2:
+        return yard_line.strip() if yard_line and yard_line.strip() else None
+    side = _GAMEBOOK_TO_NFLVERSE.get(parts[0], parts[0])
+    return f"{_RELOCATED.get(side, side)} {parts[1]}"
+
+
+def _drive_transition(description: Optional[str]) -> Optional[str]:
+    """``"Blocked FG, Downs"`` -> ``"BLOCKED_FG,_DOWNS"``: nflverse's (GSIS) code for a Shield drive description."""
+    if not description:
+        return None
+    code = description.upper().replace(" ", "_")
+    return {"END_OF_GAME": "END_GAME", "END_OF_HALF": "END_HALF"}.get(code, code)
+
+
+def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]]) -> Dict[str, Any]:
+    """The ``drive`` number and the drive's own summary from ``driveChart.drives[]``, as nflfastR reads them.
+
+    nflfastR lifts its ``drive_*`` columns from the provider's per-drive object, joined on the play's drive
+    number; the play's ``driveSequence`` is that join key (on 2015 it reproduces nflverse's play count, time of
+    possession, penalty yards and first downs on every play). Prefixed ``_sd_`` until
+    :func:`sportsdataverse.nfl.shield_pbp.drives.add_drive_detail` swaps them in.
+    """
+    d = drive_by_seq.get(seq) or {}
+
+    def flag(v: Any) -> Optional[int]:
+        return None if v is None else int(bool(v))
+
+    def clock(v: Optional[str]) -> Optional[str]:
+        return v.zfill(5) if v else None
+
+    return {
+        "drive": seq if d else None,
+        "_sd_drive_play_count": d.get("plays"),
+        "_sd_drive_time_of_possession": d.get("timeOfPossession"),
+        "_sd_drive_first_downs": d.get("firstDowns"),
+        "_sd_drive_inside20": flag(d.get("inside20")),
+        "_sd_drive_ended_with_score": flag(d.get("totalEndedWithScore")),  # nflverse; endedWithScore misses ~2%
+        "_sd_drive_quarter_start": d.get("startedQuarter"),
+        "_sd_drive_quarter_end": d.get("endedQuarter"),
+        "_sd_drive_yards_penalized": d.get("yardsGainedByPenalty"),
+        "_sd_drive_start_transition": _drive_transition(d.get("startedDescription")),
+        "_sd_drive_end_transition": _drive_transition(d.get("endedDescription")),
+        "_sd_drive_game_clock_start": clock(d.get("startedClock")),
+        "_sd_drive_game_clock_end": clock(d.get("endedClock")),
+        "_sd_drive_start_yard_line": _drive_text(d.get("startedYardLine")),
+        "_sd_drive_end_yard_line": _drive_text(d.get("endedYardLine")),
+        "_sd_drive_play_id_started": d.get("startedPlayId"),
+        "_sd_drive_play_id_ended": d.get("endedPlayId"),
+    }
+
+
 def _resolve_teams_and_game_id(
     game: Dict[str, Any], season: Optional[int], game_id: Optional[str]
 ) -> tuple[Optional[str], Optional[str], Dict[str, str], Optional[str]]:
@@ -434,8 +493,7 @@ def _resolve_teams_and_game_id(
             team_by_id[tid] = abbr
 
     if game_id is None:
-        reg_weeks = 17 if (season is not None and season <= 2020) else 18
-        game_id = nflverse_game_id(game, reg_weeks=reg_weeks) if game.get("homeTeam") else None
+        game_id = nflverse_game_id(game, reg_weeks=_reg_weeks(season)) if game.get("homeTeam") else None
 
     return home_abbr, away_abbr, team_by_id, game_id
 
@@ -456,25 +514,35 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
     season = int(game.get("season")) if game.get("season") is not None else None
     week = game.get("week")
     season_type = game.get("seasonType")
+    if season_type == "POST" and week is not None:
+        week = int(week) + _reg_weeks(season)  # nflverse's week continues the season, as its game_id does
     dc = game.get("driveChart") or {}
     plays = dc.get("plays") or []
 
     home_abbr, away_abbr, team_by_id, game_id = _resolve_teams_and_game_id(game, season, game_id)
 
     ranges = _drive_ranges(dc.get("drives") or [])
+    drive_by_seq = {d.get("sequence"): d for d in dc.get("drives") or [] if d.get("sequence") is not None}
 
     rows: List[Dict[str, Any]] = []
+    last_td_team: Optional[str] = None
     for p in plays:
         if p.get("playDeleted"):
             continue
         seq = p.get("playSequenceNumber")
         pos_team_id = _posteam_for(float(seq) if seq is not None else None, ranges)
         posteam = team_by_id.get(pos_team_id) if pos_team_id else None
+        stat_row = sum_play_stats(p.get("stats") or [])
+        # A try after a defensive or return touchdown falls between the drive ranges; nflverse gives it to
+        # the team that scored, which is what lets nflfastR's fixed_drive cascade see the possession change.
+        if posteam is None and (stat_row.get("extra_point_attempt") == 1 or stat_row.get("two_point_attempt") == 1):
+            posteam = last_td_team
+        if p.get("playScored") and p.get("scoringPlayType") == "TOUCHDOWN":
+            last_td_team = team_by_id.get(p.get("scoringTeamId"))
         defteam = None
         if posteam is not None:
             defteam = away_abbr if posteam == home_abbr else home_abbr
 
-        stat_row = sum_play_stats(p.get("stats") or [])
         # Resolve every teamId-valued stat column to an nflverse abbr. Covers the
         # scalar team cols (td/penalty/timeout/return) plus the FILL-group ``*_team``
         # slots (tackles, fumbles, forced fumbles, recoveries) used by team_stats.
@@ -537,6 +605,7 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
         score_team = team_by_id.get(p.get("scoringTeamId"))
         row["_points_home"] = pts if score_team == home_abbr else 0
         row["_points_away"] = pts if score_team == away_abbr else 0
+        row.update(_drive_record(p.get("driveSequence"), drive_by_seq))
         rows.append(row)
 
     if not rows:
