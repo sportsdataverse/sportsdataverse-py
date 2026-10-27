@@ -230,6 +230,93 @@ def test_caller_kwargs_override_the_download_defaults(monkeypatch: pytest.Monkey
     assert seen["retry_statuses"] == (500,) and seen["timeout"] == 5
 
 
+# Players per team on the unruled PDFs, which carry no table oracle. A line-position oracle (reason fragments
+# owned by the row they are centred on, built apart from the parser) agreed with the parser on every row of all
+# three, so these counts are the PDFs' own; a team swap within a game moves rows between two counts.
+_UNRULED_TEAM_COUNTS = {
+    "2024-01-15_05PM": {
+        "Atlanta Hawks": 5, "Boston Celtics": 4, "Brooklyn Nets": 6, "Chicago Bulls": 9, "Cleveland Cavaliers": 5,
+        "Dallas Mavericks": 6, "Denver Nuggets": 4, "Detroit Pistons": 7, "Golden State Warriors": 4,
+        "Houston Rockets": 4, "Indiana Pacers": 6, "Los Angeles Lakers": 5, "Memphis Grizzlies": 9, "Miami Heat": 9,
+        "New Orleans Pelicans": 9, "New York Knicks": 5, "Oklahoma City Thunder": 1, "Orlando Magic": 5,
+        "Philadelphia 76ers": 8, "San Antonio Spurs": 6, "Toronto Raptors": 6, "Utah Jazz": 5,
+        "Washington Wizards": 5,
+    },
+    "2026-01-15_05_30PM": {
+        "Atlanta Hawks": 8, "Boston Celtics": 2, "Brooklyn Nets": 4, "Charlotte Hornets": 6, "Chicago Bulls": 8,
+        "Cleveland Cavaliers": 6, "Dallas Mavericks": 10, "Detroit Pistons": 9, "Golden State Warriors": 3,
+        "Houston Rockets": 5, "Indiana Pacers": 6, "LA Clippers": 7, "Los Angeles Lakers": 3, "Memphis Grizzlies": 8,
+        "Miami Heat": 10, "Milwaukee Bucks": 4, "New Orleans Pelicans": 4, "New York Knicks": 4,
+        "Oklahoma City Thunder": 4, "Orlando Magic": 3, "Philadelphia 76ers": 6, "Phoenix Suns": 6,
+        "Portland Trail Blazers": 7, "San Antonio Spurs": 4, "Toronto Raptors": 8, "Utah Jazz": 6,
+    },
+    "2026-10-25_05_00PM": {
+        "Boston Celtics": 1, "Brooklyn Nets": 2, "Charlotte Hornets": 3, "Chicago Bulls": 3, "Cleveland Cavaliers": 3,
+        "Dallas Mavericks": 6, "Detroit Pistons": 5, "Golden State Warriors": 6, "Indiana Pacers": 7,
+        "LA Clippers": 5, "Los Angeles Lakers": 3, "Memphis Grizzlies": 3, "Miami Heat": 1,
+        "Minnesota Timberwolves": 1, "New York Knicks": 1, "Oklahoma City Thunder": 2, "Orlando Magic": 5,
+        "Philadelphia 76ers": 6, "Sacramento Kings": 5, "Toronto Raptors": 2, "Utah Jazz": 4,
+        "Washington Wizards": 3,
+    },
+}  # fmt: skip
+
+
+@pytest.mark.parametrize("slot", UNRULED)
+def test_unruled_rows_land_on_the_right_team(slot: str) -> None:
+    """The matchup check cannot see two teams of one game traded; the per-team counts can."""
+    df = ir.parse_nba_injury_report(_pdf(slot)).filter(pl.col("player_name").is_not_null())
+    assert dict(df.group_by("team").len().iter_rows()) == _UNRULED_TEAM_COUNTS[slot]
+
+
+def test_latest_probes_only_slots_up_to_now(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: list[str] = []
+    monkeypatch.setattr(ir, "download", lambda url, **kw: seen.append(url) or _Resp(403, _S3_403))
+    monkeypatch.setattr(ir, "_now_eastern", lambda: dt.datetime(2026, 1, 15, 17, 40))
+    monkeypatch.setattr(ir, "_today_eastern", lambda: dt.date(2026, 1, 15))
+    with pytest.raises(NoDataError):
+        ir.nba_injury_report()
+    assert seen[0].endswith("2026-01-15_05_30PM.pdf") and len(seen) == 71  # 00:00 .. 17:30, quarter-hourly
+    # a UTC caller's date.today() after 20:00 EDT is tomorrow in Eastern: nothing there is published yet
+    seen.clear()
+    with pytest.raises(NoDataError):
+        ir.nba_injury_report(dt.date(2026, 1, 16))
+    assert seen == []
+
+
+def test_a_dead_connection_is_a_failed_fetch(monkeypatch: pytest.MonkeyPatch) -> None:
+    import requests
+
+    def dead(url: str, **kwargs: Any) -> _Resp:
+        raise requests.exceptions.ConnectionError("connection reset")
+
+    monkeypatch.setattr(ir, "download", dead)
+    with pytest.raises(AssetFetchError):
+        ir.nba_injury_report(report_time=dt.datetime(2026, 1, 15, 17, 30))
+
+
+def test_urls_and_titles_ignore_the_time_locale() -> None:
+    """``%p`` reads LC_TIME: under German it is empty in strftime and rejects "PM" in strptime."""
+    import locale
+
+    saved = locale.setlocale(locale.LC_TIME)
+    for name in ("de_DE.UTF-8", "de_DE", "German_Germany.1252", "de-DE"):
+        try:
+            locale.setlocale(locale.LC_TIME, name)
+            break
+        except locale.Error:
+            continue
+    else:
+        pytest.skip("no German locale installed")
+    try:
+        assert ir.nba_injury_report_url(dt.datetime(2026, 1, 15, 17, 30)).endswith("_05_30PM.pdf")
+        assert ir.nba_injury_report_url(dt.datetime(2024, 1, 15, 17)).endswith("_05PM.pdf")
+        assert ir.nba_injury_report_url(dt.datetime(2024, 1, 15, 0)).endswith("_12AM.pdf")
+        df = ir.parse_nba_injury_report(_pdf("2026-01-15_05_30PM"))
+        assert set(df["report_datetime"]) == {dt.datetime(2026, 1, 15, 17, 30)}
+    finally:
+        locale.setlocale(locale.LC_TIME, saved)
+
+
 @skip_if_no_live
 def test_live_archive_slot() -> None:
     df = ir.nba_injury_report(report_time=dt.datetime(2026, 1, 15, 17, 30))

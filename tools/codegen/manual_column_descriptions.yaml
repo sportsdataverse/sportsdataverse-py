@@ -17228,7 +17228,7 @@ mjhl_season_id:
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
 nba_injury_report:
-  report_datetime: US Eastern time the league published this report, read from the PDF title (a pre-2021-10-15 HH slot is the HH:30 snapshot).
+  report_datetime: US Eastern time the league published this report, read from the PDF title (a slot before 2025-12-22 09:00 named HH is the HH:30 snapshot).
   game_date: Date of the game the row's player status applies to.
   game_time: Scheduled tip as printed on the report, e.g. "07:30 (ET)"; the PDF carries no AM/PM.
   matchup: Away@home team abbreviations, e.g. "WAS@SAC".

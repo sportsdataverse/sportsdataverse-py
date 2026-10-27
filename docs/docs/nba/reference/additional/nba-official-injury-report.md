@@ -16,7 +16,7 @@ Fetch and parse an official NBA injury report.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `date` | `date \| None` | `None` | Report date (US Eastern). Defaults to today. With no `report_time`, the LATEST published slot of that date is used (probing backwards through `nba_injury_report_slots`; for today, only slots up to now). |
+| `date` | `date \| None` | `None` | Report date (US Eastern). Defaults to today. With no `report_time`, the LATEST published slot of that date is used (probing backwards through `nba_injury_report_slots`, only slots up to now: a date ahead of today in US Eastern probes none). |
 | `report_time` | `datetime \| None` | `None` | An exact slot (naive US Eastern), e.g. `dt.datetime(2026, 1, 15, 17, 30)`. Overrides `date`. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 | `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
@@ -27,7 +27,7 @@ The parsed report (see `parse_nba_injury_report`).
 
 | col_name | type | description |
 |---|---|---|
-| `report_datetime` | Datetime | US Eastern time the league published this report, read from the PDF title (a pre-2021-10-15 HH slot is the HH:30 snapshot). |
+| `report_datetime` | Datetime | US Eastern time the league published this report, read from the PDF title (a slot before 2025-12-22 09:00 named HH is the HH:30 snapshot). |
 | `game_date` | Date | Date of the game the row's player status applies to. |
 | `game_time` | String | Scheduled tip as printed on the report, e.g. "07:30 (ET)"; the PDF carries no AM/PM. |
 | `matchup` | String | Away@home team abbreviations, e.g. "WAS@SAC". |
@@ -45,7 +45,7 @@ The parsed report (see `parse_nba_injury_report`).
 | Exception | Description |
 |---|---|
 | `NoDataError` | The slot (or every slot of the date) is not published (S3's 403 `AccessDenied`). |
-| `AssetFetchError` | Any other non-200 answer -- including a 404 and a 403 that is not S3's `AccessDenied` (a CDN / WAF block) -- or an HTTP-200 body that is not a readable PDF (a CDN error page, a truncated file). |
+| `AssetFetchError` | Any other non-200 answer -- including a 404 and a 403 that is not S3's `AccessDenied` (a CDN / WAF block) -- an HTTP-200 body that is not a readable PDF (a CDN error page, a truncated file), or a connection that fails after the retries. |
 | `ImportError` | `pdfplumber` is not installed. |
 
 **Example**

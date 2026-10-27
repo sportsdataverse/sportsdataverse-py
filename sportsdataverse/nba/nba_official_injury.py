@@ -11,9 +11,9 @@ URL and slot spec (all times US Eastern), from ``mxufc29/nbainjuries`` (MIT,
 (c) 2024 mxufc29) and re-verified against the archive on 2026-10-26:
 
 * ``https://ak-static.cms.nba.com/referee/injury/Injury-Report_{YYYY-MM-DD}_{SLOT}.pdf``.
-* 2018-12-17 .. 2021-10-14: three reports a day, slots ``01PM`` / ``05PM`` /
-  ``08PM`` (each is the HH:30 snapshot; the PDF title says ``05:30 PM``).
+* 2018-12-17 .. 2021-10-14: three reports a day, slots ``01PM`` / ``05PM`` / ``08PM``.
 * 2021-10-15 .. 2025-12-21: hourly, ``12AM`` .. ``11PM``.
+* Every slot before 2025-12-22 09:00 is the HH:30 snapshot: the ``05PM`` PDF's title says ``05:30 PM``.
 * 2025-12-22 09:00 onward: every 15 minutes, ``05_30PM``.
 * A missing slot answers **403** (S3 AccessDenied), never 404, and the folder
   cannot be listed -- slots are found by probing.
@@ -42,6 +42,7 @@ from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -114,9 +115,18 @@ def nba_injury_report_url(report_time: dt.datetime) -> str:
 
             nba_injury_report_url(dt.datetime(2026, 1, 15, 17, 30))
             # '.../Injury-Report_2026-01-15_05_30PM.pdf'
+
+        See Also:
+            * :func:`nba_injury_report_slots` -- the slots a date allows.
+            * `nbainjuries`_ -- the URL and slot spec this follows (R-free, tabula-based Python).
+
+        .. _nbainjuries: https://github.com/mxufc29/nbainjuries
     """
-    fmt = "%I_%M%p" if report_time >= _QUARTER_HOURLY_FROM else "%I%p"
-    return _BASE.format(date=report_time.date().isoformat(), slot=report_time.strftime(fmt))
+    # %p follows the C library's LC_TIME locale (German gives "" for it), so the meridiem is built here
+    hour = f"{report_time.hour % 12 or 12:02d}"
+    minute = f"_{report_time.minute:02d}" if report_time >= _QUARTER_HOURLY_FROM else ""
+    meridiem = "AM" if report_time.hour < 12 else "PM"
+    return _BASE.format(date=report_time.date().isoformat(), slot=f"{hour}{minute}{meridiem}")
 
 
 def nba_injury_report_slots(date: dt.date) -> list[dt.datetime]:
@@ -138,6 +148,12 @@ def nba_injury_report_slots(date: dt.date) -> list[dt.datetime]:
             from sportsdataverse.nba.nba_official_injury import nba_injury_report_slots
 
             len(nba_injury_report_slots(dt.date(2026, 1, 15)))  # 96
+
+        See Also:
+            * :func:`nba_injury_report_url` -- a slot's archive URL.
+            * `hoopR`_ -- NBA data in R.
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     if date < _FIRST_DATE:
         return []
@@ -180,8 +196,13 @@ def _cells(words: list[dict[str, Any]], cols: list[tuple]) -> dict[str, str]:
 
 
 def _report_time(text: str) -> dt.datetime | None:
-    m = re.search(r"Injury Report:\s*(\d{2}/\d{2}/\d{2})\s+(\d{1,2}:\d{2}\s*[AP]M)", text)
-    return dt.datetime.strptime(f"{m.group(1)} {m.group(2)}", "%m/%d/%y %I:%M %p") if m else None
+    m = re.search(r"Injury Report:\s*(\d{2})/(\d{2})/(\d{2})\s+(\d{1,2}):(\d{2})\s*([AP])M", text)
+    if not m:
+        return None
+    # no strptime %p: it reads the LC_TIME locale and raises on "PM" under a non-English one
+    month, day, year, hour, minute = (int(g) for g in m.groups()[:5])
+    hour = hour % 12 + (12 if m.group(6) == "P" else 0)
+    return dt.datetime(2000 + year, month, day, hour, minute)
 
 
 def _classify(cells: dict[str, str], text: str) -> tuple[bool, dict[str, str]]:
@@ -320,6 +341,7 @@ def parse_nba_injury_report(pdf: bytes | str | Path, *, return_as_pandas: bool =
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_official_injury import parse_nba_injury_report
 
             df = parse_nba_injury_report("Injury-Report_2026-01-15_05_30PM.pdf")
@@ -369,8 +391,8 @@ def nba_injury_report(
     Args:
         date: Report date (US Eastern). Defaults to today. With no
             ``report_time``, the LATEST published slot of that date is used
-            (probing backwards through :func:`nba_injury_report_slots`; for
-            today, only slots up to now).
+            (probing backwards through :func:`nba_injury_report_slots`, only
+            slots up to now: a date ahead of today in US Eastern probes none).
         report_time: An exact slot (naive US Eastern), e.g.
             ``dt.datetime(2026, 1, 15, 17, 30)``. Overrides ``date``.
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
@@ -384,8 +406,9 @@ def nba_injury_report(
         NoDataError: The slot (or every slot of the date) is not published
             (S3's 403 ``AccessDenied``).
         AssetFetchError: Any other non-200 answer -- including a 404 and a 403
-            that is not S3's ``AccessDenied`` (a CDN / WAF block) -- or an HTTP-200
-            body that is not a readable PDF (a CDN error page, a truncated file).
+            that is not S3's ``AccessDenied`` (a CDN / WAF block) -- an HTTP-200
+            body that is not a readable PDF (a CDN error page, a truncated file),
+            or a connection that fails after the retries.
         ImportError: ``pdfplumber`` is not installed.
 
     Example:
@@ -416,15 +439,16 @@ def nba_injury_report(
         slots = [report_time]
     else:
         day = date or _today_eastern()
-        slots = nba_injury_report_slots(day)[::-1]
-        if day == _today_eastern():
-            now = _now_eastern()
-            slots = [s for s in slots if s <= now]
+        # a slot later than now (Eastern) is not published yet: today's tail, or a whole date ahead (a UTC
+        # caller's date.today() after 20:00 EDT is tomorrow here), so neither costs a request
+        now = _now_eastern()
+        slots = [s for s in nba_injury_report_slots(day)[::-1] if s <= now]
     for slot in slots:
         url = nba_injury_report_url(slot)
         # a slot S3 lacks answers 403 AccessDenied: never retried (_RETRY), checked below
         try:
-            resp = download(url, **{"proxy": proxy, "retry_statuses": _RETRY, **kwargs})
+            with _transport_errors(url):  # a dead connection after the retries is a failed fetch
+                resp = download(url, **{"proxy": proxy, "retry_statuses": _RETRY, **kwargs})
         except NoDataError as exc:  # a 404 here means the archive moved, not "no report"
             raise AssetFetchError(f"{url} answered HTTP 404") from exc
         if resp.status_code == 200:
