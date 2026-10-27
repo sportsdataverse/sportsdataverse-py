@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 37 whole-game captures)](#espn-game-summaries-the-37-whole-game-captures)
+  - [ESPN game summaries (the 39 whole-game captures)](#espn-game-summaries-the-39-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -18,7 +18,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 37 whole-game captures)
+## ESPN game summaries (the 39 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -55,6 +55,7 @@ the 2014-2021 end-state corruption they pin.
 | 400791508 | 2015 | 16 | WSH @ PHI | `summary_400791508_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400791567 | 2015 | 7 | PHI @ CAR | `summary_400791567_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
 | 400791590 | 2015 | 1 | NYG @ DAL | `summary_400791590_trimmed.json.gz` | e9c3ca7c48, 2026-09-18 |
+| 400791618 | 2015 | 8 | NYG @ NO | `summary_400791618_trimmed.json.gz` | turnover end spots, 2026-10-26 (live fetch, same keys) |
 | 400874485 | 2016 | 16 | NYG @ PHI | `summary_400874485_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400874512 | 2016 | 2 | BAL @ CLE | `summary_400874512_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 400951676 | 2017 | 2 | SF @ SEA | `summary_400951676_trimmed.json.gz` | d28cc51212, 2026-09-18 |
@@ -72,6 +73,7 @@ the 2014-2021 end-state corruption they pin.
 | 401772636 | 2025 | 10 | ATL @ IND | `summary_401772636_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
 | 401772726 | 2025 | 2 | CLE @ BAL | `summary_401772726_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
 | 401772748 | 2025 | 6 | CLE @ PIT | `summary_401772748_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
+| 401772776 | 2025 | 11 | TB @ BUF | `summary_401772776_trimmed.json.gz` | punt-return fumble teams, 2026-10-26 (live fetch, same keys) |
 | 401872922 | 2026 | 1 | CLE @ JAX | `summary_401872922.json` | 741c871a31, 2026-09-14 |
 
 ## nflverse slices (`nflverse/`)

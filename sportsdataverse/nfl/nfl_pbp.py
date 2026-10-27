@@ -795,6 +795,32 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     ).drop("_nxt", "_turnover")
 
 
+def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
+    """A fumble or interception ends where the next snap of its game and half starts.
+
+    ``_end_state_from_next_play`` takes the end team, down and distance from the next snap but keeps
+    ESPN's end yard line, which holds on plain snaps and not on turnovers: an interception touchback
+    ends at the 99 where the next snap is at the 20, and a return is often counted from the other goal
+    or left at the spot of the catch. Of 71 turnover plays more than 0.5 EPA from nflfastR on 154
+    games (2009-2026), 45 had the right end team and a yard line the next snap contradicts. nflfastR
+    reads the next play's state, so this does too, on the same terms: no score, no kick next, and the
+    clock stoppages in between skipped. ``start.yardsToEndzone`` is final here, so it is the spot read.
+    """
+    stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
+    score = pl.col("scoringPlay").fill_null(False) | pl.col("type.text").is_in(scores_vec).fill_null(False)
+    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=pl.col("type.text").is_in(kickoff_vec).fill_null(False))
+    turnover = pl.col("text").str.contains(r"(?i)fumble|intercept|muff").fill_null(False)
+    plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
+    n = pl.col("_nxt").struct
+    use = turnover & ~stop & ~score & n.field("y2e").is_between(1, 99) & (n.field("kick") == False)  # noqa: E712
+    return plays.with_columns(
+        pl.when(use.fill_null(False))
+        .then(n.field("y2e"))
+        .otherwise(pl.col("end.yardsToEndzone"))
+        .alias("end.yardsToEndzone"),
+    ).drop("_nxt")
+
+
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
 # "fg" : float(p[2]),
@@ -1580,7 +1606,7 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool")
+        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool").pipe(_turnover_end_spot_from_next_snap)
         pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:

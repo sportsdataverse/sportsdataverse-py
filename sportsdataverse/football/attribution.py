@@ -465,19 +465,40 @@ def add_attribution_cols(
     # punt/kickoff return fumble to a "Fumble Recovery (...)" type and DROPS the
     # punt/kickoff_play flags (so sp becomes False), so a text fallback is required to
     # recover the special-teams nature and attribute the fumble to the returning team.
+    # NFL text never says "return": "J.Gillan punts 46 yards to DAL 16 ... K.Turpin to DAL 16 for no gain
+    # (A.Green). FUMBLES (A.Green)" (401671779), "B.Mann kicks 65 yards from NYJ 35 to ...". A completed
+    # punt or kickoff in the text is the kick itself, so whoever fumbles after it is the return team.
     play_df = play_df.with_columns(
         _is_kick_return=pl.when(
             (pl.col("kickoff_play") == True)
-            | (pl.col("text").str.contains(r"(?i)kickoff") & pl.col("text").str.contains(r"(?i)return|muff")),
+            | (pl.col("text").str.contains(r"(?i)kickoff") & pl.col("text").str.contains(r"(?i)return|muff"))
+            | pl.col("text").str.contains(r"(?i)\bkicks (?:onside )?\d+ yards? from\b"),
         )
         .then(True)
         .otherwise(False),
         _is_punt_return=pl.when(
             (pl.col("punt") == True)
-            | (pl.col("text").str.contains(r"(?i)punt") & pl.col("text").str.contains(r"(?i)return|muff|fair catch")),
+            | (pl.col("text").str.contains(r"(?i)punt") & pl.col("text").str.contains(r"(?i)return|muff|fair catch"))
+            | pl.col("text").str.contains(r"(?i)\bpunts -?\d+ yards?\b"),
         )
         .then(True)
         .otherwise(False),
+    )
+    # The flags above set kicking_team / return_team; a reclassified return keeps pos_team as the
+    # kicking side (punt) or the receiving side (kickoff), exactly as the fumbling-team rule reads it.
+    play_df = play_df.with_columns(
+        kicking_team=pl.when(pl.col("kicking_team").is_not_null())
+        .then(pl.col("kicking_team"))
+        .when(pl.col("_is_kick_return") == True)
+        .then(pl.col("def_pos_team"))
+        .when(pl.col("_is_punt_return") == True)
+        .then(pl.col("pos_team")),
+        return_team=pl.when(pl.col("return_team").is_not_null())
+        .then(pl.col("return_team"))
+        .when(pl.col("_is_kick_return") == True)
+        .then(pl.col("pos_team"))
+        .when(pl.col("_is_punt_return") == True)
+        .then(pl.col("def_pos_team")),
     )
 
     # fumbling team (the team that HAD the ball when the fumble/muff occurred):
