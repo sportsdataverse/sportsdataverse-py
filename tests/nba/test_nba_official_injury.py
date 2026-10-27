@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import datetime as dt
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 import polars as pl
 import pytest
@@ -40,7 +40,7 @@ def _ws(s: Any) -> str:
     return " ".join((s or "").split())
 
 
-def _table_oracle(path: Path) -> List[tuple]:
+def _table_oracle(path: Path) -> list[tuple]:
     """(matchup, team, player, status, reason) from the ruled grid's own cells."""
     with pdfplumber.open(path) as pdf:
         table = [r for p in pdf.pages for r in (p.extract_table() or [])]
@@ -164,7 +164,7 @@ class _Resp:
 
 def test_latest_slot_probes_backwards_past_403s(monkeypatch: pytest.MonkeyPatch) -> None:
     body = _pdf("2024-01-15_05PM").read_bytes()
-    seen: List[str] = []
+    seen: list[str] = []
 
     def fake(url: str, **kwargs: Any) -> _Resp:
         seen.append(url)
@@ -196,6 +196,38 @@ def test_missing_and_failing_slots_raise(monkeypatch: pytest.MonkeyPatch) -> Non
     monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(200, b"<html>Access Denied</html>"))
     with pytest.raises(AssetFetchError, match="without a PDF body"):
         ir.nba_injury_report(report_time=dt.datetime(2024, 1, 15, 17))
+
+
+@pytest.mark.parametrize("payload", [b"", b"<html>not a pdf</html>", b"%PDF-1.4 truncated"])
+def test_parser_never_raises_on_an_empty_or_malformed_payload(payload: bytes) -> None:
+    df = ir.parse_nba_injury_report(payload)
+    assert df.height == 0 and df.schema == pl.Schema(ir._SCHEMA)
+
+
+def test_fetch_failures_are_never_an_empty_report(monkeypatch: pytest.MonkeyPatch) -> None:
+    when = dt.datetime(2024, 1, 15, 17)
+
+    def not_found(url: str, **kwargs: Any) -> _Resp:
+        raise NoDataError(url)  # what dl_utils.download does on a 404
+
+    monkeypatch.setattr(ir, "download", not_found)
+    with pytest.raises(AssetFetchError, match="HTTP 404"):
+        ir.nba_injury_report(report_time=when)
+    monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(200, b"%PDF-1.4 truncated"))
+    with pytest.raises(AssetFetchError, match="unreadable PDF"):
+        ir.nba_injury_report(report_time=when)
+
+
+def test_caller_kwargs_override_the_download_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: dict = {}
+
+    def fake(url: str, **kwargs: Any) -> _Resp:
+        seen.update(kwargs)
+        return _Resp(200, _pdf("2024-01-15_05PM").read_bytes())
+
+    monkeypatch.setattr(ir, "download", fake)
+    ir.nba_injury_report(report_time=dt.datetime(2024, 1, 15, 17), retry_statuses=(500,), timeout=5)
+    assert seen["retry_statuses"] == (500,) and seen["timeout"] == 5
 
 
 @skip_if_no_live

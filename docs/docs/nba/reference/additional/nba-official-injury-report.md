@@ -8,7 +8,7 @@ description: "NBA — additional Python functions — NBA Official Injury Report
 
 ### nba_injury_report {#nba_injury_report}
 
-`nba_injury_report(date: 'Optional[dt.date]' = None, report_time: 'Optional[dt.datetime]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
+`nba_injury_report(date: 'dt.date | None' = None, report_time: 'dt.datetime | None' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 Fetch and parse an official NBA injury report.
 
@@ -16,8 +16,8 @@ Fetch and parse an official NBA injury report.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `date` | `Optional[date]` | `None` | Report date (US Eastern). Defaults to today. With no `report_time`, the LATEST published slot of that date is used (probing backwards through `nba_injury_report_slots`; for today, only slots up to now). |
-| `report_time` | `Optional[datetime]` | `None` | An exact slot (naive US Eastern), e.g. `dt.datetime(2026, 1, 15, 17, 30)`. Overrides `date`. |
+| `date` | `date \| None` | `None` | Report date (US Eastern). Defaults to today. With no `report_time`, the LATEST published slot of that date is used (probing backwards through `nba_injury_report_slots`; for today, only slots up to now). |
+| `report_time` | `datetime \| None` | `None` | An exact slot (naive US Eastern), e.g. `dt.datetime(2026, 1, 15, 17, 30)`. Overrides `date`. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 | `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
 
@@ -45,7 +45,7 @@ The parsed report (see `parse_nba_injury_report`).
 | Exception | Description |
 |---|---|
 | `NoDataError` | The slot (or every slot of the date) is not published (S3's 403 `AccessDenied`). |
-| `AssetFetchError` | Any other non-200 answer -- including a 403 that is not S3's `AccessDenied` (a CDN / WAF block) -- or an HTTP-200 body that is not a PDF (e.g. a CDN error page). |
+| `AssetFetchError` | Any other non-200 answer -- including a 404 and a 403 that is not S3's `AccessDenied` (a CDN / WAF block) -- or an HTTP-200 body that is not a readable PDF (a CDN error page, a truncated file). |
 | `ImportError` | `pdfplumber` is not installed. |
 
 **Example**
@@ -68,7 +68,7 @@ df_pd = nba_injury_report(dt.date(2024, 1, 15), return_as_pandas=True)
 
 ### nba_injury_report_slots {#nba_injury_report_slots}
 
-`nba_injury_report_slots(date: 'dt.date') -> 'List[dt.datetime]'`
+`nba_injury_report_slots(date: 'dt.date') -> 'list[dt.datetime]'`
 
 Every slot the league's schedule allows on `date`, earliest first.
 

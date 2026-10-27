@@ -38,7 +38,7 @@ import datetime as dt
 import io
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -62,6 +62,8 @@ _QUARTER_HOURLY_FROM = dt.datetime(2025, 12, 22, 9, 0)
 _NYS = "NOT YET SUBMITTED"
 # the only 403 that means "slot not published"; any other 403 is a block, not an answer
 _S3_MISSING = b"<Code>AccessDenied</Code>"
+# 403 is the missing-slot answer, so it is never retried
+_RETRY = (408, 429, 500, 502, 503, 504)
 # header label -> output column; a header cell starts at one of these words
 _COLUMNS = {
     "Game Date": "game_date",
@@ -117,7 +119,7 @@ def nba_injury_report_url(report_time: dt.datetime) -> str:
     return _BASE.format(date=report_time.date().isoformat(), slot=report_time.strftime(fmt))
 
 
-def nba_injury_report_slots(date: dt.date) -> List[dt.datetime]:
+def nba_injury_report_slots(date: dt.date) -> list[dt.datetime]:
     """Every slot the league's schedule allows on ``date``, earliest first.
 
     Args:
@@ -147,9 +149,9 @@ def nba_injury_report_slots(date: dt.date) -> List[dt.datetime]:
     return [t for t in hourly if t < _QUARTER_HOURLY_FROM] + [t for t in quarters if t >= _QUARTER_HOURLY_FROM]
 
 
-def _lines(words: List[Dict[str, Any]], tol: float = 2.0) -> List[List[Dict[str, Any]]]:
-    out: List[List[Dict[str, Any]]] = []
-    tops: List[float] = []
+def _lines(words: list[dict[str, Any]], tol: float = 2.0) -> list[list[dict[str, Any]]]:
+    out: list[list[dict[str, Any]]] = []
+    tops: list[float] = []
     for w in sorted(words, key=lambda w: (w["top"], w["x0"])):
         if out and abs(tops[-1] - w["top"]) <= tol:
             out[-1].append(w)
@@ -159,8 +161,8 @@ def _lines(words: List[Dict[str, Any]], tol: float = 2.0) -> List[List[Dict[str,
     return out
 
 
-def _header(words: List[Dict[str, Any]]) -> List[tuple]:
-    cols: List[list] = []
+def _header(words: list[dict[str, Any]]) -> list[tuple]:
+    cols: list[list] = []
     for w in sorted(words, key=lambda w: w["x0"]):
         if w["text"] in _LABEL_STARTS or not cols:
             cols.append([w["text"], w["x0"]])
@@ -169,87 +171,99 @@ def _header(words: List[Dict[str, Any]]) -> List[tuple]:
     return [(_COLUMNS[name], x0 - 3) for name, x0 in cols if name in _COLUMNS]
 
 
-def _cells(words: List[Dict[str, Any]], cols: List[tuple]) -> Dict[str, str]:
-    cells: Dict[str, List[str]] = {}
+def _cells(words: list[dict[str, Any]], cols: list[tuple]) -> dict[str, str]:
+    cells: dict[str, list[str]] = {}
     for w in sorted(words, key=lambda w: w["x0"]):
         name = [c for c, x in cols if w["x0"] >= x]
         cells.setdefault(name[-1] if name else cols[0][0], []).append(w["text"])
     return {k: " ".join(v) for k, v in cells.items()}
 
 
-def _report_time(text: str) -> Optional[dt.datetime]:
+def _report_time(text: str) -> dt.datetime | None:
     m = re.search(r"Injury Report:\s*(\d{2}/\d{2}/\d{2})\s+(\d{1,2}:\d{2}\s*[AP]M)", text)
     return dt.datetime.strptime(f"{m.group(1)} {m.group(2)}", "%m/%d/%y %I:%M %p") if m else None
 
 
+def _classify(cells: dict[str, str], text: str) -> tuple[bool, dict[str, str]]:
+    """``(is_row, cells)``: a row carries a player, a status or NOT YET SUBMITTED."""
+    if _NYS in text:
+        cells = {k: v.replace(_NYS, "").strip() for k, v in cells.items()}
+        cells = {k: v for k, v in cells.items() if v}
+        cells["reason"] = _NYS
+    return (cells.get("reason") == _NYS or "player_name" in cells or "current_status" in cells), cells
+
+
+def _attach_labels(anchors: list[dict[str, Any]], frags: list[tuple]) -> None:
+    """A Team / Matchup / Game Time fragment belongs to the NEAREST row: a wrap of
+    that row's label when it has one, else the label itself (2018-20 PDFs print a
+    group's label ~4pt above its first player line)."""
+    for top, cells in frags:
+        for c in _CARRY:
+            if c in cells and anchors:
+                owner = min(anchors, key=lambda a: abs(a["top"] - top))
+                text = cells.pop(c)
+                have = owner["cells"].get(c)
+                owner["cells"][c] = text if not have else (f"{have} {text}" if top > owner["top"] else f"{text} {have}")
+
+
+def _claim_adjacent(seq: list[tuple]) -> None:
+    """A reason-less row claims the unowned fragment just above and just below it."""
+    for i, (_, kind, a) in enumerate(seq):
+        if kind == 0 and not a["cells"].get("reason"):
+            for j in (i - 1, i + 1):
+                if 0 <= j < len(seq) and seq[j][1] == 1 and seq[j][2]["owner"] is None:
+                    seq[j][2]["owner"] = a
+
+
+def _attach_reasons(anchors: list[dict[str, Any]], frags: list[tuple], rows: list[dict[str, Any]]) -> None:
+    """Reason cells are vertically centred: a reason-less row owns the fragment just
+    above and just below it; a fragment before a page's first row continues the
+    previous page's last row; leftovers go to the nearest row."""
+    seq = sorted(
+        [(a["top"], 0, a) for a in anchors]
+        + [(t, 1, {"top": t, "text": c["reason"], "owner": None}) for t, c in frags if "reason" in c],
+        key=lambda x: (x[0], x[1]),
+    )
+    _claim_adjacent(seq)
+    for i, (top, kind, f) in enumerate(seq):
+        if kind == 1 and f["owner"] is None:
+            if not any(k == 0 for _, k, _ in seq[:i]) and rows:
+                f["owner"], f["top"] = rows[-1], float("inf")
+            elif anchors:
+                f["owner"] = min(anchors, key=lambda a: abs(a["top"] - top))
+    for _, kind, f in seq:
+        if kind == 1 and f["owner"] is not None:
+            f["owner"]["frags"].append((f["top"], f["text"]))
+
+
 def _parse(pdf: Any) -> tuple:
-    rows: List[Dict[str, Any]] = []
-    cols: List[tuple] = []
+    rows: list[dict[str, Any]] = []
+    cols: list[tuple] = []
     report_time = None
     for page in pdf.pages:
-        anchors: List[Dict[str, Any]] = []
-        frags: List[tuple] = []
+        anchors: list[dict[str, Any]] = []
+        frags: list[tuple] = []
         for words in _lines(page.extract_words(x_tolerance=1.5)):
-            top = words[0]["top"]
             text = " ".join(w["text"] for w in words)
             if text.startswith("Injury Report:"):
                 report_time = report_time or _report_time(text)
-                continue
-            if re.fullmatch(r"Page \d+ of \d+", text):
-                continue
-            if "Matchup" in text and "Reason" in text:
+            elif "Matchup" in text and "Reason" in text:
                 cols = _header(words)  # repeated on every page
-                continue
-            if not cols:
-                continue
-            cells = _cells(words, cols)
-            if _NYS in text:
-                cells = {k: v.replace(_NYS, "").strip() for k, v in cells.items()}
-                cells = {k: v for k, v in cells.items() if v}
-                cells["reason"] = _NYS
-            if cells.get("reason") == _NYS or "player_name" in cells or "current_status" in cells:
-                anchors.append({"top": top, "cells": cells, "frags": []})
-            else:
-                frags.append((top, cells))
-        # a Team / Matchup / Game Time fragment belongs to the NEAREST row: a wrap of
-        # that row's label when it has one, else the label itself (2018-20 PDFs print
-        # a group's label ~4pt above its first player line)
-        for top, cells in frags:
-            for c in _CARRY:
-                if c in cells and anchors:
-                    owner = min(anchors, key=lambda a: abs(a["top"] - top))
-                    text = cells.pop(c)
-                    have = owner["cells"].get(c)
-                    owner["cells"][c] = (
-                        text if not have else (f"{have} {text}" if top > owner["top"] else f"{text} {have}")
-                    )
-        seq = sorted(
-            [(a["top"], 0, a) for a in anchors]
-            + [(t, 1, {"top": t, "text": c["reason"], "owner": None}) for t, c in frags if "reason" in c],
-            key=lambda x: (x[0], x[1]),
-        )
-        # a reason-less row owns the fragment just above and just below it
-        for i, (_, kind, a) in enumerate(seq):
-            if kind == 0 and not a["cells"].get("reason"):
-                for j in (i - 1, i + 1):
-                    if 0 <= j < len(seq) and seq[j][1] == 1 and seq[j][2]["owner"] is None:
-                        seq[j][2]["owner"] = a
-        for i, (top, kind, f) in enumerate(seq):
-            if kind == 1 and f["owner"] is None:
-                if not any(k == 0 for _, k, _ in seq[:i]) and rows:
-                    f["owner"], f["top"] = rows[-1], float("inf")  # continues the previous page
-                elif anchors:
-                    f["owner"] = min(anchors, key=lambda a: abs(a["top"] - top))
-        for _, kind, f in seq:
-            if kind == 1 and f["owner"] is not None:
-                f["owner"]["frags"].append((f["top"], f["text"]))
+            elif cols and not re.fullmatch(r"Page \d+ of \d+", text):
+                is_row, cells = _classify(_cells(words, cols), text)
+                if is_row:
+                    anchors.append({"top": words[0]["top"], "cells": cells, "frags": []})
+                else:
+                    frags.append((words[0]["top"], cells))
+        _attach_labels(anchors, frags)
+        _attach_reasons(anchors, frags, rows)
         rows.extend(anchors)
     return rows, report_time
 
 
-def _finish(rows: List[Dict[str, Any]], report_time: Optional[dt.datetime]) -> pl.DataFrame:
-    out: List[Dict[str, Any]] = []
-    last: Dict[str, str] = {}
+def _finish(rows: list[dict[str, Any]], report_time: dt.datetime | None) -> pl.DataFrame:
+    out: list[dict[str, Any]] = []
+    last: dict[str, str] = {}
     for r in rows:
         c = r["cells"]
         if "matchup" in c and "team" not in c:
@@ -281,9 +295,7 @@ def _out(df: pl.DataFrame, return_as_pandas: bool) -> pl.DataFrame | pd.DataFram
     return df.to_pandas() if return_as_pandas else df
 
 
-def parse_nba_injury_report(
-    pdf: Union[bytes, str, Path], *, return_as_pandas: bool = False
-) -> pl.DataFrame | pd.DataFrame:
+def parse_nba_injury_report(pdf: bytes | str | Path, *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Parse one official NBA injury report PDF into rows.
 
     Args:
@@ -299,7 +311,8 @@ def parse_nba_injury_report(
         ``away_team_abbr``, ``home_team_abbr``, ``team`` (full name),
         ``player_name`` (``"Last, First"``; no player id), ``current_status``,
         ``reason``, and the 2018-19 era's ``category`` / ``previous_status``
-        (null afterwards). A report with no rows gives a zero-row frame.
+        (null afterwards). A report with no rows, an empty payload or a
+        malformed PDF gives a zero-row frame with this schema (never raises).
 
     Raises:
         ImportError: ``pdfplumber`` is not installed.
@@ -319,18 +332,33 @@ def parse_nba_injury_report(
         .. _Parser guide: https://py.sportsdataverse.org/docs/parsers/#parse_nba_injury_report
     """
     try:
+        return _out(_parse_pdf(pdf), return_as_pandas)
+    except _pdf_errors():
+        return _out(pl.DataFrame(schema=_SCHEMA), return_as_pandas)  # empty / malformed payload
+
+
+def _pdf_errors() -> tuple:
+    try:
+        from pdfplumber.utils.exceptions import MalformedPDFException, PdfminerException
+    except ImportError:  # pragma: no cover -- exercised only without the extra
+        return ()
+    return (MalformedPDFException, PdfminerException)
+
+
+def _parse_pdf(pdf: bytes | str | Path) -> pl.DataFrame:
+    try:
         import pdfplumber
     except ImportError as exc:  # pragma: no cover -- exercised only without the extra
         raise ImportError("parse_nba_injury_report needs pdfplumber: pip install sportsdataverse[pdf]") from exc
     source = io.BytesIO(pdf) if isinstance(pdf, bytes) else pdf
     with pdfplumber.open(source) as doc:
         rows, report_time = _parse(doc)
-    return _out(_finish(rows, report_time), return_as_pandas)
+    return _finish(rows, report_time)
 
 
 def nba_injury_report(
-    date: Optional[dt.date] = None,
-    report_time: Optional[dt.datetime] = None,
+    date: dt.date | None = None,
+    report_time: dt.datetime | None = None,
     *,
     return_as_pandas: bool = False,
     proxy: Any = None,
@@ -355,9 +383,9 @@ def nba_injury_report(
     Raises:
         NoDataError: The slot (or every slot of the date) is not published
             (S3's 403 ``AccessDenied``).
-        AssetFetchError: Any other non-200 answer -- including a 403 that is not
-            S3's ``AccessDenied`` (a CDN / WAF block) -- or an HTTP-200 body that
-            is not a PDF (e.g. a CDN error page).
+        AssetFetchError: Any other non-200 answer -- including a 404 and a 403
+            that is not S3's ``AccessDenied`` (a CDN / WAF block) -- or an HTTP-200
+            body that is not a readable PDF (a CDN error page, a truncated file).
         ImportError: ``pdfplumber`` is not installed.
 
     Example:
@@ -394,12 +422,18 @@ def nba_injury_report(
             slots = [s for s in slots if s <= now]
     for slot in slots:
         url = nba_injury_report_url(slot)
-        # 403 = slot not published (S3 AccessDenied); never retry it
-        resp = download(url, proxy=proxy, retry_statuses=(408, 429, 500, 502, 503, 504), **kwargs)
+        # a slot S3 lacks answers 403 AccessDenied: never retried (_RETRY), checked below
+        try:
+            resp = download(url, **{"proxy": proxy, "retry_statuses": _RETRY, **kwargs})
+        except NoDataError as exc:  # a 404 here means the archive moved, not "no report"
+            raise AssetFetchError(f"{url} answered HTTP 404") from exc
         if resp.status_code == 200:
             if not resp.content.startswith(b"%PDF"):
                 raise AssetFetchError(f"{url} answered HTTP 200 without a PDF body")
-            return parse_nba_injury_report(resp.content, return_as_pandas=return_as_pandas)
+            try:  # a truncated or corrupt PDF is a failed fetch, never an empty report
+                return _out(_parse_pdf(resp.content), return_as_pandas)
+            except _pdf_errors() as exc:
+                raise AssetFetchError(f"{url} answered HTTP 200 with an unreadable PDF") from exc
         if resp.status_code != 403 or _S3_MISSING not in (resp.content or b""):
             raise AssetFetchError(f"{url} answered HTTP {resp.status_code}")
     raise NoDataError(f"no NBA injury report published for {report_time or date or 'today'}")
