@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 37 whole-game captures)](#espn-game-summaries-the-37-whole-game-captures)
+  - [ESPN game summaries (the 42 whole-game captures)](#espn-game-summaries-the-42-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -18,7 +18,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 37 whole-game captures)
+## ESPN game summaries (the 42 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -46,15 +46,19 @@ the 2014-2021 end-state corruption they pin.
 | 261022011 | 2006 | 7 | WSH @ IND | `summary_261022011_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 261126002 | 2006 | 12 | JAX @ BUF | `summary_261126002_trimmed.json.gz` | d92519bcc3, 2026-09-26 |
 | 271209010 | 2007 | 14 | SD @ TEN | `summary_271209010_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
+| 281123030 | 2008 | 12 | MIN @ JAX | `summary_281123030_trimmed.json.gz` | turnover end spots, 2026-10-26 (live fetch, same keys) |
 | 290927014 | 2009 | 3 | GB @ STL | `summary_290927014_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 291018018 | 2009 | 6 | NYG @ NO | `summary_291018018_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 291115014 | 2009 | 10 | NO @ STL | `summary_291115014_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 301003002 | 2010 | 4 | NYJ @ BUF | `summary_301003002_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 331103020 | 2013 | 9 | NO @ NYJ | `summary_331103020_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
+| 331124022 | 2013 | 12 | IND @ ARI | `summary_331124022_trimmed.json.gz` | turnover end spots, 2026-10-26 (live fetch, same keys) |
 | 400554340 | 2014 | 11 | MIN @ CHI | `summary_400554340_trimmed.json.gz` | task 2.18, 2026-10-11 |
+| 400554411 | 2014 | 17 | DET @ GB | `summary_400554411_trimmed.json.gz` | untyped kickoff teams, 2026-10-26 (live fetch, same keys) |
 | 400791508 | 2015 | 16 | WSH @ PHI | `summary_400791508_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400791567 | 2015 | 7 | PHI @ CAR | `summary_400791567_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
 | 400791590 | 2015 | 1 | NYG @ DAL | `summary_400791590_trimmed.json.gz` | e9c3ca7c48, 2026-09-18 |
+| 400791618 | 2015 | 8 | NYG @ NO | `summary_400791618_trimmed.json.gz` | turnover end spots, 2026-10-26 (live fetch, same keys) |
 | 400874485 | 2016 | 16 | NYG @ PHI | `summary_400874485_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400874512 | 2016 | 2 | BAL @ CLE | `summary_400874512_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 400951676 | 2017 | 2 | SF @ SEA | `summary_400951676_trimmed.json.gz` | d28cc51212, 2026-09-18 |
@@ -72,6 +76,7 @@ the 2014-2021 end-state corruption they pin.
 | 401772636 | 2025 | 10 | ATL @ IND | `summary_401772636_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
 | 401772726 | 2025 | 2 | CLE @ BAL | `summary_401772726_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
 | 401772748 | 2025 | 6 | CLE @ PIT | `summary_401772748_trimmed.json.gz` | 9dc97e9872, 2026-09-18 |
+| 401772776 | 2025 | 11 | TB @ BUF | `summary_401772776_trimmed.json.gz` | punt-return fumble teams, 2026-10-26 (live fetch, same keys) |
 | 401872922 | 2026 | 1 | CLE @ JAX | `summary_401872922.json` | 741c871a31, 2026-09-14 |
 
 ## nflverse slices (`nflverse/`)

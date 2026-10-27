@@ -2224,6 +2224,20 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     kicker_recovers = (
         (pl.col("_kicker_recovers") == True).fill_null(False) if "_kicker_recovers" in df.columns else pl.lit(False)
     )
+    # EP_end is scored for the team that ends with the ball, so a turnover type flips it only when that
+    # team is not the one that started (the guard pos_score_diff_end already has): a punt the kicking
+    # team recovers is typed "Fumble Recovery (Opponent)" (401772890/4133, 401772776/2481), and an
+    # interception wiped out by a penalty keeps its type while the offense keeps the ball (401547604/3447).
+    # NFLPlayProcess takes the end team from the next play, so where that play is out of order
+    # (``_next_in_order`` False: 281123030/4024, an interception followed by id by the passer's own earlier
+    # snap) the end team says nothing and the type decides, as before.
+    possession_changed = (
+        (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).fill_null(True)
+        if {"start.pos_team.id", "end.pos_team.id"} <= set(df.columns)
+        else pl.lit(True)
+    )
+    if "_next_in_order" in df.columns:
+        possession_changed = possession_changed | (pl.col("_next_in_order") == False).fill_null(True)  # noqa: E712
     # The scoring overlays below key on ESPN's type.text. Two kinds of row are typed wrong for that:
     # a kicking-team recovery returned for a touchdown is typed "Kickoff Return Touchdown" (an
     # offense_score_vec type) but scores for the kicker, so it takes the defence-TD values (R831-6,
@@ -2354,9 +2368,9 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(0)
             # Flips for Turnovers that aren't kickoffs
             .when(
-                ((pl.col("type.text").is_in(end_change_vec)).or_(pl.col("downs_turnover") == True)).and_(
-                    pl.col("type.text").is_in(kickoff_vec) == False,
-                ),
+                ((pl.col("type.text").is_in(end_change_vec)).or_(pl.col("downs_turnover") == True))
+                .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+                .and_(possession_changed),
             )
             .then(pl.col("EP_end") * -1)
             # Flips for Turnovers that are kickoffs

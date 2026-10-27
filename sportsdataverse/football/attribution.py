@@ -465,6 +465,10 @@ def add_attribution_cols(
     # punt/kickoff return fumble to a "Fumble Recovery (...)" type and DROPS the
     # punt/kickoff_play flags (so sp becomes False), so a text fallback is required to
     # recover the special-teams nature and attribute the fumble to the returning team.
+    # NFL punt text never says "return": "J.Gillan punts 46 yards to DAL 16 ... K.Turpin to DAL 16 for no
+    # gain (A.Green). FUMBLES (A.Green)" (401671779). A completed punt in the text is the kick itself, so
+    # whoever fumbles after it is the receiving team.
+    nfl_punt = pl.col("text").str.contains(r"(?i)\bpunts -?\d+ yards?\b").fill_null(False)
     play_df = play_df.with_columns(
         _is_kick_return=pl.when(
             (pl.col("kickoff_play") == True)
@@ -474,10 +478,20 @@ def add_attribution_cols(
         .otherwise(False),
         _is_punt_return=pl.when(
             (pl.col("punt") == True)
-            | (pl.col("text").str.contains(r"(?i)punt") & pl.col("text").str.contains(r"(?i)return|muff|fair catch")),
+            | (pl.col("text").str.contains(r"(?i)punt") & pl.col("text").str.contains(r"(?i)return|muff|fair catch"))
+            | nfl_punt,
         )
         .then(True)
         .otherwise(False),
+    )
+    # A reclassified NFL punt keeps the punter's team as pos_team (ESPN's start team; 141 of 156
+    # "Muffed Punt Recovery (Opponent)" rows, 2009-25), so its kick and return teams fill as a flagged
+    # punt's do. Kickoffs are left alone: an untyped kickoff's pos_team is the kicker (400554411/3835) while
+    # a flagged one's is the receiver, so the same fill would swap them.
+    st_unset = pl.col("kicking_team").is_null() & (pl.col("kickoff_play") == False)  # noqa: E712
+    play_df = play_df.with_columns(
+        kicking_team=pl.when(st_unset & nfl_punt).then(pl.col("pos_team")).otherwise(pl.col("kicking_team")),
+        return_team=pl.when(st_unset & nfl_punt).then(pl.col("def_pos_team")).otherwise(pl.col("return_team")),
     )
 
     # fumbling team (the team that HAD the ball when the fumble/muff occurred):
