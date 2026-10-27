@@ -14,6 +14,10 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
   passer's own earlier snap, filed out of order.
 * ``summary_400554411_trimmed.json.gz`` -- DET @ GB, 2014 week 17. A free kick from the DET 20 that GB muffs and
   DET recovers, typed "Fumble Recovery (Opponent)", whose pos_team is the kicker.
+* ``summary_401128098_trimmed.json.gz`` -- MIN @ GB, 2019 week 2. A 61-yard catch to the GB 3 that drew a flag,
+  which ESPN ends 97 yards from the goal.
+* ``summary_401772890_trimmed.json.gz`` -- PHI @ DAL, 2025 week 12. A sack whose next snap's start ESPN counts from
+  the wrong goal, so its own end spot must stand.
 """
 
 from __future__ import annotations
@@ -93,6 +97,22 @@ def test_an_untyped_kickoff_gets_no_kick_teams_from_pos_team():
     r = _row(_plays(400554411), 4005544113835)
     assert r["pos_team"] == 8
     assert r["kicking_team"] != 9 and r["kick_return_team"] != 8
+
+
+def test_a_plain_play_takes_the_next_snap_when_its_yardage_agrees():
+    # 61 yards from the GB 64 is the GB 3, where MIN snaps next; ESPN ended it at the 97 (nflfastR: EPA +4.41,
+    # ESPN's spot gave -1.73).
+    r = _row(_plays(401128098), 4011280981852)
+    assert r["end.yardsToEndzone"] == 3
+    assert r["EPA"] == pytest.approx(4.41, abs=0.5)
+
+
+def test_a_plain_play_keeps_its_end_when_the_next_snap_is_mirrored():
+    # Sacked at the DAL 7 from the DAL 13: ESPN's end (93 to go) agrees with the yardage; the next snap's start reads
+    # 7, from the wrong goal, so it is not taken (nflfastR: EPA -1.96).
+    r = _row(_plays(401772890), 4017728902481)
+    assert r["end.yardsToEndzone"] == 93
+    assert r["EPA"] == pytest.approx(-1.96, abs=0.3)
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):

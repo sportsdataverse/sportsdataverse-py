@@ -795,15 +795,22 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     ).drop("_nxt", "_turnover")
 
 
-def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
-    """A fumble or interception ends where the next snap of its game and half starts.
+def _end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
+    """A play ends where the next snap of its game and half starts, when the evidence says ESPN's end is wrong.
 
     ``_end_state_from_next_play`` takes the end team, down and distance from the next snap but keeps
-    ESPN's end yard line, which holds on plain snaps and not on turnovers: an interception touchback
-    ends at the 99 where the next snap is at the 20, and a return is often counted from the other goal
-    or left at the spot of the catch. Of 71 turnover plays more than 0.5 EPA from nflfastR on 154
-    games (2009-2026), 45 had the right end team and a yard line the next snap contradicts. nflfastR
-    reads the next play's state, so this does too, on the same terms: no score, no kick next, and the
+    ESPN's end yard line, which is often wrong: an interception touchback ends at the 99 where the next
+    snap is at the 20, a return is counted from the other goal, and a catch that drew a flag ends at the
+    99 or mirrored (401128098/1852, "to GB 3 for 61 yards", ended 97 from the goal). nflfastR reads the
+    next play's state. A fumble or interception takes the next snap's spot outright (of 71 turnover plays
+    more than 0.5 EPA from nflfastR on 154 games, 45 had the right end team and a yard line the next snap
+    contradicts). Any other play takes it only when it is nearer the spot the play's own yardage implies
+    (start minus ``statYardage``) than ESPN's end is: the next snap's start is itself mirrored on some rows
+    (401772890/2481, a sack at the DAL 7 whose next snap reads 7 from the wrong goal), and there ESPN's end
+    stands. A punt, kickoff or field goal never takes it that way: its yardage is the kick's, and the receiver's
+    next snap may be filed out of order (261113029/126). On 154 games the summed play-level gap to nflfastR's
+    EPA fell from 3,296 to 2,896 (r 0.964 to 0.977).
+    Both read the next snap on the same terms: no score, no kick next, and the
     clock stoppages in between skipped. ``start.yardsToEndzone`` is final here, so it is the spot read,
     except before a field goal, which ESPN starts at the kick spot, not the line of scrimmage (331124022/1541:
     a sack fumble the offense keeps at the IND 30, then a field goal "starting" at the 38). The next play by id
@@ -822,7 +829,19 @@ def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
     plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
     n = pl.col("_nxt").struct
     in_order = (n.field("r") == seq_rank + 1) & (n.field("clock") <= pl.col("start.TimeSecsRem"))
-    use = turnover & ~stop & ~score & n.field("y2e").is_between(1, 99) & (n.field("kick") == False) & in_order  # noqa: E712
+    # the spot the play's own yardage implies; the next snap wins only if it is strictly nearer than ESPN's end
+    implied = pl.col("start.yardsToEndzone") - pl.col("statYardage").cast(pl.Float64, strict=False)
+    nearer = (n.field("y2e") - implied).abs() < (pl.col("end.yardsToEndzone") - implied).abs()
+    # a kick's yardage is the kick's, not the receiver's spot, and _kickoff_next_snap / the punt branch own those ends
+    own_kick = (kick | pl.col("type.text").is_in(punt_vec)).fill_null(False)
+    use = (
+        (turnover | (nearer.fill_null(False) & ~own_kick))
+        & ~stop
+        & ~score
+        & n.field("y2e").is_between(1, 99)
+        & (n.field("kick") == False)  # noqa: E712
+        & in_order
+    )
     return plays.with_columns(
         pl.when(use.fill_null(False))
         .then(n.field("y2e"))
@@ -1618,7 +1637,7 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool").pipe(_turnover_end_spot_from_next_snap)
+        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool").pipe(_end_spot_from_next_snap)
         pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:
