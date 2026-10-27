@@ -179,13 +179,13 @@ def test_qb_dropback_truth_table():
     # no_play and not a dropback, though its pass flag is 1.
     df = pl.DataFrame(
         {
-            "play_type": ["pass", "run", "run", "no_play", "punt"],
-            "pass": [1, 1, 0, 1, 0],
-            "qb_scramble": [0, 1, 0, 0, 0],
+            "play_type": ["pass", "run", "run", "no_play", "punt", None],
+            "pass": [1, 1, 0, 1, 0, 1],
+            "qb_scramble": [0, 1, 0, 0, 0, 0],
         }
     )
     out = add_qb_dropback(df)
-    assert out["qb_dropback"].to_list() == [1, 1, 0, 0, 0]
+    assert out["qb_dropback"].to_list() == [1, 1, 0, 0, 0, None]  # R's if_else: NA play_type -> NA
     assert out["qb_dropback"].dtype == pl.Int32
 
 

@@ -637,3 +637,13 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 # The trainer's column order (cfbfastR-dev/cfb_qbr/qbr_xgb.R:233), embedded in qbr_model.ubj's
 # feature_names, so a permuted DMatrix raises instead of scoring sack EPA as pass EPA (gap-C-083).
 qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]
+
+
+# ── nflverse drive-column conventions by season (shield_pbp.parse._drive_record) ──────────────────────
+#: Through this season nflverse's drive_* columns keep the provider's text ("Punt", "Blocked FG, Downs"), an unpadded
+#: clock ("7:53"), no penalty yards, and a start transition that is the previous drive's end (nflfastR
+#: helper_scrape_gc.R, the old-game path). Measured on nflverse pbp 1999-2025.
+NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON = 2000
+#: 2001-2002 write compound codes without the comma ("BLOCKED_FG_DOWNS"; from 2003 "BLOCKED_FG,_DOWNS") and score a drive
+#: by the feed's endedWithScore (from 2003 totalEndedWithScore, which also counts the defence's score on it).
+NFLVERSE_DRIVE_CODE_NO_COMMA_LAST_SEASON = 2002

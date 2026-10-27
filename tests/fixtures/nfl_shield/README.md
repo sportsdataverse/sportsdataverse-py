@@ -23,7 +23,9 @@ payload bodies, gzipped verbatim (no trimming).
 | `2026_02_DET_BUF_ingame_open.json.gz` | 2026 wk2 DET @ BUF (TNF) | `INGAME` Q1, offset 26, 1 drive (**still open**), 13 real plays | same capture, snapshot 13/223, `2026-09-18T00:26:50Z`; the opening-drive state — every play lives in `drives.current` and `drives.previous` is empty |
 | `2026_02_DET_BUF_pregame.json.gz` | 2026 wk2 DET @ BUF (TNF) | `PREGAME`, offset 3, 1 play (`GAME_START`) | same capture, snapshot 0/223, `2026-09-18T00:00:01Z` |
 | `2015_01_DET_SD.json.gz` | 2015 wk1 DET @ SD (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2015/2015_01_DET_SD.json`; a relocated club (`SD`), a pick-six whose try falls between Shield's drive ranges (928 / 950 / 966), and the drive records the `drive_*` columns come from |
-| `2015_01_DET_SD_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2015.parquet`, 21 columns (© nflverse contributors, CC BY 4.0); the oracle for `test_2015_det_sd_matches_nflverse` |
+| `2015_01_DET_SD_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2015.parquet` (downloaded 2026-10-26), 28 columns (© nflverse contributors, CC BY 4.0); an oracle for `test_matches_nflverse` |
+| `2002_16_STL_SEA.json.gz` | 2002 wk16 STL @ SEA (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2002/2002_16_STL_SEA.json`; the 2001-2002 drive conventions (compound codes without the comma, `endedWithScore`, no transition for a clock-ended drive) and a relocated club |
+| `2002_16_STL_SEA_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2002.parquet` (downloaded 2026-10-26), 28 columns (© nflverse contributors, CC BY 4.0); an oracle for `test_matches_nflverse` |
 
 The four `2026_02_DET_BUF` files are the live-path fixtures: the Q2 in-progress one exercises
 open-drive possession, the held-back game-outcome columns, the current-situation row

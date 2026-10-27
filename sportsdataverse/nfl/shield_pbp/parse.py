@@ -17,6 +17,10 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 import polars as pl
+from sportsdataverse.nfl.model_vars import (
+    NFLVERSE_DRIVE_CODE_NO_COMMA_LAST_SEASON,
+    NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON,
+)
 from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED, _nflverse_abbr, _team_abbr, nflverse_game_id
 
 from sportsdataverse.nfl.shield_pbp.stat_ids import sum_play_stats
@@ -429,42 +433,72 @@ def _drive_text(yard_line: Optional[str]) -> Optional[str]:
     return f"{_RELOCATED.get(side, side)} {parts[1]}"
 
 
-def _drive_transition(description: Optional[str]) -> Optional[str]:
-    """``"Blocked FG, Downs"`` -> ``"BLOCKED_FG,_DOWNS"``: nflverse's (GSIS) code for a Shield drive description."""
+def _drive_transition(description: Optional[str], season: Optional[int] = None) -> Optional[str]:
+    """nflverse's code for a Shield drive description, in the season's convention.
+
+    ``"Blocked FG, Downs"`` -> ``"BLOCKED_FG,_DOWNS"`` (2003+), ``"BLOCKED_FG_DOWNS"`` (2001-2002), or the text as it is
+    through 2000 (:data:`~sportsdataverse.nfl.model_vars.NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON`).
+    """
     if not description:
         return None
+    if season is not None and season <= NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON:
+        return description
+    gsis_2001 = season is not None and season <= NFLVERSE_DRIVE_CODE_NO_COMMA_LAST_SEASON
+    if gsis_2001:
+        description = description.replace(",", "")
     code = description.upper().replace(" ", "_")
-    return {"END_OF_GAME": "END_GAME", "END_OF_HALF": "END_HALF"}.get(code, code)
+    code = {"END_OF_GAME": "END_GAME", "END_OF_HALF": "END_HALF"}.get(code, code)
+    # 2001-2002 nflverse leaves a drive the clock ended with no transition
+    return None if gsis_2001 and code in ("END_GAME", "END_HALF") else code
 
 
-def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]]) -> Dict[str, Any]:
+def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]], season: Optional[int] = None) -> Dict[str, Any]:
     """The ``drive`` number and the drive's own summary from ``driveChart.drives[]``, as nflfastR reads them.
 
     nflfastR lifts its ``drive_*`` columns from the provider's per-drive object, joined on the play's drive
     number; the play's ``driveSequence`` is that join key (on 2015 it reproduces nflverse's play count, time of
     possession, penalty yards and first downs on every play). Prefixed ``_sd_`` until
     :func:`sportsdataverse.nfl.shield_pbp.drives.add_drive_detail` swaps them in.
+
+    Through 2000 nflverse follows nflfastR's old-game rules instead (:data:`~sportsdataverse.nfl.model_vars.
+    NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON`): the provider's text, an unpadded clock, no penalty yards, a score
+    only for a touchdown or field goal, and the previous drive's end as the start transition.
     """
     d = drive_by_seq.get(seq) or {}
+    old = season is not None and season <= NFLVERSE_DRIVE_PROVIDER_TEXT_LAST_SEASON
 
     def flag(v: Any) -> Optional[int]:
         return None if v is None else int(bool(v))
 
     def clock(v: Optional[str]) -> Optional[str]:
-        return v.zfill(5) if v else None
+        if not v:
+            return None
+        return v[1:] if old and len(v) == 5 and v.startswith("0") else (v if old else v.zfill(5))
+
+    if old:
+        prev = drive_by_seq.get(seq - 1) if isinstance(seq, int) else None
+        started = (prev or {}).get("endedDescription")
+        scored = d.get("endedDescription") in ("Touchdown", "Field Goal") if d else None
+    else:
+        started = d.get("startedDescription")
+        gsis_2001 = season is not None and season <= NFLVERSE_DRIVE_CODE_NO_COMMA_LAST_SEASON
+        scored = d.get("endedWithScore") if gsis_2001 else d.get("totalEndedWithScore")
 
     return {
         "drive": seq if d else None,
+        # the aggregate fills in only where nflverse has a value without a record: a play naming a drive that has
+        # none (a live game's open drive), or any play through 2000 (nflfastR's old-game path)
+        "_sd_fill": bool(old or (isinstance(seq, int) and seq > 0 and not d)),
         "_sd_drive_play_count": d.get("plays"),
         "_sd_drive_time_of_possession": d.get("timeOfPossession"),
         "_sd_drive_first_downs": d.get("firstDowns"),
         "_sd_drive_inside20": flag(d.get("inside20")),
-        "_sd_drive_ended_with_score": flag(d.get("totalEndedWithScore")),  # nflverse; endedWithScore misses ~2%
+        "_sd_drive_ended_with_score": flag(scored),
         "_sd_drive_quarter_start": d.get("startedQuarter"),
         "_sd_drive_quarter_end": d.get("endedQuarter"),
-        "_sd_drive_yards_penalized": d.get("yardsGainedByPenalty"),
-        "_sd_drive_start_transition": _drive_transition(d.get("startedDescription")),
-        "_sd_drive_end_transition": _drive_transition(d.get("endedDescription")),
+        "_sd_drive_yards_penalized": None if old else d.get("yardsGainedByPenalty"),
+        "_sd_drive_start_transition": _drive_transition(started, season) if d else None,
+        "_sd_drive_end_transition": _drive_transition(d.get("endedDescription"), season),
         "_sd_drive_game_clock_start": clock(d.get("startedClock")),
         "_sd_drive_game_clock_end": clock(d.get("endedClock")),
         "_sd_drive_start_yard_line": _drive_text(d.get("startedYardLine")),
@@ -472,6 +506,11 @@ def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]]) -> Dict[str
         "_sd_drive_play_id_started": d.get("startedPlayId"),
         "_sd_drive_play_id_ended": d.get("endedPlayId"),
     }
+
+
+def _nflverse_week(week: Any, season: Optional[int], season_type: Optional[str]) -> Any:
+    """Shield's week, with playoff weeks continued past the regular season as nflverse (and its game_id) number them."""
+    return int(week) + _reg_weeks(season) if season_type == "POST" and week is not None else week
 
 
 def _resolve_teams_and_game_id(
@@ -512,10 +551,8 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
         zero-row frame.
     """
     season = int(game.get("season")) if game.get("season") is not None else None
-    week = game.get("week")
     season_type = game.get("seasonType")
-    if season_type == "POST" and week is not None:
-        week = int(week) + _reg_weeks(season)  # nflverse's week continues the season, as its game_id does
+    week = _nflverse_week(game.get("week"), season, season_type)
     dc = game.get("driveChart") or {}
     plays = dc.get("plays") or []
 
@@ -605,7 +642,7 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
         score_team = team_by_id.get(p.get("scoringTeamId"))
         row["_points_home"] = pts if score_team == home_abbr else 0
         row["_points_away"] = pts if score_team == away_abbr else 0
-        row.update(_drive_record(p.get("driveSequence"), drive_by_seq))
+        row.update(_drive_record(p.get("driveSequence"), drive_by_seq, season))
         rows.append(row)
 
     if not rows:

@@ -51,19 +51,21 @@ def build_pbp(
         return df
     df = apply_game_repairs(df)
     df = add_description_features(df)
-    # fix_scrambles runs right after qb_scramble is string-detected from desc
-    # (add_description_features) and before play_type/qb_dropback would be
-    # re-derived from it downstream — matching nflfastR's ordering (reference
-    # §2): the 1999-2005 charting-data backfill only flips the qb_scramble
-    # flag, it must not retroactively change anything computed from the
-    # un-fixed value. add_pass_rush then derives the nflverse pass/rush 0/1
+    # fix_scrambles runs after qb_scramble is string-detected from desc
+    # (add_description_features) and after qb_dropback has read it (below) —
+    # matching nflfastR's ordering (reference §2): the 1999-2005 charting-data
+    # backfill only flips the qb_scramble flag, it must not retroactively change
+    # anything computed from the un-fixed value. add_pass_rush then derives the nflverse pass/rush 0/1
     # classification from the BACKFILLED qb_scramble (in nflfastR, clean_pbp's
     # pass derivation likewise runs long after fix_scrambles) and applies the
     # fix_weird_pass_plays override (reference §3) internally, between the
     # pass and rush derivations — nflfastR's exact position.
+    # qb_dropback reads the feed's own qb_scramble, before the 1999-2005 backfill: nflfastR derives it in
+    # add_nflscrapr_mutations (helper_add_nflscrapr_mutations.R:439) ahead of fix_scrambles (:747), so a
+    # backfilled scramble is not a dropback (580 such 2005 runs in nflverse).
+    df = add_qb_dropback(df)
     df = fix_scrambles(df)
     df = add_pass_rush(df)
-    df = add_qb_dropback(df)
     df = add_game_state(df, roof=roof, spread_line=spread_line, total_line=total_line)
     df = add_labels(df, game)
     # add_drive_detail (fixed_drive/fixed_drive_result/drive_*) must run after

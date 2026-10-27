@@ -128,7 +128,7 @@
   rule: nfl-2021-seventeen-game-season
   reason: '17 / 18 regular-season weeks'
 - file: sportsdataverse/nfl/shield_pbp/parse.py
-  scope: '_resolve_teams_and_game_id'
+  scope: '_reg_weeks'
   snippet: 'season <= 2020'
   count: 1
   id: C-T3

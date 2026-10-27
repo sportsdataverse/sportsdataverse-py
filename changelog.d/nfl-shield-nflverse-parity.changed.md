@@ -1,3 +1,3 @@
-- **NFL Shield play-by-play (`shield_pbp`, `nfl_model_pbp`):** the `drive_*` columns come from Shield's own drive
-  records, as nflfastR's do (text yard lines such as `"BAL 20"`, GSIS transition codes, a new `drive`); relocated clubs
-  take their current abbreviation; playoff weeks continue the season; `qb_dropback` follows nflfastR. (#1028)
+- **NFL Shield play-by-play (`shield_pbp`):** `drive_*` come from Shield's drive records in each era's nflverse
+  convention (1999-2000, 2001-2002, 2003+), `qb_dropback` follows nflfastR, and the new `drive` column switches Shield
+  overtime win probability to nflfastR's rule-format branches. (#1028)

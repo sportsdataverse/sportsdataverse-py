@@ -48,7 +48,8 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import polars as pl
 
-from sportsdataverse.nfl.shield_pbp.parse import _resolve_teams_and_game_id
+from sportsdataverse.nfl.shield_pbp.game_id import _RELOCATED
+from sportsdataverse.nfl.shield_pbp.parse import _nflverse_week, _resolve_teams_and_game_id
 
 # ---------------------------------------------------------------------------
 # Output schema (reference §13's exact `build_playstats` `dplyr::select` order
@@ -115,9 +116,11 @@ def build_playstats_frame(
             season = None
     if week is None and game_id:
         try:
-            week = int(game_id[5:7])
+            week = int(game_id[5:7])  # already nflverse's week (playoffs continue the season)
         except ValueError:
             week = None
+    else:
+        week = _nflverse_week(week, season, game.get("seasonType"))  # as the wide pbp frame numbers it
 
     _, _, team_by_id, game_id = _resolve_teams_and_game_id(game, season, game_id)
 
@@ -146,7 +149,10 @@ def build_playstats_frame(
                     "play_id": play_id,
                     "stat_id": stat_id,
                     "yards": entry.get("yards"),
-                    "team_abbr": team_by_id.get(team_raw) if team_raw is not None else None,
+                    # relocated clubs by their current abbreviation, as the wide pbp frame's team columns
+                    "team_abbr": _RELOCATED.get(team_by_id.get(team_raw), team_by_id.get(team_raw))
+                    if team_raw is not None
+                    else None,
                     "player_name": entry.get("gsisPlayerName"),
                     "gsis_player_id": entry.get("gsisPlayerId"),
                 }

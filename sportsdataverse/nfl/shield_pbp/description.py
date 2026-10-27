@@ -162,13 +162,14 @@ def add_qb_dropback(df: pl.DataFrame) -> pl.DataFrame:
     Read from ``play_type``, not ``pass``: a pass a penalty nullified keeps ``pass == 1`` but is a ``no_play``,
     and nflfastR does not count it (~1,270 such rows a season were dropbacks here before).
 
-    Must run AFTER :func:`add_pass_rush` (needs the final, fixed ``qb_scramble`` value).
+    Runs BEFORE :func:`sportsdataverse.nfl.shield_pbp.repairs.fix_scrambles`, as in nflfastR: a scramble the
+    1999-2005 charting backfill adds is not a dropback.
 
     Args:
         df: A play frame carrying ``play_type`` and ``qb_scramble``.
 
     Returns:
-        ``df`` with ``qb_dropback`` (Int32 0/1) added. Unchanged if empty or
+        ``df`` with ``qb_dropback`` (Int32 0/1, null where ``play_type`` is) added. Unchanged if empty or
         if either required column is absent.
     """
     if df.height == 0:
@@ -176,5 +177,9 @@ def add_qb_dropback(df: pl.DataFrame) -> pl.DataFrame:
     if not {"play_type", "qb_scramble"} <= set(df.columns):
         return df
     dropback = (pl.col("play_type") == "pass") | ((pl.col("play_type") == "run") & (pl.col("qb_scramble") == 1))
-    df = df.with_columns(qb_dropback=pl.when(dropback).then(1).otherwise(0).cast(pl.Int32))
+    # R's if_else passes NA through: no play_type (a GAME_START / END marker, or a row the parser could not type)
+    # is a null dropback, not a 0
+    df = df.with_columns(
+        qb_dropback=pl.when(pl.col("play_type").is_null()).then(None).when(dropback).then(1).otherwise(0).cast(pl.Int32)
+    )
     return df

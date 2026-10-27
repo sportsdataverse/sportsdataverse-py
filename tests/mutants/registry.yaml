@@ -8525,7 +8525,7 @@
   file: sportsdataverse/nfl/shield_pbp/drives.py
   snippet: '    return _take_drive_records(df)'
   mutant: '    return df.drop([c for c in df.columns if c.startswith("_sd_")])'
-  test: tests/nfl/shield_pbp/test_build.py -k "det_sd_matches_nflverse and drive_play_count"
+  test: tests/nfl/shield_pbp/test_build.py -k "matches_nflverse and 2015_01_DET_SD-drive_play_count"
   expected: kill
   note: The aggregate-from-plays drive columns match nflverse on 8% (play count) to 63% (penalty yards) of plays.
 
