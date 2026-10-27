@@ -97,6 +97,65 @@ def test_yahoo_listing_games_and_box_checks() -> None:
     assert xh.box_players("yahoo", box) == 5
 
 
+def test_yahoo_cfb_lists_one_date_at_a_time(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    calls: List[Dict[str, Any]] = []
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:
+        calls.append(kwargs)
+        day = kwargs["dates"]
+        game = {"gameId": f"ncaaf.g.{day.replace('-', '')}01", "startTime": f"{day}T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 29), date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    games = xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    # ncaaf ignores startRange/endRange: one dates= request per day, no range parameters
+    assert [c["dates"] for c in calls] == ["2024-11-29", "2024-11-30"]
+    assert not any("start_range" in c or "end_range" in c for c in calls)
+    assert sorted(g["date"] for g in games) == ["2024-11-29", "2024-11-30"]
+    assert store.has("game_ids_by_date", 2024, "20241130")
+
+
+def test_yahoo_cfb_by_date_ignores_a_stored_range_listing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A range page stored by the old code is never read for a by-date league: both days are fetched."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    calls: List[str] = []
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:
+        calls.append(kwargs["dates"])
+        day = kwargs["dates"]
+        game = {"gameId": f"ncaaf.g.{day.replace('-', '')}01", "startTime": f"{day}T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 29), date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    stale = {"gameId": "ncaaf.g.2024082401", "startTime": "2024-08-24T12:00:00-05:00", "status": "FINAL"}
+    store.put("game_ids_by_date", 2024, "20241129_20241130", {"data": {"leagues": [{"games": [stale]}]}}, gz=False)
+    xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    assert calls == ["2024-11-29", "2024-11-30"]
+
+
+def test_yahoo_cfb_off_date_listing_is_not_stored(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """If Yahoo ignores ``dates=`` and answers with another day's games, nothing is filed under that day."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:  # always the season opener, whatever date was asked for
+        game = {"gameId": "ncaaf.g.2024082401", "startTime": "2024-08-24T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    games = xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    assert games == []
+    assert not store.has("game_ids_by_date", 2024, "20241130")
+
+
 def test_cbs_envelope_and_box_players() -> None:
     window = xh.season_window("nfl", 2024)
     envelope = _load("cbs_cfb_game_boxscore_2168097_404_envelope.json")
@@ -136,3 +195,27 @@ def test_fox_box_season_check_and_players() -> None:
     problem = xh._payload_problem("fox", "nba", "event_data", box, "42022", 2019, xh.season_window("nba", 2019))
     assert problem == "season-mismatch:2024-10-15"
     assert xh.box_players("fox", box) == 25
+
+
+def test_yahoo_cfb_season_page_with_the_day_is_still_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A season page that also holds the asked-for day's games is not a listing of that day, nor is a capped one."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    def season_page(**kwargs: Any) -> Dict[str, Any]:
+        days = ["2024-08-31", "2024-09-07", "2024-09-14"]  # the asked-for day plus later ones
+        games = [
+            {"gameId": f"ncaaf.g.{d.replace('-', '')}01", "startTime": f"{d}T12:00:00-05:00", "status": "FINAL"}
+            for d in days
+        ]
+        return {"data": {"leagues": [{"games": games}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", season_page)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 8, 31)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    assert xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False) == []
+    assert not store.has("game_ids_by_date", 2024, "20240831")
+
+    capped = {"gameId": "ncaaf.g.2024083101", "startTime": "2024-08-31T12:00:00-05:00", "status": "FINAL"}
+    assert not xh._yahoo_answers_date(
+        {"data": {"leagues": [{"games": [capped] * xh._YAHOO_ROW_CAP}]}}, date(2024, 8, 31)
+    )

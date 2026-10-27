@@ -325,3 +325,14 @@ def test_known_teams_ships_the_cbs_cfb_map_only():
     assert cbs["espn_team_id"].is_unique().all() and cbs["team_id"].is_unique().all()
     assert cbs.filter(pl.col("espn_team_id") == 2405)["team_id"].item() == "709"  # Monmouth
     assert known_teams("fox", "nba") is None
+
+
+def test_fox_player_name_ignores_a_team_logo_alt_text():
+    from sportsdataverse._crosswalk_alt import _fox_player_name
+
+    # CFB box rows without a headshot show the team logo: its alt text is the team, not the player
+    logo = {"title": "E.J. WARNER", "imageType": "image-logo", "imageAltText": "Fresno State Bulldogs"}
+    assert _fox_player_name(logo) == "E.J. Warner"
+    headshot = {"title": "TRACY MCGRADY", "imageType": "image-headshot", "imageAltText": "Tracy McGrady"}
+    assert _fox_player_name(headshot) == "Tracy McGrady"
+    assert _fox_player_name({"title": "JALON DANIELS", "imageAltText": "Default Headshot"}) == "Jalon Daniels"

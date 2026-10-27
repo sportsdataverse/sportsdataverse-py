@@ -9,7 +9,7 @@ import yaml
 
 SOURCES_FILE = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "sources.yaml"
 
-_RULE_KEYS = {"label", "home", "auth", "espn_apis", "flat_apis", "release_bases", "modules", "functions"}
+_RULE_KEYS = {"label", "home", "auth", "espn_apis", "flat_apis", "release_bases", "modules", "functions", "featured"}
 
 
 def _doc() -> dict:

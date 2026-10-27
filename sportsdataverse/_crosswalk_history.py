@@ -92,6 +92,9 @@ _YAHOO_FLAG = {
 #: leagueGameIdsByDate stops at 1000 rows; a busy college week holds about 450 games.
 _YAHOO_ROW_CAP = 1000
 _YAHOO_CHUNK_DAYS = 7
+#: Leagues whose leagueGameIdsByDate ignores startRange/endRange (every range answers the
+#: season's first 1,000 games, probed 2026-10-26): list them one date at a time with ``dates=``.
+_YAHOO_BY_DATE = frozenset({"cfb"})
 
 
 class HarvestBlocked(RuntimeError):
@@ -358,22 +361,38 @@ def _yahoo_games(raw: Any) -> List[Dict[str, Any]]:
     return [g for lg in ((raw or {}).get("data") or {}).get("leagues") or [] for g in lg.get("games") or []]
 
 
+def _yahoo_answers_date(raw: Any, day: date) -> bool:
+    """A ``dates=`` listing is for ``day``: every dated game within a day of it, and under the row cap.
+
+    Empty is left to the no-games branch. One game on the day is not enough: a season page asked for an
+    early-season date holds that day's games too, so any game off the day rejects the whole answer, and a
+    cap-sized answer is truncated (a one-day chunk cannot be split further)."""
+    games = _yahoo_games(raw)
+    if len(games) >= _YAHOO_ROW_CAP:
+        return False
+    days = [d for d in (_et_date(g.get("startTime")) for g in games) if d is not None]
+    return all(abs((d - day).days) <= 1 for d in days)
+
+
 def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh: bool) -> List[Dict[str, Any]]:
     """Every Yahoo game id of a season from ``leagueGameIdsByDate`` (``season=`` set), by week."""
     from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
 
     slug, window = _YAHOO_LEAGUE[league], season_window(league, season)
+    by_date = league in _YAHOO_BY_DATE
     dates = _sweep_dates(window)
     chunks: List[Tuple[date, date]] = []
     start = dates[0] if dates else None
     while start is not None and start <= dates[-1]:
-        end = min(start + timedelta(days=_YAHOO_CHUNK_DAYS - 1), dates[-1])
+        end = start if by_date else min(start + timedelta(days=_YAHOO_CHUNK_DAYS - 1), dates[-1])
         chunks.append((start, end))
         start = end + timedelta(days=1)
     games: Dict[str, Dict[str, Any]] = {}
     while chunks:
         lo, hi = chunks.pop(0)
-        key = f"{lo:%Y%m%d}_{hi:%Y%m%d}"
+        # by-date keys differ from range keys, so a stored range listing is never trusted for them
+        key = f"{lo:%Y%m%d}" if by_date else f"{lo:%Y%m%d}_{hi:%Y%m%d}"
+        when = {"dates": lo.isoformat()} if by_date else {"start_range": lo.isoformat(), "end_range": hi.isoformat()}
         raw = None if refresh else store.load("game_ids_by_date", season, key)
         pending = raw is not None and any(g.get("status") != "FINAL" for g in _yahoo_games(raw))
         if pending:
@@ -384,14 +403,18 @@ def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh:
                 partial(
                     yahoo_league_game_ids_by_date,
                     leagues=slug,
-                    start_range=lo.isoformat(),
-                    end_range=hi.isoformat(),
+                    **when,
                     season=str(_yahoo_season(league, season)),
                     return_parsed=False,
                     **_FETCH_KW,
                 ),
             )
             if status == "fail":
+                continue
+            if by_date and not _yahoo_answers_date(raw, lo):
+                # Yahoo ignored `dates=` (as it ignores ranges for ncaaf): storing this would file the same
+                # season page under every day, so leave the day unlisted and let the next run retry it
+                logger.warning("yahoo %s %s: listing is not for that date; not stored", slug, key)
                 continue
             if len(_yahoo_games(raw)) >= _YAHOO_ROW_CAP and hi > lo:
                 mid = lo + (hi - lo) // 2  # a capped list is truncated: split the range and refetch

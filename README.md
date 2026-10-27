@@ -323,7 +323,7 @@ upstream data source for many of those loaders.
 
 ## Follow the SportsDataverse (@SportsDataverse) on X and star this repo
 
-[![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
+[![X Follow](https://img.shields.io/badge/%40SportsDataverse-000000?logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
 
 [![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/sportsdataverse-py.svg?color=eee&logo=github&style=for-the-badge&label=Star%20sportsdataverse-py&maxAge=2592000)](https://github.com/sportsdataverse/sportsdataverse-py)
 
@@ -337,7 +337,7 @@ upstream data source for many of those loaders.
 ## Our authors
 
 -   [Saiem Gilani](https://twitter.com/saiemgilani)
-<a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=twitter&style=for-the-badge" alt="@saiemgilani" /></a>
+<a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/badge/%40saiemgilani-000000?logo=x&style=for-the-badge" alt="@saiemgilani" /></a>
 <a href="https://github.com/saiemgilani" target="blank"><img src="https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge" alt="@saiemgilani" /></a>
 
 

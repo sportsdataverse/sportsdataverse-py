@@ -221,6 +221,9 @@ from sportsdataverse.analytics.defense_vs_position import defense_vs_position
 
 # Paper Index deserved-win shares + season luck (CFBE-5d): ported from Game on Paper.
 from sportsdataverse.analytics.paper_index import deserved_wins, paper_index_game, paper_index_games
+
+# ESPN league-level injuries / depth-chart snapshots, stamped with as_of_date for append-only collection.
+from sportsdataverse.espn_snapshots import espn_depthcharts_snapshot, espn_injuries_snapshot
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,

@@ -4,6 +4,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import CodeBlock from '@theme/CodeBlock';
 import registry from '@site/src/data/leagues.json';
+import providerRegistry from '@site/src/data/providers.json';
 import styles from './styles.module.css';
 
 // The R and Python packages these leagues mirror.
@@ -17,27 +18,17 @@ const SISTER_PACKAGES: {label: string; href: string}[] = [
   {label: 'fastRhockey', href: 'https://fastRhockey.sportsdataverse.org'},
 ];
 
-// A curated headline list; the full provider registry (tools/codegen/sources.yaml) is the generated
-// table on the Getting Started page. Emit a providers.json from codegen if this list drifts.
-const PROVIDERS = [
-  'ESPN',
-  'NBA Stats',
-  'NHL Web API and EDGE',
-  'MLB Stats API',
-  'Baseball Savant',
-  'nflverse',
-  'NFL.com',
-  'PFF',
-  'stats.ncaa.org',
-  'HockeyTech',
-  'EuroLeague',
-  'FIBA',
-  'KenPom',
-  'Bart Torvik',
-  'FotMob',
-  'Polymarket',
-  'Kalshi',
-  'The Odds API',
+// Written by tools/codegen/generate.py from tools/codegen/sources.yaml: every provider the Getting Started
+// sources table names, by sport. The strip shows the ones flagged `featured` (each once, in sport order);
+// the rest sit behind "+N more".
+type Provider = {key: string; label: string; href: string; featured?: boolean};
+const FEATURED: Provider[] = [
+  ...new Map(
+    providerRegistry.sports
+      .flatMap((s) => s.providers as Provider[])
+      .filter((p) => p.featured)
+      .map((p) => [p.key, p] as const),
+  ).values(),
 ];
 
 const EXAMPLE = `from sportsdataverse.nba import espn_nba_scoreboard
@@ -142,8 +133,16 @@ function Providers(): ReactNode {
       <div className="container">
         <h2 id="providers">Data sources</h2>
         <p>
-          {PROVIDERS.join(' · ')} and{' '}
-          <Link to="/docs/intro#supported-leagues-and-data-sources">many more</Link>.
+          {FEATURED.map((p, i) => (
+            <span key={p.key}>
+              {i > 0 && ' · '}
+              <Link to={p.href}>{p.label}</Link>
+            </span>
+          ))}
+          {' · '}
+          <Link to="/docs/intro#supported-leagues-and-data-sources">
+            +{providerRegistry.total - FEATURED.length} more
+          </Link>
         </p>
         <p className={styles.sisters}>
           Sister packages:{' '}

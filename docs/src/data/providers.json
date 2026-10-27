@@ -1,0 +1,536 @@
+{
+  "total": 80,
+  "sports": [
+    {
+      "label": "Football",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "nfl_com",
+          "label": "NFL.com Shield API",
+          "href": "https://api.nfl.com",
+          "featured": true
+        },
+        {
+          "key": "nfl_pro",
+          "label": "NFL Pro",
+          "href": "https://pro.nfl.com"
+        },
+        {
+          "key": "sleeper",
+          "label": "Sleeper fantasy API",
+          "href": "https://api.sleeper.app"
+        },
+        {
+          "key": "pff_api",
+          "label": "PFF Developer API",
+          "href": "https://api.pff.com",
+          "featured": true
+        },
+        {
+          "key": "pff",
+          "label": "PFF Premium Stats (LEGACY)",
+          "href": "https://premium.pff.com"
+        },
+        {
+          "key": "nflverse",
+          "label": "nflverse data releases",
+          "href": "https://github.com/nflverse",
+          "featured": true
+        },
+        {
+          "key": "sdv_releases",
+          "label": "sportsdataverse-data releases",
+          "href": "https://github.com/sportsdataverse/sportsdataverse-data"
+        },
+        {
+          "key": "ncaa_stats",
+          "label": "stats.ncaa.org",
+          "href": "https://stats.ncaa.org",
+          "featured": true
+        },
+        {
+          "key": "on3",
+          "label": "On3 Recruit Database",
+          "href": "https://www.on3.com"
+        },
+        {
+          "key": "sports247",
+          "label": "247Sports Recruit Database",
+          "href": "https://247sports.com"
+        },
+        {
+          "key": "yahoo",
+          "label": "Yahoo Sports Shangrila",
+          "href": "https://graphite-secure.sports.yahoo.com"
+        },
+        {
+          "key": "fox",
+          "label": "Fox Sports API",
+          "href": "https://api.foxsports.com"
+        }
+      ]
+    },
+    {
+      "label": "Basketball",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "sdv_releases",
+          "label": "sportsdataverse-data releases",
+          "href": "https://github.com/sportsdataverse/sportsdataverse-data"
+        },
+        {
+          "key": "feb",
+          "label": "Spanish FEB LiveStats + baloncestoenvivo",
+          "href": "https://baloncestoenvivo.feb.es"
+        },
+        {
+          "key": "scb",
+          "label": "SCB basketball API (BBL, DBBL)",
+          "href": "https://www.easycredit-bbl.de"
+        },
+        {
+          "key": "genius_livestats",
+          "label": "Genius Sports LiveStats",
+          "href": "https://fibalivestats.dcd.shared.geniussports.com"
+        },
+        {
+          "key": "atrium_embed",
+          "label": "Sportradar Atrium embed API",
+          "href": "https://embed-api.eui.connect.sportradar.com"
+        },
+        {
+          "key": "nbl_rosetta",
+          "label": "NBL Rosetta proxy (NBL, WNBL, NBL1)",
+          "href": "https://www.nbl.com.au"
+        },
+        {
+          "key": "fiba",
+          "label": "FIBA digital API and game pages",
+          "href": "https://www.fiba.basketball",
+          "featured": true
+        },
+        {
+          "key": "legabasket",
+          "label": "Lega Basket Serie A",
+          "href": "https://www.legabasket.it"
+        },
+        {
+          "key": "acb",
+          "label": "ACB (Liga Endesa)",
+          "href": "https://www.acb.com"
+        },
+        {
+          "key": "ibba",
+          "label": "IBBA (Israeli Premier League) and Segev Stats",
+          "href": "https://basket.co.il"
+        },
+        {
+          "key": "wjbl",
+          "label": "W League (Japan)",
+          "href": "https://www.wjbl.org"
+        },
+        {
+          "key": "vtb",
+          "label": "VTB United League",
+          "href": "https://www.vtb-league.com"
+        },
+        {
+          "key": "kbl",
+          "label": "KBL (Korea)",
+          "href": "https://www.kbl.or.kr"
+        },
+        {
+          "key": "bleague",
+          "label": "B.LEAGUE (Japan)",
+          "href": "https://www.bleague.jp"
+        },
+        {
+          "key": "kzs",
+          "label": "KZS (Basketball Federation of Slovenia)",
+          "href": "https://api.kzs.si"
+        },
+        {
+          "key": "lkl",
+          "label": "LKL (Lithuania)",
+          "href": "https://lkl.lt"
+        },
+        {
+          "key": "tbf",
+          "label": "TBF app API (BSL, TBL, KBSL)",
+          "href": "https://miniappapi.tbf.org.tr"
+        },
+        {
+          "key": "cebl",
+          "label": "CEBL stats API",
+          "href": "https://www.cebl.ca"
+        },
+        {
+          "key": "aba_liga",
+          "label": "ABA League",
+          "href": "https://www.aba-liga.com"
+        },
+        {
+          "key": "easl",
+          "label": "EASL (third-party sync server over Sportradar DataCore)",
+          "href": "https://www.easl.basketball"
+        },
+        {
+          "key": "sportpress",
+          "label": "BNXT League (Sportpress)",
+          "href": "https://bnxt.sportpress.info"
+        },
+        {
+          "key": "tpbl",
+          "label": "TPBL (Taiwan)",
+          "href": "https://tpbl.basketball"
+        },
+        {
+          "key": "pleague",
+          "label": "P. LEAGUE+ (Taiwan) and Preciser",
+          "href": "https://pleagueofficial.com"
+        },
+        {
+          "key": "cba",
+          "label": "CBA data API (China)",
+          "href": "https://www.cbaleague.com"
+        },
+        {
+          "key": "sportality",
+          "label": "Basketligaen (Denmark, Sportality)",
+          "href": "https://www.basketligaen.dk"
+        },
+        {
+          "key": "ncaa_stats",
+          "label": "stats.ncaa.org",
+          "href": "https://stats.ncaa.org",
+          "featured": true
+        },
+        {
+          "key": "nba_stats",
+          "label": "NBA Stats API",
+          "href": "https://stats.nba.com",
+          "featured": true
+        },
+        {
+          "key": "wnba_stats",
+          "label": "WNBA Stats API",
+          "href": "https://stats.wnba.com"
+        },
+        {
+          "key": "nbagl_stats",
+          "label": "G League Stats API",
+          "href": "https://stats.nba.com"
+        },
+        {
+          "key": "euroleague",
+          "label": "EuroLeague Competition Engine",
+          "href": "https://api-live.euroleague.net",
+          "featured": true
+        },
+        {
+          "key": "kenpom",
+          "label": "KenPom",
+          "href": "https://kenpom.com",
+          "featured": true
+        },
+        {
+          "key": "torvik",
+          "label": "Bart Torvik T-Rank",
+          "href": "https://barttorvik.com",
+          "featured": true
+        },
+        {
+          "key": "bart_wbb",
+          "label": "Bart Torvik Women's T-Rank",
+          "href": "https://barttorvik.com/ncaaw"
+        },
+        {
+          "key": "fox",
+          "label": "Fox Sports API",
+          "href": "https://api.foxsports.com"
+        },
+        {
+          "key": "her_hoop_stats",
+          "label": "Her Hoop Stats",
+          "href": "https://herhoopstats.com"
+        },
+        {
+          "key": "basketball_reference",
+          "label": "Basketball-Reference",
+          "href": "https://www.basketball-reference.com"
+        },
+        {
+          "key": "realgm",
+          "label": "RealGM",
+          "href": "https://basketball.realgm.com"
+        },
+        {
+          "key": "public_models",
+          "label": "Public model datasets",
+          "href": "https://dunksandthrees.com"
+        }
+      ]
+    },
+    {
+      "label": "Hockey",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "sdv_releases",
+          "label": "sportsdataverse-data releases",
+          "href": "https://github.com/sportsdataverse/sportsdataverse-data"
+        },
+        {
+          "key": "hockeytech",
+          "label": "HockeyTech / LeagueStat",
+          "href": "https://lscluster.hockeytech.com",
+          "featured": true
+        },
+        {
+          "key": "sihf",
+          "label": "SIHF statistics API",
+          "href": "https://data.sihf.ch"
+        },
+        {
+          "key": "esports_hokejovyzapis",
+          "label": "eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen)",
+          "href": "https://s3.eu-west-1.amazonaws.com"
+        },
+        {
+          "key": "hokej_cz",
+          "label": "hokej.cz (Czech Extraliga)",
+          "href": "https://www.hokej.cz"
+        },
+        {
+          "key": "liiga",
+          "label": "Liiga API",
+          "href": "https://liiga.fi"
+        },
+        {
+          "key": "shl",
+          "label": "SHL site API",
+          "href": "https://www.shl.se"
+        },
+        {
+          "key": "hockeyallsvenskan",
+          "label": "HockeyAllsvenskan site API",
+          "href": "https://hockeyallsvenskan.se"
+        },
+        {
+          "key": "nationalleague",
+          "label": "National League app API",
+          "href": "https://www.nationalleague.ch"
+        },
+        {
+          "key": "ligue_magnus",
+          "label": "Ligue Magnus",
+          "href": "https://liguemagnus.com"
+        },
+        {
+          "key": "khl",
+          "label": "KHL (site REST + webcaster API)",
+          "href": "https://www.khl.ru"
+        },
+        {
+          "key": "vhl",
+          "label": "VHL",
+          "href": "https://www.vhlru.ru"
+        },
+        {
+          "key": "nhl_api_web",
+          "label": "NHL Web API",
+          "href": "https://api-web.nhle.com",
+          "featured": true
+        },
+        {
+          "key": "nhl_edge",
+          "label": "NHL EDGE",
+          "href": "https://api-web.nhle.com/v1/edge",
+          "featured": true
+        },
+        {
+          "key": "nhl_stats_rest",
+          "label": "NHL Stats REST",
+          "href": "https://api.nhle.com/stats/rest"
+        },
+        {
+          "key": "nhl_records",
+          "label": "NHL Records",
+          "href": "https://records.nhl.com"
+        },
+        {
+          "key": "fox",
+          "label": "Fox Sports API",
+          "href": "https://api.foxsports.com"
+        }
+      ]
+    },
+    {
+      "label": "Baseball",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "sdv_releases",
+          "label": "sportsdataverse-data releases",
+          "href": "https://github.com/sportsdataverse/sportsdataverse-data"
+        },
+        {
+          "key": "ncaa_stats",
+          "label": "stats.ncaa.org",
+          "href": "https://stats.ncaa.org",
+          "featured": true
+        },
+        {
+          "key": "mlb_stats_api",
+          "label": "MLB Stats API",
+          "href": "https://statsapi.mlb.com",
+          "featured": true
+        },
+        {
+          "key": "statcast",
+          "label": "Baseball Savant (Statcast)",
+          "href": "https://baseballsavant.mlb.com",
+          "featured": true
+        },
+        {
+          "key": "fox",
+          "label": "Fox Sports API",
+          "href": "https://api.foxsports.com"
+        }
+      ]
+    },
+    {
+      "label": "Soccer",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "asa",
+          "label": "American Soccer Analysis",
+          "href": "https://app.americansocceranalysis.com"
+        },
+        {
+          "key": "fotmob",
+          "label": "FotMob",
+          "href": "https://www.fotmob.com",
+          "featured": true
+        },
+        {
+          "key": "uefa",
+          "label": "UEFA",
+          "href": "https://www.uefa.com"
+        },
+        {
+          "key": "fifa",
+          "label": "FIFA",
+          "href": "https://api.fifa.com"
+        },
+        {
+          "key": "football_data",
+          "label": "Football-Data.co.uk",
+          "href": "https://www.football-data.co.uk"
+        },
+        {
+          "key": "openligadb",
+          "label": "OpenLigaDB",
+          "href": "https://www.openligadb.de"
+        },
+        {
+          "key": "kloppy",
+          "label": "kloppy open event data",
+          "href": "https://kloppy.pysport.org"
+        },
+        {
+          "key": "mls",
+          "label": "MLS official web API",
+          "href": "https://sportapi.mlssoccer.com"
+        },
+        {
+          "key": "nwsl",
+          "label": "NWSL official web API",
+          "href": "https://api.nwslsoccer.com"
+        }
+      ]
+    },
+    {
+      "label": "More sports & sources",
+      "providers": [
+        {
+          "key": "espn",
+          "label": "ESPN",
+          "href": "https://www.espn.com",
+          "featured": true
+        },
+        {
+          "key": "odds_api",
+          "label": "The Odds API",
+          "href": "https://the-odds-api.com",
+          "featured": true
+        },
+        {
+          "key": "polymarket",
+          "label": "Polymarket",
+          "href": "https://polymarket.com",
+          "featured": true
+        },
+        {
+          "key": "kalshi",
+          "label": "Kalshi",
+          "href": "https://kalshi.com",
+          "featured": true
+        },
+        {
+          "key": "jolpica",
+          "label": "Jolpica F1 API (Ergast-compatible)",
+          "href": "https://api.jolpi.ca/ergast/f1"
+        },
+        {
+          "key": "cbs",
+          "label": "CBS Sports NAPI",
+          "href": "https://api.cbssports.com/napi"
+        },
+        {
+          "key": "yahoo",
+          "label": "Yahoo Sports Shangrila",
+          "href": "https://graphite-secure.sports.yahoo.com"
+        },
+        {
+          "key": "fox",
+          "label": "Fox Sports API",
+          "href": "https://api.foxsports.com"
+        },
+        {
+          "key": "thesportsdb",
+          "label": "TheSportsDB",
+          "href": "https://www.thesportsdb.com"
+        }
+      ]
+    }
+  ]
+}
