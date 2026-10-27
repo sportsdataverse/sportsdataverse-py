@@ -10,6 +10,10 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
   ("R.Dixon punts 46 yards ... M.Hardman to BUF 41 for no gain (J.Hayes). FUMBLES (J.Hayes), RECOVERED by TB").
 * ``summary_331124022_trimmed.json.gz`` -- IND @ ARI, 2013 week 12. A sack fumble the offense keeps, followed by a
   field goal ESPN starts at the kick spot rather than the line of scrimmage.
+* ``summary_281123030_trimmed.json.gz`` -- MIN @ JAX, 2008 week 12. An interception whose next play by id is the
+  passer's own earlier snap, filed out of order.
+* ``summary_400554411_trimmed.json.gz`` -- DET @ GB, 2014 week 17. A free kick from the DET 20 that GB muffs and
+  DET recovers, typed "Fumble Recovery (Opponent)", whose pos_team is the kicker.
 """
 
 from __future__ import annotations
@@ -72,6 +76,23 @@ def test_a_turnover_before_a_field_goal_keeps_its_own_end_spot():
     r = _row(_plays(331124022), 3311240221541)
     assert r["end.yardsToEndzone"] == 30
     assert r["EPA"] == pytest.approx(-1.92, abs=0.3)
+
+
+def test_an_out_of_order_next_play_neither_spots_nor_unflips_a_turnover():
+    # JAX's next play by id is its own 2:37 snap, earlier than the 2:09 interception: no evidence of where the
+    # interception ended or who has the ball, so ESPN's spot stands and the interception still flips EP_end
+    # (main: -0.88; reading that play gave +0.80).
+    r = _row(_plays(281123030), 2811230304024)
+    assert r["end.yardsToEndzone"] == 76
+    assert r["EPA"] == pytest.approx(-0.88, abs=0.1)
+
+
+def test_an_untyped_kickoff_gets_no_kick_teams_from_pos_team():
+    # pos_team is the kicker (DET 8) on this "Fumble Recovery (Opponent)" kickoff, unlike a flagged kickoff's;
+    # filling kicking_team from def_pos_team would name GB, the receiver.
+    r = _row(_plays(400554411), 4005544113835)
+    assert r["pos_team"] == 8
+    assert r["kicking_team"] != 9 and r["kick_return_team"] != 8
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):
