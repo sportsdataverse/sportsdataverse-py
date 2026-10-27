@@ -60,6 +60,8 @@ _FIRST_DATE = dt.date(2018, 12, 17)
 _HOURLY_FROM = dt.date(2021, 10, 15)
 _QUARTER_HOURLY_FROM = dt.datetime(2025, 12, 22, 9, 0)
 _NYS = "NOT YET SUBMITTED"
+# the only 403 that means "slot not published"; any other 403 is a block, not an answer
+_S3_MISSING = b"<Code>AccessDenied</Code>"
 # header label -> output column; a header cell starts at one of these words
 _COLUMNS = {
     "Game Date": "game_date",
@@ -351,9 +353,11 @@ def nba_injury_report(
         The parsed report (see :func:`parse_nba_injury_report`).
 
     Raises:
-        NoDataError: The slot (or every slot of the date) is not published.
-        AssetFetchError: Any other non-200 answer, or an HTTP-200 body that is
-            not a PDF (e.g. a CDN error page).
+        NoDataError: The slot (or every slot of the date) is not published
+            (S3's 403 ``AccessDenied``).
+        AssetFetchError: Any other non-200 answer -- including a 403 that is not
+            S3's ``AccessDenied`` (a CDN / WAF block) -- or an HTTP-200 body that
+            is not a PDF (e.g. a CDN error page).
         ImportError: ``pdfplumber`` is not installed.
 
     Example:
@@ -396,7 +400,7 @@ def nba_injury_report(
             if not resp.content.startswith(b"%PDF"):
                 raise AssetFetchError(f"{url} answered HTTP 200 without a PDF body")
             return parse_nba_injury_report(resp.content, return_as_pandas=return_as_pandas)
-        if resp.status_code != 403:
+        if resp.status_code != 403 or _S3_MISSING not in (resp.content or b""):
             raise AssetFetchError(f"{url} answered HTTP {resp.status_code}")
     raise NoDataError(f"no NBA injury report published for {report_time or date or 'today'}")
 

@@ -151,6 +151,12 @@ def test_url_format_per_era(when: dt.datetime, suffix: str) -> None:
     assert ir.nba_injury_report_url(when) == f"https://ak-static.cms.nba.com/referee/injury/Injury-Report_{suffix}"
 
 
+# the real body of a missing slot (observed 2026-10-26: 403, Server AmazonS3, 243 bytes)
+_S3_403 = (
+    b'<?xml version="1.0" encoding="UTF-8"?>\n<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>'
+)
+
+
 class _Resp:
     def __init__(self, status: int, content: bytes = b"") -> None:
         self.status_code, self.content = status, content
@@ -163,7 +169,7 @@ def test_latest_slot_probes_backwards_past_403s(monkeypatch: pytest.MonkeyPatch)
     def fake(url: str, **kwargs: Any) -> _Resp:
         seen.append(url)
         assert 403 not in kwargs["retry_statuses"]  # a missing slot must not burn retries
-        return _Resp(200, body) if url.endswith("_05PM.pdf") else _Resp(403)
+        return _Resp(200, body) if url.endswith("_05PM.pdf") else _Resp(403, _S3_403)
 
     monkeypatch.setattr(ir, "download", fake)
     df = ir.nba_injury_report(dt.date(2024, 1, 15))
@@ -172,10 +178,16 @@ def test_latest_slot_probes_backwards_past_403s(monkeypatch: pytest.MonkeyPatch)
 
 
 def test_missing_and_failing_slots_raise(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(403))
+    monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(403, _S3_403))
     with pytest.raises(NoDataError):
         ir.nba_injury_report(report_time=dt.datetime(2024, 1, 15, 17))
     with pytest.raises(NoDataError):
+        ir.nba_injury_report(dt.date(2024, 1, 15))
+    # a 403 that is NOT S3's AccessDenied (CDN / WAF block) is a failed fetch, never "no report"
+    monkeypatch.setattr(
+        ir, "download", lambda url, **kw: _Resp(403, b"<HTML><TITLE>Access Denied</TITLE> Reference #18.x</HTML>")
+    )
+    with pytest.raises(AssetFetchError, match="HTTP 403"):
         ir.nba_injury_report(dt.date(2024, 1, 15))
     monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(500))
     with pytest.raises(AssetFetchError):
