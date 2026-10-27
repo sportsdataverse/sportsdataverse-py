@@ -412,14 +412,19 @@ def _take_drive_records(df: pl.DataFrame) -> pl.DataFrame:
         # vocabulary is fixed_drive_result's ("Punt"), not nflverse's ("PUNT"), and one column must not mix the two.
         record_only = {"drive_start_transition", "drive_end_transition"}
         fill = pl.col("_sd_fill").fill_null(False) if "_sd_fill" in df.columns else pl.lit(False)
+        old = pl.col("_sd_old").fill_null(False) if "_sd_old" in df.columns else pl.lit(False)
+        # the old era's own values: nflverse has no penalty yards then, and its clocks are unpadded
+        old_era_own = {"drive_yards_penalized", "drive_game_clock_start", "drive_game_clock_end"}
         df = df.with_columns(
             (
                 pl.col(c)
                 if c[4:] in record_only or c[4:] not in df.columns
-                else pl.when(fill).then(pl.coalesce(c, c[4:])).otherwise(pl.col(c))
+                else pl.when(fill & (~old if c[4:] in old_era_own else pl.lit(True)))
+                .then(pl.coalesce(c, c[4:]))
+                .otherwise(pl.col(c))
             ).alias(c[4:])
             for c in sd
-            if c != "_sd_fill"
+            if c not in ("_sd_fill", "_sd_old")
         ).drop(sd)
     # A game with no drive record at all leaves these Null-typed (every value None); cast to the declared dtypes so
     # frames of one schema still stack (a pregame payload with an in-game one).

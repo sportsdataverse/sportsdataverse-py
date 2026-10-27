@@ -489,6 +489,7 @@ def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]], season: Opt
         # the aggregate fills in only where nflverse has a value without a record: a play naming a drive that has
         # none (a live game's open drive), or any play through 2000 (nflfastR's old-game path)
         "_sd_fill": bool(old or (isinstance(seq, int) and seq > 0 and not d)),
+        "_sd_old": old,  # through 2000 nflverse has no penalty yards and unpadded clocks: never fill those
         "_sd_drive_play_count": d.get("plays"),
         "_sd_drive_time_of_possession": d.get("timeOfPossession"),
         "_sd_drive_first_downs": d.get("firstDowns"),

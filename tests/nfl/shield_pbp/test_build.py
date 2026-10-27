@@ -254,3 +254,11 @@ def test_a_play_whose_drive_has_no_record_keeps_the_aggregate():
     # a play between drives (no drive number) stays null, as nflverse's does
     between = [p["playId"] for p in game["driveChart"]["plays"] if not p.get("driveSequence")]
     assert df.filter(pl.col("play_id").is_in(between))["drive_play_count"].null_count() > 0
+
+
+def test_the_old_era_keeps_null_penalty_yards_and_unpadded_clocks():
+    # through 2000 nflverse has no drive penalty yards and writes "7:53": the aggregate must not fill them in
+    df = build_pbp(_det_sd(season=2000))
+    assert df["drive_yards_penalized"].is_null().all()
+    clocks = df["drive_game_clock_start"].drop_nulls()
+    assert clocks.len() > 0 and not clocks.str.contains(r"^0\d:").any()  # "0:45" is unpadded, "07:53" is not
