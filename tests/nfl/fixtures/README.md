@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 46 whole-game captures)](#espn-game-summaries-the-46-whole-game-captures)
+  - [ESPN game summaries (the 47 whole-game captures)](#espn-game-summaries-the-47-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -18,7 +18,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 46 whole-game captures)
+## ESPN game summaries (the 47 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -55,6 +55,7 @@ the 2014-2021 end-state corruption they pin.
 | 331124022 | 2013 | 12 | IND @ ARI | `summary_331124022_trimmed.json.gz` | turnover end spots, 2026-10-26 (live fetch, same keys) |
 | 400554340 | 2014 | 11 | MIN @ CHI | `summary_400554340_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 400554411 | 2014 | 17 | DET @ GB | `summary_400554411_trimmed.json.gz` | untyped kickoff teams, 2026-10-26 (live fetch, same keys) |
+| 400791493 | 2015 | 1 | KC @ HOU | `summary_400791493_trimmed.json.gz` | an incompletion's corrected end against the yardage, 2026-10-27 (nfl-raw 8d3cc89e) |
 | 400791508 | 2015 | 16 | WSH @ PHI | `summary_400791508_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400791567 | 2015 | 7 | PHI @ CAR | `summary_400791567_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
 | 400791590 | 2015 | 1 | NYG @ DAL | `summary_400791590_trimmed.json.gz` | e9c3ca7c48, 2026-09-18 |

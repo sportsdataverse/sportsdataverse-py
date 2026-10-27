@@ -1560,11 +1560,31 @@
   group: nfl-end-state
   finding: PR1026
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '        (turnover | (flagged_punt & flipped).fill_null(False) | (nearer.fill_null(False) & ~own_kick))'
-  mutant: '        (turnover | (nearer.fill_null(False) & ~own_kick))'
+  snippet: '    takes_punt_snap = ((flagged_punt & flipped).fill_null(False) & guards).fill_null(False)'
+  mutant: '    takes_punt_snap = pl.lit(False)'
   test: tests/nfl/test_nfl_turnover_end_state.py -k "retyped_penalty"
   expected: kill
   note: A punt a flag retyped "Penalty" keeps ESPN's end in the punter's frame (400951721/3623, 25 for 75).
+
+- id: nfl-end-spot-flagged-punt-takes-the-snap-clock
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            pl.when(takes_punt_snap).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '            pl.col(c).alias(c)'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "snap_clock_too"
+  expected: kill
+  note: A retyped punt takes the snap's spot with its own stale end clocks, so EP_end mixes two plays.
+
+- id: nfl-end-spot-incompletion-keeps-its-end
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    use = (turnover | takes_punt_snap | (nearer.fill_null(False) & ~own_kick & ~incompletion)) & guards'
+  mutant: '    use = (turnover | takes_punt_snap | (nearer.fill_null(False) & ~own_kick)) & guards'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "keeps_its_corrected_end"
+  expected: kill
+  note: An incompletion's 0 yards overrides the corrected end (400791493/4472 takes a kneel 8 minutes later, EPA +0.96).
 
 # --- C-H5 / EX-1.1-c (task 2.3): ESPN's end.down -1 on non-scoring plays -------------------------
 - id: nfl-end-down-minus-one-rewrite

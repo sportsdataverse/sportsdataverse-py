@@ -22,6 +22,8 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
   turnover on downs.
 * ``summary_400951721_trimmed.json.gz`` -- ATL @ NYJ, 2017 week 8. A punt return touchdown a flag nullified, which
   ESPN types "Penalty" and ends in the punter's frame.
+* ``summary_400791493_trimmed.json.gz`` -- KC @ HOU, 2015 week 1. ESPN's play ids are scrambled, so an incompletion's
+  next play by sequenceNumber is a kneel eight minutes later.
 """
 
 from __future__ import annotations
@@ -133,6 +135,30 @@ def test_a_punt_a_flag_retyped_penalty_ends_at_the_receivers_next_snap():
     r = _row(_plays(400951721), 4009517213623)
     assert r["type.text"] == "Penalty"
     assert r["end.yardsToEndzone"] == 75
+
+
+def test_a_punt_a_flag_retyped_penalty_takes_the_receivers_snap_clock_too():
+    # The punt branch carries the snap's clocks (R963-3), but only for punt_vec types. ESPN's end clock lags the snap
+    # when a stoppage sits between them; with this punt's end clocks and spot blanked, all three come from ATL's snap.
+    pid = 4009517213623
+    plays = _plays(400951721)
+    stale = plays.drop("_next_in_order", strict=False).with_columns(
+        *(
+            pl.when(pl.col("id") == pid).then(v).otherwise(pl.col(c)).alias(c)
+            for c, v in (("end.TimeSecsRem", 0), ("end.adj_TimeSecsRem", 0), ("end.yardsToEndzone", 25))
+        )
+    )
+    r = _row(mod._end_spot_from_next_snap(stale), pid)
+    assert (r["end.TimeSecsRem"], r["end.adj_TimeSecsRem"], r["end.yardsToEndzone"]) == (216, 216, 75)
+
+
+def test_an_incompletion_keeps_its_corrected_end_against_the_yardage():
+    # An incompletion's statYardage is the pass's 0, so it is no evidence against the end _nfl_incompletion_end_y2e
+    # already corrected. B.Hoyer's 2nd-down incompletion at 9:07 is followed by sequenceNumber by a kneel at 1:22 at
+    # the 50 (ESPN's ids are scrambled in this game); taking it gave EPA +0.96 (nflfastR: -0.64).
+    r = _row(_plays(400791493), 4007914934472)
+    assert r["end.yardsToEndzone"] == 92
+    assert r["EPA"] < 0.5
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):
