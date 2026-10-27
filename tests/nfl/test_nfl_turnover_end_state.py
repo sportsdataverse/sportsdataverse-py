@@ -18,6 +18,10 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
   which ESPN ends 97 yards from the goal.
 * ``summary_401772890_trimmed.json.gz`` -- PHI @ DAL, 2025 week 12. A sack whose next snap's start ESPN counts from
   the wrong goal, so its own end spot must stand.
+* ``summary_400951762_trimmed.json.gz`` -- CLE @ PIT, 2017 week 17. A fourth-down run stopped at the PIT 2, a
+  turnover on downs.
+* ``summary_400951721_trimmed.json.gz`` -- ATL @ NYJ, 2017 week 8. A punt return touchdown a flag nullified, which
+  ESPN types "Penalty" and ends in the punter's frame.
 """
 
 from __future__ import annotations
@@ -113,6 +117,22 @@ def test_a_plain_play_keeps_its_end_when_the_next_snap_is_mirrored():
     r = _row(_plays(401772890), 4017728902481)
     assert r["end.yardsToEndzone"] == 93
     assert r["EPA"] == pytest.approx(-1.96, abs=0.3)
+
+
+def test_a_turnover_on_downs_compares_spots_in_the_new_offenses_frame():
+    # 4th & goal at the PIT 1, stopped at the 2 for -1: CLE snaps next at its own 2, 98 to go. The yardage implies 2
+    # in PIT's frame, 98 in CLE's; compared in PIT's, ESPN's end won and EPA was +2.1 (nflfastR: -3.70).
+    r = _row(_plays(400951762), 400951762791)
+    assert r["end.yardsToEndzone"] == 98
+    assert r["EPA"] == pytest.approx(-3.70, abs=0.5)
+
+
+def test_a_punt_a_flag_retyped_penalty_ends_at_the_receivers_next_snap():
+    # "L.Edwards punts 51 yards to ATL 20 ... TOUCHDOWN NULLIFIED by Penalty": ESPN ends it 25 from the goal, in the
+    # punter's frame (EPA +4.80); ATL snaps next at its own 25.
+    r = _row(_plays(400951721), 4009517213623)
+    assert r["type.text"] == "Penalty"
+    assert r["end.yardsToEndzone"] == 75
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):

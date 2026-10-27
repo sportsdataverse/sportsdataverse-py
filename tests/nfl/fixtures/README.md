@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 44 whole-game captures)](#espn-game-summaries-the-44-whole-game-captures)
+  - [ESPN game summaries (the 46 whole-game captures)](#espn-game-summaries-the-46-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -18,7 +18,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 44 whole-game captures)
+## ESPN game summaries (the 46 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -62,6 +62,8 @@ the 2014-2021 end-state corruption they pin.
 | 400874485 | 2016 | 16 | NYG @ PHI | `summary_400874485_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400874512 | 2016 | 2 | BAL @ CLE | `summary_400874512_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 400951676 | 2017 | 2 | SF @ SEA | `summary_400951676_trimmed.json.gz` | d28cc51212, 2026-09-18 |
+| 400951721 | 2017 | 8 | ATL @ NYJ | `summary_400951721_trimmed.json.gz` | end spot of a punt a flag retyped "Penalty", 2026-10-27 (nfl-raw 8d3cc89e) |
+| 400951762 | 2017 | 17 | CLE @ PIT | `summary_400951762_trimmed.json.gz` | end spot of a turnover on downs, 2026-10-27 (nfl-raw 8d3cc89e) |
 | 401030824 | 2018 | 17 | LAC @ DEN | `summary_401030824_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 401030962 | 2018 | 13 | IND @ JAX | `summary_401030962_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401128075 | 2019 | 11 | JAX @ IND | `summary_401128075_trimmed.json.gz` | 45567d8bf9, 2026-09-25 |
