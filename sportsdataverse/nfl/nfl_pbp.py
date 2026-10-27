@@ -642,6 +642,11 @@ def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
     )
 
 
+def _snap_rank(stop: pl.Expr) -> pl.Expr:
+    """Each snap's rank by ``sequenceNumber`` within its game and half; clock stoppages get none."""
+    return pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")
+
+
 def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
     """The kick net-spot read for ``__add_downs_data``: ``(kickoff, punt, nxt, next_snap, kicker_recovers)``.
 
@@ -690,7 +695,7 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
         .then(receiver)
         .otherwise(pl.col("start.pos_team.id"))
     )
-    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")
+    seq_rank = _snap_rank(stop)
     snap = pl.struct(
         y2e=pl.col("start.yardsToEndzone"),
         kick=kickoff,
@@ -795,15 +800,25 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     ).drop("_nxt", "_turnover")
 
 
-def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
-    """A fumble or interception ends where the next snap of its game and half starts.
+def _end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
+    """A play ends where the next snap of its game and half starts, when the evidence says ESPN's end is wrong.
 
     ``_end_state_from_next_play`` takes the end team, down and distance from the next snap but keeps
-    ESPN's end yard line, which holds on plain snaps and not on turnovers: an interception touchback
-    ends at the 99 where the next snap is at the 20, and a return is often counted from the other goal
-    or left at the spot of the catch. Of 71 turnover plays more than 0.5 EPA from nflfastR on 154
-    games (2009-2026), 45 had the right end team and a yard line the next snap contradicts. nflfastR
-    reads the next play's state, so this does too, on the same terms: no score, no kick next, and the
+    ESPN's end yard line, which is often wrong: an interception touchback ends at the 99 where the next
+    snap is at the 20, a return is counted from the other goal, and a catch that drew a flag ends at the
+    99 or mirrored (401128098/1852, "to GB 3 for 61 yards", ended 97 from the goal). nflfastR reads the
+    next play's state. A fumble or interception takes the next snap's spot outright (of 71 turnover plays
+    more than 0.5 EPA from nflfastR on 154 games, 45 had the right end team and a yard line the next snap
+    contradicts). Any other play takes it only when it is nearer the spot the play's own yardage implies
+    (start minus ``statYardage``) than ESPN's end is: the next snap's start is itself mirrored on some rows
+    (401772890/2481, a sack at the DAL 7 whose next snap reads 7 from the wrong goal), and there ESPN's end
+    stands. The implied spot is read in the end team's frame, so a turnover on downs compares like with like
+    (400951762/791). A punt, kickoff or field goal never takes it that way: its yardage is the kick's, and the
+    receiver's next snap may be filed out of order (261113029/126); a punt a flag retyped "Penalty" takes the
+    receiver's next snap and clocks, as the punt branch does (400951721/3623). An incompletion keeps the end
+    ``_nfl_incompletion_end_y2e`` corrected: its 0 yards is no evidence against it (400791493/4472). On 154 games
+    the summed play-level gap to nflfastR's EPA fell from 3,296 to 2,881 (r 0.964 to 0.978).
+    Both read the next snap on the same terms: no score, no kick next, and the
     clock stoppages in between skipped. ``start.yardsToEndzone`` is final here, so it is the spot read,
     except before a field goal, which ESPN starts at the kick spot, not the line of scrimmage (331124022/1541:
     a sack fumble the offense keeps at the IND 30, then a field goal "starting" at the 38). The next play by id
@@ -814,20 +829,45 @@ def _turnover_end_spot_from_next_snap(plays: pl.DataFrame) -> pl.DataFrame:
     stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
     score = pl.col("scoringPlay").fill_null(False) | pl.col("type.text").is_in(scores_vec).fill_null(False)
     kick = pl.col("type.text").is_in(kickoff_vec) | pl.col("type.text").str.contains(r"(?i)field goal")
-    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")
+    seq_rank = _snap_rank(stop)
     nxt = pl.struct(
-        y2e=pl.col("start.yardsToEndzone"), kick=kick.fill_null(False), r=seq_rank, clock=pl.col("start.TimeSecsRem")
+        y2e=pl.col("start.yardsToEndzone"),
+        kick=kick.fill_null(False),
+        r=seq_rank,
+        clock=pl.col("start.TimeSecsRem"),
+        adj=pl.col("start.adj_TimeSecsRem"),
     )
     turnover = pl.col("text").str.contains(r"(?i)fumble|intercept|muff").fill_null(False)
     plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
     n = pl.col("_nxt").struct
     in_order = (n.field("r") == seq_rank + 1) & (n.field("clock") <= pl.col("start.TimeSecsRem"))
-    use = turnover & ~stop & ~score & n.field("y2e").is_between(1, 99) & (n.field("kick") == False) & in_order  # noqa: E712
+    # the spot the play's own yardage implies; the next snap wins only if it is strictly nearer than ESPN's end
+    implied = pl.col("start.yardsToEndzone") - pl.col("statYardage").cast(pl.Float64, strict=False)
+    # in the end team's frame: a turnover on downs ends 100 - implied from the new offense's goal (2017_17_CLE_PIT 791)
+    flipped = pl.col("end.pos_team.id") != pl.col("start.pos_team.id")
+    implied = pl.when(flipped).then(100 - implied).otherwise(implied)
+    nearer = (n.field("y2e") - implied).abs() < (pl.col("end.yardsToEndzone") - implied).abs()
+    # a kick's yardage is the kick's, not the receiver's spot, and _kickoff_next_snap / the punt branch own those ends.
+    # A flag can retype a punt "Penalty" (2017_08_ATL_NYJ 3623, "punts 51 yards ... TOUCHDOWN NULLIFIED", ESPN's end in
+    # the punter's frame): like the punt branch, the receiver's next snap ends it
+    flagged_punt = ~pl.col("type.text").is_in(punt_vec) & pl.col("text").str.contains(r"(?i)\bpunts -?\d+ yards?")
+    own_kick = (kick | pl.col("type.text").is_in(punt_vec) | flagged_punt).fill_null(False)
+    # an incompletion's end is already corrected (_nfl_incompletion_end_y2e moves it by an enforced penalty), and its
+    # statYardage is the pass's 0, so the yardage is no evidence against that end
+    incompletion = (pl.col("type.text") == "Pass Incompletion").fill_null(False)
+    guards = ~stop & ~score & n.field("y2e").is_between(1, 99) & (n.field("kick") == False) & in_order  # noqa: E712
+    takes_punt_snap = ((flagged_punt & flipped).fill_null(False) & guards).fill_null(False)
+    use = (turnover | takes_punt_snap | (nearer.fill_null(False) & ~own_kick & ~incompletion)) & guards
     return plays.with_columns(
         pl.when(use.fill_null(False))
         .then(n.field("y2e"))
         .otherwise(pl.col("end.yardsToEndzone"))
         .alias("end.yardsToEndzone"),
+        # the punt branch carries the snap's clocks too (R963-3); a retyped punt never reaches it
+        *(
+            pl.when(takes_punt_snap).then(n.field(f)).otherwise(pl.col(c)).alias(c)
+            for f, c in (("clock", "end.TimeSecsRem"), ("adj", "end.adj_TimeSecsRem"))
+        ),
         # read by calculate_epa (an end team taken from an out-of-order play is no evidence), dropped after it
         _next_in_order=in_order.fill_null(False),
     ).drop("_nxt")
@@ -1618,7 +1658,7 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool").pipe(_turnover_end_spot_from_next_snap)
+        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool").pipe(_end_spot_from_next_snap)
         pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:

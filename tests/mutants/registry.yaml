@@ -1533,6 +1533,59 @@
   expected: kill
   note: the whole fix unwired; EPA corr with nflverse falls from 0.933 to 0.426 on the 2021 capture
 
+# --- #1026: a play's end yard line from the next snap, arbitrated by its own yardage -------------------
+- id: nfl-end-spot-arbitrated-by-yardage
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    nearer = (n.field("y2e") - implied).abs() < (pl.col("end.yardsToEndzone") - implied).abs()'
+  mutant: '    nearer = n.field("y2e").is_not_null()'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "next_snap_is_mirrored"
+  expected: kill
+  note: >-
+    Taking every next snap brings back the mirrored starts: 401772890/2481 ends 7 from the wrong goal (80
+    regressions on 154 games before the arbitration).
+
+- id: nfl-end-spot-implied-in-the-end-teams-frame
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    implied = pl.when(flipped).then(100 - implied).otherwise(implied)'
+  mutant: '    implied = implied'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "turnover_on_downs"
+  expected: kill
+  note: A turnover on downs compared in the old offense's frame keeps ESPN's end (400951762/791, EPA +2.1 vs -3.70).
+
+- id: nfl-end-spot-flagged-punt-takes-the-next-snap
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    takes_punt_snap = ((flagged_punt & flipped).fill_null(False) & guards).fill_null(False)'
+  mutant: '    takes_punt_snap = pl.lit(False)'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "retyped_penalty"
+  expected: kill
+  note: A punt a flag retyped "Penalty" keeps ESPN's end in the punter's frame (400951721/3623, 25 for 75).
+
+- id: nfl-end-spot-flagged-punt-takes-the-snap-clock
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            pl.when(takes_punt_snap).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '            pl.col(c).alias(c)'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "snap_clock_too"
+  expected: kill
+  note: A retyped punt takes the snap's spot with its own stale end clocks, so EP_end mixes two plays.
+
+- id: nfl-end-spot-incompletion-keeps-its-end
+  group: nfl-end-state
+  finding: PR1026
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    use = (turnover | takes_punt_snap | (nearer.fill_null(False) & ~own_kick & ~incompletion)) & guards'
+  mutant: '    use = (turnover | takes_punt_snap | (nearer.fill_null(False) & ~own_kick)) & guards'
+  test: tests/nfl/test_nfl_turnover_end_state.py -k "keeps_its_corrected_end"
+  expected: kill
+  note: An incompletion's 0 yards overrides the corrected end (400791493/4472 takes a kneel 8 minutes later, EPA +0.96).
+
 # --- C-H5 / EX-1.1-c (task 2.3): ESPN's end.down -1 on non-scoring plays -------------------------
 - id: nfl-end-down-minus-one-rewrite
   group: nfl-end-state
@@ -7952,8 +8005,8 @@
   group: nfl-era-play-order
   finding: R963-4
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")'
-  mutant: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")'
+  snippet: '    return pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")'
+  mutant: '    return pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")'
   test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
   expected: kill
   note: >-

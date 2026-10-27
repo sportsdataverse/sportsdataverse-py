@@ -14,6 +14,16 @@ worst EPA class (13-14% of interception returns and fumble recoveries more than 
   passer's own earlier snap, filed out of order.
 * ``summary_400554411_trimmed.json.gz`` -- DET @ GB, 2014 week 17. A free kick from the DET 20 that GB muffs and
   DET recovers, typed "Fumble Recovery (Opponent)", whose pos_team is the kicker.
+* ``summary_401128098_trimmed.json.gz`` -- MIN @ GB, 2019 week 2. A 61-yard catch to the GB 3 that drew a flag,
+  which ESPN ends 97 yards from the goal.
+* ``summary_401772890_trimmed.json.gz`` -- PHI @ DAL, 2025 week 12. A sack whose next snap's start ESPN counts from
+  the wrong goal, so its own end spot must stand.
+* ``summary_400951762_trimmed.json.gz`` -- CLE @ PIT, 2017 week 17. A fourth-down run stopped at the PIT 2, a
+  turnover on downs.
+* ``summary_400951721_trimmed.json.gz`` -- ATL @ NYJ, 2017 week 8. A punt return touchdown a flag nullified, which
+  ESPN types "Penalty" and ends in the punter's frame.
+* ``summary_400791493_trimmed.json.gz`` -- KC @ HOU, 2015 week 1. ESPN's play ids are scrambled, so an incompletion's
+  next play by sequenceNumber is a kneel eight minutes later.
 """
 
 from __future__ import annotations
@@ -93,6 +103,62 @@ def test_an_untyped_kickoff_gets_no_kick_teams_from_pos_team():
     r = _row(_plays(400554411), 4005544113835)
     assert r["pos_team"] == 8
     assert r["kicking_team"] != 9 and r["kick_return_team"] != 8
+
+
+def test_a_plain_play_takes_the_next_snap_when_its_yardage_agrees():
+    # 61 yards from the GB 64 is the GB 3, where MIN snaps next; ESPN ended it at the 97 (nflfastR: EPA +4.41,
+    # ESPN's spot gave -1.73).
+    r = _row(_plays(401128098), 4011280981852)
+    assert r["end.yardsToEndzone"] == 3
+    assert r["EPA"] == pytest.approx(4.41, abs=0.5)
+
+
+def test_a_plain_play_keeps_its_end_when_the_next_snap_is_mirrored():
+    # Sacked at the DAL 7 from the DAL 13: ESPN's end (93 to go) agrees with the yardage; the next snap's start reads
+    # 7, from the wrong goal, so it is not taken (nflfastR: EPA -1.96).
+    r = _row(_plays(401772890), 4017728902481)
+    assert r["end.yardsToEndzone"] == 93
+    assert r["EPA"] == pytest.approx(-1.96, abs=0.3)
+
+
+def test_a_turnover_on_downs_compares_spots_in_the_new_offenses_frame():
+    # 4th & goal at the PIT 1, stopped at the 2 for -1: CLE snaps next at its own 2, 98 to go. The yardage implies 2
+    # in PIT's frame, 98 in CLE's; compared in PIT's, ESPN's end won and EPA was +2.1 (nflfastR: -3.70).
+    r = _row(_plays(400951762), 400951762791)
+    assert r["end.yardsToEndzone"] == 98
+    assert r["EPA"] == pytest.approx(-3.70, abs=0.5)
+
+
+def test_a_punt_a_flag_retyped_penalty_ends_at_the_receivers_next_snap():
+    # "L.Edwards punts 51 yards to ATL 20 ... TOUCHDOWN NULLIFIED by Penalty": ESPN ends it 25 from the goal, in the
+    # punter's frame (EPA +4.80); ATL snaps next at its own 25.
+    r = _row(_plays(400951721), 4009517213623)
+    assert r["type.text"] == "Penalty"
+    assert r["end.yardsToEndzone"] == 75
+
+
+def test_a_punt_a_flag_retyped_penalty_takes_the_receivers_snap_clock_too():
+    # The punt branch carries the snap's clocks (R963-3), but only for punt_vec types. ESPN's end clock lags the snap
+    # when a stoppage sits between them; with this punt's end clocks and spot blanked, all three come from ATL's snap.
+    pid = 4009517213623
+    plays = _plays(400951721)
+    stale = plays.drop("_next_in_order", strict=False).with_columns(
+        *(
+            pl.when(pl.col("id") == pid).then(v).otherwise(pl.col(c)).alias(c)
+            for c, v in (("end.TimeSecsRem", 0), ("end.adj_TimeSecsRem", 0), ("end.yardsToEndzone", 25))
+        )
+    )
+    r = _row(mod._end_spot_from_next_snap(stale), pid)
+    assert (r["end.TimeSecsRem"], r["end.adj_TimeSecsRem"], r["end.yardsToEndzone"]) == (216, 216, 75)
+
+
+def test_an_incompletion_keeps_its_corrected_end_against_the_yardage():
+    # An incompletion's statYardage is the pass's 0, so it is no evidence against the end _nfl_incompletion_end_y2e
+    # already corrected. B.Hoyer's 2nd-down incompletion at 9:07 is followed by sequenceNumber by a kneel at 1:22 at
+    # the 50 (ESPN's ids are scrambled in this game); taking it gave EPA +0.96 (nflfastR: -0.64).
+    r = _row(_plays(400791493), 4007914934472)
+    assert r["end.yardsToEndzone"] == 92
+    assert r["EPA"] < 0.5
 
 
 def test_a_punt_return_fumble_credits_the_punting_team_with_the_force(tb_buf):
