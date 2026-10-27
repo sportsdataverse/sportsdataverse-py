@@ -211,8 +211,9 @@ def test_pre_existing_split_epa_is_unchanged(plays):
     """
     t = tendencies(plays, league="nfl")
     got = {r["pos_team"]: (r["epa_early_down"], r["epa_per_play_neutral"]) for r in t.to_dicts()}
-    # 30's early-down EPA re-pinned when kneels left scrimmage_play (its three kneels were early downs)
-    want = {5: (-1.4621596468205098, -0.8486290538567118), 30: (14.84284443577053, 0.6861752757104114)}
+    # 30's early-down EPA re-pinned when kneels left scrimmage_play (its three kneels were early downs); all four
+    # re-pinned on the nflfastR-aligned EP refit (#1027), from -1.46216 / -0.84863 and 14.84284 / 0.68618
+    want = {5: (-1.1215243758197175, -0.8308312074514106), 30: (15.776092636864632, 0.6817492700382982)}
     for team, (early, neutral) in want.items():
         assert abs(got[team][0] - early) < 1e-9 and abs(got[team][1] - neutral) < 1e-9, team
 

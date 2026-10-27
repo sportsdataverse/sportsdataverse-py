@@ -449,18 +449,28 @@ def _warn_if_season_beyond_known_eras(df: pl.DataFrame) -> None:
 _DEFAULT_ROOF = "outdoors"
 
 
-def _roof_one_hots(roof: pl.Expr) -> dict[str, pl.Expr]:
-    """``retractable`` / ``dome`` / ``outdoors`` exactly as the bundled models were trained.
+def _roof_one_hots(roof: pl.Expr, *, nflfastr: bool = False) -> dict[str, pl.Expr]:
+    """``retractable`` / ``dome`` / ``outdoors`` exactly as each bundled model was trained.
 
-    nfl-data ``model_training.play_level.make_model_mutations`` (EP, CP, xYAC, and
-    ``decision_models`` xpass): ``dome`` and ``closed`` roofs are domes, every other
-    roof (``outdoors``, ``open``) is outdoors, and ``retractable`` is 1 only for the
-    literal value ``"retractable"``, which nflverse never ships -- none of the boosters
-    splits on it. It is not nflfastR's mapping (open/closed/NA -> retractable), which
-    put the ~16% of 2023-24 plays under an open or closed roof in a state these models
-    never saw. A null roof takes
-    :data:`_DEFAULT_ROOF`.
+    ``nflfastr=True`` is the EP booster's mapping, nflfastR's ``model_roof``: ``open``,
+    ``closed`` and a null roof are retractable, ``dome`` is a dome, everything else is
+    outdoors. nfl-data trains EP on it since the 2026-10 refit (nfl-data#84).
+
+    The default is the mapping CP, xYAC and ``decision_models`` xpass were trained on
+    (nfl-data ``make_model_mutations`` before that refit): ``dome`` and ``closed`` roofs
+    are domes, every other roof (``outdoors``, ``open``) is outdoors, and ``retractable``
+    is 1 only for the literal value ``"retractable"``, which nflverse never ships -- none
+    of those boosters splits on it. A null roof takes :data:`_DEFAULT_ROOF`. Move a model
+    to ``nflfastr=True`` only with an artifact retrained on that mapping.
     """
+    if nflfastr:
+        retractable = roof.is_null() | roof.is_in(["open", "closed", "retractable"])
+        dome = (roof == "dome").fill_null(False)
+        return {
+            "retractable": retractable.cast(pl.Int32).alias("retractable"),
+            "dome": dome.cast(pl.Int32).alias("dome"),
+            "outdoors": ((dome == False) & (retractable == False)).cast(pl.Int32).alias("outdoors"),  # noqa: E712
+        }
     roof = roof.fill_null(_DEFAULT_ROOF)
     dome = roof.is_in(["dome", "closed"])
     retractable = roof == "retractable"
@@ -472,16 +482,17 @@ def _roof_one_hots(roof: pl.Expr) -> dict[str, pl.Expr]:
 
 
 def _roof_expr(df: pl.DataFrame, roof_col: str = "roof") -> pl.Expr:
-    return pl.col(roof_col) if roof_col in df.columns else pl.lit(None, dtype=pl.Utf8)
+    # An absent column takes the default under either mapping; a null value is nflfastR's NA.
+    return pl.col(roof_col) if roof_col in df.columns else pl.lit(_DEFAULT_ROOF, dtype=pl.Utf8)
 
 
 def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """Add era/roof/down one-hots and the ``home`` indicator.
 
     Matches the R ``make_model_mutations()`` in nflfastR: era bins, down
-    dummies, home indicator from ``posteam == home_team`` -- except the roof
-    one-hots, which follow the trainer of the bundled models
-    (:func:`_roof_one_hots`).  Warns
+    dummies, home indicator from ``posteam == home_team``, and nflfastR's roof
+    one-hots, which the EP booster is trained on
+    (:func:`_roof_one_hots` with ``nflfastr=True``).  Warns
     (:class:`EraCoverageWarning`) when a season lies beyond
     ``ERA_MAX_KNOWN_SEASON`` instead of absorbing it into ``era4`` silently.
     """
@@ -502,7 +513,7 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
         pl.when(pl.col("posteam") == pl.col("home_team")).then(1).otherwise(0).alias("home"),
     )
 
-    return df.with_columns(*_roof_one_hots(_roof_expr(df)).values())
+    return df.with_columns(*_roof_one_hots(_roof_expr(df), nflfastr=True).values())
 
 
 def _add_wp_aux(df: pl.DataFrame) -> pl.DataFrame:
@@ -665,8 +676,8 @@ def _espn_ep_features(
             ``"down_1_end"`` … ``"down_4_end"`` for the end-of-play variant.
         pos_timeouts_col: Possessing-team timeouts remaining.
         def_timeouts_col: Defending-team timeouts remaining.
-        roof_col: Game roof (``outdoors`` / ``dome`` / ``closed`` / ``open``);
-            :data:`_DEFAULT_ROOF` when the column is absent.
+        roof_col: Game roof (``outdoors`` / ``dome`` / ``closed`` / ``open``), mapped
+            the nflfastR way; :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`EP_FEATURES` column order.
@@ -679,7 +690,7 @@ def _espn_ep_features(
         pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
-    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col), nflfastr=True)
     return (
         df.select(
             pl.col(half_sec_col).alias("half_seconds_remaining"),

@@ -8476,3 +8476,25 @@
   test: tests/test_parser_stringify_fallbacks.py -k "nhl_stats_rest_parsers"
   expected: kill
   note: The pre-fix last-resort stringify of nhl_stats_rest_parsers._to_output.
+
+- id: nfl-ep-reads-the-nflfastr-roof
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    return df.with_columns(*_roof_one_hots(_roof_expr(df), nflfastr=True).values())'
+  mutant: '    return df.with_columns(*_roof_one_hots(_roof_expr(df)).values())'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "roof_one_hots_follow_the_models_trainer"
+  expected: kill
+  note: >-
+    The refit EP booster is trained on nflfastR's model_roof; the old mapping scores closed-roof games as domes and
+    open ones as outdoors.
+
+- id: nfl-espn-roof-from-the-venue-id
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    return _NFL_VENUE_ROOF.get(str(venue.get("id")), _DEFAULT_ROOF)'
+  mutant: '    return _DEFAULT_ROOF'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "venue_id_sets_the_roof"
+  expected: kill
+  note: ESPN's NFL venue has no indoor flag, so without the table every game, domes included, scores as outdoors.

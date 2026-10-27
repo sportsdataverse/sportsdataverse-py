@@ -532,11 +532,17 @@ def test_fourth_down_decisions_skip_clock_stoppage_rows(run, frame):
 # N12 -- roof one-hots follow the trainer of the bundled models, on both paths
 # ---------------------------------------------------------------------------
 
-_TRAINED_ONE_HOTS = {  # (retractable, dome, outdoors) per nfl-data play_level make_model_mutations
+_CP_ONE_HOTS = {  # (retractable, dome, outdoors): CP / xYAC, nfl-data make_model_mutations before the EP refit
     "dome": (0, 1, 0),
     "closed": (0, 1, 0),
     "outdoors": (0, 0, 1),
     "open": (0, 0, 1),
+}
+_EP_ONE_HOTS = {  # EP: nflfastR's model_roof, which nfl-data trains EP on (nfl-data#84)
+    "dome": (0, 1, 0),
+    "closed": (1, 0, 0),
+    "outdoors": (0, 0, 1),
+    "open": (1, 0, 0),
 }
 
 
@@ -545,14 +551,16 @@ def test_nflverse_roof_one_hots_follow_the_models_trainer():
 
     # real nflverse 2023 pass rows (tests/fixtures/nfl_ep_wp): all four roof values
     rows = pl.read_parquet(Path(__file__).resolve().parents[1] / "fixtures" / "nfl_ep_wp" / "pass_rows_2023.parquet")
-    assert set(rows["roof"].unique().to_list()) == set(_TRAINED_ONE_HOTS)
-    for mutate in (_make_model_mutations, _make_cp_mutations):
+    assert set(rows["roof"].unique().to_list()) == set(_CP_ONE_HOTS)
+    for mutate, hots in ((_make_model_mutations, _EP_ONE_HOTS), (_make_cp_mutations, _CP_ONE_HOTS)):
         got = mutate(rows).select("roof", "retractable", "dome", "outdoors").unique().rows()
-        assert {r[0]: tuple(r[1:]) for r in got} == _TRAINED_ONE_HOTS, mutate.__name__
-    # a frame without a roof takes the documented default, a trained state
-    assert _make_model_mutations(rows.drop("roof")).select("retractable", "dome", "outdoors").unique().rows() == [
-        (0, 0, 1)
-    ]
+        assert {r[0]: tuple(r[1:]) for r in got} == hots, mutate.__name__
+        # a frame without a roof takes the documented default, a trained state
+        assert mutate(rows.drop("roof")).select("retractable", "dome", "outdoors").unique().rows() == [(0, 0, 1)]
+    # a null roof is nflfastR's NA to EP (retractable) and the default to CP
+    nulls = rows.with_columns(pl.lit(None, dtype=pl.Utf8).alias("roof"))
+    assert _make_model_mutations(nulls).select("retractable", "dome", "outdoors").unique().rows() == [(1, 0, 0)]
+    assert _make_cp_mutations(nulls).select("retractable", "dome", "outdoors").unique().rows() == [(0, 0, 1)]
 
 
 def test_espn_feature_builders_read_the_roof_column(frame):
@@ -567,16 +575,26 @@ def test_espn_feature_builders_read_the_roof_column(frame):
 
     rows = frame.head(25)
     builders = (
-        (_espn_ep_features, EP_FEATURES),
-        (_espn_cp_features, CP_FEATURES),
-        (_espn_xyac_features, XYAC_FEATURES),
+        (_espn_ep_features, EP_FEATURES, _EP_ONE_HOTS),
+        (_espn_cp_features, CP_FEATURES, _CP_ONE_HOTS),
+        (_espn_xyac_features, XYAC_FEATURES, _CP_ONE_HOTS),
     )
-    cases = [(rows.with_columns(pl.lit(r).alias("roof")), hot) for r, hot in _TRAINED_ONE_HOTS.items()]
-    cases.append((rows.drop("roof"), (0, 0, 1)))
-    for f, hot in cases:
-        for build, feats in builders:
+    for build, feats, hots in builders:
+        cases = [(rows.with_columns(pl.lit(r).alias("roof")), hot) for r, hot in hots.items()]
+        cases.append((rows.drop("roof"), (0, 0, 1)))
+        for f, hot in cases:
             x = build(f)[:, [feats.index(c) for c in ("retractable", "dome", "outdoors")]]
             assert {tuple(int(v) for v in r) for r in x} == {hot}, (build.__name__, hot)
+
+
+def test_espn_venue_id_sets_the_roof():
+    from sportsdataverse.nfl.nfl_pbp import _nfl_roof
+
+    assert _nfl_roof({"venue": {"id": "3493", "fullName": "Caesars Superdome"}}) == "dome"
+    assert _nfl_roof({"venue": {"id": 3891, "fullName": "NRG Stadium"}}) == "closed"  # int id, retractable roof
+    assert _nfl_roof({"venue": {"id": "3712", "fullName": "EverBank Stadium"}}) == "outdoors"
+    assert _nfl_roof({"venue": {"id": "3493", "indoor": False}}) == "outdoors"  # an adapter's flag wins
+    assert _nfl_roof({}) == _nfl_roof(None) == "outdoors"
 
 
 # ---------------------------------------------------------------------------

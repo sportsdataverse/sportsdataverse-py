@@ -91,10 +91,10 @@ def test_a_turnover_before_a_field_goal_keeps_its_own_end_spot():
 def test_an_out_of_order_next_play_neither_spots_nor_unflips_a_turnover():
     # JAX's next play by id is its own 2:37 snap, earlier than the 2:09 interception: no evidence of where the
     # interception ended or who has the ball, so ESPN's spot stands and the interception still flips EP_end
-    # (main: -0.88; reading that play gave +0.80).
+    # (-0.75 on the nflfastR-aligned EP refit, -0.88 before it; reading that play gave +0.80).
     r = _row(_plays(281123030), 2811230304024)
     assert r["end.yardsToEndzone"] == 76
-    assert r["EPA"] == pytest.approx(-0.88, abs=0.1)
+    assert r["EPA"] == pytest.approx(-0.75, abs=0.1)
 
 
 def test_an_untyped_kickoff_gets_no_kick_teams_from_pos_team():

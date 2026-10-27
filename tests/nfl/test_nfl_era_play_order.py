@@ -78,14 +78,15 @@ def test_period_matches_nflverse_qtr(game_id, play_id):
     assert row["period"] == _PERIODS[(game_id, play_id)], (row["type.text"], row["clock.displayValue"])
 
 
-# (fixture, game, play) -> (nflverse epa, ceiling). Ceilings are the measured error rounded up.
+# (fixture, game, play) -> (nflverse epa, ceiling). Ceilings are the measured error rounded up, re-measured on
+# the nflfastR-aligned EP refit (kicker-td 0.14 -> 0.20, short-kick 0.26 -> 0.32).
 _EPA = {
     # R831-6: GB recovers DAL's kickoff fumble and returns it for a touchdown; ESPN types it "Kickoff Return
     # Touchdown" (offense_score_vec), so the receiver's +6.92 was scored: EPA +6.302 (error 13.97).
-    (_era(301107009), 301107009, 1557): (-7.672, 0.14),
+    (_era(301107009), 301107009, 1557): (-7.672, 0.20),
     # EX-2.20-a: a short-of-landing-zone kick and an onside kick ESPN types "Kickoff Return Touchdown", not
     # scored (task 2.20 cleared td_play); the overlay still scored the receiver's touchdown: EPA 5.134 / 5.748.
-    ("td_flag_residuals/summary_401671715.json.gz", 401671715, 2262): (0.926, 0.26),
+    ("td_flag_residuals/summary_401671715.json.gz", 401671715, 2262): (0.926, 0.32),
     ("td_flag_residuals/summary_401671715.json.gz", 401671715, 4728): (1.419, 0.40),
     # R856-1: a defence-typed score that did not stand. D.Hixon's 73-yard "Punt Return Touchdown" was nullified by
     # holding (td_play false); without td_stood on def_score the punting offence took the receiver's -6.92: EPA
@@ -187,11 +188,12 @@ def test_bare_punt_ignores_the_punting_teams_next_snap(game_id, play_id):
 # ends 8 yards from MIN's scoring, MIN's next snap is at its own 8; 290927014/3343 (2009, a return to the GB 14 and a
 # holding foul) ends at 12, GB snaps at its own 6; 401671835/770 (2024, returned to the CIN 27) ends at 27, CIN snaps
 # at its own 27. (game, play) -> (end yard line = the next snap's = nflverse's, nflverse epa, ceiling); EPA on devel-nfl
-# -5.360 / -4.130 / -3.468. Each ceiling is the measured error rounded up.
+# -5.360 / -4.130 / -3.468. Each ceiling is the measured error rounded up (re-measured on the nflfastR-aligned EP refit: 0.20 -> 0.21,
+# 0.02 -> 0.13).
 _POST_2009_PUNTS = {
-    (400554340, 1481): (92, 0.077, 0.20),
+    (400554340, 1481): (92, 0.077, 0.21),
     (290927014, 3343): (94, 1.025, 0.35),
-    (401671835, 770): (73, -0.555, 0.02),
+    (401671835, 770): (73, -0.555, 0.13),
 }
 
 
@@ -259,7 +261,10 @@ def test_punt_followed_by_a_free_kick_keeps_espns_end():
 def test_unscored_safety_scores_two_for_the_defence():
     row = _row(_era(271021019), 271021019, 2661)
     assert (row["type.text"], row["safety"], row["fixed_drive_result"]) == ("Blocked Punt", True, "Safety")
-    assert abs(row["EPA"] - 0.624) <= 0.01, (row["EP_start"], row["EP_end"])
+    assert abs(row["EPA"] - 0.624) <= 0.02, (
+        row["EP_start"],
+        row["EP_end"],
+    )  # 0.01 before the nflfastR-aligned EP refit
     kick = _row(_era(271021019), 271021019, 2683)
     assert (kick["homeScore"], kick["awayScore"]) == (26, 9)
 
@@ -348,7 +353,10 @@ def test_safety_overlay_falls_back_to_the_text(safety_dtype):
 def test_scored_safety_whose_text_does_not_say_so():
     row = _row(_era(281012016), 281012016, "0923")
     assert (row["type.text"], row["safety"], row["fixed_drive_result"]) == ("Safety", True, "Safety")
-    assert abs(row["EPA"] - 0.230) <= 0.12, (row["EP_start"], row["EP_end"])
+    assert abs(row["EPA"] - 0.230) <= 0.13, (
+        row["EP_start"],
+        row["EP_end"],
+    )  # 0.12 before the nflfastR-aligned EP refit
     assert _row(_era(271223008), 271223008, "0764")["safety"] is False
 
 

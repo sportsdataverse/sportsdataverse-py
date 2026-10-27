@@ -56,7 +56,7 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 
 | artifact | fitting script | bundled in | release byte-identical |
 |---|---|---|---|
-| `sportsdataverse/nfl/models/ep_model.ubj` | `play_level` | `c61e0d9ad1` | yes (`nfl_model_artifacts`) |
+| `sportsdataverse/nfl/models/ep_model.ubj` | `play_level` at nfl-data `bbe7269` (nflfastR's `cal_data` rows and roof mapping, 1999-2025 `nfl_model_pbp`) | this PR | no (refit after the 09-10 release; `nfl_model_artifacts` is republished when nfl-data#84 merges) |
 | `sportsdataverse/nfl/models/wp_naive.ubj` | `play_level` | `c61e0d9ad1` | yes |
 | `sportsdataverse/nfl/models/wp_spread.ubj` | `play_level` | `c61e0d9ad1` | yes |
 | `sportsdataverse/nfl/models/cp_model.ubj` | `play_level` | `c61e0d9ad1` | yes |

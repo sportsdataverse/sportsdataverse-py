@@ -929,9 +929,10 @@ def _snaps(game_id: int) -> pl.DataFrame:
 # Measured after the fix (before it: 17 / 23 / 67 wrong possession changes, first downs 0.886 /
 # 0.869 / 0.661, EPA corr 0.756 / 0.771 / 0.426), rounded one step toward failing.
 _END_STATE = {
-    400554340: (114, 0, 1.0, 0.761, 0.430),  # 1.0, 0.76179, 0.42959
-    401030962: (122, 0, 1.0, 0.951, 0.197),  # 1.0, 0.95171, 0.19693
-    401326467: (118, 0, 0.991, 0.932, 0.139),  # 0.99153, 0.93294, 0.13892
+    # EPA corr / MAE re-measured on the nflfastR-aligned EP refit (they were 0.762 / 0.430, 0.952 / 0.197, 0.933 / 0.139)
+    400554340: (114, 0, 1.0, 0.882, 0.197),  # 1.0, 0.88200, 0.19655
+    401030962: (122, 0, 1.0, 0.980, 0.108),  # 1.0, 0.98065, 0.10715
+    401326467: (118, 0, 0.991, 0.926, 0.131),  # 0.99153, 0.92655, 0.13065
 }
 
 
@@ -1116,12 +1117,12 @@ def test_kickoff_touchback_epa_is_zero(game_id):
 @pytest.mark.parametrize(("game_id", "play_id"), list(_TB_LANDING_ZONE.items()))
 def test_kickoff_touchback_landing_zone_ends_at_the_next_snap(game_id, play_id):
     # Oracle: nflverse's next snap (the 80), and the owner's model there: EP(1st & 10 at the 80) -
-    # EP(1st & 10 at the 2024 touchback 70) = -0.600 (measured; -0.233 with the literal 75, 0 at the 70).
+    # EP(1st & 10 at the 2024 touchback 70) = -0.611 (measured on the nflfastR-aligned EP refit; -0.600 before it; 0 at the 70).
     row = run(game_id).plays.filter(pl.col("id").cast(pl.Utf8) == f"{game_id}{play_id}").row(0, named=True)
     nxt = _nflverse_next_snap(game_id).filter(pl.col("play_id") > play_id).filter(pl.col("down").is_not_null())
     assert row["kickoff_tb"] is True
     assert row["end.yardsToEndzone"] == nxt["yardline_100"][0] == 80
-    assert abs(row["EPA"] - (-0.600)) < 0.01, row["EPA"]
+    assert abs(row["EPA"] - (-0.611)) < 0.01, row["EPA"]
 
 
 @pytest.mark.parametrize(
@@ -1173,7 +1174,7 @@ def test_kickoff_net_spot_is_the_receivers_next_snap():
 # - 400554238/568 (2014, fixtures/kickoff_onside_400554238_trimmed.json.gz): "kicks onside ... RECOVERED
 #   by IND", nflverse -3.798, ours -2.855 -> -3.498 (error 0.943 -> 0.300); IND's snap at the TEN 44.
 _KICKER_RECOVERS = [
-    (301003002, None, "3010030020297", 39, -3.890, 0.07),
+    (301003002, None, "3010030020297", 39, -3.890, 0.12),  # 0.07 before the nflfastR-aligned EP refit (error 0.115)
     (400554238, "kickoff_onside_400554238_trimmed.json.gz", "400554238568", 44, -3.798, 0.31),
 ]
 
