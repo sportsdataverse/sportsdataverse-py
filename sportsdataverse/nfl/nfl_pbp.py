@@ -75,9 +75,9 @@ from sportsdataverse.nfl.ep_wp import (
     EP_FEATURES,
     WP_NAIVE_FEATURES,
     WP_SPREAD_FEATURES,
+    _DEFAULT_ROOF,
     _EP_POINT_VALUES,
     _XYAC_OUT_COLS,
-    _DEFAULT_ROOF,
     _espn_cp_features,
     _espn_ep_features,
     _espn_wp_features,
@@ -496,12 +496,42 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 
 # ESPN's summary names the venue but carries no roof; the models' one-hots come from
 # the game-level ``roof`` column through ep_wp's feature builders (_roof_one_hots).
+#
+# ESPN venue id -> roof, for every venue nflverse's games.csv calls a dome or a
+# retractable roof (open / closed) in 5+ games of 1999-2025, joined on ESPN's game id
+# (nfl-raw summaries; ESPN ships venue ids from 2006, so earlier games take the default).
+# ESPN doesn't say whether a retractable roof was open: those take "closed", nflverse's
+# state in 83% of their games, which is retractable to EP and a dome to CP / xYAC.
+# Every venue not listed is outdoors.
+_NFL_VENUE_ROOF = {
+    "16": "dome",  # Mall of America Field
+    "1822": "dome",  # Rogers Centre
+    "3493": "dome",  # Caesars Superdome
+    "3494": "dome",  # The Dome at America's Center
+    "3495": "dome",  # Georgia Dome
+    "3727": "dome",  # Ford Field
+    "3840": "dome",  # Metrodome
+    "3888": "dome",  # RCA Dome
+    "5239": "dome",  # U.S. Bank Stadium
+    "6501": "dome",  # Allegiant Stadium
+    "7065": "dome",  # SoFi Stadium
+    "3687": "closed",  # AT&T Stadium
+    "3812": "closed",  # Lucas Oil Stadium
+    "3891": "closed",  # NRG Stadium
+    "3970": "closed",  # State Farm Stadium
+    "5348": "closed",  # Mercedes-Benz Stadium
+}
 
 
 def _nfl_roof(game_info) -> str:
-    """The game's roof from ``gameInfo.venue.indoor`` when ESPN (or an adapter) supplies it."""
-    indoor = ((game_info or {}).get("venue") or {}).get("indoor")
-    return "dome" if indoor is True else "outdoors" if indoor is False else _DEFAULT_ROOF
+    """The game's roof: ``gameInfo.venue.indoor`` when an adapter supplies it, else the venue id."""
+    venue = (game_info or {}).get("venue") or {}
+    indoor = venue.get("indoor")
+    if indoor is True:
+        return "dome"
+    if indoor is False:
+        return "outdoors"
+    return _NFL_VENUE_ROOF.get(str(venue.get("id")), _DEFAULT_ROOF)
 
 
 # "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),

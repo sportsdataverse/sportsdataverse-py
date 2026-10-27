@@ -234,17 +234,23 @@ def test_empty_input_returns_empty_decision_cols() -> None:
 NFL4TH_SLICE = Path(__file__).resolve().parent / "fixtures" / "nfl4th_2022_slice.parquet"
 NFL4TH_REPLAY_STRIDE = 7
 NFL4TH_REPLAY_FLOORS = {
-    # column: (min corr, max MAE, max |diff|, min comparable)   measured corr / MAE / max (n)
-    "go_wp": (0.995, 0.0126, 0.0879, 600),  # 0.998492 / 0.012505 / 0.087811 (606)
-    "fg_wp": (0.995, 0.0133, 0.0876, 600),  # 0.998240 / 0.013238 / 0.087517 (606)
-    "punt_wp": (0.995, 0.0123, 0.0874, 440),  # 0.998444 / 0.012272 / 0.087383 (443)
-    "go_boost": (0.9634, 0.6674, 5.7337, 600),  # 0.963449 / 0.667391 / 5.733650 (pct-pts)
+    # column: (min corr, max MAE, max |diff|, min comparable)   measured corr / MAE / max (n), on the
+    # nflfastR-aligned EP refit (re-recorded then: EP feeds the post-play states the two boosters score)
+    "go_wp": (0.995, 0.0126, 0.0850, 600),  # 0.998486 / 0.012538 / 0.084982 (606)
+    "fg_wp": (0.995, 0.0133, 0.0847, 600),  # 0.998227 / 0.013292 / 0.084688 (606)
+    "punt_wp": (0.995, 0.0124, 0.0846, 440),  # 0.998438 / 0.012349 / 0.084565 (443)
+    "go_boost": (0.9629, 0.6741, 5.7205, 600),  # 0.962981 / 0.674028 / 5.720415 (pct-pts)
 }
-NFL4TH_FULL_FLOORS = {
-    "go_wp": (0.995, 0.0122, 0.1097, 4200),  # 0.99862 / 0.012167 / 0.109654
-    "fg_wp": (0.995, 0.0130, 0.1078, 4200),  # 0.99829 / 0.012910 / 0.107780
-    "punt_wp": (0.995, 0.0125, 0.0945, 3000),  # 0.99849 / 0.012450 / 0.094482 (n=3,114 finite)
-    "go_boost": (0.9579, 0.6820, 6.0470, 4200),  # 0.95799 / 0.681019 / 6.046908 (pct-pts)
+NFL4TH_FULL_FLOORS = {  # measured on the EP refit; the old EP gave 0.99862 / 0.012172 / 0.109654 for go_wp
+    "go_wp": (0.995, 0.0122, 0.1061, 4200),  # 0.99863 / 0.012156 / 0.106019
+    "fg_wp": (0.995, 0.0130, 0.1078, 4200),  # 0.99829 / 0.012903 / 0.107780
+    "punt_wp": (0.995, 0.0125, 0.0949, 3000),  # 0.99848 / 0.012468 / 0.094798 (n=3,114 finite)
+    "go_boost": (
+        0.9587,
+        0.6759,
+        6.5003,
+        4200,
+    ),  # 0.95876 / 0.675809 / 6.500234 (pct-pts; old EP 0.95823 / 0.678373 / 6.046908)
 }
 #: sha256 of the boosters the replay was recorded from (nfl_4th_down_models release, cached 2026-06-24)
 NFL4TH_BOOSTER_SHA256 = {

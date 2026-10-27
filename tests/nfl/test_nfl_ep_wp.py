@@ -379,15 +379,15 @@ def test_ep_feature_parity_outdoors():
 
 
 def test_ep_feature_parity_dome():
-    """A dome (or closed) roof reaches both paths as dome=1, retractable=0, outdoors=0."""
-    for roof in ("dome", "closed"):
+    """EP reads roofs the nflfastR way on both paths: a dome is a dome, a closed or open roof is retractable."""
+    for roof, hot in (("dome", "dome"), ("closed", "retractable"), ("open", "retractable")):
         nv_df = _make_model_mutations(_nflverse_row(roof=roof))
         nv_X = nv_df.select(EP_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
         espn_X = _espn_ep_features(_espn_row().with_columns(pl.lit(roof).alias("roof")))
         for X in (nv_X, espn_X):
-            assert X[0, EP_FEATURES.index("dome")] == 1.0
-            assert X[0, EP_FEATURES.index("retractable")] == 0.0
-            assert X[0, EP_FEATURES.index("outdoors")] == 0.0
+            assert [X[0, EP_FEATURES.index(c)] for c in ("retractable", "dome", "outdoors")] == [
+                float(c == hot) for c in ("retractable", "dome", "outdoors")
+            ]
 
 
 # ---------------------------------------------------------------------------

@@ -342,12 +342,11 @@ NFLVERSE_FRAME_CONTRACT: frozenset[str] = frozenset(
         "defteam_timeouts_remaining",
         # derived columns (computed from inputs; listed for contract clarity)
         "home",  # 1 if posteam == home_team, else 0
-        # the bundled models' trainer (nfl-data play_level.make_model_mutations):
-        # "dome" / "closed" -> dome, everything else (incl. "open", None) -> outdoors;
-        # retractable is 1 only for the literal "retractable", which never occurs
-        "retractable",  # 1 if roof == "retractable", else 0 (never in nflverse data)
-        "dome",  # 1 if roof in {"dome", "closed"}, else 0
-        "outdoors",  # 1 otherwise ("outdoors", "open", None)
+        # EP's roof mapping, nflfastR's model_roof (CP / xYAC keep the older one; see
+        # ep_wp._roof_one_hots)
+        "retractable",  # 1 if roof in {"open", "closed"} or null, else 0
+        "dome",  # 1 if roof == "dome", else 0
+        "outdoors",  # 1 otherwise
         # ── WP feature inputs ─────────────────────────────────────────────────
         "score_differential",
         "game_seconds_remaining",
