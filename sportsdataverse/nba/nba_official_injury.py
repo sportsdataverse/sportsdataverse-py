@@ -312,6 +312,9 @@ def parse_nba_injury_report(
 
         See Also:
             * :func:`nba_injury_report` -- fetch a slot and parse it.
+            * `Parser guide`_ -- this parser's bytes / path input contract.
+
+        .. _Parser guide: https://py.sportsdataverse.org/docs/parsers/#parse_nba_injury_report
     """
     try:
         import pdfplumber
@@ -349,7 +352,8 @@ def nba_injury_report(
 
     Raises:
         NoDataError: The slot (or every slot of the date) is not published.
-        AssetFetchError: Any other non-200 answer.
+        AssetFetchError: Any other non-200 answer, or an HTTP-200 body that is
+            not a PDF (e.g. a CDN error page).
         ImportError: ``pdfplumber`` is not installed.
 
     Example:
@@ -372,6 +376,9 @@ def nba_injury_report(
         See Also:
             * :func:`sportsdataverse.nba.bref.bref_injuries` -- current list, no history.
             * :func:`sportsdataverse.espn_snapshots.espn_injuries_snapshot` -- ESPN, current only.
+            * `Parser guide`_ -- ``parse_nba_injury_report``, for a PDF you already have.
+
+        .. _Parser guide: https://py.sportsdataverse.org/docs/parsers/#parse_nba_injury_report
     """
     if report_time is not None:
         slots = [report_time]
@@ -386,6 +393,8 @@ def nba_injury_report(
         # 403 = slot not published (S3 AccessDenied); never retry it
         resp = download(url, proxy=proxy, retry_statuses=(408, 429, 500, 502, 503, 504), **kwargs)
         if resp.status_code == 200:
+            if not resp.content.startswith(b"%PDF"):
+                raise AssetFetchError(f"{url} answered HTTP 200 without a PDF body")
             return parse_nba_injury_report(resp.content, return_as_pandas=return_as_pandas)
         if resp.status_code != 403:
             raise AssetFetchError(f"{url} answered HTTP {resp.status_code}")

@@ -180,6 +180,10 @@ def test_missing_and_failing_slots_raise(monkeypatch: pytest.MonkeyPatch) -> Non
     monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(500))
     with pytest.raises(AssetFetchError):
         ir.nba_injury_report(report_time=dt.datetime(2024, 1, 15, 17))
+    # a 200 that is not a PDF (CDN error page) is an asset failure, not a pdfplumber crash
+    monkeypatch.setattr(ir, "download", lambda url, **kw: _Resp(200, b"<html>Access Denied</html>"))
+    with pytest.raises(AssetFetchError, match="without a PDF body"):
+        ir.nba_injury_report(report_time=dt.datetime(2024, 1, 15, 17))
 
 
 @skip_if_no_live

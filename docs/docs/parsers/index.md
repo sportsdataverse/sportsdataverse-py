@@ -149,6 +149,35 @@ endpoint families that share a shape:
 - **`parse_summary`** — for the rich Site v2 summary dispatcher
   (returns a dict of 21 sub-frames).
 
+## Provider-specific parsers
+
+Parsers for sources other than ESPN live next to their fetcher and are not in
+`ENDPOINT_PARSERS`. The generated reference pages leave out `parse_*`
+functions, so their input contracts are listed here.
+
+### `parse_nba_injury_report` {#parse_nba_injury_report}
+
+`sportsdataverse.nba.parse_nba_injury_report(pdf, *, return_as_pandas=False)`
+parses one official NBA injury report PDF, the document
+[`nba_injury_report`](../nba/reference/additional/nba-official-injury-report.md#nba_injury_report)
+fetches. It needs the `[pdf]` extra (`pip install sportsdataverse[pdf]`).
+
+- `pdf` is either the PDF's **bytes** (e.g. a fetched response body) or a
+  **path** (`str` or `pathlib.Path`) to a saved file. Both give the same frame.
+- It returns one row per listed player, plus one row per team whose report
+  was `NOT YET SUBMITTED` (`player_name` and `current_status` null). A PDF
+  with no rows gives a zero-row frame with the full schema.
+- Every layout from 2018-12-17 onward is handled: the 2018-19 nine-column
+  report (`category` and `previous_status` populated) and the later
+  seven-column one, with or without a ruled grid.
+
+```python
+from sportsdataverse.nba import parse_nba_injury_report
+
+df = parse_nba_injury_report("Injury-Report_2026-01-15_05_30PM.pdf")  # path
+df = parse_nba_injury_report(pdf_bytes)                                # bytes
+```
+
 ## Adding a new parser
 
 1. Write the parser in `sportsdataverse/_common_espn_parsers.py`

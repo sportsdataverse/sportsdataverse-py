@@ -45,7 +45,7 @@ The parsed report (see `parse_nba_injury_report`).
 | Exception | Description |
 |---|---|
 | `NoDataError` | The slot (or every slot of the date) is not published. |
-| `AssetFetchError` | Any other non-200 answer. |
+| `AssetFetchError` | Any other non-200 answer, or an HTTP-200 body that is not a PDF (e.g. a CDN error page). |
 | `ImportError` | `pdfplumber` is not installed. |
 
 **Example**
