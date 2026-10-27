@@ -388,24 +388,24 @@ polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is `True`) — the
 | `total_away_raw_air_epa` | Float64 | Cumulative total raw air EPA for the away team in the game so far. |
 | `total_home_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the home team in the game so far. |
 | `total_away_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the away team in the game so far. |
-| `era0` | Int64 |  |
-| `era1` | Int64 |  |
-| `era2` | Int64 |  |
-| `era3` | Int64 |  |
-| `era4` | Int64 |  |
-| `down1` | Int64 |  |
-| `down2` | Int64 |  |
-| `down3` | Int64 |  |
-| `down4` | Int64 |  |
-| `home` | Int64 |  |
-| `retractable` | Int64 |  |
-| `dome` | Int64 |  |
-| `outdoors` | Int64 |  |
-| `receive_2h_ko` | Int64 |  |
-| `posteam_spread` | Float64 |  |
-| `elapsed_share` | Float64 |  |
-| `spread_time` | Float64 |  |
-| `Diff_Time_Ratio` | Float64 |  |
+| `era0` | Int64 | 1 for seasons through 2001, else 0 (model era feature). |
+| `era1` | Int64 | 1 for seasons 2002-2005, else 0 (model era feature). |
+| `era2` | Int64 | 1 for seasons 2006-2013, else 0 (model era feature). |
+| `era3` | Int64 | 1 for seasons 2014-2017, else 0 (model era feature). |
+| `era4` | Int64 | 1 for seasons from 2018 on, else 0 (model era feature). |
+| `down1` | Int64 | 1 on a first-down play, else 0 (expected-points model feature). |
+| `down2` | Int64 | 1 on a second-down play, else 0 (expected-points model feature). |
+| `down3` | Int64 | 1 on a third-down play, else 0 (expected-points model feature). |
+| `down4` | Int64 | 1 on a fourth-down play, else 0 (expected-points model feature). |
+| `home` | Int64 | 1 when the possession team is the home team, else 0 (model feature). |
+| `retractable` | Int64 | 1 only when the roof is the literal value "retractable", which nflverse does not ship, else 0 (model feature). |
+| `dome` | Int64 | 1 when the game is played under a dome or a closed roof, else 0 (model feature; a null roof counts as outdoors). |
+| `outdoors` | Int64 | 1 when the game is played outdoors or under an open roof, else 0 (model feature; a null roof counts as outdoors). |
+| `receive_2h_ko` | Int64 | 1 on a first-half play when the possession team receives the second-half kickoff, else 0 (win-probability model feature). |
+| `posteam_spread` | Float64 | Point spread from the possession team's side, nflverse spread_line for the home team and its negation for the away team. |
+| `elapsed_share` | Float64 | Share of regulation elapsed at the snap, (3600 - game_seconds_remaining) / 3600 clipped to [0, 1]. |
+| `spread_time` | Float64 | Win-probability model feature, posteam_spread * exp(-4 * elapsed_share), so the spread fades as the game runs down; 0 when spread_line is missing. |
+| `Diff_Time_Ratio` | Float64 | Win-probability model feature, score_differential divided by exp(-4 * elapsed_share), so a lead weighs more as the game runs down. |
 | `wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play. |
 | `vegas_wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
 | `home_wp` | Float64 | Estimated win probability for the home team. |
@@ -438,32 +438,32 @@ polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is `True`) — the
 | `xyac_median_yardage` | Float64 | Median expected yards after the catch based on where the ball was caught. |
 | `xyac_success` | Float64 | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
 | `xyac_fd` | Float64 | Probability play earns a first down based on where the ball was caught. |
-| `qbr_epa` | Float64 |  |
+| `qbr_epa` | Float64 | The quarterback's EPA on the play as the QBR model reads it, floored at -5 and set to -3.5 on a fumble. |
 | `weight` | Float64 | Official weight, in pounds |
-| `non_fumble_sack` | Boolean |  |
-| `sack_epa` | Float64 |  |
-| `pass_epa` | Float64 |  |
-| `rush_epa` | Float64 |  |
-| `pen_epa` | Float64 |  |
-| `sack_weight` | Float64 |  |
-| `pass_weight` | Float64 |  |
-| `rush_weight` | Float64 |  |
-| `pen_weight` | Float64 |  |
-| `action_play` | Boolean |  |
-| `go_wp` | Float64 |  |
-| `first_down_prob` | Float64 |  |
-| `wp_succeed` | Float64 |  |
-| `wp_fail` | Float64 |  |
-| `fg_make_prob` | Float64 |  |
-| `make_fg_wp` | Float64 |  |
-| `miss_fg_wp` | Float64 |  |
-| `fg_wp` | Float64 |  |
-| `punt_wp` | Float64 |  |
-| `go_boost` | Float64 |  |
-| `go_wp_diff` | Float64 |  |
-| `punt_wp_diff` | Float64 |  |
-| `fg_wp_diff` | Float64 |  |
-| `fourth_down_recommendation` | String |  |
+| `non_fumble_sack` | Boolean | True for a sack with no fumble on the play (QBR model input). |
+| `sack_epa` | Float64 | qbr_epa on sacks without a fumble, null otherwise (QBR model input). |
+| `pass_epa` | Float64 | qbr_epa on pass plays, null otherwise (QBR model input). |
+| `rush_epa` | Float64 | qbr_epa on rushing plays, null otherwise (QBR model input). |
+| `pen_epa` | Float64 | qbr_epa on plays with a penalty, null otherwise (QBR model input). |
+| `sack_weight` | Float64 | The play's QBR weight on sacks without a fumble, null otherwise. |
+| `pass_weight` | Float64 | The play's QBR weight on pass plays, null otherwise. |
+| `rush_weight` | Float64 | The play's QBR weight on rushing plays, null otherwise. |
+| `pen_weight` | Float64 | The play's QBR weight on plays with a penalty, null otherwise. |
+| `action_play` | Boolean | True when the play's qb_epa is non-zero, i.e. the play counts toward the QBR model's inputs. |
+| `go_wp` | Float64 | Fourth downs only. Possession team's win probability if it goes for it, weighted over the distribution of yards gained. |
+| `first_down_prob` | Float64 | Fourth downs only. Probability that going for it gains a first down or a touchdown. |
+| `wp_succeed` | Float64 | Fourth downs only. Possession team's win probability if going for it converts. |
+| `wp_fail` | Float64 | Fourth downs only. Possession team's win probability if going for it fails to convert. |
+| `fg_make_prob` | Float64 | Fourth downs only. Probability a field-goal attempt from this spot is good, from the bundled fg_model. |
+| `make_fg_wp` | Float64 | Fourth downs only. Possession team's win probability if the field goal is good. |
+| `miss_fg_wp` | Float64 | Fourth downs only. Possession team's win probability if the field goal is missed. |
+| `fg_wp` | Float64 | Fourth downs only. Possession team's win probability if it attempts a field goal, the make and miss outcomes weighted by fg_make_prob. |
+| `punt_wp` | Float64 | Fourth downs only. Possession team's win probability if it punts, weighted over the punt landing distribution. |
+| `go_boost` | Float64 | Fourth downs only. Percentage points of win probability gained by going for it over the better of kicking and punting, 100 * (go_wp - max(fg_wp, punt_wp)) (nfl4th's headline number). |
+| `go_wp_diff` | Float64 | Fourth downs only. go_wp minus the recommended option's win probability; 0 when going for it is recommended, negative otherwise. |
+| `punt_wp_diff` | Float64 | Fourth downs only. punt_wp minus the recommended option's win probability; 0 when punting is recommended, negative otherwise. |
+| `fg_wp_diff` | Float64 | Fourth downs only. fg_wp minus the recommended option's win probability; 0 when kicking is recommended, negative otherwise. |
+| `fourth_down_recommendation` | String | Fourth downs only. The option with the highest win probability: "go", "field_goal" or "punt". |
 
 **Raises**
 
