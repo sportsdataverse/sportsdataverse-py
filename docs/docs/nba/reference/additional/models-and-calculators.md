@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected"
 sidebar_label: "Models and calculators: AdjRapmModel–nba_expected"
-sidebar_position: 10
+sidebar_position: 11
 description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected

@@ -54,6 +54,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_live_boxscore](additional/nba-stats-api.md#nba_live_boxscore) | Fetch and parse NBA cdn.nba.com liveData boxscore for a game. |
 | [nba_live_pbp](additional/nba-stats-api.md#nba_live_pbp) | Fetch and parse NBA cdn.nba.com liveData play-by-play for a game. |
 
+## NBA Official Injury Report
+
+| Function | Summary |
+|---|---|
+| [nba_injury_report](additional/nba-official-injury-report.md#nba_injury_report) | Fetch and parse an official NBA injury report. |
+| [nba_injury_report_slots](additional/nba-official-injury-report.md#nba_injury_report_slots) | Every slot the league's schedule allows on `date`, earliest first. |
+| [nba_injury_report_url](additional/nba-official-injury-report.md#nba_injury_report_url) | The archive URL of the report published at `report_time` (US Eastern). |
+
 ## Fox Sports API
 
 | Function | Summary |

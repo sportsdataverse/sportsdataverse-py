@@ -100,6 +100,12 @@ tests = [
     # tests/test_metric_registry.py and the codegen tests import yaml; it used to arrive
     # through pycln, which left this extra. `pip install -e .[tests]` is a documented path.
     "pyyaml>=6.0",
+    # Official NBA injury report PDFs (sportsdataverse.nba.nba_official_injury); pure Python.
+    "pdfplumber>=0.11",
+]
+pdf = [
+    # Official NBA injury report PDFs (sportsdataverse.nba.nba_official_injury); pure Python.
+    "pdfplumber>=0.11",
 ]
 soccer = [
     # kloppy reads ~15 event/tracking providers (StatsBomb, Opta, Wyscout, Sportec,
@@ -164,6 +170,8 @@ all = [
     "pyyaml>=6.0",
     "sdvplot[mpl]>=0.1.1",
     "sportypy>=1.0",
+    # Official NBA injury report PDFs (sportsdataverse.nba.nba_official_injury); pure Python.
+    "pdfplumber>=0.11",
 ]
 
 
@@ -585,6 +593,7 @@ files = [
     "sportsdataverse/_html_tables.py",
     "sportsdataverse/_temporal.py",
     "sportsdataverse/nba/bref.py",
+    "sportsdataverse/nba/nba_official_injury.py",
     "sportsdataverse/nba/nba_salary_draft.py",
     "sportsdataverse/nba/realgm.py",
     "sportsdataverse/providers/cbs/cbs_napi_parsers.py",

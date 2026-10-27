@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: add_ctg–nba_raw"
 sidebar_label: "Analytics: add_ctg–nba_raw"
-sidebar_position: 12
+sidebar_position: 13
 description: "NBA — additional Python functions — Analytics: add_ctg–nba_raw — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: add_ctg–nba_raw

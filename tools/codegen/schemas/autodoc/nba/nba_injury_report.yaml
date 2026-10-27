@@ -1,0 +1,40 @@
+schema: nba_injury_report
+kind: dataframe
+hand_authored: true
+columns:
+- name: report_datetime
+  type: datetime
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: game_time
+  type: character
+  description: ''
+- name: matchup
+  type: character
+  description: ''
+- name: away_team_abbr
+  type: character
+  description: ''
+- name: home_team_abbr
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: current_status
+  type: character
+  description: ''
+- name: reason
+  type: character
+  description: ''
+- name: category
+  type: character
+  description: ''
+- name: previous_status
+  type: character
+  description: ''
