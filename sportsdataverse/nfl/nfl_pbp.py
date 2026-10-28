@@ -504,9 +504,9 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 # ESPN doesn't say whether a retractable roof was open: those take "closed", nflverse's
 # state in 83% of their games, which is retractable to EP and a dome to CP / xYAC.
 # _NFL_OUTDOOR_VENUES lists the other venues of 5+ games. Both tables also key the Shield
-# feed's venue uuids (every one of 3+ games is unanimous in games.csv), so a neutral Shield game
-# at a dome (a Super Bowl at NRG) keeps its roof and one at Wembley stays outdoors whatever
-# Shield's neutralSite says. A venue id in neither table (none before 2006, a venue first used
+# feed's venue uuids (every one of 3+ games is unanimous in games.csv once open is folded into
+# closed and blank rows dropped), so a neutral Shield game at a dome (a Super Bowl at NRG) keeps
+# its roof and one at Wembley stays outdoors whatever Shield's neutralSite says. A venue id in neither table (none before 2006, a venue first used
 # later, a one-off international ground) takes the home team's roof that season
 # (model_vars.home_team_roof), outdoors at a neutral site. That is right where
 # games.csv is not: it gives the 2025-26 international games (Berlin, Sao Paulo, Munich, ...)

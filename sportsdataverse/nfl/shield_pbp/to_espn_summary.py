@@ -1053,8 +1053,7 @@ def _header(
                 "id": event_id,
                 "uid": f"s:20~l:28~e:{event_id}~c:{event_id}",
                 "date": game.get("time") or game.get("date"),
-                # a game abroad is neutral to the roof whoever is the designated home team
-                "neutralSite": bool(game.get("neutralSite") or game.get("international")),
+                "neutralSite": bool(game.get("neutralSite")),
                 "conferenceCompetition": False,
                 "boxscoreAvailable": False,
                 "commentaryAvailable": False,

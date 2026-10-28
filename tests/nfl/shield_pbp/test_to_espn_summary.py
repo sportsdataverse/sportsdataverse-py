@@ -599,10 +599,3 @@ def test_the_id_maps_neutral_site_keeps_a_shield_game_outdoors(cle_jax_shield, f
     unknown = {"venue": {"id": "00000000-0000-0000-0000-000000000000"}}
     assert _nfl_roof(unknown, "DET", 2014, neutral) == "outdoors"
     assert _nfl_roof(unknown, "DET", 2014, False) == "dome"
-
-
-def test_a_shield_game_abroad_is_a_neutral_site(cle_jax_shield):
-    """Shield's ``international`` flag marks a London or Mexico City game when ``neutralSite`` is False."""
-    abroad = {**cle_jax_shield, "international": True, "neutralSite": False}
-    summary, _ = shield_to_espn_summary(abroad, CLE_JAX_ROW)
-    assert summary["header"]["competitions"][0]["neutralSite"] is True
