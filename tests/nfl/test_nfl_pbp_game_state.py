@@ -597,6 +597,18 @@ def test_espn_venue_id_sets_the_roof():
     assert _nfl_roof({}) == _nfl_roof(None) == "outdoors"
 
 
+def test_shield_venue_uuid_sets_the_roof():
+    """Shield keys venues by uuid; the tables resolve them before the neutral-site and home-team rules."""
+    from sportsdataverse.nfl.nfl_pbp import _nfl_roof
+
+    nrg = {"venue": {"id": "00083698-a263-8c18-f063-4dc45196bfef", "fullName": "Reliant Stadium"}}
+    wembley = {"venue": {"id": "00085525-dc80-0059-df54-7c8d69e9fcfd", "fullName": "Wembley Stadium"}}
+    ford = {"venue": {"id": "00082026-23fe-63b7-7d18-43cec01cfcfb", "fullName": "Ford Field"}}
+    assert _nfl_roof(nrg, "NE", 2016, True) == "closed"  # Super Bowl LI: neutral, retractable roof
+    assert _nfl_roof(wembley, "ATL", 2014, False) == "outdoors"  # Shield said not neutral; ATL plays in a dome
+    assert _nfl_roof(ford, "PIT", 2005, True) == "dome"  # Super Bowl XL: neutral, under a dome
+
+
 def test_missing_or_unknown_venue_takes_the_home_teams_roof():
     from sportsdataverse.nfl.nfl_pbp import _nfl_roof
 

@@ -503,9 +503,12 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 # (nfl-raw summaries; ESPN ships venue ids from 2006, so earlier games take the default).
 # ESPN doesn't say whether a retractable roof was open: those take "closed", nflverse's
 # state in 83% of their games, which is retractable to EP and a dome to CP / xYAC.
-# _NFL_OUTDOOR_VENUES lists the other venues of 5+ games. A venue id in neither table
-# (none before 2006, a venue ESPN first used later, a Shield venue) takes the home team's
-# roof that season (model_vars.home_team_roof), outdoors at a neutral site. That is right where
+# _NFL_OUTDOOR_VENUES lists the other venues of 5+ games. Both tables also key the Shield
+# feed's venue uuids (every one of 3+ games is unanimous in games.csv once open is folded into
+# closed and blank rows dropped), so a neutral Shield game at a dome (a Super Bowl at NRG) keeps
+# its roof and one at Wembley stays outdoors whatever Shield's neutralSite says. A venue id in neither table (none before 2006, a venue first used
+# later, a one-off international ground) takes the home team's roof that season
+# (model_vars.home_team_roof), outdoors at a neutral site. That is right where
 # games.csv is not: it gives the 2025-26 international games (Berlin, Sao Paulo, Munich, ...)
 # the designated home team's own stadium and roof.
 _NFL_VENUE_ROOF = {
@@ -525,6 +528,25 @@ _NFL_VENUE_ROOF = {
     "3891": "closed",  # NRG Stadium
     "3970": "closed",  # State Farm Stadium
     "5348": "closed",  # Mercedes-Benz Stadium
+    # Shield venue uuids (nfl-raw ``nfl/raw`` Shield feed joined to games.csv on game_id, 3+ games)
+    "00081530-a57f-9bd1-0b4c-f32b7f2861a9": "dome",  # Alamodome
+    "00081510-8d44-0c8b-d478-07ace72fbbef": "dome",  # Allegiant Stadium
+    "00082870-94c7-53ad-b2bf-a1d334cf1512": "dome",  # Caesars Superdome
+    "00085189-f7bd-c6f4-5265-d084a0c003e4": "dome",  # Edward Jones Dome
+    "00082026-23fe-63b7-7d18-43cec01cfcfb": "dome",  # Ford Field
+    "00082053-4ffe-8864-c99b-7b987f19457a": "dome",  # Georgia Dome
+    "00082250-89fe-7b86-ef98-9062cd354256": "dome",  # Mall of America Field
+    "00083685-79cc-da6a-e99f-9394807af518": "dome",  # Pontiac Silverdome
+    "00083730-f472-9f0c-2aff-a67416e2a755": "dome",  # RCA Dome
+    "00084575-b3b8-4668-1b2a-7e382e602183": "dome",  # Rogers Centre
+    "00083005-73cf-76e4-0b7c-b1a83f72b2c5": "dome",  # SoFi Stadium
+    "00085025-4574-5083-1722-94071ac9648b": "dome",  # The Kingdome
+    "00081652-d8a8-d698-5b3f-31487c6624f7": "dome",  # U.S. Bank Stadium
+    "00084948-addf-5f39-b283-02455f77c178": "closed",  # AT&T Stadium
+    "00082878-4c6e-d80a-0da7-6f8355c339c2": "closed",  # Lucas Oil Stadium
+    "00082076-29a1-1a41-96a5-14b0d14d1317": "closed",  # Mercedes-Benz Stadium
+    "00083698-a263-8c18-f063-4dc45196bfef": "closed",  # Reliant Stadium
+    "00081907-ad83-307e-8d26-209df8e6df50": "closed",  # State Farm Stadium
 }
 _NFL_OUTDOOR_VENUES = frozenset(
     {
@@ -560,6 +582,49 @@ _NFL_OUTDOOR_VENUES = frozenset(
         "3954",  # Texas Stadium
         "4738",  # Levi's Stadium
         "5534",  # Tottenham Hotspur Stadium
+        # Shield venue uuids
+        "00085411-4ecf-6807-abb8-f9309b0cf6b0",  # Acrisure Stadium
+        "00081769-78fe-4172-a6d6-395cf0141069",  # Bank of America Stadium
+        "00080975-68e6-96d2-072e-78e9c9a71965",  # Candlestick Park
+        "00083825-1a4b-a9f7-85db-37e0f984d08c",  # Cinergy Field
+        "00085786-61c2-c519-196f-576acb0dcd5f",  # Empower Field at Mile High
+        "00082108-46a8-fb55-f264-c8faa1c1849e",  # Estadio Banorte
+        "00082049-e1c5-6172-a084-094f2c34a377",  # EverBank Stadium
+        "00082032-7496-45bb-6c42-e0a5cce1a564",  # Foxboro Stadium
+        "00081552-5c92-a7d0-fa55-fc0bb887fb88",  # GEHA Field at Arrowhead Stadium
+        "00082056-8646-97ec-c4f0-77894b35f674",  # Giants Stadium
+        "00081065-961a-76b2-de6a-b6da2602a129",  # Gillette Stadium
+        "00082475-4308-d8ae-8935-f685fe5d20f2",  # Hard Rock Stadium
+        "00083770-6add-eaf7-4975-0fb66a44b335",  # Highmark Stadium
+        "00085780-1313-e95c-caa9-c352f75eb57e",  # Highmark Stadium
+        "00081048-4259-348c-7701-2fa3c98bcd53",  # Huntington Bank Field
+        "00082360-2186-e96c-a08c-16c1c0d82731",  # Husky Stadium
+        "00082606-f7cb-15ed-a40a-f85cfda3ecdd",  # Lambeau Field
+        "00082099-57dc-7d8f-dbdb-9a693342cda6",  # Levi's Stadium
+        "00082769-1a91-621b-0c2d-27234c215dc0",  # Lincoln Financial Field
+        "00082850-ff14-2151-c868-6818c371404b",  # Los Angeles Memorial Coliseum
+        "00085315-d5b8-18a5-6c08-f91cd9144cb5",  # Lumen Field
+        "00083695-126e-1517-91fe-aab634a526ea",  # M&T Bank Stadium
+        "00084622-11b8-8c5d-8da3-1b129a55e2d2",  # Memorial Stadium
+        "00083757-62dd-de21-f672-4d0ca5ad5a9e",  # MetLife Stadium
+        "00083075-27ae-4207-305a-75ea700863ec",  # Mile High Stadium
+        "00082350-52f3-e11f-8c49-0193cb89e66f",  # Nissan Stadium (the open-air one)
+        "00082389-5f81-bc7b-7280-78260ea1be2a",  # Northwest Stadium
+        "00083225-33a2-538c-1249-070062a82934",  # Oakland-Alameda County Stadium
+        "00083530-fc9f-2795-83d8-308b54d591fe",  # Paycor Stadium
+        "00084200-7433-30de-ef0f-182eac54b8c3",  # Qualcomm Stadium
+        "00085112-8e54-c459-d387-fbee5839a8e7",  # ROKiT Field - Dignity Health Sports Park
+        "00083697-451e-88a5-6695-aa32961fba3a",  # Raymond James Stadium
+        "00084620-af4a-a315-44ad-cdc562bfc3ad",  # Soldier Field
+        "00084935-b492-0b5c-0241-8d663c6320a2",  # Sun Devil Stadium
+        "00085606-f092-adda-2887-0cd3702c3ca1",  # TCF Bank Stadium
+        "00084947-1e35-7e5b-8c07-31944dd8026a",  # Texas Stadium
+        "00085100-d431-2606-e931-f31190e1ff0c",  # Three Rivers Stadium
+        "00083269-e42d-3664-7fd0-954465a6277c",  # Tiger Stadium
+        "00085528-b0cf-8c3d-be4d-50f8eb4f9a31",  # Tottenham Hotspur Stadium
+        "00085526-c421-a00f-2a5a-1030acbcc8a7",  # Twickenham Stadium
+        "00085400-4c10-6170-9cfd-cdfd426bf6d2",  # Veterans Stadium
+        "00085525-dc80-0059-df54-7c8d69e9fcfd",  # Wembley Stadium
     }
 )
 # ESPN's team abbreviation -> nflverse's, where they differ (every 1999-2025 nfl-raw game

@@ -764,9 +764,10 @@ def shield_to_espn_summary(
     current = previous.pop() if (previous and not is_final(game) and phase is not None and phase != "PREGAME") else None
 
     header = _header(game, summary_block, phase, event_id, home_id, away_id, abbrs, previous, current)
-    # Shield says neutralSite False for most neutral games before 2023 (Wembley, Super Bowls), and
-    # its venue ids are uuids, so ``_nfl_roof`` would give a London game the home team's dome. The
-    # id map's flag wins when set; compared as text so a pandas NA never reaches ``bool()``.
+    # Shield says neutralSite False for most neutral games before 2023 (Super Bowls, the 2021 Ida
+    # relocation). ``_nfl_roof`` resolves the venue uuids it knows first; for one it does not, the
+    # id map's flag keeps a neutral game off the home team's roof. Compared as text so a pandas NA
+    # never reaches ``bool()``.
     if str(idmap_row.get("neutral_site")).lower() in ("true", "1"):
         header["competitions"][0]["neutralSite"] = True
     summary = {
@@ -960,8 +961,8 @@ def _fill_end_state(emitted: List[Tuple[int, Dict[str, Any]]], home_id: str, sco
 
 
 def _venue(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``gameInfo.venue`` -- Shield never states ``indoor``, so ``_nfl_roof`` reads the home team's roof
-    (outdoors when the header says neutral site, which the id map's ``neutral_site`` can set)."""
+    """``gameInfo.venue`` -- Shield never states ``indoor``; ``_nfl_roof`` reads the roof off the venue
+    uuid, and for a uuid it does not know, the home team's roof (outdoors at a neutral site)."""
     venue = game.get("venue") or {}
     return {
         "id": venue.get("id"),

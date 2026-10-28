@@ -585,8 +585,9 @@ def test_the_summary_refuses_two_missing_team_ids(cle_jax_shield):
 def test_the_id_maps_neutral_site_keeps_a_shield_game_outdoors(cle_jax_shield, flag):
     """Shield ships ``neutralSite`` False for most neutral games before 2023 and uuid venue ids.
 
-    Without the id map's flag, ``_nfl_roof`` read the designated home team's roof, so the 2014
-    DET-ATL Wembley game would have scored as a dome.
+    At a venue uuid the roof tables do not know, ``_nfl_roof`` reads the designated home team's
+    roof unless the header says neutral, so without the id map's flag a one-off ground abroad
+    takes a dome team's dome.
     """
     from sportsdataverse.nfl.nfl_pbp import _nfl_roof
 
@@ -595,5 +596,6 @@ def test_the_id_maps_neutral_site_keeps_a_shield_game_outdoors(cle_jax_shield, f
     summary, _ = shield_to_espn_summary(cle_jax_shield, {**CLE_JAX_ROW, "neutral_site": flag})
     neutral = summary["header"]["competitions"][0]["neutralSite"]
     assert neutral is True
-    assert _nfl_roof(summary["gameInfo"], "DET", 2014, neutral) == "outdoors"
-    assert _nfl_roof(plain["gameInfo"], "DET", 2014, False) == "dome"
+    unknown = {"venue": {"id": "00000000-0000-0000-0000-000000000000"}}
+    assert _nfl_roof(unknown, "DET", 2014, neutral) == "outdoors"
+    assert _nfl_roof(unknown, "DET", 2014, False) == "dome"
