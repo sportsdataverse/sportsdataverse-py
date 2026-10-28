@@ -961,8 +961,8 @@ def _fill_end_state(emitted: List[Tuple[int, Dict[str, Any]]], home_id: str, sco
 
 
 def _venue(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``gameInfo.venue`` -- Shield never states ``indoor``, so ``_nfl_roof`` reads the home team's roof
-    (outdoors when the header says neutral site, which the id map's ``neutral_site`` can set)."""
+    """``gameInfo.venue`` -- Shield never states ``indoor``; ``_nfl_roof`` reads the roof off the venue
+    uuid, and for a uuid it does not know, the home team's roof (outdoors at a neutral site)."""
     venue = game.get("venue") or {}
     return {
         "id": venue.get("id"),
