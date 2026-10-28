@@ -8539,6 +8539,26 @@
   expected: kill
   note: Shield says neutralSite False for most neutral games before 2023; without the id map's flag a Wembley game takes the home dome (#1029).
 
+- id: nfl-shield-venue-uuid-sets-an-indoor-roof
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    "00083698-a263-8c18-f063-4dc45196bfef": "closed",  # Reliant Stadium'
+  mutant: '    "00083698-a263-8c18-f063-4dc45196bfef": "outdoors",  # Reliant Stadium'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "shield_venue_uuid_sets_the_roof"
+  expected: kill
+  note: Without the Shield uuid a neutral Super Bowl at NRG falls to the neutral-site rule and scores outdoors.
+
+- id: nfl-shield-venue-uuid-sets-an-outdoor-roof
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        "00085525-dc80-0059-df54-7c8d69e9fcfd",  # Wembley Stadium'
+  mutant: '        "00000000-0000-0000-0000-000000000000",  # Wembley Stadium'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "shield_venue_uuid_sets_the_roof"
+  expected: kill
+  note: Shield ships neutralSite False for most London games; without the uuid a dome team's Wembley game takes its home dome.
+
 - id: nfl-shield-try-after-defensive-td-takes-the-scorer
   group: nfl-shield
   finding: SHIELD-PARITY
