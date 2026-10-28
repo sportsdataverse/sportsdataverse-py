@@ -764,9 +764,10 @@ def shield_to_espn_summary(
     current = previous.pop() if (previous and not is_final(game) and phase is not None and phase != "PREGAME") else None
 
     header = _header(game, summary_block, phase, event_id, home_id, away_id, abbrs, previous, current)
-    # Shield says neutralSite False for most neutral games before 2023 (Wembley, Super Bowls), and
-    # its venue ids are uuids, so ``_nfl_roof`` would give a London game the home team's dome. The
-    # id map's flag wins when set; compared as text so a pandas NA never reaches ``bool()``.
+    # Shield says neutralSite False for most neutral games before 2023 (Super Bowls, the 2021 Ida
+    # relocation). ``_nfl_roof`` resolves the venue uuids it knows first; for one it does not, the
+    # id map's flag keeps a neutral game off the home team's roof. Compared as text so a pandas NA
+    # never reaches ``bool()``.
     if str(idmap_row.get("neutral_site")).lower() in ("true", "1"):
         header["competitions"][0]["neutralSite"] = True
     summary = {
@@ -1052,7 +1053,8 @@ def _header(
                 "id": event_id,
                 "uid": f"s:20~l:28~e:{event_id}~c:{event_id}",
                 "date": game.get("time") or game.get("date"),
-                "neutralSite": bool(game.get("neutralSite")),
+                # a game abroad is neutral to the roof whoever is the designated home team
+                "neutralSite": bool(game.get("neutralSite") or game.get("international")),
                 "conferenceCompetition": False,
                 "boxscoreAvailable": False,
                 "commentaryAvailable": False,
