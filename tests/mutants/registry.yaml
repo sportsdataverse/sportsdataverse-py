@@ -8493,8 +8493,8 @@
   group: nfl-models
   finding: EP-ROOF
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '    return _NFL_VENUE_ROOF.get(str(venue.get("id")), _DEFAULT_ROOF)'
-  mutant: '    return _DEFAULT_ROOF'
+  snippet: '        return _NFL_VENUE_ROOF[venue_id]'
+  mutant: '        return _DEFAULT_ROOF'
   test: tests/nfl/test_nfl_pbp_game_state.py -k "venue_id_sets_the_roof"
   expected: kill
   note: ESPN's NFL venue has no indoor flag, so without the table every game, domes included, scores as outdoors.
