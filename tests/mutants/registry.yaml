@@ -8493,11 +8493,51 @@
   group: nfl-models
   finding: EP-ROOF
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '    return _NFL_VENUE_ROOF.get(str(venue.get("id")), _DEFAULT_ROOF)'
-  mutant: '    return _DEFAULT_ROOF'
+  snippet: '        return _NFL_VENUE_ROOF[venue_id]'
+  mutant: '        return _DEFAULT_ROOF'
   test: tests/nfl/test_nfl_pbp_game_state.py -k "venue_id_sets_the_roof"
   expected: kill
   note: ESPN's NFL venue has no indoor flag, so without the table every game, domes included, scores as outdoors.
+
+- id: nfl-espn-roof-falls-back-to-the-home-team
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    return home_team_roof(_ESPN_TO_NFLVERSE_TEAM.get(team, team), int(season)) or _DEFAULT_ROOF'
+  mutant: '    return _DEFAULT_ROOF'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "home_teams_roof or pre_2006_dome"
+  expected: kill
+  note: ESPN ships no venue id before 2006; without the fallback every 2002-2005 dome game scores EP/CP as outdoors (#1029).
+
+- id: nfl-espn-roof-neutral-site-stays-outdoors
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if venue_id in _NFL_OUTDOOR_VENUES or neutral is True or home_abbrev is None'
+  mutant: 'if venue_id in _NFL_OUTDOOR_VENUES or home_abbrev is None'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "home_teams_roof"
+  expected: kill
+  note: A neutral-site game (London, a Super Bowl) must not take the designated home team's dome (#1029).
+
+- id: nfl-espn-roof-maps-espn-team-codes
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '_ESPN_TO_NFLVERSE_TEAM = {"WSH": "WAS", "LAR": "LA"}'
+  mutant: '_ESPN_TO_NFLVERSE_TEAM = {}'
+  test: tests/nfl/test_nfl_pbp_game_state.py -k "home_teams_roof"
+  expected: kill
+  note: ESPN says LAR where nflverse's roof table says LA; unmapped, the Rams' SoFi seasons score as outdoors (#1029).
+
+- id: nfl-shield-neutral-site-from-the-id-map
+  group: nfl-models
+  finding: EP-ROOF
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: '        header["competitions"][0]["neutralSite"] = True'
+  mutant: '        pass'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k "neutral_site_keeps_a_shield_game_outdoors"
+  expected: kill
+  note: Shield says neutralSite False for most neutral games before 2023; without the id map's flag a Wembley game takes the home dome (#1029).
 
 - id: nfl-shield-try-after-defensive-td-takes-the-scorer
   group: nfl-shield
