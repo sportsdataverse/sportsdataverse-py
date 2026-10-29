@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import warnings
+
 import pandas as pd
 import polars as pl
 
@@ -97,22 +99,41 @@ def espn_cfb_game_rosters(
 
 
 def _game_roster_entries(game_id: int, **kwargs) -> pl.DataFrame:
-    """The game roster ``CFBPlayProcess`` reads, from the competitors and team-roster pages (3 requests).
+    """The game roster ``CFBPlayProcess`` reads: the competitors and team-roster pages, plus names.
 
-    ``athlete_id``, ``team_id``, ``full_name`` (ESPN's short display form, "B. Glenn", which the
-    processor's initial tier matches) and ``position_href``: everything the processor and its usage
-    box take from a roster, without the per-athlete fetch :func:`espn_cfb_game_rosters` makes (~230
-    Core v2 requests a game, which held every worker of a request-serving caller under ESPN throttling).
+    ``athlete_id``, ``team_id``, ``full_name`` and ``position_href``: everything the processor and its
+    usage box take from a roster. A current game's roster entries carry ESPN's short display name
+    ("B. Glenn", which the processor's initial tier matches), so it costs 3 requests instead of the
+    per-athlete fetch :func:`espn_cfb_game_rosters` makes (~230 Core v2 requests a game, which held
+    every worker of a request-serving caller under ESPN throttling). Older games' entries carry no
+    name (none of a 2013 game's 77), so only those athletes are fetched for theirs -- the names the
+    pre-2014 text matching needs; if that fails the roster keeps its ids, teams and positions.
     """
     url = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{x}/competitions/{x}/competitors".format(
         x=game_id,
     )
     items = helper_cfb_game_items(_download_json(download, url, **kwargs))
     entries = helper_cfb_roster_items(items=items, summary_url=url, **kwargs)
+    if "display_name" not in entries.columns:
+        entries = entries.with_columns(display_name=pl.lit(None, dtype=pl.String))
+    unnamed = entries.filter(pl.col("display_name").is_null())
+    if unnamed.height and "athlete_href" in entries.columns:
+        try:
+            athletes = helper_cfb_athlete_items(teams_rosters=unnamed, **kwargs)
+            names = athletes.select(
+                pl.col("athlete_id").cast(pl.Int64).alias("player_id"), pl.col("full_name").alias("_name")
+            )
+            entries = entries.join(names, on="player_id", how="left").with_columns(
+                display_name=pl.coalesce("display_name", "_name")
+            )
+        except Exception as exc:  # noqa: BLE001 -- names are an enrichment; the roster stands without them
+            warnings.warn(
+                f"game {game_id}: roster names not fetched ({exc}); ids, teams and positions kept", stacklevel=2
+            )
     return entries.select(
         pl.col("player_id").alias("athlete_id"),
         "team_id",
-        *([pl.col("display_name").alias("full_name")] if "display_name" in entries.columns else []),
+        pl.col("display_name").alias("full_name"),
         *(["position_href"] if "position_href" in entries.columns else []),
     )
 

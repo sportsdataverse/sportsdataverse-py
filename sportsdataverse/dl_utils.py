@@ -232,8 +232,9 @@ def _wait(delay: float, url: str, logger: logging.Logger) -> float:
 #: 15 x 30s plus backoff on a single call. CI sets these low.
 _ENV_TIMEOUT = "SDV_PY_HTTP_TIMEOUT"
 _ENV_RETRIES = "SDV_PY_HTTP_RETRIES"
-#: Overrides :data:`_MAX_TOTAL_RETRY_WAIT` (seconds): a caller serving requests, whose
-#: worker must not sleep minutes on a throttled host, sets it low.
+#: Overrides :data:`_MAX_TOTAL_RETRY_WAIT` in whole seconds (a fraction or a value under 1 is
+#: ignored, like the other two): a caller serving requests, whose worker must not sleep
+#: minutes on a throttled host, sets it low.
 _ENV_MAX_WAIT = "SDV_PY_HTTP_MAX_WAIT"
 _DEFAULT_TIMEOUT = 30
 _DEFAULT_RETRIES = 15
@@ -365,8 +366,8 @@ def download(
         the process down.
 
         The waits between retries share one budget of
-        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (``SDV_PY_HTTP_MAX_WAIT``
-        overrides it; a single ``Retry-After`` is capped at :data:`_MAX_RETRY_AFTER`);
+        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (``SDV_PY_HTTP_MAX_WAIT``,
+        whole seconds, overrides it; a single ``Retry-After`` is capped at :data:`_MAX_RETRY_AFTER`);
         a retry whose wait would cross it is not made, and a wait over
         :data:`_LONG_RETRY_WAIT` seconds is logged at WARNING.
 

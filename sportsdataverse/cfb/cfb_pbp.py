@@ -2747,7 +2747,8 @@ class CFBPlayProcess(object):
                 ``participants[]`` array (pre-2014), and by the usage box for
                 positions and tacklers' teams. Passing it makes offline rebuilds
                 fetch-free; when omitted the live path reads the two team-roster
-                pages (three requests, not one per athlete) and keeps the result here.
+                pages (three requests for a current game, not one per athlete; an older
+                game's unnamed entries fetch only those athletes) and keeps the result here.
             join_participants: when True (default) the pipeline coalesces ESPN
                 per-play participant names over the regex-extracted names and
                 resolves a roster-backed ``{type}_player_id`` -- both of which hit
@@ -10763,7 +10764,7 @@ class CFBPlayProcess(object):
             try:
                 from sportsdataverse.cfb.cfb_game_rosters import _game_roster_entries
 
-                # three requests, not espn_cfb_game_rosters' one per athlete (~230); kept
+                # team-roster pages, not espn_cfb_game_rosters' one request per athlete (~230); kept
                 # for the usage box, which reads positions and tacklers' teams from it
                 roster = self.game_roster = _game_roster_entries(self.gameId)
             except Exception as exc:  # pragma: no cover - network dependent
