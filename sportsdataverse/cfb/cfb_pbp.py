@@ -10800,8 +10800,7 @@ class CFBPlayProcess(object):
                 by_last[(parts[-1], tid)].add(aid)
         initial_lu = {k: next(iter(v)) for k, v in by_initial.items() if len(v) == 1}
         last_lu = {k: next(iter(v)) for k, v in by_last.items() if len(v) == 1}
-        # ids some source names in full; the rest are known only as "B. Glenn" (a current game's roster)
-        full_named = {aid for nn, aid, _ in records if len(nn.split()[0]) > 1}
+        full_named = {aid for nn, aid, _ in records if len(nn.split()[0]) > 1}  # not just "B. Glenn"
 
         def _match(name, team_id, *, allow_fallback=True):
             """Exact tiers always; the fuzzy tiers only when ``allow_fallback``.
@@ -10818,22 +10817,14 @@ class CFBPlayProcess(object):
             if aid is not None:
                 return aid
             parts = nn.split()
+            local = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid)) if len(parts) >= 2 else None
             aid = global_lu.get(nn)
             if aid is not None:
-                # a local player known only by initial may be this name, as the team tier would have
-                # found with their full name: prefer them to the other team's full-name match
-                if allow_fallback and len(parts) >= 2:
-                    local = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid))
-                    if local is not None and local not in full_named:
-                        return local
-                return aid
+                # a local player known only by initial (a current game's roster) beats the other team's full name
+                return local if allow_fallback and local is not None and local not in full_named else aid
             if not allow_fallback:
                 return None
-            if len(parts) >= 2:
-                aid = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid))
-                if aid is not None:
-                    return aid
-            return last_lu.get((parts[-1], tid))
+            return local if local is not None else last_lu.get((parts[-1], tid))
 
         def _resolve(name, team_id):
             """Resolve a captured name to (display_name, athlete_id).
