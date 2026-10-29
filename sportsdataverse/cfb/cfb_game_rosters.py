@@ -96,6 +96,27 @@ def espn_cfb_game_rosters(
     return _pandas_ids(rosters) if return_as_pandas else rosters
 
 
+def _game_roster_entries(game_id: int, **kwargs) -> pl.DataFrame:
+    """The game roster ``CFBPlayProcess`` reads, from the competitors and team-roster pages (3 requests).
+
+    ``athlete_id``, ``team_id``, ``full_name`` (ESPN's short display form, "B. Glenn", which the
+    processor's initial tier matches) and ``position_href``: everything the processor and its usage
+    box take from a roster, without the per-athlete fetch :func:`espn_cfb_game_rosters` makes (~230
+    Core v2 requests a game, which held every worker of a request-serving caller under ESPN throttling).
+    """
+    url = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{x}/competitions/{x}/competitors".format(
+        x=game_id,
+    )
+    items = helper_cfb_game_items(_download_json(download, url, **kwargs))
+    entries = helper_cfb_roster_items(items=items, summary_url=url, **kwargs)
+    return entries.select(
+        pl.col("player_id").alias("athlete_id"),
+        "team_id",
+        *([pl.col("display_name").alias("full_name")] if "display_name" in entries.columns else []),
+        *(["position_href"] if "position_href" in entries.columns else []),
+    )
+
+
 helper_cfb_game_items = _espn_game_rosters.game_items
 
 

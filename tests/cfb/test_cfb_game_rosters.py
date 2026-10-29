@@ -139,3 +139,38 @@ def test_roster_items_differing_team_columns_concat(monkeypatch):
     assert out.height == 4
     assert set(out["team_id"].unique().to_list()) == {52, 2641}
     assert "jersey" in out.columns and "did_not_play" in out.columns
+
+
+def test_game_roster_entries_reads_the_team_pages_not_each_athlete(monkeypatch):
+    """CFBPlayProcess's roster: competitors + one roster page per team (3 requests), never the
+    per-athlete Core v2 fetch espn_cfb_game_rosters makes (~230 a game)."""
+    from sportsdataverse.cfb import cfb_game_rosters as cgr
+
+    comp = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/9/competitions/9/competitors"
+    pages = {
+        comp: {"items": [{"id": "52", "$ref": f"{comp}/52"}, {"id": "2641", "$ref": f"{comp}/2641"}]},
+        f"{comp}/52/roster": {
+            "entries": [
+                {**_roster_entry(101), "displayName": "B. Glenn", "position": {"$ref": "http://core/positions/8"}}
+            ]
+        },
+        f"{comp}/2641/roster": {
+            "entries": [
+                {**_roster_entry(201), "displayName": "K. Smith", "position": {"$ref": "http://core/positions/21"}}
+            ]
+        },
+    }
+    calls = []
+
+    def fake_download(url, **kwargs):
+        calls.append(url)
+        return _FakeResp(pages[url])
+
+    monkeypatch.setattr(cgr, "download", fake_download)
+    monkeypatch.setattr(_espn_game_rosters, "download", fake_download)
+    out = cgr._game_roster_entries(9)
+    assert calls == [comp, f"{comp}/52/roster", f"{comp}/2641/roster"]
+    assert out.to_dicts() == [
+        {"athlete_id": 101, "team_id": 52, "full_name": "B. Glenn", "position_href": "http://core/positions/8"},
+        {"athlete_id": 201, "team_id": 2641, "full_name": "K. Smith", "position_href": "http://core/positions/21"},
+    ]

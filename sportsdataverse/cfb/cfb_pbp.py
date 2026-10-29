@@ -2717,6 +2717,7 @@ class CFBPlayProcess(object):
         game_roster=None,
         participants=None,
         join_participants=True,
+        resolve_missing=True,
         **kwargs,
     ):
         """CFBPlayProcess.
@@ -2743,9 +2744,10 @@ class CFBPlayProcess(object):
                 or the ``{"data": [...]}`` wrapper). Used by ``__attach_player_ids``
                 to resolve a roster-backed ``{type}_player_id`` for each extracted
                 ``{type}_player_name`` on games that lack a structured
-                ``participants[]`` array (pre-2014). Passing it makes offline
-                rebuilds fetch-free; when omitted the live path fetches the roster
-                on demand only if needed.
+                ``participants[]`` array (pre-2014), and by the usage box for
+                positions and tacklers' teams. Passing it makes offline rebuilds
+                fetch-free; when omitted the live path reads the two team-roster
+                pages (three requests, not one per athlete) and keeps the result here.
             join_participants: when True (default) the pipeline coalesces ESPN
                 per-play participant names over the regex-extracted names and
                 resolves a roster-backed ``{type}_player_id`` -- both of which hit
@@ -2755,6 +2757,11 @@ class CFBPlayProcess(object):
                 CPOE are unaffected (the models key on game state, not player
                 identity); the cost is that ``{type}_player_id`` columns go null and
                 names fall back to regex-from-text instead of clean ESPN displays.
+            resolve_missing: passed to
+                :func:`~sportsdataverse.cfb.cfb_play_participants.espn_cfb_play_participants`
+                when the pipeline fetches participants. True (default) fetches each athlete
+                the participants sidecar omits (up to 50 requests); False keeps the
+                fetch to the sidecar, for a caller serving requests.
 
         Attributes:
             odds_source: provenance of the resolved spread —
@@ -2791,6 +2798,7 @@ class CFBPlayProcess(object):
         self.game_roster = game_roster
         self.participants = participants
         self.join_participants = bool(join_participants)
+        self.resolve_missing = bool(resolve_missing)
 
     def espn_cfb_pbp(self, summary=None, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -10556,7 +10564,7 @@ class CFBPlayProcess(object):
             else:
                 from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
 
-                parts = espn_cfb_play_participants(self.gameId)
+                parts = espn_cfb_play_participants(self.gameId, resolve_missing=getattr(self, "resolve_missing", True))
                 self.participants = parts  # the usage box reads it from the instance
 
             # Graceful fallback conditions
@@ -10688,8 +10696,8 @@ class CFBPlayProcess(object):
 
         Games without a structured ``participants[]`` array (pre-2014) carry names
         parsed from the play text but no ids. This matches each name against the
-        game roster (``self.game_roster`` if supplied, else fetched once on the
-        live path) to recover the ESPN ``athlete_id``. Matching is **team-aware**
+        game roster (``self.game_roster`` if supplied, else read once from the two
+        team-roster pages on the live path) to recover the ESPN ``athlete_id``. Matching is **team-aware**
         -- each player type maps to the team that fielded it -- so identical names
         on opposing rosters don't collide; a globally-unique name is the fallback.
         Ids already populated (participants, 2014+) are preserved. No roster ->
@@ -10753,9 +10761,11 @@ class CFBPlayProcess(object):
         roster = self.game_roster
         if roster is None and getattr(self, "join_participants", True):
             try:
-                from sportsdataverse.cfb.cfb_game_rosters import espn_cfb_game_rosters
+                from sportsdataverse.cfb.cfb_game_rosters import _game_roster_entries
 
-                roster = espn_cfb_game_rosters(self.gameId)
+                # three requests, not espn_cfb_game_rosters' one per athlete (~230); kept
+                # for the usage box, which reads positions and tacklers' teams from it
+                roster = self.game_roster = _game_roster_entries(self.gameId)
             except Exception as exc:  # pragma: no cover - network dependent
                 logger.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
                 roster = None

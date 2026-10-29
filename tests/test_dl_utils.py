@@ -497,6 +497,15 @@ def test_retry_after_waits_share_one_budget_and_long_waits_log(monkeypatch, capl
     assert "waiting 120s before retrying" in caplog.text
 
 
+def test_max_wait_env_shrinks_the_retry_wait_budget(monkeypatch):
+    """SDV_PY_HTTP_MAX_WAIT: a request-serving caller makes a throttled host fail fast instead of
+    sleeping out a 120 s Retry-After."""
+    monkeypatch.setenv("SDV_PY_HTTP_MAX_WAIT", "10")
+    calls, sleeps = _offline(monkeypatch, 429, {"Retry-After": "120"})
+    assert download("https://site.api.espn.com/x", num_retries=15).status_code == 429
+    assert sleeps == [] and len(calls) == 1
+
+
 def test_a_connection_error_does_not_reuse_the_previous_retry_after(monkeypatch):
     """After a 429 with Retry-After: 120, a connection error backs off normally (it re-read the stale
     header, proposed 120 s again, crossed the wait budget and gave up with retries left)."""

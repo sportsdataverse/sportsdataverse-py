@@ -544,3 +544,32 @@ def test_valid_names_are_untouched_by_the_clause_cut():
         "Byron Ford",
     ]
     assert _cleaned("rusher_player_name", names) == names
+
+
+def test_live_roster_is_the_team_pages_and_is_kept_for_the_usage_box(monkeypatch):
+    """With no roster passed in, the pipeline reads the two team-roster pages once (not one request
+    per athlete) and keeps them on the instance, where the usage box reads positions and teams."""
+    import pytest
+
+    from sportsdataverse.cfb import cfb_game_rosters as cgr
+
+    roster = pl.DataFrame(
+        {"athlete_id": [100], "team_id": [10], "full_name": ["J. Back"], "position_href": ["http://core/positions/9"]}
+    )
+    calls = []
+    monkeypatch.setattr(cgr, "_game_roster_entries", lambda gid, **k: calls.append(gid) or roster)
+    monkeypatch.setattr(cgr, "espn_cfb_game_rosters", lambda *a, **k: pytest.fail("per-athlete roster fetched"))
+    proc = CFBPlayProcess(gameId=7)
+    out = proc._CFBPlayProcess__attach_player_ids(pl.DataFrame([{"rusher_player_name": "J. Back", "pos_team": 10}]))
+    assert calls == [7] and proc.game_roster is roster
+    assert out["rusher_player_id"][0] == 100
+
+
+def test_participants_fetch_honours_resolve_missing(monkeypatch):
+    from sportsdataverse.cfb import cfb_play_participants as cpp
+
+    seen = []
+    monkeypatch.setattr(cpp, "espn_cfb_play_participants", lambda gid, **k: seen.append(k) or pl.DataFrame())
+    CFBPlayProcess(gameId=7, resolve_missing=False)._CFBPlayProcess__join_participants(pl.DataFrame([{"id": 1}]))
+    CFBPlayProcess(gameId=7)._CFBPlayProcess__join_participants(pl.DataFrame([{"id": 1}]))
+    assert seen == [{"resolve_missing": False}, {"resolve_missing": True}]
