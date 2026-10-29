@@ -18,14 +18,14 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version. Kept in sync with the dev-group ``ruff`` pin in pyproject.toml
     # so the codegen generator's format pass and this hook agree byte-for-byte.
-    rev: v0.15.12
+    rev: v0.17.3
     hooks:
       # Run the linter.
       - id: ruff-check
       - id: ruff-format
         # # Run the formatter.
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         # Captured fixtures are byte-faithful oracles (e.g. the R-written
@@ -57,7 +57,7 @@ repos:
         # Deliberately-malformed lint fixture (tests the unparseable-file path).
         exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.10.0 # Use the ref you want to point at
+    rev: 0b8680c3832bb01c9243bb4e8dd79d79a830ba78 # repo has not retagged in 3 years but updates member checks
     hooks:
       - id: python-use-type-annotations
       - id: python-no-eval
@@ -72,23 +72,23 @@ repos:
   # NOTE: add-trailing-comma was removed — ruff-format (skip-magic-trailing-comma=false)
   # already manages trailing commas, so the extra hook only caused re-commit churn.
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
-    rev: v0.0.3
+    rev: v0.0.5
     hooks:
       - id: sync-pre-commit-deps
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.1
+    rev: 0.39.0
     hooks:
       - id: check-github-workflows
         args: ["--verbose"]
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.10
+    rev: v1.7.12
     hooks:
       - id: actionlint
   # NOTE: yamlfmt was removed — it reformatted the codegen-generated endpoint YAML
   # (tools/codegen/endpoints/*.yaml) on every commit, fighting the generators' output
   # and forcing a re-add/re-commit cycle. check-yaml still validates YAML syntax.
   - repo: https://github.com/thlorenz/doctoc
-    rev: "v2.2.0" # substitute a tagged version
+    rev: "v2.5.0" # substitute a tagged version
     hooks:
       - id: doctoc
         # Docusaurus pages under docs/docs/ carry YAML frontmatter that must be
@@ -98,7 +98,7 @@ repos:
         # docs/docs/ — same frontmatter pages, so it must be excluded too.
         exclude: ^(docs/(docs|versioned_docs|src/pages)|\.claude)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.20.0
+    rev: v0.24.0
     hooks:
       - id: markdownlint-cli2
         args: ["--config", ".markdownlint-cli2.yaml"]
