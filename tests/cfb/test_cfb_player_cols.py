@@ -352,6 +352,21 @@ def test_local_player_known_only_by_initial_beats_an_opponents_full_name():
     assert out["passer_player_id"].to_list() == [301, 302]
 
 
+def test_fumbler_keeps_the_full_name_match_when_pos_team_is_only_a_guess():
+    """``fumble_player_name`` maps to ``pos_team``, the kicking team on a punt, though
+    the returner fumbles. The local initial-only preference must not apply there."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 401, "full_name": "B. Glenn", "team_id": 60},
+        {"athlete_id": 402, "full_name": "B. Glenn", "team_id": 70},
+    ]
+    proc.json = _box(70, [("402", "Brandon Glenn")])
+    df = pl.DataFrame([{"fumble_player_name": "Brandon Glenn", "pos_team": 60}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["fumble_player_id"].to_list() == [402]
+
+
 def test_legitimate_surname_colliding_with_a_stopword_is_preserved():
     """A real surname that IS one of the tail stopwords must survive.
 

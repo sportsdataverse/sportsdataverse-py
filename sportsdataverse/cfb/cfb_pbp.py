@@ -10802,7 +10802,7 @@ class CFBPlayProcess(object):
         last_lu = {k: next(iter(v)) for k, v in by_last.items() if len(v) == 1}
         full_named = {aid for nn, aid, _ in records if len(nn.split()[0]) > 1}  # not just "B. Glenn"
 
-        def _match(name, team_id, *, allow_fallback=True):
+        def _match(name, team_id, *, allow_fallback=True, prefer_local=True):
             """Exact tiers always; the fuzzy tiers only when ``allow_fallback``.
 
             The fuzzy tiers key on a bare surname, so they must NOT be run on a
@@ -10821,12 +10821,12 @@ class CFBPlayProcess(object):
             aid = global_lu.get(nn)
             if aid is not None:
                 # a local player known only by initial (a current game's roster) beats the other team's full name
-                return local if allow_fallback and local is not None and local not in full_named else aid
+                return local if prefer_local and local is not None and local not in full_named else aid
             if not allow_fallback:
                 return None
             return local if local is not None else last_lu.get((parts[-1], tid))
 
-        def _resolve(name, team_id):
+        def _resolve(name, team_id, prefer_local=True):
             """Resolve a captured name to (display_name, athlete_id).
 
             The narrative-tail strip is applied HERE rather than blanket-applied
@@ -10847,11 +10847,11 @@ class CFBPlayProcess(object):
             # "Russell Wilson" and "Alex Screen", running the surname tier on
             # "Russell Wilson screen" resolves it to ALEX SCREEN. Withhold the
             # fuzzy tiers until the tail is gone.
-            aid = _match(name, team_id, allow_fallback=not has_tail)
+            aid = _match(name, team_id, allow_fallback=not has_tail, prefer_local=prefer_local and not has_tail)
             if aid is not None:
                 return {"name": name, "id": aid}
             if has_tail and trimmed:
-                aid = _match(trimmed, team_id)
+                aid = _match(trimmed, team_id, prefer_local=prefer_local)
                 if aid is not None:
                     return {"name": trimmed, "id": aid}
             # Neither form matched: keep the name as captured. Without a roster
@@ -10865,9 +10865,10 @@ class CFBPlayProcess(object):
         for name_col, id_col, team_col in self._PLAYER_ID_TEAM_MAP:
             if name_col not in play_df.columns or team_col not in play_df.columns:
                 continue
+            local = name_col != "fumble_player_name"  # pos_team only guesses a fumbler's (a punt returner's differs)
             resolved = (
                 pl.struct([pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")])
-                .map_elements(lambda s: _resolve(s["_n"], s["_t"]), return_dtype=_RESOLVED)
+                .map_elements(lambda s, p=local: _resolve(s["_n"], s["_t"], p), return_dtype=_RESOLVED)
                 .alias(f"__res_{name_col}")
             )
             play_df = play_df.with_columns(resolved)
