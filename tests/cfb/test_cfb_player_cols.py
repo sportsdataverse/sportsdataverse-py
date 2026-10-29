@@ -331,6 +331,27 @@ def test_conflicting_ids_across_sources_stay_null():
     assert out["passer_player_id"][0] is None
 
 
+def test_local_player_known_only_by_initial_beats_an_opponents_full_name():
+    """A current game's roster carries short names ("B. Glenn"). When the box score
+    has only the opponent's same-named player in full, the full-name match must not
+    take the play from the local "B. Glenn" the team-aware lookup would have found."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 301, "full_name": "B. Glenn", "team_id": 60},
+        {"athlete_id": 302, "full_name": "B. Glenn", "team_id": 70},
+    ]
+    proc.json = _box(70, [("302", "Brandon Glenn")])
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Brandon Glenn", "pos_team": 60},
+            {"passer_player_name": "Brandon Glenn", "pos_team": 70},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"].to_list() == [301, 302]
+
+
 def test_legitimate_surname_colliding_with_a_stopword_is_preserved():
     """A real surname that IS one of the tail stopwords must survive.
 
