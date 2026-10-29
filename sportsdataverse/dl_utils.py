@@ -232,6 +232,10 @@ def _wait(delay: float, url: str, logger: logging.Logger) -> float:
 #: 15 x 30s plus backoff on a single call. CI sets these low.
 _ENV_TIMEOUT = "SDV_PY_HTTP_TIMEOUT"
 _ENV_RETRIES = "SDV_PY_HTTP_RETRIES"
+#: Overrides :data:`_MAX_TOTAL_RETRY_WAIT` in whole seconds (a fraction or a value under 1 is
+#: ignored, like the other two): a caller serving requests, whose worker must not sleep
+#: minutes on a throttled host, sets it low.
+_ENV_MAX_WAIT = "SDV_PY_HTTP_MAX_WAIT"
 _DEFAULT_TIMEOUT = 30
 _DEFAULT_RETRIES = 15
 
@@ -362,9 +366,10 @@ def download(
         the process down.
 
         The waits between retries share one budget of
-        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (a single ``Retry-After`` is
-        capped at :data:`_MAX_RETRY_AFTER`); a retry whose wait would cross it is not
-        made, and a wait over :data:`_LONG_RETRY_WAIT` seconds is logged at WARNING.
+        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (``SDV_PY_HTTP_MAX_WAIT``,
+        whole seconds, overrides it; a single ``Retry-After`` is capped at :data:`_MAX_RETRY_AFTER`);
+        a retry whose wait would cross it is not made, and a wait over
+        :data:`_LONG_RETRY_WAIT` seconds is logged at WARNING.
 
     Returns:
         The final ``requests.Response``. When the retry budget is exhausted on
@@ -468,6 +473,7 @@ def download(
     last_exc: Exception | None = None
     status_retries = 0
     waited = 0.0
+    max_wait = _env_int(_ENV_MAX_WAIT, int(_MAX_TOTAL_RETRY_WAIT))
     permanent_403 = urlsplit(str(url)).hostname in _PERMANENT_403_HOSTS
     for attempt in range(attempts):
         # A connection error must not reuse the previous attempt's response: its Retry-After would
@@ -491,12 +497,7 @@ def download(
             # would raise a STALE connection exception from an earlier attempt
             # instead of returning this response. Never retry on the last attempt.
             delay = _retry_delay(response, attempt) if retryable else 0.0
-            if (
-                retryable
-                and status_retries < status_budget
-                and attempt < attempts - 1
-                and waited + delay <= _MAX_TOTAL_RETRY_WAIT
-            ):
+            if retryable and status_retries < status_budget and attempt < attempts - 1 and waited + delay <= max_wait:
                 status_retries += 1
                 logger.warning(
                     "retryable status %s - %s for url (%s) [status retry %d/%d]",
@@ -553,7 +554,7 @@ def download(
                 logger.error(_redact_secrets(f"404: {url} \nparams: {params}"))
 
             delay = _retry_delay(response, attempt)
-            if remaining <= 0 or waited + delay > _MAX_TOTAL_RETRY_WAIT:
+            if remaining <= 0 or waited + delay > max_wait:
                 logger.error(_redact_secrets(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}"))
                 break
 

@@ -2791,8 +2791,8 @@
   group: codegen-runtime
   finding: A-N11
   file: sportsdataverse/dl_utils.py
-  snippet: '                and waited + delay <= _MAX_TOTAL_RETRY_WAIT'
-  mutant: '                and True'
+  snippet: '            if retryable and status_retries < status_budget and attempt < attempts - 1 and waited + delay <= max_wait:'
+  mutant: '            if retryable and status_retries < status_budget and attempt < attempts - 1 and True:'
   test: tests/test_dl_utils.py -k retry_after_waits
   expected: kill
 
