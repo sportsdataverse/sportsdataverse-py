@@ -378,6 +378,11 @@ def test_unreconciled_pre_2013_rebound_split_nulls_orb_pct() -> None:
     assert out["pace"].null_count() == 0
 
 
+def test_null_total_rebounds_keeps_orb_pct() -> None:
+    box = _team_box_from("summary_nba.json").head(2).with_columns(pl.lit(None, dtype=pl.Int64).alias("total_rebounds"))
+    assert gp.team_game_rates(box)["orb_pct"].null_count() == 0
+
+
 def test_reconciled_rebound_split_keeps_orb_pct() -> None:
     box = _team_box_from("summary_nba.json").head(2)
     assert ((box["offensive_rebounds"] + box["defensive_rebounds"]) == box["total_rebounds"]).all()

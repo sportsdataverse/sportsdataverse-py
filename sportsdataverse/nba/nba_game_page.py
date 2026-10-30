@@ -700,8 +700,9 @@ def team_game_rates(
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     # ESPN's NBA 2002-2012 boxes split rebounds that don't add up to total_rebounds (#757). NBA only:
     # college totals can include team rebounds, which the box doesn't carry separately.
+    # A null total is no total, like a box without the column: it keeps the rate rather than nulling it.
     split_ok = (
-        (pl.col("offensive_rebounds") + pl.col("defensive_rebounds")) == pl.col("total_rebounds")
+        ((pl.col("offensive_rebounds") + pl.col("defensive_rebounds")) == pl.col("total_rebounds")).fill_null(True)
         if lg == "nba" and "total_rebounds" in team_box.columns
         else pl.lit(True)
     )

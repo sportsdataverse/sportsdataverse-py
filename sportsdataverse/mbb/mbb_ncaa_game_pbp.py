@@ -1409,8 +1409,9 @@ def ncaa_mbb_play_by_play(
             ``"skip"``: it is dropped like a missing game, and the frame gains a
             ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
             dropped game (``game_id`` and why: ``fetch_failed: ...``,
-            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
-            or ``empty``).
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``,
+            ``unsupported_layout: <format>`` for a page in a layout the parser
+            does not read, or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully

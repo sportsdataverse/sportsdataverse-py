@@ -704,8 +704,14 @@ _NFL_RULES: tuple[Rule, ...] = (
     _range_rule("rushing_yards", -99, 99),
     _range_rule("receiving_yards", -99, 99),
     # A punt can travel backwards: 2022_03_BUF_MIA play 3846 (the Morstead safety off a teammate) is -1
-    # in nflverse too. The floor is the end line behind a snap at the 1 (11 yards back).
-    _range_rule("kick_distance", -11, 99),
+    # in nflverse too. The floor is the end line behind a snap at the 1 (11 yards back). Kickoffs and
+    # field goals keep [0, 99].
+    Rule(
+        "kick_distance_range",
+        ("kick_distance", "punt_attempt"),
+        ~_c("kick_distance").is_between(pl.when(_c("punt_attempt") == 1).then(-11).otherwise(0), 99),
+        "kick_distance must be within [0, 99], or [-11, 99] on a punt",
+    ),
 )
 
 
