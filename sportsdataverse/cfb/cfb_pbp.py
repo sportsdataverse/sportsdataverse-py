@@ -2156,7 +2156,8 @@ def _drop_feed_snapshot_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     385 are timeouts in replayed drives). All four corrupt games come back into range
     (165-215 rows).
     """
-    if not {"drive.id", "text", "type.text"} <= set(plays_df.columns):
+    # runs before the materialization of missing columns, so a sparse feed must not reach an expression
+    if not {"drive.id", "text", "type.text", "clock.displayValue", "period.number"} <= set(plays_df.columns):
         return plays_df
     key = [c for c in _SNAPSHOT_KEY if c in plays_df.columns]
     text = pl.col("text").cast(pl.Utf8).str.strip_chars().fill_null("")
