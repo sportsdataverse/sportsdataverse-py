@@ -1060,6 +1060,24 @@ logger = logging.getLogger("sdv.nfl_pbp")
 logger.addHandler(logging.NullHandler())
 
 
+def _aborted_snap_carrier() -> pl.Expr:
+    """The rusher: on an aborted-snap run the fumbler, even when a teammate then ran with the ball.
+
+    nflfastR's rusher on 98 of 110 2009 aborted-snap runs, and on 85 of the 86 a teammate finished. A
+    nameless snap ("(Punt formation) FUMBLES (Aborted)") leaves the formation in ``fumble_player``,
+    so the fumbler is used only when it reads as a player's name.
+    """
+    return (
+        pl.when(
+            (pl.col("rush") == True)  # noqa: E712
+            & pl.col("text").str.contains(r"FUMBLES \(Aborted\)")
+            & pl.col("fumble_player").str.strip_chars().str.contains("^" + _NFL_NAME)
+        )
+        .then(pl.col("fumble_player"))
+        .otherwise(pl.col("rush_player"))
+    )
+
+
 def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
     """Give each passer / rusher / receiver id one name, its most common spelling in the frame.
 
@@ -4735,16 +4753,7 @@ class NFLPlayProcess(object):
             .with_columns(
                 ## Extract player names
                 passer_player_name=pl.col("pass_player").str.strip_chars(),
-                # an aborted-snap run is the fumbler's carry, even when a teammate then runs with the ball
-                # (nflfastR's rusher on 98 of 110 in 2009, and 85 of the 86 a teammate ran)
-                rusher_player_name=pl.when(
-                    pl.col("fumble_player").is_not_null()
-                    & (pl.col("rush") == True)
-                    & pl.col("text").str.contains(r"FUMBLES \(Aborted\)")
-                )
-                .then(pl.col("fumble_player"))
-                .otherwise(pl.col("rush_player"))
-                .str.strip_chars(),
+                rusher_player_name=_aborted_snap_carrier().str.strip_chars(),
                 receiver_player_name=pl.col("receiver_player").str.strip_chars(),
                 sack_player_name=pl.col("sack_player1").str.strip_chars(),
                 sack_player_name2=pl.col("sack_player2").str.strip_chars(),

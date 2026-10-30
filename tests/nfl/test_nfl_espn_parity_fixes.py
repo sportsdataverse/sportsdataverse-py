@@ -259,3 +259,19 @@ def test_aborted_snap_run_is_the_fumblers_carry() -> None:
     plays, _ = _process("era_play_order/summary_291203002_trimmed.json.gz", 291203002)
     row = plays.filter(pl.col("text").str.contains("Aborted"))
     assert row.select("rush", "rusher_player_name").rows() == [(True, "R.Fitzpatrick")]
+
+
+def test_a_formation_is_never_the_carrier() -> None:
+    """A nameless aborted snap leaves "(Punt formation)" in fumble_player: the rusher stays the extractor's."""
+    df = pl.DataFrame(
+        {
+            "rush": [True, True],
+            "text": [
+                "(Punt formation) FUMBLES (Aborted) at NE 30, recovered by NE-J.Slater.",
+                "(Shotgun) R.Fitzpatrick FUMBLES (Aborted) at NYJ 43. M.Lynch to NYJ 42 for 1 yard.",
+            ],
+            "rush_player": [None, "M.Lynch"],
+            "fumble_player": ["(Punt formation)", "R.Fitzpatrick"],
+        }
+    )
+    assert df.select(nfl_pbp._aborted_snap_carrier().alias("r"))["r"].to_list() == [None, "R.Fitzpatrick"]

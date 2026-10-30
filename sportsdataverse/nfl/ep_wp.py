@@ -1447,7 +1447,7 @@ def _cp_scored_pass(df: pl.DataFrame) -> pl.Expr:
     if all(c in df.columns for c in outcome):  # with only some, a completion alone would pass
         cond = cond & pl.any_horizontal([pl.col(c).cast(pl.Float64) == 1 for c in outcome])
     receiver = [pl.col(c).is_not_null() for c in ("receiver_player_id", "receiver_player_name") if c in df.columns]
-    if "desc" in df.columns:
+    if receiver and "desc" in df.columns:
         # nflfastR also reads the target off the text: "to"/"for", an optional jersey number, then "A.Name"
         receiver.append(
             pl.col("desc").str.contains(r"\b(?:to|for)\s\d{0,2}-?[A-Z][A-Za-z]*\.\s?[A-Z][A-Za-z]+").fill_null(False)
