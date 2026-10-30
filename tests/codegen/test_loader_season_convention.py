@@ -131,6 +131,7 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
         "load_nba_stats_team_season_stats",
         # first published on END-year assets (2026-10-01)
         "load_nba_stats_game_matchups",
+        "load_nba_stats_injury_report",
         # draft_{Y} = the June Y-1 draft, so `seasons` is the draft year (2026-10-11)
         "load_nba_stats_draft",
         # The retired-tag shims inherit their target's END-year asset path.

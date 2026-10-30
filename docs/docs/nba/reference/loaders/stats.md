@@ -546,6 +546,35 @@ Release: [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdata
 load_nba_stats_game_matchups(seasons=2025)
 ```
 
+## load_nba_stats_injury_report
+
+Release: [nba_stats_injury_report](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_injury_report) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_injury_report/injury_report_{season + 1}.parquet`
+### Returns {#load_nba_stats_injury_report-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season as its ENDING year (2026 = the 2025-26 season), the published asset's stamp. |
+| `report_datetime` | Datetime(time_unit='us', time_zone=None) | Publish time of the report version the row comes from (US Eastern, naive). The league re-publishes the report through the day, so a listing repeats once per version. |
+| `game_date` | Date | Game date as the report prints it (US Eastern). |
+| `game_time` | String | Tip time as the report prints it ("07:30 (ET)", no AM/PM). |
+| `report_matchup` | String | Game as the report prints it, away@home tricodes ("CLE@ATL"). |
+| `away_team_abbr` | String | Away team tricode as the report prints it. |
+| `home_team_abbr` | String | Home team tricode as the report prints it. |
+| `team` | String | Team the listing belongs to, full name as printed ("Cleveland Cavaliers"). |
+| `report_player_name` | String | Player as the report prints it, "Last, First" ("James, LeBron"); null on a team's NOT YET SUBMITTED row. |
+| `current_status` | String | Listed status in that version: Available, Probable, Questionable, Doubtful or Out; null on a NOT YET SUBMITTED row. |
+| `reason` | String | Reason as printed ("Injury/Illness - Left Ankle; Sprain"); "NOT YET SUBMITTED" for a team that had not filed by that version. |
+| `category` | String | Category column of the early report format; last printed 2019-11-14, null after. |
+| `previous_status` | String | Previous Status column of the early report format; last printed 2019-12-17, null after. |
+| `game_id` | String | stats.nba.com game id, joined on the game date and tricodes; null for a game postponed off its printed date, a playoff game that was not needed, or a Summer League game. |
+| `team_id` | Int64 | stats.nba.com team id of the listing's team, from its printed name. |
+| `person_id` | Int64 | stats.nba.com person id matched from the printed name (see match_method); null when unmatched. |
+| `match_method` | String | How person_id was matched: exact (full name on the team's boxscores that season), family (family name and first initial, unique on the team), league (name unique league-wide that season), roster (name on the team's roster, which lists players who have not played), or null. |
+
+```python
+load_nba_stats_injury_report(seasons=2025)
+```
+
 ## load_nba_stats_pbp_v3
 
 Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`

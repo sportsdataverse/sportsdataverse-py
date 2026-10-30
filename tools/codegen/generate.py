@@ -2247,9 +2247,9 @@ def _empty_polars_dtype(label: str):
     """The polars dtype one documented type label stands for; raise on a label no empty frame can carry."""
     import polars as pl
 
-    m = re.fullmatch(r"Datetime\(time_unit='(\w+)', time_zone='([\w/]+)'\)", label)
+    m = re.fullmatch(r"Datetime\(time_unit='(\w+)', time_zone=(?:'([\w/]+)'|None)\)", label)
     if m:
-        return pl.Datetime(m.group(1), m.group(2))
+        return pl.Datetime(m.group(1), m.group(2))  # group 2 is None for a naive datetime
     m = re.fullmatch(r"List\((\w+)\)", label)
     if m:
         return pl.List(_empty_polars_dtype(m.group(1)))

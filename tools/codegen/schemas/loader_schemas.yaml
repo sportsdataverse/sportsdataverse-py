@@ -14993,6 +14993,41 @@ load_nba_stats_game_rosters:
   type: String
 - name: season_type_id
   type: String
+load_nba_stats_injury_report:
+- name: season
+  type: Int64
+- name: report_datetime
+  type: Datetime(time_unit='us', time_zone=None)
+- name: game_date
+  type: Date
+- name: game_time
+  type: String
+- name: report_matchup
+  type: String
+- name: away_team_abbr
+  type: String
+- name: home_team_abbr
+  type: String
+- name: team
+  type: String
+- name: report_player_name
+  type: String
+- name: current_status
+  type: String
+- name: reason
+  type: String
+- name: category
+  type: String
+- name: previous_status
+  type: String
+- name: game_id
+  type: String
+- name: team_id
+  type: Int64
+- name: person_id
+  type: Int64
+- name: match_method
+  type: String
 load_nba_stats_lineups:
 - name: group_set
   type: String

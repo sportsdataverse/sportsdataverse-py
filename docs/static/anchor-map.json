@@ -5420,6 +5420,7 @@
   "load_nba_stats_game_lineups": "stats",
   "load_nba_stats_game_matchups": "stats",
   "load_nba_stats_game_rosters": "stats",
+  "load_nba_stats_injury_report": "stats",
   "load_nba_stats_lineups": "stats",
   "load_nba_stats_lineups_v3": "stats",
   "load_nba_stats_officials": "stats",
