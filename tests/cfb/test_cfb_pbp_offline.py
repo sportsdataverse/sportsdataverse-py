@@ -1995,3 +1995,11 @@ def test_a_copy_filed_ahead_of_a_penalty_still_goes():
         # the copy after the offside stays, so the drive reads 3rd-and-7, offside, 3rd-and-2
         assert kept.height == 1, text
         assert kept["id"].to_list() == [feed.filter(rows)["id"][-1]], text
+
+
+def test_a_frame_missing_a_snapshot_key_is_left_alone():
+    """Without every key a copy cannot be told from a distinct play, so nothing is dropped."""
+    feed = _feed_frame(_snapshot_capture(292620166))
+    assert _drop_feed_snapshot_copies(feed).height < feed.height
+    sparse = feed.drop("end.yardLine")
+    assert_frame_equal(_drop_feed_snapshot_copies(sparse), sparse)
