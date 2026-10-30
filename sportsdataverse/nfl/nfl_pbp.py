@@ -269,7 +269,8 @@ _NFL_FUMBLE_ROW_PASS_RE = _NFL_NAME + r" (?:pass|sacked)|[A-Z][a-z]+ [A-Z][A-Za-
 # A run ESPN typed by its fumble (or safety): an aborted snap, or the carrier first -- after any "(Shotgun)" /
 # "(2:11)" prefix -- with a direction or the spot the run ended ("K.Collins to TEN 35 for -3 yards. FUMBLES").
 # nflfastR scores all of these as runs. Kicks, punts and passes are excluded by _NFL_NOT_A_RUN_RE, which names
-# the throw ("pass short", "pass incomplete") so a run's "Defensive Pass Interference" flag keeps it a run.
+# the throw ("pass short", "pass incomplete") so a run's "Defensive Pass Interference" flag keeps it a run. An
+# aborted snap from punt or field-goal formation is a run too (nflfastR: rush 1), so formations are not excluded.
 _NFL_FUMBLE_ROW_RUN_RE = (
     r"FUMBLES \(Aborted\)|^(?:\([^)]*\)\s*)*"
     + _NFL_NAME
@@ -277,7 +278,9 @@ _NFL_FUMBLE_ROW_RUN_RE = (
     + _NFL_RUSH_DIRECTION[3:-1]
     + r")"
 )
-_NFL_NOT_A_RUN_RE = r"(?i)\bpass (?:complete|incomplete|short|deep|to)\b|sacked|spiked|\bpunts?\b|punt formation|field goal|\bkicks\b|extra point|two-point"
+_NFL_NOT_A_RUN_RE = (
+    r"(?i)\bpass (?:complete|incomplete|short|deep|to)\b|sacked|spiked|\bpunts\b|\bkicks\b|extra point|two-point"
+)
 # ESPN typed every 2009-13 pass "Pass", completed or not: a completion is a pass to a receiver for a gain
 # (or no gain), and the text names an incompletion, interception, spike or sack when it is not one.
 _NFL_PASS_TYPE_COMPLETE_RE = r"(?i)\bpass\b.* to .*\bfor (?:-?\d+ yards?|no gain)"
@@ -1064,7 +1067,7 @@ def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
     off the text), and the box groups by name, so a variant split him into a second row (2019_07_JAX_CIN).
     A play with no id keeps its own name.
     """
-    return play_df.with_columns(
+    out = play_df.with_columns(
         pl.when(pl.col(f"{role}_player_id").is_not_null())
         .then(pl.col(f"{role}_player_name").drop_nulls().mode().sort().first().over(f"{role}_player_id"))
         .otherwise(pl.col(f"{role}_player_name"))
@@ -1072,6 +1075,16 @@ def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
         for role in ("passer", "rusher", "receiver")
         if f"{role}_player_id" in play_df.columns and f"{role}_player_name" in play_df.columns
     )
+    if {"athlete_name", "passer_player_name", "rusher_player_name"} <= set(out.columns):
+        # the QBR box filters and groups on athlete_name, which was derived from the variant spellings
+        out = out.with_columns(
+            athlete_name=pl.when(pl.col("passer_player_name").is_not_null())
+            .then(pl.col("passer_player_name"))
+            .when(pl.col("rusher_player_name").is_not_null())
+            .then(pl.col("rusher_player_name"))
+            .otherwise(pl.col("athlete_name"))
+        )
+    return out
 
 
 class NFLPlayProcess(object):
@@ -4722,7 +4735,16 @@ class NFLPlayProcess(object):
             .with_columns(
                 ## Extract player names
                 passer_player_name=pl.col("pass_player").str.strip_chars(),
-                rusher_player_name=pl.col("rush_player").str.strip_chars(),
+                # an aborted-snap run is the fumbler's carry, even when a teammate then runs with the ball
+                # (nflfastR's rusher on 98 of 110 in 2009, and 85 of the 86 a teammate ran)
+                rusher_player_name=pl.when(
+                    pl.col("fumble_player").is_not_null()
+                    & (pl.col("rush") == True)
+                    & pl.col("text").str.contains(r"FUMBLES \(Aborted\)")
+                )
+                .then(pl.col("fumble_player"))
+                .otherwise(pl.col("rush_player"))
+                .str.strip_chars(),
                 receiver_player_name=pl.col("receiver_player").str.strip_chars(),
                 sack_player_name=pl.col("sack_player1").str.strip_chars(),
                 sack_player_name2=pl.col("sack_player2").str.strip_chars(),

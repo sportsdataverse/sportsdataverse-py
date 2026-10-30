@@ -1446,9 +1446,14 @@ def _cp_scored_pass(df: pl.DataFrame) -> pl.Expr:
     outcome = ("complete_pass", "incomplete_pass", "interception")
     if all(c in df.columns for c in outcome):  # with only some, a completion alone would pass
         cond = cond & pl.any_horizontal([pl.col(c).cast(pl.Float64) == 1 for c in outcome])
-    receiver = [c for c in ("receiver_player_id", "receiver_player_name") if c in df.columns]
+    receiver = [pl.col(c).is_not_null() for c in ("receiver_player_id", "receiver_player_name") if c in df.columns]
+    if "desc" in df.columns:
+        # nflfastR also reads the target off the text: "to"/"for", an optional jersey number, then "A.Name"
+        receiver.append(
+            pl.col("desc").str.contains(r"\b(?:to|for)\s\d{0,2}-?[A-Z][A-Za-z]*\.\s?[A-Z][A-Za-z]+").fill_null(False)
+        )
     if receiver:
-        cond = cond & pl.any_horizontal([pl.col(c).is_not_null() for c in receiver])
+        cond = cond & pl.any_horizontal(receiver)
     if "pass_location" in df.columns:
         cond = cond & pl.col("pass_location").is_not_null()
     if "qb_spike" in df.columns:
@@ -4157,7 +4162,8 @@ def _add_success_first_down(df: pl.DataFrame) -> pl.DataFrame:
 
     ``success`` is 1 when ``epa`` is positive, 0 when it is not, and null with ``epa`` (nflfastR's
     ``add_ep``). ``first_down`` is 1 when the play earned a first down by rush, pass or penalty
-    (nflfastR's ``first_down_rush | first_down_pass | first_down_penalty``). Both are Float64, as in
+    (nflfastR's ``first_down_rush | first_down_pass | first_down_penalty``, with R's NA logic: 1 if any part
+    is 1, else null if any part is null, else 0), and only from all three parts. Both are Float64, as in
     nflfastR's pbp. A frame that already has a column keeps it.
     """
     exprs = []
@@ -4165,9 +4171,12 @@ def _add_success_first_down(df: pl.DataFrame) -> pl.DataFrame:
         exprs.append(
             pl.when(pl.col("epa").is_null()).then(None).otherwise((pl.col("epa") > 0).cast(pl.Float64)).alias("success")
         )
-    parts = [c for c in ("first_down_rush", "first_down_pass", "first_down_penalty") if c in df.columns]
-    if "first_down" not in df.columns and parts:
-        exprs.append(pl.max_horizontal([pl.col(c).cast(pl.Float64) for c in parts]).alias("first_down"))
+    parts = ("first_down_rush", "first_down_pass", "first_down_penalty")
+    if "first_down" not in df.columns and all(c in df.columns for c in parts):
+        # any_horizontal is Kleene OR, as R's `|` is: a missing part leaves no first down unknown, not 0
+        exprs.append(
+            pl.any_horizontal([pl.col(c).cast(pl.Float64) == 1 for c in parts]).cast(pl.Float64).alias("first_down")
+        )
     return df.with_columns(exprs) if exprs else df
 
 

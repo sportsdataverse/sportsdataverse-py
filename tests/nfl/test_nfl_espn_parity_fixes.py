@@ -50,8 +50,21 @@ RUSH_CASES = [
         False,
         True,
     ),
-    # an aborted punt snap is not a run
-    ("Fumble Recovery (Own)", "(Punt formation) FUMBLES (Aborted) at NE 30, recovered by NE-J.Slater.", False, False),
+    # an aborted snap from punt or field-goal formation is a run too (nflfastR: rush 1, 2009 K.Huber)
+    ("Fumble Recovery (Own)", "(Punt formation) FUMBLES (Aborted) at NE 30, recovered by NE-J.Slater.", True, False),
+    (
+        "Fumble Recovery (Own)",
+        "(Field Goal formation) K.Huber FUMBLES (Aborted) at DEN 10, and recovers at DEN 44.",
+        True,
+        False,
+    ),
+    # a run whose flag is pass interference is still a run
+    (
+        "Fumble Recovery (Opponent)",
+        "K.Collins to TEN 35 for -3 yards. FUMBLES, RECOVERED by HST-J.Zgonina. PENALTY on HST, Defensive Pass Interference.",
+        True,
+        False,
+    ),
 ]
 
 
@@ -153,20 +166,26 @@ def test_one_name_per_player() -> None:
     )
     out = _one_name_per_player(df)
     assert out["passer_player_name"].to_list() == ["Andy Dalton", "Andy Dalton", "Andy Dalton", "No Id"]
+    # the QBR box's athlete_name follows the unified name
+    qbr = _one_name_per_player(df.with_columns(athlete_name=pl.col("passer_player_name")))
+    assert qbr["athlete_name"].to_list() == ["Andy Dalton", "Andy Dalton", "Andy Dalton", "No Id"]
 
 
 def test_success_and_first_down_follow_nflfastr() -> None:
     df = pl.DataFrame(
         {
             "epa": [0.4, -0.2, None, 0.0],
-            "first_down_rush": [1.0, 0.0, 0.0, 0.0],
+            "first_down_rush": [1.0, 0.0, 0.0, None],
             "first_down_pass": [0.0, 0.0, 0.0, 0.0],
             "first_down_penalty": [0.0, 0.0, 1.0, 0.0],
         }
     )
     out = _add_success_first_down(df)
     assert out["success"].to_list() == [1.0, 0.0, None, 0.0]
-    assert out["first_down"].to_list() == [1.0, 0.0, 1.0, 0.0]
+    # R's NA logic: a null part with no 1 is unknown, not 0
+    assert out["first_down"].to_list() == [1.0, 0.0, 1.0, None]
+    # without every part there is no first_down at all
+    assert "first_down" not in _add_success_first_down(df.drop("first_down_penalty")).columns
     # a frame that already carries them is left alone
     kept = _add_success_first_down(out.with_columns(pl.lit(9.0).alias("success")))
     assert kept["success"].to_list() == [9.0] * 4
@@ -203,3 +222,40 @@ def test_cp_scores_only_nflfastr_valid_passes() -> None:
     out = calculate_completion_probability(pl.DataFrame(rows))
     assert out["cp"].is_not_null().to_list() == [True, False, False, False]
     assert out["cpoe"].is_not_null().to_list() == [True, False, False, False]
+
+
+def test_cp_reads_the_target_off_desc() -> None:
+    """nflfastR's prepare_cp_data takes the receiver from desc when the id and name columns are empty."""
+    from sportsdataverse.nfl.ep_wp import calculate_completion_probability
+
+    rows = {
+        "season": [2009] * 3,
+        "air_yards": [8.0] * 3,
+        "ydstogo": [10.0] * 3,
+        "down": [1.0] * 3,
+        "yardline_100": [60.0] * 3,
+        "posteam": ["NE"] * 3,
+        "home_team": ["NE"] * 3,
+        "roof": ["outdoors"] * 3,
+        "qb_hit": [0.0] * 3,
+        "pass_location": ["left"] * 3,
+        "complete_pass": [0.0] * 3,
+        "incomplete_pass": [1.0] * 3,
+        "interception": [0.0] * 3,
+        "receiver_player_id": [None, None, None],
+        "desc": [
+            "(9:12) T.Brady pass incomplete short left to 81-R.Moss.",
+            "(9:12) T.Brady pass incomplete deep right intended for W.Welker.",
+            "(9:12) T.Brady pass incomplete short left.",
+        ],
+    }
+    out = calculate_completion_probability(pl.DataFrame(rows, schema_overrides={"receiver_player_id": pl.Utf8}))
+    assert out["cp"].is_not_null().to_list() == [True, True, False]
+
+
+def test_aborted_snap_run_is_the_fumblers_carry() -> None:
+    """2009_13_NYJ_BUF: "R.Fitzpatrick FUMBLES (Aborted) ... M.Lynch to NYJ 42 for 1 yard" is Fitzpatrick's
+    carry in nflfastR (as on 85 of the 86 2009 aborted-snap runs a teammate finished), not Lynch's."""
+    plays, _ = _process("era_play_order/summary_291203002_trimmed.json.gz", 291203002)
+    row = plays.filter(pl.col("text").str.contains("Aborted"))
+    assert row.select("rush", "rusher_player_name").rows() == [(True, "R.Fitzpatrick")]
