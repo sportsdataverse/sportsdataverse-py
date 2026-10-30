@@ -371,6 +371,28 @@ def test_usage_uses_the_repaired_team_turnovers() -> None:
     assert got != pytest.approx(usg(tm["total_turnovers"]))
 
 
+def test_unreconciled_pre_2013_rebound_split_nulls_orb_pct() -> None:
+    # 271128023 GS @ SAC: ESPN shows 12+13 vs 71 (GS) and 5+19 vs 80 (SAC) rebounds (#757)
+    out = gp.team_game_rates(_team_box_from("summary_nba_2007_team_box.json"))
+    assert out["orb_pct"].to_list() == [None, None]
+    assert out["pace"].null_count() == 0
+
+
+def test_reconciled_rebound_split_keeps_orb_pct() -> None:
+    box = _team_box_from("summary_nba.json").head(2)
+    assert ((box["offensive_rebounds"] + box["defensive_rebounds"]) == box["total_rebounds"]).all()
+    out = gp.team_game_rates(box).sort("team_id")
+    assert out["orb_pct"].null_count() == 0
+    # one team's split breaking nulls orb_pct for both rows (each uses the other's DRB)
+    broken = box.with_columns(
+        pl.when(pl.col("team_id") == pl.col("team_id").min())
+        .then(pl.col("total_rebounds") + 1)
+        .otherwise(pl.col("total_rebounds"))
+        .alias("total_rebounds")
+    )
+    assert gp.team_game_rates(broken)["orb_pct"].to_list() == [None, None]
+
+
 def test_wnba_regulation_is_40_minutes_and_overtime_5() -> None:
     assert gp.game_minutes(4, league_id="10") == 40
     assert gp.game_minutes(5, league_id="10") == 45
