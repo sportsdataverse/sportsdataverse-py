@@ -99,7 +99,8 @@ repos:
         # docs/docs/ — same frontmatter pages, so it must be excluded too.
         exclude: ^(docs/(docs|versioned_docs|src/pages)|\.claude)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.24.0
+    # v0.20.0, not v0.24: v0.24 needs Node >= 22 and this hook runs on the contributor's own Node
+    rev: v0.20.0
     hooks:
       - id: markdownlint-cli2
         args: ["--config", ".markdownlint-cli2.yaml"]
