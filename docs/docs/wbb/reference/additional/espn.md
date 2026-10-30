@@ -560,9 +560,10 @@ from sportsdataverse.wbb import espn_wbb_schedule
 day = espn_wbb_schedule(dates=20240407)
 print(day.shape)
 
-# Season-level pull (2024 season)
+# Season-level pull (2024 season). ``dates=2024`` is not a season sweep: ESPN answers a year with its first scoreboard page (early January only), so read the released schedule
 
-season = espn_wbb_schedule(dates=2024, limit=1500)
+from sportsdataverse.wbb import load_wbb_schedule
+season = load_wbb_schedule([2024])
 print(season.shape)
 
 # Filter to a specific team (UConn ``team_id=2509``)
@@ -574,8 +575,8 @@ uconn = season.filter(
 
 # Pandas round-trip
 
-season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
-season_pd.head()
+day_pd = espn_wbb_schedule(dates=20240407, return_as_pandas=True)
+day_pd.head()
 ```
 
 ### espn_wbb_standings {#espn_wbb_standings}

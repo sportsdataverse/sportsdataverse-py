@@ -818,6 +818,9 @@ is a real 0, except where the WBB box recorded none: in WBB before 2009 (and for
 no `season`) and in a WBB game of any season whose two teams together show fewer than 5,
 TOV%, possessions, ratings and pace are null, never computed from unrecorded turnovers. A
 team's 0 in a game whose total is 5 or more stays 0. A zero denominator gives `null`.
+For the NBA, `orb_pct` is null when either team's `offensive_rebounds + defensive_rebounds`
+differs from its `total_rebounds` (ESPN's 2002-2012 boxes); a box without `total_rebounds`
+and the other leagues are not checked.
 
 **Parameters**
 
