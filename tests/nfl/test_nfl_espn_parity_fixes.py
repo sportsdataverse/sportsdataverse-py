@@ -275,3 +275,20 @@ def test_a_formation_is_never_the_carrier() -> None:
         }
     )
     assert df.select(nfl_pbp._aborted_snap_carrier().alias("r"))["r"].to_list() == [None, "R.Fitzpatrick"]
+
+
+def test_one_name_per_player_across_roles() -> None:
+    """A QB's passes and runs get one spelling, or the QBR box (which joins by name) drops his runs."""
+    df = pl.DataFrame(
+        {
+            "passer_player_id": [4690158, 4690158, None],
+            "passer_player_name": ["Noah Kim", "Noah Kim", None],
+            "rusher_player_id": [None, None, 4690158],
+            "rusher_player_name": [None, None, "N. Kim"],
+            "receiver_player_id": [None, None, None],
+            "receiver_player_name": [None, None, None],
+        },
+        schema_overrides={"receiver_player_id": pl.Int64, "receiver_player_name": pl.Utf8},
+    )
+    out = _one_name_per_player(df)
+    assert out["rusher_player_name"].to_list() == [None, None, "Noah Kim"]

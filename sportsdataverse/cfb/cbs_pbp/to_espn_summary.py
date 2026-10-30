@@ -977,10 +977,11 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
-    cbs_game_id = str(payload.get("cbs_game_id")) if payload is not None and payload.get("cbs_game_id") else None
+    # a stored id through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+    cbs_game_id = (_id_text(payload.get("cbs_game_id")) or None) if payload is not None else None
     resolved_by = "payload" if cbs_game_id else None
     if cbs_game_id is None:
-        cbs_game_id, resolved_by = (row.get("cbs_game_id"), "idmap") if row.get("cbs_game_id") else (None, None)
+        cbs_game_id, resolved_by = (stored, "idmap") if (stored := _id_text(row.get("cbs_game_id"))) else (None, None)
     scoreboard_provenance: Dict[str, Any] = {}
     if cbs_game_id is None and payload is None:
         from sportsdataverse.cfb.cbs_pbp.game_id import _resolve_cbs_game_id

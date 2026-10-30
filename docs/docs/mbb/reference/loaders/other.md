@@ -116,13 +116,13 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `status_clock` | Float64 | Status clock. |
 | `status_display_clock` | String | Status display clock. |
 | `status_period` | Float64 | Status period. |
-| `status_type_id` | Int32 | Unique identifier for status type. |
-| `status_type_name` | String | Status type name. |
-| `status_type_state` | String | Status type state. |
-| `status_type_completed` | Boolean | Status type completed. |
-| `status_type_description` | String | Status type description. |
-| `status_type_detail` | String | Status type detail. |
-| `status_type_short_detail` | String | Status type short detail. |
+| `status_type_id` | Int32 | ESPN's numeric game-status code, passed through unchanged. ESPN publishes no reference for these codes, so read status_type_name rather than hard-coding numbers. |
+| `status_type_name` | String | ESPN's game-status enum (STATUS_FINAL, STATUS_SCHEDULED, STATUS_POSTPONED, STATUS_CANCELED, ...), passed through unchanged. ESPN does not document the full set, and no value certifies an ordinary final as distinct from a forfeit or an awarded result. |
+| `status_type_state` | String | ESPN's coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason. |
+| `status_type_completed` | Boolean | ESPN's completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction. |
+| `status_type_description` | String | ESPN's display text for the game status (for example "Final" or "Postponed"), passed through unchanged. |
+| `status_type_detail` | String | ESPN's longer status text, passed through unchanged; an overtime final reads like "Final/OT". |
+| `status_type_short_detail` | String | ESPN's short status text for scoreboards, passed through unchanged. |
 | `format_regulation_periods` | Float64 | Format regulation periods. |
 | `home_id` | Int32 | Unique identifier for home. |
 | `home_uid` | String | Home team's uid. |
@@ -137,7 +137,7 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `home_venue_id` | Int32 | Unique identifier for home venue. |
 | `home_logo` | String | Home team logo URL. |
 | `home_conference_id` | Int32 | Unique identifier for home conference. |
-| `home_score` | Int32 | Home team score at the time of the play. |
+| `home_score` | Int32 | Home team's points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true. |
 | `home_winner` | Boolean | Home team's winner. |
 | `home_current_rank` | Float64 | Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value). |
 | `home_linescores` | String | Period-by-period scores for the home team as a delimited string from ESPN's schedule feed. |
@@ -155,7 +155,7 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `away_venue_id` | Int32 | Unique identifier for away venue. |
 | `away_logo` | String | Away team logo URL. |
 | `away_conference_id` | Int32 | Unique identifier for away conference. |
-| `away_score` | Int32 | Away team score at the time of the play. |
+| `away_score` | Int32 | Away team's points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true. |
 | `away_winner` | Boolean | Away team's winner. |
 | `away_current_rank` | Float64 | Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value). |
 | `away_linescores` | String | Period-by-period scores for the away team as a delimited string from ESPN's schedule feed. |

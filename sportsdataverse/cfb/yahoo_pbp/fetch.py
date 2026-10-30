@@ -89,17 +89,21 @@ def _resolve_game_id(
     source rather than fetching a wrong one.
     """
     row = idmap_row or {}
-    stored = row.get("yahoo_game_id")
+    # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+    stored = _id_text(row.get("yahoo_game_id"))
     if stored:
-        return str(stored), "idmap"
-    home_team = row.get("home_team") or {}
+        return stored, "idmap"
+    home_team = row.get("home_team")
+    if not isinstance(home_team, Mapping):  # NaN / pandas.NA in a pandas-built row, or absent
+        home_team = {}
+    yahoo_team_id = _id_text(home_team.get("yahoo_team_id")) or None
     computed = _yahoo_cfb_game_id(
         row.get("kickoff_utc"),
         _id_text(row.get("home_espn_team_id")) or None,
-        (home_team or {}).get("yahoo_team_id"),
+        yahoo_team_id,
     )
     if computed:
-        return computed, "computed" if not (home_team or {}).get("yahoo_team_id") else "computed_idmap_team"
+        return computed, "computed" if not yahoo_team_id else "computed_idmap_team"
     from_crosswalk = _crosswalk_yahoo_id(espn_id, seasons)
     if from_crosswalk:
         return str(from_crosswalk), "cfb_schedule_crosswalk"

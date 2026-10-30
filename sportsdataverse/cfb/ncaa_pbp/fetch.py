@@ -42,6 +42,8 @@ from typing import Any, Dict, Mapping, Optional, Tuple
 import polars as pl
 from bs4 import BeautifulSoup
 
+from sportsdataverse._codegen_runtime import _id_text
+
 #: Environment variable naming a ``ncaa-mfb-football-raw`` checkout (the offline archive root).
 ARCHIVE_DIR_ENV = "SDV_NCAA_MFB_ARCHIVE"
 
@@ -222,8 +224,9 @@ def _resolve_contest_id(idmap_row: Optional[Mapping[str, Any]]) -> Tuple[Optiona
     one resolves to a real, different game. It is filled from ``ncaa-mfb-football-raw``'s own
     schedule, and there is no formula to fall back on: a contest id is a fact or it is nothing.
     """
-    stored = (idmap_row or {}).get("ncaa_game_id")
-    return (str(stored), "idmap") if stored else (None, "unresolved")
+    # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+    stored = _id_text((idmap_row or {}).get("ncaa_game_id"))
+    return (stored, "idmap") if stored else (None, "unresolved")
 
 
 _TEAM_HREF = "/teams/"

@@ -2484,6 +2484,7 @@ from sportsdataverse.football.attribution import (  # noqa: E402
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
 from sportsdataverse.football.box import _home_first, _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import _avg_start_ep  # noqa: E402
+from sportsdataverse.football.box import _one_name_per_player  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
@@ -2747,6 +2748,27 @@ def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataF
         pl.coalesce(pl.col("yds_kickoff"), kick_yds).cast(pl.Int32).alias("yds_kickoff"),
         pl.coalesce(pl.col("yds_punt_return"), return_yds).cast(pl.Int32).alias("yds_punt_return"),
     )
+
+
+def _overtime_period(columns: "list[str]") -> pl.Expr:
+    """The overtime period a play belongs to, for feeds that number every overtime 5 (401112081, 3OT; #505).
+
+    Two possessions per period, each starting at the 25, so the overtime drives are paired; a split
+    possession that restarts elsewhere does not advance the pairing. A feed that numbers its periods
+    (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
+    """
+    period = pl.col("period.number")
+    if not {"drive.id", "drive.start.yardLine"} <= set(columns):
+        return period
+    new_ot_drive = (
+        (period >= 5)
+        & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
+        & pl.col("drive.id").is_not_null()
+        & pl.col("drive.start.yardLine").is_in([25, 75])
+    ).fill_null(False)
+    paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
+    drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in columns else []
+    return pl.max_horizontal(period, *drive_period, paired)
 
 
 class CFBPlayProcess(object):
@@ -3529,18 +3551,18 @@ class CFBPlayProcess(object):
 
         # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
         # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
-        # same way) nor, in older feeds, which overtime period a row belongs to, so the count is
-        # bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
+        # same way), so the count is bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
         # allots 3 and each overtime period 1, and the count never goes below 0.
         period = pl.col("period.number")
-        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(period)
+        ot_period = _overtime_period(pbp_txt["plays"].columns)
+        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_period)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
         home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         away_used = ((pl.col("awayTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         # The payload's per-team lists hold exactly the rows that decremented a count: "1" / "2" the
-        # halves, "OT<n>" an overtime period (older feeds number every overtime 5, so theirs is "OT1").
-        window_key = pl.when(period <= 4).then(window.cast(pl.Utf8)).otherwise(pl.format("OT{}", period - 4))
+        # halves, "OT<n>" an overtime period.
+        window_key = pl.when(period <= 4).then(window.cast(pl.Utf8)).otherwise(pl.format("OT{}", ot_period - 4))
         charged = pbp_txt["plays"].select(
             "id",
             window_key.alias("window"),
@@ -9581,6 +9603,8 @@ class CFBPlayProcess(object):
         play_df = play_df.with_columns(
             pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
         )
+        # one spelling per player id, or "Noah Kim" and "N. Kim" are two passers with two xQBRs (#623)
+        play_df = _one_name_per_player(play_df)
 
         box_score_columns = [
             "completion",

@@ -38198,9 +38198,18 @@ load_mbb_schedule:
     lower-division or exhibition opponent, which also carries no away_conference_id); null, not False, for every Division I
     team. Sparse -- a handful of games per season.'
   away_records: Record strings (overall and split records) for the away team from ESPN's schedule feed.
+  away_score: 'Away team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
+  home_score: 'Home team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
+  status_type_completed: 'ESPN''s completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction.'
+  status_type_description: 'ESPN''s display text for the game status (for example "Final" or "Postponed"), passed through unchanged.'
+  status_type_detail: 'ESPN''s longer status text, passed through unchanged; an overtime final reads like "Final/OT".'
+  status_type_id: 'ESPN''s numeric game-status code, passed through unchanged. ESPN publishes no reference for these codes, so read status_type_name rather than hard-coding numbers.'
+  status_type_name: 'ESPN''s game-status enum (STATUS_FINAL, STATUS_SCHEDULED, STATUS_POSTPONED, STATUS_CANCELED, ...), passed through unchanged. ESPN does not document the full set, and no value certifies an ordinary final as distinct from a forfeit or an awarded result.'
+  status_type_short_detail: 'ESPN''s short status text for scoreboards, passed through unchanged.'
+  status_type_state: 'ESPN''s coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason.'
 load_mbb_schedule_crosswalk:
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
   yahoo_game_id: 'Yahoo Sports game id, ncaab.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
@@ -38594,8 +38603,17 @@ load_nba_player_season_stats:
 load_nba_schedule:
   away_linescores: Period-by-period points for the away team, stringified from ESPN's linescores array.
   away_records: Away team's records at game time (overall, home, away), stringified from ESPN.
+  away_score: 'Away team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   home_linescores: Period-by-period points for the home team, stringified from ESPN's linescores array.
   home_records: Home team's records at game time (overall, home, away), stringified from ESPN.
+  home_score: 'Home team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
+  status_type_completed: 'ESPN''s completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction.'
+  status_type_description: 'ESPN''s display text for the game status (for example "Final" or "Postponed"), passed through unchanged.'
+  status_type_detail: 'ESPN''s longer status text, passed through unchanged; an overtime final reads like "Final/OT".'
+  status_type_id: 'ESPN''s numeric game-status code, passed through unchanged. ESPN publishes no reference for these codes, so read status_type_name rather than hard-coding numbers.'
+  status_type_name: 'ESPN''s game-status enum (STATUS_FINAL, STATUS_SCHEDULED, STATUS_POSTPONED, STATUS_CANCELED, ...), passed through unchanged. ESPN does not document the full set, and no value certifies an ordinary final as distinct from a forfeit or an awarded result.'
+  status_type_short_detail: 'ESPN''s short status text for scoreboards, passed through unchanged.'
+  status_type_state: 'ESPN''s coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason.'
 load_nba_schedule_crosswalk:
   yahoo_game_id: Yahoo Sports game id, nba.g.<YYYYMMDD US-Eastern date><home ESPN team id, 2 digits> (Yahoo's NBA team ids equal ESPN's), from the 2014 season on; null for earlier seasons.
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
@@ -45839,6 +45857,7 @@ load_wbb_schedule:
   away_current_rank: Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value).
   away_linescores: Period-by-period scores for the away team as a delimited string from ESPN's schedule feed.
   away_records: Record strings (overall and split records) for the away team from ESPN's schedule feed.
+  away_score: 'Away team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   game_json_raw_url: raw.githubusercontent.com URL of the game's raw JSON payload in wehoop-wbb-raw.
   game_rosters_json_url: raw.githubusercontent.com URL of the game's rosters JSON payload in wehoop-wbb-raw.
   has_game_json: Whether the raw game JSON payload exists in the raw store for this game.
@@ -45847,11 +45866,19 @@ load_wbb_schedule:
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
+  home_score: 'Home team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   in_game_rosters: Whether the game is represented in the built game-rosters dataset.
   in_officials: Whether the game is represented in the built officials dataset.
   in_shots: Whether the game is represented in the built shots dataset.
   officials_json_url: raw.githubusercontent.com URL of the game's officials JSON payload in wehoop-wbb-raw.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  status_type_completed: 'ESPN''s completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction.'
+  status_type_description: 'ESPN''s display text for the game status (for example "Final" or "Postponed"), passed through unchanged.'
+  status_type_detail: 'ESPN''s longer status text, passed through unchanged; an overtime final reads like "Final/OT".'
+  status_type_id: 'ESPN''s numeric game-status code, passed through unchanged. ESPN publishes no reference for these codes, so read status_type_name rather than hard-coding numbers.'
+  status_type_name: 'ESPN''s game-status enum (STATUS_FINAL, STATUS_SCHEDULED, STATUS_POSTPONED, STATUS_CANCELED, ...), passed through unchanged. ESPN does not document the full set, and no value certifies an ordinary final as distinct from a forfeit or an awarded result.'
+  status_type_short_detail: 'ESPN''s short status text for scoreboards, passed through unchanged.'
+  status_type_state: 'ESPN''s coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason.'
 load_wbb_schedule_crosswalk:
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
   yahoo_game_id: 'Yahoo Sports game id, ncaaw.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
@@ -46006,9 +46033,18 @@ load_wnba_rosters:
 load_wnba_schedule:
   away_linescores: Stringified list of the away team's period-by-period scores from the ESPN schedule feed.
   away_records: Stringified list of the away team's record summaries (overall/home/away) from the ESPN schedule feed.
+  away_score: 'Away team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   home_linescores: Stringified list of the home team's period-by-period scores from the ESPN schedule feed.
   home_records: Stringified list of the home team's record summaries (overall/home/away) from the ESPN schedule feed.
+  home_score: 'Home team''s points as ESPN reports them: once the game is final, the full-game total including every overtime period. ESPN corrects a score in place, so this is the value ESPN showed when the release was last built. Not a final score until status_type_completed is true.'
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  status_type_completed: 'ESPN''s completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction.'
+  status_type_description: 'ESPN''s display text for the game status (for example "Final" or "Postponed"), passed through unchanged.'
+  status_type_detail: 'ESPN''s longer status text, passed through unchanged; an overtime final reads like "Final/OT".'
+  status_type_id: 'ESPN''s numeric game-status code, passed through unchanged. ESPN publishes no reference for these codes, so read status_type_name rather than hard-coding numbers.'
+  status_type_name: 'ESPN''s game-status enum (STATUS_FINAL, STATUS_SCHEDULED, STATUS_POSTPONED, STATUS_CANCELED, ...), passed through unchanged. ESPN does not document the full set, and no value certifies an ordinary final as distinct from a forfeit or an awarded result.'
+  status_type_short_detail: 'ESPN''s short status text for scoreboards, passed through unchanged.'
+  status_type_state: 'ESPN''s coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason.'
 load_wnba_schedule_crosswalk:
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
   yahoo_game_id: 'Yahoo Sports game id, wnba.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 3 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'

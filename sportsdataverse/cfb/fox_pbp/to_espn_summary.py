@@ -78,9 +78,10 @@ def _current_cfb_seasons() -> Tuple[int, ...]:
 
 def _resolve_fox_event_id(espn_id: Any, idmap_row: Optional[Mapping[str, Any]]) -> Tuple[Optional[str], str]:
     """``(fox_event_id, provenance)`` for one ESPN event id; ``(None, ...)`` means hand over."""
-    stored = (idmap_row or {}).get("fox_event_id")
+    # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+    stored = _id_text((idmap_row or {}).get("fox_event_id"))
     if stored:
-        return str(stored), "idmap"
+        return stored, "idmap"
     seasons = (int(idmap_row["season"]),) if (idmap_row or {}).get("season") else _current_cfb_seasons()
     from_crosswalk = _crosswalk_fox_id(espn_id, seasons)
     if from_crosswalk:

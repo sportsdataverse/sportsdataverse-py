@@ -133,7 +133,8 @@ def _resolve_row(
     row.setdefault("espn_event_id", str(espn_id))
 
     def _game_id() -> Optional[str]:
-        return row.get("yahoo_game_id") or _yahoo_nfl_game_id(
+        # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+        return _id_text(row.get("yahoo_game_id")) or _yahoo_nfl_game_id(
             row.get("kickoff_utc"), _id_text(row.get("home_espn_team_id")) or None, et_date=row.get("gameday")
         )
 
@@ -152,6 +153,8 @@ def _resolve_row(
         str(game_id) if game_id else None,
         {
             "idmap_resolved_by": idmap_resolved_by,
-            "yahoo_id_resolved_by": ("idmap" if row.get("yahoo_game_id") else "computed") if game_id else "unresolved",
+            "yahoo_id_resolved_by": ("idmap" if _id_text(row.get("yahoo_game_id")) else "computed")
+            if game_id
+            else "unresolved",
         },
     )
