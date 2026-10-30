@@ -2750,6 +2750,27 @@ def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataF
     )
 
 
+def _overtime_period(columns: "list[str]") -> pl.Expr:
+    """The overtime period a play belongs to, for feeds that number every overtime 5 (401112081, 3OT; #505).
+
+    Two possessions per period, each starting at the 25, so the overtime drives are paired; a split
+    possession that restarts elsewhere does not advance the pairing. A feed that numbers its periods
+    (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
+    """
+    period = pl.col("period.number")
+    if not {"drive.id", "drive.start.yardLine"} <= set(columns):
+        return period
+    new_ot_drive = (
+        (period >= 5)
+        & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
+        & pl.col("drive.id").is_not_null()
+        & pl.col("drive.start.yardLine").is_in([25, 75])
+    ).fill_null(False)
+    paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
+    drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in columns else []
+    return pl.max_horizontal(period, *drive_period, paired)
+
+
 class CFBPlayProcess(object):
     """Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -3533,23 +3554,7 @@ class CFBPlayProcess(object):
         # same way), so the count is bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
         # allots 3 and each overtime period 1, and the count never goes below 0.
         period = pl.col("period.number")
-        # Older feeds number every overtime 5 (401112081, 3OT), so the overtime period comes from the
-        # drives instead: two possessions per period, each starting at the 25 (#505). A split
-        # possession that restarts elsewhere does not advance the pairing; a feed that numbers its
-        # periods (or its drives' periods) keeps the larger value.
-        plays_cols = pbp_txt["plays"].columns
-        if {"drive.id", "drive.start.yardLine"} <= set(plays_cols):
-            new_ot_drive = (
-                (period >= 5)
-                & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
-                & pl.col("drive.id").is_not_null()
-                & pl.col("drive.start.yardLine").is_in([25, 75])
-            ).fill_null(False)
-            paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
-            drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in plays_cols else []
-            ot_period = pl.max_horizontal(period, *drive_period, paired)
-        else:
-            ot_period = period
+        ot_period = _overtime_period(pbp_txt["plays"].columns)
         window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_period)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)

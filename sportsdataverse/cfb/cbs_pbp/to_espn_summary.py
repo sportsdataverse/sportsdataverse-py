@@ -981,8 +981,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     cbs_game_id = (_id_text(payload.get("cbs_game_id")) or None) if payload is not None else None
     resolved_by = "payload" if cbs_game_id else None
     if cbs_game_id is None:
-        cbs_game_id = _id_text(row.get("cbs_game_id")) or None
-        resolved_by = "idmap" if cbs_game_id else None
+        cbs_game_id, resolved_by = (stored, "idmap") if (stored := _id_text(row.get("cbs_game_id"))) else (None, None)
     scoreboard_provenance: Dict[str, Any] = {}
     if cbs_game_id is None and payload is None:
         from sportsdataverse.cfb.cbs_pbp.game_id import _resolve_cbs_game_id
