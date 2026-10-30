@@ -49,7 +49,9 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import (
     _ban_check,
     _browser_response_unsolved,
     _is_challenge,
+    _is_session_denied,
     _raw_fetch,
+    _SessionDeniedError,
 )
 
 # Known-good captured MBB contests (present in mbb/json/) -- valid games, so any
@@ -156,6 +158,14 @@ _REAL_CHROME_UA = (
 )
 
 
+def _stop_on_session_denial(transport: Any, label: str, status: int, text: str, url: str) -> None:
+    """Re-solving cannot lift an Akamai session denial (see mbb_ncaa_fetch._is_session_denied):
+    close the session so the next call starts fresh, and raise at once."""
+    if _is_session_denied(status, text):
+        transport.close()
+        raise _SessionDeniedError(f"{label}: Akamai denied this browser session (HTTP 403 Access Denied): {url}")
+
+
 class _PatchrightTransport:
     """Local anti-detect (patchright) Chromium solver, proxy-bound like production.
 
@@ -239,6 +249,7 @@ class _PatchrightTransport:
         for _ in range(self.solve_attempts):
             self._page.wait_for_timeout(self.challenge_wait_ms)
             status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
+            _stop_on_session_denial(self, "patchright", status, text, url)
             if not _browser_response_unsolved(text):
                 return status, text
         # Retire the (likely aged-out) session so the caller's retry relaunches
@@ -305,6 +316,7 @@ class _ManagedCdpTransport:
             self._page.goto(url, wait_until="domcontentloaded", timeout=self.nav_timeout_ms)
             self._page.wait_for_timeout(self.challenge_wait_ms)
             status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
+            _stop_on_session_denial(self, "managed_cdp", status, text, url)
             if not _browser_response_unsolved(text):
                 return status, text
         raise RuntimeError(
