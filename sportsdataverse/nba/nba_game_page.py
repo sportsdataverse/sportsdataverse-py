@@ -643,6 +643,9 @@ def team_game_rates(
     no ``season``) and in a WBB game of any season whose two teams together show fewer than 5,
     TOV%, possessions, ratings and pace are null, never computed from unrecorded turnovers. A
     team's 0 in a game whose total is 5 or more stays 0. A zero denominator gives ``null``.
+    For the NBA, ``orb_pct`` is null when either team's ``offensive_rebounds + defensive_rebounds``
+    differs from its ``total_rebounds`` (ESPN's 2002-2012 boxes); a box without ``total_rebounds``
+    and the other leagues are not checked.
 
     Args:
         team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
@@ -695,8 +698,17 @@ def team_game_rates(
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     tov = _tov(team_box, lg, season)
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
+    # ESPN's NBA 2002-2012 boxes split rebounds that don't add up to total_rebounds (#757). NBA only:
+    # college totals can include team rebounds, which the box doesn't carry separately.
+    # A null total is no total, like a box without the column: it keeps the rate rather than nulling it.
+    split_ok = (
+        ((pl.col("offensive_rebounds") + pl.col("defensive_rebounds")) == pl.col("total_rebounds")).fill_null(True)
+        if lg == "nba" and "total_rebounds" in team_box.columns
+        else pl.lit(True)
+    )
     own = team_box.with_columns(
-        (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss")
+        (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss"),
+        split_ok.alias("_reb_split_ok"),
     )
     opp = own.select(
         pl.col("game_id"),
@@ -704,6 +716,7 @@ def team_game_rates(
         pl.col("team_score").alias("_opp_score"),
         pl.col("defensive_rebounds").alias("_opp_drb"),
         pl.col("_own_poss").alias("_opp_poss"),
+        pl.col("_reb_split_ok").alias("_opp_reb_split_ok"),
     )
     joined = own.join(opp, on="game_id", how="inner").filter(pl.col("team_id") != pl.col("_opp_id"))
     minutes = game_minutes(periods if periods is not None else reg, league=lg, regulation_periods=reg)
@@ -714,7 +727,9 @@ def team_game_rates(
         "team_id",
         _ratio(pl.col("field_goals_made") + 0.5 * pl.col("three_point_field_goals_made"), fga).alias("efg_pct"),
         _ratio(tov, fga + FT_WEIGHT * fta + tov).alias("tov_pct"),
-        _ratio(pl.col("offensive_rebounds"), pl.col("offensive_rebounds") + pl.col("_opp_drb")).alias("orb_pct"),
+        pl.when((pl.col("_reb_split_ok") == True) & (pl.col("_opp_reb_split_ok") == True))
+        .then(_ratio(pl.col("offensive_rebounds"), pl.col("offensive_rebounds") + pl.col("_opp_drb")))
+        .alias("orb_pct"),
         _ratio(fta, fga).alias("ft_rate"),
         poss.alias("possessions"),
         _ratio(100.0 * pl.col("team_score"), poss).alias("off_rtg"),

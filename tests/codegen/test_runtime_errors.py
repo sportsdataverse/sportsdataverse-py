@@ -273,6 +273,17 @@ def _getter(name: str) -> Callable[[], Any]:
     }[name]
 
 
+def test_nfl_api_2xx_graphql_errors_are_a_failed_fetch(monkeypatch):
+    # api.nfl.com's experience/v2 gamedetails can answer 200 with data AND errors (WB-providers R4.1b-9)
+    from sportsdataverse.nfl import nfl_api_runtime
+
+    _serve(monkeypatch, 200, '{"data": {"viewer": {}}, "errors": [{"message": "partial"}]}')
+    with pytest.raises(AssetFetchError, match="GraphQL errors"):
+        nfl_api_runtime._get("https://api.nfl.com/experience/v2/gamedetails/x", headers={}, num_retries=0)
+    _serve(monkeypatch, 200, '{"data": {"x": 1}, "errors": []}')
+    assert nfl_api_runtime._get("https://api.nfl.com/x", headers={}, num_retries=0) == {"data": {"x": 1}, "errors": []}
+
+
 @pytest.mark.parametrize("name", _JSON + _TEXT)
 @pytest.mark.parametrize("status", [401, 503])
 def test_other_getters_raise_on_a_failed_fetch(monkeypatch, name, status):

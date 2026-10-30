@@ -571,7 +571,7 @@ re-fetch), row-binds the survivors, and logs the removed ids.
 | `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`6470186.5`) are dropped, an integral float (`6470186.0`) is read as `"6470186"`. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...` or `empty`). |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...`, `unsupported_layout: <format>` for a page in a layout the parser does not read, or `empty`). |
 
 **Returns**
 

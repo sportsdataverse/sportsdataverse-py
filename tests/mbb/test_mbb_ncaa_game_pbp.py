@@ -83,6 +83,16 @@ def test_format_guard_unsupported_page_is_not_refetched(driver: Any) -> None:
     assert got.height == 0
 
 
+def test_format_guard_skip_labels_the_rejected_layout_not_empty() -> None:
+    """errors="skip" names the 2018 layout instead of calling the page empty (R974-1)."""
+    f = _Fetcher(PAGE_2018)
+    with pytest.warns(UnsupportedPageFormatWarning):
+        got = ncaa_mbb_play_by_play(["123"], fetcher=f, errors="skip")
+    assert f.calls == ["123"]
+    (status,) = got["scrape_status"].to_list()
+    assert status.startswith("unsupported_layout: a 2018-format stats.ncaa.org play-by-play page")
+
+
 class _FlakyFetcher(_Fetcher):
     """Raises on the first fetch, then serves the real page."""
 

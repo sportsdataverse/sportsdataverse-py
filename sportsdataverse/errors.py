@@ -470,7 +470,7 @@ def _object_rows(rows: Any, where: str | None = None, stacklevel: int = 3) -> li
     if not isinstance(rows, list):
         shape = f"rows is {type(rows).__name__}, not a list"
     else:
-        kept = [row for row in rows if not _is_null(row)]
+        kept = [row for row in rows if isinstance(row, dict) or not _is_null(row)]
         bad = [row for row in kept if not isinstance(row, dict)]
         if not bad:
             return kept

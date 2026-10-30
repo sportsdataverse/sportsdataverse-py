@@ -1163,6 +1163,8 @@ def _fetch_and_parse(
 ) -> tuple[pl.DataFrame, str, bool]:
     """One game's frame, its status (``ok``, ``empty``, or why it has no rows), and whether an empty one may be retried.
 
+    A page in a layout the format guard rejects is ``unsupported_layout: <format>``, not ``empty`` (R974-1).
+
     A failed fetch (``AssetFetchError``: a ban, an exhausted pool, a challenge) raises
     unless ``errors="skip"``; swallowing it made a ban read as a smaller season. A
     missing game (``NoDataError``) or a parser crash keeps R's tryCatch(-> NULL) parity.
@@ -1176,7 +1178,7 @@ def _fetch_and_parse(
         html = fetcher.fetch_game_pbp(game_id)
         model = _resolve_period_model(period_model, html)
         df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=model)
-        retry = df.height > 0 or _unsupported_layout(_extract_tables(html), model[0]) is None
+        fmt = None if df.height else _unsupported_layout(_extract_tables(html), model[0])
     except UnsupportedPageFormatWarning:
         # escalated by the caller (warnings "error" filter): a page we cannot read is
         # not a failed scrape, so it must neither be swallowed nor re-fetched
@@ -1189,7 +1191,9 @@ def _fetch_and_parse(
     except Exception as exc:  # R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
         return _empty_pbp(), f"{_failure_kind(exc, fetched=html is not None)}: {exc}", True
-    return df, "ok" if df.height else "empty", retry
+    if df.height:
+        return df, "ok", True
+    return df, f"unsupported_layout: {fmt}" if fmt else "empty", fmt is None
 
 
 def _failure_kind(exc: BaseException, *, fetched: bool) -> str:
@@ -1405,8 +1409,9 @@ def ncaa_mbb_play_by_play(
             ``"skip"``: it is dropped like a missing game, and the frame gains a
             ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
             dropped game (``game_id`` and why: ``fetch_failed: ...``,
-            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
-            or ``empty``).
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``,
+            ``unsupported_layout: <format>`` for a page in a layout the parser
+            does not read, or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully

@@ -326,6 +326,15 @@ def test_nfl_kick_distance_rules():
     assert by_rule["kick_distance_requires_kick_play"].metric == 1.0
 
 
+def test_nfl_kick_distance_range_allows_a_backwards_punt():
+    # 2022_03_BUF_MIA play 3846: nflverse's kick_distance is -1 (punt off a teammate, out the back)
+    # a backwards kickoff is still out of range: only a punt gets the negative floor
+    frame = pl.DataFrame({"kick_distance": [-1, -12, 100, -1], "punt_attempt": [1, 1, 1, 0]})
+    ctx = _ctx(dataset="nfl_model_pbp", domain="nfl", join_keys=())
+    by_rule = _findings_by_rule(definitional.run("nfl_model_pbp", frame, ctx))
+    assert by_rule["kick_distance_range"].metric == 3.0
+
+
 def test_nfl_clock_hierarchy_skips_overtime():
     frame = pl.DataFrame(
         {
