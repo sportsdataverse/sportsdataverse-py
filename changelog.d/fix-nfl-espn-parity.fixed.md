@@ -4,4 +4,5 @@
 - **NFL win probability (ESPN):** a game ESPN has no line for (most of 2009-2011) takes the nflverse schedule's
   spread and total instead of home by 2.5; a supplied summary still makes no request. (#1037)
 - **NFL CPOE:** completion probability is scored only on nflfastR's valid passes (no throwaways or spikes), and
-  `cp_model.ubj` is refit from 2009; team-week CPOE bias vs nflverse goes from -3.0 (2024) and -9.2 (2013) to near 0. (#1037)
+  `cp_model.ubj` is refit from 2009; team-week CPOE bias vs nflverse goes from -3.0 (2024) and -9.2 (2013)
+  to near 0. (#1037)
