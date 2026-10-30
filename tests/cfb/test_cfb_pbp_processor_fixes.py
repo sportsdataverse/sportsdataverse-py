@@ -274,12 +274,19 @@ def test_cfb_pbp_json_returns_the_attached_summary():
 
 def test_timeout_lists_agree_with_counts():
     period = pl.col("period.number")
+    # overtime periods by drive pairs, as the processor counts them: 401112081 numbers all three OTs 5 (#505)
+    new_ot_drive = (
+        (period >= 5)
+        & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
+        & pl.col("drive.start.yardLine").is_in([25, 75])
+    ).fill_null(False)
+    ot_period = pl.max_horizontal(period, 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2)
     window = (
         pl.when(period <= 2)
         .then(pl.lit("1"))
         .when(period <= 4)
         .then(pl.lit("2"))
-        .otherwise(pl.format("OT{}", period - 4))
+        .otherwise(pl.format("OT{}", ot_period - 4))
     )
     for game_id in (401856682, 401112081):
         proc, result, _, _ = _processed(game_id)
@@ -299,7 +306,8 @@ def test_timeout_lists_agree_with_counts():
     # timeouts of 2019 Baylor @ TCU used to be listed under the second half.
     assert len(_processed(401856682)[1]["timeouts"][251]["1"]) == 3
     baylor = _processed(401112081)[1]["timeouts"][239]
-    assert (len(baylor["2"]), len(baylor["OT1"])) == (3, 1)
+    # and its OT2 and OT3 timeouts each count against their own period, not one shared "OT1" (#505)
+    assert (len(baylor["2"]), len(baylor["OT2"]), len(baylor["OT3"]), "OT1" in baylor) == (3, 1, 1, False)
 
 
 # --- C21: shortened team names in timeout rows ------------------------------------------------------

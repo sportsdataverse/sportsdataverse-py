@@ -3530,18 +3530,34 @@ class CFBPlayProcess(object):
 
         # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
         # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
-        # same way) nor, in older feeds, which overtime period a row belongs to, so the count is
-        # bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
+        # same way), so the count is bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
         # allots 3 and each overtime period 1, and the count never goes below 0.
         period = pl.col("period.number")
-        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(period)
+        # Older feeds number every overtime 5 (401112081, 3OT), so the overtime period comes from the
+        # drives instead: two possessions per period, each starting at the 25 (#505). A split
+        # possession that restarts elsewhere does not advance the pairing; a feed that numbers its
+        # periods (or its drives' periods) keeps the larger value.
+        plays_cols = pbp_txt["plays"].columns
+        if {"drive.id", "drive.start.yardLine"} <= set(plays_cols):
+            new_ot_drive = (
+                (period >= 5)
+                & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
+                & pl.col("drive.id").is_not_null()
+                & pl.col("drive.start.yardLine").is_in([25, 75])
+            ).fill_null(False)
+            paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
+            drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in plays_cols else []
+            ot_period = pl.max_horizontal(period, *drive_period, paired)
+        else:
+            ot_period = period
+        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_period)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
         home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         away_used = ((pl.col("awayTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         # The payload's per-team lists hold exactly the rows that decremented a count: "1" / "2" the
-        # halves, "OT<n>" an overtime period (older feeds number every overtime 5, so theirs is "OT1").
-        window_key = pl.when(period <= 4).then(window.cast(pl.Utf8)).otherwise(pl.format("OT{}", period - 4))
+        # halves, "OT<n>" an overtime period.
+        window_key = pl.when(period <= 4).then(window.cast(pl.Utf8)).otherwise(pl.format("OT{}", ot_period - 4))
         charged = pbp_txt["plays"].select(
             "id",
             window_key.alias("window"),

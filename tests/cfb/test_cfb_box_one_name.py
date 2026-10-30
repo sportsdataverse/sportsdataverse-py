@@ -14,7 +14,8 @@ import polars as pl
 
 from sportsdataverse.cfb import CFBPlayProcess
 
-FIX = Path(__file__).parent / "fixtures" / "summary_401866408.json.gz"
+# outside fixtures/summary_* so the whole-game oracle does not pick it up
+FIX = Path(__file__).parent / "fixtures" / "box_names" / "summary_401866408.json.gz"
 KIM_ID = 4690158
 
 
