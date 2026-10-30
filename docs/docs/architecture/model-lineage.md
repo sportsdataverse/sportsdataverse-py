@@ -59,7 +59,7 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/nfl/models/ep_model.ubj` | `play_level` at nfl-data `bbe7269` (nflfastR's `cal_data` rows and roof mapping, 1999-2025 `nfl_model_pbp`) | this PR | no (refit after the 09-10 release; `nfl_model_artifacts` is republished when nfl-data#84 merges) |
 | `sportsdataverse/nfl/models/wp_naive.ubj` | `play_level` | `c61e0d9ad1` | yes |
 | `sportsdataverse/nfl/models/wp_spread.ubj` | `play_level` | `c61e0d9ad1` | yes |
-| `sportsdataverse/nfl/models/cp_model.ubj` | `play_level` | `c61e0d9ad1` | yes |
+| `sportsdataverse/nfl/models/cp_model.ubj` | `play_level` at nfl-data#88 (trained from 2009) | this PR | no (refit after the 09-10 release; `nfl_model_artifacts` is republished with the nfl-data follow-up) |
 | `sportsdataverse/nfl/models/xpass_model.ubj` | `decision_models` | `c61e0d9ad1` | yes |
 | `sportsdataverse/nfl/models/fg_model.ubj` | `decision_models` (per the nfl-data registry) | `c61e0d9ad1` | unverifiable (no release asset; bundle only) |
 | `sportsdataverse/nfl/models/two_pt_model.ubj` | `decision_models` (per the nfl-data registry) | `c61e0d9ad1` | unverifiable (no release asset; bundle only) |

@@ -873,7 +873,9 @@ def test_end_down_minus_one_returns_sit_in_the_kickoff_band(game_id):
 
 # C-L20: the CP booster scored on nflverse's own inputs must reproduce nflverse's cp (a constant
 # cp = 0.5 passed 121 tests). Measured: corr 0.99492 / 0.99396, MAE 0.01552 / 0.01551, 63 / 76 rows.
-_CP = {401547449: (0.994, 0.016, 63), 401671740: (0.993, 0.016, 76)}
+# 401547449 MAE ceiling 0.016 -> 0.017: re-measured on the CP refit that trains from 2009 (0.0166 here; across
+# every 2018+ pass the refit is closer to nflfastR, 0.0153 -> 0.0149, and 2006-13 0.085 -> 0.008).
+_CP = {401547449: (0.994, 0.017, 63), 401671740: (0.993, 0.016, 76)}
 _CP_INPUTS = [
     "play_id", "air_yards", "season", "ydstogo", "down", "posteam", "home_team", "roof",
     "pass_location", "qb_hit", "complete_pass", "yardline_100",
