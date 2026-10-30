@@ -2105,6 +2105,81 @@ def _place_tries_filed_after_the_kickoff(plays_df: pl.DataFrame) -> pl.DataFrame
     )
 
 
+# Everything that tells two plays apart except the record's identity (id, sequenceNumber, modified,
+# wallclock) and the running score, which a later snapshot of the same play may have corrected.
+_SNAPSHOT_KEY = [
+    "drive.id",
+    "period.number",
+    "clock.displayValue",
+    "text",
+    "type.id",
+    "start.team.id",
+    "start.down",
+    "start.distance",
+    "start.yardLine",
+    "end.yardLine",
+    "scoringPlay",
+]
+
+
+def _drop_feed_snapshot_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Drop the copies a live feed's snapshots left inside a drive, keeping each play's last copy.
+
+    Some ESPN feeds append a fresh copy of a drive's plays every time the drive updated, each
+    copy under new ids: the whole drive again (292620166, 2009: 1,417 rows for 209 plays), a
+    growing prefix of it (312602572, 2011: 0; 0,1; 0,1,2; ...) or one play echoed again and
+    again (400756912, 2015: one completion 74 times). Only adjacent copies meet the
+    adjacent-copy rule, and a completed game over 500 rows is skipped as corrupt before any copy
+    rule runs, so these games published with no enrichment at all. The same snapshots sit in
+    games under 500 rows and survived into their plays: 302820058 (2010) kept 400 rows for 166.
+
+    A row is a copy when a LATER row in its drive matches it on every key in ``_SNAPSHOT_KEY``
+    (drive, period, clock, text, type, start team, down, distance and spot, end spot, scoring
+    flag). The last copy stays, at its own position: each snapshot runs in play order and the
+    last is the most complete, and its score is the one ESPN corrected last (2009's copies
+    disagree on ``awayScore`` in 115 plays). Only a replayed drive is touched, one where at
+    least two plays other than timeouts have a later copy: a drive with a single stray copy is
+    left to the adjacent-copy rule and ``_drop_espn_play_copies``, which place it by its
+    neighbours (a copy the id sort strands outside its drive goes, the one inside stays). A
+    repeated timeout goes only inside a replayed drive too: a team may call two timeouts back
+    to back (icing a kicker twice; 401013351, Wisconsin at 0:03), and that pair is identical
+    on every key. Rows with no text, end-of-period rows and rows at a period-edge clock (0:00 or
+    15:00) that half their period shares are left alone: a clockless feed parks nearly every row
+    there (401327913 files every kickoff in drive 1 at 0:00, each a real kickoff after a real
+    score). A shared mid-period clock is no such sign: a snapshot stamps its copies at the
+    drive's clock.
+
+    The ceiling: inside a replayed drive, a timeout pair and a down replayed word for word after
+    offsetting penalties each collapse to one row.
+
+    Over the 23,024 cfb-raw games this drops 11,893 rows in 709 games (2,926 of them in 2009;
+    385 are timeouts in replayed drives). All four corrupt games come back into range
+    (165-215 rows).
+    """
+    # every key or nothing: a frame missing one (a sparse adapter's) would merge plays on a coarser key,
+    # and this runs before the missing columns are materialized. No cfb-raw feed lacks any of them.
+    if not {*_SNAPSHOT_KEY, "text", "type.text"} <= set(plays_df.columns):
+        return plays_df
+    key = _SNAPSHOT_KEY
+    text = pl.col("text").cast(pl.Utf8).str.strip_chars().fill_null("")
+    type_text = pl.col("type.text").cast(pl.Utf8).fill_null("")
+    end_row = type_text.str.contains(r"(?i)^end\b") | text.str.contains(r"(?i)^end of")
+    timeout = type_text.str.contains(r"(?i)^timeout")
+    # rows are in feed order, so a row with a later twin is any but the last of its key
+    later_twin = pl.int_range(pl.len()).over(key) < pl.len().over(key) - 1
+    # as in _drop_espn_play_copies: a clock half its period's rows share tells no plays apart. Only a
+    # period edge counts here, where a clockless feed parks its rows: a snapshot stamps its copies at
+    # the drive's own clock (292480166's Q4 12:02 holds 91 of 109 rows) and must not shield them.
+    edge = pl.col("clock.displayValue").cast(pl.Utf8).is_in(["0:00", "15:00"]).fill_null(False)
+    blank_clock = edge & (pl.len().over("period.number", "clock.displayValue") * 2 >= pl.len().over("period.number"))
+    df = plays_df.with_columns(
+        _copy=((text != "") & pl.col("drive.id").is_not_null() & ~end_row & ~blank_clock & later_twin).fill_null(False)
+    )
+    # a snapshot refiles a run of plays; a drive with one stray copy is the other rules' to place
+    replayed = (pl.col("_copy") & ~timeout).sum().over("drive.id") >= 2
+    return df.filter(~(pl.col("_copy") & replayed)).drop("_copy")
+
+
 def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Drop the play copies ESPN files that the adjacent-copy dedupe cannot see.
 
@@ -3055,6 +3130,8 @@ class CFBPlayProcess(object):
             .then(text.map_elements(_repair_entities, return_dtype=pl.Utf8))
             .otherwise(text)
         )
+        # before the size guards, which would otherwise read a feed's repeated snapshots as corruption
+        pbp_txt["plays"] = _drop_feed_snapshot_copies(pbp_txt["plays"])
         if (len(pbp_txt["plays"]) < 50) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):

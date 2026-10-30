@@ -163,6 +163,13 @@ at `ee755dc65a`, trimmed 2026-10-22) whose drives never carry one key: 272560120
 at `19865a79e3`, trimmed 2026-10-20): 252462426, 292900218, 400548291, 401282272, 401309834, 401327913, 401524051 and
 401636866. Each holds one real row that a key of the stranded-copy rule in `_drop_espn_play_copies` keeps or drops
 (`test_a_stranded_copy_needs_every_key_of_its_twin`, R312-1 / R312-2). They are not `summary_*` files either.
+`snapshot_copies/` holds 5 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`
+at `5d81242edc`, trimmed 2026-10-30) for the live-feed snapshot rule `_drop_feed_snapshot_copies`: 292620166 (UTEP @
+New Mexico State, 2009; drives refiled whole, 1,417 rows), 312602572 (Southeastern Louisiana @ Southern Miss, 2011;
+growing prefixes, 889 rows), 400756912 (Miami @ Florida Atlantic, 2015; one completion 74 times, 1,493 rows), 401013351
+(Wisconsin @ Penn State, 2018; back-to-back timeouts at 0:03, both real) and 400547745 (Louisville @ Clemson, 2014; a
+copy filed ahead of the penalty that set it up). They are not `summary_*` files either: the whole-game oracle would
+read their snapshot noise as the game.
 
 ## Captures
 
