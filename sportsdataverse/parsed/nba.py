@@ -69,6 +69,7 @@ from sportsdataverse.nba import espn_nba_leaders_core as _raw_espn_nba_leaders_c
 from sportsdataverse.nba import espn_nba_league_notes as _raw_espn_nba_league_notes
 from sportsdataverse.nba import espn_nba_league_root as _raw_espn_nba_league_root
 from sportsdataverse.nba import espn_nba_news as _raw_espn_nba_news
+from sportsdataverse.nba import espn_nba_pbp as _raw_espn_nba_pbp
 from sportsdataverse.nba import espn_nba_player_awards as _raw_espn_nba_player_awards
 from sportsdataverse.nba import espn_nba_player_bio as _raw_espn_nba_player_bio
 from sportsdataverse.nba import espn_nba_player_career_stats as _raw_espn_nba_player_career_stats
@@ -191,7 +192,6 @@ from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
-from sportsdataverse.nba import espn_nba_pbp as espn_nba_pbp  # noqa: F401
 from sportsdataverse.nba import espn_nba_player_stats as espn_nba_player_stats  # noqa: F401
 from sportsdataverse.nba import espn_nba_schedule as espn_nba_schedule  # noqa: F401
 from sportsdataverse.nba import espn_nba_teams as espn_nba_teams  # noqa: F401
@@ -1482,6 +1482,20 @@ def espn_nba_news(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nba_news(*args, **kwargs)
+
+
+def espn_nba_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.espn_nba_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.espn_nba_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.espn_nba_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nba_pbp(*args, **kwargs)
 
 
 def espn_nba_player_awards(*args, **kwargs):

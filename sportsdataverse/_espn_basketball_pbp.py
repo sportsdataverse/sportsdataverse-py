@@ -203,3 +203,47 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
         pl.when(keep_espn).then(pl.col("_espn_x")).otherwise(pl.col("coordinate.x.raw")).alias("coordinate.x.raw"),
         pl.when(keep_espn).then(pl.col("_espn_y")).otherwise(pl.col("coordinate.y.raw")).alias("coordinate.y.raw"),
     ).drop("_espn_x", "_espn_y")
+
+
+def add_athlete_names(pbp: pl.DataFrame, final: dict[str, Any]) -> pl.DataFrame:
+    """Append ``athlete_name_{1,2,3}`` to a release pbp frame, from the same game's box score.
+
+    Port of the hoopR-mbb-data / hoopR-nba-data ``pbp_reshaper`` step that runs after
+    ``helper_<lg>_play_by_play``: each ``athlete_id_N`` is looked up in
+    ``final["boxscore"]["players"]`` (first ``displayName`` per athlete, so a mid-season
+    transfer resolves to the team he played for that night). A slot the frame does not carry,
+    or a game whose box score names nobody, gets an all-null String column.
+
+    Args:
+        pbp: ``helper_<lg>_play_by_play`` output for one game.
+        final: The same game's dict (``espn_<lg>_pbp(..., return_parsed=False)``).
+
+    Returns:
+        ``pbp`` with ``athlete_name_1``, ``athlete_name_2`` and ``athlete_name_3`` (String)
+        appended; an empty ``pbp`` is returned unchanged.
+    """
+    if pbp.is_empty():
+        return pbp
+    rows: dict[int, str] = {}
+    for team in (final.get("boxscore") or {}).get("players") or []:
+        for stats in team.get("statistics") or []:
+            for a in stats.get("athletes") or []:
+                ath = a.get("athlete") or {}
+                try:
+                    aid = int(ath["id"])
+                except (KeyError, TypeError, ValueError):
+                    continue
+                if ath.get("displayName"):
+                    rows.setdefault(aid, ath["displayName"])
+    for i in (1, 2, 3):
+        idc, nmc = f"athlete_id_{i}", f"athlete_name_{i}"
+        if idc in pbp.columns and rows:
+            lookup = pl.DataFrame(
+                {idc: list(rows), nmc: list(rows.values())},
+                schema={idc: pbp.schema[idc], nmc: pl.String},
+                strict=False,
+            )
+            pbp = pbp.join(lookup, on=idc, how="left", maintain_order="left")
+        else:
+            pbp = pbp.with_columns(pl.lit(None, dtype=pl.String).alias(nmc))
+    return pbp

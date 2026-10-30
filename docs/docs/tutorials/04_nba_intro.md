@@ -704,7 +704,7 @@ out
 ## 🎬 Play-by-play & game rosters
 
 Now for the granular stuff. [`espn_nba_pbp`](../nba/reference/additional.md)
-returns the **whole game payload** as a dict — play-by-play, win probability,
+with `return_parsed=False` returns the **whole game payload** as a dict — play-by-play, win probability,
 box score, and header — keyed by `game_id` (an ESPN event id). Pair it with
 [`espn_nba_game_rosters`](../nba/reference/additional.md) for who actually
 suited up.
@@ -714,7 +714,7 @@ We'll use Game 1 of the 2024 Finals (`game_id=401585660`).
 
 ```python
 GAME_ID = 401585660
-pbp = safe('pbp payload', lambda: sdv.nba.espn_nba_pbp(game_id=GAME_ID))
+pbp = safe('pbp payload', lambda: sdv.nba.espn_nba_pbp(game_id=GAME_ID, return_parsed=False))
 (list(pbp.keys())[:8] if isinstance(pbp, dict) else 'pbp unavailable')
 ```
 

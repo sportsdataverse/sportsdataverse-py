@@ -8,7 +8,7 @@ description: "Every breaking change in sportsdataverse-py 0.2.0, with before and
 # Migrating to 0.2.0
 
 0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0); it ships first as the
-`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries sixteen breaking changes, each recorded
+`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries seventeen breaking changes, each recorded
 as a `changelog.d/*.breaking.md` fragment; the changes are on `main` already. This
 page takes them one at a time: what changed, who is affected, a before/after
 snippet and how to migrate. The fragments are the source of record, and the
@@ -141,7 +141,7 @@ shots = plays.filter(pl.col("shootingPlay") == True).select("coordinate.x", "coo
 import polars as pl
 from sportsdataverse.nba import espn_nba_pbp, nba_game_page
 
-plays = pl.from_dicts(espn_nba_pbp(game_id=401585607)["plays"], infer_schema_length=None)
+plays = pl.from_dicts(espn_nba_pbp(game_id=401585607, return_parsed=False)["plays"], infer_schema_length=None)
 shots = plays.filter(
     (pl.col("shootingPlay") == True) & (pl.col("coordinate.x.raw") > nba_game_page.COORD_SENTINEL)
 ).select("coordinate.x.raw", "coordinate.y.raw", "coordinate.x", "coordinate.y")
@@ -196,6 +196,35 @@ payload = espn_nba_game_rosters(game_id=401585607, raw=True)    # the raw dict
 ```
 
 **How to migrate.** Drop `raw=True` where you want the frame.
+
+## ESPN MBB / NBA pbp return the release frame
+
+**What changed.** `espn_mbb_pbp()` and `espn_nba_pbp()` return the play-by-play frame the
+release publishes, the one `load_mbb_pbp()` / `load_nba_pbp()` read: snake_case columns, Int32
+team / athlete / game ids, the Int64 play `id`, `game_date`, the hoopR shot coordinates,
+`athlete_name_{1,2,3}`, the rebuilt running score with `score_source`, and an empty frame for a
+game with 10 or fewer plays. They used to return a dict whose `plays` were dotted camelCase
+records with String ids. The dict is still there with `return_parsed=False`, and `raw=True` is
+unchanged. `espn_wnba_pbp()` / `espn_wbb_pbp()` still return the dict.
+
+**Who is affected.** Callers that index the result (`["plays"]`, `["boxscore"]`, ...) or pass it
+to `game_page_frames()` or a `helper_<lg>_play_by_play` / `_team_box` / `_player_box` converter.
+
+```python
+# 0.1.x
+plays = pl.from_dicts(espn_mbb_pbp(game_id=401638637)["plays"], infer_schema_length=None)
+```
+
+```python
+# 0.2.0
+from sportsdataverse.mbb import espn_mbb_pbp
+
+plays = espn_mbb_pbp(game_id=401638637)                        # the release frame
+game = espn_mbb_pbp(game_id=401638637, return_parsed=False)    # the dict
+```
+
+**How to migrate.** Use the frame's snake_case columns, or add `return_parsed=False` where you
+want the dict.
 
 ## ESPN schedules filter by season type
 

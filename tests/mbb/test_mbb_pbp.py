@@ -13,5 +13,5 @@ def generated_mbb_data():
 
 
 def test_basic_mbb_pbp(generated_mbb_data):
-    assert generated_mbb_data is not None
-    assert len(generated_mbb_data.get("plays")) > 0
+    assert generated_mbb_data.height > 0
+    assert {"game_id", "id", "team_id", "athlete_id_1", "game_date", "score_source"} <= set(generated_mbb_data.columns)
