@@ -482,6 +482,24 @@ def _browser_response_unsolved(text: str) -> bool:
     return _is_challenge(text) or not text or len(text) < _MIN_CONTENT_BYTES
 
 
+def _is_session_denied(status: int, text: str) -> bool:
+    """Did Akamai's edge refuse this browser session (HTTP 403 "Access Denied")?
+
+    Checked before :func:`_browser_response_unsolved`, whose size rule would otherwise
+    read the ~400-byte denial page as an unsolved challenge and re-solve the same
+    session. The edge serves this page both to a client that never solved the
+    challenge (tests/fixtures/ncaa/capture/README.md) and, live 2026-10-30, to a
+    solved session after some pages, when a fresh context on the same IP is served
+    again. Either way a fresh context is the remedy. The page cannot tell a refused
+    session from a refused IP.
+
+    Only a body under :data:`_MIN_CONTENT_BYTES` qualifies: that is all the size rule
+    ever misread. A full-size 403 ban page is still returned, so the fetch layer
+    retires the proxy as it always did.
+    """
+    return status == 403 and len(text) < _MIN_CONTENT_BYTES and _ban_check(text) != "clean"
+
+
 def _cached_page_usable(text: str) -> bool:
     """Is a CACHED body a real page, not a challenge shell, stub or Terms gate?
 
@@ -611,6 +629,13 @@ class _TermsAcceptError(RuntimeError):
 class _TermsRefusedError(_TermsGateError):
     """The server refused a well-formed acceptance -- the one recoverable case
     (refusals come in windows), which ``fetch_html`` backs off and retries."""
+
+
+class _SessionDeniedError(RuntimeError):
+    """Akamai refused this browser session (see :func:`_is_session_denied`). An
+    ordinary transport error: the fetch layer rotates on it and does not retire the
+    proxy. The observed denials follow the session, and the ~400-byte page was never
+    retired before either."""
 
 
 # Chromium's error for an in-page fetch() that died at the network layer. A
@@ -914,6 +939,15 @@ class _PlaywrightTransport:
                 # single proxy the retry reuses it, so force a real navigation.
                 self._challenge_solved = False
                 raise
+            if _is_session_denied(status, text):
+                # Re-solving cannot lift a refused session. Drop the context so the next
+                # fetch starts a fresh one even on the same proxy, and raise so the fetch
+                # layer rotates.
+                logger.info("Akamai denied this session (HTTP 403, %d-byte response) -- dropping it", len(text))
+                self._close_context()
+                if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
+                    time.sleep(self.relaunch_backoff)
+                raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
             if not _browser_response_unsolved(text):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
