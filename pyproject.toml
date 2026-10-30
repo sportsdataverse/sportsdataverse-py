@@ -163,7 +163,9 @@ all = [
     "playwright>=1.40",
     # NCAA (stats.ncaa.org) browser transport -- anti-detect fork of Playwright
     # that clears Akamai bm-verify; vanilla Playwright is flagged. See mbb_ncaa_fetch.
-    "patchright>=1.50",
+    # >=1.64.3: on 1.61.2 (Chromium 149) Akamai answers 403 to every request after the
+    # stats.ncaa.org Terms acceptance, so each acceptance bought one page (2026-10-30).
+    "patchright>=1.64.3",
     "kloppy[polars]>=3.19",
     # sportsdataverse.schemas.raw_schema() reads the bundled YAML payload schemas and
     # its install hint names this extra; pyyaml was only ever present through pycln.
