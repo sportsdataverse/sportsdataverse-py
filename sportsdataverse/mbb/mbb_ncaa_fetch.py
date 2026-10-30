@@ -483,12 +483,15 @@ def _browser_response_unsolved(text: str) -> bool:
 
 
 def _is_session_denied(status: int, text: str) -> bool:
-    """Did Akamai's edge refuse this browser SESSION (HTTP 403 "Access Denied")?
+    """Did Akamai's edge refuse this browser session (HTTP 403 "Access Denied")?
 
     Checked before :func:`_browser_response_unsolved`, whose size rule would otherwise
-    read the ~410-byte denial page as an unsolved challenge and re-solve a session
-    the edge has already refused. Live 2026-10-30: a fresh context on the same IP is
-    served, so the denial follows the session's cookies, not the IP.
+    read the ~400-byte denial page as an unsolved challenge and re-solve the same
+    session. The edge serves this page both to a client that never solved the
+    challenge (tests/fixtures/ncaa/capture/README.md) and, live 2026-10-30, to a
+    solved session after some pages, when a fresh context on the same IP is served
+    again. Either way a fresh context is the remedy. The page cannot tell a refused
+    session from a refused IP.
     """
     return status == 403 and _ban_check(text) != "clean"
 
@@ -626,8 +629,9 @@ class _TermsRefusedError(_TermsGateError):
 
 class _SessionDeniedError(RuntimeError):
     """Akamai refused this browser session (see :func:`_is_session_denied`). An
-    ordinary transport error: the fetch layer rotates on it and, because the IP is
-    not banned, never retires the proxy."""
+    ordinary transport error: the fetch layer rotates on it and does not retire the
+    proxy. The observed denials follow the session, and the ~400-byte page was never
+    retired before either."""
 
 
 # Chromium's error for an in-page fetch() that died at the network layer. A
@@ -937,6 +941,8 @@ class _PlaywrightTransport:
                 # layer rotates.
                 logger.info("Akamai denied this session (HTTP 403, %d-byte response) -- dropping it", len(text))
                 self._close_context()
+                if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
+                    time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
             if not _browser_response_unsolved(text):
                 return status, text

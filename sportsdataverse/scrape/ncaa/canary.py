@@ -110,6 +110,8 @@ def classify(text: str) -> str:
 def classify_error(exc: Exception) -> str:
     """Bucket a fetch exception (NcaaFetcher raises loudly on ban/unsolved)."""
     msg = str(exc).lower()
+    if "denied this browser session" in msg:  # a refused session, not a ban (mbb_ncaa_fetch)
+        return CHALLENGE
     if "every proxy" in msg or "banned" in msg or "403" in msg:
         return BAN
     if "bm-verify" in msg or "challenge" in msg:
