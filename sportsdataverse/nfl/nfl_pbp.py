@@ -230,7 +230,8 @@ _NFL_LEGACY_RECEIVER_RE2 = r" to " + _NFL_LONG_NAME + r"\.?$"
 _NFL_LEGACY_XP_KICKER_RE = r"\(" + _NFL_LONG_NAME + r" Kick(?: [A-Za-z]+)?\)"
 _NFL_LEGACY_RUSHER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Rr]un for "
 # ...and the 2015-19 scoring-summary shape "Jordan Reed Pass From Kirk Cousins for 12 Yrds".
-_NFL_LEGACY_PASSER_RE3 = r"Pass From " + _NFL_LONG_NAME + r" for \d+ Yrds?"
+# A generational suffix can sit between the surname and "for" ("Pass From Gardner Minshew II for 36 Yrds").
+_NFL_LEGACY_PASSER_RE3 = r"Pass From " + _NFL_LONG_NAME + r"(?: (?:Jr|Sr)\.?| I{2,3}| IV| V)? for \d+ Yrds?"
 _NFL_LEGACY_RECEIVER_RE3 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" Pass From "
 # ...and its kicker / interceptor forms ("Caleb Sturgis 34 Yd Field Goal", "Malcolm
 # Jenkins 34 Yrd Interception Return").
@@ -265,6 +266,22 @@ _NFL_RUSHER_RE = (
 # for", "pass complete") never match NFL text, so these are the NFL equivalents.
 _NFL_FUMBLE_ROW_RUSH_RE = _NFL_NAME + r" " + _NFL_RUSH_DIRECTION
 _NFL_FUMBLE_ROW_PASS_RE = _NFL_NAME + r" (?:pass|sacked)|[A-Z][a-z]+ [A-Z][A-Za-z'\-]+ Pass (?:Complete|Incomplete)"
+# A run ESPN typed by its fumble (or safety): an aborted snap, or the carrier first -- after any "(Shotgun)" /
+# "(2:11)" prefix -- with a direction or the spot the run ended ("K.Collins to TEN 35 for -3 yards. FUMBLES").
+# nflfastR scores all of these as runs. Kicks, punts and passes are excluded by _NFL_NOT_A_RUN_RE, which names
+# the throw ("pass short", "pass incomplete") so a run's "Defensive Pass Interference" flag keeps it a run.
+_NFL_FUMBLE_ROW_RUN_RE = (
+    r"FUMBLES \(Aborted\)|^(?:\([^)]*\)\s*)*"
+    + _NFL_NAME
+    + r" (?:to [A-Z]{2,3} -?\d+ for|"
+    + _NFL_RUSH_DIRECTION[3:-1]
+    + r")"
+)
+_NFL_NOT_A_RUN_RE = r"(?i)\bpass (?:complete|incomplete|short|deep|to)\b|sacked|spiked|\bpunts?\b|punt formation|field goal|\bkicks\b|extra point|two-point"
+# ESPN typed every 2009-13 pass "Pass", completed or not: a completion is a pass to a receiver for a gain
+# (or no gain), and the text names an incompletion, interception, spike or sack when it is not one.
+_NFL_PASS_TYPE_COMPLETE_RE = r"(?i)\bpass\b.* to .*\bfor (?:-?\d+ yards?|no gain)"
+_NFL_PASS_TYPE_NOT_COMPLETE_RE = r"(?i)incomplete|intercepted|spiked|sacked"
 # "Lateral to K.Shakir pushed ob at HST 23 for 10 yards": the lateral recipient's
 # yards are receiving yards in official scoring, credited to him, not the catcher.
 _NFL_LATERAL_NAME_RE = r"Lateral to (" + _NFL_NAME + r")"
@@ -1038,6 +1055,23 @@ qbr_model.load_model(qbr_model_file)
 
 logger = logging.getLogger("sdv.nfl_pbp")
 logger.addHandler(logging.NullHandler())
+
+
+def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Give each passer / rusher / receiver id one name, its most common spelling in the frame.
+
+    ESPN spells a player two ways in one game ("Andy Dalton" on the plays with participants, "A.Dalton"
+    off the text), and the box groups by name, so a variant split him into a second row (2019_07_JAX_CIN).
+    A play with no id keeps its own name.
+    """
+    return play_df.with_columns(
+        pl.when(pl.col(f"{role}_player_id").is_not_null())
+        .then(pl.col(f"{role}_player_name").drop_nulls().mode().sort().first().over(f"{role}_player_id"))
+        .otherwise(pl.col(f"{role}_player_name"))
+        .alias(f"{role}_player_name")
+        for role in ("passer", "rusher", "receiver")
+        if f"{role}_player_id" in play_df.columns and f"{role}_player_name" in play_df.columns
+    )
 
 
 class NFLPlayProcess(object):
@@ -1905,6 +1939,34 @@ class NFLPlayProcess(object):
         init = self.__helper_nfl_pickcenter(pbp_txt)
         return self.__helper_nfl_game_data(pbp_txt, init)
 
+    def __helper__nflverse_odds_information__(self, season=None):
+        """nflverse's line for this game, ``(gameSpread, overUnder, homeFavorite, True)``, or ``None``.
+
+        ESPN carries no line for most games before 2012 (none of 28 sampled 2009 and 2011 games), and the
+        default it leaves -- home by 2.5 -- then drives the spread-aware WP. nflverse's schedule
+        (``load_nfl_schedule``, keyed by ESPN game id) has the line for every game since 1999. Its
+        ``spread_line`` is the home margin, positive when home is favored, the convention ``homeTeamSpread``
+        uses. A failed fetch, an unknown ``season``, or a game nflverse lacks, keeps the default. The
+        season's schedule is read once per process (``_nflverse_schedule``), not once per game.
+        """
+        if season is None:
+            return None
+        try:
+            from sportsdataverse.nfl.shield_pbp.to_espn_summary import _nflverse_schedule
+
+            schedule = _nflverse_schedule((int(season),))
+            if schedule is None:
+                return None
+            row = schedule.filter(pl.col("espn").cast(pl.Utf8) == str(self.gameId))
+        except Exception as e:  # noqa: BLE001 -- no line is the documented default, as before this fallback
+            logger.warning("%s: nflverse schedule fetch failed (%r); keeping the default line", self.gameId, e)
+            return None
+        if row.height == 0 or row["spread_line"][0] is None:
+            return None
+        spread = float(row["spread_line"][0])
+        total = row["total_line"][0]
+        return (abs(spread), float(total) if total is not None else 55.5, spread >= 0, True)
+
     def __helper__espn_nfl_odds_information__(self):
         """Fetch pre-game spread/total from ESPN's modern core odds endpoint.
 
@@ -2016,6 +2078,13 @@ class NFLPlayProcess(object):
                 gameSpreadAvailable,
             ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_nfl_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
+            if not gameSpreadAvailable and not offline:
+                nflverse_odds = self.__helper__nflverse_odds_information__(
+                    (pbp_txt.get("header") or {}).get("season", {}).get("year")
+                )
+                if nflverse_odds is not None:
+                    gameSpread, overUnder, homeFavorite, gameSpreadAvailable = nflverse_odds
+                    self.odds_source = "nflverse_schedule"
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
@@ -2371,6 +2440,23 @@ class NFLPlayProcess(object):
                         )
                         .and_(pl.col("text").str.contains(_NFL_FUMBLE_ROW_RUSH_RE))
                         .and_(pl.col("text").str.contains(r" pass ") == False),
+                    )
+                    .or_(
+                        (
+                            pl.col("type.text").is_in(
+                                [
+                                    "Fumble",
+                                    "Safety",
+                                    "Fumble Recovery (Opponent)",
+                                    "Fumble Recovery (Opponent) Touchdown",
+                                    "Fumble Recovery (Own)",
+                                    "Fumble Recovery (Own) Touchdown",
+                                    "Fumble Return Touchdown",
+                                ],
+                            )
+                        )
+                        .and_(pl.col("text").str.contains(_NFL_FUMBLE_ROW_RUN_RE))
+                        .and_(pl.col("text").str.contains(_NFL_NOT_A_RUN_RE) == False),
                     ),
                 )
                 .then(True)
@@ -3295,7 +3381,9 @@ class NFLPlayProcess(object):
                 int=pl.col("type.text").is_in(["Interception Return", "Interception Return Touchdown"]),
                 int_td=pl.col("type.text").is_in(["Interception Return Touchdown"]),
                 # --- Pass Completions, Attempts and Targets -------
-                completion=pl.when(
+                completion=pl.when(pl.col("penalty_no_play").fill_null(False) == True)
+                .then(False)
+                .when(
                     pl.col("type.text").is_in(["Pass Reception", "Pass Completion", "Passing Touchdown"]),
                 )
                 .then(True)
@@ -3314,8 +3402,16 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
+                .when(
+                    (pl.col("type.text") == "Pass")
+                    .and_(pl.col("text").str.contains(_NFL_PASS_TYPE_COMPLETE_RE))
+                    .and_(pl.col("text").str.contains(_NFL_PASS_TYPE_NOT_COMPLETE_RE) == False),
+                )
+                .then(True)
                 .otherwise(False),
-                pass_attempt=pl.when(
+                pass_attempt=pl.when(pl.col("penalty_no_play").fill_null(False) == True)
+                .then(False)
+                .when(
                     pl.col("type.text").is_in(
                         ["Pass Reception", "Pass Completion", "Passing Touchdown", "Pass Incompletion"],
                     ),
@@ -3343,7 +3439,9 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                target=pl.when(
+                target=pl.when(pl.col("penalty_no_play").fill_null(False) == True)
+                .then(False)
+                .when(
                     pl.col("type.text").is_in(
                         ["Pass Reception", "Pass Completion", "Passing Touchdown", "Pass Incompletion"],
                     ),
@@ -3982,7 +4080,7 @@ class NFLPlayProcess(object):
             .then(pl.col("statYardage").cast(pl.Int32, strict=False))
             .otherwise(pl.col("yds_rushed")),
             yds_receiving=pl.when(
-                (pl.col("pass") == True).and_(pl.col("completion") == True).and_(pl.col("penalty_no_play") == True),  # noqa: E712
+                (pl.col("pass") == True).and_(pl.col("penalty_no_play") == True),  # noqa: E712
             )
             .then(0)
             .otherwise(pl.col("yds_receiving")),
@@ -7294,6 +7392,8 @@ class NFLPlayProcess(object):
         ]
         for item in box_score_columns:
             self.__cast_box_score_column(play_df, item, pl.Float32)
+
+        play_df = _one_name_per_player(play_df)
 
         pass_box = play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True)).with_columns(
             # a sack is not a pass attempt: it carries no cp and must not veto the passer's CPOE
