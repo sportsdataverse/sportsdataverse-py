@@ -178,11 +178,14 @@ def nhl_unit_ratings(
         return pl.DataFrame(schema=_UNIT_SCHEMA)
 
     out = pl.DataFrame(rows)
-    team_mean = out.group_by("team").agg(team_mean_rapm=pl.col("summed_rapm").mean())
+    team_mean = out.group_by("team", maintain_order=True).agg(team_mean_rapm=pl.col("summed_rapm").mean())
     out = out.join(team_mean, on="team", how="left")
     shrink_w = pl.col("toi_minutes") / (pl.col("toi_minutes") + _SHRINKAGE_K_MINUTES)
     out = out.with_columns(
         unit_value=(shrink_w * pl.col("summed_rapm") + (1 - shrink_w) * pl.col("team_mean_rapm"))
     ).drop("team_mean_rapm")
-    out = out.select(list(_UNIT_SCHEMA.keys())).sort("unit_value", descending=True)
+    # team + unit_ids break unit_value ties so the output is reproducible
+    out = out.select(list(_UNIT_SCHEMA.keys())).sort(
+        ["unit_value", "team", "unit_ids"], descending=[True, False, False]
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

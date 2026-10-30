@@ -129,3 +129,15 @@ def test_internal_gate_summed_rapm_tracks_observed_on_ice_xg_diff():
     )
     corr = spearman_corr(units["summed_rapm"].to_numpy(), (units["on_ice_xgf"] - units["on_ice_xga"]).to_numpy())
     assert corr >= 0.5, f"summed_rapm should track observed on-ice xG-diff: corr={corr:.3f}"
+
+
+def test_tied_unit_values_sort_by_team_then_unit_ids():
+    stints = _synthetic_stints().filter(pl.col("home_ids").list.first() != 7)
+    stints = stints.with_columns(xgf_home=pl.lit(0.2), xgf_away=pl.lit(0.2)).reverse()  # {4,5,6} first
+    rapm = _synthetic_rapm().with_columns(xg_rapm=pl.lit(0.1), xg_rapm_off=pl.lit(0.05), xg_rapm_def=pl.lit(0.05))
+    units = nhl_unit_ratings(
+        pl.DataFrame(), pl.DataFrame(), unit_type="forward_line", min_toi=0.0, _stints=stints, _rapm=rapm
+    )
+    assert units["unit_value"].n_unique() == 1
+    keys = units.select("team", "unit_ids").rows()
+    assert keys == sorted(keys) and ("1-2-3" in units["unit_ids"]) and units.height == 3
