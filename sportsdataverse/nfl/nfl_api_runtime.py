@@ -19,6 +19,7 @@ from typing import Dict, List, Optional, Union
 
 from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.nfl.nfl_games import nfl_headers_gen
 
 __all__ = ["_get", "_bool_str"]
@@ -60,11 +61,15 @@ def _get(
         ValueError: api.nfl.com answered 400 / 422 -- the request is wrong.
         AssetFetchError: Any other non-2xx or a connection failure after retries (an
             expired token's 401, a 429, a 5xx), or a 2xx whose body is empty (not
-            204/205) or not JSON.
+            204/205) or not JSON, or an object carrying a non-empty GraphQL ``errors``
+            list (a partial answer is an unknown one).
     """
     if headers is None:
         headers = nfl_headers_gen()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     with _transport_errors(url):
         resp = download(url=url, params=clean, headers=headers, **kwargs)
-    return _json_body(resp, url)
+    body = _json_body(resp, url)
+    if isinstance(body, dict) and body.get("errors"):
+        raise AssetFetchError(f"{url} answered with GraphQL errors: {str(body['errors'])[:200]}")
+    return body
