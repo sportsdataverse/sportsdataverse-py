@@ -703,7 +703,9 @@ _NFL_RULES: tuple[Rule, ...] = (
     _range_rule("passing_yards", -99, 99),
     _range_rule("rushing_yards", -99, 99),
     _range_rule("receiving_yards", -99, 99),
-    _range_rule("kick_distance", 0, 99),
+    # A punt can travel backwards: 2022_03_BUF_MIA play 3846 (the Morstead safety off a teammate) is -1
+    # in nflverse too. The floor is the end line behind a snap at the 1 (11 yards back).
+    _range_rule("kick_distance", -11, 99),
 )
 
 
