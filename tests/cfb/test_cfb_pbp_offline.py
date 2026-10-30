@@ -14,7 +14,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies, _drop_feed_snapshot_copies
 from sportsdataverse.errors import AssetFetchError, DefaultOddsWarning, PlayOrderWarning
 
 # the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
@@ -1922,3 +1922,84 @@ def test_an_untyped_try_fragment_is_not_a_play() -> None:
     td = plays.filter(pl.col("id") == 401752914787).row(0, named=True)
     after = plays.filter(pl.col("i") == td["i"] + 1).row(0, named=True)
     assert (td["type.text"], after["id"]) == ("Passing Touchdown", 401752914738)
+
+
+def _snapshot_capture(game_id: int) -> dict:
+    """A capture from ``fixtures/snapshot_copies/`` (provenance: ``fixtures/README.md``), outside the oracle's glob."""
+    with gzip.open(FIX / "snapshot_copies" / f"{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _snapshot_plays(game_id: int) -> pl.DataFrame:
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=_snapshot_capture(game_id))
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def _feed_frame(summary: dict) -> pl.DataFrame:
+    """The feed's drive plays, flattened as the processor flattens them, with their drive id."""
+    rows = [
+        {**play, "drive": {"id": drive["id"]}} for drive in summary["drives"]["previous"] for play in drive["plays"]
+    ]
+    return pl.json_normalize(rows, separator=".", infer_schema_length=None)
+
+
+@pytest.mark.parametrize(
+    ("game_id", "rows", "plays", "left_twice"),
+    [(292620166, 1417, 209, 0), (312602572, 889, 162, 0), (400756912, 1493, 195, 2)],
+)
+def test_a_feeds_repeated_snapshots_collapse_and_the_game_is_enriched(game_id, rows, plays, left_twice):
+    """Over 500 rows of live-feed snapshots read as a corrupt game and published unenriched.
+
+    The snapshot copies go before the size guard, so each game is processed: every play has a
+    period. 400756912 keeps one pair, "Brad Kaaya pass complete to Joseph Yearby for 11 yds"
+    at 2:50, because ESPN's later copy corrected the start distance (7 to 6), and a different
+    start state is a different play to every copy rule.
+    """
+    assert len(_feed_plays(_snapshot_capture(game_id))) == rows
+    frame = _snapshot_plays(game_id)
+    assert frame.height == plays
+    assert frame["period"].null_count() == 0
+    key = ["drive.id", "period.number", "clock.displayValue", "text", "start.down", "start.yardsToEndzone"]
+    assert frame.filter(pl.col("type.text") != "Timeout").filter(pl.len().over(key) > 1).height == left_twice
+
+
+def test_a_snapshot_keeps_the_last_copy_of_each_play():
+    """400756912: the completion echoed 74 times keeps one row, the last copy's id."""
+    feed = _feed_frame(_snapshot_capture(400756912))
+    text = "Brad Kaaya pass complete to Joseph Yearby for 52 yds to the FlAtl 1 for a 1ST down"
+    assert feed.filter(pl.col("text") == text).height == 74
+    kept = _drop_feed_snapshot_copies(feed).filter(pl.col("text") == text)
+    assert kept["id"].to_list() == [feed.filter(pl.col("text") == text)["id"][-1]]
+
+
+def test_back_to_back_timeouts_outside_a_replayed_drive_both_stay():
+    """401013351: two identical Wisconsin timeouts at 0:03, in a drive with no other copy, are two timeouts."""
+    feed = _feed_frame(_snapshot_capture(401013351))
+    timeouts = pl.col("text") == "Timeout WISCONSIN, clock 00:03"
+    assert feed.filter(timeouts).height == 2
+    assert _drop_feed_snapshot_copies(feed).filter(timeouts).height == 2
+
+
+def test_a_copy_filed_ahead_of_a_penalty_still_goes():
+    """400547745: the incompletion and punt filed ahead of the offside that set them up are copies."""
+    feed = _feed_frame(_snapshot_capture(400547745))
+    for text in (
+        "Cole Stoudt pass incomplete to Germone Hopper, broken up by Jermaine Reve",
+        "Bradley Pinion punt for 46 yds, fair catch by James Quick at the Lvile 17",
+    ):
+        rows = pl.col("text") == text
+        assert feed.filter(rows).height == 2, text
+        kept = _drop_feed_snapshot_copies(feed).with_row_index("_p").filter(rows)
+        # the copy after the offside stays, so the drive reads 3rd-and-7, offside, 3rd-and-2
+        assert kept.height == 1, text
+        assert kept["id"].to_list() == [feed.filter(rows)["id"][-1]], text
+
+
+def test_a_frame_missing_a_snapshot_key_is_left_alone():
+    """Without every key a copy cannot be told from a distinct play, so nothing is dropped."""
+    feed = _feed_frame(_snapshot_capture(292620166))
+    assert _drop_feed_snapshot_copies(feed).height < feed.height
+    sparse = feed.drop("end.yardLine")
+    assert_frame_equal(_drop_feed_snapshot_copies(sparse), sparse)
