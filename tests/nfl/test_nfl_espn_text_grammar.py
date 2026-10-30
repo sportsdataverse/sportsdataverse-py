@@ -36,6 +36,8 @@ def processed(monkeypatch_module):
             return summary
 
     monkeypatch_module.setattr(nfl_pbp_mod, "download", lambda *a, **k: _Resp())
+    # and no nflverse schedule fetch: the default line, with or without network
+    monkeypatch_module.setattr(NFLPlayProcess, "__helper__nflverse_odds_information__", lambda self, *a: None)
     # offline: no participants / sidecar fetch; ids resolve from the fixture's boxscore
     proc = NFLPlayProcess(gameId=GAME_ID, join_participants=False)
     proc.espn_nfl_pbp()

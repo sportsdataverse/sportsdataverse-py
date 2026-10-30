@@ -306,7 +306,7 @@ if isinstance(summary_raw, dict):
 ```
 
     ✅ match summary 1535465
-    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'leaders', 'article', 'videos', 'news', 'header', 'wallclockAvailable', 'meta', 'standings']
+    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'article', 'videos', 'news', 'leaders', 'header', 'wallclockAvailable', 'meta', 'standings']
 
 
 ### Parsing all 8 sections at once
@@ -328,6 +328,8 @@ else:
 ```
 
     header                             1 rows ×  15 cols
+
+
     matchcards_batting                11 rows ×  12 cols
     matchcards_bowling                 6 rows ×  10 cols
     matchcards_partnerships            6 rows ×  10 cols
@@ -553,11 +555,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Aiden Markram doesn't want to … ┆ 2026-10-26T07:18:45Z ┆ Story        │
-    │ Athanaze and Carty to lead Wes… ┆ 2026-10-26T07:17:55Z ┆ HeadlineNews │
-    │ Morkel wants Bhuvneshwar to 'b… ┆ 2026-10-26T07:11:06Z ┆ HeadlineNews │
-    │ Padikkal leads the way with 19… ┆ 2026-10-26T06:55:41Z ┆ Recap        │
-    │ WPL 2027 auction - who has the… ┆ 2026-10-26T06:39:20Z ┆ Story        │
+    │ Smith faces fitness test ahead… ┆ 2026-10-26T15:43:12Z ┆ HeadlineNews │
+    │ Jonassen and Rana set to be am… ┆ 2026-10-26T15:11:45Z ┆ Story        │
+    │ Gareth Batty leaves Surrey to … ┆ 2026-10-26T14:47:52Z ┆ HeadlineNews │
+    │ Series set for dramatic finish… ┆ 2026-10-26T14:24:53Z ┆ Preview      │
+    │ Sammy tells West Indies Test s… ┆ 2026-10-26T14:22:37Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 

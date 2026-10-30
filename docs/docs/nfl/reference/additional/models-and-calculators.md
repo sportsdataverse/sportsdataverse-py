@@ -58,9 +58,10 @@ print(adj.sort("adj_pressure_rate_generated", descending=True).head())
 
 Compute completion probability (CP) and CPOE for pass plays.
 
-Mirrors nflfastR's `helper_add_cp_cpoe.R`.  Scores only intended pass
-plays (where `air_yards` is not null); non-pass plays receive null in
-the `cp` column.  When `complete_pass` is present,
+Mirrors nflfastR's `helper_add_cp_cpoe.R`.  Scores only the passes it
+scores (`_cp_scored_pass`: a completion, incompletion or interception with
+air yards in [-15, 70), a receiver and a pass location; not a spike); every
+other play receives null in the `cp` column.  When `complete_pass` is present,
 `cpoe = 100 * (complete_pass - cp)` is also added — on nflfastR's
 percentage-point scale (`add_cp` in `helper_add_cp_cpoe.R`).
 

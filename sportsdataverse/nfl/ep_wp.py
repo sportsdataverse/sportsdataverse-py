@@ -1434,6 +1434,33 @@ def _apply_ot_wp_overlay(
     return out if supplied else out.drop(list(OT_TOUCHBACK_COLUMNS))
 
 
+def _cp_scored_pass(df: pl.DataFrame) -> pl.Expr:
+    """The passes nflfastR's ``add_cp`` scores (``helper_add_cp_cpoe.R``), the same rows CP trains on.
+
+    A completion, incompletion or interception with air yards in [-15, 70), a named receiver and a pass
+    location. Scoring every row with air yards also gave a cp -- and a CPOE near -61 -- to throwaways
+    (no receiver) and spikes, which nflfastR leaves NA: 832 of them in 2024, enough to pull team and QB
+    CPOE about 3 points under nflverse's. A condition whose column the frame lacks is skipped.
+    """
+    cond = pl.col("air_yards").is_not_null() & (pl.col("air_yards") >= -15) & (pl.col("air_yards") < 70)
+    outcome = ("complete_pass", "incomplete_pass", "interception")
+    if all(c in df.columns for c in outcome):  # with only some, a completion alone would pass
+        cond = cond & pl.any_horizontal([pl.col(c).cast(pl.Float64) == 1 for c in outcome])
+    receiver = [pl.col(c).is_not_null() for c in ("receiver_player_id", "receiver_player_name") if c in df.columns]
+    if receiver and "desc" in df.columns:
+        # nflfastR also reads the target off the text: "to"/"for", an optional jersey number, then "A.Name"
+        receiver.append(
+            pl.col("desc").str.contains(r"\b(?:to|for)\s\d{0,2}-?[A-Z][A-Za-z]*\.\s?[A-Z][A-Za-z]+").fill_null(False)
+        )
+    if receiver:
+        cond = cond & pl.any_horizontal(receiver)
+    if "pass_location" in df.columns:
+        cond = cond & pl.col("pass_location").is_not_null()
+    if "qb_spike" in df.columns:
+        cond = cond & (pl.col("qb_spike").cast(pl.Float64).fill_null(0) != 1)
+    return cond
+
+
 def calculate_completion_probability(
     pbp_data: pl.DataFrame,
     *,
@@ -1441,9 +1468,10 @@ def calculate_completion_probability(
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Compute completion probability (CP) and CPOE for pass plays.
 
-    Mirrors nflfastR's ``helper_add_cp_cpoe.R``.  Scores only intended pass
-    plays (where ``air_yards`` is not null); non-pass plays receive null in
-    the ``cp`` column.  When ``complete_pass`` is present,
+    Mirrors nflfastR's ``helper_add_cp_cpoe.R``.  Scores only the passes it
+    scores (``_cp_scored_pass``: a completion, incompletion or interception with
+    air yards in [-15, 70), a receiver and a pass location; not a spike); every
+    other play receives null in the ``cp`` column.  When ``complete_pass`` is present,
     ``cpoe = 100 * (complete_pass - cp)`` is also added — on nflfastR's
     percentage-point scale (``add_cp`` in ``helper_add_cp_cpoe.R``).
 
@@ -1476,7 +1504,7 @@ def calculate_completion_probability(
     df = pbp_data.drop([c for c in ("cp", "cpoe") if c in pbp_data.columns])
     df = df.with_row_index("_row_idx")
 
-    pass_df = df.filter(pl.col("air_yards").is_not_null())
+    pass_df = df.filter(_cp_scored_pass(df))
 
     if len(pass_df) > 0:
         pass_df = _make_cp_mutations(pass_df)
@@ -4129,6 +4157,29 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
     return _air_yac_family_block(merged, kind="wpa").drop(drop_cols)
 
 
+def _add_success_first_down(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's ``success`` and ``first_down``, when the frame lacks them.
+
+    ``success`` is 1 when ``epa`` is positive, 0 when it is not, and null with ``epa`` (nflfastR's
+    ``add_ep``). ``first_down`` is 1 when the play earned a first down by rush, pass or penalty
+    (nflfastR's ``first_down_rush | first_down_pass | first_down_penalty``, with R's NA logic: 1 if any part
+    is 1, else null if any part is null, else 0), and only from all three parts. Both are Float64, as in
+    nflfastR's pbp. A frame that already has a column keeps it.
+    """
+    exprs = []
+    if "success" not in df.columns and "epa" in df.columns:
+        exprs.append(
+            pl.when(pl.col("epa").is_null()).then(None).otherwise((pl.col("epa") > 0).cast(pl.Float64)).alias("success")
+        )
+    parts = ("first_down_rush", "first_down_pass", "first_down_penalty")
+    if "first_down" not in df.columns and all(c in df.columns for c in parts):
+        # any_horizontal is Kleene OR, as R's `|` is: a missing part leaves no first down unknown, not 0
+        exprs.append(
+            pl.any_horizontal([pl.col(c).cast(pl.Float64) == 1 for c in parts]).cast(pl.Float64).alias("first_down")
+        )
+    return df.with_columns(exprs) if exprs else df
+
+
 def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:
     """Add the per-play Total-QBR EPA components (nflverse port of ``__process_qbr``).
 
@@ -4690,6 +4741,9 @@ def enrich_nfl_pbp(
     # 7. QBR components — nflverse port of the ESPN __process_qbr step. Needs
     #    qb_epa (step 2b) and home_wp (step 4) which are now both present.
     raw = _derive_qbr_epa(raw)
+
+    # 7b. nflfastR's success and first_down, which the Shield-built frame did not carry.
+    raw = _add_success_first_down(raw)
 
     # 8. 4th-down decision surface — default-on, scored only on the qualifying
     #    4th-down rows and null elsewhere (nfl4th add_4th_probs + recommendation).

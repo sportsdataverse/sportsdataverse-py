@@ -45,7 +45,6 @@ most commonly used entry points.
 | [`espn_soccer_team_schedule`](../soccer/reference/site.md#espn_soccer_team_schedule) | A team's fixtures & results |
 | [`espn_soccer_news`](../soccer/reference/site.md#espn_soccer_news) | Latest news headlines for a league |
 | [`espn_soccer_injuries`](../soccer/reference/site.md#espn_soccer_injuries) | Current injury list |
-| [`espn_soccer_leaders`](../soccer/reference/web.md#espn_soccer_leaders) | Stat leaders by category |
 | [`espn_soccer_player_info`](../soccer/reference/site.md#espn_soccer_player_info) | Player bio & metadata |
 | [`espn_soccer_player_stats`](../soccer/reference/web.md#espn_soccer_player_stats) | Player season statistics |
 | [`espn_soccer_game_probabilities`](../soccer/reference/core/game.md#espn_soccer_game_probabilities) | In-game win probabilities |
@@ -640,48 +639,6 @@ else:
     shape: (0, 3)
 
 
-## 📊 Stat leaders
-
-[`espn_soccer_leaders`](../soccer/reference/web.md#espn_soccer_leaders) returns
-the statistical leaderboard for a league, optionally scoped to a season,
-stat category, and page. Categories include `goals`, `assists`, `yellowCards`,
-`redCards`, and others ESPN surfaces.
-
-
-```python
-goal_leaders = safe(
-    'EPL goal leaders 2023/24',
-    lambda: soccer.espn_soccer_leaders(
-        league='eng.1', category='goals', season=2024, limit=10,
-    ),
-)
-if isinstance(goal_leaders, dict):
-    print('leaders payload keys:', list(goal_leaders.keys()))
-elif goal_leaders is not None:
-    print('shape:', goal_leaders.shape)
-    print(goal_leaders.head())
-else:
-    print('leaders unavailable right now')
-```
-
-    ✅ EPL goal leaders 2023/24
-    shape: (1, 9)
-    shape: (1, 9)
-    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
-    │ current_s ┆ current_s ┆ current_s ┆ current_s ┆ … ┆ current_s ┆ current_s ┆ current_s ┆ current_ │
-    │ eason_yea ┆ eason_dis ┆ eason_sta ┆ eason_end ┆   ┆ eason_typ ┆ eason_typ ┆ eason_typ ┆ season_t │
-    │ r         ┆ play_name ┆ rt_date   ┆ _date     ┆   ┆ e_type    ┆ e_name    ┆ e_start_d ┆ ype_end_ │
-    │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ate       ┆ date     │
-    │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ i64       ┆ str       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆ str       ┆ str      │
-    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 2026      ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06-0 ┆ … ┆ 14308     ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06- │
-    │           ┆ English   ┆ 1T04:00:0 ┆ 1T03:59:0 ┆   ┆           ┆ English   ┆ 1T04:00:0 ┆ 01T03:59 │
-    │           ┆ Premier   ┆ 0.000+00: ┆ 0.000+00: ┆   ┆           ┆ Premier   ┆ 0.000+00: ┆ :00.000+ │
-    │           ┆ League    ┆ 00        ┆ 00        ┆   ┆           ┆ League    ┆ 00        ┆ 00:00    │
-    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
-
-
 ## 🔗 League aliases — drop the `league=` argument
 
 When you only work with one competition, the twelve league sub-modules
@@ -941,8 +898,6 @@ pl.DataFrame(rows)
 
 
     ✅ Bundesliga standings
-
-
     ✅ Serie A standings
 
 

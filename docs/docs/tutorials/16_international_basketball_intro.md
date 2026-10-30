@@ -56,7 +56,7 @@ The `sdvplot` extra brings in sdvplot and sportypy for the court drawing.
 import matplotlib.pyplot as plt
 import polars as pl
 
-from sportsdataverse import euroleague as el
+from sportsdataverse.basketball import euroleague as el
 from sportsdataverse.basketball import acb, genius, nbl_au
 
 pl.Config.set_tbl_rows(10)
@@ -106,8 +106,6 @@ print("season:", season_code, "| games:", None if games is None else games.shape
 ```
 
     ✅ EuroLeague seasons
-
-
     ✅ games E2026
     season: E2026 | games: (380, 94)
 
@@ -346,8 +344,8 @@ sh = safe(f"SLB shots {mid}", lambda: genius.slb_shots(mid)) if mid else None
     │ ---         ┆ ---    ┆ --- │
     │ str         ┆ i64    ┆ u32 │
     ╞═════════════╪════════╪═════╡
-    │ 2pt         ┆ 0      ┆ 27  │
     │ 2pt         ┆ 1      ┆ 43  │
+    │ 2pt         ┆ 0      ┆ 27  │
     │ 3pt         ┆ 0      ┆ 42  │
     │ 3pt         ┆ 1      ┆ 26  │
     └─────────────┴────────┴─────┘
@@ -417,8 +415,8 @@ matches = safe(f"NBL matches {nbl_season}", lambda: nbl_au.nbl_rosetta_matches(n
     │ ---          ┆ --- │
     │ str          ┆ u32 │
     ╞══════════════╪═════╡
-    │ draft        ┆ 3   │
     │ complete     ┆ 206 │
+    │ draft        ┆ 3   │
     └──────────────┴─────┘
 
 
