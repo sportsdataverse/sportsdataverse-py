@@ -90,11 +90,11 @@ dependencies = [
 tests = [
     # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
     "curl_cffi>=0.15.0",
-    "mypy>=1.0.0",
-    "pytest>=8.0",
-    "pytest-cov>=2.10.1",
-    "pytest-xdist>=2.1.0",
-    "ruff>=0.1.0",
+    "mypy>=2.1.0",
+    "pytest>=9.0",
+    "pytest-cov>=7.0.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.15.12",
     # tests/soccer/test_soccer_events.py loads a StatsBomb fixture through kloppy.
     "kloppy[polars]>=3.19",
     # tests/test_metric_registry.py and the codegen tests import yaml; it used to arrive
@@ -118,7 +118,7 @@ nflpro = [
     # id.nfl.com login, which needs a browser. Requests themselves are plain HTTP,
     # so this stays an extra rather than a hard dependency -- and is unnecessary
     # entirely when NFLPRO_TOKEN is supplied.
-    "playwright>=1.40",
+    "playwright>=1.61",
 ]
 models = [
     # Empty on purpose, kept so `pip install sportsdataverse[models]` keeps working:
@@ -129,7 +129,7 @@ pff = [
     # Optional headless-browser auth for PFF Premium: point SDV_PY_PFF_STORAGE_STATE
     # at a saved Playwright storage_state JSON and pff_runtime auto-refreshes the
     # short-lived Clerk session cookies. Also needs `playwright install chromium`.
-    "playwright>=1.40",
+    "playwright>=1.61",
 ]
 sdvplot = [
     # SportsDataverse team logos, colors and chart themes for the frames this package returns.
@@ -155,12 +155,12 @@ all = [
     # groups" mechanism that older pip / build-frontends understand uniformly.
     # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
     "curl_cffi>=0.15.0",
-    "mypy>=1.0.0",
-    "pytest>=8.0",
-    "pytest-cov>=2.10.1",
-    "pytest-xdist>=2.1.0",
-    "ruff>=0.1.0",
-    "playwright>=1.40",
+    "mypy>=2.1.0",
+    "pytest>=9.0",
+    "pytest-cov>=7.0.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.15.12",
+    "playwright>=1.61",
     # NCAA (stats.ncaa.org) browser transport -- anti-detect fork of Playwright
     # that clears Akamai bm-verify; vanilla Playwright is flagged. See mbb_ncaa_fetch.
     # >=1.64.3: on 1.61.2 (Chromium 149) Akamai answers 403 to every request after the
@@ -201,20 +201,20 @@ sdv-docs = "sdv_docs.server:main"
 # should prefer `uv sync --all-groups --all-extras`.
 [dependency-groups]
 test = [
-    "pytest>=8.0",
-    "pytest-cov>=4.0",
-    "pytest-xdist>=3.0",
+    "pytest>=9.0",
+    "pytest-cov>=7.0",
+    "pytest-xdist>=3.8",
     # Executes examples/notebooks/*.ipynb as pytest items (`pytest --nbmake`).
     # Opt-in via the flag, so the normal suite is unaffected; the live-tests-cron
     # workflow runs it against the real APIs.
     "nbmake>=1.5",
 ]
 lint = [
-    "mypy>=1.0",
+    "mypy>=2.1.0",
     # Stubs for `requests` so the mypy ratchet can check modules that import it
     # (e.g. errors.py, mlb_statcast_runtime.py via dl_utils). Without these mypy
     # emits an import-untyped error under the strict gate.
-    "types-requests>=2.28.0",
+    "types-requests>=2.33.0",
     # Pinned to match the pre-commit ruff hook (.pre-commit-config.yaml). The codegen
     # generator formats its output with this ruff, so build/--check and the commit hook
     # must agree byte-for-byte; a floating version reintroduces format drift.
@@ -223,11 +223,11 @@ lint = [
 dev = [
     {include-group = "test"},
     {include-group = "lint"},
-    "build>=1.0",
+    "build>=1.5",
     # Parses function docstrings (Google/NumPy/Sphinx) so the codegen autodoc pages
     # can render Args/Returns/Examples tables. Build-time only; never ships to users.
     "docstring_parser>=0.16",
-    "ipykernel>=6.0",  # for executing examples/notebooks/*.ipynb locally
+    "ipykernel>=7.3",  # for executing examples/notebooks/*.ipynb locally
     "jinja2>=3.1",
     # tools/codegen/render_notebooks.py executes the example notebooks and renders
     # them to docs/docs/tutorials/ (run weekly in tutorials-refresh). nbclient runs
@@ -235,10 +235,10 @@ dev = [
     "json5>=0.15.0",
     "nbclient>=0.10",
     "nbconvert>=7.0",
-    "nbformat>=5.0",
-    "pre-commit>=3.0",
+    "nbformat>=5.10",
+    "pre-commit>=4.6",
     "pyyaml>=6.0",
-    "twine>=4.0",
+    "twine>=6.2",
 ]
 
 
