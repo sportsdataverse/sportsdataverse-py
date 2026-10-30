@@ -827,7 +827,8 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_shots/shots_{season}.parquet
   tag: espn_mens_college_basketball_shots
-  min_season: 2025
+  min_season: 2003
+  notes: "Published seasons: 2003 and 2006 onward; the release has no 2004 or 2005 asset (the MBB pbp release has the same gap). A request for either is skipped with a warning, and a request for only those returns the documented columns with zero rows."
   example_args:
     seasons: 2025
 - fn: load_mbb_standings
@@ -851,6 +852,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_rosters/rosters_{season}.parquet
   tag: espn_mens_college_basketball_rosters
+  id_int32: [athlete_id]
   min_season: 2025
   example_args:
     seasons: 2025
@@ -867,6 +869,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet
   tag: espn_mens_college_basketball_game_rosters
+  id_int32: [game_id]
   min_season: 2025
   example_args:
     seasons: 2025
@@ -883,6 +886,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_game_rosters/game_rosters_{season}.parquet
   tag: espn_nba_game_rosters
+  id_int32: [game_id]
   min_season: 2002
   example_args:
     seasons: 2002
@@ -939,6 +943,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_rosters/rosters_{season}.parquet
   tag: espn_nba_rosters
+  id_int32: [athlete_id]
   min_season: 2025
   example_args:
     seasons: 2025
@@ -1263,7 +1268,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_player_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  id_int64: [espn_team_id, espn_athlete_id]
+  id_int32: [espn_team_id, espn_athlete_id]
   min_season: 2025
   example_args:
     seasons: 2026
@@ -1272,7 +1277,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2025
   example_args:
     seasons: 2026
@@ -1281,7 +1286,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  id_int64: [espn_team_id]
+  id_int32: [espn_team_id]
   min_season: 2002
   example_args:
     seasons: 2026
@@ -1317,7 +1322,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_player_crosswalk_{season}.parquet
   tag: nba_crosswalk
-  id_int64: [espn_team_id, espn_athlete_id]
+  id_int32: [espn_team_id, espn_athlete_id]
   min_season: 2002
   example_args:
     seasons: 2026
@@ -1326,7 +1331,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_schedule_crosswalk_{season}.parquet
   tag: nba_crosswalk
-  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1335,7 +1340,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_team_crosswalk_{season}.parquet
   tag: nba_crosswalk
-  id_int64: [espn_team_id]
+  id_int32: [espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -2193,6 +2198,7 @@ loaders:
   base: sdv_releases
   url: ncaa_mbb_pbp/ncaa_mbb_pbp_{season}.parquet
   tag: ncaa_mbb_pbp
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, event_team_espn_team_id, poss_team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2209,6 +2215,7 @@ loaders:
   base: sdv_releases
   url: ncaa_mbb_player_box/ncaa_mbb_player_box_{season}.parquet
   tag: ncaa_mbb_player_box
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2217,6 +2224,7 @@ loaders:
   base: sdv_releases
   url: ncaa_mbb_team_box/ncaa_mbb_team_box_{season}.parquet
   tag: ncaa_mbb_team_box
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2249,6 +2257,7 @@ loaders:
   base: sdv_releases
   url: ncaa_mbb_possessions/ncaa_mbb_possessions_{season}.parquet
   tag: ncaa_mbb_possessions
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, poss_team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2273,6 +2282,7 @@ loaders:
   base: sdv_releases
   url: ncaa_mbb_shots/ncaa_mbb_shots_{season}.parquet
   tag: ncaa_mbb_shots
+  id_int32: [espn_game_id, espn_team_id]
   min_season: 2019
   example_args:
     seasons: 2024

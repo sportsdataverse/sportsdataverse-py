@@ -2189,6 +2189,7 @@ class _LoaderView:
         self.abs_url = "" if ld.stub else f"{bases[ld.base]}{ld.url}"
         self.docstring = _build_loader_docstring(ld)
         self.id_int64 = ld.id_int64
+        self.id_int32 = ld.id_int32
         self.single = _loader_is_single(ld)
         has_table = ld.fn in _loader_schemas()
         self.empty = f'_empty_from_schema("loader_schemas:{ld.fn}")' if has_table else "pl.DataFrame()"
@@ -2843,10 +2844,12 @@ def refresh_loader_schemas() -> int:
         # id_int64 columns are cast at the loader boundary AFTER read, so the
         # declared type is Int64 regardless of the parquet footer (enforced by
         # tests/codegen/test_id_casts.py; a raw re-capture must not regress it).
-        if got is not None and getattr(ld, "id_int64", None):
+        if got is not None:
             for entry in got:
                 if entry["name"] in ld.id_int64:
                     entry["type"] = "Int64"
+                elif entry["name"] in ld.id_int32:
+                    entry["type"] = "Int32"
         if got is None:
             failed.append(ld.fn)
             if ld.fn in prev:

@@ -58,8 +58,8 @@ def _str_or_null(v: Any) -> Any:
     return None if _is_missing(v) else str(v)
 
 
-def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
-    """Canonicalize id columns to ``Int64`` at the loader boundary.
+def _cast_ids_int64(df: pl.DataFrame, cols: List[str], dtype: Any = pl.Int64) -> pl.DataFrame:
+    """Canonicalize id columns to ``Int64`` (or ``dtype``) at the loader boundary.
 
     Producers have shipped the same ESPN id as ``String``, ``Int32`` and ``Int64``
     across releases (CFB ``team_id`` was String on the summaries/ratings family and
@@ -78,24 +78,27 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     Args:
         df: frame to normalize (may be empty).
         cols: id column names to canonicalize; missing ones are ignored.
+        dtype: the integer dtype to cast to (:func:`_cast_ids_int32` passes ``Int32``). A
+            value that does not fit is a new null, so the column is refused, not truncated.
 
     Returns:
-        The frame with each named column cast to ``Int64`` where safe.
+        The frame with each named column cast to ``dtype`` where safe.
     """
     for col in cols:
-        if col not in df.columns or df.schema[col] == pl.Int64:
+        if col not in df.columns or df.schema[col] == dtype:
             continue
         src = df[col]
         if src.dtype == pl.String:
             # "" is a feed's "no id" (HockeyTech's FloCoreEventId on every scorebar row): null, not a refusal
             src = src.str.strip_chars()
             src = src.set(src == "", None)
-        cast = src.cast(pl.Int64, strict=False)
+        cast = src.cast(dtype, strict=False)
         # Refuse if the cast would invent nulls -- a value did not survive, so the
         # column is not really an integer id.
         if cast.null_count() != src.null_count():
             continue
-        # Widening one integer type to another is always lossless. For every other
+        # One integer type to another is lossless once no new null appeared (an Int64 id
+        # too large for Int32 is a new null, refused above). For every other
         # source dtype require an exact round-trip, because "no new nulls" is
         # necessary but NOT sufficient: "007" casts cleanly to 7 and 1.5 truncates
         # to 1, both silently changing the id. Zero-padded and fractional values
@@ -104,6 +107,23 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
             continue
         df = df.with_columns(cast.alias(col))
     return df
+
+
+def _cast_ids_int32(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
+    """:func:`_cast_ids_int64` to ``Int32``: a String id whose release family ships it as ``Int32`` elsewhere.
+
+    ESPN basketball ``game_rosters.game_id`` and ``rosters.athlete_id`` are String while the pbp, box, schedule
+    and shots releases carry the same ids as Int32; a String key cannot join an Int32 one at all (``SchemaError``).
+    The same lossless-or-refused rules apply.
+
+    Args:
+        df: frame to normalize (may be empty).
+        cols: id column names to cast; missing ones are ignored.
+
+    Returns:
+        The frame with each named column cast to ``Int32`` where safe.
+    """
+    return _cast_ids_int64(df, cols, pl.Int32)
 
 
 def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = (), stacklevel: int = 3) -> pl.DataFrame:

@@ -12041,7 +12041,7 @@ load_mbb_game_rosters:
 - name: season
   type: Int32
 - name: game_id
-  type: String
+  type: Int32
 - name: team_id
   type: Int32
 - name: team_slug
@@ -12463,13 +12463,13 @@ load_mbb_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: Int64
+  type: Int32
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -12589,7 +12589,7 @@ load_mbb_rosters:
 - name: team_logo
   type: String
 - name: athlete_id
-  type: String
+  type: Int32
 - name: uid
   type: String
 - name: guid
@@ -12823,11 +12823,11 @@ load_mbb_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int64
+  type: Int32
 - name: away_espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_game_id
-  type: Int64
+  type: Int32
 - name: bart_muid
   type: String
 - name: bart_team1
@@ -13059,7 +13059,7 @@ load_mbb_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -13876,7 +13876,7 @@ load_nba_game_rosters:
 - name: season
   type: Int32
 - name: game_id
-  type: String
+  type: Int32
 - name: team_id
   type: Int32
 - name: team_slug
@@ -14310,13 +14310,13 @@ load_nba_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: Int64
+  type: Int32
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -14457,7 +14457,7 @@ load_nba_rosters:
 - name: team_logo
   type: String
 - name: athlete_id
-  type: String
+  type: Int32
 - name: uid
   type: String
 - name: guid
@@ -14673,11 +14673,11 @@ load_nba_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int64
+  type: Int32
 - name: away_espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_game_id
-  type: Int64
+  type: Int32
 - name: nba_game_id
   type: String
 - name: nba_game_code
@@ -17171,7 +17171,7 @@ load_nba_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -18049,19 +18049,19 @@ load_ncaa_mbb_pbp:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: event_team_ncaa_team_id
   type: String
 - name: event_team_espn_team_id
-  type: String
+  type: Int32
 - name: poss_team_ncaa_team_id
   type: String
 - name: poss_team_espn_team_id
-  type: String
+  type: Int32
 - name: player_1_id
   type: String
 - name: player_1_clean_name
@@ -18111,7 +18111,7 @@ load_ncaa_mbb_pbp:
 - name: away_5_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: is_fastbreak
   type: Boolean
 - name: is_from_turnover
@@ -18384,21 +18384,21 @@ load_ncaa_mbb_player_box:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: team_ncaa_team_id
   type: String
 - name: team_espn_team_id
-  type: String
+  type: Int32
 - name: player_id
   type: String
 - name: clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_mbb_possessions:
@@ -18461,15 +18461,15 @@ load_ncaa_mbb_possessions:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: poss_team_ncaa_team_id
   type: String
 - name: poss_team_espn_team_id
-  type: String
+  type: Int32
 - name: home_1_player_id
   type: String
 - name: home_1_clean_name
@@ -18511,7 +18511,7 @@ load_ncaa_mbb_possessions:
 - name: away_5_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_mbb_rapm:
@@ -18616,13 +18616,13 @@ load_ncaa_mbb_shots:
 - name: ncaa_team_id
   type: String
 - name: espn_team_id
-  type: String
+  type: Int32
 - name: shooter_player_id
   type: String
 - name: shooter_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 load_ncaa_mbb_team_box:
 - name: home
   type: String
@@ -18773,17 +18773,17 @@ load_ncaa_mbb_team_box:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: team_ncaa_team_id
   type: String
 - name: team_espn_team_id
-  type: String
+  type: Int32
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_mbb_team_ids:

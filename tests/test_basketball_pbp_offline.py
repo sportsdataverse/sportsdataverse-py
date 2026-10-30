@@ -37,7 +37,7 @@ def _raw(name: str) -> dict:
 def _pick(lg: str, pickcenter) -> tuple:
     init = getattr(MODULES[lg], f"helper_{lg}_pickcenter")({"pickcenter": copy.deepcopy(pickcenter)})
     keys = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
-    return tuple(np.asarray(init[k]).reshape(-1)[0].item() for k in keys)
+    return tuple(None if init[k] is None else np.asarray(init[k]).reshape(-1)[0].item() for k in keys)
 
 
 @pytest.mark.parametrize(
@@ -75,14 +75,40 @@ def test_spread_and_favorite_come_from_the_same_provider(lg: str, game_id: str, 
     assert (abs(spread) if home_favorite else -abs(spread), available) == (home_line, True)
 
 
-@pytest.mark.parametrize("lg", list(MODULES))
-@pytest.mark.parametrize(
+NO_LINE = pytest.mark.parametrize(
     "pickcenter",
     [[], {}, None, PICKCENTER["mbb"]["400587253"]],  # last: a lone teamrankings entry with no spread
     ids=["empty", "missing", "null", "no-spread"],
 )
+
+
+@pytest.mark.parametrize("lg", ["nba", "wnba", "wbb"])
+@NO_LINE
 def test_pickcenter_without_a_spread_keeps_defaults(lg: str, pickcenter) -> None:
     assert _pick(lg, pickcenter) == (2.5, DEFAULT_OU[lg], True, False)
+
+
+@NO_LINE
+def test_mbb_pickcenter_without_a_spread_is_null(pickcenter) -> None:
+    """hoopR's NA: no invented 2.5 spread, 142 over/under or home favorite (parity audit 06, P0)."""
+    assert _pick("mbb", pickcenter) == (None, None, None, False)
+
+
+def test_mbb_no_line_over_under_is_the_providers_own() -> None:
+    from sportsdataverse._espn_basketball_pbp import pickcenter_odds
+
+    row = {"provider": {"id": "1002"}, "overUnder": 139.5}  # a total but no spread
+    assert pickcenter_odds([row], None, default_spread=None)["overUnder"] == 139.5
+
+
+@pytest.mark.parametrize("game_id", [401829457, 401830342])  # real ESPN payloads with no pickcenter
+def test_mbb_game_without_a_line_has_null_spreads_on_every_play(game_id: int) -> None:
+    raw = _raw(f"mbb_{game_id}.json.gz")
+    assert not raw.get("pickcenter")
+    plays = pl.from_dicts(mbb_pbp.helper_mbb_pbp(game_id, copy.deepcopy(raw))["plays"], infer_schema_length=None)
+    for col in ("gameSpread", "homeFavorite", "homeTeamSpread"):
+        assert plays[col].null_count() == plays.height, col
+    assert plays["gameSpreadAvailable"].unique().to_list() == [False]
 
 
 def test_mbb_one_provider_spread_reaches_every_play() -> None:
