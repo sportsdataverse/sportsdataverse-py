@@ -1052,7 +1052,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     )
     cbs_id_source = "payload" if cbs_game_id else None
     if cbs_game_id is None:
-        cbs_game_id = row.get("cbs_game_id")
+        # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+        cbs_game_id = _id_text(row.get("cbs_game_id")) or None
         cbs_id_source = "idmap" if cbs_game_id else None
     scoreboard_provenance: Dict[str, Any] = {}
     if cbs_game_id is None and payload is None:

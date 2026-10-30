@@ -60,8 +60,10 @@ def _resolve_fox_event_id(idmap_row: Mapping[str, Any], *, transport: Any = None
        next source rather than fetching a wrong one.
     """
     row = idmap_row or {}
-    if row.get("fox_event_id"):
-        return str(row["fox_event_id"]), "idmap"
+    # through _id_text: a NaN id-map cell is truthy and would be fetched as "nan" (#930)
+    stored = _id_text(row.get("fox_event_id"))
+    if stored:
+        return stored, "idmap"
     return _resolve_fox_game_id(
         row.get("season"),
         row.get("season_type"),

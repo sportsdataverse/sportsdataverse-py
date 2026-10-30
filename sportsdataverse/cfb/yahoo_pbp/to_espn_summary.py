@@ -703,7 +703,7 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             f"cfb {espn_id}: yahoo game {game_id or game.get('gameId')} carries no play-by-play "
             "(FCS-hosted, or before Yahoo's 2014 play floor)"
         )
-    expected_id = game_id or row.get("yahoo_game_id")
+    expected_id = game_id or _id_text(row.get("yahoo_game_id"))
     served_id = game.get("gameId")
     if expected_id and served_id and str(served_id) != str(expected_id):
         # On the fetch path the Yahoo id is a FORMULA, so a stale team number or a moved
