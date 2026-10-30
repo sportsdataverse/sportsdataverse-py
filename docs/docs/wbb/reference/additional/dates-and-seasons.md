@@ -23,7 +23,7 @@ The most recent / current season year.
 **Example**
 
 ```python
-from sportsdataverse.wbb import most_recent_wbb_season, espn_wbb_schedule
+from sportsdataverse.wbb import most_recent_wbb_season, load_wbb_schedule
 season = most_recent_wbb_season()
-sched = espn_wbb_schedule(dates=season)
+sched = load_wbb_schedule([season])
 ```
