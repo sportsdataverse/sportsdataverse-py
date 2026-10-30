@@ -354,3 +354,31 @@ def build_specialists_box(play_df: pl.DataFrame) -> list:
     # downstream consumers can take totals straight from ESPN; the computed sections
     # above retain the advanced/EPA metrics ESPN does not provide.
     return specialists_json
+
+
+def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Give each passer / rusher / receiver id one name, its most common spelling in the frame.
+
+    ESPN spells a player two ways in one game ("Andy Dalton" on the plays with participants, "A.Dalton"
+    off the text; CFB's "Noah Kim" / "N. Kim"), and the box groups by name, so a variant split him into a
+    second row (NFL 2019_07_JAX_CIN, CFB 401866408, #623).
+    A play with no id keeps its own name.
+    """
+    out = play_df.with_columns(
+        pl.when(pl.col(f"{role}_player_id").is_not_null())
+        .then(pl.col(f"{role}_player_name").drop_nulls().mode().sort().first().over(f"{role}_player_id"))
+        .otherwise(pl.col(f"{role}_player_name"))
+        .alias(f"{role}_player_name")
+        for role in ("passer", "rusher", "receiver")
+        if f"{role}_player_id" in play_df.columns and f"{role}_player_name" in play_df.columns
+    )
+    if {"athlete_name", "passer_player_name", "rusher_player_name"} <= set(out.columns):
+        # the QBR box filters and groups on athlete_name, which was derived from the variant spellings
+        out = out.with_columns(
+            athlete_name=pl.when(pl.col("passer_player_name").is_not_null())
+            .then(pl.col("passer_player_name"))
+            .when(pl.col("rusher_player_name").is_not_null())
+            .then(pl.col("rusher_player_name"))
+            .otherwise(pl.col("athlete_name"))
+        )
+    return out

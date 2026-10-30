@@ -2484,6 +2484,7 @@ from sportsdataverse.football.attribution import (  # noqa: E402
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
 from sportsdataverse.football.box import _home_first, _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import _avg_start_ep  # noqa: E402
+from sportsdataverse.football.box import _one_name_per_player  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
@@ -9581,6 +9582,8 @@ class CFBPlayProcess(object):
         play_df = play_df.with_columns(
             pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
         )
+        # one spelling per player id, or "Noah Kim" and "N. Kim" are two passers with two xQBRs (#623)
+        play_df = _one_name_per_player(play_df)
 
         box_score_columns = [
             "completion",
