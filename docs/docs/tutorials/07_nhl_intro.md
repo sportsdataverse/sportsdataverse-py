@@ -213,8 +213,8 @@ out
     │ blocked-shot    ┆ 32     │
     │ giveaway        ┆ 22     │
     │ takeaway        ┆ 19     │
-    │ delayed-penalty ┆ 3      │
     │ goal            ┆ 3      │
+    │ delayed-penalty ┆ 3      │
     └─────────────────┴────────┘
 
 
@@ -429,6 +429,8 @@ else:
 ```
 
     ✅ boxscore 2023030417
+
+
     ✅ pbp 2023030417
     players in box: 40 | pbp events: 331
 
@@ -458,8 +460,6 @@ out
 ```
 
     ✅ FLA schedule
-
-
     ✅ FLA roster
     games: 114 | roster size: 22
 

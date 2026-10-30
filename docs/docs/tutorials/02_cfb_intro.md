@@ -499,14 +499,14 @@ out
     ╞═══════════════════╪═════════╡
     │ Defensive Back    ┆ 26      │
     │ Offensive Lineman ┆ 21      │
-    │ Linebacker        ┆ 18      │
     │ Wide Receiver     ┆ 18      │
+    │ Linebacker        ┆ 18      │
     │ Defensive Lineman ┆ 12      │
     │ Defensive End     ┆ 12      │
     │ Running Back      ┆ 11      │
     │ Tight End         ┆ 10      │
-    │ Place Kicker      ┆ 6       │
     │ Quarterback       ┆ 6       │
+    │ Place Kicker      ┆ 6       │
     └───────────────────┴─────────┘
 
 
@@ -605,15 +605,15 @@ standings_tbl.head(10)
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
-    │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
     │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Randolph Macon           ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
@@ -762,7 +762,7 @@ out
     │ Tahj Brooks        ┆ 289     ┆ 1570     ┆ 0.195        │
     │ Omarion Hampton    ┆ 243     ┆ 1503     ┆ 0.115        │
     │ …                  ┆ …       ┆ …        ┆ …            │
-    │ Makhi Hughes       ┆ 255     ┆ 1365     ┆ 0.048        │
+    │ Antario Brown      ┆ 211     ┆ 1365     ┆ 0.135        │
     │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.134        │
     │ Jaydn Ott          ┆ 245     ┆ 1350     ┆ -0.006       │
     │ Ashton Jeanty      ┆ 212     ┆ 1340     ┆ 0.107        │
@@ -938,8 +938,8 @@ out
     │ ---                            ┆ ---        ┆ ---        │
     │ str                            ┆ str        ┆ f64        │
     ╞════════════════════════════════╪════════════╪════════════╡
-    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Bethune-Cookman@Miami          ┆ Miami      ┆ -54.5      │
+    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Samford@Texas A&M              ┆ Texas A&M  ┆ -54.2      │
     │ Grambling@Ohio State           ┆ Ohio State ┆ -53.5      │
     │ Samford@Baylor                 ┆ Baylor     ┆ -52.0      │

@@ -248,8 +248,6 @@ if pbp is not None and isinstance(pbp, dict) and pbp.get('plays'):
 ```
 
     ✅ championship pbp
-
-
     plays shape: (443, 60) | components: ['gameId', 'plays', 'winprobability', 'boxscore', 'header', 'format', 'broadcasts', 'videos']
 
 
@@ -713,16 +711,16 @@ top_scorers
     │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
     │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
     ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 4712323    ┆ Lauren Audino        ┆ W Michigan              ┆ 30    ┆ 0            ┆ null │
-    │ 5176126    ┆ Cheyenne Pearson     ┆ South Alabama           ┆ 32    ┆ 0            ┆ null │
-    │ 5174262    ┆ Miyah Verse          ┆ Georgia                 ┆ 30    ┆ 0            ┆ null │
-    │ 5108603    ┆ Layla Curry          ┆ LMU                     ┆ 30    ┆ 0            ┆ null │
-    │ 5178158    ┆ Meadow Roland        ┆ UNLV                    ┆ 33    ┆ 0            ┆ null │
-    │ 4900386    ┆ Debbie Reese         ┆ South Alabama           ┆ 32    ┆ 0            ┆ null │
-    │ 5174509    ┆ Jessica Cooper       ┆ UAlbany                 ┆ 32    ┆ 0            ┆ null │
-    │ 4704174    ┆ Kennady Schenck      ┆ UIC                     ┆ 33    ┆ 0            ┆ null │
-    │ 5175903    ┆ Alana Goosby         ┆ Cal Poly                ┆ 31    ┆ 0            ┆ null │
-    │ 5178450    ┆ Maria Messling       ┆ W Illinois              ┆ 30    ┆ 0            ┆ null │
+    │ 4595297    ┆ Chelby Koker         ┆ N Illinois              ┆ 31    ┆ 0            ┆ null │
+    │ 5174303    ┆ Erica Moon           ┆ Texas A&M               ┆ 32    ┆ 0            ┆ null │
+    │ 5178002    ┆ Sophia Rampulla      ┆ Milwaukee               ┆ 32    ┆ 0            ┆ null │
+    │ 5110093    ┆ Marie' Perdew        ┆ Morehead St             ┆ 30    ┆ 0            ┆ null │
+    │ 4683053    ┆ Allison Weidner      ┆ Nebraska                ┆ 35    ┆ 0            ┆ null │
+    │ 4433465    ┆ Caitlin McGee        ┆ South Florida           ┆ 33    ┆ 0            ┆ null │
+    │ 4704178    ┆ Anna Mortag          ┆ Butler                  ┆ 32    ┆ 0            ┆ null │
+    │ 5109231    ┆ Shannon Clarke       ┆ Navy                    ┆ 31    ┆ 0            ┆ null │
+    │ 5175873    ┆ Kiley Sours-Miller   ┆ Arizona St              ┆ 31    ┆ 0            ┆ null │
+    │ 5177811    ┆ Stanislava Kabernick ┆ MTSU                    ┆ 35    ┆ 0            ┆ null │
     └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
@@ -850,8 +848,8 @@ three_pt
     │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
+    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
@@ -1038,8 +1036,8 @@ defense
     │ 261     ┆ Vermont Catamounts        ┆ 37    ┆ 52.8    ┆ 59.4    ┆ 6.6     │
     │ 2450    ┆ Norfolk State Spartans    ┆ 33    ┆ 53.1    ┆ 67.0    ┆ 13.9    │
     │ 2670    ┆ VCU Rams                  ┆ 32    ┆ 53.2    ┆ 63.3    ┆ 10.1    │
-    │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
+    │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
     │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │

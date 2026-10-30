@@ -485,8 +485,8 @@ top_scorers
     │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
     │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
     │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
-    │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
     │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
+    │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
     │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
     │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
     │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
@@ -613,8 +613,8 @@ double_doubles
     │ ---                  ┆ ---               ┆ ---            ┆ ---            │
     │ str                  ┆ str               ┆ u32            ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
-    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
+    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
     │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
     │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
