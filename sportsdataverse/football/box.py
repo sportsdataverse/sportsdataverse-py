@@ -361,16 +361,33 @@ def _one_name_per_player(play_df: pl.DataFrame) -> pl.DataFrame:
 
     ESPN spells a player two ways in one game ("Andy Dalton" on the plays with participants, "A.Dalton"
     off the text; CFB's "Noah Kim" / "N. Kim"), and the box groups by name, so a variant split him into a
-    second row (NFL 2019_07_JAX_CIN, CFB 401866408, #623).
-    A play with no id keeps its own name.
+    second row (NFL 2019_07_JAX_CIN, CFB 401866408, #623). The name is chosen across every role an
+    id plays, so a quarterback's passes and runs carry the same spelling (the QBR box joins them by
+    name). A play with no id, or an id with no name, keeps its own.
     """
+    roles = [
+        r
+        for r in ("passer", "rusher", "receiver")
+        if f"{r}_player_id" in play_df.columns and f"{r}_player_name" in play_df.columns
+    ]
+    if not roles:
+        return play_df
+    # one key dtype for every role's id (Int64 here, Utf8 elsewhere): a Utf8 copy, never a float cast
+    names = pl.concat(
+        [
+            play_df.select(
+                pl.col(f"{r}_player_id").cast(pl.Utf8).alias("_id"), pl.col(f"{r}_player_name").alias("_name")
+            )
+            for r in roles
+        ]
+    ).drop_nulls()
+    canon = dict(names.group_by("_id").agg(pl.col("_name").mode().sort().first()).iter_rows())
     out = play_df.with_columns(
-        pl.when(pl.col(f"{role}_player_id").is_not_null())
-        .then(pl.col(f"{role}_player_name").drop_nulls().mode().sort().first().over(f"{role}_player_id"))
-        .otherwise(pl.col(f"{role}_player_name"))
-        .alias(f"{role}_player_name")
-        for role in ("passer", "rusher", "receiver")
-        if f"{role}_player_id" in play_df.columns and f"{role}_player_name" in play_df.columns
+        pl.coalesce(
+            pl.col(f"{r}_player_id").cast(pl.Utf8).replace_strict(canon, default=None, return_dtype=pl.Utf8),
+            pl.col(f"{r}_player_name"),
+        ).alias(f"{r}_player_name")
+        for r in roles
     )
     if {"athlete_name", "passer_player_name", "rusher_player_name"} <= set(out.columns):
         # the QBR box filters and groups on athlete_name, which was derived from the variant spellings

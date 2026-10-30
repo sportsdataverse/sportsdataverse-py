@@ -53,6 +53,8 @@ def test_cfb_yahoo_falls_through(monkeypatch, missing):
     game_id, resolved_by = m._resolve_game_id(401, row, (2024,))
     assert game_id is None or "nan" not in game_id
     assert resolved_by != "idmap"
+    # a missing home_team cell (NaN in a pandas-built row) is no team, not a crash
+    assert m._resolve_game_id(401, {**row, "home_team": missing}, (2024,))[1] != "idmap"
 
 
 @pytest.mark.parametrize("missing", MISSING, ids=["nan", "pd.NA", "None", "empty"])

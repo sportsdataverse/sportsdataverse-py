@@ -93,7 +93,9 @@ def _resolve_game_id(
     stored = _id_text(row.get("yahoo_game_id"))
     if stored:
         return stored, "idmap"
-    home_team = row.get("home_team") or {}
+    home_team = row.get("home_team")
+    if not isinstance(home_team, Mapping):  # NaN / pandas.NA in a pandas-built row, or absent
+        home_team = {}
     yahoo_team_id = _id_text(home_team.get("yahoo_team_id")) or None
     computed = _yahoo_cfb_game_id(
         row.get("kickoff_utc"),
