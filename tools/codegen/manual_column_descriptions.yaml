@@ -39011,6 +39011,24 @@ load_nba_stats_hustle_team:
   season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
   team_id: stats.nba.com team identifier; Int64.
   team_name: Team nickname (e.g. 'Celtics').
+load_nba_stats_injury_report:
+  away_team_abbr: "Away team tricode as the report prints it."
+  category: "Category column of the early report format; last printed 2019-11-14, null after."
+  current_status: "Listed status in that version: Available, Probable, Questionable, Doubtful or Out; null on a NOT YET SUBMITTED row."
+  game_date: "Game date as the report prints it (US Eastern)."
+  game_id: "stats.nba.com game id, joined on the game date and tricodes; null for a game postponed off its printed date, a playoff game that was not needed, or a Summer League game."
+  game_time: "Tip time as the report prints it (\"07:30 (ET)\", no AM/PM)."
+  home_team_abbr: "Home team tricode as the report prints it."
+  match_method: "How person_id was matched: exact (full name on the team's boxscores that season), family (family name and first initial, unique on the team), league (name unique league-wide that season), roster (name on the team's roster, which lists players who have not played), or null."
+  person_id: "stats.nba.com person id matched from the printed name (see match_method); null when unmatched."
+  previous_status: "Previous Status column of the early report format; last printed 2019-12-17, null after."
+  reason: "Reason as printed (\"Injury/Illness - Left Ankle; Sprain\"); \"NOT YET SUBMITTED\" for a team that had not filed by that version."
+  report_datetime: "Publish time of the report version the row comes from (US Eastern, naive). The league re-publishes the report through the day, so a listing repeats once per version."
+  report_matchup: "Game as the report prints it, away@home tricodes (\"CLE@ATL\")."
+  report_player_name: "Player as the report prints it, \"Last, First\" (\"James, LeBron\"); null on a team's NOT YET SUBMITTED row."
+  season: "Season as its ENDING year (2026 = the 2025-26 season), the published asset's stamp."
+  team: "Team the listing belongs to, full name as printed (\"Cleveland Cavaliers\")."
+  team_id: "stats.nba.com team id of the listing's team, from its printed name."
 load_nba_stats_lineups:
   ast_pct_rank: League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for
     the season and split.

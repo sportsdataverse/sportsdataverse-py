@@ -1156,6 +1156,14 @@ loaders:
   min_season: 2017
   example_args:
     seasons: 2025
+- fn: load_nba_stats_injury_report
+  league: nba
+  base: sdv_releases
+  url: nba_stats_injury_report/injury_report_{season + 1}.parquet
+  tag: nba_stats_injury_report
+  min_season: 2018
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_pbp_v3
   league: nba
   base: sdv_releases

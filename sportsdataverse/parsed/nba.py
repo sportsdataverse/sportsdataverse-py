@@ -285,6 +285,7 @@ from sportsdataverse.nba import load_nba_stats_game_matchups as load_nba_stats_g
 from sportsdataverse.nba import load_nba_stats_game_rosters as load_nba_stats_game_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_hustle_player as load_nba_stats_hustle_player  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_hustle_team as load_nba_stats_hustle_team  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_injury_report as load_nba_stats_injury_report  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_leaguedash as load_nba_stats_leaguedash  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
@@ -690,6 +691,7 @@ __all__ = [
     "load_nba_stats_game_rosters",
     "load_nba_stats_hustle_player",
     "load_nba_stats_hustle_team",
+    "load_nba_stats_injury_report",
     "load_nba_stats_leaguedash",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",

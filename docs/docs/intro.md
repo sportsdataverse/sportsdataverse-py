@@ -73,7 +73,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Football (Spring & Canadian) | [UFL](ufl/) | `sportsdataverse.football.ufl` | ESPN (114): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 1, Hand-written wrappers 1 |
 | Football (Spring & Canadian) | [XFL](xfl/) | `sportsdataverse.football.xfl` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | Football (Spring & Canadian) | [CFL](cfl/) | `sportsdataverse.football.cfl` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
-| Basketball | [NBA](nba/) | `sportsdataverse.nba` | ESPN (123), sportsdataverse-data releases (53), NBA Stats API (130), NBA Official Injury Report (3), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
+| Basketball | [NBA](nba/) | `sportsdataverse.nba` | ESPN (123), sportsdataverse-data releases (54), NBA Stats API (130), NBA Official Injury Report (3), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
 | Basketball | [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (127), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
 | Basketball | [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112), G League Stats API (94) |
 | Basketball | [Men's college basketball](mbb/) | `sportsdataverse.mbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (136), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |

@@ -40,6 +40,7 @@ __all__ = [
     "load_nba_stats_possessions",
     "load_nba_stats_game_lineups",
     "load_nba_stats_game_matchups",
+    "load_nba_stats_injury_report",
     "load_nba_stats_pbp_v3",
     "load_nba_stats_player_boxscores",
     "load_nba_stats_player_game_logs",
@@ -2114,6 +2115,84 @@ def load_nba_stats_game_matchups(seasons, return_as_pandas: bool = False):
         pl.concat(frames, how="diagonal_relaxed")
         if frames
         else _empty_from_schema("loader_schemas:load_nba_stats_game_matchups")
+    )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_injury_report(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_injury_report (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_injury_report
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2018).
+            Pass the season's START year (e.g. ``2018`` for the
+            2018-19 season); the published asset is keyed by the
+            END year and the loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_injury_report(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
+
+        |col_name           |type                                     |
+        |:------------------|:----------------------------------------|
+        |season             |Int64                                    |
+        |report_datetime    |Datetime(time_unit='us', time_zone=None) |
+        |game_date          |Date                                     |
+        |game_time          |String                                   |
+        |report_matchup     |String                                   |
+        |away_team_abbr     |String                                   |
+        |home_team_abbr     |String                                   |
+        |team               |String                                   |
+        |report_player_name |String                                   |
+        |current_status     |String                                   |
+        |reason             |String                                   |
+        |category           |String                                   |
+        |previous_status    |String                                   |
+        |game_id            |String                                   |
+        |team_id            |Int64                                    |
+        |person_id          |Int64                                    |
+        |match_method       |String                                   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2018.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_injury_report(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2018:
+            raise SeasonNotFoundError("season cannot be less than 2018")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_injury_report/injury_report_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_injury_report: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_nba_stats_injury_report")
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 

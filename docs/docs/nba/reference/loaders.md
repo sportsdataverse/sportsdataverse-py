@@ -36,6 +36,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_stats_possessions` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
 | `load_nba_stats_game_lineups` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
 | `load_nba_stats_game_matchups` | [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_matchups) | — |
+| `load_nba_stats_injury_report` | [nba_stats_injury_report](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_injury_report) | — |
 | `load_nba_stats_pbp_v3` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_player_boxscores` | [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) | — |
 | `load_nba_stats_player_game_logs` | [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) | — |
@@ -81,6 +82,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_stats_possessions](loaders/stats.md#load_nba_stats_possessions) | Release: nba_stats_possessions · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season …` |
 | [load_nba_stats_game_lineups](loaders/stats.md#load_nba_stats_game_lineups) | Release: nba_stats_game_lineups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + …` |
 | [load_nba_stats_game_matchups](loaders/stats.md#load_nba_stats_game_matchups) | Release: nba_stats_game_matchups · asset … |
+| [load_nba_stats_injury_report](loaders/stats.md#load_nba_stats_injury_report) | Release: nba_stats_injury_report · asset … |
 | [load_nba_stats_pbp_v3](loaders/stats.md#load_nba_stats_pbp_v3) | Release: nba_stats_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet` |
 | [load_nba_stats_player_boxscores](loaders/stats.md#load_nba_stats_player_boxscores) | Release: nba_stats_player_boxscores · asset … |
 | [load_nba_stats_player_game_logs](loaders/stats.md#load_nba_stats_player_game_logs) | Release: nba_stats_player_game_logs · asset … |
