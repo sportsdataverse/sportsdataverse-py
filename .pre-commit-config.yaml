@@ -25,7 +25,7 @@ repos:
       - id: ruff-format
         # # Run the formatter.
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         # Captured fixtures are byte-faithful oracles (e.g. the R-written
@@ -57,7 +57,7 @@ repos:
         # Deliberately-malformed lint fixture (tests the unparseable-file path).
         exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.10.0 # Use the ref you want to point at
+    rev: 0b8680c3832bb01c9243bb4e8dd79d79a830ba78 # repo has not retagged in 3 years but updates member checks
     hooks:
       - id: python-use-type-annotations
       - id: python-no-eval
@@ -72,22 +72,23 @@ repos:
   # NOTE: add-trailing-comma was removed — ruff-format (skip-magic-trailing-comma=false)
   # already manages trailing commas, so the extra hook only caused re-commit churn.
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
-    rev: v0.0.3
+    rev: v0.0.5
     hooks:
       - id: sync-pre-commit-deps
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.1
+    rev: 0.39.0
     hooks:
       - id: check-github-workflows
         args: ["--verbose"]
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.10
+    rev: v1.7.12
     hooks:
       - id: actionlint
   # NOTE: yamlfmt was removed — it reformatted the codegen-generated endpoint YAML
   # (tools/codegen/endpoints/*.yaml) on every commit, fighting the generators' output
   # and forcing a re-add/re-commit cycle. check-yaml still validates YAML syntax.
   - repo: https://github.com/thlorenz/doctoc
+    # v2.2.0, not v2.5: v2.5 writes empty TOC markers into heading-less files, every changelog.d fragment
     rev: "v2.2.0" # substitute a tagged version
     hooks:
       - id: doctoc
@@ -98,6 +99,7 @@ repos:
         # docs/docs/ — same frontmatter pages, so it must be excluded too.
         exclude: ^(docs/(docs|versioned_docs|src/pages)|\.claude)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
+    # v0.20.0, not v0.24: v0.24 needs Node >= 22 and this hook runs on the contributor's own Node
     rev: v0.20.0
     hooks:
       - id: markdownlint-cli2
