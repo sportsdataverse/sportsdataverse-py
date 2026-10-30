@@ -482,6 +482,17 @@ def _browser_response_unsolved(text: str) -> bool:
     return _is_challenge(text) or not text or len(text) < _MIN_CONTENT_BYTES
 
 
+def _is_session_denied(status: int, text: str) -> bool:
+    """Did Akamai's edge refuse this browser SESSION (HTTP 403 "Access Denied")?
+
+    Checked before :func:`_browser_response_unsolved`, whose size rule would otherwise
+    read the ~410-byte denial page as an unsolved challenge and re-solve a session
+    the edge has already refused. Live 2026-10-30: a fresh context on the same IP is
+    served, so the denial follows the session's cookies, not the IP.
+    """
+    return status == 403 and _ban_check(text) != "clean"
+
+
 def _cached_page_usable(text: str) -> bool:
     """Is a CACHED body a real page, not a challenge shell, stub or Terms gate?
 
@@ -611,6 +622,12 @@ class _TermsAcceptError(RuntimeError):
 class _TermsRefusedError(_TermsGateError):
     """The server refused a well-formed acceptance -- the one recoverable case
     (refusals come in windows), which ``fetch_html`` backs off and retries."""
+
+
+class _SessionDeniedError(RuntimeError):
+    """Akamai refused this browser session (see :func:`_is_session_denied`). An
+    ordinary transport error: the fetch layer rotates on it and, because the IP is
+    not banned, never retires the proxy."""
 
 
 # Chromium's error for an in-page fetch() that died at the network layer. A
@@ -914,6 +931,13 @@ class _PlaywrightTransport:
                 # single proxy the retry reuses it, so force a real navigation.
                 self._challenge_solved = False
                 raise
+            if _is_session_denied(status, text):
+                # Re-solving cannot lift a refused session. Drop the context so the next
+                # fetch starts a fresh one even on the same proxy, and raise so the fetch
+                # layer rotates.
+                logger.info("Akamai denied this session (HTTP 403, %d-byte response) -- dropping it", len(text))
+                self._close_context()
+                raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
             if not _browser_response_unsolved(text):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai

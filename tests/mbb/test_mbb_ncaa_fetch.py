@@ -310,6 +310,59 @@ def test_solve_gives_up_after_solve_attempts_so_the_fetcher_can_rotate() -> None
     assert page.gotos == 2  # exactly solve_attempts sensor runs, then stop
 
 
+# Akamai's edge denial as an in-page fetch returns it: HTTP 403, ~410 bytes, the URL
+# echoed back (captured live 2026-10-30, reference numbers trimmed).
+_DENIED = (
+    "<HTML><HEAD>\n<TITLE>Access Denied</TITLE>\n</HEAD><BODY>\n<H1>Access Denied</H1>\n \n"
+    "You don't have permission to access \"http&#58;&#47;&#47;stats&#46;ncaa&#46;org&#47;contests"
+    '&#47;1&#47;play&#95;by&#95;play" on this server.<P>\nReference&#32;&#35;18&#46;0</BODY>\n</HTML>\n'
+)
+
+
+class _DeniedPage(_FakePage):
+    def evaluate(self, js: str, url: str) -> dict:
+        return {"status": 403, "text": self.bodies.pop(0)}
+
+
+def test_akamai_denial_drops_the_session_without_re_solving(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 403 Access Denied is a blocked SESSION, not an unsolved challenge. It used to
+    read as "bm-verify not passed" (it is under 1 KB) and spend solve_attempts
+    navigations on a session Akamai had already refused. Live 2026-10-30: a fresh
+    context on the same IP is served normally, so drop the context and raise at once."""
+    page = _DeniedPage([_DENIED])
+    t = _transport_with(page)
+    closed: "list[bool]" = []
+    monkeypatch.setattr(t, "_close_context", lambda: closed.append(True))
+
+    with pytest.raises(RuntimeError, match="Access Denied"):
+        t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {})
+
+    assert page.gotos == 1  # the one initial solve, no re-solves
+    assert closed == [True]  # the next fetch starts a fresh session, even on the same proxy
+
+
+def test_akamai_denial_rotates_but_does_not_retire_the_proxy(tmp_path: Path) -> None:
+    """The denial follows the session, not the IP, and comes about every 14 pages.
+    Retiring the proxy on it (the fetch layer's 403 ban branch) would drain a
+    50-port pool in a few hundred pages."""
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
+
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: "dict[str, str]", headers: "dict[str, str]") -> "tuple[int, str]":
+        calls.append(proxies.get("http", ""))
+        if len(calls) == 1:
+            raise _SessionDeniedError("Akamai denied this browser session (HTTP 403 Access Denied)")
+        return 200, _CLEAN
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert calls == [_POOL[0], _POOL[1]]  # rotated off the denied session
+    assert fetcher._dead == set()  # ...without retiring the proxy
+
+
 def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> None:
     """End-to-end at the fetch layer: a transport that cannot solve raises, the
     fetcher rotates to the next proxy, and the caller gets real content."""
