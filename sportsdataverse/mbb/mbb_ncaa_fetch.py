@@ -492,8 +492,12 @@ def _is_session_denied(status: int, text: str) -> bool:
     solved session after some pages, when a fresh context on the same IP is served
     again. Either way a fresh context is the remedy. The page cannot tell a refused
     session from a refused IP.
+
+    Only a body under :data:`_MIN_CONTENT_BYTES` qualifies: that is all the size rule
+    ever misread. A full-size 403 ban page is still returned, so the fetch layer
+    retires the proxy as it always did.
     """
-    return status == 403 and _ban_check(text) != "clean"
+    return status == 403 and len(text) < _MIN_CONTENT_BYTES and _ban_check(text) != "clean"
 
 
 def _cached_page_usable(text: str) -> bool:

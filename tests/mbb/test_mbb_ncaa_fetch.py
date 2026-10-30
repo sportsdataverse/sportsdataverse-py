@@ -360,6 +360,18 @@ def test_akamai_denial_rotates_but_does_not_retire_the_proxy(tmp_path: Path, mon
     assert fetcher._dead == set()  # ...without retiring the proxy
 
 
+def test_a_full_size_403_ban_page_still_reaches_the_fetcher(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Only the short (<1 KB) edge page is a session denial. A full ban page was always
+    returned so the fetch layer could retire the proxy; the denial rule must not take
+    that away (CodeRabbit, #1039)."""
+    ban_page = "<html><h1>Access Denied</h1>Your IP has been blocked." + " " * 2000 + "</html>"
+    t, page, closed = _denied_transport(monkeypatch)
+    page.bodies = [ban_page]
+
+    assert t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {}) == (403, ban_page)
+    assert closed == []  # not treated as a session denial
+
+
 def test_canary_buckets_a_session_denial_as_a_challenge_not_a_ban() -> None:
     """The denial message carries "HTTP 403", which the canary's BAN rule matches."""
     from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
