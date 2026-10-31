@@ -242,7 +242,7 @@ def test_game_page_frames_on_the_espn_fixture(monkeypatch: pytest.MonkeyPatch) -
 
     summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
     monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
-    final = nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]))
+    final = nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]), return_parsed=False)
     frames = gp.game_page_frames(final)
     pbp = frames["pbp"]
     assert pbp.height == 450 and "home_win_prob" in pbp.columns and "x_legacy" in pbp.columns
@@ -264,7 +264,7 @@ def test_game_page_frames_before_tip_off_has_no_plays_to_score(monkeypatch: pyte
     summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
     summary["plays"] = summary["plays"][:5]  # the shape ESPN serves in the first seconds of a game
     monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
-    frames = gp.game_page_frames(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])))
+    frames = gp.game_page_frames(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]), return_parsed=False))
     assert frames["pbp"].height == 0
     assert frames["periods"] == gp.REGULATION_PERIODS
     assert frames["prior"]["source"] == "hfa"
@@ -276,7 +276,7 @@ def _fixture_pbp(monkeypatch: pytest.MonkeyPatch) -> pl.DataFrame:
 
     summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
     monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
-    return helper_nba_play_by_play(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])))
+    return helper_nba_play_by_play(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]), return_parsed=False))
 
 
 def test_final_win_probability_settles_at_0_or_1(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -443,7 +443,9 @@ def _no_teams_frames(monkeypatch: pytest.MonkeyPatch, league_id: str = "00") -> 
     summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
     summary["boxscore"]["teams"] = []
     monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
-    return gp.game_page_frames(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])), league_id=league_id)
+    return gp.game_page_frames(
+        nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]), return_parsed=False), league_id=league_id
+    )
 
 
 def test_game_page_frames_without_team_rows_carries_the_rate_schemas(monkeypatch: pytest.MonkeyPatch) -> None:

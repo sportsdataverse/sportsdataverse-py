@@ -205,37 +205,49 @@ starters = espn_nba_game_rosters(game_id=401585183).filter(
 
 ### espn_nba_pbp {#espn_nba_pbp}
 
-`espn_nba_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+`espn_nba_pbp(game_id: 'int', raw: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
-espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary`
+espn_nba_pbp() - Pull one game's play-by-play from ESPN's `nba/summary` endpoint.
+
+By default the plays come back as the frame the `espn_nba_pbp` release publishes (what
+`~sportsdataverse.nba.load_nba_pbp` reads): snake_case columns, Int32 team / athlete /
+game ids, the Int64 play `id`, `game_date` / `game_date_time`, the hoopR shot
+coordinates, `athlete_name_{1,2,3}`, and `home_score` / `away_score` rebuilt from the
+scoring plays when that reproduces the final (`score_source` says which).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from nba_schedule(). |
-| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets. |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint (wins over `return_parsed`). |
+| `return_parsed` | `bool` | `True` | If True (default), returns the release play-by-play frame. If False, returns the game dictionary (the shape before 0.2.0, which `helper_nba_play_by_play` / `helper_nba_team_box` / `helper_nba_player_box` and `game_page_frames` read). |
+| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. |
 
 **Returns**
 
-Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
+One row per play, columns and dtypes as the release (`load_nba_pbp`) for that season. Empty (no columns) when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays, as hoopR returns NULL. With `return_parsed=False`, a dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season".
 
 **Example**
 
 ```python
 from sportsdataverse.nba import espn_nba_pbp
-pbp = espn_nba_pbp(game_id=401585183)
+plays = espn_nba_pbp(game_id=401585183)
+print(plays.shape)
+
+# Pipeline next step (made threes)
+
+import polars as pl
+plays.filter(pl.col("scoring_play") == True, pl.col("score_value") == 3).height
+
+# The game dictionary (box score, header, pickcenter, ...)
+
+pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
 print(list(pbp.keys()))
 
 # Pull only the raw ESPN summary payload (skip cleaning)
 
 raw_pbp = espn_nba_pbp(game_id=401585183, raw=True)
-
-# Pipeline next step (load plays into a polars DataFrame)
-
-import polars as pl
-pbp = espn_nba_pbp(game_id=401585183)
-plays_df = pl.from_dicts(pbp["plays"])
 ```
 
 ### scoreboard_event_parsing {#scoreboard_event_parsing}

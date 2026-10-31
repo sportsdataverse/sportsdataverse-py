@@ -115,7 +115,7 @@ print({c: str(epl.schema[c]) for c in ("event_id", "home_team_id", "away_team_id
 
 A wrapper called with `raw=True` or `return_parsed=False` hands back the provider's
 JSON, and some hand-written functions return dicts of lightly processed records. No
-cast happens there. `espn_nba_pbp(game_id)["plays"]`, for example, is a list of
+cast happens there. `espn_nba_pbp(game_id, return_parsed=False)["plays"]`, for example, is a list of
 dicts whose `participants.0.athlete.id` arrives as a string.
 
 ## A worked join: shots to the game roster
@@ -130,7 +130,7 @@ import polars as pl
 from sportsdataverse.nba import espn_nba_game_rosters, espn_nba_pbp
 
 game_id = 401585607
-plays = pl.from_dicts(espn_nba_pbp(game_id=game_id)["plays"], infer_schema_length=None)
+plays = pl.from_dicts(espn_nba_pbp(game_id=game_id, return_parsed=False)["plays"], infer_schema_length=None)
 roster = espn_nba_game_rosters(game_id=game_id)
 
 shots = plays.filter(pl.col("shootingPlay") == True).select(

@@ -131,33 +131,40 @@ roster_pd.head()
 
 ### espn_mbb_pbp {#espn_mbb_pbp}
 
-`espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+`espn_mbb_pbp(game_id: 'int', raw: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
-espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary`
+espn_mbb_pbp() - Pull one game's play-by-play from ESPN's `mens-college-basketball/summary` endpoint.
+
+By default the plays come back as the frame the `espn_mens_college_basketball_pbp` release
+publishes (what `~sportsdataverse.mbb.load_mbb_pbp` reads): snake_case columns, Int32
+team / athlete / game ids, the Int64 play `id`, `game_date` / `game_date_time`, the
+hoopR shot coordinates, `athlete_name_{1,2,3}`, and `home_score` / `away_score`
+rebuilt from the scoring plays when that reproduces the final (`score_source` says which).
+The release's season-level `pregame_home_prob` / `home_win_prob` are not added.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from mbb_schedule(). |
-| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets. |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint (wins over `return_parsed`). |
+| `return_parsed` | `bool` | `True` | If True (default), returns the release play-by-play frame. If False, returns the game dictionary (the shape before 0.2.0, which `helper_mbb_play_by_play` / `helper_mbb_team_box` / `helper_mbb_player_box` and `game_page_frames` read). |
+| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. |
 
 **Returns**
 
-Dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season". A game with no betting line has null `gameSpread`, `homeFavorite` and `homeTeamSpread` on every play and `gameSpreadAvailable` False (hoopR's NA), never a default line.
+One row per play, columns and dtypes as the release (`load_mbb_pbp`) for that season. Empty (no columns) when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays, as hoopR returns NULL. A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False (hoopR's NA), never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource", "standings", "article", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
 
 **Example**
 
 ```python
 from sportsdataverse.mbb import espn_mbb_pbp
-game = espn_mbb_pbp(game_id=401638637)
-print(game["gameId"])
-print(len(game["plays"]))
+plays = espn_mbb_pbp(game_id=401638637)
+print(plays.shape)
 
 # Filter shooting plays for a basic shot chart
 
 import polars as pl
-plays = pl.DataFrame(game["plays"])
 shots = plays.filter(pl.col("shooting_play") == True)
 shots.select(
     [
@@ -171,11 +178,15 @@ shots.select(
     ]
 ).head()
 
-# Convert to pandas
+# As pandas
 
-import pandas as pd
-plays_pd = pd.DataFrame(game["plays"])
+plays_pd = espn_mbb_pbp(game_id=401638637, return_as_pandas=True)
 plays_pd[plays_pd["shooting_play"] == True].head()
+
+# The game dictionary (box score, header, pickcenter, ...)
+
+game = espn_mbb_pbp(game_id=401638637, return_parsed=False)
+print(game["gameId"], len(game["plays"]))
 
 # Raw payload (skip the cleaning pipeline) for debugging
 
