@@ -165,7 +165,8 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
     if not return_parsed:
         return game
     plays = _release_frame(helper_mbb_play_by_play(game), game, "load_mbb_pbp")
-    return plays.to_pandas() if return_as_pandas else plays
+    # the release loader's conversion, so nullable ids stay integer (a plain to_pandas() makes them float)
+    return plays.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else plays
 
 
 def mbb_pbp_disk(game_id, path_to_json):

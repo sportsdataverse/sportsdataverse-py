@@ -118,7 +118,12 @@ def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     raw = _raw(lg, next(g for x, g in CASES if x == lg))
     pdf = _call(monkeypatch, lg, raw, return_as_pandas=True)
     assert isinstance(pdf, pd.DataFrame)
-    assert list(pdf.columns) == _call(monkeypatch, lg, raw).columns
+    df = _call(monkeypatch, lg, raw)
+    assert list(pdf.columns) == df.columns
+    # nullable ids stay integer, as load_<lg>_pbp(return_as_pandas=True) returns them (never float)
+    assert df["athlete_id_2"].null_count() > 0
+    assert str(pdf["athlete_id_2"].dtype) == "int32[pyarrow]"
+    assert dict(pdf.dtypes) == dict(df.to_pandas(use_pyarrow_extension_array=True).dtypes)
 
 
 @pytest.mark.parametrize("lg", ["mbb", "nba"])
