@@ -3,49 +3,72 @@ from __future__ import annotations
 import json
 import os
 import re
-from typing import Dict
 
 import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import release_frame as _release_frame
 from sportsdataverse._espn_basketball_pbp import hoopr_coordinates as _hoopr_coordinates
 from sportsdataverse._espn_basketball_pbp import period_end_seconds as _period_end_seconds
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
 from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, flatten_json_iterative
+from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
 
 
-def espn_nba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
-    """espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary`
+def espn_nba_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs):
+    """espn_nba_pbp() - Pull one game's play-by-play from ESPN's `nba/summary` endpoint.
+
+    By default the plays come back as the frame the ``espn_nba_pbp`` release publishes (what
+    :func:`~sportsdataverse.nba.load_nba_pbp` reads): snake_case columns, Int32 team / athlete /
+    game ids, the Int64 play ``id``, ``game_date`` / ``game_date_time``, the hoopR shot
+    coordinates, ``athlete_name_{1,2,3}``, and ``home_score`` / ``away_score`` rebuilt from the
+    scoring plays when that reproduces the final (``score_source`` says which).
 
     Args:
         game_id (int): Unique game_id, can be obtained from nba_schedule().
-        raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
-
+        raw (bool): If True, returns the raw json from the API endpoint (wins over
+            ``return_parsed``).
+        return_parsed (bool): If True (default), returns the release play-by-play frame. If
+            False, returns the game dictionary (the shape before 0.2.0, which
+            ``helper_nba_play_by_play`` / ``helper_nba_team_box`` / ``helper_nba_player_box``
+            and ``game_page_frames`` read).
+        return_as_pandas (bool): If True, returns the frame as pandas instead of polars. Ignored
+            with ``raw=True`` or ``return_parsed=False``, which return a dict.
 
     Returns:
-        Dict: Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts",
-         "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread",
-         "odds", "predictor", "espnWP", "gameInfo", "season"
+        pl.DataFrame: One row per play, columns (in order) and dtypes as the release
+        (``load_nba_pbp``) for that season; a pandas frame with ``return_as_pandas=True``.
+        Zero rows, with the release's columns, when ESPN has no play-by-play for the game
+        (``playByPlaySource == "none"``) or 10 or fewer plays (hoopR returns NULL).
+
+        With ``return_parsed=False``, a dictionary of game data with keys - "gameId", "plays",
+        "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource",
+        "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread",
+        "odds", "predictor", "espnWP", "gameInfo", "season".
 
     Example:
         Quick start::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            plays = espn_nba_pbp(game_id=401585183)
+            print(plays.shape)
+
+        Pipeline next step (made threes)::
+
+            import polars as pl
+            plays.filter(pl.col("scoring_play") == True, pl.col("score_value") == 3).height
+
+        The game dictionary (box score, header, pickcenter, ...)::
+
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
             print(list(pbp.keys()))
 
         Pull only the raw ESPN summary payload (skip cleaning)::
 
             raw_pbp = espn_nba_pbp(game_id=401585183, raw=True)
-
-        Pipeline next step (load plays into a polars DataFrame)::
-
-            import polars as pl
-            pbp = espn_nba_pbp(game_id=401585183)
-            plays_df = pl.from_dicts(pbp["plays"])
 
         See Also:
             * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA PBP
@@ -81,39 +104,20 @@ def espn_nba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         "timeouts",
     ]
     dict_keys_expected = ["boxscore", "format", "gameInfo", "predictor", "article", "header", "season", "standings"]
-    # array_keys_expected = [
-    #     "plays",
-    #     "seasonseries",
-    #     "videos",
-    #     "broadcasts",
-    #     "pickcenter",
-    #     "againstTheSpread",
-    #     "odds",
-    #     "winprobability",
-    #     "teamInfo",
-    #     "espnWP",
-    #     "leaders",
-    # ]
-    if raw == True:
-        # reorder keys in raw format, appending empty keys which are defined later to the end
-        pbp_json = {}
-        for k in incoming_keys_expected:
-            if k in summary.keys():
-                pbp_json[k] = summary[k]
-            else:
-                pbp_json[k] = {} if k in dict_keys_expected else []
+    # the expected keys in a fixed order, a missing one empty ({} for dict keys, [] for arrays)
+    pbp_json = {
+        k: summary[k] if k in summary else ({} if k in dict_keys_expected else []) for k in incoming_keys_expected
+    }
+    if raw:
         return pbp_json
+    pbp_txt.update(pbp_json)
 
-    for k in incoming_keys_expected:
-        if k in summary.keys():
-            pbp_txt[k] = summary[k]
-        else:
-            pbp_txt[k] = {} if k in dict_keys_expected else []
-
-    for k in ["news", "shop"]:
-        pbp_txt.pop(f"{k}", None)
-
-    return helper_nba_pbp(game_id, pbp_txt)
+    game = helper_nba_pbp(game_id, pbp_txt)
+    if not return_parsed:
+        return game
+    plays = _release_frame(helper_nba_play_by_play(game), game, "load_nba_pbp")
+    # the release loader's conversion, so nullable ids stay integer (a plain to_pandas() makes them float)
+    return plays.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else plays
 
 
 def nba_pbp_disk(game_id, path_to_json):
@@ -158,7 +162,7 @@ def helper_nba_pbp(game_id, pbp_txt):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     init = helper_nba_pickcenter(pbp_txt)
     pbp_txt, init = helper_nba_game_data(pbp_txt, init)
@@ -212,7 +216,7 @@ def helper_nba_game_data(pbp_txt, init):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     pbp_txt["timeouts"] = {}
     pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
@@ -290,7 +294,7 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     pbp_txt["plays_mod"] = []
     for play in pbp_txt["plays"]:
@@ -442,6 +446,6 @@ def helper_nba_pickcenter(pbp_txt):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     return _pickcenter_odds(pbp_txt.get("pickcenter"), 215.5)

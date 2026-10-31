@@ -14,7 +14,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | Function | Summary |
 |---|---|
 | [espn_mbb_game_rosters](additional/highlights.md#espn_mbb_game_rosters) | espn_mbb_game_rosters() - Pull the game by id. |
-| [espn_mbb_pbp](additional/highlights.md#espn_mbb_pbp) | espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary` |
+| [espn_mbb_pbp](additional/highlights.md#espn_mbb_pbp) | espn_mbb_pbp() - Pull one game's play-by-play from ESPN's `mens-college-basketball/summary` endpoint. |
 | [espn_mbb_player_stats](additional/highlights.md#espn_mbb_player_stats) | Pull a men's-college-basketball athlete's ESPN **season** stat line. |
 | [espn_mbb_schedule](additional/highlights.md#espn_mbb_schedule) | espn_mbb_schedule - look up the men's college basketball scheduler for a given season |
 | [espn_mbb_teams](additional/highlights.md#espn_mbb_teams) | espn_mbb_teams - look up the men's college basketball teams |

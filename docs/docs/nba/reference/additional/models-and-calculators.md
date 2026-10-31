@@ -852,7 +852,7 @@ the warehouse's copies of the same frames.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `final` | `dict` |  | The dict `espn_<league>_pbp` returns (for example `~sportsdataverse.nba.nba_pbp.espn_nba_pbp`). |
+| `final` | `dict` |  | The dict `espn_<league>_pbp(..., return_parsed=False)` returns (for example `~sportsdataverse.nba.nba_pbp.espn_nba_pbp`). |
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 
@@ -873,13 +873,13 @@ the warehouse's copies of the same frames.
 ```python
 from sportsdataverse.nba.nba_game_page import game_page_frames
 from sportsdataverse.nba.nba_pbp import espn_nba_pbp
-frames = game_page_frames(espn_nba_pbp(401766458))
+frames = game_page_frames(espn_nba_pbp(401766458, return_parsed=False))
 frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
 
 # A men's college game
 
 from sportsdataverse.mbb.mbb_pbp import espn_mbb_pbp
-frames = game_page_frames(espn_mbb_pbp(401830342), league="mbb")
+frames = game_page_frames(espn_mbb_pbp(401830342, return_parsed=False), league="mbb")
 frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'half', 4)
 ```
 

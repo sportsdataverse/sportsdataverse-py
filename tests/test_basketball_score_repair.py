@@ -56,7 +56,9 @@ def _final(lg: str, name: str, monkeypatch: pytest.MonkeyPatch) -> dict:
     raw = _raw(name)
     mod = MODULES[lg]
     monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(raw)))
-    return getattr(mod, f"espn_{lg}_pbp")(game_id=int(raw["header"]["id"]))
+    # mbb / nba default to the release frame; the builder reads the processed dict
+    kw = {"return_parsed": False} if lg in ("mbb", "nba") else {}
+    return getattr(mod, f"espn_{lg}_pbp")(game_id=int(raw["header"]["id"]), **kw)
 
 
 def _espn(final: dict) -> pl.DataFrame:

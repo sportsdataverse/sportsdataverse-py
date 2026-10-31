@@ -412,13 +412,13 @@ print("player box rows:", pbox.shape)
 
 ### Recipe 4 — Play-by-play slice for one game 🎬 (ESPN)
 
-[`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) returns a dict;
+[`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) with `return_parsed=False` returns a dict;
 its `plays` list is event-level. We frame it and pull just the scoring plays of
 the 2024 national championship (UConn vs. Purdue, `game_id=401638636`).
 
 
 ```python
-pbp = safe("pbp 401638636", lambda: sdv.mbb.espn_mbb_pbp(game_id=401638636))
+pbp = safe("pbp 401638636", lambda: sdv.mbb.espn_mbb_pbp(game_id=401638636, return_parsed=False))
 if isinstance(pbp, dict) and pbp.get("plays"):
     plays = pl.DataFrame(pbp["plays"], infer_schema_length=None)
     keep = ["period.number", "clock.displayValue", "text", "scoringPlay",

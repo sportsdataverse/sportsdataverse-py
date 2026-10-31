@@ -31,7 +31,7 @@ def test_mbb_pbp_offline_reads_every_play_off_the_raw_clock(monkeypatch) -> None
     with gzip.open(CAPTURE, "rt", encoding="utf-8") as f:
         raw = json.load(f)
     monkeypatch.setattr(mbb_pbp, "download", lambda url, **kwargs: _Resp(raw))
-    out = espn_mbb_pbp(game_id=401830342)
+    out = espn_mbb_pbp(game_id=401830342, return_parsed=False)
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)
 
     assert out["gameId"] == 401830342
