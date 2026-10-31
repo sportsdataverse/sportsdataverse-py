@@ -104,37 +104,13 @@ def espn_nba_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
         "timeouts",
     ]
     dict_keys_expected = ["boxscore", "format", "gameInfo", "predictor", "article", "header", "season", "standings"]
-    # array_keys_expected = [
-    #     "plays",
-    #     "seasonseries",
-    #     "videos",
-    #     "broadcasts",
-    #     "pickcenter",
-    #     "againstTheSpread",
-    #     "odds",
-    #     "winprobability",
-    #     "teamInfo",
-    #     "espnWP",
-    #     "leaders",
-    # ]
+    # the expected keys in a fixed order, a missing one empty ({} for dict keys, [] for arrays)
+    pbp_json = {
+        k: summary[k] if k in summary else ({} if k in dict_keys_expected else []) for k in incoming_keys_expected
+    }
     if raw:
-        # reorder keys in raw format, appending empty keys which are defined later to the end
-        pbp_json = {}
-        for k in incoming_keys_expected:
-            if k in summary.keys():
-                pbp_json[k] = summary[k]
-            else:
-                pbp_json[k] = {} if k in dict_keys_expected else []
         return pbp_json
-
-    for k in incoming_keys_expected:
-        if k in summary.keys():
-            pbp_txt[k] = summary[k]
-        else:
-            pbp_txt[k] = {} if k in dict_keys_expected else []
-
-    for k in ["news", "shop"]:
-        pbp_txt.pop(f"{k}", None)
+    pbp_txt.update(pbp_json)
 
     game = helper_nba_pbp(game_id, pbp_txt)
     if not return_parsed:
