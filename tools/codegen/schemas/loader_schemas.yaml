@@ -12390,7 +12390,7 @@ load_mbb_player_core:
 - name: season
   type: Int32
 - name: athlete_id
-  type: Int64
+  type: Int32
 - name: guid
   type: String
 - name: uid
@@ -14237,7 +14237,7 @@ load_nba_player_core:
 - name: season
   type: Int32
 - name: athlete_id
-  type: Int64
+  type: Int32
 - name: guid
   type: String
 - name: uid

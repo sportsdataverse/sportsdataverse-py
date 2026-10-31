@@ -1376,6 +1376,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_core/player_core_{season}.parquet
   tag: espn_nba_player_core
+  id_int32: [athlete_id]
   min_season: 2002
   example_args:
     seasons: 2025
@@ -1392,6 +1393,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_player_core/player_core_{season}.parquet
   tag: espn_mens_college_basketball_player_core
+  id_int32: [athlete_id]
   min_season: 2003
   example_args:
     seasons: 2025

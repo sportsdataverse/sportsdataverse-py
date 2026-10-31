@@ -8703,7 +8703,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
     },
     "loader_schemas:load_mbb_player_core": {
         "season": pl.Int32,
-        "athlete_id": pl.Int64,
+        "athlete_id": pl.Int32,
         "guid": pl.String,
         "uid": pl.String,
         "slug": pl.String,
@@ -9691,7 +9691,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
     },
     "loader_schemas:load_nba_player_core": {
         "season": pl.Int32,
-        "athlete_id": pl.Int64,
+        "athlete_id": pl.Int32,
         "guid": pl.String,
         "uid": pl.String,
         "slug": pl.String,

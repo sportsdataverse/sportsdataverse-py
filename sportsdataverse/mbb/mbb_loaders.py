@@ -1312,7 +1312,7 @@ def load_mbb_player_core(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |athlete_id            |Int64   |
+        |athlete_id            |Int32   |
         |guid                  |String  |
         |uid                   |String  |
         |slug                  |String  |
@@ -1377,6 +1377,9 @@ def load_mbb_player_core(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_player_core")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

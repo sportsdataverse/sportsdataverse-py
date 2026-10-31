@@ -239,3 +239,23 @@ def test_zero_spread_takes_that_rows_favorite_flag():
     assert pickcenter_odds([row], 165.5)["homeFavorite"] is True
     del row["homeTeamOdds"]
     assert pickcenter_odds([row], 165.5)["homeFavorite"] is True
+
+
+@pytest.mark.parametrize("game_id", [401829457, 401830342])
+def test_mbb_release_frame_without_a_line_keeps_boolean_flags(game_id: int) -> None:
+    """The release builder pins the line flags: an all-null home_favorite is Boolean, not Null."""
+    from sportsdataverse.mbb.mbb_play_by_play import helper_mbb_play_by_play
+
+    final = mbb_pbp.helper_mbb_pbp(game_id, copy.deepcopy(_raw(f"mbb_{game_id}.json.gz")))
+    df = helper_mbb_play_by_play(final)
+    assert df.schema["home_favorite"] == pl.Boolean
+    assert df["home_favorite"].null_count() == df.height
+    assert df.schema["game_spread_available"] == pl.Boolean
+
+
+def test_mbb_no_line_over_under_follows_provider_order() -> None:
+    """With no spread anywhere, the total still comes from the first provider in str(provider.id) order."""
+    from sportsdataverse._espn_basketball_pbp import pickcenter_odds
+
+    rows = [{"provider": {"id": "45"}, "overUnder": 150.5}, {"provider": {"id": "1002"}, "overUnder": 139.5}]
+    assert pickcenter_odds(rows, None, default_spread=None)["overUnder"] == 139.5  # "1002" < "45"

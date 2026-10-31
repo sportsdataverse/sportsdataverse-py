@@ -160,7 +160,7 @@ Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdat
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season year. |
-| `athlete_id` | Int64 | Unique athlete identifier (ESPN). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |
 | `slug` | String | URL-safe identifier. |
