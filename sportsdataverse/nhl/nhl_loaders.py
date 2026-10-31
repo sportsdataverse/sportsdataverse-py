@@ -9,6 +9,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
+    _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
     _empty_from_schema,  # noqa: F401
     _read_release_parquet,

@@ -9,6 +9,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
+    _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
     _empty_from_schema,  # noqa: F401
     _read_release_parquet,
@@ -526,7 +527,7 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
         |col_name             |type    |
         |:--------------------|:-------|
         |season               |Int32   |
-        |game_id              |String  |
+        |game_id              |Int32   |
         |team_id              |Int32   |
         |team_slug            |String  |
         |team_abbreviation    |String  |
@@ -577,6 +578,9 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_game_rosters")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["game_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -997,7 +1001,7 @@ def load_nba_rosters(seasons, return_as_pandas: bool = False):
         |team_color               |String |
         |team_alternate_color     |String |
         |team_logo                |String |
-        |athlete_id               |String |
+        |athlete_id               |Int32  |
         |uid                      |String |
         |guid                     |String |
         |full_name                |String |
@@ -1050,6 +1054,9 @@ def load_nba_rosters(seasons, return_as_pandas: bool = False):
     # over the years) -- union columns, null-fill gaps.
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_nba_rosters")
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3514,10 +3521,10 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int64   |
+        |espn_team_id       |Int32   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |Int64   |
+        |espn_athlete_id    |Int32   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
@@ -3564,9 +3571,9 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_player_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3588,9 +3595,9 @@ def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |season            |Int32   |
         |season_type       |String  |
         |game_date         |Date    |
-        |home_espn_team_id |Int64   |
-        |away_espn_team_id |Int64   |
-        |espn_game_id      |Int64   |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |nba_game_id       |String  |
         |nba_game_code     |String  |
         |nba_home_team_id  |String  |
@@ -3631,9 +3638,9 @@ def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_schedule_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3653,7 +3660,7 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name                |type    |
         |:-----------------------|:-------|
         |season                  |Int32   |
-        |espn_team_id            |Int64   |
+        |espn_team_id            |Int32   |
         |espn_abbreviation       |String  |
         |espn_display_name       |String  |
         |espn_short_name         |String  |
@@ -3703,9 +3710,9 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_team_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3725,7 +3732,7 @@ def load_nba_player_core(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |athlete_id            |Int64   |
+        |athlete_id            |Int32   |
         |guid                  |String  |
         |uid                   |String  |
         |slug                  |String  |
@@ -3790,6 +3797,9 @@ def load_nba_player_core(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_player_core")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

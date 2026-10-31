@@ -27,7 +27,9 @@ def espn_mbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     Returns:
         Dict: Dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts",
         "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor",
-        "espnWP", "gameInfo", "season"
+        "espnWP", "gameInfo", "season". A game with no betting line has null ``gameSpread``, ``homeFavorite``
+        and ``homeTeamSpread`` on every play and ``gameSpreadAvailable`` False (hoopR's NA), never a default
+        line.
 
     Example:
         Quick start (2024 NCAA Division I men's championship game)::
@@ -204,11 +206,8 @@ def helper_mbb_game_data(pbp_txt, init):
     pbp_txt["gameSpreadAvailable"] = init["gameSpreadAvailable"]
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
-    pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True,
-        abs(init["gameSpread"]),
-        -1 * abs(init["gameSpread"]),
-    )
+    spread = init["gameSpread"]
+    pbp_txt["homeTeamSpread"] = None if spread is None else (abs(spread) if init["homeFavorite"] else -abs(spread))
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
     if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
@@ -251,7 +250,8 @@ def helper_mbb_game_data(pbp_txt, init):
 
 
 def helper_mbb_pickcenter(pbp_txt):
-    return _pickcenter_odds(pbp_txt.get("pickcenter"), 142.0)
+    # No line: null spread / over-under / favorite, as hoopR has it (no invented 2.5 / 142 / home favored).
+    return _pickcenter_odds(pbp_txt.get("pickcenter"), None, default_spread=None)
 
 
 def helper_mbb_pbp_features(game_id, pbp_txt, init):
@@ -280,13 +280,9 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             awayTeamMascot=pl.lit(init["awayTeamMascot"]),
             awayTeamAbbrev=pl.lit(init["awayTeamAbbrev"]),
             awayTeamNameAlt=pl.lit(init["awayTeamNameAlt"]),
-            # Defensive cast: ESPN sometimes returns this as a python float (no
-            # .astype()), sometimes as a numpy array. Same shape fix as the
-            # cfb_pbp / nfl_pbp versions. `.first()` collapses the resulting
-            # Series-of-length-1 to a scalar so polars 1.x doesn't refuse to
-            # broadcast it across the per-play DataFrame.
-            gameSpread=pl.lit(float(np.asarray(init["gameSpread"]).reshape(-1)[0])).abs().first(),
-            homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).reshape(-1)[0])).first(),
+            # A game with no line keeps these null (helper_mbb_pickcenter), so homeTeamSpread is null too.
+            gameSpread=pl.lit(init["gameSpread"], dtype=pl.Float64).abs(),
+            homeFavorite=pl.lit(init["homeFavorite"], dtype=pl.Boolean),
             gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
         )
         .with_columns(

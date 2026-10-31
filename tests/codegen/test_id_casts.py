@@ -154,3 +154,50 @@ def test_empty_from_schema_pandas_ids_are_nullable_int64():
     assert len(pdf) == 0 and ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
     arrow = _empty_from_schema("scoreboard", return_as_pandas=True, arrow=True)
     assert {c: str(arrow[c].dtype) for c in ids} == dict.fromkeys(ids, "int64[pyarrow]")
+
+
+# --------------------------------------------------------------------------
+# id_int32: String ids whose release family ships them as Int32 (ESPN basketball)
+# --------------------------------------------------------------------------
+def test_cast_ids_int32_converts_and_refuses_overflow():
+    from sportsdataverse._codegen_runtime import _cast_ids_int32
+
+    df = pl.DataFrame(
+        {"game_id": ["401804830", None], "big": [1, 2**40], "athlete_id": pl.Series([5, 6], dtype=pl.Int64)}
+    )
+    out = _cast_ids_int32(df, ["game_id", "big", "athlete_id"])
+    assert out.schema["game_id"] == pl.Int32 and out["game_id"].to_list() == [401804830, None]
+    assert out.schema["athlete_id"] == pl.Int32
+    assert out.schema["big"] == pl.Int64 and out["big"].to_list() == [1, 2**40]  # does not fit: refused, not nulled
+
+
+def _manifest() -> dict[str, dict]:
+    import yaml
+
+    raw = yaml.safe_load((ROOT / "tools" / "codegen" / "endpoints" / "releases.yaml").read_text(encoding="utf-8"))
+    return {ld["fn"]: ld for ld in raw["loaders"]}
+
+
+def _declared(key: str) -> dict[str, list[str]]:
+    return {fn: ld[key] for fn, ld in _manifest().items() if ld.get(key)}
+
+
+def test_every_id_int32_loader_emits_the_cast_and_declares_int32():
+    import yaml
+
+    declared = _declared("id_int32")
+    assert {"load_mbb_game_rosters", "load_mbb_rosters", "load_nba_game_rosters", "load_nba_rosters"} <= set(declared)
+    assert not set(declared) & {
+        fn for fn, cols in _declared("id_int64").items() if set(cols) & set(declared.get(fn, []))
+    }
+    schemas = yaml.safe_load(
+        (ROOT / "tools" / "codegen" / "schemas" / "loader_schemas.yaml").read_text(encoding="utf-8")
+    )
+    for fn, cols in declared.items():
+        league = _manifest()[fn]["league"]
+        src = (ROOT / "sportsdataverse" / league / f"{league}_loaders.py").read_text(encoding="utf-8")
+        body = src.split(f"def {fn}(")[1].split("\ndef ")[0]
+        call = body.split("_cast_ids_int32(")[1:]  # the formatter may wrap the call over lines
+        assert call and all(f'"{c}"' in call[0] for c in cols), fn
+        types = {e["name"]: e["type"] for e in schemas.get(fn, [])}
+        assert all(types.get(c) == "Int32" for c in cols), (fn, {c: types.get(c) for c in cols})

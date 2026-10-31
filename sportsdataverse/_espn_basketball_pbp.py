@@ -21,7 +21,9 @@ TEAM_TIMEOUT_TYPES = ["RegularTimeOut", "ShortTimeOut", "Full Timeout", "Short T
 FREE_THROW = r"(?i)free ?throw"
 
 
-def pickcenter_odds(pickcenter: Any, default_over_under: float) -> dict[str, Any]:
+def pickcenter_odds(
+    pickcenter: Any, default_over_under: float | None, default_spread: float | None = 2.5
+) -> dict[str, Any]:
     """Spread, over/under and home favorite from an ESPN summary ``pickcenter`` array.
 
     Providers are read in ``str(provider.id)`` order, which puts teamrankings
@@ -32,13 +34,26 @@ def pickcenter_odds(pickcenter: Any, default_over_under: float) -> dict[str, Any
     favorite come from the same row, the first with a spread (a record-only
     teamrankings row has none, and its favorite flag is False for both teams).
     The over/under is the first non-null one. One provider is enough; with no
-    spread anywhere the defaults (2.5, home favored, unavailable) stand.
+    spread anywhere the defaults (``default_spread``, home favored, unavailable) stand.
+
+    ``default_spread=None`` is hoopR's behaviour instead: a game with no line gets a
+    null spread, over/under (the provider's own, if it has one) and home favorite,
+    never an invented line. MBB uses it.
     """
     pc = pd.json_normalize(pickcenter or [])
-    if "spread" not in pc.columns or not pc["spread"].notnull().any():
-        return {"gameSpread": 2.5, "overUnder": default_over_under, "homeFavorite": True, "gameSpreadAvailable": False}
     if "provider.id" in pc.columns:
         pc = pc.sort_values(by="provider.id", key=lambda ids: ids.astype(str), kind="stable")
+    if "spread" not in pc.columns or not pc["spread"].notnull().any():
+        if default_spread is None:
+            ou = pc["overUnder"].dropna() if "overUnder" in pc.columns else pd.Series(dtype=float)
+            over_under = float(ou.iloc[0]) if len(ou) else default_over_under
+            return {"gameSpread": None, "overUnder": over_under, "homeFavorite": None, "gameSpreadAvailable": False}
+        return {
+            "gameSpread": default_spread,
+            "overUnder": default_over_under,
+            "homeFavorite": True,
+            "gameSpreadAvailable": False,
+        }
     row = pc[pc["spread"].notnull()].iloc[0]
     spread = float(row["spread"])
     # ESPN's spread is the home team's line, so a negative spread is a home favorite
