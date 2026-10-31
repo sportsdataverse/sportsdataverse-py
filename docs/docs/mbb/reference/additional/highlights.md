@@ -144,7 +144,7 @@ espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-bas
 
 **Returns**
 
-Dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
+Dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season". A game with no betting line has null `gameSpread`, `homeFavorite` and `homeTeamSpread` on every play and `gameSpreadAvailable` False (hoopR's NA), never a default line.
 
 **Example**
 

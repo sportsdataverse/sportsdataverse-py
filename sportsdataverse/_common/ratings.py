@@ -36,7 +36,7 @@ import warnings
 import numpy as np
 import polars as pl
 
-__all__ = ["dropped_level_ridge", "iterative_opponent_adjust", "opponent_adjusted_ridge"]
+__all__ = ["dropped_level_ridge", "id_text", "iterative_opponent_adjust", "opponent_adjusted_ridge"]
 
 
 _RIDGE_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
@@ -54,6 +54,22 @@ _ITER_SCHEMA: dict[str, pl.PolarsDataType] = {
     "raw_def": pl.Float64,
     "games": pl.Int64,
 }
+
+
+def id_text(df: pl.DataFrame, name: str) -> pl.Expr:
+    """``df[name]`` as text, through ``Int64`` when it is a float, so ``401.0`` reads ``"401"``, not ``"401.0"``.
+
+    String and integer ids cast straight to text; a non-numeric id (``"A"``) stays as it is.
+
+    Args:
+        df: the frame the column belongs to (its dtype picks the route).
+        name: the id column.
+
+    Returns:
+        A ``Utf8`` expression aliased to ``name``.
+    """
+    col = pl.col(name)
+    return (col.cast(pl.Int64) if df.schema[name].is_float() else col).cast(pl.Utf8)
 
 
 def drop_unusable_possession_rows(paired: pl.DataFrame) -> pl.DataFrame:

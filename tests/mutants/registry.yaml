@@ -1143,12 +1143,12 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: |2-
         for col in cols:
-            if col not in df.columns or df.schema[col] == pl.Int64:
+            if col not in df.columns or df.schema[col] == dtype:
   mutant: |2-
         if df.height == 0:
             return df
         for col in cols:
-            if col not in df.columns or df.schema[col] == pl.Int64:
+            if col not in df.columns or df.schema[col] == dtype:
   test: tests/codegen/test_id_casts.py -k empty_frame_cast
   expected: kill
   note: task 5.2 casts the empty frame too; the original skip leaves String ids on an empty result

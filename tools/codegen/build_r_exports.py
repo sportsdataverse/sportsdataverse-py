@@ -13,7 +13,11 @@ keeping the offline ``--check`` deterministic, exactly like
 ``r_column_descriptions.yaml``.
 
 Run:
-    python tools/codegen/build_r_exports.py
+    python tools/codegen/build_r_exports.py            # re-mine every package
+    python tools/codegen/build_r_exports.py hoopR      # re-mine only the named package(s)
+
+Naming packages keeps every other package's committed list as it is, so one sister's
+refresh does not drag in the others' drift.
 
 Output YAML shape::
 
@@ -66,9 +70,16 @@ def mine_namespace(path: Path) -> list[str]:
     return sorted(names)
 
 
-def main() -> None:
+def main(only: list[str] | None = None) -> None:
+    unknown = set(only or []) - set(NAMESPACES)
+    if unknown:
+        sys.exit(f"unknown package(s) {sorted(unknown)}; choose from {sorted(NAMESPACES)}")
+    committed = yaml.safe_load(OUTPUT.read_text(encoding="utf-8")) if only and OUTPUT.exists() else {}
     out: dict[str, list[str]] = {}
     for pkg, ns in NAMESPACES.items():
+        if only and pkg not in only:
+            out[pkg] = list(committed.get(pkg) or [])
+            continue
         if not ns.exists():
             print(f"  WARNING: NAMESPACE not found: {ns}", file=sys.stderr)
             out[pkg] = []
@@ -89,4 +100,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

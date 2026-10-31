@@ -208,6 +208,11 @@ load_mbb_ratings(seasons=2025)
 ## load_mbb_shots
 
 Release: [espn_mens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_shots/shots_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: 2003 and 2006 onward; the release has no 2004 or 2005 asset (the MBB pbp release has the same gap). A request for either is skipped with a warning, and a request for only those returns the documented columns with zero rows.
+:::
+
 ### Returns {#load_mbb_shots-returns}
 
 | col_name | type | description |
@@ -289,7 +294,7 @@ Release: [espn_mens_college_basketball_rosters](https://github.com/sportsdataver
 | `team_color` | String | Team primary color (hex without leading '#'). |
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
-| `athlete_id` | String | Unique athlete identifier (ESPN). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `uid` | String | ESPN UID string. |
 | `guid` | String | Stable cross-league team GUID. |
 | `full_name` | String | Player's full name. |
@@ -348,7 +353,7 @@ Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsda
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season year. |
-| `game_id` | String | Unique game identifier. |
+| `game_id` | Int32 | Unique game identifier. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
@@ -383,9 +388,9 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 |---|---|---|
 | `season` | Int32 | Season year. |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `home_espn_team_id` | Int64 | ESPN home team id (NA for bart-only rows). |
-| `away_espn_team_id` | Int64 | ESPN away team id (NA for bart-only rows). |
-| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 | `bart_muid` | String | Torvik muid (NA for espn-only rows). |
 | `bart_team1` | String | Torvik team1 name (NA for espn-only rows). |
 | `bart_team2` | String | Torvik team2 name (NA for espn-only rows). |

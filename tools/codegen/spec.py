@@ -251,6 +251,11 @@ class Loader:
     # makes a cross-dataset join on that id silently match nothing. Declaring the
     # column here normalizes it on read without touching the published asset.
     id_int64: List[str] = field(default_factory=list)
+    # Id columns to cast to Int32 instead: a String id in a release family whose every
+    # other dataset ships that id as Int32 (ESPN basketball game_rosters.game_id,
+    # rosters.athlete_id, the crosswalk / NCAA bridge espn_* ids), so the join keys
+    # are schema-equal, not merely joinable.
+    id_int32: List[str] = field(default_factory=list)
     # What the sdv-py loader does when a requested season has no published asset:
     # ``skip`` (default; the generated loaders -- the season is dropped) or ``raise``
     # (the hand-written nfl_loaders -- ``NoDataError``). Machine-readable so ports
@@ -541,6 +546,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             stub_message=ld.get("stub_message"),
             deprecated_for=ld.get("deprecated_for"),
             id_int64=list(ld.get("id_int64", []) or []),
+            id_int32=list(ld.get("id_int32", []) or []),
             on_missing=_on_missing(ld),
         )
         for ld in raw["loaders"]

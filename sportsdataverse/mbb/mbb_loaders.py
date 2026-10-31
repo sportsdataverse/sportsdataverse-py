@@ -9,6 +9,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
+    _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
     _empty_from_schema,  # noqa: F401
     _read_release_parquet,
@@ -622,7 +623,7 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -652,8 +653,11 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         |team_mascot         |String  |
         |team_abbrev         |String  |
 
+    Note:
+        Published seasons: 2003 and 2006 onward; the release has no 2004 or 2005 asset (the MBB pbp release has the same gap). A request for either is skipped with a warning, and a request for only those returns the documented columns with zero rows.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -662,8 +666,8 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_shots/shots_{season}.parquet"
         )
@@ -837,7 +841,7 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
         |team_color               |String |
         |team_alternate_color     |String |
         |team_logo                |String |
-        |athlete_id               |String |
+        |athlete_id               |Int32  |
         |uid                      |String |
         |guid                     |String |
         |full_name                |String |
@@ -890,6 +894,9 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
     # over the years) -- union columns, null-fill gaps.
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_rosters")
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -962,7 +969,7 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         |col_name             |type    |
         |:--------------------|:-------|
         |season               |Int32   |
-        |game_id              |String  |
+        |game_id              |Int32   |
         |team_id              |Int32   |
         |team_slug            |String  |
         |team_abbreviation    |String  |
@@ -1013,6 +1020,9 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_game_rosters")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["game_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1096,10 +1106,10 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int64   |
+        |espn_team_id       |Int32   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |Int64   |
+        |espn_athlete_id    |Int32   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
@@ -1143,9 +1153,9 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_player_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1166,9 +1176,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |:-----------------|:-------|
         |season            |Int32   |
         |game_date         |Date    |
-        |home_espn_team_id |Int64   |
-        |away_espn_team_id |Int64   |
-        |espn_game_id      |Int64   |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |bart_muid         |String  |
         |bart_team1        |String  |
         |bart_team2        |String  |
@@ -1208,9 +1218,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_schedule_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1230,7 +1240,7 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |espn_team_id          |Int64   |
+        |espn_team_id          |Int32   |
         |espn_abbreviation     |String  |
         |espn_display_name     |String  |
         |espn_short_name       |String  |
@@ -1280,9 +1290,9 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_team_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1421,13 +1431,13 @@ def load_ncaa_mbb_pbp(seasons, return_as_pandas: bool = False):
         |sub_deviate             |Int64   |
         |contest_id              |String  |
         |home_ncaa_team_id       |String  |
-        |home_espn_team_id       |String  |
+        |home_espn_team_id       |Int32   |
         |away_ncaa_team_id       |String  |
-        |away_espn_team_id       |String  |
+        |away_espn_team_id       |Int32   |
         |event_team_ncaa_team_id |String  |
-        |event_team_espn_team_id |String  |
+        |event_team_espn_team_id |Int32   |
         |poss_team_ncaa_team_id  |String  |
-        |poss_team_espn_team_id  |String  |
+        |poss_team_espn_team_id  |Int32   |
         |player_1_id             |String  |
         |player_1_clean_name     |String  |
         |player_2_id             |String  |
@@ -1452,7 +1462,7 @@ def load_ncaa_mbb_pbp(seasons, return_as_pandas: bool = False):
         |away_4_clean_name       |String  |
         |away_5_player_id        |String  |
         |away_5_clean_name       |String  |
-        |espn_game_id            |String  |
+        |espn_game_id            |Int32   |
         |is_fastbreak            |Boolean |
         |is_from_turnover        |Boolean |
         |is_paint                |Boolean |
@@ -1499,6 +1509,12 @@ def load_ncaa_mbb_pbp(seasons, return_as_pandas: bool = False):
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = (
         pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_ncaa_mbb_pbp")
+    )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(
+        out,
+        ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "event_team_espn_team_id", "poss_team_espn_team_id"],
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -1689,14 +1705,14 @@ def load_ncaa_mbb_player_box(seasons, return_as_pandas: bool = False):
         |mid_pct_unast     |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
+        |team_espn_team_id |Int32   |
         |player_id         |String  |
         |clean_name        |String  |
-        |espn_game_id      |String  |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1728,6 +1744,9 @@ def load_ncaa_mbb_player_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_mbb_player_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1820,12 +1839,12 @@ def load_ncaa_mbb_team_box(seasons, return_as_pandas: bool = False):
         |d_time_per_poss   |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
-        |espn_game_id      |String  |
+        |team_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1857,6 +1876,9 @@ def load_ncaa_mbb_team_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_mbb_team_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2072,11 +2094,11 @@ def load_ncaa_mbb_possessions(seasons, return_as_pandas: bool = False):
         |last_event_type        |String |
         |contest_id             |String |
         |home_ncaa_team_id      |String |
-        |home_espn_team_id      |String |
+        |home_espn_team_id      |Int32  |
         |away_ncaa_team_id      |String |
-        |away_espn_team_id      |String |
+        |away_espn_team_id      |Int32  |
         |poss_team_ncaa_team_id |String |
-        |poss_team_espn_team_id |String |
+        |poss_team_espn_team_id |Int32  |
         |home_1_player_id       |String |
         |home_1_clean_name      |String |
         |home_2_player_id       |String |
@@ -2097,7 +2119,7 @@ def load_ncaa_mbb_possessions(seasons, return_as_pandas: bool = False):
         |away_4_clean_name      |String |
         |away_5_player_id       |String |
         |away_5_clean_name      |String |
-        |espn_game_id           |String |
+        |espn_game_id           |Int32  |
         |season                 |Int64  |
 
     Raises:
@@ -2129,6 +2151,9 @@ def load_ncaa_mbb_possessions(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_mbb_possessions")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "poss_team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2368,10 +2393,10 @@ def load_ncaa_mbb_shots(seasons, return_as_pandas: bool = False):
         |source             |String  |
         |contest_id         |String  |
         |ncaa_team_id       |String  |
-        |espn_team_id       |String  |
+        |espn_team_id       |Int32   |
         |shooter_player_id  |String  |
         |shooter_clean_name |String  |
-        |espn_game_id       |String  |
+        |espn_game_id       |Int32   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2019.
@@ -2402,6 +2427,9 @@ def load_ncaa_mbb_shots(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_mbb_shots")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

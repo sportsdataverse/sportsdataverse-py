@@ -28,7 +28,7 @@ import polars as pl
 
 from sportsdataverse._temporal import as_date
 
-from sportsdataverse._common.ratings import drop_unusable_possession_rows, iterative_opponent_adjust
+from sportsdataverse._common.ratings import drop_unusable_possession_rows, id_text, iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
 
@@ -93,8 +93,8 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         return pl.DataFrame(schema=_EFF_SCHEMA)
 
     box = team_box.select(
-        pl.col("game_id").cast(pl.Utf8),
-        pl.col("team_id").cast(pl.Utf8),
+        id_text(team_box, "game_id"),
+        id_text(team_box, "team_id"),
         pl.col("field_goals_attempted").cast(pl.Float64).alias("fga"),
         pl.col("offensive_rebounds").cast(pl.Float64).alias("orb"),
         pl.col("turnovers").cast(pl.Float64).alias("tov"),
@@ -123,11 +123,11 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
     )
 
     sched = schedule.select(
-        pl.col("game_id").cast(pl.Utf8),
+        id_text(schedule, "game_id"),
         pl.col("season").cast(pl.Int64),
         as_date(pl.col("date")),
-        pl.col("home_team_id").cast(pl.Utf8),
-        pl.col("away_team_id").cast(pl.Utf8),
+        id_text(schedule, "home_team_id"),
+        id_text(schedule, "away_team_id"),
         pl.col("neutral_site").cast(pl.Boolean),
     )
 
