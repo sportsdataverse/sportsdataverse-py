@@ -89,6 +89,15 @@ _FLOAT64_COLS: tuple[str, ...] = (
 # (~4e17) round to the same double and collide. The stored payload carries the
 # id as a true integer, so the Python producer emits Int64 and keeps it exact.
 _INT64_COLS: tuple[str, ...] = ("id",)
+# Pinned so a game with no betting line (MBB: null home_favorite on every play) stays Boolean, not Null.
+_BOOLEAN_COLS: tuple[str, ...] = (
+    "scoring_play",
+    "shooting_play",
+    "home_favorite",
+    "game_spread_available",
+    "home_timeout_called",
+    "away_timeout_called",
+)
 
 # Appended (as all-null Float64) only when a payload ships no coordinates at
 # all. Order matters: it is the order the R creation script's season-level
@@ -289,6 +298,7 @@ def _basketball_play_by_play(
         [pl.col(c).cast(pl.Int32, strict=False) for c in int32_cols if c in df.columns]
         + [pl.col(c).cast(pl.Int64, strict=False) for c in _INT64_COLS if c in df.columns]
         + [pl.col(c).cast(pl.Float64, strict=False) for c in float64_cols if c in df.columns]
+        + [pl.col(c).cast(pl.Boolean, strict=False) for c in _BOOLEAN_COLS if c in df.columns]
     )
     return _repair_running_score(df, competitors)
 

@@ -41,6 +41,8 @@ def pickcenter_odds(
     never an invented line. MBB uses it.
     """
     pc = pd.json_normalize(pickcenter or [])
+    if "provider.id" in pc.columns:
+        pc = pc.sort_values(by="provider.id", key=lambda ids: ids.astype(str), kind="stable")
     if "spread" not in pc.columns or not pc["spread"].notnull().any():
         if default_spread is None:
             ou = pc["overUnder"].dropna() if "overUnder" in pc.columns else pd.Series(dtype=float)
@@ -52,8 +54,6 @@ def pickcenter_odds(
             "homeFavorite": True,
             "gameSpreadAvailable": False,
         }
-    if "provider.id" in pc.columns:
-        pc = pc.sort_values(by="provider.id", key=lambda ids: ids.astype(str), kind="stable")
     row = pc[pc["spread"].notnull()].iloc[0]
     spread = float(row["spread"])
     # ESPN's spread is the home team's line, so a negative spread is a home favorite

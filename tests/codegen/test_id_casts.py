@@ -200,4 +200,4 @@ def test_every_id_int32_loader_emits_the_cast_and_declares_int32():
         call = body.split("_cast_ids_int32(")[1:]  # the formatter may wrap the call over lines
         assert call and all(f'"{c}"' in call[0] for c in cols), fn
         types = {e["name"]: e["type"] for e in schemas.get(fn, [])}
-        assert all(types.get(c, "Int32") == "Int32" for c in cols), (fn, {c: types.get(c) for c in cols})
+        assert all(types.get(c) == "Int32" for c in cols), (fn, {c: types.get(c) for c in cols})

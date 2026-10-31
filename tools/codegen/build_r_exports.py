@@ -74,7 +74,10 @@ def main(only: list[str] | None = None) -> None:
     unknown = set(only or []) - set(NAMESPACES)
     if unknown:
         sys.exit(f"unknown package(s) {sorted(unknown)}; choose from {sorted(NAMESPACES)}")
-    committed = yaml.safe_load(OUTPUT.read_text(encoding="utf-8")) if only and OUTPUT.exists() else {}
+    if only and not OUTPUT.exists():
+        # a selective run copies the other packages from the committed file; without it they would be emptied
+        sys.exit(f"{OUTPUT} is missing; restore it (git checkout) before re-mining only {sorted(only)}")
+    committed = yaml.safe_load(OUTPUT.read_text(encoding="utf-8")) if only else {}
     out: dict[str, list[str]] = {}
     for pkg, ns in NAMESPACES.items():
         if only and pkg not in only:

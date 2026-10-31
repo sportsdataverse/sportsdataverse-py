@@ -69,7 +69,8 @@ def id_text(df: pl.DataFrame, name: str) -> pl.Expr:
         A ``Utf8`` expression aliased to ``name``.
     """
     col = pl.col(name)
-    return (col.cast(pl.Int64) if df.schema[name].is_float() else col).cast(pl.Utf8)
+    # NaN is a float's "missing" too, and a strict Int64 cast refuses it: make it null first
+    return (col.fill_nan(None).cast(pl.Int64) if df.schema[name].is_float() else col).cast(pl.Utf8)
 
 
 def drop_unusable_possession_rows(paired: pl.DataFrame) -> pl.DataFrame:
