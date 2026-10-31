@@ -247,3 +247,28 @@ def add_athlete_names(pbp: pl.DataFrame, final: dict[str, Any]) -> pl.DataFrame:
         else:
             pbp = pbp.with_columns(pl.lit(None, dtype=pl.String).alias(nmc))
     return pbp
+
+
+def release_frame(pbp: pl.DataFrame, final: dict[str, Any], loader: str) -> pl.DataFrame:
+    """``helper_<lg>_play_by_play`` output as the release ``loader`` returns it.
+
+    Appends ``athlete_name_{1,2,3}`` (:func:`add_athlete_names`) and puts the columns in the
+    release's order, so the frame stacks with ``load_<lg>_pbp`` output. An empty ``pbp`` (no
+    play-by-play, or 10 or fewer plays) is the release's zero-row frame, columns and dtypes included.
+
+    Args:
+        pbp: ``helper_<lg>_play_by_play`` output for one game.
+        final: The same game's dict (``espn_<lg>_pbp(..., return_parsed=False)``).
+        loader: The release loader whose returns table the frame follows (``"load_mbb_pbp"``).
+
+    Returns:
+        The release-shaped frame.
+    """
+    from sportsdataverse._codegen_runtime import _empty_from_schema
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    if pbp.is_empty():
+        return _empty_from_schema(f"loader_schemas:{loader}")
+    pbp = add_athlete_names(pbp, final)
+    order = list(SCHEMAS[f"loader_schemas:{loader}"])
+    return pbp.select([c for c in order if c in pbp.columns] + [c for c in pbp.columns if c not in order])

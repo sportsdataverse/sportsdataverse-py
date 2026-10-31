@@ -202,8 +202,9 @@ payload = espn_nba_game_rosters(game_id=401585607, raw=True)    # the raw dict
 **What changed.** `espn_mbb_pbp()` and `espn_nba_pbp()` return the play-by-play frame the
 release publishes, the one `load_mbb_pbp()` / `load_nba_pbp()` read: snake_case columns, Int32
 team / athlete / game ids, the Int64 play `id`, `game_date`, the hoopR shot coordinates,
-`athlete_name_{1,2,3}`, the rebuilt running score with `score_source`, and an empty frame for a
-game with 10 or fewer plays. They used to return a dict whose `plays` were dotted camelCase
+`athlete_name_{1,2,3}`, the rebuilt running score with `score_source`, columns in the release's
+order, and a zero-row frame with the release's columns for a game with no play-by-play
+(`playByPlaySource == "none"`) or 10 or fewer plays. They used to return a dict whose `plays` were dotted camelCase
 records with String ids. The dict is still there with `return_parsed=False`, and `raw=True` is
 unchanged. `espn_wnba_pbp()` / `espn_wbb_pbp()` still return the dict.
 

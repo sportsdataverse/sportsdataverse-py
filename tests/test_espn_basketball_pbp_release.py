@@ -122,8 +122,24 @@ def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
 
 
 @pytest.mark.parametrize("lg", ["mbb", "nba"])
-def test_ten_or_fewer_plays_is_empty(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
-    # hoopR's helper returns NULL on <= 10 plays; the release builders skip the empty frame
+@pytest.mark.parametrize("empty", ["ten_plays", "no_pbp_source"])
+def test_a_game_without_play_by_play_is_the_release_schema(
+    monkeypatch: pytest.MonkeyPatch, lg: str, empty: str
+) -> None:
+    # hoopR's helper returns NULL on <= 10 plays; the frame is the release's zero-row schema
     raw = _raw(lg, next(g for x, g in CASES if x == lg))
-    raw["plays"] = raw["plays"][:10]
-    assert _call(monkeypatch, lg, raw).shape == (0, 0)
+    if empty == "ten_plays":
+        raw["plays"] = raw["plays"][:10]
+    else:
+        raw["header"]["competitions"][0]["playByPlaySource"] = "none"
+    df = _call(monkeypatch, lg, raw)
+    release = SCHEMAS[f"loader_schemas:load_{lg}_pbp"]
+    assert df.height == 0
+    assert dict(df.schema) == dict(release)
+
+
+@pytest.mark.parametrize(("lg", "gid"), CASES)
+def test_columns_come_in_the_release_order(monkeypatch: pytest.MonkeyPatch, lg: str, gid: int) -> None:
+    # so the frame stacks with load_<lg>_pbp output (pl.concat how="vertical" needs the same order)
+    df = _call(monkeypatch, lg, _raw(lg, gid))
+    assert df.columns == [c for c in SCHEMAS[f"loader_schemas:load_{lg}_pbp"] if c in df.columns]

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._espn_basketball_pbp import add_athlete_names as _add_athlete_names
+from sportsdataverse._espn_basketball_pbp import release_frame as _release_frame
 from sportsdataverse._espn_basketball_pbp import hoopr_coordinates as _hoopr_coordinates
 from sportsdataverse._espn_basketball_pbp import period_end_seconds as _period_end_seconds
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
@@ -35,12 +35,14 @@ def espn_nba_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
             False, returns the game dictionary (the shape before 0.2.0, which
             ``helper_nba_play_by_play`` / ``helper_nba_team_box`` / ``helper_nba_player_box``
             and ``game_page_frames`` read).
-        return_as_pandas (bool): If True, returns the frame as pandas instead of polars.
+        return_as_pandas (bool): If True, returns the frame as pandas instead of polars. Ignored
+            with ``raw=True`` or ``return_parsed=False``, which return a dict.
 
     Returns:
-        pl.DataFrame: One row per play, columns and dtypes as the release (``load_nba_pbp``)
-        for that season. Empty (no columns) when ESPN has no play-by-play for the game
-        (``playByPlaySource == "none"``) or 10 or fewer plays, as hoopR returns NULL.
+        pl.DataFrame: One row per play, columns (in order) and dtypes as the release
+        (``load_nba_pbp``) for that season; a pandas frame with ``return_as_pandas=True``.
+        Zero rows, with the release's columns, when ESPN has no play-by-play for the game
+        (``playByPlaySource == "none"``) or 10 or fewer plays (hoopR returns NULL).
 
         With ``return_parsed=False``, a dictionary of game data with keys - "gameId", "plays",
         "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource",
@@ -137,7 +139,7 @@ def espn_nba_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
     game = helper_nba_pbp(game_id, pbp_txt)
     if not return_parsed:
         return game
-    plays = _add_athlete_names(helper_nba_play_by_play(game), game)
+    plays = _release_frame(helper_nba_play_by_play(game), game, "load_nba_pbp")
     return plays.to_pandas() if return_as_pandas else plays
 
 
@@ -183,7 +185,7 @@ def helper_nba_pbp(game_id, pbp_txt):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     init = helper_nba_pickcenter(pbp_txt)
     pbp_txt, init = helper_nba_game_data(pbp_txt, init)
@@ -237,7 +239,7 @@ def helper_nba_game_data(pbp_txt, init):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     pbp_txt["timeouts"] = {}
     pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
@@ -315,7 +317,7 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     pbp_txt["plays_mod"] = []
     for play in pbp_txt["plays"]:
@@ -467,6 +469,6 @@ def helper_nba_pickcenter(pbp_txt):
         Used internally by :func:`espn_nba_pbp`::
 
             from sportsdataverse.nba import espn_nba_pbp
-            pbp = espn_nba_pbp(game_id=401585183)
+            pbp = espn_nba_pbp(game_id=401585183, return_parsed=False)
     """
     return _pickcenter_odds(pbp_txt.get("pickcenter"), 215.5)

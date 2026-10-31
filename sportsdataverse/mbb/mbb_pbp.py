@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._espn_basketball_pbp import add_athlete_names as _add_athlete_names
+from sportsdataverse._espn_basketball_pbp import release_frame as _release_frame
 from sportsdataverse._espn_basketball_pbp import hoopr_coordinates as _hoopr_coordinates
 from sportsdataverse._espn_basketball_pbp import period_end_seconds as _period_end_seconds
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
@@ -36,12 +36,14 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
             False, returns the game dictionary (the shape before 0.2.0, which
             ``helper_mbb_play_by_play`` / ``helper_mbb_team_box`` / ``helper_mbb_player_box``
             and ``game_page_frames`` read).
-        return_as_pandas (bool): If True, returns the frame as pandas instead of polars.
+        return_as_pandas (bool): If True, returns the frame as pandas instead of polars. Ignored
+            with ``raw=True`` or ``return_parsed=False``, which return a dict.
 
     Returns:
-        pl.DataFrame: One row per play, columns and dtypes as the release (``load_mbb_pbp``)
-        for that season. Empty (no columns) when ESPN has no play-by-play for the game
-        (``playByPlaySource == "none"``) or 10 or fewer plays, as hoopR returns NULL.
+        pl.DataFrame: One row per play, columns (in order) and dtypes as the release
+        (``load_mbb_pbp``) for that season; a pandas frame with ``return_as_pandas=True``.
+        Zero rows, with the release's columns, when ESPN has no play-by-play for the game
+        (``playByPlaySource == "none"``) or 10 or fewer plays (hoopR returns NULL).
         A game with no betting line has null spread, home-favorite and home-team-spread
         values on every play and the spread-available flag False (hoopR's NA), never a
         default line.
@@ -162,7 +164,7 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
     game = helper_mbb_pbp(game_id, pbp_txt)
     if not return_parsed:
         return game
-    plays = _add_athlete_names(helper_mbb_play_by_play(game), game)
+    plays = _release_frame(helper_mbb_play_by_play(game), game, "load_mbb_pbp")
     return plays.to_pandas() if return_as_pandas else plays
 
 

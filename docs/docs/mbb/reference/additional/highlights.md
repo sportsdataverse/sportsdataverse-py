@@ -149,11 +149,11 @@ The release's season-level `pregame_home_prob` / `home_win_prob` are not added.
 | `game_id` | `int` |  | Unique game_id, can be obtained from mbb_schedule(). |
 | `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint (wins over `return_parsed`). |
 | `return_parsed` | `bool` | `True` | If True (default), returns the release play-by-play frame. If False, returns the game dictionary (the shape before 0.2.0, which `helper_mbb_play_by_play` / `helper_mbb_team_box` / `helper_mbb_player_box` and `game_page_frames` read). |
-| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. |
+| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. Ignored with `raw=True` or `return_parsed=False`, which return a dict. |
 
 **Returns**
 
-One row per play, columns and dtypes as the release (`load_mbb_pbp`) for that season. Empty (no columns) when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays, as hoopR returns NULL. A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False (hoopR's NA), never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource", "standings", "article", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
+One row per play, columns (in order) and dtypes as the release (`load_mbb_pbp`) for that season; a pandas frame with `return_as_pandas=True`. Zero rows, with the release's columns, when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays (hoopR returns NULL). A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False (hoopR's NA), never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource", "standings", "article", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
 
 **Example**
 
