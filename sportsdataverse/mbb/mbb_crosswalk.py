@@ -57,12 +57,13 @@ __all__ = [
 
 # ---------------------------------------------------------------------------
 # Torvik -> ESPN location alias table (VERBATIM from hoopR .mbb_bart_alias).
+# No "St. Thomas" entry: ESPN now lists team 2900 as plain "St. Thomas", the
+# name Torvik and KenPom already use.
 # ---------------------------------------------------------------------------
 BART_ALIAS: Dict[str, str] = {
     "Mississippi": "Ole Miss",
     "Connecticut": "UConn",
     "McNeese St.": "McNeese",
-    "St. Thomas": "St. Thomas-Minnesota",
     "N.C. State": "NC State",
     "Nebraska Omaha": "Omaha",
     "Texas A&M Corpus Chris": "Texas A&M-Corpus Christi",
@@ -86,11 +87,24 @@ BART_ALIAS: Dict[str, str] = {
     "Grambling St.": "Grambling",
     "USC Upstate": "South Carolina Upstate",
     "Louisiana Monroe": "UL Monroe",
+    # From hoopR's data-raw/dict_hoopR.csv: names its Trank (and older KenPom)
+    # column uses for teams ESPN now lists under another location.
+    "College of Charleston": "Charleston",
+    "Detroit": "Detroit Mercy",
+    "Houston Baptist": "Houston Christian",
+    "IUPUI": "IU Indianapolis",
+    "LIU Brooklyn": "Long Island University",
+    "Louisiana Lafayette": "Louisiana",
+    "North Carolina St.": "NC State",
+    "Fort Wayne": "Purdue Fort Wayne",
+    "Texas A&M-Commerce": "East Texas A&M",
+    "Dixie St.": "Utah Tech",
+    "New Orleans": "LSU New Orleans",
 }
 
 # ---------------------------------------------------------------------------
 # KenPom -> ESPN location alias table (VERBATIM from hoopR .mbb_kp_alias).
-# Most Torvik aliases also apply to KenPom (same terse style); the last three
+# Every Torvik alias also applies to KenPom (same terse style); the last four
 # handle KenPom-specific divergences.
 # ---------------------------------------------------------------------------
 KP_ALIAS: Dict[str, str] = {
@@ -98,7 +112,6 @@ KP_ALIAS: Dict[str, str] = {
     "Mississippi": "Ole Miss",
     "Connecticut": "UConn",
     "McNeese St.": "McNeese",
-    "St. Thomas": "St. Thomas-Minnesota",
     "N.C. State": "NC State",
     "Nebraska Omaha": "Omaha",
     "Texas A&M Corpus Chris": "Texas A&M-Corpus Christi",
@@ -122,10 +135,24 @@ KP_ALIAS: Dict[str, str] = {
     "Grambling St.": "Grambling",
     "USC Upstate": "South Carolina Upstate",
     "Louisiana Monroe": "UL Monroe",
+    # From hoopR's data-raw/dict_hoopR.csv: names its Trank (and older KenPom)
+    # column uses for teams ESPN now lists under another location.
+    "College of Charleston": "Charleston",
+    "Detroit": "Detroit Mercy",
+    "Houston Baptist": "Houston Christian",
+    "IUPUI": "IU Indianapolis",
+    "LIU Brooklyn": "Long Island University",
+    "Louisiana Lafayette": "Louisiana",
+    "North Carolina St.": "NC State",
+    "Fort Wayne": "Purdue Fort Wayne",
+    "Texas A&M-Commerce": "East Texas A&M",
+    "Dixie St.": "Utah Tech",
+    "New Orleans": "LSU New Orleans",
     # KenPom-specific
     "CSUN": "Cal State Northridge",
     "SIUE": "SIU Edwardsville",
     "Southeast Missouri": "Southeast Missouri State",
+    "Texas A&M Commerce": "East Texas A&M",
 }
 
 # ---------------------------------------------------------------------------
@@ -164,6 +191,17 @@ FOX_DISPLAY_ALIAS: Dict[str, str] = {
     "lindenwood lions": "lindenwood lions",
 }
 
+# Name columns joined from the bundled ``mbb_team_names.csv`` (see
+# :func:`_team_names`), in hoopR's order.
+NAME_COLUMNS = [
+    "ncaa_team",
+    "espn_pbp_name",
+    "warren_nolan_team",
+    "team_247",
+    "sref_slug",
+    "sref_team",
+]
+
 TEAM_COLUMNS = [
     "season",
     "espn_team_id",
@@ -180,6 +218,7 @@ TEAM_COLUMNS = [
     "bart_conf",
     "kp_team",
     "kp_conf",
+    *NAME_COLUMNS,
     "yahoo_team_id",
     "yahoo_team_name",
     "fox_match_confidence",
@@ -283,6 +322,32 @@ def _kenpom_teams(season: int) -> pl.DataFrame:
     return out
 
 
+# ---------------------------------------------------------------------------
+# Bundled team-name table (NCAA / ESPN PBP / Warren Nolan / 247 / Sports-Reference).
+#
+# Provenance: hoopR's ``data-raw/mbb_team_names.csv``, built by that repo's
+# ``data-raw/mbb_team_names.R`` from ``data-raw/dict_hoopR.csv`` and shipped in
+# hoopR as the ``hoopR::mbb_team_names`` data object -- the table
+# ``mbb_team_crosswalk()`` joins on ``espn_team_id``. Copied byte for byte;
+# refresh by copying the file again after re-running that script. Empty cells
+# read as null. The names are season-agnostic (mostly as of 2022-23).
+# ---------------------------------------------------------------------------
+_TEAM_NAMES_CACHE: Dict[str, pl.DataFrame] = {}
+
+
+def _team_names() -> pl.DataFrame:
+    """Bundled ``mbb_team_names.csv``: one row per ESPN team, every column ``Utf8`` but the id.
+
+    Returns:
+        ``pl.DataFrame`` with ``espn_team_id`` (``Int32``, unique), ``kp_team`` and
+        :data:`NAME_COLUMNS`; unknown names are null, never ``""``.
+    """
+    if "all" not in _TEAM_NAMES_CACHE:
+        raw = pl.read_csv(io.BytesIO(_league_data_bytes("mbb", "mbb_team_names.csv")), infer_schema=False)
+        _TEAM_NAMES_CACHE["all"] = raw.with_columns(pl.col("espn_team_id").cast(pl.Int32))
+    return _TEAM_NAMES_CACHE["all"]
+
+
 def _assemble_team_crosswalk(
     espn: pl.DataFrame,
     fox: Optional[pl.DataFrame],
@@ -368,6 +433,9 @@ def _assemble_team_crosswalk(
             .unique(subset=["ct_key_kp"], keep="first", maintain_order=True)
         )
 
+    names2 = _team_names().select("espn_team_id", *NAME_COLUMNS)
+    assert names2.schema["espn_team_id"] == espn2.schema["espn_team_id"]
+
     fox_ok = pl.col("fox_team_id").is_not_null()
     bart_ok = pl.col("bart_team").is_not_null()
     kp_ok = pl.col("kp_team").is_not_null()
@@ -375,6 +443,7 @@ def _assemble_team_crosswalk(
         espn2.join(fox2, on="fox_key", how="left", maintain_order="left")
         .join(bart2, on="ct_key_bart", how="left", maintain_order="left")
         .join(kp2, on="ct_key_kp", how="left", maintain_order="left")
+        .join(names2, on="espn_team_id", how="left", maintain_order="left")
         .with_columns(
             pl.lit(season, dtype=pl.Int32).alias("season"),
             pl.lit(None, dtype=pl.Utf8).alias("yahoo_team_id"),
@@ -507,7 +576,10 @@ def mbb_team_crosswalk(
     One row per ESPN team, keyed on ``espn_team_id``. Fox joins on the
     normalized mascot name via :data:`FOX_DISPLAY_ALIAS`; Torvik and KenPom
     each join on the normalized school name after :data:`BART_ALIAS` /
-    :data:`KP_ALIAS`.
+    :data:`KP_ALIAS`. The NCAA, ESPN play-by-play, Warren Nolan, 247Sports and
+    Sports-Reference names (:data:`NAME_COLUMNS`) come from the bundled
+    ``mbb_team_names.csv`` (hoopR's ``mbb_team_names``), joined on
+    ``espn_team_id``.
 
     Args:
         season: Season year (e.g. ``2026``). Defaults to the most recent MBB
@@ -550,6 +622,9 @@ def mbb_team_crosswalk(
         ``fox_section`` is that season's Fox conference, nulled where Fox lists
         the team under the conference it moved to the next season (see
         :func:`~sportsdataverse._crosswalk_basketball_sources.drop_unconfirmed_fox_sections`).
+        The :data:`NAME_COLUMNS` are the exception: each team has one set of
+        names (mostly as of 2022-23), applied to every season; an unknown name
+        is null, never a guess.
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could

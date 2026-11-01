@@ -39,6 +39,14 @@ empty Torvik frame, which cannot distinguish a working join from a broken one.
 :func:`test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage`
 feeds the committed Torvik capture instead and pins the corrected output; the
 golden is not the authority on that column.
+
+**Where the golden is stale.** The golden predates hoopR's ``mbb_team_names``
+columns (:data:`~sportsdataverse.mbb.mbb_crosswalk.NAME_COLUMNS`) and its
+dict-derived alias fixes, so it has no name columns and leaves St. Thomas and
+LSU New Orleans without a KenPom match. The MBB golden tests drop the name
+columns; :func:`test_mbb_team_crosswalk_matches_the_hoopr_assembler` compares
+against ``mbb_team_crosswalk_assembled_2026.parquet`` instead -- hoopR's own
+assembler run on the same inputs, every column included.
 """
 
 from __future__ import annotations
@@ -60,7 +68,13 @@ FUZZY_FLOOR = 0.92
 UNRECOVERABLE = {"wbb": 27, "mbb": 27, "wnba": 0, "nba": 149}
 # ESPN MBB teams the committed Torvik capture (and the bundled KenPom
 # directory) both carry, of 362. Measured, not chosen.
-BART_JOINED = 359
+BART_JOINED = 361
+# ESPN MBB teams the golden's KenPom columns matched (the golden predates the
+# dict-derived St. Thomas / New Orleans aliases). Measured, not chosen.
+GOLDEN_KP_JOINED = 359
+# The rows the alias fix joins and the golden froze unjoined.
+NEWLY_JOINED = {2900: "St. Thomas", 2443: "New Orleans"}
+NAMES = mbb_crosswalk.NAME_COLUMNS
 FIXTURES = Path(__file__).parent / "fixtures" / "crosswalk_basketball"
 SEASON = 2026
 
@@ -202,7 +216,55 @@ def test_mbb_team_crosswalk_parity() -> None:
         distinct_where(want, "kp_team", {"kp_team": "Team", "kp_conf": "Conf"}),
         SEASON,
     )
+    same(got.drop(NAMES), want, ["espn_team_id"])
+
+
+def test_mbb_team_crosswalk_matches_the_hoopr_assembler() -> None:
+    """R and Python agree on every column, the name columns included.
+
+    ``mbb_team_crosswalk_assembled_2026.parquet`` is hoopR's
+    ``.bb_assemble_team_crosswalk_mbb()`` (with ``hoopR::mbb_team_names``) run
+    on inputs rebuilt from the golden the same way as here: the golden's ESPN
+    directory and matched Fox rows, the committed Torvik capture and the 2026
+    KenPom directory (provenance in the fixture README). Unlike the golden, it
+    carries :data:`~sportsdataverse.mbb.mbb_crosswalk.NAME_COLUMNS` and the
+    dict-derived aliases, so it pins both exactly.
+    """
+    want = pl.read_parquet(FIXTURES / f"mbb_team_crosswalk_assembled_{SEASON}.parquet")
+    golden_frame = golden("mbb_team")
+    got = mbb_crosswalk._assemble_team_crosswalk(
+        espn_from(golden_frame),
+        distinct_where(
+            golden_frame,
+            "fox_team_id",
+            {"fox_team_id": "fox_team_id", "fox_team_name": "fox_team_name", "fox_section": "fox_section"},
+        ),
+        pl.read_parquet(FIXTURES / f"mbb_torvik_teams_{SEASON}.parquet"),
+        mbb_crosswalk._kenpom_teams(SEASON),
+        SEASON,
+    )
     same(got, want, ["espn_team_id"])
+    for column in NAMES:
+        assert got.schema[column] == pl.Utf8
+        assert not got.filter(pl.col(column) == "").height, f"{column} has empty strings, not nulls"
+    # Only West Florida (Division I from 2026-27) is missing an NCAA name.
+    assert got.filter(pl.col("ncaa_team").is_null())["espn_location"].to_list() == ["West Florida"]
+
+
+def test_mbb_team_names_bundle_is_keyed_on_espn_team_id() -> None:
+    """The bundled name table: unique Int32 ids, string names, nulls not ``""``."""
+    names = mbb_crosswalk._team_names()
+    assert names.columns == ["espn_team_id", "kp_team", *NAMES]
+    assert names.schema["espn_team_id"] == pl.Int32
+    assert names["espn_team_id"].is_unique().all()
+    assert names["espn_team_id"].null_count() == 0
+    assert names.height == 368
+    row = {r["kp_team"]: r for r in names.iter_rows(named=True)}
+    assert row["Abilene Christian"]["sref_slug"] == "abilene-christian"
+    assert row["Arkansas Pine Bluff"]["ncaa_team"] == "Ark.-Pine Bluff"
+    assert row["IU Indy"]["espn_team_id"] == 85
+    assert row["IU Indy"]["ncaa_team"] == "IUPUI"
+    assert row["Le Moyne"]["sref_slug"] is None
 
 
 def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
@@ -238,9 +300,16 @@ def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
         pl.DataFrame(),
         mbb_crosswalk._kenpom_teams(SEASON),
         SEASON,
-    )
-    same(got, want, ["espn_team_id"])
-    assert got["kp_team"].is_not_null().sum() == 359
+    ).drop(NAMES)
+    # The golden predates the St. Thomas / New Orleans aliases: those two rows
+    # join KenPom now and are null in the golden. Pin both sides, then require
+    # every other row to match exactly.
+    fixed = pl.col("espn_team_id").is_in(list(NEWLY_JOINED))
+    assert want.filter(fixed)["kp_team"].is_null().all()
+    assert dict(got.filter(fixed).select("espn_team_id", "kp_team").iter_rows()) == NEWLY_JOINED
+    same(got.filter(~fixed), want.filter(~fixed), ["espn_team_id"])
+    assert want["kp_team"].is_not_null().sum() == GOLDEN_KP_JOINED
+    assert got["kp_team"].is_not_null().sum() == GOLDEN_KP_JOINED + len(NEWLY_JOINED)
 
 
 def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> None:
@@ -272,7 +341,7 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
     # plain parity gate.
     for column in ("bart_team", "bart_conf", "bart_match_confidence"):
         assert want[column].is_null().all(), f"{column} is not all-null in the frozen golden"
-    assert want.filter(pl.col("match_method") == "fox+kp").height == BART_JOINED
+    assert want.filter(pl.col("match_method") == "fox+kp").height == GOLDEN_KP_JOINED
 
     got = mbb_crosswalk._assemble_team_crosswalk(
         espn_from(want),
@@ -284,24 +353,27 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
         bart,
         mbb_crosswalk._kenpom_teams(SEASON),
         SEASON,
-    )
+    ).drop(NAMES)
 
     # Floor on the populated rate + Torvik's participation in match_method.
     # Measured against the committed capture, not chosen.
     assert got["bart_team"].is_not_null().sum() == BART_JOINED
     assert got["bart_conf"].is_not_null().sum() == BART_JOINED
     assert got["bart_match_confidence"].is_not_null().sum() == BART_JOINED
-    assert got.filter(pl.col("match_method") == "fox+bart+kp").height == BART_JOINED
+    # St. Thomas has no Fox match (Fox's own alias still targets the old ESPN
+    # name), so it is the one bart+kp row.
+    assert got.filter(pl.col("match_method") == "fox+bart+kp").height == BART_JOINED - 1
+    assert got.filter(pl.col("match_method") == "bart+kp")["espn_location"].to_list() == ["St. Thomas"]
     assert got.filter(pl.col("match_method") == "fox+kp").height == 0
-    # The three ESPN teams Torvik's directory genuinely does not carry.
-    assert sorted(got.filter(pl.col("bart_team").is_null())["espn_location"].to_list()) == [
-        "LSU New Orleans",
-        "St. Thomas",
-        "West Florida",
-    ]
+    # The one ESPN team Torvik's directory genuinely does not carry (Division I
+    # from 2026-27).
+    assert got.filter(pl.col("bart_team").is_null())["espn_location"].to_list() == ["West Florida"]
 
-    # ...and nothing else moved: strip Torvik back out and the golden returns,
-    # column order, dtypes and every other match_method included.
+    # ...and nothing else moved: strip Torvik back out and, outside the two
+    # rows the alias fix joins (see the bundled-KenPom test), the golden
+    # returns, column order, dtypes and every other match_method included.
+    fixed = pl.col("espn_team_id").is_in(list(NEWLY_JOINED))
+    got, want = got.filter(~fixed), want.filter(~fixed)
     diverging = ["bart_team", "bart_conf", "bart_match_confidence", "match_method"]
     same(got.drop(diverging), want.drop(diverging), ["espn_team_id"])
     assert (
@@ -568,12 +640,13 @@ def test_alias_tables_only_merge_spellings() -> None:
 
 
 def test_kp_alias_extends_bart_alias() -> None:
-    """KenPom reuses every Torvik alias plus exactly three of its own."""
+    """KenPom reuses every Torvik alias plus exactly four of its own."""
     extra = {k: v for k, v in mbb_crosswalk.KP_ALIAS.items() if k not in mbb_crosswalk.BART_ALIAS}
     assert extra == {
         "CSUN": "Cal State Northridge",
         "SIUE": "SIU Edwardsville",
         "Southeast Missouri": "Southeast Missouri State",
+        "Texas A&M Commerce": "East Texas A&M",
     }
     shared = {k: v for k, v in mbb_crosswalk.KP_ALIAS.items() if k in mbb_crosswalk.BART_ALIAS}
     assert shared == mbb_crosswalk.BART_ALIAS

@@ -17211,6 +17211,12 @@ load_mbb_team_crosswalk:
   yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
   yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
 mbb_team_crosswalk:
+  ncaa_team: NCAA (stats.ncaa.org) team name, from the bundled mbb_team_names table (hoopR's data-raw/dict_hoopR.csv, mostly as of 2022-23); the same for every season, null where unknown.
+  espn_pbp_name: Team name as ESPN play-by-play prints it, from the bundled mbb_team_names table; the same for every season, null where unknown.
+  warren_nolan_team: Warren Nolan team name, from the bundled mbb_team_names table; the same for every season, null where unknown.
+  team_247: 247Sports team name, from the bundled mbb_team_names table; the same for every season, null where unknown.
+  sref_slug: Sports-Reference school URL slug (/cbb/schools/<slug>/), from the bundled mbb_team_names table; the same for every season, null where unknown.
+  sref_team: Sports-Reference school name, from the bundled mbb_team_names table; the same for every season, null where unknown.
   yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
   yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
 mhl_season_id:
