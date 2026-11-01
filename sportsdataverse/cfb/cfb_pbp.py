@@ -2754,18 +2754,25 @@ def _overtime_period(columns: "list[str]") -> pl.Expr:
     """The overtime period a play belongs to, for feeds that number every overtime 5 (401112081, 3OT; #505).
 
     Two possessions per period, each starting at the 25, so the overtime drives are paired; a split
-    possession that restarts elsewhere does not advance the pairing. A feed that numbers its periods
-    (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
+    possession that restarts elsewhere does not advance the pairing. Each drive counts once, at its
+    first row: the feed's row order can interleave two drives (401754372 files Cal's OT1 touchdown
+    between two Virginia Tech rows), and counting every drive-id change paired a third "possession"
+    into OT1. A drive with no overtime snap is not an overtime possession: ESPN files some timeout and
+    end-of-period rows under a regulation drive that started at the 25 (401760426's "Timeout New
+    Mexico" in OT2, under a second-quarter drive), which opened a phantom OT3. A feed that numbers its
+    periods (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
     """
     period = pl.col("period.number")
     if not {"drive.id", "drive.start.yardLine"} <= set(columns):
         return period
-    new_ot_drive = (
+    ot_snap = (period >= 5) & ~pl.col("type.text").str.contains(_ADMIN_ROW_RE).fill_null(False)
+    ot_start = (
         (period >= 5)
-        & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
         & pl.col("drive.id").is_not_null()
         & pl.col("drive.start.yardLine").is_in([25, 75])
+        & ot_snap.any().over("drive.id")
     ).fill_null(False)
+    new_ot_drive = ot_start & pl.when(ot_start).then(pl.col("drive.id")).is_first_distinct()
     paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
     drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in columns else []
     return pl.max_horizontal(period, *drive_period, paired)
