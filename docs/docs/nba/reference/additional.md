@@ -145,6 +145,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 |---|---|
 | [build_athlete_identity_lookup](additional/play-by-play-processing.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
 | [build_nba_player_identity_lookup](additional/play-by-play-processing.md#build_nba_player_identity_lookup) | R `build_identity_lookup(season)`: athlete_id -> identity from the |
+| [espn_nba_game_all](additional/play-by-play-processing.md#espn_nba_game_all) | espn_nba_game_all() - Pull one game's plays, team box and player box from one ESPN request. |
+| [espn_nba_player_box](additional/play-by-play-processing.md#espn_nba_player_box) | espn_nba_player_box() - Pull one game's player box score from ESPN's `nba/summary` endpoint. |
+| [espn_nba_team_box](additional/play-by-play-processing.md#espn_nba_team_box) | espn_nba_team_box() - Pull one game's team box score from ESPN's `nba/summary` endpoint. |
 | [nba_pbp_disk](additional/play-by-play-processing.md#nba_pbp_disk) | Load a previously cached ESPN NBA summary JSON for a game from disk. |
 | [nba_v3_to_v2_pbp](additional/play-by-play-processing.md#nba_v3_to_v2_pbp) | Convert a v3 `playbyplayv3` payload into the full v2-schema pbp frame. |
 

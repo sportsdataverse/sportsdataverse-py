@@ -191,9 +191,12 @@ from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accura
 from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
+from sportsdataverse.nba import espn_nba_game_all as espn_nba_game_all  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
+from sportsdataverse.nba import espn_nba_player_box as espn_nba_player_box  # noqa: F401
 from sportsdataverse.nba import espn_nba_player_stats as espn_nba_player_stats  # noqa: F401
 from sportsdataverse.nba import espn_nba_schedule as espn_nba_schedule  # noqa: F401
+from sportsdataverse.nba import espn_nba_team_box as espn_nba_team_box  # noqa: F401
 from sportsdataverse.nba import espn_nba_teams as espn_nba_teams  # noqa: F401
 from sportsdataverse.nba import expected_possessions as expected_possessions  # noqa: F401
 from sportsdataverse.nba import external_validity as external_validity  # noqa: F401
@@ -489,6 +492,7 @@ __all__ = [
     "espn_nba_franchise",
     "espn_nba_franchises",
     "espn_nba_game",
+    "espn_nba_game_all",
     "espn_nba_game_broadcasts",
     "espn_nba_game_competition",
     "espn_nba_game_leaders",
@@ -523,6 +527,7 @@ __all__ = [
     "espn_nba_pbp",
     "espn_nba_player_awards",
     "espn_nba_player_bio",
+    "espn_nba_player_box",
     "espn_nba_player_career_stats",
     "espn_nba_player_contracts",
     "espn_nba_player_core",
@@ -577,6 +582,7 @@ __all__ = [
     "espn_nba_summary",
     "espn_nba_talentpicks",
     "espn_nba_team",
+    "espn_nba_team_box",
     "espn_nba_team_core",
     "espn_nba_team_depthcharts",
     "espn_nba_team_history",

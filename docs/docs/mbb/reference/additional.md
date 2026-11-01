@@ -217,6 +217,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [classify_point_value](additional/play-by-play-processing.md#classify_point_value) | 2 or 3 from basket-relative geometry (arc radius + corner band). |
 | [classify_zone_geometry](additional/play-by-play-processing.md#classify_zone_geometry) | Shot zone from geometry: `rim \| paint \| mid \| corner3 \| abovebreak3`. |
 | [classify_zone_type](additional/play-by-play-processing.md#classify_zone_type) | Collapse a source shot-type label to `rim \| arc3 \| jump`. |
+| [espn_mbb_game_all](additional/play-by-play-processing.md#espn_mbb_game_all) | espn_mbb_game_all() - Pull one game's plays, team box and player box from one ESPN request. |
+| [espn_mbb_player_box](additional/play-by-play-processing.md#espn_mbb_player_box) | espn_mbb_player_box() - Pull one game's player box score from ESPN's `mens-college-basketball/summary` endpoint. |
+| [espn_mbb_team_box](additional/play-by-play-processing.md#espn_mbb_team_box) | espn_mbb_team_box() - Pull one game's team box score from ESPN's `mens-college-basketball/summary` endpoint. |
 | [espn_shots_to_canonical](additional/play-by-play-processing.md#espn_shots_to_canonical) | ESPN `load_mbb_shots` frame -> the canonical shot frame. |
 | [fit_espn_court_scale](additional/play-by-play-processing.md#fit_espn_court_scale) | Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`. |
 | [mbb_pbp_disk](additional/play-by-play-processing.md#mbb_pbp_disk) | Read a saved ESPN MBB play-by-play payload from disk. |
