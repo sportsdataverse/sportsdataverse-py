@@ -4,6 +4,7 @@
 
 - [Basketball crosswalk golden fixtures](#basketball-crosswalk-golden-fixtures)
   - [Known defect in the MBB team golden: all-null bart columns](#known-defect-in-the-mbb-team-golden-all-null-bart-columns)
+  - [hoopR assembler output with the name columns](#hoopr-assembler-output-with-the-name-columns)
   - [Re-capturing](#re-capturing)
   - [Fox game and Yahoo id captures](#fox-game-and-yahoo-id-captures)
 
@@ -67,15 +68,55 @@ asserting nothing about them* silently permits a regression back to all-null.
 
 `test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage` feeds it
 to the assembler alongside the bundled KenPom directory and pins both sides of
-the divergence: the golden's 0 populated `bart_team`, and Python's 359. The
-three ESPN teams Torvik's directory does not carry (LSU New Orleans,
-St. Thomas, West Florida) are named in that test. Note the sibling test
+the divergence: the golden's 0 populated `bart_team`, and Python's 361. The one
+ESPN team Torvik's directory does not carry (West Florida, Division I from
+2026-27) is named in that test. St. Thomas and LSU New Orleans joined once the
+alias tables stopped mapping `St. Thomas` to ESPN's old `St. Thomas-Minnesota`
+and gained `New Orleans` -> `LSU New Orleans`; the golden predates that and
+leaves both without a KenPom match. Note the sibling test
 `test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden` passes Torvik in
 **empty on purpose** — it reproduces the golden as frozen, defect included, and
 is not the authority on `bart_*`.
 
 This is the general hazard with a committed golden: it measures calendar time,
 not correctness. Date every capture.
+
+## hoopR assembler output with the name columns
+
+The golden predates hoopR's `mbb_team_names` columns (`ncaa_team`,
+`espn_pbp_name`, `warren_nolan_team`, `team_247`, `sref_slug`, `sref_team`)
+and its dict-derived alias fixes. `mbb_team_crosswalk_assembled_2026.parquet`
+is the R side of the parity check for both:
+
+| Fixture | Source | Rows |
+|---|---|---:|
+| `mbb_team_crosswalk_assembled_2026.parquet` | `hoopR:::.bb_assemble_team_crosswalk_mbb()` (hoopR `feat/mbb-crosswalk-name-sources`, 2026-11-01) on the inputs below | 362 |
+
+Its inputs are the ones `test_mbb_team_crosswalk_matches_the_hoopr_assembler`
+rebuilds: the golden's ESPN directory (first row per `espn_team_id`) and its
+matched Fox rows, `mbb_torvik_teams_2026.parquet`, and `hoopR::teams_links` for
+2026. Regenerate it from the repository root with a hoopR checkout at `$HOOPR`:
+
+```r
+pkgload::load_all(Sys.getenv("HOOPR"), quiet = TRUE)
+fx <- "tests/fixtures/crosswalk_basketball"
+g <- as.data.frame(arrow::read_parquet(file.path(fx, "mbb_team_crosswalk_2026.parquet")))
+g1 <- g[!duplicated(g$espn_team_id), ]
+espn <- data.frame(team_id = g1$espn_team_id, abbreviation = g1$espn_abbreviation,
+                   display_name = g1$espn_display_name, short_name = g1$espn_short_name,
+                   team = g1$espn_location, mascot = g1$espn_mascot,
+                   conference_name = g1$espn_conference)
+fox <- unique(g[!is.na(g$fox_team_id), c("fox_team_id", "fox_team_name", "fox_section")])
+bart <- as.data.frame(arrow::read_parquet(file.path(fx, "mbb_torvik_teams_2026.parquet")))
+kp <- hoopR::teams_links[hoopR::teams_links$Year == 2026L, c("Team", "Conf")]
+arrow::write_parquet(
+  .bb_assemble_team_crosswalk_mbb(espn, fox, bart, kp, 2026L),
+  file.path(fx, "mbb_team_crosswalk_assembled_2026.parquet")
+)
+```
+
+`sportsdataverse/mbb/data/mbb_team_names.csv` is hoopR's
+`data-raw/mbb_team_names.csv`, copied byte for byte; refresh both together.
 
 ## Re-capturing
 
