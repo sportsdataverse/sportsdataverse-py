@@ -77,6 +77,7 @@ def test_live_model_pbp_reads_the_release():
     assert df.schema["game_id"] == pl.String
     assert df.schema["drive"] == pl.Int64
     assert df.schema["drive_start_yard_line"] == pl.String
+    assert df.schema["drive_end_yard_line"] == pl.String
     assert {"ep", "epa", "wp", "vegas_wp", "cp", "cpoe"} <= set(df.columns)
 
 
