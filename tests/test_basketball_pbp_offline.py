@@ -24,7 +24,8 @@ from sportsdataverse.wnba import wnba_pbp
 FIX = Path(__file__).parent / "fixtures" / "espn"
 BB = FIX / "basketball_pbp"
 MODULES = {"nba": nba_pbp, "wnba": wnba_pbp, "mbb": mbb_pbp, "wbb": wbb_pbp}
-DEFAULT_OU = {"nba": 215.5, "wnba": 165.5, "mbb": 142.0, "wbb": 130.5}
+# real ESPN payloads with no pickcenter (README provenance)
+NO_LINE_GAMES = [("mbb", 401829457), ("mbb", 401830342), ("nba", 260312029), ("wnba", 250603003), ("wbb", 400509734)]
 PICKCENTER = json.loads((BB / "pickcenter.json").read_text(encoding="utf-8"))
 TEAM_TIMEOUT_TYPES = {"RegularTimeOut", "ShortTimeOut", "Full Timeout", "Short Timeout", "No Timeout", "Reset Timeout"}
 
@@ -82,16 +83,11 @@ NO_LINE = pytest.mark.parametrize(
 )
 
 
-@pytest.mark.parametrize("lg", ["nba", "wnba", "wbb"])
+@pytest.mark.parametrize("lg", list(MODULES))
 @NO_LINE
-def test_pickcenter_without_a_spread_keeps_defaults(lg: str, pickcenter) -> None:
-    assert _pick(lg, pickcenter) == (2.5, DEFAULT_OU[lg], True, False)
-
-
-@NO_LINE
-def test_mbb_pickcenter_without_a_spread_is_null(pickcenter) -> None:
-    """hoopR's NA: no invented 2.5 spread, 142 over/under or home favorite (parity audit 06, P0)."""
-    assert _pick("mbb", pickcenter) == (None, None, None, False)
+def test_pickcenter_without_a_spread_is_null(lg: str, pickcenter) -> None:
+    """hoopR / wehoop's NA: no invented 2.5 spread, default over/under or home favorite (parity audits 06, P0)."""
+    assert _pick(lg, pickcenter) == (None, None, None, False)
 
 
 def test_mbb_no_line_over_under_is_the_providers_own() -> None:
@@ -101,11 +97,12 @@ def test_mbb_no_line_over_under_is_the_providers_own() -> None:
     assert pickcenter_odds([row], None, default_spread=None)["overUnder"] == 139.5
 
 
-@pytest.mark.parametrize("game_id", [401829457, 401830342])  # real ESPN payloads with no pickcenter
-def test_mbb_game_without_a_line_has_null_spreads_on_every_play(game_id: int) -> None:
-    raw = _raw(f"mbb_{game_id}.json.gz")
+@pytest.mark.parametrize(("lg", "game_id"), NO_LINE_GAMES)
+def test_game_without_a_line_has_null_spreads_on_every_play(lg: str, game_id: int) -> None:
+    raw = _raw(f"{lg}_{game_id}.json.gz")
     assert not raw.get("pickcenter")
-    plays = pl.from_dicts(mbb_pbp.helper_mbb_pbp(game_id, copy.deepcopy(raw))["plays"], infer_schema_length=None)
+    helper = getattr(MODULES[lg], f"helper_{lg}_pbp")
+    plays = pl.from_dicts(helper(game_id, copy.deepcopy(raw))["plays"], infer_schema_length=None)
     for col in ("gameSpread", "homeFavorite", "homeTeamSpread"):
         assert plays[col].null_count() == plays.height, col
     assert plays["gameSpreadAvailable"].unique().to_list() == [False]
@@ -259,3 +256,58 @@ def test_mbb_no_line_over_under_follows_provider_order() -> None:
 
     rows = [{"provider": {"id": "45"}, "overUnder": 150.5}, {"provider": {"id": "1002"}, "overUnder": 139.5}]
     assert pickcenter_odds(rows, None, default_spread=None)["overUnder"] == 139.5  # "1002" < "45"
+
+
+@pytest.mark.parametrize(("lg", "game_id"), NO_LINE_GAMES)
+def test_release_builder_nulls_a_stored_invented_line(lg: str, game_id: int) -> None:
+    """Stored payloads processed before the fix carry 2.5 / home favored with gameSpreadAvailable False.
+
+    The invariant the R oracle cannot check (it was built from those payloads): no line, no line columns.
+    """
+    import importlib
+
+    builder = getattr(importlib.import_module(f"sportsdataverse.{lg}.{lg}_play_by_play"), f"helper_{lg}_play_by_play")
+    final = getattr(MODULES[lg], f"helper_{lg}_pbp")(game_id, copy.deepcopy(_raw(f"{lg}_{game_id}.json.gz")))
+    for play in final["plays"]:  # what the pre-fix producer stored
+        play.update(gameSpread=2.5, homeFavorite=True, homeTeamSpread=2.5, gameSpreadAvailable=False)
+    df = builder(final)
+    for col in ("game_spread", "home_favorite", "home_team_spread"):
+        assert df[col].null_count() == df.height, col
+    assert df.schema["home_favorite"] == pl.Boolean and df.schema["game_spread"] == pl.Float64
+
+
+def test_release_builder_keeps_a_real_line() -> None:
+    from sportsdataverse.mbb.mbb_play_by_play import helper_mbb_play_by_play
+
+    df = helper_mbb_play_by_play(mbb_pbp.helper_mbb_pbp(401856600, copy.deepcopy(_raw("mbb_401856600.json.gz"))))
+    assert df["home_team_spread"].unique().to_list() == [6.5]
+    assert df["home_favorite"].unique().to_list() == [True]
+
+
+@pytest.mark.parametrize("pickcenter", [[], None], ids=["empty", "missing"])
+def test_nhl_pickcenter_without_a_line_is_null(pickcenter) -> None:
+    """fastRhockey parity audit 06, P0-5: no invented 1.5 puck line, 5.5 total or home favorite."""
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    out = helper_nhl_pickcenter({"pickcenter": pickcenter})
+    assert out == {"gameSpread": None, "overUnder": None, "homeFavorite": None, "gameSpreadAvailable": False}
+
+
+def test_nhl_one_provider_is_a_line() -> None:
+    """A lone provider used to fall through ``> 1`` to the invented defaults."""
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    row = {"provider": {"id": "100"}, "spread": -1.5, "overUnder": 6.5, "homeTeamOdds": {"favorite": True}}
+    out = helper_nhl_pickcenter({"pickcenter": [row]})
+    assert out == {"gameSpread": -1.5, "overUnder": 6.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+def test_nhl_game_without_a_line_has_null_spreads_on_every_play(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.nhl import nhl_pbp
+
+    summary = json.loads((FIX / "summary_nhl.json").read_text(encoding="utf-8"))  # 2024 SCF G7, no pickcenter
+    assert not summary.get("pickcenter")
+    monkeypatch.setattr(nhl_pbp, "_download_json", lambda *a, **k: summary)
+    plays = pl.DataFrame(nhl_pbp.espn_nhl_pbp(401675111)["plays"], infer_schema_length=None)
+    for col in ("gameSpread", "homeFavorite", "homeTeamSpread"):
+        assert plays[col].null_count() == plays.height, col

@@ -188,11 +188,8 @@ def helper_nhl_game_data(pbp_txt, init):
     pbp_txt["gameSpreadAvailable"] = init["gameSpreadAvailable"]
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
-    pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True,
-        abs(init["gameSpread"]),
-        -1 * abs(init["gameSpread"]),
-    )
+    spread = init["gameSpread"]
+    pbp_txt["homeTeamSpread"] = None if spread is None else (abs(spread) if init["homeFavorite"] else -abs(spread))
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
     if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
@@ -235,36 +232,23 @@ def helper_nhl_game_data(pbp_txt, init):
 
 
 def helper_nhl_pickcenter(pbp_txt):
-    # Spread definition
-    if len(pbp_txt.get("pickcenter", [])) > 1:
-        pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
+    # One provider is a line (was `> 1`). A missing value stays None: no invented 1.5 / 5.5 / home favored.
+    pickcenter = pd.json_normalize(pbp_txt.get("pickcenter") or [])
+    if "provider.id" in pickcenter.columns:
         pickcenter = pickcenter.sort_values(by=["provider.id"])
-        homeFavorite = (
-            pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-            if "homeTeamOdds.favorite" in pickcenter.columns
-            else True
-        )
-        gameSpread = (
-            pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0] if "spread" in pickcenter.columns else 1.5
-        )
-        overUnder = (
-            pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-            if "overUnder" in pickcenter.columns
-            else 5.5
-        )
-        gameSpreadAvailable = True
-        # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
-    else:
-        gameSpread = 1.5
-        overUnder = 5.5
-        homeFavorite = True
-        gameSpreadAvailable = False
 
+    def first(col):
+        vals = pickcenter[col].dropna() if col in pickcenter.columns else pd.Series(dtype=object)
+        return vals.iloc[0] if len(vals) else None
+
+    gameSpread = first("spread")
+    favorite = first("homeTeamOdds.favorite")
+    overUnder = first("overUnder")
     return {
-        "gameSpread": gameSpread,
-        "overUnder": overUnder,
-        "homeFavorite": homeFavorite,
-        "gameSpreadAvailable": gameSpreadAvailable,
+        "gameSpread": None if gameSpread is None else float(gameSpread),
+        "overUnder": None if overUnder is None else float(overUnder),
+        "homeFavorite": None if favorite is None else bool(favorite),
+        "gameSpreadAvailable": gameSpread is not None,
     }
 
 
@@ -292,13 +276,9 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
             awayTeamMascot=pl.lit(init["awayTeamMascot"]),
             awayTeamAbbrev=pl.lit(init["awayTeamAbbrev"]),
             awayTeamNameAlt=pl.lit(init["awayTeamNameAlt"]),
-            # Defensive cast: ESPN sometimes returns these as python floats
-            # / bools (no .astype()), sometimes as numpy arrays. `.first()`
-            # collapses the resulting Series-of-length-1 to a scalar so
-            # polars 1.x doesn't refuse to broadcast it across the
-            # per-play DataFrame. Same shape fix as cfb_pbp / nfl_pbp.
-            gameSpread=pl.lit(float(np.asarray(init["gameSpread"]).reshape(-1)[0])).abs().first(),
-            homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).reshape(-1)[0])).first(),
+            # helper_nhl_pickcenter returns Python scalars or None (no line), so homeTeamSpread is null too.
+            gameSpread=pl.lit(init["gameSpread"], dtype=pl.Float64).abs(),
+            homeFavorite=pl.lit(init["homeFavorite"], dtype=pl.Boolean),
             gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
         )
         .with_columns(

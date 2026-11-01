@@ -38,7 +38,7 @@ def pickcenter_odds(
 
     ``default_spread=None`` is hoopR's behaviour instead: a game with no line gets a
     null spread, over/under (the provider's own, if it has one) and home favorite,
-    never an invented line. MBB uses it.
+    never an invented line. MBB, NBA, WNBA and WBB use it.
     """
     pc = pd.json_normalize(pickcenter or [])
     if "provider.id" in pc.columns:

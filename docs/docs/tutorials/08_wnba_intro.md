@@ -33,7 +33,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wnba_game_officials`](../wnba/reference/additional/espn.md#espn_wnba_game_officials) | The refs who worked a game | ⭐ ESPN |
 | [`load_wnba_schedule`](../wnba/reference/loaders/other.md#load_wnba_schedule) | Whole-season schedule (parquet release) | 📦 loader |
 | [`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) | Whole-season player box scores | 📦 loader |
-| [`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) | Whole-season team box scores | 📦 loader |
+| [`load_wnba_team_boxscore`](../wnba/reference/loaders/team.md#load_wnba_team_boxscore) | Whole-season team box scores | 📦 loader |
 | [`load_wnba_player_season_stats`](../wnba/reference/loaders/player.md#load_wnba_player_season_stats) | Season-aggregated player stats | 📦 loader |
 | [`load_wnba_pbp`](../wnba/reference/loaders/other.md#load_wnba_pbp) | Whole-season play-by-play | 📦 loader |
 | [`load_wnba_shots`](../wnba/reference/loaders/other.md#load_wnba_shots) | Shot-location data | 📦 loader |
@@ -532,7 +532,7 @@ out
 
 ### Recipe 5 — Best net rating in the league ⚖️
 
-[`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) carries each team's score **and** its opponent's score per game. Average points for minus points against gives a quick-and-dirty net rating — the single best one-number summary of who's good. We require 20+ games to drop the All-Star exhibition noise.
+[`load_wnba_team_boxscore`](../wnba/reference/loaders/team.md#load_wnba_team_boxscore) carries each team's score **and** its opponent's score per game. Average points for minus points against gives a quick-and-dirty net rating — the single best one-number summary of who's good. We require 20+ games to drop the All-Star exhibition noise.
 
 
 ```python
@@ -919,7 +919,7 @@ The `load_wnba_*` family reads pre-built **parquet releases** (whole seasons at 
 |---|---|
 | [`load_wnba_schedule`](../wnba/reference/loaders/other.md#load_wnba_schedule) | schedule + results |
 | [`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) | player box scores |
-| [`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) | team box scores |
+| [`load_wnba_team_boxscore`](../wnba/reference/loaders/team.md#load_wnba_team_boxscore) | team box scores |
 | [`load_wnba_player_season_stats`](../wnba/reference/loaders/player.md#load_wnba_player_season_stats) | season-aggregated player stats |
 | [`load_wnba_pbp`](../wnba/reference/loaders/other.md#load_wnba_pbp) | play-by-play |
 | [`load_wnba_shots`](../wnba/reference/loaders/other.md#load_wnba_shots) | shot locations |

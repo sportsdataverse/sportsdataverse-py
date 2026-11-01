@@ -637,7 +637,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -670,7 +670,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -679,8 +679,8 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_game_rosters/game_rosters_{season}.parquet"
         )
@@ -698,6 +698,9 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wbb_game_rosters")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["game_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -707,7 +710,7 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2014).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -728,8 +731,11 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
         |position_name         |String |
         |position_display_name |String |
 
+    Note:
+        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2014.
 
     Example:
         Quick start::
@@ -738,8 +744,8 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_officials/officials_{season}.parquet"
         )
@@ -764,7 +770,7 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2006).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -790,8 +796,11 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |display_value                 |String  |
         |value                         |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2006.
 
     Example:
         Quick start::
@@ -800,8 +809,8 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2006:
+            raise SeasonNotFoundError("season cannot be less than 2006")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -908,7 +917,7 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_shots
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -939,7 +948,7 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
         |team_abbrev         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -948,8 +957,8 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_shots/shots_{season}.parquet"
         )
@@ -972,7 +981,7 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1006,8 +1015,11 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -1016,8 +1028,8 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet"
         )
@@ -1042,7 +1054,7 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1068,8 +1080,11 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1078,8 +1093,8 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet"
         )
@@ -1116,10 +1131,10 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int64   |
+        |espn_team_id       |Int32   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |Int64   |
+        |espn_athlete_id    |Int32   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
@@ -1162,9 +1177,9 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wbb_player_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1174,7 +1189,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2021).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1185,9 +1200,9 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |:-----------------|:-------|
         |season            |Int32   |
         |game_date         |Date    |
-        |home_espn_team_id |Int64   |
-        |away_espn_team_id |Int64   |
-        |espn_game_id      |Int64   |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |bart_muid         |String  |
         |bart_team1        |String  |
         |bart_team2        |String  |
@@ -1198,7 +1213,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |match_confidence  |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2021.
 
     Example:
         Quick start::
@@ -1207,8 +1222,8 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2021:
+            raise SeasonNotFoundError("season cannot be less than 2021")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet"
         )
@@ -1226,9 +1241,9 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wbb_schedule_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1248,7 +1263,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |espn_team_id          |Int64   |
+        |espn_team_id          |Int32   |
         |espn_abbreviation     |String  |
         |espn_display_name     |String  |
         |espn_short_name       |String  |
@@ -1295,9 +1310,9 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wbb_team_crosswalk")
     )
-    # Producers shipped this id with differing dtypes across releases; pin it here
-    # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

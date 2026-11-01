@@ -11661,10 +11661,10 @@
   "load_wnba_stats_schedules": "stats",
   "load_wnba_stats_shots": "stats",
   "load_wnba_stats_team_boxscores": "stats",
-  "load_wnba_team_boxscore": "other",
-  "load_wnba_team_crosswalk": "other",
-  "load_wnba_team_group_seasons": "other",
-  "load_wnba_team_season_stats": "other"
+  "load_wnba_team_boxscore": "team",
+  "load_wnba_team_crosswalk": "team",
+  "load_wnba_team_group_seasons": "team",
+  "load_wnba_team_season_stats": "team"
  },
  "/docs/wnba/reference/wnba_stats": {
   "wnba_stats_alltimeleadersgrids": "other",

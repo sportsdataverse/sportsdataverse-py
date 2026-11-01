@@ -1,5 +1,5 @@
 # Byte oracle for the RDS writer's non-parity-frame branches (C-L58): Date, POSIXct with and
-# without a time zone, an Int64 column outside R's int32 range (R has no 64-bit integer: double),
+# without a time zone, an Int64 column outside R's int32 range (R has no 64-bit integer: character, exact),
 # an all-null column (logical NA) and a Categorical column (written as character).
 #
 # Usage (sdv-py repo root):
@@ -15,7 +15,7 @@ df <- structure(
     d = as.Date(c("2024-01-02", NA, "1969-12-31")),
     t_utc = structure(c(1704164400, NA, -86400.5), class = c("POSIXct", "POSIXt"), tzone = "UTC"),
     t_naive = structure(c(1704164400, 0, NA), class = c("POSIXct", "POSIXt")),
-    big = c(3e9, NA, -3000000001),
+    big = c("3000000000", NA, "-3000000001"),
     nul = c(NA, NA, NA),
     cat = c("a", "b", NA)
   ),
@@ -25,6 +25,6 @@ df <- structure(
 saveRDS(df, out, compress = FALSE, version = 2)
 back <- readRDS(out)
 stopifnot(identical(back, df))
-stopifnot(inherits(back$d, "Date"), identical(attr(back$t_utc, "tzone"), "UTC"), is.double(back$big), is.logical(back$nul), is.character(back$cat))
+stopifnot(inherits(back$d, "Date"), identical(attr(back$t_utc, "tzone"), "UTC"), is.character(back$big), is.logical(back$nul), is.character(back$cat))
 cat(R.version.string, "\n")
 str(back)

@@ -28,3 +28,14 @@ def test_hoopr_renamed_pairs_resolve():
     assert aliases["mbb"]["load_mbb_player_boxscore"] == "load_mbb_player_box"
     assert aliases["nba"]["nba_stats_assistleaders"] == "nba_assistleaders"
     assert aliases["nba"]["load_nba_stats_schedules"] == "load_nba_stats_schedule"
+
+
+def test_wehoop_renamed_pairs_resolve():
+    """The wehoop names sdv-py renames (wehoop parity audit 06, P1-7): stats.wnba.com wnba_*, box/stats loaders, hhs_*."""
+    aliases = yaml.safe_load((CODEGEN / "r_parity_aliases.yaml").read_text(encoding="utf-8"))
+    assert aliases["wnba"]["wnba_stats_assistleaders"] == "wnba_assistleaders"
+    assert aliases["wnba"]["load_wnba_stats_schedules"] == "load_wnba_stats_schedule"
+    assert aliases["wnba"]["helper_wnba_play_by_play"] == "helper_espn_wnba_pbp"
+    assert aliases["wbb"]["load_wbb_team_boxscore"] == "load_wbb_team_box"
+    assert aliases["wbb"]["herhoopstats_teams"] == "hhs_teams"
+    assert sum(py.startswith("wnba_stats_") for py in aliases["wnba"]) == 103

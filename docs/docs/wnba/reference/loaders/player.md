@@ -79,6 +79,11 @@ load_wnba_player_boxscore(seasons=2024)
 ## load_wnba_player_season_stats
 
 Release: [espn_wnba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wnba_player_season_stats-returns}
 
 | col_name | type | description |
@@ -107,19 +112,24 @@ load_wnba_player_season_stats(seasons=2024)
 ## load_wnba_player_crosswalk
 
 Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_player_crosswalk_{season}.parquet`
+
+:::caution[Coverage]
+wnba_player_id is Int64, as WNBA Stats ships player_id / person_id, so the bridge joins without a cast.
+:::
+
 ### Returns {#load_wnba_player_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
-| `espn_athlete_id` | Int64 | ESPN athlete id. |
+| `espn_athlete_id` | Int32 | ESPN athlete id. |
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |
-| `wnba_player_id` | String | Player identifier on stats.wnba.com matched to the ESPN player. |
+| `wnba_player_id` | Int64 | Player identifier on stats.wnba.com matched to the ESPN player. |
 | `wnba_player_name` | String | Player display name on the stats.wnba.com side of the crosswalk. |
 | `wnba_jersey_num` | String | Jersey number listed on the stats.wnba.com side of the crosswalk. |
 | `wnba_position` | String | Position listed on the stats.wnba.com side of the crosswalk. |

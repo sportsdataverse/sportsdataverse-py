@@ -98,6 +98,11 @@ load_wbb_player_value(seasons=2025)
 ## load_wbb_player_season_stats
 
 Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wbb_player_season_stats-returns}
 
 | col_name | type | description |
@@ -131,10 +136,10 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
-| `espn_athlete_id` | Int64 | ESPN athlete id. |
+| `espn_athlete_id` | Int32 | ESPN athlete id. |
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |

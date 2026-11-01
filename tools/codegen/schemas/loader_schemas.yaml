@@ -29782,13 +29782,13 @@ load_wbb_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: Int64
+  type: Int32
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -30158,11 +30158,11 @@ load_wbb_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int64
+  type: Int32
 - name: away_espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_game_id
-  type: Int64
+  type: Int32
 - name: bart_muid
   type: String
 - name: bart_team1
@@ -30390,7 +30390,7 @@ load_wbb_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -30554,7 +30554,7 @@ load_wnba_game_rosters:
 - name: season
   type: Int32
 - name: game_id
-  type: String
+  type: Int32
 - name: team_id
   type: Int32
 - name: team_slug
@@ -30648,7 +30648,7 @@ load_wnba_officials:
 - name: season
   type: Int32
 - name: game_id
-  type: String
+  type: Int32
 - name: official_id
   type: Int32
 - name: official_uid
@@ -30996,13 +30996,13 @@ load_wnba_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: Int64
+  type: Int32
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -31010,7 +31010,7 @@ load_wnba_player_crosswalk:
 - name: espn_position
   type: String
 - name: wnba_player_id
-  type: String
+  type: Int64
 - name: wnba_player_name
   type: String
 - name: wnba_jersey_num
@@ -31145,7 +31145,7 @@ load_wnba_rosters:
 - name: team_logo
   type: String
 - name: athlete_id
-  type: String
+  type: Int32
 - name: uid
   type: String
 - name: guid
@@ -31361,19 +31361,19 @@ load_wnba_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int64
+  type: Int32
 - name: away_espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_game_id
-  type: Int64
+  type: Int32
 - name: wnba_game_id
   type: String
 - name: wnba_game_code
   type: String
 - name: wnba_home_team_id
-  type: String
+  type: Int64
 - name: wnba_away_team_id
-  type: String
+  type: Int64
 - name: fox_game_id
   type: String
 - name: fox_home_team_id
@@ -32158,7 +32158,7 @@ load_wnba_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int64
+  type: Int32
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -32170,7 +32170,7 @@ load_wnba_team_crosswalk:
 - name: espn_mascot
   type: String
 - name: wnba_team_id
-  type: String
+  type: Int64
 - name: wnba_team_tricode
   type: String
 - name: wnba_team_name
