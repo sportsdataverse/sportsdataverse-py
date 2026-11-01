@@ -23342,6 +23342,8 @@ load_nfl_model_pbp:
   type: String
 - name: fumble_recovery_2_yards
   type: Int64
+- name: drive
+  type: Int64
 - name: two_point_conv_result
   type: String
 - name: extra_point_result
@@ -23366,12 +23368,12 @@ load_nfl_model_pbp:
   type: String
 - name: run_gap
   type: String
+- name: qb_dropback
+  type: Int32
 - name: pass
   type: Int64
 - name: rush
   type: Int64
-- name: qb_dropback
-  type: Int32
 - name: posteam_score
   type: Int64
 - name: defteam_score
@@ -23423,9 +23425,9 @@ load_nfl_model_pbp:
 - name: drive_game_clock_end
   type: String
 - name: drive_start_yard_line
-  type: Int64
+  type: String
 - name: drive_end_yard_line
-  type: Int64
+  type: String
 - name: drive_play_id_started
   type: Int64
 - name: drive_play_id_ended
