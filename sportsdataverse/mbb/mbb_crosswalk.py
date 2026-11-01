@@ -157,7 +157,8 @@ KP_ALIAS: Dict[str, str] = {
 
 # ---------------------------------------------------------------------------
 # Fox display_name -> ESPN display_name alias table (VERBATIM from hoopR
-# .mbb_fox_display_alias). Both sides are already normalized keys.
+# .mbb_fox_display_alias). Both sides are already normalized keys. No
+# "st thomas tommies" entry: Fox's "St. Thomas Tommies" already matches ESPN.
 # ---------------------------------------------------------------------------
 FOX_DISPLAY_ALIAS: Dict[str, str] = {
     # Fox drops "University", uses shortened or alternative forms
@@ -179,7 +180,6 @@ FOX_DISPLAY_ALIAS: Dict[str, str] = {
     "southern indiana screaming eagles": "southern indiana screaming eagles",
     "southern university jaguars": "southern jaguars",
     "st francis pa red flash": "saint francis red flash",
-    "st thomas tommies": "st thomas minnesota tommies",
     "tennessee martin skyhawks": "ut martin skyhawks",
     "uconn huskies": "uconn huskies",
     "uic flames": "uic flames",
@@ -330,7 +330,8 @@ def _kenpom_teams(season: int) -> pl.DataFrame:
 # hoopR as the ``hoopR::mbb_team_names`` data object -- the table
 # ``mbb_team_crosswalk()`` joins on ``espn_team_id``. Copied byte for byte;
 # refresh by copying the file again after re-running that script. Empty cells
-# read as null. The names are season-agnostic (mostly as of 2022-23).
+# read as null. The names are season-agnostic, as the 2023 source recorded
+# them (some predate a rename).
 # ---------------------------------------------------------------------------
 _TEAM_NAMES_CACHE: Dict[str, pl.DataFrame] = {}
 
@@ -623,8 +624,8 @@ def mbb_team_crosswalk(
         the team under the conference it moved to the next season (see
         :func:`~sportsdataverse._crosswalk_basketball_sources.drop_unconfirmed_fox_sections`).
         The :data:`NAME_COLUMNS` are the exception: each team has one set of
-        names (mostly as of 2022-23), applied to every season; an unknown name
-        is null, never a guess.
+        names (as the 2023 source recorded them, so some predate a rename),
+        applied to every season; an unknown name is null, never a guess.
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could

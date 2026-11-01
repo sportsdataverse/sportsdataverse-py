@@ -251,6 +251,36 @@ def test_mbb_team_crosswalk_matches_the_hoopr_assembler() -> None:
     assert got.filter(pl.col("ncaa_team").is_null())["espn_location"].to_list() == ["West Florida"]
 
 
+def test_mbb_st_thomas_joins_fox_torvik_and_kenpom() -> None:
+    """ESPN's current "St. Thomas" joins all three sources (no stale alias in the way)."""
+    espn = pl.DataFrame(
+        {
+            "team_id": [2900],
+            "abbreviation": ["STMN"],
+            "display_name": ["St. Thomas Tommies"],
+            "short_name": ["St Thomas"],
+            "team": ["St. Thomas"],
+            "mascot": ["Tommies"],
+        }
+    )
+    fox = pl.DataFrame(
+        {"fox_team_id": ["573"], "fox_team_name": ["St. Thomas Tommies"], "fox_section": ["Summit League"]}
+    )
+    out = mbb_crosswalk._assemble_team_crosswalk(
+        espn,
+        fox,
+        pl.DataFrame({"team": ["St. Thomas"], "conf": ["Sum"]}),
+        pl.DataFrame({"Team": ["St. Thomas"], "Conf": ["Sum"]}),
+        SEASON,
+    )
+    assert out.select("fox_team_id", "bart_team", "kp_team", "match_method").row(0) == (
+        "573",
+        "St. Thomas",
+        "St. Thomas",
+        "fox+bart+kp",
+    )
+
+
 def test_mbb_team_names_bundle_is_keyed_on_espn_team_id() -> None:
     """The bundled name table: unique Int32 ids, string names, nulls not ``""``."""
     names = mbb_crosswalk._team_names()
@@ -265,6 +295,8 @@ def test_mbb_team_names_bundle_is_keyed_on_espn_team_id() -> None:
     assert row["IU Indy"]["espn_team_id"] == 85
     assert row["IU Indy"]["ncaa_team"] == "IUPUI"
     assert row["Le Moyne"]["sref_slug"] is None
+    # The dict's 247 name for UT Rio Grande Valley is another school's ("UTSA").
+    assert row["UT Rio Grande Valley"]["team_247"] is None
 
 
 def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
@@ -360,8 +392,8 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
     assert got["bart_team"].is_not_null().sum() == BART_JOINED
     assert got["bart_conf"].is_not_null().sum() == BART_JOINED
     assert got["bart_match_confidence"].is_not_null().sum() == BART_JOINED
-    # St. Thomas has no Fox match (Fox's own alias still targets the old ESPN
-    # name), so it is the one bart+kp row.
+    # St. Thomas has no Fox row here: the golden, which the Fox input is
+    # rebuilt from, froze it unmatched. So it is the one bart+kp row.
     assert got.filter(pl.col("match_method") == "fox+bart+kp").height == BART_JOINED - 1
     assert got.filter(pl.col("match_method") == "bart+kp")["espn_location"].to_list() == ["St. Thomas"]
     assert got.filter(pl.col("match_method") == "fox+kp").height == 0

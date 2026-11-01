@@ -486,7 +486,7 @@ Sports-Reference names (`NAME_COLUMNS`) come from the bundled
 | `bart_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
 | `kp_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `ncaa_team` | String | NCAA (stats.ncaa.org) team name, from the bundled mbb_team_names table (hoopR's data-raw/dict_hoopR.csv, mostly as of 2022-23); the same for every season, null where unknown. |
+| `ncaa_team` | String | NCAA (stats.ncaa.org) team name, from the bundled mbb_team_names table (hoopR's data-raw/dict_hoopR.csv, as that 2023 source recorded them, so some predate a rename); the same for every season, null where unknown. |
 | `espn_pbp_name` | String | Team name as ESPN play-by-play prints it, from the bundled mbb_team_names table; the same for every season, null where unknown. |
 | `warren_nolan_team` | String | Warren Nolan team name, from the bundled mbb_team_names table; the same for every season, null where unknown. |
 | `team_247` | String | 247Sports team name, from the bundled mbb_team_names table; the same for every season, null where unknown. |
