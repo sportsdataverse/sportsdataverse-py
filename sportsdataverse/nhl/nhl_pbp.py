@@ -233,7 +233,9 @@ def helper_nhl_game_data(pbp_txt, init):
 
 def helper_nhl_pickcenter(pbp_txt):
     # One provider is a line (was `> 1`). A missing value stays None: no invented 1.5 / 5.5 / home favored.
-    pickcenter = pd.json_normalize(pbp_txt.get("pickcenter") or [])
+    pickcenter = pbp_txt.get("pickcenter")
+    # an absent key is np.array([]) (key_check above): no truth test, which raises on an ndarray
+    pickcenter = pd.json_normalize([] if pickcenter is None or len(pickcenter) == 0 else list(pickcenter))
     if "provider.id" in pickcenter.columns:
         pickcenter = pickcenter.sort_values(by=["provider.id"])
 
@@ -247,8 +249,11 @@ def helper_nhl_pickcenter(pbp_txt):
     return {
         "gameSpread": None if gameSpread is None else float(gameSpread),
         "overUnder": None if overUnder is None else float(overUnder),
-        # no favorite flag: the spread is the home line, so a negative one is a home favorite (none at 0)
-        "homeFavorite": bool(favorite) if favorite is not None else (None if not gameSpread else bool(gameSpread < 0)),
+        # no spread, no favorite; no favorite flag: the spread is the home line, so a negative one is a
+        # home favorite (none at 0)
+        "homeFavorite": None
+        if gameSpread is None
+        else (bool(favorite) if favorite is not None else (None if not gameSpread else bool(gameSpread < 0))),
         "gameSpreadAvailable": gameSpread is not None,
     }
 

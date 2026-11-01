@@ -320,3 +320,20 @@ def test_nhl_favorite_falls_back_to_the_spread_sign(spread: float, favorite) -> 
 
     out = helper_nhl_pickcenter({"pickcenter": [{"provider": {"id": "100"}, "spread": spread}]})
     assert out["homeFavorite"] is favorite and out["gameSpreadAvailable"] is True
+
+
+def test_an_ndarray_pickcenter_is_no_line() -> None:
+    """``espn_nhl_pbp`` fills an absent ``pickcenter`` with ``np.array([])``; bool() on it raises in NumPy 2."""
+    from sportsdataverse._espn_basketball_pbp import pickcenter_odds
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    none = {"gameSpread": None, "overUnder": None, "homeFavorite": None, "gameSpreadAvailable": False}
+    assert helper_nhl_pickcenter({"pickcenter": np.array([])}) == none
+    assert pickcenter_odds(np.array([]), None) == none
+
+
+def test_nhl_favorite_flag_without_a_spread_is_no_favorite() -> None:
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    out = helper_nhl_pickcenter({"pickcenter": [{"provider": {"id": "100"}, "homeTeamOdds": {"favorite": True}}]})
+    assert out["homeFavorite"] is None and out["gameSpreadAvailable"] is False

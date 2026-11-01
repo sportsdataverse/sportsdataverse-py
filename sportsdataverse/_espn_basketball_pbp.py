@@ -40,7 +40,8 @@ def pickcenter_odds(
     and home favorite, never an invented line. A numeric ``default_spread`` restores the
     old fallback (that spread, ``default_over_under``, home favored); no caller passes one.
     """
-    pc = pd.json_normalize(pickcenter or [])
+    # no truth test: a stored payload can carry np.array([]), which raises on bool()
+    pc = pd.json_normalize([] if pickcenter is None or len(pickcenter) == 0 else pickcenter)
     if "provider.id" in pc.columns:
         pc = pc.sort_values(by="provider.id", key=lambda ids: ids.astype(str), kind="stable")
     if "spread" not in pc.columns or not pc["spread"].notnull().any():
