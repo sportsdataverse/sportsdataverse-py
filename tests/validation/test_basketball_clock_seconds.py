@@ -70,8 +70,8 @@ def _process(monkeypatch, lg: str, summary: dict) -> tuple[pl.DataFrame, pl.Data
 
     monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(summary))
     monkeypatch.setattr(mod, f"helper_{lg}_pbp_features", spy)
-    # mbb / nba default to the release frame; these checks read the processed dict
-    kw = {"return_parsed": False} if lg in ("mbb", "nba") else {}
+    # espn_<lg>_pbp defaults to the release frame; these checks read the processed dict
+    kw = {"return_parsed": False}
     res = getattr(mod, f"espn_{lg}_pbp")(game_id=int(summary["header"]["id"]), **kw)
     return pl.from_dicts(res["plays"], infer_schema_length=None), frames[0]
 

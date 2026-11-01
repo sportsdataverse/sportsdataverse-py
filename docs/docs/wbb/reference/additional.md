@@ -16,7 +16,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [espn_wbb_calendar](additional/espn.md#espn_wbb_calendar) | espn_wbb_calendar - look up the women's college basketball calendar for a given season |
 | [espn_wbb_game_officials](additional/espn.md#espn_wbb_game_officials) | Pull the officials assigned to a women's-college-basketball game. |
 | [espn_wbb_game_rosters](additional/espn.md#espn_wbb_game_rosters) | espn_wbb_game_rosters() - Pull the game by id. |
-| [espn_wbb_pbp](additional/espn.md#espn_wbb_pbp) | espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`, |
+| [espn_wbb_pbp](additional/espn.md#espn_wbb_pbp) | espn_wbb_pbp() - Pull one game's play-by-play from ESPN's `womens-college-basketball/summary` endpoint. |
 | [espn_wbb_player_stats](additional/espn.md#espn_wbb_player_stats) | Pull a women's-college-basketball athlete's ESPN **season** stat line. |
 | [espn_wbb_schedule](additional/espn.md#espn_wbb_schedule) | espn_wbb_schedule - look up the women's college basketball schedule for a given season |
 | [espn_wbb_standings](additional/espn.md#espn_wbb_standings) | Pull ESPN women's-college-basketball standings for a season. |

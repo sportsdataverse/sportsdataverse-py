@@ -12,7 +12,7 @@ from tests.conftest import skip_if_no_live
 
 
 def _plays(game_id: int) -> pl.DataFrame:
-    plays = espn_wbb_pbp(game_id=game_id)["plays"]
+    plays = espn_wbb_pbp(game_id=game_id, return_parsed=False)["plays"]
     if not plays:
         pytest.skip(f"ESPN returned no plays for {game_id}")
     return pl.from_dicts(plays)

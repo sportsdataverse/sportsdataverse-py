@@ -208,11 +208,11 @@ out
 
 ## 🎬 Play-by-play — 2024 Finals Game 5
 
-[`espn_wnba_pbp`](../wnba/reference/additional/espn.md#espn_wnba_pbp) returns a **dict** of component pieces (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` entry is a list of raw ESPN dicts; build a frame with `pl.DataFrame(..., infer_schema_length=None)`. Its columns use raw **dot-notation** (`period.number`, `clock.displayValue`, `scoringPlay`, `type.text`).
+[`espn_wnba_pbp`](../wnba/reference/additional/espn.md#espn_wnba_pbp) with `return_parsed=False` returns a **dict** of component pieces (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` entry is a list of raw ESPN dicts; build a frame with `pl.DataFrame(..., infer_schema_length=None)`. Its columns use raw **dot-notation** (`period.number`, `clock.displayValue`, `scoringPlay`, `type.text`).
 
 
 ```python
-pbp = safe('Game 5 pbp', lambda: wnba.espn_wnba_pbp(game_id=401726992))
+pbp = safe('Game 5 pbp', lambda: wnba.espn_wnba_pbp(game_id=401726992, return_parsed=False))
 print('dict keys:', list(pbp.keys())[:8] if pbp is not None else None)
 if pbp is not None and pbp.get('plays'):
     plays = pl.DataFrame(pbp['plays'], infer_schema_length=None)

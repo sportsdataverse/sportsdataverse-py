@@ -13,7 +13,7 @@ Example:
 
         cfb_pbp = sdv.cfb.espn_cfb_pbp(game_id=401628334)
         nba_schedule = sdv.nba.espn_nba_schedule(season=2024)
-        wnba_pbp = sdv.wnba.espn_wnba_pbp(game_id=401620238)
+        wnba_pbp = sdv.wnba.espn_wnba_pbp(game_id=401620238)  # the release play-by-play frame
         nfl_pbp = sdv.nfl.load_nfl_pbp(seasons=[2024])
 
     The ESPN-fronted wrappers (``espn_*``) hit the live ESPN API on every

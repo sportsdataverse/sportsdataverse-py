@@ -1,4 +1,4 @@
-"""``espn_mbb_pbp`` / ``espn_nba_pbp`` return the release play-by-play frame, offline.
+"""``espn_{mbb,nba,wbb,wnba}_pbp`` return the release play-by-play frame, offline.
 
 Payloads are the committed ESPN summary captures in ``tests/fixtures/espn/basketball_pbp/``
 (provenance in its README), served as the HTTP body. The release contract is the committed
@@ -20,13 +20,20 @@ import pytest
 from sportsdataverse._returns_schemas import SCHEMAS
 from sportsdataverse.mbb import mbb_pbp
 from sportsdataverse.nba import nba_pbp
+from sportsdataverse.wbb import wbb_pbp
+from sportsdataverse.wnba import wnba_pbp
 
 BB = Path(__file__).parent / "fixtures" / "espn" / "basketball_pbp"
-MODULES = {"nba": nba_pbp, "mbb": mbb_pbp}
+MODULES = {"nba": nba_pbp, "mbb": mbb_pbp, "wbb": wbb_pbp, "wnba": wnba_pbp}
 CASES = [("mbb", g) for g in (401830342, 401856600, 401829457, 401812161, 401828345)] + [
     ("nba", g) for g in (401766458, 400829116, 401704638, 260312029)
 ]
-# Columns every season of both releases carries.
+CASES += [("wbb", g) for g in (401364640, 400509734, 293170052, 273130043, 283430164)] + [
+    ("wnba", g) for g in (400927398, 250603003, 240618004, 401726992)
+]
+# 2024 WNBA Finals G5, the committed Site v2 summary (tests/fixtures/espn/README.md): sub-second clocks
+SUMMARIES = {("wnba", 401726992): BB.parent / "summary_wnba.json"}
+# Columns every season of the four releases carries.
 CORE = {
     "game_play_number", "id", "sequence_number", "type_id", "type_text", "text", "away_score", "home_score",
     "period_number", "clock_display_value", "scoring_play", "shooting_play", "score_value", "team_id",
@@ -40,6 +47,10 @@ CORE = {
 NOT_PER_GAME = {
     "mbb": {"pregame_home_prob", "home_win_prob", "media_id"},
     "nba": {"type_abbreviation", "points_attempted", "short_description", "wallclock"},
+    # WBB: the season-level win-probability enrichment, and the fields older payloads predate
+    "wbb": {"espn_home_wp", "espn_away_wp", "espn_tie_percentage", "pregame_home_prob", "home_win_prob"}
+    | {"points_attempted", "short_description", "wallclock"},
+    "wnba": {"type_abbreviation", "points_attempted", "short_description", "wallclock"},
 }
 
 
@@ -52,6 +63,8 @@ class _Resp:
 
 
 def _raw(lg: str, gid: int) -> dict:
+    if (lg, gid) in SUMMARIES:
+        return json.loads(SUMMARIES[(lg, gid)].read_text(encoding="utf-8"))
     with gzip.open(BB / f"{lg}_{gid}.json.gz", "rt", encoding="utf-8") as f:
         return json.load(f)
 
@@ -102,7 +115,7 @@ def test_default_is_the_release_frame(monkeypatch: pytest.MonkeyPatch, lg: str, 
     assert shots.height > 0
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 def test_return_parsed_false_keeps_the_game_dict(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     gid = next(g for x, g in CASES if x == lg)
     raw = _raw(lg, gid)
@@ -113,7 +126,7 @@ def test_return_parsed_false_keeps_the_game_dict(monkeypatch: pytest.MonkeyPatch
     assert _call(monkeypatch, lg, raw, raw=True)["plays"] == raw["plays"]
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     raw = _raw(lg, next(g for x, g in CASES if x == lg))
     pdf = _call(monkeypatch, lg, raw, return_as_pandas=True)
@@ -126,7 +139,7 @@ def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     assert dict(pdf.dtypes) == dict(df.to_pandas(use_pyarrow_extension_array=True).dtypes)
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 @pytest.mark.parametrize("empty", ["ten_plays", "no_pbp_source"])
 def test_a_game_without_play_by_play_is_the_release_schema(
     monkeypatch: pytest.MonkeyPatch, lg: str, empty: str
@@ -148,3 +161,10 @@ def test_columns_come_in_the_release_order(monkeypatch: pytest.MonkeyPatch, lg: 
     # so the frame stacks with load_<lg>_pbp output (pl.concat how="vertical" needs the same order)
     df = _call(monkeypatch, lg, _raw(lg, gid))
     assert df.columns == [c for c in SCHEMAS[f"loader_schemas:load_{lg}_pbp"] if c in df.columns]
+
+
+def test_wnba_sub_second_clocks_are_float(monkeypatch: pytest.MonkeyPatch) -> None:
+    # 2024 payloads carry "53.1"-style clocks in the last minute; the release keeps them Float64
+    df = _call(monkeypatch, "wnba", _raw("wnba", 401726992))
+    assert df.schema["clock_seconds"] == pl.Float64
+    assert (df["clock_seconds"] % 1 != 0).any()
