@@ -203,14 +203,13 @@ def pwhl_pbp(game_id: int, return_as_pandas: bool = False) -> Any:
     Returns:
         polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie
             change ...): ``game_id``, ``event``, ``team_id``, ``period_of_game``,
-            ``time_of_period``, rink ``x_coord`` / ``y_coord`` (Float64, the raw 600×300 feed
-            canvas, NOT feet) and the transforms above (``x_coord_fixed`` / ``x_coord_right`` and
-            their ``y_`` pairs are in feet), the primary / second / third player and goalie ids
-            (Int64) and names, the plus / minus skaters on a goal, ``is_goal_twin``, and the
-            clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame
-            when ``return_as_pandas`` is True. The release loader ``load_pwhl_pbp`` publishes
-            ``x_coord`` in feet, so compare it with ``x_coord_fixed`` / ``x_coord_right`` here,
-            never with this ``x_coord``.
+            ``time_of_period``, rink ``x_coord`` / ``y_coord`` (Float64, feet, centre ice at
+            (0, 0), as in fastRhockey and the ``load_pwhl_pbp`` release; the raw 600×300 feed
+            canvas values are ``x_coord_original`` / ``y_coord_original``) and the transforms
+            above (``x_coord_fixed`` / ``x_coord_right`` and their ``y_`` pairs, also feet), the
+            primary / second / third player and goalie ids (Int64) and names, the plus / minus
+            skaters on a goal, ``is_goal_twin``, and the clock, geometry, game-meta and on-ice
+            columns listed above. A pandas DataFrame when ``return_as_pandas`` is True.
 
     Raises:
         NoDataError: The feed answered 404.
@@ -856,8 +855,7 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         The HockeyTech feed has no ``streaks`` view. ``modulekit&view=streaks``
         answers HTTP 200 with the in-body ``"Undefined Tab streaks"`` sentinel and
         ``statviewfeed&view=streaks`` answers ``{"error": "InvalidView error: streaks"}``
-        (both captured 2026-07-12 during the HockeyTech API recon; see
-        ``sdv-internal-refs/hockeytech/captures/``). No replacement view was found —
+        (both captured 2026-07-12 during the HockeyTech API recon). No replacement view was found —
         the PWHL site appears to compute its Streaks page client-side from schedule
         data. fastRhockey's equivalent carries the same defect.
 

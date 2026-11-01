@@ -277,7 +277,7 @@ def test_add_coord_transforms_centre_ice_is_origin_in_every_frame():
 
 
 def test_add_coord_transforms_rotations_home_and_visitor():
-    """Canvas (60, 30) is x = -80, y = 34 ft: near the net the home team attacks (sdv-internal-refs CANVAS.md).
+    """Canvas (60, 30) is x = -80, y = 34 ft: near the net the home team attacks (it shoots toward canvas x = 0).
 
     fixed = (-x, -y) for every event; right = home (-x, -y), visitor (x, y);
     vertical = (-y_right, x_right).
@@ -332,6 +332,96 @@ def test_add_coord_transforms_real_game_keeps_every_shot_on_the_rink():
     # Faceoffs carry no team: their side is unknown, so the right frame is null but fixed is not.
     fo = df.filter((pl.col("event") == "faceoff") & pl.col("x_coord_original").is_not_null())
     assert fo.height > 0 and fo["x_coord_right"].is_null().all() and fo["x_coord_fixed"].is_not_null().all()
+
+
+def test_enrich_pbp_coords_match_fastrhockey_oracle():
+    """PWHL game 42: x_coord / y_coord are feet, cell for cell with fastRhockey's live ``pwhl_pbp(42)``.
+
+    Oracle: ``r_pwhl_pbp_42_coords.csv`` (fastRhockey 122a6dac, R 4.6.1, live 2026-11-01), every row
+    with a raw coordinate; ``pwhl_pbp_42_live.json`` is the gameCenterPlayByPlay body that R parsed
+    (provenance in ``tests/fixtures/hockeytech/README.md``).
+    """
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import FIXTURES_ROOT
+
+    py = enrich_pbp(
+        P.parse_pbp(load_fixture("hockeytech", "pwhl_pbp_42_live"), pbp_style="hockeytech_a", game_id=42),
+        "pwhl",
+        42,
+        meta_payload=load_fixture("hockeytech", "pwhl_game_summary_42"),
+        shifts_payload=load_fixture("hockeytech", "pwhl_gameshifts_42"),
+    ).with_row_index("row")
+    r = pl.read_csv(FIXTURES_ROOT / "hockeytech" / "r_pwhl_pbp_42_coords.csv", null_values="NA")
+    assert r.height == 164 and r["x_coord"].abs().max() <= 100 < r["x_coord_original"].max()
+    missing = py.filter(pl.col("x_coord_original").is_null())  # the 9 events with no coordinate stay null
+    assert missing.height == py.height - 164 == 9
+    for col in ("x_coord", "y_coord", "x_coord_neutral", "y_coord_neutral", "x_coord_fixed", "y_coord_fixed",
+                "x_coord_right", "y_coord_right", "x_coord_vertical", "y_coord_vertical", "y_coord_original"):  # fmt: skip
+        assert missing[col].is_null().all(), col
+    py = py.filter(pl.col("x_coord_original").is_not_null()).with_columns(pl.col("row").cast(pl.Int64))
+    assert py["row"].to_list() == r["row"].to_list()
+    assert py["event"].to_list() == r["event"].to_list()
+    for col in ("x_coord_original", "y_coord_original", "x_coord", "y_coord", "x_coord_neutral", "y_coord_neutral",
+                "x_coord_fixed", "y_coord_fixed", "x_coord_right", "y_coord_right", "x_coord_vertical",
+                "y_coord_vertical", "shot_distance", "shot_angle"):  # fmt: skip
+        got, want = py[col].to_list(), r[col].cast(pl.Float64).to_list()
+        assert [g is None for g in got] == [w is None for w in want], col
+        assert [g for g in got if g is not None] == pytest.approx([w for w in want if w is not None], abs=1e-9), col
+    assert py["scoring_chance"].to_list() == r["scoring_chance"].to_list()
+
+
+@pytest.mark.parametrize(
+    ("stem", "league", "game_id", "style", "meta", "shifts"),
+    [
+        ("pwhl_pbp_42", "pwhl", 42, "hockeytech_a", "pwhl_game_summary_42", "pwhl_gameshifts_42"),
+        ("ohl_pbp_27225", "ohl", 27225, "hockeytech_b", None, None),
+    ],
+)
+def test_enrich_pbp_shot_geometry_unchanged_by_feet_x_coord(stem, league, game_id, style, meta, shifts):
+    """x_coord / y_coord in feet leave shot_distance / shot_angle / scoring_chance exactly as before.
+
+    Before the feet overwrite, enrich_pbp scored geometry on a copy converted from ``*_original``; that
+    "before" path is rebuilt here and must match the shipped columns bit for bit, in both dialects.
+    """
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle, enrich_pbp, scoring_chances
+
+    out = enrich_pbp(
+        P.parse_pbp(load_fixture("hockeytech", stem), pbp_style=style, game_id=game_id),
+        league,
+        game_id,
+        meta_payload=load_fixture("hockeytech", meta) if meta else {},
+        shifts_payload=load_fixture("hockeytech", shifts) if shifts else {},
+    )
+    geo = ["shot_distance", "shot_angle", "scoring_chance"]
+    before = scoring_chances(
+        add_shot_distance_angle(
+            out.drop(geo).with_columns(
+                x_coord=pl.col("x_coord_original") / 3.0 - 100.0,
+                y_coord=42.5 - (pl.col("y_coord_original") * 85.0 / 300.0),
+            )
+        )
+    )
+    assert out["shot_distance"].drop_nulls().len() > 50
+    assert out.select(geo).equals(before.select(geo))
+
+
+def test_add_coord_transforms_is_idempotent():
+    """A second pass rebuilds from *_original: twice equals once (feet x_coord is never re-read as pixels)."""
+    from sportsdataverse.hockeytech._analytics import add_coord_transforms
+
+    raw = _pbp().with_columns(
+        home_team_id=pl.lit("3"), team_id=pl.col("team_id").cast(pl.Utf8)
+    )  # home side known -> right/vertical populated
+    once = add_coord_transforms(raw)
+    assert once["x_coord"].abs().max() <= 100 < once["x_coord_original"].max()
+    assert add_coord_transforms(once).equals(once)
+    # A freshly parsed frame stacked onto a transformed one: each row keeps its own canvas.
+    mixed = add_coord_transforms(pl.concat([once, raw], how="diagonal_relaxed"))
+    assert mixed.height == 2 * once.height
+    assert mixed.head(once.height).equals(once)
+    assert mixed.tail(once.height).equals(once)
 
 
 def test_add_coord_transforms_empty_frame():

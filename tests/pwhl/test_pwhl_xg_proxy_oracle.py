@@ -584,11 +584,10 @@ def test_coord_xg_falls_back_to_two_features_without_strength_cols() -> None:
 
 
 def test_shot_geometry_rejects_raw_scale_coords() -> None:
-    """R7-(1): a RAW-scale (0-600) enrich frame must fail loud, never be scored with goal_x=89.
+    """R7-(1): a frame built straight from the raw parser (0-600) must fail loud, never be scored with goal_x=89.
 
-    The dual-frame footgun: pwhl_pbp() enrich-path x_coord is RAW feed scale, where only
-    shot_distance/shot_angle are trustworthy. Deriving geometry from those coords with the
-    default goal_x=89 is silent garbage -- _shot_geometry range-checks x_coord instead.
+    Its x_coord is the raw feed canvas. Deriving geometry from those coords with the default
+    goal_x=89 is silent garbage -- _shot_geometry range-checks x_coord instead.
     """
     from sportsdataverse.pwhl.pwhl_xg_proxy import _assert_rink_feet, _shot_geometry
 

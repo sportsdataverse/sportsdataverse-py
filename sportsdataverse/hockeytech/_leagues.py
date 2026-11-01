@@ -46,9 +46,8 @@ class LeagueConfig:
     base_url: str
     pbp_style: Literal["hockeytech_a", "hockeytech_b"]
     # Regular-season overtime length in seconds (informational; nothing reads it for
-    # parsing). Sourced per league in sdv-internal-refs rules/<league>.yaml (entries
-    # *-overtime-*): pwhl 300 (5-min 3v3, rulebook + raw store), ahl 300 (5-min 3v3 since
-    # 2015-16), echl 420 (since 2019-20), ushl 300 (5-min 3v3 + best-of-3 shootout per the
+    # parsing). Sourced per league from its rulebook: pwhl 300 (5-min 3v3, rulebook + raw
+    # store), ahl 300 (5-min 3v3 since 2015-16), echl 420 (since 2019-20), ushl 300 (5-min 3v3 + best-of-3 shootout per the
     # 2021-22 USHL Rules & Regulations, Exhibit C; the 7-min hybrid ran from 2016-17), bchl 600
     # (10-min 3v3 since 2023-24), CHL majors 300 (3v3 since 2015-16); the unsourced junior A
     # leagues keep 300 until their format is sourced.
@@ -146,7 +145,7 @@ _PWHL_SEASON_FALLBACK = [
 # feed lists them as seasons too ("2026 All-Star Challenge", "2025 Top Prospects",
 # "CCHL Pre-Draft Combine 2026", ...), and parse_seasons labels them "regular" because the
 # name says neither playoff, preseason nor exhibition. Seen in the 17-league seasons captures
-# (sdv-internal-refs hockeytech/, 2026-07-12). Exhibitions get their own "exhibition" label.
+# (2026-07-12). Exhibitions get their own "exhibition" label.
 SPECIAL_EVENT_SEASON_RE = r"(?i)all[- ]?star|showcase|prospect|combine|special event|exhibition|play[- ]?in\b"
 _GAME_TYPE_NAME_RE = {
     "regular": r"(?i)regular season",
