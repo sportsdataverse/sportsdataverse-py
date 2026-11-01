@@ -67,14 +67,16 @@ def test_exported_from_the_nfl_package():
 @skip_if_no_live
 def test_live_model_pbp_reads_the_release():
     df = nfl_loaders.load_nfl_model_pbp([2024])
-    # 326 columns in every season 2002-2026 (identical names and order), checked
-    # against all 28 assets on 2026-09-17 via a parquet-footer scan. The
-    # 2026-09-10 rebuild of 2002-2025 added 69 columns (drive_*/series_*,
-    # qb_dropback/pass/rush, and the air/YAC/pass/rush EPA-WPA split with its
-    # home/away totals); 1999-2001 predate it and still carry 257/256/256.
-    assert df.width == 326, df.width
+    # 327 columns in every season 1999-2026 (identical names and order), checked
+    # via a parquet-footer scan on 2026-10-31. The 2026-10-29 rebuild (nfl-data
+    # SCHEMA_REV 10, sdv-py #1028) added the provider's `drive` number and made
+    # drive_start/end_yard_line nflverse's "ARI 10" text; the 2026-09-10 rebuild
+    # had added the drive_*/series_* and EPA-WPA split columns (326).
+    assert df.width == 327, df.width
     assert df.height > 40_000, df.height
     assert df.schema["game_id"] == pl.String
+    assert df.schema["drive"] == pl.Int64
+    assert df.schema["drive_start_yard_line"] == pl.String
     assert {"ep", "epa", "wp", "vegas_wp", "cp", "cpoe"} <= set(df.columns)
 
 

@@ -43249,8 +43249,8 @@ load_nfl_model_pbp:
   Diff_Time_Ratio: 'WP-model feature: score_differential inflated by elapsed time, score_differential / exp(SPREAD_TIME_DECAY_EXPONENT
     * elapsed_share).'
   action_play: Whether the row is an action play -- a live-ball play rather than a timeout, penalty-only or administrative row.
-  drive_end_yard_line: 'Yards from the offense''s line of scrimmage to the opponent''s end zone (yardline_100) on the drive''s last play; the model-pbp parquet stores the numeric spot, not the ''OPP 45'' text load_nfl_pbp carries.'
-  drive_start_yard_line: 'Yards from the offense''s line of scrimmage to the opponent''s end zone (yardline_100) on the drive''s first play, 1-99; the model-pbp parquet stores the numeric spot, not the ''OWN 20'' text load_nfl_pbp carries.'
+  drive_end_yard_line: 'Field position of the drive''s last play as nflverse text: the side''s team abbreviation and yard line (''ARI 35''), or ''50'' at midfield.'
+  drive_start_yard_line: 'Field position of the drive''s first play as nflverse text: the side''s team abbreviation and yard line (''ARI 10''), or ''50'' at midfield.'
   elapsed_share: Share of regulation elapsed at the start of the play, (3600 - game_seconds_remaining) / 3600, clipped to
     [0, 1].
   extra_point_aborted: Binary indicator (1/0) that the extra-point attempt on this play was aborted (botched snap or hold,

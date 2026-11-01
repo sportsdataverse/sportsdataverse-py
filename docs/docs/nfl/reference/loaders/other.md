@@ -199,6 +199,7 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `fumble_recovery_2_player_name` | String | String name of one of the players with a fumble recovery. |
 | `fumble_recovery_2_team` | String | Team of one of the players with a fumble recovery. |
 | `fumble_recovery_2_yards` | Int64 | Yards gained by one of the players with a fumble recovery. |
+| `drive` | Int64 | Numeric drive number in the game. |
 | `two_point_conv_result` | String | String indicator for result of two point conversion attempt: success, failure, safety (touchback in defensive endzone is 1 point apparently), or return. |
 | `extra_point_result` | String | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
 | `special` | Int64 | Binary indicator if "play_type" is one of "extra_point", "field_goal", "kickoff", or "punt". |
@@ -211,9 +212,9 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `no_huddle` | Int64 | Binary indicator for whether or not the play was in no_huddle formation. |
 | `run_location` | String | String indicator for location of run: left, middle, or right. |
 | `run_gap` | String | String indicator for line gap of run: end, guard, or tackle |
+| `qb_dropback` | Int32 | Binary indicator for whether or not the QB dropped back on the play (pass attempt, sack, or scrambled). |
 | `pass` | Int64 | Binary indicator if the play was a pass play (sacks and scrambles included). |
 | `rush` | Int64 | Binary indicator if the play was a rushing play. |
-| `qb_dropback` | Int32 | Binary indicator for whether or not the QB dropped back on the play (pass attempt, sack, or scrambled). |
 | `posteam_score` | Int64 | Score the posteam at the start of the play. |
 | `defteam_score` | Int64 | Score the defteam at the start of the play. |
 | `score_differential` | Int64 | Score differential between the posteam and defteam at the start of the play. |
@@ -239,8 +240,8 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `drive_end_transition` | String | String indicating how the offense lost the ball. |
 | `drive_game_clock_start` | String | Game time at the beginning of a given drive. |
 | `drive_game_clock_end` | String | Game time at the end of a given drive. |
-| `drive_start_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's first play, 1-99; the model-pbp parquet stores the numeric spot, not the 'OWN 20' text load_nfl_pbp carries. |
-| `drive_end_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's last play; the model-pbp parquet stores the numeric spot, not the 'OPP 45' text load_nfl_pbp carries. |
+| `drive_start_yard_line` | String | Field position of the drive's first play as nflverse text: the side's team abbreviation and yard line ('ARI 10'), or '50' at midfield. |
+| `drive_end_yard_line` | String | Field position of the drive's last play as nflverse text: the side's team abbreviation and yard line ('ARI 35'), or '50' at midfield. |
 | `drive_play_id_started` | Int64 | Play_id of the first play in the given drive. |
 | `drive_play_id_ended` | Int64 | Play_id of the last play in the given drive. |
 | `drive_time_of_possession` | String | Time of possession in a given drive. |
