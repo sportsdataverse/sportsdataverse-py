@@ -354,6 +354,11 @@ def test_enrich_pbp_coords_match_fastrhockey_oracle():
     ).with_row_index("row")
     r = pl.read_csv(FIXTURES_ROOT / "hockeytech" / "r_pwhl_pbp_42_coords.csv", null_values="NA")
     assert r.height == 164 and r["x_coord"].abs().max() <= 100 < r["x_coord_original"].max()
+    missing = py.filter(pl.col("x_coord_original").is_null())  # the 9 events with no coordinate stay null
+    assert missing.height == py.height - 164 == 9
+    for col in ("x_coord", "y_coord", "x_coord_neutral", "y_coord_neutral", "x_coord_fixed", "y_coord_fixed",
+                "x_coord_right", "y_coord_right", "x_coord_vertical", "y_coord_vertical", "y_coord_original"):  # fmt: skip
+        assert missing[col].is_null().all(), col
     py = py.filter(pl.col("x_coord_original").is_not_null()).with_columns(pl.col("row").cast(pl.Int64))
     assert py["row"].to_list() == r["row"].to_list()
     assert py["event"].to_list() == r["event"].to_list()
