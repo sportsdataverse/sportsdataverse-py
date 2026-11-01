@@ -30923,7 +30923,7 @@ load_wnba_player_core:
 - name: season
   type: Int32
 - name: athlete_id
-  type: Int64
+  type: Int32
 - name: guid
   type: String
 - name: uid

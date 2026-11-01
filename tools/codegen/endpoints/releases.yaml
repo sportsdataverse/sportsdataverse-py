@@ -1403,6 +1403,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_player_core/player_core_{season}.parquet
   tag: espn_wnba_player_core
+  id_int32: [athlete_id]
   min_season: 2003
   example_args:
     seasons: 2025
@@ -1420,6 +1421,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_player_core/player_core_{season}.parquet
   tag: espn_womens_college_basketball_player_core
+  id_int32: [athlete_id]
   min_season: 2004
   example_args:
     seasons: 2025

@@ -155,7 +155,7 @@ Release: [espn_wnba_player_core](https://github.com/sportsdataverse/sportsdatave
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `athlete_id` | Int64 | Unique athlete identifier (ESPN). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |
 | `slug` | String | URL-safe identifier. |
