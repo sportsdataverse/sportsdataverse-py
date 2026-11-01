@@ -170,6 +170,12 @@ growing prefixes, 889 rows), 400756912 (Miami @ Florida Atlantic, 2015; one comp
 (Wisconsin @ Penn State, 2018; back-to-back timeouts at 0:03, both real) and 400547745 (Louisville @ Clemson, 2014; a
 copy filed ahead of the penalty that set it up). They are not `summary_*` files either: the whole-game oracle would
 read their snapshot noise as the game.
+`ot_timeouts/` holds 2 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json` at
+`b598a0f3c0`, trimmed 2026-11-01) for the overtime timeout windows (`tests/cfb/test_cfb_ot_timeout_windows.py`):
+401754372 (California @ Virginia Tech, 2025, two overtimes; its row order files Cal's OT1 touchdown between two
+Virginia Tech OT1 rows) and 401760426 (San Diego State @ New Mexico, 2025, two overtimes; New Mexico's OT2 timeout is
+filed under a second-quarter drive). They are not `summary_*` files at the top level, so the whole-game oracle does not
+pick them up.
 
 ## Captures
 
