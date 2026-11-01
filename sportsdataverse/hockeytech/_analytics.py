@@ -157,12 +157,18 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
 
         x_t = (ox / 3) - 100           -100..100 ft
         y_t = 42.5 - (oy * 85 / 300)   -42.5..42.5 ft (positive = top of canvas)
+        x_coord, y_coord = (x_t, y_t)  overwritten in feet, as fastRhockey does
 
         x_coord_fixed,    y_coord_fixed    = (-x_t, -y_t)    home team shoots right
         x_coord_right,    y_coord_right    = home (-x_t, -y_t), visitor (x_t, y_t):
                                              every team shoots right
         x_coord_vertical, y_coord_vertical = (-y_coord_right, x_coord_right):
                                              every team shoots up
+
+    ``x_coord`` / ``y_coord`` are overwritten in place with the feet values
+    ``(x_t, y_t)``, matching ``fastRhockey::add_coord_transforms`` and the PWHL
+    release (``load_pwhl_pbp``); the raw canvas values survive in
+    ``x_coord_original`` / ``y_coord_original``.
 
     Rows with null ``x_coord`` or ``y_coord`` produce null for all ten columns.
     Rows whose side is unknown (no ``team_id`` / ``home_team_id`` column, or a
@@ -179,7 +185,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     Returns
     -------
     pl.DataFrame
-        Input frame with the ten coordinate columns appended (or replaced).
+        Input frame with the ten coordinate columns appended (or replaced) and
+        ``x_coord`` / ``y_coord`` in feet.
     """
     if pbp.height == 0:
         return pbp.with_columns(
@@ -229,6 +236,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
         y_coord_original=oy,
         x_coord_neutral=(ox - 300.0),
         y_coord_neutral=(oy - 150.0),
+        x_coord=x_t,  # feet, overwritten in place (R/hockeytech_analytics.R:533-535)
+        y_coord=y_t,
         x_coord_fixed=-x_t,
         y_coord_fixed=-y_t,
         x_coord_right=side * x_t,
@@ -990,18 +999,9 @@ def enrich_pbp(
     df = backfill_power_play(df)
 
     # ------------------------------------------------------------------
-    # Step 6: shot geometry (use intermediate rink-feet frame)
+    # Step 6: shot geometry (x_coord / y_coord are already rink feet, Step 4)
     # ------------------------------------------------------------------
-    geo = df.with_columns(
-        x_coord=(pl.col("x_coord_original") / 3.0 - 100.0),
-        y_coord=(42.5 - (pl.col("y_coord_original") * 85.0 / 300.0)),
-    )
-    geo = scoring_chances(add_shot_distance_angle(geo))
-    df = df.with_columns(
-        shot_distance=geo["shot_distance"],
-        shot_angle=geo["shot_angle"],
-        scoring_chance=geo["scoring_chance"],
-    )
+    df = scoring_chances(add_shot_distance_angle(df))
 
     # ------------------------------------------------------------------
     # Step 7: on-ice player tracking via shifts
