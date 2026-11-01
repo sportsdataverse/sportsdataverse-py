@@ -98,6 +98,7 @@ _BOOLEAN_COLS: tuple[str, ...] = (
     "home_timeout_called",
     "away_timeout_called",
 )
+_LINE_COLS: tuple[str, ...] = ("game_spread", "home_favorite", "home_team_spread")
 
 # Appended (as all-null Float64) only when a payload ships no coordinates at
 # all. Order matters: it is the order the R creation script's season-level
@@ -300,7 +301,21 @@ def _basketball_play_by_play(
         + [pl.col(c).cast(pl.Float64, strict=False) for c in float64_cols if c in df.columns]
         + [pl.col(c).cast(pl.Boolean, strict=False) for c in _BOOLEAN_COLS if c in df.columns]
     )
-    return _repair_running_score(df, competitors)
+    return _repair_running_score(_null_unavailable_line(df), competitors)
+
+
+def _null_unavailable_line(df: pl.DataFrame) -> pl.DataFrame:
+    """Null ``game_spread`` / ``home_favorite`` / ``home_team_spread`` where ``game_spread_available`` is False.
+
+    A game with no betting line has no line columns, never an invented one: stored payloads processed
+    before the pickcenter fix carry a 2.5-point home-favored line with ``gameSpreadAvailable`` False.
+    """
+    if "game_spread_available" not in df.columns:
+        return df
+    no_line = pl.col("game_spread_available").fill_null(False) == False
+    return df.with_columns(
+        [pl.when(no_line).then(None).otherwise(pl.col(c)).alias(c) for c in _LINE_COLS if c in df.columns]
+    )
 
 
 def _repair_running_score(df: pl.DataFrame, competitors: list[dict[str, Any]]) -> pl.DataFrame:

@@ -507,7 +507,7 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2018).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -553,7 +553,7 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
         |team_logo                     |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2018.
 
     Example:
         Quick start::
@@ -562,8 +562,8 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2018:
+            raise SeasonNotFoundError("season cannot be less than 2018")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet"
         )
@@ -586,7 +586,7 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -596,7 +596,7 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
         |col_name             |type    |
         |:--------------------|:-------|
         |season               |Int32   |
-        |game_id              |String  |
+        |game_id              |Int32   |
         |team_id              |Int32   |
         |team_slug            |String  |
         |team_abbreviation    |String  |
@@ -619,7 +619,7 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -628,8 +628,8 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_game_rosters/game_rosters_{season}.parquet"
         )
@@ -647,6 +647,9 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_game_rosters")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["game_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -656,7 +659,7 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -666,7 +669,7 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
         |col_name              |type   |
         |:---------------------|:------|
         |season                |Int32  |
-        |game_id               |String |
+        |game_id               |Int32  |
         |official_id           |Int32  |
         |official_uid          |String |
         |official_full_name    |String |
@@ -677,8 +680,11 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
         |position_name         |String |
         |position_display_name |String |
 
+    Note:
+        Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -687,8 +693,8 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet"
         )
@@ -706,6 +712,9 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_officials")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["game_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -715,7 +724,7 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -741,8 +750,11 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
         |display_value                 |String  |
         |value                         |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -751,8 +763,8 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -797,7 +809,7 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
         |team_color               |String |
         |team_alternate_color     |String |
         |team_logo                |String |
-        |athlete_id               |String |
+        |athlete_id               |Int32  |
         |uid                      |String |
         |guid                     |String |
         |full_name                |String |
@@ -852,6 +864,9 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
     out = (
         pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_wnba_rosters")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -861,7 +876,7 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_shots
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -892,7 +907,7 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
         |team_abbrev         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -901,8 +916,8 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_shots/shots_{season}.parquet"
         )
@@ -925,7 +940,7 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -959,8 +974,11 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -969,8 +987,8 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet"
         )
@@ -997,7 +1015,7 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1023,8 +1041,11 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Note:
+        Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1033,8 +1054,8 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_team_season_stats/team_season_stats_{season}.parquet"
         )
@@ -1071,14 +1092,14 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int64   |
+        |espn_team_id       |Int32   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |Int64   |
+        |espn_athlete_id    |Int32   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
-        |wnba_player_id     |String  |
+        |wnba_player_id     |Int64   |
         |wnba_player_name   |String  |
         |wnba_jersey_num    |String  |
         |wnba_position      |String  |
@@ -1091,6 +1112,9 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |
+
+    Note:
+        wnba_player_id is Int64, as WNBA Stats ships player_id / person_id, so the bridge joins without a cast.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -1123,7 +1147,10 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
     )
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
+    out = _cast_ids_int64(out, ["wnba_player_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1133,7 +1160,7 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1145,13 +1172,13 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |season            |Int32   |
         |season_type       |String  |
         |game_date         |Date    |
-        |home_espn_team_id |Int64   |
-        |away_espn_team_id |Int64   |
-        |espn_game_id      |Int64   |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |wnba_game_id      |String  |
         |wnba_game_code    |String  |
-        |wnba_home_team_id |String  |
-        |wnba_away_team_id |String  |
+        |wnba_home_team_id |Int64   |
+        |wnba_away_team_id |Int64   |
         |fox_game_id       |String  |
         |fox_home_team_id  |String  |
         |fox_away_team_id  |String  |
@@ -1159,8 +1186,11 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |match_method      |String  |
         |match_confidence  |Float64 |
 
+    Note:
+        wnba_game_id stays String, the WNBA Stats game id's dtype; the wnba_*_team_id bridge ids are Int64, as WNBA Stats ships team_id.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1169,8 +1199,8 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_schedule_crosswalk_{season}.parquet"
         )
@@ -1190,7 +1220,10 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     )
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
+    out = _cast_ids_int64(out, ["wnba_home_team_id", "wnba_away_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1200,7 +1233,7 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1210,13 +1243,13 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name                |type    |
         |:-----------------------|:-------|
         |season                  |Int32   |
-        |espn_team_id            |Int64   |
+        |espn_team_id            |Int32   |
         |espn_abbreviation       |String  |
         |espn_display_name       |String  |
         |espn_short_name         |String  |
         |espn_location           |String  |
         |espn_mascot             |String  |
-        |wnba_team_id            |String  |
+        |wnba_team_id            |Int64   |
         |wnba_team_tricode       |String  |
         |wnba_team_name          |String  |
         |wnba_team_city          |String  |
@@ -1229,8 +1262,11 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |match_method            |String  |
         |match_confidence        |Float64 |
 
+    Note:
+        wnba_team_id is Int64, as WNBA Stats ships team_id, so the bridge joins without a cast.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1239,8 +1275,8 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_team_crosswalk_{season}.parquet"
         )
@@ -1260,7 +1296,10 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
     )
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
-    out = _cast_ids_int64(out, ["espn_team_id"])
+    out = _cast_ids_int64(out, ["wnba_team_id"])
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1280,7 +1319,7 @@ def load_wnba_player_core(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |athlete_id            |Int64   |
+        |athlete_id            |Int32   |
         |guid                  |String  |
         |uid                   |String  |
         |slug                  |String  |
@@ -1345,6 +1384,9 @@ def load_wnba_player_core(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_player_core")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1430,7 +1472,7 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_coaches
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1451,8 +1493,11 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
         |sub_sort_sequence |Int64  |
         |season_type       |String |
 
+    Note:
+        Published seasons: every season from the floor except 2019, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -1461,8 +1506,8 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_coaches/coaches_{season}.parquet"
         )
@@ -1489,7 +1534,7 @@ def load_wnba_stats_draft(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_draft
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1514,7 +1559,7 @@ def load_wnba_stats_draft(seasons, return_as_pandas: bool = False):
         |player_profile_flag |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -1523,8 +1568,8 @@ def load_wnba_stats_draft(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_draft/draft_{season}.parquet"
         )
@@ -1551,7 +1596,7 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1572,7 +1617,7 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         |game_id           |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -1581,8 +1626,8 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_game_rosters/game_rosters_{season}.parquet"
         )
@@ -1609,7 +1654,7 @@ def load_wnba_stats_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1626,7 +1671,7 @@ def load_wnba_stats_officials(seasons, return_as_pandas: bool = False):
         |game_id     |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1635,8 +1680,8 @@ def load_wnba_stats_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_officials/officials_{season}.parquet"
         )
@@ -2058,7 +2103,7 @@ def load_wnba_stats_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2087,7 +2132,7 @@ def load_wnba_stats_rosters(seasons, return_as_pandas: bool = False):
         |season_type         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -2096,8 +2141,8 @@ def load_wnba_stats_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_rosters/rosters_{season}.parquet"
         )

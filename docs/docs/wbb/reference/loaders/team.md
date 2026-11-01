@@ -80,6 +80,11 @@ load_wbb_team_boxscore(seasons=2024)
 ## load_wbb_team_season_stats
 
 Release: [espn_womens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wbb_team_season_stats-returns}
 
 | col_name | type | description |
@@ -113,7 +118,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `espn_abbreviation` | String | ESPN abbreviation. |
 | `espn_display_name` | String | ESPN display name (school + mascot). |
 | `espn_short_name` | String | ESPN short name. |
