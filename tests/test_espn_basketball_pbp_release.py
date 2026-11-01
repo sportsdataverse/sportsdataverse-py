@@ -29,8 +29,10 @@ CASES = [("mbb", g) for g in (401830342, 401856600, 401829457, 401812161, 401828
     ("nba", g) for g in (401766458, 400829116, 401704638, 260312029)
 ]
 CASES += [("wbb", g) for g in (401364640, 400509734, 293170052, 273130043, 283430164)] + [
-    ("wnba", g) for g in (400927398, 250603003, 240618004)
+    ("wnba", g) for g in (400927398, 250603003, 240618004, 401726992)
 ]
+# 2024 WNBA Finals G5, the committed Site v2 summary (tests/fixtures/espn/README.md): sub-second clocks
+SUMMARIES = {("wnba", 401726992): BB.parent / "summary_wnba.json"}
 # Columns every season of the four releases carries.
 CORE = {
     "game_play_number", "id", "sequence_number", "type_id", "type_text", "text", "away_score", "home_score",
@@ -61,6 +63,8 @@ class _Resp:
 
 
 def _raw(lg: str, gid: int) -> dict:
+    if (lg, gid) in SUMMARIES:
+        return json.loads(SUMMARIES[(lg, gid)].read_text(encoding="utf-8"))
     with gzip.open(BB / f"{lg}_{gid}.json.gz", "rt", encoding="utf-8") as f:
         return json.load(f)
 
@@ -157,3 +161,10 @@ def test_columns_come_in_the_release_order(monkeypatch: pytest.MonkeyPatch, lg: 
     # so the frame stacks with load_<lg>_pbp output (pl.concat how="vertical" needs the same order)
     df = _call(monkeypatch, lg, _raw(lg, gid))
     assert df.columns == [c for c in SCHEMAS[f"loader_schemas:load_{lg}_pbp"] if c in df.columns]
+
+
+def test_wnba_sub_second_clocks_are_float(monkeypatch: pytest.MonkeyPatch) -> None:
+    # 2024 payloads carry "53.1"-style clocks in the last minute; the release keeps them Float64
+    df = _call(monkeypatch, "wnba", _raw("wnba", 401726992))
+    assert df.schema["clock_seconds"] == pl.Float64
+    assert (df["clock_seconds"] % 1 != 0).any()

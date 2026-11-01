@@ -49,9 +49,9 @@ def espn_wnba_pbp(
         values on every play and the spread-available flag False, never a default line.
 
         With ``return_parsed=False``, a dictionary of game data with keys: "gameId", "plays",
-        "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource",
-        "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds",
-        "predictor", "espnWP", "gameInfo", "season".
+        "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource",
+        "standings", "article", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread",
+        "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
 
     Example:
         Pull a single game's play-by-play::

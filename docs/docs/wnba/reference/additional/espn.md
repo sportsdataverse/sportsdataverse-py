@@ -342,7 +342,7 @@ rebuilt from the scoring plays when that reproduces the final (`score_source` sa
 
 **Returns**
 
-One row per play, columns (in order) and dtypes as the release (`load_wnba_pbp`) for that season; a pandas frame with `return_as_pandas=True`. Zero rows, with the release's columns, when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays (wehoop returns NULL). A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False, never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season".
+One row per play, columns (in order) and dtypes as the release (`load_wnba_pbp`) for that season; a pandas frame with `return_as_pandas=True`. Zero rows, with the release's columns, when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays (wehoop returns NULL). A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False, never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource", "standings", "article", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
 
 **Example**
 
