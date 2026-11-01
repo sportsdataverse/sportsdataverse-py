@@ -244,7 +244,11 @@ def helper_nhl_pickcenter(pbp_txt):
         return vals.iloc[0] if len(vals) else None
 
     gameSpread = first("spread")
-    favorite = first("homeTeamOdds.favorite")
+    # the favorite comes from the same row as the spread, never another provider's
+    favorite = None
+    if gameSpread is not None and "homeTeamOdds.favorite" in pickcenter.columns:
+        flag = pickcenter.loc[pickcenter["spread"].notna(), "homeTeamOdds.favorite"].iloc[0]
+        favorite = None if pd.isna(flag) else flag
     overUnder = first("overUnder")
     return {
         "gameSpread": None if gameSpread is None else float(gameSpread),

@@ -337,3 +337,15 @@ def test_nhl_favorite_flag_without_a_spread_is_no_favorite() -> None:
 
     out = helper_nhl_pickcenter({"pickcenter": [{"provider": {"id": "100"}, "homeTeamOdds": {"favorite": True}}]})
     assert out["homeFavorite"] is None and out["gameSpreadAvailable"] is False
+
+
+def test_nhl_favorite_comes_from_the_spread_row() -> None:
+    """A favorite flag on another provider's row (no spread there) is not paired with this spread."""
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    rows = [
+        {"provider": {"id": "100"}, "homeTeamOdds": {"favorite": False}},  # record-only row, sorts first
+        {"provider": {"id": "200"}, "spread": -1.5, "homeTeamOdds": {"favorite": True}},
+    ]
+    out = helper_nhl_pickcenter({"pickcenter": rows})
+    assert (out["gameSpread"], out["homeFavorite"], out["gameSpreadAvailable"]) == (-1.5, True, True)
