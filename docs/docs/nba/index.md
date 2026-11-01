@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 206 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 209 | — |
 
 ## ESPN {#espn}
 
@@ -81,6 +81,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`build_athlete_identity_lookup`](reference/additional/play-by-play-processing#build_athlete_identity_lookup)
 - [`build_nba_player_identity_lookup`](reference/additional/play-by-play-processing#build_nba_player_identity_lookup)
 - [`compile_nba_season`](reference/additional/highlights#compile_nba_season)
+- [`espn_nba_game_all`](reference/additional/play-by-play-processing#espn_nba_game_all)
+- [`espn_nba_player_box`](reference/additional/play-by-play-processing#espn_nba_player_box)
+- [`espn_nba_team_box`](reference/additional/play-by-play-processing#espn_nba_team_box)
 - [`nba_pbp_disk`](reference/additional/play-by-play-processing#nba_pbp_disk)
 - [`nba_v3_to_v2_pbp`](reference/additional/play-by-play-processing#nba_v3_to_v2_pbp)
 
@@ -259,6 +262,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_draft`](reference/site#espn_nba_draft) | [`espn_nba_draft`](https://hoopR.sportsdataverse.org/reference/espn_nba_draft.html) |
 | [`espn_nba_franchise`](reference/core/other#espn_nba_franchise) | [`espn_nba_franchise`](https://hoopR.sportsdataverse.org/reference/espn_nba_franchise.html) |
 | [`espn_nba_franchises`](reference/core/other#espn_nba_franchises) | [`espn_nba_franchises`](https://hoopR.sportsdataverse.org/reference/espn_nba_franchises.html) |
+| [`espn_nba_game_all`](reference/additional/play-by-play-processing#espn_nba_game_all) | [`espn_nba_game_all`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_all.html) |
 | [`espn_nba_game_broadcasts`](reference/core/game#espn_nba_game_broadcasts) | [`espn_nba_game_broadcasts`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_broadcasts.html) |
 | [`espn_nba_game_odds`](reference/core/game#espn_nba_game_odds) | [`espn_nba_game_odds`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_odds.html) |
 | [`espn_nba_game_official_detail`](reference/core/game#espn_nba_game_official_detail) | [`espn_nba_game_official_detail`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_official_detail.html) |
@@ -280,6 +284,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_news`](reference/site#espn_nba_news) | [`espn_nba_news`](https://hoopR.sportsdataverse.org/reference/espn_nba_news.html) |
 | [`espn_nba_pbp`](reference/additional/espn#espn_nba_pbp) | [`espn_nba_pbp`](https://hoopR.sportsdataverse.org/reference/espn_nba_pbp.html) |
 | [`espn_nba_player_awards`](reference/core/player#espn_nba_player_awards) | [`espn_nba_player_awards`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_awards.html) |
+| [`espn_nba_player_box`](reference/additional/play-by-play-processing#espn_nba_player_box) | [`espn_nba_player_box`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_box.html) |
 | [`espn_nba_player_career_stats`](reference/core/player#espn_nba_player_career_stats) | [`espn_nba_player_career_stats`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_career_stats.html) |
 | [`espn_nba_player_contracts`](reference/core/player#espn_nba_player_contracts) | [`espn_nba_player_contracts`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_contracts.html) |
 | [`espn_nba_player_eventlog`](reference/core/player#espn_nba_player_eventlog) | [`espn_nba_player_eventlog`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_eventlog.html) |
@@ -309,6 +314,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_standings`](reference/site#espn_nba_standings) | [`espn_nba_standings`](https://hoopR.sportsdataverse.org/reference/espn_nba_standings.html) |
 | [`espn_nba_summary`](reference/site#espn_nba_summary) | [`espn_nba_game_all`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_all.html) |
 | [`espn_nba_team`](reference/site#espn_nba_team) | [`espn_nba_team`](https://hoopR.sportsdataverse.org/reference/espn_nba_team.html) |
+| [`espn_nba_team_box`](reference/additional/play-by-play-processing#espn_nba_team_box) | [`espn_nba_team_box`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_box.html) |
 | [`espn_nba_team_injuries`](reference/site#espn_nba_team_injuries) | [`espn_nba_team_injuries`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_injuries.html) |
 | [`espn_nba_team_leaders`](reference/site#espn_nba_team_leaders) | [`espn_nba_team_leaders`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_leaders.html) |
 | [`espn_nba_team_news`](reference/site#espn_nba_team_news) | [`espn_nba_team_news`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_news.html) |

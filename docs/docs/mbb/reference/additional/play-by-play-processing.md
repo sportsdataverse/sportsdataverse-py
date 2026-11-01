@@ -124,6 +124,107 @@ from sportsdataverse.mbb.mbb_shots_adapter import classify_zone_type
 classify_zone_type("DunkShot")
 ```
 
+### espn_mbb_game_all {#espn_mbb_game_all}
+
+`espn_mbb_game_all(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_mbb_game_all() - Pull one game's plays, team box and player box from one ESPN request.
+
+The hoopR name for this request (`hoopR::espn_mbb_game_all`): a single `mens-college-basketball/summary`
+fetch, returned as the three frames `espn_mbb_pbp`, `espn_mbb_team_box` and
+`espn_mbb_player_box` would return one request each.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_mbb_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, the three frames are pandas instead of polars. |
+
+**Returns**
+
+hoopR's list names as keys -- `"Plays"` (the `load_mbb_pbp` release frame), `"Team"` (the team box) and `"Player"` (the player box).
+
+**Example**
+
+```python
+from sportsdataverse.mbb import espn_mbb_game_all
+game = espn_mbb_game_all(game_id=401638637)
+print(game["Plays"].shape, game["Team"].shape, game["Player"].shape)
+
+# Pipeline next step (one line)
+
+game["Player"].sort("points", descending=True).select("athlete_display_name", "points").head()
+```
+
+### espn_mbb_player_box {#espn_mbb_player_box}
+
+`espn_mbb_player_box(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_mbb_player_box() - Pull one game's player box score from ESPN's `mens-college-basketball/summary` endpoint.
+
+The hoopR name for this request (`hoopR::espn_mbb_player_box`): one `summary` fetch run
+through `~sportsdataverse.mbb.helper_mbb_player_box`, so the frame is the one the
+`espn_mens_college_basketball_player_boxscores` release publishes (what
+`~sportsdataverse.mbb.load_mbb_player_boxscore` reads) for that game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_mbb_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas frame instead of polars. |
+
+**Returns**
+
+One row per athlete (did-not-play athletes included, with null stats), away team first, with the release's player-box columns. A frame with no columns when ESPN has no box score for the game.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import espn_mbb_player_box
+player_box = espn_mbb_player_box(game_id=401638637)
+print(player_box.shape)
+
+# Pipeline next step (one line)
+
+player_box.filter(pl.col("did_not_play") == False).select("athlete_display_name", "points")
+```
+
+### espn_mbb_team_box {#espn_mbb_team_box}
+
+`espn_mbb_team_box(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_mbb_team_box() - Pull one game's team box score from ESPN's `mens-college-basketball/summary` endpoint.
+
+The hoopR name for this request (`hoopR::espn_mbb_team_box`): one `summary` fetch run
+through `~sportsdataverse.mbb.helper_mbb_team_box`, so the frame is the one the
+`espn_mens_college_basketball_team_boxscores` release publishes (what
+`~sportsdataverse.mbb.load_mbb_team_boxscore` reads) for that game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_mbb_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas frame instead of polars. |
+
+**Returns**
+
+Two rows, one per team, with the release's team-box columns. A frame with no columns when ESPN has no box score for the game.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import espn_mbb_team_box
+team_box = espn_mbb_team_box(game_id=401638637)
+print(team_box.shape)
+
+# Pipeline next step (one line)
+
+team_box.select("team_display_name", "team_score", "team_winner")
+```
+
 ### espn_shots_to_canonical {#espn_shots_to_canonical}
 
 `espn_shots_to_canonical(espn: 'pl.DataFrame', *, league: 'str', season: 'int', scale: "'tuple[float, float, float] | None'" = None) -> 'pl.DataFrame'`

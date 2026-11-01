@@ -16,6 +16,8 @@ from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_ti
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 from sportsdataverse.mbb.mbb_play_by_play import helper_mbb_play_by_play
+from sportsdataverse.mbb.mbb_player_box import helper_mbb_player_box
+from sportsdataverse.mbb.mbb_team_box import helper_mbb_team_box
 
 
 def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs):
@@ -101,13 +103,23 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
         .. _ESPN: https://www.espn.com
 
     """
-    # play by play
-    pbp_txt = {"timeouts": {}}
-    # summary endpoint for pickcenter array
+    summary = _espn_mbb_summary_json(game_id, **kwargs)
+    return _mbb_pbp_from_summary(
+        game_id, summary, raw=raw, return_parsed=return_parsed, return_as_pandas=return_as_pandas
+    )
+
+
+def _espn_mbb_summary_json(game_id, **kwargs) -> dict:
+    """The raw ESPN ``summary`` payload for one game (the one request every per-game wrapper makes)."""
     summary_url = (
         f"http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={game_id}"
     )
-    summary = _download_json(download, summary_url, **kwargs)
+    return _download_json(download, summary_url, **kwargs)
+
+
+def _mbb_pbp_from_summary(game_id, summary: dict, *, raw: bool, return_parsed: bool, return_as_pandas: bool):
+    """``espn_mbb_pbp``'s processing of an already-fetched ``summary`` payload."""
+    pbp_txt = {"timeouts": {}}
     incoming_keys_expected = [
         "boxscore",
         "format",
@@ -167,6 +179,126 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
     plays = _release_frame(helper_mbb_play_by_play(game), game, "load_mbb_pbp")
     # the release loader's conversion, so nullable ids stay integer (a plain to_pandas() makes them float)
     return plays.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else plays
+
+
+def espn_mbb_team_box(game_id: int, return_as_pandas: bool = False, **kwargs):
+    """espn_mbb_team_box() - Pull one game's team box score from ESPN's `mens-college-basketball/summary` endpoint.
+
+    The hoopR name for this request (``hoopR::espn_mbb_team_box``): one ``summary`` fetch run
+    through :func:`~sportsdataverse.mbb.helper_mbb_team_box`, so the frame is the one the
+    ``espn_mens_college_basketball_team_boxscores`` release publishes (what
+    :func:`~sportsdataverse.mbb.load_mbb_team_boxscore` reads) for that game.
+
+    Args:
+        game_id (int): Unique game_id, can be obtained from ``espn_mbb_schedule()``.
+        return_as_pandas (bool): If True, returns a pandas frame instead of polars.
+        **kwargs: Forwarded to the HTTP download (``timeout``, ``proxy``, ...).
+
+    Returns:
+        pl.DataFrame: Two rows, one per team, with the release's team-box columns. A frame with
+        no columns when ESPN has no box score for the game.
+
+    Example:
+        Quick start (2024 NCAA Division I men's championship game)::
+
+            from sportsdataverse.mbb import espn_mbb_team_box
+            team_box = espn_mbb_team_box(game_id=401638637)
+            print(team_box.shape)
+
+        Pipeline next step (one line)::
+
+            team_box.select("team_display_name", "team_score", "team_winner")
+
+    See Also:
+        * :func:`~sportsdataverse.mbb.espn_mbb_game_all` -- plays and both box scores from one request.
+        * `hoopR`_ -- R sister package; ``espn_mbb_team_box`` there.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    box = helper_mbb_team_box(_espn_mbb_summary_json(game_id, **kwargs))
+    return box.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else box
+
+
+def espn_mbb_player_box(game_id: int, return_as_pandas: bool = False, **kwargs):
+    """espn_mbb_player_box() - Pull one game's player box score from ESPN's `mens-college-basketball/summary` endpoint.
+
+    The hoopR name for this request (``hoopR::espn_mbb_player_box``): one ``summary`` fetch run
+    through :func:`~sportsdataverse.mbb.helper_mbb_player_box`, so the frame is the one the
+    ``espn_mens_college_basketball_player_boxscores`` release publishes (what
+    :func:`~sportsdataverse.mbb.load_mbb_player_boxscore` reads) for that game.
+
+    Args:
+        game_id (int): Unique game_id, can be obtained from ``espn_mbb_schedule()``.
+        return_as_pandas (bool): If True, returns a pandas frame instead of polars.
+        **kwargs: Forwarded to the HTTP download (``timeout``, ``proxy``, ...).
+
+    Returns:
+        pl.DataFrame: One row per athlete (did-not-play athletes included, with null stats), away
+        team first, with the release's player-box columns. A frame with no columns when ESPN has no
+        box score for the game.
+
+    Example:
+        Quick start (2024 NCAA Division I men's championship game)::
+
+            from sportsdataverse.mbb import espn_mbb_player_box
+            player_box = espn_mbb_player_box(game_id=401638637)
+            print(player_box.shape)
+
+        Pipeline next step (one line)::
+
+            player_box.filter(pl.col("did_not_play") == False).select("athlete_display_name", "points")
+
+    See Also:
+        * :func:`~sportsdataverse.mbb.espn_mbb_game_all` -- plays and both box scores from one request.
+        * `hoopR`_ -- R sister package; ``espn_mbb_player_box`` there.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    box = helper_mbb_player_box(_espn_mbb_summary_json(game_id, **kwargs))
+    return box.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else box
+
+
+def espn_mbb_game_all(game_id: int, return_as_pandas: bool = False, **kwargs):
+    """espn_mbb_game_all() - Pull one game's plays, team box and player box from one ESPN request.
+
+    The hoopR name for this request (``hoopR::espn_mbb_game_all``): a single `mens-college-basketball/summary`
+    fetch, returned as the three frames :func:`espn_mbb_pbp`, :func:`espn_mbb_team_box` and
+    :func:`espn_mbb_player_box` would return one request each.
+
+    Args:
+        game_id (int): Unique game_id, can be obtained from ``espn_mbb_schedule()``.
+        return_as_pandas (bool): If True, the three frames are pandas instead of polars.
+        **kwargs: Forwarded to the HTTP download (``timeout``, ``proxy``, ...).
+
+    Returns:
+        dict: hoopR's list names as keys -- ``"Plays"`` (the ``load_mbb_pbp`` release frame),
+        ``"Team"`` (the team box) and ``"Player"`` (the player box).
+
+    Example:
+        Quick start (2024 NCAA Division I men's championship game)::
+
+            from sportsdataverse.mbb import espn_mbb_game_all
+            game = espn_mbb_game_all(game_id=401638637)
+            print(game["Plays"].shape, game["Team"].shape, game["Player"].shape)
+
+        Pipeline next step (one line)::
+
+            game["Player"].sort("points", descending=True).select("athlete_display_name", "points").head()
+
+    See Also:
+        * `hoopR`_ -- R sister package; ``espn_mbb_game_all`` there.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    summary = _espn_mbb_summary_json(game_id, **kwargs)
+    # the box helpers first: the play-by-play processing reshapes parts of the payload in place
+    team = helper_mbb_team_box(summary)
+    player = helper_mbb_player_box(summary)
+    plays = _mbb_pbp_from_summary(game_id, summary, raw=False, return_parsed=True, return_as_pandas=return_as_pandas)
+    if return_as_pandas:
+        team = team.to_pandas(use_pyarrow_extension_array=True)
+        player = player.to_pandas(use_pyarrow_extension_array=True)
+    return {"Plays": plays, "Team": team, "Player": player}
 
 
 def mbb_pbp_disk(game_id, path_to_json):

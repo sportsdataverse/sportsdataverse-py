@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 341 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 344 | — |
 
 ## ESPN {#espn}
 
@@ -68,6 +68,9 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`classify_point_value`](reference/additional/play-by-play-processing#classify_point_value)
 - [`classify_zone_geometry`](reference/additional/play-by-play-processing#classify_zone_geometry)
 - [`classify_zone_type`](reference/additional/play-by-play-processing#classify_zone_type)
+- [`espn_mbb_game_all`](reference/additional/play-by-play-processing#espn_mbb_game_all)
+- [`espn_mbb_player_box`](reference/additional/play-by-play-processing#espn_mbb_player_box)
+- [`espn_mbb_team_box`](reference/additional/play-by-play-processing#espn_mbb_team_box)
 - [`espn_shots_to_canonical`](reference/additional/play-by-play-processing#espn_shots_to_canonical)
 - [`fit_espn_court_scale`](reference/additional/play-by-play-processing#fit_espn_court_scale)
 - [`mbb_pbp_disk`](reference/additional/play-by-play-processing#mbb_pbp_disk)
@@ -281,6 +284,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_mbb_conferences`](reference/site#espn_mbb_conferences) | [`espn_mbb_conferences`](https://hoopR.sportsdataverse.org/reference/espn_mbb_conferences.html) |
 | [`espn_mbb_franchise`](reference/core/other#espn_mbb_franchise) | [`espn_mbb_franchise`](https://hoopR.sportsdataverse.org/reference/espn_mbb_franchise.html) |
 | [`espn_mbb_franchises`](reference/core/other#espn_mbb_franchises) | [`espn_mbb_franchises`](https://hoopR.sportsdataverse.org/reference/espn_mbb_franchises.html) |
+| [`espn_mbb_game_all`](reference/additional/play-by-play-processing#espn_mbb_game_all) | [`espn_mbb_game_all`](https://hoopR.sportsdataverse.org/reference/espn_mbb_game_all.html) |
 | [`espn_mbb_game_broadcasts`](reference/core/game#espn_mbb_game_broadcasts) | [`espn_mbb_game_broadcasts`](https://hoopR.sportsdataverse.org/reference/espn_mbb_game_broadcasts.html) |
 | [`espn_mbb_game_odds`](reference/core/game#espn_mbb_game_odds) | [`espn_mbb_game_odds`](https://hoopR.sportsdataverse.org/reference/espn_mbb_game_odds.html) |
 | [`espn_mbb_game_official_detail`](reference/core/game#espn_mbb_game_official_detail) | [`espn_mbb_game_official_detail`](https://hoopR.sportsdataverse.org/reference/espn_mbb_game_official_detail.html) |
@@ -302,6 +306,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_mbb_news`](reference/site#espn_mbb_news) | [`espn_mbb_news`](https://hoopR.sportsdataverse.org/reference/espn_mbb_news.html) |
 | [`espn_mbb_pbp`](reference/additional/highlights#espn_mbb_pbp) | [`espn_mbb_pbp`](https://hoopR.sportsdataverse.org/reference/espn_mbb_pbp.html) |
 | [`espn_mbb_player_awards`](reference/core/player#espn_mbb_player_awards) | [`espn_mbb_player_awards`](https://hoopR.sportsdataverse.org/reference/espn_mbb_player_awards.html) |
+| [`espn_mbb_player_box`](reference/additional/play-by-play-processing#espn_mbb_player_box) | [`espn_mbb_player_box`](https://hoopR.sportsdataverse.org/reference/espn_mbb_player_box.html) |
 | [`espn_mbb_player_career_stats`](reference/core/player#espn_mbb_player_career_stats) | [`espn_mbb_player_career_stats`](https://hoopR.sportsdataverse.org/reference/espn_mbb_player_career_stats.html) |
 | [`espn_mbb_player_core`](reference/core/player#espn_mbb_player_core) | [`espn_basketball_player_core`](https://hoopR.sportsdataverse.org/reference/espn_basketball_player_core.html) |
 | [`espn_mbb_player_eventlog`](reference/core/player#espn_mbb_player_eventlog) | [`espn_mbb_player_eventlog`](https://hoopR.sportsdataverse.org/reference/espn_mbb_player_eventlog.html) |
@@ -331,6 +336,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_mbb_standings`](reference/site#espn_mbb_standings) | [`espn_mbb_standings`](https://hoopR.sportsdataverse.org/reference/espn_mbb_standings.html) |
 | [`espn_mbb_summary`](reference/site#espn_mbb_summary) | [`espn_mbb_game_all`](https://hoopR.sportsdataverse.org/reference/espn_mbb_game_all.html) |
 | [`espn_mbb_team`](reference/site#espn_mbb_team) | [`espn_mbb_team`](https://hoopR.sportsdataverse.org/reference/espn_mbb_team.html) |
+| [`espn_mbb_team_box`](reference/additional/play-by-play-processing#espn_mbb_team_box) | [`espn_mbb_team_box`](https://hoopR.sportsdataverse.org/reference/espn_mbb_team_box.html) |
 | [`espn_mbb_team_injuries`](reference/site#espn_mbb_team_injuries) | [`espn_mbb_team_injuries`](https://hoopR.sportsdataverse.org/reference/espn_mbb_team_injuries.html) |
 | [`espn_mbb_team_leaders`](reference/site#espn_mbb_team_leaders) | [`espn_mbb_team_leaders`](https://hoopR.sportsdataverse.org/reference/espn_mbb_team_leaders.html) |
 | [`espn_mbb_team_news`](reference/site#espn_mbb_team_news) | [`espn_mbb_team_news`](https://hoopR.sportsdataverse.org/reference/espn_mbb_team_news.html) |
