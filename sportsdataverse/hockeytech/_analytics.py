@@ -135,7 +135,7 @@ def add_clock_columns(pbp: pl.DataFrame) -> pl.DataFrame:
 
 
 def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
-    """Add normalized coordinate columns from raw ``x_coord``/``y_coord``.
+    """Add normalized coordinate columns from the raw canvas ``x_coord``/``y_coord``.
 
     Ported from ``fastRhockey::pwhl_pbp`` (R/pwhl_pbp.R, lines 484-496).
 
@@ -167,9 +167,12 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     ``x_coord`` / ``y_coord`` are overwritten in place with the feet values
     ``(x_t, y_t)``, matching ``fastRhockey::add_coord_transforms`` and the PWHL
     release (``load_pwhl_pbp``); the raw canvas values survive in
-    ``x_coord_original`` / ``y_coord_original``.
+    ``x_coord_original`` / ``y_coord_original``. A frame that already carries
+    ``x_coord_original`` / ``y_coord_original`` is rebuilt from them, so applying the
+    transform twice equals applying it once.
 
-    Rows with null ``x_coord`` or ``y_coord`` produce null for all ten columns.
+    Rows with null ``x_coord`` or ``y_coord`` produce null for all twelve columns,
+    ``x_coord`` / ``y_coord`` included.
     Rows whose side is unknown (no ``team_id`` / ``home_team_id`` column, or a
     null or empty id in either, as on faceoffs or a game without its summary)
     produce null for the right and vertical columns.
@@ -206,8 +209,12 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     # pd.json_normalize -> pl.from_pandas infers as Utf8; dividing a String
     # column raises ``InvalidOperationError: division with 'String' datatypes``.
     # strict=False also rescues feeds that serialize coords as numeric strings.
-    ox = pl.col("x_coord").cast(pl.Float64, strict=False)
-    oy = pl.col("y_coord").cast(pl.Float64, strict=False)
+    # Idempotent: a second pass reads the canvas from *_original, never the feet x_coord.
+    src_x, src_y = (
+        ("x_coord_original", "y_coord_original") if "x_coord_original" in pbp.columns else ("x_coord", "y_coord")
+    )
+    ox = pl.col(src_x).cast(pl.Float64, strict=False)
+    oy = pl.col(src_y).cast(pl.Float64, strict=False)
 
     # Intermediate transformed coordinates (R lines 489-490):
     #   x_coord = (x_coord / 3) - 100
@@ -893,7 +900,8 @@ def enrich_pbp(
        ``gc/gamesummary``.
     2. Coordinate transforms (``*_original``, ``*_neutral``, ``*_fixed``,
        ``*_right``, ``*_vertical`` — 10 columns) via
-       :func:`add_coord_transforms`.
+       :func:`add_coord_transforms`, which also overwrites ``x_coord`` /
+       ``y_coord`` with feet (the raw canvas stays in ``*_original``).
     3. Clock columns (``minute_start``, ``second_start``, ``clock``,
        ``sec_from_start``) via :func:`add_clock_columns`.
     4. Shot geometry (``shot_distance``, ``shot_angle``, ``scoring_chance``)

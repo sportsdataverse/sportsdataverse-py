@@ -307,8 +307,8 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     0.0 ft on the seasons that carry both, so this is lossless).
 
     When geometry must be derived, ``x_coord`` is range-checked first
-    (:func:`_assert_rink_feet`) so a RAW-scale enrich frame can never be silently
-    scored with the NHL ``goal_x=89``.
+    (:func:`_assert_rink_feet`) so a frame built straight from the raw parser can never
+    be silently scored with the NHL ``goal_x=89``.
     """
     from sportsdataverse.hockeytech._analytics import _SHOT_EVENTS, add_shot_distance_angle
 

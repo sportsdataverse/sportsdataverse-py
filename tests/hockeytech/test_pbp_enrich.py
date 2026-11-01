@@ -407,6 +407,18 @@ def test_enrich_pbp_shot_geometry_unchanged_by_feet_x_coord(stem, league, game_i
     assert out.select(geo).equals(before.select(geo))
 
 
+def test_add_coord_transforms_is_idempotent():
+    """A second pass rebuilds from *_original: twice equals once (feet x_coord is never re-read as pixels)."""
+    from sportsdataverse.hockeytech._analytics import add_coord_transforms
+
+    raw = _pbp().with_columns(
+        home_team_id=pl.lit("3"), team_id=pl.col("team_id").cast(pl.Utf8)
+    )  # home side known -> right/vertical populated
+    once = add_coord_transforms(raw)
+    assert once["x_coord"].abs().max() <= 100 < once["x_coord_original"].max()
+    assert add_coord_transforms(once).equals(once)
+
+
 def test_add_coord_transforms_empty_frame():
     """Empty frame returns all ten coord columns (zero rows)."""
     from sportsdataverse.hockeytech._analytics import add_coord_transforms
