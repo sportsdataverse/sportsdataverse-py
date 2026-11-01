@@ -4,8 +4,8 @@
 - **WBB/WNBA:** release loader floors follow the published assets: WBB shots / game_rosters / standings /
   season stats / schedule_crosswalk, WNBA shots / game_rosters / officials / standings / season stats /
   crosswalks / draft, and WNBA Stats coaches / draft / game_rosters / officials / rosters. (#1047)
-- **WBB/WNBA:** ids join without a cast: WNBA `game_rosters` / `officials` `game_id`, `rosters` `athlete_id` and
-  WBB `game_rosters` `game_id` are Int32, as are the crosswalk `espn_*` ids; the WNBA crosswalk `wnba_*` team /
-  player ids are Int64, as WNBA Stats ships them. (#1047)
-- **WBB/WNBA:** the rds writer stores an integer column outside int32 as character, so 18-digit WBB play ids no
-  longer collide in R; the WNBA win-probability ids turn into text through Int64. (#1047)
+- **WBB/WNBA:** ids join without a cast: WNBA `game_rosters` / `officials` `game_id`, `rosters` / `player_core`
+  `athlete_id` and WBB `game_rosters` `game_id` are Int32, as are the crosswalk `espn_*` ids; the WNBA
+  crosswalk `wnba_*` team / player ids are Int64, as WNBA Stats ships them. (#1047)
+- **WNBA:** the win-probability model turns ids into text through Int64, so a float-origin id can never become
+  `"401….0"`. (#1047)
