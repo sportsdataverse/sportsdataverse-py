@@ -69,6 +69,7 @@ from sportsdataverse.wbb import espn_wbb_leaders_core as _raw_espn_wbb_leaders_c
 from sportsdataverse.wbb import espn_wbb_league_notes as _raw_espn_wbb_league_notes
 from sportsdataverse.wbb import espn_wbb_league_root as _raw_espn_wbb_league_root
 from sportsdataverse.wbb import espn_wbb_news as _raw_espn_wbb_news
+from sportsdataverse.wbb import espn_wbb_pbp as _raw_espn_wbb_pbp
 from sportsdataverse.wbb import espn_wbb_player_awards as _raw_espn_wbb_player_awards
 from sportsdataverse.wbb import espn_wbb_player_bio as _raw_espn_wbb_player_bio
 from sportsdataverse.wbb import espn_wbb_player_career_stats as _raw_espn_wbb_player_career_stats
@@ -311,7 +312,6 @@ from sportsdataverse.wbb import espn_shots_to_canonical as espn_shots_to_canonic
 from sportsdataverse.wbb import espn_wbb_calendar as espn_wbb_calendar  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_game_officials as espn_wbb_game_officials  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_game_rosters as espn_wbb_game_rosters  # noqa: F401
-from sportsdataverse.wbb import espn_wbb_pbp as espn_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_player_stats as espn_wbb_player_stats  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_schedule as espn_wbb_schedule  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_standings as espn_wbb_standings  # noqa: F401
@@ -1788,6 +1788,20 @@ def espn_wbb_news(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_news(*args, **kwargs)
+
+
+def espn_wbb_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_pbp(*args, **kwargs)
 
 
 def espn_wbb_player_awards(*args, **kwargs):

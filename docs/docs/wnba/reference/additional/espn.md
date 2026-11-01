@@ -321,34 +321,45 @@ rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 
 ### espn_wnba_pbp {#espn_wnba_pbp}
 
-`espn_wnba_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+`espn_wnba_pbp(game_id: 'int', raw: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
-espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
+espn_wnba_pbp() - Pull one game's play-by-play from ESPN's `wnba/summary` endpoint.
+
+By default the plays come back as the frame the `espn_wnba_pbp` release publishes (what
+`~sportsdataverse.wnba.load_wnba_pbp` reads): snake_case columns, Int32 team / athlete /
+game ids, the Int64 play `id`, sub-second Float64 clocks, `game_date` / `game_date_time`,
+the wehoop shot coordinates, `athlete_name_{1,2,3}`, and `home_score` / `away_score`
+rebuilt from the scoring plays when that reproduces the final (`score_source` says which).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from wnba_schedule(). |
-| `raw` |  | `False` |  |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint (wins over `return_parsed`). |
+| `return_parsed` | `bool` | `True` | If True (default), returns the release play-by-play frame. If False, returns the game dictionary (the shape before 0.2.0, which `helper_wnba_play_by_play` / `helper_wnba_team_box` / `helper_wnba_player_box` and `game_page_frames` read). |
+| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. Ignored with `raw=True` or `return_parsed=False`, which return a dict. |
 
 **Returns**
 
-Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
+One row per play, columns (in order) and dtypes as the release (`load_wnba_pbp`) for that season; a pandas frame with `return_as_pandas=True`. Zero rows, with the release's columns, when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays (wehoop returns NULL). A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False, never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season".
 
 **Example**
 
 ```python
 from sportsdataverse.wnba import espn_wnba_pbp
-game = espn_wnba_pbp(game_id=401620238)  # MIN at CON, 2024-05-23
-list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
-
-# Inspect the parsed plays and a header summary
-
-import polars as pl
-plays = pl.DataFrame(game["plays"])
+plays = espn_wnba_pbp(game_id=401620238)  # MIN at CON, 2024-05-23
 print(plays.shape)
-print(plays.select(["period", "time", "type.text", "text"]).head(5))
+print(plays.select(["period_number", "clock_display_value", "type_text", "text"]).head(5))
+
+# As pandas
+
+plays_pd = espn_wnba_pbp(game_id=401620238, return_as_pandas=True)
+
+# The game dictionary (box score, header, pickcenter, ...)
+
+game = espn_wnba_pbp(game_id=401620238, return_parsed=False)
+list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
 
 # Fetch the unparsed payload for custom downstream parsing
 

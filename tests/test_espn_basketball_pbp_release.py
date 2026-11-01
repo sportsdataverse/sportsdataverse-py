@@ -1,4 +1,4 @@
-"""``espn_mbb_pbp`` / ``espn_nba_pbp`` return the release play-by-play frame, offline.
+"""``espn_{mbb,nba,wbb,wnba}_pbp`` return the release play-by-play frame, offline.
 
 Payloads are the committed ESPN summary captures in ``tests/fixtures/espn/basketball_pbp/``
 (provenance in its README), served as the HTTP body. The release contract is the committed
@@ -20,13 +20,18 @@ import pytest
 from sportsdataverse._returns_schemas import SCHEMAS
 from sportsdataverse.mbb import mbb_pbp
 from sportsdataverse.nba import nba_pbp
+from sportsdataverse.wbb import wbb_pbp
+from sportsdataverse.wnba import wnba_pbp
 
 BB = Path(__file__).parent / "fixtures" / "espn" / "basketball_pbp"
-MODULES = {"nba": nba_pbp, "mbb": mbb_pbp}
+MODULES = {"nba": nba_pbp, "mbb": mbb_pbp, "wbb": wbb_pbp, "wnba": wnba_pbp}
 CASES = [("mbb", g) for g in (401830342, 401856600, 401829457, 401812161, 401828345)] + [
     ("nba", g) for g in (401766458, 400829116, 401704638, 260312029)
 ]
-# Columns every season of both releases carries.
+CASES += [("wbb", g) for g in (401364640, 400509734, 293170052, 273130043, 283430164)] + [
+    ("wnba", g) for g in (400927398, 250603003, 240618004)
+]
+# Columns every season of the four releases carries.
 CORE = {
     "game_play_number", "id", "sequence_number", "type_id", "type_text", "text", "away_score", "home_score",
     "period_number", "clock_display_value", "scoring_play", "shooting_play", "score_value", "team_id",
@@ -40,6 +45,10 @@ CORE = {
 NOT_PER_GAME = {
     "mbb": {"pregame_home_prob", "home_win_prob", "media_id"},
     "nba": {"type_abbreviation", "points_attempted", "short_description", "wallclock"},
+    # WBB: the season-level win-probability enrichment, and the fields older payloads predate
+    "wbb": {"espn_home_wp", "espn_away_wp", "espn_tie_percentage", "pregame_home_prob", "home_win_prob"}
+    | {"points_attempted", "short_description", "wallclock"},
+    "wnba": {"type_abbreviation", "points_attempted", "short_description", "wallclock"},
 }
 
 
@@ -102,7 +111,7 @@ def test_default_is_the_release_frame(monkeypatch: pytest.MonkeyPatch, lg: str, 
     assert shots.height > 0
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 def test_return_parsed_false_keeps_the_game_dict(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     gid = next(g for x, g in CASES if x == lg)
     raw = _raw(lg, gid)
@@ -113,7 +122,7 @@ def test_return_parsed_false_keeps_the_game_dict(monkeypatch: pytest.MonkeyPatch
     assert _call(monkeypatch, lg, raw, raw=True)["plays"] == raw["plays"]
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     raw = _raw(lg, next(g for x, g in CASES if x == lg))
     pdf = _call(monkeypatch, lg, raw, return_as_pandas=True)
@@ -126,7 +135,7 @@ def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
     assert dict(pdf.dtypes) == dict(df.to_pandas(use_pyarrow_extension_array=True).dtypes)
 
 
-@pytest.mark.parametrize("lg", ["mbb", "nba"])
+@pytest.mark.parametrize("lg", list(MODULES))
 @pytest.mark.parametrize("empty", ["ten_plays", "no_pbp_source"])
 def test_a_game_without_play_by_play_is_the_release_schema(
     monkeypatch: pytest.MonkeyPatch, lg: str, empty: str
