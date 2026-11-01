@@ -420,7 +420,10 @@ def test_nba_and_wnba_frames_are_byte_identical_to_the_shipped_module(
     assert fr["pbp"].select(PBP_COLS).to_dict(as_series=False) == want["pbp"]
     assert fr["team_game_rates"].sort("team_id").to_dict(as_series=False) == want["team_game_rates"]
     assert fr["player_game_rates"].sort("athlete_id").to_dict(as_series=False) == want["player_game_rates"]
-    assert (fr["periods"], fr["prior"]) == (want["periods"], want["prior"])
+    # the shipped module carried the invented no-line spread (+2.5); the line is now null, the prior unchanged
+    assert want["prior"]["game_spread_available"] is False and want["prior"]["home_team_spread"] == 2.5
+    assert fr["prior"]["home_team_spread"] is None
+    assert (fr["periods"], {**fr["prior"], "home_team_spread": 2.5}) == (want["periods"], want["prior"])
 
 
 @pytest.mark.parametrize(
