@@ -855,8 +855,7 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         The HockeyTech feed has no ``streaks`` view. ``modulekit&view=streaks``
         answers HTTP 200 with the in-body ``"Undefined Tab streaks"`` sentinel and
         ``statviewfeed&view=streaks`` answers ``{"error": "InvalidView error: streaks"}``
-        (both captured 2026-07-12 during the HockeyTech API recon; see
-        ``sdv-internal-refs/hockeytech/captures/``). No replacement view was found —
+        (both captured 2026-07-12 during the HockeyTech API recon). No replacement view was found —
         the PWHL site appears to compute its Streaks page client-side from schedule
         data. fastRhockey's equivalent carries the same defect.
 

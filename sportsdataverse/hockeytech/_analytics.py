@@ -140,10 +140,9 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     Ported from ``fastRhockey::pwhl_pbp`` (R/pwhl_pbp.R, lines 484-496).
 
     Raw coordinates (``x_coord``, ``y_coord``) come from the HockeyTech feed
-    on a 600×300 canvas with a top-left origin, so centre ice is (300, 150).
-    Every probed league uses this one canvas, and the feed puts the home team's
-    attack toward x = 0 and the visitor's toward x = 600 in every period
-    (sdv-internal-refs ``hockeytech/CANVAS.md``). The derived frames are
+    on a 600×300 px canvas with a top-left origin, so centre ice is (300, 150).
+    Every probed league uses this one canvas, and the home team shoots toward
+    x = 0 (the visitor toward x = 600) in every period. The derived frames are
     rotations of the centre-origin feet frame ``(x_t, y_t)``, so every event
     stays on the rink:
 
@@ -267,8 +266,8 @@ def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = _NHL_SIZE_RINK_GO
 
     Distance is to the nearer net, ``dx = goal_x - |x|``: an own-half event with a
     goalie in net is a near-net event whose coordinates the HockeyTech feed
-    mirrored, so the nearer net is right for it (sdv-internal-refs
-    ``hockeytech/CANVAS.md``, validated on 320 PWHL games). An empty-net goal
+    mirrored, so the nearer net is right for it (validated on 320 PWHL games).
+    An empty-net goal
     (``empty_net`` "1") is measured to the net its team attacks instead: the feed
     puts the home team's attack at ``x = -goal_x`` and the visitor's at ``+goal_x``,
     and an own-half empty-net goal is a genuine long shot. Rows without

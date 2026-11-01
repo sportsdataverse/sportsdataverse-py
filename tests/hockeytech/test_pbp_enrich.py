@@ -277,7 +277,7 @@ def test_add_coord_transforms_centre_ice_is_origin_in_every_frame():
 
 
 def test_add_coord_transforms_rotations_home_and_visitor():
-    """Canvas (60, 30) is x = -80, y = 34 ft: near the net the home team attacks (sdv-internal-refs CANVAS.md).
+    """Canvas (60, 30) is x = -80, y = 34 ft: near the net the home team attacks (it shoots toward canvas x = 0).
 
     fixed = (-x, -y) for every event; right = home (-x, -y), visitor (x, y);
     vertical = (-y_right, x_right).
