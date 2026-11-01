@@ -247,7 +247,8 @@ def helper_nhl_pickcenter(pbp_txt):
     return {
         "gameSpread": None if gameSpread is None else float(gameSpread),
         "overUnder": None if overUnder is None else float(overUnder),
-        "homeFavorite": None if favorite is None else bool(favorite),
+        # no favorite flag: the spread is the home line, so a negative one is a home favorite (none at 0)
+        "homeFavorite": bool(favorite) if favorite is not None else (None if not gameSpread else bool(gameSpread < 0)),
         "gameSpreadAvailable": gameSpread is not None,
     }
 

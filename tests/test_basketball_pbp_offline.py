@@ -311,3 +311,12 @@ def test_nhl_game_without_a_line_has_null_spreads_on_every_play(monkeypatch: pyt
     plays = pl.DataFrame(nhl_pbp.espn_nhl_pbp(401675111)["plays"], infer_schema_length=None)
     for col in ("gameSpread", "homeFavorite", "homeTeamSpread"):
         assert plays[col].null_count() == plays.height, col
+
+
+@pytest.mark.parametrize(("spread", "favorite"), [(-1.5, True), (1.5, False), (0.0, None)])
+def test_nhl_favorite_falls_back_to_the_spread_sign(spread: float, favorite) -> None:
+    """No ``homeTeamOdds.favorite``: the spread is the home line, so a negative one is a home favorite."""
+    from sportsdataverse.nhl.nhl_pbp import helper_nhl_pickcenter
+
+    out = helper_nhl_pickcenter({"pickcenter": [{"provider": {"id": "100"}, "spread": spread}]})
+    assert out["homeFavorite"] is favorite and out["gameSpreadAvailable"] is True
