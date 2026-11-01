@@ -1,0 +1,811 @@
+# Soccer (all) — American Soccer Analysis (app.americansocceranalysis.com)
+
+> Soccer (all) — American Soccer Analysis (app.americansocceranalysis.com) — endpoint reference in sdv-py, the SportsDataverse Python package.
+
+`sportsdataverse.soccer` — 16 endpoints.
+
+## asa_games
+
+Games/fixtures with final scores, venue/official/manager FKs.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/games`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/games](https://app.americansocceranalysis.com/api/v1/mls/games)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | ASA game id (base62 string; Utf8 join key). |
+| `date_time_utc` | String | Kickoff timestamp (UTC, ISO 8601). |
+| `home_score` | Int64 | Home goals (regulation + extra time). |
+| `away_score` | Int64 | Away goals (regulation + extra time). |
+| `home_team_id` | String | FK -> Team (home side). |
+| `away_team_id` | String | FK -> Team (away side). |
+| `referee_id` | String | ASA referee id (base62 string; Utf8 join key). |
+| `stadium_id` | String | ASA stadium id (base62 string; Utf8 join key). |
+| `home_manager_id` | String | FK -> Manager (home side; nullable). |
+| `away_manager_id` | String | FK -> Manager (away side; nullable). |
+| `expanded_minutes` | Int64 | Total match minutes incl. stoppage (data coverage window). |
+| `season_name` | String | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `matchday` | Int64 | Round/matchday number. |
+| `knockout_game` | Boolean | True if a knockout/playoff fixture. |
+| `status` | String | Game status (e.g. `final`). |
+| `last_updated_utc` | String | Last-updated timestamp (UTC, ISO 8601). |
+| `attendance` | Int64 | Reported attendance (nullable). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_games-example}
+
+```python
+asa_games(league_slug='mls')
+```
+
+## asa_games_xgoals
+
+Per-game expected-goals + expected points for both sides.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/games/xgoals`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/games/xgoals](https://app.americansocceranalysis.com/api/v1/mls/games/xgoals)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_games_xgoals-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | ASA game id (base62 string; Utf8 join key). |
+| `date_time_utc` | String | Kickoff timestamp (UTC, ISO 8601). |
+| `home_team_id` | String | FK -> Team (home side). |
+| `home_goals` | Int64 | Home goals scored. |
+| `home_team_xgoals` | Float64 | Home expected goals (team model). |
+| `home_player_xgoals` | Float64 | Home expected goals (player-shot model). |
+| `away_team_id` | String | FK -> Team (away side). |
+| `away_goals` | Int64 | Away goals scored. |
+| `away_team_xgoals` | Float64 | Away expected goals (team model). |
+| `away_player_xgoals` | Float64 | Away expected goals (player-shot model). |
+| `goal_difference` | Int64 | goals_for - goals_against. |
+| `team_xgoal_difference` | Float64 | Home minus away team xGoals. |
+| `player_xgoal_difference` | Float64 | Home minus away player xGoals. |
+| `final_score_difference` | Int64 | Final goal margin (home perspective). |
+| `home_xpoints` | Float64 | Home expected points from the match. |
+| `away_xpoints` | Float64 | Away expected points from the match. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_games_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_games_xgoals-example}
+
+```python
+asa_games_xgoals(league_slug='mls')
+```
+
+## asa_goalkeepers_goals_added
+
+Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/goalkeepers/goals-added`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/goalkeepers/goals-added](https://app.americansocceranalysis.com/api/v1/mls/goalkeepers/goals-added)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_goalkeepers_goals_added-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_goalkeepers_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_goalkeepers_goals_added-example}
+
+```python
+asa_goalkeepers_goals_added(league_slug='mls')
+```
+
+## asa_goalkeepers_xgoals
+
+Per-goalkeeper shot-stopping vs post-shot expected goals.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/goalkeepers/xgoals`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/goalkeepers/xgoals](https://app.americansocceranalysis.com/api/v1/mls/goalkeepers/xgoals)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_goalkeepers_xgoals-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `shots_faced` | Int64 | Shots faced. |
+| `goals_conceded` | Int64 | Goals conceded. |
+| `saves` | Int64 | Saves made. |
+| `share_headed_shots` | Float64 | Share of faced shots that were headers. |
+| `xgoals_gk_faced` | Float64 | Post-shot expected goals faced. |
+| `goals_minus_xgoals_gk` | Float64 | Goals conceded minus post-shot xG (negative = shots saved above expectation). |
+| `goals_divided_by_xgoals_gk` | Float64 | Goals conceded / post-shot xG faced. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_goalkeepers_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_goalkeepers_xgoals-example}
+
+```python
+asa_goalkeepers_xgoals(league_slug='mls')
+```
+
+## asa_managers
+
+Managers/head coaches.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/managers`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/managers](https://app.americansocceranalysis.com/api/v1/mls/managers)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_managers-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `manager_id` | String | ASA manager id (base62 string; Utf8 join key). |
+| `manager_name` | String | Manager display name. |
+| `nationality` | String | Player nationality (country name). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_managers-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_managers-example}
+
+```python
+asa_managers(league_slug='mls')
+```
+
+## asa_players
+
+Players in the league (identity + biometrics + positions).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/players`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/players](https://app.americansocceranalysis.com/api/v1/mls/players)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_players-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `player_name` | String | Player display name. |
+| `birth_date` | String | Date of birth (`YYYY-MM-DD`; may be null). |
+| `height_ft` | Int64 | Listed height, feet component. |
+| `height_in` | Int64 | Listed height, inches component. |
+| `weight_lb` | Int64 | Listed weight in pounds. |
+| `nationality` | String | Player nationality (country name). |
+| `primary_broad_position` | String | Broad position bucket (Goalkeeper/Defender/Midfielder/Forward). |
+| `primary_general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `season_name` | String | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `secondary_general_position` | String | Secondary general position code (nullable). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_players-example}
+
+```python
+asa_players(league_slug='mls')
+```
+
+## asa_players_goals_added
+
+Per-player Goals Added (g+) with a per-action-type data[] breakdown.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/players/goals-added`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/players/goals-added](https://app.americansocceranalysis.com/api/v1/mls/players/goals-added)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_players_goals_added-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_players_goals_added-example}
+
+```python
+asa_players_goals_added(league_slug='mls')
+```
+
+## asa_players_salaries
+
+Player salaries (MLS only; server caps the response at 10000 rows).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/players/salaries`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/players/salaries](https://app.americansocceranalysis.com/api/v1/mls/players/salaries)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_players_salaries-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `season_name` | Int64 | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `position` | String | Roster position designation (string; distinct from `general_position`). |
+| `base_salary` | Int64 | Base salary (USD). |
+| `guaranteed_compensation` | Int64 | Guaranteed compensation (USD). |
+| `mlspa_release` | String | MLSPA salary-release label/date the row is sourced from. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_salaries-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_players_salaries-example}
+
+```python
+asa_players_salaries(league_slug='mls')
+```
+
+## asa_players_xgoals
+
+Per-player expected-goals + attacking production.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/players/xgoals`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/players/xgoals](https://app.americansocceranalysis.com/api/v1/mls/players/xgoals)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_players_xgoals-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `shots` | Int64 | Shots taken. |
+| `shots_on_target` | Int64 | Shots on target. |
+| `goals` | Int64 | Goals scored. |
+| `xgoals` | Float64 | Expected goals (pre-shot xG). |
+| `xplace` | Float64 | Expected goals added by shot placement (post-shot minus pre-shot). |
+| `goals_minus_xgoals` | Float64 | Finishing over expectation (goals - xG). |
+| `key_passes` | Int64 | Passes that led to a shot. |
+| `primary_assists` | Int64 | Primary assists. |
+| `xassists` | Float64 | Expected assists. |
+| `primary_assists_minus_xassists` | Float64 | Assists over expectation. |
+| `goals_plus_primary_assists` | Int64 | Goals + primary assists (G+A). |
+| `xgoals_plus_xassists` | Float64 | xGoals + xAssists (xG+xA). |
+| `points_added` | Float64 | Team points added by the player's attacking output. |
+| `xpoints_added` | Float64 | Expected team points added. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_players_xgoals-example}
+
+```python
+asa_players_xgoals(league_slug='mls')
+```
+
+## asa_players_xpass
+
+Per-player expected-passing (completion over expected, distance, share of team touches).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/players/xpass`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/players/xpass](https://app.americansocceranalysis.com/api/v1/mls/players/xpass)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_players_xpass-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `attempted_passes` | Int64 | Passes attempted. |
+| `pass_completion_percentage` | Float64 | Actual pass completion (0-1). |
+| `xpass_completion_percentage` | Float64 | Expected pass completion (0-1). |
+| `passes_completed_over_expected` | Float64 | Passes completed over expected. |
+| `passes_completed_over_expected_p100` | Float64 | Passes completed over expected per 100 passes. |
+| `avg_distance_yds` | Float64 | Average pass distance in yards. |
+| `avg_vertical_distance_yds` | Float64 | Average vertical (goalward) pass distance in yards. |
+| `share_team_touches` | Float64 | Share of the team's touches (0-1). |
+| `count_games` | Int64 | Games included in the window. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_xpass-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_players_xpass-example}
+
+```python
+asa_players_xpass(league_slug='mls')
+```
+
+## asa_referees
+
+Match referees.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/referees`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/referees](https://app.americansocceranalysis.com/api/v1/mls/referees)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_referees-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `referee_id` | String | ASA referee id (base62 string; Utf8 join key). |
+| `referee_name` | String | Referee display name. |
+| `birth_date` | String | Date of birth (`YYYY-MM-DD`; may be null). |
+| `nationality` | String | Player nationality (country name). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_referees-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_referees-example}
+
+```python
+asa_referees(league_slug='mls')
+```
+
+## asa_stadia
+
+Stadia (venue metadata incl. coordinates + pitch dimensions).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/stadia`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/stadia](https://app.americansocceranalysis.com/api/v1/mls/stadia)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_stadia-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `stadium_id` | String | ASA stadium id (base62 string; Utf8 join key). |
+| `stadium_name` | String | Venue name. |
+| `capacity` | Int64 | Seating capacity. |
+| `year_built` | Int64 | Year the venue opened. |
+| `roof` | Boolean | Whether the venue has a roof. |
+| `turf` | Boolean | Whether the playing surface is artificial turf. |
+| `street` | String | Street address. |
+| `city` | String | City. |
+| `province` | String | State/province. |
+| `country` | String | Country. |
+| `postal_code` | String | Postal/ZIP code. |
+| `latitude` | Float64 | Latitude (decimal degrees). |
+| `longitude` | Float64 | Longitude (decimal degrees). |
+| `field_x` | Int64 | Pitch length (venue-reported field dimension). |
+| `field_y` | Int64 | Pitch width (venue-reported field dimension). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_stadia-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_stadia-example}
+
+```python
+asa_stadia(league_slug='mls')
+```
+
+## asa_teams
+
+Teams in the league (full table, no filter params).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/teams`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/teams](https://app.americansocceranalysis.com/api/v1/mls/teams)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+
+### Returns {#asa_teams-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `team_name` | String | Full club name. |
+| `team_short_name` | String | Short club name. |
+| `team_abbreviation` | String | Short (2-4 char) club abbreviation. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_teams-example}
+
+```python
+asa_teams(league_slug='mls')
+```
+
+## asa_teams_goals_added
+
+Per-team Goals Added for/against with a per-action-type data[] breakdown.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/teams/goals-added`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/teams/goals-added](https://app.americansocceranalysis.com/api/v1/mls/teams/goals-added)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_teams_goals_added-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes` | Int64 | Team minutes in the window. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_teams_goals_added-example}
+
+```python
+asa_teams_goals_added(league_slug='mls')
+```
+
+## asa_teams_xgoals
+
+Per-team expected-goals for/against + expected points.
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/teams/xgoals`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/teams/xgoals](https://app.americansocceranalysis.com/api/v1/mls/teams/xgoals)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_teams_xgoals-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `count_games` | Int64 | Games included in the window. |
+| `shots_for` | Int64 | Shots taken. |
+| `shots_against` | Int64 | Shots faced. |
+| `goals_for` | Int64 | Goals scored. |
+| `goals_against` | Int64 | Goals conceded. |
+| `goal_difference` | Int64 | goals_for - goals_against. |
+| `xgoals_for` | Float64 | Expected goals created. |
+| `xgoals_against` | Float64 | Expected goals conceded. |
+| `xgoal_difference` | Float64 | xgoals_for - xgoals_against. |
+| `goal_difference_minus_xgoal_difference` | Float64 | Finishing/keeping over expectation. |
+| `points` | Int64 | Actual league points earned. |
+| `xpoints` | Float64 | Expected league points. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_teams_xgoals-example}
+
+```python
+asa_teams_xgoals(league_slug='mls')
+```
+
+## asa_teams_xpass
+
+Per-team expected-passing (completion over expected, vertical distance).
+
+**Endpoint URL:** `GET https://app.americansocceranalysis.com/api/v1/{league_slug}/teams/xpass`
+
+**Valid URL:** [https://app.americansocceranalysis.com/api/v1/mls/teams/xpass](https://app.americansocceranalysis.com/api/v1/mls/teams/xpass)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
+| `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
+| `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
+| `general_position` | `general_position` |  |  | `Y` | Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes). |
+| `split_by_teams` | `split_by_teams` |  |  | `Y` | `true` => one row per entity per team (splits traded players). |
+| `split_by_seasons` | `split_by_seasons` |  |  | `Y` | `true` => one row per entity per season. |
+| `split_by_games` | `split_by_games` |  |  | `Y` | `true` => one row per entity per game. |
+| `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
+| `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
+
+### Returns {#asa_teams_xpass-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `count_games` | Int64 | Games included in the window. |
+| `attempted_passes_for` | Int64 | Passes attempted by the team. |
+| `pass_completion_percentage_for` | Float64 | Actual pass completion % (for). |
+| `xpass_completion_percentage_for` | Float64 | Expected pass completion % (for). |
+| `passes_completed_over_expected_for` | Float64 | Passes completed over expected (for). |
+| `passes_completed_over_expected_p100_for` | Float64 | Passes completed over expected per 100 passes (for). |
+| `avg_vertical_distance_for` | Float64 | Average vertical (goalward) pass distance (for). |
+| `attempted_passes_against` | Int64 | Passes attempted by opponents. |
+| `pass_completion_percentage_against` | Float64 | Actual pass completion % (against). |
+| `xpass_completion_percentage_against` | Float64 | Expected pass completion % (against). |
+| `passes_completed_over_expected_against` | Float64 | Passes completed over expected (against). |
+| `passes_completed_over_expected_p100_against` | Float64 | Passes completed over expected per 100 passes (against). |
+| `avg_vertical_distance_against` | Float64 | Average vertical pass distance (against). |
+| `passes_completed_over_expected_difference` | Float64 | For minus against (passes over expected). |
+| `avg_vertical_distance_difference` | Float64 | For minus against (vertical distance). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_xpass-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#asa_teams_xpass-example}
+
+```python
+asa_teams_xpass(league_slug='mls')
+```

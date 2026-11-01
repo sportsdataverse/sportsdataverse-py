@@ -1,0 +1,379 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-architecture/model-lineage" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.2"><title data-rh=true>Model lineage | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.jpg /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.jpg /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/architecture/model-lineage /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content="sportsdataverse-py: sports data for Python"/><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content="sportsdataverse-py: sports data for Python"/><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="Model lineage | sdv-py"/><meta data-rh=true name=description content="Where every bundled model artifact and fitted constant in sportsdataverse-py comes from, and the script that fitted it."/><meta data-rh=true property=og:description content="Where every bundled model artifact and fitted constant in sportsdataverse-py comes from, and the script that fitted it."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/architecture/model-lineage /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/architecture/model-lineage hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/architecture/model-lineage hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/architecture-and-reference","name":"Architecture & reference","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/architecture/model-lineage","name":"Model lineage","position":2}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-touch-icon-180x180.png><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.b50f5433.css /><script src=/assets/js/runtime~main.9723ad99.js defer></script><script src=/assets/js/main.39d599b8.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}(),document.documentElement.setAttribute("data-announcement-bar-initially-dismissed",function(){try{return"true"===localStorage.getItem("docusaurus.announcement.dismiss-a54")}catch(t){}return!1}())</script><div id=__docusaurus><link rel=preload as=image href=/img/logo.png /><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><div class="theme-announcement-bar announcementBar_mb4j" role=banner><div class=announcementBarPlaceholder_vyr4></div><div class="content_knG7 announcementBarContent_xLdY">sportsdataverse-py 0.2.0 is in beta: <code>pip install --pre sportsdataverse</code>. <a href=/docs/guides/migration-0-2-0>What changed</a></div><button type=button aria-label=Close class="clean-btn close closeButton_CVFx announcementBarClose_gvF7"><svg viewBox="0 0 15 15" width=14 height=14><g stroke=currentColor stroke-width=3.1><path d="M.75.75l13.5 13.5M14.25.75L.75 14.25"/></g></svg></button></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>Changelog</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf target=_self rel="noopener noreferrer" class=dropdown__link>Cheat Sheet (PDF)<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://baseballr.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/architecture/model-lineage>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/architecture/model-lineage>main (latest)</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a><li><a class=dropdown__link href=/docs/0.0.73/intro>0.0.73</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG menuWithAnnouncementBar_GW3s"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/intro><span class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/ecosystem><span class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/quality-of-life><span class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/guides><span class=categoryLinkLabel_W154>Guides</span></a><button aria-label="Expand sidebar category 'Guides'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/category/tutorials><span class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/football><span class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/basketball><span class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/hockey><span class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/baseball><span class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/soccer><span class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/other><span class=categoryLinkLabel_W154>More sports & sources</span></a><button aria-label="Expand sidebar category 'More sports & sources'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/architecture-and-reference><span class=categoryLinkLabel_W154>Architecture & reference</span></a><button aria-label="Collapse sidebar category 'Architecture & reference'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/architecture/espn-cross-league><span class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/architecture/codegen><span class=linkLabel_WmDU>Codegen</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/architecture/http-auth-config><span class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/architecture/metric-registry><span class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/architecture/model-lineage><span class=linkLabel_WmDU>Model lineage</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/parsers/><span class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/parameters><span class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/reference/python-helpers><span class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/architecture-and-reference><span>Architecture & reference</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Model lineage</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Model lineage</h1></header>
+<p>Every bundled model artifact and every fitted constant in sdv-py should name the
+script that produced it, and that script should be one a reader can open. This
+page records where that holds and where it does not. <code>tests/test_model_lineage.py</code>
+keeps it honest: every <code>dev/**.py</code> or <code>tools/**.py</code> path cited from package source
+must be tracked by git or be listed under <a href=#known-gaps class="">Known gaps</a> below, a gap
+that becomes tracked must be removed from the list, and every bundled <code>.ubj</code>
+booster must have a row in the booster registry.</p>
+<p>A script in another repository is cited as <code>repo</code> + path + the commit it was read
+at. "Byte-identical" means the bundled file's sha256 equals the GitHub release
+asset's <code>digest</code> (checked 2026-10-22).</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=bundled-boosters-26>Bundled boosters (26)<a href=#bundled-boosters-26 class=hash-link aria-label="Direct link to Bundled boosters (26)" title="Direct link to Bundled boosters (26)" translate=no>​</a></h2>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=cfb-sportsdataversecfbmodels-11>CFB (<code>sportsdataverse/cfb/models/</code>, 11)<a href=#cfb-sportsdataversecfbmodels-11 class=hash-link aria-label="Direct link to cfb-sportsdataversecfbmodels-11" title="Direct link to cfb-sportsdataversecfbmodels-11" translate=no>​</a></h3>
+<p>The trainers live in
+<a href=https://github.com/sportsdataverse/cfbfastR-cfb-data target=_blank rel="noopener noreferrer" class=""><code>cfbfastR-cfb-data</code></a> under
+<code>python/cfb_model_build/</code> (read at <code>14419a885</code>); that repo's <code>models/REGISTRY.md</code>
+holds each model's gates, retrain date and cadence. Each booster here ships a
+<code>.card.json</code> beside it.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>artifact<th>fitting script<th>bundled in<th>release byte-identical<tbody><tr><td><code>sportsdataverse/cfb/models/ep_model.ubj</code><td><code>model_training/train_ep.py</code><td><code>05bfcb1641</code><td>no (<code>espn_cfb_model_artifacts</code> <code>ep.ubj</code> is the older 2026-06-18 fit)<tr><td><code>sportsdataverse/cfb/models/wp_spread.ubj</code><td><code>model_training/train_wp.py --variant spread</code><td><code>05bfcb1641</code><td>no (release asset 2026-06-18)<tr><td><code>sportsdataverse/cfb/models/wp_naive.ubj</code><td><code>model_training/train_wp.py --variant naive</code><td><code>05bfcb1641</code><td>no (release asset 2026-06-18)<tr><td><code>sportsdataverse/cfb/models/cfb_cp_model.ubj</code><td><code>cpoe/</code> (<code>python -m cfb_model_build.cpoe --variant game_state</code>)<td><code>fbe11c473a</code><td>no<tr><td><code>sportsdataverse/cfb/models/cfb_cp_model_air_yards.ubj</code><td><code>cpoe/</code> (air-yards variant)<td><code>4b34e0e81e</code><td>yes<tr><td><code>sportsdataverse/cfb/models/fd_model.ubj</code><td><code>model_training/fourth_down/</code><td><code>fbe11c473a</code><td>no<tr><td><code>sportsdataverse/cfb/models/fg_model.ubj</code><td><code>model_training/train_fg.py</code><td><code>05bfcb1641</code><td>no<tr><td><code>sportsdataverse/cfb/models/two_pt_model.ubj</code><td><code>model_training/train_two_pt.py</code><td><code>05bfcb1641</code><td>no<tr><td><code>sportsdataverse/cfb/models/xpass_model.ubj</code><td><code>model_training/train_xpass.py</code><td><code>05bfcb1641</code><td>no<tr><td><code>sportsdataverse/cfb/models/qbr_model.ubj</code><td><code>model_training/train_qbr.py</code><td><code>291ad943e0</code><td>yes<tr><td><code>sportsdataverse/cfb/models/wp_ot_reach.ubj</code><td>sdv-py <code>tools/fit_cfb_wp_overtime.py</code> (<code>408a21e9cb</code>)<td><code>408a21e9cb</code><td>n/a (bundle only; the card pins the sha256 of the boosters it corrects)</table>
+<p>The seven boosters bundled in <code>05bfcb1641</code> ("retrain the model suite on the
+corrected corpus") are newer than the <code>espn_cfb_model_artifacts</code> assets of the
+same name, so the release is not their source; their cards record the training
+frame and seasons.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=nfl-sportsdataversenflmodels-9>NFL (<code>sportsdataverse/nfl/models/</code>, 9)<a href=#nfl-sportsdataversenflmodels-9 class=hash-link aria-label="Direct link to nfl-sportsdataversenflmodels-9" title="Direct link to nfl-sportsdataversenflmodels-9" translate=no>​</a></h3>
+<p>The trainers live in <a href=https://github.com/sportsdataverse/nfl-data target=_blank rel="noopener noreferrer" class=""><code>nfl-data</code></a>
+under <code>python/model_training/</code> (read at <code>98cfb72</code>); its <code>models/REGISTRY.md</code> holds
+the gates and cadence. No NFL booster ships a card in sdv-py.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>artifact<th>fitting script<th>bundled in<th>release byte-identical<tbody><tr><td><code>sportsdataverse/nfl/models/ep_model.ubj</code><td><code>play_level</code> at nfl-data <code>bbe7269</code> (nflfastR's <code>cal_data</code> rows and roof mapping, 1999-2025 <code>nfl_model_pbp</code>)<td>this PR<td>no (refit after the 09-10 release; <code>nfl_model_artifacts</code> is republished when nfl-data#84 merges)<tr><td><code>sportsdataverse/nfl/models/wp_naive.ubj</code><td><code>play_level</code><td><code>c61e0d9ad1</code><td>yes<tr><td><code>sportsdataverse/nfl/models/wp_spread.ubj</code><td><code>play_level</code><td><code>c61e0d9ad1</code><td>yes<tr><td><code>sportsdataverse/nfl/models/cp_model.ubj</code><td><code>play_level</code> at nfl-data#88 (trained from 2009)<td>this PR<td>no (refit after the 09-10 release; <code>nfl_model_artifacts</code> is republished with the nfl-data follow-up)<tr><td><code>sportsdataverse/nfl/models/xpass_model.ubj</code><td><code>decision_models</code><td><code>c61e0d9ad1</code><td>yes<tr><td><code>sportsdataverse/nfl/models/fg_model.ubj</code><td><code>decision_models</code> (per the nfl-data registry)<td><code>c61e0d9ad1</code><td>unverifiable (no release asset; bundle only)<tr><td><code>sportsdataverse/nfl/models/two_pt_model.ubj</code><td><code>decision_models</code> (per the nfl-data registry)<td><code>c61e0d9ad1</code><td>unverifiable (no release asset; bundle only)<tr><td><code>sportsdataverse/nfl/models/qbr_model.ubj</code><td><code>akeaswaran/cfb_qbr</code> <code>qbr_xgb.R</code> (<code>ca94e63</code>, 2021; a CFB-trained model)<td><code>2e52d0625a</code> (re-saved with feature names, trees unchanged)<td>n/a (no release)<tr><td><code>sportsdataverse/nfl/models/nfl_playcall.ubj</code><td>sdv-py <code>tools/models/nfl_scheme/train_playcall.py</code> (<code>04b729e6d2</code>)<td><code>04b729e6d2</code><td>n/a (bundle only)</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=basketball-and-baseball-6>Basketball and baseball (6)<a href=#basketball-and-baseball-6 class=hash-link aria-label="Direct link to Basketball and baseball (6)" title="Direct link to Basketball and baseball (6)" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>artifact<th>fitting script<th>bundled in<tbody><tr><td><code>sportsdataverse/nba/models/nba_in_game_wp.ubj</code><td>sdv-py <code>tools/models/nba_prediction/train_in_game_wp.py --league-id 00</code> (<code>2413d0bfb2</code>)<td><code>2413d0bfb2</code><tr><td><code>sportsdataverse/nba/models/wnba_in_game_wp.ubj</code><td>sdv-py <code>tools/models/nba_prediction/train_in_game_wp.py --league-id 10 --artifact wnba_in_game_wp.ubj</code> (<code>2413d0bfb2</code>)<td><code>2413d0bfb2</code><tr><td><code>sportsdataverse/mbb/models/mbb_in_game_wp.ubj</code><td><strong>gap</strong>: <code>dev/mbb_prediction/train_in_game_wp.py</code> exists only on the maintainer's disk (untracked)<td><code>5c3eaba8de</code><tr><td><code>sportsdataverse/mbb/models/wbb_in_game_wp.ubj</code><td><strong>gap</strong>: same untracked script<td><code>5c3eaba8de</code><tr><td><code>sportsdataverse/mlb/models/mlb_stuff_plus.ubj</code><td>sdv-py <code>tools/models/mlb_pitching/fit_stuff_plus.py</code>, names re-attached by <code>tools/models/mlb_pitching/relabel_boosters.py</code> (<code>9c883ae281</code>)<td><code>9c883ae281</code><tr><td><code>sportsdataverse/mlb/models/mlb_command_plus.ubj</code><td>sdv-py <code>tools/models/mlb_pitching/fit_command_plus.py</code>, names re-attached by <code>tools/models/mlb_pitching/relabel_boosters.py</code> (<code>9c883ae281</code>)<td><code>9c883ae281</code></table>
+<p>None of these six ships a card.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=fitted-constants>Fitted constants<a href=#fitted-constants class=hash-link aria-label="Direct link to Fitted constants" title="Direct link to Fitted constants" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>constant<th>fitting script<th>status<tbody><tr><td><code>mbb_ncaa_rapm_league.DEFAULT_RIDGE_LAMBDA</code> (1000.0)<td><code>tools/fit_ncaa_rapm_lambda.py</code><td>tracked (moved from untracked <code>dev/ncaa_rapm/fit_lambda_league.py</code>)<tr><td><code>nba_shot_value_constants.TALENT_SHRINKAGE_K["00"]</code> / <code>["20"]</code> (70.1)<td><code>tools/fit_nba_shot_shrinkage_k.py</code><td>tracked (moved from untracked <code>dev/nba_shot_value/fit_shrinkage_k.py</code>; reruns to 70.1 on the committed fixture)<tr><td><code>nba_shot_value_constants.TALENT_SHRINKAGE_K["10"]</code> (60.0)<td>none<td><strong>seeded placeholder</strong>, not a fit: no WNBA shot fixture is committed<tr><td><code>paper_index</code> weights<td><code>game-on-paper-app</code> <code>python/tools/fit_paper_index.py</code> (<code>43fd699f</code>)<td>tracked in that repo<tr><td><code>nfl_prediction_constants.RatingsConfig.ridge_lambda</code>, <code>NFL_CONSTANTS</code>, <code>PROP_CONSTANTS</code><td><code>dev/nfl_prediction/fit_{ridge_lambda,pregame,props}.py</code><td><strong>lost</strong> (see below)</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=known-gaps>Known gaps<a href=#known-gaps class=hash-link aria-label="Direct link to Known gaps" title="Direct link to Known gaps" translate=no>​</a></h2>
+<p>Cited from package source but not tracked. <strong>Lost</strong> means the script is in no
+branch's history (<code>git log --all</code>) and not on the maintainer's disk: the numbers
+it produced are recorded in the source but cannot be re-derived. <strong>Untracked</strong>
+means the script exists only in the maintainer's gitignored <code>dev/</code> directory;
+committing it (under <code>tools/</code>, or force-added like the other tracked <code>dev/</code>
+scripts) closes the gap.</p>
+<!-- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>cited path<th>status<th>cited from<tbody><tr><td><code>dev/nfl_prediction/fit_ridge_lambda.py</code><td>lost<td><code>nfl/nfl_prediction_constants.py</code><tr><td><code>dev/nfl_prediction/fit_pregame.py</code><td>lost<td><code>nfl/nfl_prediction_constants.py</code><tr><td><code>dev/nfl_prediction/fit_props.py</code><td>lost<td><code>nfl/nfl_prediction_constants.py</code><tr><td><code>dev/nfl_projection/fit_availability.py</code><td>lost<td><code>nfl/nfl_availability.py</code>, <code>nfl/nfl_projection_constants.py</code><tr><td><code>dev/nfl_projection/fit_draft_lambda.py</code><td>lost<td><code>nfl/nfl_draft_model.py</code><tr><td><code>dev/nfl_projection/fit_fantasy_calibration.py</code><td>lost<td><code>nfl/nfl_projection_constants.py</code><tr><td><code>dev/nfl_projection/fit_shrinkage.py</code><td>lost<td><code>nfl/nfl_projection_constants.py</code><tr><td><code>dev/nhl_player_impact/fit_goals_per_win.py</code><td>lost<td><code>nhl/nhl_player_impact_constants.py</code><tr><td><code>dev/mlb_pitching/fit_era_siera.py</code><td>lost<td><code>mlb/mlb_pitching_constants.py</code><tr><td><code>dev/mbb_prediction/fit_pregame.py</code><td>untracked<td><code>mbb/mbb_prediction_constants.py</code>, <code>wbb/wbb_prediction_constants.py</code><tr><td><code>dev/mbb_player_value/fit_archetypes.py</code><td>untracked<td><code>mbb/models/{mbb,wbb}_archetypes.json</code><tr><td><code>dev/mbb_player_value/fit_box_bpm.py</code><td>untracked<td><code>mbb/models/{mbb,wbb}_box_bpm.json</code><tr><td><code>dev/mbb_player_value/fit_draft.py</code><td>untracked<td><code>mbb/models/{mbb,wbb}_draft.json</code><tr><td><code>dev/mbb_player_value/fit_recruiting.py</code><td>untracked<td><code>mbb/models/{mbb,wbb}_recruiting.json</code><tr><td><code>dev/mbb_player_value/fit_transfer.py</code><td>untracked<td><code>mbb/models/{mbb,wbb}_transfer.json</code><tr><td><code>dev/ncaa_rapm/build_name_changes.py</code><td>untracked<td><code>mbb/mbb_ncaa_rapm_input.py</code><tr><td><code>dev/ncaa_proxy.py</code><td>untracked<td><code>mbb/mbb_ncaa_fetch.py</code><tr><td><code>dev/t5_xg_reevaluation/xg_model_ideas.py</code><td>untracked<td><code>pwhl/pwhl_xg_proxy.py</code></table>
+<!-- -->
+<p>Not cited from package source, so outside the test, but still gaps:</p>
+<ul>
+<li class=""><code>dev/mbb_prediction/train_in_game_wp.py</code> (untracked) trained <code>mbb_in_game_wp.ubj</code>
+and <code>wbb_in_game_wp.ubj</code>.</li>
+<li class=""><code>cfb_cp_model.card.json</code>, <code>cfb_cp_model_air_yards.card.json</code> and
+<code>fd_model.card.json</code> carry <code>training_seasons: null</code> and <code>n_training_rows: null</code>.</li>
+<li class="">No NFL, MBB, NBA or MLB booster ships a card.</li>
+<li class=""><code>nfl-data</code>'s registry lists the NFL QBR fitting script as TODO; the trainer
+named above (<code>cfb_qbr/qbr_xgb.R</code>) is the one the 2.7 feature-order fix traced
+the artifact to, not an NFL-trained replacement.</li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=adding-a-model>Adding a model<a href=#adding-a-model class=hash-link aria-label="Direct link to Adding a model" title="Direct link to Adding a model" translate=no>​</a></h2>
+<p>Cite the fitting script by a path that is tracked: put a new fitter under
+<code>tools/fit_&lt;what>.py</code> (the <code>tools/fit_cfb_wp_overtime.py</code> pattern) rather than in
+the gitignored <code>dev/</code>, add the artifact's row above, and label any value that is a
+seed rather than a fit as seeded where it is defined.</div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/architecture/model-lineage.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/architecture/metric-registry><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Metric registry</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/parsers/><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Parsers</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#bundled-boosters-26 class="table-of-contents__link toc-highlight">Bundled boosters (26)</a><ul><li><a href=#cfb-sportsdataversecfbmodels-11 class="table-of-contents__link toc-highlight">CFB (<code>sportsdataverse/cfb/models/</code>, 11)</a><li><a href=#nfl-sportsdataversenflmodels-9 class="table-of-contents__link toc-highlight">NFL (<code>sportsdataverse/nfl/models/</code>, 9)</a><li><a href=#basketball-and-baseball-6 class="table-of-contents__link toc-highlight">Basketball and baseball (6)</a></ul><li><a href=#fitted-constants class="table-of-contents__link toc-highlight">Fitted constants</a><li><a href=#known-gaps class="table-of-contents__link toc-highlight">Known gaps</a><li><a href=#adding-a-model class="table-of-contents__link toc-highlight">Adding a model</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>
