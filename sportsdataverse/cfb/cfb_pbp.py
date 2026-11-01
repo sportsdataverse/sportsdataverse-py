@@ -176,6 +176,45 @@ _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 _MANGLED_ENTITY = r"(amp|apos|quot|#39);"
 _MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
 
+_FUMBLER_NAME = r"(?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2})"
+
+
+def _fumbler_name(text: pl.Expr, legacy: pl.Expr) -> pl.Expr:
+    """The fumbler named by the play text, else null; ``legacy`` is the fixed-window fragment fallback.
+
+    "<Name> fumbled" first (optional #NN jersey), then "fumbled by <Name>", then ``legacy``. Three
+    shapes are not the fumbler, measured over the 2004-2026 releases (46,272 fumble-text rows):
+
+    * a capital "Fumble" is the scoring-summary noun, not the verb: "Darron Lee 61 Yd Fumble
+      Return" captured "Yd" (490 rows) and "X Fumble Recovery in End Zone" the recoverer. Such a
+      line names only the returner, so the legacy fallback (which reads him as the fumbler) is off.
+    * the subject of "<X> fumble(d) by <Y>" is the team or the yard line ("Wildcats fumble by
+      Darren Sproles (KSU)", stats.ncaa "to the WYO08 fumbled by #13 C.Purdy"). Y is taken only
+      in those two whole-name shapes (2004's "fumble by Y (TEAM)", a #NN jersey before it): the
+      stats.ncaa team placeholder ("fumbled by Navy at", "fumbled by Miami (FL) at") and
+      "Last,First" ("fumbled by Kitna,Jalen") stay null.
+    * "for a SAFETY TEAM fumbled": the score tag is no part of the name.
+    """
+    before = r"(?i)(?:#\d+\s+)?(" + _FUMBLER_NAME + r")\s+(?-i:fumbled?|FUMBLED?)(\s+by\b)?"
+    subject_is_not_fumbler = text.str.extract(before, 2).is_not_null()
+    after = r"(?i)fumbled? by\s+(?:#\d+\s+)?(" + _FUMBLER_NAME + ")"
+    after_whole = r"(?i)fumbled? by\s+#\d+\s+(" + _FUMBLER_NAME + r")|fumble by\s+(" + _FUMBLER_NAME + r")\s*\("
+    summary = (
+        r"(?i)\d+\s+yds?\.?\s+fumble\s+(?:return|recovery)|fumble\s+recovery\s+in\s+(?:the\s+)?end"
+        r"|recovered\s+fumble\s+in\s+(?:the\s+)?end"
+    )
+    return (
+        pl.when(subject_is_not_fumbler)
+        .then(pl.coalesce(text.str.extract(after_whole, 1), text.str.extract(after_whole, 2)))
+        .otherwise(
+            pl.coalesce(
+                text.str.extract(before, 1).str.replace(r"^SAFETY(?:\s+|$)", ""),
+                text.str.extract(after, 1),
+                pl.when(~text.str.contains(summary)).then(legacy),
+            )
+        )
+    )
+
 
 def _drive_dtypes(plays: pl.DataFrame) -> list[pl.Expr]:
     """C-L5 / R980-1: type every ``drive.*`` column a game's drives never carry (all null, dtype ``Null``).
@@ -7465,19 +7504,10 @@ class CFBPlayProcess(object):
                 # name-set/id-null fumble rows were dirty fragment captures
                 # ("o the UTAH Nate Johnson") that then failed the roster
                 # attach; simulated fix lifts fumble credit joins 56% -> 79%.
+                # _fumbler_name keeps "Yd", the recoverer and the subject of "X fumble by Y" out.
                 fumble_player=pl.when(pl.col("type.text") == "Penalty")
                 .then(None)
-                .otherwise(
-                    pl.coalesce(
-                        pl.col("text").str.extract(
-                            r"(?i)(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))\s+fumbled?", 1
-                        ),
-                        pl.col("text").str.extract(
-                            r"(?i)fumbled? by\s+(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))", 1
-                        ),
-                        pl.col("fumble_player"),
-                    )
-                ),
+                .otherwise(_fumbler_name(pl.col("text"), pl.col("fumble_player"))),
                 # --- Forced Fumble Names ----
                 fumble_forced_player=pl.when(
                     (pl.col("text").str.contains(r"(?i)fumble")).and_(pl.col("text").str.contains(r"(?i)forced by")),
