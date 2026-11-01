@@ -167,12 +167,15 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     ``x_coord`` / ``y_coord`` are overwritten in place with the feet values
     ``(x_t, y_t)``, matching ``fastRhockey::add_coord_transforms`` and the PWHL
     release (``load_pwhl_pbp``); the raw canvas values survive in
-    ``x_coord_original`` / ``y_coord_original``. A frame that already carries
-    ``x_coord_original`` / ``y_coord_original`` is rebuilt from them, so applying the
-    transform twice equals applying it once.
+    ``x_coord_original`` / ``y_coord_original``. A row that already carries
+    ``x_coord_original`` / ``y_coord_original`` is rebuilt from them (row by row, so a
+    frame mixing transformed and freshly parsed rows works), so applying the transform
+    twice equals applying it once.
 
-    Rows with null ``x_coord`` or ``y_coord`` produce null for all twelve columns,
-    ``x_coord`` / ``y_coord`` included.
+    Each axis is independent: a null ``x_coord`` nulls ``x_coord`` and the x-derived
+    columns (``x_coord_original`` / ``_neutral`` / ``_fixed`` / ``_right`` and
+    ``y_coord_vertical``); a null ``y_coord`` nulls the y-derived ones (and
+    ``x_coord_vertical``). The feed gives both or neither.
     Rows whose side is unknown (no ``team_id`` / ``home_team_id`` column, or a
     null or empty id in either, as on faceoffs or a game without its summary)
     produce null for the right and vertical columns.
@@ -209,12 +212,13 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     # pd.json_normalize -> pl.from_pandas infers as Utf8; dividing a String
     # column raises ``InvalidOperationError: division with 'String' datatypes``.
     # strict=False also rescues feeds that serialize coords as numeric strings.
-    # Idempotent: a second pass reads the canvas from *_original, never the feet x_coord.
-    src_x, src_y = (
-        ("x_coord_original", "y_coord_original") if "x_coord_original" in pbp.columns else ("x_coord", "y_coord")
-    )
-    ox = pl.col(src_x).cast(pl.Float64, strict=False)
-    oy = pl.col(src_y).cast(pl.Float64, strict=False)
+    ox = pl.col("x_coord").cast(pl.Float64, strict=False)
+    oy = pl.col("y_coord").cast(pl.Float64, strict=False)
+    # Idempotent: a transformed row reads its canvas from *_original, never its feet x_coord.
+    # Per row, so freshly parsed rows concatenated onto a transformed frame keep their coords.
+    if {"x_coord_original", "y_coord_original"} <= set(pbp.columns):
+        ox = pl.coalesce(pl.col("x_coord_original").cast(pl.Float64, strict=False), ox)
+        oy = pl.coalesce(pl.col("y_coord_original").cast(pl.Float64, strict=False), oy)
 
     # Intermediate transformed coordinates (R lines 489-490):
     #   x_coord = (x_coord / 3) - 100

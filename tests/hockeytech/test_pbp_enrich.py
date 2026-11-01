@@ -417,6 +417,11 @@ def test_add_coord_transforms_is_idempotent():
     once = add_coord_transforms(raw)
     assert once["x_coord"].abs().max() <= 100 < once["x_coord_original"].max()
     assert add_coord_transforms(once).equals(once)
+    # A freshly parsed frame stacked onto a transformed one: each row keeps its own canvas.
+    mixed = add_coord_transforms(pl.concat([once, raw], how="diagonal_relaxed"))
+    assert mixed.height == 2 * once.height
+    assert mixed.head(once.height).equals(once)
+    assert mixed.tail(once.height).equals(once)
 
 
 def test_add_coord_transforms_empty_frame():
