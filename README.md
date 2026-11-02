@@ -165,7 +165,7 @@ pip install --pre "sportsdataverse[models]"   # no-op (kept so sportsdataverse[m
 pip install --pre "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
 pip install --pre "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
 pip install --pre "sportsdataverse[pff]"      # Playwright, for the optional PFF Premium (LEGACY) headless login; the PFF Developer API needs no extra
-pip install --pre "sportsdataverse[mcp]"      # the sdv-docs MCP server
+pip install "sportsdataverse[mcp]>=0.2.0b1"  # the sdv-docs MCP server (the pin also upgrades a 0.1.4 install)
 pip install --pre "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
 pip install --pre "sportsdataverse[sdvplot]"  # sdvplot: team logos, colors and chart themes
 pip install --pre "sportsdataverse[sportypy]" # sportypy: draw pbp / shot coordinates on rulebook fields, rinks, courts (GPL-3.0)
@@ -291,11 +291,11 @@ under [`examples/notebooks/`](examples/notebooks):
   claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]>=0.2.0b1' sdv-docs
   ```
 
-  Needs 0.2.0b1 or newer (`pip install --pre "sportsdataverse[mcp]"`). The
+  Needs 0.2.0b1 or newer (`pip install "sportsdataverse[mcp]>=0.2.0b1"`). The
   server ships in the same wheel but never imports `sportsdataverse`, so it starts
   in about 1.5 s instead of the 4-12 s a full league import costs.
 
-  The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
+  The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 20 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
 ## Companion packages
 

@@ -192,10 +192,11 @@ than returning an error body or an empty dict.
 function signatures, provider endpoints and released datasets:
 
 ```bash
-claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
+claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]>=0.2.0b1' sdv-docs
 ```
 
-It needs the `mcp` extra and Python >= 3.10.
+It needs the `mcp` extra, sportsdataverse 0.2.0b1 or newer and Python >= 3.10.
+Without the `>=0.2.0b1` pin, uv resolves 0.1.4, which has no `sdv-docs`.
 
 ## Polars / pandas parser layer
 
