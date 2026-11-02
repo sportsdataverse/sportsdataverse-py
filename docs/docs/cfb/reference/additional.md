@@ -152,7 +152,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_games_from_schedule](additional/analytics.md#cfb_games_from_schedule) | Map a `load_cfb_schedule()` frame into the seedr engine `games` schema. |
 | [cfb_playoff_seeds](additional/analytics.md#cfb_playoff_seeds) | Assign College Football Playoff seeds (12-team straight seeding, by season). |
 | [cfb_resume](additional/analytics.md#cfb_resume) | Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble. |
-| [cfb_returning_production](additional/analytics.md#cfb_returning_production) | Returning production per team-season (offense / defense / overall). |
+| [cfb_returning_production](additional/analytics-2.md#cfb_returning_production) | Returning production per team-season (offense / defense / overall). |
 | [cfb_season_odds](additional/analytics-2.md#cfb_season_odds) | Ratings-driven season Monte Carlo: conference / playoff / championship odds. |
 | [cfb_transfer_impact](additional/analytics-2.md#cfb_transfer_impact) | Net transfer talent and its projected win-total impact per team-season. |
 | [cfb_transfer_moves](additional/analytics-2.md#cfb_transfer_moves) | Transfer moves inferred from year-over-year roster diffs. |

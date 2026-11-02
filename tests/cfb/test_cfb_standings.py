@@ -588,6 +588,45 @@ class TestRegistry2026Parity:
         st = cfb_standings(games, teams, tiebreaker_data=data)
         assert any("apr skipped" in n for n in st.tiebreak_notes)
 
+    def test_ineligible_division_winner_passes_berth_within_its_division(self) -> None:
+        # E1 wins the East but is ineligible: the East's best eligible team (E2)
+        # takes the berth, not the West runner-up
+        rows = [("E1", "E2", 7.0), ("E1", "E3", 7.0), ("E2", "E3", 7.0), ("W1", "W2", 7.0), ("W1", "W3", 7.0)]
+        rows += [("W2", "W3", 7.0)]
+        games = _conf_games(rows, sim=2026).rename({"sim": "season"})
+        teams = pl.DataFrame(
+            {
+                "team": ["E1", "E2", "E3", "W1", "W2", "W3"],
+                "conference": ["Sun Belt"] * 6,
+                "conf_division": ["East"] * 3 + ["West"] * 3,
+                "postseason_eligible": [False, True, True, True, True, True],
+            }
+        )
+        st = cfb_standings(games, teams)
+        top2 = set(st.filter(pl.col("conf_rank") <= 2)["team"].to_list())
+        assert top2 == {"E2", "W1"}
+        assert st.filter(pl.col("team") == "E1")["conf_rank"].item() == 6
+
+    def test_float_team_ids_join_as_integers(self) -> None:
+        # ESPN-id keys arriving as floats (a pandas frame with a NaN row) must
+        # still join: 2.0 is team "2", never "2.0"
+        games, teams, _ = _registry_case("mw_composite")
+        ids = {"A": 1, "B": 2, "C": 3, "D": 4}
+        games = games.with_columns(pl.col("home_team", "away_team").replace_strict(ids))
+        teams = teams.with_columns(pl.col("team").replace_strict(ids))
+        ratings = pl.DataFrame({"team": [1.0, 2.0, float("nan")], "rating": [1.0, 2.0, 0.0]})
+        st = cfb_standings(games, teams, tiebreaker_data={"analytics_ratings": ratings})
+        # the composite puts B ("2") first; an unjoined rating would fall to h2h (A, "1")
+        assert st.filter(pl.col("conf_rank") == 1)["team"].item() == "2"
+
+    def test_duplicate_team_rows_in_external_inputs_raise(self) -> None:
+        games, teams, data = _registry_case("american_final_win")
+        two_weeks = pl.DataFrame({"team": ["A", "A"], "rank": [20, 18]})
+        with pytest.raises(ValueError, match="cfp_rankings"):
+            cfb_standings(games, teams, tiebreaker_data={**data, "cfp_rankings": two_weeks})
+        with pytest.raises(ValueError, match="rankings"):
+            cfb_standings(games, teams, playoff_seeds=2, rankings=two_weeks)
+
     def test_acc_pool_never_admits_a_team_without_conference_games(self) -> None:
         # Z (0-0) matches unbeaten L's 0 losses, but played no conference game
         games = _conf_games([("L", "M", 7.0), ("L", "N", 7.0), ("M", "N", 7.0)], sim=2026).rename({"sim": "season"})

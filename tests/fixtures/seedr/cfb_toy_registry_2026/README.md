@@ -81,3 +81,7 @@ it that way (the Python and R RNGs differ).
 - **ACC pool:** cfbseedR admits a team with no conference game (0-0) into an
   unbeaten leader's tier on matching its 0 losses; sdv-py requires at least
   one decided conference game. No case has a 0-0 team.
+- **Ineligible division winner:** cfbseedR picks each division's champion
+  before applying `postseason_eligible`, so the berth passes to the other
+  division; sdv-py takes the division's best eligible team. No case combines
+  divisions with an ineligible team.

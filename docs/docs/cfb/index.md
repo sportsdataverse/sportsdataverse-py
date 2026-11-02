@@ -130,7 +130,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 - [`cfb_games_from_schedule`](reference/additional/analytics#cfb_games_from_schedule)
 - [`cfb_playoff_seeds`](reference/additional/analytics#cfb_playoff_seeds)
 - [`cfb_resume`](reference/additional/analytics#cfb_resume)
-- [`cfb_returning_production`](reference/additional/analytics#cfb_returning_production)
+- [`cfb_returning_production`](reference/additional/analytics-2#cfb_returning_production)
 - [`cfb_season_odds`](reference/additional/analytics-2#cfb_season_odds)
 - [`cfb_standings`](reference/additional/highlights#cfb_standings)
 - [`cfb_transfer_impact`](reference/additional/analytics-2#cfb_transfer_impact)

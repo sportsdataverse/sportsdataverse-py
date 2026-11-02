@@ -14,6 +14,7 @@ import pytest
 
 from sportsdataverse.cfb.cfb_simulations import (
     _bracket_slots,
+    _n_byes,
     _simulate_bracket,
     cfb_compute_results,
     cfb_simulations,
@@ -199,6 +200,10 @@ class TestFixedBracket:
             pl.col("home_team").str.slice(1).cast(pl.Int64).alias("hi"),
             pl.col("away_team").str.slice(1).cast(pl.Int64).alias("lo"),
         )
+
+    @pytest.mark.parametrize(("n", "byes"), [(12, 4), (8, 0), (6, 2), (4, 0), (1, 0)])
+    def test_bye_count_follows_field_size(self, n: int, byes: int) -> None:
+        assert _n_byes(n) == byes
 
     def test_bracket_slots_match_cfp_order(self) -> None:
         slots = _bracket_slots(12)

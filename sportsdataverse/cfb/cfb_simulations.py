@@ -39,7 +39,8 @@ the SAME semantics so outputs cross-validate):
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Optional, Tuple, Union, cast
+from typing import Any, cast
+from collections.abc import Callable
 
 import numpy as np
 import polars as pl
@@ -56,7 +57,7 @@ __all__ = ["cfb_simulations", "cfb_compute_results"]
 
 _SIM_INCLUDES = ("REG", "CONF", "POST")
 
-ComputeResultsFn = Callable[..., Dict[str, pl.DataFrame]]
+ComputeResultsFn = Callable[..., dict[str, pl.DataFrame]]
 
 
 def _round_out(expr: pl.Expr) -> pl.Expr:
@@ -69,10 +70,10 @@ def cfb_compute_results(
     games: pl.DataFrame,
     week_num: int,
     *,
-    rng: Optional[np.random.Generator] = None,
-    elo: Optional[Dict[str, float]] = None,
+    rng: np.random.Generator | None = None,
+    elo: dict[str, float] | None = None,
     **kwargs: Any,
-) -> Dict[str, pl.DataFrame]:
+) -> dict[str, pl.DataFrame]:
     """Default results generator — nflseedR's dynamic ELO model for CFB.
 
     Fills ``result`` for week ``week_num`` games that are still unplayed and
@@ -210,7 +211,7 @@ def _apply_compute_results(
     games: pl.DataFrame,
     week_num: int,
     rng: np.random.Generator,
-) -> Tuple[pl.DataFrame, pl.DataFrame]:
+) -> tuple[pl.DataFrame, pl.DataFrame]:
     out = compute_results(teams, games, week_num, rng=rng)
     return out["teams"], out["games"]
 
@@ -243,7 +244,12 @@ def _generate_conf_champ_games(standings: pl.DataFrame, games: pl.DataFrame, wee
     )
 
 
-def _bracket_slots(n: int) -> Dict[int, int]:
+def _n_byes(n: int) -> int:
+    """First-round byes in a fixed bracket of ``n`` seeds (4 for the 12-team CFP)."""
+    return (1 << (n - 1).bit_length()) - n if n > 1 else 0
+
+
+def _bracket_slots(n: int) -> dict[int, int]:
     """seed -> bracket slot of a fixed single-elimination bracket for ``n`` seeds.
 
     Standard bracket order (1 v P, P/2 v P/2+1, ...; P = next power of two),
@@ -264,7 +270,7 @@ def _simulate_bracket(
     compute_results: ComputeResultsFn,
     week_start: int,
     rng: np.random.Generator,
-) -> Tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
+) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
     """Fixed single-elimination CFP bracket (no reseeding), see :func:`_bracket_slots`.
 
     First round at the better seed's home, later rounds neutral (better seed
@@ -312,17 +318,17 @@ def _simulate_bracket(
 def cfb_simulations(
     games: FrameLike,
     teams: FrameLike,
-    compute_results: Optional[ComputeResultsFn] = None,
+    compute_results: ComputeResultsFn | None = None,
     *,
     simulations: int = 10000,
     playoff_seeds: int = 12,
     tiebreaker_depth: str = "SOS",
     sim_include: str = "POST",
-    rankings: Optional[FrameLike] = None,
-    tiebreaker_data: Optional[Dict[str, FrameLike]] = None,
-    seed: Optional[int] = None,
+    rankings: FrameLike | None = None,
+    tiebreaker_data: dict[str, FrameLike] | None = None,
+    seed: int | None = None,
     return_as_pandas: bool = False,
-) -> Dict[str, Union[pl.DataFrame, Any]]:
+) -> dict[str, pl.DataFrame | Any]:
     """Simulate college football seasons (nflseedR-style week loop).
 
     Replicates the input season ``simulations`` times, fills unplayed games
@@ -335,8 +341,10 @@ def cfb_simulations(
         games: One season of games in the engine schema (``season`` or
             ``sim``, ``week``, ``game_type``, ``home_team``, ``away_team``,
             ``result`` — null = unplayed, ``neutral``). Played results are
-            kept as-is.
-        teams: Team table (``team``, ``conference``).
+            kept as-is. A ``season`` column picks that season's tiebreakers
+            and CFP rule; ``sim``-keyed input uses the current ones.
+        teams: Team table (``team``, ``conference``, plus the optional
+            :func:`sportsdataverse.cfb.cfb_standings` columns).
         compute_results: Results generator with the signature
             ``fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}``
             filling ``result`` for that week's unplayed games only. Defaults
@@ -352,12 +360,9 @@ def cfb_simulations(
             to :func:`cfb_playoff_seeds`. When None, seeding falls back to
             the per-sim standings ordering (documented in
             :func:`cfb_playoff_seeds`).
-        tiebreaker_data: Optional external tiebreaker inputs forwarded to
-            every :func:`sportsdataverse.cfb.cfb_standings` call (dict with
-            ``"analytics_ratings"``, ``"cfp_rankings"``, ``"apr"`` frames),
-            held static across simulations — so simulated standings use the
-            official analytics / CFP-ranking / APR rungs instead of skipping
-            them to a coin toss.
+        tiebreaker_data: Optional tiebreaker inputs (``"analytics_ratings"``,
+            ``"cfp_rankings"``, ``"apr"`` frames) forwarded unchanged to every
+            :func:`sportsdataverse.cfb.cfb_standings` call, so the official rungs run.
         seed: Seed for the numpy RNG (deterministic runs).
         return_as_pandas: Return pandas DataFrames instead of polars.
 
@@ -376,7 +381,7 @@ def cfb_simulations(
 
     Raises:
         ValueError: On invalid ``sim_include`` / ``tiebreaker_depth``,
-            multi-season input, or missing columns.
+            multi-season input, missing columns, or duplicate team rows.
 
     Example:
         Simulate a season 100 times, deterministically::
@@ -405,12 +410,8 @@ def cfb_simulations(
         raise ValueError("`games` must contain exactly one season")
     # a `season`-keyed input names the season whose rules apply; plain `sim` = current rules
     season = int(g["sim"][0]) if "sim" not in list(games.columns) and "season" in list(games.columns) else None
-    st_kwargs: Dict[str, Any] = {
-        "tiebreaker_depth": tiebreaker_depth,
-        "tiebreaker_data": tiebreaker_data,
-        "season": season,
-        "rng": rng,
-    }
+    st_kwargs: dict[str, Any] = {"tiebreaker_depth": tiebreaker_depth, "tiebreaker_data": tiebreaker_data}
+    st_kwargs.update(season=season, rng=rng)
 
     base = g.drop("sim")
     sims_idx = pl.DataFrame({"sim": pl.int_range(1, simulations + 1, eager=True).cast(pl.Int64)})
@@ -475,7 +476,11 @@ def cfb_simulations(
     if "seed" in standings.columns:
         agg_cols += [
             pl.col("seed").is_not_null().cast(pl.Float64).mean().alias("made_playoff"),
-            (pl.col("seed") <= 4).fill_null(False).cast(pl.Float64).mean().alias("first_round_bye"),
+            (pl.col("seed") <= _n_byes(playoff_seeds))
+            .fill_null(False)
+            .cast(pl.Float64)
+            .mean()
+            .alias("first_round_bye"),
         ]
     overall = (
         standings.group_by("team", "conference")
@@ -502,7 +507,7 @@ def cfb_simulations(
     )
     games_out = games_all.sort(["sim", "week", "game_type", "home_team"])
 
-    out: Dict[str, Union[pl.DataFrame, Any]] = {
+    out: dict[str, pl.DataFrame | Any] = {
         "standings": standings,
         "games": games_out,
         "overall": overall,

@@ -455,7 +455,7 @@ df.sort("adj_off_epa_play", descending=True).head()
 
 ### cfb_standings {#cfb_standings}
 
-`cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, tiebreaker_data: 'Optional[Dict[str, FrameLike]]' = None, season: 'Optional[int]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'`
+`cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'int | None' = None, rankings: 'FrameLike | None' = None, tiebreaker_data: 'dict[str, FrameLike] | None' = None, season: 'int | None' = None, return_as_pandas: 'bool' = False, rng: 'np.random.Generator | None' = None) -> 'pl.DataFrame | Any'`
 
 Compute college football standings with conference ranks and champions.
 
@@ -471,14 +471,14 @@ Sun Belt.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed), optional `neutral` (0/1), and optional `home_points`/`away_points` (per-game scores — feeds the SEC capped-scoring-margin rung; `cfb_games_from_schedule` emits both). Either optional input absent -> that rung is skipped, not an error. |
-| `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent), and an optional `division` column (`"FBS"`/`"FCS"` or similar — feeds the Big 12 `total_wins` FCS cap; absent -> the cap degrades to uncapped win totals, noted in `tiebreak_notes`). Optional `conf_division` (in-conference division name: with two or more divisions the division champions take `conf_rank` 1-2, and it feeds the Sun Belt `div_pct` rung) and `postseason_eligible` (bool; an explicit `False` team is ranked behind every eligible one so it cannot hold a championship-game berth, while its games still count). |
+| `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent), and an optional `division` column (`"FBS"`/`"FCS"` or similar — feeds the Big 12 `total_wins` FCS cap; absent -> the cap degrades to uncapped win totals, noted in `tiebreak_notes`). Optional `conf_division` (in-conference division name: with two or more divisions each division's best eligible team is champion and the champions take the top ranks (1-2 for two divisions); it also feeds the Sun Belt `div_pct` rung) and `postseason_eligible` (bool; an explicit `False` team is ranked behind every eligible one so it cannot hold a championship-game berth, while its games still count). |
 | `tiebreaker_depth` | `str` | `'SOS'` | One of `"RANDOM"`, `"PRE-SOV"`, `"SOS"`, `"POINTS"` — the nflseedR depth ladder. Steps beyond the chosen depth are skipped and remaining ties are broken by coin flip. Gates ONLY the generic fallback cascade; registered official conference procedures (below) always run in full. |
-| `playoff_seeds` | `Optional[int]` | `None` | If set, adds a `seed` column via `cfb_playoff_seeds` with this field size (the season's CFP selection rule, resolved like the tiebreaker epochs). |
-| `rankings` | `Optional[FrameLike]` | `None` | Optional committee-style rankings frame (`team`, `rank`) forwarded to `cfb_playoff_seeds`. |
-| `tiebreaker_data` | `Optional[Dict[str, FrameLike]]` | `None` | Optional external inputs for the registry rungs, as a dict of frames: `"analytics_ratings"` (`team`, `rating` — the `analytics_rating` rung: Big Ten/Big 12/ACC/MAC, and the American/CUSA/Mountain West/Sun Belt metric composites), `"cfp_rankings"` (`team`, `rank` — the `cfp_ranked_final_week` clause: American/CUSA/Sun Belt) and `"apr"` (`team`, `apr` — the CUSA `apr` rung). Missing -> the rung is skipped, noted. |
-| `season` | `Optional[int]` | `None` | Season whose rules apply (registry epochs and the CFP selection rule) to every sim. `None` (default): when `games` is keyed by `season` each id is its own season, otherwise (plain `sim` ids) the current rules apply. |
+| `playoff_seeds` | `int \| None` | `None` | If set, adds a `seed` column via `cfb_playoff_seeds` with this field size (the season's CFP selection rule, resolved like the tiebreaker epochs). |
+| `rankings` | `FrameLike \| None` | `None` | Optional committee-style rankings frame (`team`, `rank`) forwarded to `cfb_playoff_seeds`. |
+| `tiebreaker_data` | `dict[str, FrameLike] \| None` | `None` | Optional external inputs for the registry rungs, as a dict of frames: `"analytics_ratings"` (`team`, `rating` — the `analytics_rating` rung: Big Ten/Big 12/ACC/MAC, and the American/CUSA/Mountain West/Sun Belt metric composites), `"cfp_rankings"` (`team`, `rank` — the `cfp_ranked_final_week` clause: American/CUSA/Sun Belt) and `"apr"` (`team`, `apr` — the CUSA `apr` rung). Missing -> the rung is skipped, noted. |
+| `season` | `int \| None` | `None` | Season whose rules apply (registry epochs and the CFP selection rule) to every sim. `None` (default): when `games` is keyed by `season` each id is its own season, otherwise (plain `sim` ids) the current rules apply. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-| `rng` | `Optional[Generator]` | `None` | Optional numpy Generator used only for coin-flip tiebreaks (simulations pass their seeded generator through here). |
+| `rng` | `Generator \| None` | `None` | Optional numpy Generator used only for coin-flip tiebreaks (simulations pass their seeded generator through here). |
 
 **Returns**
 
@@ -510,7 +510,7 @@ A polars (or pandas) DataFrame with one row per (sim, team): overall record (`ga
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If required columns are missing or `tiebreaker_depth` / `game_type` values are invalid. |
+| `ValueError` | If required columns are missing, `tiebreaker_depth` / `game_type` values are invalid, or `teams` / `rankings` / a `tiebreaker_data` frame has duplicate team rows. |
 
 **Example**
 
