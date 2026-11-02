@@ -1,7 +1,7 @@
 """Runtime for the generated BNXT League wrappers (``bnxt.sportpress.info/api/v1``, the Sportpress CMS).
 
 The API is the JSON backend of the bnxtleague.com web app. Measured against the live host
-(sdv-internal-refs ``sportpress/``, 2026-10-12):
+(2026-10-12):
 
 * **Header key.** Every route needs ``X-Authorization: <key>`` (401 without it). The key is public: it
   is hard-coded in the site bundle ``bnxtleague.com/js/app.<hash>.js``. This runtime reads it from the

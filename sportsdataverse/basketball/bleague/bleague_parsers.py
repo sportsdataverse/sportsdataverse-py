@@ -3,7 +3,7 @@
 Two kinds of body feed this family. A **game context** (the S3 JSON, or the copy a ``game_detail`` page embeds)
 is one object: ``Game`` (header), ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and, on the
 ``v1`` feed only, ``Leaders`` and ``Points``. The ``schedule/`` and ``standings/`` pages are HTML, which this
-module reduces to the same records the refs captures bank (sdv-internal-refs ``bleague/tools/capture.py``) with a
+module reduces to the same records the maintainers' capture tool banks, with a
 stdlib ``html.parser`` DOM that refuses layout drift (:class:`_NotParsed`) instead of guessing.
 
 Each public ``parse_bleague_*`` takes what the wrapper returns with ``return_parsed=False`` (the context, or the
@@ -1122,7 +1122,7 @@ def _season_date(year: int, mon: int, day: int) -> str:
 
 
 def _schedule_record(html: str, tab: int, year: int, event: int, mon: int, day: int) -> Dict[str, Any]:
-    """One game day of one competition and division, as the refs capture banks it. Fails closed on any scope drift.
+    """One game day of one competition and division, as the capture record banks it. Fails closed on any scope drift.
 
     Raises:
         _NotParsed: another tab / year / event / month / day than asked, a paged list, layout drift, no games.
@@ -1238,7 +1238,7 @@ def _num(s: Any) -> Optional[float]:
 
 
 def _standings_record(html: str, year: int, tab: int) -> Dict[str, Any]:
-    """Standings of one season and division, as the refs capture banks it. Fails closed on any scope drift.
+    """Standings of one season and division, as the capture record banks it. Fails closed on any scope drift.
 
     Raises:
         _NotParsed: another tab or year than asked, header or row drift, no table.

@@ -1,6 +1,6 @@
 """Runtime for the generated ``ibba`` wrappers (``basket.co.il/ws/ws.asmx`` ASP.NET web service, keyless).
 
-Measured against the live host (sdv-internal-refs ``ibba/``, 2026-10-12):
+Measured against the live host (2026-10-12):
 
 * **Season key.** ``cYear`` is the season END year (2026 = 2025-26): the sdv key itself, so there is no mapping.
   The wrappers' ``season`` is sent as ``cYear`` unchanged (``StatsTypes`` takes no season).

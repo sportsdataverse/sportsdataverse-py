@@ -72,7 +72,7 @@ _SEASONS: Dict[int, int] = {2021: 1, 2022: 34, 2023: 79, 2024: 120, 2025: 157, 2
 
 _GAME_PATH = re.compile(r"^/rencontre/(\d+)/?$")
 # Anchored on the custom element so a :data attribute elsewhere on the page is never taken for
-# the game sheet (sdv-internal-refs ligue-magnus/tools/capture.py ``_DATA_ATTR``).
+# the game sheet (the same anchor the maintainers' capture tool uses).
 _DATA_ATTR = re.compile(r'<live-rencontre-container\b[^>]*?\s:data="([^"]*)"')
 _ERROR_KEYS = frozenset({"error", "errors", "message", "code", "detail", "status"})
 #: The ``success: false`` message that means "no data" (accent-, case- and whitespace-folded).

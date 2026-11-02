@@ -35,7 +35,7 @@ dates of birth are dropped, not parsed.
   (the ``ig_`` space: 8888 is a pre-season game), and on external boards (``board_id`` >= 1001) the team ids
   of ``ibba_games`` / ``ibba_games_by_team`` are external-team ids too (the ``ig_team_*`` space), not
   team-seasons.
-* ``board_id``: a competition; code table in the sdv-internal-refs ``ibba-returns.md`` (5 league, 10 cup,
+* ``board_id``: a competition (codes 5 league, 10 cup,
   16/26/17 playoff rounds, 33 play-in, 34 Supercup, 1001+ external).
 * ``segev_game_id``: ``ibba_games.external_id`` read as a Segev game id when it is all digits (league games
   from 2025-26); a news URL for pre-season games gives null. It joins ``ibba_segev_*`` ``game_id``.

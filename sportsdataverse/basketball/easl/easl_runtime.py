@@ -9,7 +9,7 @@ least one second before **every** attempt, retries included (the server advertis
 request a second is far below it), and ``dl_utils.download`` honours ``Retry-After`` on 429 and 503. The host serves no
 ``robots.txt`` (404) and states no terms. No key, cookie or proxy is needed.
 
-What the live server does (sdv-internal-refs ``easl/``, probed 2026-10-12):
+What the live server does (probed 2026-10-12):
 
 * **Seasons.** The public argument is the END year (2027 = EASL 26-27). ``/metadata/seasons[].year`` is the START year,
   so the runtime reads that list (once per process; :func:`clear_cache`) and maps ``season`` to the DataCore

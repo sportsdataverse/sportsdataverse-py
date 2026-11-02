@@ -1,6 +1,6 @@
 """Runtime for the generated B.LEAGUE wrappers (public S3 game contexts + www.bleague.jp pages).
 
-Two keyless hosts. Measured against the live site (sdv-internal-refs ``bleague/``, 2026-10-12):
+Two keyless hosts. Measured against the live site (2026-10-12):
 
 * **Season key.** The public ``season`` is the END year (2026 = 2025-26); the site's ``Year`` / ``year=`` is the
   START year, so the runtime sends ``season - 1``. A game wrapper takes only the global ``schedule_key``; its

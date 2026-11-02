@@ -4,7 +4,7 @@ Read them through :func:`sportsdataverse.scrape.ncaa.parse.wbb_period_model`, wh
 the model for a season; nothing else should spell the tuples out.
 
 NCAA women's basketball moved from two 20-minute halves to four 10-minute quarters for the
-**2015-16** season (``rules/wbb.yaml#wbb-2016-four-quarters`` in sdv-internal-refs). Seasons
+**2015-16** season (rule ``wbb-2016-four-quarters``). Seasons
 are ending-year, so 2016 is the first quarters season and 2015 the last halves season. Men's
 basketball never switched, which is why only the women's side needs an era split.
 

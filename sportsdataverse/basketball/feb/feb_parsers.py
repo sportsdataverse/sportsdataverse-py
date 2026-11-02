@@ -4,7 +4,7 @@ Two hosts feed this family. The JSON side (``intrafeb.feb.es/LiveStats.API``) an
 10-block envelope (``HEADER, SCOREBOARD, TEAMSTATS, TICKER, OVERVIEW, PLAYBYPLAY, BANNER,
 BOXSCORE, SHOTCHART, RANKING``) of which each route fills only its own blocks. The schedule side
 (``baloncestoenvivo.feb.es``) is server-rendered ASP.NET HTML, parsed here with the stdlib
-:mod:`html.parser` into the records the refs captures bank (``sdv-internal-refs`` ``feb/tools/capture.py``):
+:mod:`html.parser` into the records the maintainers' capture tool banks:
 a minimal DOM, iterative walks (a deep page never raises ``RecursionError``), and header / width
 checks that refuse layout drift instead of guessing.
 

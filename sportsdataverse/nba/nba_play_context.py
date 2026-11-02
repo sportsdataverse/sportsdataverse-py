@@ -12,9 +12,8 @@ never recomputed here.
 
 Methodology provenance
 ----------------------
-Every definition traces to CTG's own published guide pages, captured verbatim in
-``sdv-internal-refs/cleaningtheglass/`` (``METHODOLOGY.md`` + ``captures/guide_glossary.md``);
-the engineering mapping lives in that repo's ``RECREATION.md``. Where CTG does
+Every definition traces to CTG's own published guide pages
+(``cleaningtheglass.com/stats/guide/<slug>``). Where CTG does
 not publish a threshold, the knob is exposed and defaulted to the closest
 documented public convention (see
 :mod:`sportsdataverse.nba.nba_play_context_constants`):

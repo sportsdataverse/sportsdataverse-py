@@ -3,7 +3,7 @@
 Both leagues run the same API: ``api.basketball-bundesliga.de`` (BBL, men) and
 ``api-1.dbbl.scb.world`` (DBBL, women). The generated wrappers are written against the BBL host;
 a ``league`` argument (``"bbl"`` or ``"dbbl"``) reaches :func:`_get` as a parameter, which pops it
-and swaps the host. Measured against the live API (sdv-internal-refs ``scb/``, 2026-10-12):
+and swaps the host. Measured against the live API (2026-10-12):
 
 * **Two headers on every request.** ``x-api-key: publicWebUser`` (a constant) and ``x-api-secret``,
   which is the ``"key":"..."`` value embedded in an https://www.easycredit-bbl.de/ page, reversed,

@@ -16,7 +16,7 @@ attempt inside :func:`~sportsdataverse.hockey.euro_hockey_runtime._polite` (>= 1
 in sportsdataverse. The S3 folder is the START year, so :func:`elh_start_year` subtracts one
 at the boundary (the wrappers' ``season`` path argument runs through it).
 
-**Refusals** (the reference capture's checks, ``sdv-internal-refs/hokejcz/tools/capture.py``).
+**Refusals** (the same checks the maintainers' capture tool applies).
 On top of the shared error vocabulary (404 -> :class:`~sportsdataverse.errors.NoDataError`,
 400 / 422 -> :class:`ValueError`, any other non-2xx, an empty or non-JSON 2xx, a dead
 connection -> :class:`~sportsdataverse.errors.AssetFetchError`), :func:`_get` raises:

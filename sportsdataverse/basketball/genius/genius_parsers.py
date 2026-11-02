@@ -9,7 +9,7 @@ and ignored.
 
 **Two body kinds.** ``data.json`` and ``data/competition/{compId}.json`` are JSON. The hosted schedule pages,
 the ``/u/`` shell and the site widget are HTML or JavaScript; ``genius_runtime`` reduces them with
-:func:`_page_record` to the small ``dict`` records that the refs captures hold, and the frame parsers read
+:func:`_page_record` to the small ``dict`` records that the maintainers' captures hold, and the frame parsers read
 those records.
 
 **Id key spaces** (never mix them in a join).
@@ -72,7 +72,7 @@ Frame = Union[pl.DataFrame, pd.DataFrame]
 _REQUEST = "_request"
 
 #: ORG code -> season shape: ``split`` = a season over two calendar years (Genius year = START year),
-#: ``calendar`` = one calendar year (Genius year = END year). From the refs org registry.
+#: ``calendar`` = one calendar year (Genius year = END year). From the maintainers' org registry.
 ORG_SPAN: Dict[str, str] = {
     "ESAKE": "split",
     "POL": "split",
@@ -929,7 +929,7 @@ def _parse_widget(js: str) -> Dict[str, Any]:
 
 
 def _page_record(kind: str, text: str) -> Dict[str, Any]:
-    """Reduce a fetched page to its record (the sdv-internal-refs capture shape).
+    """Reduce a fetched page to its record (the maintainers' capture record shape).
 
     Args:
         kind: ``u``, ``chooser``, ``schedule``, ``embednf`` or ``widget``.
@@ -1053,7 +1053,7 @@ def parse_genius_competitions(
         Genius year (START year for a two-year org, the year itself for a calendar org) and ``season`` the sdv
         END year (see :func:`season_end`; ``season_rule`` says which rule produced it, null season when none).
         ``selected`` marks the competition the chooser pre-selects (the org default, not always the newest).
-        The registry the refs keep also reads game dates to fix a season the label leaves ambiguous; this
+        The maintainers' org registry also reads game dates to fix a season the label leaves ambiguous; this
         frame uses the label and the year only.
         A malformed record gives a zero-row frame.
 

@@ -160,7 +160,7 @@ POOLED_REGIME = "pooled"
 T20_REGIME = "t20"
 #: ODI fielding-restriction regimes as ``(regime id, first match date)``, in order; a match
 #: on or after a start date and before the next one is in that regime
-#: (sdv-internal-refs ``rules/cricket.yaml``):
+#: (ICC playing conditions):
 #:
 #: * ``odi_pre2005`` -- two fielders outside the circle for 15 overs (the 1992 rule);
 #: * ``odi_2005`` -- three powerplays, 10 + 5 + 5 (``cricket-2005-odi-powerplays``; the

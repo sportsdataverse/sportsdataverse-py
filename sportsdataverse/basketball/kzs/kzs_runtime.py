@@ -4,7 +4,7 @@ Every request goes through the shared :data:`sportsdataverse.basketball.basketba
 least one second before **every** attempt, retries included. The API needs no key and no proxy. ``api.kzs.si/robots.txt``
 answers 401 and ``www.kzs.si/robots.txt`` 404, so no ``Crawl-delay`` is published; one request a second is the pace.
 
-What the live API does (sdv-internal-refs ``kzs/``, probed 2026-10-12):
+What the live API does (probed 2026-10-12):
 
 * **Every answer is an envelope** ``{"status": "OK", "data": ...}``. ``_get`` returns ``data``: a dict gets the request
   stamped under ``_request`` (``competition_id``, ``match_id``, ``team_id``, ``player_id``, ``season_id``, ``season``,

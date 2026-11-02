@@ -10,8 +10,8 @@ pbp shapes:
   - period-based (nba/mbb/nhl): ``pbp.sections[0].groups[]`` are periods
     (QUARTER/HALF/PERIOD) each with ``plays[]``.
   - drive-based (cfb): handled in ``sportsdataverse.cfb.cfb_fox_ext``.
-Reverse-engineering notes + an OpenAPI 3.1 spec live in the ``sdv-internal-refs``
-repo.
+Reverse-engineering notes + an OpenAPI 3.1 spec are kept in the maintainers' private
+reference notes.
 """
 
 from __future__ import annotations
@@ -1279,8 +1279,8 @@ def fox_trending_videos(
 def fox_polls(entity_ids: str, *, include_answers: bool = True, **kwargs: Any) -> Dict[str, Any]:
     """Fan polls attached to an entity (``foxpolls/v1/polls``) -- feed-tier key.
 
-    Raw-only: the service answers ``{"values": []}`` for every entity captured
-    in ``sdv-internal-refs`` (no live poll was running), so there is no
+    Raw-only: the service answers ``{"values": []}`` for every entity the
+    maintainers captured (no live poll was running), so there is no
     ground-truth row shape to flatten against. Callers get the payload as-is.
 
     Args:

@@ -235,7 +235,7 @@ def _float_coords(df: pl.DataFrame) -> pl.DataFrame:
     # UNLOCATED event (every commentary row before a competition's located era, and single
     # unlocated rows after it); a real event at the exact corner origin does not occur, so the
     # pair is nulled rather than passed through as a position
-    # (sdv-internal-refs rules/epl.yaml#epl-2009-espn-commentary-coverage-start).
+    # (rule epl-2009-espn-commentary-coverage-start).
     out = df.with_columns(pl.col(list(_COORD_KEYS)).cast(pl.Float64))
     unlocated = [(pl.col(x) == 0.0) & (pl.col(y) == 0.0) for x, y in _COORD_PAIRS]
     return out.with_columns(

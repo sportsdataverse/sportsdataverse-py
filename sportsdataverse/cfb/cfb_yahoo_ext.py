@@ -3,8 +3,8 @@
 Read-only wrappers over Yahoo's shangrila stats graph
 (``graphite-secure.sports.yahoo.com/v1/query/shangrila``) and editorial feed
 (``api-secure.sports.yahoo.com/v1/editorial/s``). Reverse-engineering notes +
-per-host OpenAPI specs live in the sdv-internal-refs repo
-(``_notes/ysportsapi/`` and ``yahoo/``). NCAAF vertical slice. No auth: the
+per-host OpenAPI specs are kept in the maintainers' private reference
+notes. NCAAF vertical slice. No auth: the
 hosts only require Origin/Referer headers.
 
 Mirrors the sibling ``cfb_fox_ext.py`` contract (``return_parsed`` /
@@ -37,7 +37,7 @@ EDITORIAL_BASE = "https://api-secure.sports.yahoo.com/v1/editorial/s"
 SHANGRILA_BASE = "https://graphite-secure.sports.yahoo.com/v1/query/shangrila"
 _HEADERS = {"Origin": "https://sports.yahoo.com", "Referer": "https://sports.yahoo.com/"}
 
-# valid legacy categories (from sdv-internal-refs catalog crawl, Pass A)
+# valid legacy categories (from a crawl of the shangrila category catalog)
 LEGACY_PLAYER_CATEGORIES = ("Passing", "Rushing", "Receiving", "Defense", "Kicking", "Punting", "Returns")
 LEGACY_TEAM_CATEGORIES = (*LEGACY_PLAYER_CATEGORIES, "Kickoffs", "Offense")
 

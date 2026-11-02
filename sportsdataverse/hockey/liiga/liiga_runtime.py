@@ -4,8 +4,8 @@ Every request goes through the shared European hockey throttle
 (:func:`sportsdataverse.hockey.euro_hockey_runtime._get`: at least 1 s per host, then the
 package getter), so the error vocabulary holds: 404 -> ``NoDataError``, 400 / 422 ->
 ``ValueError``, any other non-2xx, a dead connection, or an empty or non-JSON 200 ->
-``AssetFetchError``. On top of it, measured against the live API (sdv-internal-refs
-``liiga/``, 2026-10-12):
+``AssetFetchError``. On top of it, measured against the live API
+(2026-10-12):
 
 * **A 500 is not retried.** Liiga answers an unknown ``tournament`` or ``dataType`` with
   HTTP 500 ``"Remote server error"``, every time, so a retry only repeats it. The 500 is

@@ -164,10 +164,10 @@ SPRING_FOOTBALL_CONSTANTS: dict[str, SpringFootballConstants] = {
 # The base entries above describe the CURRENT season. Earlier seasons differ;
 # get_sf_constants(league, season=) applies the latest override at or before
 # the season. Keyed by the first season each ruleset applied to. Sources:
-# sdv-internal-refs rules/ufl.yaml (ufl-2024-inaugural-ruleset,
-# ufl-2025-kickoff-from-30-two-touchback-spots, ufl-2026-kick-pat-four-point-fg),
-# rules/xfl.yaml (xfl-2020-inaugural-ruleset, xfl-2023-relaunch-ruleset),
-# rules/cfl.yaml (cfl-2015-convert-distances, cfl-2027-field-shortened-to-100-yards).
+# the leagues' published rulebooks; rules ufl-2024-inaugural-ruleset,
+# ufl-2025-kickoff-from-30-two-touchback-spots, ufl-2026-kick-pat-four-point-fg,
+# xfl-2020-inaugural-ruleset, xfl-2023-relaunch-ruleset,
+# cfl-2015-convert-distances, cfl-2027-field-shortened-to-100-yards.
 SPRING_FOOTBALL_SEASON_OVERRIDES: dict[str, dict[int, dict[str, Any]]] = {
     "ufl": {
         # kickoffs from the 20, every touchback at the 25, no kicked PAT, 1/2/3 from the 2/5/10

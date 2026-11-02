@@ -15,8 +15,7 @@ hardcoded ``header_cols`` vectors. ``pandas.read_html`` builds a proper
 upstream column widens the frame rather than shifting every column.
 
 Sports-Reference sites are the documented exception: their cells carry a stable
-``data-stat`` attribute that should be read instead of the rendered header. See
-``sdv-internal-refs/basketball-reference/README.md``.
+``data-stat`` attribute that should be read instead of the rendered header.
 """
 
 from __future__ import annotations

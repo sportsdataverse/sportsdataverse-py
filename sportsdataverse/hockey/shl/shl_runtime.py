@@ -1,7 +1,7 @@
 """Runtime for the generated SHL wrappers (``www.shl.se/api``): season mapping and answer checks.
 
-The SHL site API is keyless JSON. Its contracts, all from the refs capture
-(``sdv-internal-refs/shl/``, live-verified 2026-10-12):
+The SHL site API is keyless JSON. Its contracts, all from a capture of the live API
+(live-verified 2026-10-12):
 
 * **Seasons are ssgts.** Tables and schedules key on an ssgt uuid (season + series + game
   type); season codes are START years (``2025`` = 2025/26). The wrappers take the season as

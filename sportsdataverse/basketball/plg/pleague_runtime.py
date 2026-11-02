@@ -2,8 +2,8 @@
 
 Eleven frames over ten routes: five server-rendered pages (schedule per stage, game, standings, the player season
 table, the player page) and the two PHP routes the game page calls (the box score, served as ``text/html`` JSON, and
-the play-by-play, JSON whose ``data`` is an HTML table). Measured against the live site (sdv-internal-refs
-``pleague/``, 2026-10-12 and 2026-10-13):
+the play-by-play, JSON whose ``data`` is an HTML table). Measured against the live site (2026-10-12 and
+2026-10-13):
 
 * **Transport.** The site sits behind Cloudflare, which answers plain ``requests`` with an HTTP 403 page, so pages are
   fetched with ``curl_cffi`` (``impersonate="chrome"``; an optional dependency, ``pip install curl_cffi`` or
@@ -287,7 +287,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
-        The record (the refs capture shape; the box as the site sends it) with ``_request`` =
+        The record (the capture record shape; the box as the site sends it) with ``_request`` =
         ``{"kind", "season", "season_slug", "gid" | "stage" | "stage_sn" | "player_page_id", ...}``.
 
     Raises:

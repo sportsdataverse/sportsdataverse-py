@@ -1,6 +1,6 @@
 """Runtime for the generated ``ibba_segev`` wrappers (Segev Stats JSON-RPC, ``stats.segevstats.com``, keyless).
 
-Measured against the live host (sdv-internal-refs ``ibba/``, 2026-10-12):
+Measured against the live host (2026-10-12):
 
 * **One flat game-id space.** ``game_id`` is the only parameter; there is no season (the season of a game is
   its tip-off time, or the IBBA game that names it in ``ExternalID``). Ids mix every competition Segev scores

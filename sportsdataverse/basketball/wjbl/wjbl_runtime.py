@@ -5,7 +5,7 @@ least one second before **every** attempt, retries included (``Retry-After`` on 
 ``dl_utils.download``). The API needs no key and no proxy. ``www.wjbl.org/robots.txt`` answers 404 (checked
 2026-10-12), so no ``Crawl-delay`` is published; one request a second is the pace.
 
-What the live API does (sdv-internal-refs ``wjbl/``, probed 2026-10-12):
+What the live API does (probed 2026-10-12):
 
 * **Every answer is HTTP 200, errors included.** An unknown id is ``[]`` (or ``{"league_id": "999", "game_months":
   []}``) and a missing or non-numeric parameter is ``{"error": {"error_code": "E003", "error_message": ...}}``. The

@@ -3,9 +3,9 @@
 The VHL has no JSON API, so this getter fetches the server-rendered page, refuses every page
 that is not the one asked for, parses it into a record with
 :func:`sportsdataverse.hockey.vhl.vhl_parsers._page_record` and returns that record (a dict,
-the shape of the refs captures) with the request stamped under ``_request``. The parsers turn
-the record (or the page's HTML) into frames. Measured against the live site (sdv-internal-refs
-``vhl/``, 2026-10-12):
+the shape of the maintainers' captures) with the request stamped under ``_request``. The parsers turn
+the record (or the page's HTML) into frames. Measured against the live site
+(2026-10-12):
 
 * **IP pin.** ``www.vhlru.ru`` has two A records and ``185.210.57.37`` stalls after about
   16 KB (the calendar and stats pages are 4-6 MB). Requests to that host only are pinned to
@@ -244,7 +244,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
-        The page's parsed record (the refs capture shape) with ``_request`` =
+        The page's parsed record (the shape of ``tests/fixtures/vhl/captures/``) with ``_request`` =
         ``{"season", "stage", "tn", "game_id", "player_id", "team_page_id"}`` (those that apply).
 
     Raises:

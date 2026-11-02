@@ -6,7 +6,7 @@ and 503. ``www.kbl.or.kr/robots.txt`` answers the SPA's HTML and ``api.kbl.or.kr
 no policy or ``Crawl-delay`` is published (checked 2026-10-12); one request a second is the pace. No key, cookie or
 proxy is needed.
 
-What the live API does (sdv-internal-refs ``kbl/``, probed 2026-10-12):
+What the live API does (probed 2026-10-12):
 
 * **Two headers must be present**, with any value: ``Channel`` and ``TeamCode`` (the site sends ``WEB`` and ``XX``).
   Without them the API answers HTTP 400 ``{"resultCode": "Fail", ...}``; the runtime always sends them. A 400 is

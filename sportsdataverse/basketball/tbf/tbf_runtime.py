@@ -4,7 +4,7 @@ One host, ``miniappapi.tbf.org.tr/webapi-service/api``: the official TBF app bac
 no ``Referer``. The vendor origin hosts (``*.nikayazilim.com``) serve the same API without Cloudflare but are never
 used, so every request is sent with redirects disabled and a 3xx is a failed fetch. ``www.tbf.org.tr`` sits behind an
 interactive Cloudflare Turnstile that this API does not touch and that is not automated. Measured against the live
-API (sdv-internal-refs ``tbf/``, 2026-10-12):
+API (2026-10-12):
 
 * **Season and competition.** The public ``season`` is the END year (``"2026-2027"`` -> 2027) and ``competition`` is
   ``bsl`` (Basketbol Super Ligi), ``tbl`` (second tier; the top flight was named TBL until 2007-08, under ``bsl``) or

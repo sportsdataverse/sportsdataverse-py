@@ -14,7 +14,7 @@ Phase 5 of the Shield plan. The adapter's summary shipped an **empty** ``boxscor
 Data path: the **documented Shield endpoints**
 ``/football/v2/stats/live/player-statistics/{gameId}`` and
 ``/football/v2/stats/live/team-statistics/{gameId}``
-(``sdv-internal-refs/nfl/nfl-com-api.openapi.yaml``, ``getLivePlayerStatistics`` /
+(operations ``getLivePlayerStatistics`` /
 ``getLiveTeamStatistics``). Despite the ``live`` path segment both answer for
 **finals in every era** the Shield corpus covers (probed 2002/2005/2010/2014/2019/2024
 /2025: 25-34 player rows per side each), so they are the whole box for a settled game

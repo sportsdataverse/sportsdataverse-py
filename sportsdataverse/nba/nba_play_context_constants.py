@@ -4,8 +4,7 @@ League-agnostic algorithms, league-specific constants: nothing in
 :mod:`sportsdataverse.nba.nba_play_context` hard-codes a number from this module.
 
 Definitions are recreated from Cleaning the Glass's own published methodology
-(``sdv-internal-refs/cleaningtheglass/METHODOLOGY.md``, quoting CTG's
-``/stats/guide/<slug>`` pages verbatim). Where CTG does NOT publish a threshold
+(CTG's ``/stats/guide/<slug>`` pages). Where CTG does NOT publish a threshold
 (it says only "until the defense is set" / "within a few seconds of the
 rebound"), we adopt the closest documented public convention and expose it as a
 knob — see :data:`DEFAULT_TRANSITION_SECONDS` and :data:`DEFAULT_PUTBACK_SECONDS`.

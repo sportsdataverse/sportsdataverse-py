@@ -1,6 +1,6 @@
 """Measurement eras of the Baseball Savant pitch feed, shared by the pitch-level models.
 
-Two boundaries in ``sdv-internal-refs rules/mlb.yaml`` change what a Savant column
+Two rule-era boundaries change what a Savant column
 measures without changing its name:
 
 * **2017** (``mlb-2017-release-speed-statcast``): ``release_speed``, ``release_pos_x/z``,

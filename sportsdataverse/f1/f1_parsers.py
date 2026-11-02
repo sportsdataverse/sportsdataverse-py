@@ -9,7 +9,7 @@ where ``<Table>`` is ``RaceTable`` / ``StandingsTable`` / ``DriverTable`` /
 rows sit at the innermost list (``RaceTable.Races[].Results[]``,
 ``RaceTable.Races[].Laps[].Timings[]``, ``StandingsTable.StandingsLists[]
 .DriverStandings[]``, ``CircuitTable.Circuits[]``, ...). :func:`parse_f1_mrdata`
-flattens that per the reference repo's rule (``sdv-internal-refs/f1/f1-returns.md``):
+flattens that by one rule:
 
 * one row per element of the innermost list, with the scalars of every ancestor
   carried onto each row -- an intermediate list's scalars are prefixed by its

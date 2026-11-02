@@ -4,7 +4,7 @@ Two shapes feed this family:
 
 * **Server-rendered HTML pages** (schedule per stage, game page, standings, the player season table, the player page)
   and the play-by-play fragment (JSON whose ``data`` is an HTML table). They are parsed here with the stdlib
-  :mod:`html.parser` into the records the refs captures bank (``sdv-internal-refs`` ``pleague/tools/capture.py``):
+  :mod:`html.parser` into the records the maintainers' capture tool banks:
   a minimal DOM, iterative walks, and header / scope / vocabulary checks that refuse layout drift, another game,
   season or stage, an unfinished game and an unknown play-by-play phrase instead of guessing. :func:`record_for`
   and :func:`pbp_record` are what the runtime uses; a refusal is :class:`_NotParsed`.
@@ -27,7 +27,7 @@ season parameter outside the page paths: games are keyed by ``gid``.
   the game page, box and play-by-play do not (they carry ``side`` and printed names). The Preciser team uuid is
   the file name of the club logo (``team_uuid`` on the standings).
 * ``player_id``: the player-team membership (the box's digit string, cast to ``Int64``; the player page's
-  ``member_id`` is the same space). ``person_id``: the Preciser person uuid (box rows from 2022-23; the refs notes
+  ``member_id`` is the same space). ``person_id``: the Preciser person uuid (box rows from 2022-23; maintainer notes
   report some 2025-26 finals boxes without it): the join to the Preciser shot list. ``random_id`` / ``player_page_id``: the 8-character page id
   of ``/player/{id}``. **``random_id`` is unreliable on 2020-21 and 2021-22 box rows** (gid 13 gives one player another
   player's page id): join box rows on ``player_id`` and box to shots on ``person_id``, never on ``random_id``.
@@ -1083,7 +1083,7 @@ def record_for(kind: str, html: str, **want: Any) -> Dict[str, Any]:
         **want: the request's scope, per ``kind``.
 
     Returns:
-        The record (the refs capture shape).
+        The record (the capture record shape).
 
     Raises:
         _NotParsed: layout drift, another scope than asked, or an empty page (``empty=True``).
@@ -1654,7 +1654,7 @@ def parse_pleague_box_players(
         ``''`` (a did-not-play row, ``played`` = false, all stats null) in one column. Made field goals and free
         throws come from the site's ``made-attempted`` strings, so they exist in every era. Era A rows (2020-21,
         2021-22) fill ``seconds``, ``efg_pct``, ``ts_pct``, ``usage_pct`` and ``position``; era B rows (2022-23 on) fill
-        ``person_id`` (the join to the Preciser shot list; the refs notes report some 2025-26 finals boxes without it), the ratings, the
+        ``person_id`` (the join to the Preciser shot list; capture notes report some 2025-26 finals boxes without it), the ratings, the
         ratios and the possession columns. ``random_id`` is unreliable in era A; join on ``player_id``. Zero rows for
         an empty or malformed input.
 

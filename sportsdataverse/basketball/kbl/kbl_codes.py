@@ -1,13 +1,13 @@
 """Code tables and the season crosswalk of the KBL (Korean Basketball League) wrappers.
 
-Everything here is data from ``sdv-internal-refs/kbl`` (``README.md`` and ``kbl-returns.md``, probed 2026-10-12). The
-Korean labels are the site's own; the English meanings are the refs' translations. A code that is missing from a
+Everything here is data probed from the live KBL API (2026-10-12). The
+Korean labels are the site's own; the English meanings are the maintainers' translations. A code that is missing from a
 table is passed through undecoded by the parsers (never guessed).
 
 **Seasons.** KBL numbers every season **and** every D-League (reserve league) edition with one sequential
 ``seasonCode``. The sdv season is the END year: the second year of ``YYYY-YYYY`` (1997 for the inaugural ``1997``
 season; a D-League edition is the label year + 1, except ``2009KBLSUMMER`` = 2009). :data:`SEASONS` is the crosswalk
-(``tools/codegen/gen_kbl.py`` checks it against the refs README on every run and the tests against a committed
+(``tools/codegen/gen_kbl.py`` checks it against the reference README on every run and the tests against a committed
 copy). ``seasonGrade`` 1 is the KBL itself, 2 the D-League.
 """
 

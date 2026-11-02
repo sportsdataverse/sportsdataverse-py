@@ -410,8 +410,8 @@ def parse_lba_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         ``team_side`` (``home`` / ``visitor`` / null for a clock action), ``home_score`` / ``visitor_score`` (parsed
         from ``score``, 2021-22 on) and ``coord_frame``: ``half_court_px`` (2017-18 and 2018-19: image pixels, an
         unlocated action at 0, 0) or ``court_pct`` (2019-20 on: 0-100 along the 28 m court). ``description`` is the
-        action in Italian (``legend`` codes translate the qualifiers: :func:`parse_lba_pbp_legend`). ``side`` changes
-        meaning by era; see ``ENDPOINTS.md`` in sdv-internal-refs. Play-by-play exists from 2017-18 only. Zero rows
+        action in Italian (``legend`` codes translate the qualifiers: :func:`parse_lba_pbp_legend`). ``side`` (as sent)
+        changes meaning by era. Play-by-play exists from 2017-18 only. Zero rows
         for an empty or malformed body.
 
     Raises:
@@ -461,8 +461,8 @@ def parse_lba_pbp_legend(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per code: ``code`` (the value of ``action_1_qualifier_code`` / ``action_2_qualifier_code``, a string
-        on the actions and an ``Int64`` here) and ``label`` (Italian, as sent; sdv-internal-refs ``legabasket-returns.md``
-        translates all 59). The same table in every game sampled. Zero rows for an empty or malformed body.
+        on the actions and an ``Int64`` here) and ``label`` (Italian, as sent; 59 codes).
+        The same table in every game sampled. Zero rows for an empty or malformed body.
 
     Raises:
         This parser does not raise on a malformed body; it returns a zero-row frame typed from the returns schema.

@@ -5,12 +5,12 @@ renders ``_get(url, params)`` GET calls. This module's :func:`_get` is the one g
 YAML names (``getter_module``); it dispatches on the route:
 
 * ``GET /pages/matcher`` (text/html): the current season's game list, decoded from the React
-  Server Components flight data (:func:`extract_game_list`, the sdv-internal-refs
-  ``hockeyallsvenskan/tools/capture.py`` rule).
+  Server Components flight data (:func:`extract_game_list`, the same rule the
+  maintainers' capture tool uses).
 * ``GET /api/game?slug=``: plain JSON.
 * every other route is a ``POST`` with a JSON body. The wrapper's ``params`` are the body
-  fields; they are laid over the route's default body (:data:`BODIES`, the bodies the refs
-  capture sends), so a ``None`` keeps the default.
+  fields; they are laid over the route's default body (:data:`BODIES`, the bodies the
+  maintainers' capture tool sends), so a ``None`` keeps the default.
 
 Every request runs inside :func:`sportsdataverse.hockey.euro_hockey_runtime._polite`
 (at least 1 s after the host's last answer) and goes through the ``_codegen_runtime`` decoders, so the error
@@ -112,7 +112,7 @@ CATEGORIES: Dict[str, Tuple[str, ...]] = {
 FIRST_SEASON = 2006
 #: Key the request is stamped under (see the module docstring).
 REQUEST_KEY = "_request"
-#: Statuses a POST is retried on (2 s, 4 s backoff), as the refs capture does.
+#: Statuses a POST is retried on (2 s, 4 s backoff), as the maintainers' capture tool does.
 RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 
 _FILTERS = {
@@ -125,7 +125,7 @@ _FILTERS = {
     "game_status": "all",
     "decided_in": "all",
 }
-#: Default JSON body per POST route (the refs ``capture.ROUTES`` bodies, minus ``season``).
+#: Default JSON body per POST route (the maintainers' capture-tool bodies, minus ``season``).
 BODIES: Dict[str, Dict[str, Any]] = {
     "/api/play-by-play": {},
     "/api/all-time-games-stats": {**_FILTERS, "categories": "all", "page": 1, "page_size": 1000},

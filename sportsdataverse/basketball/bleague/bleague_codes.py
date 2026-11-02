@@ -1,7 +1,7 @@
 """Code tables for the B.LEAGUE play-by-play (``ActionCD1`` / ``ActionCD2`` / ``ActionCD3`` / ``AreaCD``).
 
 The feed sends integer codes with no table. These were decoded from the Japanese ``PlayText`` of every sampled
-game (sdv-internal-refs ``bleague/bleague-returns.md``, verified 2026-10-12). Codes the site's JavaScript knows
+game (verified 2026-10-12). Codes the site's JavaScript knows
 but no sample contains (20, 21, 26, 44, 46, 90 as an action) are left out, so :func:`action_name` returns ``None``
 for them rather than guessing.
 

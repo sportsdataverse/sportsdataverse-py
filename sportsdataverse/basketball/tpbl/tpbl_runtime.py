@@ -1,8 +1,8 @@
 """Runtime for the generated TPBL wrappers (``api.tpbl.basketball``, Taiwan's Taipei Professional Basketball League).
 
 One host, keyless, no headers: the Laravel JSON API the tpbl.basketball site calls. ``tpbl.basketball/robots.txt``
-answers 200 with an empty body (no rules, no crawl-delay). Measured against the live API (sdv-internal-refs ``tpbl/``,
-2026-10-12):
+answers 200 with an empty body (no rules, no crawl-delay). Measured against the live API
+(2026-10-12):
 
 * **Season keys.** The public ``season`` is the END year (2026 = 2025-26). The API keys a season by its own small
   integer (1, 2, 3 = 2024-25, 2025-26, 2026-27; the ``event_id`` of ``/events/{id}/*`` is the same number) and labels
@@ -19,7 +19,7 @@ answers 200 with an empty body (no rules, no crawl-delay). Measured against the 
   inconsistent, or (``verify=True``) whose completed games per division differ from that division's standings; a
   roster of another team or event; a player game log of another player or division. The two shot lists name no team,
   player or division in the body, so they cannot be scoped: only their shape and court bounds are checked, and a
-  list of foreign shots is not detectable here (the refs capture ties them to the box scores; ``verify`` does not).
+  list of foreign shots is not detectable here (the capture ties them to the box scores; ``verify`` does not).
 * **Error vocabulary.** ``NoDataError``: HTTP 404 (an unknown id answers a Laravel ``text/html`` 404 page), a season
   the list does not hold, a legitimately empty list (no standings, roster, shots or games). ``ValueError``: a
   non-integer id or season, HTTP 400 / 422 (the player game log without ``division_id`` answers 422).

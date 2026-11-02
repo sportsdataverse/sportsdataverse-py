@@ -1,7 +1,7 @@
 """Runtime for the generated CEBL wrappers (``api.data.cebl.ca``, the Canadian Elite Basketball League's own stats API).
 
 The API is the JSON backend of the CEBL Stats Hub (cebl-stats-hub.web.app). Measured against the live host
-(sdv-internal-refs ``cebl/``, 2026-10-12 and 2026-10-13). **CEBL's own API, owner-approved gray area**: the key
+(2026-10-12 and 2026-10-13). **CEBL's own API, owner-approved gray area**: the key
 below is CEBL's first-party key for its own hub, not issued to third parties.
 
 * **Header key.** Every route needs ``X-Api-Key: <key>`` (401 ``{"detail": "Unauthorized"}`` without it). The

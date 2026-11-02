@@ -278,7 +278,7 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
 
 #: The trained CFB rule-era cuts, the LAST season of era0 / era1 / era2 (era3 is open-ended):
-#: sdv-internal-refs ``rules/cfb.yaml`` ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
+#: rules ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
 #: ``cfb-2021-model-era-cut``; the bundled model cards' ``era.cuts`` (a test pins them equal). The
 #: QBR era dummies and the fourth-down / two-point ``FD_ERA_BOUNDS`` read it.
 CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)
@@ -295,7 +295,7 @@ CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
 
 #: ``(first season, first period)`` from which every overtime period is a two-point shootout:
 #: one alternating two-point play per team, no possession from the 25 (ESPN period 5 is the
-#: first overtime). No shootout before 2019 (sdv-internal-refs ``rules/cfb.yaml``
+#: first overtime). No shootout before 2019 (rule
 #: ``cfb-1996-overtime-introduced``); the fifth overtime, period 9, in 2019-20
 #: (``cfb-2019-overtime-shootout-from-fifth``); the third, period 7, from 2021
 #: (``cfb-2021-overtime-shootout-from-third``). Source: NCAA, "Panel approves changes to
@@ -308,8 +308,8 @@ CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
 OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
 
 #: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied, newest first (the twin of
-#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). sdv-internal-refs
-#: ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
+#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). Rule
+#: ``cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
 #: from the 20 to the 25, so a kickoff touchback's next snap is 80 to go through 2011 and 75 from 2012.
 #: Every 2012-13 fixture touchback's next snap starts at the 25. cfbfastR's ``create_epa.R`` mirrors this
 #: table (cfbfastR #184).

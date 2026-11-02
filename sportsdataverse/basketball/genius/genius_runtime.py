@@ -1,6 +1,6 @@
 """Runtime for the generated Genius Sports LiveStats wrappers (three keyless hosts, one proxy variable).
 
-Hosts (sdv-internal-refs ``genius-livestats/``, measured 2026-10-12):
+Hosts (measured 2026-10-12):
 
 * ``fibalivestats.dcd.shared.geniussports.com``: ``/data/{matchId}/data.json`` (the full game),
   ``/data/competition/{compId}.json`` (a recent window) and the ``/u/{ORG}/{matchId}/`` HTML shell.
@@ -206,7 +206,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
 
     Returns:
         ``data.json``: the body ``dict`` with ``_request = {"match_id": ...}``. The competition window: the
-        JSON list. ``/u/``, the chooser, schedules and the widget: the page record ``dict`` (the refs capture
+        JSON list. ``/u/``, the chooser, schedules and the widget: the page record ``dict`` (the capture record
         shape); the chooser and ``/u/`` carry ``_request = {"org": ...}``.
 
     Raises:

@@ -7,8 +7,7 @@ number of envelope shapes, so **one generic parser covers 81 of the 82 endpoints
 and a second handles the one genuinely different payload (team standings, which
 is a ``{year: {season_type: {...}}}`` map rather than a record list).
 
-Envelope shapes actually observed in the committed captures
-(``sdv-internal-refs/cbs/captures/``):
+Envelope shapes actually observed in the maintainers' captures of the live API:
 
 * ``{"data": [...]}`` -- ``/resource/season/teams/{seasonId}``,
   ``/resource/team/players/{teamId}``: rows are ``data``.

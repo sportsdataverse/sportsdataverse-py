@@ -13,7 +13,7 @@ Function              Source                                         Shape
 :func:`rotowire_injuries`  ``rotowire.com/basketball/tables/injury-report.php`` JSON, one row per injured player
 ===================== ============================================== ==================================
 
-Documented gotchas (see ``sdv-internal-refs/nba-salary-draft-sources/README.md``):
+Documented gotchas:
 
 * **Spotrac** ships a ``<noscript>enable JavaScript</noscript>`` fallback that
   reads as a JS challenge but is a false positive -- the team cap table is in the
@@ -29,7 +29,7 @@ Documented gotchas (see ``sdv-internal-refs/nba-salary-draft-sources/README.md``
 * **NBADraft.net** serves round 1 and round 2 as the first two pick tables; a
   third table repeats round 1, so only the first two are taken. The team cell
   carries ``*`` for a traded pick, which is stripped.
-* **RotoWire** is undocumented in the internal refs. The rendered injuries grid is
+* **RotoWire** is undocumented in the maintainers' notes. The rendered injuries grid is
   client-side; the wrapper reads the JSON table endpoint the grid itself calls.
   The projected return date is subscriber-gated and comes back as
   ``"Subscribers Only"``, mapped to null.
@@ -37,7 +37,7 @@ Documented gotchas (see ``sdv-internal-refs/nba-salary-draft-sources/README.md``
 .. warning::
    **This port has NOT been verified against live pages.** It was written with no
    network access: every URL, query parameter, JSON key and column name is
-   transcribed from the hoopR R wrappers and the internal-refs README, and the
+   transcribed from the hoopR R wrappers and the maintainers' notes, and the
    tests run against inline fixtures, not captured HTML. A first live run should
    verify, in this order: (1) Spotrac's actual column labels after
    ``html_tables`` header cleaning -- the ``rank`` / ``record`` /
@@ -72,7 +72,7 @@ __all__ = [
     "spotrac_team_cap",
 ]
 
-#: Browser User-Agent. All four hosts require one (internal-refs "General gotchas" #2).
+#: Browser User-Agent. All four hosts require one.
 _USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )

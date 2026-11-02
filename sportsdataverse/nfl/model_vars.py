@@ -38,7 +38,7 @@ _EP_POINT_VALUES: np.ndarray = np.array([7.0, -7.0, 3.0, -3.0, 2.0, -2.0, 0.0], 
 #:
 #: ``ep_wp.py`` (``_make_model_mutations()``, ``_espn_*_features()``,
 #: ``calculate_xpass``) and ``nfl_fourth_down._prepare`` read these cuts; none
-#: restates them (sdv-internal-refs ``rules/nfl.yaml#nfl-2002-nflfastr-era-bins``).
+#: restates them (rule ``nfl-2002-nflfastr-era-bins``).
 #: If the model is ever retrained with different era bins, update this tuple.
 ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 
@@ -61,7 +61,7 @@ ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 ERA_MAX_KNOWN_SEASON: int = 2026
 
 #: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied,
-#: newest first.  The rule spots (sdv-internal-refs ``rules/nfl.yaml``):
+#: newest first.  The rule spots (NFL rulebook):
 #:
 #: * ``nfl-2016-kickoff-touchback-to-25`` -- the 25 (75) from 2016; the 20 (80) before.
 #: * ``nfl-2024-dynamic-kickoff`` -- the 30 (70) for the 2024 dynamic kickoff.
@@ -265,13 +265,13 @@ class OvertimeFormat(NamedTuple):
     #: Length of one overtime period in seconds.  Documentation only: no
     #: closed form in ``ep_wp`` carries a time term (``nfl-2017-overtime-ten-minutes``).
     period_seconds: int
-    #: The ``rules/nfl.yaml`` entry that put the row here.
+    #: The rule id that put the row here.
     rule_id: str
 
 
 #: NFL overtime format by ``season_type`` (nflverse ``"REG"`` / ``"POST"``), newest
 #: row first; :func:`overtime_format` picks the first row whose ``first_season``
-#: is at or before the season.  Catalog: sdv-internal-refs ``rules/nfl.yaml``.
+#: is at or before the season.  Each row names its NFL rule.
 OVERTIME_FORMATS: dict[str, tuple[OvertimeFormat, ...]] = {
     "REG": (
         OvertimeFormat(2025, OT_BOTH_POSSESS, 600, "nfl-2025-overtime-both-possess-regular-season"),

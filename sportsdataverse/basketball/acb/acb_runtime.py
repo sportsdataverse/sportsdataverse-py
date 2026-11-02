@@ -1,6 +1,6 @@
 """Runtime for the generated ACB wrappers (``api2.acb.com``, the .NET API behind acb.com and live.acb.com).
 
-One host, 33 JSON routes, measured against the live API (sdv-internal-refs ``acb/``, 2026-10-12):
+One host, 33 JSON routes, measured against the live API (2026-10-12):
 
 * **API key.** Every request carries ``X-APIKEY``; without it the API answers 401. The key is public: it
   sits in acb.com's Next.js bundle (``sharedServicesConfigDotnet: {baseUrl, apiKey}``). The documented value is
@@ -49,7 +49,7 @@ API = "https://api2.acb.com/api"
 SITE = "https://www.acb.com/"
 #: Key the request is stamped under (the parsers read it).
 REQUEST_KEY = "_request"
-#: The public key read from acb.com's bundle on 2026-10-12 (also in the refs spec); ``$ACB_API_KEY`` overrides.
+#: The public key read from acb.com's bundle on 2026-10-12; ``$ACB_API_KEY`` overrides.
 DEFAULT_KEY = "0dd94928-6f57-4c08-a3bd-b1b2f092976e"
 KEY_ENV = "ACB_API_KEY"
 ATTEMPTS = 3

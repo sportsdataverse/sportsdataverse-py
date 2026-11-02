@@ -17,7 +17,7 @@ and ``endpoints/bart_wbb.yaml`` (women's ``/ncaaw`` mirror,
 The interactive ``.php`` pages (``trank.php``, ``team-history.php``,
 ``teamsheets.php``, ``resume-compare*.php``) sit behind a JavaScript browser
 challenge and are deliberately NOT wrapped — they cannot be fetched by a plain
-HTTP client. See ``sdv-internal-refs/barttorvik/README.md``.
+HTTP client.
 """
 
 from __future__ import annotations
