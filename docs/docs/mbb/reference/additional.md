@@ -28,6 +28,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | Function | Summary |
 |---|---|
 | [espn_mbb_calendar](additional/espn.md#espn_mbb_calendar) | espn_mbb_calendar - look up the men's college basketball calendar for a given season |
+| [espn_mbb_game_all](additional/espn.md#espn_mbb_game_all) | espn_mbb_game_all() - Pull one game's plays, team box and player box from one ESPN request. |
+| [espn_mbb_player_box](additional/espn.md#espn_mbb_player_box) | espn_mbb_player_box() - Pull one game's player box score from ESPN's `mens-college-basketball/summary` endpoint. |
+| [espn_mbb_team_box](additional/espn.md#espn_mbb_team_box) | espn_mbb_team_box() - Pull one game's team box score from ESPN's `mens-college-basketball/summary` endpoint. |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org

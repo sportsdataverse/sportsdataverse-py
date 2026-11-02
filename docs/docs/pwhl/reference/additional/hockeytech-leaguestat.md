@@ -275,7 +275,7 @@ all calls without touching the shared core.
 
 **Returns**
 
-One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_id`, `event`, `team_id`, `period_of_game`, `time_of_period`, rink `x_coord` / `y_coord` (Float64, the raw 600×300 feed canvas, NOT feet) and the transforms above (`x_coord_fixed` / `x_coord_right` and their `y_` pairs are in feet), the primary / second / third player and goalie ids (Int64) and names, the plus / minus skaters on a goal, `is_goal_twin`, and the clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame when `return_as_pandas` is True. The release loader `load_pwhl_pbp` publishes `x_coord` in feet, so compare it with `x_coord_fixed` / `x_coord_right` here, never with this `x_coord`.
+One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_id`, `event`, `team_id`, `period_of_game`, `time_of_period`, rink `x_coord` / `y_coord` (Float64, feet, centre ice at (0, 0), as in fastRhockey and the `load_pwhl_pbp` release; the raw 600×300 feed canvas values are `x_coord_original` / `y_coord_original`) and the transforms above (`x_coord_fixed` / `x_coord_right` and their `y_` pairs, also feet), the primary / second / third player and goalie ids (Int64) and names, the plus / minus skaters on a goal, `is_goal_twin`, and the clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|

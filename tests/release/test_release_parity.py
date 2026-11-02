@@ -656,7 +656,7 @@ def test_rds_branch_byte_golden(tmp_path):
     ``rds_golden_branches.rds`` is R 4.6.1's ``saveRDS(compress = FALSE, version = 2)`` of the R
     value each remaining writer branch must produce (``make_branch_golden.R``, which also checks
     ``readRDS`` round-trips every column): Date, POSIXct with a ``tzone`` and without one, an Int64
-    column outside int32 (a double in R), an all-null column (logical NA) and a Categorical (character).
+    column outside int32 (character in R: a double collides 18-digit ids), an all-null column (logical NA) and a Categorical (character).
     """
     df = pl.DataFrame(
         {

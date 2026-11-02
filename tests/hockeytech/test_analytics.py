@@ -541,7 +541,7 @@ def test_build_on_ice_goal_epsilon_clamped_to_period_start():
 
 
 def test_empty_net_goals_measure_to_the_attacking_net():
-    """sdv-internal-refs CANVAS.md: own-half events with a goalie are mirrored; own-half EN goals are long shots.
+    """Own-half events with a goalie are mirrored by the feed; own-half EN goals are long shots.
 
     Feet frame: the home team attacks x = -89. Canvas 560 -> x = 86.67 ft, the home team's own end.
     """
@@ -578,7 +578,7 @@ def test_empty_net_goals_measure_to_the_attacking_net():
 
 
 def test_ot_period_length_matches_sourced_formats() -> None:
-    """Regular-season OT lengths per sdv-internal-refs rules/<league>.yaml (informational field, kept correct)."""
+    """Regular-season OT lengths per each league's rulebook (informational field, kept correct)."""
     from sportsdataverse.hockeytech._leagues import LEAGUES
 
     expected = {"pwhl": 300, "ahl": 300, "echl": 420, "ushl": 300, "bchl": 600, "ohl": 300, "whl": 300, "qmjhl": 300}

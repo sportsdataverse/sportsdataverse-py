@@ -36,6 +36,7 @@ from typing import TYPE_CHECKING, Literal, Union, overload
 
 import polars as pl
 
+from sportsdataverse._common.ratings import id_text
 from sportsdataverse.nba.nba_team_ratings import _normalize_schedule
 from sportsdataverse.wnba.wnba_game_predict import (
     wnba_in_game_win_prob,
@@ -86,9 +87,9 @@ def _pregame_probs(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.DataFra
     # ESPN schedule ships Int32 ids and wnba_predict_games' dtype guard would
     # otherwise raise on the live path.
     results = results.with_columns(
-        pl.col("game_id").cast(pl.Utf8),
-        pl.col("home_team_id").cast(pl.Utf8),
-        pl.col("away_team_id").cast(pl.Utf8),
+        id_text(results, "game_id"),
+        id_text(results, "home_team_id"),
+        id_text(results, "away_team_id"),
     )
     if "neutral_site" not in results.columns:
         results = results.with_columns(pl.lit(False).alias("neutral_site"))

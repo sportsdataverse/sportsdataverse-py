@@ -85,6 +85,9 @@ providers:
       - sportsdataverse.wnba.wnba_team_roster
     functions:
       - espn_*_pbp
+      - espn_*_team_box
+      - espn_*_player_box
+      - espn_*_game_all
 
   nfl_com:
     label: NFL.com Shield API

@@ -186,11 +186,8 @@ def helper_wnba_game_data(pbp_txt, init):
     pbp_txt["gameSpreadAvailable"] = init["gameSpreadAvailable"]
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
-    pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True,
-        abs(init["gameSpread"]),
-        -1 * abs(init["gameSpread"]),
-    )
+    spread = init["gameSpread"]
+    pbp_txt["homeTeamSpread"] = None if spread is None else (abs(spread) if init["homeFavorite"] else -abs(spread))
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
     if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
@@ -292,8 +289,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             # collapses the resulting Series-of-length-1 to a scalar so
             # polars 1.x doesn't refuse to broadcast it across the
             # per-play DataFrame. Same shape fix as cfb_pbp / nfl_pbp.
-            gameSpread=pl.lit(float(np.asarray(init["gameSpread"]).reshape(-1)[0])).abs().first(),
-            homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).reshape(-1)[0])).first(),
+            gameSpread=pl.lit(init["gameSpread"], dtype=pl.Float64).abs(),
+            homeFavorite=pl.lit(init["homeFavorite"], dtype=pl.Boolean),
             gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
         )
         .with_columns(
@@ -386,4 +383,5 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
 
 
 def helper_wnba_pickcenter(pbp_txt):
-    return _pickcenter_odds(pbp_txt.get("pickcenter"), 165.5)
+    # No line: null spread / over-under / favorite, as wehoop/hoopR have it (no invented 2.5 / 165.5 / home favored).
+    return _pickcenter_odds(pbp_txt.get("pickcenter"), None, default_spread=None)

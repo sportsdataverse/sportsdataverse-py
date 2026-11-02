@@ -58,8 +58,8 @@ def test_build_url_gc_feed_uses_tab_not_view():
 # ---------------------------------------------------------------------------
 # Issue #238: HockeyTech reports an unknown view with HTTP 200 + error-in-body,
 # so a sentinel response is otherwise indistinguishable from "no data".
-# Payload shapes below are the real captures committed under
-# sdv-internal-refs/hockeytech/captures/samples/pwhl/{streaks,svf_streaks}.json
+# Payload shapes below are real 2026-07-12 captures (pwhl_streaks_undefined_tab.json,
+# pwhl_svf_streaks_invalidview.json in tests/fixtures/hockeytech/).
 # ---------------------------------------------------------------------------
 
 _MODULEKIT_STREAKS_SENTINEL = {

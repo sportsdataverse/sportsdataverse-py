@@ -13,7 +13,8 @@ is small and stable; the output is validated against a live ``readRDS()``
 oracle in ``tests/release/``.
 
 Scope limits (raise ``ValueError``): List / Struct / nested columns. Int64
-values outside int32 range are written as doubles (R has no 64-bit integer).
+values outside int32 range are written as character (R has no 64-bit integer, and a
+double would collide 18-digit ids).
 """
 
 from __future__ import annotations
@@ -319,10 +320,10 @@ def _column_writer(writer: _RdsWriter, series: pl.Series) -> _ColumnWriter:
         if fits_int32:
             data = _int_column_bytes(series)
             return lambda: writer.intsxp_raw(data, length=length)
-        # R has no 64-bit integer; out-of-range ids become doubles like R would
-        values = series.cast(pl.Float64).fill_null(0.0).to_numpy()
-        mask = series.is_null().to_numpy()
-        return lambda: writer.realsxp(values, mask)
+        # R has no 64-bit integer, and a double collides ids past 2**53 (18-digit WBB play ids: 87% of
+        # 2026 rows shared one). Out-of-range integers are written as character, exact.
+        items = series.cast(pl.Utf8).to_list()
+        return lambda: writer.strsxp(items, length=length)
 
     if dtype in (pl.Float32, pl.Float64):
         values = series.cast(pl.Float64).fill_null(0.0).to_numpy()
