@@ -9,7 +9,6 @@ mbb:
   # splits a page into one function per table, so a Python function that returns the whole page
   # links the R function for its main table.
   espn_mbb_player_core: espn_basketball_player_core
-  espn_mbb_summary: espn_mbb_game_all
   helper_mbb_play_by_play: helper_espn_mbb_pbp
   helper_mbb_player_box: helper_espn_mbb_player_box
   helper_mbb_team_box: helper_espn_mbb_team_box
@@ -50,7 +49,6 @@ mbb:
 nba:
   # stats.nba.com wrappers carry an nba_stats_ prefix where hoopR uses nba_; the ESPN loaders say
   # boxscore / season_stats where hoopR says box / stats.
-  espn_nba_summary: espn_nba_game_all
   helper_nba_play_by_play: helper_espn_nba_pbp
   helper_nba_player_box: helper_espn_nba_player_box
   helper_nba_team_box: helper_espn_nba_team_box

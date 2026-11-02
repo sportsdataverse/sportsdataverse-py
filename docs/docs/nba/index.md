@@ -10,7 +10,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 126 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 54 | none |
 | [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
 | [NBA Official Injury Report](#nba-official-injury-report) | `official.nba.com` | 3 | none (static PDFs on ak-static.cms.nba.com) |
@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 206 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 209 | — |
 
 ## ESPN {#espn}
 
@@ -29,7 +29,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/espn) | 7 |
+| [Hand-written wrappers](reference/additional/espn) | 10 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -259,6 +259,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_draft`](reference/site#espn_nba_draft) | [`espn_nba_draft`](https://hoopR.sportsdataverse.org/reference/espn_nba_draft.html) |
 | [`espn_nba_franchise`](reference/core/other#espn_nba_franchise) | [`espn_nba_franchise`](https://hoopR.sportsdataverse.org/reference/espn_nba_franchise.html) |
 | [`espn_nba_franchises`](reference/core/other#espn_nba_franchises) | [`espn_nba_franchises`](https://hoopR.sportsdataverse.org/reference/espn_nba_franchises.html) |
+| [`espn_nba_game_all`](reference/additional/espn#espn_nba_game_all) | [`espn_nba_game_all`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_all.html) |
 | [`espn_nba_game_broadcasts`](reference/core/game#espn_nba_game_broadcasts) | [`espn_nba_game_broadcasts`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_broadcasts.html) |
 | [`espn_nba_game_odds`](reference/core/game#espn_nba_game_odds) | [`espn_nba_game_odds`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_odds.html) |
 | [`espn_nba_game_official_detail`](reference/core/game#espn_nba_game_official_detail) | [`espn_nba_game_official_detail`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_official_detail.html) |
@@ -280,6 +281,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_news`](reference/site#espn_nba_news) | [`espn_nba_news`](https://hoopR.sportsdataverse.org/reference/espn_nba_news.html) |
 | [`espn_nba_pbp`](reference/additional/espn#espn_nba_pbp) | [`espn_nba_pbp`](https://hoopR.sportsdataverse.org/reference/espn_nba_pbp.html) |
 | [`espn_nba_player_awards`](reference/core/player#espn_nba_player_awards) | [`espn_nba_player_awards`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_awards.html) |
+| [`espn_nba_player_box`](reference/additional/espn#espn_nba_player_box) | [`espn_nba_player_box`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_box.html) |
 | [`espn_nba_player_career_stats`](reference/core/player#espn_nba_player_career_stats) | [`espn_nba_player_career_stats`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_career_stats.html) |
 | [`espn_nba_player_contracts`](reference/core/player#espn_nba_player_contracts) | [`espn_nba_player_contracts`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_contracts.html) |
 | [`espn_nba_player_eventlog`](reference/core/player#espn_nba_player_eventlog) | [`espn_nba_player_eventlog`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_eventlog.html) |
@@ -307,8 +309,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_season_weeks`](reference/core/season#espn_nba_season_weeks) | [`espn_nba_season_weeks`](https://hoopR.sportsdataverse.org/reference/espn_nba_season_weeks.html) |
 | [`espn_nba_seasons`](reference/core/other#espn_nba_seasons) | [`espn_nba_seasons`](https://hoopR.sportsdataverse.org/reference/espn_nba_seasons.html) |
 | [`espn_nba_standings`](reference/site#espn_nba_standings) | [`espn_nba_standings`](https://hoopR.sportsdataverse.org/reference/espn_nba_standings.html) |
-| [`espn_nba_summary`](reference/site#espn_nba_summary) | [`espn_nba_game_all`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_all.html) |
 | [`espn_nba_team`](reference/site#espn_nba_team) | [`espn_nba_team`](https://hoopR.sportsdataverse.org/reference/espn_nba_team.html) |
+| [`espn_nba_team_box`](reference/additional/espn#espn_nba_team_box) | [`espn_nba_team_box`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_box.html) |
 | [`espn_nba_team_injuries`](reference/site#espn_nba_team_injuries) | [`espn_nba_team_injuries`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_injuries.html) |
 | [`espn_nba_team_leaders`](reference/site#espn_nba_team_leaders) | [`espn_nba_team_leaders`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_leaders.html) |
 | [`espn_nba_team_news`](reference/site#espn_nba_team_news) | [`espn_nba_team_news`](https://hoopR.sportsdataverse.org/reference/espn_nba_team_news.html) |

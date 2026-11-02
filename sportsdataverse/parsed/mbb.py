@@ -348,9 +348,12 @@ from sportsdataverse.mbb import enrich_sub_error as enrich_sub_error  # noqa: F4
 from sportsdataverse.mbb import enrich_sub_errors as enrich_sub_errors  # noqa: F401
 from sportsdataverse.mbb import ensure_ev_uniqueness as ensure_ev_uniqueness  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_calendar as espn_mbb_calendar  # noqa: F401
+from sportsdataverse.mbb import espn_mbb_game_all as espn_mbb_game_all  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_game_rosters as espn_mbb_game_rosters  # noqa: F401
+from sportsdataverse.mbb import espn_mbb_player_box as espn_mbb_player_box  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_player_stats as espn_mbb_player_stats  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_schedule as espn_mbb_schedule  # noqa: F401
+from sportsdataverse.mbb import espn_mbb_team_box as espn_mbb_team_box  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_teams as espn_mbb_teams  # noqa: F401
 from sportsdataverse.mbb import espn_shots_to_canonical as espn_shots_to_canonical  # noqa: F401
 from sportsdataverse.mbb import expand_xwalk_aliases as expand_xwalk_aliases  # noqa: F401
@@ -831,6 +834,7 @@ __all__ = [
     "espn_mbb_franchise",
     "espn_mbb_franchises",
     "espn_mbb_game",
+    "espn_mbb_game_all",
     "espn_mbb_game_broadcasts",
     "espn_mbb_game_competition",
     "espn_mbb_game_leaders",
@@ -865,6 +869,7 @@ __all__ = [
     "espn_mbb_pbp",
     "espn_mbb_player_awards",
     "espn_mbb_player_bio",
+    "espn_mbb_player_box",
     "espn_mbb_player_career_stats",
     "espn_mbb_player_contracts",
     "espn_mbb_player_core",
@@ -925,6 +930,7 @@ __all__ = [
     "espn_mbb_summary",
     "espn_mbb_talentpicks",
     "espn_mbb_team",
+    "espn_mbb_team_box",
     "espn_mbb_team_core",
     "espn_mbb_team_depthcharts",
     "espn_mbb_team_history",
