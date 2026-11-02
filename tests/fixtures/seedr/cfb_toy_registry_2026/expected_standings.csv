@@ -1,61 +1,61 @@
-"case","team","conference","conf_rank","conf_champ"
-"acc_2025","A","ACC",1,TRUE
-"acc_2025","B","ACC",2,FALSE
-"acc_2025","C","ACC",3,FALSE
-"acc_2025","D","ACC",4,FALSE
-"acc_2025","E","ACC",5,FALSE
-"acc_2026","A","ACC",2,FALSE
-"acc_2026","B","ACC",1,TRUE
-"acc_2026","C","ACC",3,FALSE
-"acc_2026","D","ACC",4,FALSE
-"acc_2026","E","ACC",5,FALSE
-"acc_pool_2026","F1","ACC",5,FALSE
-"acc_pool_2026","F2","ACC",6,FALSE
-"acc_pool_2026","F3","ACC",8,FALSE
-"acc_pool_2026","F4","ACC",4,FALSE
-"acc_pool_2026","L","ACC",1,TRUE
-"acc_pool_2026","M","ACC",7,FALSE
-"acc_pool_2026","X","ACC",2,FALSE
-"acc_pool_2026","Y","ACC",3,FALSE
-"american_final_loss","A","American Athletic",2,FALSE
-"american_final_loss","B","American Athletic",1,TRUE
-"american_final_loss","C","American Athletic",3,FALSE
-"american_final_loss","D","American Athletic",4,FALSE
-"american_final_loss_nonconf","A","American Athletic",2,FALSE
-"american_final_loss_nonconf","B","American Athletic",1,TRUE
-"american_final_loss_nonconf","C","American Athletic",3,FALSE
-"american_final_loss_nonconf","D","American Athletic",4,FALSE
-"american_final_win","A","American Athletic",1,TRUE
-"american_final_win","B","American Athletic",2,FALSE
-"american_final_win","C","American Athletic",3,FALSE
-"american_final_win","D","American Athletic",4,FALSE
-"cusa_apr","A","Conference USA",2,FALSE
-"cusa_apr","B","Conference USA",1,TRUE
-"cusa_apr","C","Conference USA",3,FALSE
-"cusa_apr","D","Conference USA",4,FALSE
-"cusa_apr","E","Conference USA",5,FALSE
-"ineligible","A","Big Ten",3,FALSE
-"ineligible","B","Big Ten",1,TRUE
-"ineligible","C","Big Ten",2,FALSE
-"mac_official","A","MAC",2,FALSE
-"mac_official","B","MAC",1,TRUE
-"mac_official","C","MAC",3,FALSE
-"mac_official","D","MAC",4,FALSE
-"mac_official","E","MAC",5,FALSE
-"mw_composite","A","Mountain West",2,FALSE
-"mw_composite","B","Mountain West",1,TRUE
-"mw_composite","C","Mountain West",3,FALSE
-"mw_composite","D","Mountain West",4,FALSE
-"sunbelt_div","E1","Sun Belt",1,TRUE
-"sunbelt_div","E2","Sun Belt",3,FALSE
-"sunbelt_div","W1","Sun Belt",2,FALSE
-"sunbelt_div","W2","Sun Belt",4,FALSE
-"sunbelt_div_champ","E1","Sun Belt",1,TRUE
-"sunbelt_div_champ","E2","Sun Belt",3,FALSE
-"sunbelt_div_champ","W1","Sun Belt",2,FALSE
-"sunbelt_div_champ","W2","Sun Belt",4,FALSE
-"sunbelt_div_pct","E1","Sun Belt",3,FALSE
-"sunbelt_div_pct","E2","Sun Belt",2,FALSE
-"sunbelt_div_pct","E3","Sun Belt",4,FALSE
-"sunbelt_div_pct","W1","Sun Belt",1,TRUE
-"sunbelt_div_pct","W2","Sun Belt",5,FALSE
+"case","team","conference","conf_rank","conf_champ","sov","sos"
+"acc_2025","A","ACC",1,TRUE,0.4285714286,0.4285714286
+"acc_2025","B","ACC",2,FALSE,0.2857142857,0.2857142857
+"acc_2025","C","ACC",3,FALSE,0.1666666667,0.5
+"acc_2025","D","ACC",4,FALSE,0,0.4444444444
+"acc_2025","E","ACC",5,FALSE,0,0.5555555556
+"acc_2026","A","ACC",2,FALSE,0.4285714286,0.4285714286
+"acc_2026","B","ACC",1,TRUE,0.2857142857,0.2857142857
+"acc_2026","C","ACC",3,FALSE,0.1666666667,0.5
+"acc_2026","D","ACC",4,FALSE,0,0.4444444444
+"acc_2026","E","ACC",5,FALSE,0,0.5555555556
+"acc_pool_2026","F1","ACC",5,FALSE,0.4444444444,0.5714285714
+"acc_pool_2026","F2","ACC",6,FALSE,0.4444444444,0.5714285714
+"acc_pool_2026","F3","ACC",8,FALSE,0.4,0.5714285714
+"acc_pool_2026","F4","ACC",4,FALSE,0.6,0.5
+"acc_pool_2026","L","ACC",1,TRUE,0.3846153846,0.3888888889
+"acc_pool_2026","M","ACC",7,FALSE,0.7142857143,0.5
+"acc_pool_2026","X","ACC",2,FALSE,0.3846153846,0.4285714286
+"acc_pool_2026","Y","ACC",3,FALSE,0.4,0.4
+"american_final_loss","A","American Athletic",2,FALSE,0.3333333333,0.3333333333
+"american_final_loss","B","American Athletic",1,TRUE,0.3333333333,0.3333333333
+"american_final_loss","C","American Athletic",3,FALSE,0.6666666667,0.6666666667
+"american_final_loss","D","American Athletic",4,FALSE,0.6666666667,0.6666666667
+"american_final_loss_nonconf","A","American Athletic",2,FALSE,0.3333333333,0.3333333333
+"american_final_loss_nonconf","B","American Athletic",1,TRUE,0.3333333333,0.3333333333
+"american_final_loss_nonconf","C","American Athletic",3,FALSE,0.6666666667,0.6666666667
+"american_final_loss_nonconf","D","American Athletic",4,FALSE,0.6666666667,0.6666666667
+"american_final_win","A","American Athletic",1,TRUE,0,0
+"american_final_win","B","American Athletic",2,FALSE,0,0
+"american_final_win","C","American Athletic",3,FALSE,0,1
+"american_final_win","D","American Athletic",4,FALSE,0,1
+"cusa_apr","A","Conference USA",2,FALSE,0.4285714286,0.4285714286
+"cusa_apr","B","Conference USA",1,TRUE,0.2857142857,0.2857142857
+"cusa_apr","C","Conference USA",3,FALSE,0.1666666667,0.5
+"cusa_apr","D","Conference USA",4,FALSE,0,0.4444444444
+"cusa_apr","E","Conference USA",5,FALSE,0,0.5555555556
+"ineligible","A","Big Ten",3,FALSE,0.25,0.25
+"ineligible","B","Big Ten",1,TRUE,0,0.5
+"ineligible","C","Big Ten",2,FALSE,0,0.75
+"mac_official","A","MAC",2,FALSE,0.4285714286,0.4285714286
+"mac_official","B","MAC",1,TRUE,0.2857142857,0.2857142857
+"mac_official","C","MAC",3,FALSE,0.1666666667,0.5
+"mac_official","D","MAC",4,FALSE,0,0.4444444444
+"mac_official","E","MAC",5,FALSE,0,0.5555555556
+"mw_composite","A","Mountain West",2,FALSE,0.5,0.4444444444
+"mw_composite","B","Mountain West",1,TRUE,0.3333333333,0.4444444444
+"mw_composite","C","Mountain West",3,FALSE,0.3333333333,0.5555555556
+"mw_composite","D","Mountain West",4,FALSE,0.6666666667,0.5555555556
+"sunbelt_div","E1","Sun Belt",1,TRUE,0.5,0.5
+"sunbelt_div","E2","Sun Belt",3,FALSE,0,0.5
+"sunbelt_div","W1","Sun Belt",2,FALSE,0,0.5
+"sunbelt_div","W2","Sun Belt",4,FALSE,0,0.5
+"sunbelt_div_champ","E1","Sun Belt",1,TRUE,0.3333333333,0.3333333333
+"sunbelt_div_champ","E2","Sun Belt",3,FALSE,0.1666666667,0.4444444444
+"sunbelt_div_champ","W1","Sun Belt",2,FALSE,0,0.5555555556
+"sunbelt_div_champ","W2","Sun Belt",4,FALSE,0,0.6666666667
+"sunbelt_div_pct","E1","Sun Belt",3,FALSE,0.5,0.5
+"sunbelt_div_pct","E2","Sun Belt",2,FALSE,0.5,0.75
+"sunbelt_div_pct","E3","Sun Belt",4,FALSE,0,0.25
+"sunbelt_div_pct","W1","Sun Belt",1,TRUE,0.25,0.25
+"sunbelt_div_pct","W2","Sun Belt",5,FALSE,0,0.75

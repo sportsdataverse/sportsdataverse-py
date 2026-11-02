@@ -752,8 +752,8 @@ The standings frame with a `seed` column (Int64; null for teams outside the fiel
 | `conf_ties` | Int64 | Ties in conference regular-season games. |
 | `conf_pct` | Float64 | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
 | `conf_pd` | Float64 | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
-| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins. |
-| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference opponents' conference win pct across all conference games played; 0.0 for independents. |
+| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference victories only; 0.0 for independents or teams without conference wins. |
+| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for independents. |
 | `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
 | `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
 | `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |

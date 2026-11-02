@@ -2445,10 +2445,11 @@ cfb_playoff_seeds:
     the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions.
     Automatic qualifiers are capped at the field size.
   sim: Season or simulation identifier the standings row belongs to.
-  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
-    opponents' conference win pct across all conference games played; 0.0 for independents.
-  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
-    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference
+    wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for
+    independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference
+    victories only; 0.0 for independents or teams without conference wins.
   team: Team name (join key across the seedr engine frames).
   ties: Ties across all played games.
   win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
@@ -2538,10 +2539,11 @@ cfb_standings:
   losses: Losses across all played games.
   pd: Point differential (points for minus points against, via game margins) summed over all played games.
   sim: Season or simulation identifier the standings row belongs to.
-  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
-    opponents' conference win pct across all conference games played; 0.0 for independents.
-  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
-    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference
+    wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for
+    independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference
+    victories only; 0.0 for independents or teams without conference wins.
   team: Team name (join key across the seedr engine frames).
   ties: Ties across all played games.
   win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.

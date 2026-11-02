@@ -29,11 +29,10 @@ the SAME semantics so outputs cross-validate):
 * **SOV/SOS are conference-scoped** (cross-validation ruling — UNLIKE
   nflseedR's overall-REG, games-weighted convention). Both use only
   conference REG games and the opponents' conference win pct:
-  ``sos`` = mean of conference opponents' conference win pct across all
-  conference games played (per game — a twice-played opponent counts
-  twice); ``sov`` = mean of defeated conference opponents' conference win
-  pct (per conference victory — a twice-beaten opponent contributes twice;
-  documented choice, unobservable on the toy fixture). Independents and
+  both are POOLED like cfbseedR's — ``sos`` = the conference opponents'
+  summed conference wins (ties count half) over their summed conference
+  games, one term per game played (a twice-played opponent counts twice);
+  ``sov`` = the same over conference victories only. Independents and
   teams without conference games/wins get 0.0. The ENTIRE tiebreaker
   cascade (head-to-head, common opponents, SOV, SOS, point differential)
   is likewise scoped to conference REG games.
@@ -56,7 +55,7 @@ the SAME semantics so outputs cross-validate):
   Adopted ambiguity resolutions (per the shared design brief): "combined win
   percentage of conference opponents" is POOLED (sum of opponents' conference
   wins / sum of their conference games, opponents counted once per game
-  played) — distinct from the per-game-mean ``sos`` column; the Big 12
+  played) — the same quantity as the ``sos`` column; the Big 12
   grouped-ties descent rule (compare records vs a tied group of common
   opponents collectively, prior to that group's own tiebreak) applies to ALL
   registry descent rungs; multi-team combined head-to-head applies only when
@@ -399,45 +398,28 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> tuple[pl.DataFrame, pl.
         pl.col("result").sum().cast(pl.Float64).alias("conf_pd"),
     )
 
-    # Conference-scoped SOV/SOS (cross-validation ruling): mean of conference
-    # opponents' conference win pct — per conference game for SOS, per
-    # conference victory for SOV. Every opp in `dgc` has a `conf` row (it
-    # played at least this conference game), so the join never misses.
-    conf_pct_opp = conf.select(
+    # Conference-scoped, POOLED SOV/SOS (cfbseedR's formula): opponents' summed
+    # conference wins over their summed conference games — every conference
+    # game for SOS (also the registry's `opp_conf_win_pct` rung), conference
+    # victories only for SOV. Every opp in `dgc` has a `conf` row (it played
+    # at least this conference game), so the join never misses.
+    opp_rec = conf.select(
         "sim",
         pl.col("team").alias("opp"),
-        ((pl.col("conf_wins") + 0.5 * pl.col("conf_ties")) / pl.col("conf_games"))
-        .cast(pl.Float64)
-        .alias("_opp_conf_pct"),
-        (pl.col("conf_wins") + 0.5 * pl.col("conf_ties")).cast(pl.Float64).alias("_opp_conf_w"),
-        pl.col("conf_games").cast(pl.Float64).alias("_opp_conf_g"),
+        (pl.col("conf_wins") + 0.5 * pl.col("conf_ties")).cast(pl.Float64).alias("_opp_w"),
+        pl.col("conf_games").cast(pl.Float64).alias("_opp_g"),
     )
+    won = pl.col("outcome") == 1.0
     sovsos = (
-        dgc.join(conf_pct_opp, on=["sim", "opp"], how="left")
-        .with_columns(won=(pl.col("outcome") == 1.0).cast(pl.Float64))
+        dgc.join(opp_rec, on=["sim", "opp"], how="left")
         .group_by("sim", "team")
         .agg(
-            pl.col("_opp_conf_pct").mean().cast(pl.Float64).alias("sos"),
-            (pl.col("_opp_conf_pct") * pl.col("won")).sum().alias("sov_num"),
-            pl.col("won").sum().alias("sov_den"),
-            # POOLED opponents' conference win pct (registry `opp_conf_win_pct`
-            # rung — ambiguity resolution 1; distinct from the per-game-mean sos)
-            pl.col("_opp_conf_w").sum().alias("_pool_num"),
-            pl.col("_opp_conf_g").sum().alias("_pool_den"),
+            (pl.col("_opp_w").filter(won).sum() / pl.col("_opp_g").filter(won).sum()).alias("sov"),
+            (pl.col("_opp_w").sum() / pl.col("_opp_g").sum()).alias("sos"),
         )
-        .with_columns(
-            pl.when(pl.col("sov_den") > 0)
-            .then(pl.col("sov_num") / pl.col("sov_den"))
-            .otherwise(0.0)
-            .cast(pl.Float64)
-            .alias("sov"),
-            pl.when(pl.col("_pool_den") > 0)
-            .then(pl.col("_pool_num") / pl.col("_pool_den"))
-            .otherwise(0.0)
-            .cast(pl.Float64)
-            .alias("_opp_wp_pooled"),
-        )
-        .select("sim", "team", "sov", "sos", "_opp_wp_pooled")
+        # no conference win -> 0/0 -> sov 0.0 (R's if_else)
+        .with_columns(pl.col("sov", "sos").fill_nan(0.0).cast(pl.Float64))
+        .with_columns(pl.col("sos").alias("_opp_wp_pooled"))
     )
 
     # SEC capped relative scoring margin over conference games (per game:
