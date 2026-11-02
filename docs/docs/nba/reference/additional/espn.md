@@ -58,6 +58,39 @@ cal = espn_nba_calendar(season=2023, ondays=True)
 urls = cal["url"].to_list()  # feed each into espn_nba_schedule
 ```
 
+### espn_nba_game_all {#espn_nba_game_all}
+
+`espn_nba_game_all(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_nba_game_all() - Pull one game's plays, team box and player box from one ESPN request.
+
+The hoopR name for this request (`hoopR::espn_nba_game_all`): a single `nba/summary`
+fetch, returned as the three frames `espn_nba_pbp`, `espn_nba_team_box` and
+`espn_nba_player_box` would return one request each.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_nba_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, the three frames are pandas instead of polars. |
+
+**Returns**
+
+hoopR's list names as keys -- `"Plays"` (the `load_nba_pbp` release frame), `"Team"` (the team box) and `"Player"` (the player box).
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_game_all
+game = espn_nba_game_all(game_id=401585183)
+print(game["Plays"].shape, game["Team"].shape, game["Player"].shape)
+
+# Pipeline next step (one line)
+
+game["Player"].sort("points", descending=True, nulls_last=True).select("athlete_display_name", "points").head()
+```
+
 ### espn_nba_game_rosters {#espn_nba_game_rosters}
 
 `espn_nba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`
@@ -248,6 +281,74 @@ print(list(pbp.keys()))
 # Pull only the raw ESPN summary payload (skip cleaning)
 
 raw_pbp = espn_nba_pbp(game_id=401585183, raw=True)
+```
+
+### espn_nba_player_box {#espn_nba_player_box}
+
+`espn_nba_player_box(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_nba_player_box() - Pull one game's player box score from ESPN's `nba/summary` endpoint.
+
+The hoopR name for this request (`hoopR::espn_nba_player_box`): one `summary` fetch run
+through `~sportsdataverse.nba.helper_nba_player_box`, so the frame is the one the
+`espn_nba_player_boxscores` release publishes (what
+`~sportsdataverse.nba.load_nba_player_boxscore` reads) for that game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_nba_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas frame instead of polars. |
+
+**Returns**
+
+One row per athlete (did-not-play athletes included, with null stats), away team first, with the release's player-box columns. A frame with no columns when ESPN has no box score for the game.
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_player_box
+player_box = espn_nba_player_box(game_id=401585183)
+print(player_box.shape)
+
+# Pipeline next step (one line)
+
+player_box.filter(pl.col("did_not_play") == False).select("athlete_display_name", "points")
+```
+
+### espn_nba_team_box {#espn_nba_team_box}
+
+`espn_nba_team_box(game_id: 'int', return_as_pandas: 'bool' = False, **kwargs)`
+
+espn_nba_team_box() - Pull one game's team box score from ESPN's `nba/summary` endpoint.
+
+The hoopR name for this request (`hoopR::espn_nba_team_box`): one `summary` fetch run
+through `~sportsdataverse.nba.helper_nba_team_box`, so the frame is the one the
+`espn_nba_team_boxscores` release publishes (what
+`~sportsdataverse.nba.load_nba_team_boxscore` reads) for that game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from `espn_nba_schedule()`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas frame instead of polars. |
+
+**Returns**
+
+Two rows, one per team, with the release's team-box columns. A frame with no columns when ESPN has no box score for the game.
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_team_box
+team_box = espn_nba_team_box(game_id=401585183)
+print(team_box.shape)
+
+# Pipeline next step (one line)
+
+team_box.select("team_display_name", "team_score", "team_winner")
 ```
 
 ### scoreboard_event_parsing {#scoreboard_event_parsing}
