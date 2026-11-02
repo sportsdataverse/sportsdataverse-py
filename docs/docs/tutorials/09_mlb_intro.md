@@ -54,7 +54,7 @@ full reference:
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 **No API key needed** for any of the premium MLB endpoints — the MLB Stats API
@@ -623,7 +623,7 @@ out
     │ Home Run     ┆ 3     │
     │ Single       ┆ 3     │
     │ Double       ┆ 2     │
-    │ Hit By Pitch ┆ 1     │
+    │ Forceout     ┆ 1     │
     └──────────────┴───────┘
 
 
@@ -770,7 +770,7 @@ out
     │ Kurtz, Nick        ┆ 668                ┆ 78.191794     ┆ 0.803892        ┆ 7.759191     │
     │ Smith, Cam         ┆ 1021               ┆ 77.932441     ┆ 0.779628        ┆ 7.692896     │
     │ Cruz, Oneil        ┆ 655                ┆ 77.703353     ┆ 0.726718        ┆ 7.531575     │
-    │ Mitchell, Garrett  ┆ 828                ┆ 77.62993      ┆ 0.805556        ┆ 7.250589     │
+    │ Mitchell, Garrett  ┆ 827                ┆ 77.638018     ┆ 0.80653         ┆ 7.252277     │
     │ Adell, Jo          ┆ 1221               ┆ 77.42451      ┆ 0.725635        ┆ 7.714183     │
     │ Schwarber, Kyle    ┆ 1173               ┆ 77.116135     ┆ 0.745951        ┆ 7.499687     │
     │ Caglianone, Jac    ┆ 968                ┆ 77.004386     ┆ 0.728306        ┆ 7.859147     │

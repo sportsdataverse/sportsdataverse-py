@@ -39,8 +39,11 @@ No API keys needed.
 ## 🔌 Setup
 
 ```sh
-pip install "sportsdataverse[sdvplot]"
+pip install --pre "sportsdataverse[sdvplot]"
 ```
+
+The `sdvplot` extra brings in sdvplot and matplotlib for the charts. `--pre` is needed while 0.2.0 is
+in beta.
 
 
 ```python
@@ -324,11 +327,11 @@ news.select("published", "headline") if news is not None and news.height else "n
     │ ---                  ┆ ---                                                           │
     │ str                  ┆ str                                                           │
     ╞══════════════════════╪═══════════════════════════════════════════════════════════════╡
-    │ 2026-10-26T19:09:01Z ┆ Magic's Jalen Suggs out at least 2 weeks with knee injury     │
-    │ 2026-10-26T18:14:09Z ┆ Dream, Valkyries to play Game 6, WNBA Finals at State Farm a… │
-    │ 2026-10-26T17:38:26Z ┆ Monday's fantasy basketball adds and bets to make in the NBA  │
-    │ 2026-10-26T16:37:08Z ┆ Fantasy risers and fallers: Time to trade away Ty Jerome, dr… │
-    │ 2026-10-26T16:36:05Z ┆ U.S. senators call on NBA to reevaluate Rwanda partnership    │
+    │ 2026-11-02T20:44:22Z ┆ Michael Jordan congratulates Valykries star Gabby Williams a… │
+    │ 2026-11-02T20:47:31Z ┆ Thunder to retire Russell Westbrook's No. 0                   │
+    │ 2026-11-02T20:21:19Z ┆ Jaylen Brown's favorite purchase? An 18th century harp        │
+    │ 2026-11-02T21:02:48Z ┆ Wilbon taking leave of absence from ESPN to address health i… │
+    │ 2026-11-02T18:52:35Z ┆ Fantasy hoops category specialists: Risacher, Robinson among… │
     └──────────────────────┴───────────────────────────────────────────────────────────────┘
 
 

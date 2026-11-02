@@ -67,7 +67,8 @@ are the **premium native NHL feed** — start there.
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
+pip install --pre "sportsdataverse[sdvplot,sportypy]"   # optional: the rink shot map
 ```
 
 No API key needed — the NHL's public feeds ship ready to go. 😊
@@ -188,6 +189,53 @@ out
 
 
 
+### 🗺️ Chart: the game's shots on the rink
+
+`details_x_coord` / `details_y_coord` are feet from centre ice, the frame sportypy's NHL rink uses, so
+[sdvplot](https://sdvplot.sportsdataverse.org/)'s `surface("nhl")` takes them as they are. Teams switch ends
+each period, so each side's shots are turned to one end: the home team attacks right, the visitors left.
+The schedule frame from above supplies the team abbreviations for the colours.
+
+
+```python
+# Needs the plotting extra: pip install --pre "sportsdataverse[sdvplot,sportypy]"
+from IPython.display import Markdown, display
+
+try:
+    import matplotlib.pyplot as plt
+    import sdvplot
+    import sportypy  # noqa: F401 -- sdvplot.surface() draws with it
+except ImportError:
+    plt = None
+
+if plt is None or pbp is None or sched is None:
+    display(Markdown('_Shot map skipped: it needs `pip install --pre "sportsdataverse[sdvplot,sportypy]"` and the pbp + schedule above._'))
+else:
+    game = sched.filter(pl.col('id') == NATIVE_GAME).row(0, named=True)
+    home_id, home, away = game['home_team_id'], game['home_team_abbrev'], game['away_team_abbrev']
+    side = pl.when(pl.col('details_event_owner_team_id') == home_id).then(1).otherwise(-1)
+    turn = pl.when(pl.col('details_x_coord') * side < 0).then(-1).otherwise(1)
+    shots = (pbp.filter(pl.col('type_desc_key').is_in(['shot-on-goal', 'missed-shot', 'goal']))
+             .drop_nulls(['details_x_coord', 'details_y_coord'])
+             .with_columns(x=pl.col('details_x_coord') * turn, y=pl.col('details_y_coord') * turn))
+
+    ax = sdvplot.surface('nhl')
+    for team, color in zip((home, away), sdvplot.team_colors('nhl', [home, away])):
+        own = shots.filter((pl.col('details_event_owner_team_id') == home_id) == (team == home))
+        goals = own.filter(pl.col('type_desc_key') == 'goal')
+        ax.scatter(own['x'], own['y'], s=18, color=color, alpha=0.6, zorder=10, label=f'{team} shots')
+        ax.scatter(goals['x'], goals['y'], s=160, marker='*', color=color, edgecolor='black', zorder=10, label=f'{team} goals')
+    ax.set_title(f'{away} at {home}: shots and goals')
+    ax.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 0))
+    plt.show()
+```
+
+
+
+![png](07_nhl_intro_files/07_nhl_intro_11_0.png)
+
+
+
 
 ```python
 # Event-type mix for the game — native uses `type_desc_key`
@@ -213,8 +261,8 @@ out
     │ blocked-shot    ┆ 32     │
     │ giveaway        ┆ 22     │
     │ takeaway        ┆ 19     │
-    │ goal            ┆ 3      │
     │ delayed-penalty ┆ 3      │
+    │ period-end      ┆ 3      │
     └─────────────────┴────────┘
 
 
@@ -429,8 +477,6 @@ else:
 ```
 
     ✅ boxscore 2023030417
-
-
     ✅ pbp 2023030417
     players in box: 40 | pbp events: 331
 
@@ -956,16 +1002,16 @@ out
     │ ---                 ┆ ---          ┆ ---    ┆ ---    ┆ ---    ┆ ---  │
     │ str                 ┆ f64          ┆ f64    ┆ f64    ┆ f64    ┆ i64  │
     ╞═════════════════════╪══════════════╪════════╪════════╪════════╪══════╡
-    │ Montréal Canadiens  ┆ 7208.0       ┆ 3650.0 ┆ 2490.0 ┆ 8368.0 ┆ 23   │
-    │ Boston Bruins       ┆ 7048.0       ┆ 3491.0 ┆ 2529.0 ┆ 8010.0 ┆ 6    │
-    │ New York Rangers    ┆ 6983.0       ┆ 3117.0 ┆ 2865.0 ┆ 7235.0 ┆ 4    │
-    │ Toronto Maple Leafs ┆ 6939.0       ┆ 3114.0 ┆ 2830.0 ┆ 7223.0 ┆ 11   │
-    │ Detroit Red Wings   ┆ 6714.0       ┆ 3083.0 ┆ 2625.0 ┆ 7172.0 ┆ 11   │
-    │ Chicago Blackhawks  ┆ 6981.0       ┆ 2946.0 ┆ 2998.0 ┆ 6929.0 ┆ 6    │
-    │ Philadelphia Flyers ┆ 4594.0       ┆ 2252.0 ┆ 1642.0 ┆ 5204.0 ┆ 2    │
-    │ St. Louis Blues     ┆ 4594.0       ┆ 2144.0 ┆ 1806.0 ┆ 4932.0 ┆ 1    │
-    │ Pittsburgh Penguins ┆ 4593.0       ┆ 2107.0 ┆ 1889.0 ┆ 4811.0 ┆ 5    │
-    │ Buffalo Sabres      ┆ 4366.0       ┆ 2008.0 ┆ 1739.0 ┆ 4635.0 ┆ 0    │
+    │ Montréal Canadiens  ┆ 7211.0       ┆ 3653.0 ┆ 2490.0 ┆ 8374.0 ┆ 23   │
+    │ Boston Bruins       ┆ 7051.0       ┆ 3492.0 ┆ 2531.0 ┆ 8012.0 ┆ 6    │
+    │ New York Rangers    ┆ 6985.0       ┆ 3117.0 ┆ 2867.0 ┆ 7235.0 ┆ 4    │
+    │ Toronto Maple Leafs ┆ 6942.0       ┆ 3115.0 ┆ 2832.0 ┆ 7225.0 ┆ 11   │
+    │ Detroit Red Wings   ┆ 6717.0       ┆ 3085.0 ┆ 2626.0 ┆ 7176.0 ┆ 11   │
+    │ Chicago Blackhawks  ┆ 6984.0       ┆ 2947.0 ┆ 2999.0 ┆ 6932.0 ┆ 6    │
+    │ Philadelphia Flyers ┆ 4597.0       ┆ 2253.0 ┆ 1643.0 ┆ 5207.0 ┆ 2    │
+    │ St. Louis Blues     ┆ 4597.0       ┆ 2146.0 ┆ 1807.0 ┆ 4936.0 ┆ 1    │
+    │ Pittsburgh Penguins ┆ 4595.0       ┆ 2107.0 ┆ 1890.0 ┆ 4812.0 ┆ 5    │
+    │ Buffalo Sabres      ┆ 4369.0       ┆ 2011.0 ┆ 1739.0 ┆ 4641.0 ┆ 0    │
     └─────────────────────┴──────────────┴────────┴────────┴────────┴──────┘
 
 
