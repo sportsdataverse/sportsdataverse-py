@@ -900,7 +900,7 @@ polars pipeline — cast the scores, sum them, sort descending.
 
 ## stats.nba.com surface (`nba_stats_*`)
 
-Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **128 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated and never-populated endpoints are excluded (see `ENDPOINT_HEALTH.md` in `sdv-internal-refs` for the full active/dying/barren/dead matrix).
+Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **128 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated endpoints and endpoints that never return rows are left out, so every wrapper listed answers with data.
 
 **League routing** is a single `league_id` parameter: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host, league chosen per call.
 

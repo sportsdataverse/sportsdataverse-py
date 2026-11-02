@@ -2751,7 +2751,7 @@ to keep the old categorical shot-quality xG.
   `@deprecated`) with a documented removal window; the 11 per-type NFL loader aliases migrate to it.
 - **Docs:** the NFL docs list a dedicated "NFL.com API" reference grouping (11 functions).
 - **Docs:** an OpenAPI 3.1 description of the NFL.com "Shield" API (`api.nfl.com`) is added to the
-  reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
+  reference specs (the maintainers' private NFL notes, `sdv-swagger/nfl_api_openapi.yaml`).
 - **Fox:** `cfb_fox_ext.FOX_DATA_KEY` is imported from `_fox_layout.DATA_KEY`, so the bundled Fox
   key and its `SDV_PY_FOX_DATA_KEY` override live in one place.
 - **HTTP:** `dl_utils.download()` reuses a pooled `requests.Session` and backs off honoring

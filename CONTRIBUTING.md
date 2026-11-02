@@ -438,8 +438,8 @@ Capture tools, all run once with network access and their output committed:
   fixtures (`uv run python tools/fixtures/gen_wnba_engine_fixtures.py --game-ids ...`; each script's
   docstring gives its arguments). They call stats.nba.com / stats.wnba.com, so run them from a
   residential IP.
-- `SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py`: trimmed copies of
-  the private `sdv-internal-refs` real captures (nba_stats, wnba_stats, On3) into `tests/fixtures/`,
+- `SDV_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py`: trimmed copies of
+  the maintainers' private real captures (nba_stats, wnba_stats, On3) into `tests/fixtures/`,
   for the returns-schema generators. It refuses to write a trimmed file that parses to different
   columns or dtypes than the full capture.
 
