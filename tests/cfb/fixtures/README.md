@@ -170,7 +170,7 @@ growing prefixes, 889 rows), 400756912 (Miami @ Florida Atlantic, 2015; one comp
 (Wisconsin @ Penn State, 2018; back-to-back timeouts at 0:03, both real) and 400547745 (Louisville @ Clemson, 2014; a
 copy filed ahead of the penalty that set it up). They are not `summary_*` files either: the whole-game oracle would
 read their snapshot noise as the game.
-`fair_catch/` holds 3 trimmed captures with its own README, for the kickoff fair-catch spot rule
+`fair_catch/` holds 4 trimmed captures with its own README, for the kickoff fair-catch spot rule
 (`tests/cfb/test_cfb_kickoff_fair_catch_spot.py`); they are not `summary_*` files either.
 
 ## Captures

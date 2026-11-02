@@ -222,6 +222,13 @@ _RETURNER_STEPPED_OUT_RE = r"(?i)\breturn\w*\b.*out[- ]of[- ]bounds"
 _FAIR_CATCH_SPOT_RE = r"(?i)fair (?:catch|caught)(?: by .{0,40}?)? at (?:the )?[A-Za-z&.' ()-]*?(\d+)"
 
 
+def _is_fair_catch() -> pl.Expr:
+    """The text says the kick was fair-caught. "Illegal fair catch signal" names a foul, not a catch:
+    401012318103849901 ("return for no gain to the Tenn 35 ... Illegal Fair Catch Signal ... to the Tenn 3")
+    snaps at 97, and none of the five such 2018+ kickoffs snaps at the 25."""
+    return pl.col("text").str.replace_all(r"(?i)fair catch signal", "").str.contains(r"(?i)fair catch|fair caught")
+
+
 def _fair_catch_spot() -> pl.Expr:
     """The yard-line number of the play's fair-catch spot (``_FAIR_CATCH_SPOT_RE``), null without one."""
     return pl.col("text").str.extract(_FAIR_CATCH_SPOT_RE, 1).cast(pl.Int64, strict=False)
@@ -229,7 +236,7 @@ def _fair_catch_spot() -> pl.Expr:
 
 #: Any "at/to <TEAM> NN" spot. The last one is where the ball came to rest: the catch, or the
 #: enforcement after it ("fair catch by #85 C.Hewitt II at LU27 PENALTY ... 15 yards from LU27 to LU42").
-_REST_SPOT_RE = r"(?i)\b(?:at|to) (?:the )?[A-Za-z&.'()]+ ?\d{1,2}\b"
+_REST_SPOT_RE = r"(?i)\b(?:at|to) (?:the )?(?:[A-Za-z&.'()-]+ ?){1,3}?\d{1,2}\b"
 
 
 def _last_spot_number() -> pl.Expr:
@@ -4147,12 +4154,14 @@ class CFBPlayProcess(object):
                 # number itself), and its team token does not always resolve ("UMD29" for MD).
                 .when(
                     pl.col("text").str.contains(r"(?i)kickoff")
+                    & (pl.col("text").str.contains(_RETURN_EXCLUDE_RE.pattern) == False)
                     & _fair_catch_spot().is_not_null()
                     & (pl.col("_nxt_start") == 100 - _last_spot_number())
                 )
                 .then(100 - _last_spot_number())
                 .when(
                     pl.col("text").str.contains(r"(?i)kickoff")
+                    & (pl.col("text").str.contains(_RETURN_EXCLUDE_RE.pattern) == False)
                     & _fair_catch_spot().is_not_null()
                     & (pl.col("_nxt_start") == _last_spot_number())
                 )
@@ -4792,9 +4801,10 @@ class CFBPlayProcess(object):
                 # Rule 6-5-1: a catch BEYOND the 25 is dead at the spot, not a touchback.
                 # ESPN's next snap agrees on 142 of 144 clean 2018-2025 catches beyond the
                 # 25 (of the other two, one snaps 5 yards short and one ends the half); no
-                # stated spot keeps the touchback (9 of 9 such rows snap at the 25).
+                # stated spot keeps the touchback (9 of 9 such rows snap at the 25, once the
+                # five "illegal fair catch signal" fouls, which are not catches, are left out).
                 .when(
-                    (pl.col("text").str.contains(r"(?i)fair catch|fair caught"))
+                    _is_fair_catch()
                     .and_(pl.col("kickoff_play") == True)
                     .and_(pl.col("season") >= CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM)
                     .and_((_fair_catch_spot() > 25).fill_null(False) == False),
@@ -4826,7 +4836,7 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 kickoff_fair_catch=pl.when(
-                    (pl.col("text").str.contains("(?i)fair catch|(?i)fair caught")).and_(
+                    _is_fair_catch().and_(
                         pl.col("kickoff_play") == True,
                     ),
                 )

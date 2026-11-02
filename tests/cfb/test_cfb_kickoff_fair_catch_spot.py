@@ -80,3 +80,16 @@ def test_fair_caught_kickoff_ends_where_the_next_snap_starts(play_id):
     assert (row["end.down"], row["end.distance"]) == (1, 10), why
     # a touchback credits the 25-yard convention; a fair catch at the spot is a return of no yards
     assert row["yds_kickoff_return"] == (25 if touchback else 0), why
+
+
+def test_illegal_fair_catch_signal_is_a_foul_not_a_touchback():
+    """ "illegal fair catch signal" names a foul, not a catch: no touchback, and the end is where the next snap starts.
+
+    401114199101917302 (Oregon @ Oregon State, 2019): "Camden Lewis kickoff for 50 yds OREGON ST Penalty, illegal
+    fair catch signal (10 Yards) to the OrgSt 15"; Oregon State snaps next at its own 15 (85 to go), not the 25.
+    """
+    name, play_id = "fair_catch/401114199_trimmed.json.gz", 401114199101917302
+    ytez = _next_snap_y2ez(_summary(name), play_id)
+    assert ytez == 85
+    row = _frame(401114199, name).filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["kickoff_tb"], row["kickoff_fair_catch"], row["end.yardsToEndzone"]) == (False, False, ytez)
