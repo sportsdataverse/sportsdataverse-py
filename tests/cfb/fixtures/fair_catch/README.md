@@ -8,12 +8,12 @@
 
 # Kickoff fair-catch spot captures
 
-Four ESPN college-football summary payloads for `tests/cfb/test_cfb_kickoff_fair_catch_spot.py`, which also reads
+Five ESPN college-football summary payloads for `tests/cfb/test_cfb_kickoff_fair_catch_spot.py`, which also reads
 `../supp002/401761641_trimmed.json.gz`.
 
 - **Source:** `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=<game_id>`,
-  as stored by the scraper in `cfbfastR-cfb-raw/cfb/json/raw/<game_id>.json`, raw repo at `8480d4db3f` (the four
-  files last changed in `b598a0f3c0` and `c5a4bbbff2`, 2026-07-29); copied 2026-11-01.
+  as stored by the scraper in `cfbfastR-cfb-raw/cfb/json/raw/<game_id>.json`, raw repo at `8480d4db3f` (the five
+  files last changed in `b598a0f3c0` and `c5a4bbbff2`, 2026-07-29, and `7bb3d828f3`, 2026-06-13); copied 2026-11-01.
 - **Form:** `<game_id>_trimmed.json.gz`, the `trimmed` form of `../README.md`: the payload reduced to `boxscore`,
   `drives`, `gameInfo`, `header`, `pickcenter` and `scoringPlays`, whole game kept, gzip with mtime 0.
 - **Selection:** from a scan of every fair-caught kickoff in the cfb-raw corpus (2,232 rows, 2004-2026), games with
@@ -24,6 +24,8 @@ Four ESPN college-football summary payloads for `tests/cfb/test_cfb_kickoff_fair
     the LU42 (next snap at 58), where ESPN's end is 80.
   - 401114199 (Oregon @ Oregon State, 2019): "OREGON ST Penalty, illegal fair catch signal (10 Yards) to the OrgSt 15",
     a foul and not a catch (next snap at 85, not the 25).
+  - 401207181 (Western Kentucky @ FIU, 2020): "return for 14 yds to the WKent 49 ... illegal fair catch signal (14
+    Yards) to the WKent 2", a returned kick and a foul (next snap at 98, return 14).
   - 400933913 (Auburn @ Georgia, 2017): fair catches at the Geo 21 and 27 before the 2018 rule, dead at the spot
     (next snaps at 79 and 73).
 - Play ids are ESPN's; the test casts them to Int64.

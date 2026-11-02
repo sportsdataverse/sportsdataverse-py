@@ -82,14 +82,25 @@ def test_fair_caught_kickoff_ends_where_the_next_snap_starts(play_id):
     assert row["yds_kickoff_return"] == (25 if touchback else 0), why
 
 
-def test_illegal_fair_catch_signal_is_a_foul_not_a_touchback():
-    """ "illegal fair catch signal" names a foul, not a catch: no touchback, and the end is where the next snap starts.
+#: play id -> (game id, capture, next-snap yards to the end zone, stated return yards or None, why)
+SIGNAL_ROWS = {
+    # "Camden Lewis kickoff for 50 yds OREGON ST Penalty, illegal fair catch signal (10 Yards) to the OrgSt 15"
+    401114199101917302: (401114199, "fair_catch/401114199_trimmed.json.gz", 85, None, "2019, no return stated"),
+    # "Tommy Heatherly kickoff for 63 yds , Noah Whittington return for 14 yds to the WKent 49 WESTRN KENTUCKY
+    # Penalty, illegal fair catch signal (14 Yards) to the WKent 2"
+    401207181101849925: (401207181, "fair_catch/401207181_trimmed.json.gz", 98, 14, "2020, return for 14 yds"),
+}
 
-    401114199101917302 (Oregon @ Oregon State, 2019): "Camden Lewis kickoff for 50 yds OREGON ST Penalty, illegal
-    fair catch signal (10 Yards) to the OrgSt 15"; Oregon State snaps next at its own 15 (85 to go), not the 25.
-    """
-    name, play_id = "fair_catch/401114199_trimmed.json.gz", 401114199101917302
-    ytez = _next_snap_y2ez(_summary(name), play_id)
-    assert ytez == 85
-    row = _frame(401114199, name).filter(pl.col("id") == play_id).row(0, named=True)
-    assert (row["kickoff_tb"], row["kickoff_fair_catch"], row["end.yardsToEndzone"]) == (False, False, ytez)
+
+@pytest.mark.parametrize(
+    "play_id",
+    [pytest.param(p, marks=pytest.mark.xdist_group(f"cfb-fc-{v[0]}"), id=str(p)) for p, v in SIGNAL_ROWS.items()],
+)
+def test_illegal_fair_catch_signal_is_a_foul_not_a_fair_catch(play_id):
+    """ "illegal fair catch signal" names a foul, not a catch: no touchback, no fair catch, the stated return kept,
+    and the end where the next snap starts (none of the five such 2018+ kickoffs snaps at the 25)."""
+    game_id, name, ytez, ret, why = SIGNAL_ROWS[play_id]
+    assert _next_snap_y2ez(_summary(name), play_id) == ytez, why
+    row = _frame(game_id, name).filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["kickoff_tb"], row["kickoff_fair_catch"], row["end.yardsToEndzone"]) == (False, False, ytez), why
+    assert row["yds_kickoff_return"] == ret, (why, row["yds_kickoff_return"])
