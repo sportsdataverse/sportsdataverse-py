@@ -272,7 +272,7 @@ wnba:
   load_wnba_stats_standings: {seasons: 2025}  # 13 rows x 94 cols
   load_wnba_stats_team_season_stats: {seasons: 2025}  # 126 rows x 179 cols
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 12 cols
-  wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
+  wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
   wnba_player_props: {season: 2024, game_id: "401620238", home_team_id: "18", away_team_id: "8"}  # 26 rows x 7 cols
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols
 
@@ -362,8 +362,8 @@ wbb:
   raw_game_efficiency: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}  # 11796 rows x 10 cols
   adjust_efficiency: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 8 cols
   adjust_tempo: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 3 cols
-  in_game_features: {pbp: {$call: wbb.helper_wbb_play_by_play, args: {final: {$call: wbb.espn_wbb_pbp, args: {game_id: 401724075}}}}, pregame_home_prob: 0.62}  # 343 rows x 5 cols
-  wbb_in_game_win_prob: {pbp: {$call: wbb.helper_wbb_play_by_play, args: {final: {$call: wbb.espn_wbb_pbp, args: {game_id: 401724075}}}}, pregame_home_prob: 0.62}  # 343 rows x 6 cols
+  in_game_features: {pbp: {$call: wbb.helper_wbb_play_by_play, args: {final: {$call: wbb.espn_wbb_pbp, args: {game_id: 401724075, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 343 rows x 5 cols
+  wbb_in_game_win_prob: {pbp: {$call: wbb.helper_wbb_play_by_play, args: {final: {$call: wbb.espn_wbb_pbp, args: {game_id: 401724075, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 343 rows x 6 cols
   build_wbb_season_wp: {season: 2024}  # 1908679 rows x 66 cols
   aggregate_player_seasons: {seasons: [2026], league: womens}  # 8305 rows x 22 cols
   player_per100_features: {season_stats: {$call: wbb.aggregate_player_seasons, args: {seasons: [2026], league: womens}}}  # 8305 rows x 20 cols
