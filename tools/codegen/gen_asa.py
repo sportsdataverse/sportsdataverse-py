@@ -4,8 +4,8 @@ Soccer Analysis OpenAPI spec (``app.americansocceranalysis.com/api/v1``, auth-fr
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_on3.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+The generator reads the frozen spec from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/asa.yaml`` -- one endpoint per GET route (16), host
   ``https://app.americansocceranalysis.com/api/v1``.

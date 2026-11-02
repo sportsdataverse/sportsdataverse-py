@@ -2,8 +2,8 @@
 
 Idempotent: same specs + same fixtures -> byte-identical output. Modeled on ``gen_kzs.py`` with the shared plumbing in
 ``gen_soccer_common.py``. Two families, one script (they share one descriptions file and one dtypes module). Reads the
-frozen specs and the returns md from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling
-checkout) and emits:
+frozen specs and the returns md from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and
+emits:
 
 * ``tools/codegen/endpoints/vtb_league.yaml`` (3 wrappers over the v2 API's 3 routes) and
   ``tools/codegen/endpoints/vtb_infobasket.yaml`` (35 wrappers over the 24 Infobasket routes; one route can feed several
@@ -19,7 +19,7 @@ checkout) and emits:
 * ``sportsdataverse/basketball/vtb/vtb_dtypes.py`` -- each parser's column dtypes (the returns-schema types), so an empty or
   all-null frame is typed like a populated one.
 * ``tests/fixtures/vtb_league/spec_paths.json`` and ``tests/fixtures/vtb_infobasket/spec_paths.json`` -- the specs' routes, for
-  the tests (CI has no refs checkout).
+  the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_vtb.py``
 """

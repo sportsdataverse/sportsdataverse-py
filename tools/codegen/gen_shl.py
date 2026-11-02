@@ -4,8 +4,8 @@
 Idempotent: same spec + same captures -> byte-identical output. Modeled on ``gen_asa.py``,
 with the shared plumbing in ``gen_soccer_common.py``.
 
-Reads the frozen spec and the committed captures from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+Reads the frozen spec and the committed captures from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/shl.yaml`` -- one endpoint per GET route (27).
 * ``tools/codegen/schemas/native/shl/<short>.yaml`` -- returns-schema per endpoint: the

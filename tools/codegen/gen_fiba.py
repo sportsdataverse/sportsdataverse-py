@@ -1,5 +1,5 @@
 """Generate the ``fiba_gdap`` and ``fiba_gamepage`` flat-API endpoint YAMLs, returns-schemas, pinned
-dtypes and column-description notes from the FIBA OpenAPI specs (``sdv-internal-refs/fiba/``).
+dtypes and column-description notes from the FIBA OpenAPI specs (``fiba/``).
 
 Idempotent: same specs + same fixtures -> byte-identical output. Modeled on ``gen_magnus.py``.
 
@@ -20,7 +20,7 @@ and rate-named columns -> float, then written to ``fiba_dtypes.py``; the returns
 columns and types. Column descriptions are NOT written into the schemas: the generator owns their text
 (``tools/codegen/notes/fiba_*_descriptions.yaml``, taken from ``fiba-returns.md`` and the tables below),
 which Integration merges into ``manual_column_descriptions.yaml``. A snapshot of the spec's routes goes to
-``tests/fixtures/fiba_gdap/routes.json`` so the tests never read the private refs checkout.
+``tests/fixtures/fiba_gdap/routes.json`` so the tests never read the private reference checkout.
 
 Run: ``python tools/codegen/gen_fiba.py``
 """

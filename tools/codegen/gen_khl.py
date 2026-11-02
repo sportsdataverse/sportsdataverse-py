@@ -1,4 +1,4 @@
-"""Generate the two KHL flat-API families from the sdv-internal-refs ``khl/`` specs.
+"""Generate the two KHL flat-API families from the ``khl/`` OpenAPI specs.
 
 Idempotent: same specs + same fixtures -> byte-identical output. Emits:
 
@@ -7,13 +7,13 @@ Idempotent: same specs + same fixtures -> byte-identical output. Emits:
 * ``tools/codegen/endpoints/khl_webcaster.yaml`` -- the webcaster mobile API (``GET <route>.json``).
 * ``tools/codegen/schemas/native/khl_{rest,webcaster}/<short>.yaml`` -- one returns-schema per
   endpoint, from running its parser over the committed fixture (``tests/fixtures/khl_*``): the FULL
-  body under ``full/`` when there is one (dtypes from complete data), else the refs capture.
+  body under ``full/`` when there is one (dtypes from complete data), else the trimmed reference capture.
   Descriptions are left blank there on purpose.
 * ``sportsdataverse/hockey/khl/khl_schemas.py`` -- the same schemas as name:dtype specs, so the
   parsers type a zero-row frame (and backfill a missing column) exactly like a populated one without
   reading ``tools/`` at runtime.
 * ``tests/fixtures/khl_{rest,webcaster}/spec_routes.json`` -- the spec's route list, so the YAML
-  route test needs no sdv-internal-refs checkout (CI has none).
+  route test needs no private reference checkout (CI has none).
 
 The column descriptions (refs ``khl-returns.md`` plus the columns the parsers rename or derive) were
 merged into ``manual_column_descriptions.yaml`` at integration; edit them there. ``main`` still

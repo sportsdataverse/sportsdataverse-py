@@ -1,6 +1,6 @@
 """Nightly cross-source parity harness: every registered alternate vs the ESPN path.
 
-H1 of ``ClaudeCowork/plans/2026-09-18-data-integrity-and-live-monitoring.md``. This is the
+Part of the 2026-09-18 data-integrity and live-monitoring plan. This is the
 guard against silent source drift -- a markup change, a new type vocabulary, an id scheme
 that shifts -- on the alternate feeds Game on Paper fails over to. It generalises the
 per-adapter G1 gate scripts (``s2-shield-adapter/parity_finals.py``, ``s2-cbs-nfl/gate.py``,

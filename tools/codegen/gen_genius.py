@@ -1,8 +1,8 @@
 """Generate the ``genius`` flat-API endpoint YAML + returns-schemas (Genius Sports / FIBA LiveStats).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_vhl.py``. Reads the frozen spec
-and the returns md from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling
-checkout) and emits:
+and the returns md from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and
+emits:
 
 * ``tools/codegen/endpoints/genius.yaml`` -- 11 wrappers over the spec's 7 routes. One ``data.json`` feeds five
   frames (game, team box, player box, play-by-play, shots), each with its own parser; the hosted competition
@@ -16,7 +16,7 @@ checkout) and emits:
 * ``tools/codegen/genius_column_descriptions.snippet.yaml`` -- ``{genius_<short>: {column: text}}``, the block for
   ``manual_column_descriptions.yaml`` (gitignored; the integrator merges it).
 * ``tests/fixtures/genius/spec_routes.json`` -- the spec's routes, so the tests read the route list without the
-  private refs checkout.
+  private reference checkout.
 
 Run: ``python tools/codegen/gen_genius.py``
 """

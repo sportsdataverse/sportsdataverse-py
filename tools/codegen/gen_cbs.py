@@ -5,8 +5,7 @@ Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_on3.py``.
 
 The generator reads the frozen OpenAPI spec and the committed response captures
-from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else a
-sibling checkout of this repo, else the Windows workspace default) and emits:
+from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/cbs_napi.yaml`` -- one endpoint per spec GET op
   (82 of them), host ``https://api.cbssports.com/napi``. The spec is itself

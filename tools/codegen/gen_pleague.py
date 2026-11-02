@@ -2,7 +2,7 @@
 
 Idempotent: same specs + same fixtures -> byte-identical output. Modeled on ``gen_aba.py``. One script writes BOTH
 stems (the site and the Preciser vendor share the clubs table, the descriptions and the fixtures layout). Reads the two
-frozen specs from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+frozen specs from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/pleague.yaml`` -- 11 wrappers over the site's 10 routes (the four schedule routes are one
   wrapper with a ``stage`` argument; the game page feeds ``game``, ``periods`` and ``officials``; the box feeds

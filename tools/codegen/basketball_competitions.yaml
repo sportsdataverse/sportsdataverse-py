@@ -5,7 +5,7 @@
 #   python tools/codegen/gen_basketball_competitions.py
 # which rewrites sportsdataverse/basketball/_competitions_registry.py (package data: the wheel ships
 # only the package, so the runtime cannot read tools/). tests/basketball/test_competition_factories.py
-# pins every fact below to its source (copied from sdv-internal-refs, never read from the checkout).
+# pins every fact below to its source (copied from the maintainers' private reference notes, never read at runtime).
 #
 # Common fields:  key (stable id), prefix (function-name prefix, `<prefix>_schedule`), label,
 #   gender (men | women | both; "women"/"both" entries are the wehoop mirror's to port), season_rule.

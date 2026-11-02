@@ -92,8 +92,8 @@ def _bucket_of(path: str) -> str:
 # Why the large buckets are here:
 # - native/nflpro: not authorable. gen_nflpro_descriptions.py authored every Next Gen Stats column a
 #   nflverse crosswalk, an identity on the capture or the envelope confirms; the 30 left (avgTTP,
-#   bhPct, twfPct, ...) have no reachable label source (sdv-internal-refs/nfl/nflpro/catalogs/
-#   nfl_pro_secured_returns.md).
+#   bhPct, twfPct, ...) have no reachable label source (pro.nfl.com
+#   publishes no column glossary).
 # - native/nba_stats, native/wnba_stats (and native/nbagl_stats, built the same way 2026-10-26): their tables were rebuilt from what the parser emits on real
 #   captures (2026-10-05), which renamed columns and surfaced every result set; the new columns had
 #   no description to carry over. (native/on3, rebuilt the same way, was fully authored 2026-10-07 and

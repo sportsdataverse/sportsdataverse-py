@@ -4,8 +4,8 @@ EuroLeague OpenAPI spec (three keyless hosts, one spec with per-path ``servers``
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_asa.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+The generator reads the frozen spec from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/euroleague.yaml`` -- the family host is
   ``https://api-live.euroleague.net/v2``; a path whose spec entry carries its own
@@ -61,8 +61,8 @@ LIVE_HOST = "https://live.euroleague.net/api"
 SPEC = "euroleague.openapi.yaml"
 STEM = "euroleague"
 
-# The committed samples are pinned to one season + game + round (sdv-internal-refs
-# euroleague/tools/capture.py SEASON / GAME); captures live under captures/<SEASON>/.
+# The committed samples are pinned to one season + game + round (the
+# maintainers' capture tool's SEASON / GAME); captures live under captures/<SEASON>/.
 SEASON = "E2025"
 GAME = 1
 _CAPTURE_VALUES = {"competitionCode": "E", "seasonCode": SEASON, "gameCode": str(GAME), "round": "1"}
@@ -703,7 +703,7 @@ def main() -> None:
             schema["columns"] = tables[0][1] if tables else []
         if missing:
             schema["unverified"] = (
-                f"no committed capture in sdv-internal-refs/{STEM}/captures/{SEASON} ({', '.join(missing)})"
+                f"no committed capture in the reference checkout's {STEM}/captures/{SEASON} ({', '.join(missing)})"
             )
         write_yaml(schema_dir / f"{short}.yaml", schema)
     _write_schemas_module(live_schemas)

@@ -1,8 +1,8 @@
 """Generate the ``wjbl`` flat-API endpoint YAML + returns-schemas (W League, Japan women's basketball, ``api.wjbl.01core.app/api``).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_kzs.py`` with the shared plumbing in
-``gen_soccer_common.py``. Reads the frozen spec and the returns md from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+``gen_soccer_common.py``. Reads the frozen spec and the returns md from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/wjbl.yaml`` -- 19 wrappers over the spec's 15 paths (one route can feed several frames: the
   game header feeds ``wjbl_game`` and ``wjbl_period_scores``, the box score two, the standings grid two, the roster two).
@@ -13,7 +13,7 @@ Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen
   keyed ``wjbl_<short>`` -> column, for ``manual_column_descriptions.yaml``. Each comes from :data:`ROUTE`
   (route-specific), the route's own ``wjbl-returns.md`` row (:data:`SECTIONS`; the md carries the English translations
   of the Japanese values), else :data:`LOCAL` (parser-built columns). A filler or missing description stops the run.
-* ``tests/fixtures/wjbl/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/wjbl/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_wjbl.py``
 """

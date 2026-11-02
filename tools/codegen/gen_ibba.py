@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_feb.py`` (itself
 ``gen_asa.py`` with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/ibba.yaml`` -- 16 wrappers over the spec's 16 ASMX ops (one wrapper per op;
   :data:`ENDPOINTS` is the source of truth). Every ASMX parameter is required by the host, so a wrapper always
@@ -15,7 +15,7 @@ Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen
   (descriptions never live in ``schemas/**``).
 * ``tools/codegen/ibba_column_descriptions.snippet.yaml`` -- ``{ibba_<short>: {column: text}}``, the block for
   ``manual_column_descriptions.yaml`` (gitignored). An empty, short or filler text fails the run.
-* ``tests/fixtures/ibba/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/ibba/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 ``gen_ibba_segev.py`` reuses :func:`emit` for the second spec.
 

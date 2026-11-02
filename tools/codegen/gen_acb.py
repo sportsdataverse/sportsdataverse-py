@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_feb.py`` (itself ``gen_asa.py``
 with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the returns md from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/acb.yaml`` -- 45 wrappers over the spec's 33 routes. One route feeds several frames
   (the box score feeds ``player_box``, ``team_box`` and ``box_info``; ``/Menu/competition-data`` feeds four), each
@@ -17,7 +17,7 @@ with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and
   ``manual_column_descriptions.yaml`` (gitignored). Text comes from :data:`LOCAL_BY` (a column whose meaning differs
   by wrapper), then the ``acb-returns.md`` row of the column's source path, then :data:`LOCAL` (derived columns).
   An empty, short (after the frame's noun is appended) or filler text fails the run.
-* ``tests/fixtures/acb/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/acb/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_acb.py``
 """

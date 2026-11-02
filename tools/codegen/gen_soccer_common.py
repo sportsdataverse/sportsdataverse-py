@@ -5,7 +5,7 @@ the reference-repo path (:func:`refs_root`, :func:`refs_dir`), spec and capture 
 deterministic YAML writers. A generator imports these rather than keeping its own copy (A-L22/A-L24).
 
 ``gen_asa.py``, ``gen_mls.py`` and ``gen_nwsl.py`` all read a frozen OpenAPI spec
-plus the committed sample payloads from the same ``sdv-internal-refs`` checkout
+plus the committed sample payloads from the same private reference checkout
 and emit an endpoint YAML + per-endpoint returns-schemas. Everything they do
 identically lives here so the three scripts carry only their provider-specific
 route curation.
@@ -35,8 +35,11 @@ from sportsdataverse.dl_utils import underscore
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Windows dev-box fallback, matching the sibling generators (gen_cbs, gen_on3).
-_WINDOWS_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
+#: Env var naming the maintainers' private reference checkout (frozen specs, captures, returns notes).
+#: There is no default: unset, :func:`refs_root` names a path that never exists, so a generator that needs
+#: the checkout stops (:func:`refs_dir`) or skips its spec cross-check (``gen_sports247``).
+REFS_ENV = "SDV_REFS_REPO"
+_REFS_UNSET = ROOT / ".refs-unset"
 
 # polars dtype -> the R-style type vocabulary the returns-schemas use.
 _NUMERIC_KINDS = ("integer", "numeric")
@@ -276,20 +279,17 @@ _SEPARATOR_ROW = re.compile(r"^[\s|:-]+$")
 
 
 def refs_root() -> Path:
-    """The ``sdv-internal-refs`` checkout: ``$SDV_INTERNAL_REFS_REPO``, else a sibling checkout, else the default.
+    """The private reference checkout named by ``$SDV_REFS_REPO`` (a never-existing path when unset).
 
     A generator that reads the repo through fixed sub-paths (rather than one marker file, which is
     :func:`refs_dir`'s job) starts here.
     """
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    if env:
-        return Path(env)
-    sibling = ROOT.parent / "sdv-internal-refs"
-    return sibling if sibling.exists() else _WINDOWS_REFS
+    env = os.environ.get(REFS_ENV)
+    return Path(env) if env else _REFS_UNSET
 
 
 def refs_dir(source: str, marker: str) -> Path:
-    """Resolve ``sdv-internal-refs/<source>`` (env -> sibling checkout -> default).
+    """Resolve ``<reference checkout>/<source>`` from ``$SDV_REFS_REPO``.
 
     Args:
         source: sub-directory of the reference repo (``"asa"``, ``"mls"``, ``"nwsl"``).
@@ -299,15 +299,12 @@ def refs_dir(source: str, marker: str) -> Path:
         The resolved directory.
 
     Raises:
-        SystemExit: when no candidate contains ``marker``.
+        SystemExit: when ``$SDV_REFS_REPO`` is unset or its ``source`` lacks ``marker``.
     """
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    candidates = [Path(env)] if env else []
-    candidates += [ROOT.parent / "sdv-internal-refs", _WINDOWS_REFS]
-    for base in candidates:
-        if (base / source / marker).exists():
-            return base / source
-    raise SystemExit(f"{source}: spec not found -- set SDV_INTERNAL_REFS_REPO to the sdv-internal-refs checkout")
+    base = refs_root()
+    if (base / source / marker).exists():
+        return base / source
+    raise SystemExit(f"{source}: spec not found -- set {REFS_ENV} to the private reference checkout")
 
 
 def load_spec(refs: Path, filename: str) -> dict:

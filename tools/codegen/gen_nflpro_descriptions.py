@@ -2,8 +2,8 @@
 
 The NGS field names are cryptic (``avgTTT``, ``croeNd``, ``bhPct``) and pro.nfl.com publishes
 no column glossary, so nothing here is guessed from a name alone. Every description rests on
-one of three checks run against the complete 2025 REG captures in
-``sdv-internal-refs/nfl/nflpro/captures/secured/``:
+one of three checks run against the maintainers' complete 2025 REG captures of the
+secured pro.nfl.com endpoints:
 
 * **nflverse crosswalk** -- the column's values equal a ``load_nfl_nextgen_stats`` column for
   the same players (``avg_ttt`` = ``avg_time_to_throw``, ``x_cmp`` = ``expected_completion_percentage``,

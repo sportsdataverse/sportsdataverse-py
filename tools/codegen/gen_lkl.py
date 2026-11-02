@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_feb.py`` (itself ``gen_asa.py`` with
 the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and ``lkl-returns.md`` from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/lkl.yaml`` -- 14 wrappers over the spec's 10 routes (7 JSON, 3 HTML). One route can feed
   several frames (``/boxscore`` feeds ``player_box``, ``team_box`` and ``period_scores``; ``/rungtynes`` feeds
@@ -19,7 +19,7 @@ the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and ``lk
   ``manual_column_descriptions.yaml`` (Integration merges it). Text comes from :data:`LOCAL_BY` (a column whose
   meaning differs by wrapper), :data:`LOCAL` (derived and renamed columns), then the ``lkl-returns.md`` row of the
   same record path. An empty, short or filler text fails the run.
-* ``tests/fixtures/lkl/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/lkl/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_lkl.py``
 """

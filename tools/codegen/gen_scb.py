@@ -1,8 +1,8 @@
 """Generate the ``scb`` flat-API endpoint YAML + returns-schemas (BBL and DBBL, the SCB API on two hosts).
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on ``gen_liiga.py``, with the shared
-plumbing in ``gen_soccer_common.py``. Reads the frozen spec and ``scb-returns.md`` from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+plumbing in ``gen_soccer_common.py``. Reads the frozen spec and ``scb-returns.md`` from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/scb.yaml`` -- 23 wrappers over the spec's 17 routes. One route can feed several
   frames (``/games/{gameId}/stats``: players, teams, actions), each with its own parser; :data:`ENDPOINTS` is the
@@ -19,7 +19,7 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
   the run.
 * ``sportsdataverse/basketball/scb/scb_dtypes.py`` -- each parser's column dtypes (the returns-schema types), so an
   empty or all-null frame is typed like a populated one.
-* ``tests/fixtures/scb/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/scb/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_scb.py``
 """
@@ -46,7 +46,7 @@ FIXTURES = ROOT / "tests" / "fixtures" / "scb"
 SCHEMA_PREFIX = "scb_"
 #: Column descriptions, keyed ``scb_<short>`` -> column; merged into manual_column_descriptions.yaml.
 NOTES = ROOT / "tools" / "codegen" / "notes" / "scb_descriptions.yaml"
-#: The spec's route list, committed so the tests check ENDPOINTS without the refs checkout.
+#: The spec's route list, committed so the tests check ENDPOINTS without the reference checkout.
 SPEC_PATHS = FIXTURES / "spec_paths.json"
 DTYPES_MODULE = ROOT / "sportsdataverse" / "basketball" / "scb" / "scb_dtypes.py"
 #: What tests/codegen/test_manual_descriptions.py rejects as filler.

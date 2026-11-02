@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Shares :func:`gen_ibba.emit` (the YAML,
 schema and description-snippet writer) with ``gen_ibba.py``. Reads the frozen ``ibba-segev.openapi.yaml`` from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/ibba_segev.yaml`` -- 6 wrappers over the spec's 3 methods (``getGameInfo`` feeds
   ``game_info`` and ``rosters``; ``getBoxScore`` feeds ``player_box``, ``team_box`` and ``period_scores``;

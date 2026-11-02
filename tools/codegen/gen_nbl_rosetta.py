@@ -2,8 +2,8 @@
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on ``gen_liiga.py``, with the
 shared plumbing in ``gen_soccer_common.py``. Reads the frozen spec, the returns md and (for the column
-descriptions) nothing else from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the
-sibling checkout), and emits:
+descriptions) nothing else from the maintainers' private reference checkout (``$SDV_REFS_REPO``), and
+emits:
 
 * ``tools/codegen/endpoints/nbl_rosetta.yaml`` -- 22 wrappers over the spec's 18 paths. One route can feed
   several frames (``/match/{match_id}/live/all``: header, official player box, team box by period, player box
@@ -45,7 +45,7 @@ FIXTURES = ROOT / "tests" / "fixtures" / "nbl_rosetta"
 SCHEMA_PREFIX = "nbl_rosetta_"
 #: Column descriptions, keyed ``nbl_rosetta_<short>`` -> column; merged into manual_column_descriptions.yaml.
 SNIPPET = ROOT / "tools" / "codegen" / "nbl_rosetta_column_descriptions.snippet.yaml"
-#: The spec's route list, committed so the tests check ENDPOINTS without the refs checkout.
+#: The spec's route list, committed so the tests check ENDPOINTS without the reference checkout.
 SPEC_PATHS = FIXTURES / "spec_paths.json"
 #: Each parser's column dtypes, from the returns-schemas, in a package-safe module.
 DTYPES_MODULE = ROOT / "sportsdataverse" / "basketball" / "nbl_au" / "nbl_rosetta_dtypes.py"

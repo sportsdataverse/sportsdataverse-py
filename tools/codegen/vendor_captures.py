@@ -1,4 +1,4 @@
-"""Vendor trimmed copies of the private sdv-internal-refs real captures into
+"""Vendor trimmed copies of the maintainers' private real captures into
 ``tests/fixtures`` so the returns-schema generators (``gen_nba_stats.py``,
 ``gen_on3.py``) can derive column names and types from what the parsers emit.
 
@@ -10,7 +10,7 @@ and refuses to write a fixture that drifts.
 
 Run (needs the private repo checkout)::
 
-    SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
+    SDV_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
 """
 
 from __future__ import annotations

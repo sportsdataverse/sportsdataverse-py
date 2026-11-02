@@ -1,8 +1,8 @@
 """Generate the ``atrium`` flat-API endpoint YAML + returns-schemas (Sportradar Atrium / Synergy embed API).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_liiga.py``, with the
-shared plumbing in ``gen_soccer_common.py``. Reads the frozen spec from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and the committed fixtures, and emits:
+shared plumbing in ``gen_soccer_common.py``. Reads the frozen spec from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and the committed fixtures, and emits:
 
 * ``tools/codegen/endpoints/atrium.yaml`` -- 22 wrappers over the spec's 14 paths. One route can feed
   several frames (``fixture_detail`` feeds the game header, the periods, the box score, the team box

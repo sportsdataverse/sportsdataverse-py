@@ -1,8 +1,8 @@
 """Generate the ``kzs`` flat-API endpoint YAML + returns-schemas (KZS FMS public API, ``api.kzs.si/api/v1/public``).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_legabasket.py`` with the shared
-plumbing in ``gen_soccer_common.py``. Reads the frozen spec and the returns md from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+plumbing in ``gen_soccer_common.py``. Reads the frozen spec and the returns md from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/kzs.yaml`` -- 23 wrappers over the spec's 18 paths. One route can feed several frames (the
   match header feeds ``kzs_match`` and ``kzs_period_scores``, the box score route three frames, the play-by-play route
@@ -17,7 +17,7 @@ plumbing in ``gen_soccer_common.py``. Reads the frozen spec and the returns md f
   (:data:`SECTIONS`). A filler or missing description stops the run.
 * ``sportsdataverse/basketball/kzs/kzs_dtypes.py`` -- each parser's column dtypes (the returns-schema types), so an
   empty or all-null frame is typed like a populated one.
-* ``tests/fixtures/kzs/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/kzs/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_kzs.py``
 """

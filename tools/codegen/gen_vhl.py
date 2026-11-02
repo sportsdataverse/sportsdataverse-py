@@ -2,8 +2,8 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_liiga.py``
 (itself ``gen_asa.py`` with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen
-spec and the returns md from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``,
-else the sibling checkout) and emits:
+spec and the returns md from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/vhl.yaml`` -- 13 wrappers over the spec's 7 HTML routes. One page
   feeds several frames (the report: game info, goals, penalties, skater and goalie lines; the
@@ -40,7 +40,7 @@ from sportsdataverse.hockey.vhl.vhl_runtime import ONLINE, REQUEST_KEY, STAGES
 HOST = "https://www.vhlru.ru"
 SPEC = "vhl.openapi.yaml"
 SNIPPET = ROOT / "tools" / "codegen" / "vhl_column_descriptions.snippet.yaml"
-#: Owner flag (sdv-internal-refs/vhl/README.md), rendered as a Notes item on every wrapper.
+#: Owner flag (from the maintainers' VHL reference notes), rendered as a Notes item on every wrapper.
 SANCTIONS = (
     "Owner flag: the VHL is run by Russian league operators, and "
     "several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine "

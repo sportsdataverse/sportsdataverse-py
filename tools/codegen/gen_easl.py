@@ -1,8 +1,8 @@
 """Generate the ``easl`` flat-API endpoint YAML + returns-schemas (East Asia Super League, via an UNOFFICIAL proxy).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_kbl.py`` with the shared plumbing in
-``gen_soccer_common.py``. Reads the frozen spec, the returns md and the presence sidecars from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+``gen_soccer_common.py``. Reads the frozen spec, the returns md and the presence sidecars from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/easl.yaml`` -- 18 wrappers over the spec's 18 paths (one parser per route).
 * ``tools/codegen/schemas/native/easl/<short>.yaml`` -- one returns-schema per wrapper: the columns of its parser
@@ -14,7 +14,7 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
   (route-specific), the route's own ``easl-returns.md`` row (:data:`SECTIONS`), else :data:`LOCAL` (columns the parser
   derives). A filler or missing description stops the run.
 * ``tests/fixtures/easl/spec_paths.json`` -- the spec's routes and the route each wrapper reads, for the tests (CI has
-  no refs checkout).
+  no reference checkout).
 
 It also checks the statistic blocks of ``easl_parsers`` against the refs ``captures/presence`` sidecars (computed on the
 FULL bodies): a statistic the sidecars have and the parser lacks, or one the parser types Int64 that was seen as a

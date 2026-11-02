@@ -1,30 +1,28 @@
 """Offline tests for the PFF Developer API stem (``tools/codegen/gen_pff_api.py``).
 
 Two layers: invariants of the COMMITTED ``pff_api.yaml`` (always run -- they guard the wire
-contract even without the sibling checkout), and a byte-reproduction check that regenerates from
-the vendored spec + captures in ``sdv-internal-refs`` (skipped when that checkout is absent).
+contract even without the reference checkout), and a byte-reproduction check that regenerates from
+the vendored spec + captures in the maintainers' private reference checkout (``$SDV_REFS_REPO``; skipped
+when it is absent).
 """
 
 import importlib.util
 import json
-import os
 from pathlib import Path
 
 import pytest
 import yaml
 
+from tools.codegen.gen_soccer_common import refs_root
+
 ROOT = Path(__file__).resolve().parents[2]
 YAML = ROOT / "tools/codegen/endpoints/pff_api.yaml"
-_REAL_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-_REFS = Path(
-    os.environ.get("SDV_INTERNAL_REFS_REPO")
-    or next((str(c) for c in (ROOT.parent / "sdv-internal-refs", _REAL_REFS) if c.exists()), str(_REAL_REFS))
-)
+_REFS = refs_root()
 _SPEC = _REFS / "pff" / "developer" / "pff-developer.openapi.json"
 
 
 def _gen():
-    """A fresh import of the generator (its paths read ``SDV_INTERNAL_REFS_REPO`` at import)."""
+    """A fresh import of the generator (its paths read ``SDV_REFS_REPO`` at import)."""
     spec = importlib.util.spec_from_file_location("gen_pff_api", ROOT / "tools/codegen/gen_pff_api.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -101,18 +99,18 @@ def test_every_parsed_route_documents_its_columns():
 
 
 def test_generator_refuses_a_checkout_without_union_captures(tmp_path, monkeypatch):
-    """Against an internal-refs commit older than the /v1 union captures, build() would quietly
+    """Against a reference checkout older than the /v1 union captures, build() would quietly
     rebuild the old EMPTY schemas and main() would delete the parsed ones: it must stop instead."""
     dev = tmp_path / "pff" / "developer"
     (dev / "captures").mkdir(parents=True)
     (dev / "pff-developer.openapi.json").write_text('{"paths": {}}', encoding="utf-8")
     (dev / "captures" / "schemas_v1.json").write_text('{"v1/nfl/player_seasons": {"tables": {}}}', encoding="utf-8")
     (dev / "captures" / "schemas_v2.json").write_text("{}", encoding="utf-8")
-    monkeypatch.setenv("SDV_INTERNAL_REFS_REPO", str(tmp_path))
+    monkeypatch.setenv("SDV_REFS_REPO", str(tmp_path))
     mod = _gen()
     with pytest.raises(SystemExit, match="predates the /v1 union captures") as exc:
         mod.build()
-    assert str(tmp_path) in str(exc.value) and "sdv-internal-refs#27" in str(exc.value)
+    assert str(tmp_path) in str(exc.value) and "pull it" in str(exc.value)
     # with a union body present the guard lets it through (an empty spec -> no endpoints)
     (dev / "captures" / "schemas_v1.json").write_text('{"v1/nfl/player_seasons": {"union": {}}}', encoding="utf-8")
     assert mod.build()[0]["endpoints"] == []
@@ -144,7 +142,7 @@ def test_generator_names_each_route_missing_its_union_capture(tmp_path, monkeypa
     (dev / "captures" / "schemas_v2.json").write_text("{}", encoding="utf-8")
     s1 = {"v1/nfl/team_summary": {"union": {"team_summary": [{"game_id": 1}]}}}  # some OTHER route
     (dev / "captures" / "schemas_v1.json").write_text(json.dumps(s1), encoding="utf-8")
-    monkeypatch.setenv("SDV_INTERNAL_REFS_REPO", str(tmp_path))
+    monkeypatch.setenv("SDV_REFS_REPO", str(tmp_path))
     mod = _gen()
     with pytest.raises(SystemExit, match="no /v1 union capture for player_kickoff_summary, player_seasons"):
         mod.build()
@@ -171,7 +169,9 @@ def test_league_dtypes_widen_instead_of_first_league_winning():
     assert cols == {"player_id": "integer", "ypa": "numeric", "one_percent": "numeric"}
 
 
-@pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff/developer spec not present (local-only source)")
+@pytest.mark.skipif(
+    not _SPEC.exists(), reason="pff/developer spec not present ($SDV_REFS_REPO unset; local-only source)"
+)
 def test_generator_reproduces_the_committed_yaml():
     mod = _gen()
     try:

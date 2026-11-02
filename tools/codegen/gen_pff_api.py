@@ -7,12 +7,12 @@ stem -- one ``pff_api_<operationId>`` wrapper per operation, mirroring the ``res
 <operationId>`` command names -- plus the returns-schemas the reference docs render.
 
 Inputs:
-    * ``pff/developer/pff-developer.openapi.json`` in the sibling ``sdv-internal-refs``
-      checkout (``SDV_INTERNAL_REFS_REPO``), vendored byte-for-byte from PFF.
+    * ``pff/developer/pff-developer.openapi.json`` in the maintainers' private reference
+      checkout (``$SDV_REFS_REPO``), vendored byte-for-byte from PFF.
     * ``pff/developer/captures/schemas_v{1,2}.json`` there -- the live-captured columns
       (``/v2`` tables describe themselves; ``/v1`` columns are the union across rows). A ``/v1``
-      target may also carry a ``union`` body (every row list folded into one row; sdv-internal-refs
-      #27 onward, required): ANY parsed ``/v1`` route with one is documented as what its parser
+      target may also carry a ``union`` body (every row list folded into one row; required, and
+      absent from older checkouts): ANY parsed ``/v1`` route with one is documented as what its parser
       emits on that body (``_parsed_schema``), unless it reuses a non-empty legacy schema.
     * this repo's LEGACY stem ``tools/codegen/endpoints/pff.yaml``: a ``/v1`` route that
       already existed on premium.pff.com returns the identical wire format, so it reuses
@@ -62,7 +62,7 @@ _SKIP_PARAMS = {"export", "format", "table"}  # CSV-only switches
 _PY_TYPE = {"integer": "int", "number": "float", "boolean": "bool"}
 _DTYPE = {"integer": "integer", "number": "numeric", "string": "character", "boolean": "logical"}
 _POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
-_STALE_REFS = f"sdv-internal-refs at {_REFS} predates the /v1 union captures (sdv-internal-refs#27); pull it"
+_STALE_REFS = f"the reference checkout at {_REFS} predates the /v1 union captures; pull it"
 
 
 def snake(s: str) -> str:
@@ -349,7 +349,7 @@ def build() -> tuple[dict, Dict[str, dict]]:
         # the per-route twin of _load's guard: one stale or partial capture must not ship an
         # empty returns schema (or delete a parsed one) for the routes it lacks
         raise SystemExit(
-            f"sdv-internal-refs at {_REFS} has no /v1 union capture for {', '.join(missing)}; their returns "
+            f"the reference checkout at {_REFS} has no /v1 union capture for {', '.join(missing)}; their returns "
             "schemas would be empty. Capture them: pff/developer/tools/capture.py --only v1 --grep '^(...)$'"
         )
     for slug, (parser, bodies) in parsed.items():

@@ -9,8 +9,8 @@ Only the nine keyless market-data routes are wrapped. ``/portfolio/*``, order
 placement and ``/exchange/announcements`` need a ``KALSHI-ACCESS-KEY`` plus an RSA
 signature; they are out of scope and absent from the frozen spec.
 
-Reads the frozen spec and the committed captures from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+Reads the frozen spec and the committed captures from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/kalshi.yaml`` -- one endpoint per GET route (9).
 * ``tools/codegen/schemas/native/kalshi/<short>.yaml`` -- returns-schema per
@@ -156,7 +156,9 @@ def main() -> None:
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1
-            schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see ENDPOINTS.md)"
+            schema["unverified"] = (
+                f"no committed capture in the reference checkout's {STEM}/captures (see ENDPOINTS.md)"
+            )
             schema["columns"] = []
         else:
             schema["columns"] = columns_from_frame(

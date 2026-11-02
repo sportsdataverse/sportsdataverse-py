@@ -1,5 +1,5 @@
 # Mutation registry: the "mutation that must go red" line of every gate in the quality program's
-# ledgers (ClaudeCowork plans/2026-10-08-sdv-py-quality-refactor/gates/*.md), run by
+# ledgers (kept in the maintainers' private notes), run by
 # tools/run_mutants.py (CI: .github/workflows/quality.yml `mutants` job).
 #
 # Row fields:

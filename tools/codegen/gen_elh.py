@@ -1,5 +1,5 @@
 """Generate the ``elh`` (Czech Extraliga) flat-API endpoint YAML + returns-schemas from the
-hokej.cz OpenAPI spec (``sdv-internal-refs/hokejcz/``: the public S3 bucket behind hokej.cz
+hokej.cz OpenAPI spec (``hokejcz/``: the public S3 bucket behind hokej.cz
 plus the eSports Media scoreboard; one spec, per-path ``servers``).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_asa.py``,

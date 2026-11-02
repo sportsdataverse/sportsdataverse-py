@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_aba.py`` (itself ``gen_asa.py`` with
 the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the returns md from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/cebl.yaml`` -- 12 wrappers, one per route of ``cebl.openapi.yaml`` (the API's own
   ``/openapi.json``); :data:`ENDPOINTS` is the source of truth. The wrappers take the END year (= the calendar
@@ -14,7 +14,7 @@ the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the 
   (descriptions never live in ``schemas/**``).
 * ``tools/codegen/notes/cebl_descriptions.yaml`` -- ``{cebl_<short>: {column: text}}``, the block for
   ``manual_column_descriptions.yaml`` (Integration merges it). A filler or missing description stops the run.
-* ``tests/fixtures/cebl/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/cebl/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_cebl.py``
 """
@@ -38,7 +38,7 @@ SPEC = "cebl.openapi.yaml"
 FIXTURES = ROOT / "tests" / "fixtures" / "cebl"
 #: Column descriptions, keyed ``cebl_<short>`` -> column; merged into manual_column_descriptions.yaml.
 NOTES = ROOT / "tools" / "codegen" / "notes" / "cebl_descriptions.yaml"
-#: The spec's route list, committed so the tests check ENDPOINTS without the refs checkout.
+#: The spec's route list, committed so the tests check ENDPOINTS without the reference checkout.
 SPEC_PATHS = FIXTURES / "spec_paths.json"
 #: What tests/codegen/test_manual_descriptions.py rejects as filler.
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.IGNORECASE)

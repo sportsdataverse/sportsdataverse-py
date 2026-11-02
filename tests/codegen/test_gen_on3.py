@@ -7,11 +7,12 @@ network or the real spec file, plus an idempotence check on ``main()``.
 from __future__ import annotations
 
 import importlib.util
-import os
 import sys
 from pathlib import Path
 
 import pytest
+
+from tools.codegen.gen_soccer_common import refs_root
 
 
 _GEN = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "gen_on3.py"
@@ -65,14 +66,10 @@ def test_usable_drops_non200():
     assert gen._usable({}) is True
 
 
-_SPEC = (
-    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"))
-    / "on3"
-    / "on3-recruit-database.openapi.yaml"
-)
+_SPEC = refs_root() / "on3" / "on3-recruit-database.openapi.yaml"
 
 
-@pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs on3 spec not present (local-only source)")
+@pytest.mark.skipif(not _SPEC.exists(), reason="on3 spec not present ($SDV_REFS_REPO unset; local-only source)")
 def test_idempotent(tmp_path, monkeypatch):
     """Two consecutive ``main()`` runs produce byte-identical endpoint YAML."""
     gen = _load_gen()

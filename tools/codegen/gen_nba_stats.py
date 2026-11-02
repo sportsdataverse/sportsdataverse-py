@@ -319,8 +319,8 @@ _SEASON_TYPE_DOC = {
 
 _LEAGUE_SPECIFIC = re.compile(r"(?i)(id(s|list)?\d*|season(year)?)$")
 # G League entities for the params whose hoopR default is an NBA entity: the GameID / PlayerID / TeamID
-# the 2026-08 capture sweep took the committed G League captures with (sdv-internal-refs
-# nba/tools/sample_params.py SAMPLE_VALUES["20"]: a 2025 G League game, Jahmir Young, a G League
+# the 2026-08 capture sweep took the committed G League captures with (the
+# maintainers' capture tool's SAMPLE_VALUES["20"]: a 2025 G League game, Jahmir Young, a G League
 # franchise), and for VsPlayerID a player in that game's box score (Alex Morales,
 # tests/fixtures/nbagl_stats/endpoints/boxscoretraditionalv2.json). A param missing here (GROUP_ID)
 # gets no default: the caller passes one.

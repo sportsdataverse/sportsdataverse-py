@@ -1,13 +1,13 @@
 """Generate the ``f1`` flat-API endpoint YAML + returns-schemas from the Jolpica F1
-(Ergast-compatible) recon in ``sdv-internal-refs/f1/``.
+(Ergast-compatible) API recon (``api.jolpi.ca``).
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_euroleague.py`` (#704), with the shared plumbing in ``gen_soccer_common.py``.
 
 Reads the frozen spec (``f1-jolpica.openapi.yaml``, 15 ``.json`` routes sharing the
 ``MRData`` envelope), the committed 3-row captures and the flattened returns tables
-(``f1-returns.md``) from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``,
-else the sibling checkout) and emits:
+(``f1-returns.md``) from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/f1.yaml`` -- one endpoint per route, host
   ``https://api.jolpi.ca/ergast/f1``, the shared keyless ``_get``, parser
@@ -248,7 +248,7 @@ def main() -> None:
                 raise SystemExit(f"{STEM}/{short}: columns missing from {STEM}-returns.md: {blank}")
         else:
             schema["columns"] = []
-            schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures ({path})"
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures ({path})"
         write_yaml(schema_dir / f"{short}.yaml", schema)
     print(f"{STEM}: {len(ops)} endpoints")
 

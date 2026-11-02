@@ -5,7 +5,7 @@ Idempotent: same spec + same captures + same fixtures -> byte-identical output. 
 ``gen_asa.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
 The generator reads the frozen spec and the route-scoped ``nationalleague-returns.md`` from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/nationalleague.yaml`` -- 17 wrappers over the 12 spec routes. The game
   page (``/games/{gameId}``) feeds six (overview, pbp, lineups, player_box, team_stats, shots);

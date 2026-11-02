@@ -1,6 +1,6 @@
 """Generate the PFF Premium Stats flat-API stem from the reverse-engineered OpenAPI.
 
-Reads ``pff/pff-premium.openapi.yaml`` from the ``sdv-internal-refs`` repo and emits a
+Reads ``pff/pff-premium.openapi.yaml`` from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits a
 **normal flat stem** (``tools/codegen/endpoints/pff.yaml``) plus per-report
 returns-schemas (``tools/codegen/schemas/native/pff/*.yaml``). ``league`` is an ordinary
 ``extra_param`` (enum ``nfl/ncaa/aaf/ufl``) on every view-family endpoint -- there is NO

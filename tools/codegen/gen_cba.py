@@ -2,8 +2,8 @@
 """Generate the ``cba`` flat-API endpoint YAML + returns-schemas (Chinese Basketball Association, data-server.cbaleague.com).
 
 Idempotent: same spec + same refs + same fixtures -> byte-identical output. Reads the frozen spec, ``cba-returns.md``
-and ``captures/presence`` from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling
-checkout) and emits:
+and ``captures/presence`` from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and
+emits:
 
 * ``sportsdataverse/basketball/cba/cba_dtypes.py`` -- the column dtypes of every parser, from the refs' ``presence``
   sidecars (the type set of every column over the FULL bodies the committed samples were cut from; a 3-row cut mistypes
@@ -16,7 +16,7 @@ checkout) and emits:
   ``manual_column_descriptions.yaml`` (Integration merges it), with the translated glossaries folded in.
 * ``tools/codegen/notes/cba_glossary.yaml`` -- the full nationality, position, team-name and play-by-play phrase
   glossaries (Chinese -> English) from the returns md.
-* ``tests/fixtures/cba/spec_paths.json`` -- the spec's route list, so tests never read the private refs checkout.
+* ``tests/fixtures/cba/spec_paths.json`` -- the spec's route list, so tests never read the private reference checkout.
 """
 
 from __future__ import annotations

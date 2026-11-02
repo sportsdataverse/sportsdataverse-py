@@ -74,7 +74,8 @@ def test_a_path_only_summary_reads_as_the_humanized_short_name():
     "text",
     [
         "# ponytail: a shortcut",
-        "see sdv-internal-refs/acb/README.md",
+        "see SDV_internal-refs/acb/README.md",  # the guard folds case and -/_
+        "in the Claude_Cowork plans",
         "see `dev/phase5f-live-proof.md`",
         "built in Task 5e.6",
         "nothing in Phase 5e exercises it",

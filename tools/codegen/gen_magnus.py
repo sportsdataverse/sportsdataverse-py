@@ -4,7 +4,7 @@ OpenAPI spec (``liguemagnus.com``, keyless).
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_asa.py``,
 with the shared plumbing in ``gen_soccer_common.py``.
 
-The spec (``sdv-internal-refs/ligue-magnus/``) models two sources on one host:
+The spec (``ligue-magnus/``) models two sources on one host:
 
 * seven **admin-ajax actions**, one physical endpoint dispatched by ``action``. The spec
   names each as a fragment path (``/wp-admin/admin-ajax.php#get_rencontres``); the wire

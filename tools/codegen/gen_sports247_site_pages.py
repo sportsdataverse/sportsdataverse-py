@@ -1,10 +1,10 @@
 """Generate the ``sports247_site_pages`` endpoint YAML + returns-schemas from the
 247Sports site-pages OpenAPI spec.
 
-Source of truth: ``sdv-internal-refs/247sports/site-pages.openapi.yaml`` (35
+Source of truth: ``247sports/site-pages.openapi.yaml`` (35
 auth-free ``247sports.com/*.json`` front-end page-model routes, 17 component
 schemas). Idempotent: the same spec yields byte-identical output. The spec path
-is resolved from ``$SDV_INTERNAL_REFS_REPO`` (default: the local workspace
+is resolved from ``$SDV_REFS_REPO`` (the maintainers' private reference
 checkout).
 
 Run: python tools/codegen/gen_sports247_site_pages.py

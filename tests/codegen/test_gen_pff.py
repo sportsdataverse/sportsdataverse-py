@@ -8,19 +8,18 @@ rewrites ``schemas/native/pff/``, so running it against the real tree raced ever
 parallel test that reads those files.
 """
 
-import os
 from pathlib import Path
 
 import pytest
 import yaml
 
+from tools.codegen.gen_soccer_common import refs_root
+
 ROOT = Path(__file__).resolve().parents[2]
-_SPEC = (
-    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"))
-    / "pff"
-    / "pff-premium.openapi.yaml"
+_SPEC = refs_root() / "pff" / "pff-premium.openapi.yaml"
+pytestmark = pytest.mark.skipif(
+    not _SPEC.exists(), reason="pff spec not present ($SDV_REFS_REPO unset; local-only source)"
 )
-pytestmark = pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff spec not present (local-only source)")
 
 
 @pytest.fixture
