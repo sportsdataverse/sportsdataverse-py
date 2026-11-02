@@ -56,7 +56,7 @@ None of them is needed for the core loaders and ESPN wrappers.
 | `pff` | `pip install "sportsdataverse[pff]"` | Playwright, for the optional headless sign-in of the legacy PFF Premium client |
 | `sdvplot` | `pip install "sportsdataverse[sdvplot]"` | [sdvplot](https://sdvplot.sportsdataverse.org/) 0.1.1 or later with matplotlib (`sdvplot[mpl]`): team logos, colors and chart themes |
 | `sportypy` | `pip install "sportsdataverse[sportypy]"` | [sportypy](https://sportypy.sportsdataverse.org/): rulebook fields, rinks and courts to draw coordinates on |
-| `mcp` | `pip install "sportsdataverse[mcp]"` | The `mcp` SDK, for the [sdv-docs MCP server](#the-sdv-docs-mcp-server) |
+| `mcp` | `pip install "sportsdataverse[mcp]>=0.2.0b1"` | The `mcp` SDK, for the [sdv-docs MCP server](#the-sdv-docs-mcp-server) |
 | `all` | `pip install "sportsdataverse[all]"` | Every extra above except `mcp`, plus `patchright` (the stats.ncaa.org browser transport) |
 
 Three notes on the extras:
@@ -119,7 +119,7 @@ Returns tables, the endpoint metadata and the R packages' indexes. It needs the
 `mcp` extra:
 
 ```bash
-pip install --pre "sportsdataverse[mcp]"   # 0.2.0b1 or newer; 0.1.4 has no sdv-docs
+pip install "sportsdataverse[mcp]>=0.2.0b1"   # 0.1.4 has no sdv-docs; the pin upgrades it
 sdv-docs --version
 ```
 
