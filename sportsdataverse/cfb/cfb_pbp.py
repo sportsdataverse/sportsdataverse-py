@@ -3559,10 +3559,14 @@ class CFBPlayProcess(object):
         # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
         # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
         # same way), so the count is bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
-        # allots 3 and each overtime period 1, and the count never goes below 0.
+        # allots 3 and each overtime window 1, and the count never goes below 0. NCAA Rule 3-1-3-h:
+        # one timeout per overtime period through 2024; from 2025 (rules change of 2025-04-16) one for
+        # the first, one for the second, and one from the third overtime until the game ends.
         period = pl.col("period.number")
         ot_period = _overtime_period(pbp_txt["plays"].columns)
-        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_period)
+        season = (pbp_txt["header"].get("season") or {}).get("year") or 0
+        ot_window = pl.min_horizontal(ot_period, pl.lit(7)) if season >= 2025 else ot_period
+        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_window)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
         home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
