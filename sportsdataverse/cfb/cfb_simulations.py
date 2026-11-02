@@ -25,17 +25,21 @@ the SAME semantics so outputs cross-validate):
   rank-1/rank-2 pair — realistic projection input); conferences without a
   CONF_CHAMP row get a generated rank-1 vs rank-2 game (rank 1 home,
   neutral flag set).
-* **CFP bracket reseeds each round (kept simple).** First round at the
-  better seed's home site, all later rounds neutral; after each round the
-  survivors are re-paired best seed vs worst seed. The real bracket is
-  fixed after the first round — reseeding is the documented simplification
-  and generalizes to any field size (byes = next power of two minus field).
+* **Fixed CFP bracket, no reseeding.** Standard bracket order with the top
+  seeds on byes (byes = next power of two minus field size). For the
+  12-team CFP: 12@5, 11@6, 10@7 and 9@8 on campus; quarterfinals 1 v 8/9,
+  2 v 7/10, 3 v 6/11, 4 v 5/12; semifinals the 1/4 side v the 2/3 side.
+  First round at the better seed's home, later rounds neutral.
+* **Season rules.** A ``season``-keyed input season picks the tiebreaker
+  registry epochs and CFP selection rule (see
+  :func:`sportsdataverse.cfb.cfb_playoff_seeds`); ``sim``-keyed input uses
+  the current rules.
 * **No draft order** (CFB has none).
 """
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union, cast
 
 import numpy as np
 import polars as pl
@@ -239,6 +243,20 @@ def _generate_conf_champ_games(standings: pl.DataFrame, games: pl.DataFrame, wee
     )
 
 
+def _bracket_slots(n: int) -> Dict[int, int]:
+    """seed -> bracket slot of a fixed single-elimination bracket for ``n`` seeds.
+
+    Standard bracket order (1 v P, P/2 v P/2+1, ...; P = next power of two),
+    so the top ``P - n`` seeds draw byes. For 12 this is the CFP bracket:
+    1 v 8/9 and 4 v 5/12 on one side, 2 v 7/10 and 3 v 6/11 on the other.
+    """
+    order = [1]
+    while len(order) < n:
+        m = 2 * len(order) + 1
+        order = [s for x in order for s in (x, m - x)]
+    return {seed: slot for slot, seed in enumerate(order) if seed <= n}
+
+
 def _simulate_bracket(
     field: pl.DataFrame,
     teams: pl.DataFrame,
@@ -247,37 +265,37 @@ def _simulate_bracket(
     week_start: int,
     rng: np.random.Generator,
 ) -> Tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
-    """Single-elimination CFP bracket, reseeded each round (documented simplification).
+    """Fixed single-elimination CFP bracket (no reseeding), see :func:`_bracket_slots`.
 
-    Returns (champions frame [sim, team], teams, games).
+    First round at the better seed's home, later rounds neutral (better seed
+    listed home). Returns (champions frame [sim, team], teams, games).
     """
-    rem = field.select("sim", "team", "seed")
-    n_sims = rem.select("sim").unique().height
+    if field.height == 0:
+        return pl.DataFrame(schema={"sim": pl.Int64, "team": pl.Utf8}), teams, games
+    n = int(cast(int, field.get_column("seed").max()))
+    slots = _bracket_slots(n)
+    slot_df = pl.DataFrame(
+        {"seed": list(slots), "_slot": list(slots.values())}, schema={"seed": pl.Int64, "_slot": pl.Int64}
+    )
+    alive = field.select("sim", "team", pl.col("seed").cast(pl.Int64)).join(slot_df, on="seed")
     week = week_start
-    first_round = True
-    while rem.height > n_sims:
-        n = rem.height // n_sims
-        if first_round:
-            p = 1 << (n - 1).bit_length()  # next power of two >= n
-            byes = p - n
-        else:
-            byes = 0
-        rem = rem.sort(["sim", "seed"]).with_columns(pl.int_range(pl.len()).over("sim").alias("_pos"))
-        bye_teams = rem.filter(pl.col("_pos") < byes).drop("_pos")
-        playing = rem.filter(pl.col("_pos") >= byes).with_columns((pl.col("_pos") - byes).alias("_k"))
-        m = n - byes
-        top = playing.filter(pl.col("_k") < m // 2)
-        bottom = playing.filter(pl.col("_k") >= m // 2).with_columns(
-            (pl.lit(m - 1, dtype=pl.Int64) - pl.col("_k")).alias("_k")
+    for r in range(1, (n - 1).bit_length() + 1):
+        # teams sharing slot // 2**r meet this round; a lone team has a bye
+        a = (
+            alive.with_columns((pl.col("_slot") // (1 << r)).alias("_m"))
+            .sort(["sim", "_m", "seed"])
+            .with_columns(pl.int_range(pl.len()).over("sim", "_m").alias("_i"))
         )
-        rnd = top.join(bottom, on=["sim", "_k"], suffix="_low").select(
+        hi, lo = a.filter(pl.col("_i") == 0), a.filter(pl.col("_i") == 1)
+        byes = hi.join(lo, on=["sim", "_m"], how="anti").select(alive.columns)
+        rnd = hi.join(lo, on=["sim", "_m"], suffix="_low").select(
             "sim",
             pl.lit(week, dtype=pl.Int64).alias("week"),
             pl.lit("POST").alias("game_type"),
             pl.col("team").alias("home_team"),
             pl.col("team_low").alias("away_team"),
             pl.lit(None, dtype=pl.Float64).alias("result"),
-            pl.lit(0 if first_round else 1, dtype=pl.Int64).alias("neutral"),
+            pl.lit(0 if r == 1 else 1, dtype=pl.Int64).alias("neutral"),
         )
         games = pl.concat([games, rnd])
         teams, games = _apply_compute_results(compute_results, teams, games, week, rng)
@@ -285,11 +303,10 @@ def _simulate_bracket(
         winners = played.select(
             "sim",
             pl.when(pl.col("result") > 0).then(pl.col("home_team")).otherwise(pl.col("away_team")).alias("team"),
-        ).join(field.select("sim", "team", "seed"), on=["sim", "team"], how="left")
-        rem = pl.concat([bye_teams, winners])
+        ).join(alive, on=["sim", "team"], how="inner")
+        alive = pl.concat([byes, winners.select(alive.columns)])
         week += 1
-        first_round = False
-    return rem.select("sim", "team"), teams, games
+    return alive.select("sim", "team"), teams, games
 
 
 def cfb_simulations(
@@ -302,6 +319,7 @@ def cfb_simulations(
     tiebreaker_depth: str = "SOS",
     sim_include: str = "POST",
     rankings: Optional[FrameLike] = None,
+    tiebreaker_data: Optional[Dict[str, FrameLike]] = None,
     seed: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Dict[str, Union[pl.DataFrame, Any]]:
@@ -334,6 +352,12 @@ def cfb_simulations(
             to :func:`cfb_playoff_seeds`. When None, seeding falls back to
             the per-sim standings ordering (documented in
             :func:`cfb_playoff_seeds`).
+        tiebreaker_data: Optional external tiebreaker inputs forwarded to
+            every :func:`sportsdataverse.cfb.cfb_standings` call (dict with
+            ``"analytics_ratings"``, ``"cfp_rankings"``, ``"apr"`` frames),
+            held static across simulations — so simulated standings use the
+            official analytics / CFP-ranking / APR rungs instead of skipping
+            them to a coin toss.
         seed: Seed for the numpy RNG (deterministic runs).
         return_as_pandas: Return pandas DataFrames instead of polars.
 
@@ -379,6 +403,14 @@ def cfb_simulations(
     t = _validate_teams(teams)
     if g["sim"].n_unique() != 1:
         raise ValueError("`games` must contain exactly one season")
+    # a `season`-keyed input names the season whose rules apply; plain `sim` = current rules
+    season = int(g["sim"][0]) if "sim" not in list(games.columns) and "season" in list(games.columns) else None
+    st_kwargs: Dict[str, Any] = {
+        "tiebreaker_depth": tiebreaker_depth,
+        "tiebreaker_data": tiebreaker_data,
+        "season": season,
+        "rng": rng,
+    }
 
     base = g.drop("sim")
     sims_idx = pl.DataFrame({"sim": pl.int_range(1, simulations + 1, eager=True).cast(pl.Int64)})
@@ -398,7 +430,7 @@ def cfb_simulations(
 
     # Conference championships -------------------------------------------------
     if sim_include in ("CONF", "POST"):
-        interim = cfb_standings(games_all, t, tiebreaker_depth=tiebreaker_depth, rng=rng)
+        interim = cfb_standings(games_all, t, **st_kwargs)
         assert isinstance(interim, pl.DataFrame)
         max_week = int(games_all.get_column("week").max())
         generated = _generate_conf_champ_games(interim, games_all, max_week + 1)
@@ -418,10 +450,9 @@ def cfb_simulations(
     standings = cfb_standings(
         games_all,
         t,
-        tiebreaker_depth=tiebreaker_depth,
         playoff_seeds=playoff_seeds if sim_include == "POST" else None,
         rankings=rankings,
-        rng=rng,
+        **st_kwargs,
     )
     assert isinstance(standings, pl.DataFrame)
 

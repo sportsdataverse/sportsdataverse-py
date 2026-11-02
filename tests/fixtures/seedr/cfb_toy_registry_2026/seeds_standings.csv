@@ -1,0 +1,17 @@
+"sim","team","conference","conf_champ","win_pct","sov","sos","pd"
+1,"T01","SEC",TRUE,0.99,0.5,0.5,99
+1,"T02","Big Ten",TRUE,0.98,0.5,0.5,98
+1,"T03","Big Ten",FALSE,0.97,0.5,0.5,97
+1,"T04","Other",FALSE,0.96,0.5,0.5,96
+1,"T05","Big 12",FALSE,0.95,0.5,0.5,95
+1,"T06","ACC",TRUE,0.94,0.5,0.5,94
+1,"T07","SEC",FALSE,0.93,0.5,0.5,93
+1,"T08","Other",FALSE,0.92,0.5,0.5,92
+1,"T09","Other",FALSE,0.91,0.5,0.5,91
+1,"T10","Other",FALSE,0.9,0.5,0.5,90
+1,"T11","Other",FALSE,0.89,0.5,0.5,89
+1,"Notre Dame","FBS Independents",FALSE,0.88,0.5,0.5,88
+1,"T13","Sun Belt",TRUE,0.87,0.5,0.5,87
+1,"T14","Big 12",TRUE,0.86,0.5,0.5,86
+1,"T15","Other",FALSE,0.85,0.5,0.5,85
+1,"T16","MAC",TRUE,0.84,0.5,0.5,84

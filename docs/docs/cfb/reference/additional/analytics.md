@@ -681,28 +681,50 @@ print(st.head())
 
 ### cfb_playoff_seeds {#cfb_playoff_seeds}
 
-`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
+`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, season: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
 
-Assign College Football Playoff seeds (current straight-seeding rule).
+Assign College Football Playoff seeds (12-team straight seeding, by season).
 
-Implements the 2025 CFP rule: the field is the `playoff_seeds` (12)
-best-ranked teams with the 5 highest-ranked conference champions
-guaranteed inclusion; seeds are assigned straight by ranking order (no
-champion bump to the top four). The rule evolves — it lives in this ONE
-function so it can be updated in one place.
+Two selection rules, picked by `season`; both seed the field straight by
+ranking order (no champion bump to the top four):
+
+* **2026+** (`season=None` or `>= 2026`, the current rule): the ACC,
+  Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
+  the highest-ranked champion of the American, Conference USA, MAC,
+  Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
+  ESPN id `"87"`) when it ranks inside the top `playoff_seeds`; the
+  rest of the field is at-large.
+* **2024-2025** (`season < 2026`): the 5 highest-ranked conference
+  champions are guaranteed inclusion, the rest is at-large.
+
+An automatic qualifier ranked outside the top `playoff_seeds` displaces
+the lowest-ranked at-large team and takes the lowest seed. Conference
+names match both cfbd and short spellings (e.g. `"American Athletic"` /
+`"American"`).
 
 When `rankings` is None the ordering falls back to the standings
 tiebreaker metrics — `win_pct` desc, then `sov`, `sos`, `pd`
 desc, then team name (documented deterministic fallback; a committee
-ranking is the intended input).
+ranking is the intended input). Notre Dame's "ranked inside the field"
+test reads its position in that same ordering.
+
+Differs from cfbseedR 0.2.0 (`autobid`) in three places: cfbseedR gives
+the Group-of-6 bid to the best-ranked G6 team whether or not it won its
+conference; it tests Notre Dame's committee `rank` only (no bid without
+`rankings`); and it matches `"Notre Dame"` but not `"87"`. Its
+`cfb_standings()` / `cfb_simulations()` also always apply the current
+rules, where `cfb_standings` and
+`sportsdataverse.cfb.cfb_simulations` here follow a
+`season`-keyed input.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
+| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conference`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
 | `rankings` | `Optional[FrameLike]` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
-| `playoff_seeds` | `int` | `12` | Field size (default 12). The champion guarantee is `min(5, number of champions, playoff_seeds)`. |
+| `playoff_seeds` | `int` | `12` | Field size (default 12). Automatic qualifiers are capped at this size. |
+| `season` | `Optional[int]` | `None` | Season whose selection rule applies (default `None` = the current, 2026 rule). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -739,6 +761,10 @@ from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
 st = cfb_standings(games, teams)
 seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
+
+# The 2024-2025 rule (5 highest-ranked champions)
+
+seeded = cfb_playoff_seeds(st, rankings=ranks_df, season=2025)
 ```
 
 ### cfb_resume {#cfb_resume}

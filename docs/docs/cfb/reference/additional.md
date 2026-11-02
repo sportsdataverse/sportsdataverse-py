@@ -150,7 +150,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [canonical_play_type_expr](additional/analytics.md#canonical_play_type_expr) | Build the polars expression mapping raw `type.text` to a canonical type. |
 | [cfb_adjusted_tempo](additional/analytics.md#cfb_adjusted_tempo) | Team-season situation-neutral, opponent-adjusted tempo / pace. |
 | [cfb_games_from_schedule](additional/analytics.md#cfb_games_from_schedule) | Map a `load_cfb_schedule()` frame into the seedr engine `games` schema. |
-| [cfb_playoff_seeds](additional/analytics.md#cfb_playoff_seeds) | Assign College Football Playoff seeds (current straight-seeding rule). |
+| [cfb_playoff_seeds](additional/analytics.md#cfb_playoff_seeds) | Assign College Football Playoff seeds (12-team straight seeding, by season). |
 | [cfb_resume](additional/analytics.md#cfb_resume) | Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble. |
 | [cfb_returning_production](additional/analytics.md#cfb_returning_production) | Returning production per team-season (offense / defense / overall). |
 | [cfb_season_odds](additional/analytics-2.md#cfb_season_odds) | Ratings-driven season Monte Carlo: conference / playoff / championship odds. |

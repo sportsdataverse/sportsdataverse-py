@@ -430,7 +430,7 @@ tal.sort("talent_rank").head(10)
 
 ### cfb_simulations {#cfb_simulations}
 
-`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'`
+`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, tiebreaker_data: 'Optional[Dict[str, FrameLike]]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'`
 
 Simulate college football seasons (nflseedR-style week loop).
 
@@ -452,6 +452,7 @@ CFB simplification.
 | `tiebreaker_depth` | `str` | `'SOS'` | nflseedR depth ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`) used by every standings computation. |
 | `sim_include` | `str` | `'POST'` | How deep to simulate: `"REG"` (regular season only), `"CONF"` (+ conference championships) or `"POST"` (+ CFP bracket, default). |
 | `rankings` | `Optional[FrameLike]` | `None` | Optional committee rankings (`team`, `rank`) forwarded to `cfb_playoff_seeds`. When None, seeding falls back to the per-sim standings ordering (documented in `cfb_playoff_seeds`). |
+| `tiebreaker_data` | `Optional[Dict[str, FrameLike]]` | `None` | Optional external tiebreaker inputs forwarded to every `sportsdataverse.cfb.cfb_standings` call (dict with `"analytics_ratings"`, `"cfp_rankings"`, `"apr"` frames), held static across simulations — so simulated standings use the official analytics / CFP-ranking / APR rungs instead of skipping them to a coin toss. |
 | `seed` | `Optional[int]` | `None` | Seed for the numpy RNG (deterministic runs). |
 | `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
 

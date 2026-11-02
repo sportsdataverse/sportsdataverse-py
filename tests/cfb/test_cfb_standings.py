@@ -203,7 +203,7 @@ class TestPlayoffSeeds:
     def test_champ_outside_top12_bumps_last_at_large(self) -> None:
         st = self._standings_14()
         rankings = pl.DataFrame({"team": st["team"], "rank": list(range(1, 15))})
-        seeded = cfb_playoff_seeds(st, rankings=rankings, playoff_seeds=12)
+        seeded = cfb_playoff_seeds(st, rankings=rankings, playoff_seeds=12, season=2025)
         assert isinstance(seeded, pl.DataFrame)
         seeds = {r["team"]: r["seed"] for r in seeded.iter_rows(named=True)}
         # champ ranked 13 gets in with the last seed (straight seeding, no bump)
@@ -217,7 +217,7 @@ class TestPlayoffSeeds:
 
     def test_fallback_ordering_without_rankings(self) -> None:
         st = self._standings_14()
-        seeded = cfb_playoff_seeds(st, rankings=None, playoff_seeds=12)
+        seeded = cfb_playoff_seeds(st, rankings=None, playoff_seeds=12, season=2025)
         assert isinstance(seeded, pl.DataFrame)
         seeds = {r["team"]: r["seed"] for r in seeded.iter_rows(named=True)}
         # win_pct descends with team index, so the fallback matches the rank order
@@ -314,7 +314,19 @@ class TestConferenceTiebreakerRegistry:
     """
 
     def test_registry_membership(self) -> None:
-        assert set(CONFERENCE_TIEBREAKERS) == {"SEC", "Big Ten", "ACC", "MAC", "Mid-American", "Big 12"}
+        assert set(CONFERENCE_TIEBREAKERS) == {
+            "SEC",
+            "Big Ten",
+            "ACC",
+            "MAC",
+            "Mid-American",
+            "Big 12",
+            "American Athletic",
+            "American",
+            "Conference USA",
+            "Mountain West",
+            "Sun Belt",
+        }
 
     def test_unregistered_conference_matches_generic_fallback(self) -> None:
         # Same 4-team scenario as TestTiebreakerEdges.test_head_to_head_pair, but
@@ -330,7 +342,7 @@ class TestConferenceTiebreakerRegistry:
                 ("Z", "Q", 4.0),
             ]
         )
-        teams = pl.DataFrame({"team": ["X", "Y", "Z", "Q"], "conference": ["Sun Belt"] * 4})
+        teams = pl.DataFrame({"team": ["X", "Y", "Z", "Q"], "conference": ["Pac-12"] * 4})
         st = cfb_standings(games, teams, tiebreaker_depth="PRE-SOV")
         assert isinstance(st, pl.DataFrame)
         ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
@@ -362,7 +374,7 @@ class TestConferenceTiebreakerRegistry:
                 ("E", "D", 3.0),
             ]
         )
-        teams = pl.DataFrame({"team": ["T1", "T2", "C", "D", "E"], "conference": ["ACC"] * 5})
+        teams = pl.DataFrame({"team": ["T1", "T2", "C", "D", "E"], "conference": ["Big Ten"] * 5})
         st = cfb_standings(games, teams, tiebreaker_depth="PRE-SOV")
         ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
         assert ranks["T1"] < ranks["T2"]
@@ -491,3 +503,194 @@ class TestTiebreakerParityFixture:
         actual = st.select("sim", "team", "conference", "conf_rank", "conf_champ").sort("sim", "team")
         expected = expected.sort("sim", "team")
         assert actual.to_dicts() == expected.to_dicts()
+
+
+REGISTRY_2026_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_toy_registry_2026"
+_TB_VALUE_COL = {"analytics_ratings": "rating", "cfp_rankings": "rank", "apr": "apr"}
+
+
+def _registry_case(case: str) -> tuple[pl.DataFrame, pl.DataFrame, dict[str, pl.DataFrame]]:
+    """One case of the cfbseedR 0.2.0 oracle: (games, teams, tiebreaker_data)."""
+    games = pl.read_csv(REGISTRY_2026_DIR / "games.csv").filter(pl.col("case") == case).drop("case")
+    teams = (
+        pl.read_csv(REGISTRY_2026_DIR / "teams.csv", schema_overrides={"postseason_eligible": pl.Utf8})
+        .filter(pl.col("case") == case)
+        .drop("case")
+        .with_columns(pl.col("postseason_eligible").str.to_lowercase() == "true")
+    )
+    # like the R capture: a case only carries the optional columns it uses
+    teams = teams.select([c for c in teams.columns if teams[c].null_count() < teams.height])
+    tb = pl.read_csv(REGISTRY_2026_DIR / "tiebreaker_data.csv").filter(pl.col("case") == case)
+    data = {
+        k: tb.filter(pl.col("kind") == k).select("team", pl.col("value").alias(v))
+        for k, v in _TB_VALUE_COL.items()
+        if k in tb["kind"].to_list()
+    }
+    return games, teams, data
+
+
+class TestRegistry2026Parity:
+    """cfbseedR 0.2.0 oracle (tests/fixtures/seedr/cfb_toy_registry_2026/, see its
+    README): season-scoped epochs, the ACC-2026 pool rule, Sun Belt divisions,
+    the American / CUSA / Mountain West / MAC procedures, postseason eligibility,
+    and both CFP selection rules.
+    """
+
+    CASES = pl.read_csv(REGISTRY_2026_DIR / "expected_standings.csv")["case"].unique().sort().to_list()
+
+    @pytest.mark.parametrize("case", CASES)
+    def test_matches_cfbseedr_standings(self, case: str) -> None:
+        games, teams, data = _registry_case(case)
+        st = cfb_standings(games, teams, tiebreaker_data=data or None)
+        actual = st.select("team", "conference", "conf_rank", "conf_champ").sort("team").to_dicts()
+        expected = (
+            pl.read_csv(REGISTRY_2026_DIR / "expected_standings.csv")
+            .filter(pl.col("case") == case)
+            .select("team", "conference", "conf_rank", "conf_champ")
+            .sort("team")
+            .to_dicts()
+        )
+        assert actual == expected
+
+    @pytest.mark.parametrize("season", [2025, 2026])
+    def test_matches_cfbseedr_seeds(self, season: int) -> None:
+        st = pl.read_csv(REGISTRY_2026_DIR / "seeds_standings.csv")
+        ranks = pl.read_csv(REGISTRY_2026_DIR / "seeds_rankings.csv")
+        seeded = cfb_playoff_seeds(st, rankings=ranks, playoff_seeds=12, season=season)
+        assert isinstance(seeded, pl.DataFrame)
+        expected = pl.read_csv(REGISTRY_2026_DIR / "expected_seeds.csv").filter(pl.col("autobid") == season)
+        actual = seeded.select("team", "seed").sort("team").to_dicts()
+        assert actual == expected.select("team", "seed").sort("team").to_dicts()
+
+    def test_season_keyed_input_resolves_acc_epoch(self) -> None:
+        # the same games keyed by plain `sim` take the current (2026) ACC rules;
+        # an explicit season pins the 2024 cascade
+        games, teams, data = _registry_case("acc_2025")
+        by_sim = games.rename({"season": "sim"})
+        current = cfb_standings(by_sim, teams, tiebreaker_data=data)
+        pinned = cfb_standings(by_sim, teams, tiebreaker_data=data, season=2025)
+        assert current.filter(pl.col("conf_rank") == 1)["team"].item() == "B"
+        assert pinned.filter(pl.col("conf_rank") == 1)["team"].item() == "A"
+
+    def test_skip_notes_for_new_rungs(self) -> None:
+        games, teams, _ = _registry_case("cusa_apr")
+        st = cfb_standings(games, teams)
+        assert any("cfp_ranked_final_week skipped" in n for n in st.tiebreak_notes)
+        assert any("apr skipped" in n for n in st.tiebreak_notes)
+        games, teams, data = _registry_case("american_final_loss")
+        st = cfb_standings(games, teams, tiebreaker_data=data)
+        assert any("cfp_ranked_final_week fell through" in n for n in st.tiebreak_notes)
+
+    def test_nan_tiebreaker_value_skips_the_rung(self) -> None:
+        # a NaN APR is missing (R's anyNA), not a value: skip + note, never crash
+        games, teams, data = _registry_case("cusa_apr")
+        data["apr"] = pl.DataFrame({"team": ["A", "B"], "apr": [float("nan"), 990.0]})
+        st = cfb_standings(games, teams, tiebreaker_data=data)
+        assert any("apr skipped" in n for n in st.tiebreak_notes)
+
+    def test_acc_pool_never_admits_a_team_without_conference_games(self) -> None:
+        # Z (0-0) matches unbeaten L's 0 losses, but played no conference game
+        games = _conf_games([("L", "M", 7.0), ("L", "N", 7.0), ("M", "N", 7.0)], sim=2026).rename({"sim": "season"})
+        teams = pl.DataFrame({"team": ["L", "M", "N", "Z"], "conference": ["ACC"] * 4})
+        ratings = pl.DataFrame({"team": ["L", "M", "N", "Z"], "rating": [1.0, 2.0, 3.0, 99.0]})
+        st = cfb_standings(games, teams, tiebreaker_data={"analytics_ratings": ratings})
+        ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
+        # Z stays in the 0.0 tier (beating 0-2 N there on its rating), not L's
+        assert ranks == {"L": 1, "M": 2, "Z": 3, "N": 4}
+
+
+class TestPlayoffSeeds2026:
+    """2026 CFP selection edge cases (P4 champions, best G6 champion, Notre Dame)."""
+
+    @staticmethod
+    def _seed(rows: list[tuple[str, str, bool]], playoff_seeds: int = 12, season: int = 2026) -> dict:
+        """rows: (team, conference, conf_champ) in committee rank order -> {team: seed}."""
+        n = len(rows)
+        st = pl.DataFrame(
+            {
+                "sim": [1] * n,
+                "team": [r[0] for r in rows],
+                "conference": [r[1] for r in rows],
+                "conf_champ": [r[2] for r in rows],
+                "win_pct": [0.5] * n,
+                "sov": [0.5] * n,
+                "sos": [0.5] * n,
+                "pd": [0.0] * n,
+            }
+        )
+        ranks = pl.DataFrame({"team": [r[0] for r in rows], "rank": list(range(1, n + 1))})
+        seeded = cfb_playoff_seeds(st, rankings=ranks, playoff_seeds=playoff_seeds, season=season)
+        assert isinstance(seeded, pl.DataFrame)
+        return {r["team"]: r["seed"] for r in seeded.iter_rows(named=True)}
+
+    @staticmethod
+    def _filler(k: int) -> list[tuple[str, str, bool]]:
+        return [(f"AL{i:02d}", "Other", False) for i in range(1, k + 1)]
+
+    def test_g6_bid_goes_to_best_g6_champion_not_best_g6_team(self) -> None:
+        # a non-champion Mountain West team outranks the American champion;
+        # only a champion holds the G6 automatic bid (cfbseedR 0.2.0 differs here)
+        rows = self._filler(12) + [("MW2", "Mountain West", False), ("AAC1", "American Athletic", True)]
+        seeds = self._seed(rows)
+        assert seeds["AAC1"] == 12
+        assert seeds["MW2"] is None
+        assert seeds["AL12"] is None
+
+    def test_only_the_best_of_several_g6_champions_is_automatic(self) -> None:
+        rows = self._filler(12) + [("SBC1", "Sun Belt", True), ("MAC1", "Mid-American", True)]
+        seeds = self._seed(rows)
+        assert seeds["SBC1"] == 12
+        assert seeds["MAC1"] is None
+
+    def test_p4_champions_in_regardless_of_rank_take_lowest_seeds(self) -> None:
+        rows = self._filler(14) + [
+            ("SEC1", "SEC", True),
+            ("B1G1", "Big Ten", True),
+            ("B121", "Big 12", True),
+            ("ACC1", "ACC", True),
+        ]
+        seeds = self._seed(rows)
+        assert [seeds[t] for t in ("SEC1", "B1G1", "B121", "ACC1")] == [9, 10, 11, 12]
+        assert [seeds[f"AL{i:02d}"] for i in range(1, 9)] == list(range(1, 9))
+        assert seeds["AL09"] is None
+
+    def test_p4_runner_up_is_not_automatic(self) -> None:
+        rows = self._filler(12) + [("SEC2", "SEC", False)]
+        assert self._seed(rows)["SEC2"] is None
+
+    @pytest.mark.parametrize("nd", ["Notre Dame", "87"])
+    def test_notre_dame_in_when_top_12(self, nd: str) -> None:
+        # ranked 12th; the 13th-ranked G6 champion would otherwise push it out
+        rows = self._filler(11) + [(nd, "FBS Independents", False), ("SBC1", "Sun Belt", True)]
+        seeds = self._seed(rows)
+        assert seeds[nd] == 11
+        assert seeds["SBC1"] == 12
+        assert seeds["AL11"] is None
+
+    def test_notre_dame_outside_top_12_gets_no_bid(self) -> None:
+        rows = self._filler(12) + [("Notre Dame", "FBS Independents", False)]
+        assert self._seed(rows)["Notre Dame"] is None
+
+    def test_2025_rule_guarantees_any_top_five_champion(self) -> None:
+        # the 13th-ranked 'Other' champion is guaranteed under 2025 only (not P4/G6)
+        rows = self._filler(12) + [("OTH1", "Other", True)]
+        assert self._seed(rows, season=2025)["OTH1"] == 12
+        assert self._seed(rows, season=2026)["OTH1"] is None
+
+    def test_automatic_bids_capped_at_field_size(self) -> None:
+        rows = self._filler(2) + [("SEC1", "SEC", True), ("B1G1", "Big Ten", True), ("ACC1", "ACC", True)]
+        seeds = self._seed(rows, playoff_seeds=2)
+        assert seeds["SEC1"] == 1 and seeds["B1G1"] == 2
+        assert seeds["ACC1"] is None and seeds["AL01"] is None
+
+    def test_cfb_standings_season_keyed_input_picks_rule_per_season(self) -> None:
+        # the same season keyed 2025 and 2026, 2-team field: the 'Other'
+        # champion O1 is guaranteed only under the 2025 rule
+        base = _conf_games([("P", "R", 7.0), ("R", "Q", -7.0), ("O1", "O2", 7.0)])
+        games = pl.concat([base.with_columns(pl.lit(s).alias("sim")) for s in (2025, 2026)]).rename({"sim": "season"})
+        teams = pl.DataFrame({"team": ["P", "Q", "R", "O1", "O2"], "conference": ["SEC"] * 3 + ["Other"] * 2})
+        ranks = pl.DataFrame({"team": ["P", "Q", "R", "O2", "O1"], "rank": [1, 2, 3, 4, 5]})
+        st = cfb_standings(games, teams, playoff_seeds=2, rankings=ranks)
+        seeded = {(r["sim"], r["team"]): r["seed"] for r in st.iter_rows(named=True)}
+        assert seeded[(2025, "O1")] is not None
+        assert seeded[(2026, "O1")] is None
