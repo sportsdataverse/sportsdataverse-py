@@ -7,12 +7,10 @@ mismatch and exits 1. The recipe is hand-mirrored (no generator), so this is the
 thing that notices when a dependency change in pyproject.toml is not carried over.
 
 Rules: a pyproject dependency with a ``sys_platform`` marker is exempt (a ``noarch:
-python`` recipe cannot carry platform selectors), and so is one whose marker raises the
-Python floor (``cyclopts; python_version >= '3.11'``): listed unconditionally it would make a
-conda env at the recipe's ``python_min`` unsolvable, and the code that needs it degrades without
-it. Every other one must appear in the recipe's ``run:`` list, under its conda name, with the same
-version specifier. A python-version upper-bound marker (``tomli; python_version < '3.11'``) is
-listed unconditionally in the recipe, so only the specifier is compared.
+python`` recipe cannot carry platform selectors); every other one must appear in the
+recipe's ``run:`` list, under its conda name, with the same version specifier. A
+python-version marker (``tomli; python_version < '3.11'``) is listed unconditionally in
+the recipe, so only the specifier is compared.
 """
 
 from __future__ import annotations
@@ -57,7 +55,7 @@ def pyproject_deps(text: str) -> tuple[str, dict[str, str]]:
         if m is None:
             raise ValueError(f"unparseable requirement {raw!r}")
         name, _extras, spec, marker = m.groups()
-        if marker and ("sys_platform" in marker or re.search(r"python_version\s*>", marker)):
+        if marker and "sys_platform" in marker:
             continue
         name = _norm(name)
         deps[CONDA_NAMES.get(name, name)] = _spec(spec)

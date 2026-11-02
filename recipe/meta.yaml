@@ -61,9 +61,6 @@ requirements:
     # pyproject's `tzdata; sys_platform == 'win32'` is intentionally omitted:
     # noarch recipes can't carry platform selectors, and conda's python
     # package already depends on tzdata on every platform.
-    # pyproject's `cyclopts` / `rich` (python_version >= '3.11', the `sdv` CLI) are omitted too:
-    # listed here they would make a python_min (3.10) env unsolvable. Without them `sdv` runs the
-    # classic argparse CLI; `conda install cyclopts rich` on 3.11+ enables the new one.
 
 test:
   imports:
