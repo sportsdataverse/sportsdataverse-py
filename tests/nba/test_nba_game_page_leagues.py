@@ -44,7 +44,7 @@ def _final(monkeypatch: pytest.MonkeyPatch, lg: str, name: str) -> dict:
     raw = _raw(name)
     mod = importlib.import_module(f"sportsdataverse.{lg}.{lg}_pbp")
     monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(raw)))
-    kw = {"return_parsed": False} if lg in ("nba", "mbb") else {}  # the dict; nba / mbb default to the release frame
+    kw = {"return_parsed": False}  # the dict; espn_<lg>_pbp defaults to the release frame
     return getattr(mod, f"espn_{lg}_pbp")(game_id=int(raw["header"]["id"]), **kw)
 
 

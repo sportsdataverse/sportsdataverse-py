@@ -68,6 +68,7 @@ from sportsdataverse.wnba import espn_wnba_leaders_core as _raw_espn_wnba_leader
 from sportsdataverse.wnba import espn_wnba_league_notes as _raw_espn_wnba_league_notes
 from sportsdataverse.wnba import espn_wnba_league_root as _raw_espn_wnba_league_root
 from sportsdataverse.wnba import espn_wnba_news as _raw_espn_wnba_news
+from sportsdataverse.wnba import espn_wnba_pbp as _raw_espn_wnba_pbp
 from sportsdataverse.wnba import espn_wnba_player_awards as _raw_espn_wnba_player_awards
 from sportsdataverse.wnba import espn_wnba_player_bio as _raw_espn_wnba_player_bio
 from sportsdataverse.wnba import espn_wnba_player_career_stats as _raw_espn_wnba_player_career_stats
@@ -154,7 +155,6 @@ from sportsdataverse.wnba import espn_wnba_calendar as espn_wnba_calendar  # noq
 from sportsdataverse.wnba import espn_wnba_draft as espn_wnba_draft  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_game_officials as espn_wnba_game_officials  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_game_rosters as espn_wnba_game_rosters  # noqa: F401
-from sportsdataverse.wnba import espn_wnba_pbp as espn_wnba_pbp  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_player_stats as espn_wnba_player_stats  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_schedule as espn_wnba_schedule  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_standings as espn_wnba_standings  # noqa: F401
@@ -1180,6 +1180,20 @@ def espn_wnba_news(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_news(*args, **kwargs)
+
+
+def espn_wnba_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_pbp(*args, **kwargs)
 
 
 def espn_wnba_player_awards(*args, **kwargs):

@@ -197,16 +197,16 @@ payload = espn_nba_game_rosters(game_id=401585607, raw=True)    # the raw dict
 
 **How to migrate.** Drop `raw=True` where you want the frame.
 
-## ESPN MBB / NBA pbp return the release frame
+## ESPN MBB / NBA / WBB / WNBA pbp return the release frame
 
-**What changed.** `espn_mbb_pbp()` and `espn_nba_pbp()` return the play-by-play frame the
-release publishes, the one `load_mbb_pbp()` / `load_nba_pbp()` read: snake_case columns, Int32
-team / athlete / game ids, the Int64 play `id`, `game_date`, the hoopR shot coordinates,
+**What changed.** `espn_mbb_pbp()`, `espn_nba_pbp()`, `espn_wbb_pbp()` and `espn_wnba_pbp()` return the
+play-by-play frame the release publishes, the one `load_<lg>_pbp()` reads: snake_case columns, Int32
+team / athlete / game ids, the Int64 play `id`, `game_date`, the hoopR / wehoop shot coordinates,
 `athlete_name_{1,2,3}`, the rebuilt running score with `score_source`, columns in the release's
 order, and a zero-row frame with the release's columns for a game with no play-by-play
 (`playByPlaySource == "none"`) or 10 or fewer plays. They used to return a dict whose `plays` were dotted camelCase
 records with String ids. The dict is still there with `return_parsed=False`, and `raw=True` is
-unchanged. `espn_wnba_pbp()` / `espn_wbb_pbp()` still return the dict.
+unchanged. The WBB release's season-level win-probability columns are not added per game.
 
 **Who is affected.** Callers that index the result (`["plays"]`, `["boxscore"]`, ...) or pass it
 to `game_page_frames()` or a `helper_<lg>_play_by_play` / `_team_box` / `_player_box` converter.
@@ -222,6 +222,10 @@ from sportsdataverse.mbb import espn_mbb_pbp
 
 plays = espn_mbb_pbp(game_id=401638637)                        # the release frame
 game = espn_mbb_pbp(game_id=401638637, return_parsed=False)    # the dict
+
+from sportsdataverse.wnba import espn_wnba_pbp
+
+plays = espn_wnba_pbp(game_id=401620238)                       # same for WBB / WNBA
 ```
 
 **How to migrate.** Use the frame's snake_case columns, or add `return_parsed=False` where you

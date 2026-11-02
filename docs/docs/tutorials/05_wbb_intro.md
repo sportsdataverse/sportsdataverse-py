@@ -232,13 +232,13 @@ keep = ['game_id', 'short_name', 'status_type_completed', 'home_team_short_displ
 
 ## 🎬 Play-by-play
 
-[`espn_wbb_pbp`](../wbb/reference/additional/espn.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
+[`espn_wbb_pbp`](../wbb/reference/additional/espn.md#espn_wbb_pbp) with `return_parsed=False` returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
 
 Game `401746075` is the **2025 national championship**: South Carolina vs. UConn.
 
 
 ```python
-pbp = safe('championship pbp', lambda: wbb.espn_wbb_pbp(game_id=401746075))
+pbp = safe('championship pbp', lambda: wbb.espn_wbb_pbp(game_id=401746075, return_parsed=False))
 plays = None
 if pbp is not None and isinstance(pbp, dict) and pbp.get('plays'):
     plays = pl.DataFrame(pbp['plays'], infer_schema_length=None)
