@@ -12,7 +12,7 @@ the capture tooling writes (``native_fixture_map.yaml``, ``tests/fixtures/<stem>
 is swept without a test edit. That is more than ``--schemas`` reads (only
 ``native_fixture_map.yaml``), which is why the sweep finds schemas ``--schemas`` never re-derives.
 ``_doc_type`` is one more copy of the polars-to-docs type map task 3.9 unifies (A-L44); import that
-one when it lands. A stem whose captures live only in sdv-internal-refs is listed
+one when it lands. A stem whose captures live only in the private reference checkout is listed
 in ``_NO_COMMITTED_CAPTURE`` and must stay capture-free, or the sweep asks for its removal.
 """
 
@@ -94,7 +94,7 @@ _STALE = {
 
 
 _CASES, _PER_STEM = _cases()
-# Stems whose schemas were built from sdv-internal-refs captures; none is committed here.
+# Stems whose schemas were built from the maintainers' private captures; none is committed here.
 _NO_COMMITTED_CAPTURE = {
     "bart_wbb",
     "cbs_napi",

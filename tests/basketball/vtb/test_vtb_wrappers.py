@@ -1,6 +1,6 @@
 """The generated ``vtb_league_*`` and ``vtb_infobasket_*`` wrappers and their endpoint YAML: URL, wire parameters, parsers.
 
-Reads only committed files (CI has no sdv-internal-refs checkout): the YAML, the descriptions snippet, the spec-path
+Reads only committed files (CI has no private reference checkout): the YAML, the descriptions snippet, the spec-path
 snapshots written by ``tools/codegen/gen_vtb.py`` and the fixtures.
 """
 
@@ -28,7 +28,7 @@ DOCS = {
 }
 FIRST = {f"{fam}_{short}": (fam, fixtures[0]) for fam, short, fixtures in CASES}
 
-# wrapper, kwargs, route, wire params (verified by hand against vtb-internal-refs' capture.py SAMPLES)
+# wrapper, kwargs, route, wire params (verified by hand against the maintainers' VTB capture samples)
 WRAPPERS = [
     ("vtb_league_leagues", {}, "/v2/leagues", {}),
     ("vtb_league_seasons", {"league_slug": "vtb"}, "/v2/leagues/vtb/seasons", {}),

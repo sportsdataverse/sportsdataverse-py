@@ -16,8 +16,8 @@ Two families live here:
    deprecated rankings shim (`sportsdataverse/cfb/on3_rankings.py`) and its
    tests in `tests/test_on3_parsers.py`.
 2. **Recruit Database (RDB)** — captured 2026-07-08 from the auth-free public
-   gateway `api.on3.com/public/rdb/v{1,2}` (see
-   `sdv-internal-refs/on3/captures/manifest.csv`), trimmed to a few `list`
+   gateway `api.on3.com/public/rdb/v{1,2}` (per the maintainers'
+   capture manifest), trimmed to a few `list`
    entries. These back `parse_on3_rdb` in `tests/test_on3_rdb.py`.
 
 | File | Route | Notes |
@@ -38,7 +38,7 @@ as a fallback: on the 9 checkable endpoints, their field names matched the
 parser's output on only 7.
 
 The 31 non-legacy captures beyond the four listed above were copied from
-`sdv-internal-refs/on3/captures/_sample/` (commit `0d900c2`).
+the maintainers' capture samples.
 
 Provenance notes:
 

@@ -1,7 +1,7 @@
 """Runtime for the generated FEB wrappers (``intrafeb.feb.es`` JSON API + ``baloncestoenvivo.feb.es`` HTML).
 
 Two hosts, one provider (the Spanish Basketball Federation). Measured against the live hosts
-(sdv-internal-refs ``feb/``, 2026-10-12):
+(2026-10-12):
 
 * **Bearer JWT.** Every LiveStats call needs ``Authorization: Bearer <JWT>``; without it the API
   answers 401 with an empty body. The token is public: the hidden input
@@ -328,7 +328,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
-        The parsed JSON envelope (all ten blocks) or the schedule page record (the refs capture shape), with
+        The parsed JSON envelope (all ten blocks) or the schedule page record (the capture record shape), with
         ``_request`` = ``{"game_id"}`` or ``{"group", "season", "season_start"}``.
 
     Raises:

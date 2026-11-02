@@ -1,7 +1,7 @@
 """Generate the four eSports hokejovyzapis flat-API families from one OpenAPI spec.
 
 The eSports s.r.o. scoring system writes one key layout into four public S3 buckets, so one spec
-(``sdv-internal-refs/esports-hokejovyzapis/esports-hokejovyzapis.openapi.yaml``) serves four
+(``esports-hokejovyzapis.openapi.yaml``) serves four
 families that differ only in their base URL ``https://s3.eu-west-1.amazonaws.com/<bucket>``:
 
 =================  ==========================  =======  ==================

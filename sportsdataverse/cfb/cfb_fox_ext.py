@@ -2,8 +2,8 @@
 
 Read-only wrappers over ``api.foxsports.com/bifrost/v1/cfb/*``. The Bifrost API
 is a layout API (sections -> tables -> rows -> cells); these functions flatten
-it into tidy frames. Reverse-engineering notes + an OpenAPI spec live in the
-sdv-internal-refs repo (``_notes/foxsportsapi/``). Vertical slice: pbp, roster,
+it into tidy frames. Reverse-engineering notes + an OpenAPI spec are kept in the
+maintainers' private reference notes. Vertical slice: pbp, roster,
 boxscore. The public apikey ships in the foxsports.com web bundle.
 
 Mirrors the codegen ESPN-ext contract (``return_parsed`` / ``return_as_pandas``;

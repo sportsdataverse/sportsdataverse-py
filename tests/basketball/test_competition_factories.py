@@ -1,7 +1,7 @@
 """Per-competition factories over FIBA, Genius LiveStats and Sportradar Atrium.
 
-The facts pinned below are COPIED from sdv-internal-refs (fiba/README.md + captures, genius-livestats/inputs/
-leagues.json, atrium-embed/SITES.md); the tests never read the refs checkout.
+The facts pinned below are COPIED from the maintainers' private reference notes and captures (FIBA, the
+Genius LiveStats league list, the Sportradar Atrium embed sites); the tests never read that checkout.
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ from sportsdataverse.errors import AssetFetchError, NoDataError
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# ---- facts copied from the refs ------------------------------------------------------------------
+# ---- facts copied from the reference notes -------------------------------------------------------
 # GDAP competitionMarketingNameId: 201/320/306/112/211 from fiba/README.md (id-space table); 352, 179 and 297
 # from getGdapCompetitionById probes of Paris 2024 women (208723), AfroBasket 2025 (208938) and Women's
 # EuroBasket 2025 (208854) on 2026-10-17; the rest from getGdapCompetitionById probes of the 2025 editions on

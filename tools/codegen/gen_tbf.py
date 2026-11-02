@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_lkl.py`` (itself ``gen_asa.py`` with
 the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and ``tbf-returns.md`` from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/tbf.yaml`` -- 32 wrappers over 29 of the spec's 33 routes. One route can feed several
   frames (``mac-istatistik`` feeds ``player_box`` and ``team_box``, ``mac-ozet`` feeds ``period_scores`` and
@@ -19,7 +19,7 @@ the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and ``tb
   ``manual_column_descriptions.yaml`` (Integration merges it). Text comes from :data:`LOCAL_BY` (a column whose meaning
   differs by wrapper), :data:`LOCAL` (derived and renamed columns), then the ``tbf-returns.md`` row of the source
   field, whose Turkish names and values are already glossed in English. An empty, short or filler text fails the run.
-* ``tests/fixtures/tbf/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/tbf/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_tbf.py``
 """

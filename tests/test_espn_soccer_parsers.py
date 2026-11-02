@@ -226,7 +226,7 @@ def test_key_events_and_commentary_coordinates_agree():
         assert (located[c] == located[c + "_cm"]).all()
 
 
-# -- era-aware fixes (sdv-internal-refs rules/epl.yaml) -----------------------------
+# -- era-aware fixes (EPL rule eras) ------------------------------------------------
 def _commentary_payload() -> dict:
     return {
         "commentary": [

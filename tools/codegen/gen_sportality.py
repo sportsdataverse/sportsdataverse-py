@@ -4,8 +4,8 @@
 Idempotent: same spec + same captures -> byte-identical output. Modeled on ``gen_shl.py`` (the same
 vendor and route families), with the shared plumbing in ``gen_soccer_common.py``.
 
-Reads the frozen spec and the committed captures from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+Reads the frozen spec and the committed captures from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/sportality.yaml`` -- one endpoint per route (24: the spec's 18 stats-info
   module paths are one ``stats_info`` endpoint with a ``module`` path parameter).
@@ -20,7 +20,7 @@ Reads the frozen spec and the committed captures from the ``sdv-internal-refs`` 
   ``manual_column_descriptions.yaml``.
 * ``sportsdataverse/basketball/dbl/sportality_dtypes.py`` -- every endpoint's column -> polars dtype, which
   the parsers use to type a zero-row frame and to backfill missing columns.
-* ``tests/fixtures/sportality/spec_paths.json`` -- the spec's route list, so the tests need no refs checkout.
+* ``tests/fixtures/sportality/spec_paths.json`` -- the spec's route list, so the tests need no reference checkout.
 
 Season-keyed routes take ``season`` (END year) + ``game_type`` instead of the provider's ssgt / season
 uuids: ``sportality_runtime._get`` maps them through layout-info.

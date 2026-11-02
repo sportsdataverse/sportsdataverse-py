@@ -1,6 +1,6 @@
 """The forced two-point try after an overtime touchdown.
 
-sdv-internal-refs rules/cfb.yaml: ``cfb-1996-overtime-introduced`` (third overtime on),
+NCAA overtime rules: ``cfb-1996-overtime-introduced`` (third overtime on),
 ``cfb-2019-overtime-shootout-from-fifth`` (still the third; the fifth on is a shootout),
 ``cfb-2021-overtime-shootout-from-third`` (the second; the third on is a shootout).
 

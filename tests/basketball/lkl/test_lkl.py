@@ -4,7 +4,7 @@ Parsers are asserted against real data: the FULL bodies of one overtime game (11
 (dtypes come from those), the refs capture samples of five games and the season records in
 ``tests/fixtures/lkl/captures/``, and the refs' cut-down HTML pages in ``tests/fixtures/lkl/html/`` (the HTML readers'
 input). The runtime is driven through a scripted ``requests`` adapter mounted on a ``PoliteSession``, so every refusal
-is exercised end to end and every attempt is counted. No network, and nothing reads the private sdv-internal-refs
+is exercised end to end and every attempt is counted. No network, and nothing reads the private reference
 checkout.
 """
 

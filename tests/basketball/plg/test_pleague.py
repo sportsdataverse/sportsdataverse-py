@@ -4,7 +4,7 @@ Parsers are asserted against real data: the full parsed play-by-play of one game
 ``tests/fixtures/pleague/full/``, the whole box bodies of four games (both box eras, a double-overtime game and a
 2025-26 finals game without ``personId``), the refs' cut-down HTML pages and the refs capture records. The runtime is
 driven through a scripted ``curl_cffi`` stand-in, so every refusal is exercised end to end and every attempt is
-counted. No network, and nothing reads the private sdv-internal-refs checkout.
+counted. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations
@@ -766,6 +766,6 @@ def test_the_transport_never_follows_redirects_and_names_curl_cffi(monkeypatch):
 
 
 def test_the_runtime_does_not_need_the_refs_checkout(monkeypatch, tmp_path):
-    monkeypatch.setenv("SDV_INTERNAL_REFS_REPO", str(tmp_path))
+    monkeypatch.setenv("SDV_REFS_REPO", str(tmp_path))
     assert not any((tmp_path / "pleague").exists() for _ in range(1))
     assert gen_pleague.SITE and P.parse_pleague_game(_game()).height == 1  # tests read only committed fixtures

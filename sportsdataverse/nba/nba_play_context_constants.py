@@ -4,8 +4,7 @@ League-agnostic algorithms, league-specific constants: nothing in
 :mod:`sportsdataverse.nba.nba_play_context` hard-codes a number from this module.
 
 Definitions are recreated from Cleaning the Glass's own published methodology
-(``sdv-internal-refs/cleaningtheglass/METHODOLOGY.md``, quoting CTG's
-``/stats/guide/<slug>`` pages verbatim). Where CTG does NOT publish a threshold
+(CTG's ``/stats/guide/<slug>`` pages). Where CTG does NOT publish a threshold
 (it says only "until the defense is set" / "within a few seconds of the
 rebound"), we adopt the closest documented public convention and expose it as a
 knob — see :data:`DEFAULT_TRANSITION_SECONDS` and :data:`DEFAULT_PUTBACK_SECONDS`.
@@ -22,7 +21,7 @@ from typing import Final
 #: CTG's shot-location taxonomy. Distinct from :data:`nba_shot_zones.SHOT_ZONES`
 #: (the *official NBA* zones: restricted area / paint-non-RA / mid-range / ...).
 #: CTG splits the midrange at the free-throw-line distance instead:
-#: rim <=4 ft, short mid 4-13.75 ft, long mid >13.75 ft (METHODOLOGY.md 5b).
+#: rim <=4 ft, short mid 4-13.75 ft, long mid >13.75 ft (CTG's methodology guide).
 CTG_SHOT_ZONES: Final[list[str]] = ["at_rim", "short_mid", "long_mid", "corner_3", "arc_3"]
 
 #: Rim boundary in feet -- CTG: "Shots within 4 feet of the basket".

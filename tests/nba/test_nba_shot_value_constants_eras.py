@@ -1,4 +1,4 @@
-"""Season-aware three-point geometry (sdv-internal-refs rules/nba.yaml, rules/wnba.yaml)."""
+"""Season-aware three-point geometry (the NBA and WNBA court-dimension rule eras)."""
 
 import pytest
 

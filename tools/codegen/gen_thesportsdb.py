@@ -9,8 +9,8 @@ caller's key (``$THESPORTSDB_API_KEY``, else the free test key ``123``) at call 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_sleeper.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-Reads the frozen spec and the committed captures from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+Reads the frozen spec and the committed captures from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/thesportsdb.yaml`` -- one endpoint per GET route (12).
 * ``tools/codegen/schemas/native/thesportsdb/<short>.yaml`` -- returns-schema per
@@ -188,7 +188,7 @@ def main() -> None:
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1
-            schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see ENDPOINTS.md)"
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
             schema["columns"] = []
         else:
             schema["columns"] = columns_from_frame(

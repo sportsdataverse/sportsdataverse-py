@@ -1,7 +1,7 @@
 """Runtime for the generated KHL site REST wrappers (``POST https://www.khl.ru/rest/<route>/``).
 
 The khl.ru front end loads its data blocks by POSTing a form to ``/rest/<route>/``; this module is
-that client. Measured live (2026-10-12, ``sdv-internal-refs/khl``):
+that client. Measured live (2026-10-12):
 
 * **Session.** One ``curl_cffi`` session per host (Chrome TLS, a cookie jar), kept in-process. It is
   primed by a GET of ``/`` that follows redirects (the first answer is a **307** that sets the

@@ -1,8 +1,8 @@
 """Generate the ``kbl`` flat-API endpoint YAML + returns-schemas (KBL, the Korean Basketball League, ``api.kbl.or.kr``).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_kzs.py`` with the shared plumbing in
-``gen_soccer_common.py``. Reads the frozen spec, the README crosswalk and the returns md from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+``gen_soccer_common.py``. Reads the frozen spec, the README crosswalk and the returns md from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/kbl.yaml`` -- 22 wrappers over the spec's 17 paths. One route can feed several frames (the
   game header feeds ``kbl_game`` and ``kbl_period_scores``, the match chart three frames, team-tracks two, the playoff
@@ -17,7 +17,7 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
   (route-specific), the route's own ``kbl-returns.md`` row (:data:`SECTIONS`), else :data:`LOCAL` (columns the parser
   derives). Korean labels are carried with the refs' English translation. A filler or missing description stops the run.
 * ``tests/fixtures/kbl/spec_paths.json`` -- the spec's routes and the route each wrapper reads, for the tests (CI has
-  no refs checkout); ``tests/fixtures/kbl/season_crosswalk.json`` -- the README's seasonCode crosswalk, which the run
+  no reference checkout); ``tests/fixtures/kbl/season_crosswalk.json`` -- the README's seasonCode crosswalk, which the run
   also compares with ``kbl_codes.SEASONS``.
 
 Run: ``python tools/codegen/gen_kbl.py``

@@ -17,8 +17,7 @@ Two source quirks are handled here rather than pushed onto callers:
 
 Column names are snake_cased, so the source's ``HomeTeam`` / ``FTHG`` /
 ``B365H`` become ``home_team`` / ``fthg`` / ``b365_h``; the glossary for the
-abbreviations is ``/notes.txt``, transcribed in
-``sdv-internal-refs/football-data-co-uk/football-data-co-uk-returns.md``. The
+abbreviations is the source's ``football-data.co.uk/notes.txt``. The
 over/under and Asian-handicap columns keep the source's punctuation
 (``B365>2.5`` -> ``b365>2.5``), because the threshold is part of the market name.
 

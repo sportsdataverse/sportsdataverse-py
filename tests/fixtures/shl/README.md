@@ -1,11 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [SHL fixtures (`www.shl.se/api`)](#shl-fixtures-wwwshlseapi)
+  - [Truncated route samples (`*.json`)](#truncated-route-samples-json)
+  - [Full bodies (`full/`)](#full-bodies-full)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # SHL fixtures (`www.shl.se/api`)
 
 Real bodies from the SHL site API (keyless GET JSON; Sportality platform, stats by StatNet).
 
 ## Truncated route samples (`*.json`)
 
-Copied unchanged from `sdv-internal-refs/shl/captures/` at refs commit `9e967aa` (captured
-2026-10-12 by `shl/tools/capture.py`). Every array is cut to 3 items and every id-keyed map
+Copied unchanged from the maintainers' captures (captured
+2026-10-12 by their capture tool). Every array is cut to 3 items and every id-keyed map
 to 3 keys, except play-by-play, which keeps the first event of each `type`. The 34
 `statistics-v2__stats-info__module__<module>.json` files were fetched with `count=1000`
 for the 2025/26 regular season (ssgt `iuzqg7dqk9`). File names follow `capture.py`'s slug

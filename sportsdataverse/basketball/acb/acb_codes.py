@@ -1,4 +1,4 @@
-"""Code tables for the ACB wrappers (decoded from the ``live.acb.com`` bundle enums, ``sdv-internal-refs/acb``).
+"""Code tables for the ACB wrappers (decoded from the ``live.acb.com`` bundle enums).
 
 * :data:`PLAY_TYPES` / :data:`PLAY_TYPE_MEANINGS`: the ``playType`` of play-by-play and shot events (bundle enum
   ``PLAYS_IDS``, 129 names; the bundle never expands ``BD``, ``CAT1`` / ``CAT2`` or the bench ``NO_ACCUMULATE`` /
@@ -8,7 +8,7 @@
 * :data:`SHOT_ZONES`: the ten ``zone`` values (legacy zones, up to 2019-20, are unreliable).
 * :data:`COUNTRIES`: the Spanish country names the API sends, as ``(English name, ISO 3166-1 alpha-2)``.
 
-Generated once from ``acb-returns.md``; edit by re-reading the refs, not by hand.
+Generated once from ``acb-returns.md``; edit by re-reading the bundle enums, not by hand.
 """
 
 from __future__ import annotations

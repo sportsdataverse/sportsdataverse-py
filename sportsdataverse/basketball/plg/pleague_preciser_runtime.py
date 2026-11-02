@@ -7,7 +7,7 @@ game page displays. The runtime keeps requests at least 1 s apart and the data r
 
 Four JSON routes keyed by the game ``uuid`` (the Preciser game uuid the site's game page embeds; ``uuid`` of
 ``pleague_game``, empty before 2022-23 so there is no vendor data for 2020-21 and 2021-22). Each body is a one-element
-list. Measured against the live host (sdv-internal-refs ``pleague/``, 2026-10-12):
+list. Measured against the live host (2026-10-12):
 
 * **Transport.** Plain ``requests`` through the shared ``basketball_runtime.SESSION``, so every attempt, retries
   included, waits its turn; ``dl_utils.download`` retries 429 / 502 / 503 / 504 and honours ``Retry-After``. HTTP 500 is

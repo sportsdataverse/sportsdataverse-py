@@ -2,8 +2,8 @@
 
 Two kinds of body feed this family. The seven ``/api/livestream/{route}/{gameId}`` routes answer JSON. The
 game page ``/rungtynes/{gameId}``, the results list ``/loadResults`` and the standings ``/loadStandings/{id}``
-answer server-rendered HTML, which this module reduces to the records the refs captures bank
-(``sdv-internal-refs`` ``lkl/tools/capture.py``): the game page's ``<game-info-component>`` props, the paged
+answer server-rendered HTML, which this module reduces to the records the maintainers' capture tool banks:
+the game page's ``<game-info-component>`` props, the paged
 results merged into one record, the four standings tables. The HTML readers are stdlib regex readers that refuse
 layout drift (:class:`_NotParsed`) instead of guessing.
 

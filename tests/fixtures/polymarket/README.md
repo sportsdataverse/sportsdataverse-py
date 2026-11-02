@@ -11,7 +11,7 @@
 Real, trimmed responses from Polymarket's two keyless read hosts
 (`https://gamma-api.polymarket.com` and `https://clob.polymarket.com`), captured
 **2026-10-06** and copied byte-for-byte from
-`sdv-internal-refs/polymarket/captures/` at refs main `22b148b`.
+the maintainers' captures.
 
 | File | Host | Route |
 |---|---|---|

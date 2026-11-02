@@ -11,7 +11,7 @@
 Real, trimmed responses from the American Soccer Analysis public API
 (`https://app.americansocceranalysis.com/api/v1/mls/...`), captured 2026-07-18
 (`players_xpass.json` on 2026-10-06) and copied byte-for-byte from
-`sdv-internal-refs/asa/captures/mls/`.
+the maintainers' captures.
 
 | File | Route |
 |---|---|

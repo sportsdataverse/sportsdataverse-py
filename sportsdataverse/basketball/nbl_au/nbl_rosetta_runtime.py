@@ -11,7 +11,7 @@ Every request goes through the shared international-basketball throttle
 retries included, waits at least 1 s for its host; ``Retry-After`` is honoured on 429 / 503), so
 the package error vocabulary holds: 404 -> ``NoDataError``, 400 / 422 -> ``ValueError``, any other
 non-2xx, a dead connection or an empty / non-JSON 200 -> ``AssetFetchError``. On top of it,
-measured against the live API (sdv-internal-refs ``nbl-rosetta/``, 2026-10-12):
+measured against the live API (2026-10-12):
 
 * **Season key.** The public ``season`` is the END year (2026 = 2025-26). Rosetta's ``year`` is
   the START year for the NBL and WNBL from 1998-99 (``season/2025`` = 2025-26) and the calendar

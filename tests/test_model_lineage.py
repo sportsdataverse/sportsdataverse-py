@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "docs" / "docs" / "architecture" / "model-lineage.md"
 # An sdv-py-relative script path: `dev/...py` or `tools/...py` not preceded by another path segment, so a
 # citation of another repo's script (`game-on-paper-app/python/tools/fit_paper_index.py`,
-# `sdv-internal-refs/<x>/tools/capture.py`) is not read as one of ours.
+# `other-repo/<x>/tools/capture.py`) is not read as one of ours.
 CITATION = re.compile(r"(?<![\w./-])((?:dev|tools)/[\w./-]+?\.py)\b")
 
 

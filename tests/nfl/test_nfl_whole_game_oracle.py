@@ -126,7 +126,7 @@ def test_line_yards_band_is_the_standard(game_id):
     # Task 2.1 flipped all 31 C-NF-3 xfails (the processor read 0-3 / 4-8 / cap 5.5).
     # Oracle: standard adjusted line yards (Football Outsiders ALY, Connelly's college version, the
     # plan's "cap 7"), per yard: losses 120%, yards 0-4 at 100%, yards 5-10 at 50%, beyond 10 at 0%.
-    # The program's ruling for task 2.1 (ClaudeCowork plan audit/EXECUTION-FINDINGS.md). The three
+    # The program's ruling for task 2.1 (the maintainers' private audit notes). The three
     # summary producers' reading (0.5 * the whole carry on 5-10, 0 from 11) is not the standard: it
     # credits a 5-yard run less than a 4-yard run.
     band = (

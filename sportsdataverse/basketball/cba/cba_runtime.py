@@ -1,6 +1,6 @@
 """Runtime for the generated CBA wrappers (``data-server.cbaleague.com``, the men's Chinese Basketball Association).
 
-Three things make this host unusual (sdv-internal-refs ``cba/``, live-verified 2026-10-12):
+Three things make this host unusual (live-verified 2026-10-12):
 
 * **Every body is AES-128-ECB / PKCS7 encrypted** (a JSON string literal holding base64 of the ciphertext). The
   16-character key is a public constant in the site's front-end bundle (function ``TIe`` of

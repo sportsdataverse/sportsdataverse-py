@@ -1,7 +1,7 @@
 """Generate the ``bleague`` flat-API endpoint YAML + returns-schemas (Japan B.LEAGUE: B1, B2, B3).
 
 Idempotent: same spec + same fixtures -> byte-identical output. Reads the frozen spec from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/bleague.yaml`` -- 14 wrappers. One game context feeds nine frames (``game_info``,
   ``period_scores``, ``player_box``, ``team_box``, ``team_summary``, ``pbp``, ``shots``, ``leaders``,
@@ -14,7 +14,7 @@ Idempotent: same spec + same fixtures -> byte-identical output. Reads the frozen
 * ``tools/codegen/notes/bleague_descriptions.yaml`` -- ``{bleague_<short>: {column: text}}``, the block for
   ``manual_column_descriptions.yaml`` (Integration merges it). Japanese terms are translated. An empty, short or
   filler text fails the run.
-* ``tests/fixtures/bleague/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/bleague/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_bleague.py``
 """

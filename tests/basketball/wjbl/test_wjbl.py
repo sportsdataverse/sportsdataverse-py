@@ -1,6 +1,6 @@
 """The W League (``wjbl``) family: parsers, runtime refusals, politeness, season mapping, and the generated wrappers.
 
-Reads only committed files (CI has no sdv-internal-refs checkout): ``tests/fixtures/wjbl`` (the FULL bodies of game
+Reads only committed files (CI has no private reference checkout): ``tests/fixtures/wjbl`` (the FULL bodies of game
 7987 and the refs captures), the endpoint YAML, its schemas, the description snippet and the spec-route snapshot.
 The transport is mocked.
 """
@@ -1043,7 +1043,7 @@ def test_the_wrappers_use_the_wjbl_runtime_getter():
 
 def test_the_fixture_readme_names_its_source():
     text = (FIX / "README.md").read_text(encoding="utf-8")
-    for needle in ("18ee8c3", "api.wjbl.01core.app", "2026-10-12", "2026-10-13", "full/"):
+    for needle in ("api.wjbl.01core.app", "2026-10-12", "2026-10-13", "full/"):
         assert needle in text, needle
     names = {p.name for p in (FIX / "full").glob("*.json")}
     assert len(names) == 10 and all((FIX / "full" / n).stat().st_size < 300_000 for n in names)

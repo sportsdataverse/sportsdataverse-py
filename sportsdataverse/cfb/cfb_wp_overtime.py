@@ -83,7 +83,7 @@ _CARD = "wp_ot_reach"
 #: either team (a period can open with "Timeout <the other team>").
 NOT_A_SNAP = ("Timeout", "End Period", "Penalty")
 #: ``(first season, first overtime period)`` from which a touchdown must be followed by a
-#: two-point try (sdv-internal-refs ``rules/cfb.yaml``): from 1996 the third overtime on
+#: two-point try (NCAA football overtime rules): from 1996 the third overtime on
 #: (``cfb-1996-overtime-introduced``); 2019-20 still the third and fourth, the fifth on being
 #: a two-point shootout (``cfb-2019-overtime-shootout-from-fifth``); from 2021 the second,
 #: the third on being a shootout (``cfb-2021-overtime-shootout-from-third``).

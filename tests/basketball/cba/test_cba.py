@@ -4,7 +4,7 @@ Parsers run over real data: the FULL bodies of game 100105799 (2025-26 round 1) 
 come from the refs' presence sidecars over full bodies) and the refs capture samples in ``tests/fixtures/cba/captures/``.
 The runtime is driven through a scripted ``requests`` adapter mounted on a ``PoliteSession`` that answers ENCRYPTED
 bodies, so every refusal is exercised end to end and every attempt is counted. No network, no proxy, and nothing reads
-the private sdv-internal-refs checkout.
+the private reference checkout.
 """
 
 from __future__ import annotations

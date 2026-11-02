@@ -15,9 +15,7 @@ One home for every algorithm shared across the four draft/projection models
 
 Design: the **math** here is league-agnostic; the **fitted numbers** (box-value
 coefficients, replacement level) live in ``LEAGUE_CONSTANTS`` per league and are
-never hard-coded inside an algorithm function. See
-``C:/Users/saiem/Documents/ClaudeCowork/specs/2026-07-07-nba-draft-projection-design.md``
-section 3.2 for the algorithm/constants boundary rationale.
+never hard-coded inside an algorithm function.
 """
 
 from __future__ import annotations

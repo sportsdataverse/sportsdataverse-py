@@ -2,7 +2,7 @@
 
 Parsers are asserted against real data: the FULL bodies of one game (6), one division and one season in
 ``tests/fixtures/tpbl/full/`` (dtypes come from those) and the refs capture samples of every route in
-``tests/fixtures/tpbl/captures/``. No network, and nothing reads the private sdv-internal-refs checkout.
+``tests/fixtures/tpbl/captures/``. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

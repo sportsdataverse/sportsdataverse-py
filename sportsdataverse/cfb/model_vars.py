@@ -278,24 +278,24 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
 
 #: The trained CFB rule-era cuts, the LAST season of era0 / era1 / era2 (era3 is open-ended):
-#: sdv-internal-refs ``rules/cfb.yaml`` ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
+#: the maintainers' rule-catalogue ids ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
 #: ``cfb-2021-model-era-cut``; the bundled model cards' ``era.cuts`` (a test pins them equal). The
 #: QBR era dummies and the fourth-down / two-point ``FD_ERA_BOUNDS`` read it.
 CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)
 
 #: First season ESPN writes the try on the touchdown row (its 2014 participants/text template);
 #: through 2013 the try is its own "Extra point by X is good" row, so the touchdown row's score
-#: lacks it (the WPA ``+ 0.92`` expected-try adjustment). ``rules/cfb.yaml``
+#: lacks it (the WPA ``+ 0.92`` expected-try adjustment). Rule-catalogue id
 #: ``cfb-2014-espn-participants-and-text-template``.
 CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014
 
 #: First season a fair-caught kickoff inside the receiver's 25 is a touchback.
-#: ``rules/cfb.yaml`` ``cfb-2018-kickoff-fair-catch-touchback``.
+#: Rule-catalogue id ``cfb-2018-kickoff-fair-catch-touchback``.
 CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
 
 #: ``(first season, first period)`` from which every overtime period is a two-point shootout:
 #: one alternating two-point play per team, no possession from the 25 (ESPN period 5 is the
-#: first overtime). No shootout before 2019 (sdv-internal-refs ``rules/cfb.yaml``
+#: first overtime). No shootout before 2019 (rule-catalogue id
 #: ``cfb-1996-overtime-introduced``); the fifth overtime, period 9, in 2019-20
 #: (``cfb-2019-overtime-shootout-from-fifth``); the third, period 7, from 2021
 #: (``cfb-2021-overtime-shootout-from-third``). Source: NCAA, "Panel approves changes to
@@ -311,12 +311,12 @@ OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
 #: period instead of one per period: NCAA Rule 3-1-3-h as amended by the Playing Rules Oversight Panel
 #: on 2025-04-16 ("Each team will be allowed one timeout beginning with the third extra period until
 #: the game is ended"; https://www.ncaa.org/media-center-changes-to-injury-timeouts-approved-in-football/).
-#: Period 7 is the third overtime. No sdv-internal-refs ``rules/cfb.yaml`` entry yet.
+#: Period 7 is the third overtime. No rule-catalogue entry yet.
 OT_SHARED_TIMEOUT_FROM: tuple[int, int] = (2025, 7)
 
 #: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied, newest first (the twin of
-#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). sdv-internal-refs
-#: ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
+#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). Rule-catalogue id
+#: ``cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
 #: from the 20 to the 25, so a kickoff touchback's next snap is 80 to go through 2011 and 75 from 2012.
 #: Every 2012-13 fixture touchback's next snap starts at the 25. cfbfastR's ``create_epa.R`` mirrors this
 #: table (cfbfastR #184).
@@ -324,7 +324,7 @@ TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80)
 
 #: The receiving team's yardline after a kickoff out of bounds, by the FIRST season each spot applied,
 #: newest first: the 35 from 2012, the 40 before. The same 2012 rule set
-#: (``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``, which moved the kick from the 30 to the 35; the
+#: (rule-catalogue id ``cfb-2012-kickoff-35-touchback-25``, which moved the kick from the 30 to the 35; the
 #: catalogue entry does not itself state the out-of-bounds spot).
 KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 35), (0, 40))
 

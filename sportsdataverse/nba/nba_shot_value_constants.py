@@ -123,10 +123,10 @@ LEAGUE_COURT: "dict[str, CourtGeometry]" = {
 # Three-point arc eras, keyed by the FIRST season (END year: 1995 = 1994-95)
 # the geometry applies to; a season maps to the latest era at or before it.
 # Seasons before the first key use the first era (the NBA's 1979-80 arc equals
-# the current one). Sources: sdv-internal-refs rules/nba.yaml
+# the current one). Sources: rules
 # nba-1995-three-point-line-shortened / nba-1998-three-point-line-restored
 # (uniform 22 ft, 1994-95 through 1996-97, so the corner equals the arc);
-# rules/wnba.yaml wnba-2004-three-point-line-20-6 (19 ft 9 in 1997-2003,
+# wnba-2004-three-point-line-20-6 (19 ft 9 in 1997-2003,
 # 20 ft 6.25 in 2004-2012) and wnba-2013-three-point-line-fiba (22 ft 1.75 in,
 # corner 200 tenths, 2013+). The G League has always used the NBA court.
 COURT_ERAS: "dict[str, dict[int, CourtGeometry]]" = {

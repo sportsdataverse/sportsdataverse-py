@@ -36,7 +36,7 @@ Oracle per column
     nflfastR's ``receive_2h_ko`` gate (cfbfastR leaves the flag ungated there; task 2.6 chose the
     nflfastR rule, as the NFL processor does). Green since task 2.6 (C-NF-2).
 ``start.yardsToEndzone.touchback`` (kickoff rows)
-    The NCAA rule, sdv-internal-refs ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: 80 through
+    The NCAA rule (rule ``cfb-2012-kickoff-35-touchback-25``): 80 through
     2011, 75 from 2012. Owner ruling: through 2011 the RULE is the oracle, not cfbfastR -- cfbfastR's
     ``create_epa.R:233`` sets 75 for every season, which is the R bug (a separate cfbfastR PR fixes
     it). Green on every capture: main's #778 (2b73fa5a5e) moved the 2012-13 spot to 75 and closed C-H4.

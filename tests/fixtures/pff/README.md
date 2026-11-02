@@ -10,7 +10,7 @@
 
 Real response captures from **`premium.pff.com/api/v1`** (PFF Premium Stats 2.0),
 captured 2026-07-08 from a logged-in session and mirrored from
-`sdv-internal-refs/pff/captures/samples/`.
+the maintainers' capture samples.
 
 These drive the offline parser + wrapper tests in `tests/nfl/test_pff_parsers.py`
 (transport injected — no network, no credentials). They are payload-agnostic:

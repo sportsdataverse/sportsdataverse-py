@@ -2,7 +2,7 @@
 
 Basketligaen's site is a Sportality instance (the vendor behind ``shl`` / ``ha``); the stats are
 ``genius-basketball``, a relay of Genius Sports LiveStats. The API is keyless JSON. Its contracts,
-all from the refs capture (``sdv-internal-refs/sportality/``, live-verified 2026-10-12):
+all live-verified 2026-10-12:
 
 * **Seasons are ssgts.** Tables and schedules key on an ssgt uuid (season + series + game type);
   season codes are START years (``2025`` = 2025/26). The wrappers take the season as its END year

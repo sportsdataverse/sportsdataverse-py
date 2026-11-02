@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_feb.py`` (itself ``gen_asa.py``
 with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the returns md from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/aba.yaml`` -- 12 wrappers over the spec's 7 routes. One route feeds several frames
   (the match page feeds ``game``, ``periods``, ``box_players``, ``box_teams`` and ``pbp``; the player page feeds
@@ -15,7 +15,7 @@ with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and
   cannot mistype a rate. The schemas carry ``description: ''`` (descriptions never live in ``schemas/**``).
 * ``tools/codegen/notes/aba_descriptions.yaml`` -- ``{aba_<short>: {column: text}}``, the block for
   ``manual_column_descriptions.yaml`` (Integration merges it). A filler or missing description stops the run.
-* ``tests/fixtures/aba/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/aba/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_aba.py``
 """
@@ -40,7 +40,7 @@ SPEC = "aba-liga.openapi.yaml"
 FIXTURES = ROOT / "tests" / "fixtures" / "aba"
 #: Column descriptions, keyed ``aba_<short>`` -> column; merged into manual_column_descriptions.yaml.
 NOTES = ROOT / "tools" / "codegen" / "notes" / "aba_descriptions.yaml"
-#: The spec's route list, committed so the tests check ENDPOINTS without the refs checkout.
+#: The spec's route list, committed so the tests check ENDPOINTS without the reference checkout.
 SPEC_PATHS = FIXTURES / "spec_paths.json"
 #: What tests/codegen/test_manual_descriptions.py rejects as filler.
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.IGNORECASE)

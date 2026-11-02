@@ -13,9 +13,9 @@ routes (the surface wrapped by the `sports247_site_pages` flat-API stem —
 distinct from the guest-JWT `ipa.247sports.com/rdb/v1` RDB behind `sports247`).
 
 - **Provenance:** copied verbatim from
-  `sdv-internal-refs/247sports/captures/site-pages/` (captured 2026-07-08).
+  the maintainers' site-page captures (captured 2026-07-08).
 - **Source URLs:** each capture corresponds to an `x-example-url` in
-  `sdv-internal-refs/247sports/site-pages.openapi.yaml` — e.g.
+  the maintainers' site-pages OpenAPI spec — e.g.
   `institution.json` ← `https://247sports.com/Institution/24099.json`,
   `recruits_season.json` ← `https://247sports.com/Season/2026-Football/Recruits.json?Items=15&Page=1`.
 - **Do not hand-edit.** Re-capture from the live routes if a schema drifts;

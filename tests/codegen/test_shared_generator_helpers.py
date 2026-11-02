@@ -1,7 +1,7 @@
 """One copy of the generator helpers (task 6.1 (c): A-L7, A-L22, A-L23, A-L24, A-N18).
 
 The flat-API generators share ``tools/codegen/gen_soccer_common.py``. Static checks only (the
-generators need the private sdv-internal-refs checkout to run):
+generators need the maintainers' private reference checkout to run):
 
 * every generator that carried its own copy now imports the shared helper and defines no copy;
 * no module under ``tools/codegen`` holds a body equal to a shared helper's, so a new copy fails here, with or
@@ -60,9 +60,10 @@ PINS = {
     "write_yaml": "d2c0fd81daca3498",
     "rewrite_schema_dir": "186076d5a47055b1",
     "capture_for": "63b9a789159e1082",
-    # current body, deliberately changed in #994 when the variants were unified (env, then a sibling checkout,
-    # then the default); the deleted gen_yahoo copy keyed f631060855bea9a5. #1000 touched only the module docstring
-    "refs_root": "cc3e9ecd474dc205",
+    # current body, deliberately changed in #994 when the variants were unified, then again when it dropped its
+    # sibling-checkout and local-path fallbacks for the env var alone (keyed cc3e9ecd474dc205 before); the deleted
+    # gen_yahoo copy keyed f631060855bea9a5. #1000 touched only the module docstring
+    "refs_root": "aadb81bf33fe9193",
 }
 
 
@@ -174,7 +175,7 @@ def test_no_generator_inlines_snake_path() -> None:
 
 
 def test_no_generator_reads_the_refs_env_itself() -> None:
-    """R61c-2: an inline re-copy of ``refs_root`` (a generator reading ``$SDV_INTERNAL_REFS_REPO`` itself, in any
+    """R61c-2: an inline re-copy of ``refs_root`` (a generator reading ``$SDV_REFS_REPO`` itself, in any
     function or at module level) differs from the shared body's AST, so the body-hash check above misses it."""
     copies = [
         f"{path.name}:{node.lineno}"
@@ -182,6 +183,10 @@ def test_no_generator_reads_the_refs_env_itself() -> None:
         if path.name != COMMON
         for node in ast.walk(ast.parse(path.read_text(encoding="utf-8")))
         if isinstance(node, ast.Call)
-        and any(isinstance(a, ast.Constant) and a.value == "SDV_INTERNAL_REFS_REPO" for a in node.args)
+        and any(
+            (isinstance(a, ast.Constant) and a.value == "SDV_REFS_REPO")
+            or (isinstance(a, ast.Name) and a.id == "REFS_ENV")
+            for a in node.args
+        )
     ]
     assert copies == [], f"use gen_soccer_common.refs_root / refs_dir: {copies}"

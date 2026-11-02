@@ -354,7 +354,7 @@ _README_STALE = [
     "(NHL + WHL)",
     "season = {2021}",
     "docs/parsers/index",
-    "sdv-internal-refs",
+    "internal-refs",  # the private reference repo, under any prefix
     "/master/sdv-py-logo.png",
     "lifecycle-experimental",
     "img.shields.io/twitter/follow/sportsdataverse?",

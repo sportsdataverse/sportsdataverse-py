@@ -1,7 +1,7 @@
 """Runtime for the generated LKL wrappers (``lkl.lt``: the livestream JSON API plus three HTML routes).
 
 One host, keyless, no headers, and ``robots.txt`` is ``Disallow:`` (empty) with no crawl-delay. Measured against
-the live site (sdv-internal-refs ``lkl/``, 2026-10-12):
+the live site (2026-10-12):
 
 * **Season keys.** The public ``season`` is the END year (2026 = 2025-26). The site keys a season by two opaque
   ids, a results id (``/loadResults?season=``) and a standings id (``/loadStandings/{id}``), neither a year. Both

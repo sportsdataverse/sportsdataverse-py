@@ -1,8 +1,8 @@
 """Offline tests for the VHL (``vhl``) flat-API family: HTML parsers, runtime and YAML.
 
 Parsers are asserted against real pages: the cut-down pages in ``tests/fixtures/vhl/`` (the
-sdv-internal-refs parser fixtures) and the full report page in ``tests/fixtures/vhl/full/``
-(dtypes come from that one). The refs capture records in ``tests/fixtures/vhl/captures/`` are
+maintainers' parser fixtures) and the full report page in ``tests/fixtures/vhl/full/``
+(dtypes come from that one). The capture records in ``tests/fixtures/vhl/captures/`` are
 the runtime's raw-record shape. The runtime is driven through a fake transport
 (``vhl_runtime._transport``), so every refusal is exercised end to end. No network.
 """

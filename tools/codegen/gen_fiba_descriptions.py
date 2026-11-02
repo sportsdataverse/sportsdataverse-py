@@ -1,6 +1,6 @@
 """Column descriptions for the FIBA returns-schemas (imported by ``gen_fiba.py``).
 
-``fiba-returns.md`` (sdv-internal-refs/fiba) documents every field of every body by JSON path. A parsed
+``fiba-returns.md`` (the maintainers' FIBA reference notes) documents every field of every body by JSON path. A parsed
 column is described by the row of the path it came from: the section of its route is filtered to the table
 the shaper explodes (``players.[]``, ``periods.[]``...), the container prefix is stripped, and the rest of the
 path, snake-cased, is the column. Columns a shaper adds (ids from the parent, derived values, renamed box

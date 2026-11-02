@@ -8,7 +8,7 @@ Task 3 catalog reconciliation (2026-07-03)
 -------------------------------------------
 The shot/FT-trip/jump-ball foul-family string tables below were reconciled
 against the full 2023-24 NBA season subType catalog
-(``c:/Users/saiem/Documents/ClaudeCowork/nba_data/v3_sweep/v3_subtype_catalog_2023.json``,
+(a sweep of the season's v3 play-by-play in the maintainers' private notes,
 1,230 games, 187 actionType/subType combos, 0 errors), superseding the task
 brief's 7-fixture-sample draft tables. Deliberately-unmapped / not further
 discriminated subTypes, by action_type:
@@ -821,9 +821,8 @@ def jump_ball_ends_possession(ctx: EventContext, i: int) -> bool:
       in ``live`` that can ever answer "True" for a ``JumpBall`` event.
     * Empirically, a cross-tab of every ``JumpBall`` event (mid-game and
       period-start) across 6 games confirmed 0/30 came back
-      ``is_possession_ending_event == True`` from the ``live`` provider (see
-      ``c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
-      2026-07-03-jumpball-oracle-crosstab.md``, Finding 2).
+      ``is_possession_ending_event == True`` from the ``live`` provider (a 2026-07-03 cross-tab in the maintainers' private
+      notes).
 
     This function previously ported pbpstats' *stats_nba*-concrete
     dispatcher, ``_is_jump_ball_possession_ending_event``
@@ -866,9 +865,8 @@ def jump_ball_ends_possession(ctx: EventContext, i: int) -> bool:
             ctx = build_event_context(rows)
             assert jump_ball_ends_possession(ctx, 0) is False
     """
-    # Empirical grounding (read-only cross-tab, not re-derived here):
-    # c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
-    # 2026-07-03-jumpball-oracle-crosstab.md -- 0/30 JumpBall events across
+    # Empirical grounding (read-only 2026-07-03 cross-tab, not re-derived here):
+    # 0/30 JumpBall events across
     # 6 games ever scored `is_possession_ending_event == True` under the
     # `live` oracle, and the v3 `teamId` field disagreed with the true tip
     # recipient in 11/24 sampled mid-game jump balls.

@@ -607,7 +607,7 @@ def _validate_against_spec() -> None:
     """Provenance/validation only — does not affect the emitted bytes."""
     spec = _load_spec()
     if spec is None:
-        print("sports247: spec not found (set SDV_INTERNAL_REFS_REPO to validate); skipping spec cross-check")
+        print("sports247: spec not found (set SDV_REFS_REPO to validate); skipping spec cross-check")
         return
     paths = spec.get("paths", {})
     guest_spec_paths = set()

@@ -3,15 +3,14 @@ the ``parse_cbs_napi`` / ``parse_cbs_napi_standings`` envelope parsers and the
 generated wrapper wiring. No network.
 
 Fixtures in ``tests/fixtures/cbs/`` are **trimmed copies of the real committed
-captures** in ``sdv-internal-refs/cbs/captures/`` (rows sliced, nothing edited).
-When that refs checkout is present the sweep tests additionally run the parsers
+captures** in the private reference checkout's ``cbs/captures/`` (rows sliced, nothing edited).
+When that checkout is present (``$SDV_REFS_REPO``) the sweep tests additionally run the parsers
 over the full 17-league capture set; they skip when it is not.
 """
 
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List
@@ -19,6 +18,8 @@ from typing import Any, Dict, List
 import polars as pl
 import pytest
 import yaml
+
+from tools.codegen.gen_soccer_common import refs_root
 
 from sportsdataverse.providers.cbs.cbs_napi_parsers import (
     parse_cbs_napi,
@@ -40,17 +41,9 @@ def _load(stem: str) -> Any:
 
 
 def _refs_cbs() -> Path | None:
-    """The ``sdv-internal-refs/cbs`` dir, or None when the checkout is absent."""
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    candidates = [Path(env)] if env else []
-    candidates += [
-        REPO_ROOT.parent / "sdv-internal-refs",
-        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
-    ]
-    for base in candidates:
-        if (base / "cbs" / "captures" / "_sample").is_dir():
-            return base / "cbs"
-    return None
+    """The reference checkout's ``cbs`` dir (``$SDV_REFS_REPO``), or None when it is absent."""
+    cbs = refs_root() / "cbs"
+    return cbs if (cbs / "captures" / "_sample").is_dir() else None
 
 
 def _id_columns(frame: pl.DataFrame) -> List[str]:
@@ -420,7 +413,7 @@ def test_every_yaml_endpoint_is_exported():
 def test_yaml_paths_match_the_frozen_spec():
     refs = _refs_cbs()
     if refs is None:
-        pytest.skip("sdv-internal-refs checkout not available")
+        pytest.skip("reference checkout not available (SDV_REFS_REPO unset)")
     spec = yaml.safe_load((refs / "cbssports-napi.openapi.yaml").read_text(encoding="utf-8"))
     doc = yaml.safe_load(ENDPOINT_YAML.read_text(encoding="utf-8"))
     # compare shapes with path tokens erased -- the YAML snake_cases them
@@ -429,14 +422,14 @@ def test_yaml_paths_match_the_frozen_spec():
 
 
 # ===========================================================================
-# Full-capture sweep (17 leagues) -- runs only with the refs checkout present
+# Full-capture sweep (17 leagues) -- runs only with the reference checkout present
 # ===========================================================================
 
 
 def test_every_committed_capture_parses_with_clean_ids():
     refs = _refs_cbs()
     if refs is None:
-        pytest.skip("sdv-internal-refs checkout not available")
+        pytest.skip("reference checkout not available (SDV_REFS_REPO unset)")
     sample = refs / "captures" / "_sample"
     seen = 0
     for src in sorted(sample.glob("*.json")):
@@ -455,7 +448,7 @@ def test_capture_id_dtype_is_consistent_across_leagues():
     leagues' frames must not silently match nothing."""
     refs = _refs_cbs()
     if refs is None:
-        pytest.skip("sdv-internal-refs checkout not available")
+        pytest.skip("reference checkout not available (SDV_REFS_REPO unset)")
     sample = refs / "captures" / "_sample"
     dtypes: Dict[str, Dict[str, set]] = {}
     for src in sorted(sample.glob("*.json")):

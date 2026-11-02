@@ -340,7 +340,7 @@ def _yaml() -> Dict[str, Any]:
 
 
 def test_yaml_lists_every_route():
-    # The spec's route list is committed by gen_liiga (spec_paths.json): CI has no sdv-internal-refs.
+    # The spec's route list is committed by gen_liiga (spec_paths.json): CI has no private reference checkout.
     doc = _yaml()
     paths = json.loads(gen_liiga.SPEC_PATHS.read_text(encoding="utf-8"))
     assert {e[0] for e in gen_liiga.ENDPOINTS.values()} == set(paths) and len(paths) == 14

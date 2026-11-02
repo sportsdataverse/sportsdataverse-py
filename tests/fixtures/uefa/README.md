@@ -8,12 +8,12 @@
 
 # UEFA fixtures
 
-Byte copies of every capture in `sdv-internal-refs/uefa/captures/` (source commit
-`e330067`, 2026-10-06): real responses from the keyless UEFA front-end APIs (four
+Byte copies of every capture in the maintainers' UEFA capture set
+(2026-10-06): real responses from the keyless UEFA front-end APIs (four
 `*.uefa.com` hosts), captured live on 2026-10-06 with `Accept: application/json` and
 `Origin: https://www.uefa.com`, every array cut to its first 3 elements at every depth.
 File names keep the capture's slug (`<host-stem>__<path>`), so a re-sync is a plain
-`cp sdv-internal-refs/uefa/captures/*.json tests/fixtures/uefa/`. Do not hand-edit.
+`cp $SDV_REFS_REPO/uefa/captures/*.json tests/fixtures/uefa/`. Do not hand-edit.
 
 | File | Wrapper | Route |
 |---|---|---|

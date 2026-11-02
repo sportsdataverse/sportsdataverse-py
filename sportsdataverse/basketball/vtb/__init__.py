@@ -12,8 +12,8 @@ several frames (``GetOnline`` feeds ``vtb_infobasket_game``, ``_box_score``, ``_
     raw = vtb_infobasket_box_score(game_id=921391, return_parsed=False)
     box, plays = parse_vtb_infobasket_box_score(raw), parse_vtb_infobasket_pbp(raw)
 
-Unofficial use of a public source: payloads are not redistributed as release assets. Owner flag
-(``sdv-internal-refs/vtb/README.md``): the league and the platform are run from Russia and several clubs are owned or
+Unofficial use of a public source: payloads are not redistributed as release assets. Owner flag:
+the league and the platform are run from Russia and several clubs are owned or
 sponsored by sanctioned state companies (the KHL precedent). Fetching on your own machine is fine; any published data
 release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
 """

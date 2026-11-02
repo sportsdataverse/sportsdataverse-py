@@ -1,6 +1,6 @@
-"""Code tables of the Infobasket play-by-play and line-up rows (``sdv-internal-refs/vtb/vtb-returns.md``).
+"""Code tables of the Infobasket play-by-play and line-up rows.
 
-Labels are the site widget's English ``getPlayDescription`` strings; the gloss is the refs documentation's English
+Labels are the site widget's English ``getPlayDescription`` strings; the gloss is the maintainers' English
 reading. Codes the table lacks (new play types) parse to a null label rather than failing.
 """
 

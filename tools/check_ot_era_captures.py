@@ -8,7 +8,7 @@ Prints one line per rule set naming the capture that covers it, then
 A capture covers a rule set when its ESPN header season falls inside the set, its plays reach the
 period that set's rule is about (so a test can tell the sets apart, which is what C-M6 asks for),
 and its game id is named in the league's ``tests/<league>/fixtures/README.md``. Rule ids are the
-sdv-internal-refs ``rules/*.yaml`` entries.
+maintainers' rule-catalogue labels.
 
 CFB: overtime from the 25 since 1996, a two-point try forced from the third overtime; 2019-20 add the
 two-point shootout from the fifth overtime (period 9); from 2021 the try is forced from the second

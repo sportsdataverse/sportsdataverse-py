@@ -10,7 +10,7 @@
 
 Real, trimmed responses from the Kalshi Trade API v2
 (`https://api.elections.kalshi.com/trade-api/v2`), captured 2026-10-06 and copied
-byte-for-byte from `sdv-internal-refs/kalshi/captures/` at refs main `22b148b`.
+byte-for-byte from the maintainers' captures.
 
 | File | Route |
 |---|---|

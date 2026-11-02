@@ -29,5 +29,5 @@ Joe Burrow, player 28022; game 23108). None of them come from our own captures.
 | `team_rushing_direction.json` | `GET /v2/{league}/teams/{team}/reports/rushing-direction` |
 | `position_report.json` | `GET /v2/{league}/positions/reports/{report}` |
 
-Refresh: re-extract from the vendored spec in sdv-internal-refs
-(`pff/developer/pff-developer.openapi.json`) when PFF bumps `info.version`.
+Refresh: re-extract from the PFF developer OpenAPI spec (vendored in the maintainers'
+private reference checkout) when PFF bumps `info.version`.

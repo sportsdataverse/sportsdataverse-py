@@ -12,8 +12,8 @@ package convention, so ``season`` goes on the wire unchanged. ``phase`` is a SIH
 regular season on ``/player`` (verified, byte-identical to ``phase=4940``); on the other routes
 that default is assumed, not verified.
 
-:func:`_get` is the shared throttled getter plus the checks the reference capture applies before
-it banks a body (``sdv-internal-refs/nationalleague/tools/capture.py``), so a wrong answer never
+:func:`_get` is the shared throttled getter plus the checks the maintainers' capture tool applies
+before it banks a body, so a wrong answer never
 reaches a parser as data:
 
 * the package error vocabulary from the shared getter: 404 -> ``NoDataError``, 400 / 422 ->

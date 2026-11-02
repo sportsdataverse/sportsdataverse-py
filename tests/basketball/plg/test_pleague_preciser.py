@@ -4,7 +4,7 @@ Parsers are asserted against real bodies of one game (gid 197): the FULL shot li
 ``tests/fixtures/pleague_preciser/full/``, the whole summary, rotation and injury bodies, and the site's box and
 play-by-play of the same game (the join and frame tests). The runtime is driven through a scripted ``requests`` adapter
 mounted on a ``PoliteSession`` (the vendor) and a scripted transport (the site, for the verified mode), so every refusal
-is exercised end to end and every attempt is counted. No network, and nothing reads the private sdv-internal-refs
+is exercised end to end and every attempt is counted. No network, and nothing reads the private reference
 checkout.
 """
 

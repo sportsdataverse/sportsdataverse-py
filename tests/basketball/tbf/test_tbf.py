@@ -4,7 +4,7 @@ Parsers are asserted against real data: the FULL bodies of one finished BSL 2026
 team statistics and the points leaders in ``tests/fixtures/tbf/full/`` (dtypes come from those), and the refs capture
 samples in ``tests/fixtures/tbf/captures/``. The runtime is driven through a scripted ``requests`` adapter mounted on
 a ``PoliteSession`` subclass, so every refusal is exercised end to end and every attempt is counted. No network, and
-nothing reads the private sdv-internal-refs checkout.
+nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

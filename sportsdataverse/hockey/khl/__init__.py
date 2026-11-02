@@ -1,7 +1,7 @@
 """KHL wrappers over www.khl.ru/rest + khl.api.webcaster.pro (codegen flat-API family ``khl_rest`` + ``khl_webcaster``).
 
-Unofficial use of a public source: payloads are not redistributed as release assets. Owner flag
-(``sdv-internal-refs/khl/README.md``): the KHL and its webcaster platform are run by Russian operators,
+Unofficial use of a public source: payloads are not redistributed as release assets. Owner flag:
+the KHL and its webcaster platform are run by Russian operators,
 some clubs by sanctioned state companies; any published data release, hosted mirror or redistribution
 needs owner (sanctions / legal) sign-off first.
 """

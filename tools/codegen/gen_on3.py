@@ -3,8 +3,8 @@ Recruit Database OpenAPI spec (``api.on3.com/public/rdb``, auth-free).
 
 Idempotent: same spec -> byte-identical output. Modeled on ``gen_nba_stats.py``.
 
-The generator reads the frozen OpenAPI spec (path via the ``SDV_INTERNAL_REFS_REPO``
-env, default ``C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs``) and emits:
+The generator reads the frozen OpenAPI spec (from the maintainers' private reference
+checkout, ``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/on3.yaml`` -- one endpoint per usable GET op, host
   ``https://api.on3.com/public/rdb/v1`` (the single ``/rdb/v2`` op carries an

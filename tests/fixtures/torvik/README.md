@@ -26,7 +26,7 @@ rows (the game-stats capture also keeps the 2 rows whose `margin` is null). Used
 | `2025_getadvstats_jersey_00.csv` | `https://barttorvik.com/getadvstats.php?year=2025&csv=1` (HTTP 200, `text/csv`, 1,975,100 bytes, 5,060 rows), captured 2026-10-20: the rows kept verbatim are all 8 whose jersey (`number`, field 28) is `"00"` and the first 4 whose jersey is `"0"`, in file order (B-M19). Used by `tests/mbb/test_mbb_torvik.py`. |
 | `ncaaw_2025_team_results_head.csv` | `https://barttorvik.com/ncaaw/2025_team_results.csv` (women's T-Rank ratings) |
 
-Endpoint map + column schemas: `sdv-internal-refs/barttorvik/`
-(`README.md`, `barttorvik.openapi.yaml`). The interactive `.php` pages
+Endpoint map + column schemas: the maintainers' private barttorvik notes
+and OpenAPI spec. The interactive `.php` pages
 (`trank.php`, `team-history.php`, `teamsheets.php`, `resume-compare*.php`)
 sit behind a JS browser challenge and are deliberately not wrapped.

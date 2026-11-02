@@ -5,7 +5,7 @@ overtime) in ``tests/fixtures/aba/full/`` (dtypes come from it), the refs captur
 minute-chart bodies in ``tests/fixtures/aba/``, and the refs' cut-down HTML pages in ``tests/fixtures/aba/*.html``
 (the HTML parser's input). The runtime is driven through a scripted ``requests`` adapter mounted on a
 ``PoliteSession``, so every refusal is exercised end to end and every attempt is counted. No network, and nothing
-reads the private sdv-internal-refs checkout.
+reads the private reference checkout.
 """
 
 from __future__ import annotations

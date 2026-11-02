@@ -1,6 +1,6 @@
 """The generated ``kzs_*`` wrappers and their endpoint YAML: URL, wire parameters, the parser each one feeds.
 
-Reads only committed files (CI has no sdv-internal-refs checkout): the YAML, the spec-path snapshot written by
+Reads only committed files (CI has no private reference checkout): the YAML, the spec-path snapshot written by
 ``tools/codegen/gen_kzs.py`` and the fixtures.
 """
 

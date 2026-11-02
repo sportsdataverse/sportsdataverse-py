@@ -1,9 +1,10 @@
-# Shared rules (synced across repos — edit the template in ClaudeCowork, not here)
+# Shared rules (synced across repos — edit the template in the maintainers' private notes, not here)
 
 These apply in every session, including Claude Code cloud sessions. They sit alongside
 this repo's root `CLAUDE.md`, which holds the repo-specific rules.
 
 ## Commits and pull requests
+
 - **Conventional Commits**: `type(scope): summary` — feat, fix, docs, chore, refactor, test, perf, ci, build.
 - **No AI attribution, ever.** No `Co-Authored-By:` trailer naming an AI tool, no
   "Generated with …" footer, no session-link trailer — on commits *and* PR bodies.
@@ -15,6 +16,7 @@ this repo's root `CLAUDE.md`, which holds the repo-specific rules.
 - Verify the commit landed (`git log -1`) — hooks can abort it silently.
 
 ## Safety
+
 - Never commit secrets, `.Renviron`, or `.env`.
 - Don't scrape stats.nba.com, stats.wnba.com, stats.ncaa.org, or Sports Reference from
   a cloud session (datacenter IPs get blocked); keep PFF / Sports Reference data out of it.

@@ -1,12 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [BNXT League fixtures (`bnxt.sportpress.info/api/v1`, the Sportpress CMS)](#bnxt-league-fixtures-bnxtsportpressinfoapiv1-the-sportpress-cms)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # BNXT League fixtures (`bnxt.sportpress.info/api/v1`, the Sportpress CMS)
 
-Provenance of every file here. Nothing reads the private `sdv-internal-refs` checkout at test time (CI has none).
+Provenance of every file here. Nothing reads the maintainers' private reference checkout at test time (CI has none).
 
 | Path | What |
 |---|---|
-| `captures/*.json` | The 80 refs samples of `sdv-internal-refs/sportpress/captures/` (refs commit `c6ebad8`, captured 2026-10-12), copied verbatim: lists cut to 3 rows. Source URL: `https://bnxt.sportpress.info/api/v1<route>`. `@<id>` in a name is a second sample of the same route (another season or game). They are truncated, so a rate that is whole in the sample is an integer there; they type nothing. The social-handle keys in them are null in every sample. |
+| `captures/*.json` | The maintainers' 80 capture samples (captured 2026-10-12), copied verbatim: lists cut to 3 rows. Source URL: `https://bnxt.sportpress.info/api/v1<route>`. `@<id>` in a name is a second sample of the same route (another season or game). They are truncated, so a rate that is whole in the sample is an integer there; they type nothing. The social-handle keys in them are null in every sample. |
 | `full/*.json`, `full/film__...json.gz` | **Full, untruncated** bodies fetched live on 2026-10-12 through `bnxt_runtime` (the public header key read from the bnxtleague.com bundle, `X-Localization: en`, >= 1 s apart, contact fields dropped by the runtime), compacted JSON with the values untouched. They exist because the dtype of a statistic comes from the whole body: the full box mixes `75` and `41.7` in one percentage column. |
-| `spec_paths.json` | The spec's 23 routes, written by `tools/codegen/gen_sportpress.py` so the tests check the YAML without the refs checkout. |
+| `spec_paths.json` | The spec's 23 routes, written by `tools/codegen/gen_sportpress.py` so the tests check the YAML without the maintainers' private reference checkout. |
 
 The `full/` bodies (live requests: the bundle page and script, then one request per body; one `/schedule/find` was fetched twice):
 

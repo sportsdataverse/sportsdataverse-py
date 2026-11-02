@@ -4,8 +4,8 @@ OpenAPI spec (``www.fotmob.com/api/data``, unofficial, keyless as of 2026-10-05)
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_asa.py`` / ``gen_mls.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-Reads the frozen spec + captures from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+Reads the frozen spec + captures from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/fotmob.yaml`` -- one endpoint per GET route (14). Every
   route is query-parameterised; the build asserts no path token is named ``{league}``
@@ -179,7 +179,7 @@ def main() -> None:
         capture = _capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
-            schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see its ENDPOINTS.md)"
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
         schema["columns"] = columns_from_frame(parse_capture(capture, parse_fotmob), descriptions)
         write_yaml(schema_dir / f"{short}.yaml", schema)
     print(f"{STEM}: {len(ops)} endpoints")

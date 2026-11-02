@@ -3,14 +3,14 @@
 Infobasket is the stats platform of the Russian basketball federation and serves the VTB United League's game, team and
 player widgets. Every request goes through the shared :data:`sportsdataverse.basketball.basketball_runtime.SESSION`, which
 waits at least one second before **every** attempt, retries included (``dl_utils.download`` honours ``Retry-After`` on
-429 / 503). The host needs no key, cookie or proxy (sdv-internal-refs ``vtb/README.md``: direct from the droplet at 1
+429 / 503). The host needs no key, cookie or proxy (probed direct from a cloud host at 1
 request per second, no throttling), so no proxy variable is read. ``org.infobasket.su/robots.txt`` is a 404 (no rules).
 
 **Owner flag.** The league and the platform are run from Russia and several clubs are owned or sponsored by sanctioned
 state companies (the KHL precedent). Fetching on the user's own machine is fine; a published data release, hosted mirror
 or redistribution needs owner sign-off first.
 
-What the live host does (sdv-internal-refs ``vtb/``, probed 2026-10-12):
+What the live host does (probed 2026-10-12):
 
 * **Season is the END year at the public API** (2026 = 2025-26). Infobasket itself takes a competition id everywhere:
   ``/Comp/GetSeasonsForTag?tag=vtb`` maps ``SeasonYear`` (the END year) to the season-level ``CompID`` (2026 -> 50714).

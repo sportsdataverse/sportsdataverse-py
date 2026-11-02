@@ -20,9 +20,9 @@ Per-family subdirectories carry their own README (see `tracking/`).
 | File | Endpoint | Captured | Notes |
 |---|---|---|---|
 | `scheduleleaguev2_2025_26.json` | `nba_stats_scheduleleaguev2(season="2025-26", return_parsed=False)` | 2026-08-07 | 2025-26 season |
-| `commonteamroster_1610612747_2023_24.json` | `nba_stats_commonteamroster(team_id="1610612747", season="2023-24", return_parsed=False)` | 2026-07-08 | Lakers 2023-24, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/00/commonteamroster.json` |
-| `leaguestandingsv3_2023_24.json` | `nba_stats_leaguestandingsv3(season="2023-24", return_parsed=False)` | 2026-07-08 | 30 teams, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/00/leaguestandingsv3.json` |
-| `leaguegamelog_team_2023_24.json` | `nba_stats_leaguegamelog(league_id="00", season="2023-24", return_parsed=False)` | 2026-07-08 | Team game log, trimmed (see below); from `sdv-internal-refs/nba/captures/_sample/00/leaguegamelog.json` |
+| `commonteamroster_1610612747_2023_24.json` | `nba_stats_commonteamroster(team_id="1610612747", season="2023-24", return_parsed=False)` | 2026-07-08 | Lakers 2023-24, untrimmed; copied from the maintainers' capture sample |
+| `leaguestandingsv3_2023_24.json` | `nba_stats_leaguestandingsv3(season="2023-24", return_parsed=False)` | 2026-07-08 | 30 teams, untrimmed; copied from the maintainers' capture sample |
+| `leaguegamelog_team_2023_24.json` | `nba_stats_leaguegamelog(league_id="00", season="2023-24", return_parsed=False)` | 2026-07-08 | Team game log, trimmed (see below); from the maintainers' capture sample |
 
 ## Trimming
 
@@ -61,8 +61,8 @@ column contract moved.
 ## Per-endpoint captures
 
 `endpoints/<slug>.json` holds one real body per `nba_stats_*` wrapper (125 of
-128). They are the 2026-08 capture sweep's samples,
-`sdv-internal-refs/nba/captures/_sample/00/<slug>.json` (commit `3d754b8`), copied
+128). They are the 2026-08 capture sweep's samples
+(the maintainers' private captures), copied
 by `tools/codegen/vendor_captures.py`. The returns-table schemas under
 `tools/codegen/schemas/native/nba_stats/` are generated from what
 `parse_nba_stats_result_sets` emits on them (`tools/codegen/gen_nba_stats.py`).
@@ -81,6 +81,6 @@ order and with the same dtypes, as the full one. Headers, result-set lists and
 scalar rows are never cut. Re-vendor (this needs the private repo):
 
 ```sh
-SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
+SDV_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
 uv run python tools/codegen/gen_nba_stats.py
 ```

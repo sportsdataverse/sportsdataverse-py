@@ -5,8 +5,8 @@ front-end OpenAPI spec (``comp`` / ``match`` / ``standings`` / ``matchstats``
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_asa.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+The generator reads the frozen spec from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/uefa.yaml`` -- one endpoint per GET route (7). The
   family host is ``https://comp.uefa.com``; every path in the spec carries its own
@@ -88,7 +88,7 @@ _OPID_PREFIX = re.compile(r"^[a-z]+_v\d+_")
 # UCL match from /v5/matches), so the docs example resolves to the committed file.
 _EXAMPLE_PATH_ARGS: Dict[str, str] = {"match_id": "2047742"}
 
-_UNVERIFIED = "no committed capture in sdv-internal-refs/uefa/captures (ENDPOINTS.md marks the route not captured)"
+_UNVERIFIED = "no committed capture in the reference checkout's uefa/captures"
 
 
 def _short(path: str, op: dict) -> str:

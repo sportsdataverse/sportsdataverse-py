@@ -4,7 +4,7 @@ The data comes from the leagues' own PHP sites (``www.aba-liga.com`` and ``druga
 database behind both, ``lea`` picks the league). Two shapes feed this family:
 
 * **HTML pages** (match, calendar, standings, player), parsed here with the stdlib :mod:`html.parser` into
-  the records the refs captures bank (``sdv-internal-refs`` ``aba-liga/tools/capture.py``): a minimal DOM,
+  the records the maintainers' capture tool banks: a minimal DOM,
   iterative walks (a deep page never raises ``RecursionError``), and header / width / scope checks that
   refuse layout drift or another game, season or league instead of guessing. :func:`record_for` is the
   one entry point the runtime uses; a refusal is :class:`_NotParsed`.
@@ -956,7 +956,7 @@ def record_for(kind: str, html: str, want: Dict[str, int]) -> Dict[str, Any]:
         want: the request as the site keys it: ``game_no`` (match), ``player_id`` (player), ``sez`` and ``lea``.
 
     Returns:
-        The refs capture shape of the page (see ``sdv-internal-refs`` ``aba-liga/aba-liga-returns.md``).
+        The page reduced to the maintainers' capture record shape.
 
     Raises:
         _NotParsed: the page is not the one asked for, is not final (a match) or has drifted. ``empty`` is set
@@ -988,7 +988,7 @@ def _shot_scope_error(body: List[Dict[str, Any]], match: Dict[str, Any]) -> Opti
     """Tally the chart per shooter and compare it with that shooter's box row (the chart echoes no game id).
 
     Rows must equal field-goal attempts and made shots within one per shooter; the summed absolute differences and
-    the unrecorded-shooter rows (``player_id`` ``"0"``) are capped. Measured on the four refs samples: a shooter
+    the unrecorded-shooter rows (``player_id`` ``"0"``) are capped. Measured on four captured samples: a shooter
     differs by 0 or +1, the sums are at most 4 attempts / 1 made / 1 unrecorded; a rematch of the same rosters
     differs by several per player.
     """

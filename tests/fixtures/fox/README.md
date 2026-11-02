@@ -17,7 +17,7 @@ captured 2026-08-07. Used by `tests/test_fox_wbb_wnba_offline.py`.
 | `wcbk_team_11_standings.json` | `/wcbk/team/11/standings` (Big East standings from the UConn seed) |
 | `nba_team_1_standings.json` | `/nba/team/1/standings` (league-wide NBA standings, all 30 teams; team directory source) |
 
-Captured 2026-06-09/12 by the `sdv-internal-refs/fox` crawl, used by
+Captured 2026-06-09/12 by the maintainers' Fox crawl, used by
 `tests/test_fox_layout.py` (shared layout layer + per-league builder):
 
 | File | URL |

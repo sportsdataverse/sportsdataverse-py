@@ -3,20 +3,17 @@
 from __future__ import annotations
 
 import importlib
-import os
 from pathlib import Path
 
 import pytest
 import yaml
 
+from tools.codegen.gen_soccer_common import refs_root
+
 ROOT = Path(__file__).resolve().parents[2]
-_SPEC = (
-    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"))
-    / "247sports"
-    / "site-pages.openapi.yaml"
-)
+_SPEC = refs_root() / "247sports" / "site-pages.openapi.yaml"
 pytestmark = pytest.mark.skipif(
-    not _SPEC.exists(), reason="sdv-internal-refs 247 site-pages spec not present (local-only source)"
+    not _SPEC.exists(), reason="247 site-pages spec not present ($SDV_REFS_REPO unset; local-only source)"
 )
 ENDPOINTS = "tools/codegen/endpoints/sports247_site_pages.yaml"
 SCHEMA_DIR = "tools/codegen/schemas/native/sports247_site_pages"

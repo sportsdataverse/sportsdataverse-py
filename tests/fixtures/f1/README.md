@@ -10,7 +10,7 @@
 
 Real, trimmed responses from the Jolpica F1 API (Ergast-compatible,
 `https://api.jolpi.ca/ergast/f1`, keyless), captured 2026-10-06 and copied
-byte-for-byte from `sdv-internal-refs/f1/captures/` (source commit `4fe3515`, copied
+byte-for-byte from the maintainers' captures (copied
 2026-10-06). Season 2024, round 1 (Bahrain); round 5 (China) for the sprint, the first
 2024 sprint weekend; driver `max_verstappen`. Every array is cut to its first 3
 elements at every depth (`MRData.total` still counts the full result).

@@ -18,7 +18,7 @@ fixtures did not match the live payload.
 | File | Endpoint | Captured | Notes |
 |---|---|---|---|
 | `scheduleleaguev2_2026.json` | `wnba_stats_scheduleleaguev2(season="2026", return_parsed=False)` | 2026-08-07 | 2026 season |
-| `commonteamroster_1611661319_2023.json` | `wnba_stats_commonteamroster(team_id="1611661319", season="2023", return_parsed=False)` | 2026-07-08 | Aces 2023, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/10/commonteamroster.json` |
+| `commonteamroster_1611661319_2023.json` | `wnba_stats_commonteamroster(team_id="1611661319", season="2023", return_parsed=False)` | 2026-07-08 | Aces 2023, untrimmed; copied from the maintainers' capture sample |
 
 ## Trimming
 
@@ -52,8 +52,8 @@ column contract moved.
 ## Per-endpoint captures
 
 `endpoints/<slug>.json` holds one real body per `wnba_stats_*` wrapper (110 of
-111). They are the 2026-08 capture sweep's samples,
-`sdv-internal-refs/nba/captures/_sample/10/<slug>.json` (commit `3d754b8`), trimmed
+111). They are the 2026-08 capture sweep's samples
+(the maintainers' private captures), trimmed
 by `tools/codegen/vendor_captures.py`; the trimming rule is described in
 `../nba_stats/README.md`. The returns-table schemas are generated from the
 parser's output on these bodies (`tools/codegen/gen_nba_stats.py`).

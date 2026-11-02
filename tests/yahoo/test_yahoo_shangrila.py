@@ -4,10 +4,10 @@ getter, the three envelope parsers, and the generated wrapper wiring. No network
 Fixture provenance:
 
 * ``tests/fixtures/yahoo/*.json`` are **real captures**, trimmed (fewer games /
-  players / plays, every collection kept) from the committed bodies in
-  ``sdv-internal-refs/yahoo/discovery/responses/``.
+  players / plays, every collection kept) from the maintainers'
+  private captures of the Yahoo API responses.
 * ``SINGLE_COLLECTION`` and ``WRAPPED_COLLECTION`` below are **constructed**, not
-  captured: the internal-refs repo holds no body for a single-collection
+  captured: those captures hold no body for a single-collection
   shangrila query, so those two are hand-built to match the shapes the spec
   declares (``PlayerSeasonStatsResponse`` / ``LegacyLeadersResponse``).
 """

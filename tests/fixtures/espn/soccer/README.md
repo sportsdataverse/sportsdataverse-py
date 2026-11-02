@@ -8,7 +8,7 @@
 
 # ESPN soccer fixtures
 
-Captured 2026-06 from ESPN (auth-free) via sdv-internal-refs espn_capture_league.py.
+Captured 2026-06 from ESPN (auth-free) via the maintainers' league capture script.
 Leagues: eng.1 (EPL), uefa.champions (UCL knockout+shootout), usa.1 (MLS conferences).
 Used by tests/test_espn_soccer_parsers.py.
 

@@ -2,7 +2,7 @@
 
 The runtime is driven through the real generated wrappers over a scripted ``requests`` adapter mounted on a
 ``PoliteSession``, answering with the committed fixtures, so every refusal is exercised end to end and every attempt
-is counted. No network, and nothing reads the private sdv-internal-refs checkout.
+is counted. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

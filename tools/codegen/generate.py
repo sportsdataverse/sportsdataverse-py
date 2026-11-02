@@ -748,11 +748,11 @@ _LEAGUE_R_PACKAGE = {
     **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},
 }
 
-# The European hockey league homes (sdv-internal-refs Phase A intake): one docs/registry prefix
+# The European hockey league homes (the 2026-10 intake): one docs/registry prefix
 # each, nested under ``hockey/`` through _NESTED_HOMES below. Ordered as the docs list them.
 _EURO_HOCKEY_HOMES = ("del", "icehl", "eihl", "metal", "elh", "liiga", "shl", "ha", "nl", "magnus", "khl", "vhl")
 
-# The international basketball homes (sdv-internal-refs Phase A intake): one docs/registry prefix each, nested under
+# The international basketball homes (the 2026-10 intake): one docs/registry prefix each, nested under
 # ``basketball/`` through _NESTED_HOMES below. Ordered as the docs list them. A prefix is the short snake_case name
 # of a provider family, not always a league: ``genius``/``atrium`` serve many competitions, ``scb`` serves BBL and
 # DBBL, ``fiba_hub``/``nbl_au`` avoid the ESPN ``fiba``/``nbl`` prefixes (function names keep ``fiba_*``/``nbl_*``), ``bnxt`` is the Sportpress family, ``dbl`` the Sportality one, ``plg`` the P. LEAGUE+ pair.
@@ -3006,15 +3006,15 @@ FLAT_APIS = [
     ("cbs_napi", "cbs"),
     ("yahoo_shangrila", "yahoo"),
     ("fox_api", "fox"),
-    # wave-1 intake families (sdv-internal-refs: euroleague/, fotmob/, uefa/, fifa/, sleeper/)
+    # wave-1 intake families (euroleague, fotmob, uefa, fifa, sleeper)
     ("euroleague", "euroleague"),
     ("fotmob", "soccer"),
     ("uefa", "soccer"),
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
-    ("f1", "f1"),  # Jolpica F1 (Ergast-compatible), sdv-internal-refs: f1/
-    # wave-2 intake families (sdv-internal-refs: espn-content/, thesportsdb/,
-    # football-data-co-uk/, openligadb/, polymarket/, kalshi/)
+    ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
+    # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
+    # polymarket, kalshi)
     ("espn_content", "espn_content"),
     ("thesportsdb", "thesportsdb"),
     ("football_data", "soccer"),
@@ -3023,8 +3023,8 @@ FLAT_APIS = [
     ("kalshi", "odds"),
     # Swiss Ice Hockey Federation statistics API (data.sihf.ch), every SIHF league
     ("sihf_api_web", "sihf"),
-    # European hockey leagues (sdv-internal-refs: esports-hokejovyzapis/, hokejcz/, liiga/, shl/,
-    # hockeyallsvenskan/, nationalleague/, ligue-magnus/, khl/, vhl/), homed under hockey/<lg>/
+    # European hockey leagues (esports.hokejovyzapis.cz, hokej.cz, Liiga, SHL, HockeyAllsvenskan,
+    # National League, Ligue Magnus, KHL, VHL), homed under hockey/<lg>/
     ("del_esports", "del"),
     ("icehl_esports", "icehl"),
     ("eihl_esports", "eihl"),
@@ -3038,9 +3038,9 @@ FLAT_APIS = [
     ("khl_rest", "khl"),
     ("khl_webcaster", "khl"),
     ("vhl", "vhl"),
-    # International basketball (sdv-internal-refs Phase A: feb/, scb/, genius-livestats/, atrium-embed/, nbl-rosetta/,
-    # fiba/, legabasket/, acb/, ibba/, wjbl/, vtb/, kbl/, bleague/, kzs/, lkl/, tbf/, cebl/, aba-liga/, easl/,
-    # sportpress/, tpbl/, pleague/, cba/, sportality/), homed under basketball/<lg>/
+    # International basketball (FEB, SCB, Genius Sports LiveStats, Atrium embed, NBL Rosetta, FIBA, LBA, ACB, IBBA,
+    # WJBL, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA Liga, EASL, Sportpress, TPBL, P. LEAGUE+, CBA, Sportality),
+    # homed under basketball/<lg>/
     ("fiba_gdap", "fiba_hub"),
     ("fiba_gamepage", "fiba_hub"),
     ("genius", "genius"),
@@ -6157,7 +6157,7 @@ def build_docs() -> list[Path]:
 # scripts are NOT listed: model docstrings and the model-lineage page cite them as provenance.
 _INTERNAL_LEAK_PATTERNS: dict[str, re.Pattern[str]] = {
     "agent-persona comment": re.compile(r"\bponytail:"),
-    "private repository": re.compile(r"sdv-internal-refs"),
+    "private repository": re.compile(r"(?i)sdv[-_]internal[-_]refs|claude[-_ ]?cowork"),
     "working-note path": re.compile(r"(?<![\w/.-])dev/[\w./-]+\.md\b"),
     "plan task id": re.compile(r"\bTask\s+\d+[a-z]?\.\d+"),
     "plan phase id": re.compile(r"\bPhase \d+[a-z]\b|\bPLAN-phase"),

@@ -4,8 +4,8 @@ API v3 OpenAPI spec (``api.fifa.com/api/v3``, keyless).
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_asa.py``, with the shared plumbing in ``gen_soccer_common.py``.
 
-The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
-(``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+The generator reads the frozen spec from the maintainers' private reference checkout
+(``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/fifa.yaml`` -- one endpoint per GET route (9), host
   ``https://api.fifa.com/api/v3``.
@@ -368,7 +368,7 @@ def main() -> None:
         capture = _capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe", "columns": []}
         if capture is None:
-            schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see ENDPOINTS.md)"
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
         else:
             frame = parse_capture(capture, parse_fifa)
             descriptions = [*sources, _curated(frame.columns)]

@@ -1,4 +1,4 @@
-"""Fixture helpers shared by the VTB tests: committed bodies only, never the sdv-internal-refs checkout."""
+"""Fixture helpers shared by the VTB tests: committed bodies only, never the private reference checkout."""
 
 from __future__ import annotations
 

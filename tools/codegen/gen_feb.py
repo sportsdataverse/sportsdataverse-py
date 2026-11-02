@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_vhl.py`` (itself
 ``gen_asa.py`` with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the returns md
-from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+from the maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/feb.yaml`` -- 11 wrappers over the spec's 8 routes (6 JSON, 2 HTML). One route feeds
   several frames (``/TeamStats`` feeds ``game_info``, ``period_scores`` and ``team_stats``; ``/resultados.aspx``
@@ -17,7 +17,7 @@ from the ``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the s
   ``manual_column_descriptions.yaml`` (gitignored). Text comes from :data:`LOCAL` (derived and renamed columns),
   :data:`LOCAL_BY` (a column whose meaning differs by wrapper), then the ``feb-returns.md`` row of the same record
   path. An empty, short or filler text fails the run.
-* ``tests/fixtures/feb/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/feb/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_feb.py``
 """

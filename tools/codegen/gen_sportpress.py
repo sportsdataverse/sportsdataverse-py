@@ -2,7 +2,7 @@
 
 Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen_feb.py`` (itself ``gen_asa.py``
 with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and the returns md from the
-``sdv-internal-refs`` checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+maintainers' private reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/sportpress.yaml`` -- 28 wrappers over the spec's 23 routes. One route can feed
   several frames (``/schedule/overview`` feeds ``game_overview``, ``game_top_performers`` and ``game_leaders``;
@@ -16,7 +16,7 @@ with the shared plumbing in ``gen_soccer_common.py``). Reads the frozen spec and
   Integration merges into ``manual_column_descriptions.yaml``. Text comes from :data:`LOCAL` (derived and renamed
   columns), :data:`LOCAL_BY` (a column whose meaning differs by wrapper), then the ``sportpress-returns.md`` row of
   the column's source path. An empty, short or filler text fails the run.
-* ``tests/fixtures/sportpress/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs checkout).
+* ``tests/fixtures/sportpress/spec_paths.json`` -- the spec's routes, for the tests (CI has no reference checkout).
 
 Run: ``python tools/codegen/gen_sportpress.py``
 """

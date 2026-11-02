@@ -10,8 +10,8 @@ a duplicated function family.
 
 **PORTING HONESTY -- NOT VALIDATED AGAINST LIVE HTML.** This module was written
 with no network access. Every URL path, table ``id`` and column name below is
-*transcribed* from the R wrappers and from
-``sdv-internal-refs/basketball-reference/README.md`` -- none of it was checked
+*transcribed* from the R wrappers and from the maintainers' private reference
+notes -- none of it was checked
 against a live page. The unit tests exercise the parser against inline fixtures
 only. A first live run should verify, in this order:
 

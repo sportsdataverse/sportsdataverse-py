@@ -42,8 +42,8 @@ possession, play-type, EPA, WPA) is high fidelity. Text-grammar-derived features
 (detailed player attribution, penalty yardage) degrade because Fox's play
 description grammar differs from ESPN's. Archive-format Fox games (with
 ``eventHeadline``/``keyPlays`` and no ``modalPlay`` geometry) are unsupported and
-raise a clear error. Reverse-engineering notes + the validation harness live in
-the sdv-internal-refs repo under ``_notes/foxsportsapi/cfb_pbp_backup/``.
+raise a clear error. Reverse-engineering notes + the validation harness are kept in
+the maintainers' private reference notes.
 """
 
 from __future__ import annotations

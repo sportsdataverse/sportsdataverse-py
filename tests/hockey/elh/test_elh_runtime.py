@@ -1,6 +1,6 @@
 """The ``elh`` runtime: END-year season mapping, the throttle, the listing pager and every refusal.
 
-The refusals mirror the reference capture's checks (``sdv-internal-refs/hokejcz/tools/capture.py``),
+The refusals mirror the reference capture's checks (the maintainers' hokej.cz capture tool),
 exercised through a mocked transport (``_codegen_runtime.download``) on real committed bodies.
 """
 

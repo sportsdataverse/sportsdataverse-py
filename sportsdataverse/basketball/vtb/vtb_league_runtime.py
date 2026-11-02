@@ -2,14 +2,14 @@
 
 Every request goes through the shared :data:`sportsdataverse.basketball.basketball_runtime.SESSION`, which waits at least
 one second before **every** attempt, retries included (``dl_utils.download`` honours ``Retry-After`` on 429 / 503). The
-API needs no key, cookie or proxy (sdv-internal-refs ``vtb/README.md``: direct from the droplet at 1 request per second,
+API needs no key, cookie or proxy (probed direct from a cloud host at 1 request per second,
 no throttling), so no proxy variable is read. ``api.vtb-league.com/robots.txt`` is a 404 (no rules).
 
 **Owner flag.** The league is run from Russia and several clubs are owned or sponsored by sanctioned state companies (the
 KHL precedent). Fetching on the user's own machine is fine; a published data release, hosted mirror or redistribution
 needs owner sign-off first.
 
-What the live API does (sdv-internal-refs ``vtb/``, probed 2026-10-12):
+What the live API does (probed 2026-10-12):
 
 * **Every answer is an envelope** ``{"meta": {...}, "data": [...]}``. ``_get`` returns that envelope with the request
   stamped under ``_request`` (``league``, ``season``); the parsers read ``data`` and the stamp. A ``meta.status`` other

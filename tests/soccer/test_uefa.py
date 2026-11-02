@@ -30,7 +30,7 @@ SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "native" / "uefa"
 
 FAMILY_HOST = "https://comp.uefa.com"
 
-# short -> committed capture (sdv-internal-refs/uefa/captures, capture.py's slug).
+# short -> committed capture in tests/fixtures/uefa/ (the capture tool's slug).
 CAPTURES: Dict[str, str] = {
     "competitions": "comp__v2__competitions",
     "teams": "comp__v2__teams",

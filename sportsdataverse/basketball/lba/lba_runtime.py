@@ -6,7 +6,7 @@ included, then through the shared ``basketball_runtime._get`` (404 -> ``NoDataEr
 any other non-2xx, a dead connection or a non-JSON / empty 200 -> ``AssetFetchError``; ``Retry-After`` on a 429 /
 503 is honoured by the transport).
 
-Measured against the live site (sdv-internal-refs ``legabasket/``, 2026-10-12):
+Measured against the live site (2026-10-12):
 
 * **Seasons are START years on the wire** (``s`` / ``year``: 2026 = 2026-27). The public argument is the sdv END
   year, so ``_get`` subtracts one from ``s`` and ``year`` before sending, and stamps the END year it was asked for

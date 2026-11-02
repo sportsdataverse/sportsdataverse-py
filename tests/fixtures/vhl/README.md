@@ -1,9 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [VHL fixtures (`www.vhlru.ru` + `online.vhlru.ru`, server-rendered HTML)](#vhl-fixtures-wwwvhlruru--onlinevhlruru-server-rendered-html)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # VHL fixtures (`www.vhlru.ru` + `online.vhlru.ru`, server-rendered HTML)
 
 The VHL has no JSON API; every route is a `text/html` page that `vhl_parsers` parses.
 
-**Cut-down pages** (`*.html` in this directory): copied verbatim from `sdv-internal-refs/tests/fixtures/vhl/`
-(refs commit `eb57f5d`, fetched 2026-10-12, `www.vhlru.ru` pinned to `188.128.49.29`). They keep the parts the
+**Cut-down pages** (`*.html` in this directory): copied verbatim from the maintainers' fixture set
+(fetched 2026-10-12, `www.vhlru.ru` pinned to `188.128.49.29`). They keep the parts the
 parsers read: scripts, styles, svg, header, footer and legends dropped; every `<tbody>` cut to 3 rows (player career
 4); selects cut to 3 options plus the selected one; the calendar keeps one day (18 March 2026, 3 games); the
 broadcast one event per kind and the `match` + period-1 stat tabs. **Birth dates are masked to `01.01.2000`.**
@@ -29,6 +37,6 @@ birth dates.
 out of the live page (4.3 MB) on 2026-10-12 and wrapped in a minimal document: all 33 season stages, 2010/11 = 189 /
 190 to 2026/27 = 1430. The runtime's season -> tn mapping reads this select.
 
-**Refs capture records** (`captures/*.json`): copied verbatim from `sdv-internal-refs/vhl/captures/` (refs commit
-`eb57f5d`). These are the parsed records `vhl_runtime._get` returns (`return_parsed=False`), truncated to 3 rows
-per array; birth dates masked to `DD.MM.YYYY`. See that directory's README for each page.
+**Capture records** (`captures/*.json`): copied verbatim from the maintainers' captures.
+These are the parsed records `vhl_runtime._get` returns (`return_parsed=False`), truncated to 3 rows
+per array; birth dates masked to `DD.MM.YYYY`.

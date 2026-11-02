@@ -8,7 +8,7 @@ is CALIBRATED, not quoted. This script is the fitting run behind that number.
 
 Target band (the oracles):
   * CTG's own published Play-Context table shows team transition frequencies
-    around 0.14 (e.g. Denver 14.3%) — `sdv-internal-refs/cleaningtheglass/`.
+    around 0.14 (e.g. Denver 14.3%).
   * Synergy's `transition` play-type frequency runs ~0.15–0.16 league-wide
     (`sportsdataverse.nba.nba_playtype`).
 

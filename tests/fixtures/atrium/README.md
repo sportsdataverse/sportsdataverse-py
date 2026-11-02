@@ -9,10 +9,10 @@
 # Sportradar Atrium embed API fixtures (`embed-api.eui.connect.sportradar.com/v1/embed`)
 
 **Per-route captures** (`<websiteId>__<type>[__<sub>].json` in this directory): copied verbatim from
-`sdv-internal-refs/atrium-embed/captures/` (refs commit `40142b0`, captured 2026-10-12, keyless GET, one
+the maintainers' captures (captured 2026-10-12, keyless GET, one
 request per route). They are truncated (every array and every UUID-keyed map cut to 3 entries), so a rate
 that is whole in the sample is an integer there; they type nothing. `sites.json` (the registry) is not copied.
-The exact requests are in the refs `ENDPOINTS.md`.
+The exact requests are recorded in the maintainers' private notes.
 
 **`full/`**: full bodies fetched live on 2026-10-12 (keyless `GET`, 1.5 s apart, the same pinned ids as the
 captures; LNB season Betclic ELITE 2025 = `df310a05-51ad-11f0-bd89-c735508e1e09`, LNB game
@@ -39,4 +39,4 @@ asked under site 14 (LNBP), fetched live on 2026-10-18 (keyless `GET`, compacted
 own site. It sits outside `full/` because it parses to nothing.
 
 `spec_paths.json` is the spec's route list, written by `tools/codegen/gen_atrium.py` so the tests check the
-YAML without the private refs checkout.
+YAML without the maintainers' private reference checkout.

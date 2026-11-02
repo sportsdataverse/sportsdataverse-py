@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [National League app API fixtures (`nationalleague`)](#national-league-app-api-fixtures-nationalleague)
+  - [Route captures (truncated)](#route-captures-truncated)
+  - [Full bodies (`full/`, the dtype source)](#full-bodies-full-the-dtype-source)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # National League app API fixtures (`nationalleague`)
 
 Keyless JSON from `https://www.nationalleague.ch/api`. robots.txt disallows `/api`; the owner approved
@@ -5,7 +15,7 @@ building on it on 2026-10-12 for polite, incremental use (at least 1 s between r
 
 ## Route captures (truncated)
 
-Byte copies of `sdv-internal-refs/nationalleague/captures/*.json` (refs commit `007ac1a`, captured
+Byte copies of the maintainers' captures (captured
 2026-10-12). Arrays are cut to their first 3 elements at every depth, so they are fine for the row and
 column shape but not for dtypes: a rate that is `90` in the three sampled rows is `86.36` elsewhere.
 `teams__teamId__info.json` carries `fields.apiKey` already replaced with `<redacted>` by the capture tool.

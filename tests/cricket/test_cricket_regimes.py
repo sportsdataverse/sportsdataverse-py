@@ -1,6 +1,6 @@
 """ODI fielding-restriction regimes in the cricket win-probability model.
 
-sdv-internal-refs rules/cricket.yaml: ``cricket-2005-odi-powerplays``,
+ICC ODI playing conditions: ``cricket-2005-odi-powerplays``,
 ``cricket-2011-odi-powerplay-window``, ``cricket-2012-odi-two-new-balls-four-out``,
 ``cricket-2015-odi-batting-powerplay-removed``.
 

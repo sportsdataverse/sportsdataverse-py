@@ -1,7 +1,7 @@
 """Parsers for the generated ``vhl`` wrappers (VHL: ``www.vhlru.ru`` + ``online.vhlru.ru``).
 
 The VHL has no JSON API: every route is a server-rendered ``text/html`` page. This module
-holds the whole HTML side, ported from ``sdv-internal-refs`` ``vhl/tools/capture.py``:
+holds the whole HTML side, ported from the maintainers' capture tool:
 
 * a minimal DOM on the stdlib :mod:`html.parser` (optional end tags closed the way browsers
   close them, void elements, iterative walks, so a deeply nested page never raises
@@ -12,7 +12,7 @@ holds the whole HTML side, ported from ``sdv-internal-refs`` ``vhl/tools/capture
   or a dropped cell is refused, never shifted); the headers must equal the column spec (drift
   is refused, never guessed);
 * one record builder per page (calendar, report, broadcast, standings, player stats, player,
-  team) producing the same records the refs captures bank (``tests/fixtures/vhl/captures/``).
+  team) producing the same records the maintainers' capture tool banks (``tests/fixtures/vhl/captures/``).
 
 Each public ``parse_vhl_*`` takes either the record the runtime returns (a dict, as
 ``return_parsed=False`` hands it back) or the page's HTML text, and follows the package

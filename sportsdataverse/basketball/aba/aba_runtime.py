@@ -4,7 +4,7 @@ The ABA League (``lea=1``) and ABA League 2 (``lea=2``) run on one PHP site over
 serves either league, and this runtime asks the league's own (www for ABA League, druga for ABA League 2).
 Seven routes: four server-rendered pages (match, calendar, standings, player) and three JSON helpers served as
 ``text/html`` (shot chart and two minute-by-minute score charts). Measured against the live sites
-(sdv-internal-refs ``aba-liga/``, 2026-10-12):
+(2026-10-12):
 
 * **Season key.** The site's ``sez`` is the START year minus 2000 (``25`` = 2025-26). The public key is the END
   year, so ``sez = season - 2001`` (``season=2026`` -> ``sez=25``; the first season, 2001-02, is ``season=2002``).
@@ -209,7 +209,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
-        The page record (the refs capture shape) for a page route, or ``{"rows": [...]}`` for a helper, with
+        The page record (the capture record shape) for a page route, or ``{"rows": [...]}`` for a helper, with
         ``_request`` = ``{"kind", "season", "sez", "league", "league_id", "game_no" | "player_id"}``.
 
     Raises:

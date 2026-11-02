@@ -1,7 +1,7 @@
 """The KZS parsers over the committed fixtures: shapes, id dtypes, typed empties, and the cross-checks the data allows.
 
 The FULL bodies (``tests/fixtures/kzs/full``) set the numeric dtypes; the refs captures (3 rows per array) are the
-per-route fixtures. Nothing here reads the sdv-internal-refs checkout.
+per-route fixtures. Nothing here reads the private reference checkout.
 """
 
 from __future__ import annotations

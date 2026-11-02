@@ -1,5 +1,5 @@
 """Generate the ``yahoo_shangrila`` flat-API endpoint YAML + returns-schemas from
-the frozen Yahoo Sports OpenAPI specs in ``sdv-internal-refs/yahoo/``.
+the frozen Yahoo Sports OpenAPI specs (``yahoo/``).
 
 Spec-driven, NOT reverse engineering: every wrapper, parameter and returns-column
 below is read out of a committed spec. Idempotent -- the same specs yield

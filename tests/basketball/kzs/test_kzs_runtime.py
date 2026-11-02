@@ -1,7 +1,7 @@
 """The KZS runtime: season mapping, politeness per attempt, Retry-After, the HTTP-400 vocabulary and every refusal.
 
 The transport is mocked and the bodies are the committed fixtures (``tests/fixtures/kzs``); nothing reads the
-sdv-internal-refs checkout.
+private reference checkout.
 """
 
 from __future__ import annotations

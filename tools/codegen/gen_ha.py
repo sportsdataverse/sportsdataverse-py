@@ -1,8 +1,8 @@
 """Generate the ``ha`` flat-API endpoint YAML + returns-schemas (HockeyAllsvenskan, ``hockeyallsvenskan.se``).
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on ``gen_liiga.py`` (itself
-``gen_asa.py`` + ``gen_soccer_common.py``). Reads the frozen spec from the ``sdv-internal-refs``
-checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
+``gen_asa.py`` + ``gen_soccer_common.py``). Reads the frozen spec from the maintainers' private
+reference checkout (``$SDV_REFS_REPO``) and emits:
 
 * ``tools/codegen/endpoints/ha.yaml`` -- 11 wrappers over the spec's 10 routes (the goalkeeper
   table also feeds ``ha_teams``, the StatNet id <-> display code crosswalk). The table
@@ -18,7 +18,7 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
 * ``sportsdataverse/hockey/ha/_ha_schema.py`` -- column -> returns-schema type, which the
   parsers cast to, so an empty frame carries the dtypes of a populated one.
 * ``tests/fixtures/ha/spec_snapshot.json`` -- the spec's routes, POST request examples and
-  ``categories`` enums, so the tests check the runtime and the YAML without the refs checkout.
+  ``categories`` enums, so the tests check the runtime and the YAML without the reference checkout.
 
 **What the flat-API YAML cannot express**, and how this family works around it: an endpoint has
 no HTTP method and no body, so every wrapper renders as ``_get(url, params=...)``. The YAML's

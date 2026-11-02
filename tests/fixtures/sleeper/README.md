@@ -10,7 +10,7 @@
 
 Real, trimmed responses from the Sleeper fantasy API v1 (`https://api.sleeper.app/v1`,
 keyless), captured 2026-10-06 and copied byte-for-byte from
-`sdv-internal-refs/sleeper/captures/` at commit `e330067`.
+the maintainers' captures.
 
 | File | Route |
 |---|---|

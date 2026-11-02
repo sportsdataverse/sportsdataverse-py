@@ -1,7 +1,7 @@
 """The VTB parsers: row shapes, dtypes from the FULL bodies, typed empty frames, ids, personal data and unit conversions.
 
 Reads only committed fixtures (``tests/fixtures/vtb_league``, ``tests/fixtures/vtb_infobasket``); CI has no
-sdv-internal-refs checkout.
+private reference checkout.
 """
 
 from __future__ import annotations

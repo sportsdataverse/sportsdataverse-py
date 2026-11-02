@@ -5,7 +5,7 @@ Thin shims over :mod:`sportsdataverse.mbb.mbb_ncaa_game_pbp` that bind the
 
 * ``(2, 1200, 300)`` -- two 20-minute halves, seasons through 2014-15;
 * four 10-minute quarters with 5-minute overtimes, 2015-16 onward
-  (``rules/wbb.yaml#wbb-2016-four-quarters`` in sdv-internal-refs).
+  (rule ``wbb-2016-four-quarters``).
 
 Feeding the wrong model to the parser does not raise -- it silently yields a
 zero-row frame -- so the era is resolved before parsing, either from the

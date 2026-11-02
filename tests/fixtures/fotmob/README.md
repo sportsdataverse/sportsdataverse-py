@@ -11,7 +11,7 @@
 Real, truncated responses from FotMob's unofficial site JSON
 (`https://www.fotmob.com/api/data/*`, plus `/api/trendingnews` at the host root),
 captured 2026-10-05/06 keyless and copied byte-for-byte from
-`sdv-internal-refs/fotmob/captures/` at commit `e330067` (2026-10-06). Every array,
+the maintainers' captures (2026-10-06). Every array,
 and every id-keyed map with more than 20 keys, is cut to its first 3 entries at every
 depth; the top-level key set of each body is intact, so the parser's shape rule sees
 exactly what the live route serves.
