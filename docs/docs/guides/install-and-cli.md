@@ -86,7 +86,7 @@ list every command and option.
 
 The CLI is built on [cyclopts](https://cyclopts.readthedocs.io) and
 [Rich](https://rich.readthedocs.io) and needs Python 3.11 or newer. On Python 3.10,
-or in an environment without cyclopts, `sdv` runs the classic CLI instead: the same
+or in an environment without cyclopts or Rich, `sdv` runs the classic CLI instead: the same
 commands, flags, `--json` output and exit codes, in plain text. The conda package
 needs Python 3.11 or newer and always installs the new CLI.
 
