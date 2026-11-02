@@ -77,8 +77,17 @@ backend, add sdvplot's own extra: `pip install "sdvplot[plotly]"` or `"sdvplot[a
 
 Installing the package puts an `sdv` console script on your path. It resolves names
 to ESPN ids, searches the function index and controls the package-wide HTTP response
-cache, without writing any Python. A global `--json` flag (placed before the
-subcommand) prints JSON for piping to `jq`.
+cache, without writing any Python. On a terminal it prints styled cards and tables
+(team cards in the team's own colours, tables sized to the window); piped or with
+`NO_COLOR` set, the output is plain. The `--json` flag, before or after the
+subcommand, prints JSON for piping to `jq`. `sdv --help` and `sdv <command> --help`
+list every command and option.
+
+The CLI is built on [cyclopts](https://cyclopts.readthedocs.io) and
+[Rich](https://rich.readthedocs.io) and needs Python 3.11 or newer. On Python 3.10,
+or in an environment without cyclopts (the conda package omits it), `sdv` runs the
+classic CLI instead: the same commands, flags, `--json` output and exit codes, in
+plain text.
 
 | Command | What it does |
 |---|---|
@@ -91,20 +100,23 @@ subcommand) prints JSON for piping to `jq`.
 | `sdv cache stats` | Show the cache's entries, bytes on disk and mode |
 | `sdv cache clear [--pattern GLOB]` | Drop cached entries, all of them or those matching a filename glob |
 
-The `--league` choices for the `find-*` commands, `list-functions` and
-`function-count` are `nba`, `wnba`, `mbb`, `wbb`, `cfb`, `nfl`, `mlb` and `nhl`.
+The `--league` choices for the `find-*` commands are `nba`, `wnba`, `mbb`, `wbb`,
+`cfb`, `nfl`, `mlb` and `nhl`. `list-functions` and `function-count` take any league
+or provider group the package has, such as `euroleague` or `pwhl`.
 
 ```bash
-sdv find-team lakers --league nba            # abbreviation: LAL ... id: 13 ...
+sdv find-team lakers --league nba            # a card: id 13, LAL, colours, clubhouse link
+sdv find-team "Lakres" -l nba                # no match: exit 1, with "did you mean Los Angeles Lakers?"
 sdv --json find-event 2025-02-09 -l nfl      # {"id": "401671889", ... "Kansas City Chiefs at Philadelphia Eagles"}
 sdv list-functions -l nba -s roster          # espn_nba_game_rosters, espn_nba_team_roster, ...
-sdv cache stats                              # mode: off / entries: 0 / disk_bytes: 0
+sdv cache stats                              # mode off · entries 0 · disk bytes 0 B
 ```
 
 Exit codes: `0` when the command succeeded (for `find-*`, a match was found), `1`
 when a `find-*` command found no match, and `2` on an error, printed as
-`sdv: <message>` on stderr. An error covers invalid input, a host that answered
-"nothing there" (`NoDataError`) and a fetch that failed (`AssetFetchError`).
+`sdv: <message>` on stderr, or a usage error such as a missing `--league`. An error
+covers invalid input, a host that answered "nothing there" (`NoDataError`) and a
+fetch that failed (`AssetFetchError`).
 
 The `cache` commands control the response cache that the package's HTTP layer
 checks before going to the network (`sportsdataverse.cache`; it is off by default).
