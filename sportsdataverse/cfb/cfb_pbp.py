@@ -6784,7 +6784,7 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)
-                .and_(pl.col("text").str.contains(r"(?i)for no gain|fair catch|fair caught")),
+                .and_(pl.col("text").str.contains(r"(?i)for no gain").or_(_is_fair_catch())),
             )
             .then(0)
             .when(
