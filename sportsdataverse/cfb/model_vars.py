@@ -311,7 +311,7 @@ OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
 #: period instead of one per period: NCAA Rule 3-1-3-h as amended by the Playing Rules Oversight Panel
 #: on 2025-04-16 ("Each team will be allowed one timeout beginning with the third extra period until
 #: the game is ended"; https://www.ncaa.org/media-center-changes-to-injury-timeouts-approved-in-football/).
-#: Period 7 is the third overtime. No sdv-internal-refs ``rules/cfb.yaml`` entry yet.
+#: Period 7 is the third overtime. No rule-catalogue entry yet.
 OT_SHARED_TIMEOUT_FROM: tuple[int, int] = (2025, 7)
 
 #: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied, newest first (the twin of
