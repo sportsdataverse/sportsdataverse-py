@@ -60,3 +60,5 @@ def test_platform_marked_dependency_is_exempt():
     version, deps = mirror.pyproject_deps(PYPROJECT.read_text(encoding="utf-8"))
     assert "tzdata" not in deps  # sys_platform marker: a noarch recipe cannot carry it
     assert deps["tomli"] == ">=2.0"  # python_version marker: listed unconditionally, bounds still compared
+    # a marker that raises the Python floor: unsolvable at the recipe's python_min, so exempt
+    assert "cyclopts" not in deps and "rich" not in deps
