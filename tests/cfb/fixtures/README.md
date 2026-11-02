@@ -170,6 +170,8 @@ growing prefixes, 889 rows), 400756912 (Miami @ Florida Atlantic, 2015; one comp
 (Wisconsin @ Penn State, 2018; back-to-back timeouts at 0:03, both real) and 400547745 (Louisville @ Clemson, 2014; a
 copy filed ahead of the penalty that set it up). They are not `summary_*` files either: the whole-game oracle would
 read their snapshot noise as the game.
+`fair_catch/` holds 5 trimmed captures with its own README, for the kickoff fair-catch spot rule
+(`tests/cfb/test_cfb_kickoff_fair_catch_spot.py`); they are not `summary_*` files either.
 `ot_timeouts/` holds 2 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json` at
 `b598a0f3c0`, trimmed 2026-11-01) for the overtime timeout windows (`tests/cfb/test_cfb_ot_timeout_windows.py`):
 401754372 (California @ Virginia Tech, 2025, two overtimes; its row order files Cal's OT1 touchdown between two
