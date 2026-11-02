@@ -257,6 +257,11 @@ load_wbb_game_rosters(seasons=2026)
 ## load_wbb_officials
 
 Release: [espn_womens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_officials/officials_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wbb_officials-returns}
 
 | col_name | type | description |
@@ -360,6 +365,11 @@ load_wbb_shots(seasons=2026)
 ## load_wbb_standings
 
 Release: [espn_womens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wbb_standings-returns}
 
 | col_name | type | description |
@@ -402,9 +412,9 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `home_espn_team_id` | Int64 | ESPN home team id (NA for bart-only rows). |
-| `away_espn_team_id` | Int64 | ESPN away team id (NA for bart-only rows). |
-| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 | `bart_muid` | String | Torvik muid (NA for espn-only rows). |
 | `bart_team1` | String | Torvik team1 name (NA for espn-only rows). |
 | `bart_team2` | String | Torvik team2 name (NA for espn-only rows). |

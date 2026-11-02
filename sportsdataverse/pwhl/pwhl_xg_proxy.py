@@ -268,11 +268,10 @@ _RAW_SCALE_MARGIN_FT = 15.0  # behind-the-net shots reach ~100+; 600-scale can't
 def _assert_rink_feet(frame: pl.DataFrame) -> None:
     """Raise if ``x_coord`` looks like the RAW feed scale (0-600) not rink-feet.
 
-    The dual-frame footgun: ``load_pwhl_pbp`` (release parquet) carries feet-scale
-    ``x_coord``, but a ``pwhl_pbp()`` enrich-path frame carries RAW feed-scale
-    ``x_coord`` (0-600) where only ``shot_distance``/``shot_angle`` are trustworthy.
-    Computing geometry from RAW coords with ``goal_x=89`` produces silent nonsense, so
-    this fails loud instead. (No-op when ``x_coord`` is absent or all-null.)
+    ``load_pwhl_pbp`` and ``pwhl_pbp()`` both carry feet-scale ``x_coord``, but a frame
+    built straight from the raw parser is on the 0-600 feed canvas. Computing geometry
+    from RAW coords with ``goal_x=89`` produces silent nonsense, so this fails loud
+    instead. (No-op when ``x_coord`` is absent or all-null.)
     """
     if "x_coord" not in frame.columns:
         return
@@ -308,8 +307,8 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     0.0 ft on the seasons that carry both, so this is lossless).
 
     When geometry must be derived, ``x_coord`` is range-checked first
-    (:func:`_assert_rink_feet`) so a RAW-scale enrich frame can never be silently
-    scored with the NHL ``goal_x=89``.
+    (:func:`_assert_rink_feet`) so a frame built straight from the raw parser can never
+    be silently scored with the NHL ``goal_x=89``.
     """
     from sportsdataverse.hockeytech._analytics import _SHOT_EVENTS, add_shot_distance_angle
 

@@ -76,23 +76,28 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_wnba_stats_shots](loaders/stats.md#load_wnba_stats_shots) | Release: wnba_stats_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_shots/shots_{season}.parquet` |
 | [load_wnba_stats_team_boxscores](loaders/stats.md#load_wnba_stats_team_boxscores) | Release: wnba_stats_team_boxscores · asset … |
 
+## Team
+
+| Function | Summary |
+|---|---|
+| [load_wnba_team_boxscore](loaders/team.md#load_wnba_team_boxscore) | Release: espn_wnba_team_boxscores · asset … |
+| [load_wnba_team_season_stats](loaders/team.md#load_wnba_team_season_stats) | Release: espn_wnba_team_season_stats · asset … |
+| [load_wnba_team_crosswalk](loaders/team.md#load_wnba_team_crosswalk) | Release: wnba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_team_crosswalk_{season}.parquet` |
+| [load_wnba_team_group_seasons](loaders/team.md#load_wnba_team_group_seasons) | Release: wnba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_team_group_seasons_{season}.parquet` |
+
 ## Other
 
 | Function | Summary |
 |---|---|
 | [load_wnba_pbp](loaders/other.md#load_wnba_pbp) | Release: espn_wnba_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_pbp/play_by_play_{season}.parquet` |
 | [load_wnba_schedule](loaders/other.md#load_wnba_schedule) | Release: espn_wnba_schedules · asset … |
-| [load_wnba_team_boxscore](loaders/other.md#load_wnba_team_boxscore) | Release: espn_wnba_team_boxscores · asset … |
 | [load_wnba_draft](loaders/other.md#load_wnba_draft) | Release: espn_wnba_draft · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet` |
 | [load_wnba_game_rosters](loaders/other.md#load_wnba_game_rosters) | Release: espn_wnba_game_rosters · asset … |
 | [load_wnba_officials](loaders/other.md#load_wnba_officials) | Release: espn_wnba_officials · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet` |
 | [load_wnba_rosters](loaders/other.md#load_wnba_rosters) | Release: espn_wnba_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_rosters/rosters_{season}.parquet` |
 | [load_wnba_shots](loaders/other.md#load_wnba_shots) | Release: espn_wnba_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_shots/shots_{season}.parquet` |
 | [load_wnba_standings](loaders/other.md#load_wnba_standings) | Release: espn_wnba_standings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet` |
-| [load_wnba_team_season_stats](loaders/other.md#load_wnba_team_season_stats) | Release: espn_wnba_team_season_stats · asset … |
 | [load_wnba_schedule_crosswalk](loaders/other.md#load_wnba_schedule_crosswalk) | Release: wnba_crosswalk · asset … |
-| [load_wnba_team_crosswalk](loaders/other.md#load_wnba_team_crosswalk) | Release: wnba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_team_crosswalk_{season}.parquet` |
 | [load_wnba_groups](loaders/other.md#load_wnba_groups) | Release: wnba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_groups.parquet` |
 | [load_wnba_group_seasons](loaders/other.md#load_wnba_group_seasons) | Release: wnba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_group_seasons.parquet` |
 | [load_wnba_group_aliases](loaders/other.md#load_wnba_group_aliases) | Release: wnba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_group_aliases.parquet` |
-| [load_wnba_team_group_seasons](loaders/other.md#load_wnba_team_group_seasons) | Release: wnba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_team_group_seasons_{season}.parquet` |

@@ -27,8 +27,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | Function | Summary |
 |---|---|
 | [espn_nba_calendar](additional/espn.md#espn_nba_calendar) | espn_nba_calendar - look up the NBA calendar for a given season from ESPN |
+| [espn_nba_game_all](additional/espn.md#espn_nba_game_all) | espn_nba_game_all() - Pull one game's plays, team box and player box from one ESPN request. |
 | [espn_nba_game_rosters](additional/espn.md#espn_nba_game_rosters) | espn_nba_game_rosters() - Pull the game by id. |
 | [espn_nba_pbp](additional/espn.md#espn_nba_pbp) | espn_nba_pbp() - Pull one game's play-by-play from ESPN's `nba/summary` endpoint. |
+| [espn_nba_player_box](additional/espn.md#espn_nba_player_box) | espn_nba_player_box() - Pull one game's player box score from ESPN's `nba/summary` endpoint. |
+| [espn_nba_team_box](additional/espn.md#espn_nba_team_box) | espn_nba_team_box() - Pull one game's team box score from ESPN's `nba/summary` endpoint. |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN NBA scoreboard event dict into a |
 
 ## sportsdataverse-data releases
