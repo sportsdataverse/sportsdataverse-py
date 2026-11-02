@@ -552,6 +552,18 @@ class TestRegistry2026Parity:
         )
         assert actual == expected
 
+    @pytest.mark.parametrize("case", CASES)
+    def test_matches_cfbseedr_sov_sos(self, case: str) -> None:
+        # pooled opponents' conference record, as cfbseedR computes it (a
+        # per-game mean differs wherever opponents played unequal game counts,
+        # e.g. acc_pool_2026)
+        games, teams, data = _registry_case(case)
+        st = cfb_standings(games, teams, tiebreaker_data=data or None).sort("team")
+        expected = pl.read_csv(REGISTRY_2026_DIR / "expected_standings.csv").filter(pl.col("case") == case).sort("team")
+        assert st["team"].to_list() == expected["team"].to_list()
+        for col in ("sov", "sos"):
+            assert st[col].to_list() == pytest.approx(expected[col].to_list(), abs=1e-9), col
+
     @pytest.mark.parametrize("season", [2025, 2026])
     def test_matches_cfbseedr_seeds(self, season: int) -> None:
         st = pl.read_csv(REGISTRY_2026_DIR / "seeds_standings.csv")
