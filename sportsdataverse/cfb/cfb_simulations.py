@@ -315,6 +315,21 @@ def _simulate_bracket(
     return alive.select("sim", "team"), teams, games
 
 
+def _game_summary(games: pl.DataFrame) -> pl.DataFrame:
+    """Per unique matchup: games played, home win / tie rates and mean margin."""
+    return (
+        games.filter(pl.col("result").is_not_null())
+        .group_by("game_type", "week", "home_team", "away_team")
+        .agg(
+            pl.len().cast(pl.Int64).alias("games_played"),
+            (pl.col("result") > 0).cast(pl.Float64).mean().alias("home_win"),
+            (pl.col("result") == 0).cast(pl.Float64).mean().alias("tie"),
+            pl.col("result").mean().cast(pl.Float64).alias("result_mean"),
+        )
+        .sort("game_type", "week", "home_team")
+    )
+
+
 def cfb_simulations(
     games: FrameLike,
     teams: FrameLike,
@@ -494,17 +509,7 @@ def cfb_simulations(
             pl.lit(0.0).alias("made_playoff"),
             pl.lit(0.0).alias("first_round_bye"),
         )
-    game_summary = (
-        games_all.filter(pl.col("result").is_not_null())
-        .group_by("game_type", "week", "home_team", "away_team")
-        .agg(
-            pl.len().cast(pl.Int64).alias("games_played"),
-            (pl.col("result") > 0).cast(pl.Float64).mean().alias("home_win"),
-            (pl.col("result") == 0).cast(pl.Float64).mean().alias("tie"),
-            pl.col("result").mean().cast(pl.Float64).alias("result_mean"),
-        )
-        .sort("game_type", "week", "home_team")
-    )
+    game_summary = _game_summary(games_all)
     games_out = games_all.sort(["sim", "week", "game_type", "home_team"])
 
     out: dict[str, pl.DataFrame | Any] = {
