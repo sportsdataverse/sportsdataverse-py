@@ -92,6 +92,8 @@ from collections.abc import Callable, Sequence
 import numpy as np
 import polars as pl
 
+from sportsdataverse.cfb.model_vars import CFB_CFP_AUTOBID_2026_FROM
+
 __all__ = ["cfb_standings", "cfb_playoff_seeds", "cfb_games_from_schedule", "CONFERENCE_TIEBREAKERS"]
 
 TIEBREAKER_DEPTHS: dict[str, int] = {"RANDOM": 0, "PRE-SOV": 1, "SOS": 2, "POINTS": 3}
@@ -1106,7 +1108,9 @@ def cfb_standings(
     )
     if playoff_seeds is not None:
         rule_2026 = (
-            pl.lit(season >= 2026) if season is not None else (pl.col("sim") >= 2026 if season_keyed else pl.lit(True))
+            pl.lit(season >= CFB_CFP_AUTOBID_2026_FROM)
+            if season is not None
+            else (pl.col("sim") >= CFB_CFP_AUTOBID_2026_FROM if season_keyed else pl.lit(True))
         )
         st = _seed_field(st, rankings, playoff_seeds, rule_2026)
     st = st.sort(["sim", "conference", "conf_rank", "team"], nulls_last=True)
@@ -1297,7 +1301,7 @@ def cfb_playoff_seeds(
         * `cfbseedR <https://cfbseedR.sportsdataverse.org>`_ -- the R port (``autobid``).
         * `nflseedR <https://nflseedr.com>`_ -- NFL seeding equivalent.
     """
-    rule_2026 = pl.lit(season is None or season >= 2026)
+    rule_2026 = pl.lit(season is None or season >= CFB_CFP_AUTOBID_2026_FROM)
     ordered = _seed_field(_to_polars(standings), rankings, playoff_seeds, rule_2026)
     return ordered.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else ordered
 
