@@ -52,7 +52,7 @@ tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 
 ### cfb_compute_results {#cfb_compute_results}
 
-`cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Dict[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'`
+`cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'np.random.Generator | None' = None, elo: 'dict[str, float] | None' = None, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
 
 Default results generator — nflseedR's dynamic ELO model for CFB.
 
@@ -69,8 +69,8 @@ simplification).
 | `teams` | `DataFrame` |  | Per-sim team table (`sim`, `team`, `conference`, optionally `elo` carried over from the previous week). |
 | `games` | `DataFrame` |  | Per-sim games table (engine schema; see `sportsdataverse.cfb.cfb_standings`). |
 | `week_num` | `int` |  | The week to fill. |
-| `rng` | `Optional[Generator]` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
-| `elo` | `Optional[Dict[str, float]]` | `None` | Optional initial ratings `{team: elo}` applied to every sim. Teams missing from the dict start at 1500. When neither `elo` nor a `teams.elo` column exists, ratings initialize randomly at `N(1500, 150)` per (sim, team) — nflseedR behavior. |
+| `rng` | `Generator \| None` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
+| `elo` | `dict[str, float] \| None` | `None` | Optional initial ratings `{team: elo}` applied to every sim. Teams missing from the dict start at 1500. When neither `elo` nor a `teams.elo` column exists, ratings initialize randomly at `N(1500, 150)` per (sim, team) — nflseedR behavior. |
 
 **Returns**
 
@@ -430,7 +430,7 @@ tal.sort("talent_rank").head(10)
 
 ### cfb_simulations {#cfb_simulations}
 
-`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'`
+`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'ComputeResultsFn | None' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'FrameLike | None' = None, tiebreaker_data: 'dict[str, FrameLike] | None' = None, seed: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame | Any]'`
 
 Simulate college football seasons (nflseedR-style week loop).
 
@@ -444,15 +444,16 @@ CFB simplification.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. |
-| `teams` | `FrameLike` |  | Team table (`team`, `conference`). |
-| `compute_results` | `Optional[ComputeResultsFn]` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
+| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. |
+| `teams` | `FrameLike` |  | Team table (`team`, `conference`, plus the optional `sportsdataverse.cfb.cfb_standings` columns). |
+| `compute_results` | `ComputeResultsFn \| None` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
 | `simulations` | `int` | `10000` | Number of simulated seasons (sequential, no chunking). |
 | `playoff_seeds` | `int` | `12` | CFP field size passed to `cfb_playoff_seeds`. |
 | `tiebreaker_depth` | `str` | `'SOS'` | nflseedR depth ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`) used by every standings computation. |
 | `sim_include` | `str` | `'POST'` | How deep to simulate: `"REG"` (regular season only), `"CONF"` (+ conference championships) or `"POST"` (+ CFP bracket, default). |
-| `rankings` | `Optional[FrameLike]` | `None` | Optional committee rankings (`team`, `rank`) forwarded to `cfb_playoff_seeds`. When None, seeding falls back to the per-sim standings ordering (documented in `cfb_playoff_seeds`). |
-| `seed` | `Optional[int]` | `None` | Seed for the numpy RNG (deterministic runs). |
+| `rankings` | `FrameLike \| None` | `None` | Optional committee rankings (`team`, `rank`) forwarded to `cfb_playoff_seeds`. When None, seeding falls back to the per-sim standings ordering (documented in `cfb_playoff_seeds`). |
+| `tiebreaker_data` | `dict[str, FrameLike] \| None` | `None` | Optional tiebreaker inputs (`"analytics_ratings"`, `"cfp_rankings"`, `"apr"` frames) forwarded unchanged to every `sportsdataverse.cfb.cfb_standings` call, so the official rungs run. |
+| `seed` | `int \| None` | `None` | Seed for the numpy RNG (deterministic runs). |
 | `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
 
 **Returns**
@@ -469,14 +470,14 @@ Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim
 | `win_pct` | Float64 | Mean overall win percentage across the simulated seasons. |
 | `won_conf` | Float64 | Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback). |
 | `made_playoff` | Float64 | Share of simulations in which the team made the College Football Playoff field. |
-| `first_round_bye` | Float64 | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
+| `first_round_bye` | Float64 | Share of simulations in which the team earned a CFP first-round bye (seeds 1-4 in the 12-team field; in general the top P - n seeds, P being the smallest power of two at or above the field size n). |
 | `won_cfp` | Float64 | Share of simulations in which the team won the College Football Playoff national championship. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | On invalid `sim_include` / `tiebreaker_depth`, multi-season input, or missing columns. |
+| `ValueError` | On invalid `sim_include` / `tiebreaker_depth`, multi-season input, missing columns, or duplicate team rows. |
 
 **Example**
 

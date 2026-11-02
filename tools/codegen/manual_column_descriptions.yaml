@@ -2440,8 +2440,10 @@ cfb_playoff_seeds:
   games: Total games played across all game types (regular season, conference championship and postseason).
   losses: Losses across all played games.
   pd: Point differential (points for minus points against, via game margins) summed over all played games.
-  seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. The five
-    best-ordered conference champions are guaranteed inclusion.
+  seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From
+    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within
+    the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions.
+    Automatic qualifiers are capped at the field size.
   sim: Season or simulation identifier the standings row belongs to.
   sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
     opponents' conference win pct across all conference games played; 0.0 for independents.
@@ -2511,7 +2513,7 @@ cfb_season_odds:
   team_id: Team ESPN id (character join key).
 cfb_simulations:
   conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
-  first_round_bye: Share of simulations in which the team earned a CFP first-round bye (seed 4 or better).
+  first_round_bye: Share of simulations in which the team earned a CFP first-round bye (seeds 1-4 in the 12-team field; in general the top P - n seeds, P being the smallest power of two at or above the field size n).
   losses: Mean losses per simulated season (all game types through the conference championship).
   made_playoff: Share of simulations in which the team made the College Football Playoff field.
   team: Team name the simulated probabilities belong to (overall summary frame).

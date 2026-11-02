@@ -38,10 +38,21 @@ the SAME semantics so outputs cross-validate):
   cascade (head-to-head, common opponents, SOV, SOS, point differential)
   is likewise scoped to conference REG games.
 * **Official per-conference tiebreakers (registry).** ``CONFERENCE_TIEBREAKERS``
-  registers the official 2024+ procedures for the SEC, Big Ten, Big 12, ACC
-  and MAC as plain rung-dict lists; any conference not in the registry uses
-  the generic cascade above, completely unchanged. Registry cascades always
-  run in full (``tiebreaker_depth`` gates only the generic fallback).
+  registers the official procedures for the SEC, Big Ten, Big 12, ACC, MAC,
+  American, Conference USA, Mountain West and Sun Belt (cfbseedR 0.2.0
+  parity) as season-scoped epochs of plain rung-dict lists; any conference not
+  in the registry (e.g. the re-formed Pac-12, which has not published one)
+  uses the generic cascade above, completely unchanged. Registry cascades
+  always run in full (``tiebreaker_depth`` gates only the generic fallback).
+  An epoch applies from its ``from`` season: games keyed by ``season`` (or an
+  explicit ``season=``) resolve per season, plain ``sim`` ids use the current
+  rules — so the ACC's 2026 policy (head-to-head, SportSource Team Success
+  Ranking, draw, plus the alternate-game-count candidate pool) applies from
+  2026 while earlier ACC seasons keep the 2024 cascade. Optional ``teams``
+  columns ``conf_division`` (division format: each division's best eligible
+  team takes a top rank, as in the 2026 Sun Belt) and ``postseason_eligible`` (an
+  explicit ``False`` team cannot hold a championship-game berth; its games
+  still count) feed the same ranking.
   Adopted ambiguity resolutions (per the shared design brief): "combined win
   percentage of conference opponents" is POOLED (sum of opponents' conference
   wins / sum of their conference games, opponents counted once per game
@@ -61,34 +72,40 @@ the SAME semantics so outputs cross-validate):
   (42 scored / 48 allowed), summed across conference games. Under registry
   conferences ``conf_rank`` 1-2 are the championship-game participants.
   Rungs whose optional inputs are absent (per-game points, an FBS/FCS
-  ``division`` flag on ``teams``, analytics ratings) are skipped
-  deterministically; each skip is recorded in ``tiebreak_notes`` (see
-  :func:`cfb_standings`). Big 12 NCAA-exempt games are not modeled.
-* **CFP seeding rule evolves.** :func:`cfb_playoff_seeds` implements the
-  current (2025) straight-seeding 12-team rule in ONE function so the rule
-  can be updated in one place.
+  ``division`` flag on ``teams``, analytics ratings, CFP rankings, APR, a
+  ``conf_division`` column) are skipped deterministically; each skip is
+  recorded in ``tiebreak_notes`` (see :func:`cfb_standings`). Big 12
+  NCAA-exempt games are not modeled.
+* **CFP selection rule evolves by season.** :func:`cfb_playoff_seeds` holds
+  both 12-team straight-seeding rules in ONE function: the 2026 rule (P4
+  champions, best Group-of-6 champion, Notre Dame if top 12, at-large) and
+  the 2024-2025 rule (5 highest-ranked champions, at-large).
 """
 
 from __future__ import annotations
 
+import functools
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union, cast
+from typing import Any, Union, cast
+from collections.abc import Callable, Sequence
 
 import numpy as np
 import polars as pl
 
+from sportsdataverse.cfb.model_vars import CFB_CFP_AUTOBID_2026_FROM
+
 __all__ = ["cfb_standings", "cfb_playoff_seeds", "cfb_games_from_schedule", "CONFERENCE_TIEBREAKERS"]
 
-TIEBREAKER_DEPTHS: Dict[str, int] = {"RANDOM": 0, "PRE-SOV": 1, "SOS": 2, "POINTS": 3}
+TIEBREAKER_DEPTHS: dict[str, int] = {"RANDOM": 0, "PRE-SOV": 1, "SOS": 2, "POINTS": 3}
 INDEPENDENT_LABEL = "FBS Independents"
 _VALID_GAME_TYPES = ("REG", "CONF_CHAMP", "POST")
 
 # rec map: sim -> team -> opp -> [outcome_points, n_games] (conference REG games only)
-_RecMap = Dict[Any, Dict[str, Dict[str, List[float]]]]
-_RecSim = Dict[str, Dict[str, List[float]]]
+_RecMap = dict[Any, dict[str, dict[str, list[float]]]]
+_RecSim = dict[str, dict[str, list[float]]]
 # per-team cascade metrics: metric name -> value (None = optional input unavailable)
-_Metrics = Dict[str, Dict[str, Optional[float]]]
-_Rung = Dict[str, Any]
+_Metrics = dict[str, dict[str, float | None]]
+_Rung = dict[str, Any]
 
 FrameLike = Union[pl.DataFrame, Any]
 
@@ -103,7 +120,7 @@ _B12_FCS_CAP = 1
 # the ``tiebreaker_depth`` gate. There is ONE execution path — the registry
 # cascades below are just other rung lists (no ``min_depth``: official
 # procedures always run in full).
-_GENERIC_CASCADE: List[_Rung] = [
+_GENERIC_CASCADE: list[_Rung] = [
     {"kind": "h2h", "min_depth": 1, "generic": True},
     {"kind": "record_vs_common", "min_depth": 1},
     {"kind": "sov", "min_depth": 2},
@@ -115,7 +132,7 @@ _GENERIC_CASCADE: List[_Rung] = [
 # Big Ten / ACC / MAC share one official template (h2h, common opponents,
 # order-of-finish descent, pooled opponents' conference win pct, SportSource
 # analytics rating, draw).
-_P5_TEMPLATE: List[_Rung] = [
+_P5_TEMPLATE: list[_Rung] = [
     {"kind": "h2h"},
     {"kind": "record_vs_common"},
     {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
@@ -124,41 +141,147 @@ _P5_TEMPLATE: List[_Rung] = [
     {"kind": "coin_toss"},
 ]
 
-#: Official 2024+ conference tiebreaker procedures as plain rung-dict lists
-#: (mirrored as a named list in the R ``cfbseedR`` port; the cross-language
-#: parity fixture under ``tests/fixtures/seedr/cfb_toy_tiebreakers/`` pins the
-#: semantics). Conferences not registered here use the generic cascade. G5
-#: conferences intentionally stay on the fallback in v1 — their published
-#: procedures depend on unspecified external metric composites.
-CONFERENCE_TIEBREAKERS: Dict[str, List[_Rung]] = {
+# ACC policy effective 2026: head-to-head, SportSource Team Success Ranking,
+# draw. Its epoch's ``pool="wins_or_losses"`` admits teams that played an
+# alternate number of conference games into the leaders' tier when they match
+# the leaders' win OR loss count.
+_ACC_2026: list[_Rung] = [{"kind": "h2h"}, {"kind": "analytics_rating"}, {"kind": "coin_toss"}]
+
+# MAC published procedure: head-to-head / defeated-all, record vs common
+# conference opponents, SportSource Analytics Team Rating Score.
+_MAC_OFFICIAL: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "record_vs_common"},
+    {"kind": "analytics_rating"},
+    {"kind": "coin_toss"},
+]
+
+# American: head-to-head, the CFP-ranked final-week clause, the conference's
+# metric composite (supply it as ``tiebreaker_data["analytics_ratings"]``),
+# record vs common opponents.
+_AMERICAN_OFFICIAL: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "cfp_ranked_final_week"},
+    {"kind": "analytics_rating"},
+    {"kind": "record_vs_common"},
+    {"kind": "coin_toss"},
+]
+
+# Conference USA: head-to-head, CFP-ranked final-week clause, metric composite,
+# multi-year Academic Progress Rate (``tiebreaker_data["apr"]``), draw.
+_CUSA_OFFICIAL: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "cfp_ranked_final_week"},
+    {"kind": "analytics_rating"},
+    {"kind": "apr"},
+    {"kind": "coin_toss"},
+]
+
+# Mountain West: berth ties go straight to the metric composite; head-to-head
+# is the fallback when no composite is supplied.
+_MW_OFFICIAL: list[_Rung] = [{"kind": "analytics_rating"}, {"kind": "h2h"}, {"kind": "coin_toss"}]
+
+# Sun Belt (division format): head-to-head, divisional win pct, descent with
+# grouped ties, record vs common opponents, CFP-ranked final-week clause,
+# computer-ranking composite.
+_SUNBELT_OFFICIAL: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "div_pct"},
+    {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
+    {"kind": "record_vs_common"},
+    {"kind": "cfp_ranked_final_week"},
+    {"kind": "analytics_rating"},
+    {"kind": "coin_toss"},
+]
+
+
+def _epoch(rungs: list[_Rung], start: int = 0, pool: str | None = None) -> dict[str, Any]:
+    return {"from": start, "rungs": rungs, "pool": pool}
+
+
+#: Official conference tiebreaker procedures, mirroring cfbseedR 0.2.0's
+#: ``CONFERENCE_TIEBREAKERS``: conference -> list of season-scoped epochs
+#: ``{"from": <first season>, "rungs": [<rung dict>, ...], "pool": <str|None>}``.
+#: :func:`cfb_standings` applies the epoch with the largest ``from`` not
+#: exceeding the season being ranked (unknown season = current rules). The
+#: cross-language parity fixtures under ``tests/fixtures/seedr/`` pin the
+#: semantics. Conferences not registered here use the generic cascade.
+CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
     "SEC": [
-        {"kind": "h2h"},
-        {"kind": "record_vs_common"},
-        {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
-        {"kind": "opp_conf_win_pct"},
-        {"kind": "capped_scoring_margin", "off_cap": 42, "def_cap": 48},
-        {"kind": "coin_toss"},
+        _epoch(
+            [
+                {"kind": "h2h"},
+                {"kind": "record_vs_common"},
+                {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
+                {"kind": "opp_conf_win_pct"},
+                {"kind": "capped_scoring_margin", "off_cap": 42, "def_cap": 48},
+                {"kind": "coin_toss"},
+            ]
+        )
     ],
-    "Big Ten": _P5_TEMPLATE,
-    "ACC": _P5_TEMPLATE,
-    "MAC": _P5_TEMPLATE,
-    "Mid-American": _P5_TEMPLATE,  # cfbfastR schedule naming for the MAC
+    "Big Ten": [_epoch(_P5_TEMPLATE)],
+    "ACC": [_epoch(_P5_TEMPLATE), _epoch(_ACC_2026, 2026, pool="wins_or_losses")],
+    "MAC": [_epoch(_MAC_OFFICIAL)],
+    "Mid-American": [_epoch(_MAC_OFFICIAL)],  # cfbfastR schedule naming for the MAC
     "Big 12": [
-        {"kind": "h2h"},
-        {"kind": "record_vs_common"},
-        {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True},
-        {"kind": "opp_conf_win_pct"},
-        {"kind": "total_wins", "fcs_cap": 1},
-        {"kind": "analytics_rating"},
-        {"kind": "coin_toss"},
+        _epoch(
+            [
+                {"kind": "h2h"},
+                {"kind": "record_vs_common"},
+                {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True},
+                {"kind": "opp_conf_win_pct"},
+                {"kind": "total_wins", "fcs_cap": 1},
+                {"kind": "analytics_rating"},
+                {"kind": "coin_toss"},
+            ]
+        )
     ],
+    "American Athletic": [_epoch(_AMERICAN_OFFICIAL)],
+    "American": [_epoch(_AMERICAN_OFFICIAL)],
+    "Conference USA": [_epoch(_CUSA_OFFICIAL)],
+    "Mountain West": [_epoch(_MW_OFFICIAL)],
+    "Sun Belt": [_epoch(_SUNBELT_OFFICIAL)],
 }
+
+
+#: Full-name / alternate spellings (the ones :func:`cfb_playoff_seeds` accepts) -> the
+#: registered key, so a cfbd-style ``"Sun Belt Conference"`` still gets the Sun Belt procedure.
+_CONF_ALIASES: dict[str, str] = {
+    "Southeastern Conference": "SEC",
+    "Big Ten Conference": "Big Ten",
+    "Atlantic Coast Conference": "ACC",
+    "Big 12 Conference": "Big 12",
+    "American Athletic Conference": "American Athletic",
+    "American Conference": "American Athletic",
+    "CUSA": "Conference USA",
+    "Mid-American Conference": "MAC",
+    "Mountain West Conference": "Mountain West",
+    "Sun Belt Conference": "Sun Belt",
+}
+
+
+def _conf_rules(conf_name: str, season: int | None) -> tuple[list[_Rung], str | None]:
+    """(rungs, pool) for one conference-season; unregistered -> the generic cascade."""
+    epochs = CONFERENCE_TIEBREAKERS.get(conf_name) or CONFERENCE_TIEBREAKERS.get(_CONF_ALIASES.get(conf_name, ""))
+    if not epochs:
+        return _GENERIC_CASCADE, None
+    eligible = [e for e in epochs if season is None or e["from"] <= season] or epochs[:1]
+    e = max(eligible, key=lambda x: x["from"])
+    return e["rungs"], e.get("pool")
 
 
 def _to_polars(df: FrameLike) -> pl.DataFrame:
     if isinstance(df, pl.DataFrame):
         return df
     return pl.from_pandas(df)
+
+
+def _team_id(df: pl.DataFrame, col: str) -> pl.Expr:
+    """Team key as Utf8; float ids go through Int64 first so 87.0 joins as "87", never "87.0"."""
+    c = pl.col(col)
+    if df.schema[col].is_float():
+        c = c.fill_nan(None).cast(pl.Int64)
+    return c.cast(pl.Utf8).alias(col)
 
 
 def _is_independent(col: str = "conference") -> pl.Expr:
@@ -170,9 +293,13 @@ def _validate_teams(teams: FrameLike) -> pl.DataFrame:
     for c in ("team", "conference"):
         if c not in t.columns:
             raise ValueError(f"`teams` must contain a `{c}` column")
-    cols = [pl.col("team").cast(pl.Utf8), pl.col("conference").cast(pl.Utf8)]
+    cols = [_team_id(t, "team"), pl.col("conference").cast(pl.Utf8)]
     if "division" in t.columns:  # optional FBS/FCS flag (Big 12 total_wins FCS cap)
         cols.append(pl.col("division").cast(pl.Utf8))
+    if "conf_division" in t.columns:  # optional in-conference division (Sun Belt format, div_pct rung)
+        cols.append(pl.col("conf_division").cast(pl.Utf8))
+    if "postseason_eligible" in t.columns:  # optional; only an explicit False marks a team out
+        cols.append(pl.col("postseason_eligible").cast(pl.Boolean))
     t = t.select(cols)
     if t["team"].n_unique() != t.height:
         raise ValueError("`teams` contains duplicate team rows")
@@ -201,8 +328,8 @@ def _validate_games(games: FrameLike) -> pl.DataFrame:
         pl.col("sim").cast(pl.Int64),
         pl.col("week").cast(pl.Int64),
         pl.col("game_type").cast(pl.Utf8),
-        pl.col("home_team").cast(pl.Utf8),
-        pl.col("away_team").cast(pl.Utf8),
+        _team_id(g, "home_team"),
+        _team_id(g, "away_team"),
         pl.col("result").cast(pl.Float64),
         pl.col("neutral").cast(pl.Int64),
     ]
@@ -242,7 +369,7 @@ def _double_games(g: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> Tuple[pl.DataFrame, pl.DataFrame]:
+def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Raw standings (records, pct, SOV/SOS) per (sim, team) + doubled REG frame."""
     dg = _double_games(g)
     sims = g.select("sim").unique()
@@ -371,6 +498,27 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> Tuple[pl.DataFrame, pl.
     else:
         capped_w = None
 
+    # cfp_ranked_final_week rung input: did the team win every conference REG
+    # game of its final conference-game week?
+    final_win = (
+        dgc.filter(pl.col("week") == pl.col("week").max().over("sim", "team"))
+        .group_by("sim", "team")
+        .agg((pl.col("outcome") == 1.0).all().alias("_final_conf_win"))
+    )
+
+    # div_pct rung input: win pct over conference REG games vs same-division
+    # opponents (0.0 with no such game); null column without `conf_division`.
+    if "conf_division" in t.columns:
+        div_pct = (
+            dgc.join(t.select("team", pl.col("conf_division").alias("_td")), on="team", how="left")
+            .join(t.select(pl.col("team").alias("opp"), pl.col("conf_division").alias("_od")), on="opp", how="left")
+            .filter(pl.col("_td").is_not_null() & (pl.col("_td") == pl.col("_od")))
+            .group_by("sim", "team")
+            .agg(pl.col("outcome").mean().cast(pl.Float64).alias("_div_pct"))
+        )
+    else:
+        div_pct = None
+
     st = (
         base.join(overall, on=["sim", "team"], how="left")
         .join(conf, on=["sim", "team"], how="left")
@@ -397,6 +545,11 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> Tuple[pl.DataFrame, pl.
         # no `division` flag on `teams`: degrade to uncapped wins (Part 2 of the design
         # brief: "without it count all wins + note") rather than skip the rung outright.
         st = st.with_columns(pl.col("wins").cast(pl.Float64).alias("_capped_wins"))
+    st = st.join(final_win, on=["sim", "team"], how="left").with_columns(pl.col("_final_conf_win").fill_null(False))
+    if div_pct is not None:
+        st = st.join(div_pct, on=["sim", "team"], how="left").with_columns(pl.col("_div_pct").fill_null(0.0))
+    else:
+        st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("_div_pct"))
     st = st.with_columns(
         pl.when(pl.col("games") > 0)
         .then((pl.col("wins") + 0.5 * pl.col("ties")) / pl.col("games"))
@@ -426,12 +579,12 @@ def _build_rec_map(dg_conf: pl.DataFrame) -> _RecMap:
     return rec
 
 
-def _keep_max(cands: List[str], key: Dict[str, float]) -> List[str]:
+def _keep_max(cands: list[str], key: dict[str, float]) -> list[str]:
     m = max(key[c] for c in cands)
     return [c for c in cands if key[c] >= m - 1e-12]
 
 
-def _pct_vs(rec_sim: Dict[str, Dict[str, List[float]]], team: str, opps: Sequence[str]) -> Tuple[float, float]:
+def _pct_vs(rec_sim: dict[str, dict[str, list[float]]], team: str, opps: Sequence[str]) -> tuple[float, float]:
     pts, n = 0.0, 0.0
     d = rec_sim.get(team, {})
     for o in opps:
@@ -452,16 +605,16 @@ class _TieCtx:
     """
 
     conf_name: str
-    conf_pct_by_team: Dict[str, float]
+    conf_pct_by_team: dict[str, float]
     division_absent: bool
-    notes: List[str]
+    notes: list[str]
 
     def note(self, msg: str) -> None:
         if msg not in self.notes:
             self.notes.append(msg)
 
 
-def _apply_h2h(cands: List[str], rec_sim: Dict[str, Dict[str, List[float]]], generic: bool) -> List[str]:
+def _apply_h2h(cands: list[str], rec_sim: dict[str, dict[str, list[float]]], generic: bool) -> list[str]:
     """Head-to-head rung: generic (existing, unchanged) vs registry multi-team semantics."""
     if generic or len(cands) == 2:
         # generic cascade (byte-identical to the pre-registry implementation) and the
@@ -493,7 +646,7 @@ def _apply_h2h(cands: List[str], rec_sim: Dict[str, Dict[str, List[float]]], gen
     return cands
 
 
-def _apply_record_vs_common(cands: List[str], rec_sim: Dict[str, Dict[str, List[float]]]) -> List[str]:
+def _apply_record_vs_common(cands: list[str], rec_sim: dict[str, dict[str, list[float]]]) -> list[str]:
     """Record vs ALL common conference opponents of the tied set (min 1 shared opponent)."""
     if len(cands) <= 1:
         return cands
@@ -506,16 +659,16 @@ def _apply_record_vs_common(cands: List[str], rec_sim: Dict[str, Dict[str, List[
 
 
 def _apply_record_vs_common_desc(
-    cands: List[str],
-    rec_sim: Dict[str, Dict[str, List[float]]],
-    conf_pct_by_team: Dict[str, float],
-) -> List[str]:
+    cands: list[str],
+    rec_sim: dict[str, dict[str, list[float]]],
+    conf_pct_by_team: dict[str, float],
+) -> list[str]:
     """Descend the conference standings (best to worst) comparing vs each common
     opponent (or tied GROUP of opponents, compared collectively — the Big 12
     grouped-ties rule, adopted for all registry descent rungs per ambiguity 2).
     """
     others = [team for team in conf_pct_by_team if team not in cands]
-    tiers: Dict[float, List[str]] = {}
+    tiers: dict[float, list[str]] = {}
     for team in others:
         tiers.setdefault(round(conf_pct_by_team[team], 9), []).append(team)
     for pct in sorted(tiers, reverse=True):
@@ -529,13 +682,13 @@ def _apply_record_vs_common_desc(
 
 
 def _apply_rung(
-    cands: List[str],
+    cands: list[str],
     rung: _Rung,
     metrics: _Metrics,
-    rec_sim: Dict[str, Dict[str, List[float]]],
+    rec_sim: dict[str, dict[str, list[float]]],
     ctx: _TieCtx,
     rng: np.random.Generator,
-) -> List[str]:
+) -> list[str]:
     kind = rung["kind"]
     if kind == "h2h":
         return _apply_h2h(cands, rec_sim, generic=bool(rung.get("generic")))
@@ -556,7 +709,7 @@ def _apply_rung(
         if any(v is None for v in margins.values()):
             ctx.note(f"{ctx.conf_name}: capped_scoring_margin skipped (no home_points/away_points on games)")
             return cands
-        return _keep_max(cands, cast(Dict[str, float], margins))
+        return _keep_max(cands, cast(dict[str, float], margins))
     if kind == "total_wins":
         if ctx.division_absent:
             ctx.note(
@@ -569,17 +722,42 @@ def _apply_rung(
         if any(v is None for v in ratings.values()):
             ctx.note(f"{ctx.conf_name}: analytics_rating skipped (no tiebreaker_data.analytics_ratings supplied)")
             return cands
-        return _keep_max(cands, cast(Dict[str, float], ratings))
+        return _keep_max(cands, cast(dict[str, float], ratings))
+    if kind == "cfp_ranked_final_week":
+        ranks = {c: metrics[c]["cfp_rank"] for c in cands}
+        if all(v is None for v in ranks.values()):
+            ctx.note(
+                f"{ctx.conf_name}: cfp_ranked_final_week skipped "
+                "(no tiebreaker_data.cfp_rankings supplied, or no tied team ranked)"
+            )
+            return cands
+        # cands is sorted, so min() keeps the first of equal ranks (R's which.min)
+        rank_key = {c: float("inf") if r is None else r for c, r in ranks.items()}
+        best = min(cands, key=rank_key.__getitem__)
+        if metrics[best]["final_conf_win"]:
+            return [best]
+        ctx.note(
+            f"{ctx.conf_name}: cfp_ranked_final_week fell through "
+            "(best-ranked tied team lost its final conference game)"
+        )
+        return cands
+    if kind in ("apr", "div_pct"):
+        vals = {c: metrics[c][kind] for c in cands}
+        if any(v is None for v in vals.values()):
+            why = "no tiebreaker_data.apr supplied" if kind == "apr" else "no conf_division column on teams"
+            ctx.note(f"{ctx.conf_name}: {kind} skipped ({why})")
+            return cands
+        return _keep_max(cands, cast(dict[str, float], vals))
     if kind == "coin_toss":
         return [str(rng.choice(sorted(cands)))]
     raise ValueError(f"unknown tiebreak rung kind: {kind!r}")
 
 
 def _pick_winner(
-    tied: List[str],
+    tied: list[str],
     metrics: _Metrics,
-    rec_sim: Dict[str, Dict[str, List[float]]],
-    rungs: List[_Rung],
+    rec_sim: dict[str, dict[str, list[float]]],
+    rungs: list[_Rung],
     depth: int,
     rng: np.random.Generator,
     ctx: _TieCtx,
@@ -605,20 +783,20 @@ def _pick_winner(
 
 
 def _order_tied(
-    tied: List[str],
+    tied: list[str],
     metrics: _Metrics,
-    rec_sim: Dict[str, Dict[str, List[float]]],
-    rungs: List[_Rung],
+    rec_sim: dict[str, dict[str, list[float]]],
+    rungs: list[_Rung],
     depth: int,
     rng: np.random.Generator,
     ctx: _TieCtx,
-) -> List[str]:
+) -> list[str]:
     """Peel one winner at a time from the tied set, restarting the full rung
     list on the shrinking remainder each time — this loop IS the "restart from
     rung 1 with the remaining set" rule for registry conferences (and is
     exactly the pre-registry generic behavior, unchanged).
     """
-    ordered: List[str] = []
+    ordered: list[str] = []
     remaining = sorted(tied)
     while len(remaining) > 1:
         winner = _pick_winner(remaining, metrics, rec_sim, rungs, depth, rng, ctx)
@@ -627,70 +805,121 @@ def _order_tied(
     return ordered + remaining
 
 
+def _order_set(
+    team_set: list[str],
+    pct_by_team: dict[str, float],
+    *,
+    pool: str | None = None,
+    wl: dict[str, tuple[int, int]],
+    metrics: _Metrics,
+    rec_sim: _RecSim,
+    rungs: list[_Rung],
+    depth: int,
+    rng: np.random.Generator,
+    ctx_args: tuple[str, bool, list[str]],
+) -> list[str]:
+    """Order ``team_set``: win-pct tiers (rounded to kill float fuzz), tiebreak
+    walk inside each. ``pct_by_team`` is the descent-rung universe (the whole
+    conference, or one division); ``wl`` maps team -> (conf wins, conf losses).
+    """
+    conf_name, division_absent, notes = ctx_args
+    ctx = _TieCtx(conf_name, pct_by_team, division_absent, notes)
+    pct = {t: round(pct_by_team[t], 9) for t in team_set}
+    if pool == "wins_or_losses":
+        # ACC 2026: alternate-game-count teams join the leaders' tier on matching
+        # the leaders' win count OR loss count. A team with no decided conference
+        # game is never admitted (cfbseedR 0.2.0 admits a 0-0 team on an
+        # unbeaten leader's 0 losses — a bug there to fix in the R port).
+        top = max(pct.values())
+        lw = {wl[t][0] for t in team_set if pct[t] == top}
+        ll = {wl[t][1] for t in team_set if pct[t] == top}
+        for t in team_set:
+            if pct[t] < top and sum(wl[t]) > 0 and (wl[t][0] in lw or wl[t][1] in ll):
+                pct[t] = top
+    ordered: list[str] = []
+    for p in sorted(set(pct.values()), reverse=True):
+        tier = [t for t in team_set if pct[t] == p]
+        if len(tier) > 1:
+            tier = _order_tied(tier, metrics, rec_sim, rungs, depth, rng, ctx)
+        ordered += tier
+    return ordered
+
+
 def _add_conf_ranks(
     st: pl.DataFrame,
     dg_conf: pl.DataFrame,
     depth: int,
-    rng: Optional[np.random.Generator],
-    notes: List[str],
+    rng: np.random.Generator | None,
+    notes: list[str],
     division_absent: bool,
+    season_of: Callable[[int], int | None],
 ) -> pl.DataFrame:
     rec = _build_rec_map(dg_conf)
+    if rng is None:
+        rng = np.random.default_rng()
     non_ind = st.filter(_is_independent() == False)  # noqa: E712
-    rank_rows: List[Tuple[int, str, int]] = []
-    lazy_rng: Optional[np.random.Generator] = rng
-    metric_cols = (
-        "team",
-        "conf_pct",
-        "sov",
-        "sos",
-        "conf_pd",
-        "_opp_wp_pooled",
-        "_capped_margin",
-        "_capped_wins",
-        "_analytics_rating",
-    )
-    parts = non_ind.partition_by(["sim", "conference"], as_dict=True)
-    for key in sorted(parts, key=lambda k: (k[0], str(k[1]))):
-        grp = parts[key]
-        sim = key[0]
-        conf_name = str(key[1])
-        rungs = CONFERENCE_TIEBREAKERS.get(conf_name, _GENERIC_CASCADE)
-        metrics: _Metrics = {}
-        conf_pct_by_team: Dict[str, float] = {}
-        for row in grp.select(*metric_cols).iter_rows(named=True):
-            team = row["team"]
-            conf_pct_by_team[team] = row["conf_pct"]
-            metrics[team] = {
-                "conf_pct": row["conf_pct"],
-                "sov": row["sov"],
-                "sos": row["sos"],
-                "conf_pd": row["conf_pd"],
-                "opp_wp_pooled": row["_opp_wp_pooled"],
-                "capped_margin": row["_capped_margin"],
-                "capped_wins": row["_capped_wins"],
-                "analytics_rating": row["_analytics_rating"],
-            }
-        ctx = _TieCtx(
-            conf_name=conf_name,
-            conf_pct_by_team=conf_pct_by_team,
-            division_absent=division_absent,
-            notes=notes,
+    rank_rows: list[tuple[int, str, int]] = []
+    metric_map = {
+        "sov": "sov",
+        "sos": "sos",
+        "conf_pd": "conf_pd",
+        "opp_wp_pooled": "_opp_wp_pooled",
+        "capped_margin": "_capped_margin",
+        "capped_wins": "_capped_wins",
+        "analytics_rating": "_analytics_rating",
+        "cfp_rank": "_cfp_rank",
+        "apr": "_apr",
+        "div_pct": "_div_pct",
+        "final_conf_win": "_final_conf_win",
+    }
+    extra = [c for c in ("conf_division", "postseason_eligible") if c in non_ind.columns]
+    cols = ["sim", "conference", "team", "conf_pct", "conf_wins", "conf_losses", *metric_map.values(), *extra]
+    # one row pass, grouped in python: per-(sim, conference) frame ops dominated 10k-sim runs
+    groups: dict[tuple[int, str], list[dict[str, Any]]] = {}
+    for row in non_ind.select(cols).iter_rows(named=True):
+        groups.setdefault((row["sim"], str(row["conference"])), []).append(row)
+    for sim, conf_name in sorted(groups):
+        rows = groups[(sim, conf_name)]
+        rungs, pool = _conf_rules(conf_name, season_of(sim))
+        rec_sim = rec.get(sim, {})
+        metrics: _Metrics = {r["team"]: {k: r[v] for k, v in metric_map.items()} for r in rows}
+        conf_pct = {r["team"]: r["conf_pct"] for r in rows}
+        order_set = functools.partial(
+            _order_set,
+            wl={r["team"]: (r["conf_wins"], r["conf_losses"]) for r in rows},
+            metrics=metrics,
+            rec_sim=rec_sim,
+            rungs=rungs,
+            depth=depth,
+            rng=rng,
+            ctx_args=(conf_name, division_absent, notes),
         )
-        # tiers by conference win pct (primary sort), rounded to kill float fuzz
-        tiers: Dict[float, List[str]] = {}
-        for team, m in metrics.items():
-            tiers.setdefault(round(cast(float, m["conf_pct"]), 9), []).append(team)
-        rank = 1
-        for pct in sorted(tiers, reverse=True):
-            tier = tiers[pct]
-            if len(tier) > 1:
-                if lazy_rng is None:
-                    lazy_rng = np.random.default_rng()
-                tier = _order_tied(tier, metrics, rec.get(sim, {}), rungs, depth, lazy_rng, ctx)
-            for team in tier:
-                rank_rows.append((sim, team, rank))
-                rank += 1
+        teams_in = [r["team"] for r in rows]
+        out = (
+            {r["team"] for r in rows if r["postseason_eligible"] is False} if "postseason_eligible" in extra else set()
+        )
+        divs = {r["team"]: r["conf_division"] for r in rows} if "conf_division" in extra else {}
+        if divs and None not in divs.values() and len(set(divs.values())) >= 2:
+            # division format: each division ranked by the conference procedure,
+            # its best ELIGIBLE team is champion; the champions take the top
+            # ranks (ordered between themselves), everyone else follows ranked
+            # across the whole conference. (cfbseedR 0.2.0 picks the champion
+            # before the eligibility filter, so an ineligible winner hands the
+            # berth to the other division.)
+            by_div: dict[str, list[str]] = {}
+            for t in teams_in:
+                by_div.setdefault(divs[t], []).append(t)
+            champs = []
+            for _, members in sorted(by_div.items()):
+                div_order = order_set(members, {t: conf_pct[t] for t in members})
+                champs.append(next((t for t in div_order if t not in out), div_order[0]))
+            champs = order_set(champs, {t: conf_pct[t] for t in champs})
+            ordered = champs + order_set([t for t in teams_in if t not in champs], conf_pct)
+        else:
+            ordered = order_set(teams_in, conf_pct, pool=pool)
+        # stable partition: an explicitly ineligible team cannot hold a CCG berth
+        ordered = [t for t in ordered if t not in out] + [t for t in ordered if t in out]
+        rank_rows += [(sim, team, i) for i, team in enumerate(ordered, start=1)]
     rank_df = pl.DataFrame(
         rank_rows,
         schema={"sim": pl.Int64, "team": pl.Utf8, "conf_rank": pl.Int64},
@@ -730,19 +959,21 @@ def cfb_standings(
     teams: FrameLike,
     *,
     tiebreaker_depth: str = "SOS",
-    playoff_seeds: Optional[int] = None,
-    rankings: Optional[FrameLike] = None,
-    tiebreaker_data: Optional[Dict[str, FrameLike]] = None,
+    playoff_seeds: int | None = None,
+    rankings: FrameLike | None = None,
+    tiebreaker_data: dict[str, FrameLike] | None = None,
+    season: int | None = None,
     return_as_pandas: bool = False,
-    rng: Optional[np.random.Generator] = None,
-) -> Union[pl.DataFrame, Any]:
+    rng: np.random.Generator | None = None,
+) -> pl.DataFrame | Any:
     """Compute college football standings with conference ranks and champions.
 
     Engine design adapted from nflseedR (MIT, Sebastian Carl & Lee Sharpe);
     see the module docstring for the documented CFB simplifications, and its
     "Official per-conference tiebreakers (registry)" section for how
     ``CONFERENCE_TIEBREAKERS`` overrides the generic cascade for the SEC,
-    Big Ten, Big 12, ACC and MAC.
+    Big Ten, Big 12, ACC, MAC, American, Conference USA, Mountain West and
+    Sun Belt.
 
     Args:
         games: Game results with columns ``sim`` (or ``season``), ``week``,
@@ -758,22 +989,35 @@ def cfb_standings(
             optional ``division`` column (``"FBS"``/``"FCS"`` or similar —
             feeds the Big 12 ``total_wins`` FCS cap; absent -> the cap
             degrades to uncapped win totals, noted in ``tiebreak_notes``).
+            Optional ``conf_division`` (in-conference division name: with two
+            or more divisions each division's best eligible team is champion
+            and the champions take the top ranks (1-2 for two divisions); it
+            also feeds the Sun Belt ``div_pct`` rung) and
+            ``postseason_eligible`` (bool; an explicit ``False`` team is
+            ranked behind every eligible one so it cannot hold a
+            championship-game berth, while its games still count).
         tiebreaker_depth: One of ``"RANDOM"``, ``"PRE-SOV"``, ``"SOS"``,
             ``"POINTS"`` — the nflseedR depth ladder. Steps beyond the chosen
             depth are skipped and remaining ties are broken by coin flip.
             Gates ONLY the generic fallback cascade; registered official
             conference procedures (below) always run in full.
         playoff_seeds: If set, adds a ``seed`` column via
-            :func:`cfb_playoff_seeds` with this field size.
+            :func:`cfb_playoff_seeds` with this field size (the season's CFP
+            selection rule, resolved like the tiebreaker epochs).
         rankings: Optional committee-style rankings frame (``team``, ``rank``)
             forwarded to :func:`cfb_playoff_seeds`.
         tiebreaker_data: Optional external inputs for the registry rungs, as
-            a dict with key ``"analytics_ratings"`` -> a frame with columns
-            ``team`` and ``rating`` (feeds the ``analytics_rating`` rung
-            used by Big Ten/Big 12/ACC/MAC). A ``"cfp_rankings"`` key
-            (``team``, ``rank``) is accepted for forward compatibility but
-            unused by the current registry (no registered conference has a
-            ``cfp_ranking`` rung yet). Missing -> the rung is skipped, noted.
+            a dict of frames: ``"analytics_ratings"`` (``team``, ``rating`` —
+            the ``analytics_rating`` rung: Big Ten/Big 12/ACC/MAC, and the
+            American/CUSA/Mountain West/Sun Belt metric composites),
+            ``"cfp_rankings"`` (``team``, ``rank`` — the
+            ``cfp_ranked_final_week`` clause: American/CUSA/Sun Belt) and
+            ``"apr"`` (``team``, ``apr`` — the CUSA ``apr`` rung). Missing ->
+            the rung is skipped, noted.
+        season: Season whose rules apply (registry epochs and the CFP
+            selection rule) to every sim. ``None`` (default): when ``games``
+            is keyed by ``season`` each id is its own season, otherwise
+            (plain ``sim`` ids) the current rules apply.
         return_as_pandas: Return a pandas DataFrame instead of polars.
         rng: Optional numpy Generator used only for coin-flip tiebreaks
             (simulations pass their seeded generator through here).
@@ -790,8 +1034,9 @@ def cfb_standings(
         metadata mechanism — avoids its "new attribute" warning).
 
     Raises:
-        ValueError: If required columns are missing or ``tiebreaker_depth`` /
-            ``game_type`` values are invalid.
+        ValueError: If required columns are missing, ``tiebreaker_depth`` /
+            ``game_type`` values are invalid, or ``teams`` / ``rankings`` /
+            a ``tiebreaker_data`` frame has duplicate team rows.
 
     Example:
         Quick start::
@@ -825,19 +1070,36 @@ def cfb_standings(
     if tiebreaker_depth not in TIEBREAKER_DEPTHS:
         raise ValueError(f"`tiebreaker_depth` must be one of {sorted(TIEBREAKER_DEPTHS)}; got {tiebreaker_depth!r}")
     depth = TIEBREAKER_DEPTHS[tiebreaker_depth]
+    season_keyed = "sim" not in list(games.columns) and "season" in list(games.columns)
     g = _validate_games(games)
     t = _validate_teams(teams)
     st, dg_conf = _standings_base(g, t)
-    if tiebreaker_data is not None and "analytics_ratings" in tiebreaker_data:
-        ar = _to_polars(tiebreaker_data["analytics_ratings"]).select(
-            pl.col("team").cast(pl.Utf8), pl.col("rating").cast(pl.Float64).alias("_analytics_rating")
-        )
-        st = st.join(ar, on="team", how="left")
+    tb = tiebreaker_data or {}
+    for key, src, dst in (
+        ("analytics_ratings", "rating", "_analytics_rating"),
+        ("cfp_rankings", "rank", "_cfp_rank"),
+        ("apr", "apr", "_apr"),
+    ):
+        if key in tb:
+            # NaN -> null so a missing value skips the rung (R's anyNA) instead of breaking _keep_max
+            raw = _to_polars(tb[key])
+            ext = raw.select(_team_id(raw, "team"), pl.col(src).cast(pl.Float64).fill_nan(None).alias(dst))
+            if ext["team"].drop_nulls().is_duplicated().any():  # a left join would duplicate standings rows
+                raise ValueError(f"`tiebreaker_data[{key!r}]` contains duplicate team rows")
+            st = st.join(ext, on="team", how="left")
+        else:
+            st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias(dst))
+    # whose rules apply: explicit season > season-keyed ids (each sim IS a season) > current
+    season_of: Callable[[int], int | None]
+    if season is not None:
+        season_of = lambda _sim: season  # noqa: E731
+    elif season_keyed:
+        season_of = lambda sim: sim  # noqa: E731
     else:
-        st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("_analytics_rating"))
+        season_of = lambda _sim: None  # noqa: E731
     division_absent = "division" not in t.columns
-    notes: List[str] = []
-    st = _add_conf_ranks(st, dg_conf, depth, rng, notes, division_absent)
+    notes: list[str] = []
+    st = _add_conf_ranks(st, dg_conf, depth, rng, notes, division_absent, season_of)
     st = _add_conf_champ(st, g, t)
     st = st.select(
         "sim",
@@ -861,7 +1123,12 @@ def cfb_standings(
         "conf_champ",
     )
     if playoff_seeds is not None:
-        st = cfb_playoff_seeds(st, rankings=rankings, playoff_seeds=playoff_seeds)
+        rule_2026 = (
+            pl.lit(season >= CFB_CFP_AUTOBID_2026_FROM)
+            if season is not None
+            else (pl.col("sim") >= CFB_CFP_AUTOBID_2026_FROM if season_keyed else pl.lit(True))
+        )
+        st = _seed_field(st, rankings, playoff_seeds, rule_2026)
     st = st.sort(["sim", "conference", "conf_rank", "team"], nulls_last=True)
     if return_as_pandas:
         pdf = st.to_pandas(use_pyarrow_extension_array=True)
@@ -871,102 +1138,191 @@ def cfb_standings(
     return st
 
 
+# 2026 CFP automatic qualifiers, matched against cfbfastR/cfbd and short
+# spellings (same lists as cfbseedR 0.2.0's cfb_playoff_seeds).
+_P4_CONFS = (
+    "SEC",
+    "Southeastern Conference",
+    "Big Ten",
+    "Big Ten Conference",
+    "ACC",
+    "Atlantic Coast Conference",
+    "Big 12",
+    "Big 12 Conference",
+)
+_G6_CONFS = (
+    "American Athletic",
+    "American",
+    "American Athletic Conference",
+    "American Conference",
+    "Conference USA",
+    "CUSA",
+    "MAC",
+    "Mid-American",
+    "Mid-American Conference",
+    "Mountain West",
+    "Mountain West Conference",
+    "Pac-12",
+    "Pac-12 Conference",
+    "Sun Belt",
+    "Sun Belt Conference",
+)
+# Notre Dame by display name or ESPN team id
+_NOTRE_DAME = ("Notre Dame", "87")
+
+
+def _seed_field(
+    standings: pl.DataFrame,
+    rankings: FrameLike | None,
+    playoff_seeds: int,
+    rule_2026: pl.Expr,
+) -> pl.DataFrame:
+    """Select and straight-seed the field per sim; ``rule_2026`` (bool expr) picks the rule per row."""
+    st = standings.drop("seed") if "seed" in standings.columns else standings
+    if rankings is not None:
+        raw = _to_polars(rankings)
+        r = raw.select(_team_id(raw, "team"), pl.col("rank").cast(pl.Float64).fill_nan(None))
+        if r["team"].drop_nulls().is_duplicated().any():  # a left join would duplicate standings rows
+            raise ValueError("`rankings` contains duplicate team rows")
+        st = st.join(r, on="team", how="left")
+    else:
+        st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("rank"))
+    n = pl.lit(playoff_seeds, dtype=pl.Int64)
+    is_champ = pl.col("conf_champ") == True  # noqa: E712
+    g6_champ = is_champ & pl.col("conference").is_in(_G6_CONFS)
+    ordered = (
+        st.with_columns(pl.col("rank").fill_null(float("inf")))
+        .sort(
+            ["sim", "rank", "win_pct", "sov", "sos", "pd", "team"],
+            descending=[False, False, True, True, True, True, False],
+        )
+        .with_columns(
+            pl.int_range(1, pl.len() + 1).over("sim").alias("_pos"),
+            is_champ.cast(pl.Int64).cum_sum().over("sim").alias("_champ_cum"),
+            g6_champ.cast(pl.Int64).cum_sum().over("sim").alias("_g6_cum"),
+        )
+        .with_columns(
+            pl.when(rule_2026)
+            # 2026: P4 champions regardless of rank, the best-ranked G6 champion,
+            # Notre Dame when it ranks inside the field size
+            .then(
+                (is_champ & pl.col("conference").is_in(_P4_CONFS))
+                | (g6_champ & (pl.col("_g6_cum") == 1))
+                | (pl.col("team").is_in(_NOTRE_DAME) & (pl.col("_pos") <= n))
+            )
+            # 2024-2025: the 5 highest-ranked conference champions
+            .otherwise(is_champ & (pl.col("_champ_cum") <= 5))
+            .alias("_auto")
+        )
+        .with_columns((pl.col("_auto") & (pl.col("_auto").cast(pl.Int64).cum_sum().over("sim") <= n)).alias("_auto"))
+        .with_columns(
+            (pl.col("_auto") == False).cast(pl.Int64).cum_sum().over("sim").alias("_al_cum"),  # noqa: E712
+            pl.col("_auto").cast(pl.Int64).sum().over("sim").alias("_n_auto"),
+        )
+        .with_columns((pl.col("_auto") | (pl.col("_al_cum") <= n - pl.col("_n_auto"))).alias("_in_field"))
+        # straight seeding in ranking order: an automatic qualifier ranked outside
+        # the top `playoff_seeds` sits behind every at-large, so it takes the lowest seeds
+        .with_columns(
+            pl.when(pl.col("_in_field"))
+            .then(pl.col("_in_field").cast(pl.Int64).cum_sum().over("sim"))
+            .otherwise(None)
+            .cast(pl.Int64)
+            .alias("seed")
+        )
+        .drop("rank", "_pos", "_champ_cum", "_g6_cum", "_auto", "_al_cum", "_n_auto", "_in_field")
+        .sort(["sim", "seed"], nulls_last=True)
+    )
+    return ordered
+
+
 def cfb_playoff_seeds(
     standings: FrameLike,
-    rankings: Optional[FrameLike] = None,
+    rankings: FrameLike | None = None,
     playoff_seeds: int = 12,
     *,
+    season: int | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, Any]:
-    """Assign College Football Playoff seeds (current straight-seeding rule).
+) -> pl.DataFrame | Any:
+    """Assign College Football Playoff seeds (12-team straight seeding, by season).
 
-    Implements the 2025 CFP rule: the field is the ``playoff_seeds`` (12)
-    best-ranked teams with the 5 highest-ranked conference champions
-    guaranteed inclusion; seeds are assigned straight by ranking order (no
-    champion bump to the top four). The rule evolves — it lives in this ONE
-    function so it can be updated in one place.
+    Two selection rules, picked by ``season``; both seed the field straight by
+    ranking order (no champion bump to the top four):
+
+    * **2026+** (``season=None`` or ``>= 2026``, the current rule): the ACC,
+      Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
+      the highest-ranked champion of the American, Conference USA, MAC,
+      Mountain West, Pac-12 and Sun Belt; and Notre Dame (``"Notre Dame"`` or
+      ESPN id ``"87"``) when it ranks inside the top ``playoff_seeds``; the
+      rest of the field is at-large.
+    * **2024-2025** (``season < 2026``): the 5 highest-ranked conference
+      champions are guaranteed inclusion, the rest is at-large.
+
+    An automatic qualifier ranked outside the top ``playoff_seeds`` displaces
+    the lowest-ranked at-large team and takes the lowest seed. Conference
+    names match both cfbd and short spellings (e.g. ``"American Athletic"`` /
+    ``"American"``).
 
     When ``rankings`` is None the ordering falls back to the standings
     tiebreaker metrics — ``win_pct`` desc, then ``sov``, ``sos``, ``pd``
     desc, then team name (documented deterministic fallback; a committee
-    ranking is the intended input).
+    ranking is the intended input). Notre Dame's "ranked inside the field"
+    test reads its position in that same ordering.
+
+    Differs from cfbseedR 0.2.0 (``autobid``) in three places: cfbseedR gives
+    the Group-of-6 bid to the best-ranked G6 team whether or not it won its
+    conference; it tests Notre Dame's committee ``rank`` only (no bid without
+    ``rankings``); and it matches ``"Notre Dame"`` but not ``"87"``. Its
+    ``cfb_standings()`` / ``cfb_simulations()`` also always apply the current
+    rules, where :func:`cfb_standings` and
+    :func:`sportsdataverse.cfb.cfb_simulations` here follow a
+    ``season``-keyed input.
+
+    Called on its own, this function cannot see a season: pass ``season=``
+    for standings of a pre-2026 season (``cfb_standings(...,
+    playoff_seeds=...)`` reads it from ``season``-keyed games instead).
 
     Args:
         standings: Output of :func:`cfb_standings` (needs ``sim``, ``team``,
-            ``conf_champ``, ``win_pct``, ``sov``, ``sos``, ``pd``).
+            ``conference``, ``conf_champ``, ``win_pct``, ``sov``, ``sos``,
+            ``pd``).
         rankings: Optional frame with columns ``team`` and ``rank`` (1 =
             best). Unranked teams order after ranked ones by the fallback.
-        playoff_seeds: Field size (default 12). The champion guarantee is
-            ``min(5, number of champions, playoff_seeds)``.
+        playoff_seeds: Field size (default 12). Automatic qualifiers are
+            capped at this size.
+        season: Season whose selection rule applies (default ``None`` = the
+            current, 2026 rule).
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
         The standings frame with a ``seed`` column (Int64; null for teams
         outside the field), sorted by sim and seed.
 
+    Raises:
+        ValueError: If ``rankings`` has duplicate team rows.
+
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
             st = cfb_standings(games, teams)
             seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
             print(seeded.filter(pl.col("seed").is_not_null()))
 
+        The 2024-2025 rule (5 highest-ranked champions)::
+
+            seeded = cfb_playoff_seeds(st, rankings=ranks_df, season=2025)
+
     See Also:
+        * `cfbseedR <https://cfbseedR.sportsdataverse.org>`_ -- the R port (``autobid``).
         * `nflseedR <https://nflseedr.com>`_ -- NFL seeding equivalent.
-        * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- CFB data in R.
     """
-    st = _to_polars(standings)
-    if "seed" in st.columns:
-        st = st.drop("seed")
-    if rankings is not None:
-        r = _to_polars(rankings).select(pl.col("team").cast(pl.Utf8), pl.col("rank").cast(pl.Float64))
-        st = st.join(r, on="team", how="left")
-    else:
-        st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("rank"))
-    ordered = st.with_columns(pl.col("rank").fill_null(float("inf"))).sort(
-        ["sim", "rank", "win_pct", "sov", "sos", "pd", "team"],
-        descending=[False, False, True, True, True, True, False],
-    )
-    is_champ = pl.col("conf_champ") == True  # noqa: E712
-    ordered = (
-        ordered.with_columns(
-            is_champ.cast(pl.Int64).cum_sum().over("sim").alias("_champ_cum"),
-            is_champ.cast(pl.Int64).sum().over("sim").alias("_champ_total"),
-        )
-        .with_columns(
-            pl.min_horizontal(
-                pl.lit(5, dtype=pl.Int64), pl.col("_champ_total"), pl.lit(playoff_seeds, dtype=pl.Int64)
-            ).alias("_n_guar")
-        )
-        .with_columns((is_champ & (pl.col("_champ_cum") <= pl.col("_n_guar"))).alias("_guaranteed"))
-        .with_columns(
-            (pl.col("_guaranteed") == False)  # noqa: E712
-            .cast(pl.Int64)
-            .cum_sum()
-            .over("sim")
-            .alias("_al_cum")
-        )
-        .with_columns(
-            (
-                pl.col("_guaranteed")
-                | (pl.col("_al_cum") <= (pl.lit(playoff_seeds, dtype=pl.Int64) - pl.col("_n_guar")))
-            ).alias("_in_field")
-        )
-        .with_columns(
-            pl.when(pl.col("_in_field") == True)  # noqa: E712
-            .then(pl.col("_in_field").cast(pl.Int64).cum_sum().over("sim"))
-            .otherwise(None)
-            .cast(pl.Int64)
-            .alias("seed")
-        )
-        .drop("rank", "_champ_cum", "_champ_total", "_n_guar", "_guaranteed", "_al_cum", "_in_field")
-        .sort(["sim", "seed"], nulls_last=True)
-    )
+    rule_2026 = pl.lit(season is None or season >= CFB_CFP_AUTOBID_2026_FROM)
+    ordered = _seed_field(_to_polars(standings), rankings, playoff_seeds, rule_2026)
     return ordered.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else ordered
 
 
-def cfb_games_from_schedule(schedule: FrameLike, *, return_as_pandas: bool = False) -> Union[pl.DataFrame, Any]:
+def cfb_games_from_schedule(schedule: FrameLike, *, return_as_pandas: bool = False) -> pl.DataFrame | Any:
     """Map a ``load_cfb_schedule()`` frame into the seedr engine ``games`` schema.
 
     Derives ``game_type`` heuristically: games whose ``notes`` mention a
