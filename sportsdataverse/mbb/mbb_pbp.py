@@ -59,7 +59,7 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
         Quick start (2024 NCAA Division I men's championship game)::
 
             from sportsdataverse.mbb import espn_mbb_pbp
-            plays = espn_mbb_pbp(game_id=401638637)
+            plays = espn_mbb_pbp(game_id=401638645)
             print(plays.shape)
 
         Filter shooting plays for a basic shot chart::
@@ -80,17 +80,17 @@ def espn_mbb_pbp(game_id: int, raw: bool = False, return_parsed: bool = True, re
 
         As pandas::
 
-            plays_pd = espn_mbb_pbp(game_id=401638637, return_as_pandas=True)
+            plays_pd = espn_mbb_pbp(game_id=401638645, return_as_pandas=True)
             plays_pd[plays_pd["shooting_play"] == True].head()
 
         The game dictionary (box score, header, pickcenter, ...)::
 
-            game = espn_mbb_pbp(game_id=401638637, return_parsed=False)
+            game = espn_mbb_pbp(game_id=401638645, return_parsed=False)
             print(game["gameId"], len(game["plays"]))
 
         Raw payload (skip the cleaning pipeline) for debugging::
 
-            raw = espn_mbb_pbp(game_id=401638637, raw=True)
+            raw = espn_mbb_pbp(game_id=401638645, raw=True)
             sorted(raw.keys())
 
         See Also:
@@ -202,7 +202,7 @@ def espn_mbb_team_box(game_id: int, return_as_pandas: bool = False, **kwargs):
         Quick start (2024 NCAA Division I men's championship game)::
 
             from sportsdataverse.mbb import espn_mbb_team_box
-            team_box = espn_mbb_team_box(game_id=401638637)
+            team_box = espn_mbb_team_box(game_id=401638645)
             print(team_box.shape)
 
         Pipeline next step (one line)::
@@ -241,7 +241,7 @@ def espn_mbb_player_box(game_id: int, return_as_pandas: bool = False, **kwargs):
         Quick start (2024 NCAA Division I men's championship game)::
 
             from sportsdataverse.mbb import espn_mbb_player_box
-            player_box = espn_mbb_player_box(game_id=401638637)
+            player_box = espn_mbb_player_box(game_id=401638645)
             print(player_box.shape)
 
         Pipeline next step (one line)::
@@ -278,12 +278,12 @@ def espn_mbb_game_all(game_id: int, return_as_pandas: bool = False, **kwargs):
         Quick start (2024 NCAA Division I men's championship game)::
 
             from sportsdataverse.mbb import espn_mbb_game_all
-            game = espn_mbb_game_all(game_id=401638637)
+            game = espn_mbb_game_all(game_id=401638645)
             print(game["Plays"].shape, game["Team"].shape, game["Player"].shape)
 
         Pipeline next step (one line)::
 
-            game["Player"].sort("points", descending=True).select("athlete_display_name", "points").head()
+            game["Player"].sort("points", descending=True, nulls_last=True).select("athlete_display_name", "points").head()
 
     See Also:
         * `hoopR`_ -- R sister package; ``espn_mbb_game_all`` there.
@@ -324,7 +324,7 @@ def helper_mbb_pbp(game_id, pbp_txt):
     init = helper_mbb_pickcenter(pbp_txt)
     pbp_txt, init = helper_mbb_game_data(pbp_txt, init)
 
-    if "plays" in pbp_txt.keys() and pbp_txt.get("header").get("competitions")[0].get("playByPlaySource") != "none":
+    if pbp_txt.get("plays") and pbp_txt["header"]["competitions"][0].get("playByPlaySource") != "none":
         pbp_txt = helper_mbb_pbp_features(game_id, pbp_txt, init)
     else:
         pbp_txt["plays"] = pl.DataFrame()

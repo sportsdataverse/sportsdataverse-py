@@ -234,7 +234,7 @@ def espn_nba_game_all(game_id: int, return_as_pandas: bool = False, **kwargs):
 
         Pipeline next step (one line)::
 
-            game["Player"].sort("points", descending=True).select("athlete_display_name", "points").head()
+            game["Player"].sort("points", descending=True, nulls_last=True).select("athlete_display_name", "points").head()
 
     See Also:
         * `hoopR`_ -- R sister package; ``espn_nba_game_all`` there.
@@ -298,7 +298,7 @@ def helper_nba_pbp(game_id, pbp_txt):
     """
     init = helper_nba_pickcenter(pbp_txt)
     pbp_txt, init = helper_nba_game_data(pbp_txt, init)
-    if "plays" in pbp_txt.keys() and pbp_txt.get("header").get("competitions")[0].get("playByPlaySource") != "none":
+    if pbp_txt.get("plays") and pbp_txt["header"]["competitions"][0].get("playByPlaySource") != "none":
         pbp_txt = helper_nba_pbp_features(game_id, pbp_txt, init)
     else:
         pbp_txt["plays"] = pl.DataFrame()

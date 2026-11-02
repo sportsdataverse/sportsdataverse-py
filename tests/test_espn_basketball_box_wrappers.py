@@ -95,3 +95,19 @@ def test_return_as_pandas_keeps_integer_ids(monkeypatch, pkg, module, lg, game_i
     assert str(game["Team"]["team_id"].dtype).startswith("int")
     assert isinstance(getattr(pkg, f"espn_{lg}_player_box")(game_id, return_as_pandas=True), pd.DataFrame)
     assert isinstance(getattr(pkg, f"espn_{lg}_team_box")(game_id), pl.DataFrame)
+
+
+@pytest.mark.parametrize(("pkg", "module", "lg", "game_id"), CASES)
+def test_game_all_keeps_the_boxes_when_espn_ships_no_plays(monkeypatch, pkg, module, lg, game_id) -> None:
+    # about 4,450 hoopR-mbb-raw payloads (401831378, 401594319, ...) say playByPlaySource "full"
+    # with an empty plays array; the committed capture is emptied in-test to reach that branch
+    raw = _raw(lg, game_id)
+    raw["plays"] = []
+    assert raw["header"]["competitions"][0]["playByPlaySource"] != "none"
+    _patch(monkeypatch, module, raw)
+    game = getattr(pkg, f"espn_{lg}_game_all")(game_id)
+    assert game["Plays"].height == 0
+    assert_frame_equal(game["Plays"], getattr(pkg, f"espn_{lg}_pbp")(game_id))
+    assert_frame_equal(game["Team"], getattr(pkg, f"espn_{lg}_team_box")(game_id))
+    assert_frame_equal(game["Player"], getattr(pkg, f"espn_{lg}_player_box")(game_id))
+    assert game["Team"].height == 2
