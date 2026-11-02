@@ -295,7 +295,7 @@ under [`examples/notebooks/`](examples/notebooks):
   server ships in the same wheel but never imports `sportsdataverse`, so it starts
   in about 1.5 s instead of the 4-12 s a full league import costs.
 
-  The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
+  The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 20 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
 ## Companion packages
 

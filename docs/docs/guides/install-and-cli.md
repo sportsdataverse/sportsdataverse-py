@@ -119,7 +119,7 @@ Returns tables, the endpoint metadata and the R packages' indexes. It needs the
 `mcp` extra:
 
 ```bash
-pip install "sportsdataverse[mcp]"
+pip install --pre "sportsdataverse[mcp]"   # 0.2.0b1 or newer; 0.1.4 has no sdv-docs
 sdv-docs --version
 ```
 
