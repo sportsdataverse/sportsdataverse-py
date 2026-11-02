@@ -249,6 +249,13 @@ def _n_byes(n: int) -> int:
     return (1 << (n - 1).bit_length()) - n if n > 1 else 0
 
 
+def _bye_cutoffs(standings: pl.DataFrame) -> pl.DataFrame:
+    """(sim, _bye_cut): seeds 1.._bye_cut drew a first-round bye in that sim's actual field."""
+    n_field = standings.group_by("sim").agg(pl.col("seed").max().fill_null(0).alias("_n"))
+    cut = {n: _n_byes(n) for n in n_field["_n"].unique().to_list()}
+    return n_field.select("sim", pl.col("_n").replace_strict(cut, return_dtype=pl.Int64).alias("_bye_cut"))
+
+
 def _bracket_slots(n: int) -> dict[int, int]:
     """seed -> bracket slot of a fixed single-elimination bracket for ``n`` seeds.
 
@@ -491,14 +498,11 @@ def cfb_simulations(
     if "seed" in standings.columns:
         agg_cols += [
             pl.col("seed").is_not_null().cast(pl.Float64).mean().alias("made_playoff"),
-            (pl.col("seed") <= _n_byes(playoff_seeds))
-            .fill_null(False)
-            .cast(pl.Float64)
-            .mean()
-            .alias("first_round_bye"),
+            (pl.col("seed") <= pl.col("_bye_cut")).fill_null(False).cast(pl.Float64).mean().alias("first_round_bye"),
         ]
     overall = (
-        standings.group_by("team", "conference")
+        (standings.join(_bye_cutoffs(standings), on="sim") if "seed" in standings.columns else standings)
+        .group_by("team", "conference")
         .agg(agg_cols)
         .join(champ_probs, on="team", how="left")
         .with_columns(pl.col("won_cfp").fill_null(0.0))

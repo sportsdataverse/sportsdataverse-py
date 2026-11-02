@@ -244,9 +244,25 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
 }
 
 
+#: Full-name / alternate spellings (the ones :func:`cfb_playoff_seeds` accepts) -> the
+#: registered key, so a cfbd-style ``"Sun Belt Conference"`` still gets the Sun Belt procedure.
+_CONF_ALIASES: dict[str, str] = {
+    "Southeastern Conference": "SEC",
+    "Big Ten Conference": "Big Ten",
+    "Atlantic Coast Conference": "ACC",
+    "Big 12 Conference": "Big 12",
+    "American Athletic Conference": "American Athletic",
+    "American Conference": "American Athletic",
+    "CUSA": "Conference USA",
+    "Mid-American Conference": "MAC",
+    "Mountain West Conference": "Mountain West",
+    "Sun Belt Conference": "Sun Belt",
+}
+
+
 def _conf_rules(conf_name: str, season: int | None) -> tuple[list[_Rung], str | None]:
     """(rungs, pool) for one conference-season; unregistered -> the generic cascade."""
-    epochs = CONFERENCE_TIEBREAKERS.get(conf_name)
+    epochs = CONFERENCE_TIEBREAKERS.get(conf_name) or CONFERENCE_TIEBREAKERS.get(_CONF_ALIASES.get(conf_name, ""))
     if not epochs:
         return _GENERIC_CASCADE, None
     eligible = [e for e in epochs if season is None or e["from"] <= season] or epochs[:1]

@@ -619,6 +619,15 @@ class TestRegistry2026Parity:
         # the composite puts B ("2") first; an unjoined rating would fall to h2h (A, "1")
         assert st.filter(pl.col("conf_rank") == 1)["team"].item() == "2"
 
+    def test_full_conference_name_gets_the_registered_procedure(self) -> None:
+        # "Mountain West Conference" (cfbd spelling) must rank like "Mountain West"
+        games, teams, data = _registry_case("mw_composite")
+        short = cfb_standings(games, teams, tiebreaker_data=data)
+        full = cfb_standings(
+            games, teams.with_columns(pl.lit("Mountain West Conference").alias("conference")), tiebreaker_data=data
+        )
+        assert full.sort("team")["conf_rank"].to_list() == short.sort("team")["conf_rank"].to_list()
+
     def test_duplicate_team_rows_in_external_inputs_raise(self) -> None:
         games, teams, data = _registry_case("american_final_win")
         two_weeks = pl.DataFrame({"team": ["A", "A"], "rank": [20, 18]})

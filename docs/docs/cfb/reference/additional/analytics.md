@@ -756,7 +756,7 @@ The standings frame with a `seed` column (Int64; null for teams outside the fiel
 | `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference opponents' conference win pct across all conference games played; 0.0 for independents. |
 | `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
 | `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
-| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the best Group-of-6 champion and a top-12 Notre Dame are guaranteed inclusion; before 2026, the five best-ordered conference champions. |
+| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
 
 **Raises**
 

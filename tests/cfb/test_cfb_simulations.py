@@ -205,6 +205,14 @@ class TestFixedBracket:
     def test_bye_count_follows_field_size(self, n: int, byes: int) -> None:
         assert _n_byes(n) == byes
 
+    @pytest.mark.parametrize(("playoff_seeds", "byes"), [(4, 0), (6, 2), (8, 0), (12, 7)])
+    def test_first_round_bye_counts_the_actual_field(self, playoff_seeds: int, byes: int) -> None:
+        # the toy has 9 teams: a 12-seed request seeds 9 -> a 16-slot bracket, 7 byes
+        games, teams = _toy_unplayed()
+        out = cfb_simulations(games, teams, simulations=5, seed=2, playoff_seeds=playoff_seeds)
+        assert out["overall"]["first_round_bye"].sum() == pytest.approx(byes)
+        assert "_bye_cut" not in out["standings"].columns
+
     def test_bracket_slots_match_cfp_order(self) -> None:
         slots = _bracket_slots(12)
         order = [seed for seed, _ in sorted(slots.items(), key=lambda kv: kv[1])]
