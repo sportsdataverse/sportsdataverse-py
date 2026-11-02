@@ -216,6 +216,28 @@ _NOT_OFFENSE_TD_TYPE_RE = r"(?i)interception|fumble|punt|kickoff|blocked|safety|
 #: A return clause before the out-of-bounds token: the returner went out, the kick did not.
 _RETURNER_STEPPED_OUT_RE = r"(?i)\breturn\w*\b.*out[- ]of[- ]bounds"
 
+#: The yard-line number of a fair catch's spot: "fair catch by Kennedy McKoy at the WVirg 3",
+#: "fair catch by #16 C.Cobb at ASU01". Side-free on purpose: a free kick must travel 10 yards from
+#: the kicker's 35 (20 after a safety), so a number of 25 or less is the receiver's own side.
+_FAIR_CATCH_SPOT_RE = r"(?i)fair (?:catch|caught)(?: by .{0,40}?)? at (?:the )?[A-Za-z&.' ()-]*?(\d+)"
+
+
+def _fair_catch_spot() -> pl.Expr:
+    """The yard-line number of the play's fair-catch spot (``_FAIR_CATCH_SPOT_RE``), null without one."""
+    return pl.col("text").str.extract(_FAIR_CATCH_SPOT_RE, 1).cast(pl.Int64, strict=False)
+
+
+#: Any "at/to <TEAM> NN" spot. The last one is where the ball came to rest: the catch, or the
+#: enforcement after it ("fair catch by #85 C.Hewitt II at LU27 PENALTY ... 15 yards from LU27 to LU42").
+_REST_SPOT_RE = r"(?i)\b(?:at|to) (?:the )?[A-Za-z&.'()]+ ?\d{1,2}\b"
+
+
+def _last_spot_number() -> pl.Expr:
+    """The yard-line number of the last ``_REST_SPOT_RE`` spot in the play's text, null without one."""
+    return (
+        pl.col("text").str.extract_all(_REST_SPOT_RE).list.last().str.extract(r"(\d+)$", 1).cast(pl.Int64, strict=False)
+    )
+
 
 def _repair_scores(scores: list, scoring: list, final) -> list:
     """One team's per-row score with ESPN's feed errors replaced by the last accepted score (see the call site).
@@ -4117,6 +4139,24 @@ class CFBPlayProcess(object):
                 .then(pl.lit(100) - pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
                 .when(pl.col("_ret_spot").is_not_null())
                 .then(pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
+                # A kickoff fair catch is a return of no yards, and the spot it rests at (the
+                # catch, or a flag's enforcement after it) needs no side: of the two readings take
+                # the one the next snap starts at (the gate below). The 2025 vendor feed ("kickoff
+                # 36 yards to the ODU29 fair catch by #5 M.James at ODU29") files the end of a
+                # catch beyond the 25 wrong on 40 of 41 rows (24 at the 35, 14 at the yard-line
+                # number itself), and its team token does not always resolve ("UMD29" for MD).
+                .when(
+                    pl.col("text").str.contains(r"(?i)kickoff")
+                    & _fair_catch_spot().is_not_null()
+                    & (pl.col("_nxt_start") == 100 - _last_spot_number())
+                )
+                .then(100 - _last_spot_number())
+                .when(
+                    pl.col("text").str.contains(r"(?i)kickoff")
+                    & _fair_catch_spot().is_not_null()
+                    & (pl.col("_nxt_start") == _last_spot_number())
+                )
+                .then(_last_spot_number())
                 .otherwise(None),
             )
             .with_columns(
@@ -4749,10 +4789,15 @@ class CFBPlayProcess(object):
                 # season so it does not mis-place pre-rule fair-caught kickoffs.
                 # (0.36-live applied this ungated; the season gate is the correctness
                 # refinement. Confirm the 2018 cutoff if porting to other rulebooks.)
+                # Rule 6-5-1: a catch BEYOND the 25 is dead at the spot, not a touchback.
+                # ESPN's next snap agrees on 142 of 144 clean 2018-2025 catches beyond the
+                # 25 (of the other two, one snaps 5 yards short and one ends the half); no
+                # stated spot keeps the touchback (9 of 9 such rows snap at the 25).
                 .when(
                     (pl.col("text").str.contains(r"(?i)fair catch|fair caught"))
                     .and_(pl.col("kickoff_play") == True)
-                    .and_(pl.col("season") >= CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM),
+                    .and_(pl.col("season") >= CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM)
+                    .and_((_fair_catch_spot() > 25).fill_null(False) == False),
                 )
                 .then(True)
                 .when((pl.col("text").str.contains("(?i)kickoff$")).and_(pl.col("kickoff_play") == True))
@@ -8316,6 +8361,10 @@ class CFBPlayProcess(object):
                 .alias("end.down"),
                 pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
                 .then(10)
+                # a fair catch beyond the 25 is not a touchback but is still 1st & 10 at the spot;
+                # ESPN files an onside one as 1st & 6 (401762499271) and a 2014 one as 1st & 0
+                .when(pl.col("kickoff_fair_catch") == True)
+                .then(pl.min_horizontal(pl.lit(10), pl.col("end.yardsToEndzone")))
                 .otherwise(pl.col("end.distance"))
                 .alias("end.distance"),
             )
