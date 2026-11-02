@@ -179,9 +179,7 @@ def main() -> None:
         capture = _capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
-            schema["unverified"] = (
-                f"no committed capture in the reference checkout's {STEM}/captures (see its ENDPOINTS.md)"
-            )
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
         schema["columns"] = columns_from_frame(parse_capture(capture, parse_fotmob), descriptions)
         write_yaml(schema_dir / f"{short}.yaml", schema)
     print(f"{STEM}: {len(ops)} endpoints")

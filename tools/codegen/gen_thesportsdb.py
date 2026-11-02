@@ -188,9 +188,7 @@ def main() -> None:
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1
-            schema["unverified"] = (
-                f"no committed capture in the reference checkout's {STEM}/captures (see ENDPOINTS.md)"
-            )
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
             schema["columns"] = []
         else:
             schema["columns"] = columns_from_frame(

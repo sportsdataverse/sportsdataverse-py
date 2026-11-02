@@ -164,7 +164,7 @@ SPRING_FOOTBALL_CONSTANTS: dict[str, SpringFootballConstants] = {
 # The base entries above describe the CURRENT season. Earlier seasons differ;
 # get_sf_constants(league, season=) applies the latest override at or before
 # the season. Keyed by the first season each ruleset applied to. Sources:
-# the leagues' published rulebooks; rules ufl-2024-inaugural-ruleset,
+# the maintainers' rule-catalogue ids ufl-2024-inaugural-ruleset,
 # ufl-2025-kickoff-from-30-two-touchback-spots, ufl-2026-kick-pat-four-point-fg,
 # xfl-2020-inaugural-ruleset, xfl-2023-relaunch-ruleset,
 # cfl-2015-convert-distances, cfl-2027-field-shortened-to-100-yards.

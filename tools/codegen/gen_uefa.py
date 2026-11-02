@@ -88,9 +88,7 @@ _OPID_PREFIX = re.compile(r"^[a-z]+_v\d+_")
 # UCL match from /v5/matches), so the docs example resolves to the committed file.
 _EXAMPLE_PATH_ARGS: Dict[str, str] = {"match_id": "2047742"}
 
-_UNVERIFIED = (
-    "no committed capture in the reference checkout's uefa/captures (ENDPOINTS.md marks the route not captured)"
-)
+_UNVERIFIED = "no committed capture in the reference checkout's uefa/captures"
 
 
 def _short(path: str, op: dict) -> str:

@@ -21,7 +21,7 @@ from typing import Final
 #: CTG's shot-location taxonomy. Distinct from :data:`nba_shot_zones.SHOT_ZONES`
 #: (the *official NBA* zones: restricted area / paint-non-RA / mid-range / ...).
 #: CTG splits the midrange at the free-throw-line distance instead:
-#: rim <=4 ft, short mid 4-13.75 ft, long mid >13.75 ft (METHODOLOGY.md 5b).
+#: rim <=4 ft, short mid 4-13.75 ft, long mid >13.75 ft (CTG's methodology guide).
 CTG_SHOT_ZONES: Final[list[str]] = ["at_rim", "short_mid", "long_mid", "corner_3", "arc_3"]
 
 #: Rim boundary in feet -- CTG: "Shots within 4 feet of the basket".

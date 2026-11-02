@@ -11,8 +11,8 @@ nflverse ever asks it about.
 
 Why the form depends on the rule format
 ---------------------------------------
-The NFL rulebook has had four overtime rule eras
-(``nfl-2010-overtime-modified-sudden-death-postseason``,
+The NFL has had four overtime rule eras (the maintainers' rule-catalogue ids
+``nfl-2010-overtime-modified-sudden-death-postseason``,
 ``nfl-2012-overtime-modified-sudden-death-regular-season``,
 ``nfl-2022-overtime-both-possess-postseason``,
 ``nfl-2025-overtime-both-possess-regular-season``; the 10-minute period of

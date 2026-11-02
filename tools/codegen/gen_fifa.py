@@ -368,9 +368,7 @@ def main() -> None:
         capture = _capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe", "columns": []}
         if capture is None:
-            schema["unverified"] = (
-                f"no committed capture in the reference checkout's {STEM}/captures (see ENDPOINTS.md)"
-            )
+            schema["unverified"] = f"no committed capture in the reference checkout's {STEM}/captures"
         else:
             frame = parse_capture(capture, parse_fifa)
             descriptions = [*sources, _curated(frame.columns)]
