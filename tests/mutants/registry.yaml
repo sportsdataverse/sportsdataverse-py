@@ -3415,6 +3415,16 @@
   expected: kill
   note: NoDataError / AssetFetchError gave a traceback and exit 1
 
+- id: sdv-cli-catches-sdv-errors
+  group: codegen-runtime
+  finding: C-L57
+  file: sdv_cli/commands.py
+  snippet: 'if isinstance(e, (ValueError, RuntimeError, SportsDataverseError)):'
+  mutant: 'if isinstance(e, (ValueError, RuntimeError)):'
+  test: tests/sdv_cli/test_commands.py -k exit_2
+  expected: kill
+  note: the cyclopts CLI keeps the classic contract; NoDataError / AssetFetchError must be 'sdv:' + exit 2
+
 - id: validate-game-float-score-delta
   group: codegen-runtime
   finding: C-M9

@@ -125,7 +125,7 @@ extras under `[project.optional-dependencies]` (`tests`, `nflpro`, `models`, `pf
 `soccer`, `sdvplot`, `sportypy`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`, `sdvplot` the team
 logo/color/theme companion (>=0.1.1, its first polars-2 release), `sportypy` the GPL-3.0 surface-drawing companion; note `[all]`
 includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. `[tool.setuptools.packages.find]`
-is an include allowlist (`sportsdataverse*`, `sdv_docs*`), so a new top-level directory never leaks into the
+is an include allowlist (`sportsdataverse*`, `sdv_docs*`, `sdv_cli*`), so a new top-level directory never leaks into the
 wheel. Package data ships the bundled model and data directories listed in `[tool.setuptools.package-data]`
 (the per-sport `models/*` and `data/*` dirs, `registry/*.yaml`, `schemas/raw/*.yaml`, `validation/*.yaml`) plus
 `py.typed`.
@@ -218,13 +218,14 @@ sportsdataverse/
   f1/         # Formula 1 (Jolpica)
   _common/    # shared metric + rating helpers
   schemas/    # bundled raw-payload schemas (schemas/raw/*.yaml)
-  cli.py                  # the `sdv` console script
+  cli.py                  # the classic argparse `sdv` CLI, the fallback on Python 3.10 (frozen)
   release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
   errors.py   # NoDataError (alias NoESPNDataError), AssetFetchError, SeasonNotFoundError
   config.py   # Per-sport URL constants pointing at sportsdataverse-data releases
   __init__.py
 sdv_docs/     # the sdv-docs MCP server, a top-level package (never imports sportsdataverse)
+sdv_cli/      # the `sdv` console script (cyclopts + Rich, Python 3.11+); imports sportsdataverse only inside commands
 tests/
   conftest.py # skip_if_no_live decorator
   cfb/, mbb/, mlb/, nba/, nfl/, nhl/, wbb/, wnba/  # one subdir per source pkg
