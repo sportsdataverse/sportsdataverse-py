@@ -1,6 +1,6 @@
 """The FIBA runtime keeps the key out of sight, refuses answers that are not about the request and spaces every attempt.
 
-Every refusal case of ``sdv-internal-refs/fiba/tools/capture.py`` is exercised through a mocked transport
+Every refusal case of the maintainers' FIBA capture tool is exercised through a mocked transport
 (``_codegen_runtime.download`` for GDAP, ``fiba_runtime._page_transport`` for game pages), measured live on
 2026-10-12:
 

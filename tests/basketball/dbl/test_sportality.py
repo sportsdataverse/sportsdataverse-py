@@ -1,8 +1,8 @@
 """Offline tests for the Basketligaen (``sportality``) parsers, endpoint YAML and returns-schemas.
 
 Every parser runs on the real captures in ``tests/fixtures/sportality/`` (3-row samples copied from
-sdv-internal-refs) and, for the dtypes, on the untruncated bodies in ``tests/fixtures/sportality/full/``.
-No network and no refs checkout.
+the maintainers' captures) and, for the dtypes, on the untruncated bodies in ``tests/fixtures/sportality/full/``.
+No network and no private reference checkout.
 """
 
 from __future__ import annotations

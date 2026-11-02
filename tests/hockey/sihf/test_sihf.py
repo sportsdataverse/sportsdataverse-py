@@ -686,7 +686,7 @@ _ALL_TABLE_ALIASES = {"results", "standing", "player", "goalkeeper", *DETAIL_ALI
 
 
 def test_yaml_wraps_every_table_alias_once():
-    # sdv-internal-refs sihf/ documents 26 table aliases: results, standing, 11 team, 9 skater, 4 goalie.
+    # The SIHF /table route has 26 aliases: results, standing, 11 team, 9 skater, 4 goalie.
     table_eps = [ep for ep in _ENDPOINTS if ep["path"] == "/table" and ep["short"] != "phases"]
     aliases = [ep["fixed_params"]["alias"] for ep in table_eps]
     assert len(aliases) == len(set(aliases)) == 26

@@ -1,6 +1,6 @@
 """One test per CFB overtime rule set on a committed capture (C-M6).
 
-The rule sets (sdv-internal-refs ``rules/cfb.yaml``): overtime from the 25 with no two-point
+The rule sets (NCAA football rules): overtime from the 25 with no two-point
 shootout before 2019 (``cfb-1996-overtime-introduced``); the shootout from the fifth overtime in
 2019-20 (``cfb-2019-overtime-shootout-from-fifth``); from the third from 2021
 (``cfb-2021-overtime-shootout-from-third``). A shootout attempt is one two-point play, not a

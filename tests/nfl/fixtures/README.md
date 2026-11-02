@@ -248,8 +248,8 @@ columns, one per quarterback-game ESPN rated in 2023 (regular season and playoff
 ## Overtime rule sets (C-M6)
 
 One committed regular-season overtime capture inside each NFL overtime rule set, cut where the code's
-behaviour changes (`sportsdataverse/nfl/model_vars.py` `OVERTIME_FORMATS`; ids from sdv-internal-refs
-`rules/nfl.yaml`); `tools/check_ot_era_captures.py` checks them. All are ESPN summaries from
+behaviour changes (`sportsdataverse/nfl/model_vars.py` `OVERTIME_FORMATS`; the rule ids are
+plain labels for the NFL rule changes); `tools/check_ot_era_captures.py` checks them. All are ESPN summaries from
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`, trimmed
 (`summary_<id>_trimmed.json.gz`).
 

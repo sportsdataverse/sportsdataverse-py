@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Ligue Magnus fixtures](#ligue-magnus-fixtures)
+  - [Provenance](#provenance)
+  - [Redaction](#redaction)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -30,7 +32,7 @@ Real responses from `https://liguemagnus.com` (keyless), all captured on **2026-
 ## Provenance
 
 - The `ajax__*.json` files without `@` and the three `rencontre__id*.json` game sheets are copies of
-  `sdv-internal-refs/ligue-magnus/captures/` (commit `92520e6`): truncated samples, every array cut to its first 3
+  the maintainers' captures: truncated samples, every array cut to its first 3
   elements (a game sheet's `evenements` keeps the first event of each type).
 - `ajax__get_rencontres@round2.json` and `@round44.json` are whole bodies fetched through
   `magnus_runtime._get` with the query `magnus_schedule(season=2027, phase_id=714, round=2|44)` sends.
@@ -42,5 +44,5 @@ Real responses from `https://liguemagnus.com` (keyless), all captured on **2026-
 
 ## Redaction
 
-Staff birth dates (`staffs[].ddn`) are masked to the literal `DD/MM/YYYY` in every game sheet here, as in the refs
+Staff birth dates (`staffs[].ddn`) are masked to the literal `DD/MM/YYYY` in every game sheet here, as in the maintainers'
 captures. The runtime drops the field before returning a sheet, and no parser reads it.

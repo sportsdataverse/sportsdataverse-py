@@ -1,7 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [NWSL (StatsPerform SDP) fixtures](#nwsl-statsperform-sdp-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # NWSL (StatsPerform SDP) fixtures
 
 Real, trimmed responses from `https://api-sdp.nwslsoccer.com/v1/nwsl/football/...`,
-captured 2026-07-18 and copied byte-for-byte from `sdv-internal-refs/nwsl/captures/`.
+captured 2026-07-18 and copied byte-for-byte from the maintainers' captures.
 
 | File | Route |
 |---|---|

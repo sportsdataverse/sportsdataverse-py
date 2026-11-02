@@ -12,14 +12,14 @@ Real captured response bodies from `stats.nba.com` with `LeagueID=20` (the NBA G
 synthetic fixtures.
 
 `endpoints/<slug>.json` holds one capture per `nbagl_stats_<slug>` wrapper: a trimmed copy of the
-2026-08 capture sweep sample `sdv-internal-refs/nba/captures/_sample/20/<slug>.json`, written by
+2026-08 capture sweep sample (the maintainers' private captures), written by
 `tools/codegen/vendor_captures.py`. Trimming keeps the first two records of every record list plus
 each later record that adds a new `(field path, value type)` pair, so the trimmed capture parses to
 the same columns and dtypes as the full one (the script asserts it). The returns schemas under
 `tools/codegen/schemas/native/nbagl_stats/` are built from what `parse_nba_stats_result_sets` emits
 on these files (`tools/codegen/gen_nba_stats.py`).
 
-The sweep took most of them with the G League sample entities in `sdv-internal-refs/nba/tools/sample_params.py`
+The sweep took most of them with the G League sample entities
 (`GameID` 2022500137, `PlayerID` 1642443, team 1612709914, season `2023-24` with a newer-season ladder), but
 not all of them, and each file's `parameters` block is the record of what it sent:
 
@@ -37,4 +37,4 @@ from a residential one with `SDV_PY_NBA_STATS_LIVE=1`.
 
 Re-vendor (needs the private repo checkout):
 
-    SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
+    SDV_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py

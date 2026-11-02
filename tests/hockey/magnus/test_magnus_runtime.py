@@ -1,6 +1,6 @@
 """The Ligue Magnus runtime maps the END-year season, extracts the game sheet and refuses bad answers.
 
-Every refusal case of ``sdv-internal-refs/ligue-magnus/tools/capture.py`` is exercised through a
+Every refusal case of the maintainers' Ligue Magnus capture tool is exercised through a
 mocked transport (``_codegen_runtime.download``), measured live on 2026-10-12:
 
 * admin-ajax errors arrive as HTTP 200: ``success: false``, an empty ``data`` stub, a Laravel

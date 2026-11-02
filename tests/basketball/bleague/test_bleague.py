@@ -1,6 +1,6 @@
 """B.LEAGUE family: parsers over the committed fixtures, the YAML, the runtime's refusals and throttling.
 
-Reads only committed files (CI has no sdv-internal-refs checkout): the YAML, the spec-path snapshot, the fixtures.
+Reads only committed files (CI has no private reference checkout): the YAML, the spec-path snapshot, the fixtures.
 The generator is imported for its ENDPOINTS table only; its ``main()`` (which reads the refs) is not called.
 """
 

@@ -1,7 +1,7 @@
 """The two KHL runtimes: the khl.ru session POST client and the webcaster GET client.
 
 Every request goes through a fake transport (no network, no sleeping): the refusal cases are the
-ones ``sdv-internal-refs/khl/tools/capture.py`` refuses to bank (error envelopes, empty answers,
+ones the maintainers' KHL capture tool refuses to bank (error envelopes, empty answers,
 answers for another game / player / stage, non-200s, cut-off bodies). Answers for something other
 than what was asked are failed fetches (``AssetFetchError``); empty answers are ``NoDataError``.
 """

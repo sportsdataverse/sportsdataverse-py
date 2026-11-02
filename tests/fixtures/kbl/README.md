@@ -1,8 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [KBL fixtures](#kbl-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # KBL fixtures
 
-Source: `sdv-internal-refs` commit `cb7a95a`, directory `kbl/` (README of 2026-10-12), host `https://api.kbl.or.kr`.
+Source: the maintainers' captures of 2026-10-12, host `https://api.kbl.or.kr`.
 
-- `captures/`: the 45 truncated refs captures, copied unchanged (captured live 2026-10-12, arrays cut to 3 rows).
+- `captures/`: the 45 truncated captures, copied unchanged (captured live 2026-10-12, arrays cut to 3 rows).
 - `full/`: untruncated bodies fetched live on 2026-10-13 with the headers `Channel: WEB`, `TeamCode: XX`, 1.5 s apart:
   game `S47G01N49` (header, text-cast with `quarterList=Q1,Q2,Q3,Q4,EQ1..EQ4`, player-stat, team-record, match-chart),
   `/leagues/S45G01/stats/players`, `/league/rank/S45G01`, `/league/playoff/new/S45G01`,

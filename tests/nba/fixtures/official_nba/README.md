@@ -11,7 +11,7 @@
 Real captures from `official.nba.com`, taken 2026-09-26 from a residential IP with a Chrome
 desktop User-Agent (`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 Gecko) Chrome/128.0.0.0 Safari/537.36`) unless noted otherwise. Copied byte-for-byte from
-`ClaudeCowork/plans/2026-09-26-f5-l2m-referees/research/fixtures/`.
+the maintainers' capture of `official.nba.com` (captured 2026-09-26).
 
 | File | URL | HTTP | Notes |
 |---|---|---|---|

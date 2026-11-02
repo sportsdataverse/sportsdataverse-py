@@ -4,7 +4,7 @@ Parsers are asserted against real data: the FULL 2025 bodies in ``tests/fixtures
 those: the refs captures keep 3 rows and cannot show a cancelled game or a league row) and the refs capture
 samples in ``tests/fixtures/cebl/captures/``. The runtime is driven through a scripted ``requests`` adapter
 mounted on a ``PoliteSession``, so every refusal is exercised end to end and every attempt is counted. No
-network, and nothing reads the private sdv-internal-refs checkout (the spec's routes are snapshotted in
+network, and nothing reads the private reference checkout (the spec's routes are snapshotted in
 ``spec_paths.json``).
 """
 

@@ -48,5 +48,5 @@ Real `nextgenstats.nfl.com/api` bodies used by `tests/nfl/test_nfl_runtime_vocab
 
 | File | Route | Provenance |
 |---|---|---|
-| `plays_isHighlight.json` | `GET /api/plays/isHighlight?gameId=2025090708&playId=2244` (HTTP 200, anonymous) | copied untrimmed from `sdv-internal-refs/nfl/nextgenstats/captures/plays_isHighlight.json` (commit `821fb4b`, captured 2026-09-09 from the project droplet) |
-| `api_gateway_deny_403.json` | the HTTP 403 body every denied `/api/live/*` route answers (`x-amzn-errortype: AccessDeniedException`) | the body recorded verbatim in `sdv-internal-refs/nfl/nextgenstats/README.md` ("14 routes still 403", 2026-09-03 and 2026-09-09 passes), joined onto one line |
+| `plays_isHighlight.json` | `GET /api/plays/isHighlight?gameId=2025090708&playId=2244` (HTTP 200, anonymous) | copied untrimmed from the maintainers' capture (captured 2026-09-09 from the project droplet) |
+| `api_gateway_deny_403.json` | the HTTP 403 body every denied `/api/live/*` route answers (`x-amzn-errortype: AccessDeniedException`) | the body recorded verbatim in the maintainers' probe notes ("14 routes still 403", 2026-09-03 and 2026-09-09 passes), joined onto one line |

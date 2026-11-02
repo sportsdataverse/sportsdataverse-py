@@ -5,7 +5,7 @@ of the season-level routes in ``tests/fixtures/sportpress/full/`` (dtypes come f
 mistype a rate as an integer), and the refs capture samples in ``tests/fixtures/sportpress/captures/``.
 The runtime is driven through a scripted ``requests`` adapter mounted on a ``PoliteSession``, so every
 refusal is exercised end to end and every attempt is counted. No network, and nothing reads the private
-sdv-internal-refs checkout (the spec's routes are snapshotted in ``spec_paths.json``).
+reference checkout (the spec's routes are snapshotted in ``spec_paths.json``).
 """
 
 from __future__ import annotations

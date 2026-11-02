@@ -8,7 +8,7 @@
 
 # OpenLigaDB fixtures
 
-Copied verbatim from `sdv-internal-refs/openligadb/captures/` (refs main `22b148b`), server
+Copied verbatim from the maintainers' captures, server
 `https://api.openligadb.de`, captured 2026-10-06. Arrays are truncated to 3 elements at every
 depth by the reference repo's capture tool, so row counts here are sample sizes, not live ones.
 

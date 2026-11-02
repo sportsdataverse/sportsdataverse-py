@@ -1,14 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [tbf fixtures -- provenance](#tbf-fixtures----provenance)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # tbf fixtures -- provenance
 
 Host: `https://miniappapi.tbf.org.tr/webapi-service/api` (the Turkish Basketball Federation's official app backend;
 no key, plain GETs, >= 1 s apart; the vendor origin hosts `*.nikayazilim.com` and `www.tbf.org.tr` are never used).
 
-* `captures/` -- copied unchanged from sdv-internal-refs `tbf/captures/` (source commit `77b4ea4d4e285045ea4d8303066477a0b0590a69`,
-  refs HEAD `cb7a95a6b1b253aac674ac8006d05b9c35889700` when copied), captured live 2026-10-12. Every array is cut to 3
+- `captures/` -- copied unchanged from the maintainers' captures, captured live 2026-10-12. Every array is cut to 3
   rows (so `count` / `totalCount` fields disagree with the rows; the runtime tests patch those). Left out: the
   routes with no wrapper (`Match__box-score*`, `Match__get-match-report-with-players*`,
-  `Team__get-team-detail-main` -- club contact fields, redacted in the refs -- and `Kupalar__*`) and `_observed.json`.
-* `full/` -- FULL, untruncated bodies fetched live 2026-10-13 (9 requests, 1.3 s apart, redirects off), the source of
+  `Team__get-team-detail-main` -- club contact fields, redacted in the capture -- and `Kupalar__*`) and `_observed.json`.
+- `full/` -- FULL, untruncated bodies fetched live 2026-10-13 (9 requests, 1.3 s apart, redirects off), the source of
   every dtype in the parsers:
 
   | file | URL (relative to the host) |
@@ -25,4 +32,4 @@ no key, plain GETs, >= 1 s apart; the vendor origin hosts `*.nikayazilim.com` an
 
   Game 346279 = BSL 2026-27 week 1, Tofas 90-89 Pizzabulls Bordo Bandirma (Genius id 2913588). The bodies carry no
   e-mail address or phone number (checked); they are stored compact (one line).
-* `spec_paths.json` -- the spec's 33 routes (written by `tools/codegen/gen_tbf.py`), so the tests need no refs checkout.
+- `spec_paths.json` -- the spec's 33 routes (written by `tools/codegen/gen_tbf.py`), so the tests need no private reference checkout.

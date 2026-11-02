@@ -10,7 +10,7 @@
 
 Real, truncated first-page responses from the keyless FIFA public API v3
 (`https://api.fifa.com/api/v3/...`), captured 2026-10-06 and copied byte-for-byte
-from `sdv-internal-refs/fifa/captures/` at commit `e330067` (2026-10-06).
+from the maintainers' captures (2026-10-06).
 
 File names follow the capture slug rule (`tools/capture.py`): the route path with the
 leading slash dropped and `/` replaced by `__`, path ids substituted by the captured

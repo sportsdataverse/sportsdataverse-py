@@ -9,7 +9,7 @@
 
 # TheSportsDB API v1 fixtures
 
-Copied verbatim from `sdv-internal-refs/thesportsdb/captures/` (refs main `22b148b`).
+Copied verbatim from the maintainers' captures.
 
 Server: `https://www.thesportsdb.com/api/v1/json/3`, the old free key `3` these files were captured with (retired since: it now answers HTTP 403). The current free key is `123`; its captures are in `free_key_123/` (below).
 Captured **2026-10-06** live at 2 s pacing; every array is cut to its first 3 elements at

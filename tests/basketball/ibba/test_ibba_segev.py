@@ -3,7 +3,7 @@
 Parsers are asserted against real data: the FULL bodies of Segev game 50 (and the 2026-27 box score of game 419)
 in ``tests/fixtures/ibba/full/`` (dtypes come from those) and the refs capture samples of games 50, 300 and 419
 in ``tests/fixtures/ibba/captures/segev/``. The runtime is driven through a scripted ``requests`` adapter
-mounted on a ``PoliteSession``. No network, and nothing reads the private sdv-internal-refs checkout.
+mounted on a ``PoliteSession``. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

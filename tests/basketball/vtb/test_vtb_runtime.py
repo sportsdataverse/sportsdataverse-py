@@ -1,7 +1,7 @@
 """The VTB runtimes: season mapping, politeness per attempt, Retry-After, error vocabulary, scope and finality checks.
 
 The transport is mocked and the bodies are the committed fixtures (``tests/fixtures/vtb_*``); nothing reads the
-sdv-internal-refs checkout.
+private reference checkout.
 """
 
 from __future__ import annotations

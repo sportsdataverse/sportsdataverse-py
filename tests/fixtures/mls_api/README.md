@@ -1,7 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [MLS web API fixtures](#mls-web-api-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # MLS web API fixtures
 
 Real, trimmed responses from the three auth-free mlssoccer.com hosts, captured
-2026-07-18 and copied byte-for-byte from `sdv-internal-refs/mls/captures/`.
+2026-07-18 and copied byte-for-byte from the maintainers' captures.
 
 | File | Host | Route |
 |---|---|---|

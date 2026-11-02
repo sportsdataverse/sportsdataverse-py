@@ -426,8 +426,7 @@ def test_jump_ball_mid_game_never_ends_possession_even_when_old_walk_said_true()
 
     This mirrors the shape of the oracle cross-tab's ``sdv=True/oracle=False``
     disagreements (e.g. game 0022300096 action_number 551 -- see
-    ``c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
-    2026-07-03-jumpball-oracle-crosstab.md``): a made shot by team 100, then a
+    the maintainers' 2026-07-03 jump-ball oracle cross-tab notes): a made shot by team 100, then a
     jump ball whose (buggy, first-jumper) ``team_id`` happens to equal that
     same team 100 (so the retired walk's ``started_with_ball`` came back
     False), followed by a made shot (not a rebound / jump ball) so none of

@@ -11,7 +11,7 @@ nflverse ever asks it about.
 
 Why the form depends on the rule format
 ---------------------------------------
-sdv-internal-refs ``rules/nfl.yaml`` catalogues four overtime rule eras
+The NFL rulebook has had four overtime rule eras
 (``nfl-2010-overtime-modified-sudden-death-postseason``,
 ``nfl-2012-overtime-modified-sudden-death-regular-season``,
 ``nfl-2022-overtime-both-possess-postseason``,

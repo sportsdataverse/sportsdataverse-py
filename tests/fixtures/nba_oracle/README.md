@@ -10,9 +10,9 @@
 
 Three-row samples used by `tests/nba/test_nba_oracle_data.py` to exercise
 `sportsdataverse/nba/nba_oracle_data.py`'s six `load_*` parsers offline. Each
-row below is byte-quoted from the real published CSVs checked into
-`ClaudeCowork/nba_data/data_metrics/` (captured 2026-07-01/02; see that
-directory for the full files, which are not committed to this repo). The
+row below is byte-quoted from the real published CSVs held in the
+maintainers' private notes (captured 2026-07-01/02; the full files are
+not committed to this repo). The
 gated real-CSV smoke tests (`SDV_PY_NBA_ORACLE_DIR`, Task 9) validate the
 loaders against the full files directly.
 

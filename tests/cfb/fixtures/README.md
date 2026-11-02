@@ -76,7 +76,7 @@ feed names the kicker: 64 of 64 agree.
 
 ## Overtime rule sets (C-M6)
 
-One capture inside each CFB overtime rule set (sdv-internal-refs `rules/cfb.yaml`), each reaching the
+One capture inside each CFB overtime rule set (NCAA football rules), each reaching the
 overtime its rule is about; `tools/check_ot_era_captures.py` checks them.
 
 | rule set | rule id | capture | why |

@@ -1,7 +1,7 @@
 """Offline tests for the SHL (``shl``) parsers, endpoint YAML and returns-schemas.
 
 Every parser runs on the real captures in ``tests/fixtures/shl/`` (3-row samples copied from
-sdv-internal-refs) and, for the dtypes, on the untruncated bodies in ``tests/fixtures/shl/full/``.
+the maintainers' captures) and, for the dtypes, on the untruncated bodies in ``tests/fixtures/shl/full/``.
 No network.
 """
 

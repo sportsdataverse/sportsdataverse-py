@@ -4,7 +4,7 @@ Parsers are asserted against real data: the FULL bodies of match 105401 (and the
 season bodies) in ``tests/fixtures/acb/full/`` (dtypes come from those), and the refs capture samples in
 ``tests/fixtures/acb/captures/`` for the routes without a full body (and the legacy 2016 / 2005 matches). The
 runtime is driven through a scripted ``requests`` adapter mounted on a ``PoliteSession``, so every refusal is
-exercised end to end and every attempt is counted. No network, and nothing reads the private sdv-internal-refs
+exercised end to end and every attempt is counted. No network, and nothing reads the private reference
 checkout.
 """
 

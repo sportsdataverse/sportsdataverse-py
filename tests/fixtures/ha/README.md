@@ -1,7 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [HockeyAllsvenskan fixtures (`hockeyallsvenskan.se`)](#hockeyallsvenskan-fixtures-hockeyallsvenskanse)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # HockeyAllsvenskan fixtures (`hockeyallsvenskan.se`)
 
 **Per-route captures** (`*.json` in this directory): copied verbatim from
-`sdv-internal-refs/hockeyallsvenskan/captures/` (refs commit `64e4e9f`, captured 2026-10-12). They are
+the maintainers' captures (captured 2026-10-12). They are
 truncated (every array cut to 3 elements, except `sort_by_options`, `teams` and `standings`, kept
 whole; play-by-play keeps the first event of each type per period). See that directory's README for
 the request bodies: season `2025` on the wire = 2025/26 (sdv END year 2026), game 23401

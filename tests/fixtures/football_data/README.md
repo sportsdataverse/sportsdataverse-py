@@ -10,7 +10,7 @@
 
 Sample heads (header + the first 3 data rows) of the CSV files served by
 `https://www.football-data.co.uk`, captured **2026-10-06** live and keyless,
-copied here from `sdv-internal-refs/football-data-co-uk/captures/`.
+copied here from the maintainers' captures.
 
 | Fixture | Source URL | Columns |
 |---|---|---|
@@ -25,5 +25,5 @@ names).
 The site is a **static CSV archive on shared hosting**, not an API — keep live
 use to about one request per second. The column glossary lives at
 `/notes.txt`, transcribed in
-`sdv-internal-refs/football-data-co-uk/football-data-co-uk-returns.md`; it is a
+the maintainers' private notes; it is a
 prose glossary rather than data and is deliberately not wrapped.

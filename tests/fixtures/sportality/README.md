@@ -15,8 +15,8 @@ Real bodies from the Basketligaen site API (keyless GET JSON; Sportality platfor
 
 ## Truncated route samples (`*.json` beside this file)
 
-Copied unchanged from `sdv-internal-refs/sportality/captures/` at refs commit `cb7a95a` (`origin/main`, captured
-2026-10-12 by `sportality/tools/capture.py`). Every array is cut to 3 items and every id-keyed map to 3 keys; the
+Copied unchanged from the maintainers' captures (captured
+2026-10-12 by their capture tool). Every array is cut to 3 items and every id-keyed map to 3 keys; the
 capture gate had already checked each body against what was asked for (game uuid, Genius id, teams in side order,
 final score, whole play-by-play feed, ssgt) before banking it. Personal keys (birth date, e-mail, phone, address,
 contact) hold the literal `<redacted>`. File names follow `capture.py`'s slug rule: the path with `/` -> `__` and the
@@ -39,7 +39,7 @@ needs `W` and `L` in it. The 7 restored entries come from plain GETs of
 2026-10-18 (UTC); their first 3 entries equalled the samples'. Nothing else in those files changed.
 
 `spec_paths.json` is the route list of `sportality.openapi.yaml` (42 paths: 24 routes, `stats-info` as one path per
-module), written by `tools/codegen/gen_sportality.py` so the tests need no refs checkout.
+module), written by `tools/codegen/gen_sportality.py` so the tests need no private reference checkout.
 
 ## Full bodies (`full/`)
 

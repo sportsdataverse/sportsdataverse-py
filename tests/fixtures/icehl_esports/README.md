@@ -1,7 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [icehl_esports fixtures — ICE Hockey League (eSports hokejovyzapis S3 bucket `icehl.hokejovyzapis.cz`)](#icehl_esports-fixtures--ice-hockey-league-esports-hokejovyzapis-s3-bucket-icehlhokejovyzapiscz)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # icehl_esports fixtures — ICE Hockey League (eSports hokejovyzapis S3 bucket `icehl.hokejovyzapis.cz`)
 
-- `*.json` (top level): copies of `sdv-internal-refs/esports-hokejovyzapis/captures/icehl/` at refs
-  commit `ad053b8`, captured live 2026-10-12. Arrays are truncated to 3 items at every depth (one of
+- `*.json` (top level): copies of the maintainers' captures of the `icehl` bucket,
+  captured live 2026-10-12. Arrays are truncated to 3 items at every depth (one of
   each event type / shot result first), so they fix column NAMES, not dtypes. One file per path the
   bucket serves, named after the path template: `https://s3.eu-west-1.amazonaws.com/icehl.hokejovyzapis.cz/<path>`
   with season 2026 (START year, i.e. 2026/27), match 8161, team 4, league 1, league part 56.

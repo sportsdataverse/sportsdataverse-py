@@ -4,7 +4,7 @@ Parsers are asserted against real data: the FULL bodies fetched on 2026-10-12 in
 (a finished game's box score, a season's teams, a roster, a round of games; dtypes come from those) and the
 refs capture samples of every ASMX op in ``tests/fixtures/ibba/captures/asmx/``. The runtime is driven through
 a scripted ``requests`` adapter mounted on a ``PoliteSession``, so every refusal is exercised end to end and
-every attempt is counted. No network, and nothing reads the private sdv-internal-refs checkout.
+every attempt is counted. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

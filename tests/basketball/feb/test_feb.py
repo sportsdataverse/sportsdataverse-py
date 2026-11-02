@@ -5,7 +5,7 @@ Parsers are asserted against real data: the FULL game bodies of one game (253572
 schedule page records in ``tests/fixtures/feb/captures/``, and the refs' cut-down HTML pages in
 ``tests/fixtures/feb/*.html`` (the HTML parser's input). The runtime is driven through a scripted
 ``requests`` adapter mounted on a ``PoliteSession``, so every refusal is exercised end to end and every
-attempt is counted. No network, and nothing reads the private sdv-internal-refs checkout.
+attempt is counted. No network, and nothing reads the private reference checkout.
 """
 
 from __future__ import annotations

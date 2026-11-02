@@ -8,7 +8,7 @@
 
 # ESPN content.core v1 fixtures
 
-Copied verbatim from `sdv-internal-refs/espn-content/captures/` (refs main `22b148b`).
+Copied verbatim from the maintainers' captures.
 
 | File | URL | Captured |
 |---|---|---|

@@ -1,6 +1,6 @@
 """Savant measurement eras in the pitch-level models.
 
-sdv-internal-refs rules/mlb.yaml: ``mlb-2026-savant-plate-location-middle-of-plate`` and
+MLB rule and Statcast measurement changes: ``mlb-2026-savant-plate-location-middle-of-plate`` and
 ``mlb-2026-abs-challenge-system`` (the called-strike / framing fits exclude 2026+ rows and
 flag them ``abs_era``), ``mlb-2017-release-speed-statcast`` (the physics z-scores are keyed
 on season as well as pitcher).

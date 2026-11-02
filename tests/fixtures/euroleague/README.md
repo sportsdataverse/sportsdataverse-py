@@ -11,8 +11,8 @@
 Real, trimmed responses from the three keyless EuroLeague APIs -- the Competition Engine
 `https://api-live.euroleague.net/v2` and `/v3` (`Accept: application/json`) and the legacy
 live API `https://live.euroleague.net/api` -- captured 2026-10-05 (v2) and 2026-10-06 (v3,
-live) and copied byte-for-byte from `sdv-internal-refs/euroleague/captures/` (source commit
-`ba0860c`, copied 2026-10-06). Season `E2025` (2025-26), game code `1`, round `1`; the two
+live) and copied byte-for-byte from the maintainers' captures
+(copied 2026-10-06). Season `E2025` (2025-26), game code `1`, round `1`; the two
 `U2025__*` files are EuroCup 2025-26 game 1. Every array is cut to its first 3 elements at
 every depth. A file name is the route slug, prefixed by the server tail when it is not v2
 (`v3__`, `api__`).
