@@ -81,7 +81,48 @@ def _fumbler(text: str) -> str | None:
             "Fumble Return (Chris Blewitt Kick)",
             "Mason Rudolph",
         ),
+        # the lowercase summary shapes name the returner too
+        ("Justin Rigg 0 Yd fumble recovery (Chance Poore Kick)", None),
+        ("Antwain Robinson 16 yard fumble return for a TOUCHDOWN.", None),
+        ("Erik Ainge sacked. Worrell Williams returned fumble 44 yards for a TOUCHDOWN.", None),
         ("TEAM run for a loss of 33 yards for a SAFETY TEAM fumbled, recovered by NCaro for a SAFETY", "TEAM"),
+        (
+            "Jarod Neal pass complete to Ladevin Fair for 5 yds for a TD Ladevin Fair fumbled, recovered by Kent "
+            "Khalid Henderson  , return for 89 yds, (Austin MacGinnis KICK)",
+            "Ladevin Fair",
+        ),
+        # a score tag with no name behind it names nobody (the legacy window read "of a SAFETY")
+        ("Team run for a loss of 7 yards for a SAFETY fumbled, recovered by TEM Forrest Brock for a SAFETY", None),
+        # replays: the overturned call after the ruling is not read (401754570301)
+        (
+            "(02:51) Shotgun #7 M.Moss pass incomplete short left to #0 C.Bell thrown to LOU50 broken up by #20 "
+            'M.Upton. The previous play is under automatic review - "Incomplete pass". CALL OVERTURNED. (Original '
+            "Play: (02:51) Shotgun #7 M.Moss pass complete short middle to #0 C.Bell caught at LOU50, for 8 yards to "
+            "the BC.48 fumbled by #0 C.Bell at BC.48 forced by #20 M.Upton recovered by BC. #2 K.Price at BC.48, End "
+            "Of Play)",
+            None,
+        ),
+        # ESPN's lead-in keeps the overturned fumble; the ruling has none (401520442102854601)
+        (
+            "Joe Milton III pass complete to for 7 yds fumbled, recovered by VAN Shotgun Milton III,Joe pass "
+            "complete short right to White,Squirrel for 7 yards to the VANDY38, End Of Play. The previous play is "
+            "under review. The ruling on the field has been overturned. The runner was down prior to losing the "
+            "ball (OVERTURNED PLAY: Shotgun #7 J.Milton III pass complete short right to #10 S.White for 8 yards to "
+            "the VANDY37 fumbled by #10 S.White at VANDY37 forced by #23 J.Mahoney recovered by VANDY #1 C.Taylor "
+            "at VANDY37, End Of Play).",
+            None,
+        ),
+        # a review that creates the fumble keeps the ruling's fumbler (401520365104888301)
+        (
+            "Braedyn Locke pass complete to Cade Yacamelli for 11 yds to the WIS 44 pass complete to for 9 yds Cade "
+            "Yacamelli fumbled, forced by Aaron Casey, recovered by IU Josh Sanguinetti No Huddle-Shotgun "
+            "Locke,Braedyn pass complete short middle to Yacamelli,Cade for 11 yards to the WIS44 fumbled by "
+            "Yacamelli,Cade at WIS42 forced by Casey,Aaron recovered by IND Sanguinetti,Josh at WIS44, End Of Play. "
+            "The previous play is under review. The ruling on the field has been overturned. The runner was not "
+            "down prior to losing the ball (OVERTURNED PLAY: (11:42) No Huddle-Shotgun #18 B.Locke pass complete "
+            "short middle to #25 C.Yacamelli for 9 yards to the WIS42 (#7 J.Mangum-Farrar; #44 A.Casey)).",
+            "Cade Yacamelli",
+        ),
         # stats.ncaa: the pass rusher before "fumbled by" is not the fumbler
         (
             "Shotgun #10 T.Ti'a pass complete short right to #7 T.Walker caught at OSU37, for 11 yards to the "

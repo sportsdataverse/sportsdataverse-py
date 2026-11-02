@@ -182,35 +182,53 @@ _FUMBLER_NAME = r"(?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2})"
 def _fumbler_name(text: pl.Expr, legacy: pl.Expr) -> pl.Expr:
     """The fumbler named by the play text, else null; ``legacy`` is the fixed-window fragment fallback.
 
-    "<Name> fumbled" first (optional #NN jersey), then "fumbled by <Name>", then ``legacy``. Three
+    "<Name> fumbled" first (optional #NN jersey), then "fumbled by <Name>", then ``legacy``. These
     shapes are not the fumbler, measured over the 2004-2026 releases (46,272 fumble-text rows):
 
     * a capital "Fumble" is the scoring-summary noun, not the verb: "Darron Lee 61 Yd Fumble
       Return" captured "Yd" (490 rows) and "X Fumble Recovery in End Zone" the recoverer. Such a
-      line names only the returner, so the legacy fallback (which reads him as the fumbler) is off.
+      line names only the returner, so the legacy fallback (which reads him as the fumbler) is off,
+      and a bare "Yd" off the lowercase "61 Yd fumble recovery" is no name.
     * the subject of "<X> fumble(d) by <Y>" is the team or the yard line ("Wildcats fumble by
       Darren Sproles (KSU)", stats.ncaa "to the WYO08 fumbled by #13 C.Purdy"). Y is taken only
       in those two whole-name shapes (2004's "fumble by Y (TEAM)", a #NN jersey before it): the
       stats.ncaa team placeholder ("fumbled by Navy at", "fumbled by Miami (FL) at") and
       "Last,First" ("fumbled by Kitna,Jalen") stay null.
-    * "for a SAFETY TEAM fumbled": the score tag is no part of the name.
+    * "for a SAFETY TEAM fumbled", "for a TD Ladevin Fair fumbled": the score tag is no part of the name.
+    * stats.ncaa's replay text keeps the overturned call after the ruling ("... CALL OVERTURNED.
+      (Original Play: ... fumbled by #0 C.Bell ...)", 2023's "(OVERTURNED PLAY: ...)"): only the
+      ruling is read, and the legacy fallback is off, so an overturned fumble names nobody.
     """
-    before = r"(?i)(?:#\d+\s+)?(" + _FUMBLER_NAME + r")\s+(?-i:fumbled?|FUMBLED?)(\s+by\b)?"
-    subject_is_not_fumbler = text.str.extract(before, 2).is_not_null()
+    review = r"(?i)\s*(?:The previous play is under|\(\s*(?:original|overturned) play\s*:).*$"
+    ruling = text.str.replace(review, "")
+    before = (
+        r"(?i)(?:for a (?-i:SAFETY|TD)\s+)?(?:#\d+\s+)?(" + _FUMBLER_NAME + r")\s+(?-i:fumbled?|FUMBLED?)(\s+by\b)?"
+    )
+    subject_is_not_fumbler = ruling.str.extract(before, 2).is_not_null()
     after = r"(?i)fumbled? by\s+(?:#\d+\s+)?(" + _FUMBLER_NAME + ")"
     after_whole = r"(?i)fumbled? by\s+#\d+\s+(" + _FUMBLER_NAME + r")|fumble by\s+(" + _FUMBLER_NAME + r")\s*\("
     summary = (
-        r"(?i)\d+\s+yds?\.?\s+fumble\s+(?:return|recovery)|fumble\s+recovery\s+in\s+(?:the\s+)?end"
-        r"|recovered\s+fumble\s+in\s+(?:the\s+)?end"
+        r"(?i)\d+\s+(?:yds?|yards?)\.?\s+(?:pass\s+)?fumble\s+(?:return|recovery)|fumble\s+return\s+\d+"
+        r"|returned\s+(?:a\s+|the\s+)?fumble|recovery\s+of\s+fumble"
+        r"|fumble\s+recovery\s+in\s+(?:the\s+)?end|recovered\s+fumble\s+in\s+(?:the\s+)?end"
     )
+    named = ruling.str.extract(before, 1)
     return (
         pl.when(subject_is_not_fumbler)
-        .then(pl.coalesce(text.str.extract(after_whole, 1), text.str.extract(after_whole, 2)))
+        .then(pl.coalesce(ruling.str.extract(after_whole, 1), ruling.str.extract(after_whole, 2)))
         .otherwise(
             pl.coalesce(
-                text.str.extract(before, 1).str.replace(r"^SAFETY(?:\s+|$)", ""),
-                text.str.extract(after, 1),
-                pl.when(~text.str.contains(summary)).then(legacy),
+                pl.when(named.str.contains(r"^(?:Yds?|Yards?|SAFETY|TD)$") == False).then(named),  # noqa: E712
+                ruling.str.extract(after, 1),
+                # the legacy chain reads the whole text's first "fumble" window: not on a summary line, a
+                # replay (ESPN's own lead-in can carry the overturned fumble: "pass complete to for 7 yds
+                # fumbled, ..." ahead of "The previous play is under review"), or behind a score tag or
+                # unit ("for a SAFETY fumbled")
+                pl.when(
+                    (ruling.str.contains(summary) == False)  # noqa: E712
+                    & (text.str.contains(review) == False)  # noqa: E712
+                    & named.is_null()
+                ).then(legacy),
             )
         )
     )
