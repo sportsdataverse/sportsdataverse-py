@@ -79,15 +79,16 @@ Installing the package puts an `sdv` console script on your path. It resolves na
 to ESPN ids, searches the function index and controls the package-wide HTTP response
 cache, without writing any Python. On a terminal it prints styled cards and tables
 (team cards in the team's own colours, tables sized to the window); piped or with
-`NO_COLOR` set, the output is plain. The `--json` flag, before or after the
-subcommand, prints JSON for piping to `jq`. `sdv --help` and `sdv <command> --help`
+`NO_COLOR` set, the output is plain. The `--json` flag prints JSON for piping to
+`jq`; put it before the subcommand (`sdv --json find-team ...`), which both CLIs
+below accept. The new CLI also takes it after the subcommand. `sdv --help` and `sdv <command> --help`
 list every command and option.
 
 The CLI is built on [cyclopts](https://cyclopts.readthedocs.io) and
 [Rich](https://rich.readthedocs.io) and needs Python 3.11 or newer. On Python 3.10,
-or in an environment without cyclopts (the conda package omits it), `sdv` runs the
-classic CLI instead: the same commands, flags, `--json` output and exit codes, in
-plain text.
+or in an environment without cyclopts, `sdv` runs the classic CLI instead: the same
+commands, flags, `--json` output and exit codes, in plain text. The conda package
+needs Python 3.11 or newer and always installs the new CLI.
 
 | Command | What it does |
 |---|---|

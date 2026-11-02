@@ -1,8 +1,8 @@
 """Console-script entry point for ``sdv``.
 
 The cyclopts CLI needs Python 3.11 and the ``cyclopts`` / ``rich`` dependencies, which are declared
-for ``python_version >= '3.11'``. When they cannot be imported (Python 3.10, or a conda install that
-omits them), ``sdv`` runs the frozen argparse CLI in :mod:`sportsdataverse.cli` instead, so 3.10
+for ``python_version >= '3.11'``. When they cannot be imported (Python 3.10, or an environment where
+they were removed), ``sdv`` runs the frozen argparse CLI in :mod:`sportsdataverse.cli` instead, so 3.10
 users keep a working command.
 """
 

@@ -105,7 +105,7 @@ _CLAUDE_CURRENT = [
     "| sdvplot | <https://sdvplot.sportsdataverse.org> |",
     "| sportypy | <https://sportypy.sportsdataverse.org> |",
     "in four layouts (24 pages in all)",
-    "include allowlist (`sportsdataverse*`, `sdv_docs*`)",
+    "include allowlist (`sportsdataverse*`, `sdv_docs*`, `sdv_cli*`)",
 ]
 
 _CLAUDE_STRUCTURE_DIRS = [
