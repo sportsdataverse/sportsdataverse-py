@@ -221,8 +221,8 @@ def home_prior(
     """Pregame home win probability for the in-game model, and where it came from.
 
     ``home_team_spread`` is the signed expected home margin the basketball pbp frames carry
-    (positive when the home side is favoured). With no line, the NBA, WNBA and WBB pickcenter helpers
-    substitute ``+2.5`` and MBB leaves it ``None``, so the value is only trusted when
+    (positive when the home side is favoured). With no line, every basketball pickcenter helper leaves
+    it ``None`` (older releases carry an invented ``+2.5``), so the value is only trusted when
     ``game_spread_available`` is true. A line
     already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
     site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use

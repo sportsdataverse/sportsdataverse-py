@@ -224,7 +224,7 @@ def test_resolve_season_id_skips_all_star_seasons(monkeypatch, season, game_type
 
 
 def test_resolve_season_id_keeps_a_preseason_exhibition(monkeypatch):
-    """Names from the SJHL seasons capture (sdv-internal-refs, 2026-07-12): an exhibition
+    """Names from the SJHL seasons capture (2026-07-12): an exhibition
     preseason is still a preseason; an all-star showcase is never the regular season."""
     from sportsdataverse.hockeytech._leagues import resolve_season_id
 

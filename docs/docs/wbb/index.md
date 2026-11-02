@@ -317,6 +317,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wbb_season_weeks`](reference/core/season#espn_wbb_season_weeks) | [`espn_wbb_season_weeks`](https://wehoop.sportsdataverse.org/reference/espn_wbb_season_weeks.html) |
 | [`espn_wbb_seasons`](reference/core/other#espn_wbb_seasons) | [`espn_wbb_seasons`](https://wehoop.sportsdataverse.org/reference/espn_wbb_seasons.html) |
 | [`espn_wbb_standings`](reference/additional/espn#espn_wbb_standings) | [`espn_wbb_standings`](https://wehoop.sportsdataverse.org/reference/espn_wbb_standings.html) |
+| [`espn_wbb_summary`](reference/site#espn_wbb_summary) | [`espn_wbb_game_all`](https://wehoop.sportsdataverse.org/reference/espn_wbb_game_all.html) |
 | [`espn_wbb_team`](reference/site#espn_wbb_team) | [`espn_wbb_team`](https://wehoop.sportsdataverse.org/reference/espn_wbb_team.html) |
 | [`espn_wbb_team_injuries`](reference/site#espn_wbb_team_injuries) | [`espn_wbb_team_injuries`](https://wehoop.sportsdataverse.org/reference/espn_wbb_team_injuries.html) |
 | [`espn_wbb_team_leaders`](reference/site#espn_wbb_team_leaders) | [`espn_wbb_team_leaders`](https://wehoop.sportsdataverse.org/reference/espn_wbb_team_leaders.html) |
@@ -337,6 +338,9 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`fox_wbb_team_stats`](reference/additional/fox-sports-api#fox_wbb_team_stats) | [`fox_wbb_team_stats`](https://wehoop.sportsdataverse.org/reference/fox_wbb_team_stats.html) |
 | [`fox_wbb_teams`](reference/additional/fox-sports-api#fox_wbb_teams) | [`fox_wbb_teams`](https://wehoop.sportsdataverse.org/reference/fox_wbb_teams.html) |
 | [`fox_wbb_teams_all`](reference/additional/fox-sports-api#fox_wbb_teams_all) | [`fox_wbb_teams_all`](https://wehoop.sportsdataverse.org/reference/fox_wbb_teams_all.html) |
+| [`herhoopstats_team_roster`](reference/additional/her-hoop-stats#herhoopstats_team_roster) | [`hhs_team_roster`](https://wehoop.sportsdataverse.org/reference/hhs_team_roster.html) |
+| [`herhoopstats_team_stats`](reference/additional/her-hoop-stats#herhoopstats_team_stats) | [`hhs_team_stats`](https://wehoop.sportsdataverse.org/reference/hhs_team_stats.html) |
+| [`herhoopstats_teams`](reference/additional/her-hoop-stats#herhoopstats_teams) | [`hhs_teams`](https://wehoop.sportsdataverse.org/reference/hhs_teams.html) |
 | [`load_ncaa_wbb_lineups`](reference/loaders/ncaa#load_ncaa_wbb_lineups) | [`load_ncaa_wbb_lineups`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_lineups.html) |
 | [`load_ncaa_wbb_matchup_stints`](reference/loaders/ncaa#load_ncaa_wbb_matchup_stints) | [`load_ncaa_wbb_matchup_stints`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_matchup_stints.html) |
 | [`load_ncaa_wbb_pbp`](reference/loaders/ncaa#load_ncaa_wbb_pbp) | [`load_ncaa_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_pbp.html) |
@@ -356,8 +360,10 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_groups`](reference/loaders/other#load_wbb_groups) | [`load_wbb_groups`](https://wehoop.sportsdataverse.org/reference/load_wbb_groups.html) |
 | [`load_wbb_officials`](reference/loaders/other#load_wbb_officials) | [`load_wbb_officials`](https://wehoop.sportsdataverse.org/reference/load_wbb_officials.html) |
 | [`load_wbb_pbp`](reference/loaders/other#load_wbb_pbp) | [`load_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_wbb_pbp.html) |
+| [`load_wbb_player_boxscore`](reference/loaders/player#load_wbb_player_boxscore) | [`load_wbb_player_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_box.html) |
 | [`load_wbb_player_core`](reference/loaders/player#load_wbb_player_core) | [`load_wbb_player_core`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_core.html) |
 | [`load_wbb_player_crosswalk`](reference/loaders/player#load_wbb_player_crosswalk) | [`load_wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_crosswalk.html) |
+| [`load_wbb_player_season_stats`](reference/loaders/player#load_wbb_player_season_stats) | [`load_wbb_player_stats`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_stats.html) |
 | [`load_wbb_player_value`](reference/loaders/player#load_wbb_player_value) | [`load_wbb_player_value`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_value.html) |
 | [`load_wbb_ratings`](reference/loaders/other#load_wbb_ratings) | [`load_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/load_wbb_ratings.html) |
 | [`load_wbb_rosters`](reference/loaders/other#load_wbb_rosters) | [`load_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_rosters.html) |
@@ -365,8 +371,10 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_schedule_crosswalk`](reference/loaders/other#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
+| [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |
 | [`load_wbb_team_crosswalk`](reference/loaders/team#load_wbb_team_crosswalk) | [`load_wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_crosswalk.html) |
 | [`load_wbb_team_group_seasons`](reference/loaders/team#load_wbb_team_group_seasons) | [`load_wbb_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_group_seasons.html) |
+| [`load_wbb_team_season_stats`](reference/loaders/team#load_wbb_team_season_stats) | [`load_wbb_team_stats`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_stats.html) |
 | [`most_recent_wbb_season`](reference/additional/dates-and-seasons#most_recent_wbb_season) | [`most_recent_wbb_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wbb_season.html) |
 | [`wbb_player_crosswalk`](reference/additional/ids-and-crosswalks#wbb_player_crosswalk) | [`wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_player_crosswalk.html) |
 | [`wbb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wbb_schedule_crosswalk) | [`wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_schedule_crosswalk.html) |

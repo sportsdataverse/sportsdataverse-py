@@ -10,6 +10,11 @@ toc_max_heading_level: 2
 ## load_wnba_stats_coaches
 
 Release: [wnba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_coaches) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_coaches/coaches_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2019, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_wnba_stats_coaches-returns}
 
 | col_name | type | description |
