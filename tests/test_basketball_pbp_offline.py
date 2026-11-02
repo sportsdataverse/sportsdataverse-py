@@ -152,7 +152,7 @@ def test_timeouts_map_matches_the_plays(monkeypatch, lg: str, first_half_periods
     summary = json.loads((FIX / f"summary_{lg}.json").read_text(encoding="utf-8"))
     mod = MODULES[lg]
     monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
-    kw = {"return_parsed": False} if lg in ("nba", "mbb") else {}  # the dict; nba / mbb default to the release frame
+    kw = {"return_parsed": False}  # the dict; espn_<lg>_pbp defaults to the release frame
     out = getattr(mod, f"espn_{lg}_pbp")(game_id=int(summary["header"]["id"]), **kw)
     teams = list(out["timeouts"])
     assert out["timeouts"] == _expected_timeouts(summary["plays"], teams, first_half_periods)

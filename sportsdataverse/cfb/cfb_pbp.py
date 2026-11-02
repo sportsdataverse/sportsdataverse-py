@@ -176,6 +176,63 @@ _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 _MANGLED_ENTITY = r"(amp|apos|quot|#39);"
 _MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
 
+_FUMBLER_NAME = r"(?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2})"
+
+
+def _fumbler_name(text: pl.Expr, legacy: pl.Expr) -> pl.Expr:
+    """The fumbler named by the play text, else null; ``legacy`` is the fixed-window fragment fallback.
+
+    "<Name> fumbled" first (optional #NN jersey), then "fumbled by <Name>", then ``legacy``. These
+    shapes are not the fumbler, measured over the 2004-2026 releases (46,272 fumble-text rows):
+
+    * a capital "Fumble" is the scoring-summary noun, not the verb: "Darron Lee 61 Yd Fumble
+      Return" captured "Yd" (490 rows) and "X Fumble Recovery in End Zone" the recoverer. Such a
+      line names only the returner, so the legacy fallback (which reads him as the fumbler) is off,
+      and a bare "Yd" off the lowercase "61 Yd fumble recovery" is no name.
+    * the subject of "<X> fumble(d) by <Y>" is the team or the yard line ("Wildcats fumble by
+      Darren Sproles (KSU)", stats.ncaa "to the WYO08 fumbled by #13 C.Purdy"). Y is taken only
+      in those two whole-name shapes (2004's "fumble by Y (TEAM)", a #NN jersey before it): the
+      stats.ncaa team placeholder ("fumbled by Navy at", "fumbled by Miami (FL) at") and
+      "Last,First" ("fumbled by Kitna,Jalen") stay null.
+    * "for a SAFETY TEAM fumbled", "for a TD Ladevin Fair fumbled": the score tag is no part of the name.
+    * stats.ncaa's replay text keeps the overturned call after the ruling ("... CALL OVERTURNED.
+      (Original Play: ... fumbled by #0 C.Bell ...)", 2023's "(OVERTURNED PLAY: ...)"): only the
+      ruling is read, and the legacy fallback is off, so an overturned fumble names nobody.
+    """
+    review = r"(?i)\s*(?:The previous play is under|\(\s*(?:original|overturned) play\s*:).*$"
+    ruling = text.str.replace(review, "")
+    before = (
+        r"(?i)(?:for a (?-i:SAFETY|TD)\s+)?(?:#\d+\s+)?(" + _FUMBLER_NAME + r")\s+(?-i:fumbled?|FUMBLED?)(\s+by\b)?"
+    )
+    subject_is_not_fumbler = ruling.str.extract(before, 2).is_not_null()
+    after = r"(?i)fumbled? by\s+(?:#\d+\s+)?(" + _FUMBLER_NAME + ")"
+    after_whole = r"(?i)fumbled? by\s+#\d+\s+(" + _FUMBLER_NAME + r")|fumble by\s+(" + _FUMBLER_NAME + r")\s*\("
+    summary = (
+        r"(?i)\d+\s+(?:yds?|yards?)\.?\s+(?:pass\s+)?fumble\s+(?:return|recovery)|fumble\s+return\s+\d+"
+        r"|returned\s+(?:a\s+|the\s+)?fumble|recovery\s+of\s+fumble"
+        r"|fumble\s+recovery\s+in\s+(?:the\s+)?end|recovered\s+fumble\s+in\s+(?:the\s+)?end"
+    )
+    named = ruling.str.extract(before, 1)
+    return (
+        pl.when(subject_is_not_fumbler)
+        .then(pl.coalesce(ruling.str.extract(after_whole, 1), ruling.str.extract(after_whole, 2)))
+        .otherwise(
+            pl.coalesce(
+                pl.when(named.str.contains(r"^(?:Yds?|Yards?|SAFETY|TD)$") == False).then(named),  # noqa: E712
+                ruling.str.extract(after, 1),
+                # the legacy chain reads the whole text's first "fumble" window: not on a summary line, a
+                # replay (ESPN's own lead-in can carry the overturned fumble: "pass complete to for 7 yds
+                # fumbled, ..." ahead of "The previous play is under review"), or behind a score tag or
+                # unit ("for a SAFETY fumbled")
+                pl.when(
+                    (ruling.str.contains(summary) == False)  # noqa: E712
+                    & (text.str.contains(review) == False)  # noqa: E712
+                    & named.is_null()
+                ).then(legacy),
+            )
+        )
+    )
+
 
 def _drive_dtypes(plays: pl.DataFrame) -> list[pl.Expr]:
     """C-L5 / R980-1: type every ``drive.*`` column a game's drives never carry (all null, dtype ``Null``).
@@ -373,6 +430,7 @@ from sportsdataverse.cfb.model_vars import (
     CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM,
     CFB_MODEL_ERA_CUTS,
     OT_SHOOTOUT_FROM_PERIOD,
+    OT_SHARED_TIMEOUT_FROM,
     int_vec,
     cfb_kickoff_out_of_bounds_spot_expr,
     kickoff_turnovers,
@@ -2754,18 +2812,25 @@ def _overtime_period(columns: "list[str]") -> pl.Expr:
     """The overtime period a play belongs to, for feeds that number every overtime 5 (401112081, 3OT; #505).
 
     Two possessions per period, each starting at the 25, so the overtime drives are paired; a split
-    possession that restarts elsewhere does not advance the pairing. A feed that numbers its periods
-    (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
+    possession that restarts elsewhere does not advance the pairing. Each drive counts once, at its
+    first row: the feed's row order can interleave two drives (401754372 files Cal's OT1 touchdown
+    between two Virginia Tech rows), and counting every drive-id change paired a third "possession"
+    into OT1. A drive with no overtime snap is not an overtime possession: ESPN files some timeout and
+    end-of-period rows under a regulation drive that started at the 25 (401760426's "Timeout New
+    Mexico" in OT2, under a second-quarter drive), which opened a phantom OT3. A feed that numbers its
+    periods (or its drives' periods) keeps the larger value. Regulation rows get their own period back.
     """
     period = pl.col("period.number")
     if not {"drive.id", "drive.start.yardLine"} <= set(columns):
         return period
-    new_ot_drive = (
+    ot_snap = (period >= 5) & ~pl.col("type.text").str.contains(_ADMIN_ROW_RE).fill_null(False)
+    ot_start = (
         (period >= 5)
-        & (pl.col("drive.id") != pl.col("drive.id").shift(1)).fill_null(True)
         & pl.col("drive.id").is_not_null()
         & pl.col("drive.start.yardLine").is_in([25, 75])
+        & ot_snap.any().over("drive.id")
     ).fill_null(False)
+    new_ot_drive = ot_start & pl.when(ot_start).then(pl.col("drive.id")).is_first_distinct()
     paired = 5 + (new_ot_drive.cast(pl.Int64).cum_sum() - 1).clip(lower_bound=0) // 2
     drive_period = [pl.col("drive.start.period.number")] if "drive.start.period.number" in columns else []
     return pl.max_horizontal(period, *drive_period, paired)
@@ -3552,10 +3617,17 @@ class CFBPlayProcess(object):
         # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
         # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
         # same way), so the count is bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
-        # allots 3 and each overtime period 1, and the count never goes below 0.
+        # allots 3 and each overtime window 1, and the count never goes below 0. NCAA Rule 3-1-3-h:
+        # one timeout per overtime period through 2024; from 2025 (rules change of 2025-04-16) one for
+        # the first, one for the second, and one from the third overtime until the game ends.
         period = pl.col("period.number")
         ot_period = _overtime_period(pbp_txt["plays"].columns)
-        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_period)
+        season = (pbp_txt["header"].get("season") or {}).get("year") or 0
+        shared_from_season, shared_from_period = OT_SHARED_TIMEOUT_FROM
+        ot_window = (
+            pl.min_horizontal(ot_period, pl.lit(shared_from_period)) if season >= shared_from_season else ot_period
+        )
+        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_window)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
         home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
@@ -7465,19 +7537,10 @@ class CFBPlayProcess(object):
                 # name-set/id-null fumble rows were dirty fragment captures
                 # ("o the UTAH Nate Johnson") that then failed the roster
                 # attach; simulated fix lifts fumble credit joins 56% -> 79%.
+                # _fumbler_name keeps "Yd", the recoverer and the subject of "X fumble by Y" out.
                 fumble_player=pl.when(pl.col("type.text") == "Penalty")
                 .then(None)
-                .otherwise(
-                    pl.coalesce(
-                        pl.col("text").str.extract(
-                            r"(?i)(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))\s+fumbled?", 1
-                        ),
-                        pl.col("text").str.extract(
-                            r"(?i)fumbled? by\s+(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))", 1
-                        ),
-                        pl.col("fumble_player"),
-                    )
-                ),
+                .otherwise(_fumbler_name(pl.col("text"), pl.col("fumble_player"))),
                 # --- Forced Fumble Names ----
                 fumble_forced_player=pl.when(
                     (pl.col("text").str.contains(r"(?i)fumble")).and_(pl.col("text").str.contains(r"(?i)forced by")),

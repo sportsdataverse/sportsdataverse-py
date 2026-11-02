@@ -247,43 +247,53 @@ roster_pd.head()
 
 ### espn_wbb_pbp {#espn_wbb_pbp}
 
-`espn_wbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+`espn_wbb_pbp(game_id: 'int', raw: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
-espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`,
+espn_wbb_pbp() - Pull one game's play-by-play from ESPN's `womens-college-basketball/summary` endpoint.
 
-`womens-college-basketball/summary`
+By default the plays come back as the frame the `espn_womens_college_basketball_pbp` release
+publishes (what `~sportsdataverse.wbb.load_wbb_pbp` reads): snake_case columns, Int32
+team / athlete / game ids, the Int64 play `id`, `game_date` / `game_date_time`, the
+wehoop shot coordinates, `athlete_name_{1,2,3}`, and `home_score` / `away_score`
+rebuilt from the scoring plays when that reproduces the final (`score_source` says which).
+The release's season-level win-probability columns (`espn_home_wp`, `pregame_home_prob`,
+`home_win_prob`, ...) are not added.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from wbb_schedule(). |
-| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets. |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint (wins over `return_parsed`). |
+| `return_parsed` | `bool` | `True` | If True (default), returns the release play-by-play frame. If False, returns the game dictionary (the shape before 0.2.0, which `helper_wbb_play_by_play` / `helper_wbb_team_box` / `helper_wbb_player_box` and `game_page_frames` read). |
+| `return_as_pandas` | `bool` | `False` | If True, returns the frame as pandas instead of polars. Ignored with `raw=True` or `return_parsed=False`, which return a dict. |
 
 **Returns**
 
-Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor","espnWP", "gameInfo", "season"
+One row per play, columns (in order) and dtypes as the release (`load_wbb_pbp`) for that season; a pandas frame with `return_as_pandas=True`. Zero rows, with the release's columns, when ESPN has no play-by-play for the game (`playByPlaySource == "none"`) or 10 or fewer plays (wehoop returns NULL). A game with no betting line has null spread, home-favorite and home-team-spread values on every play and the spread-available flag False, never a default line. With `return_parsed=False`, a dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscore", "header", "format", "broadcasts", "videos", "playByPlaySource", "standings", "article", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "teamInfo", "season".
 
 **Example**
 
 ```python
 from sportsdataverse.wbb import espn_wbb_pbp
-game = espn_wbb_pbp(game_id=401587902)
-print(game["gameId"])
-print(len(game["plays"]))
+plays = espn_wbb_pbp(game_id=401587902)
+print(plays.shape)
 
-# Convert plays to a DataFrame and filter shooting plays
+# Filter shooting plays for a basic shot chart
 
 import polars as pl
-plays = pl.DataFrame(game["plays"])
-shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
+shots = plays.filter(pl.col("shooting_play") == True)
 shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
 
-# Convert to pandas for downstream analysis
+# As pandas
 
-import pandas as pd
-shots_pd = pd.DataFrame(game["plays"])
-shots_pd[shots_pd["shooting_play"] == True].head()
+plays_pd = espn_wbb_pbp(game_id=401587902, return_as_pandas=True)
+plays_pd[plays_pd["shooting_play"] == True].head()
+
+# The game dictionary (box score, header, pickcenter, ...)
+
+game = espn_wbb_pbp(game_id=401587902, return_parsed=False)
+print(game["gameId"], len(game["plays"]))
 
 # Raw payload (skip the cleaning pipeline) for debugging
 
