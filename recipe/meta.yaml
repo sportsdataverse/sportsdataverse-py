@@ -1,6 +1,6 @@
 {% set name = "sportsdataverse" %}
 {% set version = "0.2.0b1" %}
-{% set python_min = "3.10" %}
+{% set python_min = "3.11" %}
 
 # Conda recipe for the sportsdataverse-py package.
 #
@@ -52,6 +52,11 @@ requirements:
     - scikit-learn >=1.0.0
     - xgboost >=2.0.0
     - rapidfuzz >=3.13.0
+    # pyproject's `cyclopts` / `rich` carry `python_version >= '3.11'` (the `sdv` CLI). A noarch recipe
+    # lists them unconditionally, so python_min is 3.11: conda-forge has no 3.10 cyclopts, and `pip check`
+    # in the test env fails if the wheel's requirement is unmet. pip installs keep the 3.10 floor.
+    - cyclopts >=5.3
+    - rich >=14.0
     - urllib3 >=2.8.0
     # pyproject's `tomli>=2.0; python_version < '3.11'`: a noarch recipe is built
     # once, so a `# [py<311]` selector would be evaluated against the build
