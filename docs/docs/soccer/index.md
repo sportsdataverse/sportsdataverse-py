@@ -79,6 +79,7 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 - [itscalledsoccer](https://github.com/American-Soccer-Analysis/itscalledsoccer) — American Soccer Analysis's own client for the API behind `asa_*`
 - [soccerdata](https://github.com/probberechts/soccerdata) — FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
 - [mplsoccer](https://mplsoccer.readthedocs.io) — matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
+- [Football Charts](https://www.football-charts.com/developers) — REST API and CC BY 4.0 match dataset (98 leagues, 44 countries, 100 requests/day keyless) with calibrated 1X2 probabilities and Monte Carlo season projections that sdv-py does not wrap
 
 ## Examples
 
