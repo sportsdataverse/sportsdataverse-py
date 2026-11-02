@@ -373,6 +373,7 @@ from sportsdataverse.cfb.model_vars import (
     CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM,
     CFB_MODEL_ERA_CUTS,
     OT_SHOOTOUT_FROM_PERIOD,
+    OT_SHARED_TIMEOUT_FROM,
     int_vec,
     cfb_kickoff_out_of_bounds_spot_expr,
     kickoff_turnovers,
@@ -3565,7 +3566,10 @@ class CFBPlayProcess(object):
         period = pl.col("period.number")
         ot_period = _overtime_period(pbp_txt["plays"].columns)
         season = (pbp_txt["header"].get("season") or {}).get("year") or 0
-        ot_window = pl.min_horizontal(ot_period, pl.lit(7)) if season >= 2025 else ot_period
+        shared_from_season, shared_from_period = OT_SHARED_TIMEOUT_FROM
+        ot_window = (
+            pl.min_horizontal(ot_period, pl.lit(shared_from_period)) if season >= shared_from_season else ot_period
+        )
         window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(ot_window)
         allotted = pl.when(period <= 4).then(3).otherwise(1)
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
