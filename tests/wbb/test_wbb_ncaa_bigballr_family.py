@@ -67,7 +67,7 @@ class FakeHtmlFetcher:
         self._filename = filename
         self.paths: list[str] = []
 
-    def fetch_html(self, path: str) -> str:
+    def fetch_html(self, path: str, *, force: bool = False) -> str:
         self.paths.append(path)
         return (HTML_DIR / self._filename).read_text(encoding="utf-8")
 
@@ -127,13 +127,13 @@ def test_ncaa_wbb_date_games_matches_core_wbb_league() -> None:
 
 
 def test_ncaa_wbb_date_games_missing_seasons_raise() -> None:
-    """WBB season table lacks 2009-10 (module docstring caveat).
+    """A season stats.ncaa.org never listed for WBB raises "Season Not Available".
 
-    2025-26 was also absent until it was discovered live and backfilled
-    (2026-08-01), so it is no longer a valid "missing season" example.
+    wbigballR's table lacked 2009-10 and 2025-26; the table swept from the site has both, so
+    the example is 1990, before the site's WBB scoreboards begin.
     """
     with pytest.raises(ValueError, match="Season Not Available"):
-        ncaa_wbb_date_games("12/05/2009", fetcher=FakeHtmlFetcher(SCOREBOARD_HTML))
+        ncaa_wbb_date_games("12/05/1990", fetcher=FakeHtmlFetcher(SCOREBOARD_HTML))
 
 
 def test_ncaa_wbb_team_ids_table() -> None:

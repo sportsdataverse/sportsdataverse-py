@@ -450,6 +450,7 @@ from sportsdataverse.cfb import load_cfb_pbp as load_cfb_pbp  # noqa: F401
 from sportsdataverse.cfb import load_cfb_pbp_r as load_cfb_pbp_r  # noqa: F401
 from sportsdataverse.cfb import load_cfb_percentiles as load_cfb_percentiles  # noqa: F401
 from sportsdataverse.cfb import load_cfb_play_participants as load_cfb_play_participants  # noqa: F401
+from sportsdataverse.cfb import load_cfb_player_aliases as load_cfb_player_aliases  # noqa: F401
 from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_power_index as load_cfb_power_index  # noqa: F401
 from sportsdataverse.cfb import load_cfb_ratings as load_cfb_ratings  # noqa: F401
@@ -464,6 +465,7 @@ from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_c
 from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_aliases as load_cfb_team_aliases  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_group_seasons as load_cfb_team_group_seasons  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
@@ -776,6 +778,7 @@ __all__ = [
     "load_cfb_pbp_r",
     "load_cfb_percentiles",
     "load_cfb_play_participants",
+    "load_cfb_player_aliases",
     "load_cfb_player_box",
     "load_cfb_power_index",
     "load_cfb_ratings",
@@ -790,6 +793,7 @@ __all__ = [
     "load_cfb_rushing",
     "load_cfb_schedule",
     "load_cfb_schedule_crosswalk",
+    "load_cfb_team_aliases",
     "load_cfb_team_box",
     "load_cfb_team_group_seasons",
     "load_cfb_team_info",

@@ -8,15 +8,17 @@ stub serving those bodies.
 
 from __future__ import annotations
 
+import os
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List
 
 import pytest
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 from sportsdataverse.scrape.ncaa import capture, discover, rosters
-from sportsdataverse.scrape.ncaa.bundle import bundle_path, read_bundle
+from sportsdataverse.scrape.ncaa.bundle import bundle_path, read_bundle, write_bundle
 
 FIX = Path(__file__).resolve().parents[2] / "fixtures" / "ncaa"
 CLEAN: Dict[str, str] = read_bundle(FIX / "wbb_raw" / "wbb" / "raw" / "2015" / "385627.json.gz")["pages"]
@@ -49,7 +51,7 @@ def _written(root: Path) -> List[str]:
 def test_clean_pages_write_the_bundle(tmp_path):
     fetch = _Script([True])
     counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
-    assert counts == {"captured": 1, "skipped": 0, "failed": 0}
+    assert counts == {"captured": 1, "skipped": 0, "failed": 0, "not_ready": 0}
     written = read_bundle(bundle_path(tmp_path, "wbb", "2015", "385627"))
     assert written["pages"] == CLEAN
     assert written["urls"]["box_score"] == "https://stats.ncaa.org/contests/385627/box_score"
@@ -59,13 +61,14 @@ def test_clean_pages_write_the_bundle(tmp_path):
         "captured": 0,
         "skipped": 1,
         "failed": 0,
+        "not_ready": 0,
     }
     assert again.fetched == []
 
 
 def test_a_page_that_did_not_clear_writes_nothing(tmp_path):
     counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=_Script([False]))
-    assert counts == {"captured": 0, "skipped": 0, "failed": 1}
+    assert counts == {"captured": 0, "skipped": 0, "failed": 1, "not_ready": 0}
     assert _written(tmp_path) == []
 
 
@@ -89,7 +92,7 @@ def test_a_clean_page_resets_the_soft_ban_counter(tmp_path):
     counts = capture.capture_contests(
         ["1", "2", "3"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch, max_consecutive_failures=2
     )
-    assert counts == {"captured": 1, "skipped": 0, "failed": 2}
+    assert counts == {"captured": 1, "skipped": 0, "failed": 2, "not_ready": 0}
     assert _written(tmp_path) == ["2.json.gz"]
 
 
@@ -104,7 +107,7 @@ def test_ban_suspect_is_a_hard_stop(tmp_path):
 def test_vocabulary_a_404_contest_is_counted_failed_and_the_run_goes_on(tmp_path):
     fetch = _Script([NoDataError("stats.ncaa.org has no page (HTTP 404)"), True])
     counts = capture.capture_contests(["1", "2"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
-    assert counts == {"captured": 1, "skipped": 0, "failed": 1}
+    assert counts == {"captured": 1, "skipped": 0, "failed": 1, "not_ready": 0}
     assert _written(tmp_path) == ["2.json.gz"]
 
 
@@ -226,7 +229,9 @@ def test_capture_main_binds_league_and_root(tmp_path, monkeypatch, capsys):
     seen: Dict[str, object] = {}
     monkeypatch.setattr(capture, "_select_pending", lambda master, season: seen.update(master=master) or ["9", "8"])
     monkeypatch.setattr(
-        capture, "capture_contests", _record(seen, "capture", {"captured": 2, "skipped": 0, "failed": 0})
+        capture,
+        "capture_contests",
+        _record(seen, "capture", {"captured": 2, "skipped": 0, "failed": 0, "not_ready": 0}),
     )
     monkeypatch.setattr(sys, "argv", ["capture", "--season", "2015"])
     capture._main("wbb", str(tmp_path))
@@ -248,6 +253,29 @@ def test_discover_main_binds_league_and_root(tmp_path, monkeypatch):
     args, kwargs = seen["discover"]
     assert args == (2015,) and kwargs["league"] == "wbb" and kwargs["root"] == str(tmp_path)
     assert kwargs["write_master"] is True
+
+
+def test_discover_main_scoreboard_needs_no_season_and_refuses_shards(tmp_path, monkeypatch, capsys):
+    import polars as pl
+
+    from sportsdataverse.scrape.ncaa import discover
+
+    seen: Dict[str, object] = {}
+    found = pl.DataFrame({"contest_id": ["1", "2"], "season": ["2027", "2027"]})
+    monkeypatch.setattr(discover, "discover_dates", _record(seen, "dates", found))
+    monkeypatch.setenv("NCAA_SCOREBOARD_LOOKBACK_DAYS", "x")  # a bad value falls back to the default
+    monkeypatch.setattr(sys, "argv", ["discover", "--scoreboard", "--dates", "2026-11-02"])
+    discover._main("mbb", str(tmp_path))
+    args, kwargs = seen["dates"]
+    assert args == (["2026-11-02"],) and kwargs["lookback_days"] == 3
+    assert "{'2027': 2}" in capsys.readouterr().out
+
+    monkeypatch.setattr(sys, "argv", ["discover", "--scoreboard", "--shard", "0/4"])
+    with pytest.raises(SystemExit):
+        discover._main("mbb", str(tmp_path))
+    monkeypatch.setattr(sys, "argv", ["discover"])  # the team sweep still needs its season
+    with pytest.raises(SystemExit):
+        discover._main("mbb", str(tmp_path))
 
 
 def test_rosters_main_binds_league_and_root(tmp_path, monkeypatch):
@@ -288,3 +316,143 @@ def test_xwalk_main_binds_league_and_root(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["xwalk", "--seasons", "2015"])
     xwalk._main("wbb", str(tmp_path))
     assert seen["build"] == ((str(tmp_path), "wbb", 2015), {})
+
+
+# --- not-ready contests, optional tabs, officials refresh (2026-11-03) ----------------------------
+
+_BB = Path(__file__).resolve().parents[2] / "fixtures" / "mbb_ncaa"
+OFFICIALS = (_BB / "bkb_officials_5722355.html").read_text(encoding="utf-8")
+OFFICIALS_BLANK = (_BB / "bkb_officials_blank_6635843.html").read_text(encoding="utf-8")
+TEAM_STATS = (_BB / "bkb_team_stats_5722355.html").read_text(encoding="utf-8")
+
+
+def test_not_ready_contest_is_counted_apart_and_never_trips_the_soft_ban_guard(tmp_path):
+    """A scheduled-but-unplayed contest answers "Box score not available": skip it, ask again next run."""
+    plan = [NotAvailableYetError("not available")] * 3 + [True]
+    counts = capture.capture_contests(
+        ["1", "2", "3", "4"],
+        2015,
+        league="wbb",
+        root=tmp_path,
+        fetch_pages_fn=_Script(plan),
+        max_consecutive_failures=2,
+    )
+    assert counts == {"captured": 1, "skipped": 0, "failed": 0, "not_ready": 3}
+    assert _written(tmp_path) == ["4.json.gz"]
+
+
+class _TabFetcher:
+    """Serves the three core pages plus whatever optional tabs it is given; records every path."""
+
+    def __init__(self, tabs: Dict[str, object]):
+        self.tabs = tabs
+        self.paths: List[str] = []
+
+    def fetch_game_pbp(self, cid, force=False):
+        return CLEAN["play_by_play"]
+
+    def fetch_game_box(self, cid, force=False):
+        return CLEAN["box_score"]
+
+    def fetch_game_individual_stats(self, cid, force=False):
+        return CLEAN["individual_stats"]
+
+    def fetch_html(self, path, force=False):
+        self.paths.append(path)
+        body = self.tabs[path.rsplit("/", 1)[1]]
+        if isinstance(body, Exception):
+            raise body
+        return body
+
+
+def test_optional_tabs_are_captured_with_the_bundle(tmp_path):
+    f = _TabFetcher({"team_stats": TEAM_STATS, "officials": OFFICIALS})
+    capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    b = read_bundle(bundle_path(tmp_path, "wbb", "2015", "385627"))
+    assert set(b["pages"]) == {"play_by_play", "box_score", "individual_stats", "team_stats", "officials"}
+    assert b["urls"]["officials"] == "https://stats.ncaa.org/contests/385627/officials"
+    assert f.paths == ["contests/385627/team_stats", "contests/385627/officials"]
+
+
+def test_a_missing_optional_tab_does_not_block_the_bundle(tmp_path):
+    f = _TabFetcher({"team_stats": TEAM_STATS, "officials": NoDataError("404")})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts["captured"] == 1
+    b = read_bundle(bundle_path(tmp_path, "wbb", "2015", "385627"))
+    assert "officials" not in b["pages"] and "officials" not in b["urls"]
+
+
+def _bundle_with_officials(root: Path, cid: str, officials: str) -> Path:
+    return write_bundle(root, "mbb", "2027", cid, pages={**CLEAN, "officials": officials},
+                        urls={"officials": "u"}, captured_at="2026-11-03T08:00:00+00:00")  # fmt: skip
+
+
+def test_refresh_officials_fills_a_blank_crew(tmp_path):
+    _bundle_with_officials(tmp_path, "6635843", OFFICIALS_BLANK)
+    _bundle_with_officials(tmp_path, "5722355", OFFICIALS)  # already has its crew: never re-fetched
+    f = _TabFetcher({"officials": OFFICIALS})
+    counts = capture.refresh_officials(2027, league="mbb", root=tmp_path, fetcher_factory=lambda: f)
+    assert counts == {"checked": 2, "refreshed": 1, "still_blank": 0}
+    assert f.paths == ["contests/6635843/officials"]
+    b = read_bundle(bundle_path(tmp_path, "mbb", "2027", "6635843"))
+    assert b["pages"]["officials"] == OFFICIALS
+    assert b["captured_at"] == "2026-11-03T08:00:00+00:00"  # the capture time is the original one
+
+
+def test_refresh_officials_leaves_a_still_blank_crew_and_builds_no_fetcher_when_nothing_qualifies(tmp_path):
+    path = _bundle_with_officials(tmp_path, "6635843", OFFICIALS_BLANK)
+    f = _TabFetcher({"officials": OFFICIALS_BLANK})
+    assert capture.refresh_officials(2027, league="mbb", root=tmp_path, fetcher_factory=lambda: f) == {
+        "checked": 1, "refreshed": 0, "still_blank": 1}  # fmt: skip
+    # past the window the bundle is not even opened, and no browser is launched
+    old = (datetime.now(timezone.utc) - timedelta(days=30)).timestamp()
+    os.utime(path, (old, old))
+
+    def _never():
+        raise AssertionError("fetcher built with nothing to refresh")
+
+    assert capture.refresh_officials(2027, league="mbb", root=tmp_path, fetcher_factory=_never) == {
+        "checked": 0, "refreshed": 0, "still_blank": 0}  # fmt: skip
+
+
+def test_team_stats_not_posted_yet_leaves_the_contest_for_the_next_run(tmp_path):
+    """A bundled contest is never fetched again, so a team_stats tab not posted yet must not be bundled away."""
+    f = _TabFetcher({"team_stats": NotAvailableYetError("Team stats not available"), "officials": OFFICIALS})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts == {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 1}
+    assert _written(tmp_path) == []
+
+
+def test_officials_not_posted_yet_is_bundled_without_them(tmp_path):
+    """The crew posts days later and refresh_officials re-asks, so the bundle need not wait for it."""
+    f = _TabFetcher({"team_stats": TEAM_STATS, "officials": NotAvailableYetError("Officials not available")})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts["captured"] == 1
+    assert "officials" not in read_bundle(bundle_path(tmp_path, "wbb", "2015", "385627"))["pages"]
+
+
+def test_an_optional_tab_that_is_not_a_contest_page_writes_nothing(tmp_path):
+    f = _TabFetcher({"team_stats": "<html><body>Service unavailable</body></html>", "officials": OFFICIALS})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts["failed"] == 1 and counts["captured"] == 0
+    assert _written(tmp_path) == []
+
+
+def test_capture_main_refresh_days_env_falls_back_on_a_bad_value(tmp_path, monkeypatch):
+    seen: Dict[str, object] = {}
+    monkeypatch.setattr(capture, "_select_pending", lambda master, season: [])
+    monkeypatch.setattr(
+        capture, "capture_contests", lambda *a, **k: {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 0}
+    )
+
+    def _refresh(season, **kwargs):
+        seen.update(kwargs)
+        return {"checked": 0, "refreshed": 0, "still_blank": 0}
+
+    monkeypatch.setattr(capture, "refresh_officials", _refresh)
+    monkeypatch.setattr(capture, "_vendor_fetcher", lambda vendor, root, **kw: ("vendor", vendor))
+    monkeypatch.setenv("NCAA_REFRESH_OFFICIALS_DAYS", "two weeks")
+    monkeypatch.setattr(sys, "argv", ["capture", "--season", "2027", "--vendor", "decodo"])
+    capture._main("mbb", str(tmp_path))
+    assert seen["days"] == 14
+    assert seen["fetcher_factory"]() == ("vendor", "decodo")

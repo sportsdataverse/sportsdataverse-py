@@ -4,13 +4,11 @@ Thin shim over :mod:`sportsdataverse.mbb.mbb_ncaa_scoreboard` with
 ``league="wbb"`` bound — the one league knob is the ``season_divisions``
 id table.
 
-**Season coverage caveat.** The WBB season table
-(:data:`~sportsdataverse.mbb.mbb_ncaa_scoreboard.NCAA_WBB_SEASON_DIVISIONS`)
-covers 2010-11 through 2025-26 — wbigballR is an older fork, so it has NO
-2009-10 entry (the MBB table does). 2025-26 was likewise missing upstream
-and was discovered live + backfilled here (2026-08-01). Dates in a missing
-season raise ``ValueError``; extend the table forward as new ids are
-confirmed.
+**Season ids.** The season id comes from the table every stats.ncaa.org sport shares
+(:mod:`sportsdataverse.scrape.ncaa.seasons`), which covers every WBB season the site lists,
+2009-10 included (wbigballR's own table started at 2010-11). A season opened after the package
+was built is resolved with one live lookup; only a season the site does not list raises
+``ValueError``.
 """
 
 from __future__ import annotations
@@ -63,10 +61,10 @@ def ncaa_wbb_date_games(
         ``SCOREBOARD_SCHEMA`` column contract.
 
     Raises:
-        ValueError: The date's season has no WBB ``season_divisions`` id
-            (includes 2009-10 — see module docstring), *conference* is not a
-            known conference, the date is not ``MM/DD/YYYY``, or the fetched
-            page has no games table.
+        ValueError: stats.ncaa.org lists no WBB season for the date (a season
+            missing from the bundled table is looked up live first, see the
+            module docstring), *conference* is not a known conference, the date
+            is not ``MM/DD/YYYY``, or the fetched page has no games table.
 
     Example:
         Quick start::

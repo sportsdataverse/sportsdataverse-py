@@ -298,6 +298,31 @@ class NoDataError(SportsDataverseError):
 NoESPNDataError = NoDataError
 
 
+class NotAvailableYetError(NoDataError):
+    """Raised when a page exists but has nothing behind it yet.
+
+    A :class:`NoDataError`: the fetch succeeded. stats.ncaa.org answers each tab of a
+    scheduled-but-unplayed (or not yet posted) contest with a bare "Box score not available" /
+    "Play by play not available". It is kept distinct from a 404 so a capture can count the
+    contest as not ready and ask again on a later run, instead of dropping it.
+
+    Example:
+        Skip a contest that has not been played yet::
+
+            from sportsdataverse.errors import NotAvailableYetError
+            from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+            with NcaaFetcher.with_browser() as fetcher:
+                try:
+                    html = fetcher.fetch_html("contests/6646892/box_score")
+                except NotAvailableYetError:
+                    html = None  # retry after the game
+
+    See Also:
+        * :class:`NoDataError` -- the parent: "fetch succeeded, nothing here"
+    """
+
+
 class InsufficientInputError(SportsDataverseError):
     """Raised when the inputs arrived intact but cannot support the computation.
 

@@ -84,6 +84,8 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_cfb_group_seasons` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 | `load_cfb_group_aliases` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 | `load_cfb_team_group_seasons` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
+| `load_cfb_team_aliases` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
+| `load_cfb_player_aliases` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 
 ## Advanced stats
 
@@ -158,6 +160,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_cfb_team_summaries_weekly](loaders/team-3.md#load_cfb_team_summaries_weekly) | Release: cfb_team_summaries_weekly · asset … |
 | [load_cfb_team_tendencies](loaders/team-4.md#load_cfb_team_tendencies) | Release: espn_cfb_team_tendencies · asset … |
 | [load_cfb_team_group_seasons](loaders/team-5.md#load_cfb_team_group_seasons) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet` |
+| [load_cfb_team_aliases](loaders/team-5.md#load_cfb_team_aliases) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_aliases.parquet` |
 
 ## Usage
 
@@ -200,3 +203,4 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_cfb_groups](loaders/other-2.md#load_cfb_groups) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet` |
 | [load_cfb_group_seasons](loaders/other-2.md#load_cfb_group_seasons) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet` |
 | [load_cfb_group_aliases](loaders/other-2.md#load_cfb_group_aliases) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet` |
+| [load_cfb_player_aliases](loaders/other-2.md#load_cfb_player_aliases) | Release: cfb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_player_aliases.parquet` |

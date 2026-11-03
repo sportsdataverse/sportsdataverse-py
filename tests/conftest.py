@@ -239,6 +239,26 @@ def patch_espn_fetch(monkeypatch, payload):
     monkeypatch.setattr(rt, "download", lambda url, params=None, **kwargs: _Resp(resolve(url)))
 
 
+@pytest.fixture(autouse=True)
+def _isolate_ncaa_season_cache(tmp_path_factory):
+    """Keep stats.ncaa.org season ids resolved live during a test out of the user's cache.
+
+    A test whose stub page reaches the live season-id lookup would otherwise write
+    ``~/.cache/sportsdataverse/ncaa_season_divisions.json``, and every later test (and real use)
+    would read the stub's answer back. Only this one cache file is redirected.
+
+    ``mock.patch``, not ``monkeypatch``: an autouse fixture that requests ``monkeypatch`` sets it
+    up before every other autouse fixture, so a test's own ``monkeypatch.setattr`` would be undone
+    only AFTER those fixtures' teardown (tests/codegen/conftest.py clears caches on functions a
+    test replaced, and failed on the stub).
+    """
+    from unittest import mock
+
+    path = tmp_path_factory.mktemp("ncaa_seasons") / "ncaa_season_divisions.json"
+    with mock.patch("sportsdataverse.scrape.ncaa.seasons._cache_path", lambda: path):
+        yield
+
+
 @pytest.fixture(params=["installed", "pandas2"])
 def json_normalize_flavour(request, monkeypatch):
     """Run a schema-drift test on the installed pandas and again on pandas 2's ``json_normalize`` (WB-1).
