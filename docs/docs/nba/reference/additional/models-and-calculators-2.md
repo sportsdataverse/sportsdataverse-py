@@ -58,10 +58,13 @@ print(ff.sort("efg__off", descending=True).head())
 Per-play home win probability from the bundled in-game model.
 
 Scores `in_game_features` through the committed artifact
-(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA -- a shallow
-xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
-stays out-of-sample; escalated from a plain logistic that failed the
-per-bucket calibration gate).
+(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA, `wnba_in_game_wp.ubj`
+for WNBA): a shallow monotone-constrained xgboost booster fit by
+`tools/models/nba_prediction/train_in_game_wp.py` (NBA on 2022, 2023 and 2025,
+held out on 2026; WNBA on 2021-2024, held out on 2025). Within the final minute
+the clock reaches the model only through `margin_per_sqrt_sec`, so at a fixed
+lead the probability moves toward the leader as time runs out and reaches the
+result at the horn instead of jumping to it.
 
 Gate note: the plan's concurrent oracle (stats.nba.com
 `winprobabilitypbp` HOME_PCT) is a dead endpoint, so this model is
@@ -79,7 +82,7 @@ feed. See the fixtures README + SDD ledger.
 
 **Returns**
 
-One row per play: the five feature columns plus `home_win_prob`.
+One row per play: the `in_game_features` columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
@@ -88,6 +91,8 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 **Raises**
