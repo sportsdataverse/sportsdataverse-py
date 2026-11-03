@@ -237,7 +237,7 @@ One season-less file: every player id another source (fox, nba_stats, yahoo) use
 | col_name | type | description |
 |---|---|---|
 | `league` | String | League code of the table ("nba"). |
-| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data. |
+| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data; the ESPN player loaders (load_nba_player_core and its siblings) carry it as Int32, so cast first with pl.col("athlete_id").cast(pl.Int32). |
 | `athlete_id_source` | String | Id space of athlete_id; always "espn" in this table. |
 | `source` | String | Provider whose player id this is (in this table: fox, nba_stats, yahoo). |
 | `source_player_id` | String | The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source, so filter on source first. |

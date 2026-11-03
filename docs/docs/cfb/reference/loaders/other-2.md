@@ -453,7 +453,7 @@ One season-less file: every player id another source (cbs, fox, ncaa, yahoo) use
 | col_name | type | description |
 |---|---|---|
 | `league` | String | League code of the table ("cfb"). |
-| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data. |
+| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data; the ESPN player loaders (load_cfb_player_box and its siblings) carry it as Int64, so cast first with pl.col("athlete_id").cast(pl.Int64). |
 | `athlete_id_source` | String | Id space of athlete_id; always "espn" in this table. |
 | `source` | String | Provider whose player id this is (in this table: cbs, fox, ncaa, yahoo). |
 | `source_player_id` | String | The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source, so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season. |

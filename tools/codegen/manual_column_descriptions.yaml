@@ -9673,7 +9673,9 @@ load_cfb_group_aliases:
     (still in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
 load_cfb_player_aliases:
-  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_cfb_player_box and its siblings) carry it as Int64, so cast first with
+    pl.col("athlete_id").cast(pl.Int64).
   athlete_id_source: Id space of athlete_id; always "espn" in this table.
   evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
   league: League code of the table ("cfb").
@@ -38175,7 +38177,9 @@ load_mbb_group_aliases:
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
 load_mbb_player_aliases:
-  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_mbb_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
   athlete_id_source: Id space of athlete_id; always "espn" in this table.
   evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
   league: League code of the table ("mbb").
@@ -38185,7 +38189,7 @@ load_mbb_player_aliases:
     CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
     this provider id; override for a hand-verified override.
   source: 'Provider whose player id this is (in this table: fox, kenpom, ncaa).'
-  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+  source_player_id: The source's own player id (e.g. Fox 76284). It means something only within its source,
     so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
   source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
     Yahoo / CBS team for the NFL); null otherwise.
@@ -38637,7 +38641,9 @@ load_nba_group_aliases:
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
 load_nba_player_aliases:
-  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_nba_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
   athlete_id_source: Id space of athlete_id; always "espn" in this table.
   evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
   league: League code of the table ("nba").
@@ -46010,7 +46016,9 @@ load_wbb_group_aliases:
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
 load_wbb_player_aliases:
-  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_wbb_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
   athlete_id_source: Id space of athlete_id; always "espn" in this table.
   evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
   league: League code of the table ("wbb").
@@ -46020,7 +46028,7 @@ load_wbb_player_aliases:
     CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
     this provider id; override for a hand-verified override.
   source: 'Provider whose player id this is (in this table: fox, ncaa).'
-  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+  source_player_id: The source's own player id (e.g. Fox 76284). It means something only within its source,
     so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
   source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
     Yahoo / CBS team for the NFL); null otherwise.
@@ -46224,7 +46232,9 @@ load_wnba_group_aliases:
   valid_to: Last season the alias is valid for, inclusive (calendar year); null = unbounded (still in use).
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
 load_wnba_player_aliases:
-  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_wnba_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
   athlete_id_source: Id space of athlete_id; always "espn" in this table.
   evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
   league: League code of the table ("wnba").
