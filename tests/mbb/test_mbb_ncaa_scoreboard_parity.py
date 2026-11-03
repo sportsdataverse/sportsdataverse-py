@@ -140,15 +140,36 @@ def test_mbb_date_games_offline_fetcher_injection() -> None:
 
 def test_mbb_unknown_season_raises_value_error() -> None:
     """Deliberate fix of R's type-unstable string return 'Season Not Available'."""
+    from pathlib import Path
+
+    # A season the site never listed: the one live lookup gets the site's current-season page (what
+    # stats.ncaa.org serves for an unknown year), which must not be taken as the season asked for.
+    page = (
+        Path(__file__).resolve().parents[1] / "fixtures" / "ncaa_season_divisions" / "mbb_2026_27_d1.html"
+    ).read_text()
+
+    class _Stub:
+        def fetch_html(self, path: str, *, force: bool = False) -> str:
+            assert "academic_year=1990" in path, path
+            return page
+
     with pytest.raises(ValueError, match="Season Not Available"):
-        ncaa_mbb_date_games("01/01/2005")
+        ncaa_mbb_date_games("01/01/1990", fetcher=_Stub())
 
 
-def test_mbb_season_table_boundaries() -> None:
-    """May-1 season boundary + table endpoints (all_functions.R:1132-1183)."""
-    assert NCAA_MBB_SEASON_DIVISIONS["2025-26"] == 18703
-    assert NCAA_MBB_SEASON_DIVISIONS["2009-10"] == 10060
-    assert len(NCAA_MBB_SEASON_DIVISIONS) == 17
+#: bigballR's hand-kept table (all_functions.R:1132-1183), the oracle the swept table must reproduce.
+_BIGBALLR_MBB = {
+    "2009-10": 10060, "2010-11": 10220, "2011-12": 10480, "2012-13": 10883, "2013-14": 11700,
+    "2014-15": 12320, "2015-16": 12700, "2016-17": 13100, "2017-18": 13533, "2018-19": 16700,
+    "2019-20": 17060, "2020-21": 17420, "2021-22": 17783, "2022-23": 17940, "2023-24": 18221,
+    "2024-25": 18403, "2025-26": 18703,
+}  # fmt: skip
+
+
+def test_mbb_season_table_matches_bigballr() -> None:
+    """The table swept from stats.ncaa.org reproduces every id bigballR typed by hand, and goes past it."""
+    assert {k: NCAA_MBB_SEASON_DIVISIONS.get(k) for k in _BIGBALLR_MBB} == _BIGBALLR_MBB
+    assert NCAA_MBB_SEASON_DIVISIONS["2026-27"] == 18983
 
 
 @pytest.mark.parametrize(

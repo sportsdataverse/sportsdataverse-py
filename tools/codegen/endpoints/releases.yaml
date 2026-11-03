@@ -2759,7 +2759,95 @@ loaders:
   min_season: 2010
   example_args:
     seasons: 2024
-  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026."
+  notes: "One row per team, id space and season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string in the id space team_id_source names: every D-I team has an ncaa_org row (the stats.ncaa.org org id) and, where the ncaa_baseball_crosswalk maps the school, a copy under its ESPN college-baseball team id (team_id_source espn, notes ncaa_org_id=N). The two id spaces overlap (an ESPN id can be another school's NCAA org id), so filter on team_id_source before joining on team_id. season is the calendar year; seasons 2010-2026."
+# --- {league}_groups: team_aliases (8 leagues) and player_aliases (6 leagues), built by
+# sportsdataverse/sdv-reference-data beside the four group tables. Season-less; every id is
+# Utf8 as published. The _unmatched / _rates side files are diagnostics and get no loader.
+# NFL entries are docs metadata only: load_nfl_*_aliases are hand-written in nfl_loaders.py. ---
+- fn: load_nfl_team_aliases
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_team_aliases.parquet
+  tag: nfl_groups
+  notes: "One season-less file: every id and name another source (cbs, fox, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the STARTING year (2025 = the 2025-26 season)."
+- fn: load_cfb_team_aliases
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_team_aliases.parquet
+  tag: cfb_groups
+  notes: "One season-less file: every id and name another source (cbs, cfbd, fox, on3, sports247, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the STARTING year (2025 = the fall 2025 season)."
+- fn: load_nba_team_aliases
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_team_aliases.parquet
+  tag: nba_groups
+  notes: "One season-less file: every id and name another source (cbs, fox, nba_stats, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wnba_team_aliases
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_team_aliases.parquet
+  tag: wnba_groups
+  notes: "One season-less file: every id and name another source (fox, wnba_stats, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the calendar year."
+- fn: load_mbb_team_aliases
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_team_aliases.parquet
+  tag: mbb_groups
+  notes: "One season-less file: every id and name another source (fox, kenpom, ncaa, on3, sports247, torvik, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wbb_team_aliases
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_team_aliases.parquet
+  tag: wbb_groups
+  notes: "One season-less file: every id and name another source (fox, ncaa, on3, sports247, torvik, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_mlb_team_aliases
+  league: mlb
+  base: sdv_releases
+  url: mlb_groups/mlb_team_aliases.parquet
+  tag: mlb_groups
+  notes: "One season-less file: every id and name another source (cbs, fox, mlb, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the calendar year."
+- fn: load_nhl_team_aliases
+  league: nhl
+  base: sdv_releases
+  url: nhl_groups/nhl_team_aliases.parquet
+  tag: nhl_groups
+  notes: "One season-less file: every id and name another source (cbs, fox, nhl, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_nfl_player_aliases
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_player_aliases.parquet
+  tag: nfl_groups
+  notes: "One season-less file: every player id another source (cbs, fox, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. Seasons are the STARTING year (2025 = the 2025-26 season)."
+- fn: load_cfb_player_aliases
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_player_aliases.parquet
+  tag: cfb_groups
+  notes: "One season-less file: every player id another source (cbs, fox, ncaa, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. stats.ncaa.org roster ids (source ncaa) are new every season. Seasons are the STARTING year (2025 = the fall 2025 season)."
+- fn: load_nba_player_aliases
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_player_aliases.parquet
+  tag: nba_groups
+  notes: "One season-less file: every player id another source (fox, nba_stats, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wnba_player_aliases
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_player_aliases.parquet
+  tag: wnba_groups
+  notes: "One season-less file: every player id another source (fox, wnba_stats, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. Seasons are the calendar year."
+- fn: load_mbb_player_aliases
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_player_aliases.parquet
+  tag: mbb_groups
+  notes: "One season-less file: every player id another source (fox, kenpom, ncaa) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. stats.ncaa.org roster ids (source ncaa) are new every season. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wbb_player_aliases
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_player_aliases.parquet
+  tag: wbb_groups
+  notes: "One season-less file: every player id another source (fox, ncaa) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. stats.ncaa.org roster ids (source ncaa) are new every season. Seasons are the ENDING year (2025 = the 2024-25 season)."
 # --- mlb_parks: MLB park dimensions (sportsdataverse/sdv-reference-data). One
 # season-less venue x season table; fences in feet at MLB's seven markers. ---
 - fn: load_mlb_park_dimensions

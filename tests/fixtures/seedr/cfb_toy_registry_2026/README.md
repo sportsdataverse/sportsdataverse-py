@@ -59,7 +59,9 @@ it that way (the Python and R RNGs differ).
   case), `tiebreaker_data.csv` (`kind` = `analytics_ratings` / `cfp_rankings` /
   `apr`, one `value` column) — inputs, one block per `case`.
 - `expected_standings.csv` — `case`, `team`, `conference`, `conf_rank`,
-  `conf_champ` from `cfb_standings(games, teams, tiebreaker_data = ...)`.
+  `conf_champ`, `sov`, `sos` (rounded to 10 places) from
+  `cfb_standings(games, teams, tiebreaker_data = ...)`. `sov` / `sos` pin the
+  pooled opponents'-record formula; a per-game mean differs on 5 cases.
 - `seeds_standings.csv`, `seeds_rankings.csv` — a 16-team ranked field: P4
   champions T01, T02, T06 and T14 (ranked outside the top 12), Sun Belt champion
   T13 (the best G6 team), MAC champion T16, Notre Dame 12th.

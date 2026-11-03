@@ -19,6 +19,7 @@ Contest 5722355 — Coppin St. @ South Carolina (WBB), 2024-11-14:
 | file | tab | source URL |
 |---|---|---|
 | `bkb_officials_5722355.html` | Officials | <https://stats.ncaa.org/contests/5722355/officials> |
+| `bkb_officials_blank_6635843.html` | Officials before the crew is posted (3 blank slots; captured 2026-11-03, the morning after the 11/02 game) | <https://stats.ncaa.org/contests/6635843/officials> |
 | `bkb_team_stats_5722355.html` | Team Stats (by period) | <https://stats.ncaa.org/contests/5722355/team_stats> |
 | `bkb_box_score_5722355.html` | Box Score (linescore + game info) | <https://stats.ncaa.org/contests/5722355/box_score> |
 

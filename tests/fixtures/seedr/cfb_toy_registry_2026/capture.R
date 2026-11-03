@@ -131,7 +131,8 @@ expected <- do.call(rbind, lapply(unique(games$case), function(cs) {
   st <- cfb_standings(gm, tt, verbosity = "NONE",
                       tiebreaker_data = if (length(data)) data else NULL)
   data.frame(case = cs, team = st$team, conference = st$conference,
-             conf_rank = st$conf_rank, conf_champ = st$conf_champ)
+             conf_rank = st$conf_rank, conf_champ = st$conf_champ,
+             sov = round(st$sov, 10), sos = round(st$sos, 10))
 }))
 expected <- expected[order(expected$case, expected$team), ]
 write.csv(expected, file.path(out, "expected_standings.csv"), row.names = FALSE, na = "")
