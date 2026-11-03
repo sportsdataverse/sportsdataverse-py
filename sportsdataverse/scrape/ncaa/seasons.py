@@ -27,6 +27,7 @@ from __future__ import annotations
 import html as html_lib
 import json
 import re
+import warnings
 from datetime import date
 from functools import lru_cache
 from importlib.resources import files
@@ -212,10 +213,24 @@ def _with_derived(df: pl.DataFrame) -> pl.DataFrame:
 
 @lru_cache(maxsize=1)
 def _bundled() -> pl.DataFrame:
+    """The table shipped with the package; an empty table (and a warning) if it cannot be read.
+
+    Read at import (the bigballR-era dicts are built from it), so it must never raise: a damaged
+    file would otherwise break ``import sportsdataverse`` for every sport, including the tool that
+    rebuilds it. Columns beyond the schema are ignored, so a column added later reads on old code.
+    """
     path = files("sportsdataverse.scrape.ncaa") / "data" / "ncaa_season_divisions.csv"
     if not path.is_file():
         return pl.DataFrame(schema=SEASON_DIVISIONS_SCHEMA)
-    return _with_derived(pl.read_csv(path.read_bytes(), schema=_CSV_SCHEMA))
+    try:
+        raw = pl.read_csv(path.read_bytes(), schema_overrides=_CSV_SCHEMA).select(list(_CSV_SCHEMA))
+        return _with_derived(raw)
+    except (pl.exceptions.PolarsError, OSError, ValueError) as exc:
+        warnings.warn(
+            f"cannot read the bundled stats.ncaa.org season table ({exc}); season ids will be resolved live instead",
+            stacklevel=2,
+        )
+        return pl.DataFrame(schema=SEASON_DIVISIONS_SCHEMA)
 
 
 def _cache_path() -> Path:

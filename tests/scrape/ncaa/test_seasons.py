@@ -179,3 +179,39 @@ def test_legacy_checkpoint_rows_with_extra_keys_load(monkeypatch):
     rows = [dict(r, division=99) for r in S._parse_scoreboard_page(_page("mbb_2026_27_d1.html"), "MBB")]
     _bundle(monkeypatch, rows)
     assert S.ncaa_season_divisions("mbb")["division"].to_list() == [1, 2, 3]
+
+
+class _FakeResource:
+    def __init__(self, body: bytes):
+        self.body = body
+
+    def __truediv__(self, other: str) -> "_FakeResource":
+        return self
+
+    def is_file(self) -> bool:
+        return True
+
+    def read_bytes(self) -> bytes:
+        return self.body
+
+
+def _bundled_from(monkeypatch, body: bytes) -> pl.DataFrame:
+    monkeypatch.setattr(S, "files", lambda pkg: _FakeResource(body))
+    S._bundled.cache_clear()
+    return S._bundled()
+
+
+def test_bundled_table_ignores_columns_it_does_not_know(monkeypatch):
+    body = (
+        b"sport_code,academic_year,season_label,division,division_label,season_division_id,game_sport_year_ctl_id,extra\n"
+        b"MBB,2027,2026-27,1,D-I,18983,17240,x\n"
+    )
+    df = _bundled_from(monkeypatch, body)
+    assert df.select("sport_code", "division", "season_division_id").rows() == [("MBB", 1, 18983)]
+
+
+def test_an_unreadable_bundled_table_warns_and_falls_back_to_empty(monkeypatch):
+    """Read at import: it must never take ``import sportsdataverse`` down with it."""
+    with pytest.warns(UserWarning, match="cannot read the bundled stats.ncaa.org season table"):
+        df = _bundled_from(monkeypatch, b"sport_code,academic_year\nMBB,not-a-year\n")
+    assert df.height == 0 and df.schema == pl.Schema(S.SEASON_DIVISIONS_SCHEMA)
