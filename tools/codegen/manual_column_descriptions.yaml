@@ -9672,6 +9672,49 @@ load_cfb_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (STARTING year: 2025 = the fall 2025 season); null = unbounded
     (still in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_cfb_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_cfb_player_box and its siblings) carry it as Int64, so cast first with
+    pl.col("athlete_id").cast(pl.Int64).
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("cfb").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: cbs, fox, ncaa, yahoo).'
+  source_player_id: The source's own player id (e.g. Yahoo ncaaf.p.316907, Fox 76284). It means something only within its source,
+    so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_cfb_team_group_seasons.'
+  valid_from: 'First season the id is on that team, inclusive (STARTING year: 2025 = the fall 2025 season).'
+  valid_to: 'Last season the id is on that team, inclusive (STARTING year: 2025 = the fall 2025 season). A gap or a change
+    of match method splits the window into two rows.'
+load_cfb_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("cfb").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: cbs, cfbd, fox, on3, sports247, yahoo). "sports247" is 247Sports.'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_cfb_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the fall 2025 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the fall 2025 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_cfb_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -38133,6 +38176,50 @@ load_mbb_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (ENDING year: 2025 = the 2024-25 season); null = unbounded (still
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_mbb_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_mbb_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("mbb").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: fox, kenpom, ncaa).'
+  source_player_id: The source's own player id (e.g. Fox 76284). It means something only within its source,
+    so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_mbb_team_group_seasons.'
+  valid_from: 'First season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season).'
+  valid_to: 'Last season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season). A gap or a change of
+    match method splits the window into two rows.'
+load_mbb_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("mbb").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: fox, kenpom, ncaa, on3, sports247, torvik, yahoo). "sports247"
+    is 247Sports.'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_mbb_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_mbb_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -38308,6 +38395,27 @@ load_mlb_group_aliases:
   valid_from: First season the alias is valid for, inclusive (calendar year); null = unbounded.
   valid_to: Last season the alias is valid for, inclusive (calendar year); null = unbounded (still in use).
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_mlb_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("mlb").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: cbs, fox, mlb, yahoo).'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_mlb_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: First season the source shows this id or name on the team, inclusive (calendar year); null, with valid_to, for
+    an undated curated map.
+  valid_to: Last season the source shows this id or name on the team, inclusive (calendar year); null, with valid_from, for
+    an undated curated map. A gap in the source splits the window into two rows.
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_mlb_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -38532,6 +38640,49 @@ load_nba_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (ENDING year: 2025 = the 2024-25 season); null = unbounded (still
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_nba_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_nba_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("nba").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: fox, nba_stats, yahoo).'
+  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+    so filter on source first.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_nba_team_group_seasons.'
+  valid_from: 'First season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season).'
+  valid_to: 'Last season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season). A gap or a change of
+    match method splits the window into two rows.'
+load_nba_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("nba").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: cbs, fox, nba_stats, yahoo).'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_nba_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_nba_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -43235,6 +43386,47 @@ load_nfl_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (STARTING year: 2025 = the 2025-26 season); null = unbounded (still
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_nfl_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data.
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("nfl").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: cbs, fox, yahoo).'
+  source_player_id: The source's own player id (e.g. Yahoo nfl.p.8040, Fox 76284). It means something only within its source,
+    so filter on source first.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_nfl_team_group_seasons.'
+  valid_from: 'First season the id is on that team, inclusive (STARTING year: 2025 = the 2025-26 season).'
+  valid_to: 'Last season the id is on that team, inclusive (STARTING year: 2025 = the 2025-26 season). A gap or a change of
+    match method splits the window into two rows.'
+load_nfl_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("nfl").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: cbs, fox, yahoo).'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_nfl_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the 2025-26 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the 2025-26 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_nfl_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -45142,6 +45334,27 @@ load_nhl_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (ENDING year: 2025 = the 2024-25 season); null = unbounded (still
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_nhl_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("nhl").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: cbs, fox, nhl, yahoo).'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_nhl_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_nhl_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -45802,6 +46015,49 @@ load_wbb_group_aliases:
   valid_to: 'Last season the alias is valid for, inclusive (ENDING year: 2025 = the 2024-25 season); null = unbounded (still
     in use).'
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_wbb_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_wbb_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("wbb").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: fox, ncaa).'
+  source_player_id: The source's own player id (e.g. Fox 76284). It means something only within its source,
+    so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_wbb_team_group_seasons.'
+  valid_from: 'First season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season).'
+  valid_to: 'Last season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season). A gap or a change of
+    match method splits the window into two rows.'
+load_wbb_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("wbb").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: fox, ncaa, on3, sports247, torvik, yahoo). "sports247" is 247Sports.'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_wbb_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: 'First season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_to, for an undated curated map.'
+  valid_to: 'Last season the source shows this id or name on the team, inclusive (ENDING year: 2025 = the 2024-25 season);
+    null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows.'
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_wbb_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
@@ -45975,6 +46231,49 @@ load_wnba_group_aliases:
   valid_from: First season the alias is valid for, inclusive (calendar year); null = unbounded.
   valid_to: Last season the alias is valid for, inclusive (calendar year); null = unbounded (still in use).
   value: The label exactly as the source writes it; match a source's conference or division label against it to reach group_id.
+load_wnba_player_aliases:
+  athlete_id: ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player
+    data; the ESPN player loaders (load_wnba_player_core and its siblings) carry it as Int32, so cast first with
+    pl.col("athlete_id").cast(pl.Int32).
+  athlete_id_source: Id space of athlete_id; always "espn" in this table.
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  league: League code of the table ("wnba").
+  match_confidence: The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0
+    / 0.95 / 0.9 / 0.85; null otherwise.
+  match_method: The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler,
+    CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
+    this provider id; override for a hand-verified override.
+  source: 'Provider whose player id this is (in this table: fox, wnba_stats, yahoo).'
+  source_player_id: The source's own player id (e.g. Yahoo wnba.p.5010, Fox 76284). It means something only within its source,
+    so filter on source first.
+  source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
+    Yahoo / CBS team for the NFL); null otherwise.
+  team_id: 'ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season
+    of load_wnba_team_group_seasons.'
+  valid_from: First season the id is on that team, inclusive (calendar year).
+  valid_to: Last season the id is on that team, inclusive (calendar year). A gap or a change of match method splits the window
+    into two rows.
+load_wnba_team_aliases:
+  evidence: The release asset or sportsdataverse/sdv-reference-data file the row came from.
+  id_kind: '"team" when source_id is the source''s id for this sport''s team, or "school" when it is one id for every sport
+    of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey).'
+  league: League code of the table ("wnba").
+  match_method: 'How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn
+    id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured
+    team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary).'
+  name_kind: 'Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name
+    and an abbreviation is two rows.'
+  source: 'Provider that uses this id or name (in this table: fox, wnba_stats, yahoo).'
+  source_id: The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only
+    within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first.
+  team_id: ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_wnba_team_group_seasons.
+    Join on it to reach ESPN team data.
+  team_id_source: Id space of team_id; always "espn" in this table.
+  valid_from: First season the source shows this id or name on the team, inclusive (calendar year); null, with valid_to, for
+    an undated curated map.
+  valid_to: Last season the source shows this id or name on the team, inclusive (calendar year); null, with valid_from, for
+    an undated curated map. A gap in the source splits the window into two rows.
+  value: The source's own spelling of the team name or abbreviation; null when the row carries only an id.
 load_wnba_group_seasons:
   abbreviation: Abbreviation of the group as of that season.
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a

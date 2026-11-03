@@ -116,9 +116,10 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
 
 #: ``game_page_frames`` columns / keys (``fnmatch`` patterns) whose value an alternate source does not
 #: reproduce against ESPN on the same game, by ``(league, source)``; stamped in provenance. Measured,
-#: never guessed: ``tests/basketball/test_sources_live.py`` recomputes the set on the fixture games and
-#: fails unless every pattern matches a measured gap and every gap is covered. Shot coordinates are not
-#: listed: liveData's are finer than ESPN's whole feet (checked within 1 ft, bar a shot the NBA re-located).
+#: never guessed: ``tests/basketball/test_sources_parity.py`` recomputes the set on the 27-game BB-D15 corpus
+#: and fails unless every pattern matches a measured gap and every gap is covered. Shot coordinates are not
+#: listed: liveData's are finer than ESPN's whole feet (median error 0.51 ft at worst, gated in
+#: :data:`~sportsdataverse.basketball.sources.parity.GATES`).
 _LIVE_LOSSY: tuple[str, ...] = (
     # no odds on liveData: the prior is home court, never ESPN's spread
     "game_spread",
@@ -132,9 +133,18 @@ _LIVE_LOSSY: tuple[str, ...] = (
     "wp_delta",
     # no neutral-site flag (the NBA Cup final in Las Vegas reads as a home game)
     "neutral_site",
-    # the NBA's own stat corrections (a rebound or block credited to another player) and id-map misses
+    # the NBA's own stat corrections (a rebound, block or steal credited to another player, a play
+    # re-timed by two seconds) and id-map misses
     "athlete_id_*",
     "team_id",
+    "steals",
+    "clock_display_value",
+    "clock_seconds",
+    "time",
+    "start_*_seconds_remaining",
+    # same-clock rows logged in another order: the running score between them (every period closes level)
+    "home_score",
+    "away_score",
     # ESPN rows liveData does not carry (replay reviews), and the NBA's split double fouls
     "game_play_number",
     "end_*_seconds_remaining",
@@ -148,6 +158,7 @@ _LIVE_LOSSY: tuple[str, ...] = (
     "athlete_short_name",
     "athlete_headshot_href",
     "athlete_position_*",
+    "athlete_jersey",
     "*_team_abbrev",
     "*team_abbreviation",
     "*_color",

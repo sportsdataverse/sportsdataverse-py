@@ -11,7 +11,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 9 | — |
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 36 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 136 | none (Terms gate + rate rotation) |
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
@@ -33,7 +33,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 34 |
+| [sportsdataverse-data releases](reference/loaders) | 36 |
 
 ## stats.ncaa.org {#stats-ncaa-org}
 
