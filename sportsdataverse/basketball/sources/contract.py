@@ -118,7 +118,7 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
 #: reproduce against ESPN on the same game, by ``(league, source)``; stamped in provenance. Measured,
 #: never guessed: ``tests/basketball/test_sources_live.py`` recomputes the set on the fixture games and
 #: fails unless every pattern matches a measured gap and every gap is covered. Shot coordinates are not
-#: listed: liveData's are finer than ESPN's whole feet (checked within 1 ft).
+#: listed: liveData's are finer than ESPN's whole feet (checked within 1 ft, bar a shot the NBA re-located).
 _LIVE_LOSSY: tuple[str, ...] = (
     # no odds on liveData: the prior is home court, never ESPN's spread
     "game_spread",
