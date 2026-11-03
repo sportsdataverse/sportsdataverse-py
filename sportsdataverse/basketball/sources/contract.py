@@ -114,9 +114,50 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
     ("coordinate.y", "gop_soft"),
 )
 
-#: Columns each alternate source loses against ESPN, by ``(league, source)``; stamped in provenance.
-#: Empty while ESPN is the only source; BB-D15's parity runs fill it per adapter.
-KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {}
+#: ``game_page_frames`` columns / keys (``fnmatch`` patterns) whose value an alternate source does not
+#: reproduce against ESPN on the same game, by ``(league, source)``; stamped in provenance. Measured,
+#: never guessed: ``tests/basketball/test_sources_live.py`` recomputes the set on the fixture games and
+#: fails unless every pattern matches a measured gap and every gap is covered. Shot coordinates are not
+#: listed: liveData's are finer than ESPN's whole feet (checked within 1 ft, bar a shot the NBA re-located).
+_LIVE_LOSSY: tuple[str, ...] = (
+    # no odds on liveData: the prior is home court, never ESPN's spread
+    "game_spread",
+    "game_spread_available",
+    "home_favorite",
+    "home_team_spread",
+    "prior",
+    "prior_source",
+    "pregame_home_prob",
+    "home_win_prob",
+    "wp_delta",
+    # no neutral-site flag (the NBA Cup final in Las Vegas reads as a home game)
+    "neutral_site",
+    # the NBA's own stat corrections (a rebound or block credited to another player) and id-map misses
+    "athlete_id_*",
+    "team_id",
+    # ESPN rows liveData does not carry (replay reviews), and the NBA's split double fouls
+    "game_play_number",
+    "end_*_seconds_remaining",
+    # wording and presentation
+    "text",
+    "short_description",
+    "type_id",
+    "type_text",
+    "wallclock",
+    "reason",
+    "athlete_short_name",
+    "athlete_headshot_href",
+    "athlete_position_*",
+    "*_team_abbrev",
+    "*team_abbreviation",
+    "*_color",
+    "*_logo",
+    "*_slug",
+    "*_uid",
+    "flagrant_fouls",
+    "lead_percentage",
+)
+KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {("nba", "live"): _LIVE_LOSSY, ("wnba", "live"): _LIVE_LOSSY}
 
 #: ``MM:SS`` with optional tenths, or ESPN's bare ``SS.t`` under a minute (the parser prefixes ``0:``).
 _CLOCK = re.compile(r"^\d{1,2}(:[0-5]\d)?(\.\d+)?$")
