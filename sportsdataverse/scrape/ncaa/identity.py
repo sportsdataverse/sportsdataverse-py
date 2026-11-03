@@ -138,6 +138,8 @@ TEAM_COLUMNS: Dict[str, Tuple[str, ...]] = {
     # adapter fills it from `shooting.team.name`); it is left untouched and the
     # real ids land in `ncaa_team_id` / `espn_team_id`.
     "shots": ("team_id",),
+    "linescore": ("team",),
+    "team_stats": ("away_team", "home_team"),
 }
 
 #: The ten on-court lineup slots. Same ALL-CAPS ``FIRST.LAST`` codes as
@@ -172,7 +174,7 @@ _SHOTS_PLAYER_KEYS = ("shooter_player_id", "shooter_clean_name")
 #: beside ``contest_id``. Built offline by :mod:`ncaa_espn_game_xwalk`.
 _ESPN_GAME_ID_KEY = "espn_game_id"
 
-#: The six per-game families, i.e. every family that gets ``espn_game_id``.
+#: The per-game families, i.e. every family that gets ``espn_game_id``.
 #: Kept in sync with ``ncaa_parse.PER_GAME_FAMILIES`` (duplicated for the same
 #: reason ``_key_name`` is: no shared package across these checkouts).
 _PER_GAME_FAMILIES: Tuple[str, ...] = (
@@ -182,6 +184,9 @@ _PER_GAME_FAMILIES: Tuple[str, ...] = (
     "team_box",
     "shots",
     "possessions",
+    "linescore",
+    "team_stats",
+    "officials",
 )
 
 

@@ -12,7 +12,13 @@ from typing import Any, Dict
 import polars as pl
 import pytest
 
-from sportsdataverse.cfb.cfb_simulations import cfb_compute_results, cfb_simulations
+from sportsdataverse.cfb.cfb_simulations import (
+    _bracket_slots,
+    _n_byes,
+    _simulate_bracket,
+    cfb_compute_results,
+    cfb_simulations,
+)
 
 FIXTURE_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_toy"
 
@@ -151,3 +157,133 @@ class TestComputeResults:
         assert b3 != 1500.0  # B3 played week 1 -> shifted
         i1 = t.filter(pl.col("team") == "I1")["elo"][0]
         assert i1 == 1500.0  # I1 idle in week 1 -> untouched default
+
+
+def _away_always_wins(
+    teams_df: pl.DataFrame, games_df: pl.DataFrame, week_num: int, **kwargs: Any
+) -> Dict[str, pl.DataFrame]:
+    """Every unplayed game of the week goes to the away (worse-seeded) team."""
+    games_df = games_df.with_columns(
+        pl.when((pl.col("week") == week_num) & pl.col("result").is_null())
+        .then(-3.0)
+        .otherwise(pl.col("result"))
+        .alias("result")
+    )
+    return {"teams": teams_df, "games": games_df}
+
+
+class TestFixedBracket:
+    """12-team CFP bracket is fixed: no reseeding after the first round."""
+
+    @staticmethod
+    def _run(n: int = 12) -> pl.DataFrame:
+        import numpy as np
+
+        field = pl.DataFrame(
+            {"sim": [1] * n, "team": [f"S{s:02d}" for s in range(1, n + 1)], "seed": list(range(1, n + 1))}
+        )
+        teams = field.select("sim", "team", pl.lit("X").alias("conference"))
+        games = pl.DataFrame(
+            schema={
+                "sim": pl.Int64,
+                "week": pl.Int64,
+                "game_type": pl.Utf8,
+                "home_team": pl.Utf8,
+                "away_team": pl.Utf8,
+                "result": pl.Float64,
+                "neutral": pl.Int64,
+            }
+        )
+        champ, _, games = _simulate_bracket(field, teams, games, _away_always_wins, 20, np.random.default_rng(0))
+        assert champ.height == 1
+        return games.with_columns(
+            pl.col("home_team").str.slice(1).cast(pl.Int64).alias("hi"),
+            pl.col("away_team").str.slice(1).cast(pl.Int64).alias("lo"),
+        )
+
+    @pytest.mark.parametrize(("n", "byes"), [(12, 4), (8, 0), (6, 2), (4, 0), (1, 0)])
+    def test_bye_count_follows_field_size(self, n: int, byes: int) -> None:
+        assert _n_byes(n) == byes
+
+    @pytest.mark.parametrize(("playoff_seeds", "byes"), [(4, 0), (6, 2), (8, 0), (12, 7)])
+    def test_first_round_bye_counts_the_actual_field(self, playoff_seeds: int, byes: int) -> None:
+        # the toy has 9 teams: a 12-seed request seeds 9 -> a 16-slot bracket, 7 byes
+        games, teams = _toy_unplayed()
+        out = cfb_simulations(games, teams, simulations=5, seed=2, playoff_seeds=playoff_seeds)
+        assert out["overall"]["first_round_bye"].sum() == pytest.approx(byes)
+        assert "_bye_cut" not in out["standings"].columns
+
+    def test_bracket_slots_match_cfp_order(self) -> None:
+        slots = _bracket_slots(12)
+        order = [seed for seed, _ in sorted(slots.items(), key=lambda kv: kv[1])]
+        assert order == [1, 8, 9, 4, 5, 12, 2, 7, 10, 3, 6, 11]
+
+    def test_pairings_every_round(self) -> None:
+        # the away team always wins, so the lower seed survives each game: a
+        # reseeding bracket would pair QF 1 v 12 and 4 v 9 instead
+        games = self._run()
+        pairs = {w[0]: sorted(zip(d["hi"], d["lo"])) for w, d in games.group_by("week")}
+        assert pairs[20] == [(5, 12), (6, 11), (7, 10), (8, 9)]
+        assert pairs[21] == [(1, 9), (2, 10), (3, 11), (4, 12)]
+        assert pairs[22] == [(9, 12), (10, 11)]  # 1/4 side v 2/3 side
+        assert pairs[23] == [(11, 12)]
+
+    def test_first_round_on_campus_then_neutral(self) -> None:
+        games = self._run()
+        neutral = dict(games.group_by("week").agg(pl.col("neutral").unique()).sort("week").iter_rows())
+        assert neutral == {20: [0], 21: [1], 22: [1], 23: [1]}
+
+    def test_power_of_two_field_has_no_byes(self) -> None:
+        games = self._run(4)
+        pairs = {w[0]: sorted(zip(d["hi"], d["lo"])) for w, d in games.group_by("week")}
+        assert pairs[20] == [(1, 4), (2, 3)]
+        assert pairs[21] == [(3, 4)]
+
+
+class TestTiebreakerDataPassThrough:
+    """`tiebreaker_data` reaches every standings call; `season`-keyed input picks the rules."""
+
+    @staticmethod
+    def _acc_epoch(season: int) -> tuple[pl.DataFrame, pl.DataFrame, Dict[str, pl.DataFrame]]:
+        # A 2-0 and B 2-0 never met: the 2024 ACC cascade reaches pooled
+        # opponents' win pct (A), the 2026 one goes h2h -> analytics (B)
+        rows = [(1, "A", "C"), (2, "A", "D"), (1, "B", "C"), (2, "B", "E"), (3, "C", "D"), (4, "C", "E"), (3, "D", "E")]
+        games = pl.DataFrame(
+            {
+                "season": [season] * len(rows),
+                "week": [r[0] for r in rows],
+                "game_type": ["REG"] * len(rows),
+                "home_team": [r[1] for r in rows],
+                "away_team": [r[2] for r in rows],
+                "result": [7.0] * len(rows),
+            }
+        )
+        teams = pl.DataFrame({"team": list("ABCDE"), "conference": ["ACC"] * 5})
+        ratings = pl.DataFrame({"team": ["A", "B", "C"], "rating": [1.0, 2.0, 0.5]})
+        return games, teams, {"analytics_ratings": ratings}
+
+    @staticmethod
+    def _leaders(out: Dict[str, Any]) -> set:
+        return set(out["standings"].filter(pl.col("conf_rank") == 1)["team"].to_list())
+
+    def test_analytics_rung_decides_every_sim(self) -> None:
+        games, teams, data = self._acc_epoch(2026)
+        with_data = cfb_simulations(games, teams, simulations=40, seed=5, sim_include="REG", tiebreaker_data=data)
+        without = cfb_simulations(games, teams, simulations=40, seed=5, sim_include="REG")
+        assert self._leaders(with_data) == {"B"}
+        # without the ratings the analytics rung is skipped -> a draw (the 2026
+        # pool rule also admits 2-2 C into the leaders' tier)
+        assert len(self._leaders(without)) > 1
+
+    def test_season_keyed_input_selects_registry_epoch(self) -> None:
+        games, teams, data = self._acc_epoch(2025)
+        out = cfb_simulations(games, teams, simulations=10, seed=5, sim_include="REG", tiebreaker_data=data)
+        assert self._leaders(out) == {"A"}
+
+    def test_conf_champ_game_uses_tiebreaker_data(self) -> None:
+        # the generated CCG pairs the analytics-ordered top two in every sim
+        games, teams, data = self._acc_epoch(2026)
+        out = cfb_simulations(games, teams, simulations=20, seed=5, sim_include="CONF", tiebreaker_data=data)
+        ccg = out["games"].filter(pl.col("game_type") == "CONF_CHAMP")
+        assert ccg.height == 20
+        assert set(zip(ccg["home_team"], ccg["away_team"])) == {("B", "A")}

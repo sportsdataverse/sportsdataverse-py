@@ -1,10 +1,58 @@
 ---
-title: "College football — additional Python functions — Analytics: cfb_season–play_type"
-sidebar_label: "Analytics: cfb_season–play_type"
+title: "College football — additional Python functions — Analytics: cfb_returning–play_type"
+sidebar_label: "Analytics: cfb_returning–play_type"
 sidebar_position: 13
-description: "College football — additional Python functions — Analytics: cfb_season–play_type — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: cfb_returning–play_type — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Analytics: cfb_season–play_type
+# College football — additional Python functions — Analytics: cfb_returning–play_type
+
+### cfb_returning_production {#cfb_returning_production}
+
+`cfb_returning_production(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Returning production per team-season (offense / defense / overall).
+
+For each requested season S, computes the fraction of season S-1 unit
+production attributable to players on the season-S roster (Bill Connelly's
+returning-production concept; unit weights from `get_constants`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Target season or list of seasons (production is drawn from S-1). |
+| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors), `def_basis`, `overall_basis` (Utf8, below), `is_estimated` (Boolean). `team_id` is the ESPN team id as Utf8 -- BREAKING vs the previous release, which emitted a normalized team NAME under `team` and joined at 57.7%. Zero-row (typed) when the box data is unavailable. `is_estimated` is True for **2004 only**, where season-2003 production is parsed from CFBD play text because ESPN's player box starts in 2004. Back-tested on 2005, where both sources exist, that route tracks the box route at r=0.73 (MAE 0.11) but reads about 0.085 LOW. It ranks teams well; it is not on the same level as its neighbours, so filter on this flag before comparing 2004 against another season. 2004 also carries a null `def_returning` -- 2003 play text has no defensive ids. `def_basis` names the defensive measure: `"participants"` when the production season is 2014+ (tackles, assists, tackles for loss, shared sacks, passes defended -- 92-100% of teams), `"pbp_splash"` for 2004-2013 (sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), `"box"` when that source's release is missing, null with `def_returning`. `overall_basis` is `"offense+defense"`, or `"offense"` for a team with no defensive value, whose overall then equals `off_returning`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season the returning fractions describe (production drawn from the prior season). |
+| `team_id` | String | ESPN team id as a string (integer-origin). |
+| `off_returning` | Float64 | Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster. |
+| `def_returning` | Float64 | Fraction of prior-season weighted defensive production returning on the current roster; the measure is named in def_basis. |
+| `overall_returning` | Float64 | Unit fractions combined with the fitted returning_prod_weights (FBS offense 0.49 / defense 0.51, the 2018-2025 fit in fit_returning_weights.py). |
+| `n_returning` | Int64 | Count of prior-season contributors present on the current roster. |
+| `def_basis` | String | Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), box (the source release was missing), or null with def_returning. |
+| `overall_basis` | String | Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall then equals off_returning. |
+| `is_estimated` | Boolean | True for 2004 only, where season-2003 production is parsed from play text; it reads about 0.085 low against the box route. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the season-S CFBD roster cannot be resolved to team ids above the crosswalk match floor (the ESPN roster carries `team_id` and needs no resolution; the two are unioned, see `_roster_keys`). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_returning_production
+rp = cfb_returning_production(2023)
+rp.sort("overall_returning", descending=True).head(10)
+```
 
 ### cfb_season_odds {#cfb_season_odds}
 

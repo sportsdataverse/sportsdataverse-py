@@ -1,10 +1,10 @@
 ---
-title: "College football — additional Python functions — Analytics: add_play–cfb_returning"
-sidebar_label: "Analytics: add_play–cfb_returning"
+title: "College football — additional Python functions — Analytics: add_play–cfb_resume"
+sidebar_label: "Analytics: add_play–cfb_resume"
 sidebar_position: 12
-description: "College football — additional Python functions — Analytics: add_play–cfb_returning — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: add_play–cfb_resume — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Analytics: add_play–cfb_returning
+# College football — additional Python functions — Analytics: add_play–cfb_resume
 
 ### add_play_type_canonical {#add_play_type_canonical}
 
@@ -626,7 +626,7 @@ df.sort("pace_rank").head()
 
 ### cfb_games_from_schedule {#cfb_games_from_schedule}
 
-`cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
+`cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | Any'`
 
 Map a `load_cfb_schedule()` frame into the seedr engine `games` schema.
 
@@ -681,28 +681,54 @@ print(st.head())
 
 ### cfb_playoff_seeds {#cfb_playoff_seeds}
 
-`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
+`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'FrameLike | None' = None, playoff_seeds: 'int' = 12, *, season: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | Any'`
 
-Assign College Football Playoff seeds (current straight-seeding rule).
+Assign College Football Playoff seeds (12-team straight seeding, by season).
 
-Implements the 2025 CFP rule: the field is the `playoff_seeds` (12)
-best-ranked teams with the 5 highest-ranked conference champions
-guaranteed inclusion; seeds are assigned straight by ranking order (no
-champion bump to the top four). The rule evolves — it lives in this ONE
-function so it can be updated in one place.
+Two selection rules, picked by `season`; both seed the field straight by
+ranking order (no champion bump to the top four):
+
+* **2026+** (`season=None` or `>= 2026`, the current rule): the ACC,
+  Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
+  the highest-ranked champion of the American, Conference USA, MAC,
+  Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
+  ESPN id `"87"`) when it ranks inside the top `playoff_seeds`; the
+  rest of the field is at-large.
+* **2024-2025** (`season < 2026`): the 5 highest-ranked conference
+  champions are guaranteed inclusion, the rest is at-large.
+
+An automatic qualifier ranked outside the top `playoff_seeds` displaces
+the lowest-ranked at-large team and takes the lowest seed. Conference
+names match both cfbd and short spellings (e.g. `"American Athletic"` /
+`"American"`).
 
 When `rankings` is None the ordering falls back to the standings
 tiebreaker metrics — `win_pct` desc, then `sov`, `sos`, `pd`
 desc, then team name (documented deterministic fallback; a committee
-ranking is the intended input).
+ranking is the intended input). Notre Dame's "ranked inside the field"
+test reads its position in that same ordering.
+
+Differs from cfbseedR 0.2.0 (`autobid`) in three places: cfbseedR gives
+the Group-of-6 bid to the best-ranked G6 team whether or not it won its
+conference; it tests Notre Dame's committee `rank` only (no bid without
+`rankings`); and it matches `"Notre Dame"` but not `"87"`. Its
+`cfb_standings()` / `cfb_simulations()` also always apply the current
+rules, where `cfb_standings` and
+`sportsdataverse.cfb.cfb_simulations` here follow a
+`season`-keyed input.
+
+Called on its own, this function cannot see a season: pass `season=`
+for standings of a pre-2026 season (`cfb_standings(...,
+playoff_seeds=...)` reads it from `season`-keyed games instead).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
-| `rankings` | `Optional[FrameLike]` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
-| `playoff_seeds` | `int` | `12` | Field size (default 12). The champion guarantee is `min(5, number of champions, playoff_seeds)`. |
+| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conference`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
+| `rankings` | `FrameLike \| None` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
+| `playoff_seeds` | `int` | `12` | Field size (default 12). Automatic qualifiers are capped at this size. |
+| `season` | `int \| None` | `None` | Season whose selection rule applies (default `None` = the current, 2026 rule). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -726,19 +752,30 @@ The standings frame with a `seed` column (Int64; null for teams outside the fiel
 | `conf_ties` | Int64 | Ties in conference regular-season games. |
 | `conf_pct` | Float64 | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
 | `conf_pd` | Float64 | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
-| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins. |
-| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference opponents' conference win pct across all conference games played; 0.0 for independents. |
+| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference victories only; 0.0 for independents or teams without conference wins. |
+| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for independents. |
 | `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
 | `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
-| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. The five best-ordered conference champions are guaranteed inclusion. |
+| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `rankings` has duplicate team rows. |
 
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
 st = cfb_standings(games, teams)
 seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
+
+# The 2024-2025 rule (5 highest-ranked champions)
+
+seeded = cfb_playoff_seeds(st, rankings=ranks_df, season=2025)
 ```
 
 ### cfb_resume {#cfb_resume}
@@ -789,52 +826,4 @@ One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense ran
 from sportsdataverse.cfb.cfb_resume import cfb_resume
 resume = cfb_resume(2023)
 resume.sort("sos_rank").head()
-```
-
-### cfb_returning_production {#cfb_returning_production}
-
-`cfb_returning_production(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Returning production per team-season (offense / defense / overall).
-
-For each requested season S, computes the fraction of season S-1 unit
-production attributable to players on the season-S roster (Bill Connelly's
-returning-production concept; unit weights from `get_constants`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | Target season or list of seasons (production is drawn from S-1). |
-| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
-| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
-
-**Returns**
-
-Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors), `def_basis`, `overall_basis` (Utf8, below), `is_estimated` (Boolean). `team_id` is the ESPN team id as Utf8 -- BREAKING vs the previous release, which emitted a normalized team NAME under `team` and joined at 57.7%. Zero-row (typed) when the box data is unavailable. `is_estimated` is True for **2004 only**, where season-2003 production is parsed from CFBD play text because ESPN's player box starts in 2004. Back-tested on 2005, where both sources exist, that route tracks the box route at r=0.73 (MAE 0.11) but reads about 0.085 LOW. It ranks teams well; it is not on the same level as its neighbours, so filter on this flag before comparing 2004 against another season. 2004 also carries a null `def_returning` -- 2003 play text has no defensive ids. `def_basis` names the defensive measure: `"participants"` when the production season is 2014+ (tackles, assists, tackles for loss, shared sacks, passes defended -- 92-100% of teams), `"pbp_splash"` for 2004-2013 (sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), `"box"` when that source's release is missing, null with `def_returning`. `overall_basis` is `"offense+defense"`, or `"offense"` for a team with no defensive value, whose overall then equals `off_returning`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season the returning fractions describe (production drawn from the prior season). |
-| `team_id` | String | ESPN team id as a string (integer-origin). |
-| `off_returning` | Float64 | Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster. |
-| `def_returning` | Float64 | Fraction of prior-season weighted defensive production returning on the current roster; the measure is named in def_basis. |
-| `overall_returning` | Float64 | Unit fractions combined with the fitted returning_prod_weights (FBS offense 0.49 / defense 0.51, the 2018-2025 fit in fit_returning_weights.py). |
-| `n_returning` | Int64 | Count of prior-season contributors present on the current roster. |
-| `def_basis` | String | Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), box (the source release was missing), or null with def_returning. |
-| `overall_basis` | String | Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall then equals off_returning. |
-| `is_estimated` | Boolean | True for 2004 only, where season-2003 production is parsed from play text; it reads about 0.085 low against the box route. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the season-S CFBD roster cannot be resolved to team ids above the crosswalk match floor (the ESPN roster carries `team_id` and needs no resolution; the two are unioned, see `_roster_keys`). |
-
-**Example**
-
-```python
-from sportsdataverse.cfb import cfb_returning_production
-rp = cfb_returning_production(2023)
-rp.sort("overall_returning", descending=True).head(10)
 ```
