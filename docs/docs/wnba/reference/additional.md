@@ -120,6 +120,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_referee_assignments](additional/analytics.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |
 | [wnba_shot_value](additional/analytics.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
 | [wnba_team_clutch](additional/analytics.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
+| [wnba_team_season_rates](additional/analytics.md#wnba_team_season_rates) | WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates. |
 | [wnba_tracking_drive_value](additional/analytics.md#wnba_tracking_drive_value) | WNBA drive value + rim-pressure (`league_id="10"` by-reference shim). |
 | [wnba_tracking_pass_value](additional/analytics.md#wnba_tracking_pass_value) | WNBA expected-assists / passer value (`league_id="10"` by-reference shim). |
 | [wnba_tracking_reb_oe](additional/analytics.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |

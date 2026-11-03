@@ -38260,6 +38260,432 @@ wnba_team_ratings:
   raw_pace_rank: Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least
     half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer
     than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
+mbb_team_season_rates:
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
+  def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  def_rtg_rank: Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null
+    in the clutch split.
+  efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split, 0 when the rate is null.'
+  efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  efg_pct_rank: Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split, 0 when the rate is null.'
+  ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  ft_rate_rank: Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  games: Games with at least one possession in the split.
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
+  net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
+  off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  off_rtg_rank: Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA
+    team box; null in the clutch split.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
+    from the NCAA team box; null in the clutch split.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split, 0 when the rate is null.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
+    null in the clutch split.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the split, 0 when the rate is null.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
+    as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
+  orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the split, 0 when the rate is null.'
+  orb_pct_pct: 'Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  orb_pct_rank: Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: games in the split.'
+  pace_pct: 'Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pace_rank: Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average),
+    among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate,
+    or fewer than five qualifiers.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
+    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+    in the 2nd half or an overtime, the score within 5 as it starts).'
+  team_id: ESPN team id. Non-D1 opponents have none and get no row.
+  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split.
+  tov_pct_n: 'Sample size of tov_pct: the NCAA team box''s possessions (o_poss) in the split, 0 when the rate is null.'
+  tov_pct_pct: 'Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+nba_possession_rate_rows:
+  defense_team_id: stats.nba.com id of the team on defense.
+  dreb: Defense defensive rebounds on the possession (the other half of the offensive-rebound chances).
+  end_clock: Seconds left in the period when the possession ends.
+  ff_poss: 'Turnover-rate denominator: 1 per possession.'
+  fg3m: Offense three-pointers made on the possession.
+  fga: Offense field-goal attempts on the possession.
+  fgm: Offense field goals made on the possession.
+  fta: Offense free-throw attempts on the possession.
+  game_id: stats.nba.com game id.
+  late: 'True in the 4th quarter or an overtime: the periods the clutch window can fall in.'
+  neutral_site: 'Always False: the schedule names a home team for every NBA and WNBA game.'
+  offense_is_home: True when the offense is the (nominal) home team; it signs the running score for the clutch margin.
+  offense_team_id: stats.nba.com id of the team with the ball.
+  oreb: Offense offensive rebounds on the possession.
+  period: Period of the possession; overtimes follow the last regulation period.
+  points: Points the offense scored on the possession, from its made shots and free throws (2 * fg2m + 3 * fg3m + ftm).
+  possession_number: Order of the possession in the game.
+  season: Season, named by the year it ends.
+  start_clock: Seconds left in the period when the possession starts (when the previous possession ended).
+  tov: Offense turnovers on the possession.
+nba_team_season_rates:
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
+  def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  def_rtg_rank: Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split.'
+  efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  efg_pct_rank: Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split.'
+  ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  ft_rate_rank: Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  games: Games with at least one possession in the split.
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
+  net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
+  off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  off_rtg_rank: Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: the team''s defensive possessions in the split.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
+    as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the split.'
+  orb_pct_pct: 'Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  orb_pct_rank: Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  pace: 'Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: games in the split.'
+  pace_pct: 'Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pace_rank: Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average),
+    among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate,
+    or fewer than five qualifiers.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
+    throws.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
+    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+    in the 4th quarter or an overtime, the score within 5 as it starts).'
+  team_id: stats.nba.com team id (the 10-digit franchise id).
+  tov_pct: Turnovers per offensive possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: the team''s offensive possessions in the split.'
+  tov_pct_pct: 'Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+ncaa_possession_rate_rows:
+  defense_team_id: ESPN id of the team on defense; null for a non-D1 team.
+  dreb: 'Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  end_clock: Seconds left in the period when the possession ends.
+  ff_poss: 'Always null: the turnover rate''s denominator comes from the team box.'
+  fg3m: 'Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  fga: 'Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  fgm: 'Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  fta: 'Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  game_id: The stats.ncaa.org contest id.
+  late: 'True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the
+    clutch window can fall in.'
+  neutral_site: True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the
+    home nor the away split.
+  offense_is_home: True when the offense is the (nominal) home team; it signs the running score for the clutch margin.
+  offense_team_id: ESPN id of the team with the ball; null for a non-D1 team.
+  oreb: 'Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  period: Period of the possession; overtimes follow the last regulation period.
+  points: Points the offense scored on the possession.
+  possession_number: Order of the possession in the game.
+  season: Season, named by the year it ends.
+  start_clock: 'Seconds left in the period when the possession starts: its length plus the lengths of the later possessions
+    in the period.'
+  tov: 'Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+ncaa_team_box_count_rows:
+  defense_team_id: ESPN id of its opponent; null for a non-D1 team.
+  dreb: The opponent's defensive rebounds in the game (the other half of the offensive-rebound chances).
+  ff_poss: The team box's offensive possessions in the game, the turnover-rate denominator.
+  fg3m: Three-pointers made in the game.
+  fga: Field-goal attempts in the game.
+  fgm: Field goals made in the game.
+  fta: Free-throw attempts in the game.
+  game_id: The stats.ncaa.org contest id.
+  offense_is_home: True when the team is the game's (nominal) home team in the NCAA team box; a neutral-site game is in neither
+    split.
+  offense_team_id: ESPN id of the team whose offense the row counts; null for a non-D1 team.
+  oreb: Offensive rebounds in the game.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  tov: Turnovers in the game.
+wbb_team_season_rates:
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
+  def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  def_rtg_rank: Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null
+    in the clutch split.
+  efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split, 0 when the rate is null.'
+  efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  efg_pct_rank: Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split, 0 when the rate is null.'
+  ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  ft_rate_rank: Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  games: Games with at least one possession in the split.
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
+  net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
+  off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  off_rtg_rank: Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA
+    team box; null in the clutch split.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
+    from the NCAA team box; null in the clutch split.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split, 0 when the rate is null.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
+    null in the clutch split.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the split, 0 when the rate is null.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
+    as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
+  orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the split, 0 when the rate is null.'
+  orb_pct_pct: 'Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  orb_pct_rank: Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: games in the split.'
+  pace_pct: 'Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pace_rank: Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average),
+    among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate,
+    or fewer than five qualifiers.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
+    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+    in the 4th quarter (the 2nd half before 2016) or an overtime, the score within 5 as it starts).'
+  team_id: ESPN team id. Non-D1 opponents have none and get no row.
+  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split.
+  tov_pct_n: 'Sample size of tov_pct: the NCAA team box''s possessions (o_poss) in the split, 0 when the rate is null.'
+  tov_pct_pct: 'Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+wnba_team_season_rates:
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
+  def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  def_rtg_rank: Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split.'
+  efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  efg_pct_rank: Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split.'
+  ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  ft_rate_rank: Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  games: Games with at least one possession in the split.
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
+  net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
+  off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  off_rtg_rank: Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: the team''s defensive possessions in the split.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
+    that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer
+    than five qualifiers.
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
+    as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the split.'
+  orb_pct_pct: 'Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  orb_pct_rank: Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: games in the split.'
+  pace_pct: 'Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pace_rank: Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average),
+    among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate,
+    or fewer than five qualifiers.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
+    throws.
+  season: WNBA season (its calendar year).
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
+    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+    in the 4th quarter or an overtime, the score within 5 as it starts).'
+  team_id: stats.nba.com team id (the 10-digit franchise id).
+  tov_pct: Turnovers per offensive possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: the team''s offensive possessions in the split.'
+  tov_pct_pct: 'Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,

@@ -582,6 +582,7 @@ from sportsdataverse.wbb import wbb_season_sim as wbb_season_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
+from sportsdataverse.wbb import wbb_team_season_rates as wbb_team_season_rates  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 from sportsdataverse.wbb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
@@ -1145,6 +1146,7 @@ __all__ = [
     "wbb_strength_of_schedule",
     "wbb_team_crosswalk",
     "wbb_team_ratings",
+    "wbb_team_season_rates",
     "weighted_avg",
     "win_prob_from_margin",
 ]

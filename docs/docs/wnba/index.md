@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 89 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 90 | — |
 
 ## ESPN {#espn}
 
@@ -87,6 +87,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_referee_assignments`](reference/additional/analytics#wnba_referee_assignments)
 - [`wnba_shot_value`](reference/additional/analytics#wnba_shot_value)
 - [`wnba_team_clutch`](reference/additional/analytics#wnba_team_clutch)
+- [`wnba_team_season_rates`](reference/additional/analytics#wnba_team_season_rates)
 - [`wnba_tracking_drive_value`](reference/additional/analytics#wnba_tracking_drive_value)
 - [`wnba_tracking_pass_value`](reference/additional/analytics#wnba_tracking_pass_value)
 - [`wnba_tracking_reb_oe`](reference/additional/analytics#wnba_tracking_reb_oe)
