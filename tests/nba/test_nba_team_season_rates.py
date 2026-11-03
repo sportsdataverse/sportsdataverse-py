@@ -240,8 +240,13 @@ def test_empty_input_keeps_the_schema() -> None:
     assert out.height == 0 and dict(out.schema) == TEAM_SEASON_RATES_SCHEMA
     rows = mod.nba_possession_rate_rows(pl.DataFrame(), pl.DataFrame())
     assert dict(rows.schema) == RATE_ROWS_SCHEMA
+    # a counts frame missing columns raises even when there are no possessions to rate
+    with pytest.raises(KeyError, match="counts missing"):
+        team_season_rates(pl.DataFrame(schema=RATE_ROWS_SCHEMA), minutes_per_game=40, counts=pl.DataFrame())
 
 
 def test_bad_league_id_raises() -> None:
     with pytest.raises(ValueError, match="league_id"):
         mod.nba_team_season_rates(2026, league_id="20")
+    with pytest.raises(ValueError, match="season_type"):
+        mod.nba_team_season_rates(2026, season_type="regular_season")

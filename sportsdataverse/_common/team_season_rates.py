@@ -191,9 +191,6 @@ def _side_sum(col: str, side: str) -> pl.Expr:
 
 def _with_box_sides(rows: pl.DataFrame, counts: pl.DataFrame) -> pl.DataFrame:
     """The possession sides with null four-factor counts, plus the box ``counts`` as zero-possession sides."""
-    missing = sorted(set(COUNT_ROWS_SCHEMA) - set(counts.columns))
-    if missing:
-        raise KeyError(f"counts missing columns: {missing}")
     games = rows.group_by("game_id").agg(pl.col("close").first(), pl.col("neutral_site").first())
     box = counts.select(list(COUNT_ROWS_SCHEMA)).cast(COUNT_ROWS_SCHEMA)
     assert box.schema["game_id"] == games.schema["game_id"], "game_id dtype differs between counts and rows"
@@ -239,9 +236,10 @@ def team_season_rates(
             rates = nba_team_season_rates(2026)
             rates.filter(split="clutch").sort("net_rtg", descending=True).head()
     """
-    missing = sorted(set(RATE_ROWS_SCHEMA) - set(rows.columns))
-    if missing:
-        raise KeyError(f"rows missing columns: {missing}")
+    for name, frame, schema in (("rows", rows, RATE_ROWS_SCHEMA), ("counts", counts, COUNT_ROWS_SCHEMA)):
+        missing = [] if frame is None else sorted(set(schema) - set(frame.columns))
+        if missing:  # checked before the empty-input return, so a bad counts frame always raises
+            raise KeyError(f"{name} missing columns: {missing}")
     if rows.height == 0:
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     rows = _with_clutch(rows.select(list(RATE_ROWS_SCHEMA)).cast(RATE_ROWS_SCHEMA))

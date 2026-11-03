@@ -34,6 +34,18 @@ __all__ = ["nba_possession_rate_rows", "nba_team_season_rates"]
 
 #: league_id -> (quarter seconds, regulation minutes).
 _LEAGUES = {"00": (720.0, 48), "10": (600.0, 40)}
+#: The schedule ``season_type`` values a season table is built for.
+_SEASON_TYPES = ("regular-season", "preseason", "playoffs", "play-in")
+
+
+def _check_args(league_id: str, season_type: str) -> None:
+    """Raise ValueError for an unknown ``league_id`` or ``season_type`` (a typo would match no games)."""
+    if league_id not in _LEAGUES:
+        raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+    if season_type not in _SEASON_TYPES:
+        raise ValueError(f"season_type must be one of {list(_SEASON_TYPES)}, got {season_type!r}")
+
+
 _OT_SECONDS = 300.0
 
 
@@ -57,14 +69,15 @@ def nba_possession_rate_rows(
         league_id: ``"00"`` NBA (12-minute quarters) or ``"10"`` WNBA (10-minute quarters).
         season_type: The schedule ``season_type`` to keep: ``"regular-season"`` (the default,
             stats.nba.com's "Regular Season"; NBA Cup group and knockout games count, the Cup final
-            does not), ``"playoffs"`` or ``"play-in"``.
+            does not), ``"preseason"``, ``"playoffs"`` or ``"play-in"``.
 
     Returns:
         One row per possession in
         :data:`~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
+            of the four above.
 
     Example:
         Quick start::
@@ -73,8 +86,7 @@ def nba_possession_rate_rows(
             from sportsdataverse.nba.nba_team_season_rates import nba_possession_rate_rows
             rows = nba_possession_rate_rows(load_nba_stats_possessions(2025), load_nba_stats_schedules(2025))
     """
-    if league_id not in _LEAGUES:
-        raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+    _check_args(league_id, season_type)
     quarter, _ = _LEAGUES[league_id]
     if possessions.height == 0 or schedule.height == 0:
         return pl.DataFrame(schema=RATE_ROWS_SCHEMA)
@@ -170,7 +182,7 @@ def nba_team_season_rates(
         seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
             The WNBA season is its calendar year.
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
-        season_type: ``"regular-season"`` (default), ``"playoffs"`` or ``"play-in"``, matched to
+        season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or ``"play-in"``, matched to
             the schedule's ``season_type``.
         return_as_pandas: Return a pandas frame instead of polars.
 
@@ -189,7 +201,8 @@ def nba_team_season_rates(
         teams. Empty input returns that schema with zero rows.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
+            of the four above.
 
     Example:
         Quick start::
@@ -202,8 +215,7 @@ def nba_team_season_rates(
 
             wnba = nba_team_season_rates(2025, league_id="10")
     """
-    if league_id not in _LEAGUES:
-        raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+    _check_args(league_id, season_type)
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     loader_seasons = [s - offset for s in seasons_list]
