@@ -808,7 +808,7 @@ score_win_prob(one, league="mbb", neutral_site=True)
 
 ### season_game_excitement {#season_game_excitement}
 
-`season_game_excitement(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, schedule: 'Optional[pl.DataFrame]' = None) -> 'pl.DataFrame'`
+`season_game_excitement(pbp: 'pl.DataFrame', *, league_id: 'str | None' = None, league: 'str | None' = None, schedule: 'pl.DataFrame | None' = None) -> 'pl.DataFrame'`
 
 Every game's excitement index, lead changes and biggest swing, ranked within its season.
 
@@ -821,9 +821,9 @@ release) keeps its GEI so far but is not ranked.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | Plays of one league in the basketball pbp schema (a season's `load_<league>_pbp` release, or any set of games), the columns `score_win_prob` needs plus `game_id` and `season`. |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `schedule` | `Optional[DataFrame]` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral). |
+| `league_id` | `str \| None` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `schedule` | `DataFrame \| None` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral). |
 
 **Returns**
 

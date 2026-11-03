@@ -796,7 +796,7 @@ print(curve.delta(24))  # ~1.0
 
 ### game_excitement {#game_excitement}
 
-`game_excitement(scored: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, completed: 'Optional[bool]' = None) -> 'dict[str, Any]'`
+`game_excitement(scored: 'pl.DataFrame', *, league_id: 'str | None' = None, league: 'str | None' = None, regulation_periods: 'int | None' = None, completed: 'bool | None' = None) -> 'dict[str, Any]'`
 
 How exciting one game was, with no direction: the game excitement index, lead changes and the biggest swing.
 
@@ -813,10 +813,10 @@ average length.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `scored` | `DataFrame` |  | One game from `score_win_prob`, in play order (needs `home_win_prob`, `pregame_home_prob`, `home_score`, `away_score`; `type_text` and `period_number` to tell a completed game). |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default from the frame's `season` via `game_regulation_periods`. |
-| `completed` | `Optional[bool]` | `None` | Whether the game is final. `None` reads it from the plays: final when a row ends the game ("End Game" / "End Period" from the last regulation period on, score not tied), the rule `score_win_prob` settles WP on. Without `type_text` it is live. |
+| `league_id` | `str \| None` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `int \| None` | `None` | The game's regulation periods; default from the frame's `season` via `game_regulation_periods`. |
+| `completed` | `bool \| None` | `None` | Whether the game is final. `None` reads it from the plays: final when a row ends the game ("End Game" / "End Period" from the last regulation period on, score not tied), the rule `score_win_prob` settles WP on. Without `type_text` it is live. |
 
 **Returns**
 
@@ -989,7 +989,7 @@ tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime
 
 ### game_regulation_periods {#game_regulation_periods}
 
-`game_regulation_periods(league: 'str', *, season: 'Optional[int]' = None, format_regulation_periods: 'Optional[float]' = None) -> 'int'`
+`game_regulation_periods(league: 'str', *, season: 'int | None' = None, format_regulation_periods: 'float | None' = None) -> 'int'`
 
 Regulation periods of one game: 2 (halves) or 4 (quarters).
 
@@ -1004,8 +1004,8 @@ always halves, the WNBA halves before 2006 and women's college basketball halves
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
-| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
-| `format_regulation_periods` | `Optional[float]` | `None` | The game's own regulation period count, if known. |
+| `season` | `int \| None` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
+| `format_regulation_periods` | `float \| None` | `None` | The game's own regulation period count, if known. |
 
 **Returns**
 
