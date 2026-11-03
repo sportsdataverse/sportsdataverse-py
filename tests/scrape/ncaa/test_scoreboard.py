@@ -93,3 +93,23 @@ def test_division_label_is_passed_through(_mbb_table):
     paths: "list[str]" = []
     SB.ncaa_scoreboard_contests("mbb", "2026-11-02", division="D-II", fetch_html=lambda p: paths.append(p) or "")
     assert paths[0].startswith("season_divisions/18984/")
+
+
+def test_discover_dates_merges_into_schedule_master_keeping_captured_rows(_mbb_table, tmp_path):
+    from sportsdataverse.scrape.ncaa.discover import discover_dates
+
+    master = tmp_path / "mbb" / "schedule_master.parquet"
+    master.parent.mkdir(parents=True)
+    pl.DataFrame(
+        {"contest_id": ["6624354", "6646892"], "season": ["2027", "2027"], "captured": [True, False]}
+    ).write_parquet(master)
+
+    def _fetch(path: str) -> str:
+        return _page("mbb_d1_2026-11-02.html") if "11%2F02%2F2026" in path else ""
+
+    found = discover_dates(["2026-11-02"], league="mbb", root=tmp_path, lookback_days=1, fetch_html=_fetch)
+    assert found.height == 184 and found["season"].unique().to_list() == ["2027"]
+    merged = pl.read_parquet(master)
+    assert merged.height == 185  # 184 from the board + the not-yet-played 6646892 kept
+    assert merged.filter(pl.col("contest_id") == "6624354")["captured"].to_list() == [True]  # never reset
+    assert merged.filter(pl.col("captured") == False).height == 184  # noqa: E712
