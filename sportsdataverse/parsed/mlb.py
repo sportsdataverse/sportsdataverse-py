@@ -328,6 +328,7 @@ from sportsdataverse.mlb import load_mlb_runners as load_mlb_runners  # noqa: F4
 from sportsdataverse.mlb import load_mlb_schedule as load_mlb_schedule  # noqa: F401
 from sportsdataverse.mlb import load_mlb_statcast as load_mlb_statcast  # noqa: F401
 from sportsdataverse.mlb import load_mlb_stuff_plus as load_mlb_stuff_plus  # noqa: F401
+from sportsdataverse.mlb import load_mlb_team_aliases as load_mlb_team_aliases  # noqa: F401
 from sportsdataverse.mlb import load_mlb_team_group_seasons as load_mlb_team_group_seasons  # noqa: F401
 from sportsdataverse.mlb import load_mlb_we_table as load_mlb_we_table  # noqa: F401
 from sportsdataverse.mlb import load_mlb_wpa as load_mlb_wpa  # noqa: F401
@@ -600,6 +601,7 @@ __all__ = [
     "load_mlb_schedule",
     "load_mlb_statcast",
     "load_mlb_stuff_plus",
+    "load_mlb_team_aliases",
     "load_mlb_team_group_seasons",
     "load_mlb_we_table",
     "load_mlb_wpa",

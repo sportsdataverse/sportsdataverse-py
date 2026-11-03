@@ -42,6 +42,8 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nfl_group_seasons` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
 | `load_nfl_group_aliases` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
 | `load_nfl_team_group_seasons` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
+| `load_nfl_team_aliases` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
+| `load_nfl_player_aliases` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
 
 ## Coach
 
@@ -63,6 +65,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 |---|---|
 | [load_nfl_team_tendencies](loaders/team.md#load_nfl_team_tendencies) | Release: espn_nfl_team_tendencies · asset … |
 | [load_nfl_team_group_seasons](loaders/team-2.md#load_nfl_team_group_seasons) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_team_group_seasons_{season}.parquet` |
+| [load_nfl_team_aliases](loaders/team-2.md#load_nfl_team_aliases) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_team_aliases.parquet` |
 
 ## Usage
 
@@ -96,3 +99,4 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nfl_groups](loaders/other.md#load_nfl_groups) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_groups.parquet` |
 | [load_nfl_group_seasons](loaders/other.md#load_nfl_group_seasons) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_seasons.parquet` |
 | [load_nfl_group_aliases](loaders/other.md#load_nfl_group_aliases) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_aliases.parquet` |
+| [load_nfl_player_aliases](loaders/other.md#load_nfl_player_aliases) | Release: nfl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_player_aliases.parquet` |

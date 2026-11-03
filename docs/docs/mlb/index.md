@@ -10,7 +10,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 35 | none |
 | [MLB Stats API](#mlb-stats-api) | `statsapi.mlb.com` | 79 | none |
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 23 | none |
@@ -31,7 +31,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 34 |
+| [sportsdataverse-data releases](reference/loaders) | 35 |
 
 ## MLB Stats API {#mlb-stats-api}
 

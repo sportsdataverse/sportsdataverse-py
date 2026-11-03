@@ -56,6 +56,8 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_group_seasons` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
 | `load_nba_group_aliases` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
 | `load_nba_team_group_seasons` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
+| `load_nba_team_aliases` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
+| `load_nba_player_aliases` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
 
 ## Player
 
@@ -66,6 +68,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_player_crosswalk](loaders/player.md#load_nba_player_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet` |
 | [load_nba_player_core](loaders/player.md#load_nba_player_core) | Release: espn_nba_player_core · asset … |
 | [load_nba_player_impact](loaders/player.md#load_nba_player_impact) | Release: nba_player_impact · asset … |
+| [load_nba_player_aliases](loaders/player.md#load_nba_player_aliases) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_player_aliases.parquet` |
 
 ## Stats
 
@@ -102,6 +105,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_team_season_stats](loaders/team.md#load_nba_team_season_stats) | Release: espn_nba_team_season_stats · asset … |
 | [load_nba_team_crosswalk](loaders/team.md#load_nba_team_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet` |
 | [load_nba_team_group_seasons](loaders/team.md#load_nba_team_group_seasons) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_team_group_seasons_{season}.parquet` |
+| [load_nba_team_aliases](loaders/team.md#load_nba_team_aliases) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_team_aliases.parquet` |
 
 ## Other
 

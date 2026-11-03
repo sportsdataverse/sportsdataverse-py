@@ -281,12 +281,14 @@ from sportsdataverse.nfl import load_nfl_officials as load_nfl_officials  # noqa
 from sportsdataverse.nfl import load_nfl_pbp as load_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import load_nfl_pbp_participation as load_nfl_pbp_participation  # noqa: F401
 from sportsdataverse.nfl import load_nfl_pfr_advstats as load_nfl_pfr_advstats  # noqa: F401
+from sportsdataverse.nfl import load_nfl_player_aliases as load_nfl_player_aliases  # noqa: F401
 from sportsdataverse.nfl import load_nfl_player_stats as load_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_players as load_nfl_players  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ratings_weekly as load_nfl_ratings_weekly  # noqa: F401
 from sportsdataverse.nfl import load_nfl_rosters as load_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import load_nfl_schedule as load_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import load_nfl_snap_counts as load_nfl_snap_counts  # noqa: F401
+from sportsdataverse.nfl import load_nfl_team_aliases as load_nfl_team_aliases  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_group_seasons as load_nfl_team_group_seasons  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_stats as load_nfl_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_tendencies as load_nfl_team_tendencies  # noqa: F401
@@ -611,12 +613,14 @@ __all__ = [
     "load_nfl_pbp",
     "load_nfl_pbp_participation",
     "load_nfl_pfr_advstats",
+    "load_nfl_player_aliases",
     "load_nfl_player_stats",
     "load_nfl_players",
     "load_nfl_ratings_weekly",
     "load_nfl_rosters",
     "load_nfl_schedule",
     "load_nfl_snap_counts",
+    "load_nfl_team_aliases",
     "load_nfl_team_group_seasons",
     "load_nfl_team_stats",
     "load_nfl_team_tendencies",

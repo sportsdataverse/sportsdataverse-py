@@ -46,6 +46,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_ncaa_baseball_group_seasons` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
 | `load_ncaa_baseball_group_aliases` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
 | `load_ncaa_baseball_team_group_seasons` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
+| `load_mlb_team_aliases` | [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) | — |
 | `load_mlb_park_dimensions` | [mlb_parks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks) | — |
 
 ## NCAA (stats.ncaa.org)
@@ -90,4 +91,5 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_mlb_group_seasons](loaders/other.md#load_mlb_group_seasons) | Release: mlb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_seasons.parquet` |
 | [load_mlb_group_aliases](loaders/other.md#load_mlb_group_aliases) | Release: mlb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_aliases.parquet` |
 | [load_mlb_team_group_seasons](loaders/other.md#load_mlb_team_group_seasons) | Release: mlb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_team_group_seasons_{season}.parquet` |
+| [load_mlb_team_aliases](loaders/other.md#load_mlb_team_aliases) | Release: mlb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_team_aliases.parquet` |
 | [load_mlb_park_dimensions](loaders/other.md#load_mlb_park_dimensions) | Release: mlb_parks · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_parks/mlb_park_dimensions.parquet` |

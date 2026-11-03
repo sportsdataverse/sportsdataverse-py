@@ -10,7 +10,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 36 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 114 | none (Terms gate + rate rotation) |
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
@@ -32,7 +32,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 34 |
+| [sportsdataverse-data releases](reference/loaders) | 36 |
 
 ## stats.ncaa.org {#stats-ncaa-org}
 
