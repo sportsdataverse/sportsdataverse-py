@@ -57,7 +57,7 @@ _REGULATION_MINUTES: dict[str, int] = {"nba": 48, "wnba": 40, "mbb": 40, "wbb": 
 _QUARTERS_FROM: dict[str, int] = {"wnba": 2006, "wbb": 2016}
 
 
-def _resolve_league(league: Optional[str], league_id: Optional[str]) -> str:
+def _resolve_league(league: str | None, league_id: str | None) -> str:
     """The game-page league from ``league`` and/or the legacy ``league_id``; both absent means NBA."""
     if league_id is not None and league_id not in _LEAGUE_IDS:
         raise ValueError(
@@ -74,8 +74,8 @@ def _resolve_league(league: Optional[str], league_id: Optional[str]) -> str:
 def game_regulation_periods(
     league: str,
     *,
-    season: Optional[int] = None,
-    format_regulation_periods: Optional[float] = None,
+    season: int | None = None,
+    format_regulation_periods: float | None = None,
 ) -> int:
     """Regulation periods of one game: 2 (halves) or 4 (quarters).
 
@@ -464,7 +464,7 @@ GEI_SCALE: dict[str, float] = {
 }
 
 
-def _gei_steps(wp: pl.Series, prior: float, final: Optional[float]) -> pl.Series:
+def _gei_steps(wp: pl.Series, prior: float, final: float | None) -> pl.Series:
     """Each play's absolute home WP change, the first from the prior; the last play goes to ``final`` when given."""
     if final is not None and wp.len():
         wp = wp.clone().scatter(wp.len() - 1, final)
@@ -474,10 +474,10 @@ def _gei_steps(wp: pl.Series, prior: float, final: Optional[float]) -> pl.Series
 def game_excitement(
     scored: pl.DataFrame,
     *,
-    league_id: Optional[str] = None,
-    league: Optional[str] = None,
-    regulation_periods: Optional[int] = None,
-    completed: Optional[bool] = None,
+    league_id: str | None = None,
+    league: str | None = None,
+    regulation_periods: int | None = None,
+    completed: bool | None = None,
 ) -> dict[str, Any]:
     """How exciting one game was, with no direction: the game excitement index, lead changes and the biggest swing.
 
@@ -581,9 +581,9 @@ _EXCITEMENT_SCHEMA: dict[str, pl.DataType] = {
 def season_game_excitement(
     pbp: pl.DataFrame,
     *,
-    league_id: Optional[str] = None,
-    league: Optional[str] = None,
-    schedule: Optional[pl.DataFrame] = None,
+    league_id: str | None = None,
+    league: str | None = None,
+    schedule: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Every game's excitement index, lead changes and biggest swing, ranked within its season.
 
@@ -637,7 +637,7 @@ def season_game_excitement(
     neutral: dict[int, bool] = {}
     if schedule is not None and schedule.height:
         sched = schedule.select(pl.col("game_id").cast(pl.Int64), pl.col("neutral_site").cast(pl.Boolean))
-        neutral = dict(zip(sched["game_id"].to_list(), sched["neutral_site"].to_list()))
+        neutral = dict(zip(sched["game_id"].to_list(), sched["neutral_site"].to_list(), strict=True))
     if "game_play_number" in pbp.columns:  # score_win_prob reads each game in play order
         pbp = pbp.sort("game_id", "game_play_number", maintain_order=True)
     rows = []
