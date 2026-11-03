@@ -443,13 +443,14 @@ def nba_team_ratings(
         raw_pace, games, rank, adj_net_z``, then ``<m>_rank``, ``<m>_pct``
         and ``<m>_n`` for each of the seven ratings (BB-D2, the football
         F5/F6 grammar of :mod:`sportsdataverse._common.league_context`).
-        ``_rank`` is 1 for the best team in the season (the lowest
-        ``*_def_rtg``), ``_pct`` is the Weibull percentile. Both are null
-        for a team under half the season's most games, and for every team
-        when fewer than five qualifying teams have the rating. On a full
-        season the half-games rule drops the All-Star teams; with
-        ``as_of_date`` the most games is taken before the cut, so an early
-        cut can also null regular teams. ``_n`` counts the sample:
+        ``_rank`` is 1 for the best team in the season: the highest
+        offensive and net ratings, the lowest ``*_def_rtg``, the fastest
+        pace. ``_pct`` is the Weibull percentile. Both are null for a team
+        under half the season's most games, and for every team when fewer
+        than five qualifying teams have the rating or they all share one
+        value. On a full season the half-games rule drops the All-Star
+        teams; with ``as_of_date`` the most games is taken before the cut,
+        so an early cut can also null regular teams. ``_n`` counts the sample:
         possessions (rounded) for the ratings, games for the paces. Empty
         input returns that schema with zero rows.
 
