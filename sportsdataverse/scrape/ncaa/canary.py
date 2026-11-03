@@ -300,6 +300,8 @@ class _PatchrightTransport:
                 except OSError:
                     pass
                 shutil.rmtree(self._temp_dir.name, ignore_errors=True)
+                # Handled here: without this the finalizer retries at GC and raises a ResourceWarning.
+                self._temp_dir._finalizer.detach()  # type: ignore[attr-defined]
             self._temp_dir = None
 
     def __enter__(self) -> "_PatchrightTransport":
