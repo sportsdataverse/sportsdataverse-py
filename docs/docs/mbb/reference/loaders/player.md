@@ -199,3 +199,32 @@ Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdat
 ```python
 load_mbb_player_core(seasons=2025)
 ```
+
+## load_mbb_player_aliases
+
+Release: [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_groups/mbb_player_aliases.parquet`
+
+:::caution[Coverage]
+One season-less file: every player id another source (fox, kenpom, ncaa) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. stats.ncaa.org roster ids (source ncaa) are new every season. Seasons are the ENDING year (2025 = the 2024-25 season).
+:::
+
+### Returns {#load_mbb_player_aliases-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("mbb"). |
+| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data; the ESPN player loaders (load_mbb_player_core and its siblings) carry it as Int32, so cast first with pl.col("athlete_id").cast(pl.Int32). |
+| `athlete_id_source` | String | Id space of athlete_id; always "espn" in this table. |
+| `source` | String | Provider whose player id this is (in this table: fox, kenpom, ncaa). |
+| `source_player_id` | String | The source's own player id (e.g. Fox 76284). It means something only within its source, so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season. |
+| `team_id` | String | ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season of load_mbb_team_group_seasons. |
+| `source_team_id` | String | The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox / Yahoo / CBS team for the NFL); null otherwise. |
+| `valid_from` | Int32 | First season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season). |
+| `valid_to` | Int32 | Last season the id is on that team, inclusive (ENDING year: 2025 = the 2024-25 season). A gap or a change of match method splits the window into two rows. |
+| `match_method` | String | The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler, CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to this provider id; override for a hand-verified override. |
+| `match_confidence` | Float64 | The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0 / 0.95 / 0.9 / 0.85; null otherwise. |
+| `evidence` | String | The release asset or sportsdataverse/sdv-reference-data file the row came from. |
+
+```python
+load_mbb_player_aliases()
+```

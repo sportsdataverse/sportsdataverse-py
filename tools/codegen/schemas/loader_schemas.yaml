@@ -5863,6 +5863,31 @@ load_cfb_play_participants:
   type: String
 - name: pat_passer_position_id
   type: String
+load_cfb_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
+  type: String
 load_cfb_player_box:
 - name: stat_1
   type: String
@@ -6755,6 +6780,31 @@ load_cfb_schedule_crosswalk:
 - name: yahoo_date
   type: String
 - name: matched_sources
+  type: String
+load_cfb_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
   type: String
 load_cfb_team_box:
 - name: firstDowns
@@ -12275,6 +12325,31 @@ load_mbb_pbp:
   type: Float64
 - name: home_win_prob
   type: Float64
+load_mbb_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
+  type: String
 load_mbb_player_boxscore:
 - name: game_id
   type: Int32
@@ -12936,6 +13011,31 @@ load_mbb_standings:
   type: String
 - name: value
   type: Float64
+load_mbb_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_mbb_team_boxscore:
 - name: game_id
   type: Int32
@@ -13741,6 +13841,31 @@ load_mlb_stuff_plus:
   type: Float64
 - name: season
   type: Int64
+load_mlb_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_mlb_team_group_seasons:
 - name: league
   type: String
@@ -14117,6 +14242,31 @@ load_nba_pbp:
 - name: type_abbreviation
   type: String
 - name: score_source
+  type: String
+load_nba_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
   type: String
 load_nba_player_boxscore:
 - name: game_id
@@ -17048,6 +17198,31 @@ load_nba_stats_team_season_stats:
   type: Int64
 - name: pct_uast_fgm_rank
   type: Int64
+load_nba_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_nba_team_boxscore:
 - name: game_id
   type: Int32
@@ -24521,6 +24696,31 @@ load_nfl_pbp_participation:
   type: String
 - name: defense_numbers
   type: String
+load_nfl_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
+  type: String
 load_nfl_ratings_weekly:
 - name: season
   type: Int64
@@ -24652,6 +24852,31 @@ load_nfl_snap_counts:
   type: Float64
 - name: st_pct
   type: Float64
+load_nfl_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_nfl_team_group_seasons:
 - name: league
   type: String
@@ -27955,6 +28180,31 @@ load_nhl_skater_boxscores:
   type: Int64
 - name: game_date
   type: String
+load_nhl_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_nhl_team_boxscore:
 - name: home_away
   type: String
@@ -29594,6 +29844,31 @@ load_wbb_pbp:
   type: Float64
 - name: home_win_prob
   type: Float64
+load_wbb_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
+  type: String
 load_wbb_player_boxscore:
 - name: game_id
   type: Int32
@@ -30269,6 +30544,31 @@ load_wbb_standings:
   type: String
 - name: value
   type: Float64
+load_wbb_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_wbb_team_boxscore:
 - name: game_id
   type: Int32
@@ -30803,6 +31103,31 @@ load_wnba_pbp:
 - name: type_abbreviation
   type: String
 - name: score_source
+  type: String
+load_wnba_player_aliases:
+- name: league
+  type: String
+- name: athlete_id
+  type: String
+- name: athlete_id_source
+  type: String
+- name: source
+  type: String
+- name: source_player_id
+  type: String
+- name: team_id
+  type: String
+- name: source_team_id
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: match_confidence
+  type: Float64
+- name: evidence
   type: String
 load_wnba_player_boxscore:
 - name: game_id
@@ -32035,6 +32360,31 @@ load_wnba_stats_team_boxscores:
   type: String
 - name: season
   type: Int32
+load_wnba_team_aliases:
+- name: league
+  type: String
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: id_kind
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+- name: match_method
+  type: String
+- name: evidence
+  type: String
 load_wnba_team_boxscore:
 - name: game_id
   type: Int32

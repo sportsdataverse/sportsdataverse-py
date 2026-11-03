@@ -346,6 +346,7 @@ from sportsdataverse.nhl import load_nhl_shootout as load_nhl_shootout  # noqa: 
 from sportsdataverse.nhl import load_nhl_shots_by_period as load_nhl_shots_by_period  # noqa: F401
 from sportsdataverse.nhl import load_nhl_skater_box as load_nhl_skater_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_skater_boxscores as load_nhl_skater_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_team_aliases as load_nhl_team_aliases  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_box as load_nhl_team_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
@@ -623,6 +624,7 @@ __all__ = [
     "load_nhl_shots_by_period",
     "load_nhl_skater_box",
     "load_nhl_skater_boxscores",
+    "load_nhl_team_aliases",
     "load_nhl_team_box",
     "load_nhl_team_boxscore",
     "load_nhl_team_boxscores",
