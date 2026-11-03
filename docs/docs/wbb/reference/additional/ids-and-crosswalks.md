@@ -569,6 +569,7 @@ No returns table is published for this function: no capture: barttorvik.com answ
 | Exception | Description |
 |---|---|
 | `CrosswalkSourceError` | The per-date ESPN scoreboard failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+| `ValueError` | `bart_games` is missing a column, its `game_date` is not `Date`, or it holds another season (a stale snapshot). |
 
 **Example**
 

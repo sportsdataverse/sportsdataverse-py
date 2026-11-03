@@ -37,6 +37,7 @@ from sportsdataverse._common_crosswalk_basketball import (
 from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
+    check_bart_games,
     espn_scoreboard_games,
     drop_unconfirmed_fox_sections,
     espn_team_directory,
@@ -736,6 +737,8 @@ def mbb_schedule_crosswalk(
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.
+        ValueError: ``bart_games`` is missing a column, its ``game_date`` is not
+            ``Date``, or it holds another season (a stale snapshot).
 
     Example:
         Quick start::
@@ -757,8 +760,9 @@ def mbb_schedule_crosswalk(
 
     season = int(season) if season is not None else most_recent_mbb_season()
     team_xwalk = mbb_team_crosswalk(season=season, fox=pl.DataFrame(), bart=bart, strict=strict, yahoo=yahoo, **kwargs)
-    if bart_games is None:
-        bart_games = bart_super_sked("mbb", season, **kwargs)
+    bart_games = (
+        bart_super_sked("mbb", season, **kwargs) if bart_games is None else check_bart_games(bart_games, season)
+    )
     dates = sorted({d for d in bart_games["game_date"].to_list() if d is not None})
     espn_games = espn_scoreboard_games("mbb", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, bart_games, team_xwalk, season)
