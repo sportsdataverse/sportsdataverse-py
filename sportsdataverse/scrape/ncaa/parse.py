@@ -2,14 +2,16 @@
 
 Reads a raw bundle written by :mod:`ncaa_bundle` (``play_by_play`` /
 ``box_score`` / ``individual_stats`` pages) and runs it through the sdv-py
-bigballR/cbb-explorer parser stack, producing ONE combined record with six
+bigballR/cbb-explorer parser stack, producing ONE combined record with nine
 datasets: ``pbp``, ``lineups``, ``player_box``, ``team_box``, ``shots``,
-``possessions``.
+``possessions``, plus the tab families ``linescore`` (from the box_score page's
+header, so every bundle has it), ``team_stats`` and ``officials`` (from the tabs of
+those names, captured since 2026-11; older bundles yield no rows for them).
 
-**Robustness contract:** each of the six families is computed in its own
+**Robustness contract:** each family is computed in its own
 ``try/except`` -- a parser bug in one family (e.g. a legacy box-score layout
 tripping ``get_box_lineup``) logs a warning and yields ``[]`` for that family
-only; it never aborts the other five.
+only; it never aborts the others.
 
 There are TWO distinct skip paths and both now log. An *exception* is caught
 per family in :func:`parse_bundle`. A returned ``list[ParseError]`` is not an
@@ -57,6 +59,11 @@ import polars as pl
 
 from .capture import _parse_shard  # B-L46: one body, the capture CLI's
 from .identity import enrich_parsed
+from sportsdataverse.mbb.mbb_ncaa_box_tabs import (
+    parse_ncaa_bb_linescore,
+    parse_ncaa_bb_officials,
+    parse_ncaa_bb_team_stats,
+)
 from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
 from sportsdataverse.mbb.mbb_ncaa_data_quality import ParseError
 from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
@@ -131,7 +138,7 @@ def wbb_period_model(season: Optional[str]) -> "tuple[int, int, int]":
     return WBB_QUARTERS_MODEL
 
 
-#: The six per-game families, i.e. every key of the parsed record that is a list
+#: The per-game families, i.e. every key of the parsed record that is a list
 #: of game rows. ``teams`` is deliberately absent: it is per-game reference data
 #: added by :mod:`ncaa_identity`, not a play/stat family.
 PER_GAME_FAMILIES: "tuple[str, ...]" = (
@@ -141,6 +148,9 @@ PER_GAME_FAMILIES: "tuple[str, ...]" = (
     "team_box",
     "shots",
     "possessions",
+    "linescore",
+    "team_stats",
+    "officials",
 )
 
 
@@ -351,7 +361,7 @@ def parse_bundle(
     league: str,
     root: "Optional[Union[str, Path]]" = None,
 ) -> "dict[str, Any]":
-    """Parse one raw captured bundle into the six combined datasets.
+    """Parse one raw captured bundle into the combined per-game datasets.
 
     Args:
         bundle: A raw bundle as returned by :func:`ncaa_bundle.read_bundle`
@@ -367,14 +377,14 @@ def parse_bundle(
     Returns:
         ``{"contest_id": str, "pbp": [...], "lineups": [...], "player_box":
         [...], "team_box": [...], "shots": [...], "possessions": [...],
-        "teams": [...]}`` -- every dataset a ``list[dict]``. Any family whose
+        "linescore": [...], "team_stats": [...], "officials": [...], "teams": [...]}`` -- every dataset a ``list[dict]``. Any family whose
         parse failed is an empty list (never raises), and the record then also
         carries ``"parse_errors": [{"family": ..., "error": ...}, ...]`` naming
         each failed family (or ``identity``); the key is absent on a clean parse. ``teams`` is the
         two-row readable team identity added by :mod:`ncaa_identity`, which
         also stamps ids + properly-cased names onto the other families.
 
-        EVERY row of the six per-game families carries ``contest_id`` (Utf8,
+        EVERY row of the per-game families carries ``contest_id`` (Utf8,
         equal to the top-level key) -- that is the join key across families,
         and it replaces the parser stack's own ``game_id``.
     """
@@ -383,6 +393,8 @@ def parse_bundle(
     pbp_html = pages.get("play_by_play") or ""
     box_html = pages.get("box_score") or ""
     stats_html = pages.get("individual_stats") or ""
+    team_stats_html = pages.get("team_stats") or ""
+    officials_html = pages.get("officials") or ""
     season = bundle.get("season")
 
     result: "dict[str, Any]" = {
@@ -393,6 +405,9 @@ def parse_bundle(
         "team_box": [],
         "shots": [],
         "possessions": [],
+        "linescore": [],
+        "team_stats": [],
+        "officials": [],
     }
 
     parse_errors: list[dict[str, str]] = []
@@ -440,18 +455,38 @@ def parse_bundle(
     except Exception as exc:  # noqa: BLE001
         _family_failed(parse_errors, "possessions", contest_id, exc)
 
+    # The tab families read their own page and need no pbp. The linescore sits in the header of every
+    # tab, so it comes from box_score and covers every bundle ever captured; team_stats and officials
+    # exist only in bundles captured since those tabs were added (an absent page is no rows, not an error).
+    try:
+        result["linescore"] = parse_ncaa_bb_linescore(box_html, contest_id).to_dicts()
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "linescore", contest_id, exc)
+
+    try:
+        if team_stats_html:
+            result["team_stats"] = parse_ncaa_bb_team_stats(team_stats_html, contest_id).to_dicts()
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "team_stats", contest_id, exc)
+
+    try:
+        if officials_html:
+            result["officials"] = parse_ncaa_bb_officials(officials_html, contest_id).to_dicts()
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "officials", contest_id, exc)
+
     # ONE per-game identifier column, on every family, named the same thing the
     # top-level key is. The parser stack emits `game_id` on five of the six
     # (`lineups` has none, and `shots` hardcodes it to None -- so reading the
     # families' own value would leave shots unjoinable). Stamping the bundle's
-    # contest_id instead makes all six agree by construction. Pure dict work, so
+    # contest_id instead makes every family agree by construction. Pure dict work, so
     # deliberately NOT inside a try: it cannot fail and must not be skipped.
     for family in PER_GAME_FAMILIES:
         for row in result[family]:
             row.pop("game_id", None)
             row["contest_id"] = contest_id
 
-    # Identity join LAST, over whatever the six families produced -- a pure
+    # Identity join LAST, over whatever the families produced -- a pure
     # additive pass, so a family that failed above simply has no rows to stamp.
     # Its own failure must not lose the parse either.
     try:
