@@ -122,7 +122,7 @@ def main(argv: "list[str] | None" = None) -> int:
         logger.info("%s: %d rows", code, len(rows))
 
     frames = [pl.DataFrame(json.loads(p.read_text()), schema=_CSV_SCHEMA) for p in sorted(args.cache.glob("*.json"))]
-    table = pl.concat(frames).sort("sport_code", "academic_year", "division", descending=[False, True, False])
+    table = pl.concat(frames).sort("sport_code", "academic_year", "season_division_id", descending=[False, True, False])
     args.out.parent.mkdir(parents=True, exist_ok=True)
     table.write_csv(args.out)
     logger.info("wrote %s: %d rows, %d sports", args.out, table.height, table["sport_code"].n_unique())

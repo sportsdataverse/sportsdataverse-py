@@ -89,35 +89,55 @@ def test_wbb_date_games_offline_fetcher_injection() -> None:
 
 
 def test_wbb_season_table_divergence() -> None:
-    """W table lacks 2009-10 (wbigballR all_functions.R:1106-1147).
+    """The swept table reproduces wbigballR's hand-kept ids, and differs from the men's season by season.
 
-    2025-26 was ALSO absent upstream -- wbigballR is a stale fork and never
-    added it -- until it was discovered live (2026-08-01) and backfilled here;
-    see NCAA_WBB_SEASON_DIVISIONS. 2009-10 remains genuinely absent.
+    wbigballR (a stale fork) lacked 2009-10 and 2025-26; the table read off stats.ncaa.org has
+    every season the site lists, so neither gap remains.
     """
-    assert "2009-10" not in NCAA_WBB_SEASON_DIVISIONS
-    assert NCAA_WBB_SEASON_DIVISIONS["2025-26"] == 18704
-    assert len(NCAA_WBB_SEASON_DIVISIONS) == 16
-    assert NCAA_WBB_SEASON_DIVISIONS["2024-25"] == 18423
-    assert NCAA_WBB_SEASON_DIVISIONS["2010-11"] == 10200
+    oracle = {
+        "2010-11": 10200,
+        "2011-12": 10520,
+        "2012-13": 10882,
+        "2013-14": 11660,
+        "2014-15": 12321,
+        "2015-16": 12701,
+        "2016-17": 13120,
+        "2017-18": 14100,
+        "2018-19": 16720,
+        "2019-20": 17001,
+        "2020-21": 17440,
+        "2021-22": 17763,
+        "2022-23": 17941,
+        "2023-24": 18220,
+        "2024-25": 18423,
+        "2025-26": 18704,
+    }  # fmt: skip  -- wbigballR's hand-kept table (all_functions.R:1106-1147) + the 2026-08-01 backfill
+    assert {k: NCAA_WBB_SEASON_DIVISIONS.get(k) for k in oracle} == oracle
+    assert NCAA_WBB_SEASON_DIVISIONS["2026-27"] == 19003
     # The per-league ids really differ season-by-season (the league knob).
     shared = set(NCAA_WBB_SEASON_DIVISIONS) & set(NCAA_MBB_SEASON_DIVISIONS)
     assert all(NCAA_WBB_SEASON_DIVISIONS[s] != NCAA_MBB_SEASON_DIVISIONS[s] for s in shared)
 
 
 def test_wbb_unknown_season_raises_value_error() -> None:
-    """A season absent from the WBB table must raise, not fetch.
+    """A season stats.ncaa.org never listed raises after one lookup, never a scoreboard fetch.
 
-    Uses 2009-10, which MBB has and WBB genuinely lacks. (This asserted on
-    2025-26 until that season was backfilled; with fetcher=None a
-    non-raising path would escape into a live network call, so the example
-    season must be one that is really absent.)
+    1990 predates the site's WBB scoreboards (the swept table starts at 2009-10). The stub serves
+    the site's answer to an unknown year, its current season, which must not be taken as 1990.
     """
+    paths: "list[str]" = []
+
+    class _Stub:
+        def fetch_html(self, path: str) -> str:
+            paths.append(path)
+            return FIXTURE.read_text(encoding="utf-8")
+
     with pytest.raises(ValueError, match="Season Not Available"):
         _ncaa_bb_date_games(
-            "12/05/2009",
+            "12/05/1990",
             conference="All",
             conference_id=None,
-            fetcher=None,
+            fetcher=_Stub(),
             league="wbb",
         )
+    assert len(paths) == 1 and "academic_year=1991" in paths[0]  # the lookup only

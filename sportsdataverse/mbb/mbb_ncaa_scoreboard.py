@@ -74,11 +74,13 @@ from __future__ import annotations
 import re
 from datetime import date as date_cls
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Callable, Literal, Optional, Union, overload
 
 import polars as pl
 
 from sportsdataverse.mbb.mbb_ncaa_html import jsoup_text, parse_html
+from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse.scrape.ncaa.seasons import _d1_ids_by_label, ncaa_season_division_id
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -94,55 +96,14 @@ __all__ = [
     "ncaa_mbb_date_games",
 ]
 
-#: MBB ``season_divisions`` ids by season label (bigballR all_functions.R:1132-1183).
-#: Boundary semantics: a date belongs to season ``YYYY-(YY+1)`` iff it is
-#: strictly after May 1 of YYYY and on/before May 1 of YYYY+1. bigballR's
-#: commented-out 2001-02..2008-09 rows are excluded (no box scores upstream).
-NCAA_MBB_SEASON_DIVISIONS: "dict[str, int]" = {
-    "2009-10": 10060,
-    "2010-11": 10220,
-    "2011-12": 10480,
-    "2012-13": 10883,
-    "2013-14": 11700,
-    "2014-15": 12320,
-    "2015-16": 12700,
-    "2016-17": 13100,
-    "2017-18": 13533,
-    "2018-19": 16700,
-    "2019-20": 17060,
-    "2020-21": 17420,
-    "2021-22": 17783,
-    "2022-23": 17940,
-    "2023-24": 18221,
-    "2024-25": 18403,
-    "2025-26": 18703,
-}
+#: MBB D-I ``season_divisions`` ids by season label (``"2026-27"``), read from the table every
+#: stats.ncaa.org sport shares (:mod:`sportsdataverse.scrape.ncaa.seasons`). Kept for callers of the
+#: bigballR-era dict; new code should call :func:`~sportsdataverse.scrape.ncaa.seasons
+#: .ncaa_season_division_id`, which also resolves a season opened after the package was built.
+NCAA_MBB_SEASON_DIVISIONS: "dict[str, int]" = _d1_ids_by_label("MBB")
 
-#: WBB ``season_divisions`` ids by season label (wbigballR all_functions.R:1106-1147).
-#: NOTE: the women's table has NO 2009-10 entry (wbigballR is an older fork;
-#: extend forward as new ids are confirmed). 2025-26 was likewise missing
-#: upstream and was discovered + backfilled here on 2026-08-01.
-NCAA_WBB_SEASON_DIVISIONS: "dict[str, int]" = {
-    "2010-11": 10200,
-    "2011-12": 10520,
-    "2012-13": 10882,
-    "2013-14": 11660,
-    "2014-15": 12321,
-    "2015-16": 12701,
-    "2016-17": 13120,
-    "2017-18": 14100,
-    "2018-19": 16720,
-    "2019-20": 17001,
-    "2020-21": 17440,
-    "2021-22": 17763,
-    "2022-23": 17941,
-    "2023-24": 18220,
-    "2024-25": 18423,
-    # Discovered 2026-08-01 by probing candidate ids around the men's 18703 and
-    # confirming sport_code=WBB on a team page from the division (the ids carry
-    # no MBB<->WBB offset: observed deltas run -59..+567).
-    "2025-26": 18704,
-}
+#: WBB D-I ``season_divisions`` ids by season label, from the same table.
+NCAA_WBB_SEASON_DIVISIONS: "dict[str, int]" = _d1_ids_by_label("WBB")
 
 # Deliberate fix of R's sub() (first-char-only) normalization (M:1216-1217):
 # strip EVERY character outside R's keep-class [[:alnum:]=.].
@@ -418,28 +379,23 @@ def _resolve_conference_id(conference: str) -> int:
     return cid
 
 
-def _season_id_for_date(d: date_cls, league: str) -> int:
-    """Resolve the ``season_divisions`` id for *d* (M:1132-1212 / W:1106-1150).
+def _season_id_for_date(d: date_cls, league: str, fetch_html: "Optional[Callable[[str], str]]" = None) -> int:
+    """Resolve the D-I ``season_divisions`` id for the season *d* falls in.
 
-    Season boundary is May 1: a date belongs to season ``Y-(Y+1)`` iff it is
-    strictly after ``Y-05-01`` and on/before ``(Y+1)-05-01``.
+    NCAA's academic year turns over on July 1, so a date belongs to academic year ``d.year + 1``
+    from July on and ``d.year`` before. The id comes from the shared table, or one live lookup
+    for a season opened after the package was built (see
+    :func:`~sportsdataverse.scrape.ncaa.seasons.ncaa_season_division_id`).
 
     Raises:
-        ValueError: The date falls outside the league's season-id table
-            (deliberate fix of R's type-unstable string return
-            ``"Season Not Available"``, M:1210-1212).
+        ValueError: ``"Season Not Available"`` -- stats.ncaa.org lists no such season (deliberate fix
+            of R's type-unstable string return, M:1210-1212).
     """
-    table = NCAA_MBB_SEASON_DIVISIONS if league == "mbb" else NCAA_WBB_SEASON_DIVISIONS
-    start_year = d.year if (d.month, d.day) > (5, 1) else d.year - 1
-    season = f"{start_year}-{(start_year + 1) % 100:02d}"
-    sid = table.get(season)
-    if sid is None:
-        raise ValueError(
-            f"Season Not Available: no {league} season_divisions id for {season} "
-            f"(date {d.isoformat()}); known seasons: "
-            f"{min(table)}..{max(table)}"
-        )
-    return sid
+    academic_year = d.year + 1 if d.month >= 7 else d.year
+    try:
+        return ncaa_season_division_id(league, academic_year=academic_year, fetch_html=fetch_html)
+    except SeasonNotFoundError as exc:  # this module's documented contract is ValueError
+        raise ValueError(f"Season Not Available: {exc} (date {d.isoformat()})") from exc
 
 
 def _ncaa_bb_date_games(
@@ -475,18 +431,25 @@ def _ncaa_bb_date_games(
     if date is None:
         date = (datetime.now().date() - timedelta(days=1)).strftime("%m/%d/%Y")
     d = datetime.strptime(date, "%m/%d/%Y").date()
-    sid = _season_id_for_date(d, league)
     cid = conference_id if conference_id is not None else _resolve_conference_id(conference)
-    # R: gsub("[/]", "%2F", date) into the query string (M:1266-1278).
-    path = f"season_divisions/{sid}/scoreboards?game_date={date.replace('/', '%2F')}&conference_id={cid}&commit=Submit"
+
+    def _fetch(f: "NcaaFetcher") -> "tuple[int, str]":
+        # One session serves both the (rare) live season-id lookup and the scoreboard itself.
+        sid = _season_id_for_date(d, league, f.fetch_html)
+        # R: gsub("[/]", "%2F", date) into the query string (M:1266-1278).
+        path = (
+            f"season_divisions/{sid}/scoreboards?game_date={date.replace('/', '%2F')}&conference_id={cid}&commit=Submit"
+        )
+        return sid, f.fetch_html(path)
+
     if fetcher is None:
         from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
         # Closed on return: a lingering browser blocks every later Playwright fetcher in the process.
         with NcaaFetcher.with_browser() as browser_fetcher:
-            html = browser_fetcher.fetch_html(path)
+            sid, html = _fetch(browser_fetcher)
     else:
-        html = fetcher.fetch_html(path)
+        sid, html = _fetch(fetcher)
     return parse_ncaa_bb_scoreboard(html, date, season_id=sid)
 
 
