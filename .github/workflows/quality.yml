@@ -119,7 +119,10 @@ jobs:
     # offline suite is enforced exactly as in tests.yml: live tests skip at
     # collection time because SDV_PY_LIVE_TESTS is unset here, and
     # tests/codegen + the drift test are left to codegen.yml.
+    # Over 5 min on average, so pull requests skip it (owner decision 2026-11-03); it runs on main
+    # pushes, and `gh workflow run <file> --ref <branch>` runs it for a branch on demand.
     name: coverage delta (offline suite)
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -281,7 +284,10 @@ jobs:
     # 10-25: at 714 rows (~71/shard) shard 1 finished at 30m05s on run 40176467860 ("70 killed,
     # 0 survived") and was cancelled by the limit at 10 shards. Timeout -> 45; with the 12 shards above
     # (~22 s/row) that holds to roughly 1,400 rows.
+    # Over 5 min on average, so pull requests skip it (owner decision 2026-11-03); it runs on main
+    # pushes, and `gh workflow run <file> --ref <branch>` runs it for a branch on demand.
     name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:

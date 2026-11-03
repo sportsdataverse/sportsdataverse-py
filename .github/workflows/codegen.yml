@@ -13,7 +13,8 @@ on:
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # main runs to completion: the codegen test suite runs there only.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 jobs:
@@ -35,7 +36,9 @@ jobs:
       - name: Codegen drift check (generated files in sync with metadata)
         run: uv run --frozen python tools/codegen/generate.py --check
       - name: Codegen test suite
+        # ~15 min, so pull requests run only the drift check above (owner decision 2026-11-03).
         # The subprocess --check test repeats the step above; it still guards a bare local `pytest`.
+        if: ${{ github.event_name != 'pull_request' }}
         run: uv run --frozen pytest tests/codegen/ -q --deselect tests/codegen/test_check.py::test_codegen_drift_clean
 
   release-audit:
