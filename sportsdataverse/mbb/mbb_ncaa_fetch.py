@@ -698,6 +698,10 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
 
 
 _PROFILE_PREFIX = "ncaa_pw_"
+#: Unmarked profiles older sdv-py left behind under another name: the vendor transport in
+#: :mod:`sportsdataverse.scrape.ncaa.canary` created ``patchright_udd_*`` and never removed them
+#: (about 11,000 a day, 2.6 MB each, on the 2026-11 droplet). Swept like any unmarked profile.
+_LEGACY_PROFILE_PREFIXES = ("patchright_udd_",)
 _OWNER_FILE = ".sdv_owner_pid"
 _UNMARKED_MAX_AGE_S = 86_400
 
@@ -718,7 +722,7 @@ def _pid_alive(pid: int) -> bool:
 
 
 def _sweep_orphan_profiles(root: str) -> int:
-    """Remove ``ncaa_pw_*`` Chromium profiles whose owning process is gone.
+    """Remove ``ncaa_pw_*`` (and legacy ``patchright_udd_*``) Chromium profiles whose owner is gone.
 
     ``close()``, ``atexit`` and GC finalizers cannot run when a scraper is
     SIGKILLed (OOM, pkill, a killed shard), so each such exit stranded one
@@ -729,7 +733,8 @@ def _sweep_orphan_profiles(root: str) -> int:
     Returns the number removed.
     """
     removed = 0
-    for d in Path(root).glob(f"{_PROFILE_PREFIX}*"):
+    dirs = [d for prefix in (_PROFILE_PREFIX, *_LEGACY_PROFILE_PREFIXES) for d in Path(root).glob(f"{prefix}*")]
+    for d in dirs:
         try:
             owner = int((d / _OWNER_FILE).read_text())
         except (OSError, ValueError):

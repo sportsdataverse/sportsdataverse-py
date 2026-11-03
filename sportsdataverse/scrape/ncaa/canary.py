@@ -33,6 +33,8 @@ from __future__ import annotations
 
 import argparse
 import base64
+import os
+import shutil
 import statistics
 import sys
 import tempfile
@@ -44,6 +46,8 @@ from urllib.parse import urlsplit
 
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     _MIN_CONTENT_BYTES,
+    _OWNER_FILE,
+    _PROFILE_PREFIX,
     NcaaFetchConfig,
     NcaaFetcher,
     _ban_check,
@@ -52,6 +56,7 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import (
     _is_session_denied,
     _raw_fetch,
     _SessionDeniedError,
+    _sweep_orphan_profiles,
 )
 
 # Known-good captured MBB contests (present in mbb/json/) -- valid games, so any
@@ -193,6 +198,8 @@ class _PatchrightTransport:
         self._ctx: Any = None
         self._page: Any = None
         self._current_proxy: Optional[str] = None
+        self._temp_dir: "Optional[tempfile.TemporaryDirectory[str]]" = None
+        self._atexit_registered = False
 
     def _ensure(self, proxies: "dict[str, str]") -> None:
         proxy = proxies.get("http") or proxies.get("https") or None
@@ -205,9 +212,14 @@ class _PatchrightTransport:
         from patchright.sync_api import sync_playwright
 
         self._pw = sync_playwright().start()
-        udd = tempfile.mkdtemp(prefix="patchright_udd_")
+        # One profile per launch, removed by close(). The same marked-profile scheme as
+        # NcaaFetcher's browser transport, so a SIGKILLed run's profile is reaped by the next
+        # launch: this used to mkdtemp a profile per proxy rotation and never delete it.
+        _sweep_orphan_profiles(tempfile.gettempdir())
+        self._temp_dir = tempfile.TemporaryDirectory(prefix=_PROFILE_PREFIX)
+        Path(self._temp_dir.name, _OWNER_FILE).write_text(str(os.getpid()))
         launch: "dict[str, Any]" = {
-            "user_data_dir": udd,
+            "user_data_dir": self._temp_dir.name,
             # new-headless (real GPU/ANGLE) + real Chrome UA -- the config that
             # actually clears bm-verify. headless=False + --headless=new is the
             # Playwright idiom for new-headless.
@@ -237,7 +249,9 @@ class _PatchrightTransport:
         self._ctx = self._pw.chromium.launch_persistent_context(**launch)
         self._page = self._ctx.pages[0] if self._ctx.pages else self._ctx.new_page()
         self._current_proxy = proxy
-        atexit.register(self.close)
+        if not self._atexit_registered:  # once: a relaunch per rotation used to stack a handler each
+            atexit.register(self.close)
+            self._atexit_registered = True
 
     def __call__(self, url: str, proxies: "dict[str, str]", headers: "dict[str, str]") -> "tuple[int, str]":
         self._ensure(proxies)
@@ -268,6 +282,12 @@ class _PatchrightTransport:
                 pass
         self._pw = self._ctx = self._page = None
         self._current_proxy = None
+        if self._temp_dir is not None:
+            try:
+                self._temp_dir.cleanup()
+            except OSError:  # Chromium may still be writing into it: remove what we can
+                shutil.rmtree(self._temp_dir.name, ignore_errors=True)
+            self._temp_dir = None
 
     def __enter__(self) -> "_PatchrightTransport":
         return self
