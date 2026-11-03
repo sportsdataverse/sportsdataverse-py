@@ -388,7 +388,7 @@ df.filter(pl.col("match_method") == "fuzzy_jw").head()
 
 ### mbb_schedule_crosswalk {#mbb_schedule_crosswalk}
 
-`mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, yahoo: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, yahoo: 'bool' = False, bart: 'Optional[pl.DataFrame]' = None, bart_games: 'Optional[pl.DataFrame]' = None, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the MBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo).
 
@@ -408,6 +408,8 @@ paid subscription and is not ported.
 | `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 | `fox` | `bool` | `False` | Fill `fox_game_id` from Fox's Division I scoreboard, one Fox call per game date. A Fox game matches the row on the same US-Eastern date holding every Fox team that resolves to ESPN (by name, through `FOX_DISPLAY_ALIAS`), in either home/away order. A failed Fox fetch logs a warning and leaves the column null. |
 | `yahoo` | `bool` | `False` | Fill `yahoo_game_id` = `ncaab.g.{YYYYMMDD ET}{home Yahoo id, 4 digits}`, checked against the ids Yahoo lists for the season's dates so a neutral-site game takes Yahoo's home side and a game Yahoo does not list (a non-Division-I home team) stays null. A failed Yahoo fetch logs a warning; without the team listing the ids stay null, without the id list the unverified home-side id is kept. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched Torvik `team` / `conf` frame for the team crosswalk this joins through (see `mbb_team_crosswalk`). `None` fetches it live. |
+| `bart_games` | `Optional[DataFrame]` | `None` | Pre-parsed Torvik super schedule (the `~sportsdataverse._crosswalk_basketball_sources.bart_super_sked` frame). `None` fetches it live. barttorvik.com answers 403 to datacenter IPs, so a producer there passes both from a snapshot. |
 
 **Returns**
 

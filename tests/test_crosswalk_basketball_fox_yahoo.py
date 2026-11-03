@@ -451,3 +451,47 @@ def test_schedule_builders_only_fetch_fox_and_yahoo_when_asked(monkeypatch: pyte
     else:
         build(season=2026, fox=True, yahoo=True)
         assert calls == [f"fox:{league}", f"yahoo:{league}"] and seen["yahoo"] is True
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_schedule_builders_use_passed_torvik_frames(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    # barttorvik.com 403s datacenter IPs; a producer passes a snapshot and nothing is fetched.
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    seen: Dict[str, Any] = {}
+
+    def boom(*a: Any, **k: Any) -> pl.DataFrame:
+        raise AssertionError("fetched the Torvik super schedule live")
+
+    def assemble(espn: pl.DataFrame, games: pl.DataFrame, team: pl.DataFrame, season: int) -> pl.DataFrame:
+        seen["games"] = games
+        return pl.DataFrame({"game_date": []})
+
+    monkeypatch.setattr(mod, "bart_super_sked", boom)
+    monkeypatch.setattr(mod, "espn_scoreboard_games", lambda *a, **k: pl.DataFrame())
+    monkeypatch.setattr(mod, "_assemble_schedule_crosswalk", assemble)
+    monkeypatch.setattr(mod, f"{league}_team_crosswalk", lambda **k: seen.update(k) or pl.DataFrame())
+    bart = pl.DataFrame({"team": ["Duke"], "conf": ["ACC"]})
+    games = pl.DataFrame({"game_date": [THANKSGIVING]})
+
+    getattr(mod, f"{league}_schedule_crosswalk")(season=2026, bart=bart, bart_games=games)
+    assert seen["bart"] is bart and seen["games"] is games
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_player_builders_never_ask_torvik(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    # The player crosswalk reads only ESPN / Fox team ids off the team crosswalk.
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    seen: Dict[str, Any] = {}
+
+    def team_xwalk(**k: Any) -> pl.DataFrame:
+        seen.update(k)
+        raise StopIteration  # the roster loop is not under test
+
+    monkeypatch.setattr(mod, f"{league}_team_crosswalk", team_xwalk)
+    with pytest.raises(StopIteration):
+        getattr(mod, f"{league}_player_crosswalk")(season=2026)
+    assert seen["bart"].height == 0
