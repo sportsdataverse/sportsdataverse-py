@@ -515,7 +515,7 @@ def test_player_builders_never_ask_torvik(monkeypatch: pytest.MonkeyPatch, leagu
 )
 def test_a_bad_torvik_snapshot_is_refused(games: pl.DataFrame, why: str) -> None:
     # A CSV round trip (string dates) or last season's file must not build a quietly wrong crosswalk.
-    from sportsdataverse._crosswalk_basketball_sources import check_bart_games
+    from sportsdataverse._crosswalk_basketball_torvik import check_bart_games
 
     with pytest.raises(ValueError, match=why):
         check_bart_games(games, 2026)

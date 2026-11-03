@@ -35,9 +35,9 @@ from sportsdataverse._common_crosswalk_basketball import (
     str_id,
 )
 from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
+from sportsdataverse._crosswalk_basketball_torvik import check_bart_games
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
-    check_bart_games,
     espn_scoreboard_games,
     drop_unconfirmed_fox_sections,
     espn_team_directory,
