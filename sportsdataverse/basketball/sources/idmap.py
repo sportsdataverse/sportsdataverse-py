@@ -41,7 +41,7 @@ from typing import Any, Optional
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _as_season_list, _json_body, _transport_errors, _where
 from sportsdataverse._common_crosswalk_basketball import str_id
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -191,7 +191,11 @@ def _build_idmap(
     if overrides is not None and overrides.height:
         ov = overrides.select(
             pl.col("kind").cast(pl.Utf8), str_id(overrides, "espn_id"), str_id(overrides, "source_id").alias("_ov")
-        ).unique(["kind", "espn_id"], keep="last")
+        )
+        clash = ov.group_by("kind", "espn_id").agg(pl.col("_ov").n_unique().alias("n")).filter(pl.col("n") > 1)
+        if clash.height:
+            raise ValueError(f"overrides pair one espn_id with several source_ids: {clash.head(3).rows()}")
+        ov = ov.unique(["kind", "espn_id"], keep="last")
         clash = ov.group_by("kind", "_ov").agg(pl.col("espn_id").n_unique().alias("n")).filter(pl.col("n") > 1)
         if clash.height:
             raise ValueError(f"overrides pair one source_id with several espn_ids: {clash.head(3).rows()}")
@@ -408,7 +412,7 @@ def _build_idmap_from_release(league: str, seasons: Any, **kwargs: Any) -> pl.Da
         from sportsdataverse.mbb import load_ncaa_mbb_team_box as box
     else:
         from sportsdataverse.wbb import load_ncaa_wbb_team_box as box
-    wanted = {int(s) for s in ([seasons] if isinstance(seasons, int) else seasons)}
+    wanted = sorted(set(_as_season_list(seasons)))  # "2026", 2026.0 and np.int64(2026) are one season
     teams = ncaa_espn_team_crosswalk(league)
-    teams = teams.filter((pl.col("season").str.slice(0, 4).cast(pl.Int32) + 1).is_in(sorted(wanted)))
-    return _build_idmap(league, games=box(seasons), teams=teams, **kwargs)
+    teams = teams.filter((pl.col("season").str.slice(0, 4).cast(pl.Int32) + 1).is_in(wanted))
+    return _build_idmap(league, games=box(wanted), teams=teams, **kwargs)

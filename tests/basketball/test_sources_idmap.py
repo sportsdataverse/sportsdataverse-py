@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
@@ -228,3 +229,25 @@ def test_one_source_id_overridden_onto_two_espn_ids_raises() -> None:
     )
     with pytest.raises(ValueError, match="several espn_ids"):
         _wnba(overrides=overrides)
+
+
+def test_one_espn_id_overridden_onto_two_source_ids_raises() -> None:
+    overrides = pl.DataFrame(
+        {"kind": ["game", "game"], "espn_id": ["401867790", "401867790"], "source_id": ["1012600012", "1012600017"]}
+    )
+    with pytest.raises(ValueError, match="several source_ids"):
+        _wnba(overrides=overrides)
+
+
+@pytest.mark.parametrize("seasons", ["2026", np.int64(2026), 2026.0, [2026]])
+def test_college_release_build_reads_any_season_spelling(monkeypatch: pytest.MonkeyPatch, seasons) -> None:
+    import sportsdataverse.mbb as mbb
+
+    asked: list = []
+    box = pl.read_parquet(RELEASE / "ncaa_mbb_team_box_2026.parquet")
+    monkeypatch.setattr(mbb, "ncaa_espn_team_crosswalk", lambda league: _packaged_crosswalk(league))
+    monkeypatch.setattr(mbb, "load_ncaa_mbb_team_box", lambda s: asked.append(s) or box)
+    idmap = m._build_idmap_from_release("mbb", seasons)
+    assert asked == [[2026]]
+    teams = idmap.filter(pl.col("kind") == "team")
+    assert teams["season"].unique().to_list() == [2026] and teams.height == 365  # "2025-26"
