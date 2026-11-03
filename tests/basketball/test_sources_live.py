@@ -307,6 +307,22 @@ def test_a_live_payload_of_another_game_is_not_served_under_this_id(monkeypatch:
     assert "playbyplay payload is game '0022500001', the id map says 1022600097" in out.health["live"]
 
 
+def test_a_final_box_over_a_short_play_list_falls_through(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The two payloads are fetched apart: a final box with a play list cut before the last score is refused."""
+    game = GAMES[0]
+    monkeypatch.setitem(dispatch.SOURCE_ORDER, "nba", ("espn", "live"))
+    payload = _payload(game)
+    actions = payload["playbyplay"]["game"]["actions"]
+    last_score = max(i for i, a in enumerate(actions) if a.get("shotResult") == "Made")
+    del actions[last_score:]
+    out = _process_game("nba", game[1], source="live", payloads={"live": payload, "espn": _espn(game)})
+    assert out.provenance["served"] == "espn"
+    assert "final box score (125, 124) but the play-by-play ends at" in out.health["live"]
+    # mid-game the same lag is expected and served
+    payload["boxscore"]["game"]["gameStatus"] = 2
+    assert _process_game("nba", game[1], source="live", payloads={"live": payload}).provenance["served"] == "live"
+
+
 def test_an_unmapped_person_is_a_null_athlete_and_a_note() -> None:
     """The Cup final: liveData charges a technical to San Antonio's coach (1628188), whom no crosswalk pairs."""
     adapted = _adapt(GAMES[2])

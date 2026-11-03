@@ -644,6 +644,14 @@ def _live_to_espn_summary(
         plays.append(row)
     for row in plays:
         row.pop("_out_name", None)
+    if final and plays:
+        # the two payloads are fetched separately: a final box over a play list that stops short would serve
+        # the final score in the header and an older one to the win-probability model. Mid-game a few
+        # seconds of lag between them is expected and left alone.
+        last = (plays[-1]["homeScore"], plays[-1]["awayScore"])
+        boxed = (int(home.get("score") or 0), int(away.get("score") or 0))
+        if last != boxed:
+            raise ValueError(f"final box score {boxed} but the play-by-play ends at {last}")
 
     if ids.unmapped:
         notes.append(
