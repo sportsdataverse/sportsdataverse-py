@@ -298,6 +298,15 @@ def test_a_game_or_team_missing_from_the_id_map_falls_through(monkeypatch: pytes
     assert "team 1610612760 is not in the id map" in out.health["live"]
 
 
+def test_a_live_payload_of_another_game_is_not_served_under_this_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The NBA payloads injected under the WNBA game's ESPN id: the id map says 1022600097, not 0022500001."""
+    monkeypatch.setitem(dispatch.SOURCE_ORDER, "wnba", ("espn", "live"))
+    wrong = {**_payload(GAMES[0]), "idmap": _idmap()}
+    out = _process_game("wnba", GAMES[1][1], source="live", payloads={"live": wrong, "espn": _espn(GAMES[1])})
+    assert out.provenance["served"] == "espn"
+    assert "playbyplay payload is game '0022500001', the id map says 1022600097" in out.health["live"]
+
+
 def test_an_unmapped_person_is_a_null_athlete_and_a_note() -> None:
     """The Cup final: liveData charges a technical to San Antonio's coach (1628188), whom no crosswalk pairs."""
     adapted = _adapt(GAMES[2])
@@ -381,8 +390,9 @@ def test_live_fetch_through_dispatch(monkeypatch: pytest.MonkeyPatch, lg: str, e
     try:
         out = _process_game(lg, espn_id, source="live", fallthrough=False, payloads={"live": {"idmap": idmap}})
     except dispatch.AllSourcesFailed as exc:
-        if "fetch failed" in str(exc):  # a blocked or failed cdn fetch is a skip, never a pass
-            pytest.skip(f"cdn liveData blocked from this IP: {exc}")
+        # a blocked fetch, or a game the CDN has since retired, is a skip, never a pass
+        if "fetch failed" in str(exc) or "NoDataError" in str(exc):
+            pytest.skip(f"cdn liveData unavailable from this IP: {exc}")
         raise
     assert out.provenance["served"] == "live" and out.provenance["contract"]["ok"]
     assert out.frames["pbp"].height > 350

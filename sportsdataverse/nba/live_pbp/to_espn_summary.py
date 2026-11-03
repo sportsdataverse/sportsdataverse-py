@@ -748,6 +748,11 @@ def _live_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     try:
         pbp = payload.get("playbyplay") or _fetch_live("playbyplay", game_id, league=league)
         box = payload.get("boxscore") or _fetch_live("boxscore", game_id, league=league)
+        # an injected payload of another game would be served under this ESPN id (dispatch checks header.id only)
+        for name, body in (("playbyplay", pbp), ("boxscore", box)):
+            got = str(((body or {}).get("game") or {}).get("gameId") or "")
+            if got != game_id:
+                raise ValueError(f"{name} payload is game {got!r}, the id map says {game_id}")
         summary, notes = _live_to_espn_summary(pbp, box, espn_id=espn_id, season=int(row["season"]), lookup=lookup)
     except Exception as exc:  # noqa: BLE001 -- network / NoDataError / projection -> the next source
         raise SourceUnavailable(f"{league} {espn_id}: liveData {game_id}: {type(exc).__name__}: {exc}") from exc
