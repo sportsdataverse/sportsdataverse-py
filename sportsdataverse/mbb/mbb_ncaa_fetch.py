@@ -469,6 +469,21 @@ def _is_challenge(text: str) -> bool:
     return any(marker in low for marker in _CHALLENGE_MARKERS)
 
 
+#: The whole body of a contest tab with nothing behind it yet: "Box score not available" (23 bytes),
+#: "Play by play not available" (26), seen live 2026-11-03 on scheduled-but-unplayed MBB contests.
+_NOT_AVAILABLE_RE = re.compile(r"^\s*[A-Za-z][A-Za-z ]{2,40} not available\.?\s*$")
+
+
+def _is_not_available(text: str) -> bool:
+    """Is *text* stats.ncaa.org's "<tab> not available" answer, the whole body and nothing else?
+
+    It is an answer, not a challenge: re-solving or rotating proxies cannot change it, and the
+    size rule in :func:`_browser_response_unsolved` would otherwise read it as an unsolved stub
+    and relaunch the browser until the pool is exhausted (about 620 KB of proxy traffic each).
+    """
+    return bool(text) and len(text) < 200 and _NOT_AVAILABLE_RE.match(text) is not None
+
+
 def _browser_response_unsolved(text: str) -> bool:
     """Did an in-page browser fetch come back UNSOLVED?
 
@@ -613,6 +628,15 @@ _TERMS_DWELL_MS = 10_000
 # Failed click-throughs tolerated per fetch before the form, not the proxy, is
 # the likely cause (see _get_with_rotation).
 _ACCEPT_FAILURES_MAX = 3
+
+
+class NotAvailableYetError(NoDataError):
+    """stats.ncaa.org answered a contest tab with "<tab> not available": the contest exists, the tab is empty.
+
+    A :class:`~sportsdataverse.errors.NoDataError` (the fetch succeeded), kept distinct so a
+    capture can count a not-yet-played or not-yet-posted contest apart from a real 404 and
+    retry it on a later run.
+    """
 
 
 class _TermsGateError(AssetFetchError):
@@ -948,7 +972,7 @@ class _PlaywrightTransport:
                 if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
                     time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
-            if not _browser_response_unsolved(text):
+            if not _browser_response_unsolved(text) or (status == 200 and _is_not_available(text)):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
             # re-challenged once _abck aged out. The old code set
@@ -1209,6 +1233,10 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
+            if status == 200 and _is_not_available(text):
+                # The contest exists but this tab has nothing yet (not played, or not posted):
+                # an answer, so no rotation. The caller retries on a later run.
+                raise NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
             if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
                 # A real "no such page": the host answered, and no other proxy
                 # answers differently -- rotating the whole pool on it reads as a ban.
@@ -1378,6 +1406,7 @@ __all__ = [
     "NCAA_HOST_URL",
     "NcaaFetchConfig",
     "NcaaFetcher",
+    "NotAvailableYetError",
     "get_config",
     "update_config",
     "reset_config",

@@ -310,6 +310,42 @@ def test_solve_gives_up_after_solve_attempts_so_the_fetcher_can_rotate() -> None
     assert page.gotos == 2  # exactly solve_attempts sensor runs, then stop
 
 
+#: The whole bodies stats.ncaa.org served on 2026-11-03 for scheduled-but-unplayed MBB contests
+#: 6646892 / 6650821 (23 and 26 bytes). Under the 1 KB stub rule they read as unsolved challenges,
+#: which relaunched the browser until the proxy pool was exhausted, every night.
+_NOT_AVAILABLE = ("Box score not available", "Play by play not available")
+
+
+@pytest.mark.parametrize("body", _NOT_AVAILABLE)
+def test_not_available_is_an_answer_not_a_challenge(body: str) -> None:
+    page = _FakePage([body])
+    t = _transport_with(page)
+
+    status, text = t("https://stats.ncaa.org/contests/6646892/box_score", {"http": _POOL[0]}, {})
+
+    assert (status, text) == (200, body)
+    assert page.gotos == 1  # the first solve only: no re-solve on the answer
+
+
+@pytest.mark.parametrize("body", _NOT_AVAILABLE)
+def test_vocabulary_not_available_is_no_data_after_one_request(tmp_path: Path, body: str) -> None:
+    transport = FakeTransport([(200, body)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(NoDataError, match="nothing at .*contests/6646892/box_score yet"):
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/6646892/box_score")
+    assert len(transport.calls) == 1  # never rotated through the pool
+    assert not cached_path("contests/6646892/box_score", cache_dir=tmp_path).exists()
+
+
+@pytest.mark.parametrize(
+    "body", ["", "x" * 15, "Access Denied", "not available", "<html>Box score not available</html>"]
+)
+def test_only_the_bare_sentence_counts_as_not_available(body: str) -> None:
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _is_not_available
+
+    assert not _is_not_available(body)
+
+
 class _DeniedPage(_FakePage):
     """Every in-page fetch answers Akamai's 403 "Access Denied" (``_DENIED``, a real capture)."""
 
