@@ -11,7 +11,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com`, `raw.githubusercontent.com` | 74 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com`, `raw.githubusercontent.com` | 76 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 1 | none (Terms gate + rate rotation) |
 | [On3 Recruit Database](#on3-recruit-database) | `api.on3.com` | 82 | API key (ON3_API_KEY) |
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
@@ -34,7 +34,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 70 |
+| [sportsdataverse-data releases](reference/loaders) | 72 |
 | [sportsdataverse raw data](reference/loaders) | 1 |
 | [Hand-written wrappers](reference/additional/highlights) | 3 |
 

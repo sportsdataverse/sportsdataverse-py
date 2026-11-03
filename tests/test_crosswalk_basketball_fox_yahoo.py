@@ -451,3 +451,72 @@ def test_schedule_builders_only_fetch_fox_and_yahoo_when_asked(monkeypatch: pyte
     else:
         build(season=2026, fox=True, yahoo=True)
         assert calls == [f"fox:{league}", f"yahoo:{league}"] and seen["yahoo"] is True
+
+
+def _bart_games(**over: Any) -> pl.DataFrame:
+    cols: Dict[str, Any] = {"muid": ["DukeUNC11-27"], "game_date": [THANKSGIVING], "team1": ["Duke"]}
+    cols.update({"team2": ["North Carolina"], "winner": ["Duke"], "year": pl.Series([2026], dtype=pl.Int32)})
+    return pl.DataFrame({**cols, **over})
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_schedule_builders_use_passed_torvik_frames(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    # barttorvik.com 403s datacenter IPs; a producer passes a snapshot and nothing is fetched.
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    seen: Dict[str, Any] = {}
+
+    def boom(*a: Any, **k: Any) -> pl.DataFrame:
+        raise AssertionError("fetched the Torvik super schedule live")
+
+    def assemble(espn: pl.DataFrame, games: pl.DataFrame, team: pl.DataFrame, season: int) -> pl.DataFrame:
+        seen["games"] = games
+        return pl.DataFrame({"game_date": []})
+
+    monkeypatch.setattr(mod, "bart_super_sked", boom)
+    monkeypatch.setattr(mod, "espn_scoreboard_games", lambda *a, **k: pl.DataFrame())
+    monkeypatch.setattr(mod, "_assemble_schedule_crosswalk", assemble)
+    monkeypatch.setattr(mod, f"{league}_team_crosswalk", lambda **k: seen.update(k) or pl.DataFrame())
+    bart = pl.DataFrame({"team": ["Duke"], "conf": ["ACC"]})
+    games = _bart_games()
+
+    getattr(mod, f"{league}_schedule_crosswalk")(season=2026, bart=bart, bart_games=games)
+    assert seen["bart"] is bart and seen["games"] is games
+    with pytest.raises(ValueError, match="stale"):
+        getattr(mod, f"{league}_schedule_crosswalk")(season=2027, bart=bart, bart_games=games)
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_player_builders_never_ask_torvik(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    # The player crosswalk reads only ESPN / Fox team ids off the team crosswalk.
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    seen: Dict[str, Any] = {}
+
+    def team_xwalk(**k: Any) -> pl.DataFrame:
+        seen.update(k)
+        raise StopIteration  # the roster loop is not under test
+
+    monkeypatch.setattr(mod, f"{league}_team_crosswalk", team_xwalk)
+    with pytest.raises(StopIteration):
+        getattr(mod, f"{league}_player_crosswalk")(season=2026)
+    assert seen["bart"].height == 0
+
+
+@pytest.mark.parametrize(
+    ("games", "why"),
+    [
+        (_bart_games().drop("muid"), "missing"),
+        (_bart_games(game_date=["2025-11-27"]), "expected Date"),
+        (_bart_games(year=pl.Series([2025], dtype=pl.Int32)), "stale"),
+    ],
+)
+def test_a_bad_torvik_snapshot_is_refused(games: pl.DataFrame, why: str) -> None:
+    # A CSV round trip (string dates) or last season's file must not build a quietly wrong crosswalk.
+    from sportsdataverse._crosswalk_basketball_torvik import check_bart_games
+
+    with pytest.raises(ValueError, match=why):
+        check_bart_games(games, 2026)
+    assert check_bart_games(_bart_games(), 2026).height == 1

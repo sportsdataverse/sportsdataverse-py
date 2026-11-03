@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Team: group"
-sidebar_label: "Team: group"
+title: "CFB dataset loaders — Team: group–aliases"
+sidebar_label: "Team: group–aliases"
 sidebar_position: 13
-description: "CFB dataset loaders — Team: group — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Team: group–aliases — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Team: group
+# CFB dataset loaders — Team: group–aliases
 
 ## load_cfb_team_group_seasons
 
@@ -33,4 +33,33 @@ One row per team per season: the SDV subdivision, conference and division group 
 
 ```python
 load_cfb_team_group_seasons(seasons=2024)
+```
+
+## load_cfb_team_aliases
+
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_aliases.parquet`
+
+:::caution[Coverage]
+One season-less file: every id and name another source (cbs, cfbd, fox, on3, sports247, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the STARTING year (2025 = the fall 2025 season).
+:::
+
+### Returns {#load_cfb_team_aliases-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("cfb"). |
+| `team_id` | String | ESPN team id the alias points to, as a string (e.g. "150"); the same id as team_id in load_cfb_team_group_seasons. Join on it to reach ESPN team data. |
+| `team_id_source` | String | Id space of team_id; always "espn" in this table. |
+| `source` | String | Provider that uses this id or name (in this table: cbs, cfbd, fox, on3, sports247, yahoo). "sports247" is 247Sports. |
+| `source_id` | String | The source's own id for the team (e.g. Fox 25, Yahoo nba.t.1); null for a name-only row. It means something only within its source (Fox 25 is Ohio State, ESPN 25 is California), so filter on source first. |
+| `id_kind` | String | "team" when source_id is the source's id for this sport's team, or "school" when it is one id for every sport of a school (the stats.ncaa.org org id, 247Sports institutionKey, On3 orgKey). |
+| `name_kind` | String | Kind of label in value: "name" or "abbreviation"; null when the row carries only an id. An id with both a name and an abbreviation is two rows. |
+| `value` | String | The source's own spelling of the team name or abbreviation; null when the row carries only an id. |
+| `valid_from` | Int32 | First season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the fall 2025 season); null, with valid_to, for an undated curated map. |
+| `valid_to` | Int32 | Last season the source shows this id or name on the team, inclusive (STARTING year: 2025 = the fall 2025 season); null, with valid_from, for an undated curated map. A gap in the source splits the window into two rows. |
+| `match_method` | String | How the row was tied to the ESPN team: "deterministic" (a formula or shared key, e.g. Yahoo {league}.t.{espn id}; CFBD ids are ESPN ids), "crosswalk" (carried from a published crosswalk leg), "curated" (a cited map), or for a hand-captured team directory row "alias", "exact_name" (normalized name) or "dict" (curated name dictionary). |
+| `evidence` | String | The release asset or sportsdataverse/sdv-reference-data file the row came from. |
+
+```python
+load_cfb_team_aliases()
 ```

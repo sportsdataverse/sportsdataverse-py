@@ -206,6 +206,7 @@ from sportsdataverse.wnba import load_wnba_group_seasons as load_wnba_group_seas
 from sportsdataverse.wnba import load_wnba_groups as load_wnba_groups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_officials as load_wnba_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_pbp as load_wnba_pbp  # noqa: F401
+from sportsdataverse.wnba import load_wnba_player_aliases as load_wnba_player_aliases  # noqa: F401
 from sportsdataverse.wnba import load_wnba_player_boxscore as load_wnba_player_boxscore  # noqa: F401
 from sportsdataverse.wnba import load_wnba_player_core as load_wnba_player_core  # noqa: F401
 from sportsdataverse.wnba import load_wnba_player_crosswalk as load_wnba_player_crosswalk  # noqa: F401
@@ -234,6 +235,7 @@ from sportsdataverse.wnba import load_wnba_stats_shots as load_wnba_stats_shots 
 from sportsdataverse.wnba import load_wnba_stats_standings as load_wnba_stats_standings  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_team_boxscores as load_wnba_stats_team_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_team_season_stats as load_wnba_stats_team_season_stats  # noqa: F401
+from sportsdataverse.wnba import load_wnba_team_aliases as load_wnba_team_aliases  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_boxscore as load_wnba_team_boxscore  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_crosswalk as load_wnba_team_crosswalk  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_group_seasons as load_wnba_team_group_seasons  # noqa: F401
@@ -475,6 +477,7 @@ __all__ = [
     "load_wnba_groups",
     "load_wnba_officials",
     "load_wnba_pbp",
+    "load_wnba_player_aliases",
     "load_wnba_player_boxscore",
     "load_wnba_player_core",
     "load_wnba_player_crosswalk",
@@ -503,6 +506,7 @@ __all__ = [
     "load_wnba_stats_standings",
     "load_wnba_stats_team_boxscores",
     "load_wnba_stats_team_season_stats",
+    "load_wnba_team_aliases",
     "load_wnba_team_boxscore",
     "load_wnba_team_crosswalk",
     "load_wnba_team_group_seasons",
