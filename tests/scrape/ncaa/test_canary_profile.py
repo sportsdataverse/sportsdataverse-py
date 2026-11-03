@@ -97,3 +97,19 @@ def test_sweep_reaps_stale_legacy_patchright_profiles_only(tmp_path):
 
     assert F._sweep_orphan_profiles(str(tmp_path)) == 1
     assert _profiles(tmp_path) == ["patchright_udd_young", "something_else"]
+
+
+def test_a_failed_launch_removes_its_profile(tmp_path, fake_browser, monkeypatch):
+    launches, _ = fake_browser
+
+    def _refuse(self, launches, kw):
+        launches.append(kw)
+        raise RuntimeError("proxy refused")
+
+    monkeypatch.setattr(_Ctx, "__init__", _refuse)
+    t = canary._PatchrightTransport()
+    with pytest.raises(RuntimeError, match="proxy refused"):
+        t._ensure({"http": "http://u:p@host:10001"})
+    assert Path(launches[0]["user_data_dir"]).name.startswith(F._PROFILE_PREFIX)
+    assert _profiles(tmp_path) == []
+    assert t._pw is None and t._temp_dir is None

@@ -209,6 +209,16 @@ class _PatchrightTransport:
             self.close()  # proxy rotated -> relaunch (context is proxy-bound at launch)
         import atexit
 
+        try:
+            self._launch(proxy)
+        except BaseException:
+            self.close()  # a failed launch (bad proxy, Chromium crash) must not strand its profile or driver
+            raise
+        if not self._atexit_registered:  # once: a relaunch per rotation used to stack a handler each
+            atexit.register(self.close)
+            self._atexit_registered = True
+
+    def _launch(self, proxy: Optional[str]) -> None:
         from patchright.sync_api import sync_playwright
 
         self._pw = sync_playwright().start()
@@ -249,9 +259,6 @@ class _PatchrightTransport:
         self._ctx = self._pw.chromium.launch_persistent_context(**launch)
         self._page = self._ctx.pages[0] if self._ctx.pages else self._ctx.new_page()
         self._current_proxy = proxy
-        if not self._atexit_registered:  # once: a relaunch per rotation used to stack a handler each
-            atexit.register(self.close)
-            self._atexit_registered = True
 
     def __call__(self, url: str, proxies: "dict[str, str]", headers: "dict[str, str]") -> "tuple[int, str]":
         self._ensure(proxies)
