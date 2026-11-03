@@ -2037,7 +2037,7 @@ def load_ncaa_baseball_team_group_seasons(seasons, return_as_pandas: bool = Fals
         |notes          |String  |
 
     Note:
-        One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026.
+        One row per team, id space and season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string in the id space team_id_source names: every D-I team has an ncaa_org row (the stats.ncaa.org org id) and, where the ncaa_baseball_crosswalk maps the school, a copy under its ESPN college-baseball team id (team_id_source espn, notes ncaa_org_id=N). The two id spaces overlap (an ESPN id can be another school's NCAA org id), so filter on team_id_source before joining on team_id. season is the calendar year; seasons 2010-2026.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2010.
