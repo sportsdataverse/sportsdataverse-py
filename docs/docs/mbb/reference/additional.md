@@ -369,7 +369,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_shot_selection](additional/analytics.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | Season-level SoS / Quad / WAB résumé from the released ESPN data. |
 | [mbb_team_season_rates](additional/analytics.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
-| [ncaa_mbb_lineups](additional/analytics.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
+| [mbb_team_strength](additional/analytics-2.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [ncaa_mbb_lineups](additional/analytics-2.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-2.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-2.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-2.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |

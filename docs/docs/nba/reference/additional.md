@@ -255,6 +255,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_shot_value_lineups](additional/analytics-2.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-2.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_season_rates](additional/analytics-2.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
+| [nba_team_strength](additional/analytics-2.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
 | [nba_tracking_drive_value](additional/analytics-2.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
 | [nba_tracking_pass_value](additional/analytics-2.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
 | [nba_tracking_reb_oe](additional/analytics-2.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
@@ -265,15 +266,15 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [player_play_context](additional/analytics-2.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
 | [player_rates](additional/analytics-2.md#player_rates) | Per-player per-minute rate stats from box logs. |
 | [players_on_court_from_pbp](additional/analytics-2.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
-| [players_on_court_from_quarter_boxscores](additional/analytics-2.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |
-| [players_on_court_from_rotation](additional/analytics-2.md#players_on_court_from_rotation) | Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm. |
-| [prob_over](additional/analytics-2.md#prob_over) | Probability a stat finishes strictly above `line`. |
-| [project_player_line](additional/analytics-2.md#project_player_line) | Project a player's expected counting line from per-minute rates. |
-| [prop_distribution](additional/analytics-2.md#prop_distribution) | Distribution family + parameters for a projected stat mean. |
-| [ratings_as_of](additional/analytics-2.md#ratings_as_of) | Fit `model` on every possession dated on or before `asof` and return ratings. |
-| [rotowire_injuries](additional/analytics-2.md#rotowire_injuries) | The current NBA injury report from RotoWire. |
-| [score_shot_xpoints](additional/analytics-2.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
-| [shooter_talent](additional/analytics-2.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
+| [players_on_court_from_quarter_boxscores](additional/analytics-3.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |
+| [players_on_court_from_rotation](additional/analytics-3.md#players_on_court_from_rotation) | Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm. |
+| [prob_over](additional/analytics-3.md#prob_over) | Probability a stat finishes strictly above `line`. |
+| [project_player_line](additional/analytics-3.md#project_player_line) | Project a player's expected counting line from per-minute rates. |
+| [prop_distribution](additional/analytics-3.md#prop_distribution) | Distribution family + parameters for a projected stat mean. |
+| [ratings_as_of](additional/analytics-3.md#ratings_as_of) | Fit `model` on every possession dated on or before `asof` and return ratings. |
+| [rotowire_injuries](additional/analytics-3.md#rotowire_injuries) | The current NBA injury report from RotoWire. |
+| [score_shot_xpoints](additional/analytics-3.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
+| [shooter_talent](additional/analytics-3.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
 | [shot_selection_quality](additional/analytics-3.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
 | [shrink_clutch](additional/analytics-3.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |
 | [spotrac_team_cap](additional/analytics-3.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |

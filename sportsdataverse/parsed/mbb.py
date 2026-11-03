@@ -504,6 +504,7 @@ from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_sche
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
+from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -1139,6 +1140,7 @@ __all__ = [
     "mbb_team_crosswalk",
     "mbb_team_ratings",
     "mbb_team_season_rates",
+    "mbb_team_strength",
     "mbb_transfer_projection",
     "misspellings",
     "most_recent_mbb_season",

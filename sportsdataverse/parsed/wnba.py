@@ -278,6 +278,7 @@ from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_team_season_rates as wnba_team_season_rates  # noqa: F401
+from sportsdataverse.wnba import wnba_team_strength as wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_reb_oe as wnba_tracking_reb_oe  # noqa: F401
@@ -543,6 +544,7 @@ __all__ = [
     "wnba_team_crosswalk",
     "wnba_team_ratings",
     "wnba_team_season_rates",
+    "wnba_team_strength",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",
     "wnba_tracking_reb_oe",

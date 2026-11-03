@@ -80,5 +80,6 @@ from sportsdataverse.mbb.mbb_shot_selection import *
 from sportsdataverse.mbb.mbb_shots_adapter import *
 from sportsdataverse.mbb.mbb_team_ratings import *
 from sportsdataverse.mbb.mbb_team_season_rates import *
+from sportsdataverse.mbb.mbb_team_strength import *
 from sportsdataverse.mbb.mbb_teams import *
 from sportsdataverse.mbb.mbb_win_prob import *

@@ -363,6 +363,7 @@ from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
 from sportsdataverse.nba import nba_team_season_rates as nba_team_season_rates  # noqa: F401
+from sportsdataverse.nba import nba_team_strength as nba_team_strength  # noqa: F401
 from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_reb_oe as nba_tracking_reb_oe  # noqa: F401
@@ -775,6 +776,7 @@ __all__ = [
     "nba_team_crosswalk",
     "nba_team_ratings",
     "nba_team_season_rates",
+    "nba_team_strength",
     "nba_tracking_drive_value",
     "nba_tracking_pass_value",
     "nba_tracking_reb_oe",
