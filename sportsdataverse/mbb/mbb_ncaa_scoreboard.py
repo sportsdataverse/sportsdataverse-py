@@ -435,7 +435,8 @@ def _ncaa_bb_date_games(
 
     def _fetch(f: "NcaaFetcher") -> "tuple[int, str]":
         # One session serves both the (rare) live season-id lookup and the scoreboard itself.
-        sid = _season_id_for_date(d, league, f.fetch_html)
+        # force=True on the lookup: it runs only for an unknown season, so a cached page predates it.
+        sid = _season_id_for_date(d, league, lambda p: f.fetch_html(p, force=True))
         # R: gsub("[/]", "%2F", date) into the query string (M:1266-1278).
         path = (
             f"season_divisions/{sid}/scoreboards?game_date={date.replace('/', '%2F')}&conference_id={cid}&commit=Submit"

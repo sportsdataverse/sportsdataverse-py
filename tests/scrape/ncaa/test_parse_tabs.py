@@ -41,3 +41,16 @@ def test_a_crew_not_posted_yet_is_no_rows_not_an_error(tmp_path):
     rec = parse_bundle(bundle, league="wbb", root=tmp_path)
     assert rec["officials"] == []
     assert not any(e["family"] == "officials" for e in rec.get("parse_errors", []))
+
+
+def test_a_tab_parser_crash_is_recorded_and_loses_only_its_family():
+    from sportsdataverse.scrape.ncaa.parse import _tab_family
+
+    def _boom(html, contest_id):
+        raise ValueError("layout drift")
+
+    errors: "list[dict[str, str]]" = []
+    assert _tab_family(errors, "officials", "1", _boom, "<html></html>") == []
+    assert errors == [{"family": "officials", "error": "ValueError: layout drift"}]
+    assert _tab_family(errors, "officials", "1", _boom, "") == []  # an absent page is never parsed
+    assert len(errors) == 1

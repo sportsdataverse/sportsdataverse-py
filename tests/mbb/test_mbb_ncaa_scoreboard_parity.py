@@ -149,7 +149,7 @@ def test_mbb_unknown_season_raises_value_error() -> None:
     ).read_text()
 
     class _Stub:
-        def fetch_html(self, path: str) -> str:
+        def fetch_html(self, path: str, *, force: bool = False) -> str:
             assert "academic_year=1990" in path, path
             return page
 

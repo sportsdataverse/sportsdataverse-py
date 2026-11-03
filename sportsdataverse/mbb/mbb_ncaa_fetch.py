@@ -471,7 +471,12 @@ def _is_challenge(text: str) -> bool:
 
 #: The whole body of a contest tab with nothing behind it yet: "Box score not available" (23 bytes),
 #: "Play by play not available" (26), seen live 2026-11-03 on scheduled-but-unplayed MBB contests.
-_NOT_AVAILABLE_RE = re.compile(r"^\s*[A-Za-z][A-Za-z ]{2,40} not available\.?\s*$")
+#: Only a contest tab's own name is accepted, so "Service not available" stays a failed response.
+#: ponytail: the last three tab names are the site's tab labels, not seen live; an unknown phrasing
+#: just falls back to the stub rule.
+_NOT_AVAILABLE_RE = re.compile(
+    r"^\s*(?:box score|play by play|individual stats|team stats|officials) not available\.?\s*$", re.I
+)
 
 
 def _is_not_available(text: str) -> bool:
@@ -1178,17 +1183,16 @@ class NcaaFetcher:
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:
                 status, text = transport(url, proxies, headers)
-            except ImportError:
+            except (ImportError, _TermsGateError):
                 # A missing optional dependency is a SETUP error, not a transport
                 # error, and no amount of proxy rotation installs patchright.
                 # Rotating on it burned the whole pool (with backoff between each
                 # attempt) and then reported the real cause under a "failed after
                 # rotating proxies" headline -- which reads as a ban and sends the
                 # reader hunting for an IP problem that does not exist. Re-raise so
-                # the install instruction from _ensure_page is the error.
+                # the install instruction from _ensure_page is the error. Same for
+                # the Terms gate: no proxy rotation gets past it.
                 raise
-            except _TermsGateError:
-                raise  # same reasoning: no proxy rotation gets past the Terms gate
             except Exception as exc:  # rotate on any transport failure
                 last_err = str(exc)
                 # Which error rotated (and relaunched the browser) is otherwise
@@ -1224,9 +1228,8 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
-            if status == 200 and _is_not_available(text):
-                # The contest exists but this tab has nothing yet (not played, or not posted):
-                # an answer, so no rotation. The caller retries on a later run.
+            if status == 200 and _is_not_available(text):  # an answer (not played / not posted): no rotation
+                self._count_fetch()
                 raise NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
             if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
                 # A real "no such page": the host answered, and no other proxy
@@ -1236,11 +1239,7 @@ class NcaaFetcher:
                 # The request itself is wrong (repo-wide rule): no proxy answers it differently.
                 raise ValueError(f"stats.ncaa.org rejected {url}: HTTP {status}; not retried")
             if status == 200 and _ban_check(text) == "clean":
-                self._since_rotate += 1
-                if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
-                    # Proactive: retire this IP while it is still HEALTHY. Waiting
-                    # for a ban means the ban already happened -- and it's permanent.
-                    self._rotate(f"{self._since_rotate} fetches on this proxy")
+                self._count_fetch()
                 return text
             marker = _ban_check(text)
             last_err = f"status={status} {marker}"
@@ -1259,6 +1258,14 @@ class NcaaFetcher:
         raise AssetFetchError(
             f"NCAA fetch failed after rotating proxies (pool exhausted, {attempts} attempts): {url}: {last_err}"
         )
+
+    def _count_fetch(self) -> None:
+        """Count one answered request on this proxy; rotate once it reaches ``rotate_every``."""
+        self._since_rotate += 1
+        if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
+            # Proactive: retire this IP while it is still HEALTHY. Waiting
+            # for a ban means the ban already happened -- and it's permanent.
+            self._rotate(f"{self._since_rotate} fetches on this proxy")
 
     def _rotate(self, why: str) -> None:
         """Advance to the next proxy and reset the per-proxy fetch counter."""

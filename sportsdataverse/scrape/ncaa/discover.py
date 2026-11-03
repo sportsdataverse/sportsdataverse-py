@@ -27,6 +27,8 @@ import polars as pl
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_schedule import parse_ncaa_bb_team_schedule
 
+from .capture import _env_int  # a leaf too (bundle only)
+
 # The schedules dataset tree is a pure side effect of the sweep below: this
 # module already fetches every team's page, so persisting it costs zero extra
 # HTTP. ncaa_datasets is a leaf (it never imports this module) -- no cycle.
@@ -425,8 +427,9 @@ def _main(default_league: str, default_root: str) -> None:
     parser.add_argument(
         "--season",
         type=int,
-        required=True,
-        help="Ending year of the season, e.g. 2026.",
+        default=None,
+        help="Ending year of the season, e.g. 2026. Required except with --scoreboard, which files each "
+        "contest under the season its date falls in.",
     )
     parser.add_argument(
         "--root",
@@ -458,18 +461,22 @@ def _main(default_league: str, default_root: str) -> None:
     parser.add_argument(
         "--lookback-days",
         type=int,
-        default=int(os.environ.get("NCAA_SCOREBOARD_LOOKBACK_DAYS", "3")),
+        default=_env_int("NCAA_SCOREBOARD_LOOKBACK_DAYS", 3),
         help="With --scoreboard: also read this many days before the earliest date "
         "(env NCAA_SCOREBOARD_LOOKBACK_DAYS; default 3).",
     )
     args = parser.parse_args()
     i, n = (int(x) for x in args.shard.split("/"))
+    if args.scoreboard and n > 1:  # one scoreboard pass rewrites the master; shards would race on it
+        parser.error("--scoreboard reads a few pages and writes schedule_master: run it unsharded")
+    if not args.scoreboard and args.season is None:
+        parser.error("--season is required (except with --scoreboard)")
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     if args.scoreboard:
         found = discover_dates(args.dates, league=args.league, root=args.root, lookback_days=args.lookback_days)
-        mine = found.filter(pl.col("season") == str(args.season)).height
-        print(f"discovered {found.height} contest_ids from the scoreboard ({mine} in season={args.season})")
+        by_season = dict(found.group_by("season").len().sort("season").iter_rows())
+        print(f"discovered {found.height} contest_ids from the scoreboard (by season: {by_season})")
         return
     result = discover_season(
         args.season,

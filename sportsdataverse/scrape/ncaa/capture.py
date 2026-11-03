@@ -59,6 +59,36 @@ def _is_clean(html: str) -> bool:
     return len(html) > _MIN_BYTES and len(_TR_RE.findall(html)) > _MIN_ROWS
 
 
+def _is_tab_page(html: str) -> bool:
+    """An optional tab is a real contest page: the site chrome (every tab is ~20 KB of it) and a table.
+
+    Looser than :func:`_is_clean`: an officials page holds a dozen rows (13 on both fixtures).
+    """
+    return len(html) > _MIN_BYTES // 2 and _TR_RE.search(html) is not None
+
+
+def _pages_clean(pages: "Dict[str, str]") -> bool:
+    return all(_is_clean(pages.get(key, "")) for key in PAGE_KEYS) and all(
+        _is_tab_page(pages[key]) for key in OPTIONAL_PAGE_KEYS if key in pages
+    )
+
+
+def _fetch_optional(fetcher: Any, contest_id: str, key: str) -> "Optional[str]":
+    """One optional tab, or ``None`` when the site has none.
+
+    ``team_stats`` not posted yet raises :class:`NotAvailableYetError` through, so the contest waits
+    like a core page: once bundled it is never fetched again. ``officials`` is written without the
+    page instead, since its crew posts days later and :func:`refresh_officials` asks again.
+    """
+    try:
+        return fetcher.fetch_html(f"contests/{contest_id}/{key}", force=True)
+    except NoDataError as exc:
+        if key == "team_stats" and isinstance(exc, NotAvailableYetError):
+            raise
+        logger.info("contest_id=%s has no %s page; bundle written without it", contest_id, key)
+        return None
+
+
 def _default_fetch_pages_fn() -> FetchPagesFn:
     def fetch(fetcher: Any, contest_id: str) -> Dict[str, str]:
         pages = {
@@ -66,12 +96,8 @@ def _default_fetch_pages_fn() -> FetchPagesFn:
             "box_score": fetcher.fetch_game_box(contest_id, force=True),
             "individual_stats": fetcher.fetch_game_individual_stats(contest_id, force=True),
         }
-        for key in OPTIONAL_PAGE_KEYS:
-            try:
-                pages[key] = fetcher.fetch_html(f"contests/{contest_id}/{key}", force=True)
-            except NoDataError:  # an optional tab with nothing behind it: the bundle is still whole
-                logger.info("contest_id=%s has no %s page; bundle written without it", contest_id, key)
-        return pages
+        tabs = {key: _fetch_optional(fetcher, contest_id, key) for key in OPTIONAL_PAGE_KEYS}
+        return {**pages, **{key: html for key, html in tabs.items() if html is not None}}
 
     return fetch
 
@@ -184,7 +210,7 @@ def capture_contests(
                 )
                 raise SystemExit(f"BAN-SUSPECT: capture halted at contest_id={contest_id}: {exc}") from exc
 
-            if not all(_is_clean(pages.get(key, "")) for key in PAGE_KEYS):
+            if not _pages_clean(pages):
                 logger.warning(
                     "challenge not cleared for contest_id=%s -- bundle not written",
                     contest_id,
@@ -452,7 +478,7 @@ def _main(default_league: str, default_root: str) -> None:
     parser.add_argument(
         "--refresh-officials-days",
         type=int,
-        default=int(os.environ.get("NCAA_REFRESH_OFFICIALS_DAYS", _OFFICIALS_REFRESH_DAYS)),
+        default=_env_int("NCAA_REFRESH_OFFICIALS_DAYS", _OFFICIALS_REFRESH_DAYS),
         help=(
             "After capturing, re-fetch the officials tab of bundles written in the last N days whose "
             "crew was not posted yet (env NCAA_REFRESH_OFFICIALS_DAYS; 0 disables; shard 0 only). "
@@ -485,18 +511,23 @@ def _main(default_league: str, default_root: str) -> None:
         f"not_ready={counts['not_ready']}"
     )
     if args.refresh_officials_days > 0 and i == 0:  # one shard does it: the pass is cheap and must not race
+        _refresh_officials_cli(args)
 
-        def _factory() -> Any:
-            if args.vendor:
-                return _vendor_fetcher(args.vendor, args.root)
-            from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
-            return NcaaFetcher.with_browser()
+def _refresh_officials_cli(args: Any) -> None:
+    """The capture CLI's officials pass, on the same transport the capture used."""
 
-        refreshed = refresh_officials(
-            args.season, league=args.league, root=args.root, fetcher_factory=_factory, days=args.refresh_officials_days
-        )
-        print(
-            f"officials: checked={refreshed['checked']} refreshed={refreshed['refreshed']} "
-            f"still_blank={refreshed['still_blank']}"
-        )
+    def _factory() -> Any:
+        if args.vendor:
+            return _vendor_fetcher(args.vendor, args.root)
+        from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+        return NcaaFetcher.with_browser()
+
+    refreshed = refresh_officials(
+        args.season, league=args.league, root=args.root, fetcher_factory=_factory, days=args.refresh_officials_days
+    )
+    print(
+        f"officials: checked={refreshed['checked']} refreshed={refreshed['refreshed']} "
+        f"still_blank={refreshed['still_blank']}"
+    )

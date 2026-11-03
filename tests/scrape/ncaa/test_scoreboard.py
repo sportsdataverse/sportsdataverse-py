@@ -113,3 +113,53 @@ def test_discover_dates_merges_into_schedule_master_keeping_captured_rows(_mbb_t
     assert merged.height == 185  # 184 from the board + the not-yet-played 6646892 kept
     assert merged.filter(pl.col("contest_id") == "6624354")["captured"].to_list() == [True]  # never reset
     assert merged.filter(pl.col("captured") == False).height == 184  # noqa: E712
+
+
+class _FakeFetcher:
+    """Stands in for NcaaFetcher (with_browser and vendor transports alike): serves one page, records closing."""
+
+    def __init__(self, page: str):
+        self.page = page
+        self.paths: "list[str]" = []
+        self.closed = False
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.closed = True
+
+    def fetch_html(self, path: str, force: bool = False) -> str:
+        self.paths.append(path)
+        return self.page
+
+
+def test_default_transport_is_one_browser_closed_after_the_call(_mbb_table, monkeypatch):
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+    fake = _FakeFetcher(_page("mbb_d1_2026-11-02.html"))
+    monkeypatch.setattr(NcaaFetcher, "with_browser", classmethod(lambda cls, *a, **k: fake))
+    df = SB.ncaa_scoreboard_contests("mbb", date(2026, 11, 2))
+    assert df.height == 184 and len(fake.paths) == 1 and fake.closed
+
+
+def test_no_dates_is_an_empty_frame_with_the_schema(_mbb_table):
+    df = SB.ncaa_scoreboard_contests("mbb", [], fetch_html=lambda p: "")
+    assert df.height == 0 and df.schema == pl.Schema(SB.SCOREBOARD_CONTESTS_SCHEMA)
+
+
+@pytest.mark.parametrize("vendor", ["decodo_patchright", None])
+def test_discover_dates_default_transport_is_the_vendor_or_the_browser(_mbb_table, tmp_path, monkeypatch, vendor):
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+    from sportsdataverse.scrape.ncaa import capture
+    from sportsdataverse.scrape.ncaa.discover import discover_dates
+
+    fake = _FakeFetcher(_page("mbb_d1_2026-11-02.html"))
+    if vendor:
+        monkeypatch.setenv("NCAA_VENDOR", vendor)
+        monkeypatch.setattr(capture, "_vendor_fetcher", lambda name, root, **kw: fake)
+    else:
+        monkeypatch.delenv("NCAA_VENDOR", raising=False)
+        monkeypatch.setattr(NcaaFetcher, "with_browser", classmethod(lambda cls, *a, **k: fake))
+    found = discover_dates(["2026-11-02"], league="mbb", root=tmp_path, lookback_days=0)
+    assert found.height == 184 and fake.closed

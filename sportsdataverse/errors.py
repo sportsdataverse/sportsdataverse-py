@@ -322,8 +322,6 @@ class NotAvailableYetError(NoDataError):
         * :class:`NoDataError` -- the parent: "fetch succeeded, nothing here"
     """
 
-    pass
-
 
 class InsufficientInputError(SportsDataverseError):
     """Raised when the inputs arrived intact but cannot support the computation.

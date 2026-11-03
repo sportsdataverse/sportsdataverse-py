@@ -53,7 +53,7 @@ from dataclasses import is_dataclass
 from datetime import date, datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 import polars as pl
 
@@ -221,6 +221,23 @@ def _family_failed(parse_errors: list[dict[str, str]], family: str, contest_id: 
     """Log a family whose parse raised and record it for the ``parse_errors`` marker."""
     logger.warning("ncaa_parse: family=%s contest_id=%s failed", family, contest_id, exc_info=exc)
     parse_errors.append({"family": family, "error": _clip(f"{type(exc).__name__}: {exc}", 300)})
+
+
+def _tab_family(
+    parse_errors: list[dict[str, str]],
+    family: str,
+    contest_id: str,
+    parser: "Callable[..., Any]",
+    page: str,
+) -> list[dict[str, Any]]:
+    """One tab family's rows: an absent page is no rows, a parser crash is recorded like any family's."""
+    if not page:
+        return []
+    try:
+        return parser(page, contest_id).to_dicts()
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, family, contest_id, exc)
+        return []
 
 
 def _with_marker(result: dict[str, Any], parse_errors: list[dict[str, str]]) -> dict[str, Any]:
@@ -393,8 +410,6 @@ def parse_bundle(
     pbp_html = pages.get("play_by_play") or ""
     box_html = pages.get("box_score") or ""
     stats_html = pages.get("individual_stats") or ""
-    team_stats_html = pages.get("team_stats") or ""
-    officials_html = pages.get("officials") or ""
     season = bundle.get("season")
 
     result: "dict[str, Any]" = {
@@ -458,22 +473,12 @@ def parse_bundle(
     # The tab families read their own page and need no pbp. The linescore sits in the header of every
     # tab, so it comes from box_score and covers every bundle ever captured; team_stats and officials
     # exist only in bundles captured since those tabs were added (an absent page is no rows, not an error).
-    try:
-        result["linescore"] = parse_ncaa_bb_linescore(box_html, contest_id).to_dicts()
-    except Exception as exc:  # noqa: BLE001
-        _family_failed(parse_errors, "linescore", contest_id, exc)
-
-    try:
-        if team_stats_html:
-            result["team_stats"] = parse_ncaa_bb_team_stats(team_stats_html, contest_id).to_dicts()
-    except Exception as exc:  # noqa: BLE001
-        _family_failed(parse_errors, "team_stats", contest_id, exc)
-
-    try:
-        if officials_html:
-            result["officials"] = parse_ncaa_bb_officials(officials_html, contest_id).to_dicts()
-    except Exception as exc:  # noqa: BLE001
-        _family_failed(parse_errors, "officials", contest_id, exc)
+    for family, parser, page in (
+        ("linescore", parse_ncaa_bb_linescore, box_html),
+        ("team_stats", parse_ncaa_bb_team_stats, pages.get("team_stats") or ""),
+        ("officials", parse_ncaa_bb_officials, pages.get("officials") or ""),
+    ):
+        result[family] = _tab_family(parse_errors, family, contest_id, parser, page)
 
     # ONE per-game identifier column, on every family, named the same thing the
     # top-level key is. The parser stack emits `game_id` on five of the six

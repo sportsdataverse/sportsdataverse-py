@@ -215,3 +215,64 @@ def test_an_unreadable_bundled_table_warns_and_falls_back_to_empty(monkeypatch):
     with pytest.warns(UserWarning, match="cannot read the bundled stats.ncaa.org season table"):
         df = _bundled_from(monkeypatch, b"sport_code,academic_year\nMBB,not-a-year\n")
     assert df.height == 0 and df.schema == pl.Schema(S.SEASON_DIVISIONS_SCHEMA)
+
+
+def _season_fetch(other: str):
+    """The real 2026-27 MBB page for the season list and its own season; *other* for every other request."""
+
+    def fetch(path: str) -> str:
+        if "academic_year=&" in path or "game_sport_year_ctl_id=17240&" in path:
+            return _page("mbb_2026_27_d1.html")
+        ctl = path.split("game_sport_year_ctl_id=")[1].split("&")[0] if "game_sport_year_ctl_id=" in path else "1"
+        return other.format(ctl=ctl)
+
+    return fetch
+
+
+def test_build_tool_refuses_to_checkpoint_a_page_that_selects_no_season():
+    from tools.build_ncaa_season_divisions import sport_rows
+
+    with pytest.raises(RuntimeError, match="selects no season"):
+        sport_rows(_season_fetch(""), "MBB")  # a blank 200 for 2025-26 is not "no divisions"
+
+
+def test_build_tool_keeps_a_season_the_site_lists_without_divisions():
+    from tools.build_ncaa_season_divisions import sport_rows
+
+    no_divisions = (
+        '<select name="game_sport_year_ctl_id_select"><option selected="selected" value="{ctl}">x</option></select>'
+    )
+    rows = sport_rows(_season_fetch(no_divisions), "MBB")
+    assert {r["academic_year"] for r in rows} == {2027}  # only 2026-27 has ids; the rest are skipped, not fatal
+
+
+def test_live_lookup_default_transport_is_a_closed_browser(monkeypatch):
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+    _bundle(monkeypatch, [])
+    closed: "list[bool]" = []
+
+    class _Fake:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            closed.append(True)
+
+        def fetch_html(self, path: str, force: bool = False) -> str:
+            assert force  # the lookup runs only for an unknown season: a cached page would predate it
+            return _page("mbb_2026_27_d1.html")
+
+    monkeypatch.setattr(NcaaFetcher, "with_browser", classmethod(lambda cls, *a, **k: _Fake()))
+    assert S.ncaa_season_division_id("mbb", 2027) == 18983
+    assert closed == [True]
+
+
+def test_a_damaged_cache_file_reads_as_empty(monkeypatch):
+    _bundle(monkeypatch, [])
+    path = Path(S._cache_path())
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("{not json")
+    assert S._cached_rows() == []
+    path.write_text('{"a": 1}')  # valid JSON, wrong shape
+    assert S._cached_rows() == []

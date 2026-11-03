@@ -68,6 +68,10 @@ def sport_rows(fetch: Callable[[str], str], sport_code: str) -> "list[dict]":
             logger.warning("%s %s: site answered another season; skipped", sport_code, label)
             continue
         if not got:
+            if not any(sel for _, _, sel in _select_options(page, "game_sport_year_ctl_id_select")):
+                # No season selected at all is a page that is not a scoreboard (a block, a stub, layout
+                # drift), not a season without divisions: fail the sport so it is not checkpointed.
+                raise RuntimeError(f"{sport_code} {label}: the answer selects no season; not a scoreboard page")
             logger.warning("%s %s: no divisions listed", sport_code, label)
         logger.debug("%s %s: %d divisions", sport_code, label, len(got))
         rows.extend(got)

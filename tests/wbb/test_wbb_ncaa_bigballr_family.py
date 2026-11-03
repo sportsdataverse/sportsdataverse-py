@@ -67,7 +67,7 @@ class FakeHtmlFetcher:
         self._filename = filename
         self.paths: list[str] = []
 
-    def fetch_html(self, path: str) -> str:
+    def fetch_html(self, path: str, *, force: bool = False) -> str:
         self.paths.append(path)
         return (HTML_DIR / self._filename).read_text(encoding="utf-8")
 

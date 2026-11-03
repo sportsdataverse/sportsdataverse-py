@@ -255,6 +255,29 @@ def test_discover_main_binds_league_and_root(tmp_path, monkeypatch):
     assert kwargs["write_master"] is True
 
 
+def test_discover_main_scoreboard_needs_no_season_and_refuses_shards(tmp_path, monkeypatch, capsys):
+    import polars as pl
+
+    from sportsdataverse.scrape.ncaa import discover
+
+    seen: Dict[str, object] = {}
+    found = pl.DataFrame({"contest_id": ["1", "2"], "season": ["2027", "2027"]})
+    monkeypatch.setattr(discover, "discover_dates", _record(seen, "dates", found))
+    monkeypatch.setenv("NCAA_SCOREBOARD_LOOKBACK_DAYS", "x")  # a bad value falls back to the default
+    monkeypatch.setattr(sys, "argv", ["discover", "--scoreboard", "--dates", "2026-11-02"])
+    discover._main("mbb", str(tmp_path))
+    args, kwargs = seen["dates"]
+    assert args == (["2026-11-02"],) and kwargs["lookback_days"] == 3
+    assert "{'2027': 2}" in capsys.readouterr().out
+
+    monkeypatch.setattr(sys, "argv", ["discover", "--scoreboard", "--shard", "0/4"])
+    with pytest.raises(SystemExit):
+        discover._main("mbb", str(tmp_path))
+    monkeypatch.setattr(sys, "argv", ["discover"])  # the team sweep still needs its season
+    with pytest.raises(SystemExit):
+        discover._main("mbb", str(tmp_path))
+
+
 def test_rosters_main_binds_league_and_root(tmp_path, monkeypatch):
     from sportsdataverse.scrape.ncaa import rosters
 
@@ -390,3 +413,46 @@ def test_refresh_officials_leaves_a_still_blank_crew_and_builds_no_fetcher_when_
 
     assert capture.refresh_officials(2027, league="mbb", root=tmp_path, fetcher_factory=_never) == {
         "checked": 0, "refreshed": 0, "still_blank": 0}  # fmt: skip
+
+
+def test_team_stats_not_posted_yet_leaves_the_contest_for_the_next_run(tmp_path):
+    """A bundled contest is never fetched again, so a team_stats tab not posted yet must not be bundled away."""
+    f = _TabFetcher({"team_stats": NotAvailableYetError("Team stats not available"), "officials": OFFICIALS})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts == {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 1}
+    assert _written(tmp_path) == []
+
+
+def test_officials_not_posted_yet_is_bundled_without_them(tmp_path):
+    """The crew posts days later and refresh_officials re-asks, so the bundle need not wait for it."""
+    f = _TabFetcher({"team_stats": TEAM_STATS, "officials": NotAvailableYetError("Officials not available")})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts["captured"] == 1
+    assert "officials" not in read_bundle(bundle_path(tmp_path, "wbb", "2015", "385627"))["pages"]
+
+
+def test_an_optional_tab_that_is_not_a_contest_page_writes_nothing(tmp_path):
+    f = _TabFetcher({"team_stats": "<html><body>Service unavailable</body></html>", "officials": OFFICIALS})
+    counts = capture.capture_contests(["385627"], 2015, league="wbb", root=tmp_path, fetcher=f)
+    assert counts["failed"] == 1 and counts["captured"] == 0
+    assert _written(tmp_path) == []
+
+
+def test_capture_main_refresh_days_env_falls_back_on_a_bad_value(tmp_path, monkeypatch):
+    seen: Dict[str, object] = {}
+    monkeypatch.setattr(capture, "_select_pending", lambda master, season: [])
+    monkeypatch.setattr(
+        capture, "capture_contests", lambda *a, **k: {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 0}
+    )
+
+    def _refresh(season, **kwargs):
+        seen.update(kwargs)
+        return {"checked": 0, "refreshed": 0, "still_blank": 0}
+
+    monkeypatch.setattr(capture, "refresh_officials", _refresh)
+    monkeypatch.setattr(capture, "_vendor_fetcher", lambda vendor, root, **kw: ("vendor", vendor))
+    monkeypatch.setenv("NCAA_REFRESH_OFFICIALS_DAYS", "two weeks")
+    monkeypatch.setattr(sys, "argv", ["capture", "--season", "2027", "--vendor", "decodo"])
+    capture._main("mbb", str(tmp_path))
+    assert seen["days"] == 14
+    assert seen["fetcher_factory"]() == ("vendor", "decodo")

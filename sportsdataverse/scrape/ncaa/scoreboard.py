@@ -47,12 +47,10 @@ def _as_date(value: DateLike) -> date:
     if isinstance(value, date):
         return value
     text = str(value).strip()
-    for fmt in ("%Y-%m-%d", "%m/%d/%Y"):
-        try:
-            return datetime.strptime(text, fmt).date()
-        except ValueError:
-            continue
-    raise ValueError(f"unrecognised date {value!r}; expected YYYY-MM-DD, MM/DD/YYYY or a date")
+    try:
+        return datetime.strptime(text, "%Y-%m-%d" if "-" in text else "%m/%d/%Y").date()
+    except ValueError:
+        raise ValueError(f"unrecognised date {value!r}; expected YYYY-MM-DD, MM/DD/YYYY or a date") from None
 
 
 def parse_ncaa_scoreboard_contests(

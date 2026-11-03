@@ -17,7 +17,7 @@ from typing import Callable, Iterator, Optional
 
 import pytest
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     NcaaFetchConfig,
     _TermsGateError,
@@ -338,12 +338,34 @@ def test_vocabulary_not_available_is_no_data_after_one_request(tmp_path: Path, b
 
 
 @pytest.mark.parametrize(
-    "body", ["", "x" * 15, "Access Denied", "not available", "<html>Box score not available</html>"]
+    "body",
+    [
+        "",
+        "x" * 15,
+        "Access Denied",
+        "not available",
+        "<html>Box score not available</html>",
+        "Service not available",
+        "Temporarily not available",
+    ],
 )
 def test_only_the_bare_sentence_counts_as_not_available(body: str) -> None:
     from sportsdataverse.mbb.mbb_ncaa_fetch import _is_not_available
 
     assert not _is_not_available(body)
+
+
+def test_not_available_answers_count_toward_rotate_every(tmp_path: Path) -> None:
+    """A run of not-ready contests is still traffic on one IP: it must rotate on the same budget."""
+    transport = FakeTransport([(200, _NOT_AVAILABLE[0])] * 4)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotate_every=2, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    for i in range(4):
+        with pytest.raises(NotAvailableYetError):
+            fetcher.fetch_html(f"contests/{i}/box_score")
+
+    assert _proxies_used(transport) == [_POOL[0], _POOL[0], _POOL[1], _POOL[1]]
 
 
 class _DeniedPage(_FakePage):

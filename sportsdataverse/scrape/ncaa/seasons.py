@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import html as html_lib
 import json
+import os
 import re
 import warnings
 from datetime import date
@@ -265,7 +266,7 @@ def _d1_ids_by_label(sport_code: str) -> "dict[str, int]":
         .filter((pl.col("sport_code") == sport_code) & (pl.col("division_label") == "D-I"))
         .sort("academic_year")
     )
-    return dict(zip(df["season_label"].to_list(), df["season_division_id"].to_list()))
+    return dict(df.select("season_label", "season_division_id").iter_rows())
 
 
 def _select_options(page: str, name: str) -> "list[tuple[str, str, bool]]":
@@ -307,15 +308,20 @@ def _resolve_live(code: str, academic_year: int, fetch_html: "Optional[Callable[
     if fetch_html is None:
         from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
-        with NcaaFetcher.with_browser() as fetcher:
-            page = fetcher.fetch_html(path)
+        with NcaaFetcher.with_browser() as fetcher:  # force: a cached page could predate the season
+            page = fetcher.fetch_html(path, force=True)
     else:
         page = fetch_html(path)
     rows = [r for r in _parse_scoreboard_page(page, code) if r["academic_year"] == academic_year]
     if rows:
         cache = _cache_path()
         cache.parent.mkdir(parents=True, exist_ok=True)
-        cache.write_text(json.dumps(_cached_rows() + rows))
+        # Through a per-process temp file and os.replace, so a reader never sees a half-written file.
+        # ponytail: no lock -- two processes resolving at once can drop one's rows, which costs that
+        # season one more fetch; add a file lock if the cache ever holds something not re-fetchable.
+        tmp = cache.with_name(f"{cache.name}.{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(_cached_rows() + rows))
+        os.replace(tmp, cache)
     return rows
 
 

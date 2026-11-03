@@ -128,7 +128,7 @@ def test_wbb_unknown_season_raises_value_error() -> None:
     paths: "list[str]" = []
 
     class _Stub:
-        def fetch_html(self, path: str) -> str:
+        def fetch_html(self, path: str, *, force: bool = False) -> str:
             paths.append(path)
             return FIXTURE.read_text(encoding="utf-8")
 
