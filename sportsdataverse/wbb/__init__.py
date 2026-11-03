@@ -67,6 +67,7 @@ from sportsdataverse.wbb.wbb_standings import *
 from sportsdataverse.wbb.wbb_strength_of_schedule import *
 from sportsdataverse.wbb.wbb_team_box import *
 from sportsdataverse.wbb.wbb_team_ratings import *
+from sportsdataverse.wbb.wbb_team_season_rates import *
 from sportsdataverse.wbb.wbb_team_roster import *
 from sportsdataverse.wbb.wbb_team_stats import *
 from sportsdataverse.wbb.wbb_teams import *

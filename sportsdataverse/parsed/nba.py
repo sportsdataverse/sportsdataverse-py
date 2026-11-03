@@ -349,6 +349,7 @@ from sportsdataverse.nba import nba_player_identity as nba_player_identity  # no
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
+from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_season_frame  # noqa: F401
@@ -361,6 +362,7 @@ from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
+from sportsdataverse.nba import nba_team_season_rates as nba_team_season_rates  # noqa: F401
 from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_reb_oe as nba_tracking_reb_oe  # noqa: F401
@@ -758,6 +760,7 @@ __all__ = [
     "nba_player_positions",
     "nba_player_props",
     "nba_playtype_ratings",
+    "nba_possession_rate_rows",
     "nba_predict_games",
     "nba_ratings_panel",
     "nba_raw_store_season_frame",
@@ -771,6 +774,7 @@ __all__ = [
     "nba_team_clutch",
     "nba_team_crosswalk",
     "nba_team_ratings",
+    "nba_team_season_rates",
     "nba_tracking_drive_value",
     "nba_tracking_pass_value",
     "nba_tracking_reb_oe",

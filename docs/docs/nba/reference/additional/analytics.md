@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: add_ctg–nba_raw"
-sidebar_label: "Analytics: add_ctg–nba_raw"
+title: "NBA — additional Python functions — Analytics: add_ctg–nba_ratings"
+sidebar_label: "Analytics: add_ctg–nba_ratings"
 sidebar_position: 13
-description: "NBA — additional Python functions — Analytics: add_ctg–nba_raw — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: add_ctg–nba_ratings — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: add_ctg–nba_raw
+# NBA — additional Python functions — Analytics: add_ctg–nba_ratings
 
 ### add_ctg_shot_zones {#add_ctg_shot_zones}
 
@@ -1364,6 +1364,66 @@ r = nba_playtype_ratings("2023-24", off_team=off_df, def_team=def_df, schedule=s
 r.filter(pl.col("adj_net") > 0).sort("adj_net", descending=True)
 ```
 
+### nba_possession_rate_rows {#nba_possession_rate_rows}
+
+`nba_possession_rate_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
+
+Map `nba_stats_possessions` rows onto the team-season-rates possession frame.
+
+Keeps the games of `schedule` whose `season_type` matches, takes the home team from the
+schedule, and sets each possession's start clock to the previous possession's end clock in the
+period (the period length for the first one). Points come from the made-shot counts.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows. |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `season_type`, `home_team_id`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep: `"regular-season"` (the default, stats.nba.com's "Regular Season"; NBA Cup group and knockout games count, the Cup final does not), `"playoffs"` or `"play-in"`. |
+
+**Returns**
+
+One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.nba.com game id. |
+| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
+| `possession_number` | Int64 | Order of the possession in the game. |
+| `late` | Boolean | True in the 4th quarter or an overtime: the periods the clutch window can fall in. |
+| `start_clock` | Float64 | Seconds left in the period when the possession starts (when the previous possession ended). |
+| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
+| `offense_team_id` | Int64 | stats.nba.com id of the team with the ball. |
+| `defense_team_id` | Int64 | stats.nba.com id of the team on defense. |
+| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
+| `neutral_site` | Boolean | Always False: the schedule names a home team for every NBA and WNBA game. |
+| `points` | Int64 | Points the offense scored on the possession, from its made shots and free throws (2 * fg2m + 3 * fg3m + ftm). |
+| `fga` | Float64 | Offense field-goal attempts on the possession. |
+| `fgm` | Float64 | Offense field goals made on the possession. |
+| `fg3m` | Float64 | Offense three-pointers made on the possession. |
+| `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `oreb` | Float64 | Offense offensive rebounds on the possession. |
+| `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
+| `tov` | Float64 | Offense turnovers on the possession. |
+| `ff_poss` | Float64 | Turnover-rate denominator: 1 per possession. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
+from sportsdataverse.nba.nba_team_season_rates import nba_possession_rate_rows
+rows = nba_possession_rate_rows(load_nba_stats_possessions(2025), load_nba_stats_schedules(2025))
+```
+
 ### nba_ratings_panel {#nba_ratings_panel}
 
 `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -1414,84 +1474,4 @@ print(panel.filter(pl.col("player_id") == 201939).sort("date"))
 # Every game day, no explicit grid
 
 panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
-```
-
-### nba_raw_store_season_frame {#nba_raw_store_season_frame}
-
-`nba_raw_store_season_frame(endpoint: 'str', season: 'int', variant: 'Optional[str]' = None, *, result_set: 'Optional[str]' = None, raw_store_dir: 'RawStoreDir' = None) -> "Optional['pl.DataFrame']"`
-
-Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
-
-The per-game half of the store is served by the read-through per-game path;
-this is the season-keyed half (`leaguegamelog`, `playerindex`,
-`leaguedashplayerbiostats`, ...) that the `-raw` scraper writes as
-
-* `{endpoint}/{season}/{variant}.json` -- parameterized captures, where
-  *variant* is the slugified parameter sweep (e.g. `"regular-season"`,
-  `"regular-season_totals"`), and
-* `{endpoint}/{season}.json` -- unparameterized captures (e.g.
-  `playerindex`), i.e. `variant=None`.
-
-Roots may be a local checkout or an `http(s)://` base (the raw repo served
-over raw.githubusercontent / a CDN), so a consumer -- notably the
-`hoopR-nba-stats-data` model producer -- runs clone-free in CI against the
-same committed tree the per-game compile reads.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `endpoint` | `str` |  | stats.nba.com endpoint slug (the store subdirectory). |
-| `season` | `int` |  | Season **END** year (2024 = 2023-24) -- the key both halves of the store are filed under. |
-| `variant` | `Optional[str]` | `None` | Capture variant slug, or `None` for an unparameterized capture. |
-| `result_set` | `Optional[str]` | `None` | Named result set to return when the payload carries several; defaults to the first frame that parses. |
-| `raw_store_dir` | `RawStoreDir` | `None` | Store root spec (dir or URL base) or per-endpoint mapping; `None` falls back to the env vars, `""` disables. |
-
-**Returns**
-
-The parsed `polars.DataFrame`, or `None` when the store is unset, the capture is absent, or the payload carries no usable frame -- so a caller can cleanly fall back to a live fetch.
-
-| col_name | type | description |
-|---|---|---|
-| `season_id` | String | Unique season identifier. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | String | Unique game identifier. |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `matchup` | String | Matchup. |
-| `wl` | String | Wl. |
-| `min` | Int64 | Minutes played. |
-| `fgm` | Int64 | Field goals made. |
-| `fga` | Int64 | Field goal attempts. |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `fg3_m` | Int64 | Three-point field goals made. |
-| `fg3_a` | Int64 | Three-point field goal attempts. |
-| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
-| `ftm` | Int64 | Free throws made. |
-| `fta` | Int64 | Free throw attempts. |
-| `ft_pct` | Float64 | Free throw percentage (0-1). |
-| `oreb` | Int64 | Offensive rebounds. |
-| `dreb` | Int64 | Defensive rebounds. |
-| `reb` | Int64 | Rebounds per game. |
-| `ast` | Int64 | Assists. |
-| `stl` | Int64 | Steals. |
-| `blk` | Int64 | Blocks. |
-| `tov` | Int64 | Turnovers. |
-| `pf` | Int64 | Personal fouls. |
-| `pts` | Int64 | Points scored. |
-| `plus_minus` | Int64 | Plus/minus point differential while on court. |
-| `video_available` | Int64 | Video available. |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_raw_store_season_frame
-base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
-logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
-
-# Fall back to a live fetch when the capture is absent
-
-frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
-positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
 ```
