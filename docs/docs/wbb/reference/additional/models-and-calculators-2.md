@@ -1577,8 +1577,8 @@ One row per Division I team -- see the mbb core for the full contract.
 | `proj_conf_win_pct_rank` | Float64 | Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average ties. Null for independents. |
 | `proj_conf_win_pct_pct` | Float64 | Percentile of proj_conf_win_pct within the conference. |
 | `reg_season_title_prob` | Float64 | Share of sims with the conference's best regular-season conference winning percentage; co-champions all count, so a conference can sum past 1. |
-| `conf_tourney_title_prob` | Float64 | Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob. |
-| `auto_bid_prob` | Float64 | Share of sims holding the conference's auto-bid. |
+| `conf_tourney_title_prob` | Float64 | Share of sims winning the conference tournament (a played final is certain). Ineligible teams play it too, so this can differ from auto_bid_prob. |
+| `auto_bid_prob` | Float64 | Share of sims holding the conference's auto-bid: the tournament champion, or the runner-up when the champion is ineligible. |
 | `at_large_prob` | Float64 | Share of sims with an at-large bid. |
 | `bid_prob` | Float64 | Share of sims in the 68-team field (auto_bid_prob + at_large_prob). |
 | `seed_mean` | Float64 | Mean seed line over the sims with a bid; null when never in the field. |

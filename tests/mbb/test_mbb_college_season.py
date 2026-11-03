@@ -124,7 +124,10 @@ def test_rpi_components_are_bounded_and_weighted(corpus):
     r = corpus["full"].resume.drop_nulls("rpi")
     for c in ("rpi_wp", "rpi_owp", "rpi_oowp", "rpi"):
         assert r[c].min() >= 0.0 and r[c].max() <= 1.0, c
-    blend = 0.25 * r["rpi_wp"] + 0.5 * r["rpi_owp"] + 0.25 * r["rpi_oowp"]
+    from sportsdataverse.mbb.mbb_college_season import RPI_WEIGHTS
+
+    a, b, c = RPI_WEIGHTS  # the published components add up to the published rpi
+    blend = a * r["rpi_wp"] + b * r["rpi_owp"] + c * r["rpi_oowp"]
     assert float((blend - r["rpi"]).abs().max()) < 1e-12
 
 
@@ -315,7 +318,14 @@ def test_season_sim_accounting(corpus, feb_sim):
     )
     assert (per_conf["reg_season_title_prob"] >= 1.0 - 1e-9).all()
     usi = sim.filter(pl.col("team_id") == "88").row(0, named=True)
-    assert usi["bid_prob"] == 0.0
+    assert usi["bid_prob"] == 0.0 and usi["auto_bid_prob"] == 0.0
+    # every unfinished tournament crowns one champion per sim, ineligible winners included
+    titles = (
+        sim.filter(pl.col("conference").is_not_null())
+        .group_by("conference_id")
+        .agg(pl.col("conf_tourney_title_prob").sum())
+    )
+    assert np.allclose(titles["conf_tourney_title_prob"].to_numpy(), 1.0)
 
 
 def test_season_sim_is_seeded_and_reproducible(corpus, feb_sim):
@@ -349,6 +359,13 @@ def test_season_sim_after_selection_sunday_is_the_bracket(corpus):
     br = season_bracketology(sel.resume, sel.auto_bids, league=corpus["league"])
     j = sim.join(br.select("team_id", "bid", "projected_seed"), on="team_id")
     assert ((j["bid_prob"] == 1.0) == j["bid"]).all()
+    if corpus["lg"] == "wbb":
+        ovc = sim.filter(pl.col("team_id").is_in(["88", "2630"])).sort("team_id")
+        # Southern Indiana won the OVC title; UT Martin, the runner-up, holds the auto-bid
+        assert ovc.select("team_id", "conf_tourney_title_prob", "auto_bid_prob").rows() == [
+            ("2630", 0.0, 1.0),
+            ("88", 1.0, 0.0),
+        ]
     assert j.filter(pl.col("bid") == True).select((pl.col("seed_mean") == pl.col("projected_seed")).all()).item()  # noqa: E712
 
 

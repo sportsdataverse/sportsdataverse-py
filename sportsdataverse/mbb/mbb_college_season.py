@@ -645,7 +645,7 @@ def conference_auto_bids(results: pl.DataFrame, teams: pl.DataFrame, resume: pl.
     status = _conference_status(results, teams)
     lead = (
         resume.join(status.select("season", "conference_id", "alive"), on=["season", "conference_id"], how="inner")
-        .filter(pl.col("alive").list.contains(pl.col("team_id")))
+        .filter(pl.col("alive").list.contains(pl.col("team_id")) & (pl.col("eligible") == True))  # noqa: E712
         .with_columns(
             (pl.col("conf_wins") / pl.max_horizontal(pl.col("conf_wins") + pl.col("conf_losses"), pl.lit(1))).alias(
                 "_pct"
@@ -669,10 +669,14 @@ def conference_auto_bids(results: pl.DataFrame, teams: pl.DataFrame, resume: pl.
 
 
 def _conference_status(results: pl.DataFrame, teams: pl.DataFrame) -> pl.DataFrame:
-    """Per conference: the auto-bid id once the final is played, and the eligible members still alive."""
+    """Per conference: once the final is played, its winner and the auto-bid holder; the members still alive.
+
+    Ineligible members play the tournament, so they are members and can be alive or win it; the
+    auto-bid then goes to the final's loser.
+    """
     barred = teams.filter(pl.col("eligible") == False).get_column("team_id").implode()  # noqa: E712
     members = (
-        teams.filter(pl.col("conference").is_not_null() & (pl.col("eligible") == True))  # noqa: E712
+        teams.filter(pl.col("conference").is_not_null())
         .group_by("season", "conference_id")
         .agg(pl.col("team_id").alias("members"))
     )
@@ -697,7 +701,8 @@ def _conference_status(results: pl.DataFrame, teams: pl.DataFrame) -> pl.DataFra
         .with_columns(
             pl.when(pl.col("_w").is_in(barred)).then(pl.col("_l")).otherwise(pl.col("_w")).alias("champion_id")
         )
-        .drop("_w", "_l")
+        .rename({"_w": "winner_id"})
+        .drop("_l")
     )
     losers = (
         ct.select(
@@ -720,7 +725,7 @@ def _conference_status(results: pl.DataFrame, teams: pl.DataFrame) -> pl.DataFra
             .otherwise(pl.col("members").list.set_difference(pl.col("loser")))
             .alias("alive")
         )
-        .select("season", "conference_id", "members", "alive", "champion_id")
+        .select("season", "conference_id", "members", "alive", "winner_id", "champion_id")
     )
 
 
@@ -899,7 +904,8 @@ def simulate_season(
     as-of AdjEM, as :mod:`~sportsdataverse.mbb.mbb_season_sim`), crowns the regular-season
     champions (best conference winning percentage, co-champions all count), plays every
     unfinished conference tournament as a neutral-site single elimination of the members still
-    alive seeded by conference record (byes to the top seeds), then rebuilds each team's
+    alive seeded by conference record (byes to the top seeds; an ineligible champion passes the
+    auto-bid to the runner-up), then rebuilds each team's
     résumé (WAB and Quad-1 wins move with the simulated results; ratings, SoS and opponent
     ranks stay at their as-of values) and selects and seeds the 68-team field as
     :func:`season_bracketology` does.
@@ -1012,12 +1018,13 @@ def simulate_season(
     conf_ids = sorted({x for x, hc in zip(conf, has_conf) if hc})
     members = {k: np.array([i for i, x in enumerate(conf) if x == k]) for k in conf_ids}
     champ_of = {r["conference_id"]: r["champion_id"] for r in status.iter_rows(named=True)}
+    winner_of = {r["conference_id"]: r["winner_id"] for r in status.iter_rows(named=True)}
     alive_of = {r["conference_id"]: [idx[t] for t in r["alive"] if t in idx] for r in status.iter_rows(named=True)}
     pb_neutral = norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd)  # vs each opponent, neutral
     q1_neutral = net_rank <= thr["neutral"]["q1"]
 
     rng = np.random.default_rng(seed)
-    acc = {k: np.zeros(n) for k in ("wins", "cwins", "reg", "auto", "al", "bid", "seed_sum")}
+    acc = {k: np.zeros(n) for k in ("wins", "cwins", "reg", "title", "auto", "al", "bid")}
     seed_counts = np.zeros((n, _SEED_LINES + 1))
     done = 0
     while done < n_sims:
@@ -1042,6 +1049,8 @@ def simulate_season(
             if champ is not None:
                 if champ in idx:
                     auto[:, idx[champ]] = True
+                if winner_of.get(k) in idx:
+                    acc["title"][idx[winner_of[k]]] += b
                 continue
             alive = np.array(alive_of.get(k) or [], dtype=np.int64)
             if alive.size == 0:
@@ -1053,6 +1062,7 @@ def simulate_season(
             size = 1 << max(0, int(np.ceil(np.log2(m))))
             order: np.ndarray = _bracket_order(size) - 1
             slot = np.where(order[None, :] < m, ranked[:, np.minimum(order, m - 1)], -1)
+            runner_up: np.ndarray = np.full(b, -1, dtype=np.int64)
             while slot.shape[1] > 1:
                 x, y = slot[:, 0::2], slot[:, 1::2]
                 both = (x >= 0) & (y >= 0)
@@ -1065,8 +1075,15 @@ def simulate_season(
                 np.add.at(wab, (r, wt), 1.0 - pb_neutral[lt])
                 np.add.at(wab, (r, lt), -pb_neutral[wt])
                 np.add.at(q1, (r, wt), q1_neutral[lt].astype(np.float64))
+                if win.shape[1] == 1:
+                    runner_up = lose[:, 0]
                 slot = win
-            auto[rows, slot[:, 0]] = True
+            champ_sim = slot[:, 0]
+            np.add.at(acc["title"], champ_sim, 1.0)
+            # an ineligible champion passes the auto-bid to the runner-up
+            holder = np.where(eligible[champ_sim] | (runner_up < 0), champ_sim, runner_up)
+            ok = eligible[holder]
+            auto[rows[ok], holder[ok]] = True
         score = w["adj_em_z"] * em_z[None, :] + w["sos"] * zs(sos)[None, :] + w["wab"] * zs(wab) + w["quad1_w"] * zs(q1)
         n_auto = auto.sum(axis=1)
         al_score = np.where(auto | ~eligible[None, :], -np.inf, score)
@@ -1109,7 +1126,7 @@ def simulate_season(
             pl.Series("proj_conf_wins", proj_cw),
             pl.Series("proj_conf_losses", cl0 + conf_left - (proj_cw - cw0)),
             pl.Series("reg_season_title_prob", np.where(has_conf, acc["reg"] / n_sims, np.nan)),
-            pl.Series("conf_tourney_title_prob", acc["auto"] / n_sims),
+            pl.Series("conf_tourney_title_prob", acc["title"] / n_sims),
             pl.Series("auto_bid_prob", acc["auto"] / n_sims),
             pl.Series("at_large_prob", acc["al"] / n_sims),
             pl.Series("bid_prob", acc["bid"] / n_sims),

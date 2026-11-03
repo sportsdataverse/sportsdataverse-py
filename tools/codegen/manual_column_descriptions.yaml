@@ -38676,10 +38676,12 @@ mbb_bracketology:
 mbb_season_projections:
   as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
   at_large_prob: Share of sims with an at-large bid.
-  auto_bid_prob: Share of sims holding the conference's auto-bid.
+  auto_bid_prob: 'Share of sims holding the conference''s auto-bid: the tournament champion, or the runner-up when the champion
+    is ineligible.'
   bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
   conf_losses: Regular-season conference losses as of the date.
-  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain). Ineligible teams play
+    it too, so this can differ from auto_bid_prob.
   conf_wins: Regular-season conference wins as of the date.
   conference: Conference short name. Null for independents, which get no auto-bid.
   conference_id: ESPN conference id, read off the schedule (Utf8).
@@ -38808,10 +38810,12 @@ wbb_bracketology:
 wbb_season_projections:
   as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
   at_large_prob: Share of sims with an at-large bid.
-  auto_bid_prob: Share of sims holding the conference's auto-bid.
+  auto_bid_prob: 'Share of sims holding the conference''s auto-bid: the tournament champion, or the runner-up when the champion
+    is ineligible.'
   bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
   conf_losses: Regular-season conference losses as of the date.
-  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain). Ineligible teams play
+    it too, so this can differ from auto_bid_prob.
   conf_wins: Regular-season conference wins as of the date.
   conference: Conference short name. Null for independents, which get no auto-bid.
   conference_id: ESPN conference id, read off the schedule (Utf8).

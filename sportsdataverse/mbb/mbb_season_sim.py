@@ -345,8 +345,9 @@ def mbb_season_projections(
     Returns:
         One row per Division I team: current and projected overall and conference W-L, the
         projected conference standing (``proj_conf_win_pct_rank``, 1 best within the
-        conference), ``reg_season_title_prob`` (co-champions count), ``conf_tourney_title_prob``
-        (= ``auto_bid_prob``), ``at_large_prob``, ``bid_prob``, ``seed_mean`` (over sims with a
+        conference), ``reg_season_title_prob`` (co-champions count), ``conf_tourney_title_prob``,
+        ``auto_bid_prob`` (the champion's, or the runner-up's when the champion is ineligible),
+        ``at_large_prob``, ``bid_prob``, ``seed_mean`` (over sims with a
         bid) and ``seed_1_prob`` .. ``seed_16_prob``.
 
     Example:
