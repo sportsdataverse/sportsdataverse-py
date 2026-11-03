@@ -506,7 +506,7 @@ No returns table is published for this function: no capture: it reads stats.wnba
 
 ### wnba_team_season_rates {#wnba_team_season_rates}
 
-`wnba_team_season_rates(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_team_season_rates(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates.
 
@@ -514,7 +514,7 @@ WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nb
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  |  |
+| `seasons` | `int \| list[int]` |  |  |
 | `league_id` | `str` | `'00'` |  |
 | `season_type` | `str` | `'regular-season'` |  |
 | `return_as_pandas` | `bool` | `False` |  |

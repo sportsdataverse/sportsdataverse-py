@@ -189,6 +189,23 @@ def _side_sum(col: str, side: str) -> pl.Expr:
     return pl.when(v.is_not_null().any()).then(v.sum()).alias(f"{side}_{col}")
 
 
+def _with_box_sides(rows: pl.DataFrame, counts: pl.DataFrame) -> pl.DataFrame:
+    """The possession sides with null four-factor counts, plus the box ``counts`` as zero-possession sides."""
+    missing = sorted(set(COUNT_ROWS_SCHEMA) - set(counts.columns))
+    if missing:
+        raise KeyError(f"counts missing columns: {missing}")
+    games = rows.group_by("game_id").agg(pl.col("close").first(), pl.col("neutral_site").first())
+    box = counts.select(list(COUNT_ROWS_SCHEMA)).cast(COUNT_ROWS_SCHEMA)
+    assert box.schema["game_id"] == games.schema["game_id"], "game_id dtype differs between counts and rows"
+    box = box.join(games, on="game_id", how="inner", validate="m:1").with_columns(
+        pl.lit(False).alias("clutch"),
+        pl.lit(0, dtype=pl.Int64).alias("points"),
+        pl.lit(0.0).alias("duration"),
+    )
+    sides = _sides(rows, n_poss=1).with_columns(pl.lit(None, dtype=pl.Float64).alias(c) for c in _COUNTS)
+    return pl.concat([sides, _sides(box, n_poss=0)])
+
+
 def team_season_rates(
     rows: pl.DataFrame,
     *,
@@ -229,22 +246,7 @@ def team_season_rates(
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     rows = _with_clutch(rows.select(list(RATE_ROWS_SCHEMA)).cast(RATE_ROWS_SCHEMA))
     rows = rows.with_columns((pl.col("start_clock") - pl.col("end_clock")).alias("duration"))
-    sides = _sides(rows, n_poss=1)
-    if counts is not None:
-        missing = sorted(set(COUNT_ROWS_SCHEMA) - set(counts.columns))
-        if missing:
-            raise KeyError(f"counts missing columns: {missing}")
-        games = rows.group_by("game_id").agg(pl.col("close").first(), pl.col("neutral_site").first())
-        box = counts.select(list(COUNT_ROWS_SCHEMA)).cast(COUNT_ROWS_SCHEMA)
-        assert box.schema["game_id"] == games.schema["game_id"], "game_id dtype differs between counts and rows"
-        box = box.join(games, on="game_id", how="inner", validate="m:1").with_columns(
-            pl.lit(False).alias("clutch"),
-            pl.lit(0, dtype=pl.Int64).alias("points"),
-            pl.lit(0.0).alias("duration"),
-        )
-        sides = pl.concat(
-            [sides.with_columns(pl.lit(None, dtype=pl.Float64).alias(c) for c in _COUNTS), _sides(box, n_poss=0)]
-        )
+    sides = _sides(rows, n_poss=1) if counts is None else _with_box_sides(rows, counts)
     agg = (
         _split_rows(sides)
         .group_by(["season", "team_id", "split"])
