@@ -28,7 +28,7 @@ from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_funct
 
 #: Failover order per league: ESPN first and the terminal fallback. Alternates join only once
 #: BB-D15's parity gates pass; listing one here makes it selectable in Game on Paper.
-SOURCE_ORDER: dict[str, tuple[str, ...]] = {lg: ("espn",) for lg in LEAGUES}
+SOURCE_ORDER: dict[str, tuple[str, ...]] = dict.fromkeys(LEAGUES, ("espn",))
 
 
 @dataclass
@@ -108,7 +108,7 @@ def _espn_adapter(league: str, espn_id: int, ctx: SourceContext) -> AdaptedGame:
         fetch, _ = league_pbp_functions(league)
         try:
             summary = fetch(espn_id, raw=True)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON / NoDataError -> the next source
+        except Exception as exc:  # network / JSON / NoDataError -> the next source
             raise SourceUnavailable(f"espn summary fetch failed: {type(exc).__name__}: {exc}") from exc
     return AdaptedGame(summary=summary, native_ids={"espn_event_id": str(espn_id)})
 
@@ -196,6 +196,12 @@ def _process_game(
         report = _validate_summary(adapted.summary, league)
         if not report.ok:
             error = f"contract: missing={report.missing} invalid={report.invalid}"
+            attempts.append(Attempt(src, False, error, time.perf_counter() - t0))
+            continue
+        header_id = adapted.summary["header"].get("id")
+        if str(header_id) != str(espn_id):
+            # an injected payload for another event would be served under this game's id
+            error = f"header.id {header_id!r} is not the requested game {espn_id}"
             attempts.append(Attempt(src, False, error, time.perf_counter() - t0))
             continue
         try:

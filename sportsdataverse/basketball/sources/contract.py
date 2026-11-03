@@ -119,7 +119,7 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
 KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {}
 
 #: ``MM:SS`` with optional tenths, or ESPN's bare ``SS.t`` under a minute (the parser prefixes ``0:``).
-_CLOCK = re.compile(r"^\d{1,2}(:\d{2})?(\.\d+)?$")
+_CLOCK = re.compile(r"^\d{1,2}(:[0-5]\d)?(\.\d+)?$")
 
 
 @dataclass
@@ -194,10 +194,10 @@ def _check_rows(report: ContractReport, rows: list[dict], fields: tuple[tuple[st
                 report.invalid.append(f"{prefix}.{path}: present but null on every row")
 
 
-def _check_values(report: ContractReport, competitors: list, plays: list[dict]) -> None:
-    """Value rules the parser and the win-probability model silently depend on."""
+def _check_competitors(report: ContractReport, competitors: list) -> set[str]:
+    """Competitor value rules; returns the header team ids every play team id must belong to."""
     sides = [c.get("homeAway") for c in competitors if isinstance(c, dict)]
-    if sorted(s for s in sides if s) != ["away", "home"]:
+    if sorted(str(s) for s in sides if s) != ["away", "home"]:
         report.invalid.append(f"competitors.homeAway must be exactly {{home, away}}, got {sides}")
     team_ids: set[str] = set()
     for i, c in enumerate(competitors):
@@ -211,7 +211,11 @@ def _check_values(report: ContractReport, competitors: list, plays: list[dict]) 
             report.invalid.append(f"competitors[{i}].team.id {tid!r} is not int-castable")
         else:
             team_ids.add(str(tid))
+    return team_ids
 
+
+def _check_plays(report: ContractReport, team_ids: set[str], plays: list[dict]) -> None:
+    """Play value rules the parser and the win-probability model silently depend on."""
     ids: list[int] = []
     for p in plays:
         try:
@@ -221,7 +225,7 @@ def _check_values(report: ContractReport, competitors: list, plays: list[dict]) 
             break
     else:
         # ESPN's own feeds carry late-inserted plays (a larger id in an earlier slot): report, don't fail
-        if violations := sum(b <= a for a, b in zip(ids, ids[1:])):
+        if violations := sum(b <= a for a, b in zip(ids, ids[1:], strict=False)):
             report.warnings.append(f"play ids not increasing in feed order on {violations} rows (late inserts?)")
         if dupes := len(ids) - len(set(ids)):
             report.warnings.append(f"{dupes} duplicate play ids")
@@ -274,8 +278,12 @@ def _validate_summary(summary: Any, league: str) -> ContractReport:
 
     report.missing.extend(k for k in TOP_LEVEL_KEYS[league] if k not in summary)
     for path, level in HEADER_FIELDS:
-        if _get(summary, path) is _MISSING:
+        value = _get(summary, path)
+        if value is _MISSING:
             _bucket(report, level, path)
+        elif value is None and level in ("required", "value"):
+            # e.g. a null neutralSite reads as "not neutral" and gives a neutral-site game home court
+            report.invalid.append(f"{path}: present but null")
 
     competitors = _get(summary, "header.competitions[0].competitors")
     if not isinstance(competitors, list) or not competitors:
@@ -295,5 +303,5 @@ def _validate_summary(summary: Any, league: str) -> ContractReport:
     pbp_source = _get(summary, "header.competitions[0].playByPlaySource")
     if pbp_source == "none":
         report.warnings.append('playByPlaySource == "none": the parser skips every play')
-    _check_values(report, competitors, plays)
+    _check_plays(report, _check_competitors(report, competitors), plays)
     return report

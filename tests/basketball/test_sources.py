@@ -95,7 +95,7 @@ def test_espn_fetch_through_dispatch_is_unchanged(monkeypatch: pytest.MonkeyPatc
     """The fetch path: the bare ESPN summary served as the HTTP body, ``raw=True`` defaulting included."""
     body = json.loads((ESPN / f"summary_{lg}.json").read_text(encoding="utf-8"))
     mod = importlib.import_module(f"sportsdataverse.{lg}.{lg}_pbp")
-    monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(body)))
+    monkeypatch.setattr(mod, "download", lambda *_a, **_k: _Resp(copy.deepcopy(body)))
     fetch, _ = league_pbp_functions(lg)
     before = _direct(lg, fetch(_game_id(body), raw=True))
 
@@ -104,7 +104,7 @@ def test_espn_fetch_through_dispatch_is_unchanged(monkeypatch: pytest.MonkeyPatc
     _assert_same(before, after)
     prov = after.provenance
     assert after.final["source"] is prov
-    assert prov["requested"] == prov["served"] == "espn" and prov["fallback"] is False
+    assert (prov["requested"], prov["served"], prov["fallback"]) == ("espn", "espn", False)
     assert [a["source"] for a in prov["attempts"]] == ["espn"] and prov["attempts"][0]["ok"]
     assert prov["playByPlaySource"] == "full" and prov["native_ids"] == {"espn_event_id": str(_game_id(body))}
     assert prov["contract"]["ok"] and prov["contract"]["version"] == CONTRACT_VERSION
@@ -112,7 +112,7 @@ def test_espn_fetch_through_dispatch_is_unchanged(monkeypatch: pytest.MonkeyPatc
 
 
 def test_only_espn_is_selectable_until_the_parity_gates_pass() -> None:
-    assert SOURCE_ORDER == {lg: ("espn",) for lg in LEAGUES}
+    assert dict.fromkeys(LEAGUES, ("espn",)) == SOURCE_ORDER
     assert _fallthrough_order("nba", "espn") == ("espn",)
     with pytest.raises(ValueError, match="unknown source 'live' for nba"):
         _process_game("nba", 401766458, source="live")
@@ -126,7 +126,7 @@ def test_a_registered_alternate_falls_through_to_espn(monkeypatch: pytest.Monkey
     summary = _load(path)
     monkeypatch.setitem(dispatch.SOURCE_ORDER, "nba", ("espn", "live"))
 
-    def broken(league: str, espn_id: int, ctx: dispatch.SourceContext) -> dispatch.AdaptedGame:
+    def broken(*_args: object) -> dispatch.AdaptedGame:
         raise dispatch.SourceUnavailable("cdn down")
 
     monkeypatch.setitem(dispatch._ADAPTERS, ("nba", "live"), broken)
@@ -143,10 +143,17 @@ def test_a_contract_failure_is_named_and_raises_all_sources_failed() -> None:
     assert err.value.attempts[0].error == "contract: missing=['plays[]'] invalid=[]"
 
 
+def test_a_payload_for_another_game_is_not_served_under_this_id() -> None:
+    summary = _load(ESPN / "basketball_pbp" / "wnba_400927398.json.gz")
+    with pytest.raises(AllSourcesFailed) as err:
+        _process_game("wnba", 401726992, payloads={"espn": summary})
+    assert err.value.attempts[0].error == "header.id '400927398' is not the requested game 401726992"
+
+
 def test_a_fetch_failure_raises_all_sources_failed(monkeypatch: pytest.MonkeyPatch) -> None:
     mod = importlib.import_module("sportsdataverse.mbb.mbb_pbp")
 
-    def boom(url: str, **kwargs: object) -> None:
+    def boom(*_args: object, **_kwargs: object) -> None:
         raise ConnectionError("espn down")
 
     monkeypatch.setattr(mod, "download", boom)
@@ -154,7 +161,7 @@ def test_a_fetch_failure_raises_all_sources_failed(monkeypatch: pytest.MonkeyPat
         _process_game("mbb", 401812161)
 
 
-def _mutated(mutate) -> list[str]:  # noqa: ANN001 - test-local
+def _mutated(mutate) -> list[str]:
     summary = _load(ESPN / "basketball_pbp" / "mbb_401812161.json.gz")
     mutate(summary)
     report = _validate_summary(summary, "mbb")
@@ -177,12 +184,18 @@ def _competitors(s: dict) -> list[dict]:
         (lambda s: _competitors(s)[0]["team"].update(id="-2"), "competitors[0].team.id '-2' is negative"),
         (lambda s: _competitors(s)[0].update(homeAway="away"), "competitors.homeAway must be exactly"),
         (lambda s: s["plays"][5].update(clock={"displayValue": "1:2:3"}), 'clock.displayValue not "MM:SS"'),
+        (lambda s: s["plays"][5].update(clock={"displayValue": "99:99"}), 'clock.displayValue not "MM:SS"'),
+        (lambda s: _competitors(s)[0].update(homeAway=1), "competitors.homeAway must be exactly"),
+        (
+            lambda s: s["header"]["competitions"][0].update(neutralSite=None),
+            "header.competitions[0].neutralSite: present but null",
+        ),
         (lambda s: s["plays"][5]["team"].update(id="1610612737"), "play team ids not in header competitors"),
         (lambda s: s.update(format={}), "warn: format.regulation.periods absent"),
         (lambda s: [p.pop("coordinate", None) for p in s["plays"]], "warn: plays[].coordinate.x absent"),
     ],
 )
-def test_the_contract_names_the_missing_or_wrong_field(mutate, want: str) -> None:  # noqa: ANN001
+def test_the_contract_names_the_missing_or_wrong_field(mutate, want: str) -> None:
     assert any(f.startswith(want) for f in _mutated(mutate)), _mutated(mutate)
 
 
