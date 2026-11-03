@@ -88,6 +88,8 @@ __all__ = [
     "load_cfb_group_seasons",
     "load_cfb_group_aliases",
     "load_cfb_team_group_seasons",
+    "load_cfb_team_aliases",
+    "load_cfb_player_aliases",
 ]
 
 
@@ -9742,4 +9744,98 @@ def load_cfb_team_group_seasons(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_cfb_team_group_seasons")
     )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_aliases(return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name       |type   |
+        |:--------------|:------|
+        |league         |String |
+        |team_id        |String |
+        |team_id_source |String |
+        |source         |String |
+        |source_id      |String |
+        |id_kind        |String |
+        |name_kind      |String |
+        |value          |String |
+        |valid_from     |Int32  |
+        |valid_to       |Int32  |
+        |match_method   |String |
+        |evidence       |String |
+
+    Note:
+        One season-less file: every id and name another source (cbs, cfbd, fox, on3, sports247, yahoo) uses for a team, keyed on the ESPN team id (team_id, a string; team_id_source = espn), with the seasons the source shows it on that team (valid_from / valid_to, inclusive; both null for an undated curated map). id_kind says whether source_id is the source's id for this sport's team or one id for every sport of a school; a name-only row has a null source_id. A source id means something only within its source (Fox 25 is not ESPN 25), so filter on source before joining on source_id. Seasons are the STARTING year (2025 = the fall 2025 season).
+
+    Example:
+        Quick start::
+
+            load_cfb_team_aliases()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_aliases.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_team_aliases: no published asset (returning an empty frame)")
+    out = df if df is not None else _empty_from_schema("loader_schemas:load_cfb_team_aliases")
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_player_aliases(return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |league            |String  |
+        |athlete_id        |String  |
+        |athlete_id_source |String  |
+        |source            |String  |
+        |source_player_id  |String  |
+        |team_id           |String  |
+        |source_team_id    |String  |
+        |valid_from        |Int32   |
+        |valid_to          |Int32   |
+        |match_method      |String  |
+        |match_confidence  |Float64 |
+        |evidence          |String  |
+
+    Note:
+        One season-less file: every player id another source (cbs, fox, ncaa, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. stats.ncaa.org roster ids (source ncaa) are new every season. Seasons are the STARTING year (2025 = the fall 2025 season).
+
+    Example:
+        Quick start::
+
+            load_cfb_player_aliases()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_player_aliases.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_player_aliases: no published asset (returning an empty frame)")
+    out = df if df is not None else _empty_from_schema("loader_schemas:load_cfb_player_aliases")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

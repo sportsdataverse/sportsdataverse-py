@@ -16,7 +16,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [PFF Developer API](#pff-developer-api) | `api.pff.com` | 68 | API key (SDV_PY_PFF_API_KEY) |
 | [PFF Premium Stats (LEGACY)](#pff-premium-stats-legacy) | `premium.pff.com` | 46 | cookie (legacy) |
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 21 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 23 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
 | [Additional functions](reference/additional) | hand-written wrappers & helpers | 172 | — |
 
@@ -74,7 +74,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 21 |
+| [sportsdataverse-data releases](reference/loaders) | 23 |
 
 ## Fox Sports API {#fox-sports-api}
 

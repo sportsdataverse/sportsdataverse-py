@@ -234,3 +234,32 @@ Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse
 ```python
 load_wnba_player_impact(seasons=2024)
 ```
+
+## load_wnba_player_aliases
+
+Release: [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_player_aliases.parquet`
+
+:::caution[Coverage]
+One season-less file: every player id another source (fox, wnba_stats, yahoo) uses for an ESPN athlete (athlete_id, a string; athlete_id_source = espn), with the ESPN team the match was made on (team_id) and the seasons it held (valid_from / valid_to, inclusive). match_method and match_confidence carry the matching leg's own method and score. Filter on source before joining on source_player_id. Seasons are the calendar year.
+:::
+
+### Returns {#load_wnba_player_aliases-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wnba"). |
+| `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data. |
+| `athlete_id_source` | String | Id space of athlete_id; always "espn" in this table. |
+| `source` | String | Provider whose player id this is (in this table: fox, wnba_stats, yahoo). |
+| `source_player_id` | String | The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source, so filter on source first. |
+| `team_id` | String | ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season of load_wnba_team_group_seasons. |
+| `source_team_id` | String | The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox / Yahoo / CBS team for the NFL); null otherwise. |
+| `valid_from` | Int32 | First season the id is on that team, inclusive (calendar year). |
+| `valid_to` | Int32 | Last season the id is on that team, inclusive (calendar year). A gap or a change of match method splits the window into two rows. |
+| `match_method` | String | The matching leg's own method (exact_name, fuzzy_jw, the NCAA tiers name_jersey / name / last_jersey / jaro_winkler, CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to this provider id; override for a hand-verified override. |
+| `match_confidence` | Float64 | The leg's own match confidence where it gives one (the lowest in the window); the NCAA tiers score 1.0 / 0.95 / 0.9 / 0.85; null otherwise. |
+| `evidence` | String | The release asset or sportsdataverse/sdv-reference-data file the row came from. |
+
+```python
+load_wnba_player_aliases()
+```
