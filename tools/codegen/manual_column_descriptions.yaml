@@ -46772,6 +46772,16 @@ score_win_prob:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'
+season_game_excitement:
+  game_id: ESPN game id, the join key to the play-by-play and box-score frames.
+  season: Season year as the pbp release labels it (the year the season ends).
+  gei: 'Game excitement index: the league''s mean plays per game (GEI_SCALE) / the game''s plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football''s Game on Paper formula with a per-league scale.'
+  lead_changes: How often the scoring leader flipped; a tie is not a lead, so one side ahead, tied, then the other ahead counts once.
+  max_swing_pts: Largest single-play home win-probability change, in percentage points, with no team named.
+  completed: 'Whether the pbp reaches the end of the game (an End Game / End Period row from the last regulation period on with the score not tied), so the last play was taken to the result.'
+  gei_rank: Rank of gei among the season's completed games, 1 = most exciting, ties share the best rank; null for a game that is not completed.
+  gei_pct: Share of the season's completed games with a gei at or below this one (the top game is 1.0); null for a game that is not completed.
+  gei_n: Number of completed games in the season the rank and percentile are taken over; null for a game that is not completed.
 ot_adjusted_seconds:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men''s college frames) on overtime plays.'

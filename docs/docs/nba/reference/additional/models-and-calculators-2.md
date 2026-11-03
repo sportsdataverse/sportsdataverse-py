@@ -1,10 +1,64 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_four–win_prob"
-sidebar_label: "Models and calculators: nba_four–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_expected–win_prob"
+sidebar_label: "Models and calculators: nba_expected–win_prob"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_four–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_expected–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_four–win_prob
+# NBA — additional Python functions — Models and calculators: nba_expected–win_prob
+
+### nba_expected_turnovers {#nba_expected_turnovers}
+
+`nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Expected TOV + residual ball-security skill from Synergy play-type mix.
+
+`lg_to_rate_t` = poss-weighted league mean of `turnover_freq` for play
+type `t`; `expected_tov = scale · Σ_t poss_t · lg_to_rate_t`;
+`ball_security_skill = 100·(expected_tov − tov)/poss` (fewer turnovers
+than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
+
+`scale = Σ actual tov / Σ raw type-mix estimate` is derived from the
+fetched season itself (covers players below Synergy's per-type
+classification threshold) so `Σ expected_tov ≡ Σ tov` holds exactly.
+Swapping each player's own `turnover_freq` in for the league rate
+reconstructs their real season TOV almost exactly (slope ~1.03, Spearman
+~0.97 on the 2023-24 oracle corpus) -- confirming the column semantics are
+correct. The *expected* (league-rate) version necessarily explains less
+variance than *actual* (turnover-avoidance is a more individual,
+less play-type-bound skill than foul-drawing), so its calibration slope
+runs lower than model (3)'s -- see the oracle gate for the observed floor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `tov`, `poss` (bypasses the live fetch). |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `turnover_freq`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player: `player_id` (Int64), `poss`/`tov`/ `expected_tov`/`ball_security_skill` (Float64). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_expected_turnovers
+t = nba_expected_turnovers("2023-24")
+print(t.sort("ball_security_skill", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
+
+# Pipeline next step
+
+t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
+```
 
 ### nba_four_factor_rapm {#nba_four_factor_rapm}
 
@@ -750,6 +804,60 @@ wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").he
 from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
 one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 score_win_prob(one, league="mbb", neutral_site=True)
+```
+
+### season_game_excitement {#season_game_excitement}
+
+`season_game_excitement(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, schedule: 'Optional[pl.DataFrame]' = None) -> 'pl.DataFrame'`
+
+Every game's excitement index, lead changes and biggest swing, ranked within its season.
+
+Scores each game with `score_win_prob` and `game_excitement`, then ranks the
+completed games of each season by GEI. A game whose pbp stops before the end (a truncated
+release) keeps its GEI so far but is not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Plays of one league in the basketball pbp schema (a season's `load_<league>_pbp` release, or any set of games), the columns `score_win_prob` needs plus `game_id` and `season`. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `schedule` | `Optional[DataFrame]` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral). |
+
+**Returns**
+
+One row per game, sorted by `season` then `game_id`: `game_id`, `season`, `gei`, `lead_changes`, `max_swing_pts`, `completed`, `gei_rank` (1 = the season's most exciting completed game, ties share the best rank), `gei_pct` (the share of the season's completed games with a GEI at or below this one, so the top game is 1.0) and `gei_n` (the season's completed games). The three rank columns are null for a game that is not completed. An empty input returns an empty frame with these columns.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `season` | Int64 | Season year as the pbp release labels it (the year the season ends). |
+| `gei` | Float64 | Game excitement index: the league's mean plays per game (GEI_SCALE) / the game's plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football's Game on Paper formula with a per-league scale. |
+| `lead_changes` | Int64 | How often the scoring leader flipped; a tie is not a lead, so one side ahead, tied, then the other ahead counts once. |
+| `max_swing_pts` | Float64 | Largest single-play home win-probability change, in percentage points, with no team named. |
+| `completed` | Boolean | Whether the pbp reaches the end of the game (an End Game / End Period row from the last regulation period on with the score not tied), so the last play was taken to the result. |
+| `gei_rank` | Int64 | Rank of gei among the season's completed games, 1 = most exciting, ties share the best rank; null for a game that is not completed. |
+| `gei_pct` | Float64 | Share of the season's completed games with a gei at or below this one (the top game is 1.0); null for a game that is not completed. |
+| `gei_n` | Int64 | Number of completed games in the season the rank and percentile are taken over; null for a game that is not completed. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import season_game_excitement
+from sportsdataverse.wnba.wnba_loaders import load_wnba_pbp, load_wnba_schedule
+gei = season_game_excitement(load_wnba_pbp([2025]), league="wnba", schedule=load_wnba_schedule([2025]))
+
+# The season's best games
+
+gei.sort("gei_rank", nulls_last=True).head(10)
 ```
 
 ### shot_coordinates {#shot_coordinates}

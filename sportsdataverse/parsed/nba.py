@@ -221,6 +221,7 @@ from sportsdataverse.nba import fox_nba_scorechip as fox_nba_scorechip  # noqa: 
 from sportsdataverse.nba import fox_nba_scores_segment as fox_nba_scores_segment  # noqa: F401
 from sportsdataverse.nba import fox_nba_team_header as fox_nba_team_header  # noqa: F401
 from sportsdataverse.nba import fox_nba_teamnav as fox_nba_teamnav  # noqa: F401
+from sportsdataverse.nba import game_excitement as game_excitement  # noqa: F401
 from sportsdataverse.nba import game_minutes as game_minutes  # noqa: F401
 from sportsdataverse.nba import game_page_frames as game_page_frames  # noqa: F401
 from sportsdataverse.nba import game_page_tables as game_page_tables  # noqa: F401
@@ -416,6 +417,7 @@ from sportsdataverse.nba import rotowire_injuries as rotowire_injuries  # noqa: 
 from sportsdataverse.nba import score_shot_xpoints as score_shot_xpoints  # noqa: F401
 from sportsdataverse.nba import score_win_prob as score_win_prob  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.nba import season_game_excitement as season_game_excitement  # noqa: F401
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_coordinates as shot_coordinates  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
@@ -632,6 +634,7 @@ __all__ = [
     "fox_nba_team_stats",
     "fox_nba_teamnav",
     "fox_nba_teams",
+    "game_excitement",
     "game_minutes",
     "game_page_frames",
     "game_page_tables",
@@ -826,6 +829,7 @@ __all__ = [
     "score_shot_xpoints",
     "score_win_prob",
     "scoreboard_event_parsing",
+    "season_game_excitement",
     "shooter_talent",
     "shot_coordinates",
     "shot_selection_quality",
