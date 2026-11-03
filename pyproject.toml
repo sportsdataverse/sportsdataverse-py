@@ -407,6 +407,7 @@ files = [
     "sportsdataverse/basketball/basketball_runtime.py",
     "sportsdataverse/basketball/_competitions.py",
     "sportsdataverse/basketball/basketball_crosswalk.py",
+    "sportsdataverse/basketball/sources/idmap.py",
     "sportsdataverse/basketball/aba/aba_parsers.py",
     "sportsdataverse/basketball/aba/aba_runtime.py",
     "sportsdataverse/basketball/acb/acb_codes.py",
