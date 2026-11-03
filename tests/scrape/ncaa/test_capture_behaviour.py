@@ -16,9 +16,8 @@ from typing import Dict, List
 
 import pytest
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 from sportsdataverse.scrape.ncaa import capture, discover, rosters
-from sportsdataverse.mbb.mbb_ncaa_fetch import NotAvailableYetError
 from sportsdataverse.scrape.ncaa.bundle import bundle_path, read_bundle, write_bundle
 
 FIX = Path(__file__).resolve().parents[2] / "fixtures" / "ncaa"

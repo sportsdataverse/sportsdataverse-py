@@ -20,8 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.mbb.mbb_ncaa_fetch import NotAvailableYetError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 
 from .bundle import is_captured, write_bundle
 

@@ -113,7 +113,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 from urllib.parse import urlsplit
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 
 
 logger = logging.getLogger(__name__)
@@ -628,15 +628,6 @@ _TERMS_DWELL_MS = 10_000
 # Failed click-throughs tolerated per fetch before the form, not the proxy, is
 # the likely cause (see _get_with_rotation).
 _ACCEPT_FAILURES_MAX = 3
-
-
-class NotAvailableYetError(NoDataError):
-    """stats.ncaa.org answered a contest tab with "<tab> not available": the contest exists, the tab is empty.
-
-    A :class:`~sportsdataverse.errors.NoDataError` (the fetch succeeded), kept distinct so a
-    capture can count a not-yet-played or not-yet-posted contest apart from a real 404 and
-    retry it on a later run.
-    """
 
 
 class _TermsGateError(AssetFetchError):
@@ -1406,7 +1397,6 @@ __all__ = [
     "NCAA_HOST_URL",
     "NcaaFetchConfig",
     "NcaaFetcher",
-    "NotAvailableYetError",
     "get_config",
     "update_config",
     "reset_config",
