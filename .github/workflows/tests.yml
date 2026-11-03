@@ -10,8 +10,8 @@
 # all of it the SAME doc render repeated four to five times. That is fixed in
 # tests/codegen/conftest.py; the jobs below carry the rest.
 #
-#   offline  ubuntu, parallel, no live network. Fast enough to run on PRs, which
-#            restores the pre-2026-08-12 merge-time signal.
+#   offline  ubuntu, parallel, no live network. ~18 min, so main pushes only since
+#            2026-11-03 (PRs get ruff + mypy, the codegen drift check and the 3.10 floor).
 #   live     moved to live-tests.yml (ubuntu, live APIs, main pushes + dispatch).
 #
 # SCOPE (still narrowed, unchanged by this split): the suite runs on 3.13.2 only and
@@ -29,18 +29,21 @@ on:
   pull_request:
   workflow_dispatch:
 
-# Cancel superseded runs on the same ref. On main this used to mean each merge
-# killed the previous run mid-flight and the suite never completed on any commit;
-# it is survivable now only because the offline job finishes in minutes.
+# Cancel superseded runs on the same ref, except on main: each merge used to kill the
+# previous run mid-flight so the suite never completed on any commit, and the long jobs
+# now run on main only.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 
 jobs:
   offline:
+    # Over 5 min on average, so pull requests skip it (owner decision 2026-11-03); it runs on main
+    # pushes, and `gh workflow run <file> --ref <branch>` runs it for a branch on demand.
     name: pytest (offline, parallel)
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -96,7 +99,10 @@ jobs:
           --ignore=tests/codegen
 
   whole-game:
+    # Over 5 min on average, so pull requests skip it (owner decision 2026-11-03); it runs on main
+    # pushes, and `gh workflow run <file> --ref <branch>` runs it for a branch on demand.
     name: pytest (whole-game oracles)
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30  # ~6 min on main (2026-10-30)
     steps:
