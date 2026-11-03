@@ -10,7 +10,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 119 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 32 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 33 | none |
 | [NHL Web API](#nhl-web-api) | `api-web.nhle.com` | 28 | none |
 | [NHL EDGE](#nhl-edge) | `api-web.nhle.com` | 35 | none |
 | [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
@@ -33,7 +33,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 27 |
+| [sportsdataverse-data releases](reference/loaders) | 28 |
 | [Hand-written wrappers](reference/additional/sportsdataverse-data-releases) | 5 |
 
 ## NHL Web API {#nhl-web-api}

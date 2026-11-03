@@ -47,6 +47,8 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_mbb_group_seasons` | [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) | — |
 | `load_mbb_group_aliases` | [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) | — |
 | `load_mbb_team_group_seasons` | [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) | — |
+| `load_mbb_team_aliases` | [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) | — |
+| `load_mbb_player_aliases` | [mbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_groups) | — |
 
 ## NCAA (stats.ncaa.org)
 
@@ -75,6 +77,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_mbb_player_season_stats](loaders/player.md#load_mbb_player_season_stats) | Release: espn_mens_college_basketball_player_season_stats · asset … |
 | [load_mbb_player_crosswalk](loaders/player.md#load_mbb_player_crosswalk) | Release: mbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet` |
 | [load_mbb_player_core](loaders/player.md#load_mbb_player_core) | Release: espn_mens_college_basketball_player_core · asset … |
+| [load_mbb_player_aliases](loaders/player.md#load_mbb_player_aliases) | Release: mbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_groups/mbb_player_aliases.parquet` |
 
 ## Team
 
@@ -84,6 +87,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_mbb_team_season_stats](loaders/team.md#load_mbb_team_season_stats) | Release: espn_mens_college_basketball_team_season_stats · asset … |
 | [load_mbb_team_crosswalk](loaders/team.md#load_mbb_team_crosswalk) | Release: mbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_team_crosswalk_{season}.parquet` |
 | [load_mbb_team_group_seasons](loaders/team.md#load_mbb_team_group_seasons) | Release: mbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_groups/mbb_team_group_seasons_{season}.parquet` |
+| [load_mbb_team_aliases](loaders/team.md#load_mbb_team_aliases) | Release: mbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_groups/mbb_team_aliases.parquet` |
 
 ## Other
 

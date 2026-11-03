@@ -40,6 +40,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nhl_group_seasons` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
 | `load_nhl_group_aliases` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
 | `load_nhl_team_group_seasons` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
+| `load_nhl_team_aliases` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
 
 ## Play-by-play
 
@@ -77,3 +78,4 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nhl_group_seasons](loaders/other.md#load_nhl_group_seasons) | Release: nhl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_seasons.parquet` |
 | [load_nhl_group_aliases](loaders/other.md#load_nhl_group_aliases) | Release: nhl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_aliases.parquet` |
 | [load_nhl_team_group_seasons](loaders/other.md#load_nhl_team_group_seasons) | Release: nhl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_team_group_seasons_{season}.parquet` |
+| [load_nhl_team_aliases](loaders/other.md#load_nhl_team_aliases) | Release: nhl_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_team_aliases.parquet` |

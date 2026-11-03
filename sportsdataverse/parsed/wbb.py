@@ -427,6 +427,7 @@ from sportsdataverse.wbb import load_wbb_group_seasons as load_wbb_group_seasons
 from sportsdataverse.wbb import load_wbb_groups as load_wbb_groups  # noqa: F401
 from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
 from sportsdataverse.wbb import load_wbb_pbp as load_wbb_pbp  # noqa: F401
+from sportsdataverse.wbb import load_wbb_player_aliases as load_wbb_player_aliases  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_boxscore as load_wbb_player_boxscore  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_core as load_wbb_player_core  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_crosswalk as load_wbb_player_crosswalk  # noqa: F401
@@ -438,6 +439,7 @@ from sportsdataverse.wbb import load_wbb_schedule as load_wbb_schedule  # noqa: 
 from sportsdataverse.wbb import load_wbb_schedule_crosswalk as load_wbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wbb import load_wbb_shots as load_wbb_shots  # noqa: F401
 from sportsdataverse.wbb import load_wbb_standings as load_wbb_standings  # noqa: F401
+from sportsdataverse.wbb import load_wbb_team_aliases as load_wbb_team_aliases  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_boxscore as load_wbb_team_boxscore  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_crosswalk as load_wbb_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_group_seasons as load_wbb_team_group_seasons  # noqa: F401
@@ -989,6 +991,7 @@ __all__ = [
     "load_wbb_groups",
     "load_wbb_officials",
     "load_wbb_pbp",
+    "load_wbb_player_aliases",
     "load_wbb_player_boxscore",
     "load_wbb_player_core",
     "load_wbb_player_crosswalk",
@@ -1000,6 +1003,7 @@ __all__ = [
     "load_wbb_schedule_crosswalk",
     "load_wbb_shots",
     "load_wbb_standings",
+    "load_wbb_team_aliases",
     "load_wbb_team_boxscore",
     "load_wbb_team_crosswalk",
     "load_wbb_team_group_seasons",

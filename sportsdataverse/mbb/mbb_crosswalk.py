@@ -35,6 +35,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     str_id,
 )
 from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
+from sportsdataverse._crosswalk_basketball_torvik import check_bart_games
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
@@ -687,6 +688,8 @@ def mbb_schedule_crosswalk(
     strict: bool = False,
     fox: bool = False,
     yahoo: bool = False,
+    bart: Optional[pl.DataFrame] = None,
+    bart_games: Optional[pl.DataFrame] = None,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the MBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo).
@@ -717,6 +720,13 @@ def mbb_schedule_crosswalk(
             Yahoo does not list (a non-Division-I home team) stays null. A
             failed Yahoo fetch logs a warning; without the team listing the ids
             stay null, without the id list the unverified home-side id is kept.
+        bart: Pre-fetched Torvik ``team`` / ``conf`` frame for the team
+            crosswalk this joins through (see :func:`mbb_team_crosswalk`).
+            ``None`` fetches it live.
+        bart_games: Pre-parsed Torvik super schedule (the
+            :func:`~sportsdataverse._crosswalk_basketball_sources.bart_super_sked`
+            frame). ``None`` fetches it live. barttorvik.com answers 403 to
+            datacenter IPs, so a producer there passes both from a snapshot.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -727,6 +737,8 @@ def mbb_schedule_crosswalk(
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.
+        ValueError: ``bart_games`` is missing a column, its ``game_date`` is not
+            ``Date``, or it holds another season (a stale snapshot).
 
     Example:
         Quick start::
@@ -747,8 +759,10 @@ def mbb_schedule_crosswalk(
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
 
     season = int(season) if season is not None else most_recent_mbb_season()
-    team_xwalk = mbb_team_crosswalk(season=season, fox=pl.DataFrame(), strict=strict, yahoo=yahoo, **kwargs)
-    bart_games = bart_super_sked("mbb", season, **kwargs)
+    team_xwalk = mbb_team_crosswalk(season=season, fox=pl.DataFrame(), bart=bart, strict=strict, yahoo=yahoo, **kwargs)
+    bart_games = (
+        bart_super_sked("mbb", season, **kwargs) if bart_games is None else check_bart_games(bart_games, season)
+    )
     dates = sorted({d for d in bart_games["game_date"].to_list() if d is not None})
     espn_games = espn_scoreboard_games("mbb", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, bart_games, team_xwalk, season)
@@ -820,7 +834,8 @@ def mbb_player_crosswalk(
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
 
     season = int(season) if season is not None else most_recent_mbb_season()
-    team_xwalk = mbb_team_crosswalk(season=season, strict=strict, **kwargs)
+    # Only the ESPN / Fox team ids are read, so skip Torvik (403s datacenter IPs).
+    team_xwalk = mbb_team_crosswalk(season=season, bart=pl.DataFrame(), strict=strict, **kwargs)
     frames: List[pl.DataFrame] = []
     espn_tally = FetchTally("espn_mbb_team_roster", strict=strict)
     fox_tally = FetchTally("fox_mbb_team_roster", strict=strict)

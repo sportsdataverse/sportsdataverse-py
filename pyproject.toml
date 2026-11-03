@@ -264,7 +264,7 @@ include = ["sportsdataverse*", "sdv_docs*", "sdv_cli*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "validation/*.yaml", "py.typed"]
+sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "scrape/ncaa/data/*", "validation/*.yaml", "py.typed"]
 
 
 
@@ -537,6 +537,7 @@ files = [
     "sportsdataverse/_crosswalk_basketball_sources.py",
     "sportsdataverse/_crosswalk_basketball_archive.py",
     "sportsdataverse/_crosswalk_basketball_fox_yahoo.py",
+    "sportsdataverse/_crosswalk_basketball_torvik.py",
     "sportsdataverse/_crosswalk_alt.py",
     "sportsdataverse/_crosswalk_history.py",
     "sportsdataverse/_espn_basketball_pbp.py",
@@ -675,6 +676,7 @@ files = [
     "sportsdataverse/nba/nba_game_page.py",
     "sportsdataverse/basketball/sources/contract.py",
     "sportsdataverse/basketball/sources/dispatch.py",
+    "sportsdataverse/basketball/sources/parity.py",
     "sportsdataverse/nba/live_pbp/__init__.py",
     "sportsdataverse/nba/live_pbp/to_espn_summary.py",
     "sportsdataverse/nba/nba_clutch.py",
@@ -919,6 +921,8 @@ files = [
     "sportsdataverse/schemas/__init__.py",
     "sportsdataverse/scrape/__init__.py",
     "sportsdataverse/scrape/stats/__init__.py",
+    "sportsdataverse/scrape/ncaa/scoreboard.py",
+    "sportsdataverse/scrape/ncaa/seasons.py",
     "sportsdataverse/scrape/stats/proxy.py",
     "sportsdataverse/scrape/stats/session_transport.py",
     "sportsdataverse/scrape/stats/observability.py",
