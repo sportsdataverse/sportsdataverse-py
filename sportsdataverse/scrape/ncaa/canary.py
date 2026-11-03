@@ -293,6 +293,12 @@ class _PatchrightTransport:
             try:
                 self._temp_dir.cleanup()
             except OSError:  # Chromium may still be writing into it: remove what we can
+                # Unmark first: a leftover then ages out as unmarked, even on Windows where
+                # _pid_alive keeps every marked profile.
+                try:
+                    Path(self._temp_dir.name, _OWNER_FILE).unlink(missing_ok=True)
+                except OSError:
+                    pass
                 shutil.rmtree(self._temp_dir.name, ignore_errors=True)
             self._temp_dir = None
 

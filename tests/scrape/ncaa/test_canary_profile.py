@@ -113,3 +113,19 @@ def test_a_failed_launch_removes_its_profile(tmp_path, fake_browser, monkeypatch
     assert Path(launches[0]["user_data_dir"]).name.startswith(F._PROFILE_PREFIX)
     assert _profiles(tmp_path) == []
     assert t._pw is None and t._temp_dir is None
+
+
+def test_a_failed_cleanup_unmarks_the_leftover(tmp_path, fake_browser, monkeypatch):
+    launches, _ = fake_browser
+    t = canary._PatchrightTransport()
+    t._ensure({"http": "http://u:p@host:10001"})
+    profile = Path(launches[0]["user_data_dir"])
+    (profile / "locked").write_text("x")
+
+    def _busy(self):
+        raise PermissionError("in use")
+
+    monkeypatch.setattr(tempfile.TemporaryDirectory, "cleanup", _busy)
+    monkeypatch.setattr(canary.shutil, "rmtree", lambda *a, **k: None)  # nothing can be removed
+    t.close()
+    assert not (profile / F._OWNER_FILE).exists()  # so the sweep ages it out as unmarked
