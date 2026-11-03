@@ -39163,6 +39163,176 @@ wnba_team_strength:
   tov_pct_rank: Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
   wins: Wins in the season type's completed games (the schedule's final scores).
+nba_season_sim:
+  adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
+    opponent on a neutral court.'
+  adj_net_rtg_sd: 'Posterior sd of adj_net_rtg (points per 100) from the ridge: the per-season rating shift each simulated
+    season draws.'
+  as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
+    a score counts as played.'
+  conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
+  division: NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team.
+  games_remaining: Regular-season games on the schedule still to play (simulated).
+  losses: Regular-season losses in the games already played.
+  mean_pick: Mean draft pick over the simulated seasons in which the team is in the lottery; null when it never is, or as
+    p_pick_1.
+  mean_seed: Mean regular-season seed over the simulated seasons (1 = best).
+  n_sims: Number of simulated seasons behind every share on the row.
+  p_division: Share of simulated seasons in which the team wins its division under the NBA tiebreakers; null for the WNBA.
+  p_drawn_pick: Share of simulated seasons in which the team's slot gets a drawn pick (NBA top 4, WNBA top 2); null as p_pick_1.
+  p_lottery: Share of simulated seasons in which the team misses the playoffs and enters the draft lottery.
+  p_pick_1: Share of simulated seasons in which the team's own lottery slot draws the first pick; null when the league has
+    no published chances for that many lottery teams.
+  p_play_in: 'NBA: share of simulated seasons with a conference seed of 7 to 10, the play-in; null for the WNBA.'
+  p_playoffs: 'Share of simulated seasons in which the team makes the playoffs: NBA top 6 or through the simulated play-in;
+    WNBA top 8.'
+  p_playoffs_se: 'Monte Carlo standard error of p_playoffs: sqrt(p (1 - p) / n_sims).'
+  p_seed_1: 'Share of simulated seasons in which the team finishes the regular season seeded 1: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_10: 'Share of simulated seasons in which the team finishes the regular season seeded 10: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_11: 'Share of simulated seasons in which the team finishes the regular season seeded 11: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_12: 'Share of simulated seasons in which the team finishes the regular season seeded 12: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_13: 'Share of simulated seasons in which the team finishes the regular season seeded 13: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_14: 'Share of simulated seasons in which the team finishes the regular season seeded 14: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_15: 'Share of simulated seasons in which the team finishes the regular season seeded 15: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_2: 'Share of simulated seasons in which the team finishes the regular season seeded 2: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_3: 'Share of simulated seasons in which the team finishes the regular season seeded 3: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_4: 'Share of simulated seasons in which the team finishes the regular season seeded 4: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_5: 'Share of simulated seasons in which the team finishes the regular season seeded 5: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_6: 'Share of simulated seasons in which the team finishes the regular season seeded 6: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_7: 'Share of simulated seasons in which the team finishes the regular season seeded 7: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_8: 'Share of simulated seasons in which the team finishes the regular season seeded 8: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_9: 'Share of simulated seasons in which the team finishes the regular season seeded 9: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_top4: 'Share of simulated seasons with a top-4 seed: first-round home court.'
+  p_top6: 'NBA: share of simulated seasons with a top-6 conference seed, straight to the playoffs; null for the WNBA.'
+  proj_losses: Mean final regular-season losses over the simulated seasons.
+  proj_wins: Mean final regular-season wins over the simulated seasons (played wins plus simulated ones).
+  proj_wins_p10: 10th percentile of the final wins over the simulated seasons.
+  proj_wins_p90: 90th percentile of the final wins over the simulated seasons.
+  proj_wins_sd: Standard deviation of the final wins over the simulated seasons.
+  proj_wins_se: 'Monte Carlo standard error of proj_wins: proj_wins_sd / sqrt(n_sims).'
+  season: Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year.
+  team_id: stats.nba.com team id (Int64).
+  wins: Regular-season wins in the games already played.
+wnba_season_sim:
+  adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
+    opponent on a neutral court.'
+  adj_net_rtg_sd: 'Posterior sd of adj_net_rtg (points per 100) from the ridge: the per-season rating shift each simulated
+    season draws.'
+  as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
+    a score counts as played.'
+  conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
+  division: NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team.
+  games_remaining: Regular-season games on the schedule still to play (simulated).
+  losses: Regular-season losses in the games already played.
+  mean_pick: Mean draft pick over the simulated seasons in which the team is in the lottery; null when it never is, or as
+    p_pick_1.
+  mean_seed: Mean regular-season seed over the simulated seasons (1 = best).
+  n_sims: Number of simulated seasons behind every share on the row.
+  p_division: Share of simulated seasons in which the team wins its division under the NBA tiebreakers; null for the WNBA.
+  p_drawn_pick: Share of simulated seasons in which the team's slot gets a drawn pick (NBA top 4, WNBA top 2); null as p_pick_1.
+  p_lottery: Share of simulated seasons in which the team misses the playoffs and enters the draft lottery.
+  p_pick_1: Share of simulated seasons in which the team's own lottery slot draws the first pick; null when the league has
+    no published chances for that many lottery teams.
+  p_play_in: 'NBA: share of simulated seasons with a conference seed of 7 to 10, the play-in; null for the WNBA.'
+  p_playoffs: 'Share of simulated seasons in which the team makes the playoffs: NBA top 6 or through the simulated play-in;
+    WNBA top 8.'
+  p_playoffs_se: 'Monte Carlo standard error of p_playoffs: sqrt(p (1 - p) / n_sims).'
+  p_seed_1: 'Share of simulated seasons in which the team finishes the regular season seeded 1: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_10: 'Share of simulated seasons in which the team finishes the regular season seeded 10: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_11: 'Share of simulated seasons in which the team finishes the regular season seeded 11: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_12: 'Share of simulated seasons in which the team finishes the regular season seeded 12: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_13: 'Share of simulated seasons in which the team finishes the regular season seeded 13: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_14: 'Share of simulated seasons in which the team finishes the regular season seeded 14: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_15: 'Share of simulated seasons in which the team finishes the regular season seeded 15: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_2: 'Share of simulated seasons in which the team finishes the regular season seeded 2: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_3: 'Share of simulated seasons in which the team finishes the regular season seeded 3: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_4: 'Share of simulated seasons in which the team finishes the regular season seeded 4: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_5: 'Share of simulated seasons in which the team finishes the regular season seeded 5: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_6: 'Share of simulated seasons in which the team finishes the regular season seeded 6: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_7: 'Share of simulated seasons in which the team finishes the regular season seeded 7: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_8: 'Share of simulated seasons in which the team finishes the regular season seeded 8: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_seed_9: 'Share of simulated seasons in which the team finishes the regular season seeded 9: in its conference for the
+    NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams.'
+  p_top4: 'Share of simulated seasons with a top-4 seed: first-round home court.'
+  p_top6: 'NBA: share of simulated seasons with a top-6 conference seed, straight to the playoffs; null for the WNBA.'
+  proj_losses: Mean final regular-season losses over the simulated seasons.
+  proj_wins: Mean final regular-season wins over the simulated seasons (played wins plus simulated ones).
+  proj_wins_p10: 10th percentile of the final wins over the simulated seasons.
+  proj_wins_p90: 90th percentile of the final wins over the simulated seasons.
+  proj_wins_sd: Standard deviation of the final wins over the simulated seasons.
+  proj_wins_se: 'Monte Carlo standard error of proj_wins: proj_wins_sd / sqrt(n_sims).'
+  season: Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year.
+  team_id: stats.nba.com team id (Int64).
+  wins: Regular-season wins in the games already played.
+nba_season_standings:
+  conference: NBA conference (East / West); "WNBA" for every WNBA team.
+  division: NBA division; "WNBA" for every WNBA team.
+  division_leader: True for the NBA division winner after the division tiebreak; False for every WNBA row.
+  division_rank: Rank within the division under the NBA tiebreakers, 1 = the division winner (the WNBA rows rank the league).
+  games: Regular-season games played.
+  games_back: 'Games behind the seed-1 team of the conference (NBA) or league (WNBA): ((leader wins - wins) + (losses - leader
+    losses)) / 2.'
+  losses: Regular-season losses.
+  point_diff: Points scored minus points allowed over the regular-season games.
+  season: Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year.
+  seed: 'Seed under the league''s tiebreakers: rank in the conference (NBA) or the league (WNBA), 1 = best.'
+  team_id: stats.nba.com team id (Int64).
+  win_pct: Regular-season winning percentage, wins divided by games played; the first key of the seeding.
+  wins: Regular-season wins.
+wnba_season_standings:
+  conference: NBA conference (East / West); "WNBA" for every WNBA team.
+  division: NBA division; "WNBA" for every WNBA team.
+  division_leader: True for the NBA division winner after the division tiebreak; False for every WNBA row.
+  division_rank: Rank within the division under the NBA tiebreakers, 1 = the division winner (the WNBA rows rank the league).
+  games: Regular-season games played.
+  games_back: 'Games behind the seed-1 team of the conference (NBA) or league (WNBA): ((leader wins - wins) + (losses - leader
+    losses)) / 2.'
+  losses: Regular-season losses.
+  point_diff: Points scored minus points allowed over the regular-season games.
+  season: Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year.
+  seed: 'Seed under the league''s tiebreakers: rank in the conference (NBA) or the league (WNBA), 1 = best.'
+  team_id: stats.nba.com team id (Int64).
+  win_pct: Regular-season winning percentage, wins divided by games played; the first key of the seeding.
+  wins: Regular-season wins.
+nba_draft_lottery_odds:
+  chances: The slot's chances in 1,000 (NBA 2019 table; WNBA published table or the caller's).
+  lottery_slot: Pre-lottery slot, 1 = the worst record.
+  pick: Draft pick number.
+  probability: Exact probability that the slot gets the pick, from enumerating every ordered draw.
+wnba_draft_lottery_odds:
+  chances: The slot's chances in 1,000 (NBA 2019 table; WNBA published table or the caller's).
+  lottery_slot: Pre-lottery slot, 1 = the worst record.
+  pick: Draft pick number.
+  probability: Exact probability that the slot gets the pick, from enumerating every ordered draw.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,

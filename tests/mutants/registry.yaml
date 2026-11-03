@@ -8828,3 +8828,113 @@
   test: tests/mbb/test_mbb_team_strength.py::test_sov_and_record_by_hand
   expected: kill
   note: Averaging the losses' opponents inverts the definition.
+
+- id: bb-ps-two-team-point-diff-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'two: list[Criterion] = [self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  mutant: 'two: list[Criterion] = [self._point_diff, self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  test: tests/nba/test_nba_season_sim.py::test_nba_2024_ties_break_as_the_league_did
+  expected: kill
+  note: Point differential before head-to-head seeds NOP (49-33, +362) over PHX, which won the season series.
+
+- id: bb-ps-multi-head-to-head-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'multi: list[Criterion] = [self._division_winner, self._head_to_head, self._division_pct, self._conference_pct]'
+  mutant: 'multi: list[Criterion] = [self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  test: tests/nba/test_nba_season_sim.py::test_nba_2024_ties_break_as_the_league_did
+  expected: kill
+  note: A three-way tie goes to the division leader first (ORL over IND and PHI at 47-35 in 2023-24).
+
+- id: bb-ps-wnba-point-diff-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'wnba: list[Criterion] = [self._head_to_head, self._vs_winning, self._pair_point_diff, self._point_diff]'
+  mutant: 'wnba: list[Criterion] = [self._point_diff, self._head_to_head, self._vs_winning, self._pair_point_diff]'
+  test: tests/nba/test_nba_season_sim.py::test_wnba_standings_reproduce_the_real_first_round
+  expected: kill
+  note: ATL (+334) would pass LV (+128) at 30-14; the real 2025 first round paired LV as the 2 seed.
+
+- id: bb-ps-play-in-910-host
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'win910 = t9 if _play_game(model, sim_net, float(noise[t9, t10]), t9, t10, rng) else t10'
+  mutant: 'win910 = t9 if not _play_game(model, sim_net, float(noise[t10, t9]), t10, t9, rng) else t10'
+  test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
+  expected: kill
+  note: The 10 seed hosting the 9 moves both teams' play-in odds off the closed form.
+
+- id: bb-ps-play-in-last-host
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'last = _play_game(model, sim_net, float(noise[loser78, win910]), loser78, win910, rng)'
+  mutant: 'last = not _play_game(model, sim_net, float(noise[win910, loser78]), win910, loser78, rng)'
+  test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
+  expected: kill
+  note: The last play-in game is at the 7-8 loser's home.
+
+- id: bb-ps-lottery-pre-2019-odds
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'NBA_LOTTERY_CHANCES: tuple[int, ...] = (140, 140, 140, 125, 105, 90, 75, 60, 45, 30, 20, 15, 10, 5)'
+  mutant: 'NBA_LOTTERY_CHANCES: tuple[int, ...] = (250, 199, 156, 119, 88, 63, 43, 28, 17, 11, 8, 7, 6, 5)'
+  test: tests/nba/test_nba_season_sim.py::test_nba_lottery_odds_are_the_2019_table
+  expected: kill
+  note: The 1994-2018 weights give the worst team 25% at the first pick, not 14%.
+
+- id: bb-ps-lottery-three-draws
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'NBA_LOTTERY_DRAWS = 4'
+  mutant: 'NBA_LOTTERY_DRAWS = 3'
+  test: tests/nba/test_nba_season_sim.py::test_nba_lottery_odds_are_the_2019_table
+  expected: kill
+  note: Three drawn picks (the pre-2019 rule) let the worst team fall to 4th, not 5th.
+
+- id: bb-ps-lottery-ties-not-split
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'out[k : j + 1] = out[k : j + 1].mean()'
+  mutant: 'out[k : j + 1] = out[k : j + 1]'
+  test: tests/nba/test_nba_season_sim.py::test_tied_lottery_slots_share_their_chances
+  expected: kill
+  note: Tied teams split their slots' chances (CHA and POR 132.5 each in 2024), not keep the drawn order's.
+
+- id: bb-ps-wnba-lottery-one-season
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'comb = (prior_w[out_] + total_wins[s, out_]) / (prior_g[out_] + total_games[s, out_])'
+  mutant: 'comb = total_wins[s, out_] / total_games[s, out_]'
+  test: tests/nba/test_nba_season_sim.py::test_wnba_lottery_uses_two_season_records
+  expected: kill
+  note: The WNBA lottery order is the two-season record; 2025 alone ties DAL and CHI at 10-34 and moves CONN up.
+
+- id: bb-ps-home-term-dropped
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'return (net_home - net_away + 2.0 * self.hfa) * self.poss / 100.0'
+  mutant: 'return (net_home - net_away) * self.poss / 100.0'
+  test: tests/nba/test_nba_season_sim.py::test_game_model_home_term
+  expected: kill
+  note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
+
+- id: bb-ps-rating-shift-off
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'shift = rng.standard_normal((n_sims, n_t)) * sd if rating_uncertainty else np.zeros((n_sims, n_t))'
+  mutant: 'shift = np.zeros((n_sims, n_t))'
+  test: tests/nba/test_nba_season_sim.py::test_rating_shift_widens_the_season_spread
+  expected: kill
+  note: The per-season rating shift is what widens the win distribution; a silent no-op would leave it fixed.

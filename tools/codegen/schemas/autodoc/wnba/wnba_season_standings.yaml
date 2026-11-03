@@ -1,0 +1,42 @@
+schema: wnba_season_standings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: division
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: wins
+  type: integer
+  description: ''
+- name: losses
+  type: integer
+  description: ''
+- name: win_pct
+  type: double
+  description: ''
+- name: point_diff
+  type: integer
+  description: ''
+- name: division_rank
+  type: integer
+  description: ''
+- name: division_leader
+  type: logical
+  description: ''
+- name: seed
+  type: integer
+  description: ''
+- name: games_back
+  type: double
+  description: ''

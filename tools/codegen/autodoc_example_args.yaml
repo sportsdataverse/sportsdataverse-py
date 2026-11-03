@@ -194,6 +194,9 @@ nba:
   nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
   nba_team_strength: {seasons: 2026}  # 30 rows x 77 cols
+  nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
+  nba_season_standings: {games: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}  # 30 rows x 13 cols
+  nba_draft_lottery_odds: {}  # 196 rows x 4 cols
   nba_possession_rate_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_player_props: {season: 2024, game_id: '401585828', home_team_id: '2', away_team_id: '6'}  # 36 rows x 7 cols
   raw_game_efficiency: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}  # 2640 rows x 10 cols  [private: _normalize_schedule]
@@ -277,6 +280,9 @@ wnba:
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
   wnba_team_strength: {seasons: 2025}  # 13 rows x 77 cols
+  wnba_season_sim: {season: 2025, as_of_date: 2025-07-16}  # 13 rows x 43 cols
+  wnba_season_standings: {games: {$call: wnba.load_wnba_stats_schedules, args: {seasons: 2025}}}  # 13 rows x 13 cols
+  wnba_draft_lottery_odds: {}  # 25 rows x 4 cols
   wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
   wnba_player_props: {season: 2024, game_id: "401620238", home_team_id: "18", away_team_id: "8"}  # 26 rows x 7 cols
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols

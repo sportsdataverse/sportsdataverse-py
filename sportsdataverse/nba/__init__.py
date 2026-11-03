@@ -141,6 +141,8 @@ from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
     nba_team_season_rates,
 )
 from sportsdataverse.nba.nba_team_strength import nba_team_strength  # noqa: F401
+from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_season_standings  # noqa: F401
+from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401
 from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
     expected_possessions,
     in_game_features,

@@ -327,6 +327,7 @@ from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  
 from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_from_archive  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
+from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
 from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
@@ -356,6 +357,8 @@ from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_seas
 from sportsdataverse.nba import nba_referee_assignments as nba_referee_assignments  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
 from sportsdataverse.nba import nba_schedule_crosswalk as nba_schedule_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_season_sim as nba_season_sim  # noqa: F401
+from sportsdataverse.nba import nba_season_standings as nba_season_standings  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
@@ -739,6 +742,7 @@ __all__ = [
     "nba_crosswalks_from_archive",
     "nba_darko",
     "nba_decay_rapm",
+    "nba_draft_lottery_odds",
     "nba_draft_model",
     "nba_expected_turnovers",
     "nba_foul_drawing",
@@ -768,6 +772,8 @@ __all__ = [
     "nba_referee_assignments",
     "nba_rookie_projection",
     "nba_schedule_crosswalk",
+    "nba_season_sim",
+    "nba_season_standings",
     "nba_shot_value",
     "nba_shot_value_lineups",
     "nba_spm",
