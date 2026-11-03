@@ -519,25 +519,92 @@ def _live_to_espn_summary(
     ids, notes, eid = _Ids(lookup), [], str(espn_id)
     regulation = int(bgame.get("regulationPeriods") or 4)
     final = bgame.get("gameStatus") == 3
+    teams = _teams(home, away, ids)
+    header = _header(game, bgame, eid, season, teams, final)
+    by_live_team = {t.get("teamId"): tid for t, tid, _ in teams.values()}
+    plays, unmapped_types, unpaired = _plays(game.get("actions") or [], eid, regulation, by_live_team, ids)
+    if final and plays:
+        # the two payloads are fetched separately: a final box over a play list that stops short would serve
+        # the final score in the header and an older one to the win-probability model. Mid-game a few
+        # seconds of lag between them is expected and left alone.
+        last = (plays[-1]["homeScore"], plays[-1]["awayScore"])
+        boxed = (int(home.get("score") or 0), int(away.get("score") or 0))
+        if last != boxed:
+            raise ValueError(f"final box score {boxed} but the play-by-play ends at {last}")
 
+    if ids.unmapped:
+        notes.append(
+            f"{len(ids.unmapped)} liveData people (players, or a coach charged a technical) not in the id map"
+            f" (null athlete ids): {sorted(ids.unmapped)}"
+        )
+    if unmapped_types:
+        notes.append(f"liveData play types without an ESPN match (family fallback): {sorted(unmapped_types)}")
+    if unpaired:
+        notes.append("substitutions left unpaired (in / out counts differ at one stoppage)")
+
+    summary: dict[str, Any] = {
+        "boxscore": {
+            "teams": [
+                {
+                    "team": obj,
+                    "statistics": _team_statistics(t.get("statistics") or {}, o.get("statistics") or {}),
+                    "displayOrder": i,
+                }
+                for i, ((t, _, obj), (o, _, _)) in enumerate(
+                    ((teams["away"], teams["home"]), (teams["home"], teams["away"])), start=1
+                )
+            ],
+            "players": [_box_players(t, obj, ids) for t, _, obj in (teams["away"], teams["home"])],
+        },
+        "format": {"regulation": {"periods": regulation}},
+        "header": header,
+        "plays": plays,
+    }
+    # the rest of the keys espn_<lg>_pbp(raw=True) defaults: liveData has none of them
+    for key in ("gameInfo", "predictor", "article", "standings", "season"):
+        summary[key] = {}
+    for key in _EMPTY_LISTS:
+        summary[key] = []
+    return summary, notes
+
+
+_EMPTY_LISTS = (
+    "leaders",
+    "seasonseries",
+    "broadcasts",
+    "pickcenter",
+    "againstTheSpread",
+    "odds",
+    "winprobability",
+    "videos",
+    "teamInfo",
+    "espnWP",
+    "timeouts",
+)
+
+
+def _teams(home: Mapping[str, Any], away: Mapping[str, Any], ids: _Ids) -> dict[str, tuple[Mapping, str, dict]]:
+    """``side -> (liveData team, ESPN team id, ESPN team object)``; raises on a team the id map lacks."""
     teams = {}
     for side, t in (("home", home), ("away", away)):
         tid = ids.team(t.get("teamId"))
         city, name = t.get("teamCity"), t.get("teamName")
-        teams[side] = (
-            t,
-            tid,
-            {
-                "id": tid,
-                "location": city,
-                "name": name,
-                "abbreviation": t.get("teamTricode"),
-                "displayName": f"{city} {name}",
-                "shortDisplayName": name,
-            },
-        )
-    by_live_team = {t.get("teamId"): tid for t, tid, _ in teams.values()}
+        obj = {
+            "id": tid,
+            "location": city,
+            "name": name,
+            "abbreviation": t.get("teamTricode"),
+            "displayName": f"{city} {name}",
+            "shortDisplayName": name,
+        }
+        teams[side] = (t, tid, obj)
+    return teams
 
+
+def _header(
+    game: Mapping[str, Any], bgame: Mapping[str, Any], eid: str, season: int, teams: dict, final: bool
+) -> dict[str, Any]:
+    """ESPN's ``header``: season, date, status and both competitors (home first, as ESPN orders them)."""
     competitors = []
     for side, (t, tid, obj) in teams.items():
         other = teams["away" if side == "home" else "home"][0]
@@ -551,9 +618,8 @@ def _live_to_espn_summary(
         if final:
             comp["winner"] = (t.get("score") or 0) > (other.get("score") or 0)
         competitors.append(comp)
-
     status: Any = bgame.get("gameStatus")
-    header = {
+    return {
         "id": eid,
         "season": {"year": season, "type": _SEASON_TYPES.get(str(bgame.get("gameId") or game.get("gameId"))[2:3])},
         "competitions": [
@@ -576,20 +642,27 @@ def _live_to_espn_summary(
         ],
     }
 
+
+def _plays(
+    raw_actions: Any, eid: str, regulation: int, by_live_team: dict, ids: _Ids
+) -> tuple[list[dict], set[str], bool]:
+    """ESPN ``plays[]`` in liveData's ``orderNumber`` order, folded rows merged.
+
+    Returns:
+        ``(plays, unmapped play types, whether a substitution was left unpaired)``.
+    """
     plays: list[dict] = []
     open_subs: dict[tuple, list[dict]] = {}  # (period, clock, team) -> sub rows still missing their "in"
     waiting_ins: dict[tuple, list[Mapping]] = {}  # "in" actions logged before their "out"
     unmapped_types: set[str] = set()
     period_start: dict[Any, Any] = {}  # period -> the clock its "period start" action reads (12:00, 10:00, 5:00)
-    actions = sorted(
-        (a for a in game.get("actions") or [] if isinstance(a, Mapping)), key=lambda a: a.get("orderNumber") or 0
-    )
+    actions = sorted((a for a in raw_actions if isinstance(a, Mapping)), key=lambda a: a.get("orderNumber") or 0)
     for a in actions:
         kind, sub = a.get("actionType") or "", str(a.get("subType") or "").lower()
+        key = (a.get("period"), a.get("clock"), a.get("teamId"))
         if kind == "period" and sub == "start":
             period_start[a.get("period")] = a.get("clock")
         if kind == "substitution" and sub == "in":
-            key = (a.get("period"), a.get("clock"), a.get("teamId"))
             if open_subs.get(key):
                 _fill_sub(open_subs[key].pop(0), a, ids)
             else:
@@ -600,104 +673,62 @@ def _live_to_espn_summary(
         text, exact = _espn_type(a)
         if not exact:
             unmapped_types.add("/".join(str(a.get(k) or "") for k in ("actionType", "subType", "descriptor")))
-        shot = kind in _POINTS
-        made = shot and a.get("shotResult") == "Made"
-        clock = a.get("clock")
-        if kind == "jumpball" and a.get("descriptor") == "startperiod":
-            # ESPN stamps the opening tip with the period's start, not the clock at the recovery (26 of 26)
-            clock = period_start.get(a.get("period"), clock)
-        row: dict[str, Any] = {
-            "id": f"{eid}{a.get('actionNumber')}",
-            "sequenceNumber": str(a.get("actionNumber")),
-            "type": {"id": ESPN_TYPE_IDS[text], "text": text},
-            "text": a.get("description") or "",
-            "awayScore": int(a.get("scoreAway") or 0),
-            "homeScore": int(a.get("scoreHome") or 0),
-            "period": {"number": a.get("period"), "displayValue": _period_label(int(a.get("period") or 0), regulation)},
-            "clock": {"displayValue": _clock(clock)},
-            "scoringPlay": made,
-            "scoreValue": _POINTS[kind] if made else 0,
-            "shootingPlay": shot,
-            "pointsAttempted": _POINTS.get(kind, 0),
-            # ESPN's whole-second wallclock: 2025-11-08T00:10:50.0Z -> 2025-11-08T00:10:50Z
-            "wallclock": f"{a['timeActual'][:19]}Z" if a.get("timeActual") else None,
-            "coordinate": dict(_NO_COORDINATE),
-        }
-        if kind in ("2pt", "3pt") and a.get("xLegacy") is not None and a.get("yLegacy") is not None:
-            # same sign and frame as ESPN (module docstring): tenths of a foot from the rim -> feet from (25, 0)
-            row["coordinate"] = {"x": 25 + a["xLegacy"] / 10, "y": a["yLegacy"] / 10}
-        if a.get("teamId") in by_live_team:
-            row["team"] = {"id": by_live_team[a["teamId"]]}
+        row = _play_row(a, eid, text, regulation, period_start, by_live_team)
         if kind == "substitution":
-            key = (a.get("period"), a.get("clock"), a.get("teamId"))
-            out_id, out_name = ids.player(a.get("personId"), a.get("playerNameI"))
-            row["participants"] = [{"athlete": {"id": None}}, {"athlete": {"id": out_id}}]
-            row["_out_name"] = out_name
-            if waiting_ins.get(key):
-                _fill_sub(row, waiting_ins[key].pop(0), ids)
-            else:
-                open_subs.setdefault(key, []).append(row)
-        else:
-            parts = _participants(a, ids)
-            if parts:
-                row["participants"] = [{"athlete": {"id": i}} for i in parts]
+            _open_sub(row, a, ids, waiting_ins.get(key), open_subs.setdefault(key, []))
+        elif parts := _participants(a, ids):
+            row["participants"] = [{"athlete": {"id": i}} for i in parts]
         plays.append(row)
     for row in plays:
         row.pop("_out_name", None)
-    if final and plays:
-        # the two payloads are fetched separately: a final box over a play list that stops short would serve
-        # the final score in the header and an older one to the win-probability model. Mid-game a few
-        # seconds of lag between them is expected and left alone.
-        last = (plays[-1]["homeScore"], plays[-1]["awayScore"])
-        boxed = (int(home.get("score") or 0), int(away.get("score") or 0))
-        if last != boxed:
-            raise ValueError(f"final box score {boxed} but the play-by-play ends at {last}")
+    return plays, unmapped_types, any(open_subs.values()) or any(waiting_ins.values())
 
-    if ids.unmapped:
-        notes.append(
-            f"{len(ids.unmapped)} liveData people (players, or a coach charged a technical) not in the id map"
-            f" (null athlete ids): {sorted(ids.unmapped)}"
-        )
-    if unmapped_types:
-        notes.append(f"liveData play types without an ESPN match (family fallback): {sorted(unmapped_types)}")
-    if any(open_subs.values()) or any(waiting_ins.values()):
-        notes.append("substitutions left unpaired (in / out counts differ at one stoppage)")
 
-    summary = {
-        "boxscore": {
-            "teams": [
-                {
-                    "team": obj,
-                    "statistics": _team_statistics(t.get("statistics") or {}, o.get("statistics") or {}),
-                    "displayOrder": i,
-                }
-                for i, ((t, _, obj), (o, _, _)) in enumerate(
-                    ((teams["away"], teams["home"]), (teams["home"], teams["away"])), start=1
-                )
-            ],
-            "players": [_box_players(t, obj, ids) for t, _, obj in (teams["away"], teams["home"])],
-        },
-        "format": {"regulation": {"periods": regulation}},
-        "gameInfo": {},
-        "leaders": [],
-        "seasonseries": [],
-        "broadcasts": [],
-        "predictor": {},
-        "pickcenter": [],
-        "againstTheSpread": [],
-        "odds": [],
-        "winprobability": [],
-        "header": header,
-        "plays": plays,
-        "article": {},
-        "videos": [],
-        "standings": {},
-        "teamInfo": [],
-        "espnWP": [],
-        "season": {},
-        "timeouts": [],
+def _play_row(
+    a: Mapping[str, Any], eid: str, text: str, regulation: int, period_start: dict, by_live_team: dict
+) -> dict[str, Any]:
+    """One ESPN play from one liveData action (participants are added by :func:`_plays`)."""
+    kind = a.get("actionType") or ""
+    shot = kind in _POINTS
+    made = shot and a.get("shotResult") == "Made"
+    clock = a.get("clock")
+    if kind == "jumpball" and a.get("descriptor") == "startperiod":
+        # ESPN stamps the opening tip with the period's start, not the clock at the recovery (26 of 26)
+        clock = period_start.get(a.get("period"), clock)
+    row: dict[str, Any] = {
+        "id": f"{eid}{a.get('actionNumber')}",
+        "sequenceNumber": str(a.get("actionNumber")),
+        "type": {"id": ESPN_TYPE_IDS[text], "text": text},
+        "text": a.get("description") or "",
+        "awayScore": int(a.get("scoreAway") or 0),
+        "homeScore": int(a.get("scoreHome") or 0),
+        "period": {"number": a.get("period"), "displayValue": _period_label(int(a.get("period") or 0), regulation)},
+        "clock": {"displayValue": _clock(clock)},
+        "scoringPlay": made,
+        "scoreValue": _POINTS[kind] if made else 0,
+        "shootingPlay": shot,
+        "pointsAttempted": _POINTS.get(kind, 0),
+        # ESPN's whole-second wallclock: 2025-11-08T00:10:50.0Z -> 2025-11-08T00:10:50Z
+        "wallclock": f"{a['timeActual'][:19]}Z" if a.get("timeActual") else None,
+        "coordinate": dict(_NO_COORDINATE),
     }
-    return summary, notes
+    if kind in ("2pt", "3pt") and a.get("xLegacy") is not None and a.get("yLegacy") is not None:
+        # same sign and frame as ESPN (module docstring): tenths of a foot from the rim -> feet from (25, 0)
+        row["coordinate"] = {"x": 25 + a["xLegacy"] / 10, "y": a["yLegacy"] / 10}
+    if a.get("teamId") in by_live_team:
+        row["team"] = {"id": by_live_team[a["teamId"]]}
+    return row
+
+
+def _open_sub(row: dict, out: Mapping[str, Any], ids: _Ids, waiting: Optional[list], pending: list) -> None:
+    """Start a substitution row at its ``out`` action; pair it with an ``in`` already logged, else wait for one."""
+    out_id, out_name = ids.player(out.get("personId"), out.get("playerNameI"))
+    row["participants"] = [{"athlete": {"id": None}}, {"athlete": {"id": out_id}}]
+    row["_out_name"] = out_name
+    if waiting:
+        _fill_sub(row, waiting.pop(0), ids)
+    else:
+        pending.append(row)
 
 
 def _fill_sub(row: dict, action_in: Mapping[str, Any], ids: _Ids) -> None:
@@ -748,7 +779,7 @@ def _live_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     try:
         lookup = _idmap_lookup(league, payload.get("idmap"))
         row = _resolve_game(league, espn_id, payload.get("idmap"))
-    except Exception as exc:  # noqa: BLE001 -- an id-map miss or Data API error hands over to the next source
+    except Exception as exc:  # an id-map miss or Data API error hands over to the next source
         raise SourceUnavailable(f"{league} {espn_id}: {type(exc).__name__}: {exc}") from exc
     if not row or not row.get("source_id"):
         raise SourceUnavailable(f"{league} {espn_id}: ESPN game not in the id map (no liveData game id)")
@@ -762,7 +793,7 @@ def _live_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             if got != game_id:
                 raise ValueError(f"{name} payload is game {got!r}, the id map says {game_id}")
         summary, notes = _live_to_espn_summary(pbp, box, espn_id=espn_id, season=int(row["season"]), lookup=lookup)
-    except Exception as exc:  # noqa: BLE001 -- network / NoDataError / projection -> the next source
+    except Exception as exc:  # network / NoDataError / projection -> the next source
         raise SourceUnavailable(f"{league} {espn_id}: liveData {game_id}: {type(exc).__name__}: {exc}") from exc
     return AdaptedGame(
         summary=summary, native_ids={"espn_event_id": str(espn_id), "live_game_id": game_id}, notes=notes
