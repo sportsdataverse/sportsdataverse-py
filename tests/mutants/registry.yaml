@@ -8608,3 +8608,56 @@
   test: tests/nfl/shield_pbp/test_description.py -k "qb_dropback_truth_table"
   expected: kill
   note: A penalty-nullified pass (a no_play) counted as a dropback, ~1,270 rows a season.
+
+# --- BB-D2: basketball league context (ranks, percentiles, _n, league averages) ----------------
+# Killers: tests/nba/test_nba_league_context.py on the committed NBA/WNBA 2024 captures, the
+# stats.nba.com ratings oracle and the 2025 college player-seasons.
+- id: bb-league-context-team-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'ok = v.is_not_null() & (n >= min_cohort) & (distinct > 1)'
+  mutant: 'ok = v.is_not_null() & (distinct > 1)'
+  test: tests/nba/test_nba_league_context.py::test_team_floor_nulls_rank_and_pct
+  expected: kill
+  note: Four real teams would get ranks 1-4 and percentiles of four instead of null (floor 5).
+
+- id: bb-league-context-cohort-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'pl.when(has & (n >= min_cohort))'
+  mutant: 'pl.when(has)'
+  test: tests/nba/test_nba_league_context.py::test_player_position_cohort_floor
+  expected: kill
+  note: The seven 2025 college PF player-seasons would get a _pos_pct under the ten-player floor.
+
+- id: bb-league-context-lower-is-better
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'r = v.rank(method="average", descending=m not in lower)'
+  mutant: 'r = v.rank(method="average", descending=True)'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The worst defense (highest DRtg) would rank 1 and read as the 97th percentile.
+
+- id: bb-league-context-average-row-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: '        df = df.filter(qualifier)'
+  mutant: '        df = df'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_league_average_row
+  expected: kill
+  note: The league-average row would count the two All-Star teams (n 32, not the _pct denominator 30).
+
+- id: bb-team-ratings-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/nba/nba_team_ratings.py
+  snippet: 'qualifier=_RATINGS_QUALIFIER,'
+  mutant: 'qualifier=None,'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The one-game All-Star teams would be ranked and inflate every percentile's n.

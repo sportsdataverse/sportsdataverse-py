@@ -848,6 +848,7 @@ categories:
       - sportsdataverse.nhl.nhl_xg
       - sportsdataverse.nba.nba_war
       - sportsdataverse.nhl.nhl_war
+      - sportsdataverse._common.league_context
       - sportsdataverse._common.metrics
       - sportsdataverse._common.ratings
       - sportsdataverse.cfb.model_calculators

@@ -38089,6 +38089,134 @@ fox_nba_standings:
   w_l: Win-loss record as a 'W-L' string (e.g. '42-40').
   western_conference: Team's position in the Western Conference table, from the first column whose header is the table name;
     null on rows from other tables.
+nba_team_ratings:
+  adj_def_rtg_n: 'Sample size of adj_def_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_def_rtg_pct: 'Percentile of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions),
+    among the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star
+    teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked
+    teams, so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_def_rtg_rank: Rank of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among
+    the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better),
+    average ties.
+  adj_net_rtg_n: 'Sample size of adj_net_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_net_rtg_pct: 'Percentile of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the
+    season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_net_rtg_rank: Rank of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  adj_off_rtg_n: 'Sample size of adj_off_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_off_rtg_pct: 'Percentile of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions),
+    among the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star
+    teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked
+    teams, so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_off_rtg_rank: Rank of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among
+    the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  adj_pace_n: 'Sample size of adj_pace: the games the pace is computed over (equal to games).'
+  adj_pace_pct: 'Percentile of adj_pace, the opponent-adjusted pace (possessions per game), among the season''s qualified
+    teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier
+    or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near
+    100 and none is exactly 0 or 100.'
+  adj_pace_rank: Rank of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at
+    least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or
+    when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
+  raw_def_rtg_n: 'Sample size of raw_def_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  raw_def_rtg_pct: 'Percentile of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among
+    the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  raw_def_rtg_rank: Rank of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average
+    ties.
+  raw_off_rtg_n: 'Sample size of raw_off_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  raw_off_rtg_pct: 'Percentile of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among
+    the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  raw_off_rtg_rank: Rank of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  raw_pace_n: 'Sample size of raw_pace: the games the pace is computed over (equal to games).'
+  raw_pace_pct: 'Percentile of raw_pace, the unadjusted pace (possessions per game), among the season''s qualified teams (at
+    least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or
+    when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near
+    100 and none is exactly 0 or 100.'
+  raw_pace_rank: Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least
+    half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer
+    than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
+wnba_team_ratings:
+  adj_def_rtg_n: 'Sample size of adj_def_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_def_rtg_pct: 'Percentile of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions),
+    among the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star
+    teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked
+    teams, so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_def_rtg_rank: Rank of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among
+    the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better),
+    average ties.
+  adj_net_rtg_n: 'Sample size of adj_net_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_net_rtg_pct: 'Percentile of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the
+    season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_net_rtg_rank: Rank of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  adj_off_rtg_n: 'Sample size of adj_off_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  adj_off_rtg_pct: 'Percentile of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions),
+    among the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star
+    teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked
+    teams, so the best team sits near 100 and none is exactly 0 or 100.'
+  adj_off_rtg_rank: Rank of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among
+    the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  adj_pace_n: 'Sample size of adj_pace: the games the pace is computed over (equal to games).'
+  adj_pace_pct: 'Percentile of adj_pace, the opponent-adjusted pace (possessions per game), among the season''s qualified
+    teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier
+    or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near
+    100 and none is exactly 0 or 100.'
+  adj_pace_rank: Rank of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at
+    least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or
+    when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
+  raw_def_rtg_n: 'Sample size of raw_def_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  raw_def_rtg_pct: 'Percentile of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among
+    the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  raw_def_rtg_rank: Rank of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average
+    ties.
+  raw_off_rtg_n: 'Sample size of raw_off_rtg: the box-score possessions the rating is computed over, summed over the team''s
+    games and rounded.'
+  raw_off_rtg_pct: 'Percentile of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among
+    the season''s qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams);
+    null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams,
+    so the best team sits near 100 and none is exactly 0 or 100.'
+  raw_off_rtg_rank: Rank of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's
+    qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for
+    a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties.
+  raw_pace_n: 'Sample size of raw_pace: the games the pace is computed over (equal to games).'
+  raw_pace_pct: 'Percentile of raw_pace, the unadjusted pace (possessions per game), among the season''s qualified teams (at
+    least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or
+    when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near
+    100 and none is exactly 0 or 100.'
+  raw_pace_rank: Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least
+    half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer
+    than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
