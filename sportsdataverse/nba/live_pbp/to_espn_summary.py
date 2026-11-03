@@ -370,14 +370,16 @@ def _team_statistics(stats: Mapping[str, Any], opponent: Mapping[str, Any]) -> l
     """liveData team totals as ESPN's ``boxscore.teams[].statistics`` (the names the team box reads).
 
     ESPN's conventions, each checked on the 68 team rows of the 34-game match: percentages are whole
-    numbers rounded half to even (203 of 204; the one miss is ESPN's own box error on 401809511),
+    numbers rounded half up (every exact half on the BB-D15 parity corpus: 37.5 -> 38 three times, 42.5 -> 43
+    twice; Python's half-to-even ``round`` gave 42),
     ``totalRebounds`` excludes team rebounds, technicals count the bench / team ones too, and
     ``turnoverPoints`` is what the OPPONENT scored off this team's turnovers.
     """
 
     def pct(made: str, att: str) -> str:
         a = stats.get(att) or 0
-        return str(round(100 * (stats.get(made) or 0) / a)) if a else "0"
+        # integer half-up: floor(100 * made / att + 1/2) with no float rounding at the exact half
+        return str((200 * (stats.get(made) or 0) + a) // (2 * a)) if a else "0"
 
     technicals = (stats.get("foulsTechnical") or 0) + (stats.get("foulsTeamTechnical") or 0)
 

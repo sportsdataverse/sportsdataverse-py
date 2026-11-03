@@ -1251,7 +1251,7 @@ One row per game — see the MBB sibling for the full `SCOREBOARD_SCHEMA` column
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The date's season has no WBB `season_divisions` id (includes 2009-10 — see module docstring), *conference* is not a known conference, the date is not `MM/DD/YYYY`, or the fetched page has no games table. |
+| `ValueError` | Stats.ncaa.org lists no WBB season for the date (a season missing from the bundled table is looked up live first, see the module docstring), *conference* is not a known conference, the date is not `MM/DD/YYYY`, or the fetched page has no games table. |
 
 **Example**
 
