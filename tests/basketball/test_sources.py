@@ -111,11 +111,15 @@ def test_espn_fetch_through_dispatch_is_unchanged(monkeypatch: pytest.MonkeyPatc
     assert prov["lossy_columns"] == [] and after.health == {"espn": "ok"}
 
 
-def test_only_espn_is_selectable_until_the_parity_gates_pass() -> None:
-    assert dict.fromkeys(LEAGUES, ("espn",)) == SOURCE_ORDER
-    assert _fallthrough_order("nba", "espn") == ("espn",)
-    with pytest.raises(ValueError, match="unknown source 'live' for nba"):
-        _process_game("nba", 401766458, source="live")
+def test_an_alternate_is_selectable_only_after_its_parity_gates_pass() -> None:
+    """BB-D15: "live" passed the parity gates for NBA and WNBA; the college leagues still list ESPN alone."""
+    assert SOURCE_ORDER == {"nba": ("espn", "live"), "wnba": ("espn", "live"), "mbb": ("espn",), "wbb": ("espn",)}
+    assert set(SOURCE_ORDER) == set(LEAGUES)
+    assert _fallthrough_order("nba", "espn") == ("espn", "live")
+    assert _fallthrough_order("wnba", "live") == ("live", "espn")
+    assert _fallthrough_order("mbb", "espn") == ("espn",)
+    with pytest.raises(ValueError, match="unknown source 'live' for mbb"):
+        _process_game("mbb", 401830342, source="live")
     with pytest.raises(ValueError, match="league must be one of"):
         _process_game("nfl", 401766458)
 
