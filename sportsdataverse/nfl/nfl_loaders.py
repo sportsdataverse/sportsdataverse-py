@@ -2940,3 +2940,82 @@ def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = Fal
         )
     )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_team_aliases(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load every id and name other sources use for an NFL team (``nfl_groups`` release).
+
+    One season-less file: each Fox, Yahoo and CBS team id and name, keyed on
+    the ESPN team id (``team_id``, a string; ``team_id_source`` is ``"espn"``),
+    with the seasons the source shows it on that team (``valid_from`` /
+    ``valid_to``, inclusive, the STARTING year). A source id means something
+    only within its source, so filter on ``source`` before joining on
+    ``source_id``.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per alias: ``league``, ``team_id``,
+        ``team_id_source``, ``source``, ``source_id``, ``id_kind``,
+        ``name_kind``, ``value``, ``valid_from``, ``valid_to``,
+        ``match_method``, ``evidence``.
+
+    Raises:
+        NoDataError: If the asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_team_aliases
+            aliases = load_nfl_team_aliases()
+            aliases.filter(aliases["source"] == "fox").select("source_id", "team_id", "valid_from", "valid_to")
+
+        See Also:
+            * :func:`load_nfl_player_aliases` -- the same map for player ids
+            * :func:`load_nfl_team_group_seasons` -- the ESPN team-seasons the windows cover
+    """
+    data = _fetch_release_parquet(NFL_GROUPS_URL.format(table="team_aliases"))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_player_aliases(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load every player id other sources use for an ESPN NFL athlete (``nfl_groups`` release).
+
+    One season-less file: each Fox, Yahoo and CBS player id mapped to the ESPN
+    athlete id (``athlete_id``, a string; ``athlete_id_source`` is
+    ``"espn"``), with the ESPN team the match was made on and the seasons it
+    held (``valid_from`` / ``valid_to``, inclusive, the STARTING year).
+    ``match_method`` and ``match_confidence`` carry the matching leg's own
+    method and score. Filter on ``source`` before joining on
+    ``source_player_id``.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per id, team and season window: ``league``,
+        ``athlete_id``, ``athlete_id_source``, ``source``,
+        ``source_player_id``, ``team_id``, ``source_team_id``, ``valid_from``,
+        ``valid_to``, ``match_method``, ``match_confidence``, ``evidence``.
+
+    Raises:
+        NoDataError: If the asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_player_aliases
+            aliases = load_nfl_player_aliases()
+            aliases.filter(aliases["source"] == "yahoo").select("source_player_id", "athlete_id").unique()
+
+        See Also:
+            * :func:`load_nfl_team_aliases` -- the same map for team ids
+            * :func:`load_nfl_ff_playerids` -- the DynastyProcess fantasy id map
+    """
+    data = _fetch_release_parquet(NFL_GROUPS_URL.format(table="player_aliases"))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
