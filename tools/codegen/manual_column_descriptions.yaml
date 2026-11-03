@@ -9685,7 +9685,7 @@ load_cfb_player_aliases:
     CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
     this provider id; override for a hand-verified override.
   source: 'Provider whose player id this is (in this table: cbs, fox, ncaa, yahoo).'
-  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+  source_player_id: The source's own player id (e.g. Yahoo ncaaf.p.316907, Fox 76284). It means something only within its source,
     so filter on source first. stats.ncaa.org roster ids (source ncaa) are new every season.
   source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
     Yahoo / CBS team for the NFL); null otherwise.
@@ -43397,7 +43397,7 @@ load_nfl_player_aliases:
     CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
     this provider id; override for a hand-verified override.
   source: 'Provider whose player id this is (in this table: cbs, fox, yahoo).'
-  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+  source_player_id: The source's own player id (e.g. Yahoo nfl.p.8040, Fox 76284). It means something only within its source,
     so filter on source first.
   source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
     Yahoo / CBS team for the NFL); null otherwise.
@@ -46244,7 +46244,7 @@ load_wnba_player_aliases:
     CFB rosters name); crosswalk for a leg that names none; propagated when a pair matched in another season was carried to
     this provider id; override for a hand-verified override.
   source: 'Provider whose player id this is (in this table: fox, wnba_stats, yahoo).'
-  source_player_id: The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source,
+  source_player_id: The source's own player id (e.g. Yahoo wnba.p.5010, Fox 76284). It means something only within its source,
     so filter on source first.
   source_team_id: The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox /
     Yahoo / CBS team for the NFL); null otherwise.

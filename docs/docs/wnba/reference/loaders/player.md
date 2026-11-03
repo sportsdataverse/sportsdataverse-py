@@ -251,7 +251,7 @@ One season-less file: every player id another source (fox, wnba_stats, yahoo) us
 | `athlete_id` | String | ESPN athlete id the provider id points to, as a string (e.g. "4433134"). Join on it to reach ESPN player data; the ESPN player loaders (load_wnba_player_core and its siblings) carry it as Int32, so cast first with pl.col("athlete_id").cast(pl.Int32). |
 | `athlete_id_source` | String | Id space of athlete_id; always "espn" in this table. |
 | `source` | String | Provider whose player id this is (in this table: fox, wnba_stats, yahoo). |
-| `source_player_id` | String | The source's own player id (e.g. Yahoo nba.p.5637, Fox 76284). It means something only within its source, so filter on source first. |
+| `source_player_id` | String | The source's own player id (e.g. Yahoo wnba.p.5010, Fox 76284). It means something only within its source, so filter on source first. |
 | `team_id` | String | ESPN team id (a string) the athlete was on in these seasons: the team block the match was made in, an ESPN team-season of load_wnba_team_group_seasons. |
 | `source_team_id` | String | The source's own team id when the matching leg gives one (the season's stats.ncaa.org team id; the Fox / Yahoo / CBS team for the NFL); null otherwise. |
 | `valid_from` | Int32 | First season the id is on that team, inclusive (calendar year). |
