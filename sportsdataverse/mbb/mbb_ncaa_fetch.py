@@ -113,7 +113,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 from urllib.parse import urlsplit
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError, NotAvailableYetError
 
 
 logger = logging.getLogger(__name__)
@@ -467,6 +467,26 @@ def _is_challenge(text: str) -> bool:
         return False
     low = text.lower()
     return any(marker in low for marker in _CHALLENGE_MARKERS)
+
+
+#: The whole body of a contest tab with nothing behind it yet: "Box score not available" (23 bytes),
+#: "Play by play not available" (26), seen live 2026-11-03 on scheduled-but-unplayed MBB contests.
+#: Only a contest tab's own name is accepted, so "Service not available" stays a failed response.
+#: ponytail: the last three tab names are the site's tab labels, not seen live; an unknown phrasing
+#: just falls back to the stub rule.
+_NOT_AVAILABLE_RE = re.compile(
+    r"^\s*(?:box score|play by play|individual stats|team stats|officials) not available\.?\s*$", re.I
+)
+
+
+def _is_not_available(text: str) -> bool:
+    """Is *text* stats.ncaa.org's "<tab> not available" answer, the whole body and nothing else?
+
+    It is an answer, not a challenge: re-solving or rotating proxies cannot change it, and the
+    size rule in :func:`_browser_response_unsolved` would otherwise read it as an unsolved stub
+    and relaunch the browser until the pool is exhausted (about 620 KB of proxy traffic each).
+    """
+    return bool(text) and len(text) < 200 and _NOT_AVAILABLE_RE.match(text) is not None
 
 
 def _browser_response_unsolved(text: str) -> bool:
@@ -948,7 +968,7 @@ class _PlaywrightTransport:
                 if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
                     time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
-            if not _browser_response_unsolved(text):
+            if not _browser_response_unsolved(text) or (status == 200 and _is_not_available(text)):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
             # re-challenged once _abck aged out. The old code set
@@ -1163,17 +1183,16 @@ class NcaaFetcher:
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:
                 status, text = transport(url, proxies, headers)
-            except ImportError:
+            except (ImportError, _TermsGateError):
                 # A missing optional dependency is a SETUP error, not a transport
                 # error, and no amount of proxy rotation installs patchright.
                 # Rotating on it burned the whole pool (with backoff between each
                 # attempt) and then reported the real cause under a "failed after
                 # rotating proxies" headline -- which reads as a ban and sends the
                 # reader hunting for an IP problem that does not exist. Re-raise so
-                # the install instruction from _ensure_page is the error.
+                # the install instruction from _ensure_page is the error. Same for
+                # the Terms gate: no proxy rotation gets past it.
                 raise
-            except _TermsGateError:
-                raise  # same reasoning: no proxy rotation gets past the Terms gate
             except Exception as exc:  # rotate on any transport failure
                 last_err = str(exc)
                 # Which error rotated (and relaunched the browser) is otherwise
@@ -1209,6 +1228,9 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
+            if status == 200 and _is_not_available(text):  # an answer (not played / not posted): no rotation
+                self._count_fetch()
+                raise NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
             if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
                 # A real "no such page": the host answered, and no other proxy
                 # answers differently -- rotating the whole pool on it reads as a ban.
@@ -1217,11 +1239,7 @@ class NcaaFetcher:
                 # The request itself is wrong (repo-wide rule): no proxy answers it differently.
                 raise ValueError(f"stats.ncaa.org rejected {url}: HTTP {status}; not retried")
             if status == 200 and _ban_check(text) == "clean":
-                self._since_rotate += 1
-                if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
-                    # Proactive: retire this IP while it is still HEALTHY. Waiting
-                    # for a ban means the ban already happened -- and it's permanent.
-                    self._rotate(f"{self._since_rotate} fetches on this proxy")
+                self._count_fetch()
                 return text
             marker = _ban_check(text)
             last_err = f"status={status} {marker}"
@@ -1240,6 +1258,14 @@ class NcaaFetcher:
         raise AssetFetchError(
             f"NCAA fetch failed after rotating proxies (pool exhausted, {attempts} attempts): {url}: {last_err}"
         )
+
+    def _count_fetch(self) -> None:
+        """Count one answered request on this proxy; rotate once it reaches ``rotate_every``."""
+        self._since_rotate += 1
+        if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
+            # Proactive: retire this IP while it is still HEALTHY. Waiting
+            # for a ban means the ban already happened -- and it's permanent.
+            self._rotate(f"{self._since_rotate} fetches on this proxy")
 
     def _rotate(self, why: str) -> None:
         """Advance to the next proxy and reset the per-proxy fetch counter."""
