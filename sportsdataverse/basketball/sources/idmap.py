@@ -55,7 +55,7 @@ IDMAP_SCHEMA: dict[str, pl.DataType] = {
     "source": pl.Utf8,  # "stats" (nba/wnba stats + cdn live) | "ncaa"
     "source_id": pl.Utf8,  # null = an ESPN id the crosswalk could not pair
     "espn_team_id": pl.Utf8,  # player rows: the ESPN team of that row; null otherwise
-    "name": pl.Utf8,  # team / player display name (ESPN's when known, else the source's)
+    "name": pl.Utf8,  # ESPN's team / player display name; the source's name on a source-only player row
     "match_method": pl.Utf8,  # the crosswalk's method, "unmatched" or "override"
     "match_confidence": pl.Float64,
     "built_at": pl.Utf8,
@@ -98,9 +98,12 @@ def _check_league(league: str) -> None:
 
 
 def _season(frame: pl.DataFrame) -> pl.Expr:
-    """``season`` as Int32 end year; the NCAA crosswalk's ``"2025-26"`` text becomes 2026."""
+    """``season`` as Int32 end year; the NCAA crosswalk's ``"2025-26"`` text becomes 2026, ``"2026"`` stays 2026."""
     if frame.schema["season"] == pl.Utf8:
-        return (pl.col("season").str.slice(0, 4).cast(pl.Int32) + 1).alias("season")
+        span = pl.col("season").str.slice(0, 4).cast(pl.Int32) + 1
+        return (
+            pl.when(pl.col("season").str.contains("-")).then(span).otherwise(pl.col("season").cast(pl.Int32))
+        ).alias("season")
     return pl.col("season").cast(pl.Int32)
 
 
