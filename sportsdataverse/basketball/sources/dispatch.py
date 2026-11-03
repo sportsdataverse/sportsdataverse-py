@@ -8,14 +8,16 @@ runs the unmodified ``helper_<league>_pbp`` parser and
 dict and the game-page frames with provenance stamped in. Mirrors
 :mod:`sportsdataverse.football.sources.dispatch`.
 
-Only ESPN is registered, and :data:`SOURCE_ORDER` lists only ESPN, because Game on Paper's
-``?source=`` allow-list IS that registry: a source listed there is selectable, and no
-alternate may be selectable until the cross-source parity gates pass (BB-D15). The cdn.nba.com
-live adapter (BB-D13) registers with :func:`_register` and joins the order after those gates.
+:data:`SOURCE_ORDER` lists only ESPN, because Game on Paper's ``?source=`` allow-list IS that
+order: a source listed there is selectable, and no alternate may be selectable until the
+cross-source parity gates pass (BB-D15). The cdn.nba.com / cdn.wnba.com live adapter (BB-D13,
+``source="live"``, :mod:`sportsdataverse.nba.live_pbp.to_espn_summary`) is registered for NBA and
+WNBA through :data:`_ADAPTER_MODULES` and joins the order after those gates.
 """
 
 from __future__ import annotations
 
+import importlib
 import time
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
@@ -89,6 +91,29 @@ class ProcessedGame:
 Adapter = Callable[[str, int, SourceContext], AdaptedGame]
 
 _ADAPTERS: dict[tuple[str, str], Adapter] = {}
+
+#: Adapter modules imported on first use, as in football's dispatch: the adapter lives next to its
+#: own parser and imports this module for ``AdaptedGame`` / ``_register`` without a cycle.
+_ADAPTER_MODULES: dict[tuple[str, str], str] = {
+    ("nba", "live"): "sportsdataverse.nba.live_pbp.to_espn_summary",
+    ("wnba", "live"): "sportsdataverse.nba.live_pbp.to_espn_summary",
+}
+
+#: Why an adapter module failed to import, so a broken adapter falls through with its real cause
+#: in ``attempts`` instead of reading as ``"not implemented"``.
+_ADAPTER_IMPORT_ERRORS: dict[tuple[str, str], str] = {}
+
+
+def _adapter_for(league: str, source: str) -> Adapter | None:
+    """The registered adapter for ``(league, source)``, importing its module on first use."""
+    key = (league, source)
+    if key not in _ADAPTERS and key in _ADAPTER_MODULES:
+        try:
+            importlib.import_module(_ADAPTER_MODULES[key])
+        except Exception as exc:  # noqa: BLE001 -- a broken adapter falls through, but says so
+            _ADAPTER_IMPORT_ERRORS[key] = f"import failed: {type(exc).__name__}: {exc}"
+            return None
+    return _ADAPTERS.get(key)
 
 
 def _register(league: str, source: str) -> Callable[[Adapter], Adapter]:
@@ -182,9 +207,9 @@ def _process_game(
     attempts: list[Attempt] = []
     for src in order:
         t0 = time.perf_counter()
-        adapter = _ADAPTERS.get((league, src))
+        adapter = _adapter_for(league, src)
         if adapter is None:
-            attempts.append(Attempt(src, False, "not implemented"))
+            attempts.append(Attempt(src, False, _ADAPTER_IMPORT_ERRORS.get((league, src), "not implemented")))
             continue
         try:
             adapted = adapter(league, espn_id, SourceContext(payload=payloads.get(src)))
