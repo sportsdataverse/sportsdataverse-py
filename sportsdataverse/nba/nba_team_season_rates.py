@@ -20,7 +20,7 @@ Two source rules, both checked on the 2025-26 NBA season against stats.nba.com
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, Union, overload
+from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
@@ -134,7 +134,7 @@ def _league_loaders(league_id: str):  # type: ignore[no-untyped-def]
 
 @overload
 def nba_team_season_rates(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
@@ -144,21 +144,21 @@ def nba_team_season_rates(
 
 @overload
 def nba_team_season_rates(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
     return_as_pandas: Literal[True],
-) -> "pd.DataFrame": ...
+) -> pd.DataFrame: ...
 
 
 def nba_team_season_rates(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+) -> pl.DataFrame | pd.DataFrame:
     """Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits.
 
     One row per team, season and split (``all``, ``home``, ``away``, ``close``, ``clutch``).
