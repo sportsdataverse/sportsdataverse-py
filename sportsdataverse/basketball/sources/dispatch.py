@@ -263,7 +263,7 @@ def _run_source(
         adapted = adapter(league, espn_id, SourceContext(payload=payload))
         if not isinstance(adapted, AdaptedGame):
             raise SourceUnavailable(f"adapter returned {type(adapted).__name__}, expected AdaptedGame")
-    except Exception as exc:  # noqa: BLE001 -- any adapter failure hands over to the next source
+    except Exception as exc:  # any adapter failure hands over to the next source
         raise _SourceFailed(f"{type(exc).__name__}: {exc}") from exc
     report = _validate_summary(adapted.summary, league)
     if not report.ok:
@@ -276,7 +276,7 @@ def _run_source(
     try:
         final = parse(espn_id, adapted.summary)
         frames = game_page_frames(final, league=league)
-    except Exception as exc:  # noqa: BLE001 -- a parser failure on one source is not the game's end
+    except Exception as exc:  # a parser failure on one source is not the game's end
         raise _SourceFailed(f"parser: {type(exc).__name__}: {exc}") from exc
     return adapted, report, final, frames
 
