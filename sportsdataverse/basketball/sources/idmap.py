@@ -209,7 +209,9 @@ def _build_idmap(
             )
             .drop("_ov")
         )
-        resolved = ov.select("kind", pl.col("_ov").alias("source_id"))
+        # Retire a source-only row only when its override actually landed on an ESPN row.
+        landed = out.filter(pl.col("match_method") == "override").select("kind", "espn_id").unique()
+        resolved = ov.join(landed, on=["kind", "espn_id"], how="semi").select("kind", pl.col("_ov").alias("source_id"))
         assert out.schema["source_id"] == resolved.schema["source_id"], "source_id dtype mismatch"
         out = pl.concat(
             [
@@ -272,7 +274,10 @@ def _lookup(idmap: pl.DataFrame, kind: str, value: Any, *, frm: str = "espn") ->
     _check_query(kind, frm)
     col, other = ("espn_id", "source_id") if frm == "espn" else ("source_id", "espn_id")
     hit = idmap.filter((pl.col("kind") == kind) & (pl.col(col) == _id_text(value))).sort(
-        [pl.col("season"), pl.col(other).is_not_null()], descending=True, nulls_last=True
+        # Latest season, then a paired row, then a reviewed override over a name match for the same id.
+        [pl.col("season"), pl.col(other).is_not_null(), pl.col("match_method") == "override"],
+        descending=True,
+        nulls_last=True,
     )
     return hit.row(0, named=True) if hit.height else None
 

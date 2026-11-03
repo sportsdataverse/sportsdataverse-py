@@ -143,6 +143,22 @@ def test_reviewed_overrides_win_and_retire_the_source_only_row() -> None:
     assert (row["espn_id"], row["match_method"], row["match_confidence"]) == ("401867790", "override", 1.0)
 
 
+def test_an_override_that_lands_nowhere_keeps_the_source_only_row() -> None:
+    # The ESPN id is not in the map, so no pair is written and the Stats-only row must stay.
+    overrides = pl.DataFrame({"kind": ["game"], "espn_id": ["1"], "source_id": ["1012600012"]})
+    row = m._wnba_idmap("1012600012", frm="source", idmap=_wnba(overrides=overrides))
+    assert row is not None and row["espn_id"] is None and row["match_method"] == "unmatched"
+
+
+def test_a_source_lookup_prefers_the_override_over_a_name_match() -> None:
+    # Pin Stats game 1012600001 (crosswalked to ESPN 401866150) onto ESPN 401867790: both rows are now
+    # paired in 2026, and the reviewed one must win the source -> ESPN lookup.
+    overrides = pl.DataFrame({"kind": ["game"], "espn_id": ["401867790"], "source_id": ["1012600001"]})
+    idmap = _wnba(overrides=overrides)
+    assert idmap.filter(pl.col("source_id") == "1012600001").height == 2
+    assert m._wnba_idmap("1012600001", frm="source", idmap=idmap)["espn_id"] == "401867790"
+
+
 def test_college_team_leg_is_season_keyed_and_has_2026_27() -> None:
     for league, n_2027 in (("mbb", 365), ("wbb", 363)):
         idmap = m._build_idmap(league, teams=_packaged_crosswalk(league))
