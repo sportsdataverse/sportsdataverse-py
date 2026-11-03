@@ -21,12 +21,19 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.mbb.mbb_ncaa_fetch import NotAvailableYetError
 
 from .bundle import is_captured, write_bundle
 
 logger = logging.getLogger(__name__)
 
 PAGE_KEYS = ("play_by_play", "box_score", "individual_stats")
+#: Captured beside the three core pages but not required for a bundle (bundles written before
+#: 2026-11 lack them): ``team_stats`` (team totals by period, plus the linescore) and
+#: ``officials`` (the crew, which stats.ncaa.org posts days after the game, so
+#: :func:`refresh_officials` re-fetches it).
+OPTIONAL_PAGE_KEYS = ("team_stats", "officials")
+_OFFICIALS_REFRESH_DAYS = 14
 _MIN_BYTES = 20000
 # ponytail: 30, not the round-number 50 -- the committed real-capture
 # fixtures show box_score is a small fixed-structure team-stats table
@@ -45,7 +52,7 @@ DEFAULT_MAX_CONSECUTIVE_FAILURES = 25
 
 FetchPagesFn = Callable[[Any, str], Dict[str, str]]
 
-__all__ = ["capture_contests", "shard", "DEFAULT_MAX_CONSECUTIVE_FAILURES"]
+__all__ = ["capture_contests", "refresh_officials", "shard", "DEFAULT_MAX_CONSECUTIVE_FAILURES", "OPTIONAL_PAGE_KEYS"]
 
 
 def _is_clean(html: str) -> bool:
@@ -55,22 +62,24 @@ def _is_clean(html: str) -> bool:
 
 def _default_fetch_pages_fn() -> FetchPagesFn:
     def fetch(fetcher: Any, contest_id: str) -> Dict[str, str]:
-        return {
+        pages = {
             "play_by_play": fetcher.fetch_game_pbp(contest_id, force=True),
             "box_score": fetcher.fetch_game_box(contest_id, force=True),
             "individual_stats": fetcher.fetch_game_individual_stats(contest_id, force=True),
         }
+        for key in OPTIONAL_PAGE_KEYS:
+            try:
+                pages[key] = fetcher.fetch_html(f"contests/{contest_id}/{key}", force=True)
+            except NoDataError:  # an optional tab with nothing behind it: the bundle is still whole
+                logger.info("contest_id=%s has no %s page; bundle written without it", contest_id, key)
+        return pages
 
     return fetch
 
 
-def _page_urls(contest_id: str) -> Dict[str, str]:
+def _page_urls(contest_id: str, keys: "tuple[str, ...]" = PAGE_KEYS) -> Dict[str, str]:
     base = f"https://stats.ncaa.org/contests/{contest_id}"
-    return {
-        "play_by_play": f"{base}/play_by_play",
-        "box_score": f"{base}/box_score",
-        "individual_stats": f"{base}/individual_stats",
-    }
+    return {key: f"{base}/{key}" for key in keys}
 
 
 def shard(contest_ids: "List[str]", i: int, n: int) -> "List[str]":
@@ -136,7 +145,7 @@ def capture_contests(
             after a cooldown and already-captured contests are skipped.
     """
     season_str = str(season)
-    counts = {"captured": 0, "skipped": 0, "failed": 0}
+    counts = {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 0}
     consecutive_failures = 0
 
     fetch_fn = fetch_pages_fn if fetch_pages_fn is not None else _default_fetch_pages_fn()
@@ -157,6 +166,12 @@ def capture_contests(
 
             try:
                 pages = fetch_fn(fetcher, contest_id)
+            except NotAvailableYetError as exc:
+                # Scheduled but not played (or not posted): an answer, so the session is healthy.
+                # Not written, so the next run asks again.
+                logger.info("contest_id=%s not ready -- %s", contest_id, exc)
+                counts["not_ready"] += 1
+                continue
             except NoDataError as exc:
                 # A real 404: the session got an answer, so this is neither a ban nor a soft-ban step.
                 logger.warning("contest_id=%s not on stats.ncaa.org -- bundle not written: %s", contest_id, exc)
@@ -192,8 +207,8 @@ def capture_contests(
                 league,
                 season_str,
                 contest_id,
-                pages={key: pages[key] for key in PAGE_KEYS},
-                urls=_page_urls(contest_id),
+                pages={key: pages[key] for key in PAGE_KEYS + OPTIONAL_PAGE_KEYS if key in pages},
+                urls=_page_urls(contest_id, tuple(k for k in PAGE_KEYS + OPTIONAL_PAGE_KEYS if k in pages)),
                 captured_at=datetime.now(timezone.utc).isoformat(),
             )
             counts["captured"] += 1
@@ -211,6 +226,79 @@ def capture_contests(
             if callable(closer):
                 closer(None, None, None)
 
+    return counts
+
+
+def _officials_missing(pages: "Dict[str, Any]") -> bool:
+    from sportsdataverse.mbb.mbb_ncaa_box_tabs import parse_ncaa_bb_officials
+
+    return parse_ncaa_bb_officials(pages.get("officials") or "").height == 0
+
+
+def refresh_officials(
+    season: int,
+    *,
+    league: str,
+    root: Union[str, Path],
+    fetcher_factory: "Callable[[], Any]",
+    days: int = _OFFICIALS_REFRESH_DAYS,
+    now: "Optional[datetime]" = None,
+) -> "Dict[str, int]":
+    """Re-fetch the officials tab of recent bundles that were captured before the crew was posted.
+
+    stats.ncaa.org fills in a game's officials days after it is played; a bundle captured the
+    night after holds three blank slots. This pass re-fetches that one tab for bundles written
+    in the last *days* days whose stored officials page names nobody, and rewrites the bundle
+    when the new page names someone. Older bundles are not opened (file mtime is checked first),
+    and no fetcher is built when nothing qualifies, so a quiet night costs nothing.
+
+    Args:
+        season: Ending-year season of the bundles.
+        league: ``"mbb"`` / ``"wbb"``.
+        root: Root of the raw data tree.
+        fetcher_factory: ``() -> fetcher`` (with ``fetch_html(path, force=...)``), called once,
+            only if a bundle needs a refresh; closed on exit like :func:`capture_contests`.
+        days: Only bundles written within this many days are considered.
+        now: Clock for tests.
+
+    Returns:
+        ``{"checked": n, "refreshed": n, "still_blank": n}``.
+    """
+    from .bundle import read_bundle
+
+    season_dir = Path(root) / league / "raw" / str(season)
+    cutoff = (now or datetime.now(timezone.utc)).timestamp() - days * 86400
+    counts = {"checked": 0, "refreshed": 0, "still_blank": 0}
+    candidates = []
+    for path in sorted(season_dir.glob("*.json.gz")) if season_dir.is_dir() else []:
+        if path.stat().st_mtime < cutoff:
+            continue
+        bundle = read_bundle(path)
+        counts["checked"] += 1
+        if _officials_missing(bundle.get("pages") or {}):
+            candidates.append(bundle)
+    if not candidates:
+        return counts
+    fetcher = fetcher_factory()
+    try:
+        for bundle in candidates:
+            cid = str(bundle["contest_id"])
+            try:
+                html = fetcher.fetch_html(f"contests/{cid}/officials", force=True)
+            except NoDataError:
+                counts["still_blank"] += 1
+                continue
+            pages = dict(bundle.get("pages") or {}, officials=html)
+            if _officials_missing(pages):
+                counts["still_blank"] += 1
+                continue
+            urls = dict(bundle.get("urls") or {}, officials=f"https://stats.ncaa.org/contests/{cid}/officials")
+            write_bundle(root, league, str(season), cid, pages=pages, urls=urls, captured_at=bundle["captured_at"])
+            counts["refreshed"] += 1
+    finally:
+        closer = getattr(fetcher, "__exit__", None)
+        if callable(closer):
+            closer(None, None, None)
     return counts
 
 
@@ -362,6 +450,16 @@ def _main(default_league: str, default_root: str) -> None:
             f"Default: {DEFAULT_MAX_CONSECUTIVE_FAILURES}."
         ),
     )
+    parser.add_argument(
+        "--refresh-officials-days",
+        type=int,
+        default=int(os.environ.get("NCAA_REFRESH_OFFICIALS_DAYS", _OFFICIALS_REFRESH_DAYS)),
+        help=(
+            "After capturing, re-fetch the officials tab of bundles written in the last N days whose "
+            "crew was not posted yet (env NCAA_REFRESH_OFFICIALS_DAYS; 0 disables; shard 0 only). "
+            f"Default: {_OFFICIALS_REFRESH_DAYS}."
+        ),
+    )
     args = parser.parse_args()
     i, n = _parse_shard(args.shard)
 
@@ -383,4 +481,23 @@ def _main(default_league: str, default_root: str) -> None:
         max_contests=args.max_contests,
         max_consecutive_failures=args.max_consecutive_failures,
     )
-    print(f"captured={counts['captured']} skipped={counts['skipped']} failed={counts['failed']}")
+    print(
+        f"captured={counts['captured']} skipped={counts['skipped']} failed={counts['failed']} "
+        f"not_ready={counts['not_ready']}"
+    )
+    if args.refresh_officials_days > 0 and i == 0:  # one shard does it: the pass is cheap and must not race
+
+        def _factory() -> Any:
+            if args.vendor:
+                return _vendor_fetcher(args.vendor, args.root)
+            from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+            return NcaaFetcher.with_browser()
+
+        refreshed = refresh_officials(
+            args.season, league=args.league, root=args.root, fetcher_factory=_factory, days=args.refresh_officials_days
+        )
+        print(
+            f"officials: checked={refreshed['checked']} refreshed={refreshed['refreshed']} "
+            f"still_blank={refreshed['still_blank']}"
+        )
