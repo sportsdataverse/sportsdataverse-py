@@ -47,6 +47,8 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_wbb_group_seasons` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
 | `load_wbb_group_aliases` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
 | `load_wbb_team_group_seasons` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
+| `load_wbb_team_aliases` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
+| `load_wbb_player_aliases` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
 
 ## NCAA (stats.ncaa.org)
 
@@ -75,6 +77,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_wbb_player_season_stats](loaders/player.md#load_wbb_player_season_stats) | Release: espn_womens_college_basketball_player_season_stats · asset … |
 | [load_wbb_player_crosswalk](loaders/player.md#load_wbb_player_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet` |
 | [load_wbb_player_core](loaders/player.md#load_wbb_player_core) | Release: espn_womens_college_basketball_player_core · asset … |
+| [load_wbb_player_aliases](loaders/player.md#load_wbb_player_aliases) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_player_aliases.parquet` |
 
 ## Team
 
@@ -84,6 +87,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_wbb_team_season_stats](loaders/team.md#load_wbb_team_season_stats) | Release: espn_womens_college_basketball_team_season_stats · asset … |
 | [load_wbb_team_crosswalk](loaders/team.md#load_wbb_team_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet` |
 | [load_wbb_team_group_seasons](loaders/team.md#load_wbb_team_group_seasons) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_group_seasons_{season}.parquet` |
+| [load_wbb_team_aliases](loaders/team.md#load_wbb_team_aliases) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_aliases.parquet` |
 
 ## Other
 

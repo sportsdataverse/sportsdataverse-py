@@ -264,6 +264,7 @@ from sportsdataverse.nba import load_nba_group_seasons as load_nba_group_seasons
 from sportsdataverse.nba import load_nba_groups as load_nba_groups  # noqa: F401
 from sportsdataverse.nba import load_nba_officials as load_nba_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_pbp as load_nba_pbp  # noqa: F401
+from sportsdataverse.nba import load_nba_player_aliases as load_nba_player_aliases  # noqa: F401
 from sportsdataverse.nba import load_nba_player_boxscore as load_nba_player_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_player_core as load_nba_player_core  # noqa: F401
 from sportsdataverse.nba import load_nba_player_crosswalk as load_nba_player_crosswalk  # noqa: F401
@@ -309,6 +310,7 @@ from sportsdataverse.nba import load_nba_stats_standings as load_nba_stats_stand
 from sportsdataverse.nba import load_nba_stats_synergy as load_nba_stats_synergy  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_boxscores as load_nba_stats_team_boxscores  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_season_stats as load_nba_stats_team_season_stats  # noqa: F401
+from sportsdataverse.nba import load_nba_team_aliases as load_nba_team_aliases  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_team_crosswalk as load_nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import load_nba_team_group_seasons as load_nba_team_group_seasons  # noqa: F401
@@ -678,6 +680,7 @@ __all__ = [
     "load_nba_groups",
     "load_nba_officials",
     "load_nba_pbp",
+    "load_nba_player_aliases",
     "load_nba_player_boxscore",
     "load_nba_player_core",
     "load_nba_player_crosswalk",
@@ -721,6 +724,7 @@ __all__ = [
     "load_nba_stats_synergy",
     "load_nba_stats_team_boxscores",
     "load_nba_stats_team_season_stats",
+    "load_nba_team_aliases",
     "load_nba_team_boxscore",
     "load_nba_team_crosswalk",
     "load_nba_team_group_seasons",

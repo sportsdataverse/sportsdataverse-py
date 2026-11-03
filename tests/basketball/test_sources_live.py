@@ -14,6 +14,7 @@ import fnmatch
 import gzip
 import json
 import sys
+from collections.abc import Iterable
 from functools import lru_cache
 from pathlib import Path
 
@@ -90,13 +91,17 @@ def _frames(i: int) -> tuple[dict, dict, dict, dict]:
     return lf, game_page_frames(lf, league=game[0]), ef, game_page_frames(ef, league=game[0])
 
 
-def _joined(i: int, key: str = "pbp", on: str = "id") -> pl.DataFrame:
-    _, lfr, _, efr = _frames(i)
+def _pair_frames(lfr: dict, efr: dict, key: str, on: str) -> pl.DataFrame:
     left, right = lfr[key], efr[key]
     if on == "athlete_id":
         left, right = left.drop_nulls(on), right.drop_nulls(on)
     assert left.schema[on] == right.schema[on]
     return left.join(right, on=on, how="inner", suffix="_espn")
+
+
+def _joined(i: int, key: str = "pbp", on: str = "id") -> pl.DataFrame:
+    _, lfr, _, efr = _frames(i)
+    return _pair_frames(lfr, efr, key, on)
 
 
 @pytest.mark.parametrize("game", GAMES, ids=IDS)
@@ -218,13 +223,12 @@ def test_team_box_totals_match_espn(i: int) -> None:
         assert j.filter(pl.col(col).ne_missing(pl.col(f"{col}_espn"))).is_empty(), col
 
 
-def _measured_lossy() -> set[str]:
-    """Every game-page column or key whose live value differs from ESPN's on any fixture game."""
+def _measured_lossy(games: Iterable[tuple[dict, dict]]) -> set[str]:
+    """Every game-page column or key whose live value differs from ESPN's on any ``(live, ESPN)`` frames pair."""
     lossy: set[str] = set()
-    for i in range(len(GAMES)):
-        _, lfr, _, efr = _frames(i)
+    for lfr, efr in games:
         for key, on in (("pbp", "id"), ("team_box", "team_id"), ("player_box", "athlete_id")):
-            j = _joined(i, key, on)
+            j = _pair_frames(lfr, efr, key, on)
             lossy |= set(efr[key].columns) - set(lfr[key].columns)
             for col in lfr[key].columns:
                 if col == on or f"{col}_espn" not in j.columns or col in {**COORDINATE_FEET, **COORDINATE_TENTHS}:
@@ -235,13 +239,13 @@ def _measured_lossy() -> set[str]:
     return lossy
 
 
-def test_known_lossy_is_exactly_what_the_fixtures_measure() -> None:
-    """KNOWN_LOSSY is measured, never guessed: each pattern matches a measured gap and covers all of them."""
-    measured = _measured_lossy()
+def test_known_lossy_covers_every_gap_on_these_games() -> None:
+    """Every gap measured on these three games is in KNOWN_LOSSY; ``test_sources_parity`` checks the converse
+    (each pattern matches a gap) on the 27-game BB-D15 corpus, which these games are part of."""
+    measured = _measured_lossy((_frames(i)[1], _frames(i)[3]) for i in range(len(GAMES)))
     for lg in ("nba", "wnba"):
         patterns = KNOWN_LOSSY[(lg, "live")]
         assert {c for c in measured if not any(fnmatch.fnmatch(c, p) for p in patterns)} == set(), lg
-        assert [p for p in patterns if not any(fnmatch.fnmatch(c, p) for c in measured)] == [], lg
 
 
 def test_neutral_site_is_the_measured_gap() -> None:
@@ -263,13 +267,13 @@ def test_live_through_dispatch_once_it_is_selectable(monkeypatch: pytest.MonkeyP
 
 
 @pytest.mark.parametrize("lg", ["nba", "wnba"])
-def test_live_is_registered_but_not_selectable(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
-    """Dispatch imports the adapter on first use; BB-D15's parity gates decide when "live" joins SOURCE_ORDER."""
+def test_live_is_registered_and_selectable(monkeypatch: pytest.MonkeyPatch, lg: str) -> None:
+    """Dispatch imports the adapter on first use; "live" joined SOURCE_ORDER after BB-D15's parity gates."""
     monkeypatch.setattr(dispatch, "_ADAPTERS", {})
     monkeypatch.delitem(sys.modules, live.__name__)  # a fresh import registers into the fresh registry
     adapter = dispatch._adapter_for(lg, "live")
     assert adapter is not None and adapter.__qualname__ == "_live_adapter"
-    assert dispatch.SOURCE_ORDER[lg] == ("espn",)
+    assert dispatch.SOURCE_ORDER[lg] == ("espn", "live")
     assert dispatch._adapter_for("mbb", "live") is None
 
 

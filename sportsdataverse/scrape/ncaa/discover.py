@@ -18,13 +18,16 @@ from __future__ import annotations
 import json
 import logging
 import os
+from datetime import date
 from pathlib import Path
-from typing import Callable, List, Optional, Union
+from typing import Any, Callable, Iterable, List, Optional, Tuple, Union
 
 import polars as pl
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_schedule import parse_ncaa_bb_team_schedule
+
+from .capture import _env_int  # a leaf too (bundle only)
 
 # The schedules dataset tree is a pure side effect of the sweep below: this
 # module already fetches every team's page, so persisting it costs zero extra
@@ -43,7 +46,7 @@ _TEAM_TRIES = 3
 #: Consecutive fully-failed teams that reads as a ban -> abort the sweep.
 _MAX_CONSECUTIVE_TEAM_FAILURES = 5
 
-__all__ = ["discover_season"]
+__all__ = ["discover_dates", "discover_season"]
 
 
 def _season_str(season: int) -> str:
@@ -321,6 +324,74 @@ def discover_season(
     return result
 
 
+def _path_fetch(root: "Union[str, Path]") -> "Tuple[Callable[[str], str], Callable[[], None]]":
+    """``(path -> html, close)`` on the same transport discovery uses (``NCAA_VENDOR`` or the browser)."""
+    vendor = os.environ.get("NCAA_VENDOR")
+    if vendor:
+        from .capture import _vendor_fetcher
+
+        fetcher: Any = _vendor_fetcher(vendor, Path(root))
+    else:
+        from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+
+        fetcher = NcaaFetcher.with_browser()
+
+    def _close() -> None:
+        closer = getattr(fetcher, "__exit__", None)
+        if callable(closer):
+            closer(None, None, None)
+
+    return (lambda path: fetcher.fetch_html(path, force=True)), _close
+
+
+def discover_dates(
+    dates: "Optional[Iterable[Union[date, str]]]" = None,
+    *,
+    league: str,
+    root: "Union[str, Path]",
+    lookback_days: int = 3,
+    fetch_html: "Optional[Callable[[str], str]]" = None,
+) -> pl.DataFrame:
+    """Discover contests from the per-date scoreboard and merge them into ``schedule_master``.
+
+    The nightly path: one scoreboard page per date (default yesterday and today, plus
+    *lookback_days* earlier days for results posted late) instead of every team's schedule
+    page. Each contest is filed under the season its date falls in (NCAA's academic year turns
+    over on July 1). Existing rows, ``captured=True`` ones included, are kept.
+
+    Args:
+        dates: Dates to read (``date`` or ``"YYYY-MM-DD"``); ``None`` -> yesterday and today.
+        league: ``"mbb"`` or ``"wbb"``.
+        root: Raw data tree holding ``{league}/schedule_master.parquet``.
+        lookback_days: Extra days before the earliest date.
+        fetch_html: ``path -> html``; default the ``NCAA_VENDOR`` transport (or the browser).
+
+    Returns:
+        The discovered rows: ``contest_id`` (Utf8), ``season`` (Utf8, ending year).
+    """
+    from .scoreboard import ncaa_scoreboard_contests
+
+    close: "Optional[Callable[[], None]]" = None
+    if fetch_html is None:
+        fetch_html, close = _path_fetch(root)
+    try:
+        found = ncaa_scoreboard_contests(league, dates, lookback_days=lookback_days, fetch_html=fetch_html)
+    finally:
+        if close is not None:
+            close()
+    assert isinstance(found, pl.DataFrame)
+    result = found.select(
+        pl.col("contest_id"),
+        pl.when(pl.col("game_date").dt.month() >= 7)
+        .then(pl.col("game_date").dt.year() + 1)
+        .otherwise(pl.col("game_date").dt.year())
+        .cast(pl.Utf8)
+        .alias("season"),
+    ).unique("contest_id", keep="first", maintain_order=True)
+    _write_master(result, root, league)
+    return result
+
+
 def _write_master(result: pl.DataFrame, root: Union[str, Path], league: str) -> Path:
     """Merge *result* into ``{root}/{league}/schedule_master.parquet``.
 
@@ -356,8 +427,9 @@ def _main(default_league: str, default_root: str) -> None:
     parser.add_argument(
         "--season",
         type=int,
-        required=True,
-        help="Ending year of the season, e.g. 2026.",
+        default=None,
+        help="Ending year of the season, e.g. 2026. Required except with --scoreboard, which files each "
+        "contest under the season its date falls in.",
     )
     parser.add_argument(
         "--root",
@@ -379,10 +451,33 @@ def _main(default_league: str, default_root: str) -> None:
         "shard-less pass (all teams checkpointed, so it fetches nothing) "
         "to merge every shard's checkpoints into the master.",
     )
+    parser.add_argument(
+        "--scoreboard",
+        action="store_true",
+        help="Nightly mode: read the per-date scoreboard (yesterday and today, or --dates) instead of "
+        "sweeping every team page, and merge its contests into schedule_master.",
+    )
+    parser.add_argument("--dates", nargs="*", default=None, help="With --scoreboard: dates (YYYY-MM-DD) to read.")
+    parser.add_argument(
+        "--lookback-days",
+        type=int,
+        default=_env_int("NCAA_SCOREBOARD_LOOKBACK_DAYS", 3),
+        help="With --scoreboard: also read this many days before the earliest date "
+        "(env NCAA_SCOREBOARD_LOOKBACK_DAYS; default 3).",
+    )
     args = parser.parse_args()
     i, n = (int(x) for x in args.shard.split("/"))
+    if args.scoreboard and n > 1:  # one scoreboard pass rewrites the master; shards would race on it
+        parser.error("--scoreboard reads a few pages and writes schedule_master: run it unsharded")
+    if not args.scoreboard and args.season is None:
+        parser.error("--season is required (except with --scoreboard)")
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    if args.scoreboard:
+        found = discover_dates(args.dates, league=args.league, root=args.root, lookback_days=args.lookback_days)
+        by_season = dict(found.group_by("season").len().sort("season").iter_rows())
+        print(f"discovered {found.height} contest_ids from the scoreboard (by season: {by_season})")
+        return
     result = discover_season(
         args.season,
         league=args.league,
