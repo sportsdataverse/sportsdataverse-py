@@ -85,3 +85,14 @@ def test_loader_requests_the_documented_asset(monkeypatch, league, table):
 
 def test_no_loader_for_the_diagnostic_side_files():
     assert not [fn for fn in ENTRIES if fn.endswith(("_aliases_unmatched", "_aliases_rates"))]
+
+
+@pytest.mark.parametrize(("league", "table"), [c for c in CASES if c[0] != "nfl"])
+def test_absent_asset_is_an_empty_frame_with_the_declared_schema(monkeypatch, league, table):
+    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_loaders")
+    monkeypatch.setattr(mod, "_read_release_parquet", lambda url: None)
+    fn = f"load_{league}_{table}"
+    with pytest.warns(UserWarning, match="no published asset"):
+        df = getattr(mod, fn)()
+    assert df.height == 0
+    assert {k: str(v) for k, v in df.schema.items()} == {c["name"]: c["type"] for c in SCHEMAS[fn]}
