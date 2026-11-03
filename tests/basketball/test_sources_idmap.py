@@ -210,3 +210,21 @@ def test_fetch_idmap_row_reads_the_data_api_route() -> None:
     assert seen == {"url": "https://api.example/v1/nba/idmap/2544", "params": {"kind": "player", "from": "source"}}
     assert row["espn_id"] == "1966"
     assert m._fetch_idmap_row("nba", 1, base_url="https://api.example", transport=transport) is None
+
+
+def test_a_source_id_an_override_displaces_stays_as_an_unmatched_row() -> None:
+    # ESPN 401866150 is crosswalked to Stats 1012600001; reassigning it to 1012600012 must not lose 1012600001.
+    overrides = pl.DataFrame({"kind": ["game"], "espn_id": ["401866150"], "source_id": ["1012600012"]})
+    idmap = _wnba(overrides=overrides)
+    assert m._wnba_idmap("401866150", idmap=idmap)["source_id"] == "1012600012"
+    row = m._wnba_idmap("1012600001", frm="source", idmap=idmap)
+    assert row is not None and row["espn_id"] is None and row["match_method"] == "unmatched"
+    assert _counts(idmap, "game") == (355, 6, 6)  # 1012600012 left the source-only rows, 1012600001 took its place
+
+
+def test_one_source_id_overridden_onto_two_espn_ids_raises() -> None:
+    overrides = pl.DataFrame(
+        {"kind": ["game", "game"], "espn_id": ["401867790", "401869973"], "source_id": ["1012600012", "1012600012"]}
+    )
+    with pytest.raises(ValueError, match="several espn_ids"):
+        _wnba(overrides=overrides)

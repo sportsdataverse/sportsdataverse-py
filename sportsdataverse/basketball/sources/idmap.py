@@ -192,8 +192,26 @@ def _build_idmap(
         ov = overrides.select(
             pl.col("kind").cast(pl.Utf8), str_id(overrides, "espn_id"), str_id(overrides, "source_id").alias("_ov")
         ).unique(["kind", "espn_id"], keep="last")
+        clash = ov.group_by("kind", "_ov").agg(pl.col("espn_id").n_unique().alias("n")).filter(pl.col("n") > 1)
+        if clash.height:
+            raise ValueError(f"overrides pair one source_id with several espn_ids: {clash.head(3).rows()}")
         for k in ("kind", "espn_id"):
             assert out.schema[k] == ov.schema[k], f"{k} dtype mismatch"
+        # The source ids an override takes off an ESPN row; kept below if nothing else claims them.
+        displaced = (
+            out.join(ov, on=["kind", "espn_id"], how="inner")
+            .filter(pl.col("source_id").is_not_null() & (pl.col("source_id") != pl.col("_ov")))
+            .select(
+                "kind",
+                "season",
+                pl.lit(None, dtype=pl.Utf8).alias("espn_id"),
+                "source_id",
+                pl.lit(None, dtype=pl.Utf8).alias("espn_team_id"),
+                pl.lit(None, dtype=pl.Utf8).alias("name"),
+                pl.lit("unmatched").alias("match_method"),
+                pl.lit(None, dtype=pl.Float64).alias("match_confidence"),
+            )
+        )
         out = (
             out.join(ov, on=["kind", "espn_id"], how="left")
             .with_columns(
@@ -219,6 +237,9 @@ def _build_idmap(
                 out.filter(pl.col("espn_id").is_null()).join(resolved, on=["kind", "source_id"], how="anti"),
             ]
         )
+        claimed_now = out.filter(pl.col("source_id").is_not_null()).select("kind", "source_id").unique()
+        assert displaced.schema["source_id"] == claimed_now.schema["source_id"], "source_id dtype mismatch"
+        out = pl.concat([out, displaced.join(claimed_now, on=["kind", "source_id"], how="anti")])
 
     out = (
         out.filter(pl.col("espn_id").is_not_null() | pl.col("source_id").is_not_null())
