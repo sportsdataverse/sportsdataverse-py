@@ -18,6 +18,7 @@ See Also:
 from __future__ import annotations
 
 import datetime
+from collections.abc import Iterable
 from typing import Union
 
 import pandas as pd
@@ -35,9 +36,10 @@ def wbb_bracketology(
     season: int,
     *,
     as_of_date: Union[datetime.date, None] = None,
+    ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Women's projected tournament field for a season.
+    """Women's daily ``bracketology`` table: the projected field, seeds and bubble.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with ``league="womens"`` (WBB loaders + women's constants).
 
@@ -45,19 +47,21 @@ def wbb_bracketology(
         season: Season to project (e.g. ``2024``).
         as_of_date: Only use games strictly before this date; ``None`` uses
             every completed game.
+        ineligible: Team ids barred from the NCAA tournament (in 2024, Southern
+            Indiana won the OVC final while reclassifying; UT Martin took the bid).
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per team: ``season, team_id, resume_score, projected_seed,
-        at_large_prob, auto_bid, bid`` -- see the mbb core for the full
-        contract.
+        One row per Division I team -- see the mbb core for the full contract.
 
     Example:
         Quick start::
 
             from sportsdataverse.wbb import wbb_bracketology
-            field = wbb_bracketology(2024)
+            field = wbb_bracketology(2024, ineligible={"88"})
     """
     if return_as_pandas:
-        return mbb_bracketology(season, as_of_date=as_of_date, league="womens", return_as_pandas=True)
-    return mbb_bracketology(season, as_of_date=as_of_date, league="womens")
+        return mbb_bracketology(
+            season, as_of_date=as_of_date, league="womens", ineligible=ineligible, return_as_pandas=True
+        )
+    return mbb_bracketology(season, as_of_date=as_of_date, league="womens", ineligible=ineligible)

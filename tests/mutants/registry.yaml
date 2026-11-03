@@ -8755,3 +8755,136 @@
   test: tests/mbb/test_mbb_team_season_rates.py::test_schema_and_cohort
   expected: kill
   note: The non-conference opponents (one to three games each) would be ranked beside the Big Ten teams.
+
+# --- BB-D17: college season products (RPI, quads, NET estimate, auto-bids, field, season sim) ---
+# Killers: tests/mbb/test_mbb_college_season.py on the real 2024 men's and women's seasons, against
+# WarrenNolan's 2024 RPI / quadrant records / NET mirror and the actual 2024 NCAA fields and seeds.
+- id: bb-cs-rpi-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'RPI_WEIGHTS = (0.25, 0.50, 0.25)'
+  mutant: 'RPI_WEIGHTS = (0.35, 0.40, 0.25)'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: The NCAA's 25/50/25 blend; shifting weight from OWP to WP reorders the RPI away from the oracle.
+
+- id: bb-cs-rpi-location-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'RPI_LOCATION_WEIGHTS = {"home_win": 0.6, "road_win": 1.4, "home_loss": 1.4, "road_loss": 0.6, "neutral": 1.0}'
+  mutant: 'RPI_LOCATION_WEIGHTS = {"home_win": 1.0, "road_win": 1.0, "home_loss": 1.0, "road_loss": 1.0, "neutral": 1.0}'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: Without the 0.6 / 1.4 home-road weighting WP is the plain winning percentage.
+
+- id: bb-cs-rpi-womens-weighted-from
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '_RPI_WEIGHTED_FROM = {"mens": 2005, "womens": 2012}'
+  mutant: '_RPI_WEIGHTED_FROM = {"mens": 2005, "womens": 2025}'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: The women's RPI is location-weighted from 2011-12; an unweighted 2024 women's RPI misses the oracle.
+
+- id: bb-cs-rpi-owp-excludes-team
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '.then((pl.col("tw") - pl.col("hw")) / (pl.col("tg") - pl.col("hg")))'
+  mutant: '.then(pl.col("tw") / pl.col("tg"))'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: OWP drops each opponent's games against the team being rated; keeping them credits a team's own wins to its schedule.
+
+- id: bb-cs-quad-boundary
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_prediction_constants.py
+  snippet: '"home": {"q1": 30, "q2": 75, "q3": 160},'
+  mutant: '"home": {"q1": 40, "q2": 75, "q3": 160},'
+  test: tests/mbb/test_mbb_college_season.py::test_quads_reproduce_the_oracle_quadrant_records
+  expected: kill
+  note: Quad 1 at home is opponents ranked 1-30; 31-40 home games would move out of the oracle's Quad 2.
+
+- id: bb-cs-net-estimate-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'NET_ESTIMATE_WEIGHTS = {"adj_em": 0.8, "wab": 0.2}'
+  mutant: 'NET_ESTIMATE_WEIGHTS = {"adj_em": 0.5, "wab": 0.5}'
+  test: tests/mbb/test_mbb_college_season.py::test_net_estimate_tracks_the_net
+  expected: kill
+  note: Equal weights track the 2024 NET at Spearman 0.991 (men), under the 0.994 gate.
+
+- id: bb-cs-auto-bid-champion
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'pl.coalesce("champion_id", "leader").alias("team_id"),'
+  mutant: 'pl.coalesce("leader", "champion_id").alias("team_id"),'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_are_the_conference_champions
+  expected: kill
+  note: The auto-bid is the conference-tournament champion, not the conference standings leader.
+
+- id: bb-cs-auto-bid-final-played
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'return pl.col("notes_headline").str.contains(r"(?i)-\s*final\s*$")'
+  mutant: 'return pl.col("notes_headline").str.contains(r"(?i)final")'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_mid_conference_tournaments
+  expected: kill
+  note: A quarterfinal or semifinal is not the final; matching any "final" crowns a champion mid-tournament.
+
+- id: bb-cs-ineligible-runner-up
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'pl.when(pl.col("_w").is_in(barred)).then(pl.col("_l")).otherwise(pl.col("_w")).alias("champion_id")'
+  mutant: 'pl.col("_w").alias("champion_id")'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_are_the_conference_champions
+  expected: kill
+  note: Southern Indiana won the 2024 women's OVC final while reclassifying; the runner-up UT Martin took the bid.
+
+- id: bb-cs-at-large-cut
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_bracketology.py
+  snippet: '((pl.col("auto_bid") == True) | (pl.col("at_large_rank") <= at_large_slots)).alias("bid")  # noqa: E712'
+  mutant: '((pl.col("auto_bid") == True) | (pl.col("at_large_rank") < at_large_slots)).alias("bid")  # noqa: E712'
+  test: tests/mbb/test_mbb_college_season.py::test_bracketology_against_selection_sunday
+  expected: kill
+  note: 68 minus the auto-bids is the at-large count; an off-by-one cut seeds a 67-team field.
+
+- id: bb-cs-sim-at-large-cut
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'at_large = (~auto) & eligible[None, :] & (al_rank < (FIELD_SIZE - n_auto)[:, None])'
+  mutant: 'at_large = (~auto) & eligible[None, :] & (al_rank <= (FIELD_SIZE - n_auto)[:, None])'
+  test: tests/mbb/test_mbb_college_season.py::test_season_sim_accounting
+  expected: kill
+  note: Each simulated field holds exactly 68; one extra at-large makes bid_prob sum to 69.
+
+- id: bb-cs-first-four
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'ff_al, ff_ab = al[-4:], ab[-4:]'
+  mutant: 'ff_al, ff_ab = al[:4], ab[-4:]'
+  test: tests/mbb/test_mbb_college_season.py::test_first_four_seed_structure_and_bubble
+  expected: kill
+  note: The First Four at-large pairs are the last four in, not the best four at-large teams.
+
+- id: bb-cs-sim-seeded
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '    rng = np.random.default_rng(seed)'
+  mutant: '    rng = np.random.default_rng()'
+  test: tests/mbb/test_mbb_college_season.py::test_season_sim_is_seeded_and_reproducible
+  expected: kill
+  note: The Monte Carlo must reproduce from its seed.

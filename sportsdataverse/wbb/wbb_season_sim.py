@@ -16,17 +16,20 @@ See Also:
 
 from __future__ import annotations
 
+import datetime
+from collections.abc import Iterable
 from typing import Union
 
 import numpy as np
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.mbb.mbb_season_sim import mbb_bracket_sim, mbb_season_sim
+from sportsdataverse.mbb.mbb_season_sim import mbb_bracket_sim, mbb_season_projections, mbb_season_sim
 
 __all__ = [
     "simulate_game",
     "wbb_bracket_sim",
+    "wbb_season_projections",
     "wbb_season_sim",
 ]
 
@@ -125,3 +128,49 @@ def wbb_bracket_sim(
     if return_as_pandas:
         return mbb_bracket_sim(seeded_field, ratings, n_sims=n_sims, seed=seed, league="womens", return_as_pandas=True)
     return mbb_bracket_sim(seeded_field, ratings, n_sims=n_sims, seed=seed, league="womens")
+
+
+def wbb_season_projections(
+    season: int,
+    *,
+    as_of_date: Union[datetime.date, None] = None,
+    n_sims: int = 10000,
+    seed: int = 0,
+    ineligible: Iterable[str] = (),
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Women's daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with ``league="womens"`` (WBB loaders, women's constants and quad ranges).
+
+    Args:
+        season: Season to project (e.g. ``2024``).
+        as_of_date: Only use games strictly before this date; ``None`` uses every
+            completed game.
+        n_sims: Simulated seasons.
+        seed: RNG seed (deterministic output).
+        ineligible: Team ids barred from the NCAA tournament.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per Division I team -- see the mbb core for the full contract.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import wbb_season_projections
+            odds = wbb_season_projections(2024, n_sims=2000)
+    """
+    if return_as_pandas:
+        return mbb_season_projections(
+            season,
+            as_of_date=as_of_date,
+            n_sims=n_sims,
+            seed=seed,
+            league="womens",
+            ineligible=ineligible,
+            return_as_pandas=True,
+        )
+    return mbb_season_projections(
+        season, as_of_date=as_of_date, n_sims=n_sims, seed=seed, league="womens", ineligible=ineligible
+    )

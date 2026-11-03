@@ -1534,6 +1534,79 @@ from sportsdataverse.wbb import wbb_predict_games, wbb_team_ratings
 preds = wbb_predict_games(games, wbb_team_ratings(2024))
 ```
 
+### wbb_season_projections {#wbb_season_projections}
+
+`wbb_season_projections(season: 'int', *, as_of_date: 'Union[datetime.date, None]' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds.
+
+Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with `league="womens"` (WBB loaders, women's constants and quad ranges).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `n_sims` | `int` | `10000` | Simulated seasons. |
+| `seed` | `int` | `0` | RNG seed (deterministic output). |
+| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per Division I team -- see the mbb core for the full contract.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by its end year (2024 is 2023-24). |
+| `as_of_date` | Date | The as-of date: only games strictly before it count as played. Null when every completed game is used. |
+| `team_id` | String | ESPN team id (Utf8). |
+| `team` | String | Team (ESPN location name). |
+| `conference_id` | String | ESPN conference id, read off the schedule (Utf8). |
+| `conference` | String | Conference short name. Null for independents, which get no auto-bid. |
+| `wins` | Int64 | Wins as of the date (every opponent). |
+| `losses` | Int64 | Losses as of the date. |
+| `conf_wins` | Int64 | Regular-season conference wins as of the date. |
+| `conf_losses` | Int64 | Regular-season conference losses as of the date. |
+| `proj_wins` | Float64 | Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments not counted). |
+| `proj_losses` | Float64 | Projected losses, on the same games. |
+| `proj_conf_wins` | Float64 | Projected regular-season conference wins. |
+| `proj_conf_losses` | Float64 | Projected regular-season conference losses. |
+| `proj_conf_win_pct` | Float64 | proj_conf_wins / (proj_conf_wins + proj_conf_losses). |
+| `proj_conf_win_pct_rank` | Float64 | Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average ties. Null for independents. |
+| `proj_conf_win_pct_pct` | Float64 | Percentile of proj_conf_win_pct within the conference. |
+| `reg_season_title_prob` | Float64 | Share of sims with the conference's best regular-season conference winning percentage; co-champions all count, so a conference can sum past 1. |
+| `conf_tourney_title_prob` | Float64 | Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob. |
+| `auto_bid_prob` | Float64 | Share of sims holding the conference's auto-bid. |
+| `at_large_prob` | Float64 | Share of sims with an at-large bid. |
+| `bid_prob` | Float64 | Share of sims in the 68-team field (auto_bid_prob + at_large_prob). |
+| `seed_mean` | Float64 | Mean seed line over the sims with a bid; null when never in the field. |
+| `seed_1_prob` | Float64 | Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_2_prob` | Float64 | Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_3_prob` | Float64 | Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_4_prob` | Float64 | Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_5_prob` | Float64 | Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_6_prob` | Float64 | Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_7_prob` | Float64 | Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_8_prob` | Float64 | Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_9_prob` | Float64 | Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_10_prob` | Float64 | Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_11_prob` | Float64 | Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_12_prob` | Float64 | Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_13_prob` | Float64 | Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_14_prob` | Float64 | Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_15_prob` | Float64 | Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_16_prob` | Float64 | Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob). |
+| `n_sims` | Int64 | Simulated seasons. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_season_projections
+odds = wbb_season_projections(2024, n_sims=2000)
+```
+
 ### wbb_season_sim {#wbb_season_sim}
 
 `wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`

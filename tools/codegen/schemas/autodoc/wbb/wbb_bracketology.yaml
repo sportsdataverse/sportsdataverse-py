@@ -1,5 +1,66 @@
 schema: wbb_bracketology
 kind: dataframe
-columns: []
-unverified: 'no capture: it raises a join-key dtype mismatch on every real season (the schedule''s home_team_id is Int32,
-  the ratings'' team_id is String)'
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: as_of_date
+  type: date
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: eligible
+  type: logical
+  description: ''
+- name: wins
+  type: integer
+  description: ''
+- name: losses
+  type: integer
+  description: ''
+- name: net_estimate_rank
+  type: double
+  description: ''
+- name: rpi_rank
+  type: double
+  description: ''
+- name: wab
+  type: double
+  description: ''
+- name: quad1_w
+  type: integer
+  description: ''
+- name: quad1_l
+  type: integer
+  description: ''
+- name: resume_score
+  type: double
+  description: ''
+- name: auto_bid
+  type: logical
+  description: ''
+- name: conf_champion
+  type: logical
+  description: ''
+- name: at_large_rank
+  type: integer
+  description: ''
+- name: bid
+  type: logical
+  description: ''
+- name: projected_seed
+  type: integer
+  description: ''
+- name: at_large_prob
+  type: double
+  description: ''
+- name: bubble
+  type: character
+  description: ''

@@ -38643,6 +38643,270 @@ wnba_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+mbb_bracketology:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: 'At-large probability: a logistic in resume_score centred midway between the last at-large team in and the
+    first out.'
+  at_large_rank: Order among eligible teams without an auto-bid, by resume_score (1 = best). Null for auto-bids and ineligible
+    teams.
+  auto_bid: 'Holds the conference''s auto-bid: the conference-tournament champion, or before the final the conference leader
+    still alive.'
+  bid: In the projected 68-team field.
+  bubble: last_four_byes (at-large ranks 29-32 with 36 at-large slots), last_four_in (33-36), first_four_out (37-40), next_four_out
+    (41-44); null otherwise.
+  conf_champion: True when the conference-tournament final has been played and this team holds the auto-bid (the runner-up
+    when the champion is ineligible).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  losses: Losses in played games, against every opponent.
+  net_estimate_rank: NET-estimate rank (strength_of_schedule).
+  projected_seed: Projected seed line, 1-16. The last four at-large teams and the four worst auto-bids play the First Four
+    in pairs, so every line has four slots. Null outside the field.
+  quad1_l: Quad 1 losses to Division I opponents (strength_of_schedule).
+  quad1_w: Quad 1 wins over Division I opponents (strength_of_schedule).
+  resume_score: 'Committee-style résumé: 0.35 * adj_em_z + 0.20 * z(sos) + 0.35 * z(wab) + 0.10 * z(quad1_w), over eligible
+    teams. Null for ineligible teams.'
+  rpi_rank: RPI rank (strength_of_schedule).
+  season: Season, named by its end year (2024 is 2023-24).
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+mbb_season_projections:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: Share of sims with an at-large bid.
+  auto_bid_prob: Share of sims holding the conference's auto-bid.
+  bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
+  conf_losses: Regular-season conference losses as of the date.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob.
+  conf_wins: Regular-season conference wins as of the date.
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  losses: Losses as of the date.
+  n_sims: Simulated seasons.
+  proj_conf_losses: Projected regular-season conference losses.
+  proj_conf_win_pct: proj_conf_wins / (proj_conf_wins + proj_conf_losses).
+  proj_conf_win_pct_pct: Percentile of proj_conf_win_pct within the conference.
+  proj_conf_win_pct_rank: 'Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average
+    ties. Null for independents.'
+  proj_conf_wins: Projected regular-season conference wins.
+  proj_losses: Projected losses, on the same games.
+  proj_wins: 'Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments
+    not counted).'
+  reg_season_title_prob: Share of sims with the conference's best regular-season conference winning percentage; co-champions
+    all count, so a conference can sum past 1.
+  season: Season, named by its end year (2024 is 2023-24).
+  seed_10_prob: Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_11_prob: Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_12_prob: Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_13_prob: Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_14_prob: Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_15_prob: Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_16_prob: Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_1_prob: Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_2_prob: Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_3_prob: Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_4_prob: Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_5_prob: Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_6_prob: Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_7_prob: Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_8_prob: Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_9_prob: Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_mean: Mean seed line over the sims with a bid; null when never in the field.
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wins: Wins as of the date (every opponent).
+mbb_strength_of_schedule:
+  adj_d: 'Opponent-adjusted defensive efficiency: points allowed per 100 possessions.'
+  adj_em: Adjusted efficiency margin, adj_o - adj_d.
+  adj_em_n: 'Sample size of adj_em: the games behind the ratings.'
+  adj_em_pct: 'Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1).'
+  adj_em_rank: 'Rank of adj_em within the season among Division I teams: 1 is best, average ties.'
+  adj_em_z: adj_em z-scored over Division I within the season.
+  adj_o: 'Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings).'
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  conf_losses: Regular-season conference losses.
+  conf_wins: Regular-season conference wins (conference tournaments and multi-team events excluded).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  games: Games behind the ratings (every played game with a usable box score).
+  losses: Losses in played games, against every opponent.
+  net_estimate: 'NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET''s efficiency and results halves;
+    weights fitted to the men''s 2024 NET). Higher is better.'
+  net_estimate_n: 'Sample size of net_estimate: the team''s Division I games.'
+  net_estimate_pct: 'Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1).'
+  net_estimate_rank: 'Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams:
+    1 is best, average ties.'
+  quad1_l: Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad1_w: Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad2_l: Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad2_w: Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad3_l: Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad3_w: Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad4_l: Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad4_w: Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quality_wins: Quad 1 plus Quad 2 wins.
+  rpi: 'NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp.'
+  rpi_games: Division I games behind the RPI.
+  rpi_n: 'Sample size of rpi: the team''s Division I games.'
+  rpi_oowp: 'Opponents'' opponents'' winning percentage: the opponents'' rpi_owp averaged over this team''s games.'
+  rpi_owp: 'Opponents'' winning percentage: each opponent''s unweighted Division I record without its games against this team,
+    averaged over this team''s games.'
+  rpi_pct: 'Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1).'
+  rpi_rank: 'Rank of rpi within the season among Division I teams: 1 is best, average ties.'
+  rpi_wp: 'RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4,
+    a road loss 0.6, neutral 1.0 (men''s from 2004-05, women''s from 2011-12).'
+  season: Season, named by its end year (2024 is 2023-24).
+  sos: 'Strength of schedule: mean opponent adj_em over Division I games.'
+  sos_n: 'Sample size of sos: the team''s Division I games.'
+  sos_pct: 'Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1).'
+  sos_rank: 'Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties.'
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wab_n: 'Sample size of wab: the team''s Division I games.'
+  wab_pct: 'Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1).'
+  wab_rank: 'Rank of wab within the season among Division I teams: 1 is best, average ties.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+wbb_bracketology:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: 'At-large probability: a logistic in resume_score centred midway between the last at-large team in and the
+    first out.'
+  at_large_rank: Order among eligible teams without an auto-bid, by resume_score (1 = best). Null for auto-bids and ineligible
+    teams.
+  auto_bid: 'Holds the conference''s auto-bid: the conference-tournament champion, or before the final the conference leader
+    still alive.'
+  bid: In the projected 68-team field.
+  bubble: last_four_byes (at-large ranks 29-32 with 36 at-large slots), last_four_in (33-36), first_four_out (37-40), next_four_out
+    (41-44); null otherwise.
+  conf_champion: True when the conference-tournament final has been played and this team holds the auto-bid (the runner-up
+    when the champion is ineligible).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  losses: Losses in played games, against every opponent.
+  net_estimate_rank: NET-estimate rank (strength_of_schedule).
+  projected_seed: Projected seed line, 1-16. The last four at-large teams and the four worst auto-bids play the First Four
+    in pairs, so every line has four slots. Null outside the field.
+  quad1_l: Quad 1 losses to Division I opponents (strength_of_schedule).
+  quad1_w: Quad 1 wins over Division I opponents (strength_of_schedule).
+  resume_score: 'Committee-style résumé: 0.35 * adj_em_z + 0.20 * z(sos) + 0.35 * z(wab) + 0.10 * z(quad1_w), over eligible
+    teams. Null for ineligible teams.'
+  rpi_rank: RPI rank (strength_of_schedule).
+  season: Season, named by its end year (2024 is 2023-24).
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+wbb_season_projections:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: Share of sims with an at-large bid.
+  auto_bid_prob: Share of sims holding the conference's auto-bid.
+  bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
+  conf_losses: Regular-season conference losses as of the date.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain), the same as auto_bid_prob.
+  conf_wins: Regular-season conference wins as of the date.
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  losses: Losses as of the date.
+  n_sims: Simulated seasons.
+  proj_conf_losses: Projected regular-season conference losses.
+  proj_conf_win_pct: proj_conf_wins / (proj_conf_wins + proj_conf_losses).
+  proj_conf_win_pct_pct: Percentile of proj_conf_win_pct within the conference.
+  proj_conf_win_pct_rank: 'Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average
+    ties. Null for independents.'
+  proj_conf_wins: Projected regular-season conference wins.
+  proj_losses: Projected losses, on the same games.
+  proj_wins: 'Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments
+    not counted).'
+  reg_season_title_prob: Share of sims with the conference's best regular-season conference winning percentage; co-champions
+    all count, so a conference can sum past 1.
+  season: Season, named by its end year (2024 is 2023-24).
+  seed_10_prob: Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_11_prob: Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_12_prob: Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_13_prob: Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_14_prob: Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_15_prob: Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_16_prob: Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_1_prob: Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_2_prob: Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_3_prob: Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_4_prob: Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_5_prob: Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_6_prob: Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_7_prob: Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_8_prob: Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_9_prob: Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_mean: Mean seed line over the sims with a bid; null when never in the field.
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wins: Wins as of the date (every opponent).
+wbb_strength_of_schedule:
+  adj_d: 'Opponent-adjusted defensive efficiency: points allowed per 100 possessions.'
+  adj_em: Adjusted efficiency margin, adj_o - adj_d.
+  adj_em_n: 'Sample size of adj_em: the games behind the ratings.'
+  adj_em_pct: 'Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1).'
+  adj_em_rank: 'Rank of adj_em within the season among Division I teams: 1 is best, average ties.'
+  adj_em_z: adj_em z-scored over Division I within the season.
+  adj_o: 'Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings).'
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  conf_losses: Regular-season conference losses.
+  conf_wins: Regular-season conference wins (conference tournaments and multi-team events excluded).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  games: Games behind the ratings (every played game with a usable box score).
+  losses: Losses in played games, against every opponent.
+  net_estimate: 'NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET''s efficiency and results halves;
+    weights fitted to the men''s 2024 NET). Higher is better.'
+  net_estimate_n: 'Sample size of net_estimate: the team''s Division I games.'
+  net_estimate_pct: 'Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1).'
+  net_estimate_rank: 'Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams:
+    1 is best, average ties.'
+  quad1_l: Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad1_w: Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad2_l: Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad2_w: Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad3_l: Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad3_w: Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad4_l: Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad4_w: Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quality_wins: Quad 1 plus Quad 2 wins.
+  rpi: 'NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp.'
+  rpi_games: Division I games behind the RPI.
+  rpi_n: 'Sample size of rpi: the team''s Division I games.'
+  rpi_oowp: 'Opponents'' opponents'' winning percentage: the opponents'' rpi_owp averaged over this team''s games.'
+  rpi_owp: 'Opponents'' winning percentage: each opponent''s unweighted Division I record without its games against this team,
+    averaged over this team''s games.'
+  rpi_pct: 'Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1).'
+  rpi_rank: 'Rank of rpi within the season among Division I teams: 1 is best, average ties.'
+  rpi_wp: 'RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4,
+    a road loss 0.6, neutral 1.0 (men''s from 2004-05, women''s from 2011-12).'
+  season: Season, named by its end year (2024 is 2023-24).
+  sos: 'Strength of schedule: mean opponent adj_em over Division I games.'
+  sos_n: 'Sample size of sos: the team''s Division I games.'
+  sos_pct: 'Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1).'
+  sos_rank: 'Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties.'
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wab_n: 'Sample size of wab: the team''s Division I games.'
+  wab_pct: 'Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1).'
+  wab_rank: 'Rank of wab within the season among Division I teams: 1 is best, average ties.'
+  wins: Wins in played games, against every opponent (non-Division I included).
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
