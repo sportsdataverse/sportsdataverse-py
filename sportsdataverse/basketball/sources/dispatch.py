@@ -8,11 +8,13 @@ runs the unmodified ``helper_<league>_pbp`` parser and
 dict and the game-page frames with provenance stamped in. Mirrors
 :mod:`sportsdataverse.football.sources.dispatch`.
 
-:data:`SOURCE_ORDER` lists only ESPN, because Game on Paper's ``?source=`` allow-list IS that
-order: a source listed there is selectable, and no alternate may be selectable until the
-cross-source parity gates pass (BB-D15). The cdn.nba.com / cdn.wnba.com live adapter (BB-D13,
-``source="live"``, :mod:`sportsdataverse.nba.live_pbp.to_espn_summary`) is registered for NBA and
-WNBA through :data:`_ADAPTER_MODULES` and joins the order after those gates.
+Game on Paper's ``?source=`` allow-list IS :data:`SOURCE_ORDER`: a source listed there is
+selectable, and an alternate is listed only once every game of a real captured corpus passes its
+cross-source parity gates (BB-D15, :mod:`~sportsdataverse.basketball.sources.parity`). The
+cdn.nba.com / cdn.wnba.com live adapter (BB-D13, ``source="live"``,
+:mod:`sportsdataverse.nba.live_pbp.to_espn_summary`) passed them on 27 games and follows ESPN for
+NBA and WNBA, so it is selectable there and is also the failover when ESPN cannot serve a game
+(``source="espn"`` falls through to it). MBB and WBB list ESPN alone.
 """
 
 from __future__ import annotations
@@ -24,13 +26,18 @@ from dataclasses import dataclass, field
 from typing import Any
 
 # ponytail: sport-neutral, shared so a caller catches one AllSourcesFailed for every league
-from sportsdataverse.basketball.sources.contract import KNOWN_LOSSY, LEAGUES, _validate_summary
+from sportsdataverse.basketball.sources.contract import KNOWN_LOSSY, LEAGUES, ContractReport, _validate_summary
 from sportsdataverse.football.sources.dispatch import AllSourcesFailed, Attempt, SourceUnavailable
 from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_functions
 
-#: Failover order per league: ESPN first and the terminal fallback. Alternates join only once
-#: BB-D15's parity gates pass; listing one here makes it selectable in Game on Paper.
-SOURCE_ORDER: dict[str, tuple[str, ...]] = dict.fromkeys(LEAGUES, ("espn",))
+#: Failover order per league: ESPN first and the terminal fallback. An alternate joins only once
+#: BB-D15's parity gates pass (:data:`~sportsdataverse.basketball.sources.parity.GATES`); listing one
+#: here makes it selectable in Game on Paper. "live" passed them on the 27-game corpus (2026-11-03).
+SOURCE_ORDER: dict[str, tuple[str, ...]] = {
+    **dict.fromkeys(LEAGUES, ("espn",)),
+    "nba": ("espn", "live"),
+    "wnba": ("espn", "live"),
+}
 
 
 @dataclass
@@ -203,7 +210,6 @@ def _process_game(
     """
     order = _fallthrough_order(league, source, fallthrough)
     payloads = payloads or {}
-    _, parse = league_pbp_functions(league)
     attempts: list[Attempt] = []
     for src in order:
         t0 = time.perf_counter()
@@ -212,28 +218,9 @@ def _process_game(
             attempts.append(Attempt(src, False, _ADAPTER_IMPORT_ERRORS.get((league, src), "not implemented")))
             continue
         try:
-            adapted = adapter(league, espn_id, SourceContext(payload=payloads.get(src)))
-            if not isinstance(adapted, AdaptedGame):
-                raise SourceUnavailable(f"adapter returned {type(adapted).__name__}, expected AdaptedGame")
-        except Exception as exc:  # noqa: BLE001 -- any adapter failure hands over to the next source
-            attempts.append(Attempt(src, False, f"{type(exc).__name__}: {exc}", time.perf_counter() - t0))
-            continue
-        report = _validate_summary(adapted.summary, league)
-        if not report.ok:
-            error = f"contract: missing={report.missing} invalid={report.invalid}"
-            attempts.append(Attempt(src, False, error, time.perf_counter() - t0))
-            continue
-        header_id = adapted.summary["header"].get("id")
-        if str(header_id) != str(espn_id):
-            # an injected payload for another event would be served under this game's id
-            error = f"header.id {header_id!r} is not the requested game {espn_id}"
-            attempts.append(Attempt(src, False, error, time.perf_counter() - t0))
-            continue
-        try:
-            final = parse(espn_id, adapted.summary)
-            frames = game_page_frames(final, league=league)
-        except Exception as exc:  # noqa: BLE001 -- a parser failure on one source is not the game's end
-            attempts.append(Attempt(src, False, f"parser: {type(exc).__name__}: {exc}", time.perf_counter() - t0))
+            adapted, report, final, frames = _run_source(league, espn_id, adapter, payloads.get(src))
+        except _SourceFailed as exc:
+            attempts.append(Attempt(src, False, str(exc), time.perf_counter() - t0))
             continue
         attempts.append(Attempt(src, True, None, time.perf_counter() - t0))
         provenance = {
@@ -255,6 +242,43 @@ def _process_game(
             health={a.source: ("ok" if a.ok else a.error or "failed") for a in attempts},
         )
     raise AllSourcesFailed(league, espn_id, attempts)
+
+
+class _SourceFailed(Exception):
+    """One source's leg of :func:`_process_game` failed; the message is the ``Attempt.error``."""
+
+
+def _run_source(
+    league: str, espn_id: int, adapter: Adapter, payload: Any
+) -> tuple[AdaptedGame, ContractReport, dict, dict]:
+    """One source's leg of :func:`_process_game`: adapt, check the contract and header id, parse, frame.
+
+    Shared with :mod:`~sportsdataverse.basketball.sources.parity`, which runs a source whether or not it
+    is in :data:`SOURCE_ORDER` through exactly the path a served game takes.
+
+    Raises:
+        _SourceFailed: the adapter, the contract, the header id or the parser failed.
+    """
+    try:
+        adapted = adapter(league, espn_id, SourceContext(payload=payload))
+        if not isinstance(adapted, AdaptedGame):
+            raise SourceUnavailable(f"adapter returned {type(adapted).__name__}, expected AdaptedGame")
+    except Exception as exc:  # noqa: BLE001 -- any adapter failure hands over to the next source
+        raise _SourceFailed(f"{type(exc).__name__}: {exc}") from exc
+    report = _validate_summary(adapted.summary, league)
+    if not report.ok:
+        raise _SourceFailed(f"contract: missing={report.missing} invalid={report.invalid}")
+    header_id = adapted.summary["header"].get("id")
+    if str(header_id) != str(espn_id):
+        # an injected payload for another event would be served under this game's id
+        raise _SourceFailed(f"header.id {header_id!r} is not the requested game {espn_id}")
+    _, parse = league_pbp_functions(league)
+    try:
+        final = parse(espn_id, adapted.summary)
+        frames = game_page_frames(final, league=league)
+    except Exception as exc:  # noqa: BLE001 -- a parser failure on one source is not the game's end
+        raise _SourceFailed(f"parser: {type(exc).__name__}: {exc}") from exc
+    return adapted, report, final, frames
 
 
 def _pbp_source(summary: dict) -> Any:
