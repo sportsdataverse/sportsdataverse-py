@@ -54,3 +54,23 @@ def test_a_tab_parser_crash_is_recorded_and_loses_only_its_family():
     assert errors == [{"family": "officials", "error": "ValueError: layout drift"}]
     assert _tab_family(errors, "officials", "1", _boom, "") == []  # an absent page is never parsed
     assert len(errors) == 1
+
+
+def test_tab_families_are_stamped_with_team_ids_from_the_teams_index(tmp_path):
+    """TEAM_COLUMNS must list the new families' team columns, or their rows get no ids."""
+    import json
+
+    bundle = dict(BUNDLE, pages={**BUNDLE["pages"], "team_stats": TEAM_STATS})
+    bare = parse_bundle(bundle, league="wbb", root=tmp_path / "bare")
+    names = {r["team"] for r in bare["linescore"]}
+    names |= {r[c] for r in bare["team_stats"] for c in ("away_team", "home_team")}
+    root = tmp_path / "indexed"
+    teams = root / "wbb" / "teams" / "json" / f"{BUNDLE['season']}.json"
+    teams.parent.mkdir(parents=True)
+    teams.write_text(json.dumps([{"team": n, "ncaa_team_id": 100 + i} for i, n in enumerate(sorted(names))]))
+
+    rec = parse_bundle(bundle, league="wbb", root=root)
+    assert rec["linescore"] and all(r["team_ncaa_team_id"] for r in rec["linescore"])
+    assert rec["team_stats"] and all(
+        r["away_team_ncaa_team_id"] and r["home_team_ncaa_team_id"] for r in rec["team_stats"]
+    )

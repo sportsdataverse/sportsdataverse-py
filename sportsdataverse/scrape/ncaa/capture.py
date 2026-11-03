@@ -298,15 +298,15 @@ def refresh_officials(
     for path in sorted(season_dir.glob("*.json.gz")) if season_dir.is_dir() else []:
         if path.stat().st_mtime < cutoff:
             continue
-        bundle = read_bundle(path)
         counts["checked"] += 1
-        if _officials_missing(bundle.get("pages") or {}):
-            candidates.append(bundle)
+        if _officials_missing(read_bundle(path).get("pages") or {}):
+            candidates.append(path)  # the path, not the bundle: one decoded bundle in memory at a time
     if not candidates:
         return counts
     fetcher = fetcher_factory()
     try:
-        for bundle in candidates:
+        for path in candidates:
+            bundle = read_bundle(path)
             cid = str(bundle["contest_id"])
             try:
                 html = fetcher.fetch_html(f"contests/{cid}/officials", force=True)
