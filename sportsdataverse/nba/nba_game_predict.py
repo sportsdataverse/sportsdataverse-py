@@ -273,7 +273,12 @@ def nba_predict_games(
 # gated ONLY on gate (a) -- per-probability-decile realized-outcome calibration. See
 # tests/fixtures/nba_prediction/README.md + the SDD ledger for the retirement note.
 
-_IN_GAME_FEATURES = ["score_diff", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
+# The booster's inputs (in_game_features returns these plus sec_left / sqrt_sec_left, which the
+# pre-2026-11 booster read). In the final minute the clock reaches the model only through
+# margin_per_sqrt_sec, which is fit under a +1 monotone constraint, so at a fixed lead, prior and
+# possession the WP can only move toward the leader as the clock runs down (sqrt_sec_left_60 is
+# constant there). Fitting script: tools/models/nba_prediction/train_in_game_wp.py.
+_IN_GAME_FEATURES = ["score_diff", "sqrt_sec_left_60", "pregame_logit", "home_has_ball", "margin_per_sqrt_sec"]
 
 
 def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFrame:
@@ -292,7 +297,11 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
         One row per input play: ``score_diff`` (home - away), ``sec_left``
         (clipped at 0 -- overtime plays count as 0 seconds left),
         ``sqrt_sec_left``, ``pregame_logit``, ``home_has_ball`` (``Int8``;
-        dead-ball / unknown-team plays are 0).
+        dead-ball / unknown-team plays are 0), ``margin_per_sqrt_sec``
+        (``score_diff / sqrt(sec_left + 1)``: the lead measured against the
+        time left, so a fixed lead grows as the clock runs down) and
+        ``sqrt_sec_left_60`` (``sqrt(max(sec_left, 60))``: the clock with the
+        final minute folded into ``margin_per_sqrt_sec``).
 
     Example:
         Quick start::
@@ -304,12 +313,16 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
     """
     p = min(max(pregame_home_prob, 1e-6), 1.0 - 1e-6)  # norm.cdf saturates to exact 0/1 for extreme margins
     logit = math.log(p / (1.0 - p))
+    sec = pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0)
+    diff = (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64)
     return pbp.select(
-        (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("score_diff"),
-        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).alias("sec_left"),
-        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).sqrt().alias("sqrt_sec_left"),
+        diff.alias("score_diff"),
+        sec.alias("sec_left"),
+        sec.sqrt().alias("sqrt_sec_left"),
         pl.lit(logit, dtype=pl.Float64).alias("pregame_logit"),
         (pl.col("team_id") == pl.col("home_team_id")).fill_null(False).cast(pl.Int8).alias("home_has_ball"),
+        (diff / (sec + 1.0).sqrt()).alias("margin_per_sqrt_sec"),
+        sec.clip(lower_bound=60.0).sqrt().alias("sqrt_sec_left_60"),
     )
 
 
@@ -374,10 +387,15 @@ def nba_in_game_win_prob(
     """Per-play home win probability from the bundled in-game model.
 
     Scores :func:`in_game_features` through the committed artifact
-    (``sportsdataverse/nba/models/nba_in_game_wp.ubj`` for NBA -- a shallow
-    xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
-    stays out-of-sample; escalated from a plain logistic that failed the
-    per-bucket calibration gate).
+    (``sportsdataverse/nba/models/nba_in_game_wp.ubj`` for NBA, ``wnba_in_game_wp.ubj``
+    for WNBA): a shallow monotone-constrained xgboost booster fit by
+    ``tools/models/nba_prediction/train_in_game_wp.py`` (NBA on 2022, 2023 and 2025,
+    held out on 2026; WNBA on 2021-2024, held out on 2025). Within the final minute
+    the clock reaches the model only through ``margin_per_sqrt_sec``, so at a fixed
+    lead the probability moves toward the leader as time runs out. This is the raw
+    model output: it never applies the game result. ``nba_game_page.score_win_prob`` sets the
+    last play of a finished game to the result, and that settle step is small now but
+    not always zero (the WNBA booster saturates near 0.99 for a lead of 5 or more).
 
     Gate note: the plan's concurrent oracle (stats.nba.com
     ``winprobabilitypbp`` HOME_PCT) is a dead endpoint, so this model is
@@ -395,7 +413,7 @@ def nba_in_game_win_prob(
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per play: the five feature columns plus ``home_win_prob``.
+        One row per play: the :func:`in_game_features` columns plus ``home_win_prob``.
 
     Raises:
         ImportError: If the bundled artifact is an xgboost ``.ubj`` and
