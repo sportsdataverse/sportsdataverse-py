@@ -52,7 +52,11 @@ _LEAGUE_ID = {"nba": "00", "wnba": "10"}
 
 
 def midseason(games: pl.DataFrame) -> dt.date:
-    """The first date by which half of the regular-season games are done."""
+    """The date of the season's median game; the sim treats the games before it as played.
+
+    Games on that date are simulated (as of a date means before it), so slightly fewer than half
+    of the games are in the fit. The pinned gates are computed at this date.
+    """
     dates = games.get_column("game_date").sort()
     return dates[dates.len() // 2]
 
@@ -183,6 +187,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--bench", type=Path, default=None, help="dir with the engine's bench_{S}.parquet")
     ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args(argv)
+    if len(set(args.seasons)) != len(args.seasons):
+        ap.error("--seasons has a duplicate")
+    if args.closes is not None and args.league != "wnba":
+        ap.error("--closes is WNBA only (the 2026-11-02 sim-vs-market spec)")
+    if args.bench is not None and args.closes is None:
+        ap.error("--bench needs --closes")
 
     league_id = _LEAGUE_ID[args.league]
     load_possessions, load_schedule, offset = _league_loaders(league_id)
@@ -218,7 +228,7 @@ def main(argv: list[str] | None = None) -> int:
             closes = pl.read_parquet(args.closes / f"closes_wnba_{season}.parquet").select(
                 "game_id", "mkt_p_home", "mkt_margin"
             )
-            j = oda.join(closes, on="game_id", how="inner", validate="1:1").drop_nulls("mkt_p_home")
+            j = oda.join(closes, on="game_id", how="inner", validate="1:1").drop_nulls(["mkt_p_home", "mkt_margin"])
             mkt = {
                 "games": j.height,
                 "brier_sim": round(brier_score(j["y"].to_numpy(), j["p_sim"].to_numpy()), 4),

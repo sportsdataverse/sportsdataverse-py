@@ -5190,7 +5190,7 @@
   "nba_tracking_reb_oe": "analytics-2",
   "nba_tracking_rim_protect_value": "analytics-2",
   "nba_tracking_shot_diet_value": "analytics-2",
-  "nba_tracking_touch_value": "analytics-2",
+  "nba_tracking_touch_value": "analytics-3",
   "nba_v3_to_v2_pbp": "play-by-play-processing",
   "nba_war": "models-and-calculators-2",
   "nbabpmmodelfit_ratings": "models-and-calculators",

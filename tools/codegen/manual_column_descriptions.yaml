@@ -39209,8 +39209,8 @@ wnba_team_strength:
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: 'Posterior sd of adj_net_rtg (points per 100) from the ridge: the per-season rating shift each simulated
-    season draws.'
+  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
+    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
@@ -39274,8 +39274,8 @@ nba_season_sim:
 wnba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: 'Posterior sd of adj_net_rtg (points per 100) from the ridge: the per-season rating shift each simulated
-    season draws.'
+  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
+    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).

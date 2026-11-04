@@ -264,7 +264,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_reb_oe](additional/analytics-2.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
 | [nba_tracking_rim_protect_value](additional/analytics-2.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-2.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
-| [nba_tracking_touch_value](additional/analytics-2.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
+| [nba_tracking_touch_value](additional/analytics-3.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-3.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
 | [player_play_context](additional/analytics-3.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
 | [player_rates](additional/analytics-3.md#player_rates) | Per-player per-minute rate stats from box logs. |

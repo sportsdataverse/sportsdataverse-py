@@ -193,7 +193,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_tracking_reb_oe`](reference/additional/analytics-2#nba_tracking_reb_oe)
 - [`nba_tracking_rim_protect_value`](reference/additional/analytics-2#nba_tracking_rim_protect_value)
 - [`nba_tracking_shot_diet_value`](reference/additional/analytics-2#nba_tracking_shot_diet_value)
-- [`nba_tracking_touch_value`](reference/additional/analytics-2#nba_tracking_touch_value)
+- [`nba_tracking_touch_value`](reference/additional/analytics-3#nba_tracking_touch_value)
 - [`nbadraft_mock_draft`](reference/additional/analytics-3#nbadraft_mock_draft)
 - [`player_play_context`](reference/additional/analytics-3#player_play_context)
 - [`player_rates`](reference/additional/analytics-3#player_rates)

@@ -401,3 +401,16 @@ def test_lottery_tie_shares_chances_whatever_the_tiebreak() -> None:
     order, chances = lottery_slots(comb, current, [442, 276, 178, 104], np.random.default_rng(0))
     assert order.tolist() == [1, 0, 2, 3]  # TOR's worse current record goes first
     assert chances.tolist() == [359.0, 359.0, 178.0, 104.0]
+
+
+def test_rejects_bad_draw_counts_and_chances() -> None:
+    games = _regular("wnba", 2025).select("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts")
+    model = sim_mod.as_of_game_model(pl.DataFrame(schema=RATE_ROWS_SCHEMA), league_id="10")
+    with pytest.raises(ValueError, match="n_sims"):
+        sim_mod.simulate_pro_season(games, model, league_id="10", n_sims=0)
+    for bad in ([420, 261, 167, 97], [420, 261, 167, 97, -55], [420, 261, 167, 97, float("nan")]):
+        with pytest.raises(ValueError, match="chances"):
+            sim_mod.simulate_pro_season(games, model, league_id="10", n_sims=10, chances=bad)
+    for bad in ([140, 140, 140, float("inf")], [140, 140, 140, float("nan")]):
+        with pytest.raises(ValueError, match="finite"):
+            nba_draft_lottery_odds(chances=bad)

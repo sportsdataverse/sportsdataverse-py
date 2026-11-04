@@ -202,6 +202,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     if set(args.train) & set(args.holdout):
         ap.error("train and holdout seasons must be disjoint")
+    if len(set(args.train)) != len(args.train) or len(set(args.holdout)) != len(args.holdout):
+        ap.error("--train and --holdout must not repeat a season")
 
     league_id = _LEAGUE_ID[args.league]
     preds = {s: season_predictions(league_id, s, args.cache) for s in [*args.train, *args.holdout]}
@@ -212,9 +214,10 @@ def main(argv: list[str] | None = None) -> int:
 
     methods = ["box", *[f"ridge_{lam:g}" for lam in GRID]]
     sigma = {m: best_sigma(train[m].to_numpy(), y_tr) for m in methods}
-    train_ll = {m: score(train[m].to_numpy(), y_tr, sigma[m], m_tr)["log_loss"] for m in methods}
-    ridge_best = min(methods[1:], key=train_ll.__getitem__)
-    chosen = min(methods, key=train_ll.__getitem__)
+    exact = {m: log_loss_score(y_tr, norm.cdf(train[m].to_numpy() / sigma[m])) for m in methods}
+    train_ll = {m: round(v, 5) for m, v in exact.items()}
+    ridge_best = min(methods[1:], key=exact.__getitem__)
+    chosen = min(methods, key=exact.__getitem__)
     shipped_sd = get_constants(league_id).margin_sd
     result = {
         "league": args.league,

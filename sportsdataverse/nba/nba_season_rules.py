@@ -189,6 +189,8 @@ class Season:
         total = self.g.sum(1)
         self.pct = np.where(total > 0, wins.sum(1) / np.maximum(total, 1), 0.0)
         self.leader: np.ndarray = np.zeros(len(point_diff), dtype=bool)
+        # the NBA division orders, kept so a drawn division-lead tie is drawn once
+        self._division_orders: dict[str, list[int]] = {}
         self.eligible: np.ndarray = np.zeros(len(point_diff), dtype=bool)
         if league_id == "00":
             for c in np.unique(conference):
@@ -196,7 +198,8 @@ class Season:
                 cut = np.sort(self.pct[members])[::-1][min(9, members.size - 1)]
                 self.eligible[members[self.pct[members] >= cut]] = True
             for d in np.unique(division):
-                self.leader[self.division_order(np.flatnonzero(division == d))[0]] = True
+                self._division_orders[d] = self.division_order(np.flatnonzero(division == d))
+                self.leader[self._division_orders[d][0]] = True
 
     # --- criteria: each returns one value per team of ``group``, higher is better, or None to skip
     def _pct_vs(self, group: Sequence[int], opponents: np.ndarray) -> list[float]:
@@ -292,7 +295,8 @@ class Season:
         """``(T,)`` rank within the division, 1 = the division winner."""
         rank: np.ndarray = np.zeros(len(self.pd), dtype=np.int64)
         for d in np.unique(self.div):
-            for k, t in enumerate(self.division_order(np.flatnonzero(self.div == d)), start=1):
+            order = self._division_orders.get(d) or self.division_order(np.flatnonzero(self.div == d))
+            for k, t in enumerate(order, start=1):
                 rank[t] = k
         return rank
 
@@ -402,7 +406,7 @@ def nba_draft_lottery_odds(
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``chances`` has a
-            non-positive entry or fewer entries than picks drawn.
+            non-positive or non-finite entry or fewer entries than picks drawn.
 
     Example:
         The NBA table::
@@ -423,8 +427,8 @@ def nba_draft_lottery_odds(
         if chances is not None
         else list(NBA_LOTTERY_CHANCES if league_id == "00" else WNBA_LOTTERY_CHANCES[5])
     )
-    if len(w) < draws or min(w) <= 0:
-        raise ValueError(f"chances must be positive with at least {draws} entries, got {w}")
+    if len(w) < draws or not all(np.isfinite(w)) or min(w) <= 0:
+        raise ValueError(f"chances must be positive and finite with at least {draws} entries, got {w}")
     odds = exact_lottery_odds(w, draws)
     n = len(w)
     out = pl.DataFrame(

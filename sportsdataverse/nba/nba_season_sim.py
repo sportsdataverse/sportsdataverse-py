@@ -192,7 +192,7 @@ def _team_arrays(model: GameModel, teams: list[int]) -> tuple[np.ndarray, np.nda
 def _noise_sd(model: GameModel, sd_home: np.ndarray, sd_away: np.ndarray, uncertain: bool) -> np.ndarray:
     """Per-game noise sd: the probit scale less the rating variance the season shift carries."""
     var = model.margin_sd**2 - (sd_home**2 + sd_away**2) * (model.poss / 100.0) ** 2 * float(uncertain)
-    # ponytail: floor at a quarter of the variance, in case the posterior ever exceeds the probit scale
+    # the caller caps sd so var >= margin_sd**2 / 4; the floor only absorbs rounding
     return np.sqrt(np.maximum(var, 0.25 * model.margin_sd**2))
 
 
@@ -351,6 +351,19 @@ def _rank_seasons(
     return seed_of, leader, playoff, slot_team, slot_chance
 
 
+def _check_inputs(games: pl.DataFrame, model: GameModel, *, league_id: str, n_sims: int) -> None:
+    """The argument checks of :func:`simulate_pro_season` (see its ``Raises``)."""
+    if league_id not in SIM_CONSTANTS:
+        raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
+    if games.get_column("season").n_unique() != 1:
+        raise ValueError("games must hold exactly one season")
+    for key in ("home_team_id", "away_team_id"):
+        if games.schema[key] != model.ratings.schema["team_id"]:
+            raise TypeError(f"{key} is {games.schema[key]}, model team_id is {model.ratings.schema['team_id']}")
+    if n_sims < 1:
+        raise ValueError(f"n_sims must be at least 1, got {n_sims}")
+
+
 def simulate_pro_season(
     games: pl.DataFrame,
     model: GameModel,
@@ -375,7 +388,8 @@ def simulate_pro_season(
         prior_records: WNBA only: the previous regular season's ``team_id``, ``wins``,
             ``losses``, added to the season's record for the lottery order. A team with no row
             (an expansion team) counts this season only.
-        chances: Lottery chances per slot, worst first, overriding the published table.
+        chances: Lottery chances per slot, worst first, overriding the published table; one
+            positive, finite value per lottery team.
         rating_uncertainty: Draw one rating shift per team per season (see the module doc).
             False keeps the ratings fixed; the validation reports both.
         as_of_date: Carried into the output only.
@@ -384,17 +398,12 @@ def simulate_pro_season(
         One row per team in :data:`SIM_SCHEMA`.
 
     Raises:
-        ValueError: If ``games`` holds more than one season, ``league_id`` is unknown, or a
-            conference (NBA) or the league (WNBA) has more than 15 teams.
+        ValueError: If ``games`` holds more than one season, ``league_id`` is unknown,
+            ``n_sims < 1``, ``chances`` is malformed, or a conference (NBA) or the league (WNBA)
+            has more than 15 teams.
         TypeError: If a team-id dtype differs from the model's ``team_id``.
     """
-    if league_id not in SIM_CONSTANTS:
-        raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
-    if games.get_column("season").n_unique() != 1:
-        raise ValueError("games must hold exactly one season")
-    for key in ("home_team_id", "away_team_id"):
-        if games.schema[key] != model.ratings.schema["team_id"]:
-            raise TypeError(f"{key} is {games.schema[key]}, model team_id is {model.ratings.schema['team_id']}")
+    _check_inputs(games, model, league_id=league_id, n_sims=n_sims)
     rng = np.random.default_rng(seed)
     teams = sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list()))
     index = {t: i for i, t in enumerate(teams)}
@@ -406,6 +415,9 @@ def simulate_pro_season(
     played = results_arrays(games.filter(is_played), index)
     future = games.filter(~is_played)
     net, sd = _team_arrays(model, teams)
+    # the shift of two teams may carry at most 3/4 of a game's variance, so the per-game noise
+    # (``_noise_sd``) can always restore the margin_sd marginal; binds only near the prior
+    sd = np.minimum(sd, np.sqrt(0.375) * model.margin_sd / (model.poss / 100.0))
     h = np.array([index[t] for t in future["home_team_id"].to_list()], dtype=np.int64)
     a = np.array([index[t] for t in future["away_team_id"].to_list()], dtype=np.int64)
     wins, pair, point_diff, shift = _simulate_games(
@@ -414,6 +426,10 @@ def simulate_pro_season(
     total_wins = wins.sum(2)
     total_games = total_wins + wins.sum(1)
     n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
+    if chances is not None and (
+        len(chances) != n_lottery or not all(np.isfinite(chances)) or min(chances, default=0) <= 0
+    ):
+        raise ValueError(f"chances must be {n_lottery} positive, finite values, got {chances}")
     lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
     have_odds = lot_chances is not None and n_lottery > 0
     prior_w, prior_g = _prior_arrays(prior_records, index)
@@ -516,7 +532,8 @@ def nba_season_sim(
         One row per team (stats.nba.com ``team_id``, Int64), sorted by conference and mean seed:
 
         * ``wins`` / ``losses`` so far, ``games_remaining``, and the as-of ``adj_net_rtg`` with its
-          posterior sd ``adj_net_rtg_sd``.
+          posterior sd ``adj_net_rtg_sd`` (capped so two teams' shift carries at most 3/4 of a
+          game's variance; it binds only near the prior, before many games are played).
         * ``proj_wins`` / ``proj_losses`` (means), ``proj_wins_sd``, the 10th and 90th
           percentiles, and ``proj_wins_se`` (the Monte Carlo error of the mean).
         * ``p_division`` (NBA), ``p_seed_1`` .. ``p_seed_15`` (the regular-season finish in the

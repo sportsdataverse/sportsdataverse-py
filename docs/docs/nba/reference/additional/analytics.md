@@ -934,7 +934,7 @@ One row per `(lottery_slot, pick)`: `lottery_slot` (1 = the worst record), `chan
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `chances` has a non-positive entry or fewer entries than picks drawn. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `chances` has a non-positive or non-finite entry or fewer entries than picks drawn. |
 
 **Example**
 
