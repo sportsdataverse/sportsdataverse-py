@@ -233,7 +233,8 @@ def main(argv: list[str] | None = None) -> int:
             last_rows = nba_possession_rate_rows(
                 load_possessions([season - 1 - offset]), last_schedule, league_id=league_id
             )
-            pre = preseason_prior(last_rows, sorted(set(full["home_team_id"].to_list())), league_id=league_id)
+            teams = set(full["home_team_id"].to_list()) | set(full["away_team_id"].to_list())
+            pre = preseason_prior(last_rows, sorted(teams), league_id=league_id)
         model = as_of_game_model(
             rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=pre
         )

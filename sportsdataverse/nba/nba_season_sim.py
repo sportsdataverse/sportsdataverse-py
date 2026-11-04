@@ -39,6 +39,7 @@ and the regression factor carry.
 from __future__ import annotations
 
 import datetime as dt
+import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, overload
 
@@ -46,6 +47,7 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse._common.team_strength import possession_ridge_ratings
+from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.nba.nba_season_rules import (
     NBA_LOTTERY_DRAWS,
     WNBA_LOTTERY_DRAWS,
@@ -197,6 +199,7 @@ def preseason_prior(
     league_id: str = "00",
     regression: float | None = None,
     new_team_quantile: float | None = None,
+    prev_teams: list[int] | None = None,
 ) -> PreseasonPrior | None:
     """The preseason prior from last season's possessions.
 
@@ -204,8 +207,9 @@ def preseason_prior(
     (:func:`~sportsdataverse._common.team_strength.possession_ridge_ratings` at
     :data:`~sportsdataverse._common.team_strength.RIDGE_LAMBDA`). Each team's offense and defense
     coefficient is multiplied by the fitted regression factor (:data:`PRIOR_CONSTANTS`). A team
-    that did not play last season (an expansion team) starts at the ``new_team_quantile`` of
-    last season's net ratings, unregressed, split evenly between offense and defense.
+    that did not play last season (an expansion team, ``new_team``) starts at the
+    ``new_team_quantile`` of last season's net ratings, unregressed, split evenly between offense
+    and defense; so does a returning team with no possession row last season.
 
     Args:
         prev_rows: Last season's regular-season possession rows
@@ -214,6 +218,8 @@ def preseason_prior(
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         regression: Override the fitted factor (the fitting script scans it).
         new_team_quantile: Override the fitted new-team quantile.
+        prev_teams: Last season's team ids, from its schedule; ``new_team`` is a team not among
+            them. None: the teams with a possession row last season.
 
     Returns:
         A :class:`PreseasonPrior`, or None when ``prev_rows`` is empty.
@@ -232,13 +238,14 @@ def preseason_prior(
         (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean()).alias("o"),
         (pl.col("adj_def_rtg") - pl.col("adj_def_rtg").mean()).alias("d"),
     )
+    prev_ids = set(final.get_column("team_id").to_list()) if prev_teams is None else set(prev_teams)
     ids = pl.DataFrame({"team_id": sorted(set(teams))}, schema={"team_id": pl.Int64()})
     assert ids.schema["team_id"] == devs.schema["team_id"], "team_id dtype differs across the join"
     ratings = ids.join(devs, on="team_id", how="left", validate="1:1").select(
         "team_id",
         pl.when(pl.col("o").is_null()).then(pl.lit(new_net / 2.0)).otherwise(reg * pl.col("o")).alias("off_dev"),
         pl.when(pl.col("d").is_null()).then(pl.lit(-new_net / 2.0)).otherwise(reg * pl.col("d")).alias("def_dev"),
-        pl.col("o").is_null().alias("new_team"),
+        ~pl.col("team_id").is_in(sorted(prev_ids)).alias("new_team"),
     )
     poss = prev_rows.height / (2.0 * prev_rows.get_column("game_id").n_unique())
     return PreseasonPrior(ratings, float(final.get_column("hfa")[0]), poss, _ridge_s2(prev_rows))
@@ -639,19 +646,28 @@ def _load_inputs(
     done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
     rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
     assert rows.schema["game_id"] == done.schema["game_id"], "game_id dtype differs between possessions and schedule"
-    last_schedule = load_schedule([season - 1 - offset])
+    try:
+        last_schedule = load_schedule([season - 1 - offset])
+    except SeasonNotFoundError:  # the season before the release floor: no prior
+        warnings.warn(f"no {season - 1} release: season {season} is simulated without a preseason prior", stacklevel=3)
+        last_schedule = pl.DataFrame()
     prior = None
     if last_schedule.height:
         last_rows = nba_possession_rate_rows(
             load_possessions([season - 1 - offset]), last_schedule, league_id=league_id
         )
-        teams = sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list()))
-        prior = preseason_prior(last_rows, teams, league_id=league_id)
+        last = _regular_games(last_schedule, None)
+        prior = preseason_prior(
+            last_rows,
+            sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list())),
+            league_id=league_id,
+            prev_teams=sorted(set(last["home_team_id"].to_list()) | set(last["away_team_id"].to_list())),
+        )
     model = as_of_game_model(
         rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior
     )
     records = None
-    if league_id == "10":
+    if league_id == "10" and last_schedule.height:
         records = _records(_regular_games(last_schedule, None))
     return games, model, records
 

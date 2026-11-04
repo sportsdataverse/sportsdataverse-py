@@ -154,6 +154,8 @@ def new_team_quantile(lg: str, seasons: list[int], cache: Path) -> dict[str, flo
         ranked = final.with_columns((pl.col("adj_em").rank("average") / pl.len()).alias("pct"))
         new = ranked.join(prev_teams.select("team_id"), on="team_id", how="anti")
         pct += new.get_column("pct").to_list()
+    if not pct:
+        raise ValueError(f"no first-year Division I program in the train seasons {seasons}; add a season that has one")
     return {"quantile": round(float(np.median(pct)), 2), "programs": len(pct)}
 
 
@@ -253,7 +255,7 @@ def college_totals(
         rat = adjust_efficiency(past, league=league, prior=prior, prior_weight=w)
         em = dict(zip(rat["team_id"].to_list(), rat["adj_em"].to_list(), strict=True))
         games = dict(past.group_by("team_id").len().iter_rows())
-        emin = min(em[t] for t in ids if t in em)  # a non-D-I opponent plays as the weakest D-I team
+        emin = min((em[t] for t in ids if t in em), default=0.0)  # a non-D-I opponent plays as the weakest D-I
         h = np.array([idx.get(t, -1) for t in fut["home_team_id"].to_list()])
         a = np.array([idx.get(t, -1) for t in fut["away_team_id"].to_list()])
         em_t = np.array([em.get(t, emin) for t in ids])
