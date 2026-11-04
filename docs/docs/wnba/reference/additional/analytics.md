@@ -106,6 +106,7 @@ No returns table is published for this function: no capture: its input is the sh
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
 scored = score_shot_xpoints(shots, league_avgs)
 

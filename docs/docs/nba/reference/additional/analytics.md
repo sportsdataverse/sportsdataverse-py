@@ -939,6 +939,7 @@ One row per `(lottery_slot, pick)`: `lottery_slot` (1 = the worst record), `chan
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds
 odds = nba_draft_lottery_odds()
 odds.filter(pl.col("lottery_slot") == 1)
@@ -1420,6 +1421,12 @@ Map `nba_stats_possessions` rows onto the team-season-rates possession frame.
 Keeps the games of `schedule` whose `season_type` matches, takes the home team from the
 schedule, and sets each possession's start clock to the previous possession's end clock in the
 period (the period length for the first one). Points come from the made-shot counts.
+
+`neutral_site` is always False: the stats schedule has no neutral-site or venue column, so
+a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
+as a home game for the listed home team: four or five regular-season games a season.
+ESPN's schedule `neutral_site` is not a usable substitute: it marks the 2023-24 Cup
+semifinals False, and the ESPN-to-stats game id crosswalk starts at 2025-26.
 
 **Parameters**
 

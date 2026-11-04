@@ -62,6 +62,12 @@ def nba_possession_rate_rows(
     schedule, and sets each possession's start clock to the previous possession's end clock in the
     period (the period length for the first one). Points come from the made-shot counts.
 
+    ``neutral_site`` is always False: the stats schedule has no neutral-site or venue column, so
+    a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
+    as a home game for the listed home team: four or five regular-season games a season.
+    ESPN's schedule ``neutral_site`` is not a usable substitute: it marks the 2023-24 Cup
+    semifinals False, and the ESPN-to-stats game id crosswalk starts at 2025-26.
+
     Args:
         possessions: ``load_nba_stats_possessions`` / ``load_wnba_stats_possessions`` rows.
         schedule: ``load_nba_stats_schedules`` / ``load_wnba_stats_schedules`` rows
@@ -117,6 +123,7 @@ def nba_possession_rate_rows(
             pl.col("offense_team_id").cast(pl.Int64),
             pl.col("defense_team_id").cast(pl.Int64),
             (pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")).alias("offense_is_home"),
+            # No neutral-site source keyed on the stats game id; see the docstring.
             pl.lit(False).alias("neutral_site"),
             (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).cast(pl.Int64).alias("points"),
             (pl.col("fg2a") + pl.col("fg3a")).alias("fga"),

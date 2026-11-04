@@ -100,6 +100,7 @@ def score_shot_xpoints(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
             scored = score_shot_xpoints(shots, league_avgs)
 
@@ -421,6 +422,7 @@ def zone_value_map(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, zone_value_map
             zmap = zone_value_map(score_shot_xpoints(shots, league_avgs))
 
