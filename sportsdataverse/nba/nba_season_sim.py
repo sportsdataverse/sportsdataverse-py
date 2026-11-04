@@ -30,11 +30,16 @@ seeded by ``seed``, so a call is reproducible. A probability's standard error is
 ``sqrt(p (1 - p) / n_sims)``, at most 0.005 at 10,000; ``p_playoffs_se`` and ``proj_wins_se``
 report it per team.
 
-**Unscheduled NBA games.** Until December the release lists the NBA Cup knockout games with TBD
-teams, so each team has about 80 known games. :func:`nba_season_sim` plays each team's missing
-games, up to :data:`NBA_SEASON_GAMES`, against a league-average opponent at a neutral site; they
-count in its record, not in head-to-head, division or conference records. The Cup final does not
-count in the standings and is not simulated.
+**The NBA Cup and the 82** (BB-D30, :mod:`sportsdataverse.nba.nba_cup`). Until December the
+release lists the Cup knockout games with TBD teams, so each team has 80 known games. While it
+does, :func:`nba_season_sim` simulates the Cup inside each season: the remaining Group Play games
+are the season's own draws, the Cup tiebreakers pick the eight, and the knockout's regular-season
+games are played against real simulated opponents: the quarterfinals and semifinals (the final
+does not count toward the 82), a game between each conference's two losing quarterfinalists, and
+the 22 games of the teams out of the knockout. They count like any game, head-to-head included.
+A slot the release already fills is not added again. Any game a team still lacks to reach
+:data:`NBA_SEASON_GAMES` (the Cup schedule unavailable, or a state the Cup does not cover) is
+played against a league-average opponent at a neutral site, counting in its record only.
 
 **Not modelled:** rest, travel, injuries and roster moves (BB-D23); the playoffs past the play-in;
 offseason roster moves beyond what last season's rating and the regression factor carry.
@@ -52,6 +57,7 @@ import polars as pl
 
 from sportsdataverse._common.team_strength import possession_ridge_ratings
 from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse.nba.nba_cup import CUP_FIRST_SEASON, CupDraws, CupInputs, simulate_cup_draws
 from sportsdataverse.nba.nba_season_rules import (
     NBA_LOTTERY_DRAWS,
     WNBA_LOTTERY_DRAWS,
@@ -359,8 +365,8 @@ def _simulate_games(
     wnba: bool,
     uncertain: bool,
     rng: np.random.Generator,
-) -> tuple[np.ndarray, np.ndarray | None, np.ndarray, np.ndarray]:
-    """``(wins, pair_diff, point_diff, shift)`` per simulated season, the played games included."""
+) -> tuple[np.ndarray, np.ndarray | None, np.ndarray, np.ndarray, np.ndarray]:
+    """``(wins, pair_diff, point_diff, shift, margins)`` per simulated season, the played games included."""
     w0, pd0, pair0 = played
     n_t = net.size
     shift = rng.standard_normal((n_sims, n_t)) * sd if uncertain else np.zeros((n_sims, n_t))
@@ -382,36 +388,55 @@ def _simulate_games(
     signs = np.zeros((h.size, n_t))
     signs[np.arange(h.size), h] = 1.0
     signs[np.arange(h.size), a] = -1.0
-    return wins, pair, pd0 + margins @ signs, shift
+    return wins, pair, pd0 + margins @ signs, shift, margins
 
 
 def _unscheduled_games(
     model: GameModel,
     teams: tuple[np.ndarray, np.ndarray, np.ndarray],
-    played: tuple[np.ndarray, np.ndarray, np.ndarray],
-    future: tuple[np.ndarray, np.ndarray],
-    season_games: int | None,
+    extra: np.ndarray,
     uncertain: bool,
     rng: np.random.Generator,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """``(extra, wins, point_diff)``: each team's games with no known opponent, and per simulated season their results.
+) -> tuple[np.ndarray, np.ndarray]:
+    """``(wins, point_diff)`` per simulated season of each team's ``extra`` games with no known opponent.
 
-    ``extra`` is ``season_games`` less the team's played and scheduled games. Each is played
-    against a league-average opponent (net rating 0, no rating error) at a neutral site, with the
-    team's own rating shift. Nothing is drawn when no team has one.
+    ``extra`` is ``(n_sims, T)``. Each game is played against a league-average opponent (net
+    rating 0, no rating error) at a neutral site, with the team's own rating shift. Nothing is
+    drawn when no team has one.
     """
     net, sd, shift = teams
-    h, a = future
     n_sims, n_t = shift.shape
-    known = played[0].sum(1) + played[0].sum(0) + np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)
-    extra = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)
     if not extra.any():
-        return extra, np.zeros((n_sims, n_t), dtype=np.int64), np.zeros((n_sims, n_t))
+        return np.zeros((n_sims, n_t), dtype=np.int64), np.zeros((n_sims, n_t))
     k = int(extra.max())
     noise = _noise_sd(model, sd, np.zeros_like(sd), uncertain)
     m = (net + shift)[:, :, None] * (model.poss / 100.0) + noise[None, :, None] * rng.standard_normal((n_sims, n_t, k))
-    live = np.arange(k)[None, None, :] < extra[None, :, None]
-    return extra, ((m > 0) & live).sum(2), np.where(live, m, 0.0).sum(2)
+    live = np.arange(k)[None, None, :] < extra[:, :, None]
+    return ((m > 0) & live).sum(2), np.where(live, m, 0.0).sum(2)
+
+
+def _add_cup_games(draws: CupDraws, wins: np.ndarray, point_diff: np.ndarray, need: np.ndarray) -> np.ndarray:
+    """Add the Cup's regular-season games to each simulated season; returns the games still missing.
+
+    The quarterfinals and semifinals are always added (the Cup owns them: the caller removes them
+    from the schedule). A game between quarterfinal losers or a replacement game is added only
+    when both teams still lack a game, so a slot the release has already filled is not added again.
+    """
+    rows = np.arange(need.shape[0])
+    for j, kind in enumerate(draws.kind):
+        h, a, m = draws.home[:, j], draws.away[:, j], draws.margin[:, j]
+        live = (
+            np.ones(rows.size, dtype=bool)
+            if kind in ("quarterfinal", "semifinal")
+            else (need[rows, h] > 0) & (need[rows, a] > 0)
+        )
+        need[rows, h] -= live
+        need[rows, a] -= live
+        wins[rows, h, a] += live & (m > 0)
+        wins[rows, a, h] += live & (m <= 0)
+        point_diff[rows, h] += np.where(live, m, 0.0)
+        point_diff[rows, a] -= np.where(live, m, 0.0)
+    return np.maximum(need, 0)
 
 
 def _lottery_setup(
@@ -537,7 +562,7 @@ def _rank_seasons(
             league_id=league_id,
             rng=rng,
             pair_diff=pair_s,
-            extra=(xw, unscheduled[1] - xw),
+            extra=(xw, unscheduled[1][s] - xw),
         )
         seed_of[s] = season_s.seeds()
         leader[s] = season_s.leader
@@ -593,6 +618,7 @@ def simulate_pro_season(
     rating_uncertainty: bool = True,
     as_of_date: dt.date | None = None,
     season_games: int | None = None,
+    cup: CupInputs | None = None,
 ) -> pl.DataFrame:
     """Monte Carlo of one regular season's remaining games, with standings, play-in and lottery.
 
@@ -613,16 +639,69 @@ def simulate_pro_season(
         as_of_date: Carried into the output only.
         season_games: Games per team in the full season; a team's missing games are played
             against a league-average opponent (the module doc). None: the known games only.
+        cup: NBA only: the season's Cup (:func:`sportsdataverse.nba.nba_cup.cup_inputs`). The
+            Cup is simulated inside each season and its knockout's regular-season games are
+            played against real simulated opponents before any league-average fill (the module
+            doc); its knockout games are dropped from ``games``, the Cup plays them. With a
+            Cup, ``season_games`` defaults to :data:`NBA_SEASON_GAMES`.
 
     Returns:
         One row per team in :data:`SIM_SCHEMA` (``games_remaining`` counts the missing games).
 
     Raises:
         ValueError: If ``games`` holds more than one season, ``league_id`` is unknown,
-            ``n_sims < 1``, ``chances`` is malformed, or a conference (NBA) or the league (WNBA)
-            has more than 15 teams.
+            ``n_sims < 1``, ``chances`` is malformed, a conference (NBA) or the league (WNBA)
+            has more than 15 teams, or the Cup's teams or unplayed games are not the season's.
         TypeError: If a team-id dtype differs from the model's ``team_id``.
     """
+    return _simulate_season(
+        games,
+        model,
+        league_id=league_id,
+        n_sims=n_sims,
+        seed=seed,
+        prior_records=prior_records,
+        chances=chances,
+        rating_uncertainty=rating_uncertainty,
+        as_of_date=as_of_date,
+        season_games=season_games,
+        cup=cup,
+    )[0]
+
+
+def _cup_columns(cup: CupInputs, future: pl.DataFrame, teams: list[int], h: np.ndarray, a: np.ndarray) -> np.ndarray:
+    """The positions of the Cup's unplayed Group Play games among the season's unplayed games."""
+    if cup.teams != teams:
+        raise ValueError("the Cup's teams are not the season's")
+    pos = {g: i for i, g in enumerate(future.get_column("game_id").to_list())}
+    missing = [g for g in cup.future_ids if g not in pos]
+    if missing:
+        raise ValueError(f"Cup games to play that the season has played or lacks: {missing[:5]}")
+    cols = np.array([pos[g] for g in cup.future_ids], dtype=np.int64)
+    assert np.array_equal(h[cols], cup.future[0]) and np.array_equal(a[cols], cup.future[1]), "Cup home / away differ"
+    return cols
+
+
+def _simulate_season(
+    games: pl.DataFrame,
+    model: GameModel,
+    *,
+    league_id: str = "00",
+    n_sims: int = 10_000,
+    seed: int = 20261103,
+    prior_records: pl.DataFrame | None = None,
+    chances: list[float] | None = None,
+    rating_uncertainty: bool = True,
+    as_of_date: dt.date | None = None,
+    season_games: int | None = None,
+    cup: CupInputs | None = None,
+) -> tuple[pl.DataFrame, CupDraws | None]:
+    """:func:`simulate_pro_season`, with the simulated Cups when ``cup`` is given."""
+    if cup is not None:
+        if league_id != "00":
+            raise ValueError("cup is NBA only")
+        games = games.filter(~pl.col("game_id").is_in(list(cup.knockout_ids)))
+        season_games = NBA_SEASON_GAMES if season_games is None else season_games
     _check_inputs(games, model, league_id=league_id, n_sims=n_sims)
     rng = np.random.default_rng(seed)
     teams = sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list()))
@@ -640,10 +719,19 @@ def simulate_pro_season(
     sd = np.minimum(sd, np.sqrt(0.375) * model.margin_sd / (model.poss / 100.0))
     h = np.array([index[t] for t in future["home_team_id"].to_list()], dtype=np.int64)
     a = np.array([index[t] for t in future["away_team_id"].to_list()], dtype=np.int64)
-    wins, pair, point_diff, shift = _simulate_games(
+    wins, pair, point_diff, shift, margins = _simulate_games(
         model, net, sd, h, a, played, n_sims=n_sims, wnba=league_id == "10", uncertain=rating_uncertainty, rng=rng
     )
-    extra, xw, xpd = _unscheduled_games(model, (net, sd, shift), played, (h, a), season_games, rating_uncertainty, rng)
+    noise = _noise_sd(model, sd[:, None], sd[None, :], rating_uncertainty)
+    known = played[0].sum(1) + played[0].sum(0) + np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)
+    missing = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)
+    extra = np.broadcast_to(missing, (n_sims, n_t)).copy()
+    cup_draws = None
+    if cup is not None:
+        cols = _cup_columns(cup, future, teams, h, a)
+        cup_draws = simulate_cup_draws(cup, model, net[None, :] + shift, noise, margins[:, cols], rng)
+        extra = _add_cup_games(cup_draws, wins, point_diff, extra)
+    xw, xpd = _unscheduled_games(model, (net, sd, shift), extra, rating_uncertainty, rng)
     point_diff, total_wins, total_games = point_diff + xpd, wins.sum(2) + xw, wins.sum(2) + wins.sum(1) + extra
     lot_chances, n_lottery, draws, have_odds = _lottery_setup(chances, n_t, league_id)
     prior_w, prior_g = _prior_arrays(prior_records, index)
@@ -652,7 +740,7 @@ def simulate_pro_season(
         (wins, pair, point_diff, shift),
         model,
         net,
-        _noise_sd(model, sd[:, None], sd[None, :], rating_uncertainty),
+        noise,
         (conf, div),
         league_id=league_id,
         lottery=(lot_chances if have_odds else None, n_lottery, prior_w, prior_g, total_wins, total_games),
@@ -673,12 +761,12 @@ def simulate_pro_season(
         "division": div.tolist(),
         "wins": played[0].sum(1).tolist(),
         "losses": played[0].sum(0).tolist(),
-        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t) + extra).tolist(),
+        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t) + missing).tolist(),
         "adj_net_rtg": net.tolist(),
         "adj_net_rtg_sd": sd.tolist(),
         **_summary(sims, total_games, league_id=league_id, draws=draws, have_odds=have_odds),
     }
-    return pl.DataFrame(out, schema=SIM_SCHEMA).sort("conference", "mean_seed")
+    return pl.DataFrame(out, schema=SIM_SCHEMA).sort("conference", "mean_seed"), cup_draws
 
 
 def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.DataFrame:
@@ -706,14 +794,25 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.Dat
 
 
 def _load_inputs(
-    season: int, as_of_date: dt.date | None, league_id: str
-) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None, int | None]:
-    """(regular-season games, as-of game model, WNBA prior-season records, season games) from the releases."""
+    season: int,
+    as_of_date: dt.date | None,
+    league_id: str,
+    *,
+    cup_schedule: pl.DataFrame | None = None,
+    cup: Literal["auto", "always", "never"] = "auto",
+) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None, int | None, CupInputs | None]:
+    """(regular-season games, as-of game model, WNBA prior-season records, season games, Cup) from the releases.
+
+    The Cup (NBA from 2024) is built while the release lists TBD games (``cup="auto"``) or
+    always; ``cup_schedule`` None fetches stats.nba.com's schedule, and under ``"auto"`` a failed
+    fetch warns and leaves the Cup out (the league-average fill covers its slots).
+    """
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([season - offset])
     games = _regular_games(schedule, as_of_date)
     done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
-    rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
+    possessions = load_possessions([season - offset])
+    rows = nba_possession_rate_rows(possessions, schedule, league_id=league_id)
     assert rows.schema["game_id"] == done.schema["game_id"], "game_id dtype differs between possessions and schedule"
     try:
         last_schedule = load_schedule([season - 1 - offset])
@@ -738,7 +837,40 @@ def _load_inputs(
     records = None
     if league_id == "10" and last_schedule.height:
         records = _records(_regular_games(last_schedule, None))
-    return games, model, records, _season_games(schedule, league_id)
+    season_games = _season_games(schedule, league_id)
+    cup_in = None
+    if league_id == "00" and season >= CUP_FIRST_SEASON and (cup == "always" or (cup == "auto" and season_games)):
+        cup_in = _cup_inputs(
+            season, as_of_date, cup_schedule, games, possessions, last_schedule, strict=cup == "always"
+        )
+    return games, model, records, season_games, cup_in
+
+
+def _cup_inputs(
+    season: int,
+    as_of_date: dt.date | None,
+    cup_schedule: pl.DataFrame | None,
+    games: pl.DataFrame,
+    possessions: pl.DataFrame,
+    last_schedule: pl.DataFrame,
+    *,
+    strict: bool,
+) -> CupInputs | None:
+    """The season's Cup, or None (with a warning) when stats.nba.com's schedule cannot be read."""
+    from sportsdataverse.nba.nba_cup import cup_inputs, fetch_cup_schedule
+
+    try:
+        sched = cup_schedule if cup_schedule is not None else fetch_cup_schedule(season)
+    except Exception as exc:  # stats.nba.com unreachable: the league-average fill stands in
+        if strict:
+            raise
+        warnings.warn(
+            f"no NBA Cup schedule ({type(exc).__name__}): its knockout slots get league-average opponents",
+            stacklevel=4,
+        )
+        return None
+    last = _regular_games(last_schedule, None) if last_schedule.height else None
+    return cup_inputs(sched, games=games, possessions=possessions, last_games=last, as_of_date=as_of_date)
 
 
 @overload
@@ -750,6 +882,7 @@ def nba_season_sim(
     n_sims: int = 10_000,
     seed: int = 20261103,
     chances: list[float] | None = None,
+    cup_schedule: pl.DataFrame | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 @overload
@@ -761,6 +894,7 @@ def nba_season_sim(
     n_sims: int = 10_000,
     seed: int = 20261103,
     chances: list[float] | None = None,
+    cup_schedule: pl.DataFrame | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 def nba_season_sim(
@@ -771,6 +905,7 @@ def nba_season_sim(
     n_sims: int = 10_000,
     seed: int = 20261103,
     chances: list[float] | None = None,
+    cup_schedule: pl.DataFrame | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
@@ -792,6 +927,11 @@ def nba_season_sim(
         seed: Seeds the generator; the same release data and seed give the same output.
         chances: Lottery chances per slot, worst record first, one per lottery team; overrides the
             published table (needed for the 2027 WNBA lottery's seven teams, not published yet).
+        cup_schedule: NBA: stats.nba.com's schedule for the season
+            (:func:`~sportsdataverse.nba.nba_stats.nba_stats_scheduleleaguev2`), which marks the
+            Cup games. Read only while the release lists TBD Cup games; None fetches it then
+            (a residential connection), and a failed fetch falls back to league-average
+            opponents for the Cup slots with a warning.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -836,7 +976,7 @@ def nba_season_sim(
     """
     if league_id not in SIM_CONSTANTS:
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
-    games, model, prior, season_games = _load_inputs(season, as_of_date, league_id)
+    games, model, prior, season_games, cup = _load_inputs(season, as_of_date, league_id, cup_schedule=cup_schedule)
     out = simulate_pro_season(
         games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
         model,
@@ -847,6 +987,7 @@ def nba_season_sim(
         chances=chances,
         as_of_date=as_of_date,
         season_games=season_games,
+        cup=cup,
     )
     return out.to_pandas() if return_as_pandas else out
 

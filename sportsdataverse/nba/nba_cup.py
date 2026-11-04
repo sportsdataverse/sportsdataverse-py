@@ -40,9 +40,14 @@ for the knockout (``"Quarterfinal"`` / ``"Semifinal"`` and team id 0 while the t
 The ``nba_stats_schedules`` release does not mark them (``season_type`` ``nba-cup`` is the final
 only). Overtime is read from the ``nba_stats_possessions`` release (``period > 4``).
 
-**The sim** (:func:`simulate_cup`) uses the season sim's game model, rating shift and noise
-(:mod:`sportsdataverse.nba.nba_season_sim`): the remaining Group Play games, the tiebreakers,
-the knockout (actual results where played) and the games the knockout leaves to schedule.
+**The sim** (:func:`simulate_cup_draws`) runs inside the season sim
+(:func:`sportsdataverse.nba.nba_season_sim.simulate_pro_season` with ``cup``): each simulated
+season's own Group Play margins and rating shifts, the tiebreakers, the knockout (actual results
+where played), and the regular-season games the knockout leaves to schedule, which the season
+sim counts toward each team's 82. :func:`nba_cup_sim` summarizes those Cups. A backtest of a
+past season (a complete release) keeps the real replacement games on the schedule, so its season
+totals can stray from 82 while the simulated field differs from the real one; the Cup odds do not
+depend on them.
 
 **Simplifications** (``ponytail:`` notes in the code): a simulated game has a margin, not a
 score, so a simulated tie on point differential is broken by points scored only through the
@@ -217,6 +222,8 @@ class CupInputs:
         future: ``(home, away)`` index arrays of the Group Play games still to play.
         knockout: Played knockout games: ``{frozenset(team indices): (home, away, home_margin)}``.
         team_pts: Mean regulation points per team-game so far (the base of a simulated game).
+        future_ids: The game ids of ``future``, in order.
+        knockout_ids: The game ids of every knockout game, the final included.
     """
 
     season: int
@@ -228,6 +235,8 @@ class CupInputs:
     future: tuple[np.ndarray, np.ndarray]
     knockout: dict[frozenset[int], tuple[int, int, float]]
     team_pts: float
+    future_ids: tuple[str, ...] = ()
+    knockout_ids: tuple[str, ...] = ()
 
 
 def prepare_cup(
@@ -322,6 +331,8 @@ def prepare_cup(
         ),
         future=(ix(future, "home_team_id"), ix(future, "away_team_id")),
         knockout=knockout,
+        future_ids=tuple(future.get_column("game_id").to_list()),
+        knockout_ids=tuple(games.filter(pl.col("cup_round") != "group").get_column("game_id").to_list()),
         team_pts=float((played["hp"].sum() + played["ap"].sum()) / n_pts) if n_pts else 0.0,
     )
 
@@ -631,6 +642,7 @@ def _summary(cup: CupInputs, draws: CupDraws, tab: _Table) -> dict[str, list]:
 
 
 def simulate_cup(
+    games: pl.DataFrame,
     cup: CupInputs,
     model: GameModel,
     *,
@@ -639,15 +651,19 @@ def simulate_cup(
     rating_uncertainty: bool = True,
     as_of_date: dt.date | None = None,
 ) -> pl.DataFrame:
-    """Monte Carlo of the rest of one Cup: Group Play, the tiebreakers and the knockout.
+    """Monte Carlo of the rest of one Cup inside the season sim: Group Play, tiebreakers, knockout.
 
-    The same draws as :func:`~sportsdataverse.nba.nba_season_sim.simulate_pro_season`: one
-    rating shift per team per simulated season from the ridge posterior, then each game's noise.
+    Runs :func:`~sportsdataverse.nba.nba_season_sim.simulate_pro_season`'s engine with the Cup
+    (the same draws: one rating shift per team per simulated season, each game's noise, the Group
+    Play margins of the season itself) and summarizes its Cups.
 
     Args:
+        games: The season's regular-season games (``season``, ``game_id``, ``home_team_id``,
+            ``away_team_id``, ``home_pts`` / ``away_pts``, null for a game to simulate), the Cup
+            Group Play games among them with the same scores as ``cup``.
         cup: :func:`prepare_cup` inputs.
         model: The season sim's game model.
-        n_sims: Simulated Cups.
+        n_sims: Simulated seasons.
         seed: Seeds the generator; the same inputs and seed give the same output.
         rating_uncertainty: Draw one rating shift per team per simulated season.
         as_of_date: Carried into the output only.
@@ -656,35 +672,31 @@ def simulate_cup(
         One row per team in :data:`CUP_SIM_SCHEMA`, sorted by conference, group and mean rank.
 
     Raises:
-        ValueError: If ``n_sims < 1``.
-        TypeError: If the model's ``team_id`` is not Int64.
+        ValueError: If ``n_sims < 1`` or a Cup game still to play is not among ``games``' unplayed
+            games.
+        TypeError: If a team-id dtype differs from the model's ``team_id``.
     """
-    from sportsdataverse.nba.nba_season_sim import _noise_sd, _team_arrays
+    from sportsdataverse.nba.nba_season_sim import NBA_SEASON_GAMES, _simulate_season
 
-    if n_sims < 1:
-        raise ValueError(f"n_sims must be at least 1, got {n_sims}")
-    if model.ratings.schema["team_id"] != pl.Int64:
-        raise TypeError(f"model team_id is {model.ratings.schema['team_id']}, the Cup's team ids are Int64")
-    rng = np.random.default_rng(seed)
-    net, sd = _team_arrays(model, cup.teams)
-    sd = np.minimum(sd, np.sqrt(0.375) * model.margin_sd / (model.poss / 100.0))  # the season sim's cap
-    shift = rng.standard_normal((n_sims, net.size)) * sd if rating_uncertainty else np.zeros((n_sims, net.size))
-    fh, fa = cup.future
-    scale = model.poss / 100.0
-    margins = (
-        model.margin(net[fh], net[fa])
-        + (shift[:, fh] - shift[:, fa]) * scale
-        + _noise_sd(model, sd[fh], sd[fa], rating_uncertainty) * rng.standard_normal((n_sims, fh.size))
+    season, draws = _simulate_season(
+        games,
+        model,
+        n_sims=n_sims,
+        seed=seed,
+        rating_uncertainty=rating_uncertainty,
+        as_of_date=as_of_date,
+        season_games=NBA_SEASON_GAMES,
+        cup=cup,
     )
-    noise = _noise_sd(model, sd[:, None], sd[None, :], rating_uncertainty)
-    draws = simulate_cup_draws(cup, model, net + shift, noise, margins, rng)
+    assert draws is not None
+    net = dict(season.select("team_id", "adj_net_rtg").iter_rows())
     out = {
         "season": [cup.season] * len(cup.teams),
         "as_of_date": [as_of_date] * len(cup.teams),
         "conference": cup.conf.tolist(),
         "cup_group": cup.group.tolist(),
         "team_id": cup.teams,
-        "adj_net_rtg": net.tolist(),
+        "adj_net_rtg": [net[t] for t in cup.teams],
         **_summary(cup, draws, _table(cup)),
     }
     return pl.DataFrame(out, schema=CUP_SIM_SCHEMA).sort("conference", "cup_group", "mean_group_rank")
@@ -694,23 +706,75 @@ def _season_label(season: int) -> str:
     return f"{season - 1}-{season % 100:02d}"
 
 
+def cup_inputs(
+    cup_schedule: pl.DataFrame,
+    *,
+    games: pl.DataFrame,
+    possessions: pl.DataFrame,
+    last_games: pl.DataFrame | None,
+    as_of_date: dt.date | None,
+) -> CupInputs:
+    """:class:`CupInputs` from stats.nba.com's schedule and the season's release frames.
+
+    Args:
+        cup_schedule: The season's :func:`~sportsdataverse.nba.nba_stats.nba_stats_scheduleleaguev2` rows.
+        games: The release's regular-season games, scores blanked as of the date. A Cup game it
+            holds takes its score from here, so the Cup and the season agree on what is played.
+        possessions: The season's possessions release (overtime is ``period > 4``).
+        last_games: The previous regular season's games (the fourth tiebreaker); None: none.
+        as_of_date: Games on or after it are unplayed.
+
+    Returns:
+        A :class:`CupInputs`.
+    """
+    from sportsdataverse.nba.nba_season_sim import _records
+
+    cup = cup_games(cup_schedule, as_of_date=as_of_date)
+    rel = games.select("game_id", pl.col("home_pts").alias("rel_h"), pl.col("away_pts").alias("rel_a"))
+    assert rel.schema["game_id"] == cup.schema["game_id"], "game_id dtype differs between the release and the Cup"
+    in_rel = pl.col("game_id").is_in(rel.get_column("game_id").implode())
+    cup = (
+        cup.join(rel, on="game_id", how="left", validate="1:1")
+        .with_columns(
+            pl.when(in_rel).then(pl.col("rel_h")).otherwise(pl.col("home_pts")).alias("home_pts"),
+            pl.when(in_rel).then(pl.col("rel_a")).otherwise(pl.col("away_pts")).alias("away_pts"),
+        )
+        .drop("rel_h", "rel_a")
+    )
+    group_ids = cup.filter(pl.col("cup_round") == "group").get_column("game_id").implode()
+    ot = overtime_points(possessions.filter(pl.col("game_id").cast(pl.Utf8).is_in(group_ids)))
+    prior = None if last_games is None or last_games.height == 0 else _records(last_games)
+    return prepare_cup(cup, ot_points=ot, prior_records=prior)
+
+
+def fetch_cup_schedule(season: int) -> pl.DataFrame:
+    """The season's ``scheduleleaguev2`` rows from stats.nba.com (residential connection).
+
+    Raises:
+        ValueError: If ``season`` is before the first Cup (2024).
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_scheduleleaguev2
+
+    if season < CUP_FIRST_SEASON:
+        raise ValueError(f"the first NBA Cup is season {CUP_FIRST_SEASON} (2023-24), got {season}")
+    return nba_stats_scheduleleaguev2(league_id="00", season=_season_label(season))
+
+
 def _load_cup(season: int, as_of_date: dt.date | None, cup_schedule: pl.DataFrame | None) -> CupInputs:
     """:class:`CupInputs` from stats.nba.com's schedule and the possessions / schedules releases."""
-    from sportsdataverse.nba.nba_season_sim import _records, _regular_games
+    from sportsdataverse.nba.nba_season_sim import _regular_games
     from sportsdataverse.nba.nba_team_season_rates import load_nba_stats_possessions, load_nba_stats_schedules
 
     if season < CUP_FIRST_SEASON:
         raise ValueError(f"the first NBA Cup is season {CUP_FIRST_SEASON} (2023-24), got {season}")
-    if cup_schedule is None:
-        from sportsdataverse.nba.nba_stats import nba_stats_scheduleleaguev2
-
-        cup_schedule = nba_stats_scheduleleaguev2(league_id="00", season=_season_label(season))
-    games = cup_games(cup_schedule, as_of_date=as_of_date)
-    group_ids = games.filter(pl.col("cup_round") == "group").get_column("game_id").implode()
-    possessions = load_nba_stats_possessions([season - 1])
-    ot = overtime_points(possessions.filter(pl.col("game_id").cast(pl.Utf8).is_in(group_ids)))
-    prior = _records(_regular_games(load_nba_stats_schedules([season - 2]), None))
-    return prepare_cup(games, ot_points=ot, prior_records=prior)
+    sched = cup_schedule if cup_schedule is not None else fetch_cup_schedule(season)
+    return cup_inputs(
+        sched,
+        games=_regular_games(load_nba_stats_schedules([season - 1]), as_of_date),
+        possessions=load_nba_stats_possessions([season - 1]),
+        last_games=_regular_games(load_nba_stats_schedules([season - 2]), None),
+        as_of_date=as_of_date,
+    )
 
 
 @overload
@@ -814,9 +878,9 @@ def nba_cup_sim(
 ) -> pl.DataFrame | pd.DataFrame:
     """NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win.
 
-    Simulates the remaining Group Play games with the season sim's game model and draws
-    (:func:`sportsdataverse.nba.nba_season_sim.nba_season_sim`: the as-of possession ridge, one
-    rating shift per team per simulated season), ranks every simulated group with the Cup
+    Runs the season sim (:func:`sportsdataverse.nba.nba_season_sim.nba_season_sim`: the as-of
+    possession ridge with the preseason prior, one rating shift per team per simulated season, the
+    same seed and draws) with the Cup inside it, ranks every simulated group with the Cup
     tiebreakers (:func:`nba_cup_standings`), and plays the knockout: seed 1 hosts the wild card
     and seed 2 seed 3 in each conference, the semifinals neutral through 2025-26 and at the
     higher seed from 2026-27, the final neutral. A knockout game already played keeps its result.
@@ -853,9 +917,12 @@ def nba_cup_sim(
         * :func:`sportsdataverse.nba.nba_season_sim.nba_season_sim` -- the season sim
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
     """
-    from sportsdataverse.nba.nba_season_sim import _load_inputs
+    from sportsdataverse.nba.nba_season_sim import _GAME_COLS, _load_inputs
 
-    cup = _load_cup(season, as_of_date, cup_schedule)
-    _, model, _ = _load_inputs(season, as_of_date, "00")
-    out = simulate_cup(cup, model, n_sims=n_sims, seed=seed, as_of_date=as_of_date)
+    if season < CUP_FIRST_SEASON:
+        raise ValueError(f"the first NBA Cup is season {CUP_FIRST_SEASON} (2023-24), got {season}")
+    games, model, _, _, cup = _load_inputs(season, as_of_date, "00", cup_schedule=cup_schedule, cup="always")
+    assert cup is not None
+    games = games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
+    out = simulate_cup(games, cup, model, n_sims=n_sims, seed=seed, as_of_date=as_of_date)
     return out.to_pandas() if return_as_pandas else out

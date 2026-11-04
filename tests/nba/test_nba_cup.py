@@ -14,9 +14,15 @@ What is checked against the real world:
   by exactly their overtime margin and points).
 * **Knockout field:** the seeds give the real quarterfinals: seed 1 hosts seed 4 (the wild
   card), seed 2 hosts seed 3.
-* **The 82:** the sim adds exactly two regular-season games per team (a quarterfinal plus a
+* **The 82:** the Cup adds exactly two regular-season games per team (a quarterfinal plus a
   semifinal or a game between quarterfinal losers, or two replacement games) and never the
-  final.
+  final. In the season sim on 2026-27 as released (the knockout TBD) they fill every team's 80
+  known games to 82 with nothing left for #1084's league-average stand-in; on a complete release
+  they add nothing the schedule already has.
+* **Validation gates** (as of each Cup's first night, 10,000 draws, the default seed, the season
+  sim's model with #1084's prior; ``CUP_GATES``): the Brier of the quarterfinal, group and title
+  odds against the real Cup, pinned at observed + 0.02 (title + 0.005); pooled, the quarterfinal
+  and group odds beat uniform ones. With the group stage over, the field is certain.
 
 The ``bb-nba-cup`` rows of ``tests/mutants/registry.yaml`` go red here: the tiebreak order, the
 wild card, and the final counting toward the regular season.
@@ -43,28 +49,51 @@ CHAMPIONS = {2024: 1610612747, 2025: 1610612749, 2026: 1610612752}  # LAL, MIL, 
 
 def _schedule(season: int) -> pl.DataFrame:
     """The release schedule of a season (end year) from whichever fixture holds it."""
-    path = CUP / f"nba_schedule_{season}.parquet"
-    return pl.read_parquet(path if path.exists() else PRO / f"nba_schedule_{season}.parquet")
+    path = next(
+        d / f"nba_schedule_{season}.parquet" for d in (CUP, PRO) if (d / f"nba_schedule_{season}.parquet").exists()
+    )
+    return pl.read_parquet(path)
+
+
+def _cup_schedule(season: int) -> pl.DataFrame:
+    return pl.read_parquet(CUP / f"nba_cup_schedule_{season}.parquet")
 
 
 def _cup(season: int, as_of: dt.date | None = None):  # type: ignore[no-untyped-def]
-    games = cup_mod.cup_games(pl.read_parquet(CUP / f"nba_cup_schedule_{season}.parquet"), as_of_date=as_of)
-    ot_path = CUP / f"nba_cup_overtime_{season}.parquet"
-    ot = cup_mod.overtime_points(pl.read_parquet(ot_path)) if ot_path.exists() else None
-    prior = sim_mod._records(sim_mod._regular_games(_schedule(season - 1), None))
-    return cup_mod.prepare_cup(games, ot_points=ot, prior_records=prior)
+    """:func:`cup_inputs` over the fixtures, as the season sim builds it."""
+    return cup_mod.cup_inputs(
+        _cup_schedule(season),
+        games=sim_mod._regular_games(_schedule(season), as_of),
+        possessions=pl.read_parquet(CUP / f"nba_cup_overtime_{season}.parquet"),
+        last_games=sim_mod._regular_games(_schedule(season - 1), None),
+        as_of_date=as_of,
+    )
 
 
 def _oracle(season: int) -> pl.DataFrame:
     return pl.read_parquet(CUP / f"ist_standings_{season}.parquet")
 
 
-def _model(season: int, as_of: dt.date):  # type: ignore[no-untyped-def]
-    """The season sim's as-of game model on the possessions fixture (no prior)."""
-    sched = pl.read_parquet(RATES / f"nba_schedule_{season}.parquet")
-    done = sim_mod._regular_games(_schedule(season), as_of).filter(pl.col("home_pts").is_not_null())
-    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / f"nba_possessions_{season}.parquet"), sched)
-    return sim_mod.as_of_game_model(rows.join(done.select("game_id"), on="game_id", how="semi"))
+_EMPTY_POSSESSIONS = pl.read_parquet(RATES / "nba_possessions_2024.parquet").head(0)
+
+
+def _loaders(mp: pytest.MonkeyPatch) -> None:
+    """The release loaders patched to the fixtures; a season with no possessions loads none (no prior)."""
+
+    def possessions(seasons: list[int]) -> pl.DataFrame:
+        name = f"nba_possessions_{seasons[0] + 1}.parquet"
+        path = next((d / name for d in (PRO, RATES) if (d / name).exists()), None)
+        return pl.read_parquet(path) if path is not None else _EMPTY_POSSESSIONS
+
+    mp.setattr(tsr, "load_nba_stats_possessions", possessions)
+    mp.setattr(tsr, "load_nba_stats_schedules", lambda seasons: _schedule(seasons[0] + 1))
+
+
+def _cup_sim(season: int, **kwargs) -> pl.DataFrame:  # type: ignore[no-untyped-def]
+    """``nba_cup_sim`` over the fixtures: the season sim's model, #1084's prior and draws."""
+    with pytest.MonkeyPatch.context() as mp:
+        _loaders(mp)
+        return cup_mod.nba_cup_sim(season, cup_schedule=_cup_schedule(season), **kwargs)
 
 
 def test_cup_games_mark_groups_rounds_and_tbd_teams() -> None:
@@ -132,16 +161,16 @@ def test_as_of_blanks_the_group_stage() -> None:
     assert st.filter(pl.col("tiebreak") == "random").height == 2
 
 
+MID_2026 = dt.date(2025, 11, 14)
+
+
 @pytest.fixture(scope="module")
-def mid_2026() -> tuple:
-    as_of = dt.date(2025, 11, 14)
-    cup = _cup(2026, as_of)
-    return cup, _model(2026, as_of), as_of
+def mid_2026() -> pl.DataFrame:
+    return _cup_sim(2026, as_of_date=MID_2026, n_sims=4_000, seed=7)
 
 
-def test_sim_odds_sum_and_carry_their_error(mid_2026: tuple) -> None:
-    cup, model, as_of = mid_2026
-    sim = cup_mod.simulate_cup(cup, model, n_sims=4_000, seed=7, as_of_date=as_of)
+def test_sim_odds_sum_and_carry_their_error(mid_2026: pl.DataFrame) -> None:
+    sim = mid_2026
     assert sim.schema == pl.Schema(cup_mod.CUP_SIM_SCHEMA)
     sums = {c: round(float(sim[c].sum()), 9) for c in cup_mod._ODDS}
     assert sums == {
@@ -155,15 +184,24 @@ def test_sim_odds_sum_and_carry_their_error(mid_2026: tuple) -> None:
     assert sim.group_by("cup_group").agg(pl.col("p_win_group").sum())["p_win_group"].round(9).to_list() == [1.0] * 6
     assert float(sim["p_quarterfinal_se"].max()) <= 0.5 / np.sqrt(4_000)
     assert (sim["p_champion"] <= sim["p_final"]).all() and (sim["p_final"] <= sim["p_semifinal"]).all()
-    again = cup_mod.simulate_cup(cup, model, n_sims=4_000, seed=7, as_of_date=as_of)
-    assert sim.equals(again)
+    assert sim.equals(_cup_sim(2026, as_of_date=MID_2026, n_sims=4_000, seed=7))
 
 
-def test_sim_adds_two_regular_season_games_per_team(mid_2026: tuple) -> None:
+def test_cup_odds_are_the_season_sims_own_draws(mid_2026: pl.DataFrame) -> None:
+    """The Cup sim's ratings are the season sim's as-of ratings with #1084's prior."""
+    with pytest.MonkeyPatch.context() as mp:
+        _loaders(mp)
+        season = sim_mod.nba_season_sim(2026, as_of_date=MID_2026, n_sims=50, seed=7)
+    j = mid_2026.join(season.select("team_id", "adj_net_rtg"), on="team_id", suffix="_s", validate="1:1")
+    np.testing.assert_allclose(j["adj_net_rtg"].to_numpy(), j["adj_net_rtg_s"].to_numpy())
+
+
+def test_sim_adds_two_regular_season_games_per_team() -> None:
     """The knockout's 30 games give every team exactly 82; the final is not one of them."""
     from sportsdataverse.nba.nba_season_sim import _noise_sd, _team_arrays
 
-    cup, model, _ = mid_2026
+    cup = _cup(2026, MID_2026)
+    model = sim_mod.as_of_game_model(_EMPTY_POSSESSIONS.pipe(tsr.nba_possession_rate_rows, _schedule(2026)))
     rng = np.random.default_rng(1)
     net, sd = _team_arrays(model, cup.teams)
     margins = model.margin(net[cup.future[0]], net[cup.future[1]]) + 13 * rng.standard_normal((500, cup.future[0].size))
@@ -192,21 +230,130 @@ def test_sim_adds_two_regular_season_games_per_team(mid_2026: tuple) -> None:
 @pytest.mark.parametrize("season", [2024, 2025, 2026])
 def test_finished_cup_is_certain(season: int) -> None:
     """With every game played the sim returns the real field and champion with certainty."""
-    cup = _cup(season)
-    model = _model(2026, dt.date(2025, 12, 1))  # any model: nothing is left to simulate
-    sim = cup_mod.simulate_cup(cup, model, n_sims=50, seed=1)
-    st = cup_mod.cup_standings(cup)
+    sim = _cup_sim(season, n_sims=50, seed=1)
+    st = cup_mod.cup_standings(_cup(season))
     field = set(st.filter(pl.col("knockout_seed").is_not_null())["team_id"].to_list())
     assert set(sim.filter(pl.col("p_quarterfinal") == 1.0)["team_id"].to_list()) == field
     assert sim.filter(pl.col("p_champion") == 1.0)["team_id"].to_list() == [CHAMPIONS[season]]
     assert set(sim["p_quarterfinal"].unique().to_list()) == {0.0, 1.0}
 
 
+# Observed 2026-11-04 (10,000 draws, the default seed, as of each Cup's first night, the season
+# sim's model with #1084's prior; 2023-24 has none, 2022-23 is not committed): Brier of
+# p_quarterfinal / p_win_group / p_champion against the real field, group winners and champion.
+# Gate: observed + 0.02 (+ 0.005 for the champion), never lowered; pooled over the three Cups the
+# quarterfinal and group odds must beat the uniform 8/30 and 1/5 (Brier 0.1956 / 0.1600). The
+# champion odds do not beat 1/30 (0.0322) on three Cups and are only pinned.
+CUP_GATES = {  # season: (observed qf, win, champion Brier)
+    2024: (0.1795, 0.1570, 0.0333),
+    2025: (0.1743, 0.1331, 0.0357),
+    2026: (0.2091, 0.1604, 0.0326),
+}
+
+
+@pytest.fixture(scope="module")
+def cup_start_briers() -> dict[int, tuple[float, ...]]:
+    out = {}
+    for season in CUP_GATES:
+        first = cup_mod.cup_games(_cup_schedule(season))["game_date"].min()
+        sim = _cup_sim(season, as_of_date=first)
+        assert sim["n_sims"].unique().to_list() == [10_000]
+        st = cup_mod.cup_standings(_cup(season)).select("team_id", "knockout_seed", "group_rank")
+        j = sim.join(st, on="team_id", how="inner", validate="1:1")
+        truth = (
+            j["knockout_seed"].is_not_null(),
+            j["group_rank"] == 1,
+            j["team_id"] == CHAMPIONS[season],
+        )
+        out[season] = tuple(
+            float(((j[c].to_numpy() - y.cast(pl.Float64).to_numpy()) ** 2).mean())
+            for c, y in zip(("p_quarterfinal", "p_win_group", "p_champion"), truth, strict=True)
+        )
+    return out
+
+
+@pytest.mark.parametrize("season", list(CUP_GATES))
+def test_cup_start_sim_against_the_real_cup(season: int, cup_start_briers: dict) -> None:
+    qf, win, champ = cup_start_briers[season]
+    gate_qf, gate_win, gate_champ = CUP_GATES[season]
+    assert qf <= gate_qf + 0.02, qf
+    assert win <= gate_win + 0.02, win
+    assert champ <= gate_champ + 0.005, champ
+
+
+def test_cup_start_sim_beats_uniform_odds(cup_start_briers: dict) -> None:
+    qf, win, _ = (float(np.mean(v)) for v in zip(*cup_start_briers.values(), strict=True))
+    assert qf < (8 / 30) * (22 / 30), qf
+    assert win < 0.2 * 0.8, win
+
+
+def _season_sim_2027(monkeypatch: pytest.MonkeyPatch, cup: bool) -> tuple[pl.DataFrame, list[np.ndarray]]:
+    """``simulate_pro_season`` on 2026-27 as released (TBD knockout), with or without the Cup.
+
+    Returns the season table and the league-average fill counts the engine drew.
+    """
+    as_of = dt.date(2026, 11, 3)
+    games = sim_mod._regular_games(_schedule(2027), as_of)
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), _schedule(2026))
+    cols = games.select(*sim_mod._GAME_COLS)
+    fills: list[np.ndarray] = []
+    real = sim_mod._unscheduled_games
+
+    def spy(model, teams, extra, uncertain, rng):  # type: ignore[no-untyped-def]
+        fills.append(extra.copy())
+        return real(model, teams, extra, uncertain, rng)
+
+    monkeypatch.setattr(sim_mod, "_unscheduled_games", spy)
+    out = sim_mod.simulate_pro_season(
+        cols,
+        sim_mod.as_of_game_model(rows),
+        n_sims=500,
+        seed=1,
+        season_games=82,
+        cup=_cup(2027, as_of) if cup else None,
+    )
+    return out, fills
+
+
+def test_season_sim_plays_the_cup_slots_with_real_opponents(monkeypatch: pytest.MonkeyPatch) -> None:
+    """2026-27 as released: the Cup fills every team's 80 known games to 82, no league-average stand-in."""
+    out, fills = _season_sim_2027(monkeypatch, cup=True)
+    assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {82}
+    np.testing.assert_allclose((out["proj_wins"] + out["proj_losses"]).to_numpy(), 82.0)
+    assert len(fills) == 1 and not fills[0].any()  # nothing left for the stopgap
+    stop, stop_fills = _season_sim_2027(monkeypatch, cup=False)
+    assert (stop_fills[-1] == 2).all()  # without the Cup each team's two slots are league-average
+    np.testing.assert_allclose((stop["proj_wins"] + stop["proj_losses"]).to_numpy(), 82.0)
+    # the Cup's slots are real games: a team out of the knockout plays others out of it (weaker
+    # on average), so the strong teams' projections move least
+    diff = out.join(stop, on="team_id", suffix="_avg", validate="1:1")
+    assert float((diff["proj_wins"] - diff["proj_wins_avg"]).abs().max()) < 1.0
+
+
+def test_filled_slots_are_not_added_again() -> None:
+    """A complete release (2025-26) between the quarterfinals and semifinals: the Cup owns the
+    knockout (the quarterfinals played, the semifinals simulated), every other slot is on it."""
+    as_of = dt.date(2025, 12, 11)
+    games = sim_mod._regular_games(_schedule(2026), as_of).select(*sim_mod._GAME_COLS)
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), _schedule(2026))
+    out, draws = sim_mod._simulate_season(
+        games, sim_mod.as_of_game_model(rows), n_sims=300, seed=3, season_games=82, cup=_cup(2026, as_of)
+    )
+    assert draws is not None
+    assert (draws.semifinal.sum(1) == 4).all() and len(np.unique(draws.semifinal, axis=0)) == 1  # QFs played
+    np.testing.assert_allclose((out["proj_wins"] + out["proj_losses"]).to_numpy(), 82.0)
+    assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {82}
+
+
 def test_rejects_bad_inputs() -> None:
-    cup = _cup(2026)
-    model = _model(2026, dt.date(2025, 12, 1))
     with pytest.raises(ValueError, match="n_sims"):
-        cup_mod.simulate_cup(cup, model, n_sims=0)
+        _cup_sim(2026, n_sims=0)
+    games = sim_mod._regular_games(_schedule(2026), None).select(*sim_mod._GAME_COLS)
+    model = sim_mod.as_of_game_model(_EMPTY_POSSESSIONS.pipe(tsr.nba_possession_rate_rows, _schedule(2026)))
+    with pytest.raises(ValueError, match="Cup games to play"):  # the Cup unplayed, the season played
+        sim_mod.simulate_pro_season(games, model, n_sims=5, cup=_cup(2026, dt.date(2025, 11, 1)))
+    with pytest.raises(ValueError, match="NBA only"):
+        sim_mod.simulate_pro_season(games, model, league_id="10", n_sims=5, cup=_cup(2026))
     games = cup_mod.cup_games(pl.read_parquet(CUP / "nba_cup_schedule_2026.parquet"))
     with pytest.raises(ValueError, match="six groups"):
         cup_mod.prepare_cup(games.filter(pl.col("cup_group") != "East Group A"))

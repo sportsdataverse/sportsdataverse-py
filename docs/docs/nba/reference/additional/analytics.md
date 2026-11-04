@@ -907,9 +907,9 @@ print(logs["player"].shape)
 
 NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win.
 
-Simulates the remaining Group Play games with the season sim's game model and draws
-(`sportsdataverse.nba.nba_season_sim.nba_season_sim`: the as-of possession ridge, one
-rating shift per team per simulated season), ranks every simulated group with the Cup
+Runs the season sim (`sportsdataverse.nba.nba_season_sim.nba_season_sim`: the as-of
+possession ridge with the preseason prior, one rating shift per team per simulated season, the
+same seed and draws) with the Cup inside it, ranks every simulated group with the Cup
 tiebreakers (`nba_cup_standings`), and plays the knockout: seed 1 hosts the wild card
 and seed 2 seed 3 in each conference, the semifinals neutral through 2025-26 and at the
 higher seed from 2026-27, the final neutral. A knockout game already played keeps its result.
