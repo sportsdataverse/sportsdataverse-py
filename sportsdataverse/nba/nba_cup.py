@@ -239,6 +239,37 @@ class CupInputs:
     knockout_ids: tuple[str, ...] = ()
 
 
+def _overtime_rule(played: pl.DataFrame, ot_points: pl.DataFrame | None) -> pl.DataFrame:
+    """Played Group Play games with ``diff`` (0 after overtime) and regulation points ``hp`` / ``ap``."""
+    ot = (
+        ot_points
+        if ot_points is not None
+        else pl.DataFrame(schema={"game_id": pl.Utf8, "team_id": pl.Int64, "ot_points": pl.Int64})
+    )
+    assert ot.schema["game_id"] == played.schema["game_id"], "game_id dtype differs between overtime points and games"
+    for side in ("home", "away"):
+        assert ot.schema["team_id"] == played.schema[f"{side}_team_id"], "team_id dtype differs"
+        played = played.join(
+            ot.rename({"team_id": f"{side}_team_id", "ot_points": f"{side}_ot"}),
+            on=["game_id", f"{side}_team_id"],
+            how="left",
+            validate="1:1",
+        )
+    is_ot = pl.col("game_id").is_in(ot.get_column("game_id").implode())
+    # ponytail: regulation ends tied, so both teams' regulation points are equal; the possessions
+    # undercount a point now and then, so take the smaller of the two (matched stats.nba.com's
+    # Cup standings on every overtime game of 2024-25 and 2025-26)
+    reg = pl.min_horizontal(
+        pl.col("home_pts") - pl.col("home_ot").fill_null(0), pl.col("away_pts") - pl.col("away_ot").fill_null(0)
+    )
+    played = played.with_columns(
+        pl.when(is_ot).then(0).otherwise(pl.col("home_pts") - pl.col("away_pts")).alias("diff"),
+        pl.when(is_ot).then(reg).otherwise(pl.col("home_pts")).alias("hp"),
+        pl.when(is_ot).then(reg).otherwise(pl.col("away_pts")).alias("ap"),
+    )
+    return played
+
+
 def prepare_cup(
     games: pl.DataFrame, *, ot_points: pl.DataFrame | None = None, prior_records: pl.DataFrame | None = None
 ) -> CupInputs:
@@ -282,33 +313,7 @@ def prepare_cup(
             if t in index and w + lo:
                 prior[index[t]] = w / (w + lo)
     done = pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null()
-    played = group_games.filter(done)
-    ot = (
-        ot_points
-        if ot_points is not None
-        else pl.DataFrame(schema={"game_id": pl.Utf8, "team_id": pl.Int64, "ot_points": pl.Int64})
-    )
-    assert ot.schema["game_id"] == played.schema["game_id"], "game_id dtype differs between overtime points and games"
-    for side in ("home", "away"):
-        assert ot.schema["team_id"] == played.schema[f"{side}_team_id"], "team_id dtype differs"
-        played = played.join(
-            ot.rename({"team_id": f"{side}_team_id", "ot_points": f"{side}_ot"}),
-            on=["game_id", f"{side}_team_id"],
-            how="left",
-            validate="1:1",
-        )
-    is_ot = pl.col("game_id").is_in(ot.get_column("game_id").implode())
-    # ponytail: regulation ends tied, so both teams' regulation points are equal; the possessions
-    # undercount a point now and then, so take the smaller of the two (matched stats.nba.com's
-    # Cup standings on every overtime game of 2024-25 and 2025-26)
-    reg = pl.min_horizontal(
-        pl.col("home_pts") - pl.col("home_ot").fill_null(0), pl.col("away_pts") - pl.col("away_ot").fill_null(0)
-    )
-    played = played.with_columns(
-        pl.when(is_ot).then(0).otherwise(pl.col("home_pts") - pl.col("away_pts")).alias("diff"),
-        pl.when(is_ot).then(reg).otherwise(pl.col("home_pts")).alias("hp"),
-        pl.when(is_ot).then(reg).otherwise(pl.col("away_pts")).alias("ap"),
-    )
+    played = _overtime_rule(group_games.filter(done), ot_points)
 
     def ix(frame: pl.DataFrame, col: str) -> np.ndarray:
         return np.array([index[t] for t in frame.get_column(col).to_list()], dtype=np.int64)
