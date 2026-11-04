@@ -303,6 +303,12 @@ def _last_spot_number() -> pl.Expr:
     )
 
 
+def _points_on_row(score_col: str) -> pl.Expr:
+    """What one team's best score so far gained on the row (0 before its first score, 0 on a feed drop)."""
+    best = pl.col(score_col).cum_max().forward_fill().fill_null(0)
+    return best - best.shift(1, fill_value=0)
+
+
 def _repair_scores(scores: list, scoring: list, final) -> list:
     """One team's per-row score with ESPN's feed errors replaced by the last accepted score (see the call site).
 
@@ -2560,6 +2566,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
 # The ESPN team-box helpers are shared with the NFL processor; the private
 # names stay importable here for existing callers.
 from sportsdataverse.football.attribution import (  # noqa: E402
+    _RUNNING_MARGIN_MOVE,
     _abbr_compat,
     _parse_recovery_abbrev,  # noqa: F401  (re-exported for tests)
     _parse_recovery_abbrevs,
@@ -5264,9 +5271,13 @@ class CFBPlayProcess(object):
                 .alias("lag_pos_score_diff"),
             )
             .with_columns(
-                pl.when(pl.col("lag_pos_team") == pl.col("pos_team"))
-                .then(pl.col("pos_score_diff") - pl.col("lag_pos_score_diff"))
-                .otherwise(pl.col("pos_score_diff") + pl.col("lag_pos_score_diff"))
+                # The points scored on the play, signed for the possessing team (sportsdataverse-py#1089).
+                # The running margin's move (_RUNNING_MARGIN_MOVE) was this column before and read -70
+                # when ESPN's score fell to 0 for a few rows and came back; each team's points are
+                # instead what its running-best score gained on the row, so a drop never counts.
+                pl.when(pl.col("pos_team") == pl.col("homeTeamId"))
+                .then(_points_on_row("homeScore") - _points_on_row("awayScore"))
+                .otherwise(_points_on_row("awayScore") - _points_on_row("homeScore"))
                 .alias("pos_score_pts"),
                 pl.when((pl.col("kickoff_play") == True).and_(pl.col("lag_pos_team") == pl.col("pos_team")))
                 .then(pl.col("lag_pos_score_diff"))
@@ -6491,13 +6502,13 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 pos_score_diff_end=pl.when(
-                    (pl.col("pos_score_pts").abs() >= 8)
+                    (_RUNNING_MARGIN_MOVE.abs() >= 8)
                     .and_(pl.col("scoring_play") == False)
                     .and_(pl.col("change_of_pos_team") == False),
                 )
                 .then(pl.col("pos_score_diff_start"))
                 .when(
-                    (pl.col("pos_score_pts").abs() >= 8)
+                    (_RUNNING_MARGIN_MOVE.abs() >= 8)
                     .and_(pl.col("scoring_play") == False)
                     .and_(pl.col("change_of_pos_team") == True),
                 )
