@@ -40291,14 +40291,17 @@ load_nba_player_impact:
   d_adj_rapm: Defensive regularized adjusted plus/minus after the ridge opponent adjustment.
   d_rapm: Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so
     a positive value marks a defender who suppresses opponent scoring.
-  darko_filtered_skill: DARKO-style Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
+  boban_filtered_skill: BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
     i.e. his current-form rating after aging drift and possession-weighted observation noise.
-  darko_projected_rating: One-season-ahead DARKO forecast, the filtered skill plus the empirical aging-curve drift at the
+  boban_projected_rating: One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the
     player's last observed age; both season_type rows of a player-season carry the same value because the projection is not
     playoff-specific.
-  darko_projected_sd: Standard deviation of the one-season-ahead DARKO forecast, the square root of the filtered state variance
+  boban_projected_sd: Standard deviation of the one-season-ahead BOBAN forecast, the square root of the filtered state variance
     plus the Kalman process variance; it sits at roughly 10.19 for a player with only one season in the panel, whose diffuse
     prior variance was never updated.
+  darko_filtered_skill: Deprecated alias of boban_filtered_skill, kept for one release; use that column.
+  darko_projected_rating: Deprecated alias of boban_projected_rating, kept for one release; use that column.
+  darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
   def_poss: Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss
     almost exactly because substitutions rarely split an offense-defense pair.
   dspm: Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients
@@ -47894,9 +47897,12 @@ load_wnba_player_impact:
   adj_rapm: Total prior-informed RAPM (offense plus defense), in points per 100 possessions.
   d_adj_rapm: 'Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
   d_rapm: 'Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions.'
-  darko_filtered_skill: DARKO-style Kalman-filtered estimate of the player's current skill level.
-  darko_projected_rating: DARKO-style projected forward rating, including the empirical aging-curve drift.
-  darko_projected_sd: Posterior standard deviation of the DARKO-style projected rating.
+  boban_filtered_skill: BOBAN Kalman-filtered estimate of the player's current skill level.
+  boban_projected_rating: BOBAN projected forward rating, including the empirical aging-curve drift.
+  boban_projected_sd: Posterior standard deviation of the BOBAN projected rating.
+  darko_filtered_skill: Deprecated alias of boban_filtered_skill, kept for one release; use that column.
+  darko_projected_rating: Deprecated alias of boban_projected_rating, kept for one release; use that column.
+  darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
   def_poss: Defensive possessions the player was on the floor for in the RAPM sample.
   dspm: 'Defensive statistical plus-minus: box-score features regressed onto the defensive RAPM target, per 100 possessions.'
   o_adj_rapm: 'Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'

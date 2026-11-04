@@ -12,7 +12,7 @@ import pytest
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.nba import nba_loaders
 
-# The 22-column nba_player_impact schema the hoopR-nba-stats-data producer
+# The 25-column nba_player_impact schema the hoopR-nba-stats-data producer
 # writes (nba_model_publish.builders.build_nba_player_impact). Kept in lockstep
 # with tools/codegen/schemas/loader_schemas.yaml::load_nba_player_impact.
 _IMPACT_SCHEMA = {
@@ -41,6 +41,9 @@ _IMPACT_SCHEMA = {
     "dbpm": pl.Float64,
     "bpm": pl.Float64,
     "war": pl.Float64,
+    "boban_filtered_skill": pl.Float64,
+    "boban_projected_rating": pl.Float64,
+    "boban_projected_sd": pl.Float64,
     "darko_filtered_skill": pl.Float64,
     "darko_projected_rating": pl.Float64,
     "darko_projected_sd": pl.Float64,
@@ -71,3 +74,20 @@ def test_load_nba_player_impact_round_trips_schema(monkeypatch):
 def test_load_nba_player_impact_floors_at_1996():
     with pytest.raises(SeasonNotFoundError):
         nba_loaders.load_nba_player_impact(seasons=1995)
+
+
+_BOBAN = ["boban_filtered_skill", "boban_projected_rating", "boban_projected_sd"]
+_DARKO = [c.replace("boban_", "darko_") for c in _BOBAN]
+
+
+@pytest.mark.parametrize("shipped, other", [(_DARKO, _BOBAN), (_BOBAN, _DARKO)])
+def test_load_nba_player_impact_emits_both_names_whichever_the_release_ships(monkeypatch, shipped, other):
+    # Today's release ships darko_*; after the producer rename it ships boban_*. Either way the frame
+    # carries both, with equal values, boban_* first -- the one-release deprecation window (BB-D11).
+    vals = {"rapm": [0.5], **{c: [1.5 + i] for i, c in enumerate(shipped)}}
+    monkeypatch.setattr(nba_loaders, "_read_release_parquet", lambda url: pl.DataFrame(vals))
+    out = nba_loaders.load_nba_player_impact(seasons=2024)
+    assert out.columns == ["rapm", *_BOBAN, *_DARKO]
+    for b, d in zip(_BOBAN, _DARKO):
+        assert out[b].to_list() == out[d].to_list() != [None]
+    assert out[_BOBAN[1]].to_list() == [2.5]
