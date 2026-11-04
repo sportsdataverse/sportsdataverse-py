@@ -1,0 +1,1228 @@
+{
+"filters": [
+{
+"displayName": "League",
+"name": "league",
+"value": "wnba",
+"options": [
+{
+"value": "wnba",
+"displayValue": "Women's National Basketball Association",
+"shortDisplayName": "WNBA"
+},
+{
+"value": "womens-college-basketball",
+"displayValue": "NCAA Women's Basketball",
+"shortDisplayName": "NCAAW"
+}
+]
+},
+{
+"displayName": "Season",
+"name": "seasontype",
+"value": "2",
+"options": [
+{
+"value": "2",
+"displayValue": "Regular Season"
+},
+{
+"value": "3",
+"displayValue": "Postseason"
+}
+]
+}
+],
+"teams": {
+"minnesota-lynx": {
+"id": "8",
+"uid": "s:40~l:59~t:8",
+"guid": "d815e23c-aa3e-3490-d7be-f876d1e30e8a",
+"slug": "minnesota-lynx",
+"location": "Minnesota",
+"name": "Lynx",
+"abbreviation": "MIN",
+"displayName": "Minnesota Lynx",
+"shortDisplayName": "Lynx",
+"color": "266092",
+"alternateColor": "79bc43",
+"isActive": true,
+"isAllStar": false,
+"logos": [
+{
+"href": "https://a.espncdn.com/i/teamlogos/wnba/500/min.png",
+"width": 500,
+"height": 500,
+"rel": [
+"full",
+"default"
+]
+},
+{
+"href": "https://a.espncdn.com/i/teamlogos/wnba/500-dark/min.png",
+"width": 500,
+"height": 500,
+"rel": [
+"full",
+"dark"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_on_white_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_on_white_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_on_black_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_on_black_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_on_primary_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_on_primary_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_on_secondary_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_on_secondary_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_black.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_black"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/primary_logo_white.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"primary_logo_white"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_on_white_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_on_white_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_on_black_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_on_black_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_on_primary_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_on_primary_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_on_secondary_color.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_on_secondary_color"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_black.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_black"
+]
+},
+{
+"href": "https://a.espncdn.com/guid/d815e23c-aa3e-3490-d7be-f876d1e30e8a/logos/secondary_logo_white.png",
+"width": 4096,
+"height": 4096,
+"rel": [
+"full",
+"secondary_logo_white"
+]
+}
+],
+"links": [
+{
+"language": "en",
+"rel": [
+"clubhouse",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/team/_/name/min/minnesota-lynx",
+"text": "Clubhouse",
+"shortText": "Clubhouse",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"clubhouse",
+"mobile",
+"team"
+],
+"href": "https://m.espn.com/wnba/clubhouse?teamId=8",
+"text": "Clubhouse",
+"shortText": "Clubhouse",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"roster",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/team/roster/_/name/min/minnesota-lynx",
+"text": "Roster",
+"shortText": "Roster",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"stats",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/team/stats/_/name/min/minnesota-lynx",
+"text": "Statistics",
+"shortText": "Statistics",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"schedule",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/team/schedule/_/name/min",
+"text": "Schedule",
+"shortText": "Schedule",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"photos",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/team/photos/_/name/min",
+"text": "photos",
+"shortText": "photos",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"tickets",
+"desktop",
+"team"
+],
+"href": "https://www.vividseats.com/minnesota-lynx-tickets--sports-wnba/performer/1772?wsUser=717",
+"text": "Tickets",
+"shortText": "Tickets",
+"isExternal": true,
+"isPremium": false
+},
+{
+"language": "en",
+"rel": [
+"draftpicks",
+"desktop",
+"team"
+],
+"href": "https://www.espn.com/wnba/draft/teams/_/name/min/minnesota-lynx",
+"text": "Draft Picks",
+"shortText": "Draft Picks",
+"isExternal": false,
+"isPremium": true
+}
+],
+"groups": {},
+"coaches": {},
+"venue": {
+"id": "2029",
+"fullName": "Target Center",
+"shortName": "Target Center",
+"address": {
+"city": "Minneapolis",
+"state": "MN"
+},
+"grass": false,
+"indoor": true,
+"images": [
+{
+"href": "https://a.espncdn.com/i/venues/wnba/day/2029.jpg",
+"width": 2000,
+"height": 1125,
+"rel": [
+"full",
+"day"
+]
+}
+]
+},
+"record": {},
+"ranks": {},
+"franchise": {}
+}
+},
+"categories": [
+{
+"name": "averages",
+"displayName": "Regular Season Averages",
+"labels": [
+"GP",
+"GS",
+"MIN",
+"PTS",
+"OR",
+"DR",
+"REB",
+"AST",
+"STL",
+"BLK",
+"TO",
+"FG",
+"FG%",
+"3PT",
+"3P%",
+"FT",
+"FT%",
+"PF"
+],
+"names": [
+"gamesPlayed",
+"gamesStarted",
+"avgMinutes",
+"avgPoints",
+"avgOffensiveRebounds",
+"avgDefensiveRebounds",
+"avgRebounds",
+"avgAssists",
+"avgSteals",
+"avgBlocks",
+"avgTurnovers",
+"avgFieldGoalsMade-avgFieldGoalsAttempted",
+"fieldGoalPct",
+"avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+"threePointFieldGoalPct",
+"avgFreeThrowsMade-avgFreeThrowsAttempted",
+"freeThrowPct",
+"avgFouls"
+],
+"displayNames": [
+"Games Played",
+"Games Started",
+"Minutes Per Game",
+"Points Per Game",
+"Offensive Rebounds Per Game",
+"Defensive Rebounds Per Game",
+"Rebounds Per Game",
+"Assists Per Game",
+"Steals Per Game",
+"Blocks Per Game",
+"Turnovers Per Game",
+"Field Goals Made-Attempted Per Game",
+"Field Goal Percentage",
+"3-Point Field Goals Made-Attempted Per Game",
+"3-Point Field Goal Percentage",
+"Free Throws Made-Attempted Per Game",
+"Free Throw Percentage",
+"Fouls Per Game"
+],
+"descriptions": [
+"Games Played",
+"The number of games started by an athlete.",
+"The average number of minutes per game.",
+"The average number of points scored per game.",
+"The average offensive rebounds per game.",
+"The average defensive rebounds per game.",
+"The average rebounds per game.",
+"The average assists per game.",
+"The average steals per game.",
+"The average blocks per game.",
+"The average turnovers committed per game.",
+"The average field goals made per game.-The average field goals attempted per game.",
+"The ratio of field goals made to field goals attempted: FGM / FGA",
+"The average three point field goals made per game.-The average three point field goals attempted per game.",
+"The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+"The average free throw shots made per game.-The average free throw shots attempted per game.",
+"The ratio of free throws made to free throws attempted: FTM / FTA",
+"The average fouls committed per game."
+],
+"statistics": [
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2019,
+"displayName": "2019"
+},
+"stats": [
+"34",
+"34",
+"33.3",
+"13.1",
+"1.8",
+"4.8",
+"6.6",
+"2.6",
+"1.9",
+"0.9",
+"1.9",
+"4.9-10.0",
+"49.0",
+"0.9-2.4",
+"36.1",
+"2.4-3.0",
+"79.2",
+"2.9"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2020,
+"displayName": "2020"
+},
+"stats": [
+"22",
+"22",
+"34.2",
+"16.1",
+"2.8",
+"6.3",
+"9.0",
+"3.3",
+"1.8",
+"1.3",
+"2.7",
+"6.2-11.8",
+"52.3",
+"0.9-2.2",
+"40.8",
+"2.9-3.5",
+"82.9",
+"2.7"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2021,
+"displayName": "2021"
+},
+"stats": [
+"29",
+"29",
+"34.6",
+"16.2",
+"1.7",
+"4.9",
+"6.6",
+"3.2",
+"1.3",
+"1.3",
+"2.3",
+"6.0-13.7",
+"44.1",
+"0.7-2.9",
+"25.3",
+"3.4-3.9",
+"86.0",
+"2.8"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2022,
+"displayName": "2022"
+},
+"stats": [
+"4",
+"4",
+"22.8",
+"7.3",
+"0.5",
+"2.5",
+"3.0",
+"1.0",
+"0.5",
+"0.3",
+"0.3",
+"2.8-6.5",
+"42.3",
+"0.5-1.8",
+"28.6",
+"1.3-1.8",
+"71.4",
+"2.3"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2023,
+"displayName": "2023"
+},
+"stats": [
+"37",
+"37",
+"33.5",
+"21.5",
+"1.9",
+"6.6",
+"8.5",
+"2.5",
+"1.6",
+"1.2",
+"2.4",
+"8.0-16.6",
+"48.5",
+"0.9-3.1",
+"29.8",
+"4.5-5.4",
+"84.0",
+"2.4"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2024,
+"displayName": "2024"
+},
+"stats": [
+"34",
+"34",
+"34.7",
+"20.4",
+"2.2",
+"7.5",
+"9.7",
+"3.4",
+"1.9",
+"1.4",
+"2.1",
+"7.9-16.0",
+"49.2",
+"0.9-2.9",
+"31.0",
+"3.7-4.6",
+"80.4",
+"2.6"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2025,
+"displayName": "2025"
+},
+"stats": [
+"33",
+"33",
+"32.3",
+"22.9",
+"1.9",
+"5.4",
+"7.3",
+"3.2",
+"1.6",
+"1.5",
+"2.1",
+"8.3-15.7",
+"53.1",
+"1.5-3.8",
+"40.3",
+"4.7-5.2",
+"90.6",
+"2.4"
+],
+"position": "F"
+}
+],
+"totals": [
+"193",
+"193",
+"33.5",
+"18.4",
+"2.0",
+"5.8",
+"7.8",
+"3.0",
+"1.7",
+"1.2",
+"2.2",
+"6.9-14.0",
+"49.2",
+"1.0-2.9",
+"33.6",
+"3.6-4.3",
+"84.2",
+"2.6"
+],
+"sortKey": "averages"
+},
+{
+"name": "totals",
+"displayName": "Regular Season Totals",
+"labels": [
+"PTS",
+"OR",
+"DR",
+"REB",
+"AST",
+"STL",
+"BLK",
+"TO",
+"FG",
+"FG%",
+"3PT",
+"3P%",
+"FT",
+"FT%",
+"PF"
+],
+"names": [
+"points",
+"offensiveRebounds",
+"defensiveRebounds",
+"totalRebounds",
+"assists",
+"steals",
+"blocks",
+"turnovers",
+"fieldGoalsMade-fieldGoalsAttempted",
+"fieldGoalPct",
+"threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+"threePointFieldGoalPct",
+"freeThrowsMade-freeThrowsAttempted",
+"freeThrowPct",
+"fouls"
+],
+"displayNames": [
+"Points",
+"Offensive Rebounds",
+"Defensive Rebounds",
+"Rebounds",
+"Assists",
+"Steals",
+"Blocks",
+"Turnovers",
+"Field Goals Made-Attempted",
+"Field Goal Percentage",
+"3-Point Field Goals Made-Attempted",
+"3-Point Field Goal Percentage",
+"Free Throws Made-Attempted",
+"Free Throw Percentage",
+"Fouls"
+],
+"descriptions": [
+"The number of points scored.",
+"The number of times when the offense obtains the possession of the ball after a missed shot.",
+"The number of times when the defense obtains the possession of the ball after a missed shot by the offense.",
+"The total number of rebounds for a team or player",
+"The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was \"assisting\" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist.",
+"The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player.",
+"Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player.",
+"The number of times a player loses possession to the other team.",
+"The number of times a 2pt field goal was made.-The number of times a 2pt field goal was attempted.",
+"The ratio of field goals made to field goals attempted: FGM / FGA",
+"The number of times a 3pt field goal was made.-The number of times a 3pt field goal was attempted.",
+"The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+"The number of times a free throw was made.-The number of times a free throw was attempted.",
+"The ratio of free throws made to free throws attempted: FTM / FTA",
+"The number of times a player had illegal contact with the opponent."
+],
+"statistics": [
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2019,
+"displayName": "2019"
+},
+"stats": [
+"444",
+"60",
+"163",
+"223",
+"87",
+"65",
+"32",
+"65",
+"167-341",
+"49.0",
+"30-83",
+"36.1",
+"80-101",
+"79.2",
+"99"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2020,
+"displayName": "2020"
+},
+"stats": [
+"355",
+"61",
+"138",
+"199",
+"73",
+"40",
+"28",
+"59",
+"136-260",
+"52.3",
+"20-49",
+"40.8",
+"63-76",
+"82.9",
+"60"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2021,
+"displayName": "2021"
+},
+"stats": [
+"469",
+"50",
+"142",
+"192",
+"92",
+"38",
+"37",
+"68",
+"175-397",
+"44.1",
+"21-83",
+"25.3",
+"98-114",
+"86.0",
+"82"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2022,
+"displayName": "2022"
+},
+"stats": [
+"29",
+"2",
+"10",
+"12",
+"4",
+"2",
+"1",
+"1",
+"11-26",
+"42.3",
+"2-7",
+"28.6",
+"5-7",
+"71.4",
+"9"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2023,
+"displayName": "2023"
+},
+"stats": [
+"796",
+"70",
+"243",
+"313",
+"94",
+"61",
+"43",
+"89",
+"297-613",
+"48.5",
+"34-114",
+"29.8",
+"168-200",
+"84.0",
+"89"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2024,
+"displayName": "2024"
+},
+"stats": [
+"694",
+"76",
+"254",
+"330",
+"115",
+"65",
+"48",
+"70",
+"268-545",
+"49.2",
+"31-100",
+"31.0",
+"127-158",
+"80.4",
+"87"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2025,
+"displayName": "2025"
+},
+"stats": [
+"755",
+"62",
+"179",
+"241",
+"105",
+"54",
+"50",
+"70",
+"275-518",
+"53.1",
+"50-124",
+"40.3",
+"155-171",
+"90.6",
+"78"
+],
+"position": "F"
+}
+],
+"totals": [
+"3542",
+"381",
+"1129",
+"1510",
+"570",
+"325",
+"239",
+"422",
+"1329-2700",
+"49.2",
+"188-560",
+"33.6",
+"696-827",
+"84.2",
+"504"
+],
+"sortKey": "totals"
+},
+{
+"name": "miscellaneous",
+"displayName": "Regular Season Misc Totals",
+"labels": [
+"DD2",
+"TD3",
+"AST/TO",
+"STL/TO",
+"SC-EFF",
+"SH-EFF",
+"TECH",
+"FLAG",
+"DQ",
+"EJECT"
+],
+"names": [
+"doubleDouble",
+"tripleDouble",
+"assistTurnoverRatio",
+"stealTurnoverRatio",
+"scoringEfficiency",
+"shootingEfficiency",
+"technicalFouls",
+"flagrantFouls",
+"disqualifications",
+"ejections"
+],
+"displayNames": [
+"Double Double",
+"Triple Double",
+"Assist To Turnover Ratio",
+"Steal To Turnover Ratio",
+"Scoring Efficiency",
+"Shooting Efficiency",
+"Technical Fouls",
+"Flagrant Fouls",
+"Disqualifications",
+"Ejections"
+],
+"descriptions": [
+"The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots",
+"The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots",
+"The average number of assists a player or team records per turnover",
+"The number of steals per turnover",
+"The efficiency with which a team or player scores the basketball.",
+"The efficiency with which a team or player shoots the basketball.",
+"The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations).",
+"The number of fouls that the officials thought were unnecessary or excessive.",
+"The number of times a player reached the foul limit.",
+"The number of times a player or coach is removed from the game as a result of a serious offense."
+],
+"statistics": [
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2019,
+"displayName": "2019"
+},
+"stats": [
+"5",
+"0",
+"1.3",
+"1.0",
+"1.302",
+"0.53",
+"0",
+"0",
+"0",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2020,
+"displayName": "2020"
+},
+"stats": [
+"7",
+"0",
+"1.2",
+"0.7",
+"1.365",
+"0.56",
+"0",
+"0",
+"1",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2021,
+"displayName": "2021"
+},
+"stats": [
+"1",
+"0",
+"1.4",
+"0.6",
+"1.181",
+"0.47",
+"1",
+"0",
+"0",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2022,
+"displayName": "2022"
+},
+"stats": [
+"0",
+"0",
+"4.0",
+"2.0",
+"1.115",
+"0.46",
+"0",
+"0",
+"0",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2023,
+"displayName": "2023"
+},
+"stats": [
+"11",
+"0",
+"1.1",
+"0.7",
+"1.299",
+"0.51",
+"0",
+"1",
+"1",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2024,
+"displayName": "2024"
+},
+"stats": [
+"18",
+"0",
+"1.6",
+"0.9",
+"1.273",
+"0.52",
+"1",
+"0",
+"0",
+"0"
+],
+"position": "F"
+},
+{
+"teamId": "8",
+"teamSlug": "minnesota-lynx",
+"season": {
+"year": 2025,
+"displayName": "2025"
+},
+"stats": [
+"5",
+"0",
+"1.5",
+"0.8",
+"1.458",
+"0.58",
+"1",
+"0",
+"0",
+"0"
+],
+"position": "F"
+}
+],
+"totals": [
+"47",
+"0",
+"1.4",
+"0.8",
+"1.312",
+"0.53",
+"3",
+"1",
+"2",
+"0"
+],
+"sortKey": "miscellaneous"
+}
+],
+"glossary": [
+{
+"abbreviation": "3P%",
+"displayName": "3-Point Field Goal Percentage"
+},
+{
+"abbreviation": "3PT",
+"displayName": "3-Point Field Goals Made-Attempted Per Game"
+},
+{
+"abbreviation": "AST",
+"displayName": "Assists Per Game"
+},
+{
+"abbreviation": "AST/TO",
+"displayName": "Assist To Turnover Ratio"
+},
+{
+"abbreviation": "BLK",
+"displayName": "Blocks Per Game"
+},
+{
+"abbreviation": "DD2",
+"displayName": "Double Double"
+},
+{
+"abbreviation": "DQ",
+"displayName": "Disqualifications"
+},
+{
+"abbreviation": "DR",
+"displayName": "Defensive Rebounds Per Game"
+},
+{
+"abbreviation": "EJECT",
+"displayName": "Ejections"
+},
+{
+"abbreviation": "FG",
+"displayName": "Field Goals Made-Attempted Per Game"
+},
+{
+"abbreviation": "FG%",
+"displayName": "Field Goal Percentage"
+},
+{
+"abbreviation": "FLAG",
+"displayName": "Flagrant Fouls"
+},
+{
+"abbreviation": "FT",
+"displayName": "Free Throws Made-Attempted Per Game"
+},
+{
+"abbreviation": "FT%",
+"displayName": "Free Throw Percentage"
+},
+{
+"abbreviation": "GP",
+"displayName": "Games Played"
+},
+{
+"abbreviation": "GS",
+"displayName": "Games Started"
+},
+{
+"abbreviation": "MIN",
+"displayName": "Minutes Per Game"
+},
+{
+"abbreviation": "OR",
+"displayName": "Offensive Rebounds Per Game"
+},
+{
+"abbreviation": "PF",
+"displayName": "Fouls Per Game"
+},
+{
+"abbreviation": "PTS",
+"displayName": "Points Per Game"
+},
+{
+"abbreviation": "REB",
+"displayName": "Rebounds Per Game"
+},
+{
+"abbreviation": "SC-EFF",
+"displayName": "Scoring Efficiency"
+},
+{
+"abbreviation": "SH-EFF",
+"displayName": "Shooting Efficiency"
+},
+{
+"abbreviation": "STL",
+"displayName": "Steals Per Game"
+},
+{
+"abbreviation": "STL/TO",
+"displayName": "Steal To Turnover Ratio"
+},
+{
+"abbreviation": "TD3",
+"displayName": "Triple Double"
+},
+{
+"abbreviation": "TECH",
+"displayName": "Technical Fouls"
+},
+{
+"abbreviation": "TO",
+"displayName": "Turnovers Per Game"
+}
+]
+}
