@@ -191,7 +191,7 @@ nba:
   load_lebron_daily: {path: tests/fixtures/nba_oracle/lebron_daily_sample.csv}  # 2 rows x 9 cols
   load_lebron_season: {path: tests/fixtures/nba_oracle/lebron_season_sample.csv}  # 3 rows x 8 cols
   load_rapm_ryan_davis: {path: tests/fixtures/nba_oracle/rapm_ryan_davis_sample.csv}  # 3 rows x 9 cols
-  nba_team_ratings: {seasons: 2024}  # 32 rows x 12 cols
+  nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_player_props: {season: 2024, game_id: '401585828', home_team_id: '2', away_team_id: '6'}  # 36 rows x 7 cols
   raw_game_efficiency: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}  # 2640 rows x 10 cols  [private: _normalize_schedule]
   adjust_efficiency: {game_eff: {$call: nba.raw_game_efficiency, args: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}}}  # 32 rows x 8 cols  [private: _normalize_schedule]
@@ -271,7 +271,7 @@ wnba:
   load_wnba_stats_player_season_stats: {seasons: 2025}  # 1638 rows x 211 cols
   load_wnba_stats_standings: {seasons: 2025}  # 13 rows x 94 cols
   load_wnba_stats_team_season_stats: {seasons: 2025}  # 126 rows x 179 cols
-  wnba_team_ratings: {seasons: 2024}  # 14 rows x 12 cols
+  wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
   wnba_player_props: {season: 2024, game_id: "401620238", home_team_id: "18", away_team_id: "8"}  # 26 rows x 7 cols
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols
