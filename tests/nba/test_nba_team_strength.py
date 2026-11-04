@@ -37,6 +37,7 @@ from sportsdataverse._common.team_strength import (
     RIDGE_LAMBDA,
     TEAM_STRENGTH_SCHEMA,
     possession_ridge_ratings,
+    ridge_design,
     team_strength,
 )
 
@@ -238,3 +239,22 @@ def test_wnba_binding_signature_shows_the_wnba_league_id(name: str) -> None:
     # update_wrapper sets __wrapped__; without __signature__ the docs would read the core's "00".
     binding = getattr(importlib.import_module(name), name.rsplit(".", 1)[1])
     assert inspect.signature(binding).parameters["league_id"].default == "10"
+
+
+def test_ridge_design_rejects_a_null_home_flag() -> None:
+    rows = _rows("wnba", 2025)
+    assert ridge_design(rows).height > 0
+    first = pl.int_range(pl.len()) == 0
+    broken = rows.with_columns(
+        pl.when(first).then(None).otherwise(pl.col("offense_is_home")).alias("offense_is_home"),
+        pl.when(first).then(False).otherwise(pl.col("neutral_site")).alias("neutral_site"),
+    )
+    with pytest.raises(ValueError, match="null offense_is_home"):
+        ridge_design(broken)
+    # On a neutral site the flag is not read, so a null there is fine.
+    assert (
+        ridge_design(
+            broken.with_columns(pl.when(first).then(True).otherwise(pl.col("neutral_site")).alias("neutral_site"))
+        ).height
+        == ridge_design(rows).height
+    )

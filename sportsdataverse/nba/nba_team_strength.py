@@ -102,9 +102,10 @@ def nba_team_strength(
         four against). Each has ``<m>_rank`` (1 = best; ``adj_def_rtg``, ``def_rtg``,
         ``tov_pct`` and the opponent shooting, rebounding and free-throw rates rank low first;
         ``sos`` ranks the hardest schedule first), ``<m>_pct`` (the Weibull percentile) and
-        ``<m>_n`` (possessions for the ratings, games for SOS and pace, wins for SOV). Ranks are
-        within the season, among teams with at least half the most games, and null under five
-        teams. Empty input returns that schema with zero rows.
+        ``<m>_n`` (possessions for the ratings, completed games against a rated opponent for
+        SOS, games for pace, wins over a rated opponent for SOV). Ranks are within the season,
+        among teams with at least half the most games, and null under five teams. Empty input
+        returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
