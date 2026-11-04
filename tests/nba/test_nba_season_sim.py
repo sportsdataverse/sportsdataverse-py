@@ -421,3 +421,20 @@ def test_wnba_binding_forwards_custom_chances() -> None:
     sim = _sim("wnba", 2025, n_sims=500, seed=2, chances=[442, 276, 178, 104, 55])
     assert sim["p_pick_1"].sum() == pytest.approx(1.0)
     assert dict(zip(sim["team_id"].to_list(), sim["p_pick_1"].to_list(), strict=True))[CONN] < 0.12
+
+
+def test_tbd_cup_knockout_games_are_not_simulated() -> None:
+    """2026-27 as released on 2026-11-03: the Cup knockout games list TBD teams (``team_id`` 0).
+
+    They used to reach ``team_labels`` and fail every NBA sim until December. Each team's 80 known
+    games are simulated, as the module docstring says.
+    """
+    sched = _schedule("nba", 2027)
+    assert sched.filter(pl.col("home_team_id") == 0).height == 7  # six knockout games + the final
+    games = sim_mod._regular_games(sched, dt.date(2026, 11, 3))
+    assert games.height == 1200 and games.filter(pl.col("away_team_id") == 0).is_empty()
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), _schedule("nba", 2026))
+    cols = games.select("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts")
+    out = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=200, seed=1)
+    assert out.height == 30
+    assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {80}

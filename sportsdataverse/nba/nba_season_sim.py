@@ -476,12 +476,20 @@ def simulate_pro_season(
 
 
 def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.DataFrame:
-    """The regular-season games, scores blanked on and after ``as_of_date``."""
-    reg = schedule.filter(pl.col("season_type") == "regular-season").with_columns(
-        pl.col("game_id").cast(pl.Utf8),
-        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date().alias("game_date"),
-        pl.col("home_team_id").cast(pl.Int64),
-        pl.col("away_team_id").cast(pl.Int64),
+    """The regular-season games, scores blanked on and after ``as_of_date``.
+
+    Games without both teams are dropped: until December the release lists the NBA Cup knockout
+    games with TBD teams (``team_id`` 0), which are not on any team's schedule yet.
+    """
+    reg = (
+        schedule.filter(pl.col("season_type") == "regular-season")
+        .with_columns(
+            pl.col("game_id").cast(pl.Utf8),
+            pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date().alias("game_date"),
+            pl.col("home_team_id").cast(pl.Int64),
+            pl.col("away_team_id").cast(pl.Int64),
+        )
+        .filter((pl.col("home_team_id") > 0) & (pl.col("away_team_id") > 0))
     )
     if as_of_date is not None:
         future = pl.col("game_date") >= as_of_date

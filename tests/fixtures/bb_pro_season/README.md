@@ -16,6 +16,7 @@ Nothing is synthetic or edited: rows are only filtered and columns only dropped.
 |---|---:|---|---|
 | `nba_schedule_2024.parquet` | 1,323 | `nba_stats_schedules/nba_schedule_2024` | Every `season_type` but `preseason`: regular season, NBA Cup final, All-Star, play-in, playoffs. |
 | `nba_schedule_2026.parquet` | 1,329 | `nba_stats_schedules/nba_schedule_2026` | The same. |
+| `nba_schedule_2027.parquet` | 1,207 | `nba_stats_schedules/nba_schedule_2027`, read 2026-11-03 | The same: 2026-27 a fortnight in, with the seven NBA Cup knockout games still listed with TBD teams (`team_id` 0). |
 | `wnba_schedule_2024.parquet` | 262 | `wnba_stats_schedules/wnba_schedule_2024` | Regular season and playoffs (the prior season for the 2025 lottery's two-season record). |
 | `wnba_schedule_2025.parquet` | 310 | `wnba_stats_schedules/wnba_schedule_2025` | Regular season and playoffs. |
 
