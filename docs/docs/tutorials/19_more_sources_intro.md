@@ -227,14 +227,12 @@ else:
 ```
 
     ✅ F1 laps 2025 round 1
-
-
     ✅ F1 results 2025 round 1
 
 
 
 
-![png](19_more_sources_intro_files/19_more_sources_intro_11_2.png)
+![png](19_more_sources_intro_files/19_more_sources_intro_11_1.png)
 
 
 
@@ -327,11 +325,11 @@ news.select("published", "headline") if news is not None and news.height else "n
     │ ---                  ┆ ---                                                           │
     │ str                  ┆ str                                                           │
     ╞══════════════════════╪═══════════════════════════════════════════════════════════════╡
-    │ 2026-11-02T20:44:22Z ┆ Michael Jordan congratulates Valykries star Gabby Williams a… │
-    │ 2026-11-02T20:47:31Z ┆ Thunder to retire Russell Westbrook's No. 0                   │
-    │ 2026-11-02T20:21:19Z ┆ Jaylen Brown's favorite purchase? An 18th century harp        │
-    │ 2026-11-02T21:02:48Z ┆ Wilbon taking leave of absence from ESPN to address health i… │
-    │ 2026-11-02T18:52:35Z ┆ Fantasy hoops category specialists: Risacher, Robinson among… │
+    │ 2026-11-04T02:48:10Z ┆ Lakers' Luka Doncic has 2nd tech of season rescinded by NBA   │
+    │ 2026-11-04T02:13:31Z ┆ Raptors' Kawhi Leonard completes knee treatment, begins 'ret… │
+    │ 2026-11-03T20:03:50Z ┆ Dumonts take over as controlling owners of Mavericks          │
+    │ 2026-11-03T19:07:41Z ┆ Karabell's notebook: Gobert's slow start, Zion's steals, and… │
+    │ 2026-11-04T02:01:59Z ┆ NBA defends Rwanda partnership in letter to concerned senato… │
     └──────────────────────┴───────────────────────────────────────────────────────────────┘
 
 

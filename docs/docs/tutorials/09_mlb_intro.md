@@ -609,22 +609,22 @@ out
 
 
     shape: (10, 2)
-    ┌──────────────┬───────┐
-    │ result.event ┆ count │
-    │ ---          ┆ ---   │
-    │ str          ┆ u32   │
-    ╞══════════════╪═══════╡
-    │ Strikeout    ┆ 16    │
-    │ Groundout    ┆ 14    │
-    │ Pop Out      ┆ 10    │
-    │ Flyout       ┆ 7     │
-    │ Walk         ┆ 6     │
-    │ Lineout      ┆ 4     │
-    │ Home Run     ┆ 3     │
-    │ Single       ┆ 3     │
-    │ Double       ┆ 2     │
-    │ Forceout     ┆ 1     │
-    └──────────────┴───────┘
+    ┌──────────────────┬───────┐
+    │ result.event     ┆ count │
+    │ ---              ┆ ---   │
+    │ str              ┆ u32   │
+    ╞══════════════════╪═══════╡
+    │ Strikeout        ┆ 16    │
+    │ Groundout        ┆ 14    │
+    │ Pop Out          ┆ 10    │
+    │ Flyout           ┆ 7     │
+    │ Walk             ┆ 6     │
+    │ Lineout          ┆ 4     │
+    │ Single           ┆ 3     │
+    │ Home Run         ┆ 3     │
+    │ Double           ┆ 2     │
+    │ Grounded Into DP ┆ 1     │
+    └──────────────────┴───────┘
 
 
 

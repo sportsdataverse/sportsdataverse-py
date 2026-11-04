@@ -92,7 +92,7 @@ out
     │ americanfootball_cfl            ┆ American Football ┆ CFL                       ┆ true   │
     │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     ┆ true   │
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner ┆ true   │
-    │ americanfootball_ncaaf_fcs      ┆ American Football ┆ NCAAF FCS                 ┆ false  │
+    │ americanfootball_ncaaf_fcs      ┆ American Football ┆ NCAAF FCS                 ┆ true   │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       ┆ true   │
     │ …                               ┆ …                 ┆ …                         ┆ …      │
     │ americanfootball_ufl            ┆ American Football ┆ UFL                       ┆ false  │
@@ -137,26 +137,26 @@ out
     │ str          ┆ str          ┆ ---         ┆ str        ┆ ---         ┆ ---         ┆ ---         │
     │              ┆              ┆ str         ┆            ┆ str         ┆ f64         ┆ i64         │
     ╞══════════════╪══════════════╪═════════════╪════════════╪═════════════╪═════════════╪═════════════╡
-    │ Seattle      ┆ Chicago      ┆ draftkings  ┆ h2h        ┆ Chicago     ┆ null        ┆ 142         │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Bears       ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ draftkings  ┆ h2h        ┆ Seattle     ┆ null        ┆ -170        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ draftkings  ┆ spreads    ┆ Chicago     ┆ 3.0         ┆ 100         │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Bears       ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ draftkings  ┆ spreads    ┆ Seattle     ┆ -3.0        ┆ -120        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ fanduel     ┆ h2h        ┆ Chicago     ┆ null        ┆ 150         │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Bears       ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ fanduel     ┆ h2h        ┆ Seattle     ┆ null        ┆ -178        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ fanduel     ┆ spreads    ┆ Chicago     ┆ 3.5         ┆ -120        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Bears       ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ fanduel     ┆ spreads    ┆ Seattle     ┆ -3.5        ┆ -102        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ betrivers   ┆ h2h        ┆ Chicago     ┆ null        ┆ 145         │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Bears       ┆             ┆             │
-    │ Seattle      ┆ Chicago      ┆ betrivers   ┆ h2h        ┆ Seattle     ┆ null        ┆ -177        │
-    │ Seahawks     ┆ Bears        ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ draftkings  ┆ h2h        ┆ Baltimore   ┆ null        ┆ 400         │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ Ravens      ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ draftkings  ┆ h2h        ┆ Jacksonvill ┆ null        ┆ -535        │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ e Jaguars   ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ draftkings  ┆ spreads    ┆ Baltimore   ┆ 10.0        ┆ -112        │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ Ravens      ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ draftkings  ┆ spreads    ┆ Jacksonvill ┆ -10.0       ┆ -108        │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ e Jaguars   ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ williamhill ┆ h2h        ┆ Baltimore   ┆ null        ┆ 400         │
+    │ Ravens       ┆ Jaguars      ┆ _us         ┆            ┆ Ravens      ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ williamhill ┆ h2h        ┆ Jacksonvill ┆ null        ┆ -560        │
+    │ Ravens       ┆ Jaguars      ┆ _us         ┆            ┆ e Jaguars   ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ williamhill ┆ spreads    ┆ Baltimore   ┆ 10.0        ┆ -113        │
+    │ Ravens       ┆ Jaguars      ┆ _us         ┆            ┆ Ravens      ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ williamhill ┆ spreads    ┆ Jacksonvill ┆ -10.0       ┆ -107        │
+    │ Ravens       ┆ Jaguars      ┆ _us         ┆            ┆ e Jaguars   ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ betus       ┆ h2h        ┆ Baltimore   ┆ null        ┆ 422         │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ Ravens      ┆             ┆             │
+    │ Baltimore    ┆ Jacksonville ┆ betus       ┆ h2h        ┆ Jacksonvill ┆ null        ┆ -545        │
+    │ Ravens       ┆ Jaguars      ┆             ┆            ┆ e Jaguars   ┆             ┆             │
     └──────────────┴──────────────┴─────────────┴────────────┴─────────────┴─────────────┴─────────────┘
 
 
@@ -191,22 +191,22 @@ out
 
 
     shape: (10, 5)
-    ┌───────────────────────┬──────────────────────┬───────────────────────┬────────────┬────────────┐
-    │ home_team             ┆ away_team            ┆ outcome_name          ┆ best_price ┆ best_book  │
-    │ ---                   ┆ ---                  ┆ ---                   ┆ ---        ┆ ---        │
-    │ str                   ┆ str                  ┆ str                   ┆ i64        ┆ str        │
-    ╞═══════════════════════╪══════════════════════╪═══════════════════════╪════════════╪════════════╡
-    │ Seattle Seahawks      ┆ Arizona Cardinals    ┆ Arizona Cardinals     ┆ 525        ┆ draftkings │
-    │ San Francisco 49ers   ┆ Las Vegas Raiders    ┆ Las Vegas Raiders     ┆ 415        ┆ betus      │
-    │ Kansas City Chiefs    ┆ New York Jets        ┆ New York Jets         ┆ 400        ┆ fanduel    │
-    │ Baltimore Ravens      ┆ Jacksonville Jaguars ┆ Baltimore Ravens      ┆ 370        ┆ fanduel    │
-    │ Miami Dolphins        ┆ Detroit Lions        ┆ Miami Dolphins        ┆ 295        ┆ draftkings │
-    │ Chicago Bears         ┆ Tampa Bay Buccaneers ┆ Tampa Bay Buccaneers  ┆ 235        ┆ betus      │
-    │ Indianapolis Colts    ┆ Dallas Cowboys       ┆ Indianapolis Colts    ┆ 220        ┆ betrivers  │
-    │ Washington Commanders ┆ Los Angeles Rams     ┆ Washington Commanders ┆ 210        ┆ betus      │
-    │ Los Angeles Chargers  ┆ Houston Texans       ┆ Los Angeles Chargers  ┆ 188        ┆ fanduel    │
-    │ Minnesota Vikings     ┆ Buffalo Bills        ┆ Minnesota Vikings     ┆ 158        ┆ bovada     │
-    └───────────────────────┴──────────────────────┴───────────────────────┴────────────┴────────────┘
+    ┌─────────────────────┬──────────────────────┬──────────────────────┬────────────┬────────────────┐
+    │ home_team           ┆ away_team            ┆ outcome_name         ┆ best_price ┆ best_book      │
+    │ ---                 ┆ ---                  ┆ ---                  ┆ ---        ┆ ---            │
+    │ str                 ┆ str                  ┆ str                  ┆ i64        ┆ str            │
+    ╞═════════════════════╪══════════════════════╪══════════════════════╪════════════╪════════════════╡
+    │ Seattle Seahawks    ┆ Arizona Cardinals    ┆ Arizona Cardinals    ┆ 500        ┆ draftkings     │
+    │ Tennessee Titans    ┆ Jacksonville Jaguars ┆ Tennessee Titans     ┆ 430        ┆ fanduel        │
+    │ Kansas City Chiefs  ┆ New York Jets        ┆ New York Jets        ┆ 425        ┆ draftkings     │
+    │ Baltimore Ravens    ┆ Jacksonville Jaguars ┆ Baltimore Ravens     ┆ 422        ┆ betus          │
+    │ San Francisco 49ers ┆ Las Vegas Raiders    ┆ Las Vegas Raiders    ┆ 410        ┆ fanduel        │
+    │ New York Jets       ┆ Buffalo Bills        ┆ New York Jets        ┆ 380        ┆ fanduel        │
+    │ Arizona Cardinals   ┆ Los Angeles Rams     ┆ Arizona Cardinals    ┆ 295        ┆ williamhill_us │
+    │ Miami Dolphins      ┆ Detroit Lions        ┆ Miami Dolphins       ┆ 280        ┆ draftkings     │
+    │ Chicago Bears       ┆ Tampa Bay Buccaneers ┆ Tampa Bay Buccaneers ┆ 235        ┆ draftkings     │
+    │ Indianapolis Colts  ┆ Dallas Cowboys       ┆ Indianapolis Colts   ┆ 230        ┆ draftkings     │
+    └─────────────────────┴──────────────────────┴──────────────────────┴────────────┴────────────────┘
 
 
 
@@ -239,26 +239,26 @@ out
     │ ---             ┆ ---             ┆ ---        ┆ ---             ┆ ---           ┆ ---           │
     │ str             ┆ str             ┆ str        ┆ str             ┆ f64           ┆ i64           │
     ╞═════════════════╪═════════════════╪════════════╪═════════════════╪═══════════════╪═══════════════╡
-    │ Seattle         ┆ Chicago Bears   ┆ spreads    ┆ Chicago Bears   ┆ 3.0           ┆ 100           │
-    │ Seahawks        ┆                 ┆            ┆                 ┆               ┆               │
-    │ Seattle         ┆ Chicago Bears   ┆ spreads    ┆ Seattle         ┆ -3.0          ┆ -120          │
-    │ Seahawks        ┆                 ┆            ┆ Seahawks        ┆               ┆               │
-    │ Seattle         ┆ Chicago Bears   ┆ totals     ┆ Over            ┆ 46.5          ┆ -108          │
-    │ Seahawks        ┆                 ┆            ┆                 ┆               ┆               │
-    │ Seattle         ┆ Chicago Bears   ┆ totals     ┆ Under           ┆ 46.5          ┆ -112          │
-    │ Seahawks        ┆                 ┆            ┆                 ┆               ┆               │
-    │ Baltimore       ┆ Jacksonville    ┆ spreads    ┆ Baltimore       ┆ 8.5           ┆ -115          │
+    │ Baltimore       ┆ Jacksonville    ┆ spreads    ┆ Baltimore       ┆ 10.0          ┆ -112          │
     │ Ravens          ┆ Jaguars         ┆            ┆ Ravens          ┆               ┆               │
-    │ Baltimore       ┆ Jacksonville    ┆ spreads    ┆ Jacksonville    ┆ -8.5          ┆ -105          │
+    │ Baltimore       ┆ Jacksonville    ┆ spreads    ┆ Jacksonville    ┆ -10.0         ┆ -108          │
     │ Ravens          ┆ Jaguars         ┆            ┆ Jaguars         ┆               ┆               │
-    │ Baltimore       ┆ Jacksonville    ┆ totals     ┆ Over            ┆ 42.5          ┆ -115          │
+    │ Baltimore       ┆ Jacksonville    ┆ totals     ┆ Over            ┆ 40.5          ┆ -108          │
     │ Ravens          ┆ Jaguars         ┆            ┆                 ┆               ┆               │
-    │ Baltimore       ┆ Jacksonville    ┆ totals     ┆ Under           ┆ 42.5          ┆ -105          │
+    │ Baltimore       ┆ Jacksonville    ┆ totals     ┆ Under           ┆ 40.5          ┆ -112          │
     │ Ravens          ┆ Jaguars         ┆            ┆                 ┆               ┆               │
-    │ Atlanta Falcons ┆ Cincinnati      ┆ spreads    ┆ Atlanta Falcons ┆ 3.0           ┆ -105          │
+    │ Atlanta Falcons ┆ Cincinnati      ┆ spreads    ┆ Atlanta Falcons ┆ 3.0           ┆ -108          │
     │                 ┆ Bengals         ┆            ┆                 ┆               ┆               │
-    │ Atlanta Falcons ┆ Cincinnati      ┆ spreads    ┆ Cincinnati      ┆ -3.0          ┆ -115          │
+    │ Atlanta Falcons ┆ Cincinnati      ┆ spreads    ┆ Cincinnati      ┆ -3.0          ┆ -112          │
     │                 ┆ Bengals         ┆            ┆ Bengals         ┆               ┆               │
+    │ Atlanta Falcons ┆ Cincinnati      ┆ totals     ┆ Over            ┆ 52.5          ┆ -112          │
+    │                 ┆ Bengals         ┆            ┆                 ┆               ┆               │
+    │ Atlanta Falcons ┆ Cincinnati      ┆ totals     ┆ Under           ┆ 52.5          ┆ -108          │
+    │                 ┆ Bengals         ┆            ┆                 ┆               ┆               │
+    │ Carolina        ┆ Denver Broncos  ┆ spreads    ┆ Carolina        ┆ 2.5           ┆ -102          │
+    │ Panthers        ┆                 ┆            ┆ Panthers        ┆               ┆               │
+    │ Carolina        ┆ Denver Broncos  ┆ spreads    ┆ Denver Broncos  ┆ -2.5          ┆ -118          │
+    │ Panthers        ┆                 ┆            ┆                 ┆               ┆               │
     └─────────────────┴─────────────────┴────────────┴─────────────────┴───────────────┴───────────────┘
 
 
@@ -282,17 +282,17 @@ out
 
 
     shape: (5, 4)
-    ┌──────────────────┬──────────────────────┬──────────────────────┬───────────────┐
-    │ home_team        ┆ away_team            ┆ outcome_name         ┆ outcome_price │
-    │ ---              ┆ ---                  ┆ ---                  ┆ ---           │
-    │ str              ┆ str                  ┆ str                  ┆ i64           │
-    ╞══════════════════╪══════════════════════╪══════════════════════╪═══════════════╡
-    │ Seattle Seahawks ┆ Chicago Bears        ┆ Chicago Bears        ┆ 142           │
-    │ Seattle Seahawks ┆ Chicago Bears        ┆ Seattle Seahawks     ┆ -170          │
-    │ Baltimore Ravens ┆ Jacksonville Jaguars ┆ Baltimore Ravens     ┆ 310           │
-    │ Baltimore Ravens ┆ Jacksonville Jaguars ┆ Jacksonville Jaguars ┆ -395          │
-    │ Atlanta Falcons  ┆ Cincinnati Bengals   ┆ Atlanta Falcons      ┆ 140           │
-    └──────────────────┴──────────────────────┴──────────────────────┴───────────────┘
+    ┌───────────────────┬──────────────────────┬──────────────────────┬───────────────┐
+    │ home_team         ┆ away_team            ┆ outcome_name         ┆ outcome_price │
+    │ ---               ┆ ---                  ┆ ---                  ┆ ---           │
+    │ str               ┆ str                  ┆ str                  ┆ i64           │
+    ╞═══════════════════╪══════════════════════╪══════════════════════╪═══════════════╡
+    │ Baltimore Ravens  ┆ Jacksonville Jaguars ┆ Baltimore Ravens     ┆ 400           │
+    │ Baltimore Ravens  ┆ Jacksonville Jaguars ┆ Jacksonville Jaguars ┆ -535          │
+    │ Atlanta Falcons   ┆ Cincinnati Bengals   ┆ Atlanta Falcons      ┆ 136           │
+    │ Atlanta Falcons   ┆ Cincinnati Bengals   ┆ Cincinnati Bengals   ┆ -162          │
+    │ Carolina Panthers ┆ Denver Broncos       ┆ Carolina Panthers    ┆ 120           │
+    └───────────────────┴──────────────────────┴──────────────────────┴───────────────┘
 
 
 
@@ -333,16 +333,16 @@ out
     │ ---                  ┆ ---                ┆ ---           ┆ ---          ┆ ---      │
     │ str                  ┆ str                ┆ str           ┆ f64          ┆ f64      │
     ╞══════════════════════╪════════════════════╪═══════════════╪══════════════╪══════════╡
-    │ Philadelphia Eagles  ┆ New York Giants    ┆ betonlineag   ┆ 1.030805     ┆ 3.08     │
-    │ Philadelphia Eagles  ┆ New York Giants    ┆ lowvig        ┆ 1.030805     ┆ 3.08     │
-    │ Minnesota Vikings    ┆ Buffalo Bills      ┆ betonlineag   ┆ 1.031146     ┆ 3.11     │
-    │ Minnesota Vikings    ┆ Buffalo Bills      ┆ lowvig        ┆ 1.031146     ┆ 3.11     │
-    │ Atlanta Falcons      ┆ Cincinnati Bengals ┆ betonlineag   ┆ 1.031544     ┆ 3.15     │
-    │ Atlanta Falcons      ┆ Cincinnati Bengals ┆ lowvig        ┆ 1.031544     ┆ 3.15     │
-    │ Seattle Seahawks     ┆ Chicago Bears      ┆ lowvig        ┆ 1.031621     ┆ 3.16     │
-    │ Seattle Seahawks     ┆ Chicago Bears      ┆ betonlineag   ┆ 1.031962     ┆ 3.2      │
-    │ New England Patriots ┆ Green Bay Packers  ┆ betonlineag   ┆ 1.033375     ┆ 3.34     │
-    │ New England Patriots ┆ Green Bay Packers  ┆ lowvig        ┆ 1.033375     ┆ 3.34     │
+    │ New England Patriots ┆ Green Bay Packers  ┆ betonlineag   ┆ 1.031236     ┆ 3.12     │
+    │ New England Patriots ┆ Green Bay Packers  ┆ lowvig        ┆ 1.031236     ┆ 3.12     │
+    │ Atlanta Falcons      ┆ Cincinnati Bengals ┆ betonlineag   ┆ 1.031294     ┆ 3.13     │
+    │ Atlanta Falcons      ┆ Cincinnati Bengals ┆ lowvig        ┆ 1.031294     ┆ 3.13     │
+    │ Philadelphia Eagles  ┆ New York Giants    ┆ betonlineag   ┆ 1.031962     ┆ 3.2      │
+    │ Philadelphia Eagles  ┆ New York Giants    ┆ lowvig        ┆ 1.031962     ┆ 3.2      │
+    │ Minnesota Vikings    ┆ Buffalo Bills      ┆ betonlineag   ┆ 1.031962     ┆ 3.2      │
+    │ Minnesota Vikings    ┆ Buffalo Bills      ┆ lowvig        ┆ 1.031962     ┆ 3.2      │
+    │ Seattle Seahawks     ┆ Arizona Cardinals  ┆ betmgm        ┆ 1.033333     ┆ 3.33     │
+    │ Philadelphia Eagles  ┆ New York Giants    ┆ bovada        ┆ 1.033738     ┆ 3.37     │
     └──────────────────────┴────────────────────┴───────────────┴──────────────┴──────────┘
 
 
@@ -371,17 +371,17 @@ out
 
 
     shape: (5, 5)
-    ┌──────────────────┬───────────────────┬──────────────────┬───────────────┬───────────────┐
-    │ home_team        ┆ away_team         ┆ outcome_name     ┆ outcome_price ┆ bookmaker_key │
-    │ ---              ┆ ---               ┆ ---              ┆ ---           ┆ ---           │
-    │ str              ┆ str               ┆ str              ┆ i64           ┆ str           │
-    ╞══════════════════╪═══════════════════╪══════════════════╪═══════════════╪═══════════════╡
-    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -800          ┆ mybookieag    │
-    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -770          ┆ betrivers     │
-    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -750          ┆ draftkings    │
-    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -720          ┆ fanduel       │
-    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -700          ┆ betus         │
-    └──────────────────┴───────────────────┴──────────────────┴───────────────┴───────────────┘
+    ┌──────────────────┬───────────────────┬──────────────────┬───────────────┬────────────────┐
+    │ home_team        ┆ away_team         ┆ outcome_name     ┆ outcome_price ┆ bookmaker_key  │
+    │ ---              ┆ ---               ┆ ---              ┆ ---           ┆ ---            │
+    │ str              ┆ str               ┆ str              ┆ i64           ┆ str            │
+    ╞══════════════════╪═══════════════════╪══════════════════╪═══════════════╪════════════════╡
+    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -725          ┆ mybookieag     │
+    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -700          ┆ draftkings     │
+    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -700          ┆ fanatics       │
+    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -700          ┆ bovada         │
+    │ Seattle Seahawks ┆ Arizona Cardinals ┆ Seattle Seahawks ┆ -675          ┆ williamhill_us │
+    └──────────────────┴───────────────────┴──────────────────┴───────────────┴────────────────┘
 
 
 
@@ -421,16 +421,16 @@ out
     │ ---                   ┆ ---                  ┆ ---             ┆ ---     │
     │ str                   ┆ str                  ┆ f64             ┆ u32     │
     ╞═══════════════════════╪══════════════════════╪═════════════════╪═════════╡
-    │ Atlanta Falcons       ┆ Cincinnati Bengals   ┆ 52.0            ┆ 10      │
-    │ Indianapolis Colts    ┆ Dallas Cowboys       ┆ 51.5            ┆ 10      │
-    │ San Francisco 49ers   ┆ Las Vegas Raiders    ┆ 51.5            ┆ 9       │
-    │ Miami Dolphins        ┆ Detroit Lions        ┆ 50.5            ┆ 10      │
-    │ Washington Commanders ┆ Los Angeles Rams     ┆ 48.0            ┆ 9       │
-    │ New England Patriots  ┆ Green Bay Packers    ┆ 47.0            ┆ 10      │
-    │ Chicago Bears         ┆ Tampa Bay Buccaneers ┆ 47.0            ┆ 8       │
-    │ Seattle Seahawks      ┆ Chicago Bears        ┆ 46.5            ┆ 10      │
-    │ Kansas City Chiefs    ┆ New York Jets        ┆ 46.0            ┆ 10      │
-    │ Minnesota Vikings     ┆ Buffalo Bills        ┆ 46.0            ┆ 9       │
+    │ Dallas Cowboys        ┆ San Francisco 49ers  ┆ 54.5            ┆ 6       │
+    │ San Francisco 49ers   ┆ Las Vegas Raiders    ┆ 53.0            ┆ 11      │
+    │ Atlanta Falcons       ┆ Cincinnati Bengals   ┆ 52.5            ┆ 11      │
+    │ Indianapolis Colts    ┆ Dallas Cowboys       ┆ 51.5            ┆ 11      │
+    │ New York Jets         ┆ Buffalo Bills        ┆ 51.25           ┆ 6       │
+    │ Miami Dolphins        ┆ Detroit Lions        ┆ 50.5            ┆ 11      │
+    │ Detroit Lions         ┆ New England Patriots ┆ 49.5            ┆ 5       │
+    │ Kansas City Chiefs    ┆ New York Jets        ┆ 47.5            ┆ 11      │
+    │ Washington Commanders ┆ Los Angeles Rams     ┆ 47.5            ┆ 11      │
+    │ Chicago Bears         ┆ Tampa Bay Buccaneers ┆ 47.5            ┆ 11      │
     └───────────────────────┴──────────────────────┴─────────────────┴─────────┘
 
 
@@ -466,14 +466,7 @@ out
 
 
 
-    shape: (1, 3)
-    ┌──────────────────────┬──────────────────┬───────────────┐
-    │ commence_time        ┆ home_team        ┆ away_team     │
-    │ ---                  ┆ ---              ┆ ---           │
-    │ str                  ┆ str              ┆ str           │
-    ╞══════════════════════╪══════════════════╪═══════════════╡
-    │ 2026-11-03T01:20:00Z ┆ Seattle Seahawks ┆ Chicago Bears │
-    └──────────────────────┴──────────────────┴───────────────┘
+    'nothing kicks off in the next 24h'
 
 
 
@@ -508,11 +501,11 @@ out
     │ ---          ┆ ---                 ┆ ---           ┆ ---           │
     │ str          ┆ str                 ┆ f64           ┆ i64           │
     ╞══════════════╪═════════════════════╪═══════════════╪═══════════════╡
-    │ Over         ┆ Sam Darnold         ┆ 1.5           ┆ -113          │
-    │ Under        ┆ Sam Darnold         ┆ 1.5           ┆ -113          │
-    │ Over         ┆ Caleb Williams      ┆ 1.5           ┆ 131           │
-    │ Under        ┆ Caleb Williams      ┆ 1.5           ┆ -168          │
-    │ Over         ┆ Caleb Williams      ┆ 1.5           ┆ 132           │
+    │ Over         ┆ Trevor Lawrence     ┆ 1.5           ┆ -156          │
+    │ Under        ┆ Trevor Lawrence     ┆ 1.5           ┆ 122           │
+    │ Over         ┆ Joe Fagnano         ┆ 0.5           ┆ -129          │
+    │ Under        ┆ Joe Fagnano         ┆ 0.5           ┆ 101           │
+    │ Over         ┆ Trevor Lawrence     ┆ 1.5           ┆ -132          │
     └──────────────┴─────────────────────┴───────────────┴───────────────┘
 
 
@@ -546,22 +539,22 @@ out
 
 
     shape: (10, 2)
-    ┌───────────────┬───────────┐
-    │ bookmaker_key ┆ n_markets │
-    │ ---           ┆ ---       │
-    │ str           ┆ u32       │
-    ╞═══════════════╪═══════════╡
-    │ draftkings    ┆ 102       │
-    │ fanduel       ┆ 66        │
-    │ betmgm        ┆ 51        │
-    │ betrivers     ┆ 50        │
-    │ bovada        ┆ 45        │
-    │ fanatics      ┆ 33        │
-    │ betonlineag   ┆ 31        │
-    │ betus         ┆ 9         │
-    │ mybookieag    ┆ 3         │
-    │ lowvig        ┆ 3         │
-    └───────────────┴───────────┘
+    ┌────────────────┬───────────┐
+    │ bookmaker_key  ┆ n_markets │
+    │ ---            ┆ ---       │
+    │ str            ┆ u32       │
+    ╞════════════════╪═══════════╡
+    │ draftkings     ┆ 94        │
+    │ fanduel        ┆ 64        │
+    │ betrivers      ┆ 43        │
+    │ betmgm         ┆ 42        │
+    │ bovada         ┆ 38        │
+    │ fanatics       ┆ 32        │
+    │ betonlineag    ┆ 23        │
+    │ williamhill_us ┆ 21        │
+    │ betus          ┆ 7         │
+    │ mybookieag     ┆ 3         │
+    └────────────────┴───────────┘
 
 
 
@@ -594,29 +587,29 @@ out
     │ ---       ┆ ---                 ┆ ---                 ┆ ---                 ┆ ---                │
     │ bool      ┆ str                 ┆ str                 ┆ str                 ┆ str                │
     ╞═══════════╪═════════════════════╪═════════════════════╪═════════════════════╪════════════════════╡
-    │ true      ┆ Pittsburgh Steelers ┆ Cleveland Browns    ┆ [{'name':           ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ 'Pittsburgh         ┆ 2Z                 │
+    │ true      ┆ Pittsburgh Steelers ┆ Cleveland Browns    ┆ [{'name':           ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ 'Pittsburgh         ┆ 5Z                 │
     │           ┆                     ┆                     ┆ Steelers…           ┆                    │
-    │ true      ┆ Detroit Lions       ┆ Minnesota Vikings   ┆ [{'name': 'Detroit  ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ Lions', 'sc…        ┆ 2Z                 │
-    │ true      ┆ Cincinnati Bengals  ┆ Tennessee Titans    ┆ [{'name':           ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ 'Cincinnati         ┆ 2Z                 │
+    │ true      ┆ Detroit Lions       ┆ Minnesota Vikings   ┆ [{'name': 'Detroit  ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ Lions', 'sc…        ┆ 5Z                 │
+    │ true      ┆ Cincinnati Bengals  ┆ Tennessee Titans    ┆ [{'name':           ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ 'Cincinnati         ┆ 5Z                 │
     │           ┆                     ┆                     ┆ Bengals'…           ┆                    │
-    │ true      ┆ Dallas Cowboys      ┆ Arizona Cardinals   ┆ [{'name': 'Dallas   ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ Cowboys', 's…       ┆ 2Z                 │
-    │ true      ┆ Buffalo Bills       ┆ Baltimore Ravens    ┆ [{'name': 'Buffalo  ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ Bills', 'sc…        ┆ 2Z                 │
-    │ true      ┆ Jacksonville        ┆ Indianapolis Colts  ┆ [{'name':           ┆ 2026-11-02T09:53:5 │
-    │           ┆ Jaguars             ┆                     ┆ 'Jacksonville       ┆ 2Z                 │
+    │ true      ┆ Dallas Cowboys      ┆ Arizona Cardinals   ┆ [{'name': 'Dallas   ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ Cowboys', 's…       ┆ 5Z                 │
+    │ true      ┆ Buffalo Bills       ┆ Baltimore Ravens    ┆ [{'name': 'Buffalo  ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ Bills', 'sc…        ┆ 5Z                 │
+    │ true      ┆ Jacksonville        ┆ Indianapolis Colts  ┆ [{'name':           ┆ 2026-11-03T09:53:0 │
+    │           ┆ Jaguars             ┆                     ┆ 'Jacksonville       ┆ 5Z                 │
     │           ┆                     ┆                     ┆ Jaguar…             ┆                    │
-    │ true      ┆ Tampa Bay           ┆ Atlanta Falcons     ┆ [{'name': 'Tampa    ┆ 2026-11-02T09:53:5 │
-    │           ┆ Buccaneers          ┆                     ┆ Bay Buccaneer…      ┆ 2Z                 │
-    │ true      ┆ New York Jets       ┆ Las Vegas Raiders   ┆ [{'name': 'New York ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ Jets', 'sc…         ┆ 2Z                 │
-    │ true      ┆ Los Angeles Rams    ┆ Los Angeles         ┆ [{'name': 'Los      ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆ Chargers            ┆ Angeles Rams', …    ┆ 2Z                 │
-    │ true      ┆ Denver Broncos      ┆ Kansas City Chiefs  ┆ [{'name': 'Denver   ┆ 2026-11-02T09:53:5 │
-    │           ┆                     ┆                     ┆ Broncos', 's…       ┆ 2Z                 │
+    │ true      ┆ Tampa Bay           ┆ Atlanta Falcons     ┆ [{'name': 'Tampa    ┆ 2026-11-03T09:53:0 │
+    │           ┆ Buccaneers          ┆                     ┆ Bay Buccaneer…      ┆ 5Z                 │
+    │ true      ┆ New York Jets       ┆ Las Vegas Raiders   ┆ [{'name': 'New York ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ Jets', 'sc…         ┆ 5Z                 │
+    │ true      ┆ Los Angeles Rams    ┆ Los Angeles         ┆ [{'name': 'Los      ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆ Chargers            ┆ Angeles Rams', …    ┆ 5Z                 │
+    │ true      ┆ Denver Broncos      ┆ Kansas City Chiefs  ┆ [{'name': 'Denver   ┆ 2026-11-03T09:53:0 │
+    │           ┆                     ┆                     ┆ Broncos', 's…       ┆ 5Z                 │
     └───────────┴─────────────────────┴─────────────────────┴─────────────────────┴────────────────────┘
 
 
@@ -650,9 +643,9 @@ out
     │ ---                  ┆ ---             │
     │ str                  ┆ i64             │
     ╞══════════════════════╪═════════════════╡
-    │ basketball_nba       ┆ 20              │
-    │ americanfootball_nfl ┆ 16              │
-    │ icehockey_nhl        ┆ 15              │
+    │ americanfootball_nfl ┆ 29              │
+    │ basketball_nba       ┆ 18              │
+    │ icehockey_nhl        ┆ 4               │
     │ baseball_mlb         ┆ 0               │
     └──────────────────────┴─────────────────┘
 
@@ -719,7 +712,7 @@ odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_
     │ ---                ┆ ---           ┆ ---       │
     │ i64                ┆ i64           ┆ i64       │
     ╞════════════════════╪═══════════════╪═══════════╡
-    │ 1449398            ┆ 3550602       ┆ 1         │
+    │ 1387923            ┆ 3612077       ┆ 1         │
     └────────────────────┴───────────────┴───────────┘
 
 

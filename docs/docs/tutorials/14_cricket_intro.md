@@ -309,7 +309,7 @@ if isinstance(summary_raw, dict):
 ```
 
     ✅ match summary 1535465
-    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'article', 'videos', 'news', 'leaders', 'header', 'wallclockAvailable', 'meta', 'standings']
+    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'leaders', 'article', 'videos', 'news', 'header', 'wallclockAvailable', 'meta', 'standings']
 
 
 ### Parsing all 8 sections at once
@@ -556,11 +556,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Glenn Maxwell retires from int… ┆ 2026-11-02T19:20:07Z ┆ HeadlineNews │
-    │ Switch Hit: Tri-series trials   ┆ 2026-11-02T18:34:46Z ┆ Story        │
-    │ McCullum puts focus on ODI pre… ┆ 2026-11-02T16:49:27Z ┆ HeadlineNews │
-    │ Sarfaraz Khan: 'Everyday I ask… ┆ 2026-11-02T16:11:08Z ┆ HeadlineNews │
-    │ IPL 2027 retention deadline mo… ┆ 2026-11-02T15:42:14Z ┆ HeadlineNews │
+    │ Glenn Maxwell; superhuman one … ┆ 2026-11-04T01:01:31Z ┆ HeadlineNews │
+    │ Barrett-Wild appointed Sussex … ┆ 2026-11-03T22:14:51Z ┆ HeadlineNews │
+    │ Daryl Mitchell - an unlikely b… ┆ 2026-11-03T15:57:37Z ┆ Story        │
+    │ Deitz steps down as WI head co… ┆ 2026-11-03T15:18:33Z ┆ HeadlineNews │
+    │ NCL round-up: Chattogram win a… ┆ 2026-11-03T14:49:57Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 
