@@ -368,10 +368,13 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_bracketology](additional/analytics.md#mbb_bracketology) | Projected tournament field for a season from the released ESPN data. |
 | [mbb_shot_selection](additional/analytics.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | Season-level SoS / Quad / WAB résumé from the released ESPN data. |
+| [mbb_team_season_rates](additional/analytics.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [ncaa_mbb_lineups](additional/analytics.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
-| [ncaa_mbb_on_off](additional/analytics.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
-| [ncaa_mbb_player_combos](additional/analytics.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
-| [ncaa_mbb_player_lineups](additional/analytics.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
+| [ncaa_mbb_on_off](additional/analytics-2.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
+| [ncaa_mbb_player_combos](additional/analytics-2.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
+| [ncaa_mbb_player_lineups](additional/analytics-2.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
+| [ncaa_possession_rate_rows](additional/analytics-2.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |
+| [ncaa_team_box_count_rows](additional/analytics-2.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |
 | [order_lineup](additional/analytics-2.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
 | [pos_class_to_score](additional/analytics-2.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
 | [project_bracket](additional/analytics-2.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |

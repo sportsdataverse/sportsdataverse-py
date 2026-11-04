@@ -1,0 +1,42 @@
+schema: ncaa_team_box_count_rows
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: offense_team_id
+  type: integer
+  description: ''
+- name: defense_team_id
+  type: integer
+  description: ''
+- name: offense_is_home
+  type: logical
+  description: ''
+- name: fga
+  type: double
+  description: ''
+- name: fgm
+  type: double
+  description: ''
+- name: fg3m
+  type: double
+  description: ''
+- name: fta
+  type: double
+  description: ''
+- name: oreb
+  type: double
+  description: ''
+- name: dreb
+  type: double
+  description: ''
+- name: tov
+  type: double
+  description: ''
+- name: ff_poss
+  type: double
+  description: ''
