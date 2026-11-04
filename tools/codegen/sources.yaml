@@ -850,6 +850,7 @@ categories:
       - sportsdataverse.nhl.nhl_war
       - sportsdataverse._common.league_context
       - sportsdataverse._common.team_season_rates
+      - sportsdataverse._common.team_strength
       - sportsdataverse._common.metrics
       - sportsdataverse._common.ratings
       - sportsdataverse.cfb.model_calculators
@@ -958,6 +959,10 @@ categories:
       - sportsdataverse.wnba.wnba_team_season_rates
       - sportsdataverse.mbb.mbb_team_season_rates
       - sportsdataverse.wbb.wbb_team_season_rates
+      - sportsdataverse.nba.nba_team_strength
+      - sportsdataverse.wnba.wnba_team_strength
+      - sportsdataverse.mbb.mbb_team_strength
+      - sportsdataverse.wbb.wbb_team_strength
       - sportsdataverse.nba.nba_foul_drawing
       - sportsdataverse.nba.nba_player_ages
       - sportsdataverse.nba.nba_playtype

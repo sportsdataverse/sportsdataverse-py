@@ -193,6 +193,7 @@ nba:
   load_rapm_ryan_davis: {path: tests/fixtures/nba_oracle/rapm_ryan_davis_sample.csv}  # 3 rows x 9 cols
   nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
+  nba_team_strength: {seasons: 2026}  # 30 rows x 77 cols
   nba_possession_rate_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_player_props: {season: 2024, game_id: '401585828', home_team_id: '2', away_team_id: '6'}  # 36 rows x 7 cols
   raw_game_efficiency: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}  # 2640 rows x 10 cols  [private: _normalize_schedule]
@@ -275,6 +276,7 @@ wnba:
   load_wnba_stats_team_season_stats: {seasons: 2025}  # 126 rows x 179 cols
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
+  wnba_team_strength: {seasons: 2025}  # 13 rows x 77 cols
   wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
   wnba_player_props: {season: 2024, game_id: "401620238", home_team_id: "18", away_team_id: "8"}  # 26 rows x 7 cols
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols
@@ -314,6 +316,7 @@ mbb:
   mbb_in_game_win_prob: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 6 cols
   mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
   mbb_team_season_rates: {seasons: 2025}
+  mbb_team_strength: {seasons: 2025}
   mbb_strength_of_schedule: {seasons: [2025]}  # 364 rows x 48 cols
   mbb_bracketology: {season: 2025}  # 364 rows x 21 cols
   mbb_season_projections: {season: 2025, n_sims: 500}  # 364 rows x 40 cols
@@ -369,6 +372,7 @@ wbb:
   as_of_season_split: {df: {$call: wbb.wbb_team_ratings, args: {seasons: 2024}}, target_season: 2025}  # 621 rows x 11 cols
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
   wbb_team_season_rates: {seasons: 2025}
+  wbb_team_strength: {seasons: 2025}
   wbb_strength_of_schedule: {seasons: [2025]}  # 362 rows x 48 cols
   wbb_bracketology: {season: 2025}  # 362 rows x 21 cols
   wbb_season_projections: {season: 2025, n_sims: 500}  # 362 rows x 40 cols

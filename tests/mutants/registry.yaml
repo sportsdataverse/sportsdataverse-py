@@ -8756,6 +8756,79 @@
   expected: kill
   note: The non-conference opponents (one to three games each) would be ranked beside the Big Ten teams.
 
+# --- BB-D19: team strength (possession ridge, SOS, SOV) ----------------------------------------
+# Killers: tests/nba/test_nba_team_strength.py and tests/mbb/test_mbb_team_strength.py, on BB-D3's
+# committed real captures plus tests/fixtures/bb_team_strength.
+- id: bb-ts-ridge-net-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '(pl.col("off_coef") - pl.col("def_coef")).alias("adj_net_rtg"),'
+  mutant: '(pl.col("off_coef") + pl.col("def_coef")).alias("adj_net_rtg"),'
+  test: tests/nba/test_nba_team_strength.py::test_adjusted_net_parity_with_stats_nba
+  expected: kill
+  note: Adding the defense coefficient rewards points allowed; adjusted net would stop tracking stats.nba.com's net.
+
+- id: bb-ts-ridge-def-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '(intercept + pl.col("def_coef")).alias("adj_def_rtg"),'
+  mutant: '(intercept - pl.col("def_coef")).alias("adj_def_rtg"),'
+  test: tests/nba/test_nba_team_strength.py::test_adjusted_net_parity_with_stats_nba
+  expected: kill
+  note: A flipped defense coefficient anti-correlates adj_def_rtg with stats.nba.com's def_rating.
+
+- id: bb-ts-home-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '.then(1.0).otherwise(-1.0).alias("hfa"),'
+  mutant: '.then(-1.0).otherwise(1.0).alias("hfa"),'
+  test: tests/nba/test_nba_team_strength.py::test_home_court_term
+  expected: kill
+  note: Coding the away offense +1 fits a negative home edge (NBA 2026 would read -0.86 per 100).
+
+- id: bb-ts-home-dropped
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '.then(1.0).otherwise(-1.0).alias("hfa"),'
+  mutant: '.then(0.0).otherwise(0.0).alias("hfa"),'
+  test: tests/nba/test_nba_team_strength.py::test_home_court_term
+  expected: kill
+  note: With no home contrast the shared ridge fits the term at 0, and home edge leaks into the team coefficients.
+
+- id: bb-ts-sos-weighting
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").mean().alias("sos"),'
+  mutant: 'pl.col("_opp").unique().mean().alias("sos"),'
+  test: tests/nba/test_nba_team_strength.py::test_sos_and_sov_by_hand
+  expected: kill
+  note: One weight per distinct opponent instead of per game; an NBA division rival met four times would count once.
+
+- id: bb-ts-sov-definition
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").filter(won).mean().alias("sov"),'
+  mutant: 'pl.col("_opp").mean().alias("sov"),'
+  test: tests/nba/test_nba_team_strength.py::test_sos_and_sov_by_hand
+  expected: kill
+  note: SOV over every game is just SOS again.
+
+- id: bb-ts-sov-losses
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").filter(won).mean().alias("sov"),'
+  mutant: 'pl.col("_opp").filter(~won).mean().alias("sov"),'
+  test: tests/mbb/test_mbb_team_strength.py::test_sov_and_record_by_hand
+  expected: kill
+  note: Averaging the losses' opponents inverts the definition.
+
 # --- BB-D17: college season products (RPI, quads, NET estimate, auto-bids, field, season sim) ---
 # Killers: tests/mbb/test_mbb_college_season.py on the real 2024 men's and women's seasons, against
 # WarrenNolan's 2024 RPI / quadrant records / NET mirror and the actual 2024 NCAA fields and seeds.
