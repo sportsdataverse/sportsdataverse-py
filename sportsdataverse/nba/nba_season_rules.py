@@ -308,10 +308,11 @@ def lottery_slots(
 
     Returns:
         ``(order, slot_chances)``: indexes into ``pct`` worst first, and the chances of each slot
-        with every group of equal ``(pct, tiebreak)`` given the mean of its slots' chances.
+        with every group of equal ``pct`` given the mean of its slots' chances. ``tiebreak`` only
+        orders a tied group (the WNBA's current-season record); it does not split the chances.
     """
     order = np.lexsort((rng.random(pct.size), tiebreak, pct))
-    keys = list(zip(pct[order], tiebreak[order]))
+    keys = pct[order].tolist()
     out: np.ndarray = np.asarray(chances, dtype=float).copy()
     k = 0
     while k < len(keys):

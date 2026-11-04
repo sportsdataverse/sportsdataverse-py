@@ -387,3 +387,17 @@ def test_rating_shift_widens_the_season_spread() -> None:
         pl.col("proj_wins_sd") / pl.col("proj_wins_sd_fixed")
     )
     assert float(ratio.min().item()) > 1.15
+
+
+def test_lottery_tie_shares_chances_whatever_the_tiebreak() -> None:
+    """A tie on the lottery record splits the chances evenly; the next key only orders the slots.
+
+    WNBA rule (CBS on the 2027 lottery): CONN 22-66 and TOR 11-33 tie at .250, so their
+    combinations are pooled and divided evenly; the current-season record decides only the order
+    (and the odd extra combination, which a mean ignores). Here the current records differ.
+    """
+    comb = np.array([22 / 88, 11 / 44, 26 / 88, 31 / 88])
+    current = np.array([0.30, 0.25, 0.25, 0.35])
+    order, chances = lottery_slots(comb, current, [442, 276, 178, 104], np.random.default_rng(0))
+    assert order.tolist() == [1, 0, 2, 3]  # TOR's worse current record goes first
+    assert chances.tolist() == [359.0, 359.0, 178.0, 104.0]

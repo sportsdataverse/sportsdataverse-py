@@ -26,7 +26,8 @@ report it per team.
 
 **Not modelled:** rest, travel, injuries and roster moves (BB-D23); NBA Cup knockout games not
 yet on the schedule (each team's two are added in December, so a sim before then projects 80
-games); the playoffs past the play-in.
+games); the playoffs past the play-in; a preseason prior (before the first game every team is
+average and the home term is 0, so run the sim once games are played).
 """
 
 from __future__ import annotations
@@ -233,7 +234,8 @@ def simulate_pro_season(
         One row per team in :data:`SIM_SCHEMA`.
 
     Raises:
-        ValueError: If ``games`` holds more than one season, or ``league_id`` is unknown.
+        ValueError: If ``games`` holds more than one season, ``league_id`` is unknown, or a
+            conference (NBA) or the league (WNBA) has more than 15 teams.
         TypeError: If a team-id dtype differs from the model's ``team_id``.
     """
     if league_id not in SIM_CONSTANTS:
@@ -249,6 +251,8 @@ def simulate_pro_season(
     index = {t: i for i, t in enumerate(teams)}
     n_t = len(teams)
     conf, div = team_labels(teams, league_id)
+    if max(np.unique(conf, return_counts=True)[1]) > _SEEDS:
+        raise ValueError(f"more than {_SEEDS} teams in a seeding table; SIM_SCHEMA has p_seed_1..{_SEEDS}")
     is_played = pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null()
     played, future = games.filter(is_played), games.filter(~is_played)
     w0, pd0, pair0 = results_arrays(played, index)
