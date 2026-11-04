@@ -235,7 +235,7 @@ df.sort("pts_per_g", descending=True).head()
 
 ### compile_nba_season {#compile_nba_season}
 
-`compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
 
@@ -259,6 +259,7 @@ frame is tagged with a `season` column.
 | `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2024, proxy_provider=round_robin.next) |
 | `raw_store_dir` | `RawStoreDir` | `None` | Explicit raw JSON store root forwarded to every per-game fetch — a single path, or a per-endpoint mapping (`"*"` default key) so payload families can live in independent trees. `None` -> env vars (per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, then the generic `SDV_PY_NBA_RAW_JSON_DIR`); `""` force-disables. Same spirit as `cache_dir`'s arg-over-env precedence. |
 | `raw_store_readonly` | `Optional[bool]` | `None` | If `True`, per-game fetches are fully offline — the store is the only source, and a game with no capture raises `~sportsdataverse.errors.RawStoreMissError`, which this loop's per-game handler logs and skips (so an uncaptured game is visibly skipped instead of silently completed from the live API). `None` defers to `SDV_PY_NBA_RAW_JSON_READONLY`. |
+| `league_id` | `str` | `'00'` | stats `LeagueID` sent to game discovery and every per-game fetch: `"00"` NBA (default), `"10"` WNBA (`season` is then the calendar year; discovery reads stats.wnba.com), `"20"` G League. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
@@ -271,7 +272,7 @@ No returns table is published for this function: no capture: it reads stats.nba.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If any compiled possession's `game_id` is missing (or has a null) `game_date` in the season index — surfaced as an explicit error rather than silently emitting null dates. |
+| `ValueError` | If `league_id` is not one of `"00"`, `"10"`, `"20"`. If any compiled possession's `game_id` is missing (or has a null) `game_date` in the season index — surfaced as an explicit error rather than silently emitting null dates. |
 
 **Example**
 
@@ -294,6 +295,10 @@ poss = compile_nba_season(
     season_type="Playoffs",
     cache_dir="/tmp/nba_cache",
 )
+
+# Compile a G League season from the same pipeline
+
+gl = compile_nba_season(2024, league_id="20")
 ```
 
 ### espn_nba_player_stats {#espn_nba_player_stats}
