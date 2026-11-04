@@ -17,6 +17,10 @@ raw stores the hoopR / wehoop pbp releases are built from
 `espn_<lg>_pbp(raw=True)` captures used by `tests/nba/test_nba_game_page_leagues.py`. Game dates are the US Eastern local date (ESPN's
 header time is UTC, so a night game can carry the next day's UTC date).
 
+`final/` holds stored finals (`<lg>/json/final/<game_id>.json`, plays already processed), not
+raw captures. They live apart because `tests/basketball/test_sources.py` runs every top-level
+`*.json.gz` here through the raw-summary contract and the ESPN dispatch.
+
 | File | Source | Why |
 |---|---|---|
 | `mbb_401856600.json.gz` | hoopR-mbb-raw, 2026 national championship CONN @ MICH | one pickcenter provider (DraftKings MICH -6.5); a RegularTimeOut |
@@ -41,8 +45,8 @@ header time is UTC, so a night game can carry the next day's UTC date).
 | `wbb_283430164.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/raw/283430164.json`), copied 2026-10-12, 2008-12-08 UGA @ RUTG, season 2009 | F2: both teams 0 under `turnovers`, `teamTurnovers` and `totalTurnovers` while the plays log 13 RUTG / 10 UGA turnovers: a WBB game total below 5 is "not recorded" (null) in any season |
 | `wbb_290232368.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/raw/290232368.json`), copied 2026-10-12, 2009-01-23 FAIR @ MRST, season 2009, one OT | F2 re-ruling: game total 1 (FAIR 0 under every key; MRST 1 under `teamTurnovers`) while the plays log 12 FAIR / 16 MRST turnovers: a WBB game total below 5 is "not recorded" (null) |
 | `wbb_401364640.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/raw/401364640.json`), copied 2026-10-12, 2022-01-15 BOIS @ SDSU | genuine low turnover total 8 (BOIS 2, SDSU 6; the plays agree): at or above the threshold of 5, so the counts stay |
-| `mbb_final_401808271.json.gz` | hoopR-mbb-raw @ 11e4542f967 (`mbb/json/final/401808271.json`), the stored final trimmed to `header`, `plays` and `pickcenter`, copied 2026-11-04 | #1088: the plays bake `gameSpread` 2.5 / `gameSpreadAvailable` False while `pickcenter` has DraftKings TENN (home) -5.5 |
-| `wbb_final_401513491.json.gz` | wehoop-wbb-raw @ 7e1c8026cd0 (`wbb/json/final/401513491.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` home -2.5 |
-| `wnba_final_401230795.json.gz` | wehoop-wnba-raw @ 74eadad88 (`wnba/json/final/401230795.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` away favored by 8 |
-| `nba_final_400578320.json.gz` | hoopR-nba-raw @ 95bb2c4ee43 (`nba/json/final/400578320.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` home -3 |
-| `wbb_final_400995120.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/final/400995120.json`), trimmed the same way, copied 2026-11-04 | #1088 / #1044: baked 2.5 / unavailable and no spread in `pickcenter`: the line stays null |
+| `final/mbb_final_401808271.json.gz` | hoopR-mbb-raw @ 11e4542f967 (`mbb/json/final/401808271.json`), the stored final trimmed to `header`, `plays` and `pickcenter`, copied 2026-11-04 | #1088: the plays bake `gameSpread` 2.5 / `gameSpreadAvailable` False while `pickcenter` has DraftKings TENN (home) -5.5 |
+| `final/wbb_final_401513491.json.gz` | wehoop-wbb-raw @ 7e1c8026cd0 (`wbb/json/final/401513491.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` home -2.5 |
+| `final/wnba_final_401230795.json.gz` | wehoop-wnba-raw @ 74eadad88 (`wnba/json/final/401230795.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` away favored by 8 |
+| `final/nba_final_400578320.json.gz` | hoopR-nba-raw @ 95bb2c4ee43 (`nba/json/final/400578320.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` home -3 |
+| `final/wbb_final_400995120.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/final/400995120.json`), trimmed the same way, copied 2026-11-04 | #1088 / #1044: baked 2.5 / unavailable and no spread in `pickcenter`: the line stays null |
