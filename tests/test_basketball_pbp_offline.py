@@ -352,7 +352,7 @@ def test_nhl_favorite_comes_from_the_spread_row() -> None:
 
 
 def _stored_final(lg: str, game_id: int) -> dict:
-    return _raw(f"{lg}_final_{game_id}.json.gz")
+    return _raw(f"final/{lg}_final_{game_id}.json.gz")
 
 
 def _release_builder(lg: str):

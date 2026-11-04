@@ -1,1 +1,5 @@
-- `helper_wbb_player_season_stats` and `helper_wnba_player_season_stats` read the season's own `statistics[]` row instead of ESPN's career `totals` row, so a multi-season player's file no longer reports career numbers (Collier 2025: 33 games, not 193). A traded player gets the whole-season "Totals" row, a season the payload does not cover gives no rows, and a payload without `statistics[]` still falls back to `totals`. The team comes from that season's row, not the first career team (#1087).
+- **WBB / WNBA player season stats:** `helper_{wbb,wnba}_player_season_stats` read the season's own `statistics[]` row,
+  not ESPN's career `totals`, so a multi-season player no longer reports career numbers (Collier 2025: 33 games, not
+  193). The team comes from that season's row. Fixes #1087. (#1094)
+- **WBB / WNBA player season stats:** a traded player gets the whole-season "Totals" row, a season the payload does not
+  cover gives no rows, and a payload without `statistics[]` still falls back to `totals`. (#1094)
