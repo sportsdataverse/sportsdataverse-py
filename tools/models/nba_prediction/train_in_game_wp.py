@@ -298,6 +298,8 @@ def grid_monotone_violations(booster: xgb.Booster) -> int:
 def train(league_id: str, train_seasons: list[int], holdout: int, artifact: str, baseline_ref: str) -> dict[str, Any]:
     lg = LEAGUES[league_id]["lg"]
     assert holdout not in train_seasons, "train and holdout seasons must be disjoint"
+    if len(train_seasons) < 2:
+        raise ValueError(f"need at least two training seasons (fit + early-stopping validation), got {train_seasons}")
     frames = {s: season_frame(league_id, s) for s in train_seasons}
     *fit_s, val_s = sorted(train_seasons)
     rounds = _early_stop_rounds(pl.concat([frames[s] for s in fit_s]), frames[val_s])

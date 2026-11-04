@@ -392,8 +392,10 @@ def nba_in_game_win_prob(
     ``tools/models/nba_prediction/train_in_game_wp.py`` (NBA on 2022, 2023 and 2025,
     held out on 2026; WNBA on 2021-2024, held out on 2025). Within the final minute
     the clock reaches the model only through ``margin_per_sqrt_sec``, so at a fixed
-    lead the probability moves toward the leader as time runs out and reaches the
-    result at the horn instead of jumping to it.
+    lead the probability moves toward the leader as time runs out. This is the raw
+    model output: it never applies the game result. ``nba_game_page.score_win_prob`` sets the
+    last play of a finished game to the result, and that settle step is small now but
+    not always zero (the WNBA booster saturates near 0.99 for a lead of 5 or more).
 
     Gate note: the plan's concurrent oracle (stats.nba.com
     ``winprobabilitypbp`` HOME_PCT) is a dead endpoint, so this model is
