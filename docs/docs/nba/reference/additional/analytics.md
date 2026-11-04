@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: add_ctg–nba_l2m"
-sidebar_label: "Analytics: add_ctg–nba_l2m"
+title: "NBA — additional Python functions — Analytics: add_ctg–nba_impact"
+sidebar_label: "Analytics: add_ctg–nba_impact"
 sidebar_position: 13
-description: "NBA — additional Python functions — Analytics: add_ctg–nba_l2m — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: add_ctg–nba_impact — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: add_ctg–nba_l2m
+# NBA — additional Python functions — Analytics: add_ctg–nba_impact
 
 ### add_ctg_shot_zones {#add_ctg_shot_zones}
 
@@ -151,6 +151,108 @@ from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
 from sportsdataverse.nba.nba_play_context import add_play_context
 poss = add_play_context(enhanced_pbp_from_payload(payload))
 print(poss["possession_start_type_ctg"].value_counts())
+```
+
+### add_possession_flags {#add_possession_flags}
+
+`add_possession_flags(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 10.0) -> 'pl.DataFrame'`
+
+Append `seconds_to_first_shot`, `is_transition` and `is_garbage_time` to possessions.
+
+Works for the NBA and the WNBA, on any number of games at once. `possessions` is the
+`nba_stats_possessions` / `wnba_stats_possessions` frame (or the producer's
+`attach_possession_lineups` output) and `pbp` the play-by-play it was built from:
+the `nba_stats_pbp` release or the enhanced pbp frame. The input's columns, values,
+row count and row order are unchanged; only the three columns are appended.
+
+**seconds_to_first_shot** (Float64): seconds from the change of possession to the
+possession's first field-goal attempt. The change of possession is the clock at the
+previous possession's last event (`start_seconds_remaining` is the clock at this
+possession's first event, which after a rebound is often the shot itself). A period's
+first possession counts from its own first event. Null when the possession has no field
+goal attempt (turnovers, free-throw-only trips). It can pass 24 when the shot clock
+reset inside the possession (a kicked ball, a foul).
+
+**is_transition** (Boolean, never null): `possession_start_type` is `OffMadeShot`,
+`OffMissedShot` or `OffLiveBallTurnover`, the possession is not its period's first,
+and `seconds_to_first_shot <= transition_seconds` (10 by default: hoop-math's and
+bigballR's college window).
+
+**is_garbage_time** (Boolean, never null): bigballR's rule, the one behind the college
+flag. A possession triggers it when any of its events has an absolute score margin of
+at least 25 with 10:00 or less left in regulation, at least 20 with 5:00 or less, or at
+least 15 with 2:00 or less (or at least 15 in overtime), with at most 3 of the game's 10
+starters on the floor (the first possession's 10). Once a game triggers, it stays
+garbage time to the end. The module docstring lists where this differs from bigballR
+and why the triggering possession can qualify on its own basket.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Every possession of each game it holds (the previous possession's clock and the first possession's starters are read from it, so do not filter it to `count_as_possession` or to one team first). Needs `game_id`, `period`, `possession_number`, `number_in_period`, `start_order_index`, `end_order_index`, `start_seconds_remaining`, `end_seconds_remaining`, `possession_start_type` and `off_player_1..5` / `def_player_1..5`. |
+| `pbp` | `DataFrame` |  | The play-by-play of those games. Needs `game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home` and `score_away` (Utf8 or integer; the margin is the running score after each event). |
+| `transition_seconds` | `float` | `10.0` | The transition window in seconds. Default 10.0. |
+
+**Returns**
+
+`possessions` with `POSSESSION_FLAGS_SCHEMA` appended. An empty frame returns zero rows with those columns.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 | NBA Stats team id of the defending team for the possession. |
+| `start_order_index` | Int64 | order_index of the play-by-play event that starts the possession. |
+| `end_order_index` | Int64 | order_index of the play-by-play event that ends the possession. |
+| `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession started. |
+| `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
+| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
+| `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
+| `fg2a` | Int64 | Two-point field goal attempts during the possession. |
+| `fg2m` | Int64 | Two-point field goals made during the possession. |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 for the possession. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 for the possession. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 for the possession. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 for the possession. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 for the possession. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 for the possession. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 for the possession. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 for the possession. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 for the possession. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 for the possession. |
+| `lineup_source` | String | Provenance of the on-court lineup identification for the row (how the five-man units were resolved). |
+| `season` | Int64 | Season year. |
+| `seconds_to_first_shot` | Float64 | Seconds from the change of possession (the clock at the previous possession's last event) to the possession's first field-goal attempt; null when it has no field-goal attempt. |
+| `is_transition` | Boolean | True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is not its period's first, and seconds_to_first_shot is at most transition_seconds (default 10, hoop-math's and bigballR's window). Never null. |
+| `is_garbage_time` | Boolean | True from the possession that first meets bigballR's garbage-time rule (the college ncaa_*_possessions rule) to the end of the game. At some event of the possession the absolute margin is 25+ with 10:00 or less left in regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a needed column is missing, a column the flags would write already exists, `game_id` differs in dtype between the two frames, or `pbp` has no event for some possession. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import load_nba_stats_pbp, load_nba_stats_possessions
+from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+
+poss = add_possession_flags(load_nba_stats_possessions(2023), load_nba_stats_pbp(2023))
+print(poss.group_by("is_transition").len())
 ```
 
 ### add_start_type_detail {#add_start_type_detail}
@@ -1301,94 +1403,4 @@ from sportsdataverse.nba import nba_loaders as L
 from sportsdataverse.nba.nba_game_impact import nba_impact_rows
 rows = nba_impact_rows(L.load_nba_stats_pbp(2025), L.load_nba_stats_game_lineups(2025),
                        L.load_nba_stats_possessions(2025), L.load_nba_stats_schedules(2025))
-```
-
-### nba_l2m {#nba_l2m}
-
-`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
-
-Fetch and parse an NBA Last Two Minute report from official.nba.com.
-
-Retrieves the L2M report for a given game and returns parsed tables of calls,
-game metadata, and error statistics. The game_id is zero-padded to 10 digits
-(e.g., 42500405 becomes "0042500405"). A report is published for any game that
-is within 3 points (5 points before the 2017-18 season) at any point during the
-last two minutes of the fourth quarter or overtime -- not only playoff games.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
-| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
-| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
-
-**Returns**
-
-If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
-
-| col_name | type | description |
-|---|---|---|
-| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
-| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
-| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
-| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
-| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
-| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
-| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
-| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
-| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
-| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
-| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
-| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
-| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
-| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
-| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
-| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
-| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
-| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
-| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
-| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
-| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
-| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
-| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
-| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
-| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
-| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
-| `game.away_team_name` | String | Away team nickname as published in the report. |
-| `game.home_score` | Int64 | Home team's final score for the game. |
-| `game.away_score` | Int64 | Away team's final score for the game. |
-| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
-| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
-| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
-| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
-| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
-| `NoDataError` | The game has no L2M report (a 404, or S3's `AccessDenied` 403). Only games within 3 points (5 before 2017-18) at some point in the last two minutes of the fourth quarter or overtime get one, so most games have none; a game that just ended may not be graded yet. |
-| `AssetFetchError` | The fetch failed (a transport error, a rate limit, an Akamai WAF block, or a 5xx that outlived the retry budget), or the 200 body is not a JSON object whose `game` is exactly one row, or its `l2m`/`stats` table is not a list of records (empty is fine) -- an error envelope or a changed schema, checked with `raw=True` too. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_officiating import nba_l2m
-result = nba_l2m("0042500405")
-calls = result["calls"]
-print(f"Game had {calls.height} tracked plays in the L2M window")
-
-# Parse as pandas instead
-
-result = nba_l2m("0042500405", return_as_pandas=True)
-calls_pd = result["calls"]
-
-# Access raw JSON
-
-payload = nba_l2m("0042500405", raw=True)
-print(payload["game"])
 ```

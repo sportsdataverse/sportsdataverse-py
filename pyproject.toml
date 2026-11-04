@@ -661,6 +661,7 @@ files = [
     "sportsdataverse/nba/nba_possessions.py",
     "sportsdataverse/nba/nba_play_context_constants.py",
     "sportsdataverse/nba/nba_play_context.py",
+    "sportsdataverse/nba/nba_possession_flags.py",
     "sportsdataverse/nba/nba_shot_zones.py",
     "sportsdataverse/nba/nba_shot_value_constants.py",
     "sportsdataverse/nba/nba_shot_value.py",

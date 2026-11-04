@@ -1263,6 +1263,38 @@ _global:
   yardline_text: Ball spot where the drive started, rendered as it appears on the scoreboard (e.g., "NEB 25").
   yards_covered: Net yards the offense gained over the course of the drive.
   yards_to_endzone: Distance from the current ball spot to the opponent's goal line, in yards.
+add_possession_flags:
+  count_as_possession: Whether the row counts as a true possession for per-possession rate stats.
+  def_player_1: NBA Stats player id of defensive on-court player 1 of 5 for the possession.
+  def_player_2: NBA Stats player id of defensive on-court player 2 of 5 for the possession.
+  def_player_3: NBA Stats player id of defensive on-court player 3 of 5 for the possession.
+  def_player_4: NBA Stats player id of defensive on-court player 4 of 5 for the possession.
+  def_player_5: NBA Stats player id of defensive on-court player 5 of 5 for the possession.
+  defense_team_id: NBA Stats team id of the defending team for the possession.
+  end_order_index: order_index of the play-by-play event that ends the possession.
+  end_seconds_remaining: Seconds remaining in the period when the possession ended.
+  fg2a: Two-point field goal attempts during the possession.
+  fg2m: Two-point field goals made during the possession.
+  is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
+  lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
+  number_in_period: Sequential possession number for the offense within the period.
+  off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
+  off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
+  off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
+  off_player_4: NBA Stats player id of offensive on-court player 4 of 5 for the possession.
+  off_player_5: NBA Stats player id of offensive on-court player 5 of 5 for the possession.
+  possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
+  start_order_index: order_index of the play-by-play event that starts the possession.
+  start_seconds_remaining: Seconds remaining in the period when the possession started.
+  is_garbage_time: True from the possession that first meets bigballR's garbage-time rule (the college ncaa_*_possessions
+    rule) to the end of the game. At some event of the possession the absolute margin is 25+ with 10:00 or less left in
+    regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters
+    (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null.
+  is_transition: True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is
+    not its period's first, and seconds_to_first_shot is at most transition_seconds (default 10, hoop-math's and
+    bigballR's window). Never null.
+  seconds_to_first_shot: Seconds from the change of possession (the clock at the previous possession's last event) to the
+    possession's first field-goal attempt; null when it has no field-goal attempt.
 add_sequence_features:
   batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
   cum_pitches_game: Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).
@@ -40511,14 +40543,17 @@ load_nba_player_impact:
   d_adj_rapm: Defensive regularized adjusted plus/minus after the ridge opponent adjustment.
   d_rapm: Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so
     a positive value marks a defender who suppresses opponent scoring.
-  darko_filtered_skill: DARKO-style Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
+  boban_filtered_skill: BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
     i.e. his current-form rating after aging drift and possession-weighted observation noise.
-  darko_projected_rating: One-season-ahead DARKO forecast, the filtered skill plus the empirical aging-curve drift at the
+  boban_projected_rating: One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the
     player's last observed age; both season_type rows of a player-season carry the same value because the projection is not
     playoff-specific.
-  darko_projected_sd: Standard deviation of the one-season-ahead DARKO forecast, the square root of the filtered state variance
+  boban_projected_sd: Standard deviation of the one-season-ahead BOBAN forecast, the square root of the filtered state variance
     plus the Kalman process variance; it sits at roughly 10.19 for a player with only one season in the panel, whose diffuse
     prior variance was never updated.
+  darko_filtered_skill: Deprecated alias of boban_filtered_skill, kept for one release; use that column.
+  darko_projected_rating: Deprecated alias of boban_projected_rating, kept for one release; use that column.
+  darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
   def_poss: Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss
     almost exactly because substitutions rarely split an offense-defense pair.
   dspm: Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients
@@ -48114,9 +48149,12 @@ load_wnba_player_impact:
   adj_rapm: Total prior-informed RAPM (offense plus defense), in points per 100 possessions.
   d_adj_rapm: 'Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
   d_rapm: 'Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions.'
-  darko_filtered_skill: DARKO-style Kalman-filtered estimate of the player's current skill level.
-  darko_projected_rating: DARKO-style projected forward rating, including the empirical aging-curve drift.
-  darko_projected_sd: Posterior standard deviation of the DARKO-style projected rating.
+  boban_filtered_skill: BOBAN Kalman-filtered estimate of the player's current skill level.
+  boban_projected_rating: BOBAN projected forward rating, including the empirical aging-curve drift.
+  boban_projected_sd: Posterior standard deviation of the BOBAN projected rating.
+  darko_filtered_skill: Deprecated alias of boban_filtered_skill, kept for one release; use that column.
+  darko_projected_rating: Deprecated alias of boban_projected_rating, kept for one release; use that column.
+  darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
   def_poss: Defensive possessions the player was on the floor for in the RAPM sample.
   dspm: 'Defensive statistical plus-minus: box-score features regressed onto the defensive RAPM target, per 100 possessions.'
   o_adj_rapm: 'Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'

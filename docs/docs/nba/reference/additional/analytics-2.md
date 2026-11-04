@@ -6,6 +6,96 @@ description: "NBA — additional Python functions — Analytics: nba_l2m–nba_t
 ---
 # NBA — additional Python functions — Analytics: nba_l2m–nba_team
 
+### nba_l2m {#nba_l2m}
+
+`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
+
+Fetch and parse an NBA Last Two Minute report from official.nba.com.
+
+Retrieves the L2M report for a given game and returns parsed tables of calls,
+game metadata, and error statistics. The game_id is zero-padded to 10 digits
+(e.g., 42500405 becomes "0042500405"). A report is published for any game that
+is within 3 points (5 points before the 2017-18 season) at any point during the
+last two minutes of the fourth quarter or overtime -- not only playoff games.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
+
+| col_name | type | description |
+|---|---|---|
+| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
+| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
+| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
+| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
+| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
+| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
+| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
+| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
+| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
+| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
+| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
+| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
+| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
+| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
+| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
+| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
+| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
+| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
+| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
+| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
+| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
+| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
+| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
+| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
+| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
+| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
+| `game.away_team_name` | String | Away team nickname as published in the report. |
+| `game.home_score` | Int64 | Home team's final score for the game. |
+| `game.away_score` | Int64 | Away team's final score for the game. |
+| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
+| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
+| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
+| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
+| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no L2M report (a 404, or S3's `AccessDenied` 403). Only games within 3 points (5 before 2017-18) at some point in the last two minutes of the fourth quarter or overtime get one, so most games have none; a game that just ended may not be graded yet. |
+| `AssetFetchError` | The fetch failed (a transport error, a rate limit, an Akamai WAF block, or a 5xx that outlived the retry budget), or the 200 body is not a JSON object whose `game` is exactly one row, or its `l2m`/`stats` table is not a list of records (empty is fine) -- an error envelope or a changed schema, checked with `raw=True` too. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_l2m
+result = nba_l2m("0042500405")
+calls = result["calls"]
+print(f"Game had {calls.height} tracked plays in the L2M window")
+
+# Parse as pandas instead
+
+result = nba_l2m("0042500405", return_as_pandas=True)
+calls_pd = result["calls"]
+
+# Access raw JSON
+
+payload = nba_l2m("0042500405", raw=True)
+print(payload["game"])
+```
+
 ### nba_l2m_games {#nba_l2m_games}
 
 `nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'`

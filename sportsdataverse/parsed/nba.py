@@ -164,6 +164,7 @@ from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F4
 from sportsdataverse.nba import WalkForwardResult as WalkForwardResult  # noqa: F401
 from sportsdataverse.nba import add_ctg_shot_zones as add_ctg_shot_zones  # noqa: F401
 from sportsdataverse.nba import add_play_context as add_play_context  # noqa: F401
+from sportsdataverse.nba import add_possession_flags as add_possession_flags  # noqa: F401
 from sportsdataverse.nba import add_start_type_detail as add_start_type_detail  # noqa: F401
 from sportsdataverse.nba import add_transition as add_transition  # noqa: F401
 from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: F401
@@ -464,6 +465,7 @@ __all__ = [
     "WalkForwardResult",
     "add_ctg_shot_zones",
     "add_play_context",
+    "add_possession_flags",
     "add_start_type_detail",
     "add_transition",
     "adjust_efficiency",

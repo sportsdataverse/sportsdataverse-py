@@ -2190,6 +2190,7 @@ class _LoaderView:
         self.docstring = _build_loader_docstring(ld)
         self.id_int64 = ld.id_int64
         self.id_int32 = ld.id_int32
+        self.column_aliases = ld.column_aliases
         self.single = _loader_is_single(ld)
         has_table = ld.fn in _loader_schemas()
         self.empty = f'_empty_from_schema("loader_schemas:{ld.fn}")' if has_table else "pl.DataFrame()"
@@ -2850,6 +2851,17 @@ def refresh_loader_schemas() -> int:
                     entry["type"] = "Int64"
                 elif entry["name"] in ld.id_int32:
                     entry["type"] = "Int32"
+            # column_aliases: the loader emits both names of a renamed column (new first), so a
+            # re-capture of a footer that ships only one of them must document both.
+            kinds = {e["name"]: e["type"] for e in got}
+            live = {n: o for n, o in ld.column_aliases.items() if n in kinds or o in kinds}
+            if live:
+                drop = set(live) | set(live.values())
+                got = (
+                    [e for e in got if e["name"] not in drop]
+                    + [{"name": n, "type": kinds.get(n) or kinds[o]} for n, o in live.items()]
+                    + [{"name": o, "type": kinds.get(o) or kinds[n]} for n, o in live.items()]
+                )
         if got is None:
             failed.append(ld.fn)
             if ld.fn in prev:

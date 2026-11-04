@@ -226,6 +226,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 |---|---|
 | [add_ctg_shot_zones](additional/analytics.md#add_ctg_shot_zones) | Append CTG's shot-location zone (`ctg_shot_zone`) to an enhanced PBP frame. |
 | [add_play_context](additional/analytics.md#add_play_context) | Build possessions and enrich them with the full CTG play-context surface. |
+| [add_possession_flags](additional/analytics.md#add_possession_flags) | Append `seconds_to_first_shot`, `is_transition` and `is_garbage_time` to possessions. |
 | [add_start_type_detail](additional/analytics.md#add_start_type_detail) | Append the full pbpstats start-type taxonomy to a possession frame. |
 | [add_transition](additional/analytics.md#add_transition) | Flag possessions that started in transition, and time their initial play. |
 | [box_features](additional/analytics.md#box_features) | Aggregate per-player per-100-possession box features over a set of games. |
@@ -247,7 +248,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_game_lineups_used](additional/analytics.md#nba_game_lineups_used) | The lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [nba_game_player_impact](additional/analytics.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [nba_impact_rows](additional/analytics.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
-| [nba_l2m](additional/analytics.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
+| [nba_l2m](additional/analytics-2.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
 | [nba_l2m_games](additional/analytics-2.md#nba_l2m_games) | Fetch the list of games with Last Two Minute reports for an NBA season. |
 | [nba_play_context](additional/analytics-2.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
 | [nba_player_ages](additional/analytics-2.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
