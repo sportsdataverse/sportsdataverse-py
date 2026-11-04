@@ -349,3 +349,65 @@ def test_nhl_favorite_comes_from_the_spread_row() -> None:
     ]
     out = helper_nhl_pickcenter({"pickcenter": rows})
     assert (out["gameSpread"], out["homeFavorite"], out["gameSpreadAvailable"]) == (-1.5, True, True)
+
+
+def _stored_final(lg: str, game_id: int) -> dict:
+    return _raw(f"{lg}_final_{game_id}.json.gz")
+
+
+def _release_builder(lg: str):
+    import importlib
+
+    return getattr(importlib.import_module(f"sportsdataverse.{lg}.{lg}_play_by_play"), f"helper_{lg}_play_by_play")
+
+
+@pytest.mark.parametrize(
+    ("lg", "game_id", "line"),
+    [
+        ("mbb", 401808271, (5.5, True, 5.5)),  # DraftKings TENN (home) -5.5 (#1088)
+        ("wbb", 401513491, (2.5, True, 2.5)),
+        ("wnba", 401230795, (8.0, False, -8.0)),  # away favored
+        ("nba", 400578320, (3.0, True, 3.0)),
+    ],
+)
+def test_release_builder_reads_the_line_from_pickcenter(lg: str, game_id: int, line: tuple) -> None:
+    """Stored per-play keys say no line (2.5 / unavailable) while the same file's pickcenter has one."""
+    final = _stored_final(lg, game_id)
+    assert final["plays"][0]["gameSpreadAvailable"] is False and final["plays"][0]["gameSpread"] == 2.5
+    df = _release_builder(lg)(final)
+    got = df.select("game_spread", "home_favorite", "home_team_spread", "game_spread_available").unique().rows()
+    assert got == [(*line, True)]
+    assert df.schema["game_spread"] == pl.Float64 and df.schema["home_favorite"] == pl.Boolean
+
+
+def test_release_builder_without_any_line_stays_null() -> None:
+    """No pickcenter line and a stored invented 2.5: null, never a default (#1044 / #1047)."""
+    final = _stored_final("wbb", 400995120)
+    assert final["plays"][0]["gameSpread"] == 2.5 and final["plays"][0]["gameSpreadAvailable"] is False
+    df = _release_builder("wbb")(final)
+    for col in ("game_spread", "home_favorite", "home_team_spread"):
+        assert df[col].null_count() == df.height, col
+    assert df["game_spread_available"].unique().to_list() == [False]
+
+
+def test_release_builder_reads_pickcenter_when_the_plays_carry_no_line_keys() -> None:
+    final = _stored_final("mbb", 401808271)
+    for play in final["plays"]:
+        for key in ("gameSpread", "homeFavorite", "gameSpreadAvailable", "homeTeamSpread"):
+            del play[key]
+    df = _release_builder("mbb")(final)
+    assert df.select("game_spread", "home_favorite", "home_team_spread").unique().rows() == [(5.5, True, 5.5)]
+
+
+def test_release_builder_keeps_a_stored_line() -> None:
+    """A stored available line is what the releases carry: pickcenter does not overwrite it."""
+    final = _stored_final("mbb", 401808271)
+    for play in final["plays"]:
+        play.update(gameSpread=-7.0, homeFavorite=True, homeTeamSpread=7.0, gameSpreadAvailable=True)
+    df = _release_builder("mbb")(final)
+    assert df.select("game_spread", "home_team_spread").unique().rows() == [(-7.0, 7.0)]
+    # pickcenter absent, or unparseable: the stored line is never touched
+    for pickcenter in (None, [{"provider": {"id": "45"}, "spread": "OFF"}]):
+        final["pickcenter"] = pickcenter
+        df = _release_builder("mbb")(final)
+        assert df.select("game_spread", "home_team_spread").unique().rows() == [(-7.0, 7.0)]
