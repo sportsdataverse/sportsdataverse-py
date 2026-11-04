@@ -302,8 +302,8 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     │ Montreal  ┆ 13   │
     │ Minnesota ┆ 12   │
     │ Boston    ┆ 12   │
-    │ New York  ┆ 9    │
     │ Ottawa    ┆ 9    │
+    │ New York  ┆ 9    │
     └───────────┴──────┘
 
 
@@ -330,22 +330,22 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
 
 
     shape: (10, 5)
-    ┌──────────────┬─────────────────┬───────┬─────────┬────────┐
-    │ first_name   ┆ last_name       ┆ goals ┆ assists ┆ points │
-    │ ---          ┆ ---             ┆ ---   ┆ ---     ┆ ---    │
-    │ str          ┆ str             ┆ i64   ┆ i64     ┆ i64    │
-    ╞══════════════╪═════════════════╪═══════╪═════════╪════════╡
-    │ Natalie      ┆ Spooner         ┆ 21    ┆ 8       ┆ 29     │
-    │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
-    │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
-    │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
-    │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
-    │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
-    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
-    │ Grace        ┆ Zumwinkle       ┆ 12    ┆ 8       ┆ 20     │
-    │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
-    │ Brianne      ┆ Jenner          ┆ 9     ┆ 11      ┆ 20     │
-    └──────────────┴─────────────────┴───────┴─────────┴────────┘
+    ┌──────────────┬───────────┬───────┬─────────┬────────┐
+    │ first_name   ┆ last_name ┆ goals ┆ assists ┆ points │
+    │ ---          ┆ ---       ┆ ---   ┆ ---     ┆ ---    │
+    │ str          ┆ str       ┆ i64   ┆ i64     ┆ i64    │
+    ╞══════════════╪═══════════╪═══════╪═════════╪════════╡
+    │ Natalie      ┆ Spooner   ┆ 21    ┆ 8       ┆ 29     │
+    │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
+    │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
+    │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
+    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
+    │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
+    │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
+    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
+    │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
+    │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
+    └──────────────┴───────────┴───────┴─────────┴────────┘
 
 
 
@@ -384,8 +384,8 @@ Sum saves and shots-against from the goalie boxscore, then compute a season save
     │ Aerin      ┆ Frankel    ┆ 790           ┆ 49            ┆ 0.938    │
     │ Kristen    ┆ Campbell   ┆ 718           ┆ 48            ┆ 0.933    │
     │ Corinne    ┆ Schroeder  ┆ 511           ┆ 36            ┆ 0.93     │
-    │ Nicole     ┆ Hensley    ┆ 492           ┆ 37            ┆ 0.925    │
     │ Maddie     ┆ Rooney     ┆ 362           ┆ 27            ┆ 0.925    │
+    │ Nicole     ┆ Hensley    ┆ 492           ┆ 37            ┆ 0.925    │
     │ Ann-Renée  ┆ Desbiens   ┆ 580           ┆ 44            ┆ 0.924    │
     │ Emerance   ┆ Maschmeyer ┆ 599           ┆ 51            ┆ 0.915    │
     │ Abbey      ┆ Levy       ┆ 254           ┆ 24            ┆ 0.906    │
@@ -599,9 +599,9 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
-    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
+    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
+    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
 
@@ -639,8 +639,8 @@ top_infractions
     │ Interference   ┆ 53    │
     │ Slashing       ┆ 35    │
     │ Boarding       ┆ 30    │
-    │ Cross Checking ┆ 26    │
     │ Holding        ┆ 26    │
+    │ Cross Checking ┆ 26    │
     └────────────────┴───────┘
 
 
@@ -675,9 +675,9 @@ top_infractions
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
     │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
     │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
+    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
     │ Lee            ┆ Stecklein     ┆ 18  ┆ 9         │
     │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
-    │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -780,13 +780,13 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
     │ Natalie      ┆ Spooner   ┆ 7           │
     │ Kristen      ┆ Campbell  ┆ 4           │
     │ Nicole       ┆ Hensley   ┆ 4           │
-    │ Hilary       ┆ Knight    ┆ 3           │
-    │ Alex         ┆ Carpenter ┆ 3           │
-    │ Gabbie       ┆ Hughes    ┆ 3           │
-    │ Marie-Philip ┆ Poulin    ┆ 3           │
-    │ Susanna      ┆ Tapani    ┆ 3           │
     │ Sarah        ┆ Nurse     ┆ 3           │
-    │ Maddie       ┆ Rooney    ┆ 2           │
+    │ Hilary       ┆ Knight    ┆ 3           │
+    │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Susanna      ┆ Tapani    ┆ 3           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Alex         ┆ Carpenter ┆ 3           │
+    │ Ann-Renée    ┆ Desbiens  ┆ 2           │
     └──────────────┴───────────┴─────────────┘
 
 
@@ -1179,11 +1179,11 @@ xg.select(["game_id", "event_type", "shot_distance", "shot_angle", "xg"]).drop_n
     │ ---     ┆ ---        ┆ ---           ┆ ---        ┆ ---      │
     │ i64     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
     ╞═════════╪════════════╪═══════════════╪════════════╪══════════╡
-    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050358 │
-    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053277 │
-    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082155 │
-    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06702  │
-    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.062035 │
+    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050259 │
+    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053404 │
+    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082247 │
+    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06722  │
+    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.062107 │
     └─────────┴────────────┴───────────────┴────────────┴──────────┘
 
 

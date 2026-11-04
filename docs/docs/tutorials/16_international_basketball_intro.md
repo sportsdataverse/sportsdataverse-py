@@ -107,8 +107,6 @@ print("season:", season_code, "| games:", None if games is None else games.shape
 ```
 
     ✅ EuroLeague seasons
-
-
     ✅ games E2026
     season: E2026 | games: (380, 94)
 
@@ -348,8 +346,8 @@ sh = safe(f"SLB shots {mid}", lambda: genius.slb_shots(mid)) if mid else None
     │ ---         ┆ ---    ┆ --- │
     │ str         ┆ i64    ┆ u32 │
     ╞═════════════╪════════╪═════╡
-    │ 2pt         ┆ 1      ┆ 43  │
     │ 2pt         ┆ 0      ┆ 45  │
+    │ 2pt         ┆ 1      ┆ 43  │
     │ 3pt         ┆ 0      ┆ 34  │
     │ 3pt         ┆ 1      ┆ 23  │
     └─────────────┴────────┴─────┘
@@ -419,8 +417,8 @@ matches = safe(f"NBL matches {nbl_season}", lambda: nbl_au.nbl_rosetta_matches(n
     │ ---          ┆ --- │
     │ str          ┆ u32 │
     ╞══════════════╪═════╡
-    │ complete     ┆ 206 │
     │ draft        ┆ 3   │
+    │ complete     ┆ 206 │
     └──────────────┴─────┘
 
 

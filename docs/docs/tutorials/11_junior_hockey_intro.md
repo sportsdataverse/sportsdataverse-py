@@ -439,13 +439,13 @@ out
     │ ---                  ┆ ---                ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---        │
     │ str                  ┆ str                ┆ str          ┆ str   ┆ str     ┆ str    ┆ str        │
     ╞══════════════════════╪════════════════════╪══════════════╪═══════╪═════════╪════════╪════════════╡
-    │ 2026 - 27 Regular    ┆ Red Deer Rebels    ┆ 16           ┆ 14    ┆ 13      ┆ 27     ┆ regular    │
+    │ 2026 - 27 Regular    ┆ Red Deer Rebels    ┆ 17           ┆ 15    ┆ 14      ┆ 29     ┆ regular    │
     │ Season               ┆                    ┆              ┆       ┆         ┆        ┆            │
     │ 2025 - 26 Regular    ┆ Edmonton Oil Kings ┆ 28           ┆ 11    ┆ 5       ┆ 16     ┆ regular    │
     │ Season               ┆                    ┆              ┆       ┆         ┆        ┆            │
     │ 2025 - 26 Regular    ┆ Red Deer Rebels    ┆ 36           ┆ 14    ┆ 16      ┆ 30     ┆ regular    │
     │ Season               ┆                    ┆              ┆       ┆         ┆        ┆            │
-    │ Total                ┆ null               ┆ 80           ┆ 39    ┆ 34      ┆ 73     ┆ regular    │
+    │ Total                ┆ null               ┆ 81           ┆ 40    ┆ 35      ┆ 75     ┆ regular    │
     │ 2026 - 27 Pre-Season ┆ Red Deer Rebels    ┆ 3            ┆ 2     ┆ 2       ┆ 4      ┆ exhibition │
     └──────────────────────┴────────────────────┴──────────────┴───────┴─────────┴────────┴────────────┘
 
@@ -479,7 +479,7 @@ out
     ✅ OHL schedule
 
 
-    ✅ OHL game summary 29152
+    ✅ OHL game summary 29153
 
 
 
@@ -492,11 +492,11 @@ out
     │ i64       ┆ str   ┆ ---             ┆ ---             ┆ ---             ┆ str        ┆ str       │
     │           ┆       ┆ str             ┆ str             ┆ str             ┆            ┆           │
     ╞═══════════╪═══════╪═════════════════╪═════════════════╪═════════════════╪════════════╪═══════════╡
-    │ 1         ┆ 3:19  ┆ SBY             ┆ Blake           ┆ Clayton         ┆ 0          ┆ 0         │
-    │ 1         ┆ 5:02  ┆ RN              ┆ Eliot           ┆ Ogonowski       ┆ 1          ┆ 0         │
-    │ 1         ┆ 12:59 ┆ RN              ┆ Cole            ┆ Renaud          ┆ 1          ┆ 0         │
-    │ 1         ┆ 15:13 ┆ SBY             ┆ Jean-Cristoph   ┆ Lemieux         ┆ 0          ┆ 0         │
-    │ 2         ┆ 2:37  ┆ SBY             ┆ Jan             ┆ Chovan          ┆ 1          ┆ 0         │
+    │ 1         ┆ 9:07  ┆ KIT             ┆ Haeden          ┆ Ellis           ┆ 0          ┆ 0         │
+    │ 1         ┆ 10:55 ┆ GUE             ┆ Timo            ┆ Kazda           ┆ 0          ┆ 0         │
+    │ 1         ┆ 18:05 ┆ GUE             ┆ Ethan           ┆ Czata           ┆ 0          ┆ 0         │
+    │ 3         ┆ 7:29  ┆ KIT             ┆ Cameron         ┆ Arquette        ┆ 1          ┆ 0         │
+    │ 3         ┆ 8:18  ┆ GUE             ┆ Vladimir        ┆ Dravecky        ┆ 0          ┆ 0         │
     └───────────┴───────┴─────────────────┴─────────────────┴─────────────────┴────────────┴───────────┘
 
 
@@ -519,15 +519,15 @@ out
 
 
     shape: (3, 4)
-    ┌────────────┬───────────┬───────────────┬──────┐
-    │ first_name ┆ last_name ┆ jersey_number ┆ home │
-    │ ---        ┆ ---       ┆ ---           ┆ ---  │
-    │ str        ┆ str       ┆ str           ┆ i64  │
-    ╞════════════╪═══════════╪═══════════════╪══════╡
-    │ Andreas    ┆ Straka    ┆ 15            ┆ 0    │
-    │ Adam       ┆ Nemec     ┆ 71            ┆ 1    │
-    │ Eliot      ┆ Ogonowski ┆ 12            ┆ 0    │
-    └────────────┴───────────┴───────────────┴──────┘
+    ┌────────────┬────────────┬───────────────┬──────┐
+    │ first_name ┆ last_name  ┆ jersey_number ┆ home │
+    │ ---        ┆ ---        ┆ ---           ┆ ---  │
+    │ str        ┆ str        ┆ str           ┆ i64  │
+    ╞════════════╪════════════╪═══════════════╪══════╡
+    │ Vladimir   ┆ Dravecky   ┆ 29            ┆ 0    │
+    │ Jason      ┆ Schaubel   ┆ 39            ┆ 1    │
+    │ Illia      ┆ Shybinskyi ┆ 81            ┆ 0    │
+    └────────────┴────────────┴───────────────┴──────┘
 
 
 

@@ -896,7 +896,7 @@ else:
     │ ACU        ┆ 000000    ┆ Abilene   ┆ 669     ┆ … ┆ Abilene   ┆ Abilene   ┆ abilene-c ┆ s:1~l:102 │
     │            ┆           ┆ Christian ┆         ┆   ┆ Chrstn    ┆ Chrstn    ┆ hristian- ┆ ~t:669    │
     │            ┆           ┆ Wildcats  ┆         ┆   ┆           ┆           ┆ wildcats  ┆           │
-    │ AFA        ┆ 004A7B    ┆ Air Force ┆ 567     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:102 │
+    │ AF         ┆ 004A7B    ┆ Air Force ┆ 567     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:102 │
     │            ┆           ┆ Falcons   ┆         ┆   ┆           ┆           ┆ -falcons  ┆ ~t:567    │
     │ AKR        ┆ 0A1E5B    ┆ Akron     ┆ 670     ┆ … ┆ Akron     ┆ Akron     ┆ akron-zip ┆ s:1~l:102 │
     │            ┆           ┆ Zips      ┆         ┆   ┆           ┆           ┆ s         ┆ ~t:670    │
@@ -1475,11 +1475,15 @@ else:
 
     ✅ ufl teams
     ✅ xfl teams
+
+
     ✅ cfl teams
+
+
     ✅ college_baseball teams
-
-
     ✅ college_softball teams
+
+
     ✅ mch teams
     ✅ wch teams
     Total teams across all 7 leagues: 1067
@@ -1526,7 +1530,7 @@ else:
     print('no CFL games today (or offseason)')
 ```
 
-    ✅ today's CFL slate (20261102)
+    ✅ today's CFL slate (20261104)
     no CFL games today (or offseason)
 
 

@@ -404,8 +404,8 @@ print("player box rows:", pbox.shape)
     │ David Jones          ┆ Memphis                 ┆ 32  ┆ 21.8 │
     │ Dalton Knecht        ┆ Tennessee               ┆ 36  ┆ 21.7 │
     │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
-    │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
     │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
+    │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
     └──────────────────────┴─────────────────────────┴─────┴──────┘
 
 
@@ -600,8 +600,8 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
     │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
     │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
+    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     └──────────────────────┴───────────────────┴─────┴───────┴────────┘
 
 
@@ -738,16 +738,16 @@ out
     │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
     │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
     ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 1     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
     │ 2     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
     │ 3     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
-    │ 4     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 5     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
-    │ 6     ┆ -   ┆ -   ┆ -   ┆ null ┆ null     │
-    │ 7     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
-    │ 8     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
-    │ 9     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
-    │ 10    ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
+    │ 4     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 5     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
+    │ 6     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
+    │ 7     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 8     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
+    │ 9     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 10    ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
     └───────┴─────┴─────┴─────┴──────┴──────────┘
 
 

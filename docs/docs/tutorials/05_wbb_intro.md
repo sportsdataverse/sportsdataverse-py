@@ -706,22 +706,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬───────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name      ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                       ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                       ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪═══════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5179312    ┆ Daquira Lancaster-Navarro ┆ Morgan St               ┆ 30    ┆ 0            ┆ null │
-    │ 5106098    ┆ Jade Campbell             ┆ St Francis PA           ┆ 30    ┆ 0            ┆ null │
-    │ 5174406    ┆ Danna Grenald             ┆ Clemson                 ┆ 31    ┆ 0            ┆ null │
-    │ 5177267    ┆ Gianna McManaman          ┆ New Mexico              ┆ 32    ┆ 0            ┆ null │
-    │ 5195177    ┆ McKenna Johnson           ┆ Minnesota               ┆ 22    ┆ 0            ┆ null │
-    │ 5178411    ┆ Michelle Ugwah            ┆ Morehead St             ┆ 30    ┆ 0            ┆ null │
-    │ 4899041    ┆ Mia Flor                  ┆ Wofford                 ┆ 30    ┆ 0            ┆ null │
-    │ 4714498    ┆ Allie Palmieri            ┆ UMass                   ┆ 32    ┆ 0            ┆ null │
-    │ 5107686    ┆ Dylan Philip              ┆ Montana St              ┆ 33    ┆ 0            ┆ null │
-    │ 4705067    ┆ Caitlin Wingertzahn       ┆ William & Mary          ┆ 29    ┆ 0            ┆ null │
-    └────────────┴───────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 5181772    ┆ Emily Scholl         ┆ Holy Cross              ┆ 34    ┆ 0            ┆ null │
+    │ 5174255    ┆ Maryn Archer         ┆ Arkansas                ┆ 33    ┆ 0            ┆ null │
+    │ 4594728    ┆ Nya Mitchels         ┆ UT Rio Grande           ┆ 29    ┆ 0            ┆ null │
+    │ 4900464    ┆ Yamani McCollough    ┆ Bethune                 ┆ 31    ┆ 0            ┆ null │
+    │ 5174714    ┆ Tate Chappell        ┆ Appalachian St          ┆ 32    ┆ 0            ┆ null │
+    │ 5107676    ┆ Draya Wacker         ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
+    │ 5176108    ┆ Jayda Allie          ┆ Marshall                ┆ 33    ┆ 0            ┆ null │
+    │ 5106157    ┆ Mikayla Parks        ┆ Kansas St               ┆ 34    ┆ 0            ┆ null │
+    │ 5177785    ┆ Morgan Cyiark        ┆ Florida A&M             ┆ 30    ┆ 0            ┆ null │
+    │ 5106192    ┆ Charia Smith         ┆ Marquette               ┆ 32    ┆ 0            ┆ null │
+    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -853,7 +853,7 @@ three_pt
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
-    │ 213     ┆ Penn State Lady Lions          ┆ 35    ┆ 294 ┆ 787  ┆ 37.4      │
+    │ 127     ┆ Michigan State Spartans        ┆ 31    ┆ 283 ┆ 757  ┆ 37.4      │
     └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
 
 
@@ -904,8 +904,8 @@ clutch
     │ Ta'Niya Latson       ┆ Florida St              ┆ 47           ┆ 65            │
     │ Cheyenne Stubbs      ┆ Utah State              ┆ 36           ┆ 62            │
     │ Chellia Watson       ┆ Buffalo                 ┆ 38           ┆ 61            │
-    │ Deja Kelly           ┆ North Carolina          ┆ 51           ┆ 59            │
     │ Lucy Olsen           ┆ Villanova               ┆ 39           ┆ 59            │
+    │ Deja Kelly           ┆ North Carolina          ┆ 51           ┆ 59            │
     └──────────────────────┴─────────────────────────┴──────────────┴───────────────┘
 
 
@@ -993,8 +993,8 @@ dd
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
-    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
     │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
+    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
     │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
@@ -1036,11 +1036,11 @@ defense
     │ 261     ┆ Vermont Catamounts        ┆ 37    ┆ 52.8    ┆ 59.4    ┆ 6.6     │
     │ 2450    ┆ Norfolk State Spartans    ┆ 33    ┆ 53.1    ┆ 67.0    ┆ 13.9    │
     │ 2670    ┆ VCU Rams                  ┆ 32    ┆ 53.2    ┆ 63.3    ┆ 10.1    │
-    │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
+    │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
+    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
     └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
 

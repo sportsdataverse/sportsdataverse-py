@@ -183,11 +183,7 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 
 
     ✅ espn_wnba_teams
-
-
     ✅ espn_nhl_teams
-
-
     ✅ espn_mlb_teams
 
 
@@ -224,10 +220,8 @@ print("NFL scoreboard rows:", None if board is None else board.height,
 ```
 
     ✅ espn_nfl_scoreboard
-
-
     ✅ espn_nba_standings
-    NFL scoreboard rows: 14 | NBA standings rows: 30
+    NFL scoreboard rows: 15 | NBA standings rows: 30
 
 
 ### 📦 The loaders follow one pattern too
@@ -390,11 +384,11 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
     │ ---          ┆ ---         │
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
-    │ mbb          ┆ 660         │
-    │ wbb          ┆ 577         │
-    │ nba          ┆ 541         │
-    │ cfb          ┆ 467         │
-    │ nhl          ┆ 406         │
+    │ mbb          ┆ 667         │
+    │ wbb          ┆ 582         │
+    │ nba          ┆ 551         │
+    │ cfb          ┆ 469         │
+    │ nhl          ┆ 407         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │
     │ kijhl        ┆ 14          │
@@ -565,8 +559,6 @@ pl.DataFrame(rows)
 
     ✅ espn_nba_standings
     ✅ espn_nhl_standings
-
-
     ✅ espn_mlb_standings
 
 
@@ -599,10 +591,10 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 ```
 
     nfl  Patriots       -> New England Patriots (id=17)
+
+
     mlb  Yankees        -> New York Yankees (id=10)
     nhl  Bruins         -> Boston Bruins (id=1)
-
-
     cfb  Crimson Tide   -> Alabama Crimson Tide (id=333)
 
 
@@ -834,15 +826,15 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20.0         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 97.2         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 96.2         ┆ null         ┆ null         ┆ null      │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
+    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
 
 
@@ -873,14 +865,14 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
     │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
     │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
     ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 12   ┆ 2      ┆ 2         ┆ 26     ┆ Eastern         ┆ Metropolitan  │
-    │ 11   ┆ 2      ┆ 2         ┆ 24     ┆ Western         ┆ Pacific       │
-    │ 10   ┆ 3      ┆ 3         ┆ 23     ┆ Western         ┆ Central       │
-    │ 10   ┆ 4      ┆ 1         ┆ 21     ┆ Eastern         ┆ Atlantic      │
+    │ 12   ┆ 3      ┆ 2         ┆ 26     ┆ Eastern         ┆ Metropolitan  │
+    │ 11   ┆ 2      ┆ 3         ┆ 25     ┆ Western         ┆ Pacific       │
+    │ 11   ┆ 3      ┆ 3         ┆ 25     ┆ Western         ┆ Central       │
+    │ 11   ┆ 4      ┆ 1         ┆ 23     ┆ Eastern         ┆ Atlantic      │
+    │ 10   ┆ 5      ┆ 2         ┆ 22     ┆ Western         ┆ Pacific       │
+    │ 9    ┆ 3      ┆ 3         ┆ 21     ┆ Eastern         ┆ Atlantic      │
     │ 9    ┆ 3      ┆ 2         ┆ 20     ┆ Eastern         ┆ Atlantic      │
-    │ 9    ┆ 5      ┆ 1         ┆ 19     ┆ Western         ┆ Pacific       │
-    │ 9    ┆ 6      ┆ 1         ┆ 19     ┆ Eastern         ┆ Atlantic      │
-    │ 8    ┆ 3      ┆ 2         ┆ 18     ┆ Eastern         ┆ Atlantic      │
+    │ 10   ┆ 5      ┆ 0         ┆ 20     ┆ Eastern         ┆ Metropolitan  │
     └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
 
 
@@ -1043,13 +1035,13 @@ out
     │ americanfootball_cfl            ┆ American Football ┆ CFL                       │
     │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     │
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
+    │ americanfootball_ncaaf_fcs      ┆ American Football ┆ NCAAF FCS                 │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
     │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
     │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       │
     │ aussierules_aflw                ┆ Aussie Rules      ┆ AFL Women's               │
     │ baseball_kbo                    ┆ Baseball          ┆ KBO                       │
     │ basketball_euroleague           ┆ Basketball        ┆ Basketball Euroleague     │
-    │ basketball_nba                  ┆ Basketball        ┆ NBA                       │
     └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
@@ -1079,22 +1071,32 @@ out
 
 
     shape: (10, 6)
-    ┌──────────────────┬───────────────┬───────────────┬────────────┬──────────────────┬───────────────┐
-    │ home_team        ┆ away_team     ┆ bookmaker_key ┆ market_key ┆ outcome_name     ┆ outcome_price │
-    │ ---              ┆ ---           ┆ ---           ┆ ---        ┆ ---              ┆ ---           │
-    │ str              ┆ str           ┆ str           ┆ str        ┆ str              ┆ i64           │
-    ╞══════════════════╪═══════════════╪═══════════════╪════════════╪══════════════════╪═══════════════╡
-    │ Seattle Seahawks ┆ Chicago Bears ┆ draftkings    ┆ h2h        ┆ Chicago Bears    ┆ 142           │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ draftkings    ┆ h2h        ┆ Seattle Seahawks ┆ -170          │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ fanduel       ┆ h2h        ┆ Chicago Bears    ┆ 150           │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ fanduel       ┆ h2h        ┆ Seattle Seahawks ┆ -178          │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ betrivers     ┆ h2h        ┆ Chicago Bears    ┆ 145           │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ betrivers     ┆ h2h        ┆ Seattle Seahawks ┆ -177          │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ lowvig        ┆ h2h        ┆ Chicago Bears    ┆ 153           │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ lowvig        ┆ h2h        ┆ Seattle Seahawks ┆ -175          │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ betonlineag   ┆ h2h        ┆ Chicago Bears    ┆ 157           │
-    │ Seattle Seahawks ┆ Chicago Bears ┆ betonlineag   ┆ h2h        ┆ Seattle Seahawks ┆ -180          │
-    └──────────────────┴───────────────┴───────────────┴────────────┴──────────────────┴───────────────┘
+    ┌───────────┬──────────────┬────────────────┬────────────┬──────────────────────┬───────────────┐
+    │ home_team ┆ away_team    ┆ bookmaker_key  ┆ market_key ┆ outcome_name         ┆ outcome_price │
+    │ ---       ┆ ---          ┆ ---            ┆ ---        ┆ ---                  ┆ ---           │
+    │ str       ┆ str          ┆ str            ┆ str        ┆ str                  ┆ i64           │
+    ╞═══════════╪══════════════╪════════════════╪════════════╪══════════════════════╪═══════════════╡
+    │ Baltimore ┆ Jacksonville ┆ draftkings     ┆ h2h        ┆ Baltimore Ravens     ┆ 400           │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ draftkings     ┆ h2h        ┆ Jacksonville Jaguars ┆ -535          │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ williamhill_us ┆ h2h        ┆ Baltimore Ravens     ┆ 400           │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ williamhill_us ┆ h2h        ┆ Jacksonville Jaguars ┆ -560          │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ betus          ┆ h2h        ┆ Baltimore Ravens     ┆ 422           │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ betus          ┆ h2h        ┆ Jacksonville Jaguars ┆ -545          │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ fanduel        ┆ h2h        ┆ Baltimore Ravens     ┆ 420           │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ fanduel        ┆ h2h        ┆ Jacksonville Jaguars ┆ -560          │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ betonlineag    ┆ h2h        ┆ Baltimore Ravens     ┆ 412           │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Jacksonville ┆ betonlineag    ┆ h2h        ┆ Jacksonville Jaguars ┆ -545          │
+    │ Ravens    ┆ Jaguars      ┆                ┆            ┆                      ┆               │
+    └───────────┴──────────────┴────────────────┴────────────┴──────────────────────┴───────────────┘
 
 
 
@@ -1113,7 +1115,7 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 9907
+    Total wrappers across the counted leagues: 9942
 
 
 
@@ -1125,11 +1127,11 @@ df
     │ ---          ┆ ---         │
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
-    │ mbb          ┆ 660         │
-    │ wbb          ┆ 577         │
-    │ nba          ┆ 541         │
-    │ cfb          ┆ 467         │
-    │ nhl          ┆ 406         │
+    │ mbb          ┆ 667         │
+    │ wbb          ┆ 582         │
+    │ nba          ┆ 551         │
+    │ cfb          ┆ 469         │
+    │ nhl          ┆ 407         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │
     │ kijhl        ┆ 14          │
