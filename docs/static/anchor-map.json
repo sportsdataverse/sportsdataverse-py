@@ -11499,7 +11499,7 @@
   "wnba_tracking_drive_value": "analytics",
   "wnba_tracking_pass_value": "analytics",
   "wnba_tracking_reb_oe": "analytics",
-  "wnba_tracking_rim_protect_value": "analytics",
+  "wnba_tracking_rim_protect_value": "analytics-2",
   "wnba_tracking_shot_diet_value": "analytics-2",
   "wnba_tracking_touch_value": "analytics-2",
   "wnba_win_prob_from_margin": "models-and-calculators",

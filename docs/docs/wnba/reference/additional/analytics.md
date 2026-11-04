@@ -476,7 +476,7 @@ print(f"Found {officials.height} official slots")
 
 ### wnba_season_sim {#wnba_season_sim}
 
-`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim.
 
@@ -489,6 +489,7 @@ WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10').
 | `league_id` | `str` | `'10'` |  |
 | `n_sims` | `int` | `10000` |  |
 | `seed` | `int` | `20261103` |  |
+| `chances` | `list[float] \| None` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
@@ -498,7 +499,7 @@ One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
-| `as_of_date` | String | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
+| `as_of_date` | Date | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
 | `team_id` | Int64 | stats.nba.com team id (Int64). |
 | `conference` | String | NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table). |
 | `division` | String | NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team. |
@@ -916,45 +917,4 @@ No returns table is published for this function: no capture: it reads stats.nba.
 from sportsdataverse.wnba import wnba_tracking_reb_oe
 df = wnba_tracking_reb_oe(2024)
 print(df.sort("reb_oe", descending=True).head())
-```
-
-### wnba_tracking_rim_protect_value {#wnba_tracking_rim_protect_value}
-
-`wnba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-WNBA rim-protection / shot-defend points-saved (`league_id="10"`
-
-by-reference shim).
-
-See `sportsdataverse.nba.nba_tracking_value.nba_tracking_rim_protect_value`
-for the full recipe (bucket-mean defended-rate baseline; optional
-`playerdashptshotdefend` rim-band enrichment).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
-| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.wnba import wnba_tracking_rim_protect_value
-df = wnba_tracking_rim_protect_value(2024)
-print(df.sort("rim_protect_pts_saved", descending=True).head())
 ```

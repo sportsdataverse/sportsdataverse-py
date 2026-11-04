@@ -158,7 +158,7 @@ wnba_officials = result["officials"]
 
 ### nba_season_sim {#nba_season_sim}
 
-`nba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
 
@@ -176,6 +176,7 @@ are in `sportsdataverse.nba.nba_season_rules`.
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
 | `n_sims` | `int` | `10000` | Simulated seasons (Monte Carlo error: see `SIM_SCHEMA`'s `_se` columns). |
 | `seed` | `int` | `20261103` | Seeds the generator; the same release data and seed give the same output. |
+| `chances` | `list[float] \| None` | `None` | Lottery chances per slot, worst record first, one per lottery team; overrides the published table (needed for the 2027 WNBA lottery's seven teams, not published yet). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -185,7 +186,7 @@ One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
-| `as_of_date` | String | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
+| `as_of_date` | Date | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
 | `team_id` | Int64 | stats.nba.com team id (Int64). |
 | `conference` | String | NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table). |
 | `division` | String | NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team. |

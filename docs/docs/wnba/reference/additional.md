@@ -128,7 +128,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_tracking_drive_value](additional/analytics.md#wnba_tracking_drive_value) | WNBA drive value + rim-pressure (`league_id="10"` by-reference shim). |
 | [wnba_tracking_pass_value](additional/analytics.md#wnba_tracking_pass_value) | WNBA expected-assists / passer value (`league_id="10"` by-reference shim). |
 | [wnba_tracking_reb_oe](additional/analytics.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |
-| [wnba_tracking_rim_protect_value](additional/analytics.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |
+| [wnba_tracking_rim_protect_value](additional/analytics-2.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |
 | [wnba_tracking_shot_diet_value](additional/analytics-2.md#wnba_tracking_shot_diet_value) | WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"` |
 | [wnba_tracking_touch_value](additional/analytics-2.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
 | [zone_value_map](additional/analytics-2.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |

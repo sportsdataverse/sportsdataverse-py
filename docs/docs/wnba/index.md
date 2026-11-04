@@ -95,7 +95,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_tracking_drive_value`](reference/additional/analytics#wnba_tracking_drive_value)
 - [`wnba_tracking_pass_value`](reference/additional/analytics#wnba_tracking_pass_value)
 - [`wnba_tracking_reb_oe`](reference/additional/analytics#wnba_tracking_reb_oe)
-- [`wnba_tracking_rim_protect_value`](reference/additional/analytics#wnba_tracking_rim_protect_value)
+- [`wnba_tracking_rim_protect_value`](reference/additional/analytics-2#wnba_tracking_rim_protect_value)
 - [`wnba_tracking_shot_diet_value`](reference/additional/analytics-2#wnba_tracking_shot_diet_value)
 - [`wnba_tracking_touch_value`](reference/additional/analytics-2#wnba_tracking_touch_value)
 - [`zone_value_map`](reference/additional/analytics-2#zone_value_map)

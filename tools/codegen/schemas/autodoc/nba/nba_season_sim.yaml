@@ -5,7 +5,7 @@ columns:
   type: integer
   description: ''
 - name: as_of_date
-  type: character
+  type: date
   description: ''
 - name: team_id
   type: integer

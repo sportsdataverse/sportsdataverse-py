@@ -106,6 +106,9 @@ def outcomes(sim: pl.DataFrame, final: pl.DataFrame, schedule: pl.DataFrame) -> 
     """The sim joined to what happened: final wins, seed, division winner, playoff / play-in."""
     assert sim.schema["team_id"] == final.schema["team_id"], "team_id dtype differs"
     playoffs, play_in = postseason_teams(schedule, "playoffs"), postseason_teams(schedule, "play-in")
+    missing = set(sim["team_id"].to_list()) - set(final["team_id"].to_list())
+    if missing:
+        raise ValueError(f"simulated teams with no final standings row: {sorted(missing)}")
     return sim.join(
         final.select("team_id", pl.col("wins").alias("final_wins"), "seed", "division_leader"),
         on="team_id",

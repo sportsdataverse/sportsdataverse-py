@@ -414,3 +414,10 @@ def test_rejects_bad_draw_counts_and_chances() -> None:
     for bad in ([140, 140, 140, float("inf")], [140, 140, 140, float("nan")]):
         with pytest.raises(ValueError, match="finite"):
             nba_draft_lottery_odds(chances=bad)
+
+
+def test_wnba_binding_forwards_custom_chances() -> None:
+    """``chances`` reaches the sim through ``wnba_season_sim`` (the 2027 lottery has no table)."""
+    sim = _sim("wnba", 2025, n_sims=500, seed=2, chances=[442, 276, 178, 104, 55])
+    assert sim["p_pick_1"].sum() == pytest.approx(1.0)
+    assert dict(zip(sim["team_id"].to_list(), sim["p_pick_1"].to_list(), strict=True))[CONN] < 0.12

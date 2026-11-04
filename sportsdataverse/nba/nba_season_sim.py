@@ -364,6 +364,17 @@ def _check_inputs(games: pl.DataFrame, model: GameModel, *, league_id: str, n_si
         raise ValueError(f"n_sims must be at least 1, got {n_sims}")
 
 
+def _check_chances(chances: list[float] | None, n_lottery: int, league_id: str) -> None:
+    """Caller-supplied lottery chances: one positive, finite value per lottery team, at least the draws."""
+    if chances is not None and (
+        len(chances) != n_lottery
+        or len(chances) < (NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS)
+        or not all(np.isfinite(chances))
+        or min(chances, default=0) <= 0
+    ):
+        raise ValueError(f"chances must be {n_lottery} positive, finite values (at least the draws), got {chances}")
+
+
 def simulate_pro_season(
     games: pl.DataFrame,
     model: GameModel,
@@ -426,12 +437,10 @@ def simulate_pro_season(
     total_wins = wins.sum(2)
     total_games = total_wins + wins.sum(1)
     n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
-    if chances is not None and (
-        len(chances) != n_lottery or not all(np.isfinite(chances)) or min(chances, default=0) <= 0
-    ):
-        raise ValueError(f"chances must be {n_lottery} positive, finite values, got {chances}")
+    _check_chances(chances, n_lottery, league_id)
     lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
-    have_odds = lot_chances is not None and n_lottery > 0
+    draws = NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS
+    have_odds = lot_chances is not None and n_lottery >= draws
     prior_w, prior_g = _prior_arrays(prior_records, index)
 
     seed_of, leader, playoff, slot_team, slot_chance = _rank_seasons(
@@ -445,7 +454,7 @@ def simulate_pro_season(
         rng=rng,
     )
 
-    draws = (NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS) if have_odds else 0
+    draws = draws if have_odds else 0
     pick_of: np.ndarray = np.zeros((n_sims, n_t), dtype=np.int64)
     if have_odds:
         np.put_along_axis(pick_of, slot_team, draw_picks(slot_chance, draws, rng), axis=1)
@@ -482,6 +491,24 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.Dat
     return reg
 
 
+def _load_inputs(
+    season: int, as_of_date: dt.date | None, league_id: str
+) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None]:
+    """(regular-season games, as-of game model, WNBA prior-season records) from the releases."""
+    load_possessions, load_schedule, offset = _league_loaders(league_id)
+    schedule = load_schedule([season - offset])
+    games = _regular_games(schedule, as_of_date)
+    done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
+    rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
+    assert rows.schema["game_id"] == done.schema["game_id"], "game_id dtype differs between possessions and schedule"
+    model = as_of_game_model(rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id)
+    prior = None
+    if league_id == "10":
+        last = _regular_games(load_schedule([season - 1 - offset]), None)
+        prior = _records(last)
+    return games, model, prior
+
+
 @overload
 def nba_season_sim(
     season: int,
@@ -490,6 +517,7 @@ def nba_season_sim(
     league_id: str = "00",
     n_sims: int = 10_000,
     seed: int = 20261103,
+    chances: list[float] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 @overload
@@ -500,6 +528,7 @@ def nba_season_sim(
     league_id: str = "00",
     n_sims: int = 10_000,
     seed: int = 20261103,
+    chances: list[float] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 def nba_season_sim(
@@ -509,6 +538,7 @@ def nba_season_sim(
     league_id: str = "00",
     n_sims: int = 10_000,
     seed: int = 20261103,
+    chances: list[float] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
@@ -526,6 +556,8 @@ def nba_season_sim(
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         n_sims: Simulated seasons (Monte Carlo error: see :data:`SIM_SCHEMA`'s ``_se`` columns).
         seed: Seeds the generator; the same release data and seed give the same output.
+        chances: Lottery chances per slot, worst record first, one per lottery team; overrides the
+            published table (needed for the 2027 WNBA lottery's seven teams, not published yet).
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -560,20 +592,17 @@ def nba_season_sim(
         WNBA via ``league_id``::
 
             nba_season_sim(2025, as_of_date=dt.date(2025, 7, 1), league_id="10")
+
+    See Also:
+        * :func:`sportsdataverse.nba.nba_season_rules.nba_season_standings` -- the standings and
+          tiebreakers each simulated season is ranked with
+        * :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_sim` -- the college season sim
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+        * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
     if league_id not in SIM_CONSTANTS:
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
-    load_possessions, load_schedule, offset = _league_loaders(league_id)
-    schedule = load_schedule([season - offset])
-    games = _regular_games(schedule, as_of_date)
-    done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
-    rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
-    assert rows.schema["game_id"] == done.schema["game_id"], "game_id dtype differs between possessions and schedule"
-    model = as_of_game_model(rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id)
-    prior = None
-    if league_id == "10":
-        last = _regular_games(load_schedule([season - 1 - offset]), None)
-        prior = _records(last)
+    games, model, prior = _load_inputs(season, as_of_date, league_id)
     out = simulate_pro_season(
         games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
         model,
@@ -581,6 +610,7 @@ def nba_season_sim(
         n_sims=n_sims,
         seed=seed,
         prior_records=prior,
+        chances=chances,
         as_of_date=as_of_date,
     )
     return out.to_pandas() if return_as_pandas else out
