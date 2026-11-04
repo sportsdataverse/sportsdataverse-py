@@ -65,10 +65,11 @@ def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float,
             )
             off = dict(zip(coef["team_id"], coef["off_coef"]))
             de = dict(zip(coef["team_id"], coef["def_coef"]))
+            # A held-out team with no training rows gets the ridge prior mean, 0.
             pred = (
                 b0
-                + np.array([off[t] for t in test["offense_id"]])
-                + np.array([de[t] for t in test["defense_id"]])
+                + np.array([off.get(t, 0.0) for t in test["offense_id"]])
+                + np.array([de.get(t, 0.0) for t in test["defense_id"]])
                 + hfa * test["hfa"].to_numpy()
             )
             sse = float(((test["y"].to_numpy() - pred) ** 2).sum())
@@ -77,11 +78,13 @@ def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float,
     return out
 
 
-def main(argv: "list[str] | None" = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
     ap.add_argument("--seasons", type=int, nargs="+", required=True, help="seasons by END year")
     args = ap.parse_args(argv)
+    if len(set(args.seasons)) < 2:
+        ap.error("--seasons needs at least two distinct seasons: each one is scored on a penalty chosen on the others")
 
     league_id = _LEAGUE_ID[args.league]
     load_possessions, load_schedule, offset = _league_loaders(league_id)

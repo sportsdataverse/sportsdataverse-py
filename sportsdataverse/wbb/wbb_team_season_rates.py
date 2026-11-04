@@ -12,8 +12,6 @@ Example:
 
 from __future__ import annotations
 
-from typing import Union
-
 import pandas as pd
 import polars as pl
 
@@ -23,10 +21,10 @@ __all__ = ["wbb_team_season_rates"]
 
 
 def wbb_team_season_rates(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's college season team rates from possessions, with home/away/close/clutch splits.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_team_season_rates.mbb_team_season_rates` with
