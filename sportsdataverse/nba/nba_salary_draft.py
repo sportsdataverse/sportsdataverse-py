@@ -533,6 +533,7 @@ def nbadraft_mock_draft(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba import nbadraft_mock_draft
 
             mock = nbadraft_mock_draft()
@@ -628,6 +629,7 @@ def rotowire_injuries(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba import rotowire_injuries
 
             injuries = rotowire_injuries()

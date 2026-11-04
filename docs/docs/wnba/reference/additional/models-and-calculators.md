@@ -207,7 +207,7 @@ board = wnba_draft_model(2023)
 
 ### wnba_in_game_win_prob {#wnba_in_game_win_prob}
 
-`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
 
@@ -217,7 +217,7 @@ WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_
 |---|---|---|---|
 | `pbp` | `DataFrame` |  |  |
 | `pregame_home_prob` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
@@ -237,7 +237,7 @@ One row per play: the `in_game_features` columns plus `home_win_prob`.
 
 ### wnba_predict_games {#wnba_predict_games}
 
-`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
 
@@ -247,7 +247,7 @@ WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nb
 |---|---|---|---|
 | `games` | `DataFrame` |  |  |
 | `ratings` | `DataFrame` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
@@ -258,7 +258,7 @@ No returns table is published for this function: no capture: it needs one row pe
 
 ### wnba_predict_margin {#wnba_predict_margin}
 
-`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
+`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '10') -> 'float'`
 
 WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
 
@@ -271,7 +271,7 @@ WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.
 | `home_pace` | `float` |  |  |
 | `away_pace` | `float` |  |  |
 | `neutral` | `bool` | `False` |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 
@@ -279,7 +279,7 @@ Expected margin in points (positive favors the home team).
 
 ### wnba_predict_total {#wnba_predict_total}
 
-`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
+`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '10') -> 'float'`
 
 WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
 
@@ -293,7 +293,7 @@ WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.p
 | `away_def` | `float` |  |  |
 | `home_pace` | `float` |  |  |
 | `away_pace` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 
@@ -327,7 +327,7 @@ board = wnba_rookie_projection(2023)
 
 ### wnba_team_ratings {#wnba_team_ratings}
 
-`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
 
@@ -336,7 +336,7 @@ WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Union[int, list[int]]` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `as_of_date` | `Union[date, None]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
@@ -382,7 +382,7 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 
 ### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
 
-`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
+`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '10') -> 'float'`
 
 WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
 
@@ -391,7 +391,7 @@ WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_pre
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `exp_margin` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 

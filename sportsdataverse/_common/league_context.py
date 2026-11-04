@@ -16,8 +16,10 @@ in any league follows one suffix grammar:
 * ``<m>_n`` -- the sample size of the rate: the possessions, games or attempts it is computed
   over. A null denominator is 0.
 * :func:`league_averages` -- one row per ``(season, level, entity, category, metric)`` with the
-  ``mean / median / sd / n`` of the ranked rows. Its ``n`` is the ``_pct`` denominator: the
-  cohort count lives here, not beside each row.
+  ``mean / median / sd / n`` of the qualifying rows. Its ``n`` is the cohort count, the number of
+  finite qualifying values (not a rate's ``<m>_n`` sample size). Where ranks exist it is the ``n``
+  of the ``_pct`` formula above, whose denominator is ``n + 1``; it ignores the floor, so a
+  season below the floor still reports its ``n`` beside null ranks.
 
 There is one deliberate difference from football. Football floors only the cohort
 percentiles. Here the floor (owner decision D-F5, :data:`MIN_COHORT_TEAMS` and
@@ -239,9 +241,12 @@ def league_averages(
 
     The statistics describe the distribution of the qualifying entity rows (an unweighted mean
     over teams or qualified players), not a pooled league rate. That is the population
-    :func:`attach_ranks` ranks, so ``n`` is the ``_pct`` denominator. A null or non-finite
-    value is skipped and does not count toward ``n``. A metric with no finite value in a season
-    gets no row.
+    :func:`attach_ranks` ranks. ``n`` is the cohort count: the finite qualifying values, the
+    ``n`` in the ``_pct`` formula (whose denominator is ``n + 1``), not a rate's ``<m>_n``
+    sample size. It applies neither the ``min_cohort`` floor nor the distinct-value check, so a
+    season whose ``_rank`` / ``_pct`` are null still reports its mean, median, sd and ``n``. A
+    null or non-finite value is skipped and does not count toward ``n``. A metric with no finite
+    value in a season gets no row, and a row with a null ``season`` is dropped.
 
     Args:
         df: The season table. It must carry an integer ``season`` column.
@@ -276,7 +281,8 @@ def league_averages(
         df.select(pl.col("season").cast(pl.Int64), *[pl.col(m).cast(pl.Float64) for m in metrics])
         # value_name must not collide with a metric's own name (polars 2.0 raises DuplicateError)
         .unpivot(index="season", variable_name="metric", value_name="__value")
-        .filter(pl.col("__value").is_finite())
+        # A null season would group as its own season row, one that attach_ranks never ranks.
+        .filter(pl.col("season").is_not_null() & pl.col("__value").is_finite())
     )
     # Sorting each group's values makes the float sums a pure function of the value multiset,
     # so identical rebuilds produce byte-identical parquet (the football producers' rule).

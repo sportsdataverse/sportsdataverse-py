@@ -73388,3 +73388,8 @@ stack_seasons:
   off_ids: Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids.
   off_team: Team on offense during the stint.
   y_offset: The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace.
+nbadraft_mock_draft:
+  round: Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables).
+rotowire_injuries:
+  return_date: Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only")
+    and when the cell is blank.

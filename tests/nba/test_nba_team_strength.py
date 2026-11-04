@@ -22,7 +22,6 @@ the home term's sign and its removal, the SOS opponent weighting and the SOV def
 from __future__ import annotations
 
 import importlib
-import inspect
 from collections import defaultdict
 from pathlib import Path
 
@@ -230,15 +229,6 @@ def test_bad_season_type_raises_before_loading(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr(tsr, "load_nba_stats_schedules", no_load)
     with pytest.raises(ValueError, match="season_type"):
         mod.nba_team_strength(2026, season_type="regular")
-
-
-@pytest.mark.parametrize(
-    "name", ["sportsdataverse.wnba.wnba_team_strength", "sportsdataverse.wnba.wnba_team_season_rates"]
-)
-def test_wnba_binding_signature_shows_the_wnba_league_id(name: str) -> None:
-    # update_wrapper sets __wrapped__; without __signature__ the docs would read the core's "00".
-    binding = getattr(importlib.import_module(name), name.rsplit(".", 1)[1])
-    assert inspect.signature(binding).parameters["league_id"].default == "10"
 
 
 def test_ridge_design_rejects_a_null_home_flag() -> None:

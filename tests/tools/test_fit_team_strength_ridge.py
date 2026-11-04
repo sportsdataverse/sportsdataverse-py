@@ -53,10 +53,11 @@ def test_bad_seasons_are_rejected(seasons: list[str], message: str, capsys: pyte
 def test_season_without_possessions_is_rejected(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    empty = pl.DataFrame()
-    monkeypatch.setattr(fit, "_league_loaders", lambda league_id: (lambda s: empty, lambda s: empty, 0))
-    monkeypatch.setattr(fit, "nba_possession_rate_rows", lambda *a, **k: empty)
-    monkeypatch.setattr(fit, "season_cv", lambda rows, grid: {lam: (0.0, 0) for lam in grid})
+    # The real mapper and season_cv run on a season the release has no possessions for, so the
+    # guard is shown to fire before the per-season division, not just when season_cv is stubbed.
+    empty = pl.read_parquet(RATES / "wnba_possessions_2025.parquet").head(0)
+    schedule = pl.read_parquet(RATES / "wnba_schedule_2025.parquet")
+    monkeypatch.setattr(fit, "_league_loaders", lambda league_id: (lambda s: empty, lambda s: schedule, 0))
     with pytest.raises(SystemExit) as exc:
         fit.main(["--league", "wnba", "--seasons", "2024", "2025"])
     assert exc.value.code == 2

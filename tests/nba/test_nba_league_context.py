@@ -157,3 +157,13 @@ def test_empty_frames_keep_the_schema() -> None:
     assert ranked.schema["def_rating_rank"] == pl.Float64 and ranked.schema["def_rating_pct"] == pl.Float64
     avg = league_averages(oracle, ["def_rating"], level="nba", entity="team", category="t")
     assert avg.height == 0 and dict(avg.schema) == LEAGUE_AVERAGES_SCHEMA
+
+
+def test_league_averages_drop_a_null_season_row() -> None:
+    """A null-season row is not summarized: it would form a season row ``attach_ranks`` never ranks."""
+    oracle = pl.read_parquet(PRED / "team_ratings_oracle_2024.parquet").with_columns(
+        season=pl.when(pl.int_range(pl.len()) == 0).then(None).otherwise(2024).cast(pl.Int64)
+    )
+    avg = league_averages(oracle, ["net_rating"], level="nba", entity="team", category="t")
+    assert avg["season"].to_list() == [2024]
+    assert avg["n"][0] == oracle.filter(pl.col("season").is_not_null())["net_rating"].is_finite().sum()

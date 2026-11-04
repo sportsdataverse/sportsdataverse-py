@@ -70,7 +70,7 @@ One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `wei
 
 | col_name | type | description |
 |---|---|---|
-| `round` | Int64 | Tournament / playoff round. |
+| `round` | Int64 | Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables). |
 | `pick` | Int64 | Pick number within the round. |
 | `team` | String | Team-side label or team identifier. |
 | `player` | String | Player name. |
@@ -89,6 +89,7 @@ One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `wei
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba import nbadraft_mock_draft
 
 mock = nbadraft_mock_draft()
@@ -594,7 +595,7 @@ One row per injured player with `player_id`, `player`, `first_name`, `last_name`
 | `position` | String | Listed roster position (G, F, C, etc.). |
 | `injury` | String | Injury (body part / description). |
 | `status` | String | Status label. |
-| `return_date` | String | Projected return (`NA` unless a subscriber). |
+| `return_date` | String | Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only") and when the cell is blank. |
 | `url` | String | RotoWire player page URL. |
 
 **Raises**
@@ -606,6 +607,7 @@ One row per injured player with `player_id`, `player`, `first_name`, `last_name`
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba import rotowire_injuries
 
 injuries = rotowire_injuries()
@@ -654,6 +656,7 @@ No returns table is published for this function: no capture: its input is stats.
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
 scored = score_shot_xpoints(shots, league_avgs)
 
@@ -1006,6 +1009,7 @@ No returns table is published for this function: no capture: its input is stats.
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, zone_value_map
 zmap = zone_value_map(score_shot_xpoints(shots, league_avgs))
 
