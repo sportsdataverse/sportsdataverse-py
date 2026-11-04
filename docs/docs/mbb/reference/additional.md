@@ -371,6 +371,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_bracketology](additional/analytics.md#mbb_bracketology) | The daily `bracketology` table: the projected field, seeds and bubble as of a date. |
 | [mbb_shot_selection](additional/analytics.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_team_luck](additional/analytics.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_rates](additional/analytics-2.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-2.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [ncaa_mbb_lineups](additional/analytics-2.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |

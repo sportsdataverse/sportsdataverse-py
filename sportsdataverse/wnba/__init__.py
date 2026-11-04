@@ -43,6 +43,7 @@ from sportsdataverse.wnba.wnba_shot_value import *
 from sportsdataverse.wnba.wnba_playtype_impact import *
 from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_season_rates  # noqa: F401
 from sportsdataverse.wnba.wnba_team_strength import wnba_team_strength  # noqa: F401
+from sportsdataverse.wnba.wnba_team_luck import wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba.wnba_season_sim import (  # noqa: F401
     wnba_draft_lottery_odds,
     wnba_season_sim,

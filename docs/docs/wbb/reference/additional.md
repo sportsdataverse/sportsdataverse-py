@@ -348,6 +348,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's daily `bracketology` table: the projected field, seeds and bubble. |
 | [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [wbb_team_luck](additional/analytics-2.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
 | [wbb_team_season_rates](additional/analytics-2.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [wbb_team_strength](additional/analytics-2.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |

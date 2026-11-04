@@ -506,6 +506,7 @@ from sportsdataverse.mbb import mbb_shot_quality_model as mbb_shot_quality_model
 from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
 from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
@@ -1147,6 +1148,7 @@ __all__ = [
     "mbb_shot_selection",
     "mbb_strength_of_schedule",
     "mbb_team_crosswalk",
+    "mbb_team_luck",
     "mbb_team_ratings",
     "mbb_team_season_rates",
     "mbb_team_strength",
