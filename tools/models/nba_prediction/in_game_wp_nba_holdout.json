@@ -1,0 +1,57 @@
+{
+  "league_id": "00",
+  "league": "nba",
+  "train_seasons": [
+    2022,
+    2023,
+    2025
+  ],
+  "validation_season": 2025,
+  "holdout_season": 2026,
+  "baseline_ref": "3e967eb40d",
+  "n_train_plays": 1863631,
+  "rounds": 139,
+  "params": {
+    "max_depth": 4,
+    "eta": 0.1,
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42,
+    "monotone_constraints": "(1,0,1,1,1)"
+  },
+  "features": [
+    "score_diff",
+    "sqrt_sec_left_60",
+    "pregame_logit",
+    "home_has_ball",
+    "margin_per_sqrt_sec"
+  ],
+  "baseline": {
+    "plays": 639829,
+    "brier": 0.152233636263066,
+    "log_loss": 0.4548486772456902,
+    "calibration_slope": 0.9157766767393115,
+    "games": 1321,
+    "horn_jump_share": 0.13701741105223317,
+    "horn_step_median": 0.026443779468536377,
+    "final_minute_pairs": 3407,
+    "final_minute_toward_share": 0.0,
+    "final_minute_away_share": 0.0,
+    "grid_violations": 0
+  },
+  "refit": {
+    "plays": 639829,
+    "brier": 0.14467252026645755,
+    "log_loss": 0.436822075987754,
+    "calibration_slope": 0.9263542457648785,
+    "games": 1321,
+    "horn_jump_share": 0.000757002271006813,
+    "horn_step_median": 0.0003694295883178711,
+    "final_minute_pairs": 3407,
+    "final_minute_toward_share": 0.43733489873789255,
+    "final_minute_away_share": 0.0,
+    "grid_violations": 0
+  }
+}
