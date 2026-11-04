@@ -64,7 +64,7 @@ def nba_possession_rate_rows(
 
     ``neutral_site`` is always False: the stats schedule has no neutral-site or venue column, so
     a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
-    as a home game for the listed home team: four or five regular-season games a season.
+    as a home game for the listed home team: at most five regular-season games a season.
     ESPN's schedule ``neutral_site`` is not a usable substitute: it marks the 2023-24 Cup
     semifinals False, and the ESPN-to-stats game id crosswalk starts at 2025-26.
 
