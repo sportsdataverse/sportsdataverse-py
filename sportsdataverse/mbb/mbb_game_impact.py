@@ -29,6 +29,7 @@ from sportsdataverse._common.game_impact import (
     game_player_impact,
     impact_row_schema,
 )
+from sportsdataverse.mbb.mbb_team_season_rates import _WBB_FIRST_QUARTERS_SEASON
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -57,7 +58,7 @@ def _slots(prefix: str = "") -> list[pl.Expr]:
 
 def _period_bounds(league: str) -> tuple[pl.Expr, pl.Expr]:
     """(start, end) of the event's period in cumulative game seconds: halves, or quarters for women from 2016."""
-    quarters = (pl.col("season") >= 2016) if league == "womens" else pl.lit(False)
+    quarters = (pl.col("season") >= _WBB_FIRST_QUARTERS_SEASON) if league == "womens" else pl.lit(False)
     n_reg = pl.when(quarters).then(4).otherwise(2)
     reg_len = 2400.0 / n_reg
     period = pl.col("period")
