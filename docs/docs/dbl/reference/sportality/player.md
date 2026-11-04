@@ -86,7 +86,7 @@ Player head-to-head of a matchup with per-game and season lines.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`. |
 | `home_team_uuid` | `home_team_uuid` |  | `Y` |  | Home team uuid of the game. |
 | `away_team_uuid` | `away_team_uuid` |  | `Y` |  | Away team uuid of the game. |
 | `gameUuid` | `game_uuid` |  |  | `Y` | Game uuid; selects the game whose box-score lines the head-to-head carries. |

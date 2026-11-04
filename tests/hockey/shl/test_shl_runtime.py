@@ -136,6 +136,18 @@ def test_unknown_season_or_game_type_is_no_data(served, season, game_type):
         rt.shl_ssgt_uuid(season, game_type)
 
 
+def test_live_layout_shape_resolves_the_2027_regular_season(served):
+    """layout-info renamed its directory key to ``originalSeasonSeriesGameTypeTeams`` (live 2026-11-04)."""
+    assert "seasonSeriesGameTypeTeams" not in LAYOUT[0]  # the fixture is the live shape
+    assert rt.shl_ssgt_uuid(2027) == "qa98unlbd6"
+
+
+def test_old_layout_key_still_resolves(served):
+    routes, _, _ = served
+    routes["/statistics-v2/layout-info"] = _Resp(_load("statistics-v2__layout-info__old_key.json"))
+    assert rt.shl_ssgt_uuid(2027) == "qa98unlbd6" and rt.shl_ssgt_uuid(2026, "playoff") == "zg0pa4po75"
+
+
 def test_ssgt_helper_and_bad_season(served):
     assert rt.shl_ssgt_uuid(2026) == "iuzqg7dqk9"
     assert rt.shl_ssgt_uuid(2025) == "qeb-73qtP8d19"

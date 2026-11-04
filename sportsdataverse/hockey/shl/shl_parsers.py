@@ -134,6 +134,16 @@ def _dict(v: Any) -> Dict[str, Any]:
     return v if isinstance(v, dict) else {}
 
 
+#: layout-info's ssgt directory key: renamed live 2026-11-04; the old name stays a fallback.
+_SSGT_KEYS = ("originalSeasonSeriesGameTypeTeams", "seasonSeriesGameTypeTeams")
+
+
+def _ssgts(body: Any) -> List[Any]:
+    """The ssgt list of one layout-info item: the first of ``_SSGT_KEYS`` that holds a list."""
+    item = _dict(body)
+    return next((item[k] for k in _SSGT_KEYS if isinstance(item.get(k), list)), [])
+
+
 def _list(v: Any) -> List[Any]:
     """``v`` when it is a list, else ``[]`` (a wrong-typed value reads as absent)."""
     return v if isinstance(v, list) else []
@@ -727,7 +737,7 @@ def parse_shl_layout(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         Parse one ssgt::
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_layout
-            parse_shl_layout([{"seasonSeriesGameTypeTeams": [{"ssgtUuid": "iuzqg7dqk9",
+            parse_shl_layout([{"originalSeasonSeriesGameTypeTeams": [{"ssgtUuid": "iuzqg7dqk9",
                 "season": {"code": "2025"}, "gameType": {"code": "regular"}}]}])
 
     See Also:
@@ -737,9 +747,8 @@ def parse_shl_layout(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _body(raw)
-    ssgts = body.get("seasonSeriesGameTypeTeams") if isinstance(body, dict) else None
     rows = []
-    for s in ssgts if isinstance(ssgts, list) else []:
+    for s in _ssgts(body):
         if not isinstance(s, dict):
             continue
         season = _dict(s.get("season"))

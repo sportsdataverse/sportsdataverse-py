@@ -95,7 +95,7 @@ Games of the last played match day of an ssgt.
 | `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | Boolean | Whether the game went to a shootout. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
 | `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -169,7 +169,7 @@ Directory of every SHL ssgt (season + series + game type) with teams and the sta
 | `game_type` | String | Game type record (uuid, code regular / playoff / qualdown, Swedish name). |
 | `game_type_name` | String | Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation series. |
 | `series_code` | String | Series code (SHL, CHL; HA and Kvalserien in old career logs). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `state` | String | ssgt state: active (the current season) or closed. |
 | `season_uuid` | String | Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid param of game-schedule. |
 | `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
@@ -215,7 +215,7 @@ Games of the next match day of an ssgt.
 | `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | Boolean | Whether the game went to a shootout. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
 | `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -450,7 +450,7 @@ Player head-to-head for a matchup.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid. |
 | `home_team_uuid` | `home_team_uuid` |  | `Y` |  | Home team uuid of the game. |
 | `away_team_uuid` | `away_team_uuid` |  | `Y` |  | Away team uuid of the game. |
 | `gameUuid` | `game_uuid` |  |  | `Y` | Game uuid; narrows the head-to-head to that game's line-ups. |
@@ -655,7 +655,7 @@ Schedule and results of one season + series + game type.
 | `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | Boolean | Whether the game went to a shootout. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
 | `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -759,7 +759,7 @@ Teams (sites) taking part in an ssgt.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid. |
 
 ### Returns {#shl_sites-returns}
 
@@ -799,7 +799,7 @@ Stats provider of an ssgt, a bare string such as statnet.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid. |
 
 ### Returns {#shl_ssgt_provider-returns}
 

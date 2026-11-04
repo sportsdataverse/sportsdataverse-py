@@ -246,7 +246,7 @@ endpoints:
   path: /statistics-v2/player-h2h-v2/{ssgt_uuid}/{home_team_uuid}/{away_team_uuid}
   path_params:
   - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
-      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+      season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.'
     name: ssgt_uuid
     required: true
     type: str
@@ -354,7 +354,7 @@ endpoints:
   path: /sports-v2/all-sites/{ssgt_uuid}
   path_params:
   - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
-      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+      season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.'
     name: ssgt_uuid
     required: true
     type: str
@@ -367,7 +367,7 @@ endpoints:
   path: /sports-v2/ssgt/{ssgt_uuid}/provider
   path_params:
   - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
-      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+      season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.'
     name: ssgt_uuid
     required: true
     type: str
@@ -380,7 +380,7 @@ endpoints:
   path: /gameday/team-standings/{ssgt_uuid}
   path_params:
   - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
-      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+      season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.'
     name: ssgt_uuid
     required: true
     type: str

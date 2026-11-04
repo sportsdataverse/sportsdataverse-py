@@ -83,7 +83,7 @@ A team's recent games (current season view).
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `post-game` = played (schedule, day views). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | String | Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout (null on every game seen; basketball has none). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `home_team_status` | String | WIN or LOSE for the home team once the game is played; absent or empty before. Values: `LOSE` = the team lost; `WIN` = the team won. |
 | `home_team_uuid` | String | Home team uuid (platform key space); joins /sports-v2/teams/{team_uuid}. |
 | `home_team_owner_instance_id` | String | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |
@@ -213,7 +213,7 @@ A team's next games (current season view).
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `pre-game` = not yet played (schedule, day views). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | String | Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout (null on every game seen; basketball has none). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `home_team_status` | String | WIN or LOSE for the home team once the game is played; absent or empty before. Values: `N/A` = no result yet / not applicable. |
 | `home_team_uuid` | String | Home team uuid (platform key space); joins /sports-v2/teams/{team_uuid}. |
 | `home_team_owner_instance_id` | String | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |

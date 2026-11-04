@@ -1857,7 +1857,7 @@ def shl_player_h2h(
     Example URL: https://www.shl.se/api/statistics-v2/player-h2h-v2/iuzqg7dqk9/087a-087aTQv9u/41c4-41c4BiYZU?gameUuid=bdhvuc5tex
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.
+        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.
         home_team_uuid: Home team uuid of the game.
         away_team_uuid: Away team uuid of the game.
         game_uuid: Game uuid; narrows the head-to-head to that game's line-ups.
@@ -2144,7 +2144,7 @@ def shl_sites(
     Example URL: https://www.shl.se/api/sports-v2/all-sites/iuzqg7dqk9
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.
+        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.
         return_parsed: parse the payload through parse_shl -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2196,7 +2196,7 @@ def shl_ssgt_provider(
     Example URL: https://www.shl.se/api/sports-v2/ssgt/iuzqg7dqk9/provider
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.
+        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.
         return_parsed: parse the payload through parse_shl -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2248,7 +2248,7 @@ def shl_standings(
     Example URL: https://www.shl.se/api/gameday/team-standings/iuzqg7dqk9
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.
+        ssgt_uuid: ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid.
         return_parsed: parse the payload through parse_shl_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

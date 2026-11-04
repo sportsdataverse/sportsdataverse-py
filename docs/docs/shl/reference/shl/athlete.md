@@ -62,7 +62,7 @@ Player career totals by season.
 | `info_statistics_provider` | String | Stats provider of the data (statnet seen). |
 | `info_is_in_squad` | Boolean | Whether the player is in the current squad. |
 | `info_player_id` | Int64 | isa (StatNet) player id as an INTEGER. Join trap: play-by-play sends the same id as a STRING (player.playerId, pop/nep, assists) and map keys are strings; cast before joining. |
-| `info_ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `info_ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `info_team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -187,7 +187,7 @@ Player game log of one season.
 | `info_statistics_provider` | String | Stats provider of the data (statnet seen). |
 | `info_is_in_squad` | Boolean | Whether the player is in the current squad. |
 | `info_player_id` | Int64 | isa (StatNet) player id as an INTEGER. Join trap: play-by-play sends the same id as a STRING (player.playerId, pop/nep, assists) and map keys are strings; cast before joining. |
-| `info_ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `info_ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
