@@ -50,7 +50,7 @@ def _partial_bindings() -> list[tuple[str, str]]:
         mod = importlib.import_module(f"sportsdataverse.wnba.{info.name}")
         for name in getattr(mod, "__all__", []):
             obj = getattr(mod, name)
-            if isinstance(obj, functools.partial) and obj.keywords.get("league_id") == "10":
+            if isinstance(obj, functools.partial) and "league_id" in obj.keywords:
                 found.append((info.name, name))
     return found
 
@@ -68,4 +68,6 @@ def test_the_binding_signature_shows_the_wnba_league_id(mod: str, name: str) -> 
     # update_wrapper sets __wrapped__; without wnba_signature, inspect.signature (and the generated
     # reference) would read the NBA core's league_id="00" through the binding.
     binding = getattr(importlib.import_module(f"sportsdataverse.wnba.{mod}"), name)
+    # wnba_signature always displays "10", so check the bound keyword too.
+    assert binding.keywords["league_id"] == "10"
     assert inspect.signature(binding).parameters["league_id"].default == "10"
