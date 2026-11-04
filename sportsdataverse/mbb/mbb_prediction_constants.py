@@ -76,13 +76,19 @@ class LeagueConstants:
     in_game_wp_artifact: str
 
 
-# NET-style quadrant opponent-rank upper bounds by venue (Quad 4 = worse than q3).
-# Men's and women's Division I both use the NET with this quadrant structure; the
-# thresholds are seeded identically and may be re-fit per league later.
+# NET quadrant opponent-rank upper bounds by venue (Quad 4 = worse than q3). The men's and
+# women's committees use different ranges: NCAA, "Breaking down the NCAA Division I men's and
+# women's basketball committees' selection criteria" (2025-03-05),
+# https://www.ncaa.org/news/march-basketball/breaking-down-the-ncaa-division-i-mens-and-womens-basketball-committees-selection-criteria/
 _NET_QUAD_THRESHOLDS: dict[str, dict[str, int]] = {
     "home": {"q1": 30, "q2": 75, "q3": 160},
     "neutral": {"q1": 50, "q2": 100, "q3": 200},
     "away": {"q1": 75, "q2": 135, "q3": 240},
+}
+_NET_QUAD_THRESHOLDS_WOMENS: dict[str, dict[str, int]] = {
+    "home": {"q1": 25, "q2": 55, "q3": 90},
+    "neutral": {"q1": 35, "q2": 65, "q3": 105},
+    "away": {"q1": 45, "q2": 80, "q3": 130},
 }
 
 # Both leagues' hfa / margin_sd / em_scale / avg_tempo / bubble_adj_em were
@@ -90,7 +96,7 @@ _NET_QUAD_THRESHOLDS: dict[str, dict[str, int]] = {
 # joint least squares of actual margin on em_diff + non-neutral indicator;
 # mens: 4,359 eligible games, womens: 4,133 with ``PRED_LEAGUE=womens``; each
 # iterated to a fixed point because the ratings engine reads hfa/avg_tempo).
-# Quad thresholds are canonical NET definitions.
+# Quad thresholds are the NCAA's published NET ranges, per league.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "mens": LeagueConstants(
         hfa=2.9281,
@@ -108,7 +114,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         em_scale=0.6230,
         avg_tempo=71.8212,
         avg_efficiency=95.0,
-        quad_thresholds=_NET_QUAD_THRESHOLDS,
+        quad_thresholds=_NET_QUAD_THRESHOLDS_WOMENS,
         bubble_adj_em=27.472,
         in_game_wp_artifact="wbb_in_game_wp.ubj",
     ),

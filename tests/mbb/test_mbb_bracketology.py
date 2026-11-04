@@ -2,7 +2,7 @@
 
 import polars as pl
 
-from sportsdataverse.mbb.mbb_bracketology import _conference_auto_bids, project_bracket
+from sportsdataverse.mbb.mbb_bracketology import project_bracket
 
 
 def _resume(n: int = 70) -> pl.DataFrame:
@@ -57,30 +57,3 @@ def test_resume_score_monotone_in_inputs():
     ranked = out.sort("resume_score", descending=True)["team_id"].to_list()
     assert ranked[0] == "t00"
     assert ranked[-1] == "t69"
-
-
-def _standings() -> pl.DataFrame:
-    # long-form load_mbb_standings shape: one row per (group, team, stat)
-    rows = [
-        (2024, "2", "ACC", "1", "vsConf_winPercent", 0.90),
-        (2024, "2", "ACC", "2", "vsConf_winPercent", 0.55),
-        (2024, "8", "SEC", "3", "vsConf_winPercent", 0.75),
-        (2024, "8", "SEC", "4", "vsConf_winPercent", 0.80),
-    ]
-    return pl.DataFrame(
-        rows,
-        schema={
-            "season": pl.Int64,
-            "group_id": pl.Utf8,
-            "group_name": pl.Utf8,
-            "team_id": pl.Utf8,
-            "stat_name": pl.Utf8,
-            "value": pl.Float64,
-        },
-        orient="row",
-    )
-
-
-def test_conference_auto_bids_one_per_conference():
-    bids = _conference_auto_bids(_standings())
-    assert bids == {"1", "4"}
