@@ -1024,6 +1024,7 @@ One row per team (stats.nba.com `team_id`, Int64), sorted by conference, group a
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_cup import nba_cup_standings
 nba_cup_standings(2026).filter(pl.col("knockout_seed").is_not_null())
 ```

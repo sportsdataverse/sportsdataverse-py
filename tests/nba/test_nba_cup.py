@@ -352,6 +352,15 @@ def test_rejects_bad_inputs() -> None:
     model = sim_mod.as_of_game_model(_EMPTY_POSSESSIONS.pipe(tsr.nba_possession_rate_rows, _schedule(2026)))
     with pytest.raises(ValueError, match="Cup games to play"):  # the Cup unplayed, the season played
         sim_mod.simulate_pro_season(games, model, n_sims=5, cup=_cup(2026, dt.date(2025, 11, 1)))
+    with pytest.raises(ValueError, match="the Cup is season 2025"):  # a Cup from another season
+        sim_mod.simulate_pro_season(games, model, n_sims=5, cup=_cup(2025))
+    with pytest.raises(ValueError, match="the Cup schedule is season"):
+        cup_mod.cup_inputs(
+            _cup_schedule(2025), games=games, possessions=_EMPTY_POSSESSIONS, last_games=None, as_of_date=None
+        )
+    full = cup_mod.cup_games(_cup_schedule(2026))
+    with pytest.raises(ValueError, match="60 Group Play games"):  # one game missing
+        cup_mod.prepare_cup(full.filter(pl.col("game_id") != full.filter(pl.col("cup_round") == "group")["game_id"][0]))
     with pytest.raises(ValueError, match="NBA only"):
         sim_mod.simulate_pro_season(games, model, league_id="10", n_sims=5, cup=_cup(2026))
     games = cup_mod.cup_games(pl.read_parquet(CUP / "nba_cup_schedule_2026.parquet"))

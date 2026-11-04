@@ -678,7 +678,8 @@ def _cup_columns(cup: CupInputs, future: pl.DataFrame, teams: list[int], h: np.n
     if missing:
         raise ValueError(f"Cup games to play that the season has played or lacks: {missing[:5]}")
     cols = np.array([pos[g] for g in cup.future_ids], dtype=np.int64)
-    assert np.array_equal(h[cols], cup.future[0]) and np.array_equal(a[cols], cup.future[1]), "Cup home / away differ"
+    if not (np.array_equal(h[cols], cup.future[0]) and np.array_equal(a[cols], cup.future[1])):
+        raise ValueError("the Cup's home and away teams differ from the season's")
     return cols
 
 
@@ -700,6 +701,10 @@ def _simulate_season(
     if cup is not None:
         if league_id != "00":
             raise ValueError("cup is NBA only")
+        if games.get_column("season").unique().to_list() != [cup.season]:
+            raise ValueError(
+                f"the Cup is season {cup.season}, the games {games.get_column('season').unique().to_list()}"
+            )
         games = games.filter(~pl.col("game_id").is_in(list(cup.knockout_ids)))
         season_games = NBA_SEASON_GAMES if season_games is None else season_games
     _check_inputs(games, model, league_id=league_id, n_sims=n_sims)

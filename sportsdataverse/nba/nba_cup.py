@@ -254,7 +254,8 @@ def prepare_cup(
         A :class:`CupInputs`.
 
     Raises:
-        ValueError: If ``games`` holds more than one season or a group is not five teams.
+        ValueError: If ``games`` holds more than one season, a group is not five teams, or Group
+            Play is not the 60 games of each group pair once.
     """
     if games.get_column("season").n_unique() != 1:
         raise ValueError("games must hold exactly one season")
@@ -264,6 +265,12 @@ def prepare_cup(
     ).unique()
     if sides.group_by("cup_group").len().get_column("len").to_list() != [5] * 6 or sides.height != 30:
         raise ValueError("expected six groups of five teams in the Group Play games")
+    pairs = group_games.select(
+        pl.min_horizontal("home_team_id", "away_team_id").alias("t1"),
+        pl.max_horizontal("home_team_id", "away_team_id").alias("t2"),
+    )
+    if group_games.height != 60 or pairs.n_unique() != 60:
+        raise ValueError(f"expected 60 Group Play games, each pair of a group once; got {group_games.height}")
     teams = sorted(sides.get_column("team_id").to_list())
     index = {t: i for i, t in enumerate(teams)}
     gmap = dict(sides.iter_rows())
@@ -726,10 +733,16 @@ def cup_inputs(
 
     Returns:
         A :class:`CupInputs`.
+
+    Raises:
+        ValueError: If the Cup schedule and the release games are not one and the same season.
     """
     from sportsdataverse.nba.nba_season_sim import _records
 
     cup = cup_games(cup_schedule, as_of_date=as_of_date)
+    seasons = (cup.get_column("season").unique().to_list(), games.get_column("season").unique().to_list())
+    if len(seasons[0]) != 1 or seasons[0] != seasons[1]:
+        raise ValueError(f"the Cup schedule is season {seasons[0]}, the release games {seasons[1]}")
     rel = games.select("game_id", pl.col("home_pts").alias("rel_h"), pl.col("away_pts").alias("rel_a"))
     assert rel.schema["game_id"] == cup.schema["game_id"], "game_id dtype differs between the release and the Cup"
     in_rel = pl.col("game_id").is_in(rel.get_column("game_id").implode())
@@ -834,6 +847,7 @@ def nba_cup_standings(
     Example:
         The 2025-26 Cup at the end of Group Play::
 
+            import polars as pl
             from sportsdataverse.nba.nba_cup import nba_cup_standings
             nba_cup_standings(2026).filter(pl.col("knockout_seed").is_not_null())
 
