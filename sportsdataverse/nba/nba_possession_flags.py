@@ -248,7 +248,11 @@ def _running_score(col: str) -> pl.Expr:
 
 
 def _starters_on_floor(p: pl.DataFrame) -> pl.DataFrame:
-    """``_row -> _n_starters``: how many of the game's first-possession 10 are on the floor."""
+    """``_row -> _n_starters``: how many of the game's first-possession 10 are on the floor.
+
+    Null when any of the possession's 10 slots is null (an unknown lineup cannot pass the
+    starters clause), so that possession never triggers garbage time.
+    """
     long = p.select("_row", "game_id", "possession_number", *_LINEUP_COLS).unpivot(
         index=["_row", "game_id", "possession_number"], on=_LINEUP_COLS, value_name="_player"
     )
@@ -262,7 +266,11 @@ def _starters_on_floor(p: pl.DataFrame) -> pl.DataFrame:
     return (
         long.join(starters, on=["game_id", "_player"], how="left")
         .group_by("_row")
-        .agg(pl.col("_is_starter").fill_null(0).sum().alias("_n_starters"))
+        .agg(
+            pl.when(pl.col("_player").null_count() == 0)
+            .then(pl.col("_is_starter").fill_null(0).sum())
+            .alias("_n_starters")
+        )
     )
 
 

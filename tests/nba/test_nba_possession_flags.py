@@ -252,3 +252,12 @@ def test_empty_and_bad_inputs() -> None:
     one_game = poss["game_id"][0]
     with pytest.raises(ValueError, match="no events"):
         add_possession_flags(poss, pbp.filter(pl.col("game_id") != one_game))
+
+
+def test_unknown_lineup_never_passes_the_starters_clause() -> None:
+    """A possession with a null on-floor slot cannot count 0 starters and trigger garbage time."""
+    poss, pbp = _load("wnba_2025")
+    blind = poss.with_columns(pl.lit(None, dtype=pl.Int64).alias("def_player_5"))
+    out = add_possession_flags(blind, pbp)
+    assert out["is_garbage_time"].sum() == 0
+    assert out["is_transition"].sum() == OBSERVED["wnba_2025"][2]
