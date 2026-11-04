@@ -1,0 +1,31 @@
+schema: season_game_excitement
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: gei
+  type: double
+  description: ''
+- name: lead_changes
+  type: integer
+  description: ''
+- name: max_swing_pts
+  type: double
+  description: ''
+- name: completed
+  type: logical
+  description: ''
+- name: gei_rank
+  type: integer
+  description: ''
+- name: gei_pct
+  type: double
+  description: ''
+- name: gei_n
+  type: integer
+  description: ''

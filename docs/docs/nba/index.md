@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 215 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 217 | — |
 
 ## ESPN {#espn}
 
@@ -108,6 +108,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`expected_possessions`](reference/additional/models-and-calculators#expected_possessions)
 - [`external_validity`](reference/additional/models-and-calculators#external_validity)
 - [`fit_aging_curve`](reference/additional/models-and-calculators#fit_aging_curve)
+- [`game_excitement`](reference/additional/models-and-calculators#game_excitement)
 - [`game_minutes`](reference/additional/models-and-calculators#game_minutes)
 - [`game_page_frames`](reference/additional/models-and-calculators#game_page_frames)
 - [`game_page_tables`](reference/additional/models-and-calculators#game_page_tables)
@@ -125,7 +126,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_darko`](reference/additional/models-and-calculators#nba_darko)
 - [`nba_decay_rapm`](reference/additional/models-and-calculators#nba_decay_rapm)
 - [`nba_draft_model`](reference/additional/models-and-calculators#nba_draft_model)
-- [`nba_expected_turnovers`](reference/additional/models-and-calculators#nba_expected_turnovers)
+- [`nba_expected_turnovers`](reference/additional/models-and-calculators-2#nba_expected_turnovers)
 - [`nba_four_factor_rapm`](reference/additional/models-and-calculators-2#nba_four_factor_rapm)
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators-2#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators-2#nba_la_rapm)
@@ -142,6 +143,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
 - [`render_report`](reference/additional/models-and-calculators-2#render_report)
 - [`score_win_prob`](reference/additional/models-and-calculators-2#score_win_prob)
+- [`season_game_excitement`](reference/additional/models-and-calculators-2#season_game_excitement)
 - [`shot_coordinates`](reference/additional/models-and-calculators-2#shot_coordinates)
 - [`team_game_rates`](reference/additional/models-and-calculators-2#team_game_rates)
 - [`train_spm`](reference/additional/models-and-calculators-2#train_spm)

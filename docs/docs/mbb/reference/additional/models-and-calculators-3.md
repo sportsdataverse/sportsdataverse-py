@@ -1,10 +1,204 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: simulate_game–win_prob"
-sidebar_label: "Models and calculators: simulate_game–win_prob"
+title: "Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob"
+sidebar_label: "Models and calculators: rank_corr–win_prob"
 sidebar_position: 12
-description: "Men's college basketball — additional Python functions — Models and calculators: simulate_game–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: simulate_game–win_prob
+# Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob
+
+### rank_corr {#rank_corr}
+
+`rank_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
+
+Spearman rank correlation between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
+
+**Returns**
+
+The Spearman rank correlation coefficient.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import spearman_corr
+spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
+```
+
+### raw_game_efficiency {#raw_game_efficiency}
+
+`raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Per-team, per-game possessions + raw offensive/defensive efficiency.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids as strings or ints; cast to `Utf8` here). |
+| `team_box` | `DataFrame` |  | Per-team boxscore with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. When it also carries `total_turnovers` / `team_turnovers` (the loaders do), a row whose `turnovers` and `total_turnovers` are both 0 takes its count from `team_turnovers` -- where ESPN's 2009-2012 women's box files it. |
+
+**Returns**
+
+One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_eff, def_eff`. Empty input returns that schema with zero rows. Team-game rows whose possession estimate is non-positive (an all-zero ESPN boxscore shell) are dropped with a `UserWarning` -- their efficiency is undefined, and one of them poisons the whole season's fixed point. Games in which either team still has 0 turnovers are dropped the same way: the possession estimate would miss its turnover term.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_eff` | Float64 | Off eff. |
+| `def_eff` | Float64 | Def eff. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a season's games have 0 turnovers under every turnover key (ESPN's pre-2009 women's box), so no rating built from it would be meaningful. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
+from sportsdataverse.mbb.mbb_team_ratings import raw_game_efficiency
+eff = raw_game_efficiency(load_mbb_schedule([2024]), load_mbb_team_boxscore([2024]))
+```
+
+### ridge_cv_lambda {#ridge_cv_lambda}
+
+`ridge_cv_lambda(X: 'np.ndarray', y: 'np.ndarray', groups: 'np.ndarray', lams: "'list[float]'") -> 'float'`
+
+Pick lambda by leave-one-group-out CV (groups = seasons/classes).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix. |
+| `y` | `ndarray` |  | Targets. |
+| `groups` | `ndarray` |  | Group label per row (e.g. season); each held out once. |
+| `lams` | `list[float]` |  | Candidate penalties. |
+
+**Returns**
+
+The candidate with the lowest mean held-out MSE.
+
+**Example**
+
+```python
+lam = ridge_cv_lambda(X, y, seasons, [0.1, 1, 10, 100])
+```
+
+### ridge_fit {#ridge_fit}
+
+`ridge_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float') -> 'np.ndarray'`
+
+Closed-form ridge with an unpenalized intercept (coefficient 0).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix `(n, d)`. |
+| `y` | `ndarray` |  | Targets `(n,)`. |
+| `lam` | `float` |  | L2 penalty on the non-intercept coefficients. |
+
+**Returns**
+
+Coefficient vector of length `d + 1` (intercept first).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
+beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
+```
+
+### roc_auc {#roc_auc}
+
+`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
+
+Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
+| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
+
+**Returns**
+
+AUC in `[0, 1]`; `nan` when only one class is present.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
+roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
+```
+
+### save_artifact {#save_artifact}
+
+`save_artifact(name: 'str', obj: 'dict') -> 'None'`
+
+Write a bundled artifact (dev/fitter use -- writes into the source tree).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
+| `obj` | `dict` |  | JSON-serializable artifact payload. |
+
+**Example**
+
+```python
+save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
+```
+
+### score_to_tuple {#score_to_tuple}
+
+`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
+
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`).
+
+Scala's `str match { case regex(s1, s2) => ... }` on a compiled
+`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
+`Matcher.matches()`, not `find()`) -- ported here as
+`re.fullmatch`, not `re.match`/`re.search`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
+
+**Returns**
+
+`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
+
+score_to_tuple("55-68")   # (55, 68)
+score_to_tuple("garbage")  # (0, 0)
+```
 
 ### simulate_game {#simulate_game}
 
