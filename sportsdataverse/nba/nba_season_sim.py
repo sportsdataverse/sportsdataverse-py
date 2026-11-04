@@ -30,10 +30,14 @@ seeded by ``seed``, so a call is reproducible. A probability's standard error is
 ``sqrt(p (1 - p) / n_sims)``, at most 0.005 at 10,000; ``p_playoffs_se`` and ``proj_wins_se``
 report it per team.
 
-**Not modelled:** rest, travel, injuries and roster moves (BB-D23); NBA Cup knockout games not
-yet on the schedule (each team's two are added in December, so a sim before then projects 80
-games); the playoffs past the play-in; offseason roster moves beyond what last season's rating
-and the regression factor carry.
+**Unscheduled NBA games.** Until December the release lists the NBA Cup knockout games with TBD
+teams, so each team has about 80 known games. :func:`nba_season_sim` plays each team's missing
+games, up to :data:`NBA_SEASON_GAMES`, against a league-average opponent at a neutral site; they
+count in its record, not in head-to-head, division or conference records. The Cup final does not
+count in the standings and is not simulated.
+
+**Not modelled:** rest, travel, injuries and roster moves (BB-D23); the playoffs past the play-in;
+offseason roster moves beyond what last season's rating and the regression factor carry.
 """
 
 from __future__ import annotations
@@ -108,6 +112,11 @@ SIM_CONSTANTS: dict[str, tuple[float, float]] = {"00": (800.0, 13.3), "10": (200
 PRIOR_CONSTANTS: dict[str, tuple[float, float]] = {"00": (0.8, 0.25), "10": (0.6, 0.25)}
 
 _SEEDS = 15
+
+#: NBA regular-season games per team. Until December the release lists the NBA Cup knockout games
+#: with TBD teams; :func:`nba_season_sim` then simulates each team's missing games
+#: (:func:`simulate_pro_season`'s ``season_games``). The Cup final does not count in the standings.
+NBA_SEASON_GAMES = 82
 
 #: :func:`simulate_pro_season` / :func:`nba_season_sim` output, one row per team.
 SIM_SCHEMA: dict[str, pl.DataType] = {
@@ -376,6 +385,55 @@ def _simulate_games(
     return wins, pair, pd0 + margins @ signs, shift
 
 
+def _unscheduled_games(
+    model: GameModel,
+    teams: tuple[np.ndarray, np.ndarray, np.ndarray],
+    played: tuple[np.ndarray, np.ndarray, np.ndarray],
+    future: tuple[np.ndarray, np.ndarray],
+    season_games: int | None,
+    uncertain: bool,
+    rng: np.random.Generator,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """``(extra, wins, point_diff)``: each team's games with no known opponent, and per simulated season their results.
+
+    ``extra`` is ``season_games`` less the team's played and scheduled games. Each is played
+    against a league-average opponent (net rating 0, no rating error) at a neutral site, with the
+    team's own rating shift. Nothing is drawn when no team has one.
+    """
+    net, sd, shift = teams
+    h, a = future
+    n_sims, n_t = shift.shape
+    known = played[0].sum(1) + played[0].sum(0) + np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)
+    extra = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)
+    if not extra.any():
+        return extra, np.zeros((n_sims, n_t), dtype=np.int64), np.zeros((n_sims, n_t))
+    k = int(extra.max())
+    noise = _noise_sd(model, sd, np.zeros_like(sd), uncertain)
+    m = (net + shift)[:, :, None] * (model.poss / 100.0) + noise[None, :, None] * rng.standard_normal((n_sims, n_t, k))
+    live = np.arange(k)[None, None, :] < extra[None, :, None]
+    return extra, ((m > 0) & live).sum(2), np.where(live, m, 0.0).sum(2)
+
+
+def _lottery_setup(
+    chances: list[float] | None, n_t: int, league_id: str
+) -> tuple[list[float] | tuple[int, ...] | None, int, int, bool]:
+    """``(chances, lottery teams, draws, have_odds)``: the published chances unless ``chances`` overrides them."""
+    n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
+    _check_chances(chances, n_lottery, league_id)
+    lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
+    draws = NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS
+    return lot_chances, n_lottery, draws, lot_chances is not None and n_lottery >= draws
+
+
+def _season_games(schedule: pl.DataFrame, league_id: str) -> int | None:
+    """:data:`NBA_SEASON_GAMES` while the release still lists TBD regular-season games, else None."""
+    tbd = schedule.filter(
+        (pl.col("season_type") == "regular-season")
+        & ((pl.col("home_team_id").cast(pl.Int64) <= 0) | (pl.col("away_team_id").cast(pl.Int64) <= 0))
+    )
+    return NBA_SEASON_GAMES if league_id == "00" and tbd.height else None
+
+
 def _play_in(
     model: GameModel, net: np.ndarray, noise: np.ndarray, seeds: np.ndarray, conf: np.ndarray, rng: np.random.Generator
 ) -> np.ndarray:
@@ -450,6 +508,7 @@ def _rank_seasons(
     league_id: str,
     lottery: tuple,
     rng: np.random.Generator,
+    unscheduled: tuple[np.ndarray, np.ndarray],
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Rank every simulated season, run the play-in, and order its lottery slots.
 
@@ -469,7 +528,17 @@ def _rank_seasons(
     slot_chance = np.ones((n_sims, max(n_lottery, 0)))
     for s in range(n_sims):
         pair_s = None if pair is None else pair[s]
-        season_s = Season(wins[s], point_diff[s], conf, div, league_id=league_id, rng=rng, pair_diff=pair_s)
+        xw = unscheduled[0][s]
+        season_s = Season(
+            wins[s],
+            point_diff[s],
+            conf,
+            div,
+            league_id=league_id,
+            rng=rng,
+            pair_diff=pair_s,
+            extra=(xw, unscheduled[1] - xw),
+        )
         seed_of[s] = season_s.seeds()
         leader[s] = season_s.leader
         if league_id == "00":
@@ -523,6 +592,7 @@ def simulate_pro_season(
     chances: list[float] | None = None,
     rating_uncertainty: bool = True,
     as_of_date: dt.date | None = None,
+    season_games: int | None = None,
 ) -> pl.DataFrame:
     """Monte Carlo of one regular season's remaining games, with standings, play-in and lottery.
 
@@ -541,9 +611,11 @@ def simulate_pro_season(
         rating_uncertainty: Draw one rating shift per team per season (see the module doc).
             False keeps the ratings fixed; the validation reports both.
         as_of_date: Carried into the output only.
+        season_games: Games per team in the full season; a team's missing games are played
+            against a league-average opponent (the module doc). None: the known games only.
 
     Returns:
-        One row per team in :data:`SIM_SCHEMA`.
+        One row per team in :data:`SIM_SCHEMA` (``games_remaining`` counts the missing games).
 
     Raises:
         ValueError: If ``games`` holds more than one season, ``league_id`` is unknown,
@@ -571,13 +643,9 @@ def simulate_pro_season(
     wins, pair, point_diff, shift = _simulate_games(
         model, net, sd, h, a, played, n_sims=n_sims, wnba=league_id == "10", uncertain=rating_uncertainty, rng=rng
     )
-    total_wins = wins.sum(2)
-    total_games = total_wins + wins.sum(1)
-    n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
-    _check_chances(chances, n_lottery, league_id)
-    lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
-    draws = NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS
-    have_odds = lot_chances is not None and n_lottery >= draws
+    extra, xw, xpd = _unscheduled_games(model, (net, sd, shift), played, (h, a), season_games, rating_uncertainty, rng)
+    point_diff, total_wins, total_games = point_diff + xpd, wins.sum(2) + xw, wins.sum(2) + wins.sum(1) + extra
+    lot_chances, n_lottery, draws, have_odds = _lottery_setup(chances, n_t, league_id)
     prior_w, prior_g = _prior_arrays(prior_records, index)
 
     seed_of, leader, playoff, slot_team, slot_chance = _rank_seasons(
@@ -589,6 +657,7 @@ def simulate_pro_season(
         league_id=league_id,
         lottery=(lot_chances if have_odds else None, n_lottery, prior_w, prior_g, total_wins, total_games),
         rng=rng,
+        unscheduled=(xw, extra),
     )
 
     draws = draws if have_odds else 0
@@ -604,7 +673,7 @@ def simulate_pro_season(
         "division": div.tolist(),
         "wins": played[0].sum(1).tolist(),
         "losses": played[0].sum(0).tolist(),
-        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)).tolist(),
+        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t) + extra).tolist(),
         "adj_net_rtg": net.tolist(),
         "adj_net_rtg_sd": sd.tolist(),
         **_summary(sims, total_games, league_id=league_id, draws=draws, have_odds=have_odds),
@@ -638,8 +707,8 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.Dat
 
 def _load_inputs(
     season: int, as_of_date: dt.date | None, league_id: str
-) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None]:
-    """(regular-season games, as-of game model, WNBA prior-season records) from the releases."""
+) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None, int | None]:
+    """(regular-season games, as-of game model, WNBA prior-season records, season games) from the releases."""
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([season - offset])
     games = _regular_games(schedule, as_of_date)
@@ -669,7 +738,7 @@ def _load_inputs(
     records = None
     if league_id == "10" and last_schedule.height:
         records = _records(_regular_games(last_schedule, None))
-    return games, model, records
+    return games, model, records, _season_games(schedule, league_id)
 
 
 @overload
@@ -767,7 +836,7 @@ def nba_season_sim(
     """
     if league_id not in SIM_CONSTANTS:
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
-    games, model, prior = _load_inputs(season, as_of_date, league_id)
+    games, model, prior, season_games = _load_inputs(season, as_of_date, league_id)
     out = simulate_pro_season(
         games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
         model,
@@ -777,6 +846,7 @@ def nba_season_sim(
         prior_records=prior,
         chances=chances,
         as_of_date=as_of_date,
+        season_games=season_games,
     )
     return out.to_pandas() if return_as_pandas else out
 

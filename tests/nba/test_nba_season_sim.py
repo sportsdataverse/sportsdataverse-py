@@ -552,3 +552,39 @@ def test_in_season_ridge_shrinks_toward_the_prior() -> None:
     # an overwhelming penalty returns the prior itself
     far = possession_ridge_ratings(rows, lam=1e9, prior=pre.ratings).join(prior_net, on="team_id", validate="1:1")
     np.testing.assert_allclose(far["adj_net_rtg"].to_numpy(), far["p"].to_numpy(), atol=1e-3)
+
+
+def test_nba_season_sim_carries_the_prior_from_the_release_before() -> None:
+    """The public path loads 2024-25 and rates a week into 2025-26 with it, not toward average."""
+    games = _regular("nba", 2026)
+    cut = games["game_date"].min() + dt.timedelta(days=7)
+    sim = _sim("nba", 2026, as_of_date=cut, n_sims=200, seed=1)
+    done = games.filter(pl.col("game_date") < cut).select("game_id")
+    rows = _rows("nba", 2026).join(done, on="game_id", how="semi")
+    with_prior = sim_mod.as_of_game_model(rows, prior=_prior("nba", 2026)).ratings
+    without = sim_mod.as_of_game_model(rows).ratings
+    j = sim.select("team_id", "adj_net_rtg").join(with_prior, on="team_id", suffix="_p", validate="1:1")
+    j = j.join(without, on="team_id", suffix="_0", validate="1:1")
+    np.testing.assert_allclose(j["adj_net_rtg"].to_numpy(), j["adj_net_rtg_p"].to_numpy(), atol=1e-9)
+    assert float((j["adj_net_rtg"] - j["adj_net_rtg_0"]).abs().max()) > 1.0
+
+
+def test_unscheduled_cup_games_fill_each_team_to_82() -> None:
+    """2026-27 as released on 2026-11-03: each team's ~80 known games plus its unscheduled Cup slots make 82."""
+    sched = _schedule("nba", 2027)
+    assert sim_mod._season_games(sched, "00") == sim_mod.NBA_SEASON_GAMES == 82
+    assert sim_mod._season_games(_schedule("nba", 2026), "00") is None  # a complete release needs no fill
+    games = sim_mod._regular_games(sched, dt.date(2026, 11, 3))
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), _schedule("nba", 2026))
+    cols = games.select("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts")
+    out = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=500, seed=1, season_games=82)
+    assert out.height == 30 and out.filter(pl.col("team_id") == 0).is_empty()
+    assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {82}
+    np.testing.assert_allclose((out["proj_wins"] + out["proj_losses"]).to_numpy(), 82.0)
+    # the fill is played: a strong team wins more of its extra games than a weak one
+    fixed = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=500, seed=1)
+    gain = out.join(fixed, on="team_id", suffix="_80", validate="1:1").select(
+        "adj_net_rtg", (pl.col("proj_wins") - pl.col("proj_wins_80")).alias("gain")
+    )
+    assert 0.0 <= float(gain["gain"].min()) and float(gain["gain"].max()) <= 2.0 + 1e-9
+    assert np.corrcoef(gain["adj_net_rtg"].to_numpy(), gain["gain"].to_numpy())[0, 1] > 0.5

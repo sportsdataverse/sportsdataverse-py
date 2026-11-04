@@ -165,6 +165,8 @@ class Season:
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         rng: The generator for drawings.
         pair_diff: ``(T, T)`` point differential of ``i`` against ``j``; WNBA only.
+        extra: ``((T,), (T,))`` wins and losses in games without a known opponent (the season
+            sim's unscheduled NBA Cup slots); they count in the winning percentage only.
     """
 
     def __init__(
@@ -177,6 +179,7 @@ class Season:
         league_id: str,
         rng: np.random.Generator,
         pair_diff: np.ndarray | None = None,
+        extra: tuple[np.ndarray, np.ndarray] | None = None,
     ) -> None:
         self.w = wins
         self.g = wins + wins.T
@@ -186,8 +189,9 @@ class Season:
         self.div = division
         self.league_id = league_id
         self.rng = rng
-        total = self.g.sum(1)
-        self.pct = np.where(total > 0, wins.sum(1) / np.maximum(total, 1), 0.0)
+        xw, xl = extra if extra is not None else (0, 0)
+        total = self.g.sum(1) + xw + xl
+        self.pct = np.where(total > 0, (wins.sum(1) + xw) / np.maximum(total, 1), 0.0)
         self.leader: np.ndarray = np.zeros(len(point_diff), dtype=bool)
         # the NBA division orders, kept so a drawn division-lead tie is drawn once
         self._division_orders: dict[str, list[int]] = {}

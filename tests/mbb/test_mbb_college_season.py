@@ -25,6 +25,8 @@ from scipy.stats import norm
 from sportsdataverse.mbb.mbb_college_season import (
     _d1_games,
     college_teams,
+    game_noise_sd,
+    rating_shift_sd,
     season_bracketology,
     season_inputs,
     season_prior,
@@ -565,9 +567,13 @@ def test_preseason_prior_regresses_last_season_and_defaults_new_programs(lg, cor
     new = prior.filter(pl.col("new_team"))
     assert new.height == 2, new  # 2024-25 newcomers to Division I: Mercyhurst, West Georgia
     want = float(final["adj_em"].quantile(pp.new_team_quantile, interpolation="linear"))
-    np.testing.assert_allclose((new["off_dev"] - new["def_dev"]).to_numpy(), want)
+    np.testing.assert_allclose(new["off_dev"].to_numpy(), want / 2)
+    np.testing.assert_allclose(new["def_dev"].to_numpy(), -want / 2)
     old = prior.filter(~pl.col("new_team")).join(final, on="team_id", validate="1:1")
-    np.testing.assert_allclose((old["off_dev"] - old["def_dev"]).to_numpy(), pp.regression * old["adj_em"].to_numpy())
+    avg = float(raw_game_efficiency(played, prev_box)["off_eff"].mean())
+    np.testing.assert_allclose(old["off_dev"].to_numpy(), pp.regression * (old["adj_o"].to_numpy() - avg))
+    np.testing.assert_allclose(old["def_dev"].to_numpy(), pp.regression * (old["adj_d"].to_numpy() - avg))
+    assert (prior["prior_avg"] == avg).all()
     # before the first game the ratings are the prior; a newcomer is rated, not left null
     pre = season_inputs(sched, box, league=league, as_of_date=datetime.date(2024, 10, 1), prior_season=prior_2024)
     r = pre.resume.join(prior, on="team_id", validate="1:1")
@@ -634,3 +640,17 @@ def test_prior_edge_cases_are_explicit(prior_2024, corpus_2025):
     teams = college_teams(corpus_2025[0])
     nobody = college_teams(prev_sched).with_columns(pl.lit("none").alias("team_id")).head(1)
     assert preseason_prior(eff, teams, nobody).is_empty()
+
+
+def test_game_noise_keeps_each_margin_at_margin_sd(lg):
+    """The shift's variance comes out of each game's own noise: margin_sd ** 2 overall, floored at a quarter."""
+    league = LEAGUE[lg]
+    c = get_constants(league)
+    tau = rating_shift_sd(np.array([0.0, 4.0, 30.0]), league)
+    assert tau[0] > tau[1] > tau[2] > 0  # more games, less rating error
+    zero = game_noise_sd(np.zeros(3), np.zeros(3), league)
+    np.testing.assert_allclose(zero, c.margin_sd)
+    sd = game_noise_sd(tau, tau[::-1], league)
+    np.testing.assert_allclose(sd**2 + c.em_scale**2 * (tau**2 + tau[::-1] ** 2), c.margin_sd**2)
+    big = game_noise_sd(np.array([1e3]), np.array([1e3]), league)
+    np.testing.assert_allclose(big, 0.5 * c.margin_sd)
