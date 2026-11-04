@@ -477,7 +477,7 @@ print(f"Found {officials.height} official slots")
 
 ### wnba_season_sim {#wnba_season_sim}
 
-`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, cup_schedule: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim.
 
@@ -491,6 +491,7 @@ WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10').
 | `n_sims` | `int` | `10000` |  |
 | `seed` | `int` | `20261103` |  |
 | `chances` | `list[float] \| None` | `None` |  |
+| `cup_schedule` | `DataFrame \| None` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**

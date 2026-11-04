@@ -328,6 +328,8 @@ from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
 from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
 from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  # noqa: F401
 from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_from_archive  # noqa: F401
+from sportsdataverse.nba import nba_cup_sim as nba_cup_sim  # noqa: F401
+from sportsdataverse.nba import nba_cup_standings as nba_cup_standings  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
@@ -747,6 +749,8 @@ __all__ = [
     "nba_bpm",
     "nba_career_trajectory",
     "nba_crosswalks_from_archive",
+    "nba_cup_sim",
+    "nba_cup_standings",
     "nba_darko",
     "nba_decay_rapm",
     "nba_draft_lottery_odds",
