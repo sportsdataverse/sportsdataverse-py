@@ -35,7 +35,7 @@ from typing import Any
 
 import polars as pl
 
-from sportsdataverse._espn_basketball_pbp import hoopr_coordinates
+from sportsdataverse._espn_basketball_pbp import hoopr_coordinates, pickcenter_odds
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.wbb.wbb_team_box import _game_datetime, _to_int
 
@@ -235,7 +235,7 @@ def _basketball_play_by_play(
 
     # Compat: old nested participants[] -> dotted keys (R unnest_wider branch).
     plays: list[dict[str, Any]] = []
-    for p in plays_raw:
+    for p in _with_pickcenter_line(plays_raw, final.get("pickcenter")):
         parts = p.get("participants")
         if isinstance(parts, list):
             p = {k: v for k, v in p.items() if k != "participants"}
@@ -302,6 +302,31 @@ def _basketball_play_by_play(
         + [pl.col(c).cast(pl.Boolean, strict=False) for c in _BOOLEAN_COLS if c in df.columns]
     )
     return _repair_running_score(_null_unavailable_line(df), competitors)
+
+
+def _with_pickcenter_line(plays: list[dict[str, Any]], pickcenter: Any) -> list[dict[str, Any]]:
+    """The plays, with the game's ``pickcenter`` line on every play whose stored keys say there is none.
+
+    The per-play line keys are baked in when the game is captured, and newer captures bake
+    ``gameSpreadAvailable`` False (or no keys at all) even when ``pickcenter`` has a line (#1088).
+    Same convention as the ``helper_*_pbp`` producers: ``gameSpread`` is the absolute spread and
+    ``homeTeamSpread`` is it signed by ``homeFavorite``. A stored available line is kept: it is
+    what the releases and the R oracle carry. Existing keys keep their place in the column order;
+    absent ones append. With no spread in ``pickcenter`` the plays are returned as stored, and
+    :func:`_null_unavailable_line` nulls a line they say is unavailable: never a default line.
+    """
+    odds = pickcenter_odds(pickcenter, None)
+    if odds["gameSpreadAvailable"] is not True:
+        return plays
+    spread = abs(odds["gameSpread"])
+    home_favorite = bool(odds["homeFavorite"])
+    line = {
+        "gameSpread": spread,
+        "homeFavorite": home_favorite,
+        "gameSpreadAvailable": True,
+        "homeTeamSpread": spread if home_favorite else -spread,
+    }
+    return [p if p.get("gameSpreadAvailable") is True else {**p, **line} for p in plays]
 
 
 def _null_unavailable_line(df: pl.DataFrame) -> pl.DataFrame:
