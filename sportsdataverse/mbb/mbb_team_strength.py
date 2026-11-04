@@ -13,7 +13,8 @@ it. The ESPN schedule is read once, for BB-D3's neutral sites and for the result
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -33,7 +34,8 @@ if TYPE_CHECKING:
 __all__ = ["mbb_team_strength"]
 
 
-def _load_ratings(league: str):  # type: ignore[no-untyped-def]
+def _load_ratings(league: str) -> Callable[..., Any]:
+    """The ratings loader for ``league``: ``load_wbb_ratings`` for ``"womens"``, else ``load_mbb_ratings``."""
     if league == "womens":
         from sportsdataverse.wbb.wbb_loaders import load_wbb_ratings
 
