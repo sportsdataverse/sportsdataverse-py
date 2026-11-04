@@ -282,7 +282,10 @@ def helper_wbb_player_season_stats(
     ``extract_athlete_meta`` in ``espn_wbb_05_player_season_stats_creation.R``:
     parallel-array categories pivot long, identity comes from the
     team-rosters lookup with the payload's own ``athlete``/``teams`` blocks as
-    fallback.
+    fallback. Unlike the R script, values come from the ``statistics[]`` row
+    tagged with ``season`` (the flat ``totals`` array is the CAREER row); a
+    traded player's whole-season "Totals" row is preferred over a team stint,
+    and a payload without ``statistics[]`` falls back to ``totals``.
 
     Args:
         payload: One athlete's ``wbb/player_season_stats/json/{season}/{athlete_id}.json``.
@@ -318,15 +321,34 @@ def helper_wbb_player_season_stats(
         return pl.DataFrame()
 
     ident = (identity_lookup or {}).get(str(_rel_int(athlete_id))) or {}
-    # team_display_name lives in the payload's `teams` map keyed by slug.
+    season_int = int(season)
+
+    def _season_row(cat: dict) -> tuple[dict | None, list[Any]]:
+        # A category's flat ``totals`` is ESPN's CAREER row; the season is the
+        # ``statistics[]`` entry whose ``season.year`` matches (#1087). A traded
+        # player has one stint per team plus a "{season} Totals" row: prefer it,
+        # else the last stint -- the same rule as ``helper_nba_player_season_stats``.
+        stats_entries = cat.get("statistics")
+        if not stats_entries:
+            # Legacy payloads without per-season rows: the flat array is all there is.
+            return None, cat.get("totals") or cat.get("values") or []
+        matches = [s for s in stats_entries if _rel_int((s.get("season") or {}).get("year")) == season_int]
+        if not matches:
+            return None, []
+        for s in matches:
+            slug = _rel_chr(s.get("teamSlug"))
+            if slug and "totals" in slug.lower():
+                return s, s.get("stats") or []
+        return matches[-1], matches[-1].get("stats") or []
+
+    # team_display_name lives in the payload's `teams` map keyed by slug; the
+    # slug comes from this season's row (a Totals row's slug misses the map,
+    # leaving the roster identity).
     teams_map = payload.get("teams") or {}
     team_slug = None
     for cat in categories:
-        for s in cat.get("statistics") or []:
-            cand = _rel_chr(s.get("teamSlug"))
-            if cand:
-                team_slug = cand
-                break
+        chosen, _ = _season_row(cat)
+        team_slug = _rel_chr((chosen or {}).get("teamSlug"))
         if team_slug:
             break
     team_block = teams_map.get(team_slug) or {} if team_slug else {}
@@ -346,10 +368,10 @@ def helper_wbb_player_season_stats(
 
     rows: list[dict[str, Any]] = []
     for cat in categories:
-        totals = cat.get("totals") or cat.get("values") or []
-        if not totals:
+        _, season_vals = _season_row(cat)
+        if not season_vals:
             continue
-        vals = [_rel_chr(v) for v in totals]
+        vals = [_rel_chr(v) for v in season_vals]
         n = len(vals)
         cat_name = _coalesce_chr(cat.get("name"), cat.get("displayName"))
         labels = _pad(cat.get("labels"), n)
@@ -359,7 +381,7 @@ def helper_wbb_player_season_stats(
         for i in range(n):
             rows.append(
                 {
-                    "season": int(season),
+                    "season": season_int,
                     "athlete_id": _rel_int(athlete_id),
                     "athlete_display_name": meta["display_name"],
                     "athlete_first_name": meta["first_name"],
