@@ -15,7 +15,7 @@ import numbers
 import time
 import warnings
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
+from typing import Any, Callable, Dict, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
 
 import polars as pl
@@ -124,6 +124,36 @@ def _cast_ids_int32(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
         The frame with each named column cast to ``Int32`` where safe.
     """
     return _cast_ids_int64(df, cols, pl.Int32)
+
+
+def _alias_columns(df: pl.DataFrame, aliases: Dict[str, str]) -> pl.DataFrame:
+    """Emit both names of a renamed column so a release can rename it without breaking callers.
+
+    ``aliases`` maps each new (canonical) name to its deprecated old name. Whichever of the pair the
+    release ships, the other is added as a copy, so the frame always carries both and a caller on either
+    name keeps working for the one-release deprecation window. Column order is deterministic: every other
+    column, then the new names, then the old ones.
+
+    Args:
+        df: frame read from a release asset (may be empty).
+        aliases: ``{new_name: old_name}``.
+
+    Returns:
+        The frame with both names of every pair the release carried at least one of.
+    """
+    have = set(df.columns)
+    new_cols = [n for n, o in aliases.items() if n in have or o in have]
+    if not new_cols:
+        return df
+    copies = [
+        pl.col(o if o in have else n).alias(n if o in have else o)
+        for n, o in aliases.items()
+        if (n in have) != (o in have)
+    ]
+    df = df.with_columns(copies) if copies else df
+    pairs = [(n, o) for n, o in aliases.items() if n in new_cols]
+    front = [n for n, _ in pairs] + [o for _, o in pairs]
+    return df.select([c for c in df.columns if c not in front] + front)
 
 
 def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = (), stacklevel: int = 3) -> pl.DataFrame:

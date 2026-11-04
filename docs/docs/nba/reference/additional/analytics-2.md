@@ -1,10 +1,190 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_playtype–nba_team"
-sidebar_label: "Analytics: nba_playtype–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_player–nba_team"
+sidebar_label: "Analytics: nba_player–nba_team"
 sidebar_position: 14
-description: "NBA — additional Python functions — Analytics: nba_playtype–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_player–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_playtype–nba_team
+# NBA — additional Python functions — Analytics: nba_player–nba_team
+
+### nba_player_ages {#nba_player_ages}
+
+`nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
+
+Per-player age for a season (bulk), for the DARKO aging curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | NBA season, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | LeagueID (`"00"` NBA). |
+| `fetch` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable `nba_stats_leaguedashplayerbiostats` replacement for offline tests. |
+
+**Returns**
+
+Frame `player_id:Int64, age:Float64`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_player_ages
+ages = nba_player_ages("2023-24")
+print(ages.head())
+```
+
+### nba_player_identity {#nba_player_identity}
+
+`nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Human-readable identity for every player in a season's box logs.
+
+Model outputs key on `player_id` alone, which makes them unusable without a
+second lookup -- a leaderboard reads `1628983` instead of
+`Shai Gilgeous-Alexander`. This derives the display columns from the season's
+own game logs, so they are **season-accurate**: a player's team is what he
+actually played for that year, not his current one (which is what a player
+directory would give and would silently mislabel every historical season).
+
+A traded player has rows for several teams. `team_*` is his **primary** team
+by minutes -- the one a reader means when they say "his team that season" --
+and `teams` lists every abbreviation he appeared for, in descending minutes,
+so a trade is visible rather than silently collapsed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_logs` | `DataFrame` |  | Per-player-per-game rows from `leaguegamelog` (the `player_or_team="P"` variant), carrying `player_id`, `player_name`, `team_id`, `team_abbreviation`, `team_name` and `min`. |
+
+**Returns**
+
+One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one. A malformed frame yields the typed zero-row frame instead of raising, so a caller can join unconditionally.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `teams` | String | Nested list of member-team membership spans. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_player_identity
+
+logs = pl.DataFrame({
+    "player_id": [1628983],
+    "player_name": ["Shai Gilgeous-Alexander"],
+    "team_id": [1610612760],
+    "team_abbreviation": ["OKC"],
+    "team_name": ["Oklahoma City Thunder"],
+    "min": [34.0],
+})
+ratings = pl.DataFrame({"player_id": [1628983], "war": [21.9]})
+named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
+print(named.select("player_name", "team_name", "war"))
+```
+
+### nba_player_positions {#nba_player_positions}
+
+`nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
+
+Fetch league-wide listed positions for a season as numeric 1-5.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | NBA season, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | LeagueID (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
+| `fetch` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable `nba_stats_playerindex` replacement for offline tests. |
+
+**Returns**
+
+Frame with columns `player_id:Int64, position_num:Float64`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If `curl_cffi` is not installed (required by the stats runtime). |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_player_positions
+pos = nba_player_positions("2023-24")
+print(pos.head())
+
+# Offline / injectable fetch for testing
+
+import polars as pl
+stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
+pos = nba_player_positions("2023-24", fetch=stub)
+```
+
+### nba_player_props {#nba_player_props}
+
+`nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Per-player expected prop lines + team pace projection for a matchup.
+
+Loads the season's player box logs + team ratings, keeps only games played
+strictly before `as_of_date` (both inputs), computes per-minute
+`player_rates`, and projects each player's line onto their mean
+minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
+two teams in the matchup are returned.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | End year of the season (e.g. `2024`). |
+| `game_id` | `str` |  | The game id. When `as_of_date` is `None` and this game is in the season's box logs or schedule, its date becomes the cut, so the default call never sees the game's own or any later line. |
+| `home_team_id` | `str` |  | Home team id. |
+| `away_team_id` | `str` |  | Away team id. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `as_of_date` | `Union[date, None]` | `None` | Only box lines and ratings games with `game_date < as_of_date` (strict) are used. `None` = the target game's date from the box logs, else from the schedule (one extra schedule read, only when the game is missing from the logs); a game in neither gets no cut and an `~sportsdataverse.errors.AsOfCutWarning`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `stat_pts_exp` | Float64 |  |
+| `stat_reb_exp` | Float64 |  |
+| `stat_ast_exp` | Float64 |  |
+| `stat_fg3m_exp` | Float64 |  |
+| `pace_proj` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import nba_player_props
+props = nba_player_props(2024, "401585828", "2", "6")
+
+# Backtest as of a date
+
+import datetime as dt
+props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
+```
 
 ### nba_playtype_ratings {#nba_playtype_ratings}
 

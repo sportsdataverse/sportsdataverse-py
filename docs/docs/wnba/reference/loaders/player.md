@@ -198,6 +198,11 @@ load_wnba_player_core(seasons=2025)
 ## load_wnba_player_impact
 
 Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_player_impact) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_player_impact/wnba_player_impact_{season}.parquet`
+
+:::caution[Coverage]
+The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boban_projected_rating and boban_projected_sd were renamed from darko_*; the loader returns both names for one release, so move to boban_* now (darko_* is deprecated and will be removed).
+:::
+
 ### Returns {#load_wnba_player_impact-returns}
 
 | col_name | type | description |
@@ -227,9 +232,12 @@ Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse
 | `dbpm` | Float64 | Defensive box plus/minus. |
 | `bpm` | Float64 | Career box plus/minus. |
 | `war` | Float64 | Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win. |
-| `darko_filtered_skill` | Float64 | DARKO-style Kalman-filtered estimate of the player's current skill level. |
-| `darko_projected_rating` | Float64 | DARKO-style projected forward rating, including the empirical aging-curve drift. |
-| `darko_projected_sd` | Float64 | Posterior standard deviation of the DARKO-style projected rating. |
+| `boban_filtered_skill` | Float64 | BOBAN Kalman-filtered estimate of the player's current skill level. |
+| `boban_projected_rating` | Float64 | BOBAN projected forward rating, including the empirical aging-curve drift. |
+| `boban_projected_sd` | Float64 | Posterior standard deviation of the BOBAN projected rating. |
+| `darko_filtered_skill` | Float64 | Deprecated alias of boban_filtered_skill, kept for one release; use that column. |
+| `darko_projected_rating` | Float64 | Deprecated alias of boban_projected_rating, kept for one release; use that column. |
+| `darko_projected_sd` | Float64 | Deprecated alias of boban_projected_sd, kept for one release; use that column. |
 
 ```python
 load_wnba_player_impact(seasons=2024)

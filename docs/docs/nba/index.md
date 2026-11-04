@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 220 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 221 | — |
 
 ## ESPN {#espn}
 
@@ -155,6 +155,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 
 - [`add_ctg_shot_zones`](reference/additional/analytics#add_ctg_shot_zones)
 - [`add_play_context`](reference/additional/analytics#add_play_context)
+- [`add_possession_flags`](reference/additional/analytics#add_possession_flags)
 - [`add_start_type_detail`](reference/additional/analytics#add_start_type_detail)
 - [`add_transition`](reference/additional/analytics#add_transition)
 - [`box_features`](reference/additional/analytics#box_features)
@@ -176,10 +177,10 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_l2m`](reference/additional/analytics#nba_l2m)
 - [`nba_l2m_games`](reference/additional/analytics#nba_l2m_games)
 - [`nba_play_context`](reference/additional/analytics#nba_play_context)
-- [`nba_player_ages`](reference/additional/analytics#nba_player_ages)
-- [`nba_player_identity`](reference/additional/analytics#nba_player_identity)
-- [`nba_player_positions`](reference/additional/analytics#nba_player_positions)
-- [`nba_player_props`](reference/additional/analytics#nba_player_props)
+- [`nba_player_ages`](reference/additional/analytics-2#nba_player_ages)
+- [`nba_player_identity`](reference/additional/analytics-2#nba_player_identity)
+- [`nba_player_positions`](reference/additional/analytics-2#nba_player_positions)
+- [`nba_player_props`](reference/additional/analytics-2#nba_player_props)
 - [`nba_playtype_ratings`](reference/additional/analytics-2#nba_playtype_ratings)
 - [`nba_possession_rate_rows`](reference/additional/analytics-2#nba_possession_rate_rows)
 - [`nba_ratings_panel`](reference/additional/analytics-2#nba_ratings_panel)
