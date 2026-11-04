@@ -137,6 +137,61 @@ from sportsdataverse.wbb import wbb_strength_of_schedule
 wbb_strength_of_schedule([2024]).sort("rpi_rank").head(20)
 ```
 
+### wbb_team_luck {#wbb_team_luck}
+
+`wbb_team_luck(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L.
+
+Delegates to `sportsdataverse.mbb.mbb_team_luck.mbb_team_luck` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)`: `games`, `wins`, `losses`, `pts`, `opp_pts`, `win_pct`, `pythag_win_pct`, `exp_wins`, `luck_wins`, `pbp_games`, the close-game record and the `_rank` / `_pct` / `_n` columns. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks. |
+| `games` | Int64 | Games in the season's completed ESPN games, postseason included. |
+| `wins` | Int64 | Wins in the season's completed ESPN games, postseason included. |
+| `losses` | Int64 | Losses in the season's completed ESPN games, postseason included. |
+| `pts` | Int64 | Points scored in those games (final scores). |
+| `opp_pts` | Int64 | Points allowed in those games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['wbb'] (fitted on past seasons by tools/fit_team_luck_pythag.py). |
+| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
+| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
+| `pbp_games` | Int64 | Games with published possessions (ncaa_wbb_possessions): the games whose close-game status is known. close_games covers these, not every game. |
+| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter (the 2nd half before 2015-16) or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). |
+| `close_wins` | Int64 | Wins in close games. |
+| `close_losses` | Int64 | Losses in close games. |
+| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
+| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers. |
+| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
+| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
+| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_team_luck
+wbb_team_luck(2025).sort("luck_wins", descending=True).head()
+```
+
 ### wbb_team_season_rates {#wbb_team_season_rates}
 
 `wbb_team_season_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 219 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 220 | — |
 
 ## ESPN {#espn}
 
@@ -190,10 +190,11 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_shot_value`](reference/additional/analytics-2#nba_shot_value)
 - [`nba_shot_value_lineups`](reference/additional/analytics-2#nba_shot_value_lineups)
 - [`nba_team_clutch`](reference/additional/analytics-2#nba_team_clutch)
+- [`nba_team_luck`](reference/additional/analytics-2#nba_team_luck)
 - [`nba_team_season_rates`](reference/additional/analytics-2#nba_team_season_rates)
-- [`nba_team_strength`](reference/additional/analytics-2#nba_team_strength)
-- [`nba_tracking_drive_value`](reference/additional/analytics-2#nba_tracking_drive_value)
-- [`nba_tracking_pass_value`](reference/additional/analytics-2#nba_tracking_pass_value)
+- [`nba_team_strength`](reference/additional/analytics-3#nba_team_strength)
+- [`nba_tracking_drive_value`](reference/additional/analytics-3#nba_tracking_drive_value)
+- [`nba_tracking_pass_value`](reference/additional/analytics-3#nba_tracking_pass_value)
 - [`nba_tracking_reb_oe`](reference/additional/analytics-3#nba_tracking_reb_oe)
 - [`nba_tracking_rim_protect_value`](reference/additional/analytics-3#nba_tracking_rim_protect_value)
 - [`nba_tracking_shot_diet_value`](reference/additional/analytics-3#nba_tracking_shot_diet_value)
@@ -216,9 +217,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`spotrac_team_cap`](reference/additional/analytics-3#spotrac_team_cap)
 - [`starters_on_court_counts`](reference/additional/analytics-3#starters_on_court_counts)
 - [`team_pace_projection`](reference/additional/analytics-3#team_pace_projection)
-- [`team_play_context`](reference/additional/analytics-3#team_play_context)
-- [`xpoints_baseline`](reference/additional/analytics-3#xpoints_baseline)
-- [`zone_value_map`](reference/additional/analytics-3#zone_value_map)
+- [`team_play_context`](reference/additional/analytics-4#team_play_context)
+- [`xpoints_baseline`](reference/additional/analytics-4#xpoints_baseline)
+- [`zone_value_map`](reference/additional/analytics-4#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 
