@@ -9070,3 +9070,56 @@
   test: tests/mbb/test_mbb_college_season.py::test_season_sim_is_seeded_and_reproducible
   expected: kill
   note: The Monte Carlo must reproduce from its seed.
+
+# --- Basketball preseason prior: tests/mbb/test_mbb_college_season.py and tests/nba/test_nba_season_sim.py
+# The 2025 college seasons rated with the committed 2024 season as their prior, and the NBA 2025-26 /
+# WNBA 2025 sims with the committed 2024-25 / 2024 possessions as theirs.
+- id: bb-prior-college-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'prior_weight=PRESEASON_PRIOR[league].weight,'
+  mutant: 'prior_weight=0.0,'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_improves_early_season_log_loss
+  expected: kill
+  note: With no pseudo-games of prior the as-of AdjEM is one game's noise again; the weeks 0-6 log loss gate fails.
+
+- id: bb-prior-college-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_team_ratings.py
+  snippet: '.then(pl.lit(new_em / 2.0))'
+  mutant: '.then(pl.lit(0.0))'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_regresses_last_season_and_defaults_new_programs
+  expected: kill
+  note: A program new to Division I starts at last season's 0.23 quantile of D-I AdjEM, not at average.
+
+- id: bb-prior-college-rating-noise
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'tau = rating_shift_sd(games, league) if on else np.zeros(games.size)'
+  mutant: 'tau = np.zeros(games.size)'
+  test: tests/mbb/test_mbb_college_season.py::test_rating_noise_spreads_the_odds_and_keeps_the_marginals
+  expected: kill
+  note: Without the per-season AdjEM shift the bid odds pile up at 0 and 1 again.
+
+- id: bb-prior-pro-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)'
+  mutant: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None)'
+  test: tests/nba/test_nba_season_sim.py::test_in_season_ridge_shrinks_toward_the_prior
+  expected: kill
+  note: Once a game is played the ridge must shrink toward the prior, not toward average.
+
+- id: bb-prior-pro-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'pl.when(pl.col("o").is_null()).then(pl.lit(new_net / 2.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  mutant: 'pl.when(pl.col("o").is_null()).then(pl.lit(0.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  test: tests/nba/test_nba_season_sim.py::test_preseason_model_is_the_regressed_prior
+  expected: kill
+  note: An expansion team starts at last season's bottom-quartile net rating (the 2025 Valkyries), not at average.

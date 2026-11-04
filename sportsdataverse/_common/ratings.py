@@ -319,6 +319,8 @@ def iterative_opponent_adjust(
     baseline: float | None = None,
     max_iter: int = 100,
     tol: float = 1e-4,
+    prior: dict[str, tuple[float, float]] | None = None,
+    prior_weight: float = 0.0,
 ) -> pl.DataFrame:
     """KenPom-style opponent-adjustment fixed point for one group of game rows.
 
@@ -351,10 +353,17 @@ def iterative_opponent_adjust(
             ``None`` (default), computed as the data's own ``off_col`` mean.
         max_iter: Maximum fixed-point iterations.
         tol: Convergence tolerance on the largest rating change.
+        prior: Optional ``team -> (off_dev, def_dev)``: a preseason prior for each team, as
+            deviations from the league average. Each listed team's rating is pulled toward
+            ``avg + dev`` as if it had played ``prior_weight`` extra games at exactly that rating,
+            so the fixed point shrinks toward the prior instead of trusting a few games. A team
+            in ``prior`` with no game yet is returned at its prior (``games`` 0, raw rates null);
+            a team not in ``prior`` is not shrunk.
+        prior_weight: Pseudo-games of prior per listed team (0 turns the prior off).
 
     Returns:
         One row per team: ``team_id, adj_off, adj_def, adj_net, raw_off,
-        raw_def, games``. Empty input returns that schema with zero rows.
+        raw_def, games``. Empty input with no prior returns that schema with zero rows.
 
     Example:
         Quick start::
@@ -366,9 +375,13 @@ def iterative_opponent_adjust(
                 neutral_col="neutral_site", hfa=3.0,
             )
     """
-    if game_eff.height == 0:
+    prior = prior if prior and prior_weight > 0 else None
+    if game_eff.height == 0 and (prior is None or baseline is None):
         return pl.DataFrame(schema=_ITER_SCHEMA)
     teams = game_eff[team_col].unique(maintain_order=True).to_list()
+    if prior is not None:
+        seen = set(teams)
+        teams += [t for t in prior if t not in seen]
     index = {t: i for i, t in enumerate(teams)}
     n = len(teams)
     ti = np.array([index[t] for t in game_eff[team_col].to_list()], dtype=np.int64)
@@ -384,15 +397,24 @@ def iterative_opponent_adjust(
     avg = float(off.mean()) if baseline is None else float(baseline)
 
     counts: np.ndarray = np.bincount(ti, minlength=n).astype(float)
-    raw_o = np.bincount(ti, weights=off, minlength=n) / counts
-    raw_d = np.bincount(ti, weights=dfn, minlength=n) / counts
+    with np.errstate(invalid="ignore", divide="ignore"):  # a prior-only team has no raw rate
+        raw_o = np.bincount(ti, weights=off, minlength=n) / counts
+        raw_d = np.bincount(ti, weights=dfn, minlength=n) / counts
+    # the prior as pseudo-games: w games at avg + dev on each side, for the listed teams only
+    w: np.ndarray = np.zeros(n)
+    pri_o, pri_d = np.zeros(n), np.zeros(n)
+    if prior is not None:
+        for t, (do, dd) in prior.items():
+            w[index[t]], pri_o[index[t]], pri_d[index[t]] = prior_weight, avg + do, avg + dd
+    denom = counts + w
 
-    adj_o, adj_d = raw_o.copy(), raw_d.copy()
+    adj_o = np.where(counts > 0, raw_o, pri_o)
+    adj_d = np.where(counts > 0, raw_d, pri_d)
     for _ in range(max_iter):
         contrib_o = off - (adj_d[oi] - avg) - loc_o
         contrib_d = dfn - (adj_o[oi] - avg) - loc_d
-        new_o = np.bincount(ti, weights=contrib_o, minlength=n) / counts
-        new_d = np.bincount(ti, weights=contrib_d, minlength=n) / counts
+        new_o = (np.bincount(ti, weights=contrib_o, minlength=n) + w * pri_o) / denom
+        new_d = (np.bincount(ti, weights=contrib_d, minlength=n) + w * pri_d) / denom
         delta = max(float(np.abs(new_o - adj_o).max()), float(np.abs(new_d - adj_d).max()))
         adj_o, adj_d = new_o, new_d
         if delta < tol:
@@ -409,4 +431,4 @@ def iterative_opponent_adjust(
             "games": counts.astype(np.int64),
         },
         schema=_ITER_SCHEMA,
-    )
+    ).with_columns(pl.col("raw_off", "raw_def").fill_nan(None))

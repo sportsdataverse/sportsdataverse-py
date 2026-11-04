@@ -1,9 +1,12 @@
-"""BB-D17 college season products on the real 2024 seasons (men's and women's).
+"""BB-D17 college season products on the real 2024 seasons (men's and women's), and the preseason prior.
 
 Oracles (all committed, see tests/fixtures/bb_college_season/README.md):
 
 * WarrenNolan's end-of-season 2024 RPI and its RPI-quadrant records, and its NET mirror.
 * The actual 2024 NCAA tournament fields and seeds (``*_prediction/ncaa_tourney_2024``).
+
+The 2025 seasons carry the preseason prior from the committed 2024 season, as the producers do;
+the 2024 seasons are rated without one (2023 is not committed).
 
 Every gate is the value observed when the products landed (2026-11-03) less a stated margin.
 Raise a gate when the model improves; never lower one.
@@ -17,14 +20,19 @@ import numpy as np
 import polars as pl
 import pytest
 
+from scipy.stats import norm
+
 from sportsdataverse.mbb.mbb_college_season import (
     _d1_games,
+    college_teams,
     season_bracketology,
     season_inputs,
+    season_prior,
     simulate_season,
     split_season,
 )
-from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr
+from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR, get_constants, spearman_corr
+from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
 from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 
 FIX = "tests/fixtures"
@@ -50,7 +58,7 @@ GATES = {
         "exact_seeds": 31,  # observed 34
         "seed_mae": 0.85,  # observed 0.750
         "paymon": 270,  # observed 278 / 340
-        "bid_brier_feb1": 0.090,  # observed 0.0810 (prevalence baseline 0.1526)
+        "bid_brier_feb1": 0.090,  # observed 0.0801 with the rating noise, 0.0810 without (baseline 0.1526)
     },
     "wbb": {
         "rpi_spearman": 0.998,  # observed 0.9996
@@ -63,7 +71,7 @@ GATES = {
         "exact_seeds": 31,  # observed 34
         "seed_mae": 0.80,  # observed 0.672
         "paymon": 270,  # observed 280 / 340
-        "bid_brier_feb1": 0.075,  # observed 0.0653 (prevalence baseline 0.1532)
+        "bid_brier_feb1": 0.075,  # observed 0.0652 with the rating noise, 0.0653 without (baseline 0.1532)
     },
 }
 
@@ -402,12 +410,14 @@ def test_auto_bids_mid_conference_tournaments(corpus):
 
 
 # --- 2025: out of sample (the NET weights and the résumé blend were set on 2024) ---------------
+# The 2025 inputs carry the preseason prior from the committed 2024 season, as the producers do.
 
 GATES_2025 = {
     "mbb": {"field": 64, "at_large": 33, "exact_seeds": 36, "seed_mae": 0.75, "paymon": 283, "bid_brier_feb1": 0.072},
-    # observed: field 65 / 68, at-large 34 / 37, exact 39, seed MAE 0.646, paymon 291, Brier 0.0644 (base 0.1519)
+    # observed: field 65 / 68, at-large 34 / 37, exact 40, seed MAE 0.585, paymon 292, Brier 0.0626 (base 0.1519);
+    # without the prior and the rating noise (BB-D17): exact 39, seed MAE 0.646, paymon 291, Brier 0.0644
     "wbb": {"bid_brier_feb1": 0.060},
-    # observed Brier 0.0532 (base 0.1526); the field is not gated, see the women's test below
+    # observed Brier 0.0533 (base 0.1526; 0.0532 before); the field is not gated, see the women's test below
 }
 
 
@@ -419,9 +429,15 @@ def corpus_2025(lg):
     return sched, box, seeds
 
 
-def test_2025_selection_sunday(lg, corpus_2025):
+@pytest.fixture(scope="module")
+def prior_2024(lg):
+    """The 2024 season as the 2025 prior season: ``(schedule, team_box)``."""
+    return _load(lg)
+
+
+def test_2025_selection_sunday(lg, corpus_2025, prior_2024):
     sched, box, seeds = corpus_2025
-    inp = season_inputs(sched, box, league=LEAGUE[lg], as_of_date=datetime.date(2025, 3, 17))
+    inp = season_inputs(sched, box, league=LEAGUE[lg], as_of_date=datetime.date(2025, 3, 17), prior_season=prior_2024)
     assert inp.auto_bids.height == 31  # the Pac-12 played 2024-25 with two members and no auto-bid
     champs = inp.auto_bids.filter(pl.col("champion"))
     # every conference whose final is in the release crowns a team that was in the field
@@ -445,9 +461,9 @@ def test_2025_selection_sunday(lg, corpus_2025):
     assert 3 * both.height + 2 * int((d == 0).sum()) + int((d == 1).sum()) >= g["paymon"]
 
 
-def test_2025_season_sim_bid_brier(lg, corpus_2025):
+def test_2025_season_sim_bid_brier(lg, corpus_2025, prior_2024):
     sched, box, seeds = corpus_2025
-    inp = season_inputs(sched, box, league=LEAGUE[lg], as_of_date=FEB1.replace(year=2025))
+    inp = season_inputs(sched, box, league=LEAGUE[lg], as_of_date=FEB1.replace(year=2025), prior_season=prior_2024)
     sim = simulate_season(inp.played, inp.remaining, inp.teams, inp.resume, league=LEAGUE[lg], n_sims=2000, seed=0)
     y = sim.join(seeds.select("team_id", pl.lit(1.0).alias("y")), on="team_id", how="left").with_columns(
         pl.col("y").fill_null(0.0)
@@ -466,16 +482,18 @@ def test_preseason_tables_are_empty_not_errors(corpus):
     assert abs(sim["bid_prob"].sum() - 68.0) < 1e-9
 
 
-def test_2025_rpi_and_net_estimate_out_of_sample(lg, corpus_2025):
+def test_2025_rpi_and_net_estimate_out_of_sample(lg, corpus_2025, prior_2024):
     sched, box, _seeds = corpus_2025
     wn = pl.read_parquet(f"{FIX}/bb_college_season/{lg}_warrennolan_2025.parquet")
-    r = season_inputs(sched, box, league=LEAGUE[lg]).resume.join(
+    r = season_inputs(sched, box, league=LEAGUE[lg], prior_season=prior_2024).resume.join(
         wn.select("team_id", pl.col("rpi_rank").alias("o_rpi"), pl.col("net_rank").alias("o_net")), on="team_id"
     )
     assert r.height == wn.height
     net = spearman_corr(r["net_estimate_rank"].to_numpy(), r["o_net"].to_numpy())
     em_only = spearman_corr(r["adj_em_rank"].to_numpy(), r["o_net"].to_numpy())
-    # observed: men 0.9962 (AdjEM alone 0.9938), women 0.9935 (0.9923)
+    # observed with the prior: men 0.9946 (AdjEM alone 0.9908), women 0.9931 (0.9922); without it
+    # (BB-D17) 0.9962 (0.9938) and 0.9935 (0.9923). The NET has no prior; four pseudo-games of one
+    # out of ~34 move the end-of-season AdjEM a little away from it.
     assert net >= {"mbb": 0.994, "wbb": 0.990}[lg], net
     assert net > em_only  # the WAB share earns its place out of sample
     if lg == "wbb":
@@ -483,3 +501,118 @@ def test_2025_rpi_and_net_estimate_out_of_sample(lg, corpus_2025):
     d = (r["rpi_rank"] - r["o_rpi"]).abs()
     assert d.mean() <= 0.5, d.mean()  # observed 0.26
     assert (d <= 2).mean() >= 0.95  # observed 0.978
+
+
+# --- the preseason prior and the rating noise (2025, prior from the committed 2024 season) ---------
+
+# Weeks 0-6 log loss of every later Division I regular-season game, ratings as of each weekly
+# cutoff from the first game, with the shipped game model. Observed 2026-11-03: men 0.5807 with
+# the prior against 0.7463 without, women 0.5094 against 0.6926. Gate: observed + 0.01, and the
+# prior beats no prior by at least half the observed gap.
+EARLY_GATES = {"mbb": (0.5907, 0.0828), "wbb": (0.5194, 0.0916)}
+
+
+def _early_log_loss(sched: pl.DataFrame, box: pl.DataFrame, lg: str, prior_season) -> float:  # type: ignore[no-untyped-def]
+    c = get_constants(LEAGUE[lg])
+    teams = set(college_teams(sched)["team_id"].to_list())
+    done = sched.filter(pl.col("completed") & pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null())
+    scored = done.filter(
+        (pl.col("season_type") == 2) & pl.col("home_team_id").is_in(teams) & pl.col("away_team_id").is_in(teams)
+    )
+    start = done["date"].min()
+    losses = []
+    for week in range(7):
+        cut = start + datetime.timedelta(days=7 * week)
+        res = season_inputs(sched, box, league=LEAGUE[lg], as_of_date=cut, prior_season=prior_season).resume
+        em = dict(zip(res["team_id"].to_list(), res["adj_em"].to_list(), strict=True))
+        rated = [v for v in em.values() if v is not None]
+        fill = min(rated) if rated else 0.0  # the sim's rule: an unrated team plays as the weakest
+        fut = scored.filter(pl.col("date") >= cut)
+        dem = np.array(
+            [
+                (em[h] if em[h] is not None else fill) - (em[a] if em[a] is not None else fill)
+                for h, a in fut.select("home_team_id", "away_team_id").iter_rows()
+            ]
+        )
+        p = norm.cdf((c.em_scale * dem + c.hfa * (~fut["neutral_site"].fill_null(False).to_numpy())) / c.margin_sd)
+        y = (fut["home_score"] > fut["away_score"]).to_numpy()
+        p = np.clip(p, 1e-15, 1 - 1e-15)
+        losses.append(-(y * np.log(p) + (~y) * np.log(1 - p)))
+    return float(np.concatenate(losses).mean())
+
+
+def test_preseason_prior_improves_early_season_log_loss(lg, corpus_2025, prior_2024):
+    sched, box, _seeds = corpus_2025
+    with_prior = _early_log_loss(sched, box, lg, prior_2024)
+    without = _early_log_loss(sched, box, lg, None)
+    gate, gain = EARLY_GATES[lg]
+    assert with_prior <= gate, (with_prior, without)
+    assert without - with_prior >= gain, (with_prior, without)
+
+
+def test_preseason_prior_regresses_last_season_and_defaults_new_programs(lg, corpus_2025, prior_2024):
+    """Last season's D-I teams carry ``regression`` x their final rating; programs new to D-I start at the quantile."""
+    sched, box, _seeds = corpus_2025
+    league, pp = LEAGUE[lg], PRESEASON_PRIOR[LEAGUE[lg]]
+    teams = college_teams(sched)
+    prior = season_prior(*prior_2024, teams, league=league)
+    assert prior.height == teams.height and prior["team_id"].n_unique() == teams.height
+    prev_sched, prev_box = prior_2024
+    played, _ = split_season(prev_sched)
+    final = adjust_efficiency(raw_game_efficiency(played, prev_box), league=league).join(
+        college_teams(prev_sched).select("team_id"), on="team_id", how="semi"
+    )
+    new = prior.filter(pl.col("new_team"))
+    assert new.height == 2, new  # 2024-25 newcomers to Division I: Mercyhurst, West Georgia
+    want = float(final["adj_em"].quantile(pp.new_team_quantile, interpolation="linear"))
+    np.testing.assert_allclose((new["off_dev"] - new["def_dev"]).to_numpy(), want)
+    old = prior.filter(~pl.col("new_team")).join(final, on="team_id", validate="1:1")
+    np.testing.assert_allclose((old["off_dev"] - old["def_dev"]).to_numpy(), pp.regression * old["adj_em"].to_numpy())
+    # before the first game the ratings are the prior; a newcomer is rated, not left null
+    pre = season_inputs(sched, box, league=league, as_of_date=datetime.date(2024, 10, 1), prior_season=prior_2024)
+    r = pre.resume.join(prior, on="team_id", validate="1:1")
+    assert r["adj_em"].null_count() == 0 and (r["games"] == 0).all()
+    np.testing.assert_allclose(r["adj_em"].to_numpy(), (r["off_dev"] - r["def_dev"]).to_numpy(), atol=1e-9)
+
+
+def test_first_week_sim_is_not_a_one_game_projection(lg, corpus_2025, prior_2024):
+    """A week in, the shipped sim no longer projects one-game teams to run the table (BB-D17 did)."""
+    sched, box, _seeds = corpus_2025
+    league = LEAGUE[lg]
+    start = split_season(sched)[0]["date"].min()
+    cut = start + datetime.timedelta(days=7)
+    out = {}
+    for name, ps, noise in (("bb_d17", None, False), ("shipped", prior_2024, True)):
+        inp = season_inputs(sched, box, league=league, as_of_date=cut, prior_season=ps)
+        sim = simulate_season(
+            inp.played, inp.remaining, inp.teams, inp.resume, league=league, n_sims=500, seed=0, rating_noise=noise
+        )
+        games = sim["proj_wins"] + sim["proj_losses"]
+        out[name] = {
+            "top_win_pct": float((sim["proj_wins"] / games).max()),
+            "locks": int((sim["bid_prob"] >= 0.995).sum()),
+        }
+    # observed: the top projected winning pct men 0.997 -> 0.870, women 1.000 -> 0.906; teams at
+    # a 99.5% bid men 27 -> 3, women 36 -> 5
+    assert out["bb_d17"]["top_win_pct"] > 0.99, out
+    assert out["shipped"]["top_win_pct"] < 0.95, out
+    assert out["shipped"]["locks"] <= out["bb_d17"]["locks"] / 2, out
+
+
+def test_rating_noise_spreads_the_odds_and_keeps_the_marginals(corpus, feb_sim):
+    """The rating shift moves bid odds off 0 / 1 without moving the projected wins."""
+    inp, noisy = feb_sim
+    fixed = simulate_season(
+        inp.played,
+        inp.remaining,
+        inp.teams,
+        inp.resume,
+        league=corpus["league"],
+        n_sims=2000,
+        seed=0,
+        rating_noise=False,
+    )
+    j = noisy.join(fixed, on="team_id", suffix="_fixed", validate="1:1")
+    assert float((j["proj_wins"] - j["proj_wins_fixed"]).abs().max()) < 0.6
+    sure = lambda col: int(((j[col] < 0.001) | (j[col] > 0.999)).sum())  # noqa: E731
+    assert sure("bid_prob") < sure("bid_prob_fixed"), (sure("bid_prob"), sure("bid_prob_fixed"))

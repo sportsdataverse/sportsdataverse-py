@@ -45,7 +45,13 @@ from scipy.stats import norm
 
 from sportsdataverse._common.metrics import brier_score
 from sportsdataverse.nba.nba_season_rules import nba_season_standings
-from sportsdataverse.nba.nba_season_sim import _records, _regular_games, as_of_game_model, simulate_pro_season
+from sportsdataverse.nba.nba_season_sim import (
+    _records,
+    _regular_games,
+    as_of_game_model,
+    preseason_prior,
+    simulate_pro_season,
+)
 from sportsdataverse.nba.nba_team_season_rates import _league_loaders, nba_possession_rate_rows
 
 _LEAGUE_ID = {"nba": "00", "wnba": "10"}
@@ -189,6 +195,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--closes", type=Path, default=None, help="dir with closes_wnba_{S}.parquet (private)")
     ap.add_argument("--bench", type=Path, default=None, help="dir with the engine's bench_{S}.parquet")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--no-prior", action="store_true", help="rate without the preseason prior (the BB-D18 sim)")
     args = ap.parse_args(argv)
     if len(set(args.seasons)) != len(args.seasons):
         ap.error("--seasons has a duplicate")
@@ -199,7 +206,13 @@ def main(argv: list[str] | None = None) -> int:
 
     league_id = _LEAGUE_ID[args.league]
     load_possessions, load_schedule, offset = _league_loaders(league_id)
-    result: dict[str, object] = {"league": args.league, "n_sims": args.n_sims, "seed": args.seed, "seasons": {}}
+    result: dict[str, object] = {
+        "league": args.league,
+        "n_sims": args.n_sims,
+        "seed": args.seed,
+        "preseason_prior": not args.no_prior,
+        "seasons": {},
+    }
     pooled: dict[str, list[pl.DataFrame]] = {"shift": [], "fixed": []}
     for season in args.seasons:
         schedule = load_schedule([season - offset])
@@ -209,8 +222,17 @@ def main(argv: list[str] | None = None) -> int:
         cut = midseason(full)
         games = _regular_games(schedule, cut)
         done = games.filter(pl.col("home_pts").is_not_null())
-        model = as_of_game_model(rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id)
-        prior = _records(_regular_games(load_schedule([season - 1 - offset]), None)) if league_id == "10" else None
+        last_schedule = load_schedule([season - 1 - offset])
+        pre = None
+        if not args.no_prior:
+            last_rows = nba_possession_rate_rows(
+                load_possessions([season - 1 - offset]), last_schedule, league_id=league_id
+            )
+            pre = preseason_prior(last_rows, sorted(set(full["home_team_id"].to_list())), league_id=league_id)
+        model = as_of_game_model(
+            rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=pre
+        )
+        prior = _records(_regular_games(last_schedule, None)) if league_id == "10" else None
         entry: dict[str, object] = {"as_of": str(cut), "standings_check": check_standings(final, schedule, league_id)}
         for name, unc in (("shift", True), ("fixed", False)):
             sim = simulate_pro_season(
