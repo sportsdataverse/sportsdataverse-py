@@ -193,7 +193,8 @@ def test_return_as_pandas(monkeypatch):
 # corpus (tests/fixtures/mbb_prediction/, README there): the first 400 games of pbp_sample_2024 (every
 # 25th play; game_play_number = play order by clock), the full results_2024 schedule and team_box_2024.
 # The oracle is each game's real result (`home_win`). Observed 2026-10-11: Brier in-game 0.14316,
-# pregame 0.20503, base rate 0.23487. Floors rounded to the safe side, never raised.
+# pregame 0.20503, base rate 0.23487 (the 2026-11 refit booster: in-game 0.14262). Floors rounded to the
+# safe side, never raised.
 
 
 @pytest.mark.filterwarnings(
@@ -224,3 +225,33 @@ def test_real_season_slice_compiles_and_scores_against_real_outcomes(monkeypatch
     assert brier_wp <= 0.1432 and brier_pre <= 0.2051, (brier_wp, brier_pre)
     assert brier_wp < brier_pre < brier_base
     print("MBB_SEASON_WP_REAL_OK", round(brier_wp, 5), round(brier_pre, 5))
+
+
+def test_release_wp_scores_overtime_on_the_game_page_clock(monkeypatch):
+    """The enrichment scores each play as ``score_win_prob`` does, overtime included.
+
+    ``ot_game_2022_401364358.parquet`` is one real overtime game from the 2022 release (README there),
+    where overtime plays carry the game clock (0 and below), not the period clock: 35 rows that
+    ``ot_adjusted_seconds`` re-clocks. Scored on the raw clock, each would read "game over at the
+    current margin". The enrichment's prior is pinned to the one the game page used.
+    """
+    from pathlib import Path
+
+    from sportsdataverse.mbb import mbb_win_prob
+    from sportsdataverse.nba.nba_game_page import score_win_prob
+
+    pbp = pl.read_parquet(
+        Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction" / "ot_game_2022_401364358.parquet"
+    )
+    page = score_win_prob(pbp, league="mbb")
+    prior = float(page["pregame_home_prob"][0])
+    monkeypatch.setattr(
+        mbb_win_prob,
+        "_pregame_probs",
+        lambda *a, **k: pl.DataFrame({"game_id": ["401364358"], "pregame_home_prob": [prior]}),
+    )
+    release = _compile_season_wp(pbp, pl.DataFrame(), pl.DataFrame())
+    unsettled = ~page["type_text"].is_in(["End Period", "End Game"]).fill_null(False)
+    ot = (page["period_number"] > 2) & unsettled
+    assert int(ot.sum()) > 30
+    assert release["home_win_prob"].filter(unsettled).to_list() == page["home_win_prob"].filter(unsettled).to_list()

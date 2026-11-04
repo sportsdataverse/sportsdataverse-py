@@ -1,0 +1,147 @@
+{
+  "league": "mbb",
+  "fit_seasons": [
+    2022,
+    2023
+  ],
+  "validation_season": 2025,
+  "rule": "min of the mean of the log loss with the game page's HFA prior and with the rated prior",
+  "pick": {
+    "hfa_prior_share": 0.0,
+    "keep_unrated": false
+  },
+  "grid": [
+    {
+      "hfa_prior_share": 0.0,
+      "keep_unrated": false,
+      "rounds": 101,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.13446422615968176,
+        "log_loss": 0.4056821797815312,
+        "calibration_intercept": 0.021195855775081637,
+        "calibration_slope": 0.9377393641408224,
+        "max_decile_gap": 0.03126976077037957
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12075205635211654,
+        "log_loss": 0.3701708327222029,
+        "calibration_intercept": 0.08477950707004246,
+        "calibration_slope": 0.9570102994225804,
+        "max_decile_gap": 0.030881749089808508
+      },
+      "mean_log_loss": 0.3879265062518671
+    },
+    {
+      "hfa_prior_share": 0.25,
+      "keep_unrated": false,
+      "rounds": 95,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.1348151441745857,
+        "log_loss": 0.40646891771425664,
+        "calibration_intercept": 0.12727462260807137,
+        "calibration_slope": 0.9080355826757123,
+        "max_decile_gap": 0.05279647423290146
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12117520446724328,
+        "log_loss": 0.3714242479538457,
+        "calibration_intercept": 0.0953177417195792,
+        "calibration_slope": 0.9487015351453854,
+        "max_decile_gap": 0.04674188423612746
+      },
+      "mean_log_loss": 0.38894658283405115
+    },
+    {
+      "hfa_prior_share": 0.5,
+      "keep_unrated": false,
+      "rounds": 75,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.13480439798936342,
+        "log_loss": 0.40658282361125003,
+        "calibration_intercept": 0.13821318873528257,
+        "calibration_slope": 0.9249722724275014,
+        "max_decile_gap": 0.0547494124516458
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12174757129763972,
+        "log_loss": 0.3733851228503049,
+        "calibration_intercept": 0.07362600780753181,
+        "calibration_slope": 0.9565384386857672,
+        "max_decile_gap": 0.03752400495591918
+      },
+      "mean_log_loss": 0.3899839732307775
+    },
+    {
+      "hfa_prior_share": 0.0,
+      "keep_unrated": true,
+      "rounds": 84,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.13666830598589794,
+        "log_loss": 0.41230828969563865,
+        "calibration_intercept": -0.18681103844246416,
+        "calibration_slope": 0.8950821685309932,
+        "max_decile_gap": 0.08353857754335103
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12065867214894616,
+        "log_loss": 0.3702503208466459,
+        "calibration_intercept": 0.04286415692255101,
+        "calibration_slope": 0.9399582877848678,
+        "max_decile_gap": 0.029787530821050734
+      },
+      "mean_log_loss": 0.3912793052711423
+    },
+    {
+      "hfa_prior_share": 0.25,
+      "keep_unrated": true,
+      "rounds": 77,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.134702482068473,
+        "log_loss": 0.40703462303600807,
+        "calibration_intercept": -0.011634750710678174,
+        "calibration_slope": 0.883661717915755,
+        "max_decile_gap": 0.03903231678768382
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12080125146996096,
+        "log_loss": 0.3707999901620186,
+        "calibration_intercept": 0.07555734401659941,
+        "calibration_slope": 0.9520979051616014,
+        "max_decile_gap": 0.033947020540113004
+      },
+      "mean_log_loss": 0.38891730659901336
+    },
+    {
+      "hfa_prior_share": 0.5,
+      "keep_unrated": true,
+      "rounds": 70,
+      "hfa_prior": {
+        "plays": 2188711,
+        "brier": 0.13455672456708143,
+        "log_loss": 0.4064296771776912,
+        "calibration_intercept": 0.04902460563254094,
+        "calibration_slope": 0.9038175576575703,
+        "max_decile_gap": 0.042320869738188854
+      },
+      "rated_prior": {
+        "plays": 2188711,
+        "brier": 0.12162662746378686,
+        "log_loss": 0.3732552658432297,
+        "calibration_intercept": 0.06595037146558792,
+        "calibration_slope": 0.9573188851991363,
+        "max_decile_gap": 0.03822697140559003
+      },
+      "mean_log_loss": 0.3898424715104605
+    }
+  ]
+}

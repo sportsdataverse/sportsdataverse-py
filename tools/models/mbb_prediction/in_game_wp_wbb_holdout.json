@@ -8,9 +8,37 @@
   "validation_season": 2025,
   "holdout_season": 2026,
   "confirmation_season": 2024,
+  "confirmation_note": "2024 is in no training season, but the pregame constants (hfa, margin_sd, em_scale) that the rated prior and the naive model read were fit on it, and it precedes the 2025 training season",
   "baseline_ref": "eb4207476e",
-  "n_train_plays": 5069311,
-  "rounds": 86,
+  "artifact_sha256": "f027bc0fa23a1379e83c77d7e8e9c027534cf425646bf111c13b68ed80c38a4e",
+  "rounds": 92,
+  "n_train_plays": 5617092,
+  "train_stats": {
+    "2022": {
+      "games": 5347,
+      "rated_games": 4826,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 0,
+      "hfa_swapped_games": 1206,
+      "rows": 1760510
+    },
+    "2023": {
+      "games": 5700,
+      "rated_games": 5145,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 0,
+      "hfa_swapped_games": 1286,
+      "rows": 1883029
+    },
+    "2025": {
+      "games": 5472,
+      "rated_games": 4964,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 0,
+      "hfa_swapped_games": 1241,
+      "rows": 1973553
+    }
+  },
   "params": {
     "max_depth": 4,
     "eta": 0.1,
@@ -29,47 +57,50 @@
     "margin_per_sqrt_sec"
   ],
   "hfa_prior_share": 0.25,
+  "keep_unrated": true,
   "holdout": {
     "hfa_prior": {
       "refit": {
         "plays": 2812064,
-        "brier": 0.12037202367056159,
-        "log_loss": 0.3642908664097988,
-        "calibration_intercept": -0.03718300120821219,
-        "calibration_slope": 1.0927904140672466,
-        "max_decile_gap": 0.02806165051888715,
+        "brier": 0.1206990771605305,
+        "log_loss": 0.36479229695923404,
+        "calibration_intercept": -0.1294467160791919,
+        "calibration_slope": 1.0770558072423084,
+        "max_decile_gap": 0.04600553498634813,
         "brier_by_period": {
-          "1": 0.19302439337571134,
-          "2": 0.13988213381755807,
-          "3": 0.09948337226860406,
-          "4": 0.05569552260500902,
-          "ot": 0.15973704233558442
+          "1": 0.19329688584996063,
+          "2": 0.14035819098498098,
+          "3": 0.09985771286703667,
+          "4": 0.055876731679330015,
+          "ot": 0.16033132862856211
         },
+        "games_scored": 6011,
         "games": 6011,
-        "horn_jump_share": 0.0,
-        "horn_step_median": 0.0008191466331481934,
+        "horn_jump_share": 0.00016636167027116953,
+        "horn_step_median": 0.0005150596844032407,
         "final_minute_pairs": 17057,
-        "final_minute_toward_share": 0.33341150260889957,
+        "final_minute_toward_share": 0.3492407809110629,
         "final_minute_away_share": 0.0,
         "grid_violations": 0
       },
       "baseline": {
         "plays": 2812064,
-        "brier": 0.12116702793984917,
-        "log_loss": 0.36772480238166033,
-        "calibration_intercept": 0.017584332909542765,
-        "calibration_slope": 1.1154221575645122,
-        "max_decile_gap": 0.04495680055585166,
+        "brier": 0.12154899161675606,
+        "log_loss": 0.36878964814445314,
+        "calibration_intercept": 0.04479066460159168,
+        "calibration_slope": 1.1222900071397732,
+        "max_decile_gap": 0.045818740778872935,
         "brier_by_period": {
-          "1": 0.1943298657800745,
-          "2": 0.1405509155742248,
-          "3": 0.1001988433976367,
-          "4": 0.0562261632186366,
-          "ot": 0.1606262161632504
+          "1": 0.19512334393392267,
+          "2": 0.14106404861187585,
+          "3": 0.10046450761973215,
+          "4": 0.056225900258140366,
+          "ot": 0.16100599366947702
         },
+        "games_scored": 6011,
         "games": 6011,
         "horn_jump_share": 0.04691399101646981,
-        "horn_step_median": 0.008478999137878418,
+        "horn_step_median": 0.008407811634242535,
         "final_minute_pairs": 17057,
         "final_minute_toward_share": 0.3169373277833148,
         "final_minute_away_share": 0.04531863750952688,
@@ -77,47 +108,81 @@
       },
       "naive": {
         "plays": 2812064,
-        "brier": 0.1204904806561924,
-        "log_loss": 0.3667551209245268,
-        "calibration_intercept": 0.015089970276278439,
-        "calibration_slope": 1.003064142042702,
-        "max_decile_gap": 0.018985157712614553,
+        "brier": 0.12077798923103979,
+        "log_loss": 0.36746957989204887,
+        "calibration_intercept": 0.044409378692436136,
+        "calibration_slope": 0.9980548835384258,
+        "max_decile_gap": 0.021909524749147424,
         "brier_by_period": {
-          "1": 0.19352554064812338,
-          "2": 0.1397358081744161,
-          "3": 0.09933336040134146,
-          "4": 0.055919578843041357,
-          "ot": 0.16234829237155604
+          "1": 0.19421079073924027,
+          "2": 0.14004613843553537,
+          "3": 0.099524095484898,
+          "4": 0.055924059770795766,
+          "ot": 0.16253349460219182
         },
+        "games_scored": 6011,
         "games": 6011,
         "horn_jump_share": 0.0,
         "horn_step_median": 0.0,
         "final_minute_pairs": 17057,
-        "final_minute_toward_share": 0.3406812452365598,
+        "final_minute_toward_share": 0.3410330069766078,
         "final_minute_away_share": 0.0,
         "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0008499144562255573,
+          "ci95": [
+            -0.0013585342372911785,
+            -0.00026574523361204183
+          ]
+        },
+        "log_loss": {
+          "delta": -0.0039973511852190915,
+          "ci95": [
+            -0.005326703414161608,
+            -0.0026331379526449653
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -7.891207050928304e-05,
+          "ci95": [
+            -0.0005005413957005551,
+            0.0003659875132860888
+          ]
+        },
+        "log_loss": {
+          "delta": -0.0026772829328148484,
+          "ci95": [
+            -0.003955496099435005,
+            -0.0013958117245006555
+          ]
+        }
       }
     },
     "rated_prior": {
       "refit": {
         "plays": 2812064,
-        "brier": 0.10128798904901548,
-        "log_loss": 0.31311046577460455,
-        "calibration_intercept": -0.008677887758628235,
-        "calibration_slope": 1.0112276002893628,
-        "max_decile_gap": 0.019778405910807317,
+        "brier": 0.10101939300678318,
+        "log_loss": 0.31217845670692995,
+        "calibration_intercept": -0.03559513079208301,
+        "calibration_slope": 0.9911754148490037,
+        "max_decile_gap": 0.03665454899852261,
         "brier_by_period": {
-          "1": 0.144555362815036,
-          "2": 0.1176146704268788,
-          "3": 0.09136776719274478,
-          "4": 0.05484086586497363,
-          "ot": 0.1631564584211757
+          "1": 0.14377064092932326,
+          "2": 0.11741525686543552,
+          "3": 0.09125175780658992,
+          "4": 0.05485632136010868,
+          "ot": 0.16156573037818253
         },
+        "games_scored": 6011,
         "games": 6011,
-        "horn_jump_share": 0.0006654466810846781,
-        "horn_step_median": 0.0007453560829162598,
+        "horn_jump_share": 0.00033272334054233906,
+        "horn_step_median": 0.0004863739013671875,
         "final_minute_pairs": 17057,
-        "final_minute_toward_share": 0.3317699478220086,
+        "final_minute_toward_share": 0.3500615583045084,
         "final_minute_away_share": 0.0,
         "grid_violations": 0
       },
@@ -135,6 +200,7 @@
           "4": 0.05612196985456926,
           "ot": 0.167048251543863
         },
+        "games_scored": 6011,
         "games": 6011,
         "horn_jump_share": 0.0524039261354184,
         "horn_step_median": 0.006274521350860596,
@@ -149,7 +215,7 @@
         "log_loss": 0.32037188493309116,
         "calibration_intercept": 0.07587690812237369,
         "calibration_slope": 0.8335312841003137,
-        "max_decile_gap": 0.04166719496491836,
+        "max_decile_gap": 0.041667194964918386,
         "brier_by_period": {
           "1": 0.14513696074114096,
           "2": 0.11838192047102587,
@@ -157,6 +223,7 @@
           "4": 0.05452433878930614,
           "ot": 0.1601918654721244
         },
+        "games_scored": 6011,
         "games": 6011,
         "horn_jump_share": 0.0,
         "horn_step_median": 0.0,
@@ -164,6 +231,38 @@
         "final_minute_toward_share": 0.3378671513161752,
         "final_minute_away_share": 0.0,
         "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0029109551710667365,
+          "ci95": [
+            -0.003953721197068601,
+            -0.001991098207294154
+          ]
+        },
+        "log_loss": {
+          "delta": -0.013401869832321682,
+          "ci95": [
+            -0.017901365328951285,
+            -0.009490793582867443
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.0005584764932396492,
+          "ci95": [
+            -0.0012560605853523222,
+            9.330084648674129e-05
+          ]
+        },
+        "log_loss": {
+          "delta": -0.008193428226161285,
+          "ci95": [
+            -0.012437744205733835,
+            -0.00459766798865309
+          ]
+        }
       }
     }
   },
@@ -171,40 +270,42 @@
     "hfa_prior": {
       "refit": {
         "plays": 1898308,
-        "brier": 0.12333395176917461,
-        "log_loss": 0.3747734003326583,
-        "calibration_intercept": 0.050491030801576076,
-        "calibration_slope": 1.04964384355605,
-        "max_decile_gap": 0.03277919668290763,
+        "brier": 0.12342487259060421,
+        "log_loss": 0.37485958839809913,
+        "calibration_intercept": -0.039032438941199746,
+        "calibration_slope": 1.0328865034332513,
+        "max_decile_gap": 0.030841993454001793,
         "brier_by_period": {
-          "1": 0.19396976500400784,
-          "2": 0.144898931160051,
-          "3": 0.1049261044518227,
-          "4": 0.057177985441464935,
-          "ot": 0.14454420348477057
+          "1": 0.19387828703470739,
+          "2": 0.1450884408066977,
+          "3": 0.10514578876224781,
+          "4": 0.0572179664238722,
+          "ot": 0.1447002522761394
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.0007196833393306944,
-        "horn_step_median": 0.0008387985872104764,
+        "horn_step_median": 0.000554502010345459,
         "final_minute_pairs": 15873,
-        "final_minute_toward_share": 0.3471933471933472,
+        "final_minute_toward_share": 0.36042336042336043,
         "final_minute_away_share": 0.0,
         "grid_violations": 0
       },
       "baseline": {
         "plays": 1898308,
-        "brier": 0.12415803809667023,
-        "log_loss": 0.37811326444508075,
-        "calibration_intercept": 0.10191843636013324,
-        "calibration_slope": 1.0823046526143953,
-        "max_decile_gap": 0.05695467633083057,
+        "brier": 0.12455982467019765,
+        "log_loss": 0.37922023334739985,
+        "calibration_intercept": 0.12642249281178328,
+        "calibration_slope": 1.088317967848479,
+        "max_decile_gap": 0.05868834631867886,
         "brier_by_period": {
-          "1": 0.19492084217097153,
-          "2": 0.14587210724527047,
-          "3": 0.10585166303906056,
-          "4": 0.05765401732884671,
-          "ot": 0.14539596529343726
+          "1": 0.19566736908435353,
+          "2": 0.146456950420917,
+          "3": 0.10615618374169514,
+          "4": 0.057658818334869924,
+          "ot": 0.14628531495539657
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.04318100035984167,
         "horn_step_median": 0.009002381935715675,
@@ -215,47 +316,81 @@
       },
       "naive": {
         "plays": 1898308,
-        "brier": 0.12363576062760565,
-        "log_loss": 0.3780693390238086,
-        "calibration_intercept": 0.10046319894933178,
-        "calibration_slope": 0.9577970516402742,
-        "max_decile_gap": 0.0330223587334203,
+        "brier": 0.12402683406148343,
+        "log_loss": 0.3790575663615795,
+        "calibration_intercept": 0.12697201138355022,
+        "calibration_slope": 0.9527586238332416,
+        "max_decile_gap": 0.03740900414894743,
         "brier_by_period": {
-          "1": 0.19453081455622076,
-          "2": 0.14487571174938996,
-          "3": 0.10494455791759588,
-          "4": 0.05769740196964032,
-          "ot": 0.14931630638444127
+          "1": 0.1954797279282952,
+          "2": 0.1453034742752778,
+          "3": 0.10516418290425161,
+          "4": 0.057713709610744894,
+          "ot": 0.14985052610422692
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.0007196833393306944,
         "horn_step_median": 0.0,
         "final_minute_pairs": 15873,
-        "final_minute_toward_share": 0.34561834561834565,
+        "final_minute_toward_share": 0.34574434574434576,
         "final_minute_away_share": 0.0,
         "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0011349520795934356,
+          "ci95": [
+            -0.001707713989795198,
+            -0.0005557728665278876
+          ]
+        },
+        "log_loss": {
+          "delta": -0.004360644949300685,
+          "ci95": [
+            -0.005738635948619944,
+            -0.0028524608062161566
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.0006019614708792349,
+          "ci95": [
+            -0.0010628377756184465,
+            -0.00013399901955875895
+          ]
+        },
+        "log_loss": {
+          "delta": -0.004197977963480352,
+          "ci95": [
+            -0.006310812466400311,
+            -0.002318637903073809
+          ]
+        }
       }
     },
     "rated_prior": {
       "refit": {
         "plays": 1898308,
-        "brier": 0.10509558118653015,
-        "log_loss": 0.32674925671707555,
-        "calibration_intercept": 0.08633506211018846,
-        "calibration_slope": 0.9882152893465824,
-        "max_decile_gap": 0.03566576555721079,
+        "brier": 0.10484904591434067,
+        "log_loss": 0.3263655095445809,
+        "calibration_intercept": 0.05938727253932708,
+        "calibration_slope": 0.9660674330549355,
+        "max_decile_gap": 0.029957654307261522,
         "brier_by_period": {
-          "1": 0.14980671226500902,
-          "2": 0.1231856835292027,
-          "3": 0.09573425903945836,
-          "4": 0.056201413820937005,
-          "ot": 0.14795300424821548
+          "1": 0.14875164855642853,
+          "2": 0.12312799950602862,
+          "3": 0.09573810636682324,
+          "4": 0.056234763828859814,
+          "ot": 0.14903321275433973
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.0010795250089960418,
-        "horn_step_median": 0.0007828797679394484,
+        "horn_step_median": 0.0005134940147399902,
         "final_minute_pairs": 15873,
-        "final_minute_toward_share": 0.3456813456813457,
+        "final_minute_toward_share": 0.36111636111636114,
         "final_minute_away_share": 0.0,
         "grid_violations": 0
       },
@@ -273,6 +408,7 @@
           "4": 0.05732762949368121,
           "ot": 0.1478684854289529
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.050017992083483266,
         "horn_step_median": 0.007064410485327244,
@@ -287,7 +423,7 @@
         "log_loss": 0.33107398584743014,
         "calibration_intercept": 0.16342972417691176,
         "calibration_slope": 0.8310270433802595,
-        "max_decile_gap": 0.05253593871322543,
+        "max_decile_gap": 0.05253593871322554,
         "brier_by_period": {
           "1": 0.15016113994337676,
           "2": 0.12351948147287808,
@@ -295,6 +431,7 @@
           "4": 0.05574562986884071,
           "ot": 0.14803899210257626
         },
+        "games_scored": 5778,
         "games": 5558,
         "horn_jump_share": 0.0007196833393306944,
         "horn_step_median": 0.0,
@@ -302,6 +439,38 @@
         "final_minute_toward_share": 0.34486234486234485,
         "final_minute_away_share": 0.0,
         "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.002218525667838554,
+          "ci95": [
+            -0.003170679308549928,
+            -0.0012908324973018028
+          ]
+        },
+        "log_loss": {
+          "delta": -0.010788802179874104,
+          "ci95": [
+            -0.014951295162685743,
+            -0.006952420825829064
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.0003665039871336137,
+          "ci95": [
+            -0.0009362051661336924,
+            0.00022890660835745672
+          ]
+        },
+        "log_loss": {
+          "delta": -0.00470847630284922,
+          "ci95": [
+            -0.0074818141432658435,
+            -0.0018886359331943242
+          ]
+        }
       }
     }
   }

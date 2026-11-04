@@ -137,7 +137,7 @@ def test_wbb_pregame_spread_and_total_mae_vs_close(wbb_weekly_backtest, wbb_corp
 
 
 def test_wbb_in_game_wp_decile_calibration(wbb_corpus):
-    """Phase-3 gate (same threshold): decile gap <= 0.03. Observed: 0.0224."""
+    """Phase-3 gate (same threshold): decile gap <= 0.03. Observed: 0.0224 (2023-only booster), 0.0295 (2026-11 refit)."""
     sample = wbb_corpus["pbp_sample_2024"]
     preds, obs = [], []
     for (_gid,), sub in sample.group_by("game_id", maintain_order=True):

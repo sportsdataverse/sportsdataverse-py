@@ -241,11 +241,15 @@ def test_bracketology_seed_order_vs_committee(oracle_corpus):
 def test_in_game_wp_decile_calibration(oracle_corpus):
     """Task 3.4 gate: |mean_pred - mean_actual| <= 0.03 in every predicted decile.
 
-    Out-of-sample by construction: the bundled artifact is trained on 2023,
+    Out-of-sample by construction: no bundled artifact trains on 2024, and
     the sample is 2024 (every 25th play of all 4,326 eligible games -- a few
     plays from every game beats every play from few games, because plays
     within a game are correlated and per-decile power is driven by game
-    count). Observed at train time: max gap 0.0298 (57,887 plays).
+    count). Observed: the 2023-only booster (to eb4207476e) 0.0298; the
+    2026-11 refit (tools/models/mbb_prediction/train_in_game_wp.py, train
+    2022/2023/2025) 0.0326, in the 0.15 bin. Game-clustered bootstrap 90%
+    bands of the max gap overlap (refit 0.025-0.055, old 0.019-0.051). The
+    threshold is unchanged; whether it stays the gate is an owner decision.
     """
     sample = oracle_corpus["pbp_sample_2024"]
     preds, obs = [], []
