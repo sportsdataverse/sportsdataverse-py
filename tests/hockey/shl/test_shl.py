@@ -178,6 +178,12 @@ def test_layout_maps_start_year_codes_to_end_year_seasons():
     assert row["ssgt_uuid"].item() == "iuzqg7dqk9" and row["season_code"].item() == "2025"
 
 
+def test_layout_reads_the_old_directory_key():
+    df = P.parse_shl_layout(_load(FIXTURES / "statistics-v2__layout-info__old_key.json"))
+    assert df.height == 3
+    assert df.filter(pl.col("season") == 2027)["ssgt_uuid"].to_list() == ["qa98unlbd6"]
+
+
 def test_player_crosswalk_isa_to_athlete_uuid():
     df = P.parse_shl_player_crosswalk(_load(FIXTURES / "statistics-v2__stats-info__module__players_summary.json"))
     assert df.schema["player_id"] == pl.Int64 and df.schema["athlete_uuid"] == pl.Utf8

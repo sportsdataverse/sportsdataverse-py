@@ -1691,7 +1691,7 @@ def sportality_player_h2h(
     Example URL: https://www.basketligaen.dk/api/statistics-v2/player-h2h-v2/xs07bd3fmp/rfo82vr830/gvvuxe9ysw?gameUuid=c4hh5nig6t
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.
+        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`.
         home_team_uuid: Home team uuid of the game.
         away_team_uuid: Away team uuid of the game.
         game_uuid: Game uuid; selects the game whose box-score lines the head-to-head carries.
@@ -2011,7 +2011,7 @@ def sportality_sites(
     Example URL: https://www.basketligaen.dk/api/sports-v2/all-sites/xs07bd3fmp
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.
+        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`.
         return_parsed: parse the payload through parse_sportality -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2071,7 +2071,7 @@ def sportality_ssgt_provider(
     Example URL: https://www.basketligaen.dk/api/sports-v2/ssgt/xs07bd3fmp/provider
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.
+        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`.
         return_parsed: parse the payload through parse_sportality -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2131,7 +2131,7 @@ def sportality_standings(
     Example URL: https://www.basketligaen.dk/api/gameday/team-standings/xs07bd3fmp
 
     Args:
-        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.
+        ssgt_uuid: ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`.
         return_parsed: parse the payload through parse_sportality_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

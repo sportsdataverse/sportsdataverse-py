@@ -188,6 +188,16 @@ def _dict(v: Any) -> Dict[str, Any]:
     return v if isinstance(v, dict) else {}
 
 
+#: layout-info's ssgt directory key: renamed live 2026-11-04; the old name stays a fallback.
+_SSGT_KEYS = ("originalSeasonSeriesGameTypeTeams", "seasonSeriesGameTypeTeams")
+
+
+def _ssgts(body: Any) -> List[Any]:
+    """The ssgt list of one layout-info item: the first of ``_SSGT_KEYS`` that holds a list."""
+    item = _dict(body)
+    return next((item[k] for k in _SSGT_KEYS if isinstance(item.get(k), list)), [])
+
+
 def _list(v: Any) -> List[Any]:
     """``v`` when it is a list, else ``[]`` (a wrong-typed value reads as absent)."""
     return v if isinstance(v, list) else []
@@ -857,13 +867,12 @@ def parse_sportality_layout(
         Parse one ssgt::
 
             from sportsdataverse.basketball.dbl.sportality_parsers import parse_sportality_layout
-            parse_sportality_layout([{"seasonSeriesGameTypeTeams": [{"ssgtUuid": "xs07bd3fmp",
+            parse_sportality_layout([{"originalSeasonSeriesGameTypeTeams": [{"ssgtUuid": "xs07bd3fmp",
                 "season": {"code": "2026"}, "gameType": {"code": "regular"}}]}])
     """
     body = _body(raw)
-    ssgts = body.get("seasonSeriesGameTypeTeams") if isinstance(body, dict) else None
     rows = []
-    for s in ssgts if isinstance(ssgts, list) else []:
+    for s in _ssgts(body):
         if not isinstance(s, dict):
             continue
         season = _dict(s.get("season"))

@@ -277,6 +277,12 @@ def test_layout_maps_start_year_codes_to_end_year_seasons():
     assert df["season"].min() == 2003 and df["season"].max() == 2027
 
 
+def test_layout_reads_the_old_directory_key():
+    df = P.parse_sportality_layout(_load(FIXTURES / "statistics-v2__layout-info__old_key.json"))
+    assert df.height == 3
+    assert df.filter(pl.col("season") == 2027)["ssgt_uuid"].to_list() == ["xs07bd3fmp"]
+
+
 def test_player_crosswalk_genius_id_to_athlete_uuid():
     df = P.parse_sportality_player_crosswalk(
         _load(FULL / "statistics-v2__stats-info__players_summary__qzw34da6jg.json")

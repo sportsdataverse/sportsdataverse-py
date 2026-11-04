@@ -25,6 +25,12 @@ Examples in them: game `bdhvuc5tex` (Frölunda HC 2-1 Linköping HC, 2025-09-13,
 22003), team `087a-087aTQv9u` (Frölunda HC), athlete `qQ9-349c7WDv6` (Lars Johansson,
 isa 2427), current ssgt `qa98unlbd6` (2026/27 regular season) for the match-day routes.
 
+`statistics-v2__layout-info.json` was re-captured on 2026-11-04 with the same `capture.py`, after the API renamed
+the ssgt directory key `seasonSeriesGameTypeTeams` to `originalSeasonSeriesGameTypeTeams` (the 2026-10-12 body
+carried both). `capture.py` still reads the old key, so the run patched its `ROWS` presence check to the new one.
+`statistics-v2__layout-info__old_key.json` keeps the old shape for the fallback tests: three ssgts of the 2026-10-12
+directory (`iuzqg7dqk9`, `qa98unlbd6`, `zg0pa4po75`) under `seasonSeriesGameTypeTeams`, plus `ssgtDefaultValue`.
+
 ## Full bodies (`full/`)
 
 Untruncated, fetched live on 2026-10-12. The column dtypes of the returns schemas and the
@@ -36,4 +42,4 @@ dtype tests come from these, not from the 3-row samples:
 | `gameday__boxscore__bdhvuc5tex.json` | `https://www.shl.se/api/gameday/boxscore/bdhvuc5tex` |
 | `statistics-v2__stats-info__teams_result__iuzqg7dqk9.json` | `https://www.shl.se/api/statistics-v2/stats-info/teams_result?ssgtUuid=iuzqg7dqk9&count=1000` (14 teams) |
 | `statistics-v2__stats-info__goalkeepers_summary__iuzqg7dqk9.json` | `https://www.shl.se/api/statistics-v2/stats-info/goalkeepers_summary?ssgtUuid=iuzqg7dqk9&count=1000` (36 goalies) |
-| `statistics-v2__layout-info__directory.json` | **Derived** from `https://www.shl.se/api/statistics-v2/layout-info` (1.5 MB): the first (statnet) item only, with every ssgt's `state`, `ssgtUuid`, `gameType`, `season` and `series` (uuid, code, name) kept and the team lists, filters and module lists dropped. All 110 SHL ssgts, 1975/76 to 2026/27. |
+| `statistics-v2__layout-info__directory.json` | **Derived** from `https://www.shl.se/api/statistics-v2/layout-info`, re-fetched 2026-11-04 (754 KB): the first (statnet) item only, its `originalSeasonSeriesGameTypeTeams` list, with every ssgt's `state`, `ssgtUuid`, `gameType`, `season` and `series` (uuid, code, name) kept and the team lists, filters and module lists dropped. All 110 SHL ssgts, 1975/76 to 2026/27. |

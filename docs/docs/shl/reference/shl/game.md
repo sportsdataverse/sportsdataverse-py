@@ -70,7 +70,7 @@ Game header: StatNet extId, arena, state, teams, scores.
 | `away_team_email` | String | Contact email address of the club. |
 | `away_team_icon` | String | URL of the team logo image. |
 | `away_team_score` | Int64 | Goals scored by the team in the game. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk); the seriesUuid param of game-schedule. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

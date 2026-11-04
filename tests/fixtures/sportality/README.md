@@ -20,7 +20,15 @@ Copied unchanged from the maintainers' captures (captured
 capture gate had already checked each body against what was asked for (game uuid, Genius id, teams in side order,
 final score, whole play-by-play feed, ssgt) before banking it. Personal keys (birth date, e-mail, phone, address,
 contact) hold the literal `<redacted>`. File names follow `capture.py`'s slug rule: the path with `/` -> `__` and the
-braces dropped, `__module__<module>` for stats-info, and `@<uuid>` for a second sample of the same route:
+braces dropped, `__module__<module>` for stats-info, and `@<uuid>` for a second sample of the same route.
+
+`statistics-v2__layout-info.json` was re-captured on 2026-11-04 with the same `capture.py`, after the API renamed
+the ssgt directory key `seasonSeriesGameTypeTeams` to `originalSeasonSeriesGameTypeTeams` (the 2026-10-12 body
+carried both). `capture.py` still reads the old key, so the run patched its `layout_context` (the layout gate) to the new one.
+`statistics-v2__layout-info__old_key.json` keeps the old shape for the fallback tests: three ssgts of the 2026-10-12
+directory (`al4a0u2go5`, `qzw34da6jg`, `xs07bd3fmp`) under `seasonSeriesGameTypeTeams`, plus `ssgtDefaultValue`, each team list cut to two.
+
+The suffixes:
 
 | Suffix | Sample |
 |---|---|
@@ -56,7 +64,7 @@ come from these, not from the 3-row samples:
 | `statistics-v2__stats-info__players_summary__qzw34da6jg.json` | `https://www.basketligaen.dk/api/statistics-v2/stats-info/players_summary?ssgtUuid=qzw34da6jg&count=1000` (208 rows, 206 players) |
 | `statistics-v2__stats-info__teams_summary__qzw34da6jg.json` | `.../stats-info/teams_summary?ssgtUuid=qzw34da6jg&count=1000` (12 teams) |
 | `statistics-v2__stats-info__games_games__qzw34da6jg.json` | `.../stats-info/games_games?ssgtUuid=qzw34da6jg&count=1000` (192 games) |
-| `statistics-v2__layout-info__directory.json` | **Derived** from `https://www.basketligaen.dk/api/statistics-v2/layout-info` (330 KB): the first item only, every ssgt's `ssgtUuid`, `state`, `gameType`, `season` and `series` (uuid, code, name) kept, each team list cut to `uuid` + `instanceId`, plus `ssgtDefaultValue`; the module lists, filters and overview blocks dropped. All 49 ssgts, 2002/03 to 2026/27 |
+| `statistics-v2__layout-info__directory.json` | **Derived** from `https://www.basketligaen.dk/api/statistics-v2/layout-info`, re-fetched 2026-11-04 (170 KB): the first item only, every `originalSeasonSeriesGameTypeTeams` ssgt's `ssgtUuid`, `state`, `gameType`, `season` and `series` (uuid, code, name) kept, each team list cut to `uuid` + `instanceId`, plus `ssgtDefaultValue`; the module lists, filters and overview blocks dropped. All 49 ssgts, 2002/03 to 2026/27 |
 
 Ten live requests were spent in all: eight for these bodies and two for the runtime smoke test (`sportality_ssgt_uuid` and
 `sportality_game_overview`), each at least 1 s apart.
