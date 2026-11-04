@@ -901,6 +901,53 @@ logs = nba_box_logs("2023-24")
 print(logs["player"].shape)
 ```
 
+### nba_draft_lottery_odds {#nba_draft_lottery_odds}
+
+`nba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Sequence[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick.
+
+NBA: the 2019 odds, 14 slots, four picks drawn. WNBA: two picks drawn, with the published
+chances for the number of lottery teams. Every ordered draw is enumerated (24,024 for the
+NBA), so the odds are exact, not simulated.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `chances` | `Sequence[float] \| None` | `None` | Chances per slot, worst record first. Default: `NBA_LOTTERY_CHANCES` (NBA) or the five-team `WNBA_LOTTERY_CHANCES` table (WNBA, the 2026 lottery). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(lottery_slot, pick)`: `lottery_slot` (1 = the worst record), `chances` (the slot's chances), `pick` and `probability`.
+
+| col_name | type | description |
+|---|---|---|
+| `lottery_slot` | Int64 | Pre-lottery slot, 1 = the worst record. |
+| `chances` | Float64 | The slot's chances in 1,000 (NBA 2019 table; WNBA published table or the caller's). |
+| `pick` | Int64 | Draft pick number. |
+| `probability` | Float64 | Exact probability that the slot gets the pick, from enumerating every ordered draw. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `chances` has a non-positive or non-finite entry or fewer entries than picks drawn. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds
+odds = nba_draft_lottery_odds()
+odds.filter(pl.col("lottery_slot") == 1)
+
+# A WNBA lottery with its own chances
+
+nba_draft_lottery_odds(league_id="10", chances=[442, 276, 178, 104])
+```
+
 ### nba_foul_drawing {#nba_foul_drawing}
 
 `nba_foul_drawing(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, advanced: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`

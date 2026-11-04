@@ -253,6 +253,7 @@ from sportsdataverse.wnba import wnba_aging_curve as wnba_aging_curve  # noqa: F
 from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa: F401
 from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
 from sportsdataverse.wnba import wnba_crosswalks_from_archive as wnba_crosswalks_from_archive  # noqa: F401
+from sportsdataverse.wnba import wnba_draft_lottery_odds as wnba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
@@ -275,6 +276,8 @@ from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  #
 from sportsdataverse.wnba import wnba_referee_assignments as wnba_referee_assignments  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_schedule_crosswalk as wnba_schedule_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_season_sim as wnba_season_sim  # noqa: F401
+from sportsdataverse.wnba import wnba_season_standings as wnba_season_standings  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
@@ -521,6 +524,7 @@ __all__ = [
     "wnba_availability",
     "wnba_career_trajectory",
     "wnba_crosswalks_from_archive",
+    "wnba_draft_lottery_odds",
     "wnba_draft_model",
     "wnba_enhanced_pbp",
     "wnba_expected_turnovers",
@@ -543,6 +547,8 @@ __all__ = [
     "wnba_referee_assignments",
     "wnba_rookie_projection",
     "wnba_schedule_crosswalk",
+    "wnba_season_sim",
+    "wnba_season_standings",
     "wnba_shot_value",
     "wnba_team_clutch",
     "wnba_team_crosswalk",

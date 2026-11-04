@@ -961,6 +961,9 @@ categories:
       - sportsdataverse.wbb.wbb_team_season_rates
       - sportsdataverse.nba.nba_team_strength
       - sportsdataverse.wnba.wnba_team_strength
+      - sportsdataverse.nba.nba_season_rules
+      - sportsdataverse.nba.nba_season_sim
+      - sportsdataverse.wnba.wnba_season_sim
       - sportsdataverse.mbb.mbb_team_strength
       - sportsdataverse.wbb.wbb_team_strength
       - sportsdataverse.nba.nba_foul_drawing
