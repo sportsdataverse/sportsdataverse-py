@@ -220,7 +220,7 @@ proj = wnba_availability(2023)
 
 ### wnba_draft_lottery_odds {#wnba_draft_lottery_odds}
 
-`wnba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Union[Sequence[float], None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Sequence[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA draft-lottery odds by slot, two picks drawn (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_draft_lottery_odds.
 
@@ -229,7 +229,7 @@ WNBA draft-lottery odds by slot, two picks drawn (league_id='10'). See sportsdat
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `league_id` | `str` | `'00'` |  |
-| `chances` | `Union[Sequence[float], None]` | `None` |  |
+| `chances` | `Sequence[float] \| None` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
@@ -476,7 +476,7 @@ print(f"Found {officials.height} official slots")
 
 ### wnba_season_sim {#wnba_season_sim}
 
-`wnba_season_sim(season: 'int', *, as_of_date: 'Union[dt.date, None]' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim.
 
@@ -485,7 +485,7 @@ WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10').
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  |  |
-| `as_of_date` | `Union[date, None]` | `None` |  |
+| `as_of_date` | `date \| None` | `None` |  |
 | `league_id` | `str` | `'00'` |  |
 | `n_sims` | `int` | `10000` |  |
 | `seed` | `int` | `20261103` |  |
@@ -543,7 +543,7 @@ One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean
 
 ### wnba_season_standings {#wnba_season_standings}
 
-`wnba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings.
 

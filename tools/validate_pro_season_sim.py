@@ -65,13 +65,13 @@ def postseason_teams(schedule: pl.DataFrame, season_type: str) -> set[int]:
 
 def check_standings(final: pl.DataFrame, schedule: pl.DataFrame, league_id: str) -> dict[str, object]:
     """The computed seeds against the real postseason field and first-round pairs."""
-    seed = dict(zip(final["team_id"].to_list(), final["seed"].to_list()))
+    seed = dict(zip(final["team_id"].to_list(), final["seed"].to_list(), strict=True))
     playoffs = postseason_teams(schedule, "playoffs")
     po = schedule.filter(pl.col("season_type") == "playoffs").with_columns(
         pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date()
     )
     first: dict[frozenset[int], tuple[int, int]] = {}
-    for d, h, a in po.sort("game_date").select("game_date", "home_team_id", "away_team_id").iter_rows():
+    for h, a in po.sort("game_date").select("home_team_id", "away_team_id").iter_rows():
         key = frozenset((h, a))
         if not any(h in k or a in k for k in first) or key in first:
             first.setdefault(key, (h, a))
@@ -82,8 +82,8 @@ def check_standings(final: pl.DataFrame, schedule: pl.DataFrame, league_id: str)
             bad.append("play-in field != seeds 7-10")
         if playoffs - play_in != {t for t, s in seed.items() if s <= 6}:
             bad.append("direct playoff field != seeds 1-6")
-        conf = dict(zip(final["team_id"].to_list(), final["conference"].to_list()))
-        for pair, (h, a) in first.items():
+        conf = dict(zip(final["team_id"].to_list(), final["conference"].to_list(), strict=True))
+        for h, a in first.values():
             sh, sa = seed[h], seed[a]
             if conf[h] == conf[a] and max(sh, sa) <= 6 and sh + sa != 9:
                 bad.append(f"first round {sh} v {sa}")
@@ -92,7 +92,7 @@ def check_standings(final: pl.DataFrame, schedule: pl.DataFrame, league_id: str)
     else:
         if playoffs != {t for t, s in seed.items() if s <= 8}:
             bad.append("playoff field != seeds 1-8")
-        for pair, (h, a) in first.items():
+        for h, a in first.values():
             if seed[h] + seed[a] != 9 or seed[h] > seed[a]:
                 bad.append(f"first round {seed[h]} v {seed[a]} (home {seed[h]})")
     return {"first_round_series": len(first), "mismatches": bad}
@@ -147,7 +147,7 @@ def one_day_ahead(rows: pl.DataFrame, games: pl.DataFrame, league_id: str, warmu
         if reg.filter(pl.col("game_date") < d).height < warmup:
             continue
         model = as_of_game_model(rows.filter(pl.col("game_date") < d).drop("game_date"), league_id=league_id)
-        net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list()))
+        net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
         m = model.margin(
             np.array([net.get(t, 0.0) for t in today["home_team_id"].to_list()]),
             np.array([net.get(t, 0.0) for t in today["away_team_id"].to_list()]),
@@ -173,7 +173,7 @@ def paired_brier(frame: pl.DataFrame, a: str, b: str) -> dict[str, float]:
     return {"diff": round(mean, 4), "se": round(se, 4)}
 
 
-def main(argv: "list[str] | None" = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
     ap.add_argument("--seasons", type=int, nargs="+", required=True, help="seasons by END year")

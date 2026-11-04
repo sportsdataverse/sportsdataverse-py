@@ -60,7 +60,7 @@ NBA's 2025-26 lottery-reform proposals, and the NBA Cup final (not a regular-sea
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
-from typing import TYPE_CHECKING, Literal, Union, overload
+from typing import TYPE_CHECKING, Literal, overload
 
 import numpy as np
 import polars as pl
@@ -71,7 +71,7 @@ if TYPE_CHECKING:
 __all__ = ["nba_draft_lottery_odds", "nba_season_standings"]
 
 #: A tiebreak criterion: one value per team of the group (higher is better), or None to skip it.
-Criterion = Callable[[Sequence[int]], Union[list[float], None]]
+Criterion = Callable[[Sequence[int]], list[float] | None]
 
 #: stats.nba.com team id -> (conference, division). The six-division alignment of 2004-05 onward,
 #: unchanged since (franchise ids survive relocations and renames).
@@ -138,7 +138,7 @@ STANDINGS_SCHEMA: dict[str, pl.DataType] = {
 }
 
 
-def lottery_chances(league_id: str, n_teams: int) -> Union[tuple[int, ...], None]:
+def lottery_chances(league_id: str, n_teams: int) -> tuple[int, ...] | None:
     """The published lottery chances for ``n_teams`` lottery teams, or None when there are none.
 
     Args:
@@ -176,7 +176,7 @@ class Season:
         *,
         league_id: str,
         rng: np.random.Generator,
-        pair_diff: Union[np.ndarray, None] = None,
+        pair_diff: np.ndarray | None = None,
     ) -> None:
         self.w = wins
         self.g = wins + wins.T
@@ -212,7 +212,7 @@ class Season:
     def _division_winner(self, group: Sequence[int]) -> list[float]:
         return [float(self.leader[i]) for i in group]
 
-    def _division_pct(self, group: Sequence[int]) -> Union[list[float], None]:
+    def _division_pct(self, group: Sequence[int]) -> list[float] | None:
         if len({self.div[i] for i in group}) > 1:
             return None
         return self._pct_vs(group, np.flatnonzero(self.div == self.div[group[0]]))
@@ -258,7 +258,9 @@ class Season:
                 continue
             out: list[int] = []
             for v in sorted(set(values), reverse=True):
-                out += self.break_tie([t for t, x in zip(group, values) if x == v], with_leader=with_leader)
+                out += self.break_tie(
+                    [t for t, x in zip(group, values, strict=True) if x == v], with_leader=with_leader
+                )
             return out
         return [group[k] for k in self.rng.permutation(len(group))]
 
@@ -373,15 +375,15 @@ def exact_lottery_odds(chances: Sequence[float], draws: int) -> np.ndarray:
 
 @overload
 def nba_draft_lottery_odds(
-    *, league_id: str = "00", chances: Union[Sequence[float], None] = None, return_as_pandas: Literal[False] = False
+    *, league_id: str = "00", chances: Sequence[float] | None = None, return_as_pandas: Literal[False] = False
 ) -> pl.DataFrame: ...
 @overload
 def nba_draft_lottery_odds(
-    *, league_id: str = "00", chances: Union[Sequence[float], None] = None, return_as_pandas: Literal[True]
-) -> "pd.DataFrame": ...
+    *, league_id: str = "00", chances: Sequence[float] | None = None, return_as_pandas: Literal[True]
+) -> pd.DataFrame: ...
 def nba_draft_lottery_odds(
-    *, league_id: str = "00", chances: Union[Sequence[float], None] = None, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    *, league_id: str = "00", chances: Sequence[float] | None = None, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
     """Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick.
 
     NBA: the 2019 odds, 14 slots, four picks drawn. WNBA: two picks drawn, with the published
@@ -474,10 +476,10 @@ def nba_season_standings(
 @overload
 def nba_season_standings(
     games: pl.DataFrame, *, league_id: str = "00", seed: int = 0, return_as_pandas: Literal[True]
-) -> "pd.DataFrame": ...
+) -> pd.DataFrame: ...
 def nba_season_standings(
     games: pl.DataFrame, *, league_id: str = "00", seed: int = 0, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+) -> pl.DataFrame | pd.DataFrame:
     """Standings with the league's tiebreakers from completed regular-season games.
 
     NBA: conference seeds and division ranks under the NBA tie-break procedure (division leaders

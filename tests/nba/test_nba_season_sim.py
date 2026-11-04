@@ -120,7 +120,7 @@ def test_nba_standings_reproduce_the_real_postseason(season: int) -> None:
     st = nba_season_standings(_regular("nba", season))
     assert st.schema == pl.Schema(STANDINGS_SCHEMA)
     assert st.height == 30 and set(st["games"].to_list()) == {82}
-    seed = dict(zip(st["team_id"].to_list(), st["seed"].to_list()))
+    seed = dict(zip(st["team_id"].to_list(), st["seed"].to_list(), strict=True))
     for team, real in _postseason_seeds(sched).items():
         assert seed[team] == real, f"{team}: computed seed {seed[team]}, the postseason says {real}"
     # the other first-round hosts are seeds 3 and 4, paired with 6 and 5
@@ -137,7 +137,7 @@ def test_nba_standings_reproduce_the_real_postseason(season: int) -> None:
 
 def test_nba_2024_ties_break_as_the_league_did() -> None:
     st = nba_season_standings(_regular("nba", 2024))
-    row = {t: r for t, r in zip(st["team_id"].to_list(), st.iter_rows(named=True))}
+    row = {t: r for t, r in zip(st["team_id"].to_list(), st.iter_rows(named=True), strict=True)}
     orl, ind, phi = 1610612753, 1610612754, 1610612755
     assert {row[t]["wins"] for t in (orl, ind, phi)} == {47}
     # three-way: the division leader first, then IND over PHI head to head
@@ -150,7 +150,7 @@ def test_nba_2024_ties_break_as_the_league_did() -> None:
 def test_wnba_standings_reproduce_the_real_first_round() -> None:
     sched = _schedule("wnba", 2025)
     st = nba_season_standings(_regular("wnba", 2025), league_id="10")
-    seed = dict(zip(st["team_id"].to_list(), st["seed"].to_list()))
+    seed = dict(zip(st["team_id"].to_list(), st["seed"].to_list(), strict=True))
     po = sched.filter(pl.col("season_type") == "playoffs").sort("game_date")
     firsts: dict[frozenset[int], tuple[int, int]] = {}
     for h, a in po.select("home_team_id", "away_team_id").iter_rows():
@@ -206,7 +206,7 @@ def test_game_model_home_term() -> None:
     assert edge == pytest.approx(2 * model.hfa * model.poss / 100)
     assert 1.5 < edge < 3.5, edge
     later = games.filter(pl.col("game_date") >= cut)
-    net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list()))
+    net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
     m = model.margin(
         np.array([net[t] for t in later["home_team_id"].to_list()]),
         np.array([net[t] for t in later["away_team_id"].to_list()]),
@@ -233,7 +233,7 @@ def test_play_in_is_simulated_with_the_higher_seed_at_home(nba_2024_final: pl.Da
     """With every game played, the play-in odds are closed-form in the game model."""
     sim = nba_2024_final
     model = sim_mod.as_of_game_model(_rows_2024())
-    net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list()))
+    net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
     for conf in ("East", "West"):
         by_seed = {
             r["p_seed_7"] * 7 + r["p_seed_8"] * 8 + r["p_seed_9"] * 9 + r["p_seed_10"] * 10: r
@@ -271,7 +271,7 @@ def test_play_in_is_simulated_with_the_higher_seed_at_home(nba_2024_final: pl.Da
 
 
 def test_nba_2024_lottery_splits_tied_chances(nba_2024_final: pl.DataFrame) -> None:
-    p1 = dict(zip(nba_2024_final["team_id"].to_list(), nba_2024_final["p_pick_1"].to_list()))
+    p1 = dict(zip(nba_2024_final["team_id"].to_list(), nba_2024_final["p_pick_1"].to_list(), strict=True))
     n = 20_000
     for team, want in ((DET, 0.140), (WAS_NBA, 0.140), (CHA, 0.1325), (POR, 0.1325), (SAS, 0.105)):
         assert abs(p1[team] - want) < 4 * np.sqrt(want * (1 - want) / n), (team, p1[team], want)
@@ -282,7 +282,7 @@ def test_nba_2024_lottery_splits_tied_chances(nba_2024_final: pl.DataFrame) -> N
 
 def test_wnba_lottery_uses_two_season_records() -> None:
     sim = _sim("wnba", 2025, n_sims=20_000, seed=5)
-    p1 = dict(zip(sim["team_id"].to_list(), sim["p_pick_1"].to_list()))
+    p1 = dict(zip(sim["team_id"].to_list(), sim["p_pick_1"].to_list(), strict=True))
     n = 20_000
     for team, want in ((DAL, 0.420), (CHI, 0.261), (LA, 0.167), (WAS, 0.097), (CONN, 0.055)):
         assert abs(p1[team] - want) < 4 * np.sqrt(want * (1 - want) / n), (team, p1[team], want)
@@ -367,7 +367,7 @@ def test_tied_lottery_slots_share_their_chances() -> None:
     order, chances = lottery_slots(
         worst["win_pct"].to_numpy(), np.zeros(14), NBA_LOTTERY_CHANCES, np.random.default_rng(0)
     )
-    by_team = dict(zip(worst["team_id"].to_numpy()[order].tolist(), chances.tolist()))
+    by_team = dict(zip(worst["team_id"].to_numpy()[order].tolist(), chances.tolist(), strict=True))
     assert by_team[CHA] == by_team[POR] == 132.5
     assert (by_team[DET], by_team[WAS_NBA], by_team[SAS]) == (140.0, 140.0, 105.0)
     assert sum(by_team.values()) == 1000.0

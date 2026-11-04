@@ -123,7 +123,7 @@ def ridge_margins(rows: pl.DataFrame, future: pl.DataFrame, lam: float) -> np.nd
     rat = possession_ridge_ratings(rows, lam=lam)
     poss = rows.height / (2.0 * rows.get_column("game_id").n_unique())
     hfa = float(rat.get_column("hfa")[0])
-    net = dict(zip(rat.get_column("team_id").to_list(), rat.get_column("adj_net_rtg").to_list()))
+    net = dict(zip(rat.get_column("team_id").to_list(), rat.get_column("adj_net_rtg").to_list(), strict=True))
     h = np.array([net.get(t, 0.0) for t in future.get_column("home_team_id").to_list()])
     a = np.array([net.get(t, 0.0) for t in future.get_column("away_team_id").to_list()])
     return (h - a + 2.0 * hfa) * poss / 100.0
@@ -192,7 +192,7 @@ def paired_log_loss(hold: pl.DataFrame, a: str, sa: float, b: str, sb: float) ->
     return {"diff": round(mean, 5), "se": round(se, 5), "games": sums.height}
 
 
-def main(argv: "list[str] | None" = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
     ap.add_argument("--train", type=int, nargs="+", required=True, help="seasons by END year")

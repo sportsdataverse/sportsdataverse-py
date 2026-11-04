@@ -158,7 +158,7 @@ wnba_officials = result["officials"]
 
 ### nba_season_sim {#nba_season_sim}
 
-`nba_season_sim(season: 'int', *, as_of_date: 'Union[dt.date, None]' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
 
@@ -172,7 +172,7 @@ are in `sportsdataverse.nba.nba_season_rules`.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  | The season, named by the year it ends (`2027` is 2026-27); the WNBA season is its calendar year. |
-| `as_of_date` | `Union[date, None]` | `None` | Games on or after this date are simulated even when the release has their score (a backtest). None: every game with a score counts as played. |
+| `as_of_date` | `date \| None` | `None` | Games on or after this date are simulated even when the release has their score (a backtest). None: every game with a score counts as played. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
 | `n_sims` | `int` | `10000` | Simulated seasons (Monte Carlo error: see `SIM_SCHEMA`'s `_se` columns). |
 | `seed` | `int` | `20261103` | Seeds the generator; the same release data and seed give the same output. |
@@ -249,7 +249,7 @@ nba_season_sim(2025, as_of_date=dt.date(2025, 7, 1), league_id="10")
 
 ### nba_season_standings {#nba_season_standings}
 
-`nba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Standings with the league's tiebreakers from completed regular-season games.
 

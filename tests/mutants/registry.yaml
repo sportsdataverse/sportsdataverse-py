@@ -8863,8 +8863,8 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'win910 = t9 if _play_game(model, sim_net, float(noise[t9, t10]), t9, t10, rng) else t10'
-  mutant: 'win910 = t9 if not _play_game(model, sim_net, float(noise[t10, t9]), t10, t9, rng) else t10'
+  snippet: 'win910 = t9 if _play_game(model, net, float(noise[t9, t10]), t9, t10, rng) else t10'
+  mutant: 'win910 = t9 if not _play_game(model, net, float(noise[t10, t9]), t10, t9, rng) else t10'
   test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
   expected: kill
   note: The 10 seed hosting the 9 moves both teams' play-in odds off the closed form.
@@ -8873,8 +8873,8 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'last = _play_game(model, sim_net, float(noise[loser78, win910]), loser78, win910, rng)'
-  mutant: 'last = not _play_game(model, sim_net, float(noise[win910, loser78]), win910, loser78, rng)'
+  snippet: 'last = _play_game(model, net, float(noise[loser78, win910]), loser78, win910, rng)'
+  mutant: 'last = not _play_game(model, net, float(noise[win910, loser78]), win910, loser78, rng)'
   test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
   expected: kill
   note: The last play-in game is at the 7-8 loser's home.
@@ -8933,7 +8933,7 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'shift = rng.standard_normal((n_sims, n_t)) * sd if rating_uncertainty else np.zeros((n_sims, n_t))'
+  snippet: 'shift = rng.standard_normal((n_sims, n_t)) * sd if uncertain else np.zeros((n_sims, n_t))'
   mutant: 'shift = np.zeros((n_sims, n_t))'
   test: tests/nba/test_nba_season_sim.py::test_rating_shift_widens_the_season_spread
   expected: kill

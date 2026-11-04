@@ -903,7 +903,7 @@ print(logs["player"].shape)
 
 ### nba_draft_lottery_odds {#nba_draft_lottery_odds}
 
-`nba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Union[Sequence[float], None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Sequence[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick.
 
@@ -916,7 +916,7 @@ NBA), so the odds are exact, not simulated.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `chances` | `Union[Sequence[float], None]` | `None` | Chances per slot, worst record first. Default: `NBA_LOTTERY_CHANCES` (NBA) or the five-team `WNBA_LOTTERY_CHANCES` table (WNBA, the 2026 lottery). |
+| `chances` | `Sequence[float] \| None` | `None` | Chances per slot, worst record first. Default: `NBA_LOTTERY_CHANCES` (NBA) or the five-team `WNBA_LOTTERY_CHANCES` table (WNBA, the 2026 lottery). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
