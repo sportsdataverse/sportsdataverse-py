@@ -171,6 +171,10 @@ _RECORD_AGGS = (
 def _clean_results(results: pl.DataFrame) -> pl.DataFrame:
     """``results`` in :data:`GAME_RESULTS_SCHEMA`, tied rows dropped (see :func:`season_records`)."""
     res = results.select(list(GAME_RESULTS_SCHEMA)).cast(GAME_RESULTS_SCHEMA)
+    unknown = res.filter(pl.col("team_id").is_null() | pl.col("opp_team_id").is_null()).height
+    if unknown:  # a null id would pool unrelated games into one phantom team
+        logger.warning("dropped %d team-games with no team or opponent id", unknown)
+        res = res.filter(pl.col("team_id").is_not_null() & pl.col("opp_team_id").is_not_null())
     tied = pl.col("pts") == pl.col("opp_pts")
     ties = res.filter(tied).height
     if ties:
@@ -184,7 +188,8 @@ def _clean_results(results: pl.DataFrame) -> pl.DataFrame:
 def season_records(results: pl.DataFrame) -> pl.DataFrame:
     """Games, wins, losses and points for and against per (season, team).
 
-    A tied row is dropped with a warning. A final score cannot be tied, so it is a game never
+    A row with no team or opponent id is dropped with a warning, and so is a tied row. A final
+    score cannot be tied, so it is a game never
     played (the stats schedule lists the cancelled 2013-04-16 Celtics-Pacers game at 0-0; ESPN
     marks 33 college games 0-0 Final) or a bad score (two women's college games, 56-56 and 27-27).
 

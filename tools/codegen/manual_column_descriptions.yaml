@@ -39238,15 +39238,17 @@ wnba_team_strength:
   wins: Wins in the season type's completed games (the schedule's final scores).
 mbb_team_luck:
   close_games: 'Close games: at least one possession started with 5:00 or less left in the 2nd half or an overtime, the score
-    within 5 (stats.nba.com''s clutch window; BB-D3''s close split).'
+    within 5 (stats.nba.com''s clutch window; BB-D3''s close split). The margin is the running sum of the possessions'' points,
+    so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games.'
   close_losses: Losses in close games.
   close_win_pct: close_wins / close_games; null with no close game.
   close_win_pct_n: 'Sample size of close_win_pct: close games.'
-  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
-    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
-  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that
-    played at least half the most games any team played in the season, have possessions for at least half their games and
-    played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers.
+  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the season, have possessions for at least half their games and played at
+    least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when
+    every qualifier has the same value.
   close_wins: Wins in close games.
   exp_wins: 'Expected wins: pythag_win_pct * games.'
   games: Games in the season's completed ESPN games, postseason included.
@@ -39256,34 +39258,37 @@ mbb_team_luck:
   luck_wins_pct: 'Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
     n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   luck_wins_rank: Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at
-    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
+    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers,
+    or when every qualifier has the same value.
   opp_pts: Points allowed in those games (final scores).
-  pbp_games: 'Games with published possessions (ncaa_mbb_possessions): the games whose close-game status is known. close_games
-    covers these, not every game.'
+  pbp_games: Games with published possessions (ncaa_mbb_possessions); close_games is counted among these. A game whose late
+    possessions are missing from the release counts as not close.
   pts: Points scored in those games (final scores).
-  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''mbb''] (fitted on past seasons
-    by tools/fit_team_luck_pythag.py).'
+  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''mbb''] (PYTHAG_EXPONENT[''wbb'']
+    with league=''womens''), fitted on past seasons by tools/fit_team_luck_pythag.py.'
   pythag_win_pct_n: 'Sample size of pythag_win_pct: games.'
-  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank)
-    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   pythag_win_pct_rank: Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that
     played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than
-    five qualifiers.
+    five qualifiers, or when every qualifier has the same value.
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks.
   win_pct: 'Win fraction: wins divided by games, from the final scores.'
   wins: Wins in the season's completed ESPN games, postseason included.
 nba_team_luck:
-  close_games: 'Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the
-    score within 5 (stats.nba.com''s clutch window; BB-D3''s close split).'
+  close_games: 'Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score
+    within 5 (stats.nba.com''s clutch window; BB-D3''s close split). The margin is the running sum of the possessions'' points,
+    so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games.'
   close_losses: Losses in close games.
   close_win_pct: close_wins / close_games; null with no close game.
   close_win_pct_n: 'Sample size of close_win_pct: close games.'
-  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
-    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
-  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that
-    played at least half the most games any team played in the season, have possessions for at least half their games and
-    played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers.
+  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the season, have possessions for at least half their games and played at
+    least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when
+    every qualifier has the same value.
   close_wins: Wins in close games.
   exp_wins: 'Expected wins: pythag_win_pct * games.'
   games: Games in the season type's completed games (the stats schedule's final scores).
@@ -39293,34 +39298,38 @@ nba_team_luck:
   luck_wins_pct: 'Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
     n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   luck_wins_rank: Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at
-    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
+    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers,
+    or when every qualifier has the same value.
   opp_pts: Points allowed in those games (final scores).
-  pbp_games: 'Games with published possessions (nba_stats_possessions): the games whose close-game status is known. close_games
-    covers these, not every game.'
+  pbp_games: Games with published possessions (nba_stats_possessions); close_games is counted among these. A game whose late
+    possessions are missing from the release counts as not close.
   pts: Points scored in those games (final scores).
-  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''nba''] (fitted on past seasons
-    by tools/fit_team_luck_pythag.py).'
+  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''nba''] (PYTHAG_EXPONENT[''wnba'']
+    with league_id=''10''), fitted on past seasons by tools/fit_team_luck_pythag.py.'
   pythag_win_pct_n: 'Sample size of pythag_win_pct: games.'
-  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank)
-    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   pythag_win_pct_rank: Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that
     played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than
-    five qualifiers.
+    five qualifiers, or when every qualifier has the same value.
   season: Season, named by the year it ends (2026 is 2025-26).
   team_id: stats.nba.com team id (the 10-digit franchise id).
   win_pct: 'Win fraction: wins divided by games, from the final scores.'
   wins: Wins in the season type's completed games (the stats schedule's final scores).
 wbb_team_luck:
   close_games: 'Close games: at least one possession started with 5:00 or less left in the 4th quarter (the 2nd half before
-    2015-16) or an overtime, the score within 5 (stats.nba.com''s clutch window; BB-D3''s close split).'
+    2015-16) or an overtime, the score within 5 (stats.nba.com''s clutch window; BB-D3''s close split). The margin is the running
+    sum of the possessions'' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play
+    recount on 1210 of 1229 games.'
   close_losses: Losses in close games.
   close_win_pct: close_wins / close_games; null with no close game.
   close_win_pct_n: 'Sample size of close_win_pct: close games.'
-  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
-    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
-  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that
-    played at least half the most games any team played in the season, have possessions for at least half their games and
-    played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers.
+  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the season, have possessions for at least half their games and played at
+    least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when
+    every qualifier has the same value.
   close_wins: Wins in close games.
   exp_wins: 'Expected wins: pythag_win_pct * games.'
   games: Games in the season's completed ESPN games, postseason included.
@@ -39330,34 +39339,37 @@ wbb_team_luck:
   luck_wins_pct: 'Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
     n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   luck_wins_rank: Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at
-    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
+    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers,
+    or when every qualifier has the same value.
   opp_pts: Points allowed in those games (final scores).
-  pbp_games: 'Games with published possessions (ncaa_wbb_possessions): the games whose close-game status is known. close_games
-    covers these, not every game.'
+  pbp_games: Games with published possessions (ncaa_wbb_possessions); close_games is counted among these. A game whose late
+    possessions are missing from the release counts as not close.
   pts: Points scored in those games (final scores).
-  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''wbb''] (fitted on past seasons
-    by tools/fit_team_luck_pythag.py).'
+  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''wbb''], fitted on past seasons
+    by tools/fit_team_luck_pythag.py.'
   pythag_win_pct_n: 'Sample size of pythag_win_pct: games.'
-  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank)
-    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   pythag_win_pct_rank: Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that
     played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than
-    five qualifiers.
+    five qualifiers, or when every qualifier has the same value.
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks.
   win_pct: 'Win fraction: wins divided by games, from the final scores.'
   wins: Wins in the season's completed ESPN games, postseason included.
 wnba_team_luck:
-  close_games: 'Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the
-    score within 5 (stats.nba.com''s clutch window; BB-D3''s close split).'
+  close_games: 'Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score
+    within 5 (stats.nba.com''s clutch window; BB-D3''s close split). The margin is the running sum of the possessions'' points,
+    so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games.'
   close_losses: Losses in close games.
   close_win_pct: close_wins / close_games; null with no close game.
   close_win_pct_n: 'Sample size of close_win_pct: close games.'
-  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
-    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
-  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that
-    played at least half the most games any team played in the season, have possessions for at least half their games and
-    played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers.
+  close_win_pct_pct: 'Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  close_win_pct_rank: Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played
+    at least half the most games any team played in the season, have possessions for at least half their games and played at
+    least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when
+    every qualifier has the same value.
   close_wins: Wins in close games.
   exp_wins: 'Expected wins: pythag_win_pct * games.'
   games: Games in the season type's completed games (the stats schedule's final scores).
@@ -39367,19 +39379,20 @@ wnba_team_luck:
   luck_wins_pct: 'Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
     n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   luck_wins_rank: Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at
-    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
+    least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers,
+    or when every qualifier has the same value.
   opp_pts: Points allowed in those games (final scores).
-  pbp_games: 'Games with published possessions (wnba_stats_possessions): the games whose close-game status is known. close_games
-    covers these, not every game.'
+  pbp_games: Games with published possessions (wnba_stats_possessions); close_games is counted among these. A game whose late
+    possessions are missing from the release counts as not close.
   pts: Points scored in those games (final scores).
-  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''wnba''] (fitted on past seasons
-    by tools/fit_team_luck_pythag.py).'
+  pythag_win_pct: 'Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT[''wnba''], fitted on past seasons
+    by tools/fit_team_luck_pythag.py.'
   pythag_win_pct_n: 'Sample size of pythag_win_pct: games.'
-  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank)
-    / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  pythag_win_pct_pct: 'Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   pythag_win_pct_rank: Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that
     played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than
-    five qualifiers.
+    five qualifiers, or when every qualifier has the same value.
   season: Season, the calendar year.
   team_id: stats.nba.com team id (the 10-digit franchise id).
   win_pct: 'Win fraction: wins divided by games, from the final scores.'

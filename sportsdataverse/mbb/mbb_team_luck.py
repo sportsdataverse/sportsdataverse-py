@@ -51,11 +51,12 @@ def espn_game_results(schedule: pl.DataFrame) -> pl.DataFrame:
     """
     if schedule.height == 0:
         return pl.DataFrame(schema=GAME_RESULTS_SCHEMA)
-    done = schedule.unique("game_id", keep="first", maintain_order=True).filter(
+    # completed rows first, then one per game: an earlier unfinished copy cannot hide the final
+    done = schedule.filter(
         (pl.col("status_type_completed") == True)  # noqa: E712
         & pl.col("home_score").is_not_null()
         & pl.col("away_score").is_not_null()
-    )
+    ).unique("game_id", keep="first", maintain_order=True)
     sides = (("home", "away"), ("away", "home"))
     return pl.concat(
         [

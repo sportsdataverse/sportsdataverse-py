@@ -154,6 +154,8 @@ def main(argv: list[str] | None = None) -> int:
     span_train, span_holdout = SPANS[args.league]
     train = list(range(args.train[0], args.train[1] + 1)) if args.train else list(span_train)
     holdout = list(range(args.holdout[0], args.holdout[1] + 1)) if args.holdout else list(span_holdout)
+    if not train or not holdout:
+        ap.error("--train and --holdout each need FIRST <= LAST")
     if max(train) >= min(holdout):
         ap.error("--holdout must come after --train: later seasons the fit never saw")
     records = load_records(args.league, train + holdout)

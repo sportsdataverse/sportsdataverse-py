@@ -83,8 +83,8 @@ def test_expected_wins_by_hand(college: tuple[str, pl.DataFrame]) -> None:
     lg, luck = college
     sched = (
         pl.read_parquet(STRENGTH / f"{lg}_schedule_2025.parquet")
-        .unique("game_id")
         .filter(pl.col("status_type_completed") == True)  # noqa: E712
+        .unique("game_id")
     )
     x = PYTHAG_EXPONENT[lg]
     for row in luck.filter(pl.col("luck_wins_rank").is_not_null()).iter_rows(named=True):
