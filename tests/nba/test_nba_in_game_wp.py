@@ -38,7 +38,17 @@ def _synthetic_pbp() -> pl.DataFrame:
 
 def test_in_game_features_shape_and_math() -> None:
     feats = in_game_features(_synthetic_pbp(), 0.6)
-    assert feats.columns == ["score_diff", "sec_left", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
+    assert feats.columns == [
+        "score_diff",
+        "sec_left",
+        "sqrt_sec_left",
+        "pregame_logit",
+        "home_has_ball",
+        "margin_per_sqrt_sec",
+        "sqrt_sec_left_60",
+    ]
+    assert feats["margin_per_sqrt_sec"].to_list() == [0.0, -2.0 / math.sqrt(1441.0), 16.0 / math.sqrt(31.0)]
+    assert feats["sqrt_sec_left_60"].to_list() == [math.sqrt(2880.0), math.sqrt(1440.0), math.sqrt(60.0)]
     assert feats["score_diff"].to_list() == [0.0, -2.0, 16.0]
     # sec_left strictly decreasing across the three plays
     assert feats["sec_left"].to_list() == [2880.0, 1440.0, 30.0]
