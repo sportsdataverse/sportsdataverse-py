@@ -418,6 +418,12 @@ def nba_draft_lottery_odds(
         A WNBA lottery with its own chances::
 
             nba_draft_lottery_odds(league_id="10", chances=[442, 276, 178, 104])
+
+    See Also:
+        * :func:`sportsdataverse.nba.nba_season_sim.nba_season_sim` -- the season sim that applies these rules
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+        * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
+        * `nba_api <https://github.com/swar/nba_api>`_ -- Python client for the stats.nba.com endpoints
     """
     if league_id not in ("00", "10"):
         raise ValueError(f"league_id must be '00' or '10', got {league_id!r}")
@@ -517,6 +523,12 @@ def nba_season_standings(
             from sportsdataverse.nba.nba_loaders import load_nba_stats_schedules
             from sportsdataverse.nba.nba_season_rules import nba_season_standings
             nba_season_standings(load_nba_stats_schedules(2025)).filter(pl.col("seed") <= 10)
+
+    See Also:
+        * :func:`sportsdataverse.nba.nba_season_sim.nba_season_sim` -- the season sim that applies these rules
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+        * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
+        * `nba_api <https://github.com/swar/nba_api>`_ -- Python client for the stats.nba.com endpoints
     """
     if league_id not in ("00", "10"):
         raise ValueError(f"league_id must be '00' or '10', got {league_id!r}")
