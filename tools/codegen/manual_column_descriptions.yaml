@@ -48641,14 +48641,20 @@ ot_adjusted_seconds:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men''s college frames) on overtime plays.'
 in_game_features:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 nba_in_game_win_prob:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
+mbb_in_game_win_prob:
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
+wbb_in_game_win_prob:
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 wnba_in_game_win_prob:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 shot_coordinates:
   x_legacy: Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays.
   y_legacy: Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays.

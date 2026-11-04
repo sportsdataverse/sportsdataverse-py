@@ -1,0 +1,284 @@
+{
+  "league": "mbb",
+  "train_seasons": [
+    2022,
+    2023,
+    2025
+  ],
+  "validation_season": 2025,
+  "holdout_season": 2026,
+  "confirmation_season": 2024,
+  "baseline_ref": "eb4207476e",
+  "n_train_plays": 5370793,
+  "rounds": 101,
+  "params": {
+    "max_depth": 4,
+    "eta": 0.1,
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42,
+    "monotone_constraints": "(1,0,1,1,1)"
+  },
+  "features": [
+    "score_diff",
+    "sqrt_sec_left_60",
+    "pregame_logit",
+    "home_has_ball",
+    "margin_per_sqrt_sec"
+  ],
+  "hfa_prior_share": 0.0,
+  "holdout": {
+    "hfa_prior": {
+      "refit": {
+        "plays": 2903178,
+        "brier": 0.13269583469231327,
+        "log_loss": 0.40021776627401684,
+        "calibration_intercept": -0.06072960342041258,
+        "calibration_slope": 0.9909864088577838,
+        "max_decile_gap": 0.027101131495242514,
+        "brier_by_period": {
+          "1": 0.1736830812426753,
+          "2": 0.09387827275196997,
+          "ot": 0.15123698169706062
+        },
+        "games": 6275,
+        "horn_jump_share": 0.00015936254980079682,
+        "horn_step_median": 0.0008407831192016602,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.3849695967884763,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 2903178,
+        "brier": 0.13322305990859465,
+        "log_loss": 0.4024002087205141,
+        "calibration_intercept": -0.023765857792547054,
+        "calibration_slope": 1.010835997393642,
+        "max_decile_gap": 0.04474536982017452,
+        "brier_by_period": {
+          "1": 0.17468231765561104,
+          "2": 0.09395494000589491,
+          "ot": 0.15220051643358243
+        },
+        "games": 6275,
+        "horn_jump_share": 0.06645418326693227,
+        "horn_step_median": 0.011603176593780518,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.28348780919770944,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "naive": {
+        "plays": 2903178,
+        "brier": 0.1340941997209552,
+        "log_loss": 0.41110117129763835,
+        "calibration_intercept": 0.23474629953702877,
+        "calibration_slope": 0.7522903971774177,
+        "max_decile_gap": 0.08311568661597649,
+        "brier_by_period": {
+          "1": 0.17511223236253048,
+          "2": 0.09521494861654563,
+          "ot": 0.15470078948233718
+        },
+        "games": 6275,
+        "horn_jump_share": 0.0,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.36017474467205857,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      }
+    },
+    "rated_prior": {
+      "refit": {
+        "plays": 2903178,
+        "brier": 0.12005542919517058,
+        "log_loss": 0.3676502405649871,
+        "calibration_intercept": 0.05772394269596622,
+        "calibration_slope": 0.9561579987393886,
+        "max_decile_gap": 0.025872181137393258,
+        "brier_by_period": {
+          "1": 0.1521174347582002,
+          "2": 0.08946986646701291,
+          "ot": 0.14848143453419343
+        },
+        "games": 6275,
+        "horn_jump_share": 0.00031872509960159364,
+        "horn_step_median": 0.0007953047752380371,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.3862093393942972,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 2903178,
+        "brier": 0.12165769003329348,
+        "log_loss": 0.373981227159824,
+        "calibration_intercept": 0.025418859967187384,
+        "calibration_slope": 0.9808232748192363,
+        "max_decile_gap": 0.022328124832658336,
+        "brier_by_period": {
+          "1": 0.15410505836831395,
+          "2": 0.09071596381935267,
+          "ot": 0.14970309916993632
+        },
+        "games": 6275,
+        "horn_jump_share": 0.07171314741035857,
+        "horn_step_median": 0.010171688161790371,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.28348780919770944,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "naive": {
+        "plays": 2903178,
+        "brier": 0.12236951752383353,
+        "log_loss": 0.38667998873988296,
+        "calibration_intercept": 0.23345695930065252,
+        "calibration_slope": 0.6844922260061223,
+        "max_decile_gap": 0.09800831280759575,
+        "brier_by_period": {
+          "1": 0.1547127267288744,
+          "2": 0.09150271190539662,
+          "ot": 0.15186389584473975
+        },
+        "games": 6275,
+        "horn_jump_share": 0.0,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 16939,
+        "final_minute_toward_share": 0.35840368380660015,
+        "final_minute_away_share": 5.903536218194698e-05,
+        "grid_violations": null
+      }
+    }
+  },
+  "confirmation": {
+    "hfa_prior": {
+      "refit": {
+        "plays": 1993755,
+        "brier": 0.13498720938189443,
+        "log_loss": 0.4062174650632008,
+        "calibration_intercept": -0.019695215489354195,
+        "calibration_slope": 0.970947254172646,
+        "max_decile_gap": 0.020282080001159497,
+        "brier_by_period": {
+          "1": 0.17858617405059354,
+          "2": 0.09444155435759087,
+          "ot": 0.16016534536754645
+        },
+        "games": 5960,
+        "horn_jump_share": 0.0003355704697986577,
+        "horn_step_median": 0.0008407831192016602,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.41027879997505146,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 1993755,
+        "brier": 0.13568712503785463,
+        "log_loss": 0.4088277345474321,
+        "calibration_intercept": 0.017047861920802196,
+        "calibration_slope": 0.9919872300443059,
+        "max_decile_gap": 0.04937789835616657,
+        "brier_by_period": {
+          "1": 0.17990336110689611,
+          "2": 0.09459859057277176,
+          "ot": 0.15948563976944205
+        },
+        "games": 5960,
+        "horn_jump_share": 0.06644295302013423,
+        "horn_step_median": 0.011603176593780518,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.28572319590843887,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "naive": {
+        "plays": 1993755,
+        "brier": 0.137069440734544,
+        "log_loss": 0.4174691806960195,
+        "calibration_intercept": 0.2692179080947579,
+        "calibration_slope": 0.738700545193351,
+        "max_decile_gap": 0.10523633964505844,
+        "brier_by_period": {
+          "1": 0.18097228842242777,
+          "2": 0.096259252772852,
+          "ot": 0.16141647567304931
+        },
+        "games": 5960,
+        "horn_jump_share": 0.0003355704697986577,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.3760992952036425,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      }
+    },
+    "rated_prior": {
+      "refit": {
+        "plays": 1993755,
+        "brier": 0.12399248202236891,
+        "log_loss": 0.37833322089500493,
+        "calibration_intercept": 0.1124738987960901,
+        "calibration_slope": 0.9294989495843341,
+        "max_decile_gap": 0.05133090212647001,
+        "brier_by_period": {
+          "1": 0.15900385845472895,
+          "2": 0.09117238404564872,
+          "ot": 0.15873073671602791
+        },
+        "games": 5960,
+        "horn_jump_share": 0.0003355704697986577,
+        "horn_step_median": 0.0007994597544893622,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.41071539948855484,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 1993755,
+        "brier": 0.12657080171390678,
+        "log_loss": 0.3880347275265294,
+        "calibration_intercept": 0.09493076451671392,
+        "calibration_slope": 0.9338479382103337,
+        "max_decile_gap": 0.03415479681033895,
+        "brier_by_period": {
+          "1": 0.16210643158938592,
+          "2": 0.09327148711021385,
+          "ot": 0.16114817114292837
+        },
+        "games": 5960,
+        "horn_jump_share": 0.07348993288590604,
+        "horn_step_median": 0.010621845722198486,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.28572319590843887,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "naive": {
+        "plays": 1993755,
+        "brier": 0.12717595378605645,
+        "log_loss": 0.40037250253760015,
+        "calibration_intercept": 0.28476848710209823,
+        "calibration_slope": 0.6635014958185014,
+        "max_decile_gap": 0.12891707047751283,
+        "brier_by_period": {
+          "1": 0.16302243345830353,
+          "2": 0.09361004102451137,
+          "ot": 0.1606803633039114
+        },
+        "games": 5960,
+        "horn_jump_share": 0.0003355704697986577,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 16033,
+        "final_minute_toward_share": 0.3743528971496289,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      }
+    }
+  }
+}

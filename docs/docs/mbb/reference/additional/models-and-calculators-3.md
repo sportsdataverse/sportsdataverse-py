@@ -1,10 +1,48 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob"
-sidebar_label: "Models and calculators: predict_margin–win_prob"
+title: "Men's college basketball — additional Python functions — Models and calculators: poss_calc–win_prob"
+sidebar_label: "Models and calculators: poss_calc–win_prob"
 sidebar_position: 12
-description: "Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: poss_calc–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob
+# Men's college basketball — additional Python functions — Models and calculators: poss_calc–win_prob
+
+### poss_calc_fragment_sum {#poss_calc_fragment_sum}
+
+`poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'`
+
+Field-wise add two `PossCalcFragment`\ s
+
+(`PossCalcFragment.sum`).
+
+The Scala original uses `shapeless.Generic` to zip the two case
+classes' fields and sum pairwise; since every field is a plain `Int`,
+a plain `zip` over `dataclasses.astuple` reproduces the same
+behavior without the generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `PossCalcFragment` |  | The left-hand fragment. |
+| `b` | `PossCalcFragment` |  | The right-hand fragment. |
+
+**Returns**
+
+A new `PossCalcFragment` with each field summed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import (
+    PossCalcFragment,
+    poss_calc_fragment_sum,
+)
+
+frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
+frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
+poss_calc_fragment_sum(frag1, frag2)
+# PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
 
 ### predict_margin {#predict_margin}
 

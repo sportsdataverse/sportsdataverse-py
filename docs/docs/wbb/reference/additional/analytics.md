@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster"
 sidebar_label: "Analytics: ConcurrentClump–using_roster"
-sidebar_position: 10
+sidebar_position: 11
 description: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster

@@ -3818,7 +3818,7 @@
   "player_per100_features": "models-and-calculators-2",
   "playwright_transport": "stats-ncaa-org-3",
   "pos_class_to_score": "analytics-2",
-  "poss_calc_fragment_sum": "models-and-calculators-2",
+  "poss_calc_fragment_sum": "models-and-calculators-3",
   "possession_deciles": "stats-ncaa-org-3",
   "possessioneventattacking_team": "models-and-calculators",
   "possessioneventdefending_team": "models-and-calculators",
@@ -10813,11 +10813,11 @@
   "wbb_season_sim": "models-and-calculators-2",
   "wbb_strength_of_schedule": "analytics-2",
   "wbb_team_crosswalk": "ids-and-crosswalks",
-  "wbb_team_ratings": "models-and-calculators-2",
+  "wbb_team_ratings": "models-and-calculators-3",
   "wbb_team_season_rates": "analytics-2",
   "wbb_team_strength": "analytics-2",
   "weighted_avg": "analytics-2",
-  "win_prob_from_margin": "models-and-calculators-2"
+  "win_prob_from_margin": "models-and-calculators-3"
  },
  "/docs/wbb/reference/core": {
   "espn_wbb_award": "other",

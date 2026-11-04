@@ -14,7 +14,8 @@ Offline validation fixtures for the MBB/WBB prediction & tournament stack
 (Phase 0, Task 0.1). Captured **2026-07-07** for the **2024** season
 (2023-24 men's Division I). Regenerate with
 `uv run python dev/mbb_prediction/capture_oracle.py` (script is gitignored
-under `dev/`).
+under `dev/`). The in-game WP model and its late-game fixture are fit and written by the committed
+`tools/models/mbb_prediction/train_in_game_wp.py`.
 
 **ID convention:** every team / game id is `Utf8` (cast from the raw ESPN
 integer via `pl.col(id).cast(pl.Int64).cast(pl.Utf8)`), so joins across
@@ -32,6 +33,8 @@ fixtures and against the ratings engine never hit a dtype mismatch. The two `she
 | `espn_odds_sample.parquet` | 294 | `espn_mbb_game_odds(game_id)` (ESPN Core v2) | Closing `close_spread_home` (home point spread, negative = home favored) + `close_total` for the same sampled games (19 of 313 had no usable book). Book preference order: ESPN BET, DraftKings, Caesars, Betfair, MGM, Unibet, SugarHouse — first with an explicit close (`homeTeamOdds.close.pointSpread` + `close.total`), else the first with a stored line snapshot (top-level `spread`/`overUnder`). |
 | `pbp_sample_2024.parquet` | 57887 | `load_mbb_pbp([2024])` (ESPN) | Phase-3 in-game WP calibration sample: every 25th play of ALL 4,326 eligible games (both teams ≥ 8 prior at the as-of date), with each game's as-of `pregame_home_prob` + `home_win` label attached. A few plays from every game beats every play from few games — plays within a game are correlated, so per-decile power is driven by game count. Regenerate with `uv run python dev/mbb_prediction/capture_oracle.py wp`. |
 | `ncaa_tourney_2024.parquet` | 134 | `espn_mbb_scoreboard(dates=...)` (ESPN Site v2, one call per tournament date) | Actual 2024 NCAA tournament: two rows per game (67 games, 68 teams) with `seed` = ESPN `curatedRank.current` (ESPN swaps the AP rank for the committee seed during the tournament; verified 68 teams / seeds 1–16 / 16 top-4 seeds), scores, winners, and the round in `notes_headline`. Oracle for the Phase-5 seed-order gate (the bracketmatrix archive is unreachable — self-signed TLS — so the gate uses the actual committee seeds, a stronger reference) and the Phase-6 advancement-calibration gate. Regenerate with `... capture_oracle.py tourney`. |
+| `mbb_late_game_2026.parquet` | 241049 | `load_mbb_pbp([2026])` (ESPN `espn_mens_college_basketball_pbp` release, read 2026-11-04) | In-game-WP holdout late-game gate (tests/mbb/test_mbb_in_game_wp_late_game.py): every play of the second half with `start_game_seconds_remaining <= 120`, plus every overtime play, of all 6,275 holdout games, scores forward-filled per game first. Written by `tools/models/mbb_prediction/train_in_game_wp.py`; 2026 is not a training season. |
+| `baseline_in_game_wp/mbb_in_game_wp_eb4207476e.ubj` | -- | `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` at eb4207476e | The pre-2026-11 men's booster (2023-only fit, WP 0.68 with a one-point lead at 0.1 s). The late-game gates must fail on it. |
 
 ## Oracle notes
 

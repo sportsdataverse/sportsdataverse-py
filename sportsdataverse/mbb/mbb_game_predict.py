@@ -12,7 +12,6 @@ functions are league-agnostic (``league="mens"`` / ``"womens"``).
 from __future__ import annotations
 
 import json
-import math
 from functools import lru_cache
 from importlib.resources import files
 from typing import Any, Literal, Union, overload
@@ -23,6 +22,7 @@ import polars as pl
 from scipy.stats import norm
 
 from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+from sportsdataverse.nba.nba_game_predict import in_game_features as nba_in_game_features
 
 __all__ = [
     "in_game_features",
@@ -67,9 +67,13 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
 
     Returns:
         One row per input play: ``score_diff`` (home - away), ``sec_left``
-        (clipped at 0 -- overtime plays count as 0 seconds left),
-        ``sqrt_sec_left``, ``pregame_logit``, ``home_has_ball`` (``Int8``;
-        dead-ball / unknown-team plays are 0).
+        (clipped at 0 -- overtime plays count as 0 seconds left; the game page
+        gives overtime plays the period clock first), ``sqrt_sec_left``,
+        ``pregame_logit``, ``home_has_ball`` (``Int8``; dead-ball /
+        unknown-team plays are 0), ``margin_per_sqrt_sec``
+        (``score_diff / sqrt(sec_left + 1)``) and ``sqrt_sec_left_60``
+        (``sqrt(max(sec_left, 60))``). The same features as the NBA / WNBA
+        model (:func:`sportsdataverse.nba.nba_game_predict.in_game_features`).
 
     Example:
         Quick start::
@@ -79,15 +83,7 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
             pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
             feats = in_game_features(pbp, 0.62)
     """
-    p = min(max(pregame_home_prob, 1e-6), 1.0 - 1e-6)  # norm.cdf saturates to exact 0/1 for extreme margins
-    logit = math.log(p / (1.0 - p))
-    return pbp.select(
-        (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("score_diff"),
-        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).alias("sec_left"),
-        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).sqrt().alias("sqrt_sec_left"),
-        pl.lit(logit, dtype=pl.Float64).alias("pregame_logit"),
-        (pl.col("team_id") == pl.col("home_team_id")).fill_null(False).cast(pl.Int8).alias("home_has_ball"),
-    )
+    return nba_in_game_features(pbp, pregame_home_prob)
 
 
 @overload
@@ -117,11 +113,19 @@ def mbb_in_game_win_prob(
     league: str = "mens",
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Per-play home win probability from the bundled in-game logistic.
+    """Per-play home win probability from the bundled in-game model.
 
     Scores :func:`in_game_features` through the committed artifact
-    (``sportsdataverse/mbb/models``, trained on the season before the pregame
-    gate season so the calibration backtest stays out-of-sample).
+    (``sportsdataverse/mbb/models/mbb_in_game_wp.ubj`` men's,
+    ``wbb_in_game_wp.ubj`` women's): a shallow monotone-constrained xgboost
+    booster fit by ``tools/models/mbb_prediction/train_in_game_wp.py`` on
+    2022, 2023 and 2025, held out on 2026 (2024, the pregame and decile gate
+    season, is in neither). It is the NBA / WNBA model's contract: within the
+    final minute the clock reaches the model only through
+    ``margin_per_sqrt_sec``, so at a fixed lead the probability moves toward
+    the leader as time runs out. This is the raw model output: it never
+    applies the game result (``nba_game_page.score_win_prob`` settles a
+    finished game's last play).
 
     Args:
         pbp: Play-by-play for ONE game in the ``load_mbb_pbp`` schema
@@ -133,7 +137,7 @@ def mbb_in_game_win_prob(
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per play: the five feature columns plus ``home_win_prob``.
+        One row per play: the :func:`in_game_features` columns plus ``home_win_prob``.
 
     Raises:
         ImportError: If the bundled artifact is an xgboost tree (``.ubj``) and

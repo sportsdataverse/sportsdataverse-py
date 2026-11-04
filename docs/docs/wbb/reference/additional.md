@@ -299,8 +299,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_predict_games](additional/models-and-calculators-2.md#wbb_predict_games) | Women's vectorized pregame predictions over a schedule. |
 | [wbb_season_projections](additional/models-and-calculators-2.md#wbb_season_projections) | Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
 | [wbb_season_sim](additional/models-and-calculators-2.md#wbb_season_sim) | Women's remaining-schedule Monte Carlo. |
-| [wbb_team_ratings](additional/models-and-calculators-2.md#wbb_team_ratings) | Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo). |
-| [win_prob_from_margin](additional/models-and-calculators-2.md#win_prob_from_margin) | Women's home win probability from an expected margin. |
+| [wbb_team_ratings](additional/models-and-calculators-3.md#wbb_team_ratings) | Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo). |
+| [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Women's home win probability from an expected margin. |
 
 ## Analytics
 

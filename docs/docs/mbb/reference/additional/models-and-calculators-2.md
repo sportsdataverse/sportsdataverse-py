@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc"
-sidebar_label: "Models and calculators: build_priors–poss_calc"
+title: "Men's college basketball — additional Python functions — Models and calculators: build_priors–player_per100"
+sidebar_label: "Models and calculators: build_priors–player_per100"
 sidebar_position: 11
-description: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: build_priors–player_per100 — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc
+# Men's college basketball — additional Python functions — Models and calculators: build_priors–player_per100
 
 ### build_priors {#build_priors}
 
@@ -593,7 +593,7 @@ Per-play in-game win-probability features from a `load_mbb_pbp` frame.
 
 **Returns**
 
-One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left; the game page gives overtime plays the period clock first), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0), `margin_per_sqrt_sec` (`score_diff / sqrt(sec_left + 1)`) and `sqrt_sec_left_60` (`sqrt(max(sec_left, 60))`). The same features as the NBA / WNBA model (`sportsdataverse.nba.nba_game_predict.in_game_features`).
 
 | col_name | type | description |
 |---|---|---|
@@ -602,6 +602,8 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 
 **Example**
 
@@ -936,11 +938,19 @@ board.sort("draft_prob", descending=True).head(30)
 
 `mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
-Per-play home win probability from the bundled in-game logistic.
+Per-play home win probability from the bundled in-game model.
 
 Scores `in_game_features` through the committed artifact
-(`sportsdataverse/mbb/models`, trained on the season before the pregame
-gate season so the calibration backtest stays out-of-sample).
+(`sportsdataverse/mbb/models/mbb_in_game_wp.ubj` men's,
+`wbb_in_game_wp.ubj` women's): a shallow monotone-constrained xgboost
+booster fit by `tools/models/mbb_prediction/train_in_game_wp.py` on
+2022, 2023 and 2025, held out on 2026 (2024, the pregame and decile gate
+season, is in neither). It is the NBA / WNBA model's contract: within the
+final minute the clock reaches the model only through
+`margin_per_sqrt_sec`, so at a fixed lead the probability moves toward
+the leader as time runs out. This is the raw model output: it never
+applies the game result (`nba_game_page.score_win_prob` settles a
+finished game's last play).
 
 **Parameters**
 
@@ -953,7 +963,7 @@ gate season so the calibration backtest stays out-of-sample).
 
 **Returns**
 
-One row per play: the five feature columns plus `home_win_prob`.
+One row per play: the `in_game_features` columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
@@ -962,6 +972,8 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 **Raises**
@@ -1578,42 +1590,4 @@ One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 featur
 ```python
 from sportsdataverse.mbb.mbb_player_value_constants import player_per100_features
 feats = player_per100_features(season_stats)
-```
-
-### poss_calc_fragment_sum {#poss_calc_fragment_sum}
-
-`poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'`
-
-Field-wise add two `PossCalcFragment`\ s
-
-(`PossCalcFragment.sum`).
-
-The Scala original uses `shapeless.Generic` to zip the two case
-classes' fields and sum pairwise; since every field is a plain `Int`,
-a plain `zip` over `dataclasses.astuple` reproduces the same
-behavior without the generic-programming machinery.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `a` | `PossCalcFragment` |  | The left-hand fragment. |
-| `b` | `PossCalcFragment` |  | The right-hand fragment. |
-
-**Returns**
-
-A new `PossCalcFragment` with each field summed.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import (
-    PossCalcFragment,
-    poss_calc_fragment_sum,
-)
-
-frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
-frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
-poss_calc_fragment_sum(frag1, frag2)
-# PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
 ```
