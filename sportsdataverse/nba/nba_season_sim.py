@@ -12,6 +12,12 @@ before the as-of date, at this module's own penalty. The expected home margin of
 team wins when ``margin + noise > 0``; the noise is normal with the as-of probit scale
 ``margin_sd``. Both constants are in :data:`SIM_CONSTANTS`, chosen on an as-of-date holdout.
 
+**The preseason prior** (:func:`preseason_prior`). The ridge shrinks each team toward last
+season's final rating times a fitted regression factor (:data:`PRIOR_CONSTANTS`) instead of
+toward average, with the penalty as the prior's weight, so the prior fades as possessions come
+in. Before the first game the ratings are the prior and the home term, possessions and variance
+are last season's. An expansion team starts at last season's bottom-quartile net rating.
+
 **Rating uncertainty.** A team's rating error is shared by all its remaining games, so the sim
 draws one shift per team per simulated season from the ridge posterior,
 ``N(0, s2 / (n_off + lam) + s2 / (n_def + lam))`` (``s2`` the variance of points per 100 per
@@ -24,15 +30,20 @@ seeded by ``seed``, so a call is reproducible. A probability's standard error is
 ``sqrt(p (1 - p) / n_sims)``, at most 0.005 at 10,000; ``p_playoffs_se`` and ``proj_wins_se``
 report it per team.
 
-**Not modelled:** rest, travel, injuries and roster moves (BB-D23); NBA Cup knockout games not
-yet on the schedule (each team's two are added in December, so a sim before then projects 80
-games); the playoffs past the play-in; a preseason prior (before the first game every team is
-average and the home term is 0, so run the sim once games are played).
+**Unscheduled NBA games.** Until December the release lists the NBA Cup knockout games with TBD
+teams, so each team has about 80 known games. :func:`nba_season_sim` plays each team's missing
+games, up to :data:`NBA_SEASON_GAMES`, against a league-average opponent at a neutral site; they
+count in its record, not in head-to-head, division or conference records. The Cup final does not
+count in the standings and is not simulated.
+
+**Not modelled:** rest, travel, injuries and roster moves (BB-D23); the playoffs past the play-in;
+offseason roster moves beyond what last season's rating and the regression factor carry.
 """
 
 from __future__ import annotations
 
 import datetime as dt
+import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, overload
 
@@ -40,6 +51,7 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse._common.team_strength import possession_ridge_ratings
+from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.nba.nba_season_rules import (
     NBA_LOTTERY_DRAWS,
     WNBA_LOTTERY_DRAWS,
@@ -76,7 +88,35 @@ __all__ = ["nba_season_sim"]
 #:   against it as shipped. BB-D19's 800 scores 0.63204 on holdout but 0.61162 vs 0.60698 on train.
 SIM_CONSTANTS: dict[str, tuple[float, float]] = {"00": (800.0, 13.3), "10": (200.0, 13.3)}
 
+#: league_id -> (regression factor, new-team quantile) of the preseason prior
+#: (:func:`preseason_prior`): the ridge shrinks toward last season's final ratings times the
+#: factor, with the :data:`SIM_CONSTANTS` penalty as the prior's weight (800 / 200 possessions on
+#: each side, about 8 / 2.5 games). Fit by ``tools/fit_preseason_prior.py`` (2026-11-03): weekly
+#: cutoffs from the first game (week 0 = preseason), the ratings through each cutoff scoring every
+#: later regular-season game; the factor minimizes TRAIN log loss on a 0.1 grid at the shipped
+#: penalty and sd, the HOLDOUT seasons are scored once (paired SE clustered by game).
+#:
+#: * NBA, train 2018 2019 2022 2023, holdout 2024-2026: factor 0.8 (train 0.64915 -> 0.64184).
+#:   Holdout weeks 0-6 log loss 0.64468 -> 0.63434 (-0.01034 +- 0.00247; week 0 0.69315 ->
+#:   0.65791), the whole season 0.62559 -> 0.62081 (-0.00478 +- 0.00158).
+#: * WNBA, train 2018 2019 2021, holdout 2024 2025: factor 0.6 (train 0.62904 -> 0.62283).
+#:   Holdout weeks 0-6 0.65745 -> 0.65512 (-0.00233 +- 0.00400, a tie on 526 games), the season
+#:   0.64141 -> 0.63920 (-0.00221 +- 0.00279).
+#: * Also scanned: the penalty and sd chosen jointly with the factor on train (NBA 0.7 / 3200 /
+#:   11.7, WNBA 0.8 / 200 / 15.5). The NBA joint pick loses on the holdout after week 1 (whole
+#:   season +0.00218 +- 0.00242), so the shipped fit keeps the BB-D18 penalty and sd, which that
+#:   holdout validated mid-season. This was decided after seeing the holdout.
+#: * The new-team quantile is not fit: no train season has an expansion team. 0.25 (last
+#:   season's bottom-quartile net rating) is a stated default; the 2025 Valkyries are its only
+#:   holdout case.
+PRIOR_CONSTANTS: dict[str, tuple[float, float]] = {"00": (0.8, 0.25), "10": (0.6, 0.25)}
+
 _SEEDS = 15
+
+#: NBA regular-season games per team. Until December the release lists the NBA Cup knockout games
+#: with TBD teams; :func:`nba_season_sim` then simulates each team's missing games
+#: (:func:`simulate_pro_season`'s ``season_games``). The Cup final does not count in the standings.
+NBA_SEASON_GAMES = 82
 
 #: :func:`simulate_pro_season` / :func:`nba_season_sim` output, one row per team.
 SIM_SCHEMA: dict[str, pl.DataType] = {
@@ -138,17 +178,103 @@ class GameModel:
         return (net_home - net_away + 2.0 * self.hfa) * self.poss / 100.0
 
 
-def as_of_game_model(rows: pl.DataFrame, *, league_id: str = "00") -> GameModel:
+@dataclass(frozen=True)
+class PreseasonPrior:
+    """Last season's final ratings, regressed to the mean, as the prior of the as-of ridge.
+
+    Attributes:
+        ratings: One row per team: ``team_id`` (Int64), ``off_dev`` / ``def_dev`` (points per 100
+            over / under the league average, already regressed) and ``new_team`` (the
+            expansion default, :func:`preseason_prior`).
+        hfa: Last season's home term, per 100; used until this season has a game.
+        poss: Last season's possessions per team-game; likewise.
+        s2: Last season's variance of points per 100 per possession; likewise.
+    """
+
+    ratings: pl.DataFrame
+    hfa: float
+    poss: float
+    s2: float
+
+
+def _ridge_s2(rows: pl.DataFrame) -> float:
+    return float((100.0 * rows.get_column("points").cast(pl.Float64)).var() or 0.0)
+
+
+def preseason_prior(
+    prev_rows: pl.DataFrame,
+    teams: list[int],
+    *,
+    league_id: str = "00",
+    regression: float | None = None,
+    new_team_quantile: float | None = None,
+    prev_teams: list[int] | None = None,
+) -> PreseasonPrior | None:
+    """The preseason prior from last season's possessions.
+
+    Last season's final ratings are BB-D19's published ridge
+    (:func:`~sportsdataverse._common.team_strength.possession_ridge_ratings` at
+    :data:`~sportsdataverse._common.team_strength.RIDGE_LAMBDA`). Each team's offense and defense
+    coefficient is multiplied by the fitted regression factor (:data:`PRIOR_CONSTANTS`). A team
+    that did not play last season (an expansion team, ``new_team``) starts at the
+    ``new_team_quantile`` of last season's net ratings, unregressed, split evenly between offense
+    and defense; so does a returning team with no possession row last season.
+
+    Args:
+        prev_rows: Last season's regular-season possession rows
+            (:data:`~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`).
+        teams: This season's team ids (Int64).
+        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        regression: Override the fitted factor (the fitting script scans it).
+        new_team_quantile: Override the fitted new-team quantile.
+        prev_teams: Last season's team ids, from its schedule; ``new_team`` is a team not among
+            them. None: the teams with a possession row last season.
+
+    Returns:
+        A :class:`PreseasonPrior`, or None when ``prev_rows`` is empty.
+    """
+    from sportsdataverse._common.team_strength import RIDGE_LAMBDA
+
+    if prev_rows.height == 0:
+        return None
+    reg, new_q = PRIOR_CONSTANTS[league_id]
+    reg = reg if regression is None else regression
+    new_q = new_q if new_team_quantile is None else new_team_quantile
+    final = possession_ridge_ratings(prev_rows, lam=RIDGE_LAMBDA[league_id])
+    new_net = float(final.get_column("adj_net_rtg").quantile(new_q, interpolation="linear"))
+    devs = final.select(
+        "team_id",
+        (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean()).alias("o"),
+        (pl.col("adj_def_rtg") - pl.col("adj_def_rtg").mean()).alias("d"),
+    )
+    prev_ids = set(final.get_column("team_id").to_list()) if prev_teams is None else set(prev_teams)
+    ids = pl.DataFrame({"team_id": sorted(set(teams))}, schema={"team_id": pl.Int64()})
+    assert ids.schema["team_id"] == devs.schema["team_id"], "team_id dtype differs across the join"
+    ratings = ids.join(devs, on="team_id", how="left", validate="1:1").select(
+        "team_id",
+        pl.when(pl.col("o").is_null()).then(pl.lit(new_net / 2.0)).otherwise(reg * pl.col("o")).alias("off_dev"),
+        pl.when(pl.col("d").is_null()).then(pl.lit(-new_net / 2.0)).otherwise(reg * pl.col("d")).alias("def_dev"),
+        ~pl.col("team_id").is_in(sorted(prev_ids)).alias("new_team"),
+    )
+    poss = prev_rows.height / (2.0 * prev_rows.get_column("game_id").n_unique())
+    return PreseasonPrior(ratings, float(final.get_column("hfa")[0]), poss, _ridge_s2(prev_rows))
+
+
+def as_of_game_model(rows: pl.DataFrame, *, league_id: str = "00", prior: PreseasonPrior | None = None) -> GameModel:
     """The season sim's game model from the possessions played so far.
 
     Args:
         rows: Possession rows (:data:`~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`)
             of the games before the as-of date only.
         league_id: ``"00"`` NBA or ``"10"`` WNBA; selects :data:`SIM_CONSTANTS`.
+        prior: The preseason prior (:func:`preseason_prior`). The ridge then shrinks each team
+            toward its prior instead of toward average, and a team with no possession yet is
+            rated at its prior. None: every team starts average.
 
     Returns:
-        A :class:`GameModel`. With no rows, every team is average (no ratings) and the home term
-        is 0.
+        A :class:`GameModel`. With no rows and no prior, every team is average (no ratings) and
+        the home term is 0; with a prior and no rows, the ratings are the prior and the home
+        term, possessions and per-possession variance are last season's.
 
     Raises:
         ValueError: If ``league_id`` has no :data:`SIM_CONSTANTS` entry.
@@ -158,9 +284,29 @@ def as_of_game_model(rows: pl.DataFrame, *, league_id: str = "00") -> GameModel:
     lam, sd = SIM_CONSTANTS[league_id]
     schema = {"team_id": pl.Int64(), "adj_net_rtg": pl.Float64(), "adj_net_rtg_sd": pl.Float64()}
     if rows.height == 0:
-        return GameModel(pl.DataFrame(schema=schema), 0.0, 100.0, sd, float("nan"))
-    rat = possession_ridge_ratings(rows, lam=lam)
-    s2 = float((100.0 * rows.get_column("points").cast(pl.Float64)).var() or 0.0)
+        if prior is None:
+            return GameModel(pl.DataFrame(schema=schema), 0.0, 100.0, sd, float("nan"))
+        prior_sd = float(np.sqrt(2.0 * prior.s2 / lam))
+        ratings = prior.ratings.select(
+            "team_id",
+            (pl.col("off_dev") - pl.col("def_dev")).alias("adj_net_rtg"),
+            pl.lit(prior_sd).alias("adj_net_rtg_sd"),
+        ).cast(schema)
+        return GameModel(ratings, prior.hfa, prior.poss, sd, prior_sd)
+    rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)
+    if prior is not None:  # a team with no possession yet is rated at its prior
+        unseen = prior.ratings.join(rat.select("team_id"), on="team_id", how="anti")
+        rat = pl.concat(
+            [
+                rat.select("team_id", "adj_net_rtg", "hfa"),
+                unseen.select(
+                    "team_id",
+                    (pl.col("off_dev") - pl.col("def_dev")).alias("adj_net_rtg"),
+                    pl.lit(rat.get_column("hfa")[0], dtype=pl.Float64).alias("hfa"),
+                ),
+            ]
+        )
+    s2 = _ridge_s2(rows)
     n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
     n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
     for frame in (n_off, n_def):
@@ -239,6 +385,55 @@ def _simulate_games(
     return wins, pair, pd0 + margins @ signs, shift
 
 
+def _unscheduled_games(
+    model: GameModel,
+    teams: tuple[np.ndarray, np.ndarray, np.ndarray],
+    played: tuple[np.ndarray, np.ndarray, np.ndarray],
+    future: tuple[np.ndarray, np.ndarray],
+    season_games: int | None,
+    uncertain: bool,
+    rng: np.random.Generator,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """``(extra, wins, point_diff)``: each team's games with no known opponent, and per simulated season their results.
+
+    ``extra`` is ``season_games`` less the team's played and scheduled games. Each is played
+    against a league-average opponent (net rating 0, no rating error) at a neutral site, with the
+    team's own rating shift. Nothing is drawn when no team has one.
+    """
+    net, sd, shift = teams
+    h, a = future
+    n_sims, n_t = shift.shape
+    known = played[0].sum(1) + played[0].sum(0) + np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)
+    extra = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)
+    if not extra.any():
+        return extra, np.zeros((n_sims, n_t), dtype=np.int64), np.zeros((n_sims, n_t))
+    k = int(extra.max())
+    noise = _noise_sd(model, sd, np.zeros_like(sd), uncertain)
+    m = (net + shift)[:, :, None] * (model.poss / 100.0) + noise[None, :, None] * rng.standard_normal((n_sims, n_t, k))
+    live = np.arange(k)[None, None, :] < extra[None, :, None]
+    return extra, ((m > 0) & live).sum(2), np.where(live, m, 0.0).sum(2)
+
+
+def _lottery_setup(
+    chances: list[float] | None, n_t: int, league_id: str
+) -> tuple[list[float] | tuple[int, ...] | None, int, int, bool]:
+    """``(chances, lottery teams, draws, have_odds)``: the published chances unless ``chances`` overrides them."""
+    n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
+    _check_chances(chances, n_lottery, league_id)
+    lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
+    draws = NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS
+    return lot_chances, n_lottery, draws, lot_chances is not None and n_lottery >= draws
+
+
+def _season_games(schedule: pl.DataFrame, league_id: str) -> int | None:
+    """:data:`NBA_SEASON_GAMES` while the release still lists TBD regular-season games, else None."""
+    tbd = schedule.filter(
+        (pl.col("season_type") == "regular-season")
+        & ((pl.col("home_team_id").cast(pl.Int64) <= 0) | (pl.col("away_team_id").cast(pl.Int64) <= 0))
+    )
+    return NBA_SEASON_GAMES if league_id == "00" and tbd.height else None
+
+
 def _play_in(
     model: GameModel, net: np.ndarray, noise: np.ndarray, seeds: np.ndarray, conf: np.ndarray, rng: np.random.Generator
 ) -> np.ndarray:
@@ -313,6 +508,7 @@ def _rank_seasons(
     league_id: str,
     lottery: tuple,
     rng: np.random.Generator,
+    unscheduled: tuple[np.ndarray, np.ndarray],
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Rank every simulated season, run the play-in, and order its lottery slots.
 
@@ -332,7 +528,17 @@ def _rank_seasons(
     slot_chance = np.ones((n_sims, max(n_lottery, 0)))
     for s in range(n_sims):
         pair_s = None if pair is None else pair[s]
-        season_s = Season(wins[s], point_diff[s], conf, div, league_id=league_id, rng=rng, pair_diff=pair_s)
+        xw = unscheduled[0][s]
+        season_s = Season(
+            wins[s],
+            point_diff[s],
+            conf,
+            div,
+            league_id=league_id,
+            rng=rng,
+            pair_diff=pair_s,
+            extra=(xw, unscheduled[1] - xw),
+        )
         seed_of[s] = season_s.seeds()
         leader[s] = season_s.leader
         if league_id == "00":
@@ -386,6 +592,7 @@ def simulate_pro_season(
     chances: list[float] | None = None,
     rating_uncertainty: bool = True,
     as_of_date: dt.date | None = None,
+    season_games: int | None = None,
 ) -> pl.DataFrame:
     """Monte Carlo of one regular season's remaining games, with standings, play-in and lottery.
 
@@ -404,9 +611,11 @@ def simulate_pro_season(
         rating_uncertainty: Draw one rating shift per team per season (see the module doc).
             False keeps the ratings fixed; the validation reports both.
         as_of_date: Carried into the output only.
+        season_games: Games per team in the full season; a team's missing games are played
+            against a league-average opponent (the module doc). None: the known games only.
 
     Returns:
-        One row per team in :data:`SIM_SCHEMA`.
+        One row per team in :data:`SIM_SCHEMA` (``games_remaining`` counts the missing games).
 
     Raises:
         ValueError: If ``games`` holds more than one season, ``league_id`` is unknown,
@@ -434,13 +643,9 @@ def simulate_pro_season(
     wins, pair, point_diff, shift = _simulate_games(
         model, net, sd, h, a, played, n_sims=n_sims, wnba=league_id == "10", uncertain=rating_uncertainty, rng=rng
     )
-    total_wins = wins.sum(2)
-    total_games = total_wins + wins.sum(1)
-    n_lottery = n_t - (16 if league_id == "00" else WNBA_PLAYOFF_TEAMS)
-    _check_chances(chances, n_lottery, league_id)
-    lot_chances = chances if chances is not None else lottery_chances(league_id, n_lottery)
-    draws = NBA_LOTTERY_DRAWS if league_id == "00" else WNBA_LOTTERY_DRAWS
-    have_odds = lot_chances is not None and n_lottery >= draws
+    extra, xw, xpd = _unscheduled_games(model, (net, sd, shift), played, (h, a), season_games, rating_uncertainty, rng)
+    point_diff, total_wins, total_games = point_diff + xpd, wins.sum(2) + xw, wins.sum(2) + wins.sum(1) + extra
+    lot_chances, n_lottery, draws, have_odds = _lottery_setup(chances, n_t, league_id)
     prior_w, prior_g = _prior_arrays(prior_records, index)
 
     seed_of, leader, playoff, slot_team, slot_chance = _rank_seasons(
@@ -452,6 +657,7 @@ def simulate_pro_season(
         league_id=league_id,
         lottery=(lot_chances if have_odds else None, n_lottery, prior_w, prior_g, total_wins, total_games),
         rng=rng,
+        unscheduled=(xw, extra),
     )
 
     draws = draws if have_odds else 0
@@ -467,7 +673,7 @@ def simulate_pro_season(
         "division": div.tolist(),
         "wins": played[0].sum(1).tolist(),
         "losses": played[0].sum(0).tolist(),
-        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)).tolist(),
+        "games_remaining": (np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t) + extra).tolist(),
         "adj_net_rtg": net.tolist(),
         "adj_net_rtg_sd": sd.tolist(),
         **_summary(sims, total_games, league_id=league_id, draws=draws, have_odds=have_odds),
@@ -501,20 +707,38 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.Dat
 
 def _load_inputs(
     season: int, as_of_date: dt.date | None, league_id: str
-) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None]:
-    """(regular-season games, as-of game model, WNBA prior-season records) from the releases."""
+) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None, int | None]:
+    """(regular-season games, as-of game model, WNBA prior-season records, season games) from the releases."""
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([season - offset])
     games = _regular_games(schedule, as_of_date)
     done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
     rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
     assert rows.schema["game_id"] == done.schema["game_id"], "game_id dtype differs between possessions and schedule"
-    model = as_of_game_model(rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id)
+    try:
+        last_schedule = load_schedule([season - 1 - offset])
+    except SeasonNotFoundError:  # the season before the release floor: no prior
+        warnings.warn(f"no {season - 1} release: season {season} is simulated without a preseason prior", stacklevel=3)
+        last_schedule = pl.DataFrame()
     prior = None
-    if league_id == "10":
-        last = _regular_games(load_schedule([season - 1 - offset]), None)
-        prior = _records(last)
-    return games, model, prior
+    if last_schedule.height:
+        last_rows = nba_possession_rate_rows(
+            load_possessions([season - 1 - offset]), last_schedule, league_id=league_id
+        )
+        last = _regular_games(last_schedule, None)
+        prior = preseason_prior(
+            last_rows,
+            sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list())),
+            league_id=league_id,
+            prev_teams=sorted(set(last["home_team_id"].to_list()) | set(last["away_team_id"].to_list())),
+        )
+    model = as_of_game_model(
+        rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior
+    )
+    records = None
+    if league_id == "10" and last_schedule.height:
+        records = _records(_regular_games(last_schedule, None))
+    return games, model, records, _season_games(schedule, league_id)
 
 
 @overload
@@ -551,9 +775,11 @@ def nba_season_sim(
 ) -> pl.DataFrame | pd.DataFrame:
     """Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
 
-    Reads the ``{nba,wnba}_stats_schedules`` and ``_possessions`` releases, fits the game model on
-    the regular-season games played before ``as_of_date`` (:func:`as_of_game_model`), and
-    simulates the rest (:func:`simulate_pro_season`). The rules applied to each simulated season
+    Reads the ``{nba,wnba}_stats_schedules`` and ``_possessions`` releases for the season and the
+    one before, fits the game model on the regular-season games played before ``as_of_date``,
+    shrunk toward last season's final ratings (:func:`as_of_game_model`, :func:`preseason_prior`),
+    and simulates the rest (:func:`simulate_pro_season`). Before the first game the ratings are
+    the prior alone. The rules applied to each simulated season
     are in :mod:`sportsdataverse.nba.nba_season_rules`.
 
     Args:
@@ -610,7 +836,7 @@ def nba_season_sim(
     """
     if league_id not in SIM_CONSTANTS:
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
-    games, model, prior = _load_inputs(season, as_of_date, league_id)
+    games, model, prior, season_games = _load_inputs(season, as_of_date, league_id)
     out = simulate_pro_season(
         games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
         model,
@@ -620,6 +846,7 @@ def nba_season_sim(
         prior_records=prior,
         chances=chances,
         as_of_date=as_of_date,
+        season_games=season_games,
     )
     return out.to_pandas() if return_as_pandas else out
 

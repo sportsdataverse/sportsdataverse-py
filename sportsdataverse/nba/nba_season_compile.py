@@ -35,7 +35,15 @@ _LOG = logging.getLogger(__name__)
 #: their own caches and must rebuild those themselves.
 PIPELINE_VERSION: int = 5
 
-_LEAGUE_ID = "00"
+#: stats ``LeagueID`` values the compile accepts: NBA, WNBA, G League.
+_LEAGUE_IDS = ("00", "10", "20")
+
+
+def _season_label(season: int, league_id: str) -> str:
+    """stats-API season string for an END year: the plain year for the WNBA, ``"2023-24"`` otherwise."""
+    from .nba_schedule import year_to_season
+
+    return str(season) if league_id == "10" else year_to_season(season - 1)
 
 
 def _default_cache_dir() -> Path:
@@ -99,6 +107,7 @@ def _season_game_index(
     *,
     proxy_url: Optional[str] = None,
     raw_store_dir: "RawStoreDir" = None,
+    league_id: str = "00",
 ) -> pl.DataFrame:
     """``(game_id, game_date)`` index for a season from leaguegamelog (monkeypatchable).
 
@@ -116,6 +125,8 @@ def _season_game_index(
         raw_store_dir: Raw JSON store root (dir or ``http(s)://`` base) or
             per-endpoint mapping; ``None`` -> env vars. When it yields a committed
             leaguegamelog the live call is skipped entirely.
+        league_id: stats ``LeagueID``: ``"00"`` NBA, ``"10"`` WNBA (read from
+            stats.wnba.com, season as the plain year), ``"20"`` G League.
 
     Returns:
         Polars DataFrame with ``game_id: Utf8`` and ``game_date: Date``.
@@ -124,13 +135,15 @@ def _season_game_index(
     if from_store is not None:
         return from_store
 
-    from .nba_schedule import year_to_season
-    from .nba_stats import nba_stats_leaguegamelog
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguegamelog as leaguegamelog
+    else:
+        from .nba_stats import nba_stats_leaguegamelog as leaguegamelog
 
-    log = nba_stats_leaguegamelog(
-        season=year_to_season(season - 1),
+    log = leaguegamelog(
+        season=_season_label(season, league_id),
         season_type_all_star=season_type,
-        league_id=_LEAGUE_ID,
+        league_id=league_id,
         proxy_url=proxy_url,
     )
     return _index_select(log)
@@ -200,6 +213,7 @@ def compile_nba_season(
     proxy_provider: Optional[Callable[[], Optional[str]]] = None,
     raw_store_dir: RawStoreDir = None,
     raw_store_readonly: Optional[bool] = None,
+    league_id: str = "00",
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -251,6 +265,9 @@ def compile_nba_season(
             loop's per-game handler logs and skips (so an uncaptured game is
             visibly skipped instead of silently completed from the live API).
             ``None`` defers to ``SDV_PY_NBA_RAW_JSON_READONLY``.
+        league_id: stats ``LeagueID`` sent to game discovery and every per-game
+            fetch: ``"00"`` NBA (default), ``"10"`` WNBA (``season`` is then the
+            calendar year; discovery reads stats.wnba.com), ``"20"`` G League.
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
@@ -258,6 +275,7 @@ def compile_nba_season(
         typed frame if no games.
 
     Raises:
+        ValueError: If ``league_id`` is not one of ``"00"``, ``"10"``, ``"20"``.
         ValueError: If any compiled possession's ``game_id`` is missing (or has a
             null) ``game_date`` in the season index — surfaced as an explicit
             error rather than silently emitting null dates.
@@ -283,7 +301,13 @@ def compile_nba_season(
                 season_type="Playoffs",
                 cache_dir="/tmp/nba_cache",
             )
+
+        Compile a G League season from the same pipeline::
+
+            gl = compile_nba_season(2024, league_id="20")
     """
+    if league_id not in _LEAGUE_IDS:
+        raise ValueError(f"league_id must be one of {_LEAGUE_IDS}, got {league_id!r}")
     cdir = Path(cache_dir) if cache_dir else _default_cache_dir()
     cdir.mkdir(parents=True, exist_ok=True)
 
@@ -294,6 +318,7 @@ def compile_nba_season(
         season_type,
         proxy_url=proxy_provider() if proxy_provider is not None else None,
         raw_store_dir=raw_store_dir,
+        league_id=league_id,
     )
     # dedupe preserving order
     game_ids = list(dict.fromkeys(index["game_id"].to_list()))
@@ -318,7 +343,7 @@ def compile_nba_season(
             # across the season instead of hammering stats.nba.com from one address.
             poss = _fetch_possessions(
                 gid,
-                _LEAGUE_ID,
+                league_id,
                 lineup_source=lineup_source,
                 proxy_url=proxy_provider() if proxy_provider is not None else None,
                 raw_store_dir=raw_store_dir,

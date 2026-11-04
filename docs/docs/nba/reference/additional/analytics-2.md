@@ -324,9 +324,11 @@ wnba_officials = result["officials"]
 
 Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
 
-Reads the `{nba,wnba}_stats_schedules` and `_possessions` releases, fits the game model on
-the regular-season games played before `as_of_date` (`as_of_game_model`), and
-simulates the rest (`simulate_pro_season`). The rules applied to each simulated season
+Reads the `{nba,wnba}_stats_schedules` and `_possessions` releases for the season and the
+one before, fits the game model on the regular-season games played before `as_of_date`,
+shrunk toward last season's final ratings (`as_of_game_model`, `preseason_prior`),
+and simulates the rest (`simulate_pro_season`). Before the first game the ratings are
+the prior alone. The rules applied to each simulated season
 are in `sportsdataverse.nba.nba_season_rules`.
 
 **Parameters**

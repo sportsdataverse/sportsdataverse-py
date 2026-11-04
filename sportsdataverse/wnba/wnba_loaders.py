@@ -279,7 +279,7 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_schedules
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -367,7 +367,7 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
         |player_box                |Boolean                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -376,8 +376,8 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_schedules/wnba_schedule_{season}.parquet"
         )

@@ -73434,6 +73434,15 @@ stack_seasons:
   off_ids: Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids.
   off_team: Team on offense during the stint.
   y_offset: The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace.
+preseason_prior:
+  season: The season the prior is for (named by its end year).
+  team_id: ESPN team id of a Division I team this season.
+  off_dev: The prior's offense, points per 100 possessions above the prior season's league average; last season's final
+    AdjO deviation times the regression factor, or half the new-team default for a program new to Division I.
+  def_dev: The prior's defense, points per 100 allowed above the prior season's league average (lower is better); last
+    season's final AdjD deviation times the regression factor, or minus half the new-team default.
+  prior_avg: The prior season's league-average efficiency, the ratings' baseline before this season has a game.
+  new_team: True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM.
 nbadraft_mock_draft:
   round: Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables).
 rotowire_injuries:

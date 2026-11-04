@@ -9100,3 +9100,96 @@
   test: tests/nba/test_nba_cup.py::test_sim_adds_two_regular_season_games_per_team
   expected: kill
   note: The Cup final is not a regular-season game; counting it gives the finalists 83.
+
+- id: bb-cup-slots-added-twice
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'if kind in ("quarterfinal", "semifinal")'
+  mutant: 'if kind != "final"'
+  test: tests/nba/test_nba_cup.py::test_filled_slots_are_not_added_again
+  expected: kill
+  note: A replacement or quarterfinal-loser game the release already lists must not be added again.
+
+# --- Basketball preseason prior: tests/mbb/test_mbb_college_season.py and tests/nba/test_nba_season_sim.py
+# The 2025 college seasons rated with the committed 2024 season as their prior, and the NBA 2025-26 /
+# WNBA 2025 sims with the committed 2024-25 / 2024 possessions as theirs.
+- id: bb-prior-college-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'prior_weight=PRESEASON_PRIOR[league].weight,'
+  mutant: 'prior_weight=0.0,'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_improves_early_season_log_loss
+  expected: kill
+  note: With no pseudo-games of prior the as-of AdjEM is one game's noise again; the weeks 0-6 log loss gate fails.
+
+- id: bb-prior-college-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_team_ratings.py
+  snippet: '.then(pl.lit(new_em / 2.0))'
+  mutant: '.then(pl.lit(0.0))'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_regresses_last_season_and_defaults_new_programs
+  expected: kill
+  note: A program new to Division I starts at last season's 0.23 quantile of D-I AdjEM, not at average.
+
+- id: bb-prior-college-rating-noise
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'tau = rating_shift_sd(games, league) if on else np.zeros(games.size)'
+  mutant: 'tau = np.zeros(games.size)'
+  test: tests/mbb/test_mbb_college_season.py::test_rating_noise_spreads_the_odds_and_keeps_the_marginals
+  expected: kill
+  note: Without the per-season AdjEM shift the bid odds pile up at 0 and 1 again.
+
+- id: bb-prior-pro-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)'
+  mutant: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None)'
+  test: tests/nba/test_nba_season_sim.py::test_in_season_ridge_shrinks_toward_the_prior
+  expected: kill
+  note: Once a game is played the ridge must shrink toward the prior, not toward average.
+
+- id: bb-prior-pro-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'pl.when(pl.col("o").is_null()).then(pl.lit(new_net / 2.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  mutant: 'pl.when(pl.col("o").is_null()).then(pl.lit(0.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  test: tests/nba/test_nba_season_sim.py::test_preseason_model_is_the_regressed_prior
+  expected: kill
+  note: An expansion team starts at last season's bottom-quartile net rating (the 2025 Valkyries), not at average.
+
+- id: bb-prior-pro-public-path
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior'
+  mutant: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=None'
+  test: tests/nba/test_nba_season_sim.py::test_nba_season_sim_carries_the_prior_from_the_release_before
+  expected: kill
+  note: nba_season_sim must hand the loaded prior to the game model.
+
+- id: bb-prior-college-game-noise
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'var = c.margin_sd**2 - c.em_scale**2 * (tau_home**2 + tau_away**2)'
+  mutant: 'var = c.margin_sd**2 + 0.0 * (tau_home**2 + tau_away**2)'
+  test: tests/mbb/test_mbb_college_season.py::test_game_noise_keeps_each_margin_at_margin_sd
+  expected: kill
+  note: The shift's variance comes out of each game's own noise, so a game's margin keeps margin_sd.
+
+- id: bb-ps-unscheduled-cup-fill
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'missing = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)'
+  mutant: 'missing = np.zeros(n_t, dtype=np.int64)'
+  test: tests/nba/test_nba_season_sim.py::test_unscheduled_cup_games_fill_each_team_to_82
+  expected: kill
+  note: Before December each NBA team's TBD Cup slots are simulated, so its record sums to 82, not ~80.

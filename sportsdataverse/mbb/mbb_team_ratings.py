@@ -254,14 +254,30 @@ _ADJ_SCHEMA = {
 }
 
 
-def _adjust_one_season(sub: pl.DataFrame, season: int, hfa: float, max_iter: int, tol: float) -> pl.DataFrame:
+def _adjust_one_season(
+    sub: pl.DataFrame,
+    season: int,
+    hfa: float,
+    max_iter: int,
+    tol: float,
+    prior: pl.DataFrame | None = None,
+    prior_weight: float = 0.0,
+) -> pl.DataFrame:
     """Fixed-point opponent adjustment for one season's game-efficiency rows.
 
     Thin wrapper (T7.2): the fixed-point core moved verbatim to
     :func:`sportsdataverse._common.ratings.iterative_opponent_adjust`
     (``baseline=None`` reproduces this module's own data-mean average);
-    only the column rename to this module's public names stays local.
+    only the column rename to this module's public names stays local. ``prior`` is this
+    season's rows of :data:`PRIOR_SCHEMA`; with no game played yet the baseline is its
+    ``prior_avg``.
     """
+    pri = None
+    baseline = None
+    if prior is not None and prior.height:
+        pri = {t: (o, d) for t, o, d in prior.select("team_id", "off_dev", "def_dev").iter_rows()}
+        if sub.height == 0:
+            baseline = float(prior.get_column("prior_avg")[0])
     core = iterative_opponent_adjust(
         sub,
         team_col="team_id",
@@ -271,9 +287,11 @@ def _adjust_one_season(sub: pl.DataFrame, season: int, hfa: float, max_iter: int
         home_col="is_home",
         neutral_col="neutral_site",
         hfa=hfa,
-        baseline=None,
+        baseline=baseline,
         max_iter=max_iter,
         tol=tol,
+        prior=pri,
+        prior_weight=prior_weight,
     )
     return (
         core.rename(
@@ -285,7 +303,13 @@ def _adjust_one_season(sub: pl.DataFrame, season: int, hfa: float, max_iter: int
 
 
 def adjust_efficiency(
-    game_eff: pl.DataFrame, *, league: str = "mens", max_iter: int = 100, tol: float = 1e-4
+    game_eff: pl.DataFrame,
+    *,
+    league: str = "mens",
+    max_iter: int = 100,
+    tol: float = 1e-4,
+    prior: pl.DataFrame | None = None,
+    prior_weight: float = 0.0,
 ) -> pl.DataFrame:
     """Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -306,10 +330,16 @@ def adjust_efficiency(
         league: ``"mens"`` / ``"womens"`` -- selects the HFA constant.
         max_iter: Maximum fixed-point iterations.
         tol: Convergence tolerance on the largest rating change.
+        prior: Optional preseason prior in :data:`PRIOR_SCHEMA` (:func:`preseason_prior`): each
+            listed team is shrunk toward its prior as if it had played ``prior_weight`` extra
+            games at that rating. A listed team with no game yet comes back at its prior
+            (``games`` 0, raw rates null), and a season in ``prior`` with no game at all is
+            rated from the prior alone.
+        prior_weight: Pseudo-games of prior per team (0 turns the prior off).
 
     Returns:
         One row per (season, team_id): ``season, team_id, adj_o, adj_d, adj_em,
-        raw_o, raw_d, games``. Empty input returns that schema with zero rows.
+        raw_o, raw_d, games``. Empty input (and no prior) returns that schema with zero rows.
 
     Example:
         Quick start::
@@ -317,14 +347,118 @@ def adjust_efficiency(
             from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
             ratings = adjust_efficiency(raw_game_efficiency(sched, box))
     """
-    if game_eff.height == 0:
-        return pl.DataFrame(schema=_ADJ_SCHEMA)
     hfa = float(get_constants(league).hfa)
+    pri = prior if prior is not None and prior_weight > 0 and prior.height else None
+    seasons = game_eff.get_column("season").unique(maintain_order=True).to_list() if game_eff.height else []
+    if pri is not None:
+        seasons += [s for s in pri.get_column("season").unique(maintain_order=True).to_list() if s not in seasons]
+    if not seasons:
+        return pl.DataFrame(schema=_ADJ_SCHEMA)
     frames = [
-        _adjust_one_season(sub, int(sub["season"][0]), hfa, max_iter, tol)
-        for _key, sub in game_eff.group_by("season", maintain_order=True)
+        _adjust_one_season(
+            game_eff.filter(pl.col("season") == s),
+            int(s),
+            hfa,
+            max_iter,
+            tol,
+            None if pri is None else pri.filter(pl.col("season") == s),
+            prior_weight,
+        )
+        for s in seasons
     ]
     return pl.concat(frames)
+
+
+#: A preseason prior for :func:`adjust_efficiency`, one row per (season, team): the team's
+#: regressed prior-season offense / defense as deviations from the league average, and that
+#: prior season's league average (the baseline before any game of the season is played).
+PRIOR_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "team_id": pl.Utf8(),
+    "off_dev": pl.Float64(),
+    "def_dev": pl.Float64(),
+    "prior_avg": pl.Float64(),
+    "new_team": pl.Boolean(),
+}
+
+
+def preseason_prior(
+    prev_eff: pl.DataFrame,
+    teams: pl.DataFrame,
+    prev_teams: pl.DataFrame,
+    *,
+    league: str = "mens",
+    regression: float | None = None,
+    new_team_quantile: float | None = None,
+) -> pl.DataFrame:
+    """The preseason prior for one season: last season's final ratings, regressed to the mean.
+
+    Each Division I team's prior-season final AdjO / AdjD (:func:`adjust_efficiency` over every
+    game of that season, no prior of its own) is taken as a deviation from that season's league
+    average and multiplied by the league's fitted ``regression``. A team that was not
+    Division I last season (a program new to Division I, ``new_team``) gets the
+    ``new_team_quantile`` of last season's Division I AdjEM, unregressed, split evenly between
+    offense and defense; so does a returning team with no rated game last season.
+    Both constants come from
+    :data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`.
+
+    Args:
+        prev_eff: :func:`raw_game_efficiency` over the prior season's played games.
+        teams: This season's Division I teams (``season``, ``team_id``), e.g.
+            :func:`sportsdataverse.mbb.mbb_college_season.college_teams`.
+        prev_teams: The prior season's Division I teams.
+        league: ``"mens"`` / ``"womens"``.
+        regression: Override the fitted regression factor (the fitting script scans it).
+        new_team_quantile: Override the new-team quantile.
+
+    Returns:
+        One row per team in ``teams`` in :data:`PRIOR_SCHEMA` (``new_team`` flags the
+        default). Empty when ``prev_eff`` is empty: no prior is then applied.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_ratings import preseason_prior, raw_game_efficiency
+            prior = preseason_prior(raw_game_efficiency(prev_sched, prev_box), teams, prev_teams)
+    """
+    from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR
+
+    if prev_eff.height == 0 or teams.height == 0:
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
+    fitted = PRESEASON_PRIOR[league]
+    reg = fitted.regression if regression is None else regression
+    new_q = fitted.new_team_quantile if new_team_quantile is None else new_team_quantile
+    avg = float(prev_eff.get_column("off_eff").mean())
+    for frame in (teams, prev_teams):
+        assert frame.schema["team_id"] == pl.Utf8, "team_id must be Utf8 (the ratings key)"
+    final = adjust_efficiency(prev_eff, league=league).join(
+        prev_teams.select("team_id").unique(), on="team_id", how="semi"
+    )
+    if final.height == 0:  # no prior-season Division I team is rated
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
+    new_em = float(final.get_column("adj_em").quantile(new_q, interpolation="linear"))
+    season = int(teams.get_column("season")[0])
+    return (
+        teams.select("team_id")
+        .unique()
+        .join(final.select("team_id", "adj_o", "adj_d"), on="team_id", how="left", validate="1:1")
+        .select(
+            pl.lit(season, dtype=pl.Int64).alias("season"),
+            "team_id",
+            pl.when(pl.col("adj_o").is_null())
+            .then(pl.lit(new_em / 2.0))
+            .otherwise(reg * (pl.col("adj_o") - avg))
+            .alias("off_dev"),
+            pl.when(pl.col("adj_d").is_null())
+            .then(pl.lit(-new_em / 2.0))
+            .otherwise(reg * (pl.col("adj_d") - avg))
+            .alias("def_dev"),
+            pl.lit(avg).alias("prior_avg"),
+            ~pl.col("team_id").is_in(prev_teams.get_column("team_id").to_list()).alias("new_team"),
+        )
+        .cast(PRIOR_SCHEMA)
+        .sort("team_id")
+    )
 
 
 _TEMPO_SCHEMA = {"season": pl.Int64, "team_id": pl.Utf8, "adj_tempo": pl.Float64}
@@ -498,4 +632,6 @@ __all__ = [
     "adjust_efficiency",
     "adjust_tempo",
     "mbb_team_ratings",
+    "preseason_prior",
+    "PRIOR_SCHEMA",
 ]

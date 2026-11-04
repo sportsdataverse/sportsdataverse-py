@@ -33,6 +33,23 @@ Sources for the fixed rules (no fitted numbers here):
 * **Field.** 68 teams: every conference-tournament champion (the auto-bid) plus the best
   at-large résumés. The First Four is the last four at-large teams and the four lowest auto-bid
   teams, two games each, so 64 seed slots fill four per seed line.
+
+Fitted numbers (``tools/fit_preseason_prior.py``, in
+:data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`):
+
+* **Preseason prior** (:func:`season_prior`). The ratings engine shrinks each team toward last
+  season's final rating, regressed toward the mean, as if the prior were ``weight`` extra games;
+  a program new to Division I starts at a low quantile of last season's Division I AdjEM. One
+  game in, a team is no longer rated on that game alone.
+* **Rating noise** (:func:`simulate_season`). The as-of AdjEM is an estimate whose error is
+  shared by all of a team's remaining games. Each simulated season draws one AdjEM shift per
+  team, ``N(0, rating_sd ** 2 / (games + weight))`` (:func:`rating_shift_sd`), applied to its
+  regular-season and conference-tournament games, and shrinks each game's own noise so its
+  margin variance stays ``margin_sd ** 2`` (:func:`game_noise_sd`). A game's win chance is
+  unchanged on average; a team's season totals get the spread a fixed rating understates. The
+  résumé (SoS, the bubble's WAB chances, opponent ranks) keeps the unshifted ratings; the AdjEM
+  term of the selection score moves toward the shifted rating by the share of its season a team
+  has left to play, so it is the as-of rating once the regular season is over.
 """
 
 from __future__ import annotations
@@ -55,13 +72,16 @@ __all__ = [
     "RPI_WEIGHTS",
     "college_teams",
     "conference_auto_bids",
+    "game_noise_sd",
     "net_estimate",
     "normalize_college_schedule",
     "SeasonInputs",
     "load_season_inputs",
     "rating_percentage_index",
+    "rating_shift_sd",
     "season_bracketology",
     "season_inputs",
+    "season_prior",
     "season_resume",
     "simulate_season",
     "split_season",
@@ -496,10 +516,12 @@ def season_resume(
     *,
     league: str = "mens",
     as_of_date: datetime.date | None = None,
+    prior: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """The ``strength_of_schedule`` table: records, ratings, SoS, quads, WAB, RPI and the NET estimate.
 
-    The ratings come from :mod:`sportsdataverse.mbb.mbb_team_ratings` (every played game).
+    The ratings come from :mod:`sportsdataverse.mbb.mbb_team_ratings` (every played game),
+    shrunk toward ``prior`` when one is given (:func:`season_prior`).
     SoS, WAB and the quads come from
     :func:`~sportsdataverse.mbb.mbb_strength_of_schedule.strength_of_schedule` over Division I
     games, with the opponent ranked by :func:`net_estimate` as the NCAA ranks by NET.
@@ -510,6 +532,8 @@ def season_resume(
         teams: The Division I teams (:func:`college_teams`).
         league: ``"mens"`` or ``"womens"``.
         as_of_date: Stamped on every row (null when ``None``).
+        prior: A preseason prior (:func:`season_prior`); ``None`` rates on this season's games
+            alone.
 
     Returns:
         One row per Division I team, ordered by ``net_estimate_rank``. The ``_rank`` /
@@ -522,11 +546,17 @@ def season_resume(
             from sportsdataverse.mbb.mbb_college_season import season_resume
             resume = season_resume(played, team_box, teams)
     """
+    from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR
     from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
     from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
 
     ratings = (
-        adjust_efficiency(raw_game_efficiency(results, team_box), league=league)
+        adjust_efficiency(
+            raw_game_efficiency(results, team_box),
+            league=league,
+            prior=prior,
+            prior_weight=PRESEASON_PRIOR[league].weight,
+        )
         .join(teams.select("season", "team_id"), on=["season", "team_id"], how="semi")
         .with_columns(_z("adj_em").alias("adj_em_z"))
     )
@@ -886,6 +916,102 @@ SEASON_SIM_SCHEMA: dict[str, pl.DataType] = {
 }
 
 
+def rating_shift_sd(
+    games: np.ndarray, league: str, rating_sd: float | None = None, weight: float | None = None
+) -> np.ndarray:
+    """Per-team sd of the season sim's AdjEM shift: ``rating_sd / sqrt(games + weight)``.
+
+    Capped so two teams' shifts carry at most 3/4 of a game's margin variance, which the per-game
+    noise (:func:`game_noise_sd`) then tops back up to ``margin_sd``.
+
+    Args:
+        games: Games rated so far, per team.
+        league: ``"mens"`` or ``"womens"``; selects
+            :data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`.
+        rating_sd: Override the fitted per-game scale (the fitting script scans it).
+        weight: Override the prior's weight in pseudo-games.
+
+    Returns:
+        The shift sd per team, AdjEM points.
+    """
+    from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR
+
+    c, pp = get_constants(league), PRESEASON_PRIOR[league]
+    scale = pp.rating_sd if rating_sd is None else rating_sd
+    w = pp.weight if weight is None else weight
+    cap = np.sqrt(0.375) * c.margin_sd / c.em_scale
+    return np.minimum(scale / np.sqrt(np.maximum(np.asarray(games, dtype=np.float64) + w, 1.0)), cap)
+
+
+def game_noise_sd(tau_home: np.ndarray, tau_away: np.ndarray, league: str) -> np.ndarray:
+    """Per-game noise sd once both teams' rating shifts are drawn, so each game's margin keeps ``margin_sd``.
+
+    The game model's ``em_scale`` and ``margin_sd`` are fit on as-of ratings, so a game's
+    marginal win chance already prices the rating error; the shift only makes a team's games
+    share it.
+    """
+    c = get_constants(league)
+    var = c.margin_sd**2 - c.em_scale**2 * (tau_home**2 + tau_away**2)
+    return np.sqrt(np.maximum(var, 0.25 * c.margin_sd**2))
+
+
+def _sim_state(
+    res: pl.DataFrame, sched: dict[str, np.ndarray], em: np.ndarray, net_rank: np.ndarray, league: str
+) -> tuple[np.ndarray, dict[str, np.ndarray]]:
+    """The fixed part of every simulated selection score, and the per-team arrays the batches share."""
+    from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
+
+    c = get_constants(league)
+    col = lambda name: res.get_column(name).fill_null(0).to_numpy().astype(np.float64)  # noqa: E731
+    g0 = col("rpi_games")
+    # SoS over every scheduled Division I game, not only the played ones
+    sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
+    base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos)
+    return base, {
+        "em": em,
+        "eligible": res.get_column("eligible").to_numpy(),
+        "pb_neutral": norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd),
+        "q1_neutral": net_rank <= c.quad_thresholds["neutral"]["q1"],
+        "title": np.zeros(res.height),
+    }
+
+
+def _rating_noise(games: np.ndarray, sched: dict[str, np.ndarray], league: str, on: bool) -> dict[str, np.ndarray]:
+    """The season sim's rating shift: per-team sd, per-game noise sd, and how far the selection AdjEM moves.
+
+    ``moved`` is the share of a team's end-of-season rating its remaining games make up (the prior
+    counts as its ``weight`` games), so the AdjEM the committee sees is the as-of one once the
+    regular season is over.
+    """
+    from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR
+
+    tau = rating_shift_sd(games, league) if on else np.zeros(games.size)
+    h, a, left = sched["h"], sched["a"], sched["games_left"]
+    tau_h, tau_a = np.where(h >= 0, tau[np.maximum(h, 0)], 0.0), np.where(a >= 0, tau[np.maximum(a, 0)], 0.0)
+    return {
+        "tau": tau,
+        "sd_game": game_noise_sd(tau_h, tau_a, league),
+        "moved": left / np.maximum(PRESEASON_PRIOR[league].weight + games + left, 1.0),
+    }
+
+
+def _draw_shift(
+    rng: np.random.Generator, noise: dict[str, np.ndarray], sched: dict[str, np.ndarray], b: int, league: str, on: bool
+) -> tuple[np.ndarray, np.ndarray]:
+    """One batch's AdjEM shift ``(b, teams)`` and the remaining games' home-win chances under it.
+
+    With the noise off nothing is drawn, so the draws are the sim's from before the shift existed.
+    """
+    n = noise["tau"].size
+    if not on:
+        return np.zeros((b, n)), sched["p_home"]
+    shift = rng.standard_normal((b, n)) * noise["tau"]
+    h, a = sched["h"], sched["a"]
+    d = np.where(h >= 0, shift[:, np.maximum(h, 0)], 0.0) - np.where(a >= 0, shift[:, np.maximum(a, 0)], 0.0)
+    c = get_constants(league)
+    return shift, norm.cdf((sched["mu"][None, :] + c.em_scale * d) / noise["sd_game"])
+
+
 def _remaining_games(
     remaining: pl.DataFrame, teams: pl.DataFrame, res: pl.DataFrame, em: np.ndarray, net_rank: np.ndarray, league: str
 ) -> dict[str, np.ndarray]:
@@ -935,6 +1061,9 @@ def _remaining_games(
     d1_h, d1_a = inc_h[:, 2 * n : 3 * n], inc_a[:, 2 * n : 3 * n]
     return {
         "p_home": p_home,
+        "h": h,
+        "a": a,
+        "mu": c.em_scale * (em_h - em_a) + c.hfa * (~neutral),
         "inc_h": inc_h,
         "inc_a": inc_a,
         "games_left": inc_h[:, :n].sum(axis=0) + inc_a[:, :n].sum(axis=0),
@@ -961,6 +1090,7 @@ def _conference_tournament(
     """
     c = get_constants(league)
     em, b = t["em"], cpct.shape[0]
+    ems, rows, tau = t["ems"], np.arange(b)[:, None], t["tau"]  # this batch's AdjEM, rating shift included
     key = cpct[:, alive] + 1e-6 * (em[alive] - em.min())[None, :]
     ranked = alive[np.argsort(-key, axis=1, kind="stable")]  # (b, m), seed 1 first
     m = alive.size
@@ -969,7 +1099,8 @@ def _conference_tournament(
     runner_up: np.ndarray = np.full(b, -1, dtype=np.int64)
     while slot.shape[1] > 1:
         x, y = slot[:, 0::2], slot[:, 1::2]
-        px = norm.cdf(c.em_scale * (em[np.maximum(x, 0)] - em[np.maximum(y, 0)]) / c.margin_sd)
+        xi, yi = np.maximum(x, 0), np.maximum(y, 0)
+        px = norm.cdf(c.em_scale * (ems[rows, xi] - ems[rows, yi]) / game_noise_sd(tau[xi], tau[yi], league))
         xw = rng.random(x.shape) < px
         win = np.where(y < 0, x, np.where(x < 0, y, np.where(xw, x, y)))
         lose = np.where(win == x, y, x)
@@ -1086,6 +1217,7 @@ def simulate_season(
     n_sims: int = 10000,
     seed: int = 0,
     batch: int = 1000,
+    rating_noise: bool = True,
 ) -> pl.DataFrame:
     """The ``season_sim`` table: a seeded Monte Carlo of the rest of one season and its field.
 
@@ -1098,6 +1230,9 @@ def simulate_season(
     the simulated results; ratings and opponent ranks stay at their as-of values, SoS covers
     every scheduled game) and selects and seeds the 68-team field as
     :func:`season_bracketology` does.
+
+    Each simulated season first draws one AdjEM shift per team, the error of its as-of rating
+    (the module's **rating noise**).
 
     ``numpy.random.default_rng(seed)`` drives every draw, in batches of ``batch`` sims, so a
     seed reproduces the table exactly.
@@ -1112,6 +1247,8 @@ def simulate_season(
         seed: RNG seed.
         batch: Sims per batch, to bound memory. The draw order depends on it, so keep it
             fixed when comparing runs.
+        rating_noise: Draw the per-season rating shift. ``False`` holds the ratings
+            fixed and reproduces the sim before it was added.
 
     Returns:
         One row per Division I team: current and projected W-L, the projected conference
@@ -1127,7 +1264,6 @@ def simulate_season(
     """
     from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
 
-    c = get_constants(league)
     res = resume.sort("team_id")
     n = res.height
     idx = {t: i for i, t in enumerate(res.get_column("team_id").to_list())}
@@ -1137,24 +1273,18 @@ def simulate_season(
     net_rank = res.get_column("net_estimate_rank").fill_null(float(n)).to_numpy()
     sched = _remaining_games(remaining, teams, res, em, net_rank, league)
     col = lambda name: res.get_column(name).fill_null(0).to_numpy().astype(np.float64)  # noqa: E731
-    g0 = col("rpi_games")
-    # SoS over every scheduled Division I game, not only the played ones
-    sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
-    base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos)
-    t = {
-        "em": em,
-        "eligible": res.get_column("eligible").to_numpy(),
-        "pb_neutral": norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd),
-        "q1_neutral": net_rank <= c.quad_thresholds["neutral"]["q1"],
-        "title": np.zeros(n),
-    }
+    base, t = _sim_state(res, sched, em, net_rank, league)
     status = {r["conference_id"]: r for r in _conference_status(played, teams).iter_rows(named=True)}
     acc = {k: np.zeros(n) for k in ("wins", "cwins", "reg", "auto", "al", "bid")}
     seed_counts = np.zeros((n, _SEED_LINES + 1))
+    noise = _rating_noise(col("games"), sched, league, rating_noise)
+    t["tau"] = noise["tau"]
     rng = np.random.default_rng(seed)
     for start in range(0, n_sims, batch):
         b = min(batch, n_sims - start)
-        hw = (rng.random((b, len(sched["p_home"]))) < sched["p_home"]).astype(np.float32)
+        shift, p_home = _draw_shift(rng, noise, sched, b, league, rating_noise)
+        t["ems"] = em[None, :] + shift
+        hw = (rng.random((b, len(sched["p_home"]))) < p_home).astype(np.float32)
         got = hw @ sched["inc_h"] + (1.0 - hw) @ sched["inc_a"]  # (b, 4n)
         cw = col("conf_wins") + got[:, n : 2 * n]
         cpct = cw / np.maximum(col("conf_wins") + col("conf_losses") + sched["conf_left"], 1.0)
@@ -1164,6 +1294,9 @@ def simulate_season(
         acc["cwins"] += got[:, n : 2 * n].sum(axis=0)
         auto = _conference_bids(rng, cpct, status, idx, t, acc, league)
         score = base[None, :] + w["wab"] * _zscore(t["wab"]) + w["quad1_w"] * _zscore(t["q1"])
+        if rating_noise:  # the AdjEM the committee sees has moved toward the shifted rating
+            seen = em[None, :] + shift * noise["moved"][None, :]
+            score = score + w["adj_em_z"] * (_zscore(seen) - col("adj_em_z")[None, :])
         at_large, bid = _select_field(score, auto, t["eligible"])
         for s in range(b):
             seed_counts[np.arange(n), _seed_field(score[s], bid[s], auto[s])] += 1
@@ -1192,6 +1325,7 @@ def season_inputs(
     as_of_date: datetime.date | None = None,
     league: str = "mens",
     ineligible: Iterable[str] = (),
+    prior_season: tuple[pl.DataFrame, pl.DataFrame] | None = None,
 ) -> SeasonInputs:
     """Split, rate and résumé one season from a normalized schedule and its team box.
 
@@ -1202,6 +1336,9 @@ def season_inputs(
             completed game.
         league: ``"mens"`` or ``"womens"``.
         ineligible: Team ids barred from the tournament (:func:`college_teams`).
+        prior_season: The previous season's ``(schedule, team_box)``, normalized the same way;
+            its final ratings become the preseason prior (:func:`season_prior`). ``None`` rates
+            on this season's games alone.
 
     Returns:
         A :class:`SeasonInputs`: the schedule, the Division I teams, the played and remaining
@@ -1220,7 +1357,8 @@ def season_inputs(
         raise ValueError("season_inputs takes one season at a time")
     teams = college_teams(schedule, ineligible)
     played, remaining = split_season(schedule, as_of_date)
-    resume = season_resume(played, team_box, teams, league=league, as_of_date=as_of_date)
+    prior = None if prior_season is None else season_prior(*prior_season, teams, league=league)
+    resume = season_resume(played, team_box, teams, league=league, as_of_date=as_of_date, prior=prior)
     return SeasonInputs(schedule, teams, played, remaining, resume, conference_auto_bids(played, teams, resume))
 
 
@@ -1232,6 +1370,9 @@ def load_season_inputs(
     ineligible: Iterable[str] = (),
 ) -> SeasonInputs:
     """:func:`season_inputs` from the released ESPN schedule and team box.
+
+    The previous season's release is read too, for the preseason prior (:func:`season_prior`);
+    when it is missing the season is rated on its own games.
 
     Args:
         season: The season (e.g. ``2024``).
@@ -1248,8 +1389,60 @@ def load_season_inputs(
             from sportsdataverse.mbb.mbb_college_season import load_season_inputs
             inp = load_season_inputs(2024)
     """
+    from sportsdataverse.errors import SeasonNotFoundError
     from sportsdataverse.mbb.mbb_team_ratings import _league_loaders
 
     load_schedule, load_team_box = _league_loaders(league)
     sched = normalize_college_schedule(load_schedule([season]))
-    return season_inputs(sched, load_team_box([season]), as_of_date=as_of_date, league=league, ineligible=ineligible)
+    try:
+        prev_sched, prev_box = load_schedule([season - 1]), load_team_box([season - 1])
+    except SeasonNotFoundError:  # the previous season is below the release floor: no prior
+        prev_sched = prev_box = pl.DataFrame()
+    prior_season = (normalize_college_schedule(prev_sched), prev_box) if prev_sched.height and prev_box.height else None
+    return season_inputs(
+        sched,
+        load_team_box([season]),
+        as_of_date=as_of_date,
+        league=league,
+        ineligible=ineligible,
+        prior_season=prior_season,
+    )
+
+
+def season_prior(
+    prev_schedule: pl.DataFrame, prev_team_box: pl.DataFrame, teams: pl.DataFrame, *, league: str = "mens"
+) -> pl.DataFrame:
+    """The preseason prior for a season from the previous season's games.
+
+    Last season's final ratings (every completed game, no prior of their own) regressed toward
+    the mean, and a default for programs new to Division I, as
+    :func:`sportsdataverse.mbb.mbb_team_ratings.preseason_prior` documents; the constants are
+    :data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`. The ratings engine
+    weighs the prior as ``weight`` games, so it fades as the season's games come in.
+
+    Args:
+        prev_schedule: :func:`normalize_college_schedule` for the previous season.
+        prev_team_box: The ESPN team box for the previous season.
+        teams: This season's Division I teams (:func:`college_teams`).
+        league: ``"mens"`` or ``"womens"``.
+
+    Returns:
+        One row per team in ``teams``, in
+        :data:`~sportsdataverse.mbb.mbb_team_ratings.PRIOR_SCHEMA` (empty when the previous
+        season has no rated game).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_college_season import season_prior
+            prior = season_prior(prev_sched, prev_box, college_teams(sched))
+    """
+    from sportsdataverse.errors import InsufficientInputError
+    from sportsdataverse.mbb.mbb_team_ratings import PRIOR_SCHEMA, preseason_prior, raw_game_efficiency
+
+    played, _ = split_season(prev_schedule)
+    try:
+        prev_eff = raw_game_efficiency(played, prev_team_box)
+    except InsufficientInputError:  # an unratable previous season (pre-2009 women's box): no prior
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
+    return preseason_prior(prev_eff, teams, college_teams(prev_schedule), league=league)

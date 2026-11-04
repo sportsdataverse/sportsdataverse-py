@@ -735,7 +735,7 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 
 ### adjust_efficiency {#adjust_efficiency}
 
-`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001, prior: 'pl.DataFrame | None' = None, prior_weight: 'float' = 0.0) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -759,10 +759,12 @@ sign); `avg` is the league mean efficiency and `hfa` comes from
 | `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
 | `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
 | `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+| `prior` | `DataFrame \| None` | `None` | Optional preseason prior in `PRIOR_SCHEMA` (`preseason_prior`): each listed team is shrunk toward its prior as if it had played `prior_weight` extra games at that rating. A listed team with no game yet comes back at its prior (`games` 0, raw rates null), and a season in `prior` with no game at all is rated from the prior alone. |
+| `prior_weight` | `float` | `0.0` | Pseudo-games of prior per team (0 turns the prior off). |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input (and no prior) returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|

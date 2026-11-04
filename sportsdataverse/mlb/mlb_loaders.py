@@ -1061,7 +1061,7 @@ def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_pbp
 
     Args:
-        seasons: an int or iterable of seasons (>= 2017).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1109,7 +1109,7 @@ def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
         |season           |Int64        |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2017.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1118,8 +1118,8 @@ def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2017:
-            raise SeasonNotFoundError("season cannot be less than 2017")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_pbp/ncaa_baseball_pbp_{season}.parquet"
         )
@@ -1208,7 +1208,7 @@ def load_ncaa_baseball_teams(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_teams
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1223,7 +1223,7 @@ def load_ncaa_baseball_teams(seasons, return_as_pandas: bool = False):
         |season    |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1232,8 +1232,8 @@ def load_ncaa_baseball_teams(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_teams/ncaa_baseball_teams_{season}.parquet"
         )
@@ -1260,7 +1260,7 @@ def load_ncaa_baseball_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1286,7 +1286,7 @@ def load_ncaa_baseball_rosters(seasons, return_as_pandas: bool = False):
         |season          |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1295,8 +1295,8 @@ def load_ncaa_baseball_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_rosters/ncaa_baseball_rosters_{season}.parquet"
         )
@@ -1323,7 +1323,7 @@ def load_ncaa_baseball_linescore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_linescore
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1350,7 +1350,7 @@ def load_ncaa_baseball_linescore(seasons, return_as_pandas: bool = False):
         |season       |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1359,8 +1359,8 @@ def load_ncaa_baseball_linescore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_linescore/ncaa_baseball_linescore_{season}.parquet"
         )
@@ -1387,7 +1387,7 @@ def load_ncaa_baseball_team_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_team_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1413,7 +1413,7 @@ def load_ncaa_baseball_team_stats(seasons, return_as_pandas: bool = False):
         |season       |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1422,8 +1422,8 @@ def load_ncaa_baseball_team_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_team_stats/ncaa_baseball_team_stats_{season}.parquet"
         )
@@ -1450,7 +1450,7 @@ def load_ncaa_baseball_player_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_player_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1520,7 +1520,7 @@ def load_ncaa_baseball_player_stats(seasons, return_as_pandas: bool = False):
         |season        |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1529,8 +1529,8 @@ def load_ncaa_baseball_player_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_player_stats/ncaa_baseball_player_stats_{season}.parquet"
         )
@@ -1557,7 +1557,7 @@ def load_ncaa_baseball_situational_stats(seasons, return_as_pandas: bool = False
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_situational_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1601,7 +1601,7 @@ def load_ncaa_baseball_situational_stats(seasons, return_as_pandas: bool = False
         |season         |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1610,8 +1610,8 @@ def load_ncaa_baseball_situational_stats(seasons, return_as_pandas: bool = False
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_situational_stats/ncaa_baseball_situational_stats_{season}.parquet"
         )
@@ -1640,7 +1640,7 @@ def load_ncaa_baseball_games(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_games
 
     Args:
-        seasons: an int or iterable of seasons (>= 2017).
+        seasons: an int or iterable of seasons (>= 2016).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1661,7 +1661,7 @@ def load_ncaa_baseball_games(seasons, return_as_pandas: bool = False):
         |home_final   |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2017.
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -1670,8 +1670,8 @@ def load_ncaa_baseball_games(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2017:
-            raise SeasonNotFoundError("season cannot be less than 2017")
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_games/ncaa_baseball_games_{season}.parquet"
         )

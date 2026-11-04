@@ -15,6 +15,7 @@ split (:func:`as_of_ratings_split`).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import NamedTuple
 
 from sportsdataverse._common.metrics import (
     as_of_ratings_split as as_of_ratings_split,
@@ -28,6 +29,8 @@ from sportsdataverse._common.metrics import (
 __all__ = [
     "LEAGUE_CONSTANTS",
     "LeagueConstants",
+    "PRESEASON_PRIOR",
+    "PreseasonPrior",
     "as_of_ratings_split",
     "brier_score",
     "calibration_table",
@@ -118,6 +121,52 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         bubble_adj_em=27.472,
         in_game_wp_artifact="wbb_in_game_wp.ubj",
     ),
+}
+
+
+class PreseasonPrior(NamedTuple):
+    """The college preseason prior and the season sim's rating noise, per league.
+
+    Attributes:
+        regression: Multiplies a team's prior-season final AdjO / AdjD deviation from the
+            league average (1 carries it over in full, 0 starts everyone average).
+        new_team_quantile: A program new to Division I starts at this quantile of last
+            season's Division I AdjEM.
+        weight: The prior's weight in pseudo-games: a team with ``g`` games so far is rated
+            ``g / (g + weight)`` on this season and the rest on the prior.
+        rating_sd: The season sim draws one AdjEM shift per team per simulated season,
+            ``N(0, rating_sd ** 2 / (g + weight))``.
+    """
+
+    regression: float
+    new_team_quantile: float
+    weight: float
+    rating_sd: float
+
+
+#: Fit by ``tools/fit_preseason_prior.py`` (2026-11-03) on an as-of-date holdout: weekly cutoffs
+#: from the first game (week 0 = preseason), the ratings through each cutoff scoring every later
+#: Division I regular-season game (conference tournaments included) with the shipped game model
+#: above. ``regression`` (0.1 grid) and ``weight`` (1..25 games) minimize TRAIN log loss; train
+#: 2012-2020 and 2022 (2021, the COVID season, is not scored), holdout 2023-2026, scored once
+#: against the engine with no prior (paired SE clustered by game):
+#:
+#: * men: 0.9 and 4 games. Train 0.65799 -> 0.56140. Holdout weeks 0-6 0.72923 -> 0.58139
+#:   (-0.14784 +- 0.00298; week 0 0.658 -> 0.594, week 1 1.233 -> 0.586), the season 0.66815 ->
+#:   0.57985 (-0.08830 +- 0.00194).
+#: * women: 0.6 and 3 games. Train 0.97673 -> 0.55162. Holdout weeks 0-6 0.66675 -> 0.52260
+#:   (-0.14415 +- 0.00298), the season 0.60485 -> 0.51926 (-0.08559 +- 0.00191).
+#: * ``new_team_quantile``: the 24 programs in their first Division I season in the train years
+#:   finished at a median 0.23 percentile of Division I AdjEM, in both leagues.
+#: * ``rating_sd`` is 1.25 x the one-team single-game AdjEM noise the game model implies,
+#:   ``margin_sd / (em_scale * sqrt 2)`` (13.76 men, 13.82 women): the multiplier (0..1.75 by
+#:   0.25) minimizes the TRAIN CRPS of each team's remaining regular-season wins in a 400-season
+#:   sim of the shift and game model. Holdout CRPS 1.375 -> 1.338 men, 1.303 -> 1.261 women;
+#:   weeks 0-6 the 10-90% band covers 0.83 / 0.84 of final wins (0.65 / 0.65 with no shift).
+#:   Widening a game's own margin sd instead did not help (train log loss flat, then worse).
+PRESEASON_PRIOR: dict[str, PreseasonPrior] = {
+    "mens": PreseasonPrior(regression=0.9, new_team_quantile=0.23, weight=4.0, rating_sd=17.2),
+    "womens": PreseasonPrior(regression=0.6, new_team_quantile=0.23, weight=3.0, rating_sd=17.27),
 }
 
 
