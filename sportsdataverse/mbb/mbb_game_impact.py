@@ -38,6 +38,7 @@ __all__ = ["mbb_game_lineups_used", "mbb_game_player_impact", "ncaa_impact_rows"
 _LEAGUES = ("mens", "womens")
 _PLAYER = pl.Utf8()
 _ROWS = impact_row_schema(_PLAYER)
+_SLOT_NAMES = [f"{side}_{i}" for side in ("home", "away") for i in range(1, 6)]
 
 
 def _check_league(league: str) -> None:
@@ -111,7 +112,20 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
     start, end = _period_bounds(league)
     is_last = pl.int_range(pl.len()).over(in_period) == pl.len().over(in_period) - 1
     events = (
-        pbp.with_row_index("_order")
+        pbp.select(
+            "season",
+            "contest_id",
+            "period",
+            "game_seconds",
+            "home_score",
+            "away_score",
+            "event_type",
+            "foul_class",
+            "home_espn_team_id",
+            "away_espn_team_id",
+            *[f"{c}_player_id" for c in _SLOT_NAMES],
+        )  # fmt: skip
+        .with_row_index("_order")
         .sort([game, "_order"])  # ponytail: the release is in game order; sort only groups games
         .with_columns(
             (

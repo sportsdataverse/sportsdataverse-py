@@ -41,6 +41,11 @@ _QUARTER = {"00": 720.0, "10": 600.0}
 _OT_SECONDS = 300.0
 _PLAYER = pl.Int64()
 _ROWS = impact_row_schema(_PLAYER)
+#: The pbp columns the builder reads (the release carries 49).
+_PBP_COLUMNS = (
+    "season", "game_id", "order_index", "action_number", "period", "seconds_remaining",
+    "score_home", "score_away", "is_free_throw", "is_foul",
+)  # fmt: skip
 
 
 def _check_league(league_id: str) -> None:
@@ -62,7 +67,8 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         for side in ("home", "away")
     }
     actions = (
-        pbp.with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("action_number").cast(pl.Int64))
+        pbp.select(_PBP_COLUMNS)
+        .with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("action_number").cast(pl.Int64))
         .join(games, on="game_id", how="inner", validate="m:1")
         .sort(["game_id", "order_index"])
         .with_columns(
@@ -90,9 +96,9 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
 
 def _possession_rows(possessions: pl.DataFrame, games: pl.DataFrame) -> pl.DataFrame:
     """One impact row per possession, its offense and defense mapped to home and away."""
-    poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8)).join(
-        games, on="game_id", how="inner", validate="m:1"
-    )
+    slots = [f"{side}_player_{i}" for side in ("off", "def") for i in range(1, 6)]
+    poss = possessions.select("season", "game_id", "offense_team_id", *slots)
+    poss = poss.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="inner", validate="m:1")
     home_off = pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")
     return poss.with_columns(
         *[

@@ -44,8 +44,8 @@ from __future__ import annotations
 import polars as pl
 
 __all__ = [
-    "HOME_SLOTS",
     "AWAY_SLOTS",
+    "HOME_SLOTS",
     "credit_free_throws_to_foul_lineup",
     "game_lineups_used",
     "game_lineups_used_schema",
@@ -128,25 +128,29 @@ def credit_free_throws_to_foul_lineup(
     Returns:
         ``actions`` with the ten slot columns replaced on free-throw rows.
     """
-    # The whole lineup of the foul row (nulls included), never a slot-by-slot fill across fouls.
-    marked = actions.with_row_index("_i").with_columns(
-        pl.when(is_free_throw.fill_null(False))
-        .then(pl.when(is_foul.fill_null(False)).then(pl.col("_i")).forward_fill().over(game))
-        .alias("_foul_i")
+    # The foul row's whole lineup as one struct (a null slot stays null), never a slot-by-slot fill.
+    at_foul = pl.when(is_foul.fill_null(False)).then(pl.struct(_SLOTS)).forward_fill().over(game)
+    marked = actions.with_columns(
+        pl.when(is_free_throw.fill_null(False)).then(at_foul).alias("_at_foul"),
     )
-    at_foul = marked.select(pl.col("_i").alias("_foul_i"), *[pl.col(c).alias(f"_foul_{c}") for c in _SLOTS])
-    joined = marked.join(at_foul, on="_foul_i", how="left").sort("_i")
-    has = pl.col("_foul_i").is_not_null()
-    return joined.with_columns(
-        **{c: pl.when(has).then(pl.col(f"_foul_{c}")).otherwise(pl.col(c)) for c in _SLOTS}
-    ).drop("_i", "_foul_i", *[f"_foul_{c}" for c in _SLOTS])
+    has = pl.col("_at_foul").is_not_null()
+    return marked.with_columns(
+        **{c: pl.when(has).then(pl.col("_at_foul").struct.field(c)).otherwise(pl.col(c)) for c in _SLOTS}
+    ).drop("_at_foul")
 
 
 def _sides(rows: pl.DataFrame) -> pl.DataFrame:
-    """Each impact row twice, once from each team's side, with that side's five players as a list."""
+    """Each stint twice, once from each team's side, with that side's players as a sorted list.
+
+    A stint is the impact rows of one game that share all ten slots, summed first, so the per-side
+    lists are built for a few hundred thousand stints a season, not millions of actions.
+    """
+    stints = rows.group_by(["season", "game_id", "home_team_id", "away_team_id", *_SLOTS]).agg(
+        pl.col("seconds", "home_pts", "away_pts", "home_poss", "away_poss").sum()
+    )
     return pl.concat(
         [
-            rows.select(
+            stints.select(
                 "season",
                 "game_id",
                 pl.col(f"{us}_team_id").alias("team_id"),
