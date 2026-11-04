@@ -83,7 +83,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
     ap.add_argument("--seasons", type=int, nargs="+", required=True, help="seasons by END year")
     args = ap.parse_args(argv)
-    if len(set(args.seasons)) < 2:
+    if len(set(args.seasons)) != len(args.seasons):
+        ap.error("--seasons repeats a season: it would count twice in the pooled error")
+    if len(args.seasons) < 2:
         ap.error("--seasons needs at least two distinct seasons: each one is scored on a penalty chosen on the others")
 
     league_id = _LEAGUE_ID[args.league]
@@ -94,6 +96,8 @@ def main(argv: list[str] | None = None) -> int:
             load_possessions([season - offset]), load_schedule([season - offset]), league_id=league_id
         )
         per_season[season] = season_cv(rows, GRID)
+        if per_season[season][GRID[0]][1] == 0:
+            ap.error(f"season {season}: no possessions with both team ids to fit")
         best = min(GRID, key=lambda lam: per_season[season][lam][0])
         mse = {lam: s / n for lam, (s, n) in per_season[season].items()}
         print(

@@ -117,9 +117,16 @@ def ridge_design(rows: pl.DataFrame) -> pl.DataFrame:
         One row per possession with both team ids: ``season``, ``game_id``, ``offense_id`` /
         ``defense_id`` (text, the ridge's team keys), ``y`` (100 * points) and ``hfa`` (``+1``
         home offense, ``-1`` away offense, ``0`` neutral site).
+
+    Raises:
+        ValueError: If a non-neutral possession with both team ids has a null ``offense_is_home``.
     """
     neutral = pl.col("neutral_site").fill_null(False)
-    return rows.filter(pl.col("offense_team_id").is_not_null() & pl.col("defense_team_id").is_not_null()).select(
+    rows = rows.filter(pl.col("offense_team_id").is_not_null() & pl.col("defense_team_id").is_not_null())
+    unknown = rows.filter(~neutral & pl.col("offense_is_home").is_null()).height
+    if unknown:  # the hfa term would silently read these as away possessions
+        raise ValueError(f"ridge_design: {unknown} non-neutral possessions have a null offense_is_home")
+    return rows.select(
         pl.col("season").cast(pl.Int64),
         pl.col("game_id").cast(pl.Utf8),
         pl.col("offense_team_id").cast(pl.Utf8).alias("offense_id"),

@@ -433,7 +433,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 | `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
 | `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
 | `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
+| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
 | `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
 | `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. |
 | `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
@@ -515,12 +515,12 @@ mean opponent `adj_net_rtg` over the team's games, SOV the same over its wins.
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. The ridge, the rates and the games all use it. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. The ridge, the rates and the games all use it. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the possessions; `wins` / `losses` come from the schedule's final scores. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, games for SOS and pace, wins for SOV). Ranks are within the season, among teams with at least half the most games, and null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the possessions; `wins` / `losses` come from the schedule's final scores. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, completed games against a rated opponent for SOS, games for pace, wins over a rated opponent for SOV). Ranks are within the season, among teams with at least half the most games, and null under five teams. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -541,7 +541,7 @@ One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64).
 | `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
 | `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
 | `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
+| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
 | `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
 | `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. |
 | `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
@@ -606,7 +606,7 @@ One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64).
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above (checked before any data is loaded). |
 
 **Example**
 

@@ -24,7 +24,7 @@ from sportsdataverse._common.team_strength import (
     possession_ridge_ratings,
     team_strength,
 )
-from sportsdataverse.nba.nba_team_season_rates import _LEAGUES, _league_loaders, nba_possession_rate_rows
+from sportsdataverse.nba.nba_team_season_rates import _LEAGUES, _check_args, _league_loaders, nba_possession_rate_rows
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -88,8 +88,9 @@ def nba_team_strength(
         seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
             The WNBA season is its calendar year.
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
-        season_type: ``"regular-season"`` (default), ``"playoffs"`` or ``"play-in"``, matched to
-            the schedule's ``season_type``. The ridge, the rates and the games all use it.
+        season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or
+            ``"play-in"``, matched to the schedule's ``season_type``. The ridge, the rates and the
+            games all use it.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -101,12 +102,14 @@ def nba_team_strength(
         four against). Each has ``<m>_rank`` (1 = best; ``adj_def_rtg``, ``def_rtg``,
         ``tov_pct`` and the opponent shooting, rebounding and free-throw rates rank low first;
         ``sos`` ranks the hardest schedule first), ``<m>_pct`` (the Weibull percentile) and
-        ``<m>_n`` (possessions for the ratings, games for SOS and pace, wins for SOV). Ranks are
-        within the season, among teams with at least half the most games, and null under five
-        teams. Empty input returns that schema with zero rows.
+        ``<m>_n`` (possessions for the ratings, completed games against a rated opponent for
+        SOS, games for pace, wins over a rated opponent for SOV). Ranks are within the season,
+        among teams with at least half the most games, and null under five teams. Empty input
+        returns that schema with zero rows.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
+            of the four above (checked before any data is loaded).
 
     Example:
         Quick start::
@@ -119,8 +122,7 @@ def nba_team_strength(
 
             wnba = nba_team_strength(2025, league_id="10")
     """
-    if league_id not in _LEAGUES:
-        raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+    _check_args(league_id, season_type)
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     loader_seasons = [s - offset for s in seasons_list]
