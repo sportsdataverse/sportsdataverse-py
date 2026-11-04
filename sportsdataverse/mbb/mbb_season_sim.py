@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Literal, Union, overload
+from typing import Literal, overload
 
 import numpy as np
 import pandas as pd
@@ -108,7 +108,7 @@ def mbb_season_sim(
     seed: int = 0,
     league: str = "mens",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Monte Carlo the remaining schedule: expected wins + title odds.
 
     Args:
@@ -223,7 +223,7 @@ def mbb_bracket_sim(
     seed: int = 0,
     league: str = "mens",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Single-elimination Monte Carlo over a bracket-ordered field.
 
     Rows of ``seeded_field`` are bracket slots: adjacent rows meet in round 1
@@ -259,7 +259,7 @@ def mbb_bracket_sim(
     if n & (n - 1) != 0 or n < 2:
         raise ValueError(f"bracket field size must be a power of two, got {n}")
     c = get_constants(league)
-    em_map = dict(zip(ratings.get_column("team_id").to_list(), ratings.get_column("adj_em").to_list()))
+    em_map = dict(zip(ratings.get_column("team_id").to_list(), ratings.get_column("adj_em").to_list(), strict=True))
     slots = seeded_field.get_column("team_id").to_list()
     em = np.array([em_map[t] for t in slots])
 
@@ -321,7 +321,7 @@ def mbb_season_projections(
     league: str = "mens",
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """The daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
 
     Loads the released ESPN schedule and team box, rates every team on the games strictly

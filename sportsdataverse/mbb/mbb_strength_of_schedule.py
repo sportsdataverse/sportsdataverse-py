@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Literal, Union, overload
+from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
@@ -204,7 +204,7 @@ def mbb_strength_of_schedule(
     league: str = "mens",
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """The daily ``strength_of_schedule`` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 
     Loads the released ESPN schedule and team box per season and builds

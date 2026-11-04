@@ -1440,7 +1440,7 @@ moves = transfer_cohort(bpm.select("player_id", "team_id", "season"))
 
 ### wbb_bracket_sim {#wbb_bracket_sim}
 
-`wbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's single-elimination bracket Monte Carlo.
 
@@ -1536,7 +1536,7 @@ preds = wbb_predict_games(games, wbb_team_ratings(2024))
 
 ### wbb_season_projections {#wbb_season_projections}
 
-`wbb_season_projections(season: 'int', *, as_of_date: 'Union[datetime.date, None]' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds.
 
@@ -1547,7 +1547,7 @@ Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with `l
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  | Season to project (e.g. `2024`). |
-| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
 | `n_sims` | `int` | `10000` | Simulated seasons. |
 | `seed` | `int` | `0` | RNG seed (deterministic output). |
 | `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament. |
@@ -1609,7 +1609,7 @@ odds = wbb_season_projections(2024, n_sims=2000)
 
 ### wbb_season_sim {#wbb_season_sim}
 
-`wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's remaining-schedule Monte Carlo.
 

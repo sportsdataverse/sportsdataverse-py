@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -65,7 +64,7 @@ def wbb_season_sim(
     n_sims: int = 10000,
     seed: int = 0,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's remaining-schedule Monte Carlo.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_sim` with ``league="womens"``.
@@ -102,7 +101,7 @@ def wbb_bracket_sim(
     n_sims: int = 10000,
     seed: int = 0,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's single-elimination bracket Monte Carlo.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_bracket_sim` with ``league="womens"``.
@@ -133,12 +132,12 @@ def wbb_bracket_sim(
 def wbb_season_projections(
     season: int,
     *,
-    as_of_date: Union[datetime.date, None] = None,
+    as_of_date: datetime.date | None = None,
     n_sims: int = 10000,
     seed: int = 0,
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with ``league="womens"`` (WBB loaders, women's constants and quad ranges).

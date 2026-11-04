@@ -8,7 +8,7 @@ description: "Women's college basketball — additional Python functions — Ana
 
 ### wbb_bracketology {#wbb_bracketology}
 
-`wbb_bracketology(season: 'int', *, as_of_date: 'Union[datetime.date, None]' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `bracketology` table: the projected field, seeds and bubble.
 
@@ -19,7 +19,7 @@ Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `leagu
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  | Season to project (e.g. `2024`). |
-| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
 | `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (in 2024, Southern Indiana won the OVC final while reclassifying; UT Martin took the bid). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -60,7 +60,7 @@ field = wbb_bracketology(2024, ineligible={"88"})
 
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
-`wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'Union[datetime.date, None]' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 
@@ -71,7 +71,7 @@ Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_sched
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
-| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
 | `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (sets `eligible`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

@@ -1021,7 +1021,7 @@ roles.filter(pl.col("archetype") == "rim protector").sort("dist_to_center").head
 
 ### mbb_bracketology {#mbb_bracketology}
 
-`mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The daily `bracketology` table: the projected field, seeds and bubble as of a date.
 
@@ -1127,7 +1127,7 @@ sel.sort("selection_value", descending=True).head(10)
 
 ### mbb_strength_of_schedule {#mbb_strength_of_schedule}
 
-`mbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`mbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 

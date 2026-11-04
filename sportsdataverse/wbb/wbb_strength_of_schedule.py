@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Union
 
 import pandas as pd
 import polars as pl
@@ -38,10 +37,10 @@ __all__ = [
 def wbb_strength_of_schedule(
     seasons: list[int],
     *,
-    as_of_date: Union[datetime.date, None] = None,
+    as_of_date: datetime.date | None = None,
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``strength_of_schedule`` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with ``league="womens"`` (WBB loaders, women's constants and quad ranges; RPI location weights from 2011-12).

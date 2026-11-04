@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Literal, Union, overload
+from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
@@ -162,7 +162,7 @@ def mbb_bracketology(
     league: str = "mens",
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """The daily ``bracketology`` table: the projected field, seeds and bubble as of a date.
 
     Builds the season résumé (:func:`~sportsdataverse.mbb.mbb_college_season.season_resume`)

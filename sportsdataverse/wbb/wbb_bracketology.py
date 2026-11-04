@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import Union
 
 import pandas as pd
 import polars as pl
@@ -35,10 +34,10 @@ __all__ = [
 def wbb_bracketology(
     season: int,
     *,
-    as_of_date: Union[datetime.date, None] = None,
+    as_of_date: datetime.date | None = None,
     ineligible: Iterable[str] = (),
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``bracketology`` table: the projected field, seeds and bubble.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with ``league="womens"`` (WBB loaders + women's constants).

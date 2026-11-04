@@ -39,7 +39,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Iterable
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 import numpy as np
 import polars as pl
@@ -199,20 +199,19 @@ def college_teams(schedule: pl.DataFrame, ineligible: Iterable[str] = ()) -> pl.
             from sportsdataverse.mbb.mbb_college_season import college_teams
             teams = college_teams(sched)
     """
-    sides = []
-    for s in ("home", "away"):
-        sides.append(
-            schedule.select(
-                "season",
-                pl.col(f"{s}_team_id").alias("team_id"),
-                pl.col(f"{s}_team").alias("team"),
-                pl.col(f"{s}_conference_id").alias("own"),
-                pl.when(pl.col("conference_competition") == True)  # noqa: E712
-                .then(pl.col("groups_id"))
-                .alias("grp"),
-                pl.col(f"{'away' if s == 'home' else 'home'}_conference_id").alias("opp"),
-            )
+    sides = [
+        schedule.select(
+            "season",
+            pl.col(f"{s}_team_id").alias("team_id"),
+            pl.col(f"{s}_team").alias("team"),
+            pl.col(f"{s}_conference_id").alias("own"),
+            pl.when(pl.col("conference_competition") == True)  # noqa: E712
+            .then(pl.col("groups_id"))
+            .alias("grp"),
+            pl.col(f"{o}_conference_id").alias("opp"),
         )
+        for s, o in (("home", "away"), ("away", "home"))
+    ]
     first_mode = lambda c: pl.col(c).drop_nulls().mode().sort().first()  # noqa: E731
     # last resort: a team ESPN strips of every conference field (Dayton, 2024 women) but that
     # played a conference schedule -- _MIN_CONF_OPP_GAMES or more games against one conference
@@ -249,9 +248,7 @@ def college_teams(schedule: pl.DataFrame, ineligible: Iterable[str] = ()) -> pl.
     )
 
 
-def split_season(
-    schedule: pl.DataFrame, as_of_date: Optional[datetime.date] = None
-) -> tuple[pl.DataFrame, pl.DataFrame]:
+def split_season(schedule: pl.DataFrame, as_of_date: datetime.date | None = None) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Split a season into the games played before ``as_of_date`` and the ones left to simulate.
 
     Args:
@@ -498,7 +495,7 @@ def season_resume(
     teams: pl.DataFrame,
     *,
     league: str = "mens",
-    as_of_date: Optional[datetime.date] = None,
+    as_of_date: datetime.date | None = None,
 ) -> pl.DataFrame:
     """The ``strength_of_schedule`` table: records, ratings, SoS, quads, WAB, RPI and the NET estimate.
 
@@ -749,9 +746,11 @@ def _seed_field(score: np.ndarray, bid: np.ndarray, auto: np.ndarray) -> np.ndar
         ff_al, ff_ab = al[-4:], ab[-4:]
         ff = set(ff_al) | set(ff_ab)
         units: list[tuple[float, list[int]]] = [(float(score[i]), [int(i)]) for i in field if i not in ff]
-        for grp in (ff_al, ff_ab):
-            for pair in (grp[0:2], grp[2:4]):
-                units.append((float(np.mean(score[pair])), [int(i) for i in pair]))
+        units += [
+            (float(np.mean(score[pair])), [int(i) for i in pair])
+            for grp in (ff_al, ff_ab)
+            for pair in (grp[0:2], grp[2:4])
+        ]
         units.sort(key=lambda u: -u[0])
         for pos, (_s, members) in enumerate(units):
             seeds[members] = pos // 4 + 1
@@ -887,6 +886,196 @@ SEASON_SIM_SCHEMA: dict[str, pl.DataType] = {
 }
 
 
+def _remaining_games(
+    remaining: pl.DataFrame, teams: pl.DataFrame, res: pl.DataFrame, em: np.ndarray, net_rank: np.ndarray, league: str
+) -> dict[str, np.ndarray]:
+    """The remaining games as arrays: home-win chances and per-team incidence matrices.
+
+    The incidence columns are ``[wins | conf wins | D1 wins | Quad-1 wins]`` for the home and the
+    away side, so one matrix product turns a batch of simulated results into all four tallies.
+    A non-Division I opponent still adds a result to the Division I team's W-L, rated at the
+    weakest Division I AdjEM.
+    """
+    c = get_constants(league)
+    ids = res.get_column("team_id").to_list()
+    idx = {t: i for i, t in enumerate(ids)}
+    n = len(ids)
+    rem = with_conf_games(remaining, teams).filter(
+        pl.col("home_team_id").is_in(ids) | pl.col("away_team_id").is_in(ids)
+    )
+    h = np.array([idx.get(t, -1) for t in rem.get_column("home_team_id").to_list()], dtype=np.int64)
+    a = np.array([idx.get(t, -1) for t in rem.get_column("away_team_id").to_list()], dtype=np.int64)
+    emin = float(em.min())
+    em_h = np.where(h >= 0, em[np.maximum(h, 0)], emin)
+    em_a = np.where(a >= 0, em[np.maximum(a, 0)], emin)
+    neutral = rem.get_column("neutral_site").fill_null(False).to_numpy()
+    p_home = norm.cdf((c.em_scale * (em_h - em_a) + c.hfa * (~neutral)) / c.margin_sd)
+    # the bubble team's win chance in each game from either side, and the Quad-1 flags
+    sign_h = np.where(neutral, 0.0, 1.0)
+    pb_h = norm.cdf((c.em_scale * (c.bubble_adj_em - em_a) + sign_h * c.hfa) / c.margin_sd)
+    pb_a = norm.cdf((c.em_scale * (c.bubble_adj_em - em_h) - sign_h * c.hfa) / c.margin_sd)
+    thr = c.quad_thresholds
+    q1_cut_h = np.where(neutral, thr["neutral"]["q1"], thr["home"]["q1"])
+    q1_cut_a = np.where(neutral, thr["neutral"]["q1"], thr["away"]["q1"])
+    both_d1 = (h >= 0) & (a >= 0)
+    q1_h = both_d1 & (net_rank[np.maximum(a, 0)] <= q1_cut_h)
+    q1_a = both_d1 & (net_rank[np.maximum(h, 0)] <= q1_cut_a)
+    conf_game = rem.get_column("conf_game").to_numpy()
+    g = len(p_home)
+
+    def inc(side: np.ndarray, mask: np.ndarray) -> np.ndarray:
+        m: np.ndarray = np.zeros((g, n), dtype=np.float32)
+        ok = (side >= 0) & mask
+        m[np.flatnonzero(ok), side[ok]] = 1.0
+        return m
+
+    every: np.ndarray = np.ones(g, dtype=bool)
+    inc_h = np.concatenate([inc(h, every), inc(h, conf_game), inc(h, both_d1), inc(h, q1_h)], axis=1)
+    inc_a = np.concatenate([inc(a, every), inc(a, conf_game), inc(a, both_d1), inc(a, q1_a)], axis=1)
+    d1_h, d1_a = inc_h[:, 2 * n : 3 * n], inc_a[:, 2 * n : 3 * n]
+    return {
+        "p_home": p_home,
+        "inc_h": inc_h,
+        "inc_a": inc_a,
+        "games_left": inc_h[:, :n].sum(axis=0) + inc_a[:, :n].sum(axis=0),
+        "conf_left": inc_h[:, n : 2 * n].sum(axis=0) + inc_a[:, n : 2 * n].sum(axis=0),
+        "pb_left": (pb_h[:, None] * d1_h).sum(axis=0) + (pb_a[:, None] * d1_a).sum(axis=0),
+        "d1_left": d1_h.sum(axis=0) + d1_a.sum(axis=0),
+        "opp_em_left": (em_a[:, None] * d1_h).sum(axis=0) + (em_h[:, None] * d1_a).sum(axis=0),
+    }
+
+
+def _conference_tournament(
+    rng: np.random.Generator,
+    alive: np.ndarray,
+    cpct: np.ndarray,
+    t: dict[str, np.ndarray],
+    league: str,
+) -> np.ndarray:
+    """Play one conference tournament in every sim of a batch; returns the auto-bid holders.
+
+    Neutral-site single elimination of the ``alive`` members, seeded by simulated conference
+    record (AdjEM breaks ties), byes to the top seeds. Each game moves WAB and Quad-1 wins in
+    place (``t["wab"]`` / ``t["q1"]``) and the title count (``t["title"]``). An ineligible
+    champion passes the auto-bid to the runner-up; a holder of -1 means no eligible holder.
+    """
+    c = get_constants(league)
+    em, b = t["em"], cpct.shape[0]
+    key = cpct[:, alive] + 1e-6 * (em[alive] - em.min())[None, :]
+    ranked = alive[np.argsort(-key, axis=1, kind="stable")]  # (b, m), seed 1 first
+    m = alive.size
+    order: np.ndarray = _bracket_order(1 << max(0, int(np.ceil(np.log2(m))))) - 1
+    slot = np.where(order[None, :] < m, ranked[:, np.minimum(order, m - 1)], -1)
+    runner_up: np.ndarray = np.full(b, -1, dtype=np.int64)
+    while slot.shape[1] > 1:
+        x, y = slot[:, 0::2], slot[:, 1::2]
+        px = norm.cdf(c.em_scale * (em[np.maximum(x, 0)] - em[np.maximum(y, 0)]) / c.margin_sd)
+        xw = rng.random(x.shape) < px
+        win = np.where(y < 0, x, np.where(x < 0, y, np.where(xw, x, y)))
+        lose = np.where(win == x, y, x)
+        r, cix = np.nonzero((x >= 0) & (y >= 0))
+        wt, lt = win[r, cix], lose[r, cix]
+        np.add.at(t["wab"], (r, wt), 1.0 - t["pb_neutral"][lt])
+        np.add.at(t["wab"], (r, lt), -t["pb_neutral"][wt])
+        np.add.at(t["q1"], (r, wt), t["q1_neutral"][lt].astype(np.float64))
+        if win.shape[1] == 1:
+            runner_up = lose[:, 0]
+        slot = win
+    champ = slot[:, 0]
+    np.add.at(t["title"], champ, 1.0)
+    holder = np.where(t["eligible"][champ] | (runner_up < 0), champ, runner_up)
+    return np.where(t["eligible"][holder], holder, -1)
+
+
+def _conference_bids(
+    rng: np.random.Generator,
+    cpct: np.ndarray,
+    status: dict[str, dict],
+    idx: dict[str, int],
+    t: dict[str, np.ndarray],
+    acc: dict[str, np.ndarray],
+    league: str,
+) -> np.ndarray:
+    """One batch's regular-season titles (into ``acc["reg"]``) and auto-bids, conference by conference.
+
+    A played final fixes the title and the auto-bid; an unfinished tournament is played by
+    :func:`_conference_tournament`. Conferences run in id order, so the draws are reproducible.
+    """
+    b, n = cpct.shape
+    auto: np.ndarray = np.zeros((b, n), dtype=bool)
+    for k in sorted(status):
+        st = status[k]
+        mem = np.array([idx[x] for x in st["members"] if x in idx], dtype=np.int64)
+        acc["reg"][mem] += (cpct[:, mem] >= cpct[:, mem].max(axis=1, keepdims=True) - 1e-12).sum(axis=0)
+        if st["champion_id"] is not None:  # the final is played
+            auto[:, idx[st["champion_id"]]] = True
+            t["title"][idx[st["winner_id"]]] += b
+            continue
+        alive = np.array([idx[x] for x in st["alive"] if x in idx], dtype=np.int64)
+        if alive.size:
+            holder = _conference_tournament(rng, alive, cpct, t, league)
+            ok = holder >= 0
+            auto[np.flatnonzero(ok), holder[ok]] = True
+    return auto
+
+
+def _select_field(score: np.ndarray, auto: np.ndarray, eligible: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """At-large bids and the field, per sim: the best eligible résumés after the auto-bids."""
+    b, n = score.shape
+    al_score = np.where(auto | ~eligible[None, :], -np.inf, score)
+    order_al = np.argsort(-al_score, axis=1, kind="stable")
+    al_rank = np.empty_like(order_al)
+    al_rank[np.arange(b)[:, None], order_al] = np.arange(n)[None, :]
+    n_auto = auto.sum(axis=1)
+    at_large = (~auto) & eligible[None, :] & (al_rank < (FIELD_SIZE - n_auto)[:, None])
+    return at_large, auto | at_large
+
+
+def _zscore(x: np.ndarray) -> np.ndarray:
+    sd = x.std(axis=-1, ddof=1, keepdims=True)
+    return (x - x.mean(axis=-1, keepdims=True)) / (sd + 1e-9)
+
+
+def _sim_table(res: pl.DataFrame, acc: dict[str, np.ndarray], seed_counts: np.ndarray, n_sims: int) -> pl.DataFrame:
+    """Turn the Monte Carlo tallies into the :data:`SEASON_SIM_SCHEMA` table."""
+    col = lambda name: res.get_column(name).fill_null(0).to_numpy().astype(np.float64)  # noqa: E731
+    wins0, losses0, cw0, cl0 = col("wins"), col("losses"), col("conf_wins"), col("conf_losses")
+    in_field = seed_counts[:, 1:].sum(axis=1)
+    lines = np.arange(1, _SEED_LINES + 1)
+    seed_mean = np.where(in_field > 0, (seed_counts[:, 1:] * lines).sum(axis=1) / np.maximum(in_field, 1), np.nan)
+    proj_w, proj_cw = wins0 + acc["wins"] / n_sims, cw0 + acc["cwins"] / n_sims
+    has_conf = res.get_column("conference").is_not_null().to_numpy()
+    keep = ["season", "as_of_date", "team_id", "team", "conference_id", "conference"]
+    out = (
+        res.select(*keep, "wins", "losses", "conf_wins", "conf_losses")
+        .with_columns(
+            pl.Series("proj_wins", proj_w),
+            pl.Series("proj_losses", losses0 + acc["games_left"] - (proj_w - wins0)),
+            pl.Series("proj_conf_wins", proj_cw),
+            pl.Series("proj_conf_losses", cl0 + acc["conf_left"] - (proj_cw - cw0)),
+            pl.Series("reg_season_title_prob", np.where(has_conf, acc["reg"] / n_sims, np.nan)),
+            pl.Series("conf_tourney_title_prob", acc["title"] / n_sims),
+            pl.Series("auto_bid_prob", acc["auto"] / n_sims),
+            pl.Series("at_large_prob", acc["al"] / n_sims),
+            pl.Series("bid_prob", acc["bid"] / n_sims),
+            pl.Series("seed_mean", seed_mean),
+            *[pl.Series(f"seed_{k}_prob", seed_counts[:, k] / n_sims) for k in lines],
+            pl.lit(n_sims, dtype=pl.Int64).alias("n_sims"),
+        )
+        .with_columns(
+            pl.col("reg_season_title_prob", "seed_mean").fill_nan(None),
+            (pl.col("proj_conf_wins") / (pl.col("proj_conf_wins") + pl.col("proj_conf_losses")))
+            .fill_nan(None)
+            .alias("proj_conf_win_pct"),
+            pl.when(pl.col("conference").is_not_null()).then(pl.col("conference_id")).alias("_cohort"),
+        )
+    )
+    out = attach_ranks(out, ["proj_conf_win_pct"], min_cohort=MIN_COHORT_TEAMS, by=("season", "_cohort"))
+    return out.select(list(SEASON_SIM_SCHEMA)).sort(
+        "season", "conference", "proj_conf_win_pct_rank", "team_id", nulls_last=True
+    )
+
+
 def simulate_season(
     played: pl.DataFrame,
     remaining: pl.DataFrame,
@@ -905,9 +1094,9 @@ def simulate_season(
     champions (best conference winning percentage, co-champions all count), plays every
     unfinished conference tournament as a neutral-site single elimination of the members still
     alive seeded by conference record (byes to the top seeds; an ineligible champion passes the
-    auto-bid to the runner-up), then rebuilds each team's
-    résumé (WAB and Quad-1 wins move with the simulated results; ratings, SoS and opponent
-    ranks stay at their as-of values) and selects and seeds the 68-team field as
+    auto-bid to the runner-up), then rebuilds each team's résumé (WAB and Quad-1 wins move with
+    the simulated results; ratings and opponent ranks stay at their as-of values, SoS covers
+    every scheduled game) and selects and seeds the 68-team field as
     :func:`season_bracketology` does.
 
     ``numpy.random.default_rng(seed)`` drives every draw, in batches of ``batch`` sims, so a
@@ -936,220 +1125,53 @@ def simulate_season(
             from sportsdataverse.mbb.mbb_college_season import simulate_season
             sim = simulate_season(played, remaining, teams, resume, n_sims=2000, seed=7)
     """
-    from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS
+    from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
 
     c = get_constants(league)
     res = resume.sort("team_id")
-    ids = res.get_column("team_id").to_list()
-    idx = {t: i for i, t in enumerate(ids)}
-    n = len(ids)
+    n = res.height
+    idx = {t: i for i, t in enumerate(res.get_column("team_id").to_list())}
     # a team with no rating yet (preseason, or no box score) plays as the weakest rated team
     em_min = res.get_column("adj_em").min()
     em = res.get_column("adj_em").fill_null(em_min if em_min is not None else 0.0).to_numpy().astype(np.float64)
     net_rank = res.get_column("net_estimate_rank").fill_null(float(n)).to_numpy()
-    conf = res.get_column("conference_id").to_list()
-    has_conf = res.get_column("conference").is_not_null().to_numpy()
-    eligible = res.get_column("eligible").to_numpy()
-
-    # remaining games: D1 sides only matter for D1 tables, but a non-D1 opponent still adds a
-    # result to the D1 team's W-L (rated at the D1 minimum when it has no rating).
-    rem = with_conf_games(remaining, teams).filter(
-        pl.col("home_team_id").is_in(ids) | pl.col("away_team_id").is_in(ids)
-    )
-    h = np.array([idx.get(t, -1) for t in rem.get_column("home_team_id").to_list()], dtype=np.int64)
-    a = np.array([idx.get(t, -1) for t in rem.get_column("away_team_id").to_list()], dtype=np.int64)
-    emin = float(em.min())
-    em_h = np.where(h >= 0, em[np.maximum(h, 0)], emin)
-    em_a = np.where(a >= 0, em[np.maximum(a, 0)], emin)
-    neutral = rem.get_column("neutral_site").fill_null(False).to_numpy()
-    p_home = norm.cdf((c.em_scale * (em_h - em_a) + c.hfa * (~neutral)) / c.margin_sd)
-    conf_game = rem.get_column("conf_game").to_numpy()
-    # the bubble team's win chance in each remaining game, and the Quad-1 flag, per side
-    thr = c.quad_thresholds
-    bub = lambda opp_em, hfa_sign: norm.cdf(  # noqa: E731
-        (c.em_scale * (c.bubble_adj_em - opp_em) + hfa_sign * c.hfa) / c.margin_sd
-    )
-    sign_h = np.where(neutral, 0.0, 1.0)
-    pb_h, pb_a = bub(em_a, sign_h), bub(em_h, -sign_h)
-    venue_h = np.where(neutral, "neutral", "home")
-    venue_a = np.where(neutral, "neutral", "away")
-    q1_h = np.array([a_ >= 0 and net_rank[a_] <= thr[v]["q1"] for a_, v in zip(a, venue_h)], dtype=bool)
-    q1_a = np.array([h_ >= 0 and net_rank[h_] <= thr[v]["q1"] for h_, v in zip(h, venue_a)], dtype=bool)
-    both_d1 = (h >= 0) & (a >= 0)
-
-    g = len(p_home)
-
-    # incidence columns: [wins | conf wins | wab wins | q1 wins] for home and away sides
-    def _inc(side: np.ndarray, mask: np.ndarray) -> np.ndarray:
-        m: np.ndarray = np.zeros((g, n), dtype=np.float32)
-        ok = (side >= 0) & mask
-        m[np.flatnonzero(ok), side[ok]] = 1.0
-        return m
-
-    true_: np.ndarray = np.ones(g, dtype=bool)
-    inc_h = np.concatenate([_inc(h, true_), _inc(h, conf_game), _inc(h, both_d1), _inc(h, both_d1 & q1_h)], axis=1)
-    inc_a = np.concatenate([_inc(a, true_), _inc(a, conf_game), _inc(a, both_d1), _inc(a, both_d1 & q1_a)], axis=1)
-    games_left = inc_h[:, :n].sum(axis=0) + inc_a[:, :n].sum(axis=0)
-    conf_left = inc_h[:, n : 2 * n].sum(axis=0) + inc_a[:, n : 2 * n].sum(axis=0)
-    pb_left = (pb_h[:, None] * inc_h[:, 2 * n : 3 * n]).sum(axis=0) + (pb_a[:, None] * inc_a[:, 2 * n : 3 * n]).sum(
-        axis=0
-    )
-
+    sched = _remaining_games(remaining, teams, res, em, net_rank, league)
     col = lambda name: res.get_column(name).fill_null(0).to_numpy().astype(np.float64)  # noqa: E731
-    wins0, losses0 = col("wins"), col("losses")
-    cw0, cl0 = col("conf_wins"), col("conf_losses")
-    wab0, q10 = res.get_column("wab").fill_null(0.0).to_numpy(), col("quad1_w")
-    # SoS over every scheduled D1 game, not only the played ones
-    opp_em_left = (em_a[:, None] * inc_h[:, 2 * n : 3 * n]).sum(axis=0) + (em_h[:, None] * inc_a[:, 2 * n : 3 * n]).sum(
-        axis=0
-    )
-    d1_left = inc_h[:, 2 * n : 3 * n].sum(axis=0) + inc_a[:, 2 * n : 3 * n].sum(axis=0)
     g0 = col("rpi_games")
-    sos0 = res.get_column("sos").fill_null(0.0).to_numpy()
-    sos = np.where(g0 + d1_left > 0, (sos0 * g0 + opp_em_left) / np.maximum(g0 + d1_left, 1), 0.0)
-    em_z = res.get_column("adj_em_z").fill_null(0.0).to_numpy()
-
-    def zs(x: np.ndarray) -> np.ndarray:
-        sd = x.std(axis=-1, ddof=1, keepdims=True)
-        return (x - x.mean(axis=-1, keepdims=True)) / (sd + 1e-9)
-
-    w = _RESUME_WEIGHTS
-    status = _conference_status(played, teams).filter(pl.col("conference_id").is_in(conf))
-    conf_ids = sorted({x for x, hc in zip(conf, has_conf) if hc})
-    members = {k: np.array([i for i, x in enumerate(conf) if x == k]) for k in conf_ids}
-    champ_of = {r["conference_id"]: r["champion_id"] for r in status.iter_rows(named=True)}
-    winner_of = {r["conference_id"]: r["winner_id"] for r in status.iter_rows(named=True)}
-    alive_of = {r["conference_id"]: [idx[t] for t in r["alive"] if t in idx] for r in status.iter_rows(named=True)}
-    pb_neutral = norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd)  # vs each opponent, neutral
-    q1_neutral = net_rank <= thr["neutral"]["q1"]
-
-    rng = np.random.default_rng(seed)
-    acc = {k: np.zeros(n) for k in ("wins", "cwins", "reg", "title", "auto", "al", "bid")}
+    # SoS over every scheduled Division I game, not only the played ones
+    sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
+    base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos)
+    t = {
+        "em": em,
+        "eligible": res.get_column("eligible").to_numpy(),
+        "pb_neutral": norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd),
+        "q1_neutral": net_rank <= c.quad_thresholds["neutral"]["q1"],
+        "title": np.zeros(n),
+    }
+    status = {r["conference_id"]: r for r in _conference_status(played, teams).iter_rows(named=True)}
+    acc = {k: np.zeros(n) for k in ("wins", "cwins", "reg", "auto", "al", "bid")}
     seed_counts = np.zeros((n, _SEED_LINES + 1))
-    done = 0
-    while done < n_sims:
-        b = min(batch, n_sims - done)
-        hw = (rng.random((b, g)) < p_home).astype(np.float32)
-        got = hw @ inc_h + (1.0 - hw) @ inc_a  # (b, 4n)
-        wins_rem, cw_rem, d1w_rem, q1_rem = got[:, :n], got[:, n : 2 * n], got[:, 2 * n : 3 * n], got[:, 3 * n :]
-        cw = cw0 + cw_rem
-        cl = cl0 + (conf_left - cw_rem)
-        cpct = cw / np.maximum(cw + cl, 1.0)
-        wab = wab0 + d1w_rem - pb_left
-        q1 = q10 + q1_rem
-        acc["wins"] += wins_rem.sum(axis=0)
-        acc["cwins"] += cw_rem.sum(axis=0)
-        auto: np.ndarray = np.zeros((b, n), dtype=bool)
-        rows = np.arange(b)
-        for k in conf_ids:
-            mem = members[k]
-            best = cpct[:, mem].max(axis=1, keepdims=True)
-            acc["reg"][mem] += (cpct[:, mem] >= best - 1e-12).sum(axis=0)
-            champ = champ_of.get(k)
-            if champ is not None:
-                if champ in idx:
-                    auto[:, idx[champ]] = True
-                if winner_of.get(k) in idx:
-                    acc["title"][idx[winner_of[k]]] += b
-                continue
-            alive = np.array(alive_of.get(k) or [], dtype=np.int64)
-            if alive.size == 0:
-                continue
-            # seed the alive members by simulated conference record, AdjEM breaking ties
-            key = cpct[:, alive] + 1e-6 * (em[alive] - emin)[None, :]
-            ranked = alive[np.argsort(-key, axis=1, kind="stable")]  # (b, m) seed 1 first
-            m = alive.size
-            size = 1 << max(0, int(np.ceil(np.log2(m))))
-            order: np.ndarray = _bracket_order(size) - 1
-            slot = np.where(order[None, :] < m, ranked[:, np.minimum(order, m - 1)], -1)
-            runner_up: np.ndarray = np.full(b, -1, dtype=np.int64)
-            while slot.shape[1] > 1:
-                x, y = slot[:, 0::2], slot[:, 1::2]
-                both = (x >= 0) & (y >= 0)
-                px = norm.cdf(c.em_scale * (em[np.maximum(x, 0)] - em[np.maximum(y, 0)]) / c.margin_sd)
-                xw = rng.random(x.shape) < px
-                win = np.where(y < 0, x, np.where(x < 0, y, np.where(xw, x, y)))
-                lose = np.where(win == x, y, x)
-                r, cix = np.nonzero(both)
-                wt, lt = win[r, cix], lose[r, cix]
-                np.add.at(wab, (r, wt), 1.0 - pb_neutral[lt])
-                np.add.at(wab, (r, lt), -pb_neutral[wt])
-                np.add.at(q1, (r, wt), q1_neutral[lt].astype(np.float64))
-                if win.shape[1] == 1:
-                    runner_up = lose[:, 0]
-                slot = win
-            champ_sim = slot[:, 0]
-            np.add.at(acc["title"], champ_sim, 1.0)
-            # an ineligible champion passes the auto-bid to the runner-up
-            holder = np.where(eligible[champ_sim] | (runner_up < 0), champ_sim, runner_up)
-            ok = eligible[holder]
-            auto[rows[ok], holder[ok]] = True
-        score = w["adj_em_z"] * em_z[None, :] + w["sos"] * zs(sos)[None, :] + w["wab"] * zs(wab) + w["quad1_w"] * zs(q1)
-        n_auto = auto.sum(axis=1)
-        al_score = np.where(auto | ~eligible[None, :], -np.inf, score)
-        order_al = np.argsort(-al_score, axis=1, kind="stable")
-        al_rank = np.empty_like(order_al)
-        al_rank[rows[:, None], order_al] = np.arange(n)[None, :]
-        at_large = (~auto) & eligible[None, :] & (al_rank < (FIELD_SIZE - n_auto)[:, None])
-        bid = auto | at_large
+    rng = np.random.default_rng(seed)
+    for start in range(0, n_sims, batch):
+        b = min(batch, n_sims - start)
+        hw = (rng.random((b, len(sched["p_home"]))) < sched["p_home"]).astype(np.float32)
+        got = hw @ sched["inc_h"] + (1.0 - hw) @ sched["inc_a"]  # (b, 4n)
+        cw = col("conf_wins") + got[:, n : 2 * n]
+        cpct = cw / np.maximum(col("conf_wins") + col("conf_losses") + sched["conf_left"], 1.0)
+        t["wab"] = col("wab") + got[:, 2 * n : 3 * n] - sched["pb_left"]
+        t["q1"] = col("quad1_w") + got[:, 3 * n :]
+        acc["wins"] += got[:, :n].sum(axis=0)
+        acc["cwins"] += got[:, n : 2 * n].sum(axis=0)
+        auto = _conference_bids(rng, cpct, status, idx, t, acc, league)
+        score = base[None, :] + w["wab"] * _zscore(t["wab"]) + w["quad1_w"] * _zscore(t["q1"])
+        at_large, bid = _select_field(score, auto, t["eligible"])
         for s in range(b):
-            sd = _seed_field(score[s], bid[s], auto[s])
-            seed_counts[np.arange(n), sd] += 1
+            seed_counts[np.arange(n), _seed_field(score[s], bid[s], auto[s])] += 1
         acc["auto"] += auto.sum(axis=0)
         acc["al"] += at_large.sum(axis=0)
         acc["bid"] += bid.sum(axis=0)
-        done += b
-
-    probs = seed_counts[:, 1:] / n_sims
-    in_field = seed_counts[:, 1:].sum(axis=1)
-    seed_mean = np.where(
-        in_field > 0, (seed_counts[:, 1:] * np.arange(1, _SEED_LINES + 1)).sum(axis=1) / np.maximum(in_field, 1), np.nan
-    )
-    proj_w = wins0 + acc["wins"] / n_sims
-    proj_cw = cw0 + acc["cwins"] / n_sims
-    out = (
-        res.select(
-            "season",
-            "as_of_date",
-            "team_id",
-            "team",
-            "conference_id",
-            "conference",
-            "wins",
-            "losses",
-            "conf_wins",
-            "conf_losses",
-        )
-        .with_columns(
-            pl.Series("proj_wins", proj_w),
-            pl.Series("proj_losses", losses0 + games_left - (proj_w - wins0)),
-            pl.Series("proj_conf_wins", proj_cw),
-            pl.Series("proj_conf_losses", cl0 + conf_left - (proj_cw - cw0)),
-            pl.Series("reg_season_title_prob", np.where(has_conf, acc["reg"] / n_sims, np.nan)),
-            pl.Series("conf_tourney_title_prob", acc["title"] / n_sims),
-            pl.Series("auto_bid_prob", acc["auto"] / n_sims),
-            pl.Series("at_large_prob", acc["al"] / n_sims),
-            pl.Series("bid_prob", acc["bid"] / n_sims),
-            pl.Series("seed_mean", seed_mean),
-            *[pl.Series(f"seed_{k}_prob", probs[:, k - 1]) for k in range(1, _SEED_LINES + 1)],
-            pl.lit(n_sims, dtype=pl.Int64).alias("n_sims"),
-        )
-        .with_columns(
-            pl.col("reg_season_title_prob", "seed_mean").fill_nan(None),
-            (pl.col("proj_conf_wins") / (pl.col("proj_conf_wins") + pl.col("proj_conf_losses")))
-            .fill_nan(None)
-            .alias("proj_conf_win_pct"),
-        )
-    )
-    out = attach_ranks(
-        out.with_columns(pl.when(pl.col("conference").is_not_null()).then(pl.col("conference_id")).alias("_cohort")),
-        ["proj_conf_win_pct"],
-        min_cohort=MIN_COHORT_TEAMS,
-        by=("season", "_cohort"),
-    )
-    return out.select(list(SEASON_SIM_SCHEMA)).sort(
-        "season", "conference", "proj_conf_win_pct_rank", "team_id", nulls_last=True
-    )
+    acc.update(title=t["title"], games_left=sched["games_left"], conf_left=sched["conf_left"])
+    return _sim_table(res, acc, seed_counts, n_sims)
 
 
 class SeasonInputs(NamedTuple):
@@ -1167,7 +1189,7 @@ def season_inputs(
     schedule: pl.DataFrame,
     team_box: pl.DataFrame,
     *,
-    as_of_date: Optional[datetime.date] = None,
+    as_of_date: datetime.date | None = None,
     league: str = "mens",
     ineligible: Iterable[str] = (),
 ) -> SeasonInputs:
@@ -1205,7 +1227,7 @@ def season_inputs(
 def load_season_inputs(
     season: int,
     *,
-    as_of_date: Optional[datetime.date] = None,
+    as_of_date: datetime.date | None = None,
     league: str = "mens",
     ineligible: Iterable[str] = (),
 ) -> SeasonInputs:
