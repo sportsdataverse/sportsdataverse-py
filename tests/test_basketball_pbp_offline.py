@@ -406,3 +406,8 @@ def test_release_builder_keeps_a_stored_line() -> None:
         play.update(gameSpread=-7.0, homeFavorite=True, homeTeamSpread=7.0, gameSpreadAvailable=True)
     df = _release_builder("mbb")(final)
     assert df.select("game_spread", "home_team_spread").unique().rows() == [(-7.0, 7.0)]
+    # pickcenter absent, or unparseable: the stored line is never touched
+    for pickcenter in (None, [{"provider": {"id": "45"}, "spread": "OFF"}]):
+        final["pickcenter"] = pickcenter
+        df = _release_builder("mbb")(final)
+        assert df.select("game_spread", "home_team_spread").unique().rows() == [(-7.0, 7.0)]

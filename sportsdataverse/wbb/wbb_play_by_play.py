@@ -315,6 +315,8 @@ def _with_pickcenter_line(plays: list[dict[str, Any]], pickcenter: Any) -> list[
     absent ones append. With no spread in ``pickcenter`` the plays are returned as stored, and
     :func:`_null_unavailable_line` nulls a line they say is unavailable: never a default line.
     """
+    if all(p.get("gameSpreadAvailable") is True for p in plays):
+        return plays  # every play keeps its stored line: nothing to parse
     odds = pickcenter_odds(pickcenter, None)
     if odds["gameSpreadAvailable"] is not True:
         return plays
