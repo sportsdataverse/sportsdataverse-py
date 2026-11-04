@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 349 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 351 | — |
 
 ## ESPN {#espn}
 
@@ -95,6 +95,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`PlayerValueConstants`](reference/additional/models-and-calculators#PlayerValueConstants)
 - [`PossCalcFragment`](reference/additional/models-and-calculators#PossCalcFragment)
 - [`PossessionEvent`](reference/additional/models-and-calculators#PossessionEvent)
+- [`PreseasonPrior`](reference/additional/models-and-calculators#PreseasonPrior)
 - [`RapmConfig`](reference/additional/models-and-calculators#RapmConfig)
 - [`RapmPlayerContext`](reference/additional/models-and-calculators#RapmPlayerContext)
 - [`RapmPreProcDiagnostics`](reference/additional/models-and-calculators#RapmPreProcDiagnostics)
@@ -125,7 +126,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`build_net_points`](reference/additional/models-and-calculators#build_net_points)
 - [`build_o_rtg`](reference/additional/models-and-calculators#build_o_rtg)
 - [`build_player_context`](reference/additional/models-and-calculators#build_player_context)
-- [`build_priors`](reference/additional/models-and-calculators#build_priors)
+- [`build_priors`](reference/additional/models-and-calculators-2#build_priors)
 - [`build_productivity`](reference/additional/models-and-calculators-2#build_productivity)
 - [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators-2#build_weak_prior_from_rapm)
 - [`calc_collinearity_diag`](reference/additional/models-and-calculators-2#calc_collinearity_diag)
@@ -163,8 +164,9 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`pick_ridge_regression`](reference/additional/models-and-calculators-2#pick_ridge_regression)
 - [`player_per100_features`](reference/additional/models-and-calculators-2#player_per100_features)
 - [`poss_calc_fragment_sum`](reference/additional/models-and-calculators-2#poss_calc_fragment_sum)
-- [`predict_margin`](reference/additional/models-and-calculators-2#predict_margin)
-- [`predict_total`](reference/additional/models-and-calculators-2#predict_total)
+- [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
+- [`predict_total`](reference/additional/models-and-calculators-3#predict_total)
+- [`preseason_prior`](reference/additional/models-and-calculators-3#preseason_prior)
 - [`rank_corr`](reference/additional/models-and-calculators-3#rank_corr)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-3#raw_game_efficiency)
 - [`ridge_cv_lambda`](reference/additional/models-and-calculators-3#ridge_cv_lambda)

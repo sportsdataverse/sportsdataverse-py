@@ -248,6 +248,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [PlayerValueConstants](additional/models-and-calculators.md#PlayerValueConstants) | Per-league constants for the player-value spine. |
 | [PossCalcFragment](additional/models-and-calculators.md#PossCalcFragment) | Running stats needed to calculate possessions for one lineup event, |
 | [PossessionEvent](additional/models-and-calculators.md#PossessionEvent) | Decomposes `RawGameEvent`\ s into attacking/defending sides |
+| [PreseasonPrior](additional/models-and-calculators.md#PreseasonPrior) | The college preseason prior and the season sim's rating noise, per league. |
 | [RapmConfig](additional/models-and-calculators.md#RapmConfig) | Port of `RapmConfig` (`RapmUtils.ts:175-179`). |
 | [RapmPlayerContext](additional/models-and-calculators.md#RapmPlayerContext) | Port of `RapmPlayerContext` (`RapmUtils.ts:147-173`). |
 | [RapmPreProcDiagnostics](additional/models-and-calculators.md#RapmPreProcDiagnostics) | Port of `RapmPreProcDiagnostics` (`RapmUtils.ts:187-194`) -- the |
@@ -278,7 +279,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_net_points](additional/models-and-calculators.md#build_net_points) | Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown. |
 | [build_o_rtg](additional/models-and-calculators.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
 | [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
-| [build_priors](additional/models-and-calculators.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
+| [build_priors](additional/models-and-calculators-2.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
 | [build_productivity](additional/models-and-calculators-2.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
 | [build_weak_prior_from_rapm](additional/models-and-calculators-2.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
 | [calc_collinearity_diag](additional/models-and-calculators-2.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
@@ -316,8 +317,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [pick_ridge_regression](additional/models-and-calculators-2.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
 | [player_per100_features](additional/models-and-calculators-2.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
 | [poss_calc_fragment_sum](additional/models-and-calculators-2.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
-| [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted efficiency margins. |
-| [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted efficiencies and tempos. |
+| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted efficiency margins. |
+| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted efficiencies and tempos. |
+| [preseason_prior](additional/models-and-calculators-3.md#preseason_prior) | The preseason prior for one season: last season's final ratings, regressed to the mean. |
 | [rank_corr](additional/models-and-calculators-3.md#rank_corr) | Spearman rank correlation between two arrays. |
 | [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive efficiency. |
 | [ridge_cv_lambda](additional/models-and-calculators-3.md#ridge_cv_lambda) | Pick lambda by leave-one-group-out CV (groups = seasons/classes). |

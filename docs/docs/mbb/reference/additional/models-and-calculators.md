@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors"
-sidebar_label: "Models and calculators: AssistEvent–build_priors"
+title: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_player"
+sidebar_label: "Models and calculators: AssistEvent–build_player"
 sidebar_position: 10
-description: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors
+# Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_player
 
 ### AssistEvent {#AssistEvent}
 
@@ -396,6 +396,21 @@ The event string for the team NOT in possession, or `None`.
 
 `ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
 
+### PreseasonPrior {#PreseasonPrior}
+
+`PreseasonPrior(regression: ForwardRef('float'), new_team_quantile: ForwardRef('float'), weight: ForwardRef('float'), rating_sd: ForwardRef('float'))`
+
+The college preseason prior and the season sim's rating noise, per league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `regression` | `ForwardRef('float')` |  | Multiplies a team's prior-season final AdjO / AdjD deviation from the league average (1 carries it over in full, 0 starts everyone average). |
+| `new_team_quantile` | `ForwardRef('float')` |  | A program new to Division I starts at this quantile of last season's Division I AdjEM. |
+| `weight` | `ForwardRef('float')` |  | The prior's weight in pseudo-games: a team with `g` games so far is rated `g / (g + weight)` on this season and the rest on the prior. |
+| `rating_sd` | `ForwardRef('float')` |  | The season sim draws one AdjEM shift per team per simulated season, `N(0, rating_sd ** 2 / (g + weight))`. |
+
 ### RapmConfig {#RapmConfig}
 
 `RapmConfig(...)`
@@ -705,7 +720,7 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 
 ### adjust_efficiency {#adjust_efficiency}
 
-`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001, prior: 'pl.DataFrame | None' = None, prior_weight: 'float' = 0.0) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -729,10 +744,12 @@ sign); `avg` is the league mean efficiency and `hfa` comes from
 | `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
 | `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
 | `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+| `prior` | `DataFrame \| None` | `None` | Optional preseason prior in `PRIOR_SCHEMA` (`preseason_prior`): each listed team is shrunk toward its prior as if it had played `prior_weight` extra games at that rating. A listed team with no game yet comes back at its prior (`games` 0, raw rates null), and a season in `prior` with no game at all is rated from the prior alone. |
+| `prior_weight` | `float` | `0.0` | Pseudo-games of prior per team (0 turns the prior off). |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input (and no prior) returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -1413,39 +1430,4 @@ print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
 
 off_lineups = ctx["filtered_lineups"]("off")
 def_lineups = ctx["filtered_lineups"]("def")
-```
-
-### build_priors {#build_priors}
-
-`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
-
-Build strong/weak per-player RAPM priors for every column.
-
-Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
-See the module docstring's landmine list, item 1, for the critical
-Python-vs-JS `{}`-truthiness gotcha this function's implementation
-deliberately avoids.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
-| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
-| `avg_efficiency` | `float` |  | League/context average efficiency. |
-| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
-| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
-| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
-
-**Returns**
-
-A `RapmPriorInfo`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import build_priors
-
-priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
-print(priors["players_weak"][0])
 ```

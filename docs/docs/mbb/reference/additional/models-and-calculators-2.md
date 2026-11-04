@@ -1,10 +1,45 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: build_productivity–predict_total"
-sidebar_label: "Models and calculators: build_productivity–predict_total"
+title: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc"
+sidebar_label: "Models and calculators: build_priors–poss_calc"
 sidebar_position: 11
-description: "Men's college basketball — additional Python functions — Models and calculators: build_productivity–predict_total — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: build_productivity–predict_total
+# Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc
+
+### build_priors {#build_priors}
+
+`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
+
+Build strong/weak per-player RAPM priors for every column.
+
+Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
+See the module docstring's landmine list, item 1, for the critical
+Python-vs-JS `{}`-truthiness gotcha this function's implementation
+deliberately avoids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
+| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
+| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
+
+**Returns**
+
+A `RapmPriorInfo`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_priors
+
+priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
+print(priors["players_weak"][0])
+```
 
 ### build_productivity {#build_productivity}
 
@@ -1581,68 +1616,4 @@ frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
 frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
 poss_calc_fragment_sum(frag1, frag2)
 # PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
-```
-
-### predict_margin {#predict_margin}
-
-`predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'`
-
-Expected home-minus-away margin from two adjusted efficiency margins.
-
-The AdjEM difference is scaled by the league's fitted `em_scale` (AdjEM
-is per-100-possessions; a game margin scales by roughly tempo/100, further
-attenuated for as-of estimation noise) before the home-court advantage is
-added.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_adj_em` | `float` |  | Home team's adjusted efficiency margin (points / 100 poss). |
-| `away_adj_em` | `float` |  | Away team's adjusted efficiency margin. |
-| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted em_scale / HFA). |
-
-**Returns**
-
-Expected margin in points (positive favors the home team).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_game_predict import predict_margin
-predict_margin(20.0, 10.0)
-```
-
-### predict_total {#predict_total}
-
-`predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'`
-
-Expected total points from adjusted efficiencies and tempos.
-
-Expected possessions are `home_tempo * away_tempo / avg_tempo`; each
-side's expected points per 100 possessions blend its offense with the
-opponent's defense (`0.5 * (off + opp_def)`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_adj_o` | `float` |  | Home adjusted offensive efficiency (points / 100 poss). |
-| `home_adj_d` | `float` |  | Home adjusted defensive efficiency. |
-| `away_adj_o` | `float` |  | Away adjusted offensive efficiency. |
-| `away_adj_d` | `float` |  | Away adjusted defensive efficiency. |
-| `home_tempo` | `float` |  | Home adjusted tempo (possessions / game). |
-| `away_tempo` | `float` |  | Away adjusted tempo. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the tempo anchor). |
-
-**Returns**
-
-Expected combined points scored by both teams.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_game_predict import predict_total
-predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
 ```

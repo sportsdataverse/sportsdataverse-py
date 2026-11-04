@@ -1,10 +1,120 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob"
-sidebar_label: "Models and calculators: rank_corr–win_prob"
+title: "Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob"
+sidebar_label: "Models and calculators: predict_margin–win_prob"
 sidebar_position: 12
-description: "Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: rank_corr–win_prob
+# Men's college basketball — additional Python functions — Models and calculators: predict_margin–win_prob
+
+### predict_margin {#predict_margin}
+
+`predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'`
+
+Expected home-minus-away margin from two adjusted efficiency margins.
+
+The AdjEM difference is scaled by the league's fitted `em_scale` (AdjEM
+is per-100-possessions; a game margin scales by roughly tempo/100, further
+attenuated for as-of estimation noise) before the home-court advantage is
+added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_em` | `float` |  | Home team's adjusted efficiency margin (points / 100 poss). |
+| `away_adj_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted em_scale / HFA). |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_margin
+predict_margin(20.0, 10.0)
+```
+
+### predict_total {#predict_total}
+
+`predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'`
+
+Expected total points from adjusted efficiencies and tempos.
+
+Expected possessions are `home_tempo * away_tempo / avg_tempo`; each
+side's expected points per 100 possessions blend its offense with the
+opponent's defense (`0.5 * (off + opp_def)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_o` | `float` |  | Home adjusted offensive efficiency (points / 100 poss). |
+| `home_adj_d` | `float` |  | Home adjusted defensive efficiency. |
+| `away_adj_o` | `float` |  | Away adjusted offensive efficiency. |
+| `away_adj_d` | `float` |  | Away adjusted defensive efficiency. |
+| `home_tempo` | `float` |  | Home adjusted tempo (possessions / game). |
+| `away_tempo` | `float` |  | Away adjusted tempo. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the tempo anchor). |
+
+**Returns**
+
+Expected combined points scored by both teams.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_total
+predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
+```
+
+### preseason_prior {#preseason_prior}
+
+`preseason_prior(prev_eff: 'pl.DataFrame', teams: 'pl.DataFrame', prev_teams: 'pl.DataFrame', *, league: 'str' = 'mens', regression: 'float | None' = None, new_team_quantile: 'float | None' = None) -> 'pl.DataFrame'`
+
+The preseason prior for one season: last season's final ratings, regressed to the mean.
+
+Each Division I team's prior-season final AdjO / AdjD (`adjust_efficiency` over every
+game of that season, no prior of its own) is taken as a deviation from that season's league
+average and multiplied by the league's fitted `regression`. A team that was not
+Division I last season (a program new to Division I, `new_team`) gets the
+`new_team_quantile` of last season's Division I AdjEM, unregressed, split evenly between
+offense and defense; so does a returning team with no rated game last season.
+Both constants come from
+`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `prev_eff` | `DataFrame` |  | `raw_game_efficiency` over the prior season's played games. |
+| `teams` | `DataFrame` |  | This season's Division I teams (`season`, `team_id`), e.g. `sportsdataverse.mbb.mbb_college_season.college_teams`. |
+| `prev_teams` | `DataFrame` |  | The prior season's Division I teams. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"`. |
+| `regression` | `float \| None` | `None` | Override the fitted regression factor (the fitting script scans it). |
+| `new_team_quantile` | `float \| None` | `None` | Override the new-team quantile. |
+
+**Returns**
+
+One row per team in `teams` in `PRIOR_SCHEMA` (`new_team` flags the default). Empty when `prev_eff` is empty: no prior is then applied.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | The season the prior is for (named by its end year). |
+| `team_id` | String | ESPN team id of a Division I team this season. |
+| `off_dev` | Float64 | The prior's offense, points per 100 possessions above the prior season's league average; last season's final AdjO deviation times the regression factor, or half the new-team default for a program new to Division I. |
+| `def_dev` | Float64 | The prior's defense, points per 100 allowed above the prior season's league average (lower is better); last season's final AdjD deviation times the regression factor, or minus half the new-team default. |
+| `prior_avg` | Float64 | The prior season's league-average efficiency, the ratings' baseline before this season has a game. |
+| `new_team` | Boolean | True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import preseason_prior, raw_game_efficiency
+prior = preseason_prior(raw_game_efficiency(prev_sched, prev_box), teams, prev_teams)
+```
 
 ### rank_corr {#rank_corr}
 

@@ -225,6 +225,7 @@ from sportsdataverse.mbb import PossCalcFragment as PossCalcFragment  # noqa: F4
 from sportsdataverse.mbb import PossState as PossState  # noqa: F401
 from sportsdataverse.mbb import PossessionEvent as PossessionEvent  # noqa: F401
 from sportsdataverse.mbb import PossessionSplits as PossessionSplits  # noqa: F401
+from sportsdataverse.mbb import PreseasonPrior as PreseasonPrior  # noqa: F401
 from sportsdataverse.mbb import RapmConfig as RapmConfig  # noqa: F401
 from sportsdataverse.mbb import RapmPlayerContext as RapmPlayerContext  # noqa: F401
 from sportsdataverse.mbb import RapmPreProcDiagnostics as RapmPreProcDiagnostics  # noqa: F401
@@ -612,6 +613,7 @@ from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum
 from sportsdataverse.mbb import possession_deciles as possession_deciles  # noqa: F401
 from sportsdataverse.mbb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
+from sportsdataverse.mbb import preseason_prior as preseason_prior  # noqa: F401
 from sportsdataverse.mbb import project_bracket as project_bracket  # noqa: F401
 from sportsdataverse.mbb import rank_corr as rank_corr  # noqa: F401
 from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
@@ -702,6 +704,7 @@ __all__ = [
     "PossState",
     "PossessionEvent",
     "PossessionSplits",
+    "PreseasonPrior",
     "RapmConfig",
     "RapmPlayerContext",
     "RapmPreProcDiagnostics",
@@ -1251,6 +1254,7 @@ __all__ = [
     "possession_deciles",
     "predict_margin",
     "predict_total",
+    "preseason_prior",
     "project_bracket",
     "rank_corr",
     "raw_game_efficiency",

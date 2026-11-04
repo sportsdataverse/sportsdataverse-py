@@ -136,13 +136,19 @@ def ridge_design(rows: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float) -> pl.DataFrame:
+def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFrame | None = None) -> pl.DataFrame:
     """Adjusted offensive / defensive / net ratings from possessions, one ridge fit per season.
 
     Args:
         rows: Possessions in :data:`~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`
             (the BB-D3 row mappers' output).
         lam: The penalty on the team coefficients, in possessions (:data:`RIDGE_LAMBDA`).
+        prior: Optional prior means for the team coefficients: ``team_id`` (Int64), ``off_dev``
+            and ``def_dev`` (points per 100 over / under the league average, the same scale as
+            ``adj_off_rtg - intercept``). The penalty then shrinks each team toward its prior
+            instead of toward average (``lam`` possessions of the prior on each side); a team
+            missing from ``prior`` shrinks toward average. One prior serves every season in
+            ``rows``.
 
     Returns:
         One row per (season, team) in :data:`RATINGS_SCHEMA`, plus ``hfa``: the fitted home term,
@@ -157,6 +163,25 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float) -> pl.DataFrame:
         raise KeyError(f"rows missing columns: {missing}")
     schema = {**RATINGS_SCHEMA, "hfa": pl.Float64()}
     design = ridge_design(rows)
+    if prior is not None and prior.height:
+        # ridge toward a prior mean = ridge toward 0 on the residual off the prior, then add it back
+        pri = prior.select(pl.col("team_id").cast(pl.Utf8), "off_dev", "def_dev")
+        design = (
+            design.join(
+                pri.select(pl.col("team_id").alias("offense_id"), "off_dev"),
+                on="offense_id",
+                how="left",
+                validate="m:1",
+            )
+            .join(
+                pri.select(pl.col("team_id").alias("defense_id"), "def_dev"),
+                on="defense_id",
+                how="left",
+                validate="m:1",
+            )
+            .with_columns(pl.col("off_dev", "def_dev").fill_null(0.0))
+            .with_columns((pl.col("y") - pl.col("off_dev") - pl.col("def_dev")).alias("y"))
+        )
     frames = []
     for (season,), sub in design.group_by("season", maintain_order=True):
         coef, intercept, hfa = opponent_adjusted_ridge(
@@ -168,6 +193,15 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float) -> pl.DataFrame:
             lam=lam,
             hfa_col="hfa",
         )
+        if prior is not None and prior.height:
+            coef = (
+                coef.join(pri.rename({"off_dev": "_po", "def_dev": "_pd"}), on="team_id", how="left", validate="1:1")
+                .with_columns(
+                    (pl.col("off_coef") + pl.col("_po").fill_null(0.0)).alias("off_coef"),
+                    (pl.col("def_coef") + pl.col("_pd").fill_null(0.0)).alias("def_coef"),
+                )
+                .drop("_po", "_pd")
+            )
         frames.append(
             coef.select(
                 pl.lit(season, dtype=pl.Int64).alias("season"),

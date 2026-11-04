@@ -19,7 +19,12 @@ What is checked against the real world:
   ``tools/validate_pro_season_sim.py``, gate = observed + 0.02 Brier / + 0.5 wins, never
   lowered): NBA 2023-24 playoff Brier 0.0585 (gate 0.0785), wins MAE 3.077 (3.577); 2025-26
   0.0829 (0.1029), 4.214 (4.714); WNBA 2025 0.0638 (0.0838), 3.501 (4.001). Each also beats the
-  pace baseline's wins MAE (3.364 / 4.458 / 4.015).
+  pace baseline's wins MAE (3.364 / 4.458 / 4.015). With the preseason prior (2025-26 and WNBA
+  2025 carry it from the committed season before; 2023-24 has none): 2025-26 0.0880 / 4.271,
+  WNBA 2025 0.0602 / 3.469.
+* **Preseason prior:** weeks 0-6 game log loss with and without it (NBA 2025-26, WNBA 2025), the
+  regressed prior and the expansion default (the 2025 Valkyries), and the in-season ridge toward
+  the prior.
 
 The ``bb-pro-season`` rows of ``tests/mutants/registry.yaml`` go red here: the tiebreaker order,
 the play-in hosts, the lottery chances, the WNBA two-season order and the game model's home term.
@@ -37,6 +42,7 @@ import pytest
 from scipy.stats import norm
 
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA
+from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings
 from sportsdataverse.nba.nba_season_rules import (
     NBA_DIVISIONS,
     NBA_LOTTERY_CHANCES,
@@ -54,6 +60,7 @@ sim_mod = importlib.import_module("sportsdataverse.nba.nba_season_sim")
 
 DAL, CHI, LA, WAS, CONN = 1611661321, 1611661329, 1611661320, 1611661322, 1611661323
 CHA, POR, DET, WAS_NBA, SAS = 1610612766, 1610612757, 1610612765, 1610612764, 1610612759
+GSV = 1611661331
 
 
 def _schedule(lg: str, season: int) -> pl.DataFrame:
@@ -65,15 +72,19 @@ def _regular(lg: str, season: int) -> pl.DataFrame:
 
 
 def _sim(lg: str, season: int, **kwargs) -> pl.DataFrame:  # type: ignore[no-untyped-def]
-    """``nba_season_sim`` over the fixtures (the loaders patched by season)."""
+    """``nba_season_sim`` over the fixtures (the loaders patched by season).
+
+    A season with no fixture loads as an empty frame, as a missing release does, so the sim runs
+    without a preseason prior there (NBA 2023-24: 2022-23 is not committed).
+    """
 
     def loader(kind: str):  # type: ignore[no-untyped-def]
         def load(seasons: list[int]) -> pl.DataFrame:
             (s,) = seasons
             year = s + 1 if lg == "nba" else s
-            if kind == "possessions":
-                return pl.read_parquet(RATES / f"{lg}_possessions_{year}.parquet")
-            return _schedule(lg, year)
+            name = f"{lg}_possessions_{year}.parquet" if kind == "possessions" else f"{lg}_schedule_{year}.parquet"
+            path = next((d / name for d in (PRO, RATES) if (d / name).exists()), None)
+            return pl.read_parquet(path) if path is not None else pl.DataFrame()
 
         return load
 
@@ -438,3 +449,142 @@ def test_tbd_cup_knockout_games_are_not_simulated() -> None:
     out = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=200, seed=1)
     assert out.height == 30
     assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {80}
+
+
+# --- the preseason prior (NBA 2025-26 and WNBA 2025, prior from the committed season before) ------
+
+
+def _rows(lg: str, year: int) -> pl.DataFrame:
+    """Regular-season possession rows of a committed season (end-year named)."""
+    name = f"{lg}_possessions_{year}.parquet"
+    path = next(d / name for d in (PRO, RATES) if (d / name).exists())
+    lid = "00" if lg == "nba" else "10"
+    return tsr.nba_possession_rate_rows(pl.read_parquet(path), _schedule(lg, year), league_id=lid)
+
+
+def _prior(lg: str, season: int) -> sim_mod.PreseasonPrior:
+    teams = sorted(set(_regular(lg, season)["home_team_id"].to_list()))
+    pre = sim_mod.preseason_prior(_rows(lg, season - 1), teams, league_id="00" if lg == "nba" else "10")
+    assert pre is not None
+    return pre
+
+
+def _early_log_loss(lg: str, season: int, prior: sim_mod.PreseasonPrior | None, first: int = 0) -> float:
+    """Weeks ``first``-6: ratings as of each weekly cutoff from the first game, every later game scored."""
+    lid = "00" if lg == "nba" else "10"
+    games = _regular(lg, season).filter(pl.col("home_pts").is_not_null())
+    rows = _rows(lg, season).join(games.select("game_id", "game_date"), on="game_id", how="inner", validate="m:1")
+    start = games["game_date"].min()
+    losses = []
+    for week in range(first, 7):
+        cut = start + dt.timedelta(days=7 * week)
+        model = sim_mod.as_of_game_model(
+            rows.filter(pl.col("game_date") < cut).drop("game_date"), league_id=lid, prior=prior
+        )
+        net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
+        fut = games.filter(pl.col("game_date") >= cut)
+        m = model.margin(
+            np.array([net.get(t, 0.0) for t in fut["home_team_id"].to_list()]),
+            np.array([net.get(t, 0.0) for t in fut["away_team_id"].to_list()]),
+        )
+        p = np.clip(norm.cdf(m / model.margin_sd), 1e-15, 1 - 1e-15)
+        y = (fut["home_pts"] > fut["away_pts"]).to_numpy()
+        losses.append(-(y * np.log(p) + (~y) * np.log(1 - p)))
+    return float(np.concatenate(losses).mean())
+
+
+# Observed 2026-11-03 (weeks 0-6 log loss, with / without the prior): NBA 2025-26 0.6349 / 0.6396,
+# WNBA 2025 0.6557 / 0.6594. Gate: observed + 0.01, and the prior at least half the observed gain.
+EARLY_GATES = {("nba", 2026): (0.6449, 0.0023), ("wnba", 2025): (0.6657, 0.0018)}
+
+
+@pytest.mark.parametrize("key", list(EARLY_GATES))
+def test_preseason_prior_improves_early_season_log_loss(key: tuple[str, int]) -> None:
+    lg, season = key
+    with_prior = _early_log_loss(lg, season, _prior(lg, season))
+    without = _early_log_loss(lg, season, None)
+    gate, gain = EARLY_GATES[key]
+    assert with_prior <= gate, (with_prior, without)
+    assert without - with_prior >= gain, (with_prior, without)
+
+
+def test_preseason_model_is_the_regressed_prior() -> None:
+    """Before the first game: last season's ratings x the factor, the expansion team at the quantile."""
+    pre = _prior("wnba", 2025)
+    reg, q = sim_mod.PRIOR_CONSTANTS["10"]
+    final = possession_ridge_ratings(_rows("wnba", 2024), lam=RIDGE_LAMBDA["10"])
+    new = pre.ratings.filter(pl.col("new_team"))
+    assert new["team_id"].to_list() == [GSV]  # the 2025 expansion Valkyries
+    want = float(final["adj_net_rtg"].quantile(q, interpolation="linear"))
+    assert float((new["off_dev"] - new["def_dev"]).item()) == pytest.approx(want)
+    old = pre.ratings.filter(~pl.col("new_team")).join(final, on="team_id", validate="1:1")
+    np.testing.assert_allclose(
+        (old["off_dev"] - old["def_dev"]).to_numpy(),
+        reg * (old["adj_net_rtg"] - final["adj_net_rtg"].mean()).to_numpy(),
+    )
+    model = sim_mod.as_of_game_model(_rows("wnba", 2025).head(0), league_id="10", prior=pre)
+    assert model.hfa == pre.hfa != 0.0 and model.poss == pre.poss
+    assert model.ratings.height == 13 and model.ratings["adj_net_rtg"].std() > 1.0
+    # a preseason sim is no longer every team at .500
+    sim = _sim("wnba", 2025, as_of_date=dt.date(2025, 5, 1), n_sims=500, seed=1)
+    assert float(sim["proj_wins"].max() - sim["proj_wins"].min()) > 8.0
+
+
+def test_in_season_ridge_shrinks_toward_the_prior() -> None:
+    """A week into 2025-26 the as-of ratings are the ridge toward last season, not toward average."""
+    pre = _prior("nba", 2026)
+    games = _regular("nba", 2026)
+    cut = games["game_date"].min() + dt.timedelta(days=7)
+    done = games.filter(pl.col("game_date") < cut).select("game_id")
+    rows = _rows("nba", 2026).join(done, on="game_id", how="semi")
+    lam = sim_mod.SIM_CONSTANTS["00"][0]
+    model = sim_mod.as_of_game_model(rows, prior=pre)
+    want = possession_ridge_ratings(rows, lam=lam, prior=pre.ratings)
+    got = model.ratings.join(want.select("team_id", pl.col("adj_net_rtg").alias("w")), on="team_id", validate="1:1")
+    assert got.height == 30
+    np.testing.assert_allclose(got["adj_net_rtg"].to_numpy(), got["w"].to_numpy(), atol=1e-9)
+    prior_net = pre.ratings.select("team_id", (pl.col("off_dev") - pl.col("def_dev")).alias("p"))
+    flat = possession_ridge_ratings(rows, lam=lam).join(prior_net, on="team_id", validate="1:1")
+    toward = got.join(prior_net, on="team_id", validate="1:1")
+    assert float((toward["adj_net_rtg"] - toward["p"]).abs().mean()) < 0.7 * float(
+        (flat["adj_net_rtg"] - flat["p"]).abs().mean()
+    )
+    # an overwhelming penalty returns the prior itself
+    far = possession_ridge_ratings(rows, lam=1e9, prior=pre.ratings).join(prior_net, on="team_id", validate="1:1")
+    np.testing.assert_allclose(far["adj_net_rtg"].to_numpy(), far["p"].to_numpy(), atol=1e-3)
+
+
+def test_nba_season_sim_carries_the_prior_from_the_release_before() -> None:
+    """The public path loads 2024-25 and rates a week into 2025-26 with it, not toward average."""
+    games = _regular("nba", 2026)
+    cut = games["game_date"].min() + dt.timedelta(days=7)
+    sim = _sim("nba", 2026, as_of_date=cut, n_sims=200, seed=1)
+    done = games.filter(pl.col("game_date") < cut).select("game_id")
+    rows = _rows("nba", 2026).join(done, on="game_id", how="semi")
+    with_prior = sim_mod.as_of_game_model(rows, prior=_prior("nba", 2026)).ratings
+    without = sim_mod.as_of_game_model(rows).ratings
+    j = sim.select("team_id", "adj_net_rtg").join(with_prior, on="team_id", suffix="_p", validate="1:1")
+    j = j.join(without, on="team_id", suffix="_0", validate="1:1")
+    np.testing.assert_allclose(j["adj_net_rtg"].to_numpy(), j["adj_net_rtg_p"].to_numpy(), atol=1e-9)
+    assert float((j["adj_net_rtg"] - j["adj_net_rtg_0"]).abs().max()) > 1.0
+
+
+def test_unscheduled_cup_games_fill_each_team_to_82() -> None:
+    """2026-27 as released on 2026-11-03: each team's ~80 known games plus its unscheduled Cup slots make 82."""
+    sched = _schedule("nba", 2027)
+    assert sim_mod._season_games(sched, "00") == sim_mod.NBA_SEASON_GAMES == 82
+    assert sim_mod._season_games(_schedule("nba", 2026), "00") is None  # a complete release needs no fill
+    games = sim_mod._regular_games(sched, dt.date(2026, 11, 3))
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), _schedule("nba", 2026))
+    cols = games.select("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts")
+    out = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=500, seed=1, season_games=82)
+    assert out.height == 30 and out.filter(pl.col("team_id") == 0).is_empty()
+    assert set((out["wins"] + out["losses"] + out["games_remaining"]).to_list()) == {82}
+    np.testing.assert_allclose((out["proj_wins"] + out["proj_losses"]).to_numpy(), 82.0)
+    # the fill is played: a strong team wins more of its extra games than a weak one
+    fixed = sim_mod.simulate_pro_season(cols, sim_mod.as_of_game_model(rows), n_sims=500, seed=1)
+    gain = out.join(fixed, on="team_id", suffix="_80", validate="1:1").select(
+        "adj_net_rtg", (pl.col("proj_wins") - pl.col("proj_wins_80")).alias("gain")
+    )
+    assert 0.0 <= float(gain["gain"].min()) and float(gain["gain"].max()) <= 2.0 + 1e-9
+    assert np.corrcoef(gain["adj_net_rtg"].to_numpy(), gain["gain"].to_numpy())[0, 1] > 0.5
