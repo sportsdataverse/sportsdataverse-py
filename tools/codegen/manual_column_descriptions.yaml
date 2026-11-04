@@ -38443,7 +38443,7 @@ nba_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  pace: 'Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
   pace_n: 'Sample size of pace: games in the split.'
   pace_pct: 'Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1),
     n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38716,14 +38716,13 @@ mbb_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null
-    in the clutch split.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box.
   efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the season, 0 when the rate is null.'
   efg_pct_pct: 'Percentile of efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the season, 0 when the rate is null.'
   ft_rate_pct: 'Percentile of ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38744,14 +38743,14 @@ mbb_team_strength:
   off_rtg_rank: Rank of off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
   opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA
-    team box; null in the clutch split.
+    team box.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
-  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38759,7 +38758,7 @@ mbb_team_strength:
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
-    from the NCAA team box; null in the clutch split.
+    from the NCAA team box.
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the season, 0 when the rate is
     null.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38769,8 +38768,7 @@ mbb_team_strength:
     qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
-  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
-    null in the clutch split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the season, 0 when the rate is
     null.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38779,7 +38777,7 @@ mbb_team_strength:
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
-    as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
+    as a fraction. Game-level, from the NCAA team box.'
   orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the season, 0 when the rate is null.'
   orb_pct_pct: 'Percentile of orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38811,7 +38809,7 @@ mbb_team_strength:
     that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer
     than five qualifiers.
   team_id: ESPN team id. Non-D1 opponents have none and get no row.
-  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split.
+  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box.
   tov_pct_n: 'Sample size of tov_pct: the NCAA team box''s possessions (o_poss) in the season, 0 when the rate is null.'
   tov_pct_pct: 'Percentile of tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38912,7 +38910,7 @@ nba_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  pace: 'Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
   pace_n: 'Sample size of pace: games in the season.'
   pace_pct: 'Percentile of pace within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -38976,14 +38974,13 @@ wbb_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null
-    in the clutch split.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box.
   efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the season, 0 when the rate is null.'
   efg_pct_pct: 'Percentile of efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
-  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the season, 0 when the rate is null.'
   ft_rate_pct: 'Percentile of ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -39004,14 +39001,14 @@ wbb_team_strength:
   off_rtg_rank: Rank of off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
   opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA
-    team box; null in the clutch split.
+    team box.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
-  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -39019,7 +39016,7 @@ wbb_team_strength:
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
-    from the NCAA team box; null in the clutch split.
+    from the NCAA team box.
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the season, 0 when the rate is
     null.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -39029,8 +39026,7 @@ wbb_team_strength:
     qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
-  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
-    null in the clutch split.
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the season, 0 when the rate is
     null.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -39039,7 +39035,7 @@ wbb_team_strength:
     at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five
     qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
-    as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
+    as a fraction. Game-level, from the NCAA team box.'
   orb_pct_n: 'Sample size of orb_pct: the team''s offensive-rebound chances in the season, 0 when the rate is null.'
   orb_pct_pct: 'Percentile of orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -39071,7 +39067,7 @@ wbb_team_strength:
     that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer
     than five qualifiers.
   team_id: ESPN team id. Non-D1 opponents have none and get no row.
-  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split.
+  tov_pct: Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box.
   tov_pct_n: 'Sample size of tov_pct: the NCAA team box''s possessions (o_poss) in the season, 0 when the rate is null.'
   tov_pct_pct: 'Percentile of tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
@@ -39206,6 +39202,274 @@ wnba_team_strength:
   tov_pct_rank: Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
   wins: Wins in the season type's completed games (the schedule's final scores).
+mbb_bracketology:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: 'At-large probability: a logistic in resume_score centred midway between the last at-large team in and the
+    first out.'
+  at_large_rank: Order among eligible teams without an auto-bid, by resume_score (1 = best). Null for auto-bids and ineligible
+    teams.
+  auto_bid: 'Holds the conference''s auto-bid: the conference-tournament champion, or before the final the conference leader
+    still alive.'
+  bid: In the projected 68-team field.
+  bubble: last_four_byes (at-large ranks 29-32 with 36 at-large slots), last_four_in (33-36), first_four_out (37-40), next_four_out
+    (41-44); null otherwise.
+  conf_champion: True when the conference-tournament final has been played and this team holds the auto-bid (the runner-up
+    when the champion is ineligible).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  losses: Losses in played games, against every opponent.
+  net_estimate_rank: NET-estimate rank (strength_of_schedule).
+  projected_seed: Projected seed line, 1-16. The last four at-large teams and the four worst auto-bids play the First Four
+    in pairs, so every line has four slots. Null outside the field.
+  quad1_l: Quad 1 losses to Division I opponents (strength_of_schedule).
+  quad1_w: Quad 1 wins over Division I opponents (strength_of_schedule).
+  resume_score: 'Committee-style résumé: 0.35 * adj_em_z + 0.20 * z(sos) + 0.35 * z(wab) + 0.10 * z(quad1_w), over eligible
+    teams. Null for ineligible teams.'
+  rpi_rank: RPI rank (strength_of_schedule).
+  season: Season, named by its end year (2024 is 2023-24).
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+mbb_season_projections:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: Share of sims with an at-large bid.
+  auto_bid_prob: 'Share of sims holding the conference''s auto-bid: the tournament champion, or the runner-up when the champion
+    is ineligible.'
+  bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
+  conf_losses: Regular-season conference losses as of the date.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain). Ineligible teams play
+    it too, so this can differ from auto_bid_prob.
+  conf_wins: Regular-season conference wins as of the date.
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  losses: Losses as of the date.
+  n_sims: Simulated seasons.
+  proj_conf_losses: Projected regular-season conference losses.
+  proj_conf_win_pct: proj_conf_wins / (proj_conf_wins + proj_conf_losses).
+  proj_conf_win_pct_pct: Percentile of proj_conf_win_pct within the conference.
+  proj_conf_win_pct_rank: 'Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average
+    ties. Null for independents.'
+  proj_conf_wins: Projected regular-season conference wins.
+  proj_losses: Projected losses, on the same games.
+  proj_wins: 'Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments
+    not counted).'
+  reg_season_title_prob: Share of sims with the conference's best regular-season conference winning percentage; co-champions
+    all count, so a conference can sum past 1.
+  season: Season, named by its end year (2024 is 2023-24).
+  seed_10_prob: Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_11_prob: Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_12_prob: Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_13_prob: Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_14_prob: Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_15_prob: Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_16_prob: Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_1_prob: Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_2_prob: Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_3_prob: Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_4_prob: Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_5_prob: Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_6_prob: Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_7_prob: Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_8_prob: Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_9_prob: Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_mean: Mean seed line over the sims with a bid; null when never in the field.
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wins: Wins as of the date (every opponent).
+mbb_strength_of_schedule:
+  adj_d: 'Opponent-adjusted defensive efficiency: points allowed per 100 possessions.'
+  adj_em: Adjusted efficiency margin, adj_o - adj_d.
+  adj_em_n: 'Sample size of adj_em: the games behind the ratings.'
+  adj_em_pct: 'Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1).'
+  adj_em_rank: 'Rank of adj_em within the season among Division I teams: 1 is best, average ties.'
+  adj_em_z: adj_em z-scored over Division I within the season.
+  adj_o: 'Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings).'
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  conf_losses: Regular-season conference losses.
+  conf_wins: Regular-season conference wins (conference tournaments and multi-team events excluded).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  games: Games behind the ratings (every played game with a usable box score).
+  losses: Losses in played games, against every opponent.
+  net_estimate: 'NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET''s efficiency and results halves;
+    weights fitted to the men''s 2024 NET). Higher is better.'
+  net_estimate_n: 'Sample size of net_estimate: the team''s Division I games.'
+  net_estimate_pct: 'Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1).'
+  net_estimate_rank: 'Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams:
+    1 is best, average ties.'
+  quad1_l: Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad1_w: Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad2_l: Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad2_w: Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad3_l: Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad3_w: Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad4_l: Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad4_w: Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quality_wins: Quad 1 plus Quad 2 wins.
+  rpi: 'NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp.'
+  rpi_games: Division I games behind the RPI.
+  rpi_n: 'Sample size of rpi: the team''s Division I games.'
+  rpi_oowp: 'Opponents'' opponents'' winning percentage: the opponents'' rpi_owp averaged over this team''s games.'
+  rpi_owp: 'Opponents'' winning percentage: each opponent''s unweighted Division I record without its games against this team,
+    averaged over this team''s games.'
+  rpi_pct: 'Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1).'
+  rpi_rank: 'Rank of rpi within the season among Division I teams: 1 is best, average ties.'
+  rpi_wp: 'RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4,
+    a road loss 0.6, neutral 1.0 (men''s from 2004-05, women''s from 2011-12).'
+  season: Season, named by its end year (2024 is 2023-24).
+  sos: 'Strength of schedule: mean opponent adj_em over Division I games.'
+  sos_n: 'Sample size of sos: the team''s Division I games.'
+  sos_pct: 'Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1).'
+  sos_rank: 'Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties.'
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wab_n: 'Sample size of wab: the team''s Division I games.'
+  wab_pct: 'Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1).'
+  wab_rank: 'Rank of wab within the season among Division I teams: 1 is best, average ties.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+wbb_bracketology:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: 'At-large probability: a logistic in resume_score centred midway between the last at-large team in and the
+    first out.'
+  at_large_rank: Order among eligible teams without an auto-bid, by resume_score (1 = best). Null for auto-bids and ineligible
+    teams.
+  auto_bid: 'Holds the conference''s auto-bid: the conference-tournament champion, or before the final the conference leader
+    still alive.'
+  bid: In the projected 68-team field.
+  bubble: last_four_byes (at-large ranks 29-32 with 36 at-large slots), last_four_in (33-36), first_four_out (37-40), next_four_out
+    (41-44); null otherwise.
+  conf_champion: True when the conference-tournament final has been played and this team holds the auto-bid (the runner-up
+    when the champion is ineligible).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  losses: Losses in played games, against every opponent.
+  net_estimate_rank: NET-estimate rank (strength_of_schedule).
+  projected_seed: Projected seed line, 1-16. The last four at-large teams and the four worst auto-bids play the First Four
+    in pairs, so every line has four slots. Null outside the field.
+  quad1_l: Quad 1 losses to Division I opponents (strength_of_schedule).
+  quad1_w: Quad 1 wins over Division I opponents (strength_of_schedule).
+  resume_score: 'Committee-style résumé: 0.35 * adj_em_z + 0.20 * z(sos) + 0.35 * z(wab) + 0.10 * z(quad1_w), over eligible
+    teams. Null for ineligible teams.'
+  rpi_rank: RPI rank (strength_of_schedule).
+  season: Season, named by its end year (2024 is 2023-24).
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wins: Wins in played games, against every opponent (non-Division I included).
+wbb_season_projections:
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  at_large_prob: Share of sims with an at-large bid.
+  auto_bid_prob: 'Share of sims holding the conference''s auto-bid: the tournament champion, or the runner-up when the champion
+    is ineligible.'
+  bid_prob: Share of sims in the 68-team field (auto_bid_prob + at_large_prob).
+  conf_losses: Regular-season conference losses as of the date.
+  conf_tourney_title_prob: Share of sims winning the conference tournament (a played final is certain). Ineligible teams play
+    it too, so this can differ from auto_bid_prob.
+  conf_wins: Regular-season conference wins as of the date.
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  losses: Losses as of the date.
+  n_sims: Simulated seasons.
+  proj_conf_losses: Projected regular-season conference losses.
+  proj_conf_win_pct: proj_conf_wins / (proj_conf_wins + proj_conf_losses).
+  proj_conf_win_pct_pct: Percentile of proj_conf_win_pct within the conference.
+  proj_conf_win_pct_rank: 'Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average
+    ties. Null for independents.'
+  proj_conf_wins: Projected regular-season conference wins.
+  proj_losses: Projected losses, on the same games.
+  proj_wins: 'Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments
+    not counted).'
+  reg_season_title_prob: Share of sims with the conference's best regular-season conference winning percentage; co-champions
+    all count, so a conference can sum past 1.
+  season: Season, named by its end year (2024 is 2023-24).
+  seed_10_prob: Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_11_prob: Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_12_prob: Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_13_prob: Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_14_prob: Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_15_prob: Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_16_prob: Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_1_prob: Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_2_prob: Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_3_prob: Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_4_prob: Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_5_prob: Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_6_prob: Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_7_prob: Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_8_prob: Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_9_prob: Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob).
+  seed_mean: Mean seed line over the sims with a bid; null when never in the field.
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wins: Wins as of the date (every opponent).
+wbb_strength_of_schedule:
+  adj_d: 'Opponent-adjusted defensive efficiency: points allowed per 100 possessions.'
+  adj_em: Adjusted efficiency margin, adj_o - adj_d.
+  adj_em_n: 'Sample size of adj_em: the games behind the ratings.'
+  adj_em_pct: 'Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1).'
+  adj_em_rank: 'Rank of adj_em within the season among Division I teams: 1 is best, average ties.'
+  adj_em_z: adj_em z-scored over Division I within the season.
+  adj_o: 'Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings).'
+  as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
+  conf_losses: Regular-season conference losses.
+  conf_wins: Regular-season conference wins (conference tournaments and multi-team events excluded).
+  conference: Conference short name. Null for independents, which get no auto-bid.
+  conference_id: ESPN conference id, read off the schedule (Utf8).
+  eligible: False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason
+    ban). It counts in every rating and résumé but gets no bid.
+  games: Games behind the ratings (every played game with a usable box score).
+  losses: Losses in played games, against every opponent.
+  net_estimate: 'NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET''s efficiency and results halves;
+    weights fitted to the men''s 2024 NET). Higher is better.'
+  net_estimate_n: 'Sample size of net_estimate: the team''s Division I games.'
+  net_estimate_pct: 'Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1).'
+  net_estimate_rank: 'Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams:
+    1 is best, average ties.'
+  quad1_l: Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad1_w: Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad2_l: Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad2_w: Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad3_l: Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad3_w: Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quad4_l: Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges.
+  quad4_w: Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and
+    women's differ).
+  quality_wins: Quad 1 plus Quad 2 wins.
+  rpi: 'NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp.'
+  rpi_games: Division I games behind the RPI.
+  rpi_n: 'Sample size of rpi: the team''s Division I games.'
+  rpi_oowp: 'Opponents'' opponents'' winning percentage: the opponents'' rpi_owp averaged over this team''s games.'
+  rpi_owp: 'Opponents'' winning percentage: each opponent''s unweighted Division I record without its games against this team,
+    averaged over this team''s games.'
+  rpi_pct: 'Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1).'
+  rpi_rank: 'Rank of rpi within the season among Division I teams: 1 is best, average ties.'
+  rpi_wp: 'RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4,
+    a road loss 0.6, neutral 1.0 (men''s from 2004-05, women''s from 2011-12).'
+  season: Season, named by its end year (2024 is 2023-24).
+  sos: 'Strength of schedule: mean opponent adj_em over Division I games.'
+  sos_n: 'Sample size of sos: the team''s Division I games.'
+  sos_pct: 'Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1).'
+  sos_rank: 'Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties.'
+  team: Team (ESPN location name).
+  team_id: ESPN team id (Utf8).
+  wab: 'Wins above bubble: Division I wins minus a bubble-quality team''s expected wins against the same schedule and venues.'
+  wab_n: 'Sample size of wab: the team''s Division I games.'
+  wab_pct: 'Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1).'
+  wab_rank: 'Rank of wab within the season among Division I teams: 1 is best, average ties.'
+  wins: Wins in played games, against every opponent (non-Division I included).
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
@@ -48145,6 +48409,16 @@ score_win_prob:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'
+season_game_excitement:
+  game_id: ESPN game id, the join key to the play-by-play and box-score frames.
+  season: Season year as the pbp release labels it (the year the season ends).
+  gei: 'Game excitement index: the league''s mean plays per game (GEI_SCALE) / the game''s plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football''s Game on Paper formula with a per-league scale.'
+  lead_changes: How often the scoring leader flipped; a tie is not a lead, so one side ahead, tied, then the other ahead counts once.
+  max_swing_pts: Largest single-play home win-probability change, in percentage points, with no team named.
+  completed: 'Whether the pbp reaches the end of the game (an End Game / End Period row from the last regulation period on with the score not tied), so the last play was taken to the result.'
+  gei_rank: Rank of gei among the season's completed games, 1 = most exciting, ties share the best rank; null for a game that is not completed.
+  gei_pct: Share of the season's completed games with a gei at or below this one (the top game is 1.0); null for a game that is not completed.
+  gei_n: Number of completed games in the season the rank and percentile are taken over; null for a game that is not completed.
 ot_adjusted_seconds:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men''s college frames) on overtime plays.'

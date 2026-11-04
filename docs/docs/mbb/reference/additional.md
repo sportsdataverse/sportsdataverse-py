@@ -306,6 +306,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_in_game_win_prob](additional/models-and-calculators-2.md#mbb_in_game_win_prob) | Per-play home win probability from the bundled in-game logistic. |
 | [mbb_predict_games](additional/models-and-calculators-2.md#mbb_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [mbb_recruiting_projection](additional/models-and-calculators-2.md#mbb_recruiting_projection) | Expected freshman box-BPM per recruit + over/under-performance residual. |
+| [mbb_season_projections](additional/models-and-calculators-2.md#mbb_season_projections) | The daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
 | [mbb_season_sim](additional/models-and-calculators-2.md#mbb_season_sim) | Monte Carlo the remaining schedule: expected wins + title odds. |
 | [mbb_shooter_talent](additional/models-and-calculators-2.md#mbb_shooter_talent) | Per-shooter EB-regressed make% over expected + points over expected. |
 | [mbb_shot_quality](additional/models-and-calculators-2.md#mbb_shot_quality) | Score each shot with `xmake` / `xpoints` from the cell table. |
@@ -317,13 +318,13 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [poss_calc_fragment_sum](additional/models-and-calculators-2.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
 | [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted efficiency margins. |
 | [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted efficiencies and tempos. |
-| [rank_corr](additional/models-and-calculators-2.md#rank_corr) | Spearman rank correlation between two arrays. |
-| [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive efficiency. |
-| [ridge_cv_lambda](additional/models-and-calculators-2.md#ridge_cv_lambda) | Pick lambda by leave-one-group-out CV (groups = seasons/classes). |
-| [ridge_fit](additional/models-and-calculators-2.md#ridge_fit) | Closed-form ridge with an unpenalized intercept (coefficient 0). |
-| [roc_auc](additional/models-and-calculators-2.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
-| [save_artifact](additional/models-and-calculators-2.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
-| [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`). |
+| [rank_corr](additional/models-and-calculators-3.md#rank_corr) | Spearman rank correlation between two arrays. |
+| [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive efficiency. |
+| [ridge_cv_lambda](additional/models-and-calculators-3.md#ridge_cv_lambda) | Pick lambda by leave-one-group-out CV (groups = seasons/classes). |
+| [ridge_fit](additional/models-and-calculators-3.md#ridge_fit) | Closed-form ridge with an unpenalized intercept (coefficient 0). |
+| [roc_auc](additional/models-and-calculators-3.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
+| [save_artifact](additional/models-and-calculators-3.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
+| [score_to_tuple](additional/models-and-calculators-3.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`). |
 | [simulate_game](additional/models-and-calculators-3.md#simulate_game) | Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`. |
 | [slow_regression](additional/models-and-calculators-3.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
 | [spearman_corr](additional/models-and-calculators-3.md#spearman_corr) | Spearman rank correlation between two arrays. |
@@ -365,10 +366,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [lineup_fixer](additional/analytics.md#lineup_fixer) | Clamp obviously-broken possession counts (``PossessionUtils |
 | [lineup_to_team_report](additional/analytics.md#lineup_to_team_report) | Build per-player on/off splits out of a team's lineups. |
 | [mbb_archetypes](additional/analytics.md#mbb_archetypes) | Per-player-season role archetype from the bundled KMeans centers. |
-| [mbb_bracketology](additional/analytics.md#mbb_bracketology) | Projected tournament field for a season from the released ESPN data. |
+| [mbb_bracketology](additional/analytics.md#mbb_bracketology) | The daily `bracketology` table: the projected field, seeds and bubble as of a date. |
 | [mbb_shot_selection](additional/analytics.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
-| [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | Season-level SoS / Quad / WAB résumé from the released ESPN data. |
-| [mbb_team_season_rates](additional/analytics.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
+| [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_team_season_rates](additional/analytics-2.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-2.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [ncaa_mbb_lineups](additional/analytics-2.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-2.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |

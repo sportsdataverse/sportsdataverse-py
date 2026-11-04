@@ -317,6 +317,9 @@ mbb:
   mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
   mbb_team_season_rates: {seasons: 2025}
   mbb_team_strength: {seasons: 2025}
+  mbb_strength_of_schedule: {seasons: [2025]}  # 364 rows x 48 cols
+  mbb_bracketology: {season: 2025}  # 364 rows x 21 cols
+  mbb_season_projections: {season: 2025, n_sims: 500}  # 364 rows x 40 cols
   ncaa_possession_rate_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
   ncaa_team_box_count_rows: {team_box: {$call: mbb.load_ncaa_mbb_team_box, args: {seasons: 2025}}}
   raw_game_efficiency: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: mbb.load_mbb_team_boxscore, args: {seasons: 2024}}}  # 12478 rows x 10 cols
@@ -370,6 +373,9 @@ wbb:
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
   wbb_team_season_rates: {seasons: 2025}
   wbb_team_strength: {seasons: 2025}
+  wbb_strength_of_schedule: {seasons: [2025]}  # 362 rows x 48 cols
+  wbb_bracketology: {season: 2025}  # 362 rows x 21 cols
+  wbb_season_projections: {season: 2025, n_sims: 500}  # 362 rows x 40 cols
   raw_game_efficiency: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}  # 11796 rows x 10 cols
   adjust_efficiency: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 8 cols
   adjust_tempo: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 3 cols

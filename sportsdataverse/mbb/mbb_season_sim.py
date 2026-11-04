@@ -8,7 +8,9 @@ deterministic and reproducible.
 
 from __future__ import annotations
 
-from typing import Literal, Union, overload
+import datetime
+from collections.abc import Iterable
+from typing import Literal, overload
 
 import numpy as np
 import pandas as pd
@@ -20,6 +22,7 @@ from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 
 __all__ = [
     "mbb_bracket_sim",
+    "mbb_season_projections",
     "mbb_season_sim",
     "simulate_game",
 ]
@@ -105,7 +108,7 @@ def mbb_season_sim(
     seed: int = 0,
     league: str = "mens",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Monte Carlo the remaining schedule: expected wins + title odds.
 
     Args:
@@ -220,7 +223,7 @@ def mbb_bracket_sim(
     seed: int = 0,
     league: str = "mens",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Single-elimination Monte Carlo over a bracket-ordered field.
 
     Rows of ``seeded_field`` are bracket slots: adjacent rows meet in round 1
@@ -256,7 +259,7 @@ def mbb_bracket_sim(
     if n & (n - 1) != 0 or n < 2:
         raise ValueError(f"bracket field size must be a power of two, got {n}")
     c = get_constants(league)
-    em_map = dict(zip(ratings.get_column("team_id").to_list(), ratings.get_column("adj_em").to_list()))
+    em_map = dict(zip(ratings.get_column("team_id").to_list(), ratings.get_column("adj_em").to_list(), strict=True))
     slots = seeded_field.get_column("team_id").to_list()
     em = np.array([em_map[t] for t in slots])
 
@@ -281,3 +284,89 @@ def mbb_bracket_sim(
         out = out.with_columns(pl.Series(col, vals, dtype=pl.Float64))
     result = out.select(*[col for col in ("team_id", "seed") if col in out.columns], *_ROUND_COLS)
     return result.to_pandas() if return_as_pandas else result
+
+
+@overload
+def mbb_season_projections(
+    season: int,
+    *,
+    as_of_date: datetime.date | None = None,
+    n_sims: int = 10000,
+    seed: int = 0,
+    league: str = "mens",
+    ineligible: Iterable[str] = (),
+    return_as_pandas: Literal[False] = False,
+) -> pl.DataFrame: ...
+
+
+@overload
+def mbb_season_projections(
+    season: int,
+    *,
+    as_of_date: datetime.date | None = None,
+    n_sims: int = 10000,
+    seed: int = 0,
+    league: str = "mens",
+    ineligible: Iterable[str] = (),
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+def mbb_season_projections(
+    season: int,
+    *,
+    as_of_date: datetime.date | None = None,
+    n_sims: int = 10000,
+    seed: int = 0,
+    league: str = "mens",
+    ineligible: Iterable[str] = (),
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """The daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
+
+    Loads the released ESPN schedule and team box, rates every team on the games strictly
+    before ``as_of_date``, and runs
+    :func:`~sportsdataverse.mbb.mbb_college_season.simulate_season`: the remaining regular
+    season, the regular-season conference titles, every unfinished conference tournament
+    (the auto-bid), and the 68-team field and its seeds, ``n_sims`` times from
+    ``numpy.random.default_rng(seed)``. The same arguments give the same table.
+
+    Args:
+        season: Season to project (e.g. ``2024``).
+        as_of_date: Only use games strictly before this date; ``None`` uses every completed
+            game (today's table).
+        n_sims: Simulated seasons.
+        seed: RNG seed.
+        league: ``"mens"`` or ``"womens"``.
+        ineligible: Team ids barred from the NCAA tournament (no bid; see
+            :func:`~sportsdataverse.mbb.mbb_bracketology.mbb_bracketology`).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per Division I team: current and projected overall and conference W-L, the
+        projected conference standing (``proj_conf_win_pct_rank``, 1 best within the
+        conference), ``reg_season_title_prob`` (co-champions count), ``conf_tourney_title_prob``,
+        ``auto_bid_prob`` (the champion's, or the runner-up's when the champion is ineligible),
+        ``at_large_prob``, ``bid_prob``, ``seed_mean`` (over sims with a
+        bid) and ``seed_1_prob`` .. ``seed_16_prob``.
+
+    Example:
+        Quick start::
+
+            import datetime
+            from sportsdataverse.mbb import mbb_season_projections
+            odds = mbb_season_projections(2024, as_of_date=datetime.date(2024, 2, 1), n_sims=2000)
+
+        Pipeline next step (one line)::
+
+            odds.sort("bid_prob", descending=True).head(68)
+
+    See Also:
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+        * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
+    """
+    from sportsdataverse.mbb.mbb_college_season import load_season_inputs, simulate_season
+
+    inp = load_season_inputs(season, as_of_date=as_of_date, league=league, ineligible=ineligible)
+    out = simulate_season(inp.played, inp.remaining, inp.teams, inp.resume, league=league, n_sims=n_sims, seed=seed)
+    return out.to_pandas() if return_as_pandas else out

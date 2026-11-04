@@ -496,6 +496,7 @@ from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # 
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
 from sportsdataverse.mbb import mbb_schedule_crosswalk as mbb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_season_projections as mbb_season_projections  # noqa: F401
 from sportsdataverse.mbb import mbb_season_sim as mbb_season_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_shooter_talent as mbb_shooter_talent  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_data as mbb_shot_data  # noqa: F401
@@ -1134,6 +1135,7 @@ __all__ = [
     "mbb_predict_games",
     "mbb_recruiting_projection",
     "mbb_schedule_crosswalk",
+    "mbb_season_projections",
     "mbb_season_sim",
     "mbb_shooter_talent",
     "mbb_shot_data",

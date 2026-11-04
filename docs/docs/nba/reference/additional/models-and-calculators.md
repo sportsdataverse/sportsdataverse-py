@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_expected"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_draft"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -794,6 +794,57 @@ curve = fit_aging_curve(panel, ages, smooth=1)
 print(curve.delta(24))  # ~1.0
 ```
 
+### game_excitement {#game_excitement}
+
+`game_excitement(scored: 'pl.DataFrame', *, league_id: 'str | None' = None, league: 'str | None' = None, regulation_periods: 'int | None' = None, completed: 'bool | None' = None) -> 'dict[str, Any]'`
+
+How exciting one game was, with no direction: the game excitement index, lead changes and the biggest swing.
+
+Football's GEI (Game on Paper's `calculateGEI` / `excitement.py`) on the basketball WP
+series: `GEI_SCALE[league] / n * sum(|home WP change|)` over the game's `n` plays. Each
+play's change is measured from the previous play's home WP (the pregame prior for the first
+play). The last play of a completed game swings to the result (1 if home won, 0 if it lost, 0.5
+for a tie); while the game is live the swings so far are summed. The scale is the league's mean
+plays per game (`GEI_SCALE`), so the index reads as the total WP movement of a game of
+average length.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | One game from `score_win_prob`, in play order (needs `home_win_prob`, `pregame_home_prob`, `home_score`, `away_score`; `type_text` and `period_number` to tell a completed game). |
+| `league_id` | `str \| None` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `int \| None` | `None` | The game's regulation periods; default from the frame's `season` via `game_regulation_periods`. |
+| `completed` | `bool \| None` | `None` | Whether the game is final. `None` reads it from the plays: final when a row ends the game ("End Game" / "End Period" from the last regulation period on, score not tied), the rule `score_win_prob` settles WP on. Without `type_text` it is live. |
+
+**Returns**
+
+`{"gei", "lead_changes", "max_swing_pts", "completed"}`: the index (`None` for no plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead counts once), the largest of the changes the index sums in percentage points (the last play's swing to the result included; `None` for no plays), and whether the last play was taken to the result.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `scored` holds more than one `game_id`. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import game_excitement, score_win_prob
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+one = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+game_excitement(score_win_prob(one))
+
+# A men's college game
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+game_excitement(score_win_prob(one, league="mbb"), league="mbb")
+```
+
 ### game_minutes {#game_minutes}
 
 `game_minutes(periods: 'int', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'int'`
@@ -938,7 +989,7 @@ tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime
 
 ### game_regulation_periods {#game_regulation_periods}
 
-`game_regulation_periods(league: 'str', *, season: 'Optional[int]' = None, format_regulation_periods: 'Optional[float]' = None) -> 'int'`
+`game_regulation_periods(league: 'str', *, season: 'int | None' = None, format_regulation_periods: 'float | None' = None) -> 'int'`
 
 Regulation periods of one game: 2 (halves) or 4 (quarters).
 
@@ -953,8 +1004,8 @@ always halves, the WNBA halves before 2006 and women's college basketball halves
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
-| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
-| `format_regulation_periods` | `Optional[float]` | `None` | The game's own regulation period count, if known. |
+| `season` | `int \| None` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
+| `format_regulation_periods` | `float \| None` | `None` | The game's own regulation period count, if known. |
 
 **Returns**
 
@@ -1544,58 +1595,4 @@ board = nba_draft_model(2019, college_prior=mbb_prior_df)
 # Pipeline next step (one line)
 
 board.filter(pl.col("pro_tier") == "lottery")
-```
-
-### nba_expected_turnovers {#nba_expected_turnovers}
-
-`nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Expected TOV + residual ball-security skill from Synergy play-type mix.
-
-`lg_to_rate_t` = poss-weighted league mean of `turnover_freq` for play
-type `t`; `expected_tov = scale · Σ_t poss_t · lg_to_rate_t`;
-`ball_security_skill = 100·(expected_tov − tov)/poss` (fewer turnovers
-than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
-
-`scale = Σ actual tov / Σ raw type-mix estimate` is derived from the
-fetched season itself (covers players below Synergy's per-type
-classification threshold) so `Σ expected_tov ≡ Σ tov` holds exactly.
-Swapping each player's own `turnover_freq` in for the league rate
-reconstructs their real season TOV almost exactly (slope ~1.03, Spearman
-~0.97 on the 2023-24 oracle corpus) -- confirming the column semantics are
-correct. The *expected* (league-rate) version necessarily explains less
-variance than *actual* (turnover-avoidance is a more individual,
-less play-type-bound skill than foul-drawing), so its calibration slope
-runs lower than model (3)'s -- see the oracle gate for the observed floor.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `tov`, `poss` (bypasses the live fetch). |
-| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `turnover_freq`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per player: `player_id` (Int64), `poss`/`tov`/ `expected_tov`/`ball_security_skill` (Float64). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_expected_turnovers
-t = nba_expected_turnovers("2023-24")
-print(t.sort("ball_security_skill", descending=True).head(10))
-
-# Injected offline (oracle / test) path
-
-t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
-
-# Pipeline next step
-
-t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
 ```
