@@ -43,8 +43,11 @@ its END year (2026 is 2025-26) and space requests at least a second apart, so be
 ## 🔌 Setup
 
 ```sh
-pip install "sportsdataverse[sdvplot]"
+pip install --pre "sportsdataverse[sdvplot]"
 ```
+
+The `sdvplot` extra brings in sdvplot and matplotlib for the charts. `--pre` is needed while 0.2.0 is
+in beta.
 
 
 ```python
@@ -173,14 +176,14 @@ cols = ["tournament", "ranking", "team_name", "games", "wins", "losses", "points
     │ ---        ┆ ---     ┆ ---       ┆ ---   ┆   ┆ ---    ┆ ---    ┆ ---   ┆ ---           │
     │ str        ┆ i64     ┆ str       ┆ i64   ┆   ┆ i64    ┆ i64    ┆ i64   ┆ i64           │
     ╞════════════╪═════════╪═══════════╪═══════╪═══╪════════╪════════╪═══════╪═══════════════╡
-    │ runkosarja ┆ 1       ┆ Lukko     ┆ 17    ┆ … ┆ 4      ┆ 35     ┆ 46    ┆ 32            │
-    │ runkosarja ┆ 2       ┆ SaiPa     ┆ 16    ┆ … ┆ 3      ┆ 34     ┆ 49    ┆ 27            │
-    │ runkosarja ┆ 3       ┆ Ilves     ┆ 17    ┆ … ┆ 5      ┆ 32     ┆ 48    ┆ 36            │
-    │ runkosarja ┆ 4       ┆ Jukurit   ┆ 18    ┆ … ┆ 6      ┆ 32     ┆ 44    ┆ 35            │
-    │ runkosarja ┆ 5       ┆ JYP       ┆ 14    ┆ … ┆ 3      ┆ 30     ┆ 44    ┆ 35            │
-    │ runkosarja ┆ 6       ┆ Kärpät    ┆ 18    ┆ … ┆ 4      ┆ 30     ┆ 51    ┆ 50            │
-    │ runkosarja ┆ 7       ┆ Ässät     ┆ 17    ┆ … ┆ 6      ┆ 28     ┆ 38    ┆ 40            │
-    │ runkosarja ┆ 8       ┆ TPS       ┆ 17    ┆ … ┆ 7      ┆ 27     ┆ 47    ┆ 42            │
+    │ runkosarja ┆ 1       ┆ Lukko     ┆ 19    ┆ … ┆ 4      ┆ 40     ┆ 53    ┆ 36            │
+    │ runkosarja ┆ 2       ┆ Ilves     ┆ 20    ┆ … ┆ 6      ┆ 37     ┆ 52    ┆ 39            │
+    │ runkosarja ┆ 3       ┆ Jukurit   ┆ 20    ┆ … ┆ 6      ┆ 36     ┆ 49    ┆ 40            │
+    │ runkosarja ┆ 4       ┆ JYP       ┆ 17    ┆ … ┆ 4      ┆ 35     ┆ 59    ┆ 48            │
+    │ runkosarja ┆ 5       ┆ Ässät     ┆ 20    ┆ … ┆ 7      ┆ 34     ┆ 46    ┆ 48            │
+    │ runkosarja ┆ 6       ┆ SaiPa     ┆ 18    ┆ … ┆ 5      ┆ 34     ┆ 52    ┆ 38            │
+    │ runkosarja ┆ 7       ┆ Kärpät    ┆ 20    ┆ … ┆ 5      ┆ 33     ┆ 53    ┆ 52            │
+    │ runkosarja ┆ 8       ┆ TPS       ┆ 19    ┆ … ┆ 7      ┆ 31     ┆ 53    ┆ 48            │
     └────────────┴─────────┴───────────┴───────┴───┴────────┴────────┴───────┴───────────────┘
 
 
@@ -202,8 +205,8 @@ out
     ✅ Liiga games
 
 
-    ✅ Liiga shotmap 2701415
-    Sport 1 - 3 SaiPa
+    ✅ Liiga shotmap 2701437
+    Tappara 0 - 3 HPK
 
 
 
@@ -215,10 +218,10 @@ out
     │ ---            ┆ --- │
     │ str            ┆ u32 │
     ╞════════════════╪═════╡
-    │ GOALIE_BLOCKED ┆ 41  │
-    │ GOAL           ┆ 4   │
-    │ MISSED         ┆ 27  │
-    │ PLAYER_BLOCKED ┆ 25  │
+    │ MISSED         ┆ 21  │
+    │ GOALIE_BLOCKED ┆ 43  │
+    │ PLAYER_BLOCKED ┆ 21  │
+    │ GOAL           ┆ 3   │
     └────────────────┴─────┘
 
 
@@ -327,14 +330,14 @@ cols = ["table", "rank", "name", "gp", "w", "l", "pts", "goals_for", "goals_agai
     │ ---    ┆ ---  ┆ ---          ┆ --- ┆   ┆ --- ┆ --- ┆ ---       ┆ ---           │
     │ str    ┆ i64  ┆ str          ┆ i64 ┆   ┆ i64 ┆ i64 ┆ i64       ┆ i64           │
     ╞════════╪══════╪══════════════╪═════╪═══╪═════╪═════╪═══════════╪═══════════════╡
-    │ league ┆ 1    ┆ Металлург Мг ┆ 20  ┆ … ┆ 3   ┆ 32  ┆ 67        ┆ 39            │
-    │ league ┆ 2    ┆ Локомотив    ┆ 19  ┆ … ┆ 5   ┆ 28  ┆ 49        ┆ 33            │
-    │ league ┆ 3    ┆ ЦСКА         ┆ 19  ┆ … ┆ 5   ┆ 28  ┆ 58        ┆ 36            │
-    │ league ┆ 4    ┆ Драконы      ┆ 18  ┆ … ┆ 4   ┆ 26  ┆ 56        ┆ 44            │
-    │ league ┆ 5    ┆ Спартак      ┆ 19  ┆ … ┆ 5   ┆ 25  ┆ 51        ┆ 35            │
-    │ league ┆ 6    ┆ Нефтехимик   ┆ 19  ┆ … ┆ 6   ┆ 24  ┆ 55        ┆ 46            │
-    │ league ┆ 7    ┆ Северсталь   ┆ 20  ┆ … ┆ 7   ┆ 24  ┆ 46        ┆ 43            │
-    │ league ┆ 8    ┆ Торпедо      ┆ 18  ┆ … ┆ 5   ┆ 24  ┆ 49        ┆ 36            │
+    │ league ┆ 1    ┆ Металлург Мг ┆ 24  ┆ … ┆ 5   ┆ 36  ┆ 79        ┆ 56            │
+    │ league ┆ 2    ┆ ЦСКА         ┆ 22  ┆ … ┆ 5   ┆ 34  ┆ 73        ┆ 42            │
+    │ league ┆ 3    ┆ Локомотив    ┆ 21  ┆ … ┆ 6   ┆ 30  ┆ 55        ┆ 36            │
+    │ league ┆ 4    ┆ Драконы      ┆ 21  ┆ … ┆ 5   ┆ 30  ┆ 64        ┆ 51            │
+    │ league ┆ 5    ┆ Нефтехимик   ┆ 23  ┆ … ┆ 7   ┆ 29  ┆ 65        ┆ 55            │
+    │ league ┆ 6    ┆ Торпедо      ┆ 21  ┆ … ┆ 5   ┆ 29  ┆ 58        ┆ 43            │
+    │ league ┆ 7    ┆ Спартак      ┆ 22  ┆ … ┆ 6   ┆ 28  ┆ 59        ┆ 42            │
+    │ league ┆ 8    ┆ Северсталь   ┆ 23  ┆ … ┆ 9   ┆ 26  ┆ 51        ┆ 53            │
     └────────┴──────┴──────────────┴─────┴───┴─────┴─────┴───────────┴───────────────┘
 
 
@@ -391,7 +394,7 @@ wsb.select([c for c in cols if c in wsb.columns]) if wsb is not None and wsb.hei
     │ ---               ┆ ---        ┆ ---                ┆ ---        ┆ ---        │
     │ str               ┆ str        ┆ str                ┆ str        ┆ str        │
     ╞═══════════════════╪════════════╪════════════════════╪════════════╪════════════╡
-    │ 2026-10-26T15:00Z ┆ MNST @ BC  ┆ Final/OT           ┆ 1          ┆ 2          │
+    │ 2026-11-03T23:00Z ┆ UNNY @ RPI ┆ Final              ┆ 0          ┆ 1          │
     └───────────────────┴────────────┴────────────────────┴────────────┴────────────┘
 
 

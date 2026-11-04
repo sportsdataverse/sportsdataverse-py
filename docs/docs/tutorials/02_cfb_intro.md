@@ -58,7 +58,8 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
+pip install --pre "sportsdataverse[sdvplot]"   # optional: the win-probability chart
 ```
 
 No API key required. The `load_cfb_*` loaders read public parquet from the
@@ -253,7 +254,7 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
-    pbp season: 2023 | pbp shape: (153945, 506)
+    pbp season: 2023 | pbp shape: (153899, 507)
 
 
 
@@ -271,6 +272,51 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
     │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.156885  ┆ -0.000819 │
     │ 401523986 ┆ San José State      ┆ 2    ┆ 5        ┆ -1.096584 ┆ -0.003242 │
     └───────────┴─────────────────────┴──────┴──────────┴───────────┴───────────┘
+
+
+
+### 📈 Chart: win probability in team colours
+
+`home_wp_before` is the home side's win probability before each play.
+[sdvplot](https://sdvplot.sportsdataverse.org/)'s `team_colors` turns ESPN abbreviations into each
+school's colour, so the area above 0.5 is the home team's and the area below the visitor's.
+
+
+```python
+# Needs the plotting extra: pip install --pre "sportsdataverse[sdvplot]"
+from IPython.display import Markdown, display
+
+try:
+    import matplotlib.pyplot as plt
+    import sdvplot
+except ImportError:
+    plt = None
+
+if plt is None or 'home_wp_before' not in pbp.columns:
+    display(Markdown('_Chart skipped: it needs `pip install --pre "sportsdataverse[sdvplot]"` and a loaded pbp season._'))
+else:
+    game = pbp.filter((pl.col('homeTeamAbbrev') == 'MICH') & (pl.col('awayTeamAbbrev') == 'OSU'))
+    if game.height == 0:  # another season loaded: chart its first game instead
+        game = pbp.filter(pl.col('game_id') == pbp['game_id'][0])
+    wp = game.sort('game_play_number').drop_nulls('home_wp_before')
+    home, away = wp['homeTeamAbbrev'][0], wp['awayTeamAbbrev'][0]
+    home_color, away_color = sdvplot.team_colors('cfb', [home, away])
+    x, y = wp['game_play_number'].to_numpy(), wp['home_wp_before'].to_numpy()
+
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.fill_between(x, 0.5, y, where=y >= 0.5, interpolate=True, color=home_color, label=home)
+    ax.fill_between(x, 0.5, y, where=y < 0.5, interpolate=True, color=away_color, label=away)
+    ax.set_ylim(0, 1)
+    ax.set_xlabel('Play number')
+    ax.set_ylabel(f'{home} win probability')
+    ax.set_title(f'{away} at {home}, {PBP_SEASON}')
+    ax.legend(loc='upper left')
+    plt.show()
+```
+
+
+
+![png](02_cfb_intro_files/02_cfb_intro_15_0.png)
 
 
 
@@ -445,17 +491,17 @@ out
     │ ---        ┆ ---   ┆ ---          │
     │ str        ┆ u32   ┆ f64          │
     ╞════════════╪═══════╪══════════════╡
-    │ LSU        ┆ 946   ┆ 0.38         │
+    │ LSU        ┆ 939   ┆ 0.388        │
     │ Oregon     ┆ 1052  ┆ 0.311        │
     │ Georgia    ┆ 1064  ┆ 0.24         │
     │ USC        ┆ 958   ┆ 0.207        │
-    │ Washington ┆ 1121  ┆ 0.18         │
+    │ Washington ┆ 1120  ┆ 0.184        │
     │ …          ┆ …     ┆ …            │
     │ Alabama    ┆ 1030  ┆ 0.147        │
     │ Michigan   ┆ 1036  ┆ 0.143        │
+    │ Notre Dame ┆ 917   ┆ 0.141        │
     │ Missouri   ┆ 1004  ┆ 0.141        │
     │ Texas      ┆ 1106  ┆ 0.14         │
-    │ Notre Dame ┆ 917   ┆ 0.14         │
     └────────────┴───────┴──────────────┘
 
 
@@ -501,12 +547,12 @@ out
     │ Offensive Lineman ┆ 21      │
     │ Wide Receiver     ┆ 18      │
     │ Linebacker        ┆ 18      │
-    │ Defensive Lineman ┆ 12      │
     │ Defensive End     ┆ 12      │
+    │ Defensive Lineman ┆ 12      │
     │ Running Back      ┆ 11      │
     │ Tight End         ┆ 10      │
-    │ Quarterback       ┆ 6       │
     │ Place Kicker      ┆ 6       │
+    │ Quarterback       ┆ 6       │
     └───────────────────┴─────────┘
 
 
@@ -607,11 +653,11 @@ standings_tbl.head(10)
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
     │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
     │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
     │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
@@ -704,8 +750,8 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
     │ i64  ┆ str           ┆ i64     ┆ i64         ┆ i64    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
-    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
     │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
+    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
@@ -756,16 +802,16 @@ out
     │ ---                ┆ ---     ┆ ---      ┆ ---          │
     │ str                ┆ u32     ┆ i64      ┆ f64          │
     ╞════════════════════╪═════════╪══════════╪══════════════╡
-    │ Ollie Gordon II    ┆ 280     ┆ 1762     ┆ 0.074        │
-    │ Kimani Vidal       ┆ 288     ┆ 1600     ┆ 0.019        │
+    │ Ollie Gordon II    ┆ 282     ┆ 1767     ┆ 0.127        │
+    │ Kimani Vidal       ┆ 289     ┆ 1669     ┆ 0.038        │
     │ Cody Schrader      ┆ 274     ┆ 1585     ┆ 0.129        │
-    │ Tahj Brooks        ┆ 289     ┆ 1570     ┆ 0.195        │
-    │ Omarion Hampton    ┆ 243     ┆ 1503     ┆ 0.115        │
+    │ Tahj Brooks        ┆ 290     ┆ 1576     ┆ 0.216        │
+    │ Omarion Hampton    ┆ 244     ┆ 1520     ┆ 0.148        │
     │ …                  ┆ …       ┆ …        ┆ …            │
     │ Antario Brown      ┆ 211     ┆ 1365     ┆ 0.135        │
     │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.134        │
     │ Jaydn Ott          ┆ 245     ┆ 1350     ┆ -0.006       │
-    │ Ashton Jeanty      ┆ 212     ┆ 1340     ┆ 0.107        │
+    │ Ashton Jeanty      ┆ 213     ┆ 1341     ┆ 0.111        │
     │ Marcus Carroll     ┆ 273     ┆ 1340     ┆ 0.031        │
     └────────────────────┴─────────┴──────────┴──────────────┘
 
@@ -1011,6 +1057,8 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 ```
 
     ✅ ESPN standings
+
+
     ✅ ESPN rankings (polls)
 
 
@@ -1031,10 +1079,10 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 58      ┆ Bulls      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 349     ┆ Black      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆ Knights    ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 2226    ┆ Owls       ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
 
 

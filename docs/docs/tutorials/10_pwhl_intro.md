@@ -53,7 +53,7 @@ Everything returns a tidy **polars** `DataFrame` by default — pass `return_as_
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 No key, no config — just import and go.
@@ -330,22 +330,22 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
 
 
     shape: (10, 5)
-    ┌──────────────┬─────────────────┬───────┬─────────┬────────┐
-    │ first_name   ┆ last_name       ┆ goals ┆ assists ┆ points │
-    │ ---          ┆ ---             ┆ ---   ┆ ---     ┆ ---    │
-    │ str          ┆ str             ┆ i64   ┆ i64     ┆ i64    │
-    ╞══════════════╪═════════════════╪═══════╪═════════╪════════╡
-    │ Natalie      ┆ Spooner         ┆ 21    ┆ 8       ┆ 29     │
-    │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
-    │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
-    │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
-    │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
-    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
-    │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
-    │ Grace        ┆ Zumwinkle       ┆ 12    ┆ 8       ┆ 20     │
-    │ Erin         ┆ Ambrose         ┆ 4     ┆ 16      ┆ 20     │
-    │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
-    └──────────────┴─────────────────┴───────┴─────────┴────────┘
+    ┌──────────────┬───────────┬───────┬─────────┬────────┐
+    │ first_name   ┆ last_name ┆ goals ┆ assists ┆ points │
+    │ ---          ┆ ---       ┆ ---   ┆ ---     ┆ ---    │
+    │ str          ┆ str       ┆ i64   ┆ i64     ┆ i64    │
+    ╞══════════════╪═══════════╪═══════╪═════════╪════════╡
+    │ Natalie      ┆ Spooner   ┆ 21    ┆ 8       ┆ 29     │
+    │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
+    │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
+    │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
+    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
+    │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
+    │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
+    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
+    │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
+    │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
+    └──────────────┴───────────┴───────┴─────────┴────────┘
 
 
 
@@ -599,8 +599,8 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
+    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
@@ -673,11 +673,11 @@ top_infractions
     │ Abby           ┆ Roque         ┆ 31  ┆ 10        │
     │ Jesse          ┆ Compher       ┆ 25  ┆ 7         │
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
-    │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
     │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
-    │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
-    │ Sarah          ┆ Bujold        ┆ 18  ┆ 9         │
-    │ Jade           ┆ Downie-Landry ┆ 18  ┆ 9         │
+    │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
+    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
+    │ Lee            ┆ Stecklein     ┆ 18  ┆ 9         │
+    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -741,11 +741,11 @@ goals_by_period
     │ Grace             ┆ Zumwinkle        ┆ 12    │
     │ Marie-Philip      ┆ Poulin           ┆ 11    │
     │ Sarah             ┆ Nurse            ┆ 11    │
-    │ Laura             ┆ Stacey           ┆ 10    │
     │ Daryl             ┆ Watts            ┆ 10    │
-    │ Brianne           ┆ Jenner           ┆ 9     │
-    │ Taylor            ┆ Heise            ┆ 9     │
+    │ Laura             ┆ Stacey           ┆ 10    │
     │ Michela           ┆ Cava             ┆ 9     │
+    │ Taylor            ┆ Heise            ┆ 9     │
+    │ Brianne           ┆ Jenner           ┆ 9     │
     │ Gabbie            ┆ Hughes           ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
@@ -778,15 +778,15 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
     │ str          ┆ str       ┆ u32         │
     ╞══════════════╪═══════════╪═════════════╡
     │ Natalie      ┆ Spooner   ┆ 7           │
-    │ Nicole       ┆ Hensley   ┆ 4           │
     │ Kristen      ┆ Campbell  ┆ 4           │
-    │ Alex         ┆ Carpenter ┆ 3           │
-    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Nicole       ┆ Hensley   ┆ 4           │
+    │ Sarah        ┆ Nurse     ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
     │ Gabbie       ┆ Hughes    ┆ 3           │
     │ Susanna      ┆ Tapani    ┆ 3           │
-    │ Hilary       ┆ Knight    ┆ 3           │
-    │ Sarah        ┆ Nurse     ┆ 3           │
-    │ Kateřina     ┆ Mrázová   ┆ 2           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Alex         ┆ Carpenter ┆ 3           │
+    │ Ann-Renée    ┆ Desbiens  ┆ 2           │
     └──────────────┴───────────┴─────────────┘
 
 
@@ -1177,7 +1177,7 @@ xg.select(["game_id", "event_type", "shot_distance", "shot_angle", "xg"]).drop_n
     ┌─────────┬────────────┬───────────────┬────────────┬──────────┐
     │ game_id ┆ event_type ┆ shot_distance ┆ shot_angle ┆ xg       │
     │ ---     ┆ ---        ┆ ---           ┆ ---        ┆ ---      │
-    │ i32     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
+    │ i64     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
     ╞═════════╪════════════╪═══════════════╪════════════╪══════════╡
     │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050259 │
     │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053404 │

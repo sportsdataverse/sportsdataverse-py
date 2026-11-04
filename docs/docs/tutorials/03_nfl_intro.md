@@ -62,7 +62,8 @@ full reference.
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
+pip install --pre "sportsdataverse[sdvplot]"   # optional: the win-probability chart
 ```
 
 **No API key needed** — the native `api.nfl.com` wrappers mint a fresh
@@ -550,6 +551,48 @@ pbp.shape
 
 
 
+### 📈 Chart: the last game of the season in team colours
+
+nflverse's `home_wp` is the home side's win probability on each play. [sdvplot](https://sdvplot.sportsdataverse.org/)'s
+`team_colors` gives each club its colour, so the area above 0.5 belongs to the home team.
+
+
+```python
+# Needs the plotting extra: pip install --pre "sportsdataverse[sdvplot]"
+from IPython.display import Markdown, display
+
+try:
+    import matplotlib.pyplot as plt
+    import sdvplot
+except ImportError:
+    plt = None
+
+if plt is None:
+    display(Markdown('_Chart skipped: it needs `pip install --pre "sportsdataverse[sdvplot]"`._'))
+else:
+    last = pbp.filter(pl.col("week") == pbp["week"].max())
+    wp = last.filter(pl.col("game_id") == last["game_id"][0]).drop_nulls("home_wp")
+    home, away = wp["home_team"][0], wp["away_team"][0]
+    home_color, away_color = sdvplot.team_colors("nfl", [home, away])
+    x, y = range(wp.height), wp["home_wp"].to_numpy()
+
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.fill_between(x, 0.5, y, where=y >= 0.5, interpolate=True, color=home_color, label=home)
+    ax.fill_between(x, 0.5, y, where=y < 0.5, interpolate=True, color=away_color, label=away)
+    ax.set_ylim(0, 1)
+    ax.set_xlabel("Play number")
+    ax.set_ylabel(f"{home} win probability")
+    ax.set_title(f"{away} at {home}, {wp['game_id'][0]}")
+    ax.legend(loc="upper left")
+    plt.show()
+```
+
+
+
+![png](03_nfl_intro_files/03_nfl_intro_24_0.png)
+
+
+
 
 ```python
 ngs_release = nfl.load_nfl_nextgen_stats([SEASON], stat_type="passing")
@@ -1013,7 +1056,7 @@ redzone
     │ SEA     ┆ 27.0   ┆ 125      ┆ 21.6   │
     │ NO      ┆ 25.0   ┆ 120      ┆ 20.8   │
     │ NYJ     ┆ 31.0   ┆ 150      ┆ 20.7   │
-    │ ARI     ┆ 32.0   ┆ 157      ┆ 20.4   │
+    │ WAS     ┆ 52.0   ┆ 255      ┆ 20.4   │
     └─────────┴────────┴──────────┴────────┘
 
 
@@ -1223,7 +1266,7 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 
 
 
-    {'current_season': 2026, 'current_week': 7, 'most_recent_season': 2026}
+    {'current_season': 2026, 'current_week': 8, 'most_recent_season': 2026}
 
 
 
@@ -1297,9 +1340,13 @@ import os
 
 from sportsdataverse.nfl.nflpro import nfl_pro_players_offense_passing_season
 
-ngs = safe("nfl_pro passing (season)", lambda: nfl_pro_players_offense_passing_season(season=2024))
-if ngs is not None:
-    print(ngs.columns[:8])
+# NFL Pro needs an account; like PFF below, the cell is a no-op without credentials.
+if os.environ.get("NFLPRO_TOKEN") or (os.environ.get("NFLPRO_EMAIL") and os.environ.get("NFLPRO_PW")):
+    ngs = safe("nfl_pro passing (season)", lambda: nfl_pro_players_offense_passing_season(season=2024))
+    if ngs is not None:
+        print(ngs.columns[:8])
+else:
+    print("no NFL Pro credentials set - skipping nfl_pro_* (set NFLPRO_TOKEN, or NFLPRO_EMAIL + NFLPRO_PW)")
 
 # PFF needs a key; the cell is a no-op without one rather than a traceback.
 if os.environ.get("SDV_PY_PFF_API_KEY") or os.environ.get("PFF_API_KEY"):
@@ -1316,6 +1363,6 @@ print("shield_pbp:", [n for n in dir(shield_pbp) if not n.startswith("_")][:6])
 
 ```
 
-    ⏭️  nfl_pro passing (season): NFLProAuthError: No NFL Pro credentials: pass email=/password=REDACTED, or set NFLPRO_EMAIL and NFLPRO_PW, or set NFLPRO_TOKE…
+    no NFL Pro credentials set - skipping nfl_pro_* (set NFLPRO_TOKEN, or NFLPRO_EMAIL + NFLPRO_PW)
     no PFF key set - skipping pff_api_* (set SDV_PY_PFF_API_KEY)
     shield_pbp: ['annotations', 'build', 'build_pbp', 'build_pbp_from_file', 'build_playstats_frame', 'build_playstats_season']
