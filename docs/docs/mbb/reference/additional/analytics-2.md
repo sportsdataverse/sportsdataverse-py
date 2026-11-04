@@ -294,7 +294,9 @@ Map the stats.ncaa.org pbp and possessions onto the game-impact row frame.
 One row per event (the clock since the previous event in the period and the points scored on
 it, on that event's lineup; a free throw on the lineup at the last foul) and one per
 possession (its lineup and which side had it, `poss_team == home`). The clock left in a
-period after its last event goes to that event's lineup, so each period's clock is whole.
+period after its last event goes to that event's lineup, so each period's clock is whole. The
+possessions of a contest with no pbp events, and those whose `poss_team` is neither side,
+are dropped.
 
 **Parameters**
 

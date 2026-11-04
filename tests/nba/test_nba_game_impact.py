@@ -209,6 +209,27 @@ def test_public_builders_read_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
     assert units["game_id"].n_unique() == 16
 
 
+def test_possessions_need_play_by_play_and_a_side() -> None:
+    pbp, poss = _read("nba", "pbp"), _read("nba", "possessions")
+    no_pbp, no_side = "0022500013", "0022500136"
+    rows = nba_impact_rows(
+        pbp.filter(pl.col("game_id") != no_pbp),
+        _read("nba", "game_lineups"),
+        poss.with_columns(
+            pl.when(pl.col("game_id") == no_side).then(0).otherwise(pl.col("offense_team_id")).alias("offense_team_id")
+        ),
+        _read("nba", "schedule"),
+    )
+    impact = game_player_impact(rows, player_dtype=pl.Int64())
+    units = game_lineups_used(rows, player_dtype=pl.Int64())
+    # a game with possessions but no play-by-play publishes nothing (not poss with zero points)
+    assert no_pbp not in set(impact["game_id"]) and no_pbp not in set(units["game_id"])
+    # possessions whose offense is neither team are dropped, never credited to the away side
+    game = impact.filter(pl.col("game_id") == no_side)
+    assert game.height > 0 and game["poss"].sum() == 0 and game["opp_poss"].sum() == 0
+    assert impact.filter(pl.col("game_id") != no_side)["poss"].sum() > 0
+
+
 def test_wnba_builder_reads_the_calendar_year(monkeypatch: pytest.MonkeyPatch) -> None:
     def fixture(name: str):  # type: ignore[no-untyped-def]
         def load(seasons: list[int]) -> pl.DataFrame:

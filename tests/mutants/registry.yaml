@@ -9453,3 +9453,33 @@
   test: tests/nba/test_nba_game_impact.py::test_ratings_and_sample_sizes
   expected: kill
   note: DRtg per offensive possession would drift from points allowed per 100 defensive possessions.
+
+- id: bb-gi-possession-needs-a-side
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'poss = poss.filter(home_off | (offense == pl.col("away_team_id")))'
+  mutant: 'poss = poss'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A possession whose offense is neither team would be credited to the away side.
+
+- id: bb-gi-possession-needs-pbp
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'played = games.join(parts[0].select("game_id").unique(), on="game_id", how="semi")'
+  mutant: 'played = games'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A game with possessions and no play-by-play would publish positive poss with zero points and minutes.
+
+- id: bb-gi-ncaa-possession-filter
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: 'kept = possessions.filter(has_events & (home_has | (pl.col("poss_team") == pl.col("away"))))'
+  mutant: 'kept = possessions'
+  test: tests/mbb/test_mbb_game_impact.py::test_possessions_need_events_and_a_side
+  expected: kill
+  note: College possessions without events, or with a poss_team that is neither side, would be published.

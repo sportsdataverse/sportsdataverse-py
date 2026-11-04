@@ -116,8 +116,10 @@ def credit_free_throws_to_foul_lineup(
 ) -> pl.DataFrame:
     """Give each free throw the lineup on the floor at the game's most recent foul.
 
-    ``actions`` must be sorted in game order. A free throw with no earlier foul in the game keeps
-    its own lineup.
+    ``actions`` must be sorted in game order and carry ``seconds``, ``home_pts`` and ``away_pts``.
+    Only the points move: a free-throw row with clock on it (a period's tail, say) is split, its
+    ``seconds`` staying on a row with the action's own lineup. A free throw with no earlier foul in
+    the game keeps its own lineup.
 
     Args:
         actions: Action rows carrying ``home_1..5`` / ``away_1..5``, in game order.
@@ -126,7 +128,9 @@ def credit_free_throws_to_foul_lineup(
         game: The game key column.
 
     Returns:
-        ``actions`` with the ten slot columns replaced on free-throw rows.
+        ``actions`` with the ten slot columns replaced and ``seconds`` zeroed on free-throw rows,
+        plus one row per such free throw that had clock: its own lineup, its ``seconds``, no points.
+        The split rows come last.
     """
     # The foul row's whole lineup as one struct (a null slot stays null), never a slot-by-slot fill.
     at_foul = pl.when(is_foul.fill_null(False)).then(pl.struct(_SLOTS)).forward_fill().over(game)
@@ -134,9 +138,14 @@ def credit_free_throws_to_foul_lineup(
         pl.when(is_free_throw.fill_null(False)).then(at_foul).alias("_at_foul"),
     )
     has = pl.col("_at_foul").is_not_null()
-    return marked.with_columns(
-        **{c: pl.when(has).then(pl.col("_at_foul").struct.field(c)).otherwise(pl.col(c)) for c in _SLOTS}
-    ).drop("_at_foul")
+    clock = marked.filter(has & (pl.col("seconds") != 0)).with_columns(
+        pl.col("home_pts") * 0, pl.col("away_pts") * 0
+    )  # ponytail: the clock half of a split free throw, appended (row order does not matter downstream)
+    credited = marked.with_columns(
+        *[pl.when(has).then(pl.col("_at_foul").struct.field(c)).otherwise(pl.col(c)).alias(c) for c in _SLOTS],
+        pl.when(has).then(pl.col("seconds") * 0).otherwise(pl.col("seconds")).alias("seconds"),
+    )
+    return pl.concat([credited, clock]).drop("_at_foul")
 
 
 def _sides(rows: pl.DataFrame) -> pl.DataFrame:

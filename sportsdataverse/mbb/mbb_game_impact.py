@@ -81,7 +81,9 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
     One row per event (the clock since the previous event in the period and the points scored on
     it, on that event's lineup; a free throw on the lineup at the last foul) and one per
     possession (its lineup and which side had it, ``poss_team == home``). The clock left in a
-    period after its last event goes to that event's lineup, so each period's clock is whole.
+    period after its last event goes to that event's lineup, so each period's clock is whole. The
+    possessions of a contest with no pbp events, and those whose ``poss_team`` is neither side,
+    are dropped.
 
     Args:
         pbp: ``load_ncaa_mbb_pbp`` / ``load_ncaa_wbb_pbp`` rows, in release (game) order, with the
@@ -159,19 +161,28 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
     )
     parts = [events.select(list(_ROWS))]
     if possessions.height:
-        home_has = pl.col("poss_team") == pl.col("home")
-        parts.append(
-            possessions.select(
-                *_teams(),
-                *_slots(),
-                pl.lit(0.0).alias("seconds"),
-                pl.lit(0).alias("home_pts"),
-                pl.lit(0).alias("away_pts"),
-                home_has.cast(pl.Int64).alias("home_poss"),
-                (~home_has).cast(pl.Int64).alias("away_poss"),
-            )
-        )
+        parts.append(_possession_rows(possessions, events["game_id"].unique()))
     return pl.concat([p.cast(_ROWS) for p in parts])
+
+
+def _possession_rows(possessions: pl.DataFrame, played: pl.Series) -> pl.DataFrame:
+    """One impact row per possession of a contest with events, its side from ``poss_team``.
+
+    A contest with no events would publish poss with no points, and a ``poss_team`` that is
+    neither side has no team to credit: both are dropped.
+    """
+    home_has = pl.col("poss_team") == pl.col("home")
+    has_events = pl.col("contest_id").cast(pl.Utf8).is_in(played.implode())
+    kept = possessions.filter(has_events & (home_has | (pl.col("poss_team") == pl.col("away"))))
+    return kept.select(
+        *_teams(),
+        *_slots(),
+        pl.lit(0.0).alias("seconds"),
+        pl.lit(0).alias("home_pts"),
+        pl.lit(0).alias("away_pts"),
+        home_has.cast(pl.Int64).alias("home_poss"),
+        (~home_has).cast(pl.Int64).alias("away_poss"),
+    )
 
 
 def _load_rows(seasons: int | list[int], league: str) -> pl.DataFrame:

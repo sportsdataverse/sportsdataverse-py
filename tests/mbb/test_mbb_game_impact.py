@@ -119,7 +119,10 @@ def test_free_throws_take_the_whole_lineup_at_the_foul() -> None:
         pl.col("plus_minus") != pl.col("plus_minus_raw")
     )
     assert moved.height > 0
-    assert with_rule["seconds"].sum() == without["seconds"].sum()
+    # Only the points move: every player's clock is the same with or without the rule.
+    keys = ["game_id", "team_id", "player_id"]
+    clock = with_rule.join(without, on=keys, how="full", suffix="_raw", coalesce=True)
+    assert ((clock["seconds"].fill_null(0) - clock["seconds_raw"].fill_null(0)).abs() < 1e-9).all()
     # Every free throw carries its foul row's ten slots exactly, nulls included.
     # The event rows come first, in the builder's (contest, release order) order.
     in_order = pbp.with_row_index("_o").sort("contest_id", "_o")
@@ -132,6 +135,24 @@ def test_free_throws_take_the_whole_lineup_at_the_foul() -> None:
     assert pair.height == fts.height > 0
     for c in _SLOTS:
         assert pair[c].eq_missing(pair[f"f_{c}"]).all(), c
+
+
+def test_possessions_need_events_and_a_side() -> None:
+    pbp, poss = _read("mbb", "pbp"), _read("mbb", "possessions")
+    no_pbp, no_side = "5722385", "5726007"
+    rows = ncaa_impact_rows(
+        pbp.filter(pl.col("contest_id") != no_pbp),
+        poss.with_columns(
+            pl.when(pl.col("contest_id") == no_side)
+            .then(pl.lit("nobody"))
+            .otherwise(pl.col("poss_team"))
+            .alias("poss_team")
+        ),
+    )
+    impact = game_player_impact(rows, player_dtype=pl.Utf8())
+    assert no_pbp not in set(impact["game_id"])
+    game = impact.filter(pl.col("game_id") == no_side)
+    assert game.height > 0 and game["poss"].sum() == 0 and game["opp_poss"].sum() == 0
 
 
 def test_public_builders_read_their_league(monkeypatch: pytest.MonkeyPatch) -> None:

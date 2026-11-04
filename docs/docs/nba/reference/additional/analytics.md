@@ -1352,7 +1352,8 @@ Map the stats.nba.com releases onto the game-impact row frame.
 
 One row per play-by-play action (its clock and points, on the lineup at that action; a free
 throw on the lineup at the last foul) and one per possession (its lineup and which side had
-the ball). Games not in `schedule` are dropped.
+the ball). Games not in `schedule` are dropped, and so are the possessions of a game with
+no play-by-play actions and those whose offense is neither team.
 
 **Parameters**
 

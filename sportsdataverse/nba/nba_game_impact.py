@@ -62,8 +62,14 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         *[pl.col(f"away_player_{i}").cast(_PLAYER).alias(f"away_{i}") for i in range(1, 6)],
     ).unique(["game_id", "action_number"], keep="first")
     period_len = pl.when(pl.col("period") <= 4).then(pl.lit(quarter)).otherwise(pl.lit(_OT_SECONDS))
+    # The pre-2019-20 feed writes "0" (not null) on non-scoring rows; a running score never drops
+    # back to 0, so a 0 is a gap and the last score carries forward.
     score = {
-        side: pl.col(f"score_{side}").cast(pl.Int64, strict=False).forward_fill().over("game_id").fill_null(0)
+        side: pl.when(pl.col(f"score_{side}").cast(pl.Int64, strict=False) != 0)
+        .then(pl.col(f"score_{side}").cast(pl.Int64, strict=False))
+        .forward_fill()
+        .over("game_id")
+        .fill_null(0)
         for side in ("home", "away")
     }
     actions = (
@@ -85,6 +91,7 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
             ]
         )
         .join(on_floor, on=["game_id", "action_number"], how="left")
+        .sort(["game_id", "order_index"])  # a join need not keep order; the foul fill reads it
     )
     actions = credit_free_throws_to_foul_lineup(
         actions,
@@ -99,7 +106,10 @@ def _possession_rows(possessions: pl.DataFrame, games: pl.DataFrame) -> pl.DataF
     slots = [f"{side}_player_{i}" for side in ("off", "def") for i in range(1, 6)]
     poss = possessions.select("season", "game_id", "offense_team_id", *slots)
     poss = poss.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="inner", validate="m:1")
-    home_off = pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")
+    offense = pl.col("offense_team_id").cast(pl.Int64)
+    home_off = offense == pl.col("home_team_id")
+    # An offense that is neither side has no home/away to credit.
+    poss = poss.filter(home_off | (offense == pl.col("away_team_id")))
     return poss.with_columns(
         *[
             pl.when(home_off).then(pl.col(f"off_player_{i}")).otherwise(pl.col(f"def_player_{i}")).alias(f"home_{i}")
@@ -129,7 +139,8 @@ def nba_impact_rows(
 
     One row per play-by-play action (its clock and points, on the lineup at that action; a free
     throw on the lineup at the last foul) and one per possession (its lineup and which side had
-    the ball). Games not in ``schedule`` are dropped.
+    the ball). Games not in ``schedule`` are dropped, and so are the possessions of a game with
+    no play-by-play actions and those whose offense is neither team.
 
     Args:
         pbp: ``load_nba_stats_pbp`` / ``load_wnba_stats_pbp`` rows (``game_id``, ``order_index``,
@@ -164,7 +175,9 @@ def nba_impact_rows(
     cols = list(_ROWS)
     parts = [_action_rows(pbp, game_lineups, games, _QUARTER[league_id]).select(cols)]
     if possessions.height:
-        parts.append(_possession_rows(possessions, games).select(cols))
+        # Possessions only for games with actions: alone they would publish poss with no points.
+        played = games.join(parts[0].select("game_id").unique(), on="game_id", how="semi")
+        parts.append(_possession_rows(possessions, played).select(cols))
     return pl.concat([p.cast(_ROWS) for p in parts])
 
 
