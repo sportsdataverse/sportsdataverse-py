@@ -196,7 +196,7 @@ sportality_game_header:
   series_uuid: Series uuid (platform key space; Basketligaen = m1ay3mpa4t, the only
     series on this host).
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
 sportality_game_overview:
   away_goals: Points scored by the away team.
@@ -285,7 +285,7 @@ sportality_last_game_day:
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether
     the game was decided by a shootout (null on every game seen; basketball has none).'
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen)
     wall time 'YYYY-MM-DD HH:MM:SS' with no zone; on the other routes it is ISO 8601
@@ -307,7 +307,7 @@ sportality_layout_info:
   series_code: Series code (DBL = Basketligaen).
   series_uuid: Series uuid (platform key space).
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   state: 'Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2
     game-info: post_game (underscore). Gameday overview: GameEnded. Values: `active`
@@ -355,7 +355,7 @@ sportality_next_game_day:
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether
     the game was decided by a shootout (null on every game seen; basketball has none).'
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen)
     wall time 'YYYY-MM-DD HH:MM:SS' with no zone; on the other routes it is ISO 8601
@@ -638,7 +638,7 @@ sportality_schedule:
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether
     the game was decided by a shootout (null on every game seen; basketball has none).'
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen)
     wall time 'YYYY-MM-DD HH:MM:SS' with no zone; on the other routes it is ISO 8601
@@ -934,7 +934,7 @@ sportality_team_played_games:
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether
     the game was decided by a shootout (null on every game seen; basketball has none).'
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen)
     wall time 'YYYY-MM-DD HH:MM:SS' with no zone; on the other routes it is ISO 8601
@@ -1013,7 +1013,7 @@ sportality_team_upcoming_games:
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether
     the game was decided by a shootout (null on every game seen; basketball has none).'
   ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins
-    /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route
+    /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route
     keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen)
     wall time 'YYYY-MM-DD HH:MM:SS' with no zone; on the other routes it is ISO 8601

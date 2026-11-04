@@ -97,7 +97,7 @@ A team's recent games.
 | `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | Boolean | Whether the game went to a shootout. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
 | `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -222,7 +222,7 @@ A team's next games.
 | `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | Boolean | Whether the game went to a shootout. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
 | `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |

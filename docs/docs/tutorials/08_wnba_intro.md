@@ -47,7 +47,8 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
+pip install --pre "sportsdataverse[sdvplot,sportypy]"   # optional: the shot chart
 ```
 
 That's it — the ESPN endpoints are public, so there's nothing to configure. 😊
@@ -485,8 +486,8 @@ top_scorers
     │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
     │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
     │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
-    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
+    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
     │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
     │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
@@ -613,8 +614,8 @@ double_doubles
     │ ---                  ┆ ---               ┆ ---            ┆ ---            │
     │ str                  ┆ str               ┆ u32            ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
-    │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
     │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
+    │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
     │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
     │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
     │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
@@ -726,6 +727,52 @@ threes.join(team_names, on='team_id', how='left').select(
     │ ATL               ┆ 249               ┆ 249            ┆ 100.0        │
     │ CHI               ┆ 193               ┆ 193            ┆ 100.0        │
     └───────────────────┴───────────────────┴────────────────┴──────────────┘
+
+
+
+### 📍 Chart: a season of shots on the court
+
+[`load_wnba_stats_shots`](../wnba/reference/loaders/stats.md#load_wnba_stats_shots) carries the stats API's shot locations
+(`x_legacy` / `y_legacy`, tenths of a foot from the hoop). [sdvplot](https://sdvplot.sportsdataverse.org/)'s `court_coords` moves them onto
+the court `surface("wnba")` draws, here for the season's highest-volume shooter, in team colours.
+
+
+```python
+# Needs the plotting extra: pip install --pre "sportsdataverse[sdvplot,sportypy]"
+from IPython.display import Markdown, display
+
+try:
+    import matplotlib.pyplot as plt
+    import sdvplot
+    import sportypy  # noqa: F401 -- sdvplot.surface() draws with it
+except ImportError:
+    plt = None
+
+# WNBA seasons are single years.
+stats_shots = None if plt is None else safe('stats shots release', lambda: sdv.wnba.load_wnba_stats_shots(seasons=SEASON))
+if plt is None or stats_shots is None or stats_shots.height == 0:
+    display(Markdown('_Shot chart skipped: it needs `pip install --pre "sportsdataverse[sdvplot,sportypy]"` and the shots release._'))
+else:
+    pid, player, team, _ = (stats_shots.group_by('person_id', 'player_name', 'team_tricode').len()
+                            .sort('len', descending=True).row(0))
+    pts = sdvplot.court_coords(stats_shots.filter(pl.col('person_id') == pid))
+    made, missed = pts.filter(pl.col('shot_result') == 'Made'), pts.filter(pl.col('shot_result') != 'Made')
+
+    ax = sdvplot.surface('wnba', display_range='defense')
+    ax.scatter(missed['court_x'], missed['court_y'], s=5, color='lightgrey', alpha=0.6, zorder=10, label='missed')
+    ax.scatter(made['court_x'], made['court_y'], s=7, color=sdvplot.team_colors('wnba', team),
+               edgecolors='black', linewidths=0.2, zorder=10, label='made')
+    ax.set_title(f'{player} ({team}): {made.height} of {pts.height} shots made')
+    ax.legend(loc='upper right')
+    plt.show()
+```
+
+    ✅ stats shots release
+
+
+
+
+![png](08_wnba_intro_files/08_wnba_intro_38_1.png)
 
 
 
@@ -847,21 +894,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ C   ┆ G   ┆ F   │
+    │ team_abbreviation ┆ F   ┆ G   ┆ C   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 1   ┆ 7   ┆ 4   │
-    │ CHI               ┆ 2   ┆ 9   ┆ 3   │
-    │ CONNECTICU        ┆ 2   ┆ 8   ┆ 5   │
-    │ DALLAS            ┆ 1   ┆ 7   ┆ 6   │
-    │ IND               ┆ 2   ┆ 8   ┆ 3   │
+    │ ATL               ┆ 4   ┆ 7   ┆ 1   │
+    │ CHI               ┆ 3   ┆ 9   ┆ 2   │
+    │ CONNECTICU        ┆ 5   ┆ 8   ┆ 2   │
+    │ DALLAS            ┆ 6   ┆ 7   ┆ 1   │
+    │ IND               ┆ 3   ┆ 8   ┆ 2   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 1   ┆ 5   ┆ 8   │
-    │ NY                ┆ 2   ┆ 8   ┆ 5   │
-    │ PHX               ┆ 1   ┆ 7   ┆ 7   │
-    │ SEA               ┆ 3   ┆ 6   ┆ 5   │
-    │ WSH               ┆ 2   ┆ 9   ┆ 3   │
+    │ MIN               ┆ 8   ┆ 5   ┆ 1   │
+    │ NY                ┆ 5   ┆ 8   ┆ 2   │
+    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
+    │ SEA               ┆ 5   ┆ 6   ┆ 3   │
+    │ WSH               ┆ 3   ┆ 9   ┆ 2   │
     └───────────────────┴─────┴─────┴─────┘
 
 

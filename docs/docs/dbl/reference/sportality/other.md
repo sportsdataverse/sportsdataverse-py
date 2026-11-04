@@ -98,7 +98,7 @@ Games of the last played match day of an ssgt.
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `post-game` = played (schedule, day views). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | String | Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout (null on every game seen; basketball has none). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `home_team_status` | String | WIN or LOSE for the home team once the game is played; absent or empty before. Values: `LOSE` = the team lost; `WIN` = the team won. |
 | `home_team_uuid` | String | Home team uuid (platform key space); joins /sports-v2/teams/{team_uuid}. |
 | `home_team_owner_instance_id` | String | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |
@@ -172,7 +172,7 @@ Directory of every ssgt (season + series + game type) with its teams, and the st
 | `game_type` | String | Game type of the game ('' on every line seen). |
 | `game_type_name` | String | Game type name in Danish (Grundspil = regular season, Slutspil = playoffs). |
 | `series_code` | String | Series code (DBL = Basketligaen). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `active` = current ssgt; `closed` = past ssgt. |
 | `season_uuid` | String | Season uuid (platform key space). |
 | `series_uuid` | String | Series uuid (platform key space). |
@@ -218,7 +218,7 @@ Games of the next match day of an ssgt.
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `pre-game` = not yet played (schedule, day views). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | String | Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout (null on every game seen; basketball has none). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `home_team_status` | String | WIN or LOSE for the home team once the game is played; absent or empty before. Values: `N/A` = no result yet / not applicable. |
 | `home_team_uuid` | String | Home team uuid (platform key space); joins /sports-v2/teams/{team_uuid}. |
 | `home_team_owner_instance_id` | String | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |
@@ -476,7 +476,7 @@ Schedule and results of one season + series + game type.
 | `state` | String | Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore). Gameday overview: GameEnded. Values: `post-game` = played (schedule, day views); `pre-game` = not yet played (schedule, day views). |
 | `overtime` | Boolean | Whether the game went to overtime. |
 | `shootout` | String | Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout (null on every game seen; basketball has none). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `home_team_status` | String | WIN or LOSE for the home team once the game is played; absent or empty before. Values: `LOSE` = the team lost; `N/A` = no result yet / not applicable; `WIN` = the team won. |
 | `home_team_uuid` | String | Home team uuid (platform key space); joins /sports-v2/teams/{team_uuid}. |
 | `home_team_owner_instance_id` | String | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |
@@ -578,7 +578,7 @@ Clubs (sites) taking part in an ssgt.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`. |
 
 ### Returns {#sportality_sites-returns}
 
@@ -618,7 +618,7 @@ Stats provider of an ssgt, a bare word (genius-basketball).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`. |
 
 ### Returns {#sportality_ssgt_provider-returns}
 
@@ -654,7 +654,7 @@ Standings of an ssgt (gameday widget).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027 regular season. Directory: `/statistics-v2/layout-info` `originalSeasonSeriesGameTypeTeams[].ssgtUuid`. |
 
 ### Returns {#sportality_standings-returns}
 

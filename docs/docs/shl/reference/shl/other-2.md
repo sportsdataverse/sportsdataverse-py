@@ -17,7 +17,7 @@ Standings of an ssgt (gameday widget).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid. |
 
 ### Returns {#shl_standings-returns}
 
@@ -26,7 +26,7 @@ Standings of an ssgt (gameday widget).
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season END year (2026 = 2025/26). |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[]. |
 | `team_code` | String | StatNet team code (SAIK, FHC). |
 | `team_uuid` | String | Platform team uuid. |
 | `team_name` | String | Name of the team. |

@@ -1,0 +1,172 @@
+[
+ {
+  "seasonSeriesGameTypeTeams": [
+   {
+    "series": {
+     "uuid": "m1ay3mpa4t",
+     "code": "DBL",
+     "name": "Basketligaen"
+    },
+    "season": {
+     "uuid": "ggp2aapun2",
+     "code": "2025",
+     "name": "2025/2026"
+    },
+    "gameType": {
+     "uuid": "qZn-4XuTzFdn0",
+     "code": "finals",
+     "name": "Slutspel"
+    },
+    "state": "closed",
+    "ssgtUuid": "al4a0u2go5",
+    "teams": [
+     {
+      "uuid": "swr1d65lew",
+      "instanceId": "bac1_bac"
+     },
+     {
+      "uuid": "ktcu9aaala",
+      "instanceId": "bak1_bak"
+     }
+    ]
+   },
+   {
+    "series": {
+     "uuid": "m1ay3mpa4t",
+     "code": "DBL",
+     "name": "Basketligaen"
+    },
+    "season": {
+     "uuid": "ggp2aapun2",
+     "code": "2025",
+     "name": "2025/2026"
+    },
+    "gameType": {
+     "uuid": "aprlbjgxlp",
+     "code": "regular",
+     "name": "Seriematch"
+    },
+    "state": "closed",
+    "ssgtUuid": "qzw34da6jg",
+    "teams": [
+     {
+      "uuid": "swr1d65lew",
+      "instanceId": "bac1_bac"
+     },
+     {
+      "uuid": "ktcu9aaala",
+      "instanceId": "bak1_bak"
+     }
+    ]
+   },
+   {
+    "series": {
+     "uuid": "m1ay3mpa4t",
+     "code": "DBL",
+     "name": "Basketligaen"
+    },
+    "season": {
+     "uuid": "fg7gxxmm0w",
+     "code": "2026",
+     "name": "2026/2027"
+    },
+    "gameType": {
+     "uuid": "aprlbjgxlp",
+     "code": "regular",
+     "name": "Seriematch"
+    },
+    "state": "active",
+    "ssgtUuid": "xs07bd3fmp",
+    "teams": [
+     {
+      "uuid": "swr1d65lew",
+      "instanceId": "bac1_bac"
+     },
+     {
+      "uuid": "ktcu9aaala",
+      "instanceId": "bak1_bak"
+     }
+    ]
+   }
+  ],
+  "ssgtDefaultValue": {
+   "state": "active",
+   "ssgtUuid": "xs07bd3fmp",
+   "gameType": {
+    "uuid": "aprlbjgxlp",
+    "code": "regular",
+    "deleted": false,
+    "name": "Seriematch"
+   },
+   "season": {
+    "uuid": "fg7gxxmm0w",
+    "code": "2026",
+    "deleted": false,
+    "name": "2026/2027"
+   },
+   "series": {
+    "uuid": "m1ay3mpa4t",
+    "code": "DBL",
+    "createdAt": null,
+    "createdBy": "dbl1_dbl",
+    "deleted": false,
+    "lastModified": "2026-07-01T07:38:11.000Z",
+    "names": [
+     {
+      "language": "da",
+      "translation": "Basketligaen"
+     },
+     {
+      "language": "sv",
+      "translation": "Basketligaen"
+     },
+     {
+      "language": "display",
+      "translation": "Basketligaen"
+     }
+    ],
+    "name": "Basketligaen"
+   },
+   "teams": [
+    {
+     "uuid": "swr1d65lew",
+     "instanceId": "bac1_bac",
+     "name": {
+      "code": "BAC",
+      "short": "Bears Academy",
+      "medium": "Bears Academy"
+     },
+     "teamNames": {
+      "code": "BAC",
+      "short": "Bears Academy",
+      "long": "Bears Academy",
+      "full": "Bears Academy",
+      "codeSite": "BAC",
+      "shortSite": "Bears Academy",
+      "fullSite": "Bears Academy",
+      "longSite": "Bears Academy"
+     }
+    },
+    {
+     "uuid": "ktcu9aaala",
+     "instanceId": "bak1_bak",
+     "name": {
+      "code": "BAK",
+      "short": "Bakken Bears",
+      "medium": "Bakken Bears"
+     },
+     "teamNames": {
+      "code": "BAK",
+      "short": "Bakken Bears",
+      "long": "Bakken Bears",
+      "full": "Bakken Bears",
+      "codeSite": "BAK",
+      "shortSite": "Bakken Bears",
+      "fullSite": "Bakken Bears",
+      "longSite": "Bakken Bears"
+     }
+    }
+   ]
+  }
+ }
+]

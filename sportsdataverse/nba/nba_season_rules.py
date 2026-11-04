@@ -411,6 +411,7 @@ def nba_draft_lottery_odds(
     Example:
         The NBA table::
 
+            import polars as pl
             from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds
             odds = nba_draft_lottery_odds()
             odds.filter(pl.col("lottery_slot") == 1)

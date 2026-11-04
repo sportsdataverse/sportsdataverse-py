@@ -32804,7 +32804,7 @@ sportality_game_header:
   instance_context_site_team_is_home_team: Whether the requesting site's own team is the home team.
   instance_context_site_team_is_in_game: Whether the requesting site's own team plays in the game.
   series_uuid: Series uuid (platform key space; Basketligaen = m1ay3mpa4t, the only series on this host).
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
 sportality_game_overview:
   away_goals: Points scored by the away team.
@@ -32885,7 +32885,7 @@ sportality_last_game_day:
   series_uuid: Series uuid (platform key space).
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout
     (null on every game seen; basketball has none).'
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen) wall time 'YYYY-MM-DD HH:MM:SS'
     with no zone; on the other routes it is ISO 8601 UTC with milliseconds (compare rawStartDateTime).
@@ -32903,7 +32903,7 @@ sportality_layout_info:
   season_uuid: Season uuid (platform key space).
   series_code: Series code (DBL = Basketligaen).
   series_uuid: Series uuid (platform key space).
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   state: 'Game state. Schedule and day views: pre-game or post-game (hyphen). sports-v2 game-info: post_game (underscore).
     Gameday overview: GameEnded. Values: `active` = current ssgt; `closed` = past ssgt.'
@@ -32947,7 +32947,7 @@ sportality_next_game_day:
   series_uuid: Series uuid (platform key space).
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout
     (null on every game seen; basketball has none).'
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen) wall time 'YYYY-MM-DD HH:MM:SS'
     with no zone; on the other routes it is ISO 8601 UTC with milliseconds (compare rawStartDateTime).
@@ -33198,7 +33198,7 @@ sportality_schedule:
   series_uuid: Series uuid (platform key space).
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout
     (null on every game seen; basketball has none).'
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen) wall time 'YYYY-MM-DD HH:MM:SS'
     with no zone; on the other routes it is ISO 8601 UTC with milliseconds (compare rawStartDateTime).
@@ -33471,7 +33471,7 @@ sportality_team_played_games:
   series_uuid: Series uuid (platform key space).
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout
     (null on every game seen; basketball has none).'
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen) wall time 'YYYY-MM-DD HH:MM:SS'
     with no zone; on the other routes it is ISO 8601 UTC with milliseconds (compare rawStartDateTime).
@@ -33541,7 +33541,7 @@ sportality_team_upcoming_games:
   series_uuid: Series uuid (platform key space).
   shootout: 'Unobserved: null in every sample and every full body. When filled: Whether the game was decided by a shootout
     (null on every game seen; basketball has none).'
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid
     and every route keyed by ssgt.'
   start_date_time: Scheduled start. On the schedule route this is the LOCAL (Europe/Copenhagen) wall time 'YYYY-MM-DD HH:MM:SS'
     with no zone; on the other routes it is ISO 8601 UTC with milliseconds (compare rawStartDateTime).
@@ -70222,7 +70222,7 @@ shl_athlete_career:
   info_position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
   info_season_stats: Current-season stat rows of the player (empty in the sample).
   info_shoots: Shooting side (L / R; Left / Right).
-  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   info_statistics_provider: Stats provider of the data (statnet seen).
   info_team_code: Team code of the player's team (e.g. FHC).
   info_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team uuid.
@@ -70286,7 +70286,7 @@ shl_athlete_game_log:
   info_position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
   info_season_stats: Current-season stat rows of the player (empty in the sample).
   info_shoots: Shooting side (L / R; Left / Right). '-' placeholder in every sample.
-  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   info_statistics_provider: Stats provider of the data (statnet seen).
   info_team_name: Team name (e.g. Frölunda HC); empty in some rows. Empty string in every sample (placeholder).
   l: 1 when the goalie was charged with the loss in this game (overtime and shootout included), else 0.
@@ -70419,7 +70419,7 @@ shl_game_header:
   instance_context_site_team_is_home_team: Whether the site's team is the home team.
   instance_context_site_team_is_in_game: Whether the site's team plays in the game.
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk); the seriesUuid param of game-schedule.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
 shl_game_overview:
   away_goals: Away goals after this event (running score).
   away_team_game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info
@@ -70492,7 +70492,7 @@ shl_last_game_day:
   series_display_name: Series label shown on the site (SHL, CHL).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
   shootout: Whether the game went to a shootout.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   start_date_time: Scheduled start, local time (Europe/Stockholm).
   state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
   venue_name: Name of the arena (venue).
@@ -70508,7 +70508,7 @@ shl_layout_info:
   season_uuid: Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid param of game-schedule.
   series_code: Series code (SHL, CHL; HA and Kvalserien in old career logs).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   state: 'ssgt state: active (the current season) or closed.'
 shl_next_game_day:
   away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps.
@@ -70547,7 +70547,7 @@ shl_next_game_day:
   series_display_name: Series label shown on the site (SHL, CHL).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
   shootout: Whether the game went to a shootout.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   start_date_time: Scheduled start, local time (Europe/Stockholm).
   state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
   venue_name: Name of the arena (venue).
@@ -70788,7 +70788,7 @@ shl_schedule:
   series_display_name: Series label shown on the site (SHL, CHL).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
   shootout: Whether the game went to a shootout.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   start_date_time: Scheduled start, local time (Europe/Stockholm).
   state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
   venue_name: Name of the arena (venue).
@@ -70820,7 +70820,7 @@ shl_standings:
   rank: Position in the table (1 = top).
   rank_diff: Change in standings rank, in places (the reference point is unverified).
   season: Season END year (2026 = 2025/26).
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   t: Games tied after regulation, decided in overtime or a shootout (= OTW + OTL).
   team_code: StatNet team code (SAIK, FHC).
   team_name: Name of the team.
@@ -71170,7 +71170,7 @@ shl_team_played_games:
   series_display_name: Series label shown on the site (SHL, CHL).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
   shootout: Whether the game went to a shootout.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   start_date_time: Scheduled start, local time (Europe/Stockholm).
   state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
   time: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as an mm:ss string.
@@ -71229,7 +71229,7 @@ shl_team_upcoming_games:
   series_display_name: Series label shown on the site (SHL, CHL).
   series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
   shootout: Whether the game went to a shootout.
-  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[].'
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label via layout-info originalSeasonSeriesGameTypeTeams[].'
   start_date_time: Scheduled start, local time (Europe/Stockholm).
   state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
   time: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as an mm:ss string.
@@ -73397,3 +73397,8 @@ preseason_prior:
     season's final AdjD deviation times the regression factor, or minus half the new-team default.
   prior_avg: The prior season's league-average efficiency, the ratings' baseline before this season has a game.
   new_team: True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM.
+nbadraft_mock_draft:
+  round: Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables).
+rotowire_injuries:
+  return_date: Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only")
+    and when the cell is blank.
