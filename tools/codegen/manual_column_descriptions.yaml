@@ -1263,6 +1263,38 @@ _global:
   yardline_text: Ball spot where the drive started, rendered as it appears on the scoreboard (e.g., "NEB 25").
   yards_covered: Net yards the offense gained over the course of the drive.
   yards_to_endzone: Distance from the current ball spot to the opponent's goal line, in yards.
+add_possession_flags:
+  count_as_possession: Whether the row counts as a true possession for per-possession rate stats.
+  def_player_1: NBA Stats player id of defensive on-court player 1 of 5 for the possession.
+  def_player_2: NBA Stats player id of defensive on-court player 2 of 5 for the possession.
+  def_player_3: NBA Stats player id of defensive on-court player 3 of 5 for the possession.
+  def_player_4: NBA Stats player id of defensive on-court player 4 of 5 for the possession.
+  def_player_5: NBA Stats player id of defensive on-court player 5 of 5 for the possession.
+  defense_team_id: NBA Stats team id of the defending team for the possession.
+  end_order_index: order_index of the play-by-play event that ends the possession.
+  end_seconds_remaining: Seconds remaining in the period when the possession ended.
+  fg2a: Two-point field goal attempts during the possession.
+  fg2m: Two-point field goals made during the possession.
+  is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
+  lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
+  number_in_period: Sequential possession number for the offense within the period.
+  off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
+  off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
+  off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
+  off_player_4: NBA Stats player id of offensive on-court player 4 of 5 for the possession.
+  off_player_5: NBA Stats player id of offensive on-court player 5 of 5 for the possession.
+  possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
+  start_order_index: order_index of the play-by-play event that starts the possession.
+  start_seconds_remaining: Seconds remaining in the period when the possession started.
+  is_garbage_time: True from the possession that first meets bigballR's garbage-time rule (the college ncaa_*_possessions
+    rule) to the end of the game. At some event of the possession the absolute margin is 25+ with 10:00 or less left in
+    regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters
+    (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null.
+  is_transition: True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is
+    not its period's first, and seconds_to_first_shot is 10 or less (hoop-math's and bigballR's 10-second window). Never
+    null.
+  seconds_to_first_shot: Seconds from the change of possession (the clock at the previous possession's last event) to the
+    possession's first field-goal attempt; null when it has no field-goal attempt.
 add_sequence_features:
   batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
   cum_pitches_game: Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).

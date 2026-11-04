@@ -9193,3 +9193,96 @@
   test: tests/nba/test_nba_season_sim.py::test_unscheduled_cup_games_fill_each_team_to_82
   expected: kill
   note: Before December each NBA team's TBD Cup slots are simulated, so its record sums to 82, not ~80.
+
+# --- BB-D7: garbage-time and transition flags on the NBA / WNBA possessions ----------------------
+# Killers: tests/nba/test_nba_possession_flags.py on the committed 2023-24 NBA, 2025 WNBA and
+# 1999-00 releases, plus stats.nba.com's 2023-24 Synergy transition play type.
+- id: bb-flags-ball-change-clock
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.then(pl.col("end_seconds_remaining").shift(1).over("game_id"))'
+  mutant: '.then(pl.col("start_seconds_remaining"))'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_tracks_synergy_2024
+  expected: kill
+  note: Timing from the possession's first row (often the shot itself) calls most possessions transition.
+
+- id: bb-flags-live-start-types
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'pl.col("possession_start_type").is_in(TRANSITION_START_TYPES)'
+  mutant: 'pl.lit(True)'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_definition_holds_row_by_row
+  expected: kill
+  note: After a timeout or a dead ball the defense is set; those starts are never transition.
+
+- id: bb-flags-garbage-sticky
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '(pl.col("_trigger").cast(pl.Int32).cum_sum().over("game_id") > 0)'
+  mutant: 'pl.col("_trigger")'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_is_sticky_and_late
+  expected: kill
+  note: bigballR keeps a game in garbage time once it triggers; per-possession flags flicker in and out.
+
+- id: bb-flags-garbage-starters
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'return in_band & (pl.col("_n_starters") <= GARBAGE_TIME_MAX_STARTERS)'
+  mutant: 'return in_band'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_matches_the_bigballr_loop
+  expected: kill
+  note: Without the starters clause a blowout with the starters still on is garbage time.
+
+- id: bb-flags-running-score-cummax
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'pl.col(col).cast(pl.Int64, strict=False).cum_max().over("game_id").forward_fill().over("game_id").fill_null(0)'
+  mutant: 'pl.col(col).cast(pl.Int64, strict=False).forward_fill().over("game_id").fill_null(0)'
+  test: tests/nba/test_nba_possession_flags.py::test_running_score_survives_the_old_zero_filled_feed
+  expected: kill
+  note: Before 2019-20 the feed writes "0" on non-scoring rows; a plain forward fill reads a 0-0 game.
+
+- id: bb-flags-garbage-overtime
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '| ((pl.col("period") > pl.col("_reg_periods")) & (m >= min(b[1] for b in GARBAGE_TIME_BANDS)))'
+  mutant: '| ((pl.col("period") > pl.col("_reg_periods")) & pl.lit(False))'
+  test: tests/nba/test_nba_possession_flags.py::test_overtime_and_halves_branches
+  expected: kill
+  note: 2020-21 0022000983 is the one game in the 1996-97 to 2026-27 NBA releases whose garbage time starts in overtime.
+
+- id: bb-flags-garbage-halves
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.then(2)'
+  mutant: '.then(4)'
+  test: tests/nba/test_nba_possession_flags.py::test_overtime_and_halves_branches
+  expected: kill
+  note: The WNBA played two 20-minute halves through 2005; read as quarters, no game of 1997-2005 has garbage time.
+
+- id: bb-flags-garbage-every-event
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.filter(pl.col("order_index") <= pl.col("end_order_index"))'
+  mutant: '.filter(pl.col("order_index") == pl.col("end_order_index"))'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_matches_the_bigballr_loop
+  expected: kill
+  note: bigballR tests every event; the last event alone misses 31 NBA 2023-24 possessions in 10 games.
+
+- id: bb-flags-transition-window
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'TRANSITION_SECONDS: Final[float] = 10.0'
+  mutant: 'TRANSITION_SECONDS: Final[float] = 8.0'
+  test: tests/nba/test_nba_possession_flags.py::test_observed_counts
+  expected: kill
+  note: The published 10-second window is the default; 8 s fits Synergy's level better but is not a published rule.

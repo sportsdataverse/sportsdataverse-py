@@ -977,6 +977,7 @@ categories:
       - sportsdataverse.nba.nba_ratings_panel
       - sportsdataverse.nba.nba_salary_draft
       - sportsdataverse.nba.nba_play_context
+      - sportsdataverse.nba.nba_possession_flags
       - sportsdataverse.nhl.nhl_zone_transitions
       - sportsdataverse.cfb.cfb_tempo
       - sportsdataverse.cfb.cfb_resume
