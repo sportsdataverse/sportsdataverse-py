@@ -85,6 +85,10 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
     # over the years) -- union columns, null-fill gaps.
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = pl.concat(frames, how="diagonal_relaxed") if frames else {{ ld.empty }}
+{% if ld.column_aliases %}
+    # diagonal_relaxed appends a column first seen in a later season at the end; restore the pair order.
+    out = _alias_columns(out, {{ ld.column_aliases|py_repr }})
+{% endif %}
 {% if ld.id_int64 %}
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.

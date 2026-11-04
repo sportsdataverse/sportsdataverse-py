@@ -2860,7 +2860,7 @@ def refresh_loader_schemas() -> int:
                 got = (
                     [e for e in got if e["name"] not in drop]
                     + [{"name": n, "type": kinds.get(n) or kinds[o]} for n, o in live.items()]
-                    + [{"name": o, "type": kinds.get(n) or kinds[o]} for n, o in live.items()]
+                    + [{"name": o, "type": kinds.get(o) or kinds[n]} for n, o in live.items()]
                 )
         if got is None:
             failed.append(ld.fn)

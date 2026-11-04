@@ -91,3 +91,18 @@ def test_load_nba_player_impact_emits_both_names_whichever_the_release_ships(mon
     for b, d in zip(_BOBAN, _DARKO):
         assert out[b].to_list() == out[d].to_list() != [None]
     assert out[_BOBAN[1]].to_list() == [2.5]
+
+
+def test_load_nba_player_impact_keeps_pair_order_when_seasons_ship_different_names(monkeypatch):
+    # An old season ships darko_* and no `gp`, a newer one boban_* and `gp`: the concat appends the
+    # later-seen `gp` after the pair, so the order (boban_* then darko_*, last) must be restored.
+    def fake_read(url):
+        old = "2023" in url
+        cols = _DARKO if old else _BOBAN
+        extra = {} if old else {"gp": [7]}
+        return pl.DataFrame({"rapm": [0.5], **extra, **{c: [1.0 + i] for i, c in enumerate(cols)}})
+
+    monkeypatch.setattr(nba_loaders, "_read_release_parquet", fake_read)
+    out = nba_loaders.load_nba_player_impact(seasons=[2023, 2024])
+    assert out.columns == ["rapm", "gp", *_BOBAN, *_DARKO]
+    assert out["boban_projected_rating"].to_list() == out["darko_projected_rating"].to_list() == [2.0, 2.0]

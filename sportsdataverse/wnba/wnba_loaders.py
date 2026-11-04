@@ -1481,6 +1481,15 @@ def load_wnba_player_impact(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_player_impact")
     )
+    # diagonal_relaxed appends a column first seen in a later season at the end; restore the pair order.
+    out = _alias_columns(
+        out,
+        {
+            "boban_filtered_skill": "darko_filtered_skill",
+            "boban_projected_rating": "darko_projected_rating",
+            "boban_projected_sd": "darko_projected_sd",
+        },
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
