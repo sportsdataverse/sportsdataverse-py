@@ -283,7 +283,7 @@ from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: E
 def test_end_to_end_real_slice_report(tmp_path, monkeypatch):
     # small real slice compiled once, then validated (report shape only, not thresholds)
     real_index = C._season_game_index(2023, "Regular Season").head(8)
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st: real_index)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, **_: real_index)
     s = compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=1.0)
     rep = validate_model(
         RidgeRapmModel(),
@@ -583,7 +583,7 @@ def test_end_to_end_real_slice_external_validity(tmp_path, monkeypatch):
     from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
 
     real_index = C._season_game_index(2022, "Regular Season").head(8)
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st: real_index)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, **_: real_index)
     s = compile_nba_season(2022, cache_dir=str(tmp_path), delay_s=1.0)
     ratings = nba_rapm(s)
     oracle = load_rapm_ryan_davis(os.path.join(_ORACLE_DIR, "rapm_ryan_davis.csv")).filter(
