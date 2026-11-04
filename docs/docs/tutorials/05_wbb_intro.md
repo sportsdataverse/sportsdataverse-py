@@ -47,7 +47,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 **No API key needed** — the ESPN endpoints and the parquet releases are all public. 😊
@@ -706,22 +706,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 4595297    ┆ Chelby Koker         ┆ N Illinois              ┆ 31    ┆ 0            ┆ null │
-    │ 5174303    ┆ Erica Moon           ┆ Texas A&M               ┆ 32    ┆ 0            ┆ null │
-    │ 5178002    ┆ Sophia Rampulla      ┆ Milwaukee               ┆ 32    ┆ 0            ┆ null │
-    │ 5110093    ┆ Marie' Perdew        ┆ Morehead St             ┆ 30    ┆ 0            ┆ null │
-    │ 4683053    ┆ Allison Weidner      ┆ Nebraska                ┆ 35    ┆ 0            ┆ null │
-    │ 4433465    ┆ Caitlin McGee        ┆ South Florida           ┆ 33    ┆ 0            ┆ null │
-    │ 4704178    ┆ Anna Mortag          ┆ Butler                  ┆ 32    ┆ 0            ┆ null │
-    │ 5109231    ┆ Shannon Clarke       ┆ Navy                    ┆ 31    ┆ 0            ┆ null │
-    │ 5175873    ┆ Kiley Sours-Miller   ┆ Arizona St              ┆ 31    ┆ 0            ┆ null │
-    │ 5177811    ┆ Stanislava Kabernick ┆ MTSU                    ┆ 35    ┆ 0            ┆ null │
-    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬───────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name      ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                       ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                       ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪═══════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 5179312    ┆ Daquira Lancaster-Navarro ┆ Morgan St               ┆ 30    ┆ 0            ┆ null │
+    │ 5106098    ┆ Jade Campbell             ┆ St Francis PA           ┆ 30    ┆ 0            ┆ null │
+    │ 5174406    ┆ Danna Grenald             ┆ Clemson                 ┆ 31    ┆ 0            ┆ null │
+    │ 5177267    ┆ Gianna McManaman          ┆ New Mexico              ┆ 32    ┆ 0            ┆ null │
+    │ 5195177    ┆ McKenna Johnson           ┆ Minnesota               ┆ 22    ┆ 0            ┆ null │
+    │ 5178411    ┆ Michelle Ugwah            ┆ Morehead St             ┆ 30    ┆ 0            ┆ null │
+    │ 4899041    ┆ Mia Flor                  ┆ Wofford                 ┆ 30    ┆ 0            ┆ null │
+    │ 4714498    ┆ Allie Palmieri            ┆ UMass                   ┆ 32    ┆ 0            ┆ null │
+    │ 5107686    ┆ Dylan Philip              ┆ Montana St              ┆ 33    ┆ 0            ┆ null │
+    │ 4705067    ┆ Caitlin Wingertzahn       ┆ William & Mary          ┆ 29    ┆ 0            ┆ null │
+    └────────────┴───────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -844,12 +844,12 @@ three_pt
     │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
     │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
     ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
+    │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
+    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
@@ -993,10 +993,10 @@ dd
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
-    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
     │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
+    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -1039,8 +1039,8 @@ defense
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
     │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
+    │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
     │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
     └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
 
@@ -1196,8 +1196,15 @@ Now go find the next national champion! 🏀🏆
 ```python
 from sportsdataverse.wbb import bart_wbb_ratings
 
-safe("bart_wbb ratings", lambda: bart_wbb_ratings(year=2025))
+# barttorvik.com answers HTTP 403 to cloud and CI machines, which is where the docs page is rendered.
+try:
+    bart = bart_wbb_ratings(year=2025)
+    print(f"✅ bart_wbb ratings: {bart.height} teams")
+except AssetFetchError as e:
+    bart = None
+    print("Torvik blocks automated requests; run this locally" if "HTTP 403" in str(e) else f"⏭️  bart_wbb ratings: {e}")
+bart
 
 ```
 
-    ⏭️  bart_wbb ratings: AssetFetchError: barttorvik.com/ncaaw/2025_team_results.csv answered HTTP 403
+    Torvik blocks automated requests; run this locally

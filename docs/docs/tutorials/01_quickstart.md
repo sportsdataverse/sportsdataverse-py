@@ -84,7 +84,7 @@ sport. 🎛️
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 # or
 uv add sportsdataverse
 ```
@@ -180,10 +180,14 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 ```
 
     ✅ espn_nba_teams
+
+
     ✅ espn_wnba_teams
 
 
     ✅ espn_nhl_teams
+
+
     ✅ espn_mlb_teams
 
 
@@ -220,6 +224,8 @@ print("NFL scoreboard rows:", None if board is None else board.height,
 ```
 
     ✅ espn_nfl_scoreboard
+
+
     ✅ espn_nba_standings
     NFL scoreboard rows: 14 | NBA standings rows: 30
 
@@ -322,14 +328,13 @@ for lg, fns in hits.items():
 ```
 
      cfb: espn_cfb_cdn_scoreboard, espn_cfb_scoreboard, fox_cfb_scoreboard, scoreboard_event_parsing, yahoo_cfb_scoreboard
-     mbb: espn_mbb_cdn_scoreboard, espn_mbb_scoreboard, fox_mbb_scoreboard, parse_ncaa_bb_scoreboard, scoreboard_event_parsing
-     mlb: espn_mlb_cdn_scoreboard, espn_mlb_scoreboard, fox_mlb_scoreboard
-     nba: espn_nba_cdn_scoreboard, espn_nba_scoreboard, fox_nba_scoreboard, scoreboard_event_parsing
      nfl: espn_nfl_cdn_scoreboard, espn_nfl_scoreboard, fox_nfl_scoreboard, scoreboard_event_parsing
-     nhl: espn_nhl_scoreboard, fox_nhl_scoreboard, nhl_scoreboard, parse_nhl_web_scoreboard, scoreboard_event_parsing
-     wbb: espn_wbb_cdn_scoreboard, espn_wbb_scoreboard, fox_wbb_scoreboard, scoreboard_event_parsing
-    wnba: espn_wnba_cdn_scoreboard, espn_wnba_scoreboard, fox_wnba_scoreboard, scoreboard_event_parsing
-    nbagl: espn_nbagl_scoreboard
+     ufl: espn_ufl_scoreboard
+     xfl: espn_xfl_scoreboard
+     cfl: espn_cfl_scoreboard
+     nba: espn_nba_cdn_scoreboard, espn_nba_scoreboard, fox_nba_scoreboard, nba_stats_scoreboardv2, nba_stats_scoreboardv3, scoreboard_event_parsing
+    wnba: espn_wnba_cdn_scoreboard, espn_wnba_scoreboard, fox_wnba_scoreboard, scoreboard_event_parsing, wnba_stats_scoreboardv2, wnba_stats_scoreboardv3
+    nbagl: espn_nbagl_scoreboard, nbagl_stats_scoreboardv3
      nbl: espn_nbl_scoreboard
     fiba: espn_fiba_scoreboard
     olympics_mbk: espn_olympics_mbk_scoreboard
@@ -340,8 +345,16 @@ for lg, fns in hits.items():
     nbasl_sac: espn_nbasl_sac_scoreboard
     nbasl_orl: espn_nbasl_orl_scoreboard
     nbasl_gs: espn_nbasl_gs_scoreboard
+     mbb: espn_mbb_cdn_scoreboard, espn_mbb_scoreboard, fox_mbb_scoreboard, parse_ncaa_bb_scoreboard, scoreboard_event_parsing
+     wbb: espn_wbb_cdn_scoreboard, espn_wbb_scoreboard, fox_wbb_scoreboard, scoreboard_event_parsing
+     nhl: espn_nhl_scoreboard, fox_nhl_scoreboard, nhl_scoreboard, parse_nhl_web_scoreboard, scoreboard_event_parsing
+     mch: espn_mch_scoreboard
+     wch: espn_wch_scoreboard
+     elh: elh_scoreboard, parse_elh_scoreboard
+     mlb: espn_mlb_cdn_scoreboard, espn_mlb_scoreboard, fox_mlb_scoreboard
+    college_baseball: espn_college_baseball_cdn_scoreboard, espn_college_baseball_scoreboard
+    college_softball: espn_college_softball_scoreboard
     soccer: espn_soccer_scoreboard
-    cricket: espn_cricket_scoreboard
      epl: espn_epl_cdn_scoreboard, espn_epl_scoreboard
     laliga: espn_laliga_scoreboard
     bundesliga: espn_bundesliga_scoreboard
@@ -354,13 +367,10 @@ for lg, fns in hits.items():
     nwsl: espn_nwsl_scoreboard
      wwc: espn_wwc_scoreboard
       wc: espn_wc_scoreboard
-     mch: espn_mch_scoreboard
-     wch: espn_wch_scoreboard
-     ufl: espn_ufl_scoreboard
-     xfl: espn_xfl_scoreboard
-     cfl: espn_cfl_scoreboard
-    college_baseball: espn_college_baseball_cdn_scoreboard, espn_college_baseball_scoreboard
-    college_softball: espn_college_softball_scoreboard
+    cricket: espn_cricket_scoreboard
+     cbs: cbs_game_scoring_scoreboard
+    yahoo: yahoo_editorial_scoreboard, yahoo_scoreboard_game
+     fox: fox_api_scoreboard, fox_api_topevents_scoreboard_segment
 
 
 
@@ -374,24 +384,24 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
 
 
 
-    shape: (45, 2)
-    ┌────────┬─────────────┐
-    │ league ┆ n_functions │
-    │ ---    ┆ ---         │
-    │ str    ┆ i64         │
-    ╞════════╪═════════════╡
-    │ mbb    ┆ 658         │
-    │ wbb    ┆ 578         │
-    │ cfb    ┆ 467         │
-    │ nba    ┆ 407         │
-    │ nhl    ┆ 406         │
-    │ …      ┆ …           │
-    │ pwhl   ┆ 68          │
-    │ ahl    ┆ 14          │
-    │ ohl    ┆ 14          │
-    │ qmjhl  ┆ 14          │
-    │ whl    ┆ 14          │
-    └────────┴─────────────┘
+    shape: (105, 2)
+    ┌──────────────┬─────────────┐
+    │ league       ┆ n_functions │
+    │ ---          ┆ ---         │
+    │ str          ┆ i64         │
+    ╞══════════════╪═════════════╡
+    │ mbb          ┆ 660         │
+    │ wbb          ┆ 577         │
+    │ nba          ┆ 541         │
+    │ cfb          ┆ 467         │
+    │ nhl          ┆ 406         │
+    │ …            ┆ …           │
+    │ vijhl        ┆ 14          │
+    │ kijhl        ┆ 14          │
+    │ mjhl         ┆ 14          │
+    │ thesportsdb  ┆ 13          │
+    │ espn_content ┆ 4           │
+    └──────────────┴─────────────┘
 
 
 
@@ -471,11 +481,11 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
     │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
     │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
     │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ bool      ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401908044 ┆ s:1~l:10~ ┆ 2026-10-2 ┆ Milwaukee ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4019080 ┆ 7T00:00Z  ┆ Brewers   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 44        ┆           ┆ at Tampa  ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │ 401908046 ┆ s:1~l:10~ ┆ 2026-10-2 ┆ Milwaukee ┆ … ┆ https://a ┆ 4         ┆ true      ┆ null     │
+    │           ┆ e:4019080 ┆ 9T00:00Z  ┆ Brewers   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 46        ┆           ┆ at Tampa  ┆   ┆ com/i/tea ┆           ┆           ┆          │
     │           ┆           ┆           ┆ Bay…      ┆   ┆ mlo…      ┆           ┆           ┆          │
     └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
@@ -554,8 +564,6 @@ pl.DataFrame(rows)
 ```
 
     ✅ espn_nba_standings
-
-
     ✅ espn_nhl_standings
 
 
@@ -591,8 +599,6 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 ```
 
     nfl  Patriots       -> New England Patriots (id=17)
-
-
     mlb  Yankees        -> New York Yankees (id=10)
     nhl  Bruins         -> Boston Bruins (id=1)
 
@@ -707,6 +713,8 @@ print("raw    ->", type(raw).__name__, "(top-level keys:", None if not isinstanc
 ```
 
     ✅ nhl_standings (parsed)
+
+
     ✅ nhl_standings (raw dict)
     parsed -> DataFrame (32, 84)
     raw    -> dict (top-level keys: ['wildCardIndicator', 'standingsDateTimeUtc', 'standings'] )
@@ -826,13 +834,13 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20.0         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 97.2         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
+    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
+    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 96.2         ┆ null         ┆ null         ┆ null      │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
@@ -865,14 +873,14 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
     │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
     │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
     ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 9    ┆ 2      ┆ 2         ┆ 20     ┆ Eastern         ┆ Metropolitan  │
-    │ 9    ┆ 2      ┆ 1         ┆ 19     ┆ Eastern         ┆ Atlantic      │
-    │ 8    ┆ 3      ┆ 2         ┆ 18     ┆ Western         ┆ Central       │
-    │ 8    ┆ 2      ┆ 1         ┆ 17     ┆ Western         ┆ Pacific       │
-    │ 8    ┆ 4      ┆ 1         ┆ 17     ┆ Western         ┆ Pacific       │
-    │ 8    ┆ 4      ┆ 0         ┆ 16     ┆ Western         ┆ Central       │
-    │ 8    ┆ 4      ┆ 0         ┆ 16     ┆ Eastern         ┆ Atlantic      │
-    │ 7    ┆ 4      ┆ 2         ┆ 16     ┆ Eastern         ┆ Atlantic      │
+    │ 12   ┆ 2      ┆ 2         ┆ 26     ┆ Eastern         ┆ Metropolitan  │
+    │ 11   ┆ 2      ┆ 2         ┆ 24     ┆ Western         ┆ Pacific       │
+    │ 10   ┆ 3      ┆ 3         ┆ 23     ┆ Western         ┆ Central       │
+    │ 10   ┆ 4      ┆ 1         ┆ 21     ┆ Eastern         ┆ Atlantic      │
+    │ 9    ┆ 3      ┆ 2         ┆ 20     ┆ Eastern         ┆ Atlantic      │
+    │ 9    ┆ 5      ┆ 1         ┆ 19     ┆ Western         ┆ Pacific       │
+    │ 9    ┆ 6      ┆ 1         ┆ 19     ┆ Eastern         ┆ Atlantic      │
+    │ 8    ┆ 3      ┆ 2         ┆ 18     ┆ Eastern         ┆ Atlantic      │
     └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
 
 
@@ -1037,11 +1045,11 @@ out
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
     │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
+    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       │
     │ aussierules_aflw                ┆ Aussie Rules      ┆ AFL Women's               │
     │ baseball_kbo                    ┆ Baseball          ┆ KBO                       │
-    │ baseball_mlb                    ┆ Baseball          ┆ MLB                       │
-    │ baseball_mlb_world_series_winn… ┆ Baseball          ┆ MLB World Series Winner   │
     │ basketball_euroleague           ┆ Basketball        ┆ Basketball Euroleague     │
+    │ basketball_nba                  ┆ Basketball        ┆ NBA                       │
     └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
@@ -1071,32 +1079,22 @@ out
 
 
     shape: (10, 6)
-    ┌──────────────┬────────────────┬────────────────┬────────────┬────────────────┬───────────────┐
-    │ home_team    ┆ away_team      ┆ bookmaker_key  ┆ market_key ┆ outcome_name   ┆ outcome_price │
-    │ ---          ┆ ---            ┆ ---            ┆ ---        ┆ ---            ┆ ---           │
-    │ str          ┆ str            ┆ str            ┆ str        ┆ str            ┆ i64           │
-    ╞══════════════╪════════════════╪════════════════╪════════════╪════════════════╪═══════════════╡
-    │ Philadelphia ┆ Dallas Cowboys ┆ draftkings     ┆ h2h        ┆ Dallas Cowboys ┆ -218          │
-    │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ draftkings     ┆ h2h        ┆ Philadelphia   ┆ 180           │
-    │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Dallas Cowboys ┆ -235          │
-    │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Philadelphia   ┆ 200           │
-    │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Dallas Cowboys ┆ -218          │
-    │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Philadelphia   ┆ 182           │
-    │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Dallas Cowboys ┆ -210          │
-    │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Philadelphia   ┆ 176           │
-    │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Dallas Cowboys ┆ -223          │
-    │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Philadelphia   ┆ 188           │
-    │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    └──────────────┴────────────────┴────────────────┴────────────┴────────────────┴───────────────┘
+    ┌──────────────────┬───────────────┬───────────────┬────────────┬──────────────────┬───────────────┐
+    │ home_team        ┆ away_team     ┆ bookmaker_key ┆ market_key ┆ outcome_name     ┆ outcome_price │
+    │ ---              ┆ ---           ┆ ---           ┆ ---        ┆ ---              ┆ ---           │
+    │ str              ┆ str           ┆ str           ┆ str        ┆ str              ┆ i64           │
+    ╞══════════════════╪═══════════════╪═══════════════╪════════════╪══════════════════╪═══════════════╡
+    │ Seattle Seahawks ┆ Chicago Bears ┆ draftkings    ┆ h2h        ┆ Chicago Bears    ┆ 142           │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ draftkings    ┆ h2h        ┆ Seattle Seahawks ┆ -170          │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ fanduel       ┆ h2h        ┆ Chicago Bears    ┆ 150           │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ fanduel       ┆ h2h        ┆ Seattle Seahawks ┆ -178          │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ betrivers     ┆ h2h        ┆ Chicago Bears    ┆ 145           │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ betrivers     ┆ h2h        ┆ Seattle Seahawks ┆ -177          │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ lowvig        ┆ h2h        ┆ Chicago Bears    ┆ 153           │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ lowvig        ┆ h2h        ┆ Seattle Seahawks ┆ -175          │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ betonlineag   ┆ h2h        ┆ Chicago Bears    ┆ 157           │
+    │ Seattle Seahawks ┆ Chicago Bears ┆ betonlineag   ┆ h2h        ┆ Seattle Seahawks ┆ -180          │
+    └──────────────────┴───────────────┴───────────────┴────────────┴──────────────────┴───────────────┘
 
 
 
@@ -1115,30 +1113,30 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 7402
+    Total wrappers across the counted leagues: 9907
 
 
 
 
 
-    shape: (45, 2)
-    ┌────────┬─────────────┐
-    │ league ┆ n_functions │
-    │ ---    ┆ ---         │
-    │ str    ┆ i64         │
-    ╞════════╪═════════════╡
-    │ mbb    ┆ 658         │
-    │ wbb    ┆ 578         │
-    │ cfb    ┆ 467         │
-    │ nba    ┆ 407         │
-    │ nhl    ┆ 406         │
-    │ …      ┆ …           │
-    │ pwhl   ┆ 68          │
-    │ ahl    ┆ 14          │
-    │ ohl    ┆ 14          │
-    │ qmjhl  ┆ 14          │
-    │ whl    ┆ 14          │
-    └────────┴─────────────┘
+    shape: (105, 2)
+    ┌──────────────┬─────────────┐
+    │ league       ┆ n_functions │
+    │ ---          ┆ ---         │
+    │ str          ┆ i64         │
+    ╞══════════════╪═════════════╡
+    │ mbb          ┆ 660         │
+    │ wbb          ┆ 577         │
+    │ nba          ┆ 541         │
+    │ cfb          ┆ 467         │
+    │ nhl          ┆ 406         │
+    │ …            ┆ …           │
+    │ vijhl        ┆ 14          │
+    │ kijhl        ┆ 14          │
+    │ mjhl         ┆ 14          │
+    │ thesportsdb  ┆ 13          │
+    │ espn_content ┆ 4           │
+    └──────────────┴─────────────┘
 
 
 

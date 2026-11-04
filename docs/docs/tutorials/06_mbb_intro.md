@@ -64,7 +64,7 @@ no live API). Click any name for the full reference.
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 No API key needed — ESPN, Fox and the parquet loaders are all open. 😊
@@ -297,16 +297,16 @@ out
     │ ---     ┆ --- ┆ ---  ┆ ---  ┆ ---  │
     │ str     ┆ str ┆ str  ┆ str  ┆ str  │
     ╞═════════╪═════╪══════╪══════╪══════╡
-    │ 1       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 2       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 3       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 4       ┆ 36  ┆ null ┆ null ┆ null │
-    │ 5       ┆ 36  ┆ null ┆ null ┆ null │
-    │ 6       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 7       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 8       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 9       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 10      ┆ 35  ┆ null ┆ null ┆ null │
+    │ 1       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 2       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 3       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 4       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 5       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 6       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 7       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 8       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 9       ┆ 1   ┆ null ┆ null ┆ null │
+    │ 10      ┆ 1   ┆ null ┆ null ┆ null │
     └─────────┴─────┴──────┴──────┴──────┘
 
 
@@ -738,16 +738,16 @@ out
     │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
     │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
     ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 37  ┆ 21  ┆ 16  ┆ null ┆ null     │
-    │ 2     ┆ 35  ┆ 21  ┆ 15  ┆ null ┆ null     │
-    │ 3     ┆ 35  ┆ 18  ┆ 17  ┆ null ┆ null     │
-    │ 4     ┆ 35  ┆ 23  ┆ 13  ┆ null ┆ null     │
-    │ 5     ┆ 35  ┆ 15  ┆ 20  ┆ null ┆ null     │
-    │ 6     ┆ 35  ┆ 19  ┆ 18  ┆ null ┆ null     │
-    │ 7     ┆ 35  ┆ 30  ┆ 9   ┆ null ┆ null     │
-    │ 8     ┆ 35  ┆ 19  ┆ 16  ┆ null ┆ null     │
-    │ 9     ┆ 34  ┆ 29  ┆ 6   ┆ null ┆ null     │
-    │ 10    ┆ 34  ┆ 36  ┆ 3   ┆ null ┆ null     │
+    │ 1     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 2     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
+    │ 3     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 4     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
+    │ 5     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
+    │ 6     ┆ -   ┆ -   ┆ -   ┆ null ┆ null     │
+    │ 7     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
+    │ 8     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
+    │ 9     ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
+    │ 10    ┆ -   ┆ 0   ┆ 0   ┆ null ┆ null     │
     └───────┴─────┴─────┴─────┴──────┴──────────┘
 
 
@@ -839,10 +839,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6         Fardaws Aimaq               CAL              19
-    7       Yaxel Lendeborg               UAB              19
-    8          Saint Thomas              UNCO              19
-    9           Riley Minix              MORE              19
+    6          Saint Thomas              UNCO              19
+    7         Fardaws Aimaq               CAL              19
+    8           Riley Minix              MORE              19
+    9       Yaxel Lendeborg               UAB              19
 
 
 
@@ -1073,7 +1073,13 @@ import os
 
 from sportsdataverse.mbb import torvik_ratings
 
-safe("torvik ratings", lambda: torvik_ratings(year=2025))
+# barttorvik.com answers HTTP 403 to cloud and CI machines, which is where the docs page is rendered.
+try:
+    torvik = torvik_ratings(year=2025)
+    print(f"✅ torvik ratings: {torvik.height} teams")
+except AssetFetchError as e:
+    torvik = None
+    print("Torvik blocks automated requests; run this locally" if "HTTP 403" in str(e) else f"⏭️  torvik ratings: {e}")
 
 if os.environ.get("KENPOM_EMAIL") and os.environ.get("KENPOM_PASSWORD"):
     from sportsdataverse.mbb import kenpom_ratings
@@ -1084,5 +1090,5 @@ else:
 
 ```
 
-    ⏭️  torvik ratings: AssetFetchError: barttorvik.com/2025_team_results.csv answered HTTP 403
+    Torvik blocks automated requests; run this locally
     no KenPom credentials - skipping kenpom_* (set KENPOM_EMAIL / KENPOM_PASSWORD)
