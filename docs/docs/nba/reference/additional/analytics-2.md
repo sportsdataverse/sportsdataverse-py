@@ -252,7 +252,7 @@ skill.sort("clutch_skill_shrunk", descending=True).head()
 
 ### nba_team_season_rates {#nba_team_season_rates}
 
-`nba_team_season_rates(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_team_season_rates(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits.
 
@@ -265,9 +265,9 @@ possession. The full definitions are in `sportsdataverse._common.team_season_rat
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -337,7 +337,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
 
 **Example**
 

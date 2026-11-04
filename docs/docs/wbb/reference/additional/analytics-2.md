@@ -65,7 +65,7 @@ wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
 
 ### wbb_team_season_rates {#wbb_team_season_rates}
 
-`wbb_team_season_rates(seasons: 'Union[int, list[int]]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_team_season_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's college season team rates from possessions, with home/away/close/clutch splits.
 
@@ -77,7 +77,7 @@ or an overtime, the score within 5 as the possession starts.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**

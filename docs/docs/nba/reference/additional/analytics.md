@@ -1381,7 +1381,7 @@ period (the period length for the first one). Points come from the made-shot cou
 | `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows. |
 | `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `season_type`, `home_team_id`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
-| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep: `"regular-season"` (the default, stats.nba.com's "Regular Season"; NBA Cup group and knockout games count, the Cup final does not), `"playoffs"` or `"play-in"`. |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep: `"regular-season"` (the default, stats.nba.com's "Regular Season"; NBA Cup group and knockout games count, the Cup final does not), `"preseason"`, `"playoffs"` or `"play-in"`. |
 
 **Returns**
 
@@ -1414,7 +1414,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
 
 **Example**
 
