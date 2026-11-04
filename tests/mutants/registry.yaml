@@ -9287,6 +9287,89 @@
   expected: kill
   note: The published 10-second window is the default; 8 s fits Synergy's level better but is not a published rule.
 
+# --- BB-D22: luck and close-game record (Pythagorean expected wins, close games) ----------------
+# Killers: tests/nba/test_nba_team_luck.py, tests/mbb/test_mbb_team_luck.py and
+# tests/tools/test_fit_team_luck_pythag.py, on committed real captures (tests/fixtures/bb_team_luck).
+- id: bb-tl-pythag-ratio
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'ratio = (pl.col("opp_pts") / pl.col("pts")) ** exponent'
+  mutant: 'ratio = (pl.col("pts") / pl.col("opp_pts")) ** exponent'
+  test: tests/nba/test_nba_team_luck.py::test_expected_wins_by_hand
+  expected: kill
+  note: An inverted ratio gives every team its opponents' expected wins.
+
+- id: bb-tl-close-wins
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '(is_close & _WON).sum().cast(pl.Int64).alias("close_wins"),'
+  mutant: 'is_close.sum().cast(pl.Int64).alias("close_wins"),'
+  test: tests/nba/test_nba_team_luck.py::test_close_games_are_bb_d3_close_split
+  expected: kill
+  note: Counting every close game as a win breaks close_wins + close_losses == close_games.
+
+- id: bb-tl-close-flag-game-level
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'return flagged.group_by("game_id").agg(pl.col("close").first())'
+  mutant: 'return flagged.group_by("game_id").agg(pl.col("clutch").first().alias("close"))'
+  test: tests/nba/test_nba_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: The first possession's clutch flag is almost never set; the ESPN recount would disagree on ~550 games.
+
+- id: bb-tl-espn-rekey
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/mbb/mbb_team_luck.py
+  snippet: '.select(pl.col("espn_game_id").alias("game_id"), "close")'
+  mutant: '.select(pl.col("game_id"), "close")'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: Left on the NCAA contest id, no close flag joins an ESPN result.
+
+- id: bb-tl-tie-drop
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '        res = res.filter(~tied)'
+  mutant: '        pass'
+  test: tests/nba/test_nba_team_luck.py::test_tied_rows_are_dropped_with_a_warning
+  expected: kill
+  note: A 0-0 never-played game would count as a loss for both sides.
+
+- id: bb-tl-fit-argmin
+  group: bb-team-luck
+  finding: BB-D22
+  file: tools/fit_team_luck_pythag.py
+  snippet: 'return float(GRID[int(np.argmin(sse))])'
+  mutant: 'return float(GRID[int(np.argmax(sse))])'
+  test: tests/tools/test_fit_team_luck_pythag.py
+  expected: kill
+  note: The refit would no longer land on the frozen PYTHAG_EXPONENT.
+
+- id: bb-tl-pbp-games
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'pl.col("close").is_not_null().sum().cast(pl.Int64).alias("pbp_games"),'
+  mutant: 'pl.len().cast(pl.Int64).alias("pbp_games"),'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: Counting every game as classed hides the college games with no NCAA possessions.
+
+- id: bb-tl-close-qualifier
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '.pipe(attach_ranks, ["close_win_pct"], min_cohort=MIN_COHORT_TEAMS, by=("season",), qualifier=_CLOSE_QUALIFIER)'
+  mutant: '.pipe(attach_ranks, ["close_win_pct"], min_cohort=MIN_COHORT_TEAMS, by=("season",), qualifier=QUALIFIER)'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_win_pct_rank_needs_classed_close_games
+  expected: kill
+  note: A team with most games unclassed, or under five close games, would be ranked on close_win_pct.
+
 # --- BB-D6: game impact box and lineups used (NBA / WNBA / MBB / WBB) ------------------------------
 # Killers: tests/nba/test_nba_game_impact.py (16 NBA 2025-26 and 16 WNBA 2026 games against the
 # stats.nba.com box +/-) and tests/mbb/test_mbb_game_impact.py (12 + 12 college 2024-25 games

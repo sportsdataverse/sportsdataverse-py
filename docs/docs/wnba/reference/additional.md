@@ -125,9 +125,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_season_standings](additional/analytics.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
 | [wnba_shot_value](additional/analytics.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
 | [wnba_team_clutch](additional/analytics.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
+| [wnba_team_luck](additional/analytics.md#wnba_team_luck) | WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck. |
 | [wnba_team_season_rates](additional/analytics.md#wnba_team_season_rates) | WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates. |
-| [wnba_team_strength](additional/analytics.md#wnba_team_strength) | WNBA team strength: adjusted ratings, SOS, SOV, pace and four factors (league_id='10'). See sportsdataverse.nba.nba_team_strength.nba_team_strength. |
-| [wnba_tracking_drive_value](additional/analytics.md#wnba_tracking_drive_value) | WNBA drive value + rim-pressure (`league_id="10"` by-reference shim). |
+| [wnba_team_strength](additional/analytics-2.md#wnba_team_strength) | WNBA team strength: adjusted ratings, SOS, SOV, pace and four factors (league_id='10'). See sportsdataverse.nba.nba_team_strength.nba_team_strength. |
+| [wnba_tracking_drive_value](additional/analytics-2.md#wnba_tracking_drive_value) | WNBA drive value + rim-pressure (`league_id="10"` by-reference shim). |
 | [wnba_tracking_pass_value](additional/analytics-2.md#wnba_tracking_pass_value) | WNBA expected-assists / passer value (`league_id="10"` by-reference shim). |
 | [wnba_tracking_reb_oe](additional/analytics-2.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |
 | [wnba_tracking_rim_protect_value](additional/analytics-2.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |

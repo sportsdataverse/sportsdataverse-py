@@ -1,10 +1,77 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg"
-sidebar_label: "Analytics: mbb_team–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of"
+sidebar_label: "Analytics: mbb_team–strength_of"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of
+
+### mbb_team_luck {#mbb_team_luck}
+
+`mbb_team_luck(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L.
+
+One row per team and season. `exp_wins` is the Pythagorean expectation on the season's
+final scores, `games * pts^x / (pts^x + opp_pts^x)`, with the exponent `x` fitted per
+league on past seasons (`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
+`luck_wins` is `wins - exp_wins`. A close game is one within 5 points at the start of a
+possession in the last 5:00 of the 2nd half (4th quarter, women's, from 2016) or overtime.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_luck.wbb_team_luck`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from ESPN's completed games (postseason included); `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published NCAA possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents; `close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks. |
+| `games` | Int64 | Games in the season's completed ESPN games, postseason included. |
+| `wins` | Int64 | Wins in the season's completed ESPN games, postseason included. |
+| `losses` | Int64 | Losses in the season's completed ESPN games, postseason included. |
+| `pts` | Int64 | Points scored in those games (final scores). |
+| `opp_pts` | Int64 | Points allowed in those games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['mbb'] (PYTHAG_EXPONENT['wbb'] with league='womens'), fitted on past seasons by tools/fit_team_luck_pythag.py. |
+| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
+| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
+| `pbp_games` | Int64 | Games with published possessions (ncaa_mbb_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
+| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 2nd half or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
+| `close_wins` | Int64 | Wins in close games. |
+| `close_losses` | Int64 | Losses in close games. |
+| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
+| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
+| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
+| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
+| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+| `SeasonNotFoundError` | For a season before 2010, the first with NCAA possessions. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_luck import mbb_team_luck
+luck = mbb_team_luck(2025)
+luck.sort("luck_wins", descending=True).select("team_id", "wins", "exp_wins", "luck_wins").head()
+```
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -1058,126 +1125,4 @@ No returns table is published for this function: no capture: it needs a schedule
 ```python
 from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 resume = strength_of_schedule(results, ratings)
-```
-
-### test_positional_aware_filter {#test_positional_aware_filter}
-
-`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
-
-Check a positional-aware filter (from `build_positional_aware_filter`)
-
-against a sorted (`order_lineup`-ordered) lineup array.
-
-Faithful port of `PositionUtils.testPositionalAwareFilter`
-(`PositionUtils.ts:831-858`). A fragment matches if any of its
-position-restricted slots (or, when `pos` is empty, any slot at all)
-has a `code`/`id` containing the fragment's filter text
-(case-insensitive substring match). Every positive fragment must match
-(vacuously true if there are none); no negative fragment may match
-(vacuously true if there are none).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
-| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
-| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
-
-**Returns**
-
-Whether the lineup satisfies both the positive and negative filters.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
-lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
-test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
-```
-
-### using_roster_pos {#using_roster_pos}
-
-`using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'`
-
-Reconcile a stats-derived position class against roster metadata.
-
-Faithful port of `PositionUtils.usingRosterPos` (`PositionUtils.ts:583-626`).
-When the classifier landed on an "unsure" bucket (`"G?"`/`"F/C?"`),
-roster info narrows it (a roster `"C"` always wins outright); otherwise
-an obviously-wrong stats classification is compromised toward the
-roster-implied side, gated by `pos_class_to_score` thresholds.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | The stats-derived position class. |
-| `roster_pos` | `str \| None` |  | The roster-reported position (`"G"`/`"F"`/`"C"`), or `None`/`""` when unknown. `if (rosterPos)` (ts:587) is a plain JS truthiness check on a string -- `""` and `None` behave identically (both mean "no correction"), so `if not roster_pos` is the faithful Python mirror, not an `is None` landmine. |
-
-**Returns**
-
-A `(position, info)` tuple. `info` is `None` when no correction/explanation applies (matches the TS `undefined`), else a human-readable note on why the position was adjusted.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_positions import using_roster_pos
-using_roster_pos("G?", "C")
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
-
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
-
-# Two-lineup possession-weighted merge
-
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
 ```

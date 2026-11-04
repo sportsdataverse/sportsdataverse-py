@@ -350,6 +350,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
 | [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [wbb_team_luck](additional/analytics-2.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
 | [wbb_team_season_rates](additional/analytics-2.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [wbb_team_strength](additional/analytics-2.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
