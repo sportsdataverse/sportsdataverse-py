@@ -1,10 +1,199 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_player–nba_team"
-sidebar_label: "Analytics: nba_player–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_l2m–nba_team"
+sidebar_label: "Analytics: nba_l2m–nba_team"
 sidebar_position: 14
-description: "NBA — additional Python functions — Analytics: nba_player–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_l2m–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_player–nba_team
+# NBA — additional Python functions — Analytics: nba_l2m–nba_team
+
+### nba_l2m {#nba_l2m}
+
+`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
+
+Fetch and parse an NBA Last Two Minute report from official.nba.com.
+
+Retrieves the L2M report for a given game and returns parsed tables of calls,
+game metadata, and error statistics. The game_id is zero-padded to 10 digits
+(e.g., 42500405 becomes "0042500405"). A report is published for any game that
+is within 3 points (5 points before the 2017-18 season) at any point during the
+last two minutes of the fourth quarter or overtime -- not only playoff games.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
+
+| col_name | type | description |
+|---|---|---|
+| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
+| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
+| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
+| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
+| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
+| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
+| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
+| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
+| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
+| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
+| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
+| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
+| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
+| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
+| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
+| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
+| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
+| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
+| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
+| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
+| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
+| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
+| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
+| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
+| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
+| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
+| `game.away_team_name` | String | Away team nickname as published in the report. |
+| `game.home_score` | Int64 | Home team's final score for the game. |
+| `game.away_score` | Int64 | Away team's final score for the game. |
+| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
+| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
+| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
+| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
+| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no L2M report (a 404, or S3's `AccessDenied` 403). Only games within 3 points (5 before 2017-18) at some point in the last two minutes of the fourth quarter or overtime get one, so most games have none; a game that just ended may not be graded yet. |
+| `AssetFetchError` | The fetch failed (a transport error, a rate limit, an Akamai WAF block, or a 5xx that outlived the retry budget), or the 200 body is not a JSON object whose `game` is exactly one row, or its `l2m`/`stats` table is not a list of records (empty is fine) -- an error envelope or a changed schema, checked with `raw=True` too. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_l2m
+result = nba_l2m("0042500405")
+calls = result["calls"]
+print(f"Game had {calls.height} tracked plays in the L2M window")
+
+# Parse as pandas instead
+
+result = nba_l2m("0042500405", return_as_pandas=True)
+calls_pd = result["calls"]
+
+# Access raw JSON
+
+payload = nba_l2m("0042500405", raw=True)
+print(payload["game"])
+```
+
+### nba_l2m_games {#nba_l2m_games}
+
+`nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Fetch the list of games with Last Two Minute reports for an NBA season.
+
+Retrieves and parses the L2M season index page from official.nba.com,
+returning a table of all games for which L2M reports exist. JSON reports
+exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
+which this function ignores. A release loader for historical (PDF-era)
+reports is planned but does not exist yet.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int \| str` |  | The NBA season (end year) as a 4-digit int or string, e.g. 2026 for the 2025-26 season. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
+| `season` | Int64 | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
+| `season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `label` | String | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season` is not a 4-digit year (an int or an all-digit string), checked before any request. |
+| `NoDataError` | Official.nba.com has no listing page for that season (a 404, or S3's `AccessDenied` 403) -- e.g. a future season, or one from before the L2M program began. |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), or a 200 response that is missing the expected "Last Two Minute" page marker (an Akamai interstitial, a blank body, or a redesigned page), or that links reports in a shape the parser does not read (a redesigned page) -- checked here, not in `parse_nba_l2m_games`, so the parser itself never raises. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_l2m_games
+df = nba_l2m_games(2026)
+print(f"Season had {df.height} games with L2M reports")
+
+# Get playoff games only
+
+df = nba_l2m_games(2026)
+playoffs = df.filter(df["season_type"] == "playoffs")
+
+# Convert to pandas
+
+df = nba_l2m_games(2026, return_as_pandas=True)
+```
+
+### nba_play_context {#nba_play_context}
+
+`nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Fetch one game and return its possessions with the full CTG play-context surface.
+
+Single live call to `nba_stats_playbyplayv3`, then
+`add_play_context`. Works for NBA (`league_id="00"`), WNBA and the
+G-League — `stats.wnba.com` ships the same play-by-play shapes, and every
+threshold here is league-agnostic.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str` |  | Ten-character game identifier (e.g. `"0022200001"`). |
+| `league_id` | `str` | `'00'` | League identifier (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
+| `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Possession frame with the play-context columns. Empty/malformed payloads return a zero-row frame — never raises.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_play_context import nba_play_context
+poss = nba_play_context("0022200001")
+print(poss["possession_start_type_ctg"].value_counts())
+
+# Transition rate for the game
+
+import polars as pl
+clean = poss.filter(
+    (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
+)
+print(clean["is_transition"].mean())
+```
 
 ### nba_player_ages {#nba_player_ages}
 
@@ -811,105 +1000,4 @@ luck.sort("luck_wins", descending=True).select("team_id", "wins", "exp_wins", "l
 # WNBA via ``league_id``
 
 wnba = nba_team_luck(2025, league_id="10")
-```
-
-### nba_team_season_rates {#nba_team_season_rates}
-
-`nba_team_season_rates(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits.
-
-One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
-Clutch is a possession that starts with 5:00 or less left in the 4th quarter or an overtime,
-the score within 5 (stats.nba.com's clutch window); a close game is one with a clutch
-possession. The full definitions are in `sportsdataverse._common.team_season_rates`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (Int64). `games`, `poss` / `opp_poss` (offensive / defensive possessions) and `pts` / `opp_pts` are the split's totals. The twelve rates are `off_rtg`, `def_rtg`, `net_rtg` (per 100 possessions), `pace` (possessions per 48 minutes, 40 in the WNBA), the four factors `efg_pct`, `tov_pct`, `orb_pct`, `ft_rate` and the same four against (`opp_*`), all fractions. Each rate has `<m>_rank` (1 = best; `def_rtg`, `tov_pct`, `opp_efg_pct`, `opp_orb_pct` and `opp_ft_rate` rank low first; pace ranks high first), `<m>_pct` (the Weibull percentile) and `<m>_n` (the sample: possessions for the ratings, games for pace, field-goal attempts for eFG% and FT rate, possessions for turnover rate, rebound chances for ORB%). Ranks are within the season and split, among teams with at least half the most games, and null under five teams. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games as the stats.nba.com schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left in the 4th quarter or an overtime, the score within 5 as it starts). |
-| `games` | Int64 | Games with at least one possession in the split. |
-| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
-| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
-| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. |
-| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
-| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. |
-| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
-| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. |
-| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). |
-| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `pace_rank` | Float64 | Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `off_rtg_pct` | Float64 | Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `def_rtg_pct` | Float64 | Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `net_rtg_pct` | Float64 | Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pace_pct` | Float64 | Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `efg_pct_pct` | Float64 | Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `tov_pct_pct` | Float64 | Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `orb_pct_pct` | Float64 | Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `ft_rate_pct` | Float64 | Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: the team's offensive possessions in the split. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: the team's defensive possessions in the split. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: the team's offensive plus defensive possessions in the split. |
-| `pace_n` | Int64 | Sample size of pace: games in the split. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: the team's field-goal attempts in the split. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: the team's offensive possessions in the split. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: the team's offensive-rebound chances in the split. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: the team's field-goal attempts in the split. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponents' field-goal attempts in the split. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the team's defensive possessions in the split. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the split. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the split. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_team_season_rates import nba_team_season_rates
-rates = nba_team_season_rates(2026)
-rates.filter(split="all").sort("net_rtg_rank").head()
-
-# WNBA via ``league_id``
-
-wnba = nba_team_season_rates(2025, league_id="10")
 ```

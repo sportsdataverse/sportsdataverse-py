@@ -850,6 +850,7 @@ categories:
       - sportsdataverse.nhl.nhl_war
       - sportsdataverse._common.league_context
       - sportsdataverse._common.team_season_rates
+      - sportsdataverse._common.game_impact
       - sportsdataverse._common.team_strength
       - sportsdataverse._common.team_luck
       - sportsdataverse._common.metrics
@@ -957,9 +958,13 @@ categories:
       - sportsdataverse.mlb.mlb_stolen_base
       - sportsdataverse.nba.nba_clutch
       - sportsdataverse.nba.nba_team_season_rates
+      - sportsdataverse.nba.nba_game_impact
       - sportsdataverse.wnba.wnba_team_season_rates
+      - sportsdataverse.wnba.wnba_game_impact
       - sportsdataverse.mbb.mbb_team_season_rates
+      - sportsdataverse.mbb.mbb_game_impact
       - sportsdataverse.wbb.wbb_team_season_rates
+      - sportsdataverse.wbb.wbb_game_impact
       - sportsdataverse.nba.nba_team_strength
       - sportsdataverse.wnba.wnba_team_strength
       - sportsdataverse.nba.nba_team_luck

@@ -338,6 +338,9 @@ from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
 from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_game_lineups_used as nba_game_lineups_used  # noqa: F401
+from sportsdataverse.nba import nba_game_player_impact as nba_game_player_impact  # noqa: F401
+from sportsdataverse.nba import nba_impact_rows as nba_impact_rows  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
 from sportsdataverse.nba import nba_injury_report as nba_injury_report  # noqa: F401
 from sportsdataverse.nba import nba_injury_report_slots as nba_injury_report_slots  # noqa: F401
@@ -761,6 +764,9 @@ __all__ = [
     "nba_expected_turnovers",
     "nba_foul_drawing",
     "nba_four_factor_rapm",
+    "nba_game_lineups_used",
+    "nba_game_player_impact",
+    "nba_impact_rows",
     "nba_in_game_win_prob",
     "nba_injury_report",
     "nba_injury_report_slots",

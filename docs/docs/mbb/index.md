@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 352 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 355 | — |
 
 ## ESPN {#espn}
 
@@ -214,11 +214,14 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`lineup_to_team_report`](reference/additional/analytics#lineup_to_team_report)
 - [`mbb_archetypes`](reference/additional/analytics#mbb_archetypes)
 - [`mbb_bracketology`](reference/additional/analytics#mbb_bracketology)
+- [`mbb_game_lineups_used`](reference/additional/analytics#mbb_game_lineups_used)
+- [`mbb_game_player_impact`](reference/additional/analytics#mbb_game_player_impact)
 - [`mbb_shot_selection`](reference/additional/analytics#mbb_shot_selection)
 - [`mbb_strength_of_schedule`](reference/additional/analytics#mbb_strength_of_schedule)
-- [`mbb_team_luck`](reference/additional/analytics#mbb_team_luck)
+- [`mbb_team_luck`](reference/additional/analytics-2#mbb_team_luck)
 - [`mbb_team_season_rates`](reference/additional/analytics-2#mbb_team_season_rates)
 - [`mbb_team_strength`](reference/additional/analytics-2#mbb_team_strength)
+- [`ncaa_impact_rows`](reference/additional/analytics-2#ncaa_impact_rows)
 - [`ncaa_mbb_lineups`](reference/additional/analytics-2#ncaa_mbb_lineups)
 - [`ncaa_mbb_on_off`](reference/additional/analytics-2#ncaa_mbb_on_off)
 - [`ncaa_mbb_player_combos`](reference/additional/analytics-2#ncaa_mbb_player_combos)
@@ -230,9 +233,9 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`project_bracket`](reference/additional/analytics-2#project_bracket)
 - [`regress_shot_quality`](reference/additional/analytics-2#regress_shot_quality)
 - [`strength_of_schedule`](reference/additional/analytics-2#strength_of_schedule)
-- [`test_positional_aware_filter`](reference/additional/analytics-2#test_positional_aware_filter)
-- [`using_roster_pos`](reference/additional/analytics-2#using_roster_pos)
-- [`weighted_avg`](reference/additional/analytics-2#weighted_avg)
+- [`test_positional_aware_filter`](reference/additional/analytics-3#test_positional_aware_filter)
+- [`using_roster_pos`](reference/additional/analytics-3#using_roster_pos)
+- [`weighted_avg`](reference/additional/analytics-3#weighted_avg)
 
 ### Dates and seasons {#dates-and-seasons}
 

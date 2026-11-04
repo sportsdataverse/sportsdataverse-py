@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: add_ctg–nba_play"
-sidebar_label: "Analytics: add_ctg–nba_play"
+title: "NBA — additional Python functions — Analytics: add_ctg–nba_impact"
+sidebar_label: "Analytics: add_ctg–nba_impact"
 sidebar_position: 13
-description: "NBA — additional Python functions — Analytics: add_ctg–nba_play — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: add_ctg–nba_impact — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: add_ctg–nba_play
+# NBA — additional Python functions — Analytics: add_ctg–nba_impact
 
 ### add_ctg_shot_zones {#add_ctg_shot_zones}
 
@@ -1229,191 +1229,179 @@ f = nba_foul_drawing("2023-24", base=base_df, player_mix=mix_df)
 f.filter(pl.col("poss") >= 200).sort("foul_draw_skill", descending=True)
 ```
 
-### nba_l2m {#nba_l2m}
+### nba_game_lineups_used {#nba_game_lineups_used}
 
-`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
+`nba_game_lineups_used(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Fetch and parse an NBA Last Two Minute report from official.nba.com.
-
-Retrieves the L2M report for a given game and returns parsed tables of calls,
-game metadata, and error statistics. The game_id is zero-padded to 10 digits
-(e.g., 42500405 becomes "0042500405"). A report is published for any game that
-is within 3 points (5 points before the 2017-18 season) at any point during the
-last two minutes of the fourth quarter or overtime -- not only playoff games.
+The lineups used: per five-man unit and game, minutes, possessions, +/- and ratings.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
-| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
-| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
+One row per `(season, game_id, team_id, lineup_id)`: `lineup_id` (the five player ids sorted and joined with `-`), `player_1..5`, and the same totals and ratings as `nba_game_player_impact`, sorted by minutes within each team and game. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
-| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
-| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
-| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
-| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
-| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
-| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
-| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
-| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
-| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
-| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
-| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
-| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
-| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
-| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
-| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
-| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
-| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
-| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
-| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
-| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
-| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
-| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
-| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
-| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
-| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
-| `game.away_team_name` | String | Away team nickname as published in the report. |
-| `game.home_score` | Int64 | Home team's final score for the game. |
-| `game.away_score` | Int64 | Away team's final score for the game. |
-| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
-| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
-| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
-| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
-| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `lineup_id` | String | The five player ids of the unit, sorted and joined with '-'. |
+| `player_1` | Int64 | Player 1 of the unit, in lineup_id order. |
+| `player_2` | Int64 | Player 2 of the unit, in lineup_id order. |
+| `player_3` | Int64 | Player 3 of the unit, in lineup_id order. |
+| `player_4` | Int64 | Player 4 of the unit, in lineup_id order. |
+| `player_5` | Int64 | Player 5 of the unit, in lineup_id order. |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
-| `NoDataError` | The game has no L2M report (a 404, or S3's `AccessDenied` 403). Only games within 3 points (5 before 2017-18) at some point in the last two minutes of the fourth quarter or overtime get one, so most games have none; a game that just ended may not be graded yet. |
-| `AssetFetchError` | The fetch failed (a transport error, a rate limit, an Akamai WAF block, or a 5xx that outlived the retry budget), or the 200 body is not a JSON object whose `game` is exactly one row, or its `l2m`/`stats` table is not a list of records (empty is fine) -- an error envelope or a changed schema, checked with `raw=True` too. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_officiating import nba_l2m
-result = nba_l2m("0042500405")
-calls = result["calls"]
-print(f"Game had {calls.height} tracked plays in the L2M window")
-
-# Parse as pandas instead
-
-result = nba_l2m("0042500405", return_as_pandas=True)
-calls_pd = result["calls"]
-
-# Access raw JSON
-
-payload = nba_l2m("0042500405", raw=True)
-print(payload["game"])
+from sportsdataverse.nba.nba_game_impact import nba_game_lineups_used
+units = nba_game_lineups_used(2026)
+units.filter(game_id="0022500101").group_by("team_id").head(5)
 ```
 
-### nba_l2m_games {#nba_l2m_games}
+### nba_game_player_impact {#nba_game_player_impact}
 
-`nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_game_player_impact(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Fetch the list of games with Last Two Minute reports for an NBA season.
+The game impact box: per player and game, minutes, on-court possessions, +/- and ratings.
 
-Retrieves and parses the L2M season index page from official.nba.com,
-returning a table of all games for which L2M reports exist. JSON reports
-exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
-which this function ignores. A release loader for historical (PDF-era)
-reports is planned but does not exist yet.
+The on-court +/- is the official box score's: on the 2025-26 NBA season it equals
+stats.nba.com's `plus_minus_points` on 91% of player-games, the rest being on-court lineup
+errors in the source. The definitions are in `sportsdataverse._common.game_impact`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int \| str` |  | The NBA season (end year) as a 4-digit int or string, e.g. 2026 for the 2025-26 season. |
-| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
+One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` and `seconds` on the floor, `poss` / `opp_poss` (offensive / defensive possessions on the floor), `pts` / `opp_pts` (points scored / allowed while on), `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions) and their `_n` sample sizes. Ids are the stats.nba.com ids (Int64; `game_id` a String). Every game of every season type is included. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | String | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
-| `season` | Int64 | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
-| `season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `label` | String | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | `season` is not a 4-digit year (an int or an all-digit string), checked before any request. |
-| `NoDataError` | Official.nba.com has no listing page for that season (a 404, or S3's `AccessDenied` 403) -- e.g. a future season, or one from before the L2M program began. |
-| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), or a 200 response that is missing the expected "Last Two Minute" page marker (an Akamai interstitial, a blank body, or a redesigned page), or that links reports in a shape the parser does not read (a redesigned page) -- checked here, not in `parse_nba_l2m_games`, so the parser itself never raises. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_officiating import nba_l2m_games
-df = nba_l2m_games(2026)
-print(f"Season had {df.height} games with L2M reports")
-
-# Get playoff games only
-
-df = nba_l2m_games(2026)
-playoffs = df.filter(df["season_type"] == "playoffs")
-
-# Convert to pandas
-
-df = nba_l2m_games(2026, return_as_pandas=True)
+from sportsdataverse.nba.nba_game_impact import nba_game_player_impact
+box = nba_game_player_impact(2026)
+box.filter(game_id="0022500101")
 ```
 
-### nba_play_context {#nba_play_context}
+### nba_impact_rows {#nba_impact_rows}
 
-`nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_impact_rows(pbp: 'pl.DataFrame', game_lineups: 'pl.DataFrame', possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
 
-Fetch one game and return its possessions with the full CTG play-context surface.
+Map the stats.nba.com releases onto the game-impact row frame.
 
-Single live call to `nba_stats_playbyplayv3`, then
-`add_play_context`. Works for NBA (`league_id="00"`), WNBA and the
-G-League — `stats.wnba.com` ships the same play-by-play shapes, and every
-threshold here is league-agnostic.
+One row per play-by-play action (its clock and points, on the lineup at that action; a free
+throw on the lineup at the last foul) and one per possession (its lineup and which side had
+the ball). Games not in `schedule` are dropped, and so are the possessions of a game with
+no play-by-play actions and those whose offense is neither team.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `str` |  | Ten-character game identifier (e.g. `"0022200001"`). |
-| `league_id` | `str` | `'00'` | League identifier (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
-| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
-| `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `action_number`, `period`, `seconds_remaining`, `score_home`, `score_away`, `is_free_throw`, `is_foul`, `season`). |
+| `game_lineups` | `DataFrame` |  | `load_nba_stats_game_lineups` / `load_wnba_stats_game_lineups` rows. |
+| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows. |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `home_team_id`, `away_team_id`), every season type. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
 
 **Returns**
 
-Possession frame with the play-context columns. Empty/malformed payloads return a zero-row frame — never raises.
+Rows in `sportsdataverse._common.game_impact.impact_row_schema` with Int64 player ids.
 
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season of the action or possession. |
+| `game_id` | String | stats.nba.com game id. |
+| `home_team_id` | Int64 | stats.nba.com team id of the home team, from the schedule. |
+| `away_team_id` | Int64 | stats.nba.com team id of the away team, from the schedule. |
+| `home_1` | Int64 | Home player 1 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_2` | Int64 | Home player 2 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_3` | Int64 | Home player 3 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_4` | Int64 | Home player 4 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_5` | Int64 | Home player 5 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_1` | Int64 | Away player 1 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_2` | Int64 | Away player 2 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_3` | Int64 | Away player 3 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_4` | Int64 | Away player 4 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_5` | Int64 | Away player 5 on the floor (on a free throw, the player on the floor at the last foul). |
+| `seconds` | Float64 | Game clock that ran into this action (0 on a possession row). |
+| `home_pts` | Int64 | Points the home team scored on this action (0 on a possession row). |
+| `away_pts` | Int64 | Points the away team scored on this action (0 on a possession row). |
+| `home_poss` | Int64 | 1 on a possession row where the home team has the ball, else 0. |
+| `away_poss` | Int64 | 1 on a possession row where the away team has the ball, else 0. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_play_context import nba_play_context
-poss = nba_play_context("0022200001")
-print(poss["possession_start_type_ctg"].value_counts())
-
-# Transition rate for the game
-
-import polars as pl
-clean = poss.filter(
-    (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
-)
-print(clean["is_transition"].mean())
+from sportsdataverse.nba import nba_loaders as L
+from sportsdataverse.nba.nba_game_impact import nba_impact_rows
+rows = nba_impact_rows(L.load_nba_stats_pbp(2025), L.load_nba_stats_game_lineups(2025),
+                       L.load_nba_stats_possessions(2025), L.load_nba_stats_schedules(2025))
 ```

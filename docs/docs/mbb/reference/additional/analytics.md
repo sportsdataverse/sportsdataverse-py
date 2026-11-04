@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_team"
-sidebar_label: "Analytics: ConcurrentClump–mbb_team"
+title: "Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_strength"
+sidebar_label: "Analytics: ConcurrentClump–mbb_strength"
 sidebar_position: 13
-description: "Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_strength — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_team
+# Men's college basketball — additional Python functions — Analytics: ConcurrentClump–mbb_strength
 
 ### ConcurrentClump {#ConcurrentClump}
 
@@ -1080,6 +1080,117 @@ field = mbb_bracketology(2024, as_of_date=datetime.date(2024, 3, 18))
 field.filter(pl.col("bid") == True).sort("projected_seed")
 ```
 
+### mbb_game_lineups_used {#mbb_game_lineups_used}
+
+`mbb_game_lineups_used(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_game_impact.wbb_game_lineups_used`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, lineup_id)`: `lineup_id` (the five NCAA player ids sorted and joined with `-`), `player_1..5`, and the same totals and ratings as `mbb_game_player_impact`, sorted by minutes within each team and game. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `lineup_id` | String | The five player ids of the unit, sorted and joined with '-'. |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_impact import mbb_game_lineups_used
+units = mbb_game_lineups_used(2025)
+```
+
+### mbb_game_player_impact {#mbb_game_player_impact}
+
+`mbb_game_player_impact(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings.
+
+The definitions are in `sportsdataverse._common.game_impact`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_game_impact.wbb_game_player_impact`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` and `seconds` on the floor, `poss` / `opp_poss` (offensive / defensive possessions on the floor), `pts` / `opp_pts` (points scored / allowed while on), `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions) and their `_n` sample sizes. `game_id` is the NCAA contest id, `team_id` the ESPN team id (Int64), `player_id` the NCAA player id (String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | String | stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet). |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_impact import mbb_game_player_impact
+box = mbb_game_player_impact(2025)
+```
+
 ### mbb_shot_selection {#mbb_shot_selection}
 
 `mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -1213,71 +1324,4 @@ resume = mbb_strength_of_schedule([2024])
 # Pipeline next step (one line)
 
 resume.sort("rpi_rank").head(25)
-```
-
-### mbb_team_luck {#mbb_team_luck}
-
-`mbb_team_luck(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L.
-
-One row per team and season. `exp_wins` is the Pythagorean expectation on the season's
-final scores, `games * pts^x / (pts^x + opp_pts^x)`, with the exponent `x` fitted per
-league on past seasons (`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
-`luck_wins` is `wins - exp_wins`. A close game is one within 5 points at the start of a
-possession in the last 5:00 of the 2nd half (4th quarter, women's, from 2016) or overtime.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_luck.wbb_team_luck`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from ESPN's completed games (postseason included); `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published NCAA possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents; `close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks. |
-| `games` | Int64 | Games in the season's completed ESPN games, postseason included. |
-| `wins` | Int64 | Wins in the season's completed ESPN games, postseason included. |
-| `losses` | Int64 | Losses in the season's completed ESPN games, postseason included. |
-| `pts` | Int64 | Points scored in those games (final scores). |
-| `opp_pts` | Int64 | Points allowed in those games (final scores). |
-| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
-| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['mbb'] (PYTHAG_EXPONENT['wbb'] with league='womens'), fitted on past seasons by tools/fit_team_luck_pythag.py. |
-| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
-| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
-| `pbp_games` | Int64 | Games with published possessions (ncaa_mbb_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
-| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 2nd half or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
-| `close_wins` | Int64 | Wins in close games. |
-| `close_losses` | Int64 | Losses in close games. |
-| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
-| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
-| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
-| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
-| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-| `SeasonNotFoundError` | For a season before 2010, the first with NCAA possessions. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_team_luck import mbb_team_luck
-luck = mbb_team_luck(2025)
-luck.sort("luck_wins", descending=True).select("team_id", "wins", "exp_wins", "luck_wins").head()
 ```

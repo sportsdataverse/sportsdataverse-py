@@ -9369,3 +9369,117 @@
   test: tests/mbb/test_mbb_team_luck.py::test_close_win_pct_rank_needs_classed_close_games
   expected: kill
   note: A team with most games unclassed, or under five close games, would be ranked on close_win_pct.
+
+# --- BB-D6: game impact box and lineups used (NBA / WNBA / MBB / WBB) ------------------------------
+# Killers: tests/nba/test_nba_game_impact.py (16 NBA 2025-26 and 16 WNBA 2026 games against the
+# stats.nba.com box +/-) and tests/mbb/test_mbb_game_impact.py (12 + 12 college 2024-25 games
+# against the final margin), all committed real captures.
+- id: bb-gi-free-throw-foul-lineup
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'is_free_throw=pl.col("is_free_throw").eq(True),'
+  mutant: 'is_free_throw=pl.lit(False),'
+  test: tests/nba/test_nba_game_impact.py::test_plus_minus_matches_the_box_score
+  expected: kill
+  note: Free throws on the lineup at the free throw (not the foul) match the box +/- on 118 of the 331 NBA fixture player-games, not 305.
+
+- id: bb-gi-possession-side
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'home_off.cast(pl.Int64).alias("home_poss"),'
+  mutant: '(~home_off).cast(pl.Int64).alias("home_poss"),'
+  test: tests/nba/test_nba_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Crediting the home side's possessions to its defensive rows breaks poss == 5 x the team's possessions.
+
+- id: bb-gi-period-clock
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'pl.col("seconds_remaining").shift(1).over(["game_id", "period"]).fill_null(period_len)'
+  mutant: 'pl.col("seconds_remaining").shift(1).over(["game_id"]).fill_null(period_len)'
+  test: tests/nba/test_nba_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Without the period window each new period starts from the last clock of the previous one, so a team's minutes are not the game length.
+
+- id: bb-gi-lineup-dedupe
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'pl.concat_list(slots).list.drop_nulls().list.unique().list.sort().alias("players"),'
+  mutant: 'pl.concat_list(slots).list.drop_nulls().alias("players"),'
+  test: tests/nba/test_nba_game_impact.py::test_lineups_used_add_up_to_the_game
+  expected: kill
+  note: An unsorted unit list makes the same five players several lineup_ids, so units and their player order differ.
+
+- id: bb-gi-five-man-units
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'sides = _sides(rows).filter(pl.col("players").list.len() == 5)'
+  mutant: 'sides = _sides(rows).filter(pl.col("players").list.len() > 0)'
+  test: tests/mbb/test_mbb_game_impact.py::test_lineups_used_are_five_man_units_that_add_up
+  expected: kill
+  note: The stats.ncaa.org lineup gaps would publish four-man units in lineups_used.
+
+- id: bb-gi-ncaa-foul
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: 'is_foul=pl.col("foul_class").is_not_null()'
+  mutant: 'is_foul=pl.lit(False)'
+  test: tests/mbb/test_mbb_game_impact.py::test_free_throws_take_the_whole_lineup_at_the_foul
+  expected: kill
+  note: With no fouls the college free throws keep their own lineup and no player's +/- moves.
+
+- id: bb-gi-ncaa-period-tail
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: '+ pl.when(is_last).then(end - elapsed).otherwise(0.0)'
+  mutant: '+ 0.0'
+  test: tests/mbb/test_mbb_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Without the clock left after a period's last event, most college games come up seconds short of 40 minutes.
+
+- id: bb-gi-def-rtg-denominator
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: '_per100("opp_pts", "opp_poss").alias("def_rtg"),'
+  mutant: '_per100("opp_pts", "poss").alias("def_rtg"),'
+  test: tests/nba/test_nba_game_impact.py::test_ratings_and_sample_sizes
+  expected: kill
+  note: DRtg per offensive possession would drift from points allowed per 100 defensive possessions.
+
+- id: bb-gi-possession-needs-a-side
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'poss = poss.filter(home_off | (offense == pl.col("away_team_id")))'
+  mutant: 'poss = poss'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A possession whose offense is neither team would be credited to the away side.
+
+- id: bb-gi-possession-needs-pbp
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'played = games.join(parts[0].select("game_id").unique(), on="game_id", how="semi")'
+  mutant: 'played = games'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A game with possessions and no play-by-play would publish positive poss with zero points and minutes.
+
+- id: bb-gi-ncaa-possession-filter
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: 'kept = possessions.filter(has_events & (home_has | (pl.col("poss_team") == pl.col("away"))))'
+  mutant: 'kept = possessions'
+  test: tests/mbb/test_mbb_game_impact.py::test_possessions_need_events_and_a_side
+  expected: kill
+  note: College possessions without events, or with a poss_team that is neither side, would be published.

@@ -369,11 +369,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [lineup_to_team_report](additional/analytics.md#lineup_to_team_report) | Build per-player on/off splits out of a team's lineups. |
 | [mbb_archetypes](additional/analytics.md#mbb_archetypes) | Per-player-season role archetype from the bundled KMeans centers. |
 | [mbb_bracketology](additional/analytics.md#mbb_bracketology) | The daily `bracketology` table: the projected field, seeds and bubble as of a date. |
+| [mbb_game_lineups_used](additional/analytics.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [mbb_game_player_impact](additional/analytics.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_shot_selection](additional/analytics.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_strength_of_schedule](additional/analytics.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
-| [mbb_team_luck](additional/analytics.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
+| [mbb_team_luck](additional/analytics-2.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_rates](additional/analytics-2.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-2.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [ncaa_impact_rows](additional/analytics-2.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_mbb_lineups](additional/analytics-2.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-2.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-2.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
@@ -385,9 +388,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [project_bracket](additional/analytics-2.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics-2.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
 | [strength_of_schedule](additional/analytics-2.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-2.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
-| [using_roster_pos](additional/analytics-2.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [test_positional_aware_filter](additional/analytics-3.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [using_roster_pos](additional/analytics-3.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
+| [weighted_avg](additional/analytics-3.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## IDs and crosswalks
 

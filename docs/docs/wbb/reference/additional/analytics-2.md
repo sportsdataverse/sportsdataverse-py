@@ -58,6 +58,107 @@ from sportsdataverse.wbb import wbb_bracketology
 field = wbb_bracketology(2024, ineligible={"88"})
 ```
 
+### wbb_game_lineups_used {#wbb_game_lineups_used}
+
+`wbb_game_lineups_used(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings.
+
+Delegates to `sportsdataverse.mbb.mbb_game_impact.mbb_game_lineups_used` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, lineup_id)`: `player_1..5` and the same totals and ratings as `wbb_game_player_impact`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `lineup_id` | String | The five player ids of the unit, sorted and joined with '-'. |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_lineups_used
+wbb_game_lineups_used(2025).head()
+```
+
+### wbb_game_player_impact {#wbb_game_player_impact}
+
+`wbb_game_player_impact(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college game impact box: per player and game, minutes, possessions, +/- and ratings.
+
+Delegates to `sportsdataverse.mbb.mbb_game_impact.mbb_game_player_impact` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes`, `seconds`, `poss`, `opp_poss`, `pts`, `opp_pts`, `plus_minus`, `off_rtg`, `def_rtg`, `net_rtg` and their `_n`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | String | stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet). |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_player_impact
+wbb_game_player_impact(2025).sort("plus_minus").tail()
+```
+
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
 `wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

@@ -347,6 +347,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's daily `bracketology` table: the projected field, seeds and bubble. |
+| [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
 | [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
 | [wbb_team_luck](additional/analytics-2.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
 | [wbb_team_season_rates](additional/analytics-2.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
