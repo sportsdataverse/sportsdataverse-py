@@ -39204,6 +39204,52 @@ wnba_team_strength:
   tov_pct_rank: Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers.
   wins: Wins in the season type's completed games (the schedule's final scores).
+nba_cup_sim:
+  adj_net_rtg: 'As-of adjusted net rating from the season sim''s possession ridge: points per 100 over an average opponent
+    on a neutral court.'
+  as_of_date: 'The as-of date: games on or after it are simulated. Null when every final game counts as played.'
+  conference: NBA conference (East / West).
+  cup_group: The team's NBA Cup group (East Group A .. West Group C).
+  losses: Group Play losses in the games already played.
+  mean_group_rank: Mean Group Play finish (1-5) over the simulated Cups.
+  n_sims: Number of simulated Cups behind every share on the row.
+  p_champion: Share of simulated Cups the team wins (the final included).
+  p_champion_se: 'Monte Carlo standard error of p_champion: sqrt(p (1 - p) / n_sims).'
+  p_final: Share of simulated Cups in which the team reaches the final.
+  p_final_se: 'Monte Carlo standard error of p_final: sqrt(p (1 - p) / n_sims).'
+  p_quarterfinal: 'Share of simulated Cups in which the team reaches the knockout: a group win or the wild card.'
+  p_quarterfinal_se: 'Monte Carlo standard error of p_quarterfinal: sqrt(p (1 - p) / n_sims).'
+  p_semifinal: Share of simulated Cups in which the team wins its quarterfinal.
+  p_semifinal_se: 'Monte Carlo standard error of p_semifinal: sqrt(p (1 - p) / n_sims).'
+  p_wild_card: 'Share of simulated Cups in which the team takes its conference''s wild card: the best second-place team.'
+  p_wild_card_se: 'Monte Carlo standard error of p_wild_card: sqrt(p (1 - p) / n_sims).'
+  p_win_group: Share of simulated Cups in which the team wins its group under the Cup tiebreakers.
+  p_win_group_se: 'Monte Carlo standard error of p_win_group: sqrt(p (1 - p) / n_sims).'
+  point_diff: Group Play point differential in the games already played, 0 for a game that went to overtime.
+  season: Season, named by the year it ends (2027 is 2026-27).
+  team_id: stats.nba.com team id (Int64).
+  wins: Group Play wins in the games already played.
+nba_cup_standings:
+  as_of_date: 'The as-of date: games on or after it are not counted. Null when every final game counts.'
+  conference: NBA conference (East / West).
+  conference_rank: 'Rank in the conference as stats.nba.com orders it: the group leaders 1-3 (the seeding order), then the
+    second-place teams (the wild-card race), then the rest, each by record and the tiebreakers without head-to-head.'
+  cup_group: The team's NBA Cup group (East Group A .. West Group C).
+  games_remaining: Group Play games still to play.
+  group_rank: Place in the group (1-5) by Group Play record, then head-to-head, point differential, points scored, the
+    previous season's record and a random drawing.
+  holds_wild_card: Whether the team holds its conference's wild card on the current table (the best second-place team).
+  knockout_seed: Knockout seed (1-3 the group leaders by record, 4 the wild card) on the current table; null otherwise.
+  leads_group: Whether the team leads (or won) its group.
+  losses: Group Play losses.
+  point_diff: Group Play point differential, 0 for a game that went to overtime (the Cup rule).
+  points: Group Play points scored, overtime points excluded (the Cup rule).
+  prior_win_pct: The previous regular season's winning percentage, the fourth tiebreaker.
+  season: Season, named by the year it ends (2027 is 2026-27).
+  team_id: stats.nba.com team id (Int64).
+  tiebreak: 'The criterion that placed the team among the teams with its group record: head_to_head, point_diff, points,
+    prior_record or random; null when the record alone did.'
+  wins: Group Play wins.
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'

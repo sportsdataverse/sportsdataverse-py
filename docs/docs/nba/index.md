@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 217 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 219 | — |
 
 ## ESPN {#espn}
 
@@ -169,6 +169,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`make_prob_joint`](reference/additional/analytics#make_prob_joint)
 - [`nba_availability`](reference/additional/analytics#nba_availability)
 - [`nba_box_logs`](reference/additional/analytics#nba_box_logs)
+- [`nba_cup_sim`](reference/additional/analytics#nba_cup_sim)
+- [`nba_cup_standings`](reference/additional/analytics#nba_cup_standings)
 - [`nba_draft_lottery_odds`](reference/additional/analytics#nba_draft_lottery_odds)
 - [`nba_foul_drawing`](reference/additional/analytics#nba_foul_drawing)
 - [`nba_l2m`](reference/additional/analytics#nba_l2m)
@@ -178,9 +180,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_identity`](reference/additional/analytics#nba_player_identity)
 - [`nba_player_positions`](reference/additional/analytics#nba_player_positions)
 - [`nba_player_props`](reference/additional/analytics#nba_player_props)
-- [`nba_playtype_ratings`](reference/additional/analytics#nba_playtype_ratings)
-- [`nba_possession_rate_rows`](reference/additional/analytics#nba_possession_rate_rows)
-- [`nba_ratings_panel`](reference/additional/analytics#nba_ratings_panel)
+- [`nba_playtype_ratings`](reference/additional/analytics-2#nba_playtype_ratings)
+- [`nba_possession_rate_rows`](reference/additional/analytics-2#nba_possession_rate_rows)
+- [`nba_ratings_panel`](reference/additional/analytics-2#nba_ratings_panel)
 - [`nba_raw_store_season_frame`](reference/additional/analytics-2#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-2#nba_referee_assignments)
 - [`nba_season_sim`](reference/additional/analytics-2#nba_season_sim)
@@ -192,9 +194,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_team_strength`](reference/additional/analytics-2#nba_team_strength)
 - [`nba_tracking_drive_value`](reference/additional/analytics-2#nba_tracking_drive_value)
 - [`nba_tracking_pass_value`](reference/additional/analytics-2#nba_tracking_pass_value)
-- [`nba_tracking_reb_oe`](reference/additional/analytics-2#nba_tracking_reb_oe)
-- [`nba_tracking_rim_protect_value`](reference/additional/analytics-2#nba_tracking_rim_protect_value)
-- [`nba_tracking_shot_diet_value`](reference/additional/analytics-2#nba_tracking_shot_diet_value)
+- [`nba_tracking_reb_oe`](reference/additional/analytics-3#nba_tracking_reb_oe)
+- [`nba_tracking_rim_protect_value`](reference/additional/analytics-3#nba_tracking_rim_protect_value)
+- [`nba_tracking_shot_diet_value`](reference/additional/analytics-3#nba_tracking_shot_diet_value)
 - [`nba_tracking_touch_value`](reference/additional/analytics-3#nba_tracking_touch_value)
 - [`nbadraft_mock_draft`](reference/additional/analytics-3#nbadraft_mock_draft)
 - [`player_play_context`](reference/additional/analytics-3#player_play_context)

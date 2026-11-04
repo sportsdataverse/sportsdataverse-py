@@ -9070,3 +9070,33 @@
   test: tests/mbb/test_mbb_college_season.py::test_season_sim_is_seeded_and_reproducible
   expected: kill
   note: The Monte Carlo must reproduce from its seed.
+
+- id: bb-cup-point-diff-before-head-to-head
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: 'GROUP_TIEBREAKERS: tuple[str, ...] = ("head_to_head", "point_diff", "points", "prior_record")'
+  mutant: 'GROUP_TIEBREAKERS: tuple[str, ...] = ("point_diff", "head_to_head", "points", "prior_record")'
+  test: tests/nba/test_nba_cup.py::test_standings_reproduce_the_league
+  expected: kill
+  note: Twelve 2024-25 and 2025-26 group places were set by head-to-head before point differential.
+
+- id: bb-cup-wild-card-any-non-winner
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: 'for sel in (group_rank == 2, group_rank > 2)'
+  mutant: 'for sel in (group_rank >= 2, group_rank > 99)'
+  test: tests/nba/test_nba_cup.py::test_standings_reproduce_the_league
+  expected: kill
+  note: The wild-card race is the second-place teams; 2025-26 ranks ATL and BOS (2-2, second) over CLE and DET (2-2, third, better differential).
+
+- id: bb-cup-final-counts
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: '"semifinal": True, "final": False}'
+  mutant: '"semifinal": True, "final": True}'
+  test: tests/nba/test_nba_cup.py::test_sim_adds_two_regular_season_games_per_team
+  expected: kill
+  note: The Cup final is not a regular-season game; counting it gives the finalists 83.
