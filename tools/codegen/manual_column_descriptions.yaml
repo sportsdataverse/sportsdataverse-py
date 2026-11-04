@@ -38454,8 +38454,9 @@ nba_team_season_rates:
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
   season: Season, named by the year it ends (2026 is 2025-26).
-  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
-    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games as the stats.nba.com
+    schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close
+    (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
     in the 4th quarter or an overtime, the score within 5 as it starts).'
   team_id: stats.nba.com team id (the 10-digit franchise id).
   tov_pct: Turnovers per offensive possession, as a fraction.
@@ -38676,8 +38677,9 @@ wnba_team_season_rates:
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
   season: WNBA season (its calendar year).
-  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
-    close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games as the stats.nba.com
+    schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close
+    (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left
     in the 4th quarter or an overtime, the score within 5 as it starts).'
   team_id: stats.nba.com team id (the 10-digit franchise id).
   tov_pct: Turnovers per offensive possession, as a fraction.
