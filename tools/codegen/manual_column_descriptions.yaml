@@ -38688,6 +38688,226 @@ wnba_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers.
+nba_game_player_impact:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_id: stats.nba.com player (person) id.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: stats.nba.com team id.
+nba_game_lineups_used:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  lineup_id: The five player ids of the unit, sorted and joined with '-'.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_1: Player 1 of the unit, in lineup_id order.
+  player_2: Player 2 of the unit, in lineup_id order.
+  player_3: Player 3 of the unit, in lineup_id order.
+  player_4: Player 4 of the unit, in lineup_id order.
+  player_5: Player 5 of the unit, in lineup_id order.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: stats.nba.com team id.
+wnba_game_player_impact:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_id: stats.nba.com player (person) id.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: stats.nba.com team id.
+wnba_game_lineups_used:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  lineup_id: The five player ids of the unit, sorted and joined with '-'.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_1: Player 1 of the unit, in lineup_id order.
+  player_2: Player 2 of the unit, in lineup_id order.
+  player_3: Player 3 of the unit, in lineup_id order.
+  player_4: Player 4 of the unit, in lineup_id order.
+  player_5: Player 5 of the unit, in lineup_id order.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: stats.nba.com team id.
+mbb_game_player_impact:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.ncaa.org contest id.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_id: stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet).
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+mbb_game_lineups_used:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.ncaa.org contest id.
+  lineup_id: The five player ids of the unit, sorted and joined with '-'.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_1: Player 1 of the unit, in lineup_id order.
+  player_2: Player 2 of the unit, in lineup_id order.
+  player_3: Player 3 of the unit, in lineup_id order.
+  player_4: Player 4 of the unit, in lineup_id order.
+  player_5: Player 5 of the unit, in lineup_id order.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+wbb_game_player_impact:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.ncaa.org contest id.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_id: stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet).
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+wbb_game_lineups_used:
+  def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  game_id: stats.ncaa.org contest id.
+  lineup_id: The five player ids of the unit, sorted and joined with '-'.
+  minutes: Game-clock minutes on the floor (seconds / 60).
+  net_rtg: 'On-court net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'On-court offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions on the floor.
+  opp_pts: The opponent's points while on the floor, credited as pts is.
+  opp_team_id: The opponent's team id.
+  player_1: Player 1 of the unit, in lineup_id order.
+  player_2: Player 2 of the unit, in lineup_id order.
+  player_3: Player 3 of the unit, in lineup_id order.
+  player_4: Player 4 of the unit, in lineup_id order.
+  player_5: Player 5 of the unit, in lineup_id order.
+  plus_minus: 'On-court +/-: pts - opp_pts.'
+  poss: Offensive possessions on the floor (a possession counts for the five on the floor when it starts).
+  pts: The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the
+    lineup at the last foul, the official scorer's rule).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+nba_impact_rows:
+  away_1: Away player 1 on the floor (on a free throw, the player on the floor at the last foul).
+  away_2: Away player 2 on the floor (on a free throw, the player on the floor at the last foul).
+  away_3: Away player 3 on the floor (on a free throw, the player on the floor at the last foul).
+  away_4: Away player 4 on the floor (on a free throw, the player on the floor at the last foul).
+  away_5: Away player 5 on the floor (on a free throw, the player on the floor at the last foul).
+  away_poss: 1 on a possession row where the away team has the ball, else 0.
+  away_pts: Points the away team scored on this action (0 on a possession row).
+  away_team_id: stats.nba.com team id of the away team, from the schedule.
+  game_id: stats.nba.com game id.
+  home_1: Home player 1 on the floor (on a free throw, the player on the floor at the last foul).
+  home_2: Home player 2 on the floor (on a free throw, the player on the floor at the last foul).
+  home_3: Home player 3 on the floor (on a free throw, the player on the floor at the last foul).
+  home_4: Home player 4 on the floor (on a free throw, the player on the floor at the last foul).
+  home_5: Home player 5 on the floor (on a free throw, the player on the floor at the last foul).
+  home_poss: 1 on a possession row where the home team has the ball, else 0.
+  home_pts: Points the home team scored on this action (0 on a possession row).
+  home_team_id: stats.nba.com team id of the home team, from the schedule.
+  season: Season of the action or possession.
+  seconds: Game clock that ran into this action (0 on a possession row).
+ncaa_impact_rows:
+  away_1: Away player 1 on the floor (on a free throw, the player on the floor at the last foul).
+  away_2: Away player 2 on the floor (on a free throw, the player on the floor at the last foul).
+  away_3: Away player 3 on the floor (on a free throw, the player on the floor at the last foul).
+  away_4: Away player 4 on the floor (on a free throw, the player on the floor at the last foul).
+  away_5: Away player 5 on the floor (on a free throw, the player on the floor at the last foul).
+  away_poss: 1 on a possession row where the away team has the ball, else 0.
+  away_pts: Points the away team scored on this action (0 on a possession row).
+  away_team_id: Away ESPN team id (null for a non-D1 team).
+  game_id: stats.ncaa.org contest id.
+  home_1: Home player 1 on the floor (on a free throw, the player on the floor at the last foul).
+  home_2: Home player 2 on the floor (on a free throw, the player on the floor at the last foul).
+  home_3: Home player 3 on the floor (on a free throw, the player on the floor at the last foul).
+  home_4: Home player 4 on the floor (on a free throw, the player on the floor at the last foul).
+  home_5: Home player 5 on the floor (on a free throw, the player on the floor at the last foul).
+  home_poss: 1 on a possession row where the home team has the ball, else 0.
+  home_pts: Points the home team scored on this action (0 on a possession row).
+  home_team_id: Home ESPN team id (null for a non-D1 team).
+  season: Season of the action or possession.
+  seconds: Game clock that ran into this action (0 on a possession row).
 mbb_team_strength:
   adj_def_rtg: 'Adjusted defensive rating: points allowed per 100 possessions against an average offense, from the published
     college ratings (adj_d); lower is better.'

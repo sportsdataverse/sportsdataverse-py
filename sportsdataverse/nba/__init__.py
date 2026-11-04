@@ -136,6 +136,11 @@ from sportsdataverse.nba.nba_team_ratings import (  # noqa: F401
     nba_team_ratings,
     raw_game_efficiency,
 )
+from sportsdataverse.nba.nba_game_impact import (  # noqa: F401
+    nba_game_lineups_used,
+    nba_game_player_impact,
+    nba_impact_rows,
+)
 from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
     nba_possession_rate_rows,
     nba_team_season_rates,

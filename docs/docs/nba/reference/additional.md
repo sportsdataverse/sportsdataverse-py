@@ -244,13 +244,16 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_cup_standings](additional/analytics.md#nba_cup_standings) | NBA Cup Group Play standings as of a date, with the official tiebreak order and wild cards. |
 | [nba_draft_lottery_odds](additional/analytics.md#nba_draft_lottery_odds) | Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick. |
 | [nba_foul_drawing](additional/analytics.md#nba_foul_drawing) | Expected FTA + residual foul-drawing skill from Synergy play-type mix. |
+| [nba_game_lineups_used](additional/analytics.md#nba_game_lineups_used) | The lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [nba_game_player_impact](additional/analytics.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
+| [nba_impact_rows](additional/analytics.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
 | [nba_l2m](additional/analytics.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
-| [nba_l2m_games](additional/analytics.md#nba_l2m_games) | Fetch the list of games with Last Two Minute reports for an NBA season. |
-| [nba_play_context](additional/analytics.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
-| [nba_player_ages](additional/analytics.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
-| [nba_player_identity](additional/analytics.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
-| [nba_player_positions](additional/analytics.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
-| [nba_player_props](additional/analytics.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
+| [nba_l2m_games](additional/analytics-2.md#nba_l2m_games) | Fetch the list of games with Last Two Minute reports for an NBA season. |
+| [nba_play_context](additional/analytics-2.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
+| [nba_player_ages](additional/analytics-2.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
+| [nba_player_identity](additional/analytics-2.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
+| [nba_player_positions](additional/analytics-2.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
+| [nba_player_props](additional/analytics-2.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_playtype_ratings](additional/analytics-2.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_possession_rate_rows](additional/analytics-2.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
 | [nba_ratings_panel](additional/analytics-2.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
@@ -262,9 +265,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_shot_value_lineups](additional/analytics-2.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-2.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_season_rates](additional/analytics-2.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
-| [nba_team_strength](additional/analytics-2.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
-| [nba_tracking_drive_value](additional/analytics-2.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
-| [nba_tracking_pass_value](additional/analytics-2.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
+| [nba_team_strength](additional/analytics-3.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
+| [nba_tracking_drive_value](additional/analytics-3.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
+| [nba_tracking_pass_value](additional/analytics-3.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
 | [nba_tracking_reb_oe](additional/analytics-3.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
 | [nba_tracking_rim_protect_value](additional/analytics-3.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-3.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
@@ -287,9 +290,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [spotrac_team_cap](additional/analytics-3.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |
 | [starters_on_court_counts](additional/analytics-3.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
 | [team_pace_projection](additional/analytics-3.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
-| [team_play_context](additional/analytics-3.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
-| [xpoints_baseline](additional/analytics-3.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
-| [zone_value_map](additional/analytics-3.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
+| [team_play_context](additional/analytics-4.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
+| [xpoints_baseline](additional/analytics-4.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
+| [zone_value_map](additional/analytics-4.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
 ## Dates and seasons
 

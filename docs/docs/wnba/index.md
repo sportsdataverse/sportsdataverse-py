@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 94 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 96 | — |
 
 ## ESPN {#espn}
 
@@ -82,6 +82,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_draft_lottery_odds`](reference/additional/analytics#wnba_draft_lottery_odds)
 - [`wnba_expected_turnovers`](reference/additional/analytics#wnba_expected_turnovers)
 - [`wnba_foul_drawing`](reference/additional/analytics#wnba_foul_drawing)
+- [`wnba_game_lineups_used`](reference/additional/analytics#wnba_game_lineups_used)
+- [`wnba_game_player_impact`](reference/additional/analytics#wnba_game_player_impact)
 - [`wnba_matchup_drapm`](reference/additional/analytics#wnba_matchup_drapm)
 - [`wnba_player_props`](reference/additional/analytics#wnba_player_props)
 - [`wnba_playtype_ratings`](reference/additional/analytics#wnba_playtype_ratings)
@@ -93,8 +95,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_team_season_rates`](reference/additional/analytics#wnba_team_season_rates)
 - [`wnba_team_strength`](reference/additional/analytics#wnba_team_strength)
 - [`wnba_tracking_drive_value`](reference/additional/analytics#wnba_tracking_drive_value)
-- [`wnba_tracking_pass_value`](reference/additional/analytics#wnba_tracking_pass_value)
-- [`wnba_tracking_reb_oe`](reference/additional/analytics#wnba_tracking_reb_oe)
+- [`wnba_tracking_pass_value`](reference/additional/analytics-2#wnba_tracking_pass_value)
+- [`wnba_tracking_reb_oe`](reference/additional/analytics-2#wnba_tracking_reb_oe)
 - [`wnba_tracking_rim_protect_value`](reference/additional/analytics-2#wnba_tracking_rim_protect_value)
 - [`wnba_tracking_shot_diet_value`](reference/additional/analytics-2#wnba_tracking_shot_diet_value)
 - [`wnba_tracking_touch_value`](reference/additional/analytics-2#wnba_tracking_touch_value)

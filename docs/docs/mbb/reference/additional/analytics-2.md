@@ -218,6 +218,65 @@ strength = mbb_team_strength(2025)
 strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
 ```
 
+### ncaa_impact_rows {#ncaa_impact_rows}
+
+`ncaa_impact_rows(pbp: 'pl.DataFrame', possessions: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Map the stats.ncaa.org pbp and possessions onto the game-impact row frame.
+
+One row per event (the clock since the previous event in the period and the points scored on
+it, on that event's lineup; a free throw on the lineup at the last foul) and one per
+possession (its lineup and which side had it, `poss_team == home`). The clock left in a
+period after its last event goes to that event's lineup, so each period's clock is whole.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order, with the cumulative `game_seconds` and the `period`. |
+| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
+| `league` | `str` | `'mens'` | `"mens"` (20-minute halves) or `"womens"` (10-minute quarters from 2016, halves before); overtimes are 5 minutes. |
+
+**Returns**
+
+Rows in `sportsdataverse._common.game_impact.impact_row_schema` with String player ids.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season of the action or possession. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `home_team_id` | Int64 | Home ESPN team id (null for a non-D1 team). |
+| `away_team_id` | Int64 | Away ESPN team id (null for a non-D1 team). |
+| `home_1` | String | Home player 1 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_2` | String | Home player 2 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_3` | String | Home player 3 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_4` | String | Home player 4 on the floor (on a free throw, the player on the floor at the last foul). |
+| `home_5` | String | Home player 5 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_1` | String | Away player 1 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_2` | String | Away player 2 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_3` | String | Away player 3 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_4` | String | Away player 4 on the floor (on a free throw, the player on the floor at the last foul). |
+| `away_5` | String | Away player 5 on the floor (on a free throw, the player on the floor at the last foul). |
+| `seconds` | Float64 | Game clock that ran into this action (0 on a possession row). |
+| `home_pts` | Int64 | Points the home team scored on this action (0 on a possession row). |
+| `away_pts` | Int64 | Points the away team scored on this action (0 on a possession row). |
+| `home_poss` | Int64 | 1 on a possession row where the home team has the ball, else 0. |
+| `away_poss` | Int64 | 1 on a possession row where the away team has the ball, else 0. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp, load_ncaa_mbb_possessions
+from sportsdataverse.mbb.mbb_game_impact import ncaa_impact_rows
+rows = ncaa_impact_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025))
+```
+
 ### ncaa_mbb_lineups {#ncaa_mbb_lineups}
 
 `ncaa_mbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`

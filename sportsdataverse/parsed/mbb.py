@@ -491,6 +491,8 @@ from sportsdataverse.mbb import mbb_box_bpm as mbb_box_bpm  # noqa: F401
 from sportsdataverse.mbb import mbb_bracket_sim as mbb_bracket_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F401
 from sportsdataverse.mbb import mbb_draft_projection as mbb_draft_projection  # noqa: F401
+from sportsdataverse.mbb import mbb_game_lineups_used as mbb_game_lineups_used  # noqa: F401
+from sportsdataverse.mbb import mbb_game_player_impact as mbb_game_player_impact  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
@@ -515,6 +517,7 @@ from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season
 from sportsdataverse.mbb import name_in_v0_box_format as name_in_v0_box_format  # noqa: F401
 from sportsdataverse.mbb import name_is_initials as name_is_initials  # noqa: F401
 from sportsdataverse.mbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import ncaa_impact_rows as ncaa_impact_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_box_scores as ncaa_mbb_box_scores  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_date_games as ncaa_mbb_date_games  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_game_pbp as ncaa_mbb_game_pbp  # noqa: F401
@@ -1132,6 +1135,8 @@ __all__ = [
     "mbb_bracket_sim",
     "mbb_bracketology",
     "mbb_draft_projection",
+    "mbb_game_lineups_used",
+    "mbb_game_player_impact",
     "mbb_in_game_win_prob",
     "mbb_pbp_disk",
     "mbb_player_crosswalk",
@@ -1156,6 +1161,7 @@ __all__ = [
     "name_in_v0_box_format",
     "name_is_initials",
     "ncaa_espn_team_crosswalk",
+    "ncaa_impact_rows",
     "ncaa_mbb_box_scores",
     "ncaa_mbb_date_games",
     "ncaa_mbb_game_pbp",
