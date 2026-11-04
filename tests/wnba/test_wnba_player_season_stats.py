@@ -61,3 +61,38 @@ def test_payload_without_statistics_rows_falls_back_to_totals():
         del cat["statistics"]
     df = helper_wbb_player_season_stats(payload, season=2025, athlete_id=3917450)
     assert _stat(df, "averages", "gamesPlayed") == "193"
+
+
+def test_an_empty_statistics_list_is_a_season_with_no_row():
+    payload = _load(3917450)
+    for cat in payload["categories"]:
+        cat["statistics"] = []
+    assert helper_wbb_player_season_stats(payload, season=2025, athlete_id=3917450).is_empty()
+
+
+def test_one_category_without_statistics_does_not_emit_career_values():
+    """Another category's per-season rows show the payload is not legacy: no flat career fallback."""
+    payload = _load(3917450)
+    del payload["categories"][2]["statistics"]
+    df = helper_wbb_player_season_stats(payload, season=2025, athlete_id=3917450)
+    assert set(df["category"].unique().to_list()) == {"averages", "totals"}
+    assert helper_wbb_player_season_stats(payload, season=2018, athlete_id=3917450).is_empty()
+
+
+def test_traded_player_without_a_totals_row_takes_the_last_stint_and_its_team():
+    payload = _load(1107)
+    for cat in payload["categories"]:
+        cat["statistics"] = [s for s in cat["statistics"] if "totals" not in s["teamSlug"].lower()]
+    stint = next(s for s in reversed(payload["categories"][0]["statistics"]) if s["season"]["year"] == 2025)
+    team = payload["teams"][stint["teamSlug"]]
+    # team_id and team_display_name both name the stint's team, whatever the roster lookup says
+    ident = {"1107": {"team_id": 999, "team_display_name": "Roster Team"}}
+    df = helper_wnba_player_season_stats(payload, season=2025, athlete_id=1107, identity_lookup=ident)
+    assert df["team_id"].unique().to_list() == [int(stint["teamId"])]
+    assert df["team_display_name"].unique().to_list() == [team["displayName"]]
+
+
+def test_traded_players_totals_row_takes_both_team_fields_from_the_roster():
+    ident = {"1107": {"team_id": 5, "team_display_name": "Indiana Fever"}}
+    df = helper_wnba_player_season_stats(_load(1107), season=2025, athlete_id=1107, identity_lookup=ident)
+    assert df.select("team_id", "team_display_name").unique().rows() == [(5, "Indiana Fever")]

@@ -269,6 +269,41 @@ def _pad(x: list[Any] | None, n: int) -> list[str | None]:
     return vals + [None] * (n - len(vals))
 
 
+def _season_row(cat: dict, season: int, legacy: bool) -> tuple[dict | None, list[Any]]:
+    """One stats category's row for ``season``: ``(the statistics[] entry or None, its values)``.
+
+    A category's flat ``totals`` is ESPN's CAREER row; the season is the ``statistics[]`` entry
+    whose ``season.year`` matches (#1087). A traded player has one stint per team plus a
+    "{season} Totals" row: prefer it, else the last stint -- the same rule as
+    ``helper_nba_player_season_stats``. ``legacy`` (no category of the payload has a
+    ``statistics`` key) is the only case that reads the flat array.
+    """
+    if legacy:
+        return None, cat.get("totals") or cat.get("values") or []
+    matches = [s for s in cat.get("statistics") or [] if _rel_int((s.get("season") or {}).get("year")) == season]
+    if not matches:
+        return None, []
+    for s in matches:
+        slug = _rel_chr(s.get("teamSlug"))
+        if slug and "totals" in slug.lower():
+            return s, s.get("stats") or []
+    return matches[-1], matches[-1].get("stats") or []
+
+
+def _season_team(chosen: dict | None, ident: dict[str, Any], teams_map: dict) -> tuple[int | None, str | None]:
+    """``(team_id, team_display_name)`` of the chosen season row, both from one source.
+
+    A team stint names its team (``teamId``, and ``teamSlug`` in the payload's ``teams`` map); a
+    traded player's Totals row names none, so both fall back to the roster identity.
+    """
+    chosen = chosen or {}
+    team_block = teams_map.get(_rel_chr(chosen.get("teamSlug"))) or {}
+    team_id = _rel_int(chosen.get("teamId"))
+    if team_id is None:
+        team_id = ident.get("team_id") if ident.get("team_id") is not None else _rel_int(team_block.get("id"))
+    return team_id, _coalesce_chr(team_block.get("displayName"), ident.get("team_display_name"))
+
+
 def helper_wbb_player_season_stats(
     payload: dict,
     *,
@@ -322,36 +357,9 @@ def helper_wbb_player_season_stats(
 
     ident = (identity_lookup or {}).get(str(_rel_int(athlete_id))) or {}
     season_int = int(season)
-
-    def _season_row(cat: dict) -> tuple[dict | None, list[Any]]:
-        # A category's flat ``totals`` is ESPN's CAREER row; the season is the
-        # ``statistics[]`` entry whose ``season.year`` matches (#1087). A traded
-        # player has one stint per team plus a "{season} Totals" row: prefer it,
-        # else the last stint -- the same rule as ``helper_nba_player_season_stats``.
-        stats_entries = cat.get("statistics")
-        if not stats_entries:
-            # Legacy payloads without per-season rows: the flat array is all there is.
-            return None, cat.get("totals") or cat.get("values") or []
-        matches = [s for s in stats_entries if _rel_int((s.get("season") or {}).get("year")) == season_int]
-        if not matches:
-            return None, []
-        for s in matches:
-            slug = _rel_chr(s.get("teamSlug"))
-            if slug and "totals" in slug.lower():
-                return s, s.get("stats") or []
-        return matches[-1], matches[-1].get("stats") or []
-
-    # team_display_name lives in the payload's `teams` map keyed by slug; the
-    # slug comes from this season's row (a Totals row's slug misses the map,
-    # leaving the roster identity).
-    teams_map = payload.get("teams") or {}
-    team_slug = None
-    for cat in categories:
-        chosen, _ = _season_row(cat)
-        team_slug = _rel_chr((chosen or {}).get("teamSlug"))
-        if team_slug:
-            break
-    team_block = teams_map.get(team_slug) or {} if team_slug else {}
+    legacy = all(cat.get("statistics") is None for cat in categories)
+    chosen = next((r for r in (_season_row(c, season_int, legacy)[0] for c in categories) if r), None)
+    team_id, team_display_name = _season_team(chosen, ident, payload.get("teams") or {})
     athlete = payload.get("athlete") or {}
     meta = {
         "display_name": _coalesce_chr(ident.get("display_name"), athlete.get("displayName")),
@@ -362,13 +370,13 @@ def helper_wbb_player_season_stats(
             (athlete.get("position") or {}).get("abbreviation"),
         ),
         "jersey": _coalesce_chr(ident.get("jersey"), athlete.get("jersey")),
-        "team_id": ident.get("team_id") if ident.get("team_id") is not None else _rel_int(team_block.get("id")),
-        "team_display_name": _coalesce_chr(team_block.get("displayName"), ident.get("team_display_name")),
+        "team_id": team_id,
+        "team_display_name": team_display_name,
     }
 
     rows: list[dict[str, Any]] = []
     for cat in categories:
-        _, season_vals = _season_row(cat)
+        _, season_vals = _season_row(cat, season_int, legacy)
         if not season_vals:
             continue
         vals = [_rel_chr(v) for v in season_vals]
