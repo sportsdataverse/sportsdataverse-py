@@ -506,7 +506,7 @@ No returns table is published for this function: no capture: it reads stats.wnba
 
 ### wnba_team_season_rates {#wnba_team_season_rates}
 
-`wnba_team_season_rates(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wnba_team_season_rates(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates.
 
@@ -515,7 +515,7 @@ WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nb
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `season_type` | `str` | `'regular-season'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
@@ -584,7 +584,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 
 ### wnba_team_strength {#wnba_team_strength}
 
-`wnba_team_strength(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_team_strength(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA team strength: adjusted ratings, SOS, SOV, pace and four factors (league_id='10'). See sportsdataverse.nba.nba_team_strength.nba_team_strength.
 
@@ -592,8 +592,8 @@ WNBA team strength: adjusted ratings, SOS, SOV, pace and four factors (league_id
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
 | `season_type` | `str` | `'regular-season'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 

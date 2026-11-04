@@ -152,7 +152,7 @@ wbb_team_season_rates(2025).filter(split="all").sort("net_rtg_rank").head()
 
 ### wbb_team_strength {#wbb_team_strength}
 
-`wbb_team_strength(seasons: 'Union[int, list[int]]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_team_strength(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
@@ -163,7 +163,7 @@ Delegates to `sportsdataverse.mbb.mbb_team_strength.mbb_team_strength` with
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**

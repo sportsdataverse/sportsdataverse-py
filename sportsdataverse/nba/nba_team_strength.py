@@ -13,7 +13,7 @@ wins and the games behind SOS and SOV.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, Union, overload
+from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
@@ -51,7 +51,7 @@ def _schedule_games(schedule: pl.DataFrame, season_type: str) -> pl.DataFrame:
 
 @overload
 def nba_team_strength(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
@@ -61,21 +61,21 @@ def nba_team_strength(
 
 @overload
 def nba_team_strength(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
     return_as_pandas: Literal[True],
-) -> "pd.DataFrame": ...
+) -> pd.DataFrame: ...
 
 
 def nba_team_strength(
-    seasons: Union[int, list[int]],
+    seasons: int | list[int],
     *,
     league_id: str = "00",
     season_type: str = "regular-season",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+) -> pl.DataFrame | pd.DataFrame:
     """Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors.
 
     One row per team and season. The adjusted ratings are a ridge regression of points per 100
