@@ -398,6 +398,7 @@ def test_wbb_halves_box_without_regulation_reads_the_box_season(monkeypatch: pyt
 
 
 GOLDEN = json.loads((BB / "nba_game_page_golden.json").read_text(encoding="utf-8"))
+BASELINE_WP = Path(__file__).resolve().parents[1] / "fixtures" / "nba_prediction" / "baseline_in_game_wp"
 PBP_COLS = ["home_win_prob", "wp_delta", "wp_regime", "prior_source", "pregame_home_prob", "x_legacy", "y_legacy"]
 
 
@@ -414,7 +415,17 @@ PBP_COLS = ["home_win_prob", "wp_delta", "wp_regime", "prior_source", "pregame_h
 def test_nba_and_wnba_frames_are_byte_identical_to_the_shipped_module(
     monkeypatch: pytest.MonkeyPatch, lg: str, name: str, kwargs: dict
 ) -> None:
-    # the golden was written by the shipped (NBA-only) module at e4894f0817; never regenerate it from this one
+    # the golden was written by the shipped (NBA-only) module at e4894f0817; never regenerate it from this one.
+    # It pins the pipeline, so it scores with the booster that module shipped (the 3e967eb40d artifact, kept
+    # as a fixture); the refit booster's own gates live in test_nba_in_game_wp_late_game.py.
+    import xgboost as xgb
+
+    from sportsdataverse.nba import nba_game_predict
+
+    booster = xgb.Booster()
+    booster.load_model(bytearray((BASELINE_WP / f"{lg}_in_game_wp_3e967eb40d.ubj").read_bytes()))
+    art = {"kind": "xgboost", "booster": booster, "features": booster.feature_names}
+    monkeypatch.setattr(nba_game_predict, "_load_in_game_artifact", lambda league_id="00": art)
     fr = gp.game_page_frames(_final(monkeypatch, lg, name), **kwargs)
     want = GOLDEN[name]
     assert fr["pbp"].select(PBP_COLS).to_dict(as_series=False) == want["pbp"]

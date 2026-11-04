@@ -347,6 +347,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's projected tournament field for a season. |
 | [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
+| [wbb_team_season_rates](additional/analytics-2.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## Dates and seasons

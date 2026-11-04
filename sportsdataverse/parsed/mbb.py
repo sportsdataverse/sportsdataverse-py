@@ -505,6 +505,7 @@ from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
+from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -527,6 +528,8 @@ from sportsdataverse.mbb import ncaa_mbb_team_ids as ncaa_mbb_team_ids  # noqa: 
 from sportsdataverse.mbb import ncaa_mbb_team_roster as ncaa_mbb_team_roster  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_schedule as ncaa_mbb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # noqa: F401
+from sportsdataverse.mbb import ncaa_possession_rate_rows as ncaa_possession_rate_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import observed_pairs as observed_pairs  # noqa: F401
@@ -1139,6 +1142,7 @@ __all__ = [
     "mbb_strength_of_schedule",
     "mbb_team_crosswalk",
     "mbb_team_ratings",
+    "mbb_team_season_rates",
     "mbb_transfer_projection",
     "misspellings",
     "most_recent_mbb_season",
@@ -1161,6 +1165,8 @@ __all__ = [
     "ncaa_mbb_team_roster",
     "ncaa_mbb_team_schedule",
     "ncaa_mbb_team_stats",
+    "ncaa_possession_rate_rows",
+    "ncaa_team_box_count_rows",
     "normalize_player_key",
     "normalize_team_roster_columns",
     "observed_pairs",

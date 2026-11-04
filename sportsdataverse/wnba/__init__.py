@@ -41,6 +41,7 @@ from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
 )
 from sportsdataverse.wnba.wnba_shot_value import *
 from sportsdataverse.wnba.wnba_playtype_impact import *
+from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_season_rates  # noqa: F401
 from sportsdataverse.wnba.wnba_team_ratings import wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba.wnba_game_predict import (  # noqa: F401
     wnba_in_game_win_prob,

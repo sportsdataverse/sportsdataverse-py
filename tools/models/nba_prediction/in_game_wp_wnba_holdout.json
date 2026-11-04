@@ -1,0 +1,58 @@
+{
+  "league_id": "10",
+  "league": "wnba",
+  "train_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "validation_season": 2024,
+  "holdout_season": 2025,
+  "baseline_ref": "3e967eb40d",
+  "n_train_plays": 377343,
+  "rounds": 44,
+  "params": {
+    "max_depth": 4,
+    "eta": 0.1,
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42,
+    "monotone_constraints": "(1,0,1,1,1)"
+  },
+  "features": [
+    "score_diff",
+    "sqrt_sec_left_60",
+    "pregame_logit",
+    "home_has_ball",
+    "margin_per_sqrt_sec"
+  ],
+  "baseline": {
+    "plays": 120717,
+    "brier": 0.18958312724082585,
+    "log_loss": 0.5525917442596314,
+    "calibration_slope": 1.122045386787119,
+    "games": 312,
+    "horn_jump_share": 0.2916666666666667,
+    "horn_step_median": 0.07292044162750244,
+    "final_minute_pairs": 869,
+    "final_minute_toward_share": 0.0,
+    "final_minute_away_share": 0.0,
+    "grid_violations": 0
+  },
+  "refit": {
+    "plays": 120717,
+    "brier": 0.16453637561511336,
+    "log_loss": 0.48355850044461884,
+    "calibration_slope": 0.9185559273809637,
+    "games": 312,
+    "horn_jump_share": 0.0,
+    "horn_step_median": 0.012222728691995144,
+    "final_minute_pairs": 869,
+    "final_minute_toward_share": 0.23130034522439585,
+    "final_minute_away_share": 0.0,
+    "grid_violations": 0
+  }
+}

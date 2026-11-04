@@ -28,6 +28,7 @@ import polars as pl
 
 from sportsdataverse._temporal import as_date
 
+from sportsdataverse._common.league_context import MIN_COHORT_TEAMS, attach_ranks, attach_sample_sizes
 from sportsdataverse._common.ratings import drop_unusable_possession_rows, id_text, iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
@@ -330,6 +331,28 @@ _RATINGS_SCHEMA = {
     "adj_net_z": pl.Float64,
 }
 
+#: Ranked rating -> the sample its ``_n`` counts (BB-D2): the per-100 ratings are rates over
+#: possessions, the paces are per game. Pace has no good direction; like football's pass
+#: rate it ranks high-first.
+_RANKED_SAMPLES = {
+    "adj_off_rtg": "poss",
+    "adj_def_rtg": "poss",
+    "adj_net_rtg": "poss",
+    "adj_pace": "games",
+    "raw_off_rtg": "poss",
+    "raw_def_rtg": "poss",
+    "raw_pace": "games",
+}
+_LOWER_IS_BETTER = ("adj_def_rtg", "raw_def_rtg")
+#: Who is ranked: a team with at least half the season's most games. It keeps the ESPN All-Star
+#: teams (one game each; 2 of the 32 NBA 2024 rows) out of the cohort and its percentile ``n``.
+# ponytail: a share of the max, not a per-league list of exhibition team ids; switch to an id
+# list if a real team ever plays under half the leader's games.
+_RATINGS_QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over("season")
+_RATINGS_SCHEMA |= {f"{m}_rank": pl.Float64 for m in _RANKED_SAMPLES}
+_RATINGS_SCHEMA |= {f"{m}_pct": pl.Float64 for m in _RANKED_SAMPLES}
+_RATINGS_SCHEMA |= {f"{m}_n": pl.Int64 for m in _RANKED_SAMPLES}
+
 
 def _league_loaders(league_id: str):  # type: ignore[no-untyped-def]
     """(schedule, team_box) loaders for a ``league_id``.
@@ -417,8 +440,19 @@ def nba_team_ratings(
     Returns:
         One row per (season, team_id): ``season, team_id, adj_off_rtg,
         adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg,
-        raw_pace, games, rank, adj_net_z``. Empty input returns that schema
-        with zero rows.
+        raw_pace, games, rank, adj_net_z``, then ``<m>_rank``, ``<m>_pct``
+        and ``<m>_n`` for each of the seven ratings (BB-D2, the football
+        F5/F6 grammar of :mod:`sportsdataverse._common.league_context`).
+        ``_rank`` is 1 for the best team in the season: the highest
+        offensive and net ratings, the lowest ``*_def_rtg``, the fastest
+        pace. ``_pct`` is the Weibull percentile. Both are null for a team
+        under half the season's most games, and for every team when fewer
+        than five qualifying teams have the rating or they all share one
+        value. On a full season the half-games rule drops the All-Star
+        teams; with ``as_of_date`` the most games is taken before the cut,
+        so an early cut can also null regular teams. ``_n`` counts the sample:
+        possessions (rounded) for the ratings, games for the paces. Empty
+        input returns that schema with zero rows.
 
     Example:
         Quick start::
@@ -449,8 +483,20 @@ def nba_team_ratings(
     else:
         ratings = adjust_efficiency(eff, league_id=league_id)
         pace = adjust_pace(eff, league_id=league_id)
+        poss = eff.group_by(["season", "team_id"]).agg(pl.col("poss").sum())
+        for k in ("season", "team_id"):
+            assert ratings.schema[k] == pace.schema[k] == poss.schema[k], f"{k} dtype differs across the joins"
         out = (
             ratings.join(pace, on=["season", "team_id"], how="left")
+            .join(poss, on=["season", "team_id"], how="left", validate="1:1")
+            .pipe(
+                attach_ranks,
+                list(_RANKED_SAMPLES),
+                min_cohort=MIN_COHORT_TEAMS,
+                lower_is_better=_LOWER_IS_BETTER,
+                qualifier=_RATINGS_QUALIFIER,
+            )
+            .pipe(attach_sample_sizes, {m: pl.col(s) for m, s in _RANKED_SAMPLES.items()})
             .with_columns(
                 pl.col("adj_net_rtg").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank"),
                 (

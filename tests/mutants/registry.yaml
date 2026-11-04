@@ -8608,3 +8608,150 @@
   test: tests/nfl/shield_pbp/test_description.py -k "qb_dropback_truth_table"
   expected: kill
   note: A penalty-nullified pass (a no_play) counted as a dropback, ~1,270 rows a season.
+
+# --- BB-D2: basketball league context (ranks, percentiles, _n, league averages) ----------------
+# Killers: tests/nba/test_nba_league_context.py on the committed NBA/WNBA 2024 captures, the
+# stats.nba.com ratings oracle and the 2025 college player-seasons.
+- id: bb-league-context-team-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'ok = v.is_not_null() & (n >= min_cohort) & (distinct > 1)'
+  mutant: 'ok = v.is_not_null() & (distinct > 1)'
+  test: tests/nba/test_nba_league_context.py::test_team_floor_nulls_rank_and_pct
+  expected: kill
+  note: Four real teams would get ranks 1-4 and percentiles of four instead of null (floor 5).
+
+- id: bb-league-context-cohort-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'pl.when(has & (n >= min_cohort))'
+  mutant: 'pl.when(has)'
+  test: tests/nba/test_nba_league_context.py::test_player_position_cohort_floor
+  expected: kill
+  note: The seven 2025 college PF player-seasons would get a _pos_pct under the ten-player floor.
+
+- id: bb-league-context-lower-is-better
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'r = v.rank(method="average", descending=m not in lower)'
+  mutant: 'r = v.rank(method="average", descending=True)'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The worst defense (highest DRtg) would rank 1 and read as the 97th percentile.
+
+- id: bb-league-context-average-row-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: '        df = df.filter(qualifier)'
+  mutant: '        df = df'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_league_average_row
+  expected: kill
+  note: The league-average row would count the two All-Star teams (n 32, not the _pct denominator 30).
+
+- id: bb-team-ratings-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/nba/nba_team_ratings.py
+  snippet: 'qualifier=_RATINGS_QUALIFIER,'
+  mutant: 'qualifier=None,'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The one-game All-Star teams would be ranked and inflate every percentile's n.
+
+# --- BB-D3: season team rates from possessions (NBA / WNBA / MBB / WBB) ------------------------
+# Killers: tests/nba/test_nba_team_season_rates.py (NBA 2026 vs stats.nba.com team_stats_advanced,
+# NBA 2024 vs the stats.nba.com clutch dashboard) and tests/mbb/test_mbb_team_season_rates.py
+# (the 2024-25 Big Ten games), all committed real captures.
+- id: bb-tsr-points-from-counts
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).cast(pl.Int64).alias("points"),'
+  mutant: 'pl.col("points").cast(pl.Int64).alias("points"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_nba_2026_net_rating_parity
+  expected: kill
+  note: The score-delta points column carries forward-fill glitches; Denver's net would miss stats.nba.com by 1.1.
+
+- id: bb-tsr-possession-count
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'pl.col("n_poss").filter(pl.col("side") == "o").sum().alias("poss"),'
+  mutant: 'pl.col("n_poss").sum().alias("poss"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_nba_2026_possessions_pace_and_four_factors
+  expected: kill
+  note: Counting both sides' rows would double poss against stats.nba.com's possession count.
+
+- id: bb-tsr-for-against-swap
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'de = base.with_columns(pl.col("defense_team_id").alias("team_id"),'
+  mutant: 'de = base.with_columns(pl.col("offense_team_id").alias("team_id"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_for_and_against_balance
+  expected: kill
+  note: The defensive view would credit the offense, so opp_pts would be the team's own points, not its opponents' box score.
+
+- id: bb-tsr-home-away-swap
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")).alias("offense_is_home"),'
+  mutant: '(pl.col("offense_team_id").cast(pl.Int64) != pl.col("home_team_id")).alias("offense_is_home"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_home_away_split_against_the_box_score
+  expected: kill
+  note: Home and away would swap; the league's home split would show the road deficit.
+
+- id: bb-tsr-neutral-site
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '    home = pl.col("offense_is_home") & ~pl.col("neutral_site").fill_null(False)'
+  mutant: '    home = pl.col("offense_is_home")'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_neutral_site_games_are_neither_home_nor_away
+  expected: kill
+  note: Big Ten tournament and other neutral-site games would count as the nominal home team's home games.
+
+- id: bb-tsr-clutch-clock
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'CLUTCH_SECONDS = 300.0'
+  mutant: 'CLUTCH_SECONDS = 360.0'
+  test: tests/nba/test_nba_team_season_rates.py::test_clutch_window_against_stats_nba_2024
+  expected: kill
+  note: A six-minute window would add ~20% clutch possessions over stats.nba.com's clutch dashboard.
+
+- id: bb-tsr-clutch-margin
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'CLUTCH_MARGIN = 5'
+  mutant: 'CLUTCH_MARGIN = 6'
+  test: tests/nba/test_nba_team_season_rates.py::test_clutch_window_against_stats_nba_2024
+  expected: kill
+  note: Within 6 instead of 5 drops the clutch net's correlation with stats.nba.com from 0.98 to 0.93.
+
+- id: bb-tsr-clutch-period
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/mbb/mbb_team_season_rates.py
+  snippet: 'return pl.when(pl.col("season") >= _WBB_FIRST_QUARTERS_SEASON).then(4).otherwise(2)'
+  mutant: 'return pl.when(pl.col("season") >= _WBB_FIRST_QUARTERS_SEASON).then(2).otherwise(2)'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_clutch_window_uses_the_final_period
+  expected: kill
+  note: Women's clutch would include the last five minutes of the 2nd and 3rd quarters.
+
+- id: bb-tsr-qualifier
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '_QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over(["season", "split"])'
+  mutant: '_QUALIFIER = pl.lit(True)'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_schema_and_cohort
+  expected: kill
+  note: The non-conference opponents (one to three games each) would be ranked beside the Big Ten teams.

@@ -249,12 +249,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_positions](additional/analytics.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
 | [nba_player_props](additional/analytics.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_playtype_ratings](additional/analytics.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
+| [nba_possession_rate_rows](additional/analytics.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
 | [nba_ratings_panel](additional/analytics.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
-| [nba_raw_store_season_frame](additional/analytics.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
+| [nba_raw_store_season_frame](additional/analytics-2.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics-2.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
 | [nba_shot_value](additional/analytics-2.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-2.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-2.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
+| [nba_team_season_rates](additional/analytics-2.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
 | [nba_tracking_drive_value](additional/analytics-2.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
 | [nba_tracking_pass_value](additional/analytics-2.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
 | [nba_tracking_reb_oe](additional/analytics-2.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
@@ -274,14 +276,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [rotowire_injuries](additional/analytics-2.md#rotowire_injuries) | The current NBA injury report from RotoWire. |
 | [score_shot_xpoints](additional/analytics-2.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
 | [shooter_talent](additional/analytics-2.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
-| [shot_selection_quality](additional/analytics-2.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
-| [shrink_clutch](additional/analytics-2.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |
-| [spotrac_team_cap](additional/analytics-2.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |
-| [starters_on_court_counts](additional/analytics-2.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
-| [team_pace_projection](additional/analytics-2.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
-| [team_play_context](additional/analytics-2.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
-| [xpoints_baseline](additional/analytics-2.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
-| [zone_value_map](additional/analytics-2.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
+| [shot_selection_quality](additional/analytics-3.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
+| [shrink_clutch](additional/analytics-3.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |
+| [spotrac_team_cap](additional/analytics-3.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |
+| [starters_on_court_counts](additional/analytics-3.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
+| [team_pace_projection](additional/analytics-3.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
+| [team_play_context](additional/analytics-3.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
+| [xpoints_baseline](additional/analytics-3.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
+| [zone_value_map](additional/analytics-3.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
 ## Dates and seasons
 

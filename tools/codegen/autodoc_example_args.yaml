@@ -191,7 +191,9 @@ nba:
   load_lebron_daily: {path: tests/fixtures/nba_oracle/lebron_daily_sample.csv}  # 2 rows x 9 cols
   load_lebron_season: {path: tests/fixtures/nba_oracle/lebron_season_sample.csv}  # 3 rows x 8 cols
   load_rapm_ryan_davis: {path: tests/fixtures/nba_oracle/rapm_ryan_davis_sample.csv}  # 3 rows x 9 cols
-  nba_team_ratings: {seasons: 2024}  # 32 rows x 12 cols
+  nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
+  nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
+  nba_possession_rate_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_player_props: {season: 2024, game_id: '401585828', home_team_id: '2', away_team_id: '6'}  # 36 rows x 7 cols
   raw_game_efficiency: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}  # 2640 rows x 10 cols  [private: _normalize_schedule]
   adjust_efficiency: {game_eff: {$call: nba.raw_game_efficiency, args: {schedule: {$call: nba.nba_team_ratings._normalize_schedule, args: {schedule: {$call: nba.load_nba_schedule, args: {seasons: 2024}}}}, team_box: {$call: nba.load_nba_team_boxscore, args: {seasons: 2024}}}}}  # 32 rows x 8 cols  [private: _normalize_schedule]
@@ -224,7 +226,7 @@ nba:
   luck_adjusted_response: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}, shooting: {$call: nba.nba_possessions.build_possession_shooting, args: {enhanced_pbp: {$call: nba.nba_enhanced_pbp.enhanced_pbp_from_payload, args: {payload: {$call: nba.nba_possessions._fetch_pbp, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}}}}  # 199 rows x 35 cols  [private: _fetch_pbp]
   nba_la_rapm: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}, shooting: {$call: nba.nba_possessions.build_possession_shooting, args: {enhanced_pbp: {$call: nba.nba_enhanced_pbp.enhanced_pbp_from_payload, args: {payload: {$call: nba.nba_possessions._fetch_pbp, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}}}}  # 19 rows x 6 cols  [private: _fetch_pbp]
   nba_war: {ratings: {$call: nba.nba_rapm.nba_rapm, args: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}, poss: {$call: nba.nba_rapm.nba_rapm, args: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}, rating_col: rapm, poss_col: off_poss, replacement_level: -2.0, pts_per_win: 250.0}  # 19 rows x 2 cols
-  in_game_features: {pbp: {$call: nba.load_nba_pbp, args: {seasons: 2024}}, pregame_home_prob: 0.62}  # 614447 rows x 5 cols
+  in_game_features: {pbp: {$call: nba.load_nba_pbp, args: {seasons: 2024}}, pregame_home_prob: 0.62}  # 614447 rows x 7 cols
   nba_in_game_win_prob: {pbp: {$call: nba.load_nba_pbp, args: {seasons: 2024}}, pregame_home_prob: 0.62}  # 614447 rows x 6 cols
   score_win_prob: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}
   ot_adjusted_seconds: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}
@@ -271,7 +273,8 @@ wnba:
   load_wnba_stats_player_season_stats: {seasons: 2025}  # 1638 rows x 211 cols
   load_wnba_stats_standings: {seasons: 2025}  # 13 rows x 94 cols
   load_wnba_stats_team_season_stats: {seasons: 2025}  # 126 rows x 179 cols
-  wnba_team_ratings: {seasons: 2024}  # 14 rows x 12 cols
+  wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
+  wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
   wnba_in_game_win_prob: {pbp: {$call: wnba.helper_wnba_play_by_play, args: {final: {$call: wnba.espn_wnba_pbp, args: {game_id: 401620238, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 410 rows x 6 cols
   wnba_player_props: {season: 2024, game_id: "401620238", home_team_id: "18", away_team_id: "8"}  # 26 rows x 7 cols
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols
@@ -310,6 +313,9 @@ mbb:
   in_game_features: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 5 cols
   mbb_in_game_win_prob: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 6 cols
   mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
+  mbb_team_season_rates: {seasons: 2025}
+  ncaa_possession_rate_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
+  ncaa_team_box_count_rows: {team_box: {$call: mbb.load_ncaa_mbb_team_box, args: {seasons: 2025}}}
   raw_game_efficiency: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: mbb.load_mbb_team_boxscore, args: {seasons: 2024}}}  # 12478 rows x 10 cols
   adjust_efficiency: {game_eff: {$call: mbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: mbb.load_mbb_team_boxscore, args: {seasons: 2024}}}}}  # 717 rows x 8 cols
   adjust_tempo: {game_eff: {$call: mbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: mbb.load_mbb_team_boxscore, args: {seasons: 2024}}}}}  # 717 rows x 3 cols
@@ -359,6 +365,7 @@ wbb:
   as_of_ratings_split: {results: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, cutoff_date: 2024-01-15}  # 3060 rows x 83 cols
   as_of_season_split: {df: {$call: wbb.wbb_team_ratings, args: {seasons: 2024}}, target_season: 2025}  # 621 rows x 11 cols
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
+  wbb_team_season_rates: {seasons: 2025}
   raw_game_efficiency: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}  # 11796 rows x 10 cols
   adjust_efficiency: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 8 cols
   adjust_tempo: {game_eff: {$call: wbb.raw_game_efficiency, args: {schedule: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: wbb.load_wbb_schedule, args: {seasons: 2024}}}}, team_box: {$call: wbb.load_wbb_team_boxscore, args: {seasons: 2024}}}}, league: womens}  # 621 rows x 3 cols

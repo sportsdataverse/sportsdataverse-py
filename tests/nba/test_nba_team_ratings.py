@@ -222,9 +222,12 @@ def test_nba_team_ratings_public_entry_point(monkeypatch: pytest.MonkeyPatch) ->
         "rank",
         "adj_net_z",
     ]
-    assert out.columns == expected_cols
+    assert out.columns[: len(expected_cols)] == expected_cols
+    assert dict(out.schema) == mod._RATINGS_SCHEMA
     assert out.schema["team_id"] == pl.Utf8
     assert out.height == 2
+    # two teams are under the five-team floor: every BB-D2 rank and percentile is null
+    assert out.select(pl.col("^.*_(rank|pct)$").null_count()).row(0) == (2,) * 14
 
     # as_of_date before G2 should drop it (leakage boundary)
     out_asof = nba_team_ratings(2024, league_id="00", as_of_date=dt.date(2024, 1, 2))
