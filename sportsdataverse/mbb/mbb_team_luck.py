@@ -124,6 +124,7 @@ def mbb_team_luck(
 
     Raises:
         ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
+        SeasonNotFoundError: For a season before 2010, the first with NCAA possessions.
 
     Example:
         Quick start::

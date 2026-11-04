@@ -1272,6 +1272,7 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 | Exception | Description |
 |---|---|
 | `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+| `SeasonNotFoundError` | For a season before 2010, the first with NCAA possessions. |
 
 **Example**
 
