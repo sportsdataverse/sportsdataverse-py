@@ -296,8 +296,11 @@ def team_season_rates_league_averages(rates: pl.DataFrame, *, level: str) -> pl.
     """The league-average rows of a team-season-rates table, one block per split.
 
     The football F1 rows of :func:`~sportsdataverse._common.league_context.league_averages`, over
-    the same qualified teams the ranks use, so each row's ``n`` is the cohort count (the ``_pct``
-    denominator). ``category`` is ``team_season_rates_<split>``. ``qualifier_min`` is null: the
+    the same qualified teams the ranks use, so each row's ``n`` is the cohort count: the number of
+    qualifying teams with a finite value, which is the ``n`` of the ``_pct`` formula (its
+    denominator is ``n + 1``) and not a rate's ``<m>_n`` sample size. It ignores the cohort floor,
+    so a split below the floor still reports ``n`` beside null ranks. ``category`` is
+    ``team_season_rates_<split>``. ``qualifier_min`` is null: the
     gate is relative (half the split's most games), not a fixed threshold.
 
     Args:
