@@ -203,7 +203,8 @@ def college_season(
         for name, (r, w) in methods.items():
             rat = adjust_efficiency(past, league=league, prior=priors[r] if w > 0 else None, prior_weight=w)
             em = dict(zip(rat["team_id"].to_list(), rat["adj_em"].to_list(), strict=True))
-            fill = min(em.values()) if em else 0.0  # the sim's rule: an unrated team plays as the weakest
+            # the sim's rule: an unrated team plays as the weakest rated Division I team
+            fill = min((em[t] for t in d1 if t in em), default=0.0)
             dem = np.array([em.get(x, fill) for x in h]) - np.array([em.get(x, fill) for x in a])
             frame[name] = c.em_scale * dem + loc
         out.append(pl.DataFrame(frame))
@@ -252,7 +253,7 @@ def college_totals(
         rat = adjust_efficiency(past, league=league, prior=prior, prior_weight=w)
         em = dict(zip(rat["team_id"].to_list(), rat["adj_em"].to_list(), strict=True))
         games = dict(past.group_by("team_id").len().iter_rows())
-        emin = min(em.values())
+        emin = min(em[t] for t in ids if t in em)  # a non-D-I opponent plays as the weakest D-I team
         h = np.array([idx.get(t, -1) for t in fut["home_team_id"].to_list()])
         a = np.array([idx.get(t, -1) for t in fut["away_team_id"].to_list()])
         em_t = np.array([em.get(t, emin) for t in ids])

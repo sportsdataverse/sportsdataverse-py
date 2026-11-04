@@ -1389,11 +1389,15 @@ def load_season_inputs(
             from sportsdataverse.mbb.mbb_college_season import load_season_inputs
             inp = load_season_inputs(2024)
     """
+    from sportsdataverse.errors import SeasonNotFoundError
     from sportsdataverse.mbb.mbb_team_ratings import _league_loaders
 
     load_schedule, load_team_box = _league_loaders(league)
     sched = normalize_college_schedule(load_schedule([season]))
-    prev_sched, prev_box = load_schedule([season - 1]), load_team_box([season - 1])
+    try:
+        prev_sched, prev_box = load_schedule([season - 1]), load_team_box([season - 1])
+    except SeasonNotFoundError:  # the previous season is below the release floor: no prior
+        prev_sched = prev_box = pl.DataFrame()
     prior_season = (normalize_college_schedule(prev_sched), prev_box) if prev_sched.height and prev_box.height else None
     return season_inputs(
         sched,

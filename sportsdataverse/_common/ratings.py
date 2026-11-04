@@ -361,6 +361,10 @@ def iterative_opponent_adjust(
             a team not in ``prior`` is not shrunk.
         prior_weight: Pseudo-games of prior per listed team (0 turns the prior off).
 
+    Raises:
+        ValueError: If ``game_eff`` is empty and a prior is given without ``baseline`` (the
+            league average the prior's deviations are from).
+
     Returns:
         One row per team: ``team_id, adj_off, adj_def, adj_net, raw_off,
         raw_def, games``. Empty input with no prior returns that schema with zero rows.
@@ -376,7 +380,9 @@ def iterative_opponent_adjust(
             )
     """
     prior = prior if prior and prior_weight > 0 else None
-    if game_eff.height == 0 and (prior is None or baseline is None):
+    if game_eff.height == 0 and prior is not None and baseline is None:
+        raise ValueError("iterative_opponent_adjust: a prior with no games needs an explicit baseline")
+    if game_eff.height == 0 and prior is None:
         return pl.DataFrame(schema=_ITER_SCHEMA)
     teams = game_eff[team_col].unique(maintain_order=True).to_list()
     if prior is not None:

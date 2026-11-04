@@ -79,8 +79,9 @@ The preseason prior for one season: last season's final ratings, regressed to th
 Each Division I team's prior-season final AdjO / AdjD (`adjust_efficiency` over every
 game of that season, no prior of its own) is taken as a deviation from that season's league
 average and multiplied by the league's fitted `regression`. A team that was not
-Division I last season (a program new to Division I) gets the `new_team_quantile`
-of last season's Division I AdjEM, unregressed, split evenly between offense and defense.
+Division I last season (a program new to Division I, `new_team`) gets the
+`new_team_quantile` of last season's Division I AdjEM, unregressed, split evenly between
+offense and defense; so does a returning team with no rated game last season.
 Both constants come from
 `~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`.
 

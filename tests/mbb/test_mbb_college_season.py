@@ -616,3 +616,21 @@ def test_rating_noise_spreads_the_odds_and_keeps_the_marginals(corpus, feb_sim):
     assert float((j["proj_wins"] - j["proj_wins_fixed"]).abs().max()) < 0.6
     sure = lambda col: int(((j[col] < 0.001) | (j[col] > 0.999)).sum())  # noqa: E731
     assert sure("bid_prob") < sure("bid_prob_fixed"), (sure("bid_prob"), sure("bid_prob_fixed"))
+
+
+def test_prior_edge_cases_are_explicit(prior_2024, corpus_2025):
+    """A prior with no game needs a baseline; a prior season with no rated D-I team gives no prior."""
+    from sportsdataverse._common.ratings import iterative_opponent_adjust
+    from sportsdataverse.mbb.mbb_team_ratings import preseason_prior
+
+    prev_sched, prev_box = prior_2024
+    eff = raw_game_efficiency(split_season(prev_sched)[0], prev_box)
+    cols = dict(team_col="team_id", opp_col="opp_team_id", off_col="off_eff", def_col="def_eff")
+    cols |= dict(home_col="is_home", neutral_col="neutral_site", hfa=3.0)
+    with pytest.raises(ValueError, match="baseline"):
+        iterative_opponent_adjust(eff.head(0), **cols, prior={"1": (1.0, -1.0)}, prior_weight=4.0)
+    out = iterative_opponent_adjust(eff.head(0), **cols, baseline=100.0, prior={"1": (1.0, -1.0)}, prior_weight=4.0)
+    assert out.select("adj_off", "adj_def", "games").row(0) == (101.0, 99.0, 0)
+    teams = college_teams(corpus_2025[0])
+    nobody = college_teams(prev_sched).with_columns(pl.lit("none").alias("team_id")).head(1)
+    assert preseason_prior(eff, teams, nobody).is_empty()

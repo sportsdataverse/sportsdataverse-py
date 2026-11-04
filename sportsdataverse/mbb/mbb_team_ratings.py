@@ -396,8 +396,9 @@ def preseason_prior(
     Each Division I team's prior-season final AdjO / AdjD (:func:`adjust_efficiency` over every
     game of that season, no prior of its own) is taken as a deviation from that season's league
     average and multiplied by the league's fitted ``regression``. A team that was not
-    Division I last season (a program new to Division I) gets the ``new_team_quantile``
-    of last season's Division I AdjEM, unregressed, split evenly between offense and defense.
+    Division I last season (a program new to Division I, ``new_team``) gets the
+    ``new_team_quantile`` of last season's Division I AdjEM, unregressed, split evenly between
+    offense and defense; so does a returning team with no rated game last season.
     Both constants come from
     :data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`.
 
@@ -433,6 +434,8 @@ def preseason_prior(
     final = adjust_efficiency(prev_eff, league=league).join(
         prev_teams.select("team_id").unique(), on="team_id", how="semi"
     )
+    if final.height == 0:  # no prior-season Division I team is rated
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
     new_em = float(final.get_column("adj_em").quantile(new_q, interpolation="linear"))
     season = int(teams.get_column("season")[0])
     return (
@@ -451,7 +454,7 @@ def preseason_prior(
             .otherwise(reg * (pl.col("adj_d") - avg))
             .alias("def_dev"),
             pl.lit(avg).alias("prior_avg"),
-            pl.col("adj_o").is_null().alias("new_team"),
+            ~pl.col("team_id").is_in(prev_teams.get_column("team_id").to_list()).alias("new_team"),
         )
         .cast(PRIOR_SCHEMA)
         .sort("team_id")

@@ -46,6 +46,7 @@ from scipy.stats import norm
 from sportsdataverse._common.metrics import brier_score
 from sportsdataverse.nba.nba_season_rules import nba_season_standings
 from sportsdataverse.nba.nba_season_sim import (
+    PreseasonPrior,
     _records,
     _regular_games,
     as_of_game_model,
@@ -150,7 +151,9 @@ def metrics(j: pl.DataFrame, league_id: str) -> dict[str, object]:
     return {k: round(v, 4) if isinstance(v, float) else v for k, v in out.items()}
 
 
-def one_day_ahead(rows: pl.DataFrame, games: pl.DataFrame, league_id: str, warmup: int = 20) -> pl.DataFrame:
+def one_day_ahead(
+    rows: pl.DataFrame, games: pl.DataFrame, league_id: str, warmup: int = 20, prior: PreseasonPrior | None = None
+) -> pl.DataFrame:
     """The sim's game-model home win probability for each game, ratings through the day before."""
     reg = games.filter(pl.col("home_pts").is_not_null()).sort("game_date", "game_id")
     rows = rows.join(reg.select("game_id", "game_date"), on="game_id", how="inner", validate="m:1")
@@ -159,7 +162,9 @@ def one_day_ahead(rows: pl.DataFrame, games: pl.DataFrame, league_id: str, warmu
         today = reg.filter(pl.col("game_date") == d)
         if reg.filter(pl.col("game_date") < d).height < warmup:
             continue
-        model = as_of_game_model(rows.filter(pl.col("game_date") < d).drop("game_date"), league_id=league_id)
+        model = as_of_game_model(
+            rows.filter(pl.col("game_date") < d).drop("game_date"), league_id=league_id, prior=prior
+        )
         net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
         m = model.margin(
             np.array([net.get(t, 0.0) for t in today["home_team_id"].to_list()]),
@@ -249,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
             entry[name] = metrics(joined, league_id)
             pooled[name].append(joined)
         if args.closes is not None and league_id == "10":
-            oda = one_day_ahead(rows, full, league_id)
+            oda = one_day_ahead(rows, full, league_id, prior=pre)
             closes = pl.read_parquet(args.closes / f"closes_wnba_{season}.parquet").select(
                 "game_id", "mkt_p_home", "mkt_margin"
             )

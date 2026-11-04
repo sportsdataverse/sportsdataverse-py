@@ -151,11 +151,11 @@ class PreseasonPrior(NamedTuple):
 #: 2012-2020 and 2022 (2021, the COVID season, is not scored), holdout 2023-2026, scored once
 #: against the engine with no prior (paired SE clustered by game):
 #:
-#: * men: 0.9 and 4 games. Train 0.66376 -> 0.56140. Holdout weeks 0-6 0.73128 -> 0.58139
-#:   (-0.14989 +- 0.00306; week 0 0.658 -> 0.594, week 1 1.245 -> 0.586), the season 0.66935 ->
-#:   0.57985 (-0.08950 +- 0.00198).
-#: * women: 0.6 and 3 games. Train 1.10104 -> 0.55162. Holdout weeks 0-6 0.67948 -> 0.52260
-#:   (-0.15687 +- 0.00357), the season 0.61239 -> 0.51926 (-0.09313 +- 0.00224).
+#: * men: 0.9 and 4 games. Train 0.65799 -> 0.56140. Holdout weeks 0-6 0.72923 -> 0.58139
+#:   (-0.14784 +- 0.00298; week 0 0.658 -> 0.594, week 1 1.233 -> 0.586), the season 0.66815 ->
+#:   0.57985 (-0.08830 +- 0.00194).
+#: * women: 0.6 and 3 games. Train 0.97673 -> 0.55162. Holdout weeks 0-6 0.66675 -> 0.52260
+#:   (-0.14415 +- 0.00298), the season 0.60485 -> 0.51926 (-0.08559 +- 0.00191).
 #: * ``new_team_quantile``: the 24 programs in their first Division I season in the train years
 #:   finished at a median 0.23 percentile of Division I AdjEM, in both leagues.
 #: * ``rating_sd`` is 1.25 x the one-team single-game AdjEM noise the game model implies,
