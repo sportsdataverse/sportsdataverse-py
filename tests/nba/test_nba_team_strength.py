@@ -221,6 +221,16 @@ def test_bad_league_id_raises() -> None:
         mod.nba_team_strength(2026, league_id="20")
 
 
+def test_bad_season_type_raises_before_loading(monkeypatch: pytest.MonkeyPatch) -> None:
+    def no_load(seasons: list[int]) -> pl.DataFrame:
+        raise AssertionError("loader called before season_type was checked")
+
+    monkeypatch.setattr(tsr, "load_nba_stats_possessions", no_load)
+    monkeypatch.setattr(tsr, "load_nba_stats_schedules", no_load)
+    with pytest.raises(ValueError, match="season_type"):
+        mod.nba_team_strength(2026, season_type="regular")
+
+
 @pytest.mark.parametrize(
     "name", ["sportsdataverse.wnba.wnba_team_strength", "sportsdataverse.wnba.wnba_team_season_rates"]
 )

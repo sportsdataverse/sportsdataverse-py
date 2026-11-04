@@ -35,9 +35,29 @@ def test_held_out_team_without_training_rows_gets_the_prior_mean() -> None:
     assert math.isfinite(sse)
 
 
-@pytest.mark.parametrize("seasons", [["2025"], ["2025", "2025"]])
-def test_fewer_than_two_distinct_seasons_is_rejected(seasons: list[str], capsys: pytest.CaptureFixture[str]) -> None:
+@pytest.mark.parametrize(
+    ("seasons", "message"),
+    [
+        (["2025"], "at least two distinct seasons"),
+        (["2025", "2025"], "repeats a season"),
+        (["2024", "2024", "2025"], "repeats a season"),
+    ],
+)
+def test_bad_seasons_are_rejected(seasons: list[str], message: str, capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as exc:
         fit.main(["--league", "wnba", "--seasons", *seasons])
     assert exc.value.code == 2
-    assert "at least two distinct seasons" in capsys.readouterr().err
+    assert message in capsys.readouterr().err
+
+
+def test_season_without_possessions_is_rejected(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    empty = pl.DataFrame()
+    monkeypatch.setattr(fit, "_league_loaders", lambda league_id: (lambda s: empty, lambda s: empty, 0))
+    monkeypatch.setattr(fit, "nba_possession_rate_rows", lambda *a, **k: empty)
+    monkeypatch.setattr(fit, "season_cv", lambda rows, grid: {lam: (0.0, 0) for lam in grid})
+    with pytest.raises(SystemExit) as exc:
+        fit.main(["--league", "wnba", "--seasons", "2024", "2025"])
+    assert exc.value.code == 2
+    assert "season 2024: no possessions" in capsys.readouterr().err
