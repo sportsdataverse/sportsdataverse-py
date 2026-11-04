@@ -94,7 +94,12 @@ def test_training_design_is_the_validation_pick_and_was_applied(fit: Any, lg: st
     val = _report(lg, "validation")
     assert val["validation_season"] == 2025 and set(val["fit_seasons"]).isdisjoint({HOLDOUT, CONFIRMATION})
     best = min(val["grid"], key=lambda c: c["mean_log_loss"])
-    assert val["pick"] == {"hfa_prior_share": best["hfa_prior_share"], "keep_unrated": best["keep_unrated"]}
+    assert val["best"] == {"hfa_prior_share": best["hfa_prior_share"], "keep_unrated": best["keep_unrated"]}
+    # ties: the best cell's paired 95% interval against the cell includes 0; the simplest tie is picked
+    ties = [c for c in val["grid"] if c is best or c["best_minus_this"]["ci95"][1] >= 0]
+    assert [c["tied_with_best"] for c in val["grid"]] == [c in ties for c in val["grid"]]
+    pick = min(ties, key=lambda c: (c["keep_unrated"], c["hfa_prior_share"]))
+    assert val["pick"] == {"hfa_prior_share": pick["hfa_prior_share"], "keep_unrated": pick["keep_unrated"]}
     assert val["pick"] == {"hfa_prior_share": fit.HFA_PRIOR_SHARE[lg], "keep_unrated": fit.KEEP_UNRATED[lg]}
     report = _report(lg)
     assert (report["hfa_prior_share"], report["keep_unrated"]) == (fit.HFA_PRIOR_SHARE[lg], fit.KEEP_UNRATED[lg])
@@ -103,6 +108,8 @@ def test_training_design_is_the_validation_pick_and_was_applied(fit: Any, lg: st
         assert unrated > 0  # the season's first days: the case the design is about
         assert stats["unrated_games_dropped"] == (0 if fit.KEEP_UNRATED[lg] else unrated)
         assert stats["hfa_swapped_games"] == round(fit.HFA_PRIOR_SHARE[lg] * stats["rated_games"])
+    if lg == "mbb":  # the 2022 MBB release puts overtime plays on the game clock: the re-clock fired
+        assert report["train_stats"]["2022"]["ot_rows_reclocked"] > 10_000
 
 
 @pytest.mark.parametrize(("lg", "baseline_violations"), [("mbb", 0), ("wbb", 94)])
@@ -118,8 +125,8 @@ def test_final_minute_grid_moves_toward_the_leader(fit: Any, lg: str, baseline_v
 
 
 # (floor at 0.1 s, minimum rise over the final minute). Observed (refit, home +1, prior 0.55, the trailing
-# team's ball): at 0.1 s MBB 0.970 / WBB 0.974, rise 0.278 / 0.323. Floors: observed less 0.03 / 0.06.
-ONE_POINT = {"mbb": (0.939, 0.217), "wbb": (0.944, 0.262)}
+# team's ball): at 0.1 s MBB 0.970 / WBB 0.980, rise 0.278 / 0.308. Floors: observed less 0.03 / 0.06.
+ONE_POINT = {"mbb": (0.939, 0.217), "wbb": (0.949, 0.247)}
 
 
 @pytest.mark.parametrize("lg", sorted(LEAGUES))
@@ -147,9 +154,9 @@ def test_one_point_lead_converges_at_the_horn(lg: str) -> None:
 
 
 # (games, minimum toward-the-leader share) on the late-game fixture (every 2026 holdout game). Observed,
-# refit: horn share MBB 0.0 / WBB 0.00017, toward 0.385 / 0.349, away 0 / 0. Baseline: horn 0.066 / 0.047,
+# refit: horn share MBB 0.0 / WBB 0.00017, toward 0.385 / 0.352, away 0 / 0. Baseline: horn 0.066 / 0.047,
 # toward 0.283 / 0.317, away 0 / 0.045. Gates: horn share <= 0.005; away == 0; toward >= observed less 0.03.
-LATE = {"mbb": (6275, 0.355), "wbb": (6011, 0.319)}
+LATE = {"mbb": (6275, 0.355), "wbb": (6011, 0.322)}
 
 
 @pytest.mark.parametrize("lg", sorted(LEAGUES))
@@ -171,8 +178,8 @@ OUTCOMES: dict[tuple[str, str, str], dict[str, str]] = {
     ("mbb", "holdout", "rated_prior"): {"baseline": "win", "naive": "win"},
     ("mbb", "confirmation", "hfa_prior"): {"baseline": "win", "naive": "win"},
     ("mbb", "confirmation", "rated_prior"): {"baseline": "win", "naive": "win"},
-    # WBB vs the naive closed form: log loss is a win in every cell, Brier a tie in three
-    ("wbb", "holdout", "hfa_prior"): {"baseline": "win", "naive": "tie"},
+    # WBB vs the naive closed form: log loss is a win in every cell, Brier a tie with the rated prior
+    ("wbb", "holdout", "hfa_prior"): {"baseline": "win", "naive": "win"},
     ("wbb", "holdout", "rated_prior"): {"baseline": "win", "naive": "tie"},
     ("wbb", "confirmation", "hfa_prior"): {"baseline": "win", "naive": "win"},
     ("wbb", "confirmation", "rated_prior"): {"baseline": "win", "naive": "tie"},
@@ -192,6 +199,32 @@ def test_report_comparisons_rest_on_the_paired_bootstrap(lg: str, season: str, p
     assert cell["refit"]["horn_jump_share"] <= 0.002 and cell["refit"]["grid_violations"] == 0, cell["refit"]
 
 
+# Fixed 2026-holdout ceilings, never raised: (Brier, log loss, |slope - 1|, |intercept|), each the observed
+# refit value plus 0.0002 / 0.0005 / 0.03 / 0.05. Observed (in_game_wp_<lg>_holdout.json, refit):
+#   MBB hfa   0.13245 / 0.39957 / slope 0.990 / intercept -0.001
+#   MBB rated 0.12006 / 0.36765 / 0.956 / +0.058
+#   WBB hfa   0.12052 / 0.36480 / 1.113 / +0.018
+#   WBB rated 0.10146 / 0.31330 / 0.995 / -0.019
+# WBB history (game-page prior): the d862d3e077 booster read 0.12037 / intercept -0.037; the f5e91fd935
+# one (unrated games kept, the grid's best before ties were broken) 0.12070 / -0.129; this one (the simplest
+# tie: unrated dropped) 0.12052 / +0.018.
+FIXED_LIVE: dict[tuple[str, str], tuple[float, float, float, float]] = {
+    ("mbb", "hfa_prior"): (0.13265, 0.40007, 0.040, 0.051),
+    ("mbb", "rated_prior"): (0.12026, 0.36815, 0.074, 0.108),
+    ("wbb", "hfa_prior"): (0.12072, 0.36530, 0.143, 0.068),
+    ("wbb", "rated_prior"): (0.10166, 0.31380, 0.035, 0.070),
+}
+
+
+@pytest.mark.parametrize(("lg", "prior"), sorted(FIXED_LIVE))
+def test_report_sits_under_the_fixed_ceilings(lg: str, prior: str) -> None:
+    """A regenerated report cannot move the gates: its refit holdout must sit under the fixed ceilings."""
+    m = _report(lg)["holdout"][prior]["refit"]
+    max_brier, max_ll, max_slope_dev, max_int = FIXED_LIVE[(lg, prior)]
+    assert m["brier"] <= max_brier and m["log_loss"] <= max_ll, m
+    assert abs(m["calibration_slope"] - 1) <= max_slope_dev and abs(m["calibration_intercept"]) <= max_int, m
+
+
 @pytest.mark.skipif(os.environ.get("SDV_PY_LIVE_TESTS") != "1", reason="downloads the holdout pbp release")
 @pytest.mark.parametrize("lg", sorted(LEAGUES))
 @pytest.mark.parametrize("prior", ["hfa_prior", "rated_prior"])
@@ -209,3 +242,6 @@ def test_holdout_reproduces_the_report(fit: Any, lg: str, prior: str) -> None:
     assert m["brier"] <= want["brier"] + 0.0002 and m["log_loss"] <= want["log_loss"] + 0.0005, m
     assert abs(m["calibration_slope"] - 1) <= abs(want["calibration_slope"] - 1) + 0.03, m
     assert abs(m["calibration_intercept"]) <= abs(want["calibration_intercept"]) + 0.05, m
+    max_brier, max_ll, max_slope_dev, max_int = FIXED_LIVE[(lg, prior)]
+    assert m["brier"] <= max_brier and m["log_loss"] <= max_ll, m
+    assert abs(m["calibration_slope"] - 1) <= max_slope_dev and abs(m["calibration_intercept"]) <= max_int, m

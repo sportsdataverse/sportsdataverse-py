@@ -33,10 +33,12 @@ from that script rather than re-implemented. College specifics:
    subset. ``KEEP_UNRATED`` says whether unrated games are trained on. Both are picked per league by
    ``--validate`` (``in_game_wp_<lg>_validation.json``): fit on 2022 + 2023, score every finished
    2025 game (the holdout and confirmation seasons are not looked at) with each prior, and take the
-   lowest mean of the two log losses over share {0, 0.25, 0.5} x keep {no, yes}. MBB: share 0, unrated
-   dropped (0.38793; keeping them at share 0 moves the HFA-prior calibration intercept +0.021 ->
-   -0.187). WBB: share 0.25, unrated kept (0.34795; share 0 dropped 0.34943, HFA-prior intercept
-   -0.172 -> -0.100).
+   lowest mean of the two log losses over share {0, 0.25, 0.5} x keep {no, yes}; cells whose paired
+   game-clustered 95% interval against that best includes 0 are ties, and the simplest tie wins
+   (unrated dropped, then the smallest share). MBB: share 0, unrated dropped (the best, 0.38793; every
+   other cell is worse, keeping unrated games at share 0 moves the HFA-prior calibration intercept
+   +0.021 -> -0.187). WBB: share 0.25, unrated dropped (0.34819, a tie with the best, 0.34795 with
+   unrated kept, whose HFA-prior intercept is -0.100 against +0.029).
 
 Replaces ``dev/mbb_prediction/train_in_game_wp.py`` (untracked): a 2023-only fit with a daily as-of
 prior and no clock transform, whose booster carried no lineage and held home WP flat in the final
@@ -90,7 +92,7 @@ LEAGUES: dict[str, dict[str, Any]] = {
 # 1 and 3): the share of rated training games fit with the game page's HFA-only prior, and whether
 # games with no as-of rating are trained on.
 HFA_PRIOR_SHARE = {"mbb": 0.0, "wbb": 0.25}
-KEEP_UNRATED = {"mbb": False, "wbb": True}
+KEEP_UNRATED = {"mbb": False, "wbb": False}
 CONFIRMATION_SEASON = 2024
 # The last commit before this refit: the baseline the holdout gate compares against.
 BASELINE_REF = "eb4207476e"
@@ -236,48 +238,72 @@ def _fit(frames: dict[int, pl.DataFrame]) -> tuple[xgb.Booster, int]:
     ), rounds
 
 
+def _design_key(cell: dict[str, Any]) -> tuple[bool, float]:
+    """Simplest design first: unrated games dropped (no biased fallback prior), then the smallest HFA share."""
+    return (cell["keep_unrated"], cell["hfa_prior_share"])
+
+
 def validate(lg: str, log: Callable[[str], None] = print) -> dict[str, Any]:
     """The design grid on the 2025 validation season: fit 2022 + 2023, score every finished 2025 game.
 
     Scored on features (not through ``score_win_prob``) with the game page's prior (``hfa_logit``) and
-    the rated prior. The pick minimizes the mean of the two log losses; ``HFA_PRIOR_SHARE`` /
-    ``KEEP_UNRATED`` must equal it (tests/mbb/test_mbb_in_game_wp_late_game.py).
+    the rated prior; a cell's loss is the mean of the two log losses. 2025 is also each cell's
+    early-stopping season, an optimism every cell shares. The best cell's paired game-clustered
+    bootstrap interval against each other cell decides ties: of the cells whose interval includes 0,
+    the pick is the simplest (:func:`_design_key`). ``HFA_PRIOR_SHARE`` / ``KEEP_UNRATED`` must equal
+    the pick (tests/mbb/test_mbb_in_game_wp_late_game.py).
     """
     raws = {s: season_raw(lg, s)[0] for s in (2022, 2023, 2025)}
     served = {
         "hfa_prior": raws[2025].with_columns(pl.col("hfa_logit").alias("pregame_logit")),
         "rated_prior": raws[2025],
     }
-    grid = []
+    grid, sums = [], []
     for keep in (False, True):
         for share in GRID_SHARES:
             frames = {s: training_frame(raws[s], share, keep, s)[0] for s in raws}
             tr = pl.concat([frames[2022], frames[2023]])
             rounds = shared._early_stop_rounds(tr, frames[2025])
             booster = xgb.train(shared._XGB_PARAMS, shared._dmat(tr), num_boost_round=rounds)
-            cell: dict[str, Any] = {
-                "hfa_prior_share": share,
-                "keep_unrated": keep,
-                "rounds": rounds,
-            }
+            cell: dict[str, Any] = {"hfa_prior_share": share, "keep_unrated": keep, "rounds": rounds}
+            per_game = []
             for prior, df in served.items():
-                p = booster.inplace_predict(df.select(_IN_GAME_FEATURES).to_numpy())
+                p = booster.inplace_predict(df.select(_IN_GAME_FEATURES).to_numpy()).astype(np.float64)
                 cell[prior] = probability_metrics(df["home_win"].to_numpy(), p)
+                rows = df.select("game_id", pl.col("home_win").alias("y")).with_columns(pl.Series("home_win_prob", p))
+                per_game.append(_game_sums(rows))
+            # per game, the mean of the two priors' summed losses (the cell's loss, game by game)
+            sums.append(
+                per_game[0]
+                .join(per_game[1], on="game_id", suffix="_r")
+                .select(
+                    "game_id",
+                    "n",
+                    ((pl.col("se") + pl.col("se_r")) / 2).alias("se"),
+                    ((pl.col("ll") + pl.col("ll_r")) / 2).alias("ll"),
+                )
+            )
             cell["mean_log_loss"] = (cell["hfa_prior"]["log_loss"] + cell["rated_prior"]["log_loss"]) / 2
             log(f"{lg} validate keep_unrated={keep} share={share}: mean log loss {cell['mean_log_loss']:.5f}")
             grid.append(cell)
     if not all(math.isfinite(c["mean_log_loss"]) for c in grid):
         raise ValueError(f"non-finite validation log loss: {[c['mean_log_loss'] for c in grid]}")
-    best = min(grid, key=lambda c: c["mean_log_loss"])
+    b = min(range(len(grid)), key=lambda k: grid[k]["mean_log_loss"])
+    for k, cell in enumerate(grid):
+        cell["best_minus_this"] = paired_deltas(sums[b], sums[k])["log_loss"]
+        cell["tied_with_best"] = k == b or cell["best_minus_this"]["ci95"][1] >= 0
+    pick = min((c for c in grid if c["tied_with_best"]), key=_design_key)
     report = {
         "league": lg,
         "fit_seasons": [2022, 2023],
         "validation_season": 2025,
-        "rule": "min of the mean of the log loss with the game page's HFA prior and with the rated prior",
-        "pick": {
-            "hfa_prior_share": best["hfa_prior_share"],
-            "keep_unrated": best["keep_unrated"],
-        },
+        "rule": (
+            "lowest mean of the game-page-prior and rated-prior log losses; cells whose paired game-clustered 95% "
+            "interval against it includes 0 are ties, and the simplest tie is picked (unrated dropped, then the "
+            "smallest HFA share)"
+        ),
+        "best": {"hfa_prior_share": grid[b]["hfa_prior_share"], "keep_unrated": grid[b]["keep_unrated"]},
+        "pick": {"hfa_prior_share": pick["hfa_prior_share"], "keep_unrated": pick["keep_unrated"]},
         "grid": grid,
     }
     (HERE / f"in_game_wp_{lg}_validation.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

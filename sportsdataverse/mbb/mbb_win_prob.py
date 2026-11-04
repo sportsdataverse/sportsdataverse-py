@@ -155,8 +155,11 @@ def _compile_season_wp(
         fit (``nba_game_page.score_win_prob``): in play order, with a null score
         carried forward (0 before the first score) and, when the frame has
         ``period_number`` and a period clock, overtime plays on the period clock
-        (:func:`~sportsdataverse.nba.nba_game_page.ot_adjusted_seconds`). Only the
-        model input is changed; the returned columns are as given.
+        (:func:`~sportsdataverse.nba.nba_game_page.ot_adjusted_seconds`). A frame
+        without ``period_number`` or a period clock is scored on its game clock as
+        given. The regulation period count comes from the frame's first ``season``
+        (one season per call; none means the league default). Only the model input
+        is changed; the returned columns are as given.
     """
     if pbp.height == 0:
         return pbp

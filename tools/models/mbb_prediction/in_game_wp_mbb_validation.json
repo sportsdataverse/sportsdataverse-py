@@ -5,7 +5,11 @@
     2023
   ],
   "validation_season": 2025,
-  "rule": "min of the mean of the log loss with the game page's HFA prior and with the rated prior",
+  "rule": "lowest mean of the game-page-prior and rated-prior log losses; cells whose paired game-clustered 95% interval against it includes 0 are ties, and the simplest tie is picked (unrated dropped, then the smallest HFA share)",
+  "best": {
+    "hfa_prior_share": 0.0,
+    "keep_unrated": false
+  },
   "pick": {
     "hfa_prior_share": 0.0,
     "keep_unrated": false
@@ -31,7 +35,15 @@
         "calibration_slope": 0.9570102994225804,
         "max_decile_gap": 0.030881749089808508
       },
-      "mean_log_loss": 0.3879265062518671
+      "mean_log_loss": 0.3879265062518671,
+      "best_minus_this": {
+        "delta": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "tied_with_best": true
     },
     {
       "hfa_prior_share": 0.25,
@@ -53,7 +65,15 @@
         "calibration_slope": 0.9487015351453854,
         "max_decile_gap": 0.04674188423612746
       },
-      "mean_log_loss": 0.38894658283405115
+      "mean_log_loss": 0.38894658283405115,
+      "best_minus_this": {
+        "delta": -0.0010200765821840939,
+        "ci95": [
+          -0.0016244275106934885,
+          -0.0003937460006274077
+        ]
+      },
+      "tied_with_best": false
     },
     {
       "hfa_prior_share": 0.5,
@@ -75,7 +95,15 @@
         "calibration_slope": 0.9565384386857672,
         "max_decile_gap": 0.03752400495591918
       },
-      "mean_log_loss": 0.3899839732307775
+      "mean_log_loss": 0.3899839732307775,
+      "best_minus_this": {
+        "delta": -0.002057466978910403,
+        "ci95": [
+          -0.002740675751661772,
+          -0.0013583765214421448
+        ]
+      },
+      "tied_with_best": false
     },
     {
       "hfa_prior_share": 0.0,
@@ -97,7 +125,15 @@
         "calibration_slope": 0.9399582877848678,
         "max_decile_gap": 0.029787530821050734
       },
-      "mean_log_loss": 0.3912793052711423
+      "mean_log_loss": 0.3912793052711423,
+      "best_minus_this": {
+        "delta": -0.003352799019275187,
+        "ci95": [
+          -0.004701345155677528,
+          -0.0019772870652231193
+        ]
+      },
+      "tied_with_best": false
     },
     {
       "hfa_prior_share": 0.25,
@@ -119,7 +155,15 @@
         "calibration_slope": 0.9520979051616014,
         "max_decile_gap": 0.033947020540113004
       },
-      "mean_log_loss": 0.38891730659901336
+      "mean_log_loss": 0.38891730659901336,
+      "best_minus_this": {
+        "delta": -0.0009908003471463176,
+        "ci95": [
+          -0.0015583227485238718,
+          -0.00044401829307948745
+        ]
+      },
+      "tied_with_best": false
     },
     {
       "hfa_prior_share": 0.5,
@@ -141,7 +185,15 @@
         "calibration_slope": 0.9573188851991363,
         "max_decile_gap": 0.03822697140559003
       },
-      "mean_log_loss": 0.3898424715104605
+      "mean_log_loss": 0.3898424715104605,
+      "best_minus_this": {
+        "delta": -0.0019159652585934127,
+        "ci95": [
+          -0.0024605524994214508,
+          -0.0013793003214739468
+        ]
+      },
+      "tied_with_best": false
     }
   ]
 }
