@@ -1,10 +1,265 @@
 ---
-title: "NBA — additional Python functions — Analytics: score_shot–zone_value"
-sidebar_label: "Analytics: score_shot–zone_value"
+title: "NBA — additional Python functions — Analytics: players_on–zone_value"
+sidebar_label: "Analytics: players_on–zone_value"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: score_shot–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: players_on–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: score_shot–zone_value
+# NBA — additional Python functions — Analytics: players_on–zone_value
+
+### players_on_court_from_rotation {#players_on_court_from_rotation}
+
+`players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int', league_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm.
+
+Pure function — no network calls.  Port of hoopR's `.players_on_court_v3()`
+(R/nba_stats_pbp.R lines 857-1041).
+
+The rotation dict may use either `"HomeTeam"`/`"AwayTeam"` or
+`"homeTeam"`/`"awayTeam"` as keys — both are accepted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. Must contain `game_id`, `action_number`, `period`, `seconds_remaining`, `is_substitution`, and `team_id`. |
+| `rotation` | `dict[str, list[dict]]` |  | Parsed rotation dict, typically from `parse_rotation_resultsets`. Each team's list contains stint dicts with numeric `PERSON_ID`, `IN_TIME_REAL`, `OUT_TIME_REAL`. |
+| `home_team_id` | `int` |  | Integer team ID of the home team. |
+| `away_team_id` | `int` |  | Integer team ID of the away team. |
+| `league_id` | `Optional[str]` | `None` | `"00"` NBA, `"10"` WNBA, `"15"` Summer League, `"20"` G League. Sets the period lengths the rotation clock runs on; when `None` the league is read off the game id. |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA` with one row per action in *enhanced_pbp* (same row count, same ordering). Never raises — an empty or malformed rotation (stints that do not sum to five players' game time, or carry negative / inverted clocks) logs a warning and returns a zero-row frame, so callers fall back to another lineup source.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+import polars as pl
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+rot = json.loads(pathlib.Path("gamerotation.json").read_text())
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+rotation = parse_rotation_resultsets(rot)
+df = players_on_court_from_rotation(
+    enh, rotation, home_team_id=home, away_team_id=away
+)
+print(df.shape)
+```
+
+### prob_over {#prob_over}
+
+`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'`
+
+Probability a stat finishes strictly above `line`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_value` | `float` |  | Projected mean of the stat. |
+| `line` | `float` |  | The prop line. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `league_id` | `str` | `'00'` | Accepted for parity. |
+
+**Returns**
+
+`P(stat > line)` in `[0, 1]`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import prob_over
+prob_over(24.0, 22.5, "pts")
+```
+
+### project_player_line {#project_player_line}
+
+`project_player_line(rate_row: 'dict[str, Any]', exp_minutes: 'float', pace_factor: 'float' = 1.0) -> 'dict[str, float]'`
+
+Project a player's expected counting line from per-minute rates.
+
+`exp_stat = rate_per_min * exp_minutes * pace_factor` -- counting stats
+scale with both projected minutes and pace.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rate_row` | `dict[str, Any]` |  | One row of `player_rates` (as a dict). |
+| `exp_minutes` | `float` |  | Projected minutes for the game. |
+| `pace_factor` | `float` | `1.0` | Pace multiplier (`exp_poss / avg_pace`); `1.0` for a league-average-pace matchup. |
+
+**Returns**
+
+`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import player_rates, project_player_line
+r = player_rates(box_logs).row(0, named=True)
+line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
+```
+
+### prop_distribution {#prop_distribution}
+
+`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'`
+
+Distribution family + parameters for a projected stat mean.
+
+Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
+(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
+variance `dispersion*mu` (Poisson if dispersion <= 1).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_value` | `float` |  | Projected mean of the stat. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `league_id` | `str` | `'00'` | Accepted for parity (dispersion is currently league-shared). |
+
+**Returns**
+
+`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import prop_distribution
+fam, par = prop_distribution(24.0, "pts")
+```
+
+### ratings_as_of {#ratings_as_of}
+
+`ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'`
+
+Fit `model` on every possession dated on or before `asof` and return ratings.
+
+This is the through-date primitive: possessions with `game_date > asof`
+are excluded from the fit entirely (never merely down-weighted), which is
+what makes the panel built from repeated calls to this function leakage-free
+by construction — see `tests/nba/test_nba_ratings_panel.py::test_ratings_as_of_is_leakage_free_append_invariant`.
+NOTE: the leakage property is proven by the append-invariance test TOGETHER
+with the panel's per-date-parity test — neither alone covers
+cross-checkpoint-window leaks; do not prune one without the other.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel` (a `RapmModel`, `RatingsModel`, or `PriorModel`). |
+| `possessions` | `DataFrame` |  | A possession+lineup frame that MUST carry a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
+| `asof` | `date` |  | The through-date checkpoint (inclusive: `game_date <= asof`). A pregame consumer of a game on day D passes `D - 1 day`; the pregame surfaces (`nba_player_props`, `nba_team_ratings`) take a strict `as_of_date` instead. |
+
+**Returns**
+
+`RatingsFit` with per-player offense/defense ratings (per-100-possession scale, same sign convention as `nba_rapm`: positive `d_ratings` means good defense). Empty dicts when no possessions fall on or before `asof` or when `possessions` is empty.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `possessions` (non-empty) does not carry a `game_date` column — this is a caller-contract violation, not a normal empty case, so it raises rather than silently returning empty ratings. |
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+from sportsdataverse.nba.nba_ratings_panel import ratings_as_of
+
+rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
+print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
+```
+
+### rotowire_injuries {#rotowire_injuries}
+
+`rotowire_injuries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+The current NBA injury report from RotoWire.
+
+One row per injured player: team, position, the injury, the designation
+(Out / Doubtful / Questionable / GTD / Day-To-Day) and a link to the player's
+RotoWire page. This is the live replacement for the defunct RotoWorld feed.
+
+The rendered grid at `/basketball/news.php?view=injuries` builds itself
+client-side, so this reads the JSON table endpoint the grid calls
+(`/basketball/tables/injury-report.php?team=ALL&pos=ALL`) rather than
+scraping the page. The projected return date is subscriber-gated and comes
+back as `"Subscribers Only"`; it is returned as null for non-subscribers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per injured player with `player_id`, `player`, `first_name`, `last_name`, `team`, `position`, `injury`, `status`, `return_date` and `url`. An unreachable endpoint or a non-list body yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `team` | String | Team-side label or team identifier. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `injury` | String | Injury (body part / description). |
+| `status` | String | Status label. |
+| `return_date` | String | Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only") and when the cell is blank. |
+| `url` | String | RotoWire player page URL. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the endpoint cannot be fetched or does not answer with a JSON array; the call still returns an empty frame. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import rotowire_injuries
+
+injuries = rotowire_injuries()
+print(injuries.shape)
+
+# As pandas
+
+injuries_pd = rotowire_injuries(return_as_pandas=True)
+
+# Pipeline next step (who is ruled out)
+
+injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
+```
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
