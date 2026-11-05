@@ -13,22 +13,18 @@ Checked against stats.nba.com's five-man ``lineups`` dashboard (Base and Advance
 (64.6% within 2.0, max 10.8) and the eFG% by under 0.05. stats.nba.com counts a possession for
 every lineup on the floor during it, so its possession counts run about 4% above these (each
 possession here belongs to the lineup that started it, which keeps the lineups adding up to the
-team), and ``off_rtg`` / ``def_rtg`` each run about 5 above its ratings; the offset cancels in
-``net_rtg``. ``lineup_id`` sorts the stats.nba.com ids numerically.
+team), and ``off_rtg`` / ``def_rtg`` each run about 5 above its ratings; in ``net_rtg`` the two
+offsets largely cancel (the median gap of 1.5 above). ``lineup_id`` sorts the stats.nba.com ids numerically.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
+import pandas as pd
 import polars as pl
 
 from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS
 from sportsdataverse._common.lineup_seasons import COUNTS, lineup_count_schema, lineup_seasons
 from sportsdataverse.nba.nba_game_impact import _check_league, _load_releases, _possession_rows, nba_impact_rows
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 __all__ = ["nba_lineup_count_rows", "nba_lineup_seasons"]
 
@@ -58,6 +54,9 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
         One row per possession in :func:`sportsdataverse._common.lineup_seasons.lineup_count_schema`
         with Int64 player ids.
 
+    Raises:
+        ValueError: If a count column holds a null.
+
     Example:
         Quick start::
 
@@ -70,6 +69,10 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
     games = schedule.select(
         pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64), pl.col("away_team_id").cast(pl.Int64)
     ).unique("game_id")
+    sources = ("fg2a", "fg2m", "fg3a", "fg3m", "fta", "oreb", "dreb", "tov")
+    nulls = [c for c in sources if possessions[c].null_count()]
+    if nulls:  # a missing count would zero a known one (fga = fg2a + fg3a) and skew every rate over it
+        raise ValueError(f"possessions carry null counts in {nulls}; the four factors need every count")
     poss = possessions.with_columns(
         (pl.col("fg2a") + pl.col("fg3a")).alias("fga"), (pl.col("fg2m") + pl.col("fg3m")).alias("fgm")
     )
@@ -117,13 +120,14 @@ def nba_lineup_seasons(
         ``poss`` / ``opp_poss``, ``pts`` / ``opp_pts``, ``plus_minus``, ``off_rtg`` / ``def_rtg`` /
         ``net_rtg`` (per 100 possessions), the four factors for (``efg_pct``, ``tov_pct``,
         ``orb_pct``, ``ft_rate``) and against (``opp_*``) as fractions, and for every rate
-        ``<m>_rank`` / ``<m>_pct`` (within the season and unit size, among units over
+        ``<m>_rank`` / ``<m>_pct`` (within the season and unit size, among units with at least
         ``min_poss``) and ``<m>_n``. Ids are the stats.nba.com ids (Int64). Empty input returns
         that schema with zero rows.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
-            of the four above.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, ``season_type`` is not one
+            of the four above, or the possessions carry a null shot, free-throw, rebound or
+            turnover count.
 
     Example:
         Quick start::

@@ -233,3 +233,51 @@ def test_empty_input_bad_counts_and_bad_args() -> None:
         nba_lineup_seasons(2025, league_id="20")
     with pytest.raises(ValueError, match="season_type"):
         nba_lineup_seasons(2025, season_type="Regular Season")
+
+
+def test_a_game_needs_both_play_by_play_and_possessions() -> None:
+    """A game missing either release adds nothing: not points without possessions, nor shots."""
+    pbp, lineups = _read("nba", "pbp"), _read("nba", "game_lineups")
+    poss, schedule = _read("nba", "possessions"), _read("nba", "schedule")
+    games = schedule["game_id"].sort().to_list()
+    no_pbp, no_poss = games[0], games[1]
+    gapped = lineup_seasons(
+        nba_impact_rows(
+            pbp.filter(pl.col("game_id") != no_pbp), lineups, poss.filter(pl.col("game_id") != no_poss), schedule
+        ),
+        nba_lineup_count_rows(poss.filter(pl.col("game_id") != no_poss), schedule),
+        player_dtype=pl.Int64(),
+        min_poss=400,
+    )
+    kept = schedule.filter(~pl.col("game_id").is_in([no_pbp, no_poss]))
+    clean = lineup_seasons(
+        nba_impact_rows(pbp, lineups, poss, kept),
+        nba_lineup_count_rows(poss, kept),
+        player_dtype=pl.Int64(),
+        min_poss=400,
+    )
+    assert gapped.equals(clean)
+
+
+def test_wnba_half_seasons_count_the_whole_game() -> None:
+    """Through 2005 the WNBA played two 20-minute halves: five-man minutes are the game's length."""
+    frames = {
+        n: pl.read_parquet(FIX / f"wnba_{n}_2005.parquet") for n in ("pbp", "game_lineups", "possessions", "schedule")
+    }
+    rows = nba_impact_rows(
+        frames["pbp"], frames["game_lineups"], frames["possessions"], frames["schedule"], league_id="10"
+    )
+    out = lineup_seasons(
+        rows, nba_lineup_count_rows(frames["possessions"], frames["schedule"]), player_dtype=pl.Int64(), min_poss=200
+    )
+    periods = frames["pbp"].group_by("game_id").agg(pl.col("period").max())
+    length = periods.select("game_id", (2400 + 300 * (pl.col("period") - 2)).alias("game_minutes_x60"))
+    sched = frames["schedule"].select("game_id", "home_team_id", "away_team_id")
+    teams = pl.concat([sched.select("game_id", pl.col(f"{s}_team_id").alias("team_id")) for s in ("home", "away")])
+    want = (
+        teams.join(length, on="game_id").group_by("team_id").agg((pl.col("game_minutes_x60").sum() / 60).alias("want"))
+    )
+    got = out.filter(pl.col("n_players") == 5).group_by("team_id").agg(pl.col("minutes").sum())
+    both = want.join(got, on="team_id", validate="1:1")
+    assert both.height == 6 and set(periods["period"]) == {2, 4}  # six teams; three regulation games, one 2OT
+    assert ((both["minutes"] - both["want"]).abs() < 1e-3).all(), both

@@ -206,6 +206,12 @@ One row per possession in `sportsdataverse._common.lineup_seasons.lineup_count_s
 | `away_dreb` | Int64 | The away side's defensive rebounds in the possession. |
 | `away_tov` | Int64 | The away side's turnovers in the possession. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a count column holds a null. |
+
 **Example**
 
 ```python
@@ -234,7 +240,7 @@ The definitions are in `sportsdataverse._common.lineup_seasons`.
 
 **Returns**
 
-One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`) as fractions, and for every rate `<m>_rank` / `<m>_pct` (within the season and unit size, among units over `min_poss`) and `<m>_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
+One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`) as fractions, and for every rate `<m>_rank` / `<m>_pct` (within the season and unit size, among units with at least `min_poss`) and `<m>_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -253,8 +259,8 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 | `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
 | `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
 | `plus_minus` | Int64 | The unit's +/- over the season: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. About 5 above stats.nba.com's: it credits a possession to every lineup on the floor during it, so its counts run ~4% higher (the offset cancels in net_rtg). |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. About 5 above stats.nba.com's: it credits a possession to every lineup on the floor during it, so its counts run ~4% higher (the offset cancels in net_rtg). |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com's lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4% higher). |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com's lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4% higher). |
 | `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
 | `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. |
 | `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. |
@@ -264,17 +270,17 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 | `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession. Null with a zero denominator. |
 | `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate: its OREB / (its OREB + the unit's DREB). Null with a zero denominator. |
 | `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least 400 possessions (poss + opp_poss); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer than ten qualifiers. |
 | `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
@@ -302,7 +308,7 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, `season_type` is not one of the four above, or the possessions carry a null shot, free-throw, rebound or turnover count. |
 
 **Example**
 

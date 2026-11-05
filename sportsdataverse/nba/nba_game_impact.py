@@ -61,7 +61,15 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         *[pl.col(f"home_player_{i}").cast(_PLAYER).alias(f"home_{i}") for i in range(1, 6)],
         *[pl.col(f"away_player_{i}").cast(_PLAYER).alias(f"away_{i}") for i in range(1, 6)],
     ).unique(["game_id", "action_number"], keep="first")
-    period_len = pl.when(pl.col("period") <= 4).then(pl.lit(quarter)).otherwise(pl.lit(_OT_SECONDS))
+    # The WNBA played two 20-minute halves through 2005: a first period longer than a quarter
+    # makes the game a two-half one (the rule add_possession_flags uses), its periods 3+ overtimes.
+    halves = pl.col("seconds_remaining").filter(pl.col("period") == 1).max().over("game_id") > quarter
+    regulation = pl.col("period") <= pl.when(halves).then(2).otherwise(4)
+    period_len = (
+        pl.when(regulation)
+        .then(pl.when(halves).then(pl.lit(2 * quarter)).otherwise(pl.lit(quarter)))
+        .otherwise(pl.lit(_OT_SECONDS))
+    )
     # The pre-2019-20 feed writes "0" (not null) on non-scoring rows; a running score never drops
     # back to 0, so a 0 is a gap and the last score carries forward.
     score = {

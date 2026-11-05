@@ -236,9 +236,10 @@ def lineup_seasons(
 
     Args:
         rows: Game-impact rows (:func:`sportsdataverse._common.game_impact.impact_row_schema`).
-        counts: Count rows in :func:`lineup_count_schema` (extra columns are ignored).
+        counts: Count rows in :func:`lineup_count_schema` (extra columns are ignored). Only the
+            games whose ``rows`` carry possessions are used, in ``rows`` and ``counts`` alike.
         player_dtype: The league's player id dtype.
-        min_poss: The rank gate: a unit is ranked when ``poss + opp_poss`` reaches it.
+        min_poss: The rank gate: a unit is ranked when ``poss + opp_poss`` is at least this.
         zones: Add the college shot-zone rates (``counts`` must carry :data:`ZONE_COUNTS`).
 
     Returns:
@@ -266,6 +267,17 @@ def lineup_seasons(
     missing = sorted(set(count_schema) - set(counts.columns))
     if missing:
         raise KeyError(f"counts missing columns: {missing}")
+    # A game counts only with both play-by-play and possessions: without possessions its points
+    # and minutes would land on units with no possessions, without play-by-play (the impact rows
+    # then carry none of its possessions) its shots and turnovers would.
+    played = (
+        rows.group_by(["season", "game_id"])
+        .agg((pl.col("home_poss") + pl.col("away_poss")).sum().alias("_poss"))
+        .filter(pl.col("_poss") > 0)
+        .drop("_poss")
+    )
+    rows = rows.join(played, on=["season", "game_id"], how="semi")
+    counts = counts.select(list(count_schema)).cast(count_schema).join(played, on=["season", "game_id"], how="semi")
     used = game_lineups_used(rows, player_dtype=player_dtype)
     if used.height == 0:
         return pl.DataFrame(schema=schema)
@@ -273,7 +285,7 @@ def lineup_seasons(
     fives = used.group_by(["season", "team_id", "lineup_id"]).agg(
         *[pl.col(f"player_{i}").first() for i in range(1, 6)], *[pl.col(c).sum() for c in _TOTALS]
     )
-    tallies = _count_lineups(counts.select(list(count_schema)).cast(count_schema), names)
+    tallies = _count_lineups(counts, names)
     keys = ["season", "team_id", "lineup_id"]
     assert all(fives.schema[k] == tallies.schema[k] for k in keys), "key dtypes differ between units and counts"
     # A unit with no count rows (it never started a possession, say) has zero events, not unknown ones.

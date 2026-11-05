@@ -21,17 +21,13 @@ the game impact box. A non-D1 opponent has no ESPN team id, so its units get no 
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
+import pandas as pd
 import polars as pl
 
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
 from sportsdataverse._common.lineup_seasons import COUNTS, ZONE_COUNTS, lineup_count_schema, lineup_seasons
 from sportsdataverse.mbb.mbb_game_impact import _check_league, _load_releases, _slots, _teams, ncaa_impact_rows
 from sportsdataverse.mbb.mbb_ncaa_lineups import RIM_TYPES_FIXED
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 __all__ = ["mbb_lineup_seasons", "ncaa_lineup_count_rows"]
 
@@ -137,7 +133,7 @@ def mbb_lineup_seasons(
         (``efg_pct``, ``tov_pct``, ``orb_pct``, ``ft_rate``, ``opp_*``), the shot zones for and
         against (``rim_rate``, ``mid_rate``, ``fg3_rate`` shares of field-goal attempts and
         ``rim_pct``, ``mid_pct``, ``fg3_pct`` make rates, ``opp_*``), and for every rate
-        ``<m>_rank`` / ``<m>_pct`` (within the season and unit size, among units over
+        ``<m>_rank`` / ``<m>_pct`` (within the season and unit size, among units with at least
         ``min_poss``) and ``<m>_n``. ``team_id`` is the ESPN team id (Int64). Empty input
         returns that schema with zero rows.
 
