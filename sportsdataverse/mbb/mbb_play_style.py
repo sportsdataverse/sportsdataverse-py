@@ -92,12 +92,13 @@ _RIM = "(?i)layup|dunk|tip"
 
 
 def _shot_features(shots: pl.DataFrame) -> pl.DataFrame:
-    """Per-shooter assisted and dunk shares from the shots release (free throws dropped)."""
+    """Per shooter and team assisted and dunk shares from the shots release (free throws dropped)."""
     if shots.is_empty() or "athlete_id_2" not in shots.columns:
         return pl.DataFrame(
             schema={
                 "player_id": pl.Utf8,
                 "season": pl.Int64,
+                "team_id": pl.Utf8,
                 "assisted_share": pl.Float64,
                 "dunk_share": pl.Float64,
             }
@@ -113,9 +114,10 @@ def _shot_features(shots: pl.DataFrame) -> pl.DataFrame:
     return (
         fga.with_columns(
             pl.col("athlete_id_1").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
+            pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
             pl.col("season").cast(pl.Int64),
         )
-        .group_by("player_id", "season")
+        .group_by("player_id", "season", "team_id")
         .agg(
             ((made & pl.col("athlete_id_2").is_not_null()).sum() / made.sum().clip(lower_bound=1)).alias(
                 "assisted_share"
@@ -152,7 +154,7 @@ def college_play_style_features(seasons: int | list[int], *, league: str = "mens
     out = (
         player_per100_features(agg)
         .join(role, on=key, how="left")
-        .join(shots, on=["player_id", "season"], how="left")
+        .join(shots, on=key, how="left")
         .filter(pl.col("min") >= PLAYER_MIN_SHARE * pl.col("min").max().over("season"))
     )
     return out.select(*key, "player", "min", *COLLEGE_PLAY_STYLE_FEATURES)

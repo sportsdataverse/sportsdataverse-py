@@ -23,7 +23,7 @@ from the releases.
 | File | Rows | Seasons | Built by |
 |---|---:|---|---|
 | `nba_play_style_offense_player.parquet` | 3,502 | 2016-2026 | `nba_play_style_features(range(2016, 2027), side="offense", entity="player")` |
-| `nba_play_style_defense_player.parquet` | 2,898 | 2018-2026 | `nba_play_style_features(range(2018, 2027), side="defense", entity="player")` |
+| `nba_play_style_defense_player.parquet` | 2,883 | 2018-2026 | `nba_play_style_features(range(2018, 2027), side="defense", entity="player")` |
 | `nba_play_style_defense_team.parquet` | 330 | 2016-2026 | `nba_play_style_features(range(2016, 2027), side="defense", entity="team")` (every candidate feature) |
 | `mbb_play_style_player.parquet` | 5,799 | 2025-2026 | `college_play_style_features([2025, 2026], league="mens")` |
 | `wbb_play_style_player.parquet` | 5,661 | 2025-2026 | `college_play_style_features([2025, 2026], league="womens")` |

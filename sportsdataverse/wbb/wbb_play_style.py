@@ -1,4 +1,4 @@
-"""Women's college player play-style archetypes (BB-D20): ``wbb.play_styles``.
+"""Women's college player play-style archetypes (BB-D20): ``wbb_play_styles``.
 
 Thin shim over :mod:`sportsdataverse.mbb.mbb_play_style`: ``league="womens"`` reads the women's box and shots
 releases and the bundled ``wbb_play_style_player.json`` centers.

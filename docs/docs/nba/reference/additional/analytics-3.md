@@ -66,7 +66,7 @@ The play-style clustering features, one row per qualifying player- or team-seaso
 
 **Returns**
 
-The ids, `season` (and `min` for players) and the raw (unstandardized) features of `NBA_PLAY_STYLE_FEATURES` for `(side, entity)`. A season no release covers yet is skipped.
+The ids, `season` (and `min` for players) and the raw (unstandardized) features of `NBA_PLAY_STYLE_FEATURES` for `(side, entity)` (every candidate feature for the team defense). A season no release covers yet is skipped; with none left the frame has those columns and zero rows. The returns table below is the default `side="offense", entity="player"` frame.
 
 | col_name | type | description |
 |---|---|---|

@@ -76862,7 +76862,6 @@ nba_team_play_styles:
   team_id: stats.nba.com team id.
   season: Season, named by the year it ends (2026 is 2025-26).
   team_name: Team's full name on stats.nba.com (city and nickname).
-    z-scored features; null when the team does not qualify on that side or the season is not covered.'
   def_archetype: 'Defensive play-style archetype: the label of the nearest frozen KMeans center to the team-season''s within-season
     z-scored features; null when the team does not qualify on that side or the season is not covered.'
   def_cluster: Index of the defensive archetype's center in the bundled artifact (0-based).

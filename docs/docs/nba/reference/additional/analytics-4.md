@@ -381,7 +381,7 @@ One row per `(team_id, season)`: `team_id` (Int64), `season`, `team_name` and th
 |---|---|---|
 | `team_id` | Int64 | stats.nba.com team id. |
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `team_name` | String | Team's full name on stats.nba.com (city and nickname). z-scored features; null when the team does not qualify on that side or the season is not covered.' |
+| `team_name` | String | Team's full name on stats.nba.com (city and nickname). |
 | `def_archetype` | String | Defensive play-style archetype: the label of the nearest frozen KMeans center to the team-season's within-season z-scored features; null when the team does not qualify on that side or the season is not covered. |
 | `def_cluster` | Int64 | Index of the defensive archetype's center in the bundled artifact (0-based). |
 | `def_dist_to_center` | Float64 | Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example. |

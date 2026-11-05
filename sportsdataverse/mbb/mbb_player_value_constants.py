@@ -274,7 +274,15 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
                 df.select(
                     [
                         c
-                        for c in ("athlete_id_1", "athlete_id_2", "season", "type_text", "score_value", "scoring_play")
+                        for c in (
+                            "athlete_id_1",
+                            "athlete_id_2",
+                            "team_id",
+                            "season",
+                            "type_text",
+                            "score_value",
+                            "scoring_play",
+                        )
                         if c in df.columns
                     ]
                 )

@@ -913,6 +913,8 @@ One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8,
 | `fga_rim` | Float64 |  |
 | `fga_mid` | Float64 |  |
 | `fga_three` | Float64 |  |
+| `games` | Int64 | Games played. |
+| `starter_share` | Float64 |  |
 
 **Example**
 

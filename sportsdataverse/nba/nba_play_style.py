@@ -388,7 +388,8 @@ def defense_player_features(
     Returns:
         One row per qualifying ``(player_id, season)``: ``player_id`` (Int64), ``player_name``,
         ``team_id``, ``season``, ``min`` and the defense-player features of
-        :data:`NBA_PLAY_STYLE_FEATURES`. Players without matchup or hustle rows drop out.
+        :data:`NBA_PLAY_STYLE_FEATURES`. Players without matchup, hustle or defensive Synergy rows
+        drop out.
     """
     key = ["player_id", "season"]
     td = _regular(tracking_defense).select(
@@ -422,10 +423,14 @@ def defense_player_features(
         if p not in ru.columns:
             ru = ru.with_columns(pl.lit(None, dtype=pl.Float64).alias(p))
     ru = ru.select(*key, *[pl.col(p).fill_null(0.0).alias(f"match_{p.lower()}_share") for p in ("G", "F", "C")])
-    syn = synergy_mix(synergy, by="player_id", grouping="Defensive").drop("syn_poss")
+    syn = synergy_mix(synergy, by="player_id", grouping="Defensive")
     out = _join(_join(_join(td, hu, key, "inner"), ru, key, "inner"), syn, key)
-    out = out.with_columns(pl.col(f"dpt_{t}").fill_null(0.0) for t in _DEF_TYPES)
-    return _qualify(out).select(*key, "player_name", "team_id", "min", *NBA_PLAY_STYLE_FEATURES[("defense", "player")])
+    # a qualifier with no defensive Synergy rows has no play-type mix: drop him, as offense does
+    return (
+        _qualify(out)
+        .filter(pl.col("syn_poss") > 0)
+        .select(*key, "player_name", "team_id", "min", *NBA_PLAY_STYLE_FEATURES[("defense", "player")])
+    )
 
 
 def defense_team_features(
@@ -525,8 +530,10 @@ def nba_play_style_features(
 
     Returns:
         The ids, ``season`` (and ``min`` for players) and the raw (unstandardized) features of
-        :data:`NBA_PLAY_STYLE_FEATURES` for ``(side, entity)``. A season no release covers yet
-        is skipped.
+        :data:`NBA_PLAY_STYLE_FEATURES` for ``(side, entity)`` (every candidate feature for the team
+        defense). A season no release covers yet is skipped; with none left the frame has those
+        columns and zero rows. The returns table below is the default ``side="offense",
+        entity="player"`` frame.
 
     Raises:
         ValueError: If ``side`` or ``entity`` is not one of the values above.
@@ -538,8 +545,25 @@ def nba_play_style_features(
             feats = nba_play_style_features(2025, side="defense", entity="team")
     """
     frames = [f for s in _seasons(seasons, side, entity) if (f := _load_season(s, side, entity)).height]
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_features(side, entity)
     return out.to_pandas() if return_as_pandas else out
+
+
+def _empty_features(side: str, entity: str) -> pl.DataFrame:
+    """The zero-row frame of :func:`nba_play_style_features` for ``(side, entity)``."""
+    ids: dict[str, pl.DataType] = (
+        {
+            "player_id": pl.Int64(),
+            "season": pl.Int64(),
+            "player_name": pl.Utf8(),
+            "team_id": pl.Int64(),
+            "min": pl.Float64(),
+        }
+        if entity == "player"
+        else {"team_id": pl.Int64(), "season": pl.Int64(), "team_name": pl.Utf8()}
+    )
+    cols = NBA_TEAM_FEATURE_CANDIDATES.get((side, entity), {}).get("long", NBA_PLAY_STYLE_FEATURES[(side, entity)])
+    return pl.DataFrame(schema=ids | dict.fromkeys(cols, pl.Float64()))
 
 
 @cache

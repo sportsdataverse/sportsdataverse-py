@@ -34,7 +34,7 @@ GATES = {
     ("defense", "team"): {"holdout_ari": 0.43, "holdout_persistence": 0.50},
 }
 #: Smallest and largest archetype share in any holdout season (observed 0.1006 / 0.305,
-#: 0.066 / 0.3569, 0.0667 / 0.3667): no archetype empties out or swallows the league.
+#: 0.0692 / 0.3569, 0.0667 / 0.3667): no archetype empties out or swallows the league.
 SHARE_GATES = {
     ("offense", "player"): (0.10, 0.31),
     ("defense", "player"): (0.06, 0.36),
@@ -130,7 +130,7 @@ def test_stability_gates_on_the_holdout_seasons(side, entity):
     assert rep["holdout_persistence"] > 1.5 * rep["holdout_chance_persistence"]
     assert rep["holdout_ari"] > rep["null_holdout_ari"] == pytest.approx(art["stability"]["null_holdout_ari"], abs=1e-4)
     assert rep["min_share"] >= SHARE_GATES[(side, entity)][0] and rep["max_share"] <= SHARE_GATES[(side, entity)][1]
-    assert rep["n_persistence_pairs"] >= (900 if entity == "player" else 110)  # observed 982 / 984 / 120
+    assert rep["n_persistence_pairs"] >= (900 if entity == "player" else 110)  # observed 982 / 982 / 120
     assert art["stability"]["holdout_ari_ci"][0] > art["stability"]["null_holdout_ari"]
 
 
@@ -221,3 +221,17 @@ def test_empty_and_bad_arguments():
     assert nps._seasons([2015, 2016], "defense", "player") == []
     with pytest.raises(ValueError, match="side must be"):
         nps.nba_play_style_features(2025, side="both")
+
+
+def test_non_finite_features_and_duplicate_entity_seasons_are_refused():
+    """A NaN or infinity would silently become cluster 0; a duplicated row would count a player twice."""
+    f = _corpus("defense", "team")
+    art = nps._artifact("defense", "team")
+    hot = f.with_columns(
+        pl.when(pl.int_range(pl.len()) == 0).then(float("inf")).otherwise(pl.col("opp_fta_rate")).alias("opp_fta_rate")
+    )
+    with pytest.raises(ValueError, match=r"non-finite feature values: \['opp_fta_rate'\]"):
+        ps.assign_play_style(hot, art, ["team_id", "season"])
+    twice = pl.concat([f, f.filter(pl.col("season") == 2025).head(1)])
+    with pytest.raises(ValueError, match=r"share an \(team_id, season\)"):
+        ps.stability_report(twice, art, entity="team_id", holdout_seasons=art["holdout_seasons"], n_boot=1, n_ci=0)

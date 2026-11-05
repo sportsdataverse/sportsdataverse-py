@@ -67,3 +67,9 @@ columns:
 - name: fga_three
   type: double
   description: ''
+- name: games
+  type: integer
+  description: ''
+- name: starter_share
+  type: double
+  description: ''

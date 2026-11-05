@@ -229,7 +229,8 @@ def check_features(features: pl.DataFrame, feature_cols: Sequence[str]) -> None:
         feature_cols: The clustering features.
 
     Raises:
-        ValueError: Naming each (season, feature) with no value.
+        ValueError: Naming each (season, feature) with no value, or each feature holding a NaN or
+            an infinity.
     """
     missing = [c for c in feature_cols if c not in features.columns]
     if missing:
@@ -242,6 +243,15 @@ def check_features(features: pl.DataFrame, feature_cols: Sequence[str]) -> None:
     )
     if empty.height:
         raise ValueError(f"a feature is null for a whole season: {sorted(empty.select('season', 'feature').rows())}")
+    bad = [
+        c
+        for c in feature_cols
+        if features.select(
+            pl.col(c).cast(pl.Float64).is_infinite().any() | pl.col(c).cast(pl.Float64).is_nan().any()
+        ).item()
+    ]
+    if bad:
+        raise ValueError(f"non-finite feature values: {bad}")
 
 
 def _refit_ari(Z: np.ndarray, centers: np.ndarray, k: int, seed: int) -> float:
@@ -326,6 +336,9 @@ def selection_score(
 def _pairs(assigned: pl.DataFrame, entity: str, later_seasons: Sequence[int]) -> pl.DataFrame:
     """Entities assigned in a season and the one before it: ``cluster`` (before) and ``cluster_next``."""
     a = assigned.select(entity, "season", "cluster")
+    dupes = a.filter(pl.len().over(entity, "season") > 1)
+    if dupes.height:
+        raise ValueError(f"{dupes.height} rows share an ({entity}, season): persistence needs one per entity-season")
     return a.join(a.with_columns(pl.col("season") - 1), on=[entity, "season"], suffix="_next").filter(
         (pl.col("season") + 1).is_in(list(later_seasons))
     )
@@ -377,12 +390,12 @@ def _intervals(
     centers = np.asarray(artifact["centers"], float)
     rng = np.random.default_rng(seed)
     aris = [_refit_ari(Zh[rows], centers, k, seed) for rows in _resampled_rows(hold_ids, rng, min(n_ci, 50))]
-    kept = pairs["cluster"].to_numpy() == pairs["cluster_next"].to_numpy()
-    draws = [kept[rows].mean() for rows in _resampled_rows(pairs[entity].to_numpy(), rng, n_ci)]
-    return {
-        "holdout_ari_ci": _interval(aris),
-        "holdout_persistence_ci": _interval(draws),
-    }
+    out = {"holdout_ari_ci": _interval(aris)}
+    if pairs.height:
+        kept = pairs["cluster"].to_numpy() == pairs["cluster_next"].to_numpy()
+        draws = [kept[rows].mean() for rows in _resampled_rows(pairs[entity].to_numpy(), rng, n_ci)]
+        out["holdout_persistence_ci"] = _interval(draws)
+    return out
 
 
 def stability_report(

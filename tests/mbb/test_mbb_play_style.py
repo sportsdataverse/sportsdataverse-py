@@ -38,7 +38,7 @@ def test_shot_features_reproduce_the_corpus():
     built = mps._shot_features(shots)
     team = str(shots["team_id"][0])
     corpus = _corpus("mbb").filter((pl.col("season") == 2025) & (pl.col("team_id") == team))
-    joined = corpus.join(built, on=["player_id", "season"], suffix="_built")
+    joined = corpus.join(built, on=["player_id", "season", "team_id"], suffix="_built")
     assert joined.height == corpus.height > 5
     for c in ("assisted_share", "dunk_share"):
         np.testing.assert_allclose(joined[c].to_numpy(), joined[f"{c}_built"].round(6).to_numpy(), atol=1e-6)
