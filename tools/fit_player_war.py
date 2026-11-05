@@ -68,6 +68,7 @@ def score_replacement_level(player_seasons: pl.DataFrame, level: float) -> tuple
 
 
 def _margin_wins(records: pl.DataFrame) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Season point margin, wins and games for the qualifying team-seasons, as float arrays."""
     r = records.filter(QUALIFIER)
     margin = (r["pts"] - r["opp_pts"]).to_numpy().astype(float)
     return margin, r["wins"].to_numpy().astype(float), r["games"].to_numpy().astype(float)
@@ -111,6 +112,7 @@ def _compact(ps: pl.DataFrame) -> pl.DataFrame:
 
 
 def _in_span(df: pl.DataFrame, span: range) -> pl.DataFrame:
+    """Rows whose season falls inside ``span``."""
     return df.filter(pl.col("season").is_in(list(span)))
 
 
