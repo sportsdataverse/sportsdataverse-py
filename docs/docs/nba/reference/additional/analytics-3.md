@@ -1,10 +1,82 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_team–rotowire_injuries"
-sidebar_label: "Analytics: nba_team–rotowire_injuries"
+title: "NBA — additional Python functions — Analytics: nba_team–prob_over"
+sidebar_label: "Analytics: nba_team–prob_over"
 sidebar_position: 15
-description: "NBA — additional Python functions — Analytics: nba_team–rotowire_injuries — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_team–prob_over — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_team–rotowire_injuries
+# NBA — additional Python functions — Analytics: nba_team–prob_over
+
+### nba_team_luck {#nba_team_luck}
+
+`nba_team_luck(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L.
+
+One row per team and season. `exp_wins` is the Pythagorean expectation on the season's
+final scores, `games * pts^x / (pts^x + opp_pts^x)`, with the exponent `x` fitted per
+league on past seasons (`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
+`luck_wins` is `wins - exp_wins`. A close game is one within 5 points at the start of a
+possession in the last 5:00 of the 4th quarter or in overtime (stats.nba.com's clutch
+window; BB-D3's `close` split).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. The exponent was fitted on regular seasons; on a handful of playoff or play-in games `exp_wins` is only indicative. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from the final scores; `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (`close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
+| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
+| `games` | Int64 | Games in the season type's completed games (the stats schedule's final scores). |
+| `wins` | Int64 | Wins in the season type's completed games (the stats schedule's final scores). |
+| `losses` | Int64 | Losses in the season type's completed games (the stats schedule's final scores). |
+| `pts` | Int64 | Points scored in those games (final scores). |
+| `opp_pts` | Int64 | Points allowed in those games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['nba'] (PYTHAG_EXPONENT['wnba'] with league_id='10'), fitted on past seasons by tools/fit_team_luck_pythag.py. |
+| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
+| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
+| `pbp_games` | Int64 | Games with published possessions (nba_stats_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
+| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
+| `close_wins` | Int64 | Wins in close games. |
+| `close_losses` | Int64 | Losses in close games. |
+| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
+| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
+| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
+| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
+| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_team_luck import nba_team_luck
+luck = nba_team_luck(2026)
+luck.sort("luck_wins", descending=True).select("team_id", "wins", "exp_wins", "luck_wins").head()
+
+# WNBA via ``league_id``
+
+wnba = nba_team_luck(2025, league_id="10")
+```
 
 ### nba_team_season_rates {#nba_team_season_rates}
 
@@ -906,169 +978,4 @@ Probability a stat finishes strictly above `line`.
 ```python
 from sportsdataverse.nba.nba_player_props import prob_over
 prob_over(24.0, 22.5, "pts")
-```
-
-### project_player_line {#project_player_line}
-
-`project_player_line(rate_row: 'dict[str, Any]', exp_minutes: 'float', pace_factor: 'float' = 1.0) -> 'dict[str, float]'`
-
-Project a player's expected counting line from per-minute rates.
-
-`exp_stat = rate_per_min * exp_minutes * pace_factor` -- counting stats
-scale with both projected minutes and pace.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `rate_row` | `dict[str, Any]` |  | One row of `player_rates` (as a dict). |
-| `exp_minutes` | `float` |  | Projected minutes for the game. |
-| `pace_factor` | `float` | `1.0` | Pace multiplier (`exp_poss / avg_pace`); `1.0` for a league-average-pace matchup. |
-
-**Returns**
-
-`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_player_props import player_rates, project_player_line
-r = player_rates(box_logs).row(0, named=True)
-line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
-```
-
-### prop_distribution {#prop_distribution}
-
-`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'`
-
-Distribution family + parameters for a projected stat mean.
-
-Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
-(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
-variance `dispersion*mu` (Poisson if dispersion <= 1).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `exp_value` | `float` |  | Projected mean of the stat. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
-| `league_id` | `str` | `'00'` | Accepted for parity (dispersion is currently league-shared). |
-
-**Returns**
-
-`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_player_props import prop_distribution
-fam, par = prop_distribution(24.0, "pts")
-```
-
-### ratings_as_of {#ratings_as_of}
-
-`ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'`
-
-Fit `model` on every possession dated on or before `asof` and return ratings.
-
-This is the through-date primitive: possessions with `game_date > asof`
-are excluded from the fit entirely (never merely down-weighted), which is
-what makes the panel built from repeated calls to this function leakage-free
-by construction — see `tests/nba/test_nba_ratings_panel.py::test_ratings_as_of_is_leakage_free_append_invariant`.
-NOTE: the leakage property is proven by the append-invariance test TOGETHER
-with the panel's per-date-parity test — neither alone covers
-cross-checkpoint-window leaks; do not prune one without the other.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel` (a `RapmModel`, `RatingsModel`, or `PriorModel`). |
-| `possessions` | `DataFrame` |  | A possession+lineup frame that MUST carry a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
-| `asof` | `date` |  | The through-date checkpoint (inclusive: `game_date <= asof`). A pregame consumer of a game on day D passes `D - 1 day`; the pregame surfaces (`nba_player_props`, `nba_team_ratings`) take a strict `as_of_date` instead. |
-
-**Returns**
-
-`RatingsFit` with per-player offense/defense ratings (per-100-possession scale, same sign convention as `nba_rapm`: positive `d_ratings` means good defense). Empty dicts when no possessions fall on or before `asof` or when `possessions` is empty.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `possessions` (non-empty) does not carry a `game_date` column — this is a caller-contract violation, not a normal empty case, so it raises rather than silently returning empty ratings. |
-
-**Example**
-
-```python
-import datetime
-from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
-from sportsdataverse.nba.nba_ratings_panel import ratings_as_of
-
-rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
-print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
-```
-
-### rotowire_injuries {#rotowire_injuries}
-
-`rotowire_injuries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-The current NBA injury report from RotoWire.
-
-One row per injured player: team, position, the injury, the designation
-(Out / Doubtful / Questionable / GTD / Day-To-Day) and a link to the player's
-RotoWire page. This is the live replacement for the defunct RotoWorld feed.
-
-The rendered grid at `/basketball/news.php?view=injuries` builds itself
-client-side, so this reads the JSON table endpoint the grid calls
-(`/basketball/tables/injury-report.php?team=ALL&pos=ALL`) rather than
-scraping the page. The projected return date is subscriber-gated and comes
-back as `"Subscribers Only"`; it is returned as null for non-subscribers.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per injured player with `player_id`, `player`, `first_name`, `last_name`, `team`, `position`, `injury`, `status`, `return_date` and `url`. An unreachable endpoint or a non-list body yields a zero-row frame with that schema.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `player` | String | Player name. |
-| `first_name` | String | Player's first name. |
-| `last_name` | String | Player's last name. |
-| `team` | String | Team-side label or team identifier. |
-| `position` | String | Listed roster position (G, F, C, etc.). |
-| `injury` | String | Injury (body part / description). |
-| `status` | String | Status label. |
-| `return_date` | String | Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only") and when the cell is blank. |
-| `url` | String | RotoWire player page URL. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `UserWarning` | Emitted (not raised) when the endpoint cannot be fetched or does not answer with a JSON array; the call still returns an empty frame. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba import rotowire_injuries
-
-injuries = rotowire_injuries()
-print(injuries.shape)
-
-# As pandas
-
-injuries_pd = rotowire_injuries(return_as_pandas=True)
-
-# Pipeline next step (who is ruled out)
-
-injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 ```

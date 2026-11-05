@@ -261,6 +261,7 @@ from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa:
 from sportsdataverse.wnba import wnba_game_lineups_used as wnba_game_lineups_used  # noqa: F401
 from sportsdataverse.wnba import wnba_game_player_impact as wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba import wnba_in_game_win_prob as wnba_in_game_win_prob  # noqa: F401
+from sportsdataverse.wnba import wnba_lineup_seasons as wnba_lineup_seasons  # noqa: F401
 from sportsdataverse.wnba import wnba_live_boxscore as wnba_live_boxscore  # noqa: F401
 from sportsdataverse.wnba import wnba_live_pbp as wnba_live_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noqa: F401
@@ -535,6 +536,7 @@ __all__ = [
     "wnba_game_lineups_used",
     "wnba_game_player_impact",
     "wnba_in_game_win_prob",
+    "wnba_lineup_seasons",
     "wnba_live_boxscore",
     "wnba_live_pbp",
     "wnba_matchup_drapm",
