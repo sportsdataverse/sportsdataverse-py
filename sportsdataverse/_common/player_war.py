@@ -6,8 +6,9 @@ third-party VORP is read.
 
 **Team anchoring.** Each rating is re-anchored to the team, the way BPM 2.0 anchors its box
 score: within a team-season, a player's rating minus his team's possession-weighted mean, plus
-the team's net rating per 100 divided by 5. The five men on the floor then add up to the team's
-net rating, so a team's points above average are exactly its point margin, whatever offset the
+the team's net rating per 100 divided by 5. Over the season the team's possession-weighted mean
+rating is then its net rating / 5 (before the league centring, which shifts every team alike), so
+a team's points above average are exactly its point margin, whatever offset the
 source carries (``o_adj_rapm`` / ``d_adj_rapm`` sit about +11 / -11, the ``adj_rapm`` sum is off
 by about +1). A traded player is anchored on each team for the possessions he played there. The
 ratings are then centred on the league: their possession-weighted mean is 0 each season. A
@@ -51,7 +52,7 @@ model uncertainty. College has one source, so box BPM's own sampling error is in
 ``vorp`` has the same interval scaled by ``vorp / war`` (the two differ by a season constant).
 ``R`` is a mean over 5-8 train seasons, standard error
 0.09 (NBA), 0.18 (WNBA), 0.06 (MBB), 0.11 (WBB) per 100; a shift of ``dR`` moves a player's WAR
-by ``-dR * poss / 100 / pts_per_win`` (0.3 wins for an NBA starter per 0.1).
+by ``-dR * poss / 100 / pts_per_win`` (about 0.17 wins per 0.1 for an NBA starter with 5,300 on-court possessions).
 
 **Minutes basis.** ``poss`` is a player's on-court possessions, ``(offensive + defensive) / 2``.
 NBA and WNBA count them from the stats.nba.com possessions (every possession row, BB-D3's

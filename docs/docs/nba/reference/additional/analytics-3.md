@@ -529,8 +529,9 @@ props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1
 
 WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season).
 
-Each rating is anchored to the team (a team's five players on the floor add up to its net
-rating) and centred on the league, so 0 is a league-average player. `vorp` is points per
+Each rating is anchored to the team (its players' possession-weighted mean rating over the
+season is the team's net rating / 5; it is a season constraint, not an estimate for each
+five-man lineup) and centred on the league, so 0 is a league-average player. `vorp` is points per
 100 team possessions above a replacement player over one team's season of possessions
 (Basketball-Reference's VORP scale); `war` is wins above replacement. A replacement-level
 player has 0, and a season's `war` adds up to the league's wins minus those of a team of
