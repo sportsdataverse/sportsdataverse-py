@@ -47,6 +47,18 @@ def _check_args(league_id: str, season_type: str) -> None:
 
 
 _OT_SECONDS = 300.0
+#: A first period longer than this is a half: the WNBA played two 20-minute halves through 2005.
+_HALF_GAME_FIRST_PERIOD_SECONDS = 900.0
+
+
+def _regulation_periods() -> pl.Expr:
+    """Regulation periods per game of a possessions frame: 2 for a two-halves game, else 4.
+
+    A game whose first period runs past 15 minutes (``end_seconds_remaining``) is a two-halves one
+    (the WNBA through 2005), its periods 3+ overtimes.
+    """
+    first = pl.col("end_seconds_remaining").filter(pl.col("period") == 1).max().over("game_id")
+    return pl.when(first > _HALF_GAME_FIRST_PERIOD_SECONDS).then(2).otherwise(4)
 
 
 def nba_possession_rate_rows(
@@ -60,7 +72,9 @@ def nba_possession_rate_rows(
 
     Keeps the games of ``schedule`` whose ``season_type`` matches, takes the home team from the
     schedule, and sets each possession's start clock to the previous possession's end clock in the
-    period (the period length for the first one). Points come from the made-shot counts.
+    period (the period length for the first one). Points come from the made-shot counts. A game
+    whose first period runs past 15 minutes is played in two 20-minute halves (the WNBA through
+    2005): its periods are 20 minutes, ``late`` starts with the 2nd half and period 3 is overtime.
 
     ``neutral_site`` is always False: the stats schedule has no neutral-site or venue column, so
     a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
@@ -101,10 +115,13 @@ def nba_possession_rate_rows(
     )
     poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))
     assert poss.schema["game_id"] == games.schema["game_id"], "game_id dtype differs between possessions and schedule"
-    period_len = pl.when(pl.col("period") <= 4).then(pl.lit(quarter)).otherwise(pl.lit(_OT_SECONDS))
+    n_reg = pl.col("_reg_periods")
+    reg_len = pl.when(n_reg == 2).then(pl.lit(2 * quarter)).otherwise(pl.lit(quarter))
+    period_len = pl.when(pl.col("period") <= n_reg).then(reg_len).otherwise(pl.lit(_OT_SECONDS))
     return (
         poss.join(games, on="game_id", how="inner", validate="m:1")
         .sort(["game_id", "period", "possession_number"])
+        .with_columns(_regulation_periods().alias("_reg_periods"))
         .with_columns(
             pl.col("end_seconds_remaining")
             .shift(1)
@@ -117,7 +134,7 @@ def nba_possession_rate_rows(
             "game_id",
             pl.col("period").cast(pl.Int64),
             pl.col("possession_number").cast(pl.Int64),
-            (pl.col("period") >= 4).alias("late"),
+            (pl.col("period") >= n_reg).alias("late"),
             "start_clock",
             pl.col("end_seconds_remaining").cast(pl.Float64).alias("end_clock"),
             pl.col("offense_team_id").cast(pl.Int64),

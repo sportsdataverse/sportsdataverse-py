@@ -145,19 +145,21 @@ TEAM_SEASON_RATES_SCHEMA: dict[str, pl.DataType] = {
 
 
 def _with_clutch(rows: pl.DataFrame) -> pl.DataFrame:
-    """Add the start-of-possession margin, ``clutch`` and the game-level ``close`` flag."""
+    """Add ``start_margin`` (home minus away as the possession starts), ``clutch`` and the game-level ``close``."""
     signed = pl.when(pl.col("offense_is_home")).then(pl.col("points")).otherwise(-pl.col("points"))
     return (
         rows.sort(["game_id", "period", "possession_number"])
         .with_columns(signed.fill_null(0).alias("_signed"))
-        .with_columns((pl.col("_signed").cum_sum().over("game_id") - pl.col("_signed")).alias("_margin"))
+        .with_columns((pl.col("_signed").cum_sum().over("game_id") - pl.col("_signed")).alias("start_margin"))
         .with_columns(
             (
-                pl.col("late") & (pl.col("start_clock") <= CLUTCH_SECONDS) & (pl.col("_margin").abs() <= CLUTCH_MARGIN)
+                pl.col("late")
+                & (pl.col("start_clock") <= CLUTCH_SECONDS)
+                & (pl.col("start_margin").abs() <= CLUTCH_MARGIN)
             ).alias("clutch")
         )
         .with_columns(pl.col("clutch").any().over("game_id").alias("close"))
-        .drop("_signed", "_margin")
+        .drop("_signed")
     )
 
 

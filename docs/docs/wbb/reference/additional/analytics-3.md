@@ -76,6 +76,157 @@ from sportsdataverse.wbb import wbb_player_wowy
 wbb_player_wowy(2025).sort("minutes_both", descending=True).head()
 ```
 
+### wbb_situational_lineup {#wbb_situational_lineup}
+
+`wbb_situational_lineup(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college five-man unit splits by situation.
+
+Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_lineup` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `top_n` | `int` | `25` | As `wbb_situational_team`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_situational_lineup
+wbb_situational_lineup(2026).filter(split="transition").sort("poss", descending=True).head()
+```
+
+### wbb_situational_player {#wbb_situational_player}
+
+`wbb_situational_player(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college player on-floor splits by situation.
+
+Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_player` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `top_n` | `int` | `25` | As `wbb_situational_team`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_player` (String player ids).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `player_id` | String | stats.ncaa.org player id (no NCAA-to-ESPN player crosswalk yet). A possession counts for the five on the floor as it starts, with all its points. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_situational_player
+wbb_situational_player(2026).filter(split="clutch").sort("net_rtg_n", descending=True).head()
+```
+
+### wbb_situational_team {#wbb_situational_team}
+
+`wbb_situational_team(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type.
+
+Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_team` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `top_n` | `int` | `25` | How many of the season's best teams by the published `adj_em` are `vs_top`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_team`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_situational_team
+wbb_situational_team(2026).filter(split="clutch").sort("net_rtg", descending=True).head()
+```
+
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
 `wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
