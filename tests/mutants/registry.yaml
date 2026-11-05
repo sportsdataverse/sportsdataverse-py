@@ -10510,10 +10510,10 @@
   finding: BB-D26
   file: sportsdataverse/_common/player_war.py
   snippet: 'rng = np.random.default_rng([_SEED, int(season), zlib.crc32(str(team).encode())])'
-  mutant: 'rng = np.random.default_rng(_SEED)'
-  test: tests/nba/test_nba_player_war.py::test_war_interval
+  mutant: 'rng = np.random.default_rng([_SEED, int(season)])'
+  test: tests/nba/test_nba_player_war.py::test_a_team_s_draws_do_not_depend_on_the_other_teams
   expected: kill
-  note: Every team-season drawing the same stream would correlate the teams' resamples.
+  note: Without the team in the seed, every team in a season would draw the same counts.
 
 - id: bb-war-interval-consistency
   group: bb-player-war

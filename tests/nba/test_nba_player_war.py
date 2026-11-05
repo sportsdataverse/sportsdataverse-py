@@ -380,6 +380,28 @@ def test_a_season_s_interval_does_not_depend_on_the_rest_of_the_call() -> None:
     )
 
 
+def test_a_team_s_draws_do_not_depend_on_the_other_teams() -> None:
+    rated, net, _ = _season("nba")
+    team_games, player_games = _games("nba")
+    frames = _boot_frames(rated, net, team_games, player_games)
+    gone = net["team_id"][0]
+    fewer = _boot_frames(
+        rated.filter(pl.col("team_id") != gone),
+        net.filter(pl.col("team_id") != gone),
+        team_games.filter(pl.col("team_id") != gone),
+        player_games.filter(pl.col("team_id") != gone),
+    )
+    full, part = _draw_counts(frames["team_games"], 20), _draw_counts(fewer["team_games"], 20)
+    keys = ["team_id", "game_id"]
+    kept = frames["team_games"].with_row_index("i").join(fewer["team_games"].with_row_index("j"), on=keys)
+    assert kept.height == fewer["team_games"].height
+    assert (full[:, kept["i"].to_numpy()] == part[:, kept["j"].to_numpy()]).all()
+    # and two teams with the same 82 games draw different counts (the team is in the seed)
+    tg = frames["team_games"]
+    first, second = (tg.filter(pl.col("t") == t)["g"].to_numpy() for t in (0, 1))
+    assert len(first) == len(second) == 82 and (full[:, first] != full[:, second]).any()
+
+
 def test_stints_without_their_game_rows_are_refused() -> None:
     rated, net, _ = _season("nba")
     team_games, player_games = _games("nba")

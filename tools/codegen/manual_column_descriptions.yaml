@@ -77037,7 +77037,7 @@ mbb_player_war:
     own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
     then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
     are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate''s adjusted
-    net rating is the adjusted rating plus the change in the raw one).'
+    net rating is the adjusted rating plus the change in the raw one); box BPM''s own sampling error is in no column.'
   vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
   war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
   vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
@@ -77065,7 +77065,7 @@ wbb_player_war:
     own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
     then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
     are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate''s adjusted
-    net rating is the adjusted rating plus the change in the raw one).'
+    net rating is the adjusted rating plus the change in the raw one); box BPM''s own sampling error is in no column.'
   vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
   war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
   vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'

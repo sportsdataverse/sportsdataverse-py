@@ -41,8 +41,8 @@ from a cluster bootstrap: :data:`N_BOOT` replicates, each team-season's games re
 replacement (as many as it played), so a player's possessions in a game, his team's possessions
 and its margin move together. Each team-season draws from its own generator, seeded on (seed,
 season, team id), and seasons run one at a time, so an interval does not depend on what else is
-in the call; Monte Carlo error at 1000 replicates is about 3% of the width (NBA 2024-25: median
-0.017 wins, at most 0.25). Coverage is not checked. Each replicate recomputes his possessions, the team's net rating
+in the call; Monte Carlo error at 1000 replicates is about 3% of the width (measured 2026-11-05
+on the 2024-25 NBA test fixture, seed 0 against seed 1: median 0.017 wins, at most 0.25). Coverage is not checked. Each replicate recomputes his possessions, the team's net rating
 (in college: the adjusted rating plus the replicate's change in the raw one), the team anchoring
 and the league centring, holding the source ratings and ``R`` fixed. It is the sampling
 uncertainty of the team side and the playing time, not of the source ratings themselves: the pro
@@ -241,8 +241,10 @@ def _replicate_war(
     t_poss = (g_team @ (counts * tg["poss"].to_numpy()).T).T
     t_margin = (g_team @ (counts * tg["margin"].to_numpy()).T).T
     t_idx = tg["t"].to_numpy()
-    raw = np.bincount(t_idx, tg["margin"].to_numpy(), n_t) / np.bincount(t_idx, tg["poss"].to_numpy(), n_t)
-    net = frames["net"] + (t_margin / t_poss - raw) * 100
+    # a rated team with no stints and no games (a D1 team with no box rows) is 0 / 0 and touches no player
+    with np.errstate(divide="ignore", invalid="ignore"):
+        raw = np.bincount(t_idx, tg["margin"].to_numpy(), n_t) / np.bincount(t_idx, tg["poss"].to_numpy(), n_t)
+        net = frames["net"] + (t_margin / t_poss - raw) * 100
     t_of, z_of = st["t"].to_numpy(), st["z"].to_numpy()
     team, season = _member(t_of, n_t), _member(z_of, int(z_of.max()) + 1)
     rating = np.zeros_like(poss)
