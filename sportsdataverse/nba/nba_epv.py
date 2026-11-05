@@ -17,8 +17,9 @@ possession leaks in):
   change of possession), 2 a transition possession whose first shot has been taken (the
   possession's ``is_transition`` flag, known once that shot happens).
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
-  substitutions and replays carry the previous one.
-* ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1).
+  substitutions, replays and the dead-ball rebound between two free throws carry the previous one.
+* ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1); a technical
+  (its foul or its free throw) inside an ordinary trip leaves the count as it was.
 * ``shot_zone`` -- the zone of the possession's latest field-goal attempt (:data:`SHOT_ZONES`),
   0 before its first.
 
@@ -38,8 +39,10 @@ rebounder, a fouler) its negative, and a steal or block credits the stealer or b
 the negative of the turnover or missed shot it ended. On-court EPV +/- gives every player on
 the floor the offense's EPV added (the defenders its negative): the ten at each action from
 the ``nba_stats_game_lineups`` release when it is passed (the loaders do), else the
-possession's starting ten. Free throws go on the lineup of the foul that led to them (:func:`~sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`,
-BB-D6's rule). The release carries no assist or foul-drawn player, so neither is credited.
+possession's starting ten. An ordinary free throw goes on the lineup of the last ordinary foul
+(BB-D6's rule, :func:`~sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`),
+so a technical called inside the trip does not move it; a technical's free throw stays on its
+own action's ten. The release carries no assist or foul-drawn player, so neither is credited.
 
 The model is an XGBoost regression on the remaining points of the possession, fitted by
 ``tools/models/nba_epv/train_epv.py`` on disjoint train, holdout, confirmation and monitor
@@ -47,7 +50,7 @@ seasons (the seasons and gates are in the booster's attributes and in that folde
 reports). It is served from its first training season on; earlier seasons are refused.
 
 Most of the skill is inside the possession (after a miss, a foul, a free throw); possession
-starts differ little (about 0.15 points from a dead ball to a live-ball turnover), so the
+starts differ little (about 0.2 points from a dead ball to a live-ball turnover), so the
 possession-ending term moves EPV added by tenths of a point, not whole points.
 """
 
