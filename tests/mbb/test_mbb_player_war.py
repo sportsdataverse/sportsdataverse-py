@@ -20,7 +20,14 @@ import polars as pl
 import pytest
 from scipy.stats import spearmanr
 
-from sportsdataverse._common.player_war import PTS_PER_WIN, REPLACEMENT_LEVEL, _anchor, player_war, replacement_win_pct
+from sportsdataverse._common.player_war import (
+    PTS_PER_WIN,
+    REPLACEMENT_LEVEL,
+    _anchor,
+    player_war,
+    replacement_win_pct,
+    season_rows,
+)
 from sportsdataverse._common.team_luck import QUALIFIER
 
 bpm_mod = importlib.import_module("sportsdataverse.mbb.mbb_box_bpm")
@@ -176,10 +183,52 @@ def test_mbb_player_war_reads_box_bpm_and_ratings(monkeypatch: pytest.MonkeyPatc
         seen.append(("ratings", league))
         return _ratings("wbb")
 
+    def games(seasons: list[int]) -> pl.DataFrame:
+        seen.append(("games", "womens"))
+        return _bb("mbb_box_slice_2025.parquet").clear()
+
     monkeypatch.setattr(war_mod, "mbb_box_bpm", box)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", ratings)
+    monkeypatch.setattr("sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore", games)
     out = wbb_mod.wbb_player_war(2025)
-    assert seen == [("box", "womens"), ("ratings", "womens")]
+    assert seen == [("ratings", "womens"), ("box", "womens"), ("games", "womens")]
+    assert "war_lo" in out.columns
     assert out["war"].sum() == pytest.approx(_season("wbb")[2]["war"].sum())  # the WBB constants
     with pytest.raises(ValueError, match="league"):
         war_mod.mbb_player_war(2025, league="coed")
+
+
+def _bb(name: str) -> pl.DataFrame:
+    return pl.read_parquet(FIX / "bb_player_war" / name)
+
+
+def test_game_rows_on_a_real_box_slice() -> None:
+    # every 2024-25 box row of ESPN team 2 (Auburn) and its ratings row
+    box, ratings = _bb("mbb_box_slice_2025.parquet"), _bb("mbb_ratings_slice_2025.parquet")
+    player_games, team_games = war_mod._game_rows(box, ratings)
+    tempo = ratings["adj_tempo"].item()
+    played = box.filter(pl.col("minutes").is_not_null() & (pl.col("minutes") > 0))
+    ours = played.filter(pl.col("team_id").cast(pl.Utf8) == "2")
+    assert player_games.height == ours.height < box.height  # DNPs and the opponents' rows are out
+    assert player_games["poss"].sum() == pytest.approx(ours["minutes"].sum() / 40 * tempo)
+    assert team_games.height == ours["game_id"].n_unique()
+    assert team_games["poss"].sum() == pytest.approx(player_games["poss"].sum() / 5)
+    margin = ours.group_by("game_id").agg((pl.col("team_score") - pl.col("opponent_team_score")).first())
+    assert team_games["margin"].sum() == margin["team_score"].sum()
+
+
+def test_war_interval_on_forty_teams() -> None:
+    # a self-consistent 2024-25 capture of 40 D1 teams: stints, net and their game rows
+    stints, net = _bb("mbb_stints_2025.parquet"), _bb("mbb_net_2025.parquet")
+    team_games, player_games = _bb("mbb_team_games_2025.parquet"), _bb("mbb_player_games_2025.parquet")
+    summed, _ = season_rows(player_games, team_games)
+    j = summed.join(stints, on=["season", "team_id", "player_id"], how="full", coalesce=True, validate="1:1")
+    assert j["poss"].null_count() == 0 and np.allclose(j["poss"], j["poss_right"])  # the box BPM minutes
+    out = player_war(stints, net, league="mbb", sources=["bpm"], team_games=team_games, player_games=player_games)
+    out = out.with_columns((pl.col("war_hi") - pl.col("war_lo")).alias("width"))
+    assert out["width"].null_count() == 0 and ((out["war_lo"] <= out["war"]) & (out["war"] <= out["war_hi"])).all()
+    # observed: median width 0.596; Johni Broome (most war) 5.20 in [4.73, 5.75], width 1.015;
+    # Spearman(width, poss) 0.953
+    assert out["width"].median() == pytest.approx(0.596, abs=0.001)
+    assert out.sort("war", descending=True)["width"][0] == pytest.approx(1.015, abs=0.001)
+    assert spearmanr(out["width"], out["poss"]).statistic >= 0.953

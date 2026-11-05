@@ -200,7 +200,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_raw_store_season_frame`](reference/additional/analytics-3#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-3#nba_referee_assignments)
 - [`nba_score_rows`](reference/additional/analytics-3#nba_score_rows)
-- [`nba_season_sim`](reference/additional/analytics-3#nba_season_sim)
+- [`nba_season_sim`](reference/additional/analytics-4#nba_season_sim)
 - [`nba_season_standings`](reference/additional/analytics-4#nba_season_standings)
 - [`nba_shot_value`](reference/additional/analytics-4#nba_shot_value)
 - [`nba_shot_value_lineups`](reference/additional/analytics-4#nba_shot_value_lineups)
@@ -213,7 +213,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_team_play_styles`](reference/additional/analytics-4#nba_team_play_styles)
 - [`nba_team_season_flow`](reference/additional/analytics-4#nba_team_season_flow)
 - [`nba_team_season_rates`](reference/additional/analytics-4#nba_team_season_rates)
-- [`nba_team_strength`](reference/additional/analytics-4#nba_team_strength)
+- [`nba_team_strength`](reference/additional/analytics-5#nba_team_strength)
 - [`nba_tracking_drive_value`](reference/additional/analytics-5#nba_tracking_drive_value)
 - [`nba_tracking_pass_value`](reference/additional/analytics-5#nba_tracking_pass_value)
 - [`nba_tracking_reb_oe`](reference/additional/analytics-5#nba_tracking_reb_oe)
@@ -238,9 +238,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`spotrac_team_cap`](reference/additional/analytics-5#spotrac_team_cap)
 - [`starters_on_court_counts`](reference/additional/analytics-5#starters_on_court_counts)
 - [`team_pace_projection`](reference/additional/analytics-5#team_pace_projection)
-- [`team_play_context`](reference/additional/analytics-5#team_play_context)
-- [`xpoints_baseline`](reference/additional/analytics-5#xpoints_baseline)
-- [`zone_value_map`](reference/additional/analytics-5#zone_value_map)
+- [`team_play_context`](reference/additional/analytics-6#team_play_context)
+- [`xpoints_baseline`](reference/additional/analytics-6#xpoints_baseline)
+- [`zone_value_map`](reference/additional/analytics-6#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 

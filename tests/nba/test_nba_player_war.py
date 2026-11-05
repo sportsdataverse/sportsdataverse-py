@@ -24,11 +24,15 @@ from sportsdataverse._common.player_war import (
     PTS_PER_WIN,
     REPLACEMENT_LEVEL,
     _anchor,
+    _boot_frames,
+    _draw_counts,
+    _replicate_war,
     player_war,
     repair_bpm_team_constant,
     replacement_win_pct,
+    season_rows,
 )
-from sportsdataverse.nba.nba_player_war import _possession_stints, _rating_stints, nba_player_war
+from sportsdataverse.nba.nba_player_war import _possession_games, _rating_stints, nba_player_war
 
 war_module = importlib.import_module("sportsdataverse.nba.nba_player_war")
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_player_war"
@@ -55,20 +59,24 @@ def _read(name: str) -> pl.DataFrame:
     return pl.read_parquet(FIX / name)
 
 
+def _games(league: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """(team_games, player_games): ``_possession_games`` over the whole 2025 regular season."""
+    return _read(f"{league}_team_games_2025.parquet"), _read(f"{league}_player_games_2025.parquet")
+
+
 def _inputs(league: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
-    return (
-        _read(f"{league}_stints_2025.parquet"),
-        _read(f"{league}_net_2025.parquet"),
-        _read(f"{league}_impact_2025.parquet"),
-    )
+    team_games, player_games = _games(league)
+    return (*season_rows(player_games, team_games), _read(f"{league}_impact_2025.parquet"))
 
 
 @functools.cache
 def _season(league: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
-    """(rated stints, team net, player_war output) of the 2025 fixtures."""
+    """(rated stints, team net, player_war output with its interval) of the 2025 fixtures."""
     stints, net, impact = _inputs(league)
     rated = _rating_stints(stints, net, impact)
-    return rated, net, player_war(rated, net, league=league, sources=SOURCES)
+    team_games, player_games = _games(league)
+    out = player_war(rated, net, league=league, sources=SOURCES, team_games=team_games, player_games=player_games)
+    return rated, net, out
 
 
 LEAGUES = pytest.mark.parametrize("league", ["nba", "wnba"])
@@ -81,7 +89,9 @@ def _records(league: str) -> pl.DataFrame:
 def test_possession_stints_count_regular_season_possessions_and_points() -> None:
     # 12 regular-season games and a playoff game of the 2024-25 possessions release
     raw, sched = _read("nba_possessions_slice_2025.parquet"), _read("nba_schedule_slice_2025.parquet")
-    stints, net = _possession_stints(raw, sched)
+    player_games, team_games = _possession_games(raw, sched)
+    stints, net = season_rows(player_games, team_games)
+    assert team_games.height == 2 * 12 and player_games["game_id"].n_unique() == 12  # one row per side
     rs = sched.filter(pl.col("season_type") == "regular-season")
     rs_rows = raw.join(rs.select("game_id"), on="game_id", how="semi").height
     assert rs_rows < raw.height  # the playoff game is in the slice and is dropped
@@ -294,6 +304,7 @@ def test_nba_player_war_reads_the_three_releases(monkeypatch: pytest.MonkeyPatch
     out = nba_player_war(2025)
     assert calls == {"poss": [2024], "sched": [2024], "impact": [2025]}  # loaders take the start year
     assert out.height > 0 and set(out["season"]) == {2025}
+    assert out["war_lo"].null_count() == 0  # the public path always ships the interval
     with pytest.raises(ValueError, match="league_id"):
         nba_player_war(2025, league_id="20")
 
@@ -307,3 +318,46 @@ def test_empty_input_returns_the_schema() -> None:
         sources=SOURCES,
     )
     assert out.height == 0 and "war_bpm" in out.columns and out.schema["player_id"] == pl.Int64
+    assert out.schema["war_lo"] == out.schema["war_hi"] == pl.Float64
+
+
+#: The 90% interval on the 2025 fixtures (200 replicates, seed 0, so exact): median width, the
+#: league leader's width (Jokic / A'ja Wilson), and Spearman(width, possessions).
+INTERVAL_OBS = {"nba": (0.785, 3.630, 0.931), "wnba": (0.804, 2.068, 0.918)}
+
+
+@LEAGUES
+def test_identity_replicate_is_the_point_estimate(league: str) -> None:
+    rated, net, out = _season(league)
+    team_games, player_games = _games(league)
+    frames = _boot_frames(rated, net, team_games, player_games)
+    ones = np.ones((1, frames["team_games"].height))
+    war = _replicate_war(frames, ones, league=league, sources=SOURCES)[0]
+    players = frames["stints"].group_by("p").agg(pl.col("player_id").first()).sort("p")
+    got = players.with_columns(pl.Series("boot", war)).join(out, on="player_id", how="inner", validate="1:1")
+    assert got.height == out.height
+    assert np.allclose(got["boot"], got["war"], atol=1e-9)
+
+
+@LEAGUES
+def test_draws_keep_each_team_season_whole(league: str) -> None:
+    rated, net, _ = _season(league)
+    frames = _boot_frames(rated, net, *_games(league))
+    tg = frames["team_games"]
+    counts = _draw_counts(tg, 50)
+    games = tg.group_by("t").agg(pl.len()).sort("t")
+    per_team = np.stack([counts[:, tg["t"].to_numpy() == t].sum(axis=1) for t in games["t"]], axis=1)
+    assert (per_team == games["len"].to_numpy()).all()  # every replicate plays each team's season length
+    assert (counts == np.round(counts)).all() and counts.max() >= 3 and (counts == 0).any()  # with replacement
+
+
+@LEAGUES
+def test_war_interval(league: str) -> None:
+    out = _season(league)[2].with_columns((pl.col("war_hi") - pl.col("war_lo")).alias("width"))
+    assert out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0
+    assert ((out["war_lo"] <= out["war"]) & (out["war"] <= out["war_hi"])).all()
+    median, lead, rho = INTERVAL_OBS[league]
+    assert out["width"].median() == pytest.approx(median, abs=0.001)
+    assert out.sort("war", descending=True)["width"][0] == pytest.approx(lead, abs=0.001)
+    # possessions move together within a game: the interval widens with playing time
+    assert spearmanr(out["width"], out["poss"]).statistic >= rho

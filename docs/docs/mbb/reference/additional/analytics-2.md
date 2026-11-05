@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot"
-sidebar_label: "Analytics: mbb_coach–mbb_shot"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player"
+sidebar_label: "Analytics: mbb_coach–mbb_player"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot
+# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player
 
 ### mbb_coach_seasons {#mbb_coach_seasons}
 
@@ -603,7 +603,7 @@ level and points per win are fitted per league
 
 **Returns**
 
-One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10 or more games in `~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's own centring set, so a season is empty until its teams reach 10 games: `player_name`, `team_id` (the team he played most possessions for), `teams`, `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war`, with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
+One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10 or more games in `~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's own centring set, so a season is empty until its teams reach 10 games: `player_name`, `team_id` (the team he played most possessions for), `teams`, `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war` with `war_lo` / `war_hi` (a 90% interval from a bootstrap over each team-season's games), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -617,6 +617,8 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
 | `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference's VORP scale. |
 | `war` | Float64 | Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91, WBB 47.10). 0 at replacement level; a replacement team wins about .35. |
+| `war_lo` | Float64 | Low end of the 90% interval for war (5th percentile of 200 bootstrap replicates): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate's adjusted net rating is the adjusted rating plus the change in the raw one). |
+| `war_hi` | Float64 | High end of the 90% interval for war (95th percentile of the same 200 game-resampled replicates as war_lo). |
 | `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
 | `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
 | `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
@@ -713,49 +715,4 @@ One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` sorting
 from sportsdataverse.mbb.mbb_player_on_off import mbb_player_wowy
 pairs = mbb_player_wowy(2025)
 pairs.sort("minutes_both", descending=True).head()
-```
-
-### mbb_shot_selection {#mbb_shot_selection}
-
-`mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Per shooter/team expected points per attempt vs the league-average mix.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `xpoints, point_value, made` + the group column). |
-| `group` | `str` | `'shooter_id'` | `"shooter_id"` or `"team_id"`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (interface parity; the math is league-free). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_value, selection_value_total` (all value columns Float64). The attempt-weighted `selection_value` sums to zero across the league. Empty input returns the zero-row schema.
-
-| col_name | type | description |
-|---|---|---|
-| `shooter_id` | String | Unique identifier for shooter. |
-| `n_shots` | Int64 |  |
-| `xppp` | Float64 |  |
-| `actual_ppp` | Float64 |  |
-| `selection_value` | Float64 |  |
-| `selection_value_total` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Unknown `group`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shot_selection
-sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
-
-# Pipeline next step (one line)
-
-sel.sort("selection_value", descending=True).head(10)
 ```

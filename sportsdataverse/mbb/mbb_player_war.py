@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING
 import polars as pl
 
 from sportsdataverse._common.player_war import player_war
+from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore
 from sportsdataverse.mbb.mbb_box_bpm import mbb_box_bpm
 from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 
@@ -33,6 +34,7 @@ _LEAGUE = {"mens": "mbb", "womens": "wbb"}
 #: A Division I team: box BPM's centring set (the ratings also list every non-D1 opponent).
 _D1_MIN_GAMES = 10
 _GAME_MINUTES = 40
+_D1 = pl.col("games") >= _D1_MIN_GAMES
 
 
 def _war_stints(box_bpm: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -47,7 +49,7 @@ def _war_stints(box_bpm: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFr
         ``player_name``, ``min``, ``poss`` (minutes / 40 * adj_tempo) and ``bpm``; and one row per
         D1 ``(season, team_id)`` with ``net``, its ``adj_em`` minus the D1 mean.
     """
-    d1 = ratings.filter(pl.col("games") >= _D1_MIN_GAMES).select(
+    d1 = ratings.filter(_D1).select(
         pl.col("season").cast(pl.Int64),
         pl.col("team_id").cast(pl.Utf8),
         "adj_tempo",
@@ -67,6 +69,38 @@ def _war_stints(box_bpm: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFr
     )
     stints = stints.with_columns((pl.col("min") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")).drop("adj_tempo")
     return stints, d1.select("season", "team_id", "net")
+
+
+def _game_rows(box: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Per-game possessions behind :func:`_war_stints`, for the WAR interval.
+
+    Args:
+        box: ``load_mbb_player_boxscore`` / ``load_wbb_player_boxscore`` rows of the seasons.
+        ratings: The same seasons' team ratings.
+
+    Returns:
+        ``(player_games, team_games)`` for the D1 teams: one row per ``(season, team_id, game_id,
+        player_id)`` with ``poss`` (minutes / 40 * adj_tempo, the minutes box BPM sums: positive
+        and set), and one per ``(season, team_id, game_id)`` with the team's ``poss`` (its players'
+        over 5) and ``margin`` (``team_score - opponent_team_score``).
+    """
+    d1 = ratings.filter(_D1).select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Utf8), "adj_tempo")
+    rows = box.filter(pl.col("minutes").is_not_null() & (pl.col("minutes") > 0)).select(
+        pl.col("season").cast(pl.Int64),
+        pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
+        pl.col("minutes").cast(pl.Float64),
+        (pl.col("team_score").cast(pl.Float64) - pl.col("opponent_team_score").cast(pl.Float64)).alias("margin"),
+    )
+    assert rows.schema["team_id"] == d1.schema["team_id"], "team_id dtype differs between box and ratings"
+    rows = rows.join(d1, on=["season", "team_id"], how="inner", validate="m:1").with_columns(
+        (pl.col("minutes") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")
+    )
+    keys = ["season", "team_id", "game_id"]
+    player_games = rows.group_by(*keys, "player_id").agg(pl.col("poss").sum())
+    team_games = rows.group_by(keys).agg((pl.col("poss").sum() / 5).alias("poss"), pl.col("margin").first())
+    return player_games, team_games
 
 
 def mbb_player_war(
@@ -94,7 +128,8 @@ def mbb_player_war(
         own centring set, so a season is empty until its teams reach 10 games: ``player_name``,
         ``team_id`` (the team he played most possessions for), ``teams``, ``min``, ``poss``
         (minutes / 40 * the team's adjusted tempo), ``rating`` (anchored box BPM, per 100),
-        ``vorp`` and ``war``, with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
+        ``vorp`` and ``war`` with ``war_lo`` / ``war_hi`` (a 90% interval from a bootstrap over each
+        team-season's games), with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
         ``vorp`` and ``war`` among every player of the season. Sorted by season and ``war``.
         Empty input returns that schema with zero rows.
 
@@ -111,6 +146,14 @@ def mbb_player_war(
     if league not in _LEAGUE:
         raise ValueError(f"league must be 'mens' or 'womens', got {league!r}")
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
-    stints, net = _war_stints(mbb_box_bpm(seasons_list, league=league), mbb_team_ratings(seasons_list, league=league))
-    out = player_war(stints, net, league=_LEAGUE[league], sources=["bpm"])
+    ratings = mbb_team_ratings(seasons_list, league=league)
+    stints, net = _war_stints(mbb_box_bpm(seasons_list, league=league), ratings)
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as load_box
+    else:
+        load_box = load_mbb_player_boxscore
+    player_games, team_games = _game_rows(load_box(seasons_list), ratings)
+    out = player_war(
+        stints, net, league=_LEAGUE[league], sources=["bpm"], team_games=team_games, player_games=player_games
+    )
     return out.to_pandas() if return_as_pandas else out

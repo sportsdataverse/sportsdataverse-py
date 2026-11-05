@@ -10196,8 +10196,8 @@
   group: bb-player-war
   finding: BB-D26
   file: sportsdataverse/nba/nba_player_war.py
-  snippet: 'stints = on_court.group_by("season", "team_id", "player_id").agg((pl.len() / 2).alias("poss"))'
-  mutant: 'stints = on_court.group_by("season", "team_id", "player_id").agg(pl.len().cast(pl.Float64).alias("poss"))'
+  snippet: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg((pl.len() / 2).alias("poss"))'
+  mutant: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg(pl.len().cast(pl.Float64).alias("poss"))'
   test: tests/nba/test_nba_player_war.py::test_possession_stints_count_regular_season_possessions_and_points
   expected: kill
   note: Offensive plus defensive possessions not halved -- the release war column's double count.
@@ -10226,8 +10226,8 @@
   group: bb-player-war
   finding: BB-D26
   file: sportsdataverse/mbb/mbb_player_war.py
-  snippet: 'd1 = ratings.filter(pl.col("games") >= _D1_MIN_GAMES).select('
-  mutant: 'd1 = ratings.select('
+  snippet: '_D1 = pl.col("games") >= _D1_MIN_GAMES'
+  mutant: '_D1 = pl.col("games") >= 0'
   test: tests/mbb/test_mbb_player_war.py::test_stints_are_division_i_with_minutes_times_tempo
   expected: kill
   note: The non-D1 opponents (a game or two each) would join the league and its centring.
@@ -10271,3 +10271,63 @@
   test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
   expected: kill
   note: One NaN rating would turn its team's and season's means, and so every WAR of the season, into NaN.
+
+- id: bb-war-draw-within-team
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'counts[:, idx] = rng.multinomial(len(idx), np.full(len(idx), 1 / len(idx)), size=n_boot)'
+  mutant: 'counts[:, idx] = 1.0'
+  test: tests/nba/test_nba_player_war.py
+  expected: kill
+  note: No resampling, so every replicate is the season and the interval collapses to the point.
+
+- id: bb-war-poss-move-together
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'poss = (occ @ counts.T).T  # replicate x stint'
+  mutant: 'poss = np.repeat(np.asarray(occ.sum(axis=1)).T, counts.shape[0], axis=0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A player's possessions held at the season total instead of moving with the drawn games.
+
+- id: bb-war-net-resampled
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'net = frames["net"] + (t_margin / t_poss - raw) * 100'
+  mutant: 'net = frames["net"] + 0 * t_poss'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: The team net rating held fixed -- the team side's sampling noise left out of the interval.
+
+- id: bb-war-interval-percentiles
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '_INTERVAL = (5.0, 95.0)'
+  mutant: '_INTERVAL = (25.0, 75.0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A 50% interval published as the 90% one.
+
+- id: bb-war-college-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '(pl.col("minutes") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")'
+  mutant: '(pl.col("minutes") * pl.col("adj_tempo")).alias("poss")'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Game possessions off the box BPM minutes basis, so the interval would resample the wrong playing time.
+
+- id: bb-war-college-team-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games = rows.group_by(keys).agg((pl.col("poss").sum() / 5).alias("poss"), pl.col("margin").first())'
+  mutant: 'team_games = rows.group_by(keys).agg(pl.col("poss").sum().alias("poss"), pl.col("margin").first())'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Team possessions five times too many, so the replicate's raw net rating shrinks toward zero.

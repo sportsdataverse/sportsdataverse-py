@@ -40,6 +40,12 @@ columns:
 - name: war
   type: double
   description: ''
+- name: war_lo
+  type: double
+  description: ''
+- name: war_hi
+  type: double
+  description: ''
 - name: war_bpm
   type: double
   description: ''

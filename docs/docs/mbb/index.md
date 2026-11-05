@@ -225,7 +225,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_player_on_off`](reference/additional/analytics-2#mbb_player_on_off)
 - [`mbb_player_war`](reference/additional/analytics-2#mbb_player_war)
 - [`mbb_player_wowy`](reference/additional/analytics-2#mbb_player_wowy)
-- [`mbb_shot_selection`](reference/additional/analytics-2#mbb_shot_selection)
+- [`mbb_shot_selection`](reference/additional/analytics-3#mbb_shot_selection)
 - [`mbb_situational_lineup`](reference/additional/analytics-3#mbb_situational_lineup)
 - [`mbb_situational_player`](reference/additional/analytics-3#mbb_situational_player)
 - [`mbb_situational_team`](reference/additional/analytics-3#mbb_situational_team)

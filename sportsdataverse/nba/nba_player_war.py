@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
-from sportsdataverse._common.player_war import player_war, repair_bpm_team_constant
+from sportsdataverse._common.player_war import player_war, repair_bpm_team_constant, season_rows
 from sportsdataverse.nba.nba_team_season_rates import _league_loaders
 
 if TYPE_CHECKING:
@@ -37,51 +37,59 @@ _SOURCES = {"bpm": "bpm", "adj_rapm": "rapm", "boban_filtered_skill": "boban"}
 _RS = "Regular Season"
 
 
-def _possession_stints(possessions: pl.DataFrame, schedule: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
-    """On-court possessions per player and team, and each team's net rating, over the regular season.
+def _possession_games(possessions: pl.DataFrame, schedule: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """On-court possessions per player, team and game, and each team's game, over the regular season.
 
     Args:
         possessions: ``load_nba_stats_possessions`` / ``load_wnba_stats_possessions`` rows.
         schedule: The matching ``*_stats_schedules`` rows; their ``regular-season`` games are kept.
 
     Returns:
-        ``(stints, net)``: one row per ``(season, team_id, player_id)`` with ``poss`` (possessions
-        on the floor, offensive plus defensive over 2); and one row per ``(season, team_id)`` with
-        ``poss`` (the team's, offensive plus defensive over 2) and ``net``, its points per 100
-        possessions minus its opponents'. Points are ``2 * fg2m + 3 * fg3m + ftm`` and every
-        possession row counts (BB-D3).
+        ``(player_games, team_games)``: one row per ``(season, team_id, game_id, player_id)`` with
+        ``poss`` (possessions on the floor, offensive plus defensive over 2); and one row per
+        ``(season, team_id, game_id)`` with the team's ``poss`` (offensive plus defensive over 2)
+        and ``margin`` (points for minus against). Points are ``2 * fg2m + 3 * fg3m + ftm`` and
+        every possession row counts (BB-D3). :func:`~sportsdataverse._common.player_war.season_rows`
+        sums them to the season.
     """
     games = schedule.filter(pl.col("season_type") == "regular-season").select(pl.col("game_id").cast(pl.Utf8))
     p = possessions.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")
     pts = 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")
     sides = [("offense_team_id", "off_player"), ("defense_team_id", "def_player")]
     on_court = pl.concat(
-        p.select("season", pl.col(team).alias("team_id"), pl.col(f"{slot}_{k}").alias("player_id"))
+        p.select("season", pl.col(team).alias("team_id"), "game_id", pl.col(f"{slot}_{k}").alias("player_id"))
         for team, slot in sides
         for k in range(1, 6)
     ).drop_nulls("player_id")
-    stints = on_court.group_by("season", "team_id", "player_id").agg((pl.len() / 2).alias("poss"))
+    player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg((pl.len() / 2).alias("poss"))
     team = [
-        p.group_by("season", pl.col(t).alias("team_id")).agg(pl.len().alias(f"_n{i}"), pts.sum().alias(f"_p{i}"))
+        p.group_by("season", pl.col(t).alias("team_id"), "game_id").agg(
+            pl.len().alias(f"_n{i}"), pts.sum().alias(f"_p{i}")
+        )
         for i, t in enumerate(("offense_team_id", "defense_team_id"))
     ]
-    net = (
+    team_games = (
         team[0]
-        .join(team[1], on=["season", "team_id"], how="full", coalesce=True)
+        .join(team[1], on=["season", "team_id", "game_id"], how="full", coalesce=True)
         .fill_null(0)
-        .with_columns(((pl.col("_n0") + pl.col("_n1")) / 2).alias("poss"))
-        .select("season", "team_id", "poss", ((pl.col("_p0") - pl.col("_p1")) / pl.col("poss") * 100).alias("net"))
+        .select(
+            "season",
+            "team_id",
+            "game_id",
+            ((pl.col("_n0") + pl.col("_n1")) / 2).alias("poss"),
+            (pl.col("_p0") - pl.col("_p1")).cast(pl.Float64).alias("margin"),
+        )
     )
     keys = {"season": pl.Int64, "team_id": pl.Int64}
-    return stints.cast({**keys, "player_id": pl.Int64}), net.cast(keys)
+    return player_games.cast({**keys, "player_id": pl.Int64}), team_games.cast(keys)
 
 
 def _rating_stints(stints: pl.DataFrame, net: pl.DataFrame, impact: pl.DataFrame) -> pl.DataFrame:
     """Attach the release's ratings to the possession stints, with BPM's team constant repaired.
 
     Args:
-        stints: :func:`_possession_stints` player rows.
-        net: :func:`_possession_stints` team rows.
+        stints: :func:`~sportsdataverse._common.player_war.season_rows` player rows.
+        net: :func:`~sportsdataverse._common.player_war.season_rows` team rows.
         impact: ``load_nba_player_impact`` / ``load_wnba_player_impact`` rows (the
             ``Regular Season`` rows are read).
 
@@ -144,7 +152,9 @@ def nba_player_war(
         ``team_id`` (the team he played most possessions for), ``teams`` (how many he played
         for), ``min``, ``poss`` (on-court possessions, offensive plus defensive over 2),
         ``rating`` and ``rating_bpm`` / ``rating_rapm`` / ``rating_boban`` (anchored, per 100),
-        ``vorp``, ``war`` and ``war_bpm`` / ``war_rapm`` / ``war_boban``, with ``_rank``
+        ``vorp``, ``war`` with ``war_lo`` / ``war_hi`` (a 90% interval from a bootstrap over each
+        team-season's games: the sampling uncertainty of the team side and the playing time) and
+        ``war_bpm`` / ``war_rapm`` / ``war_boban`` (the source spread), with ``_rank``
         (1 = most), ``_pct`` and ``_n`` (possessions) for ``vorp`` and ``war`` among every player
         of the season. Sorted by season and ``war``. Empty input returns that schema with zero
         rows.
@@ -172,7 +182,15 @@ def nba_player_war(
     else:
         from sportsdataverse.nba.nba_loaders import load_nba_player_impact as load_impact
     loader_seasons = [s - offset for s in seasons_list]
-    stints, net = _possession_stints(load_possessions(loader_seasons), load_schedule(loader_seasons))
+    player_games, team_games = _possession_games(load_possessions(loader_seasons), load_schedule(loader_seasons))
+    stints, net = season_rows(player_games, team_games)
     stints = _rating_stints(stints, net, load_impact(seasons_list))
-    out = player_war(stints, net, league=_LEAGUE[league_id], sources=list(_SOURCES.values()))
+    out = player_war(
+        stints,
+        net,
+        league=_LEAGUE[league_id],
+        sources=list(_SOURCES.values()),
+        team_games=team_games,
+        player_games=player_games,
+    )
     return out.to_pandas() if return_as_pandas else out

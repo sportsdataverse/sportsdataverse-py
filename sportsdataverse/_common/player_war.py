@@ -36,8 +36,15 @@ above all ``war_boban`` the pool carries more WAR than under ``war_bpm`` (NBA 20
 season whose pool sits 0.8 above ``R``: 46 under ``war_bpm`` and ``war_rapm``, 90 under
 ``war_boban``, of 765).
 
-**Uncertainty.** The pro rows carry ``war_bpm`` / ``war_rapm`` / ``war_boban`` beside the mean:
-their spread is the model uncertainty. ``R`` is a mean over 5-8 train seasons, standard error
+**Uncertainty.** ``war_lo`` / ``war_hi`` are a 90% interval (5th and 95th percentiles) from a
+cluster bootstrap: :data:`N_BOOT` replicates, each team-season's games resampled with replacement
+(as many as it played, seed fixed), so a player's possessions in a game, his team's possessions
+and its margin move together. Each replicate recomputes his possessions, the team's net rating
+(in college: the adjusted rating plus the replicate's change in the raw one), the team anchoring
+and the league centring, holding the source ratings and ``R`` fixed. It is the sampling
+uncertainty of the team side and the playing time, not of the source ratings themselves: the pro
+rows carry ``war_bpm`` / ``war_rapm`` / ``war_boban`` beside the mean, and their spread is that
+model uncertainty. ``R`` is a mean over 5-8 train seasons, standard error
 0.09 (NBA), 0.18 (WNBA), 0.06 (MBB), 0.11 (WBB) per 100; a shift of ``dR`` moves a player's WAR
 by ``-dR * poss / 100 / pts_per_win`` (0.3 wins for an NBA starter per 0.1).
 
@@ -51,19 +58,23 @@ convention); college has no published on-court possessions for every game, so it
 
 from __future__ import annotations
 
+import numpy as np
 import polars as pl
+from scipy import sparse
 
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
 
 __all__ = [
     "PTS_PER_WIN",
     "REPLACEMENT_LEVEL",
+    "N_BOOT",
     "REPLACEMENT_SHARE",
     "player_war",
     "player_war_schema",
     "repair_bpm_team_constant",
     "replacement_level_by_season",
     "replacement_win_pct",
+    "season_rows",
 ]
 
 #: The replacement pool: the players who together played the league's least-used share of
@@ -101,6 +112,11 @@ REPLACEMENT_SHARE = 0.15
 REPLACEMENT_LEVEL: dict[str, float] = {"nba": -1.98, "wnba": -3.18, "mbb": -1.66, "wbb": -1.99}
 PTS_PER_WIN: dict[str, float] = {"nba": 31.56, "wnba": 31.31, "mbb": 38.91, "wbb": 47.10}
 
+#: Bootstrap replicates behind ``war_lo`` / ``war_hi``, and the interval's percentiles.
+N_BOOT = 200
+_INTERVAL = (5.0, 95.0)
+_SEED = 0
+
 
 def player_war_schema(player_dtype: pl.DataType, team_dtype: pl.DataType, sources: list[str]) -> dict[str, pl.DataType]:
     """Columns of :func:`player_war` for a league's id dtypes and rating ``sources``.
@@ -121,6 +137,8 @@ def player_war_schema(player_dtype: pl.DataType, team_dtype: pl.DataType, source
         **{f"rating_{s}": pl.Float64() for s in per},
         "vorp": pl.Float64(),
         "war": pl.Float64(),
+        "war_lo": pl.Float64(),
+        "war_hi": pl.Float64(),
         **{f"war_{s}": pl.Float64() for s in per},
         "vorp_rank": pl.Float64(),
         "war_rank": pl.Float64(),
@@ -177,6 +195,129 @@ def _anchor(stints: pl.DataFrame, net: pl.DataFrame, sources: list[str]) -> pl.D
     return out.with_columns((pl.col(s) - _wmean(s, "poss", ["season"])).alias(s) for s in sources)
 
 
+def season_rows(player_games: pl.DataFrame, team_games: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Sum game rows to the season: player possessions per team, and each team's net rating.
+
+    Args:
+        player_games: ``season``, ``team_id``, ``game_id``, ``player_id`` and ``poss`` (on-court
+            possessions in that game).
+        team_games: ``season``, ``team_id``, ``game_id``, ``poss`` (the team's) and ``margin``
+            (points for minus against).
+
+    Returns:
+        ``(stints, net)``: one row per ``(season, team_id, player_id)`` with ``poss``, and one
+        per ``(season, team_id)`` with ``poss`` and ``net`` (points per 100 minus its opponents').
+    """
+    stints = player_games.group_by("season", "team_id", "player_id").agg(pl.col("poss").sum())
+    net = team_games.group_by("season", "team_id").agg(pl.col("poss").sum(), pl.col("margin").sum())
+    return stints, net.select("season", "team_id", "poss", (pl.col("margin") / pl.col("poss") * 100).alias("net"))
+
+
+def _member(rows: np.ndarray, n: int) -> sparse.csr_matrix:
+    """A rows-by-``n`` 0/1 membership matrix: row ``i`` belongs to group ``rows[i]``."""
+    return sparse.csr_matrix((np.ones(len(rows)), (np.arange(len(rows)), rows)), shape=(len(rows), n))
+
+
+def _replicate_war(
+    frames: dict[str, pl.DataFrame], counts: np.ndarray, *, league: str, sources: list[str]
+) -> np.ndarray:
+    """WAR per player-season under each row of ``counts`` (replicates by team-games), as :func:`player_war`.
+
+    ``frames`` are :func:`_boot_frames`; ``counts[b, g]`` is how often team-game ``g`` is drawn in
+    replicate ``b``. All ones reproduces :func:`player_war`'s ``war``.
+    """
+    st, tg, pg = frames["stints"], frames["team_games"], frames["player_games"]
+    n_s, n_t, n_g = st.height, frames["n_teams"], tg.height
+    occ = sparse.csr_matrix((pg["poss"].to_numpy(), (pg["s"].to_numpy(), pg["g"].to_numpy())), shape=(n_s, n_g))
+    poss = (occ @ counts.T).T  # replicate x stint
+    g_team = _member(tg["t"].to_numpy(), n_t).T  # team x game
+    t_poss = (g_team @ (counts * tg["poss"].to_numpy()).T).T
+    t_margin = (g_team @ (counts * tg["margin"].to_numpy()).T).T
+    t_idx = tg["t"].to_numpy()
+    raw = np.bincount(t_idx, tg["margin"].to_numpy(), n_t) / np.bincount(t_idx, tg["poss"].to_numpy(), n_t)
+    net = frames["net"] + (t_margin / t_poss - raw) * 100
+    t_of, z_of = st["t"].to_numpy(), st["z"].to_numpy()
+    team, season = _member(t_of, n_t), _member(z_of, int(z_of.max()) + 1)
+    rating = np.zeros_like(poss)
+    for src in sources:
+        r = st[src].to_numpy().astype(float)
+        ok = np.isfinite(r)
+        w = poss * ok
+        mean = (team.T @ (w * np.where(ok, r, 0.0)).T).T / np.where((den := (team.T @ w.T).T) > 0, den, 1.0)
+        a = np.where(ok, r - mean[:, t_of], 0.0) + net[:, t_of] / 5
+        a -= ((season.T @ (a * poss).T) / (season.T @ poss.T)).T[:, z_of]
+        rating += a / len(sources)
+    par = (rating - REPLACEMENT_LEVEL[league]) * poss
+    return (_member(st["p"].to_numpy(), frames["n_players"]).T @ par.T).T / 100 / PTS_PER_WIN[league]
+
+
+def _boot_frames(stints: pl.DataFrame, net: pl.DataFrame, team_games: pl.DataFrame, player_games: pl.DataFrame) -> dict:
+    """Integer-index the stints, teams, seasons, player-seasons and team-games for the bootstrap."""
+    keys = ["season", "team_id"]
+    teams = net.select(*keys, "net").sort(keys).with_row_index("t")
+    st = stints.join(teams, on=keys, how="inner", validate="m:1").with_row_index("s")
+    players = st.select("season", "player_id").unique().sort("season", "player_id").with_row_index("p")
+    st = st.join(players, on=["season", "player_id"], how="left", validate="m:1").sort("s")
+    st = st.with_columns(pl.col("season").rank("dense").cast(pl.Int64).sub(1).alias("z"))
+    # sorted, so a fixed seed gives the same draws whatever order the game rows came in
+    tg = team_games.join(teams.select(*keys, "t"), on=keys, how="inner").sort(*keys, "game_id").with_row_index("g")
+    pg = player_games.join(st.select(*keys, "player_id", "s"), on=[*keys, "player_id"], how="inner").join(
+        tg.select(*keys, "game_id", "g"), on=[*keys, "game_id"], how="inner"
+    )
+    return {
+        "stints": st,
+        "team_games": tg,
+        "player_games": pg,
+        "n_teams": teams.height,
+        "n_players": players.height,
+        "net": teams["net"].to_numpy(),
+    }
+
+
+def _draw_counts(team_games: pl.DataFrame, n_boot: int) -> np.ndarray:
+    """``counts[b, g]``: how often team-game ``g`` is drawn in replicate ``b``.
+
+    Each team-season (``t``) draws as many of its own games as it played, with replacement, so
+    its game count is fixed and a game's possessions and margin move together.
+    """
+    rng = np.random.default_rng(_SEED)
+    counts = np.zeros((n_boot, team_games.height))
+    for idx in team_games.group_by("t", maintain_order=True).agg("g")["g"].to_list():
+        counts[:, idx] = rng.multinomial(len(idx), np.full(len(idx), 1 / len(idx)), size=n_boot)
+    return counts
+
+
+def war_interval(
+    stints: pl.DataFrame,
+    net: pl.DataFrame,
+    team_games: pl.DataFrame,
+    player_games: pl.DataFrame,
+    *,
+    league: str,
+    sources: list[str],
+    n_boot: int = N_BOOT,
+) -> pl.DataFrame:
+    """``war_lo`` / ``war_hi`` per player-season: a cluster bootstrap over each team-season's games.
+
+    Each replicate draws, for every team-season, as many of its games as it played, with
+    replacement, and recomputes :func:`player_war`'s WAR from them (possessions, team net rating,
+    anchoring, centring; the source ratings and ``R`` held fixed).
+
+    Returns:
+        ``season``, ``player_id``, ``war_lo`` and ``war_hi`` (the 5th and 95th percentiles).
+    """
+    frames = _boot_frames(stints, net, team_games, player_games)
+    counts = _draw_counts(frames["team_games"], n_boot)
+    # a team with no game rows has no possessions to resample: its players' interval is null
+    with np.errstate(divide="ignore", invalid="ignore"):
+        lo, hi = np.percentile(_replicate_war(frames, counts, league=league, sources=sources), _INTERVAL, axis=0)
+    players = frames["stints"].group_by("p").agg(pl.col("season").first(), pl.col("player_id").first()).sort("p")
+    assert players.height == frames["n_players"]
+    return players.select("season", "player_id").with_columns(
+        pl.Series("war_lo", lo).fill_nan(None), pl.Series("war_hi", hi).fill_nan(None)
+    )
+
+
 #: The season's possessions per team: on-court possessions / 5 / teams.
 _LG_TEAM_POSS = pl.col("poss").sum().over("season") / 5 / pl.col("team_id").n_unique().over("season")
 
@@ -187,6 +328,9 @@ def player_war(
     *,
     league: str,
     sources: list[str],
+    team_games: pl.DataFrame | None = None,
+    player_games: pl.DataFrame | None = None,
+    n_boot: int = N_BOOT,
 ) -> pl.DataFrame:
     """WAR and VORP per player-season from rating stints.
 
@@ -198,13 +342,19 @@ def player_war(
             ratings are anchored to (actual in the pros, D1-centred adjusted in college).
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (picks the fitted constants).
         sources: The rating columns; ``rating`` / ``war`` are their mean.
+        team_games: The games behind ``net`` (:func:`season_rows`), for the interval.
+        player_games: The games behind ``stints``' ``poss`` (:func:`season_rows`), for the
+            interval. Without both, ``war_lo`` / ``war_hi`` are null; the ``{lg}_player_war``
+            functions always pass them.
+        n_boot: Bootstrap replicates behind ``war_lo`` / ``war_hi`` (:func:`war_interval`).
 
     Returns:
         :func:`player_war_schema` rows sorted by season and ``war`` (most first). ``team_id`` is
         the team he played most possessions for and ``teams`` how many he played for. ``war`` and
         ``vorp`` carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) among every
-        player of the season, null under :data:`MIN_COHORT_PLAYERS`. Stints on a team without
-        ``net`` are dropped. Empty input returns that schema with zero rows.
+        player of the season, null under :data:`MIN_COHORT_PLAYERS`; ``war_lo`` / ``war_hi`` are
+        the 90% interval of :func:`war_interval`. Stints on a team without ``net`` are dropped.
+        Empty input returns that schema with zero rows.
     """
     schema = player_war_schema(stints.schema["player_id"], stints.schema["team_id"], sources)
     if stints.height == 0:
@@ -234,6 +384,12 @@ def player_war(
             *[(pl.col(f"_par_{s}") / 100 / ppw).alias("war" if s == "rating" else f"war_{s}") for s in rated],
         )
     )
+    if team_games is not None and player_games is not None:
+        interval = war_interval(stints, net, team_games, player_games, league=league, sources=sources, n_boot=n_boot)
+        assert out.schema["player_id"] == interval.schema["player_id"], "player_id dtype differs in the interval"
+        out = out.join(interval, on=["season", "player_id"], how="left", validate="1:1")
+    else:
+        out = out.with_columns(pl.lit(None, pl.Float64).alias("war_lo"), pl.lit(None, pl.Float64).alias("war_hi"))
     return (
         out.pipe(attach_ranks, ["vorp", "war"], min_cohort=MIN_COHORT_PLAYERS, by=("season",))
         .pipe(attach_sample_sizes, {"vorp": pl.col("poss"), "war": pl.col("poss")})
