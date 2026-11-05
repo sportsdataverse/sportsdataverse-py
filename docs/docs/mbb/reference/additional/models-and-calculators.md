@@ -895,11 +895,11 @@ One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8,
 | `turnovers` | Float64 | Total turnovers. |
 | `points` | Float64 | Points scored. |
 | `player_id` | String | Unique player identifier. |
-| `fga_rim` | Float64 |  |
-| `fga_mid` | Float64 |  |
-| `fga_three` | Float64 |  |
+| `fga_rim` | Float64 | Rim field-goal attempts (layups, dunks, tips) from the shots release; 0 in seasons without shots data. |
+| `fga_mid` | Float64 | Mid-range field-goal attempts (non-rim twos) from the shots release; in seasons without shots data, all box two-point attempts. |
+| `fga_three` | Float64 | Three-point field-goal attempts from the shots release; in seasons without shots data, the box three-point attempts. |
 | `games` | Int64 | Games played. |
-| `starter_share` | Float64 |  |
+| `starter_share` | Float64 | Share of the player's box-score rows for the team-season that mark them a starter (0-1). |
 
 **Example**
 
