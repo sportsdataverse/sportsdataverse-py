@@ -38818,27 +38818,27 @@ nba_lineup_seasons:
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
     shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
     turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
@@ -38847,18 +38847,18 @@ nba_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com''s
     lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4% higher).'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
     possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.
@@ -38866,18 +38866,18 @@ nba_lineup_seasons:
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
     rebounds and turnovers count for the lineup that started it, even after a substitution inside it.'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
     Each possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.'
@@ -38885,9 +38885,9 @@ nba_lineup_seasons:
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
   opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
@@ -38896,9 +38896,9 @@ nba_lineup_seasons:
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
     possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.'
@@ -38906,9 +38906,9 @@ nba_lineup_seasons:
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -38927,36 +38927,36 @@ nba_lineup_seasons:
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
 wnba_lineup_seasons:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
     shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
     turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
@@ -38965,17 +38965,17 @@ wnba_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
     possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.
@@ -38983,18 +38983,18 @@ wnba_lineup_seasons:
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
     rebounds and turnovers count for the lineup that started it, even after a substitution inside it.'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
     Each possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.'
@@ -39002,9 +39002,9 @@ wnba_lineup_seasons:
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
   opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
@@ -39013,9 +39013,9 @@ wnba_lineup_seasons:
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
-    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
-    one value.
+    among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
+    '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying
+    units have a finite value of this rate or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
     possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.'
@@ -39023,9 +39023,9 @@ wnba_lineup_seasons:
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39044,9 +39044,9 @@ wnba_lineup_seasons:
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
-    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
-    value.
+    units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
+    (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units
+    have a finite value of this rate or they all share one value.
 mbb_lineup_seasons:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
