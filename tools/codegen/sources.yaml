@@ -855,6 +855,7 @@ categories:
       - sportsdataverse._common.player_on_off
       - sportsdataverse._common.play_style
       - sportsdataverse._common.game_flow
+      - sportsdataverse._common.situational_splits
       - sportsdataverse._common.team_strength
       - sportsdataverse._common.team_luck
       - sportsdataverse._common.coach_seasons
@@ -968,23 +969,27 @@ categories:
       - sportsdataverse.nba.nba_player_on_off
       - sportsdataverse.nba.nba_play_style
       - sportsdataverse.nba.nba_game_flow
+      - sportsdataverse.nba.nba_situational
       - sportsdataverse.wnba.wnba_team_season_rates
       - sportsdataverse.wnba.wnba_game_impact
       - sportsdataverse.wnba.wnba_lineup_seasons
       - sportsdataverse.wnba.wnba_player_on_off
       - sportsdataverse.wnba.wnba_game_flow
+      - sportsdataverse.wnba.wnba_situational
       - sportsdataverse.mbb.mbb_team_season_rates
       - sportsdataverse.mbb.mbb_game_impact
       - sportsdataverse.mbb.mbb_lineup_seasons
       - sportsdataverse.mbb.mbb_player_on_off
       - sportsdataverse.mbb.mbb_play_style
       - sportsdataverse.mbb.mbb_game_flow
+      - sportsdataverse.mbb.mbb_situational
       - sportsdataverse.wbb.wbb_team_season_rates
       - sportsdataverse.wbb.wbb_game_impact
       - sportsdataverse.wbb.wbb_lineup_seasons
       - sportsdataverse.wbb.wbb_player_on_off
       - sportsdataverse.wbb.wbb_play_style
       - sportsdataverse.wbb.wbb_game_flow
+      - sportsdataverse.wbb.wbb_situational
       - sportsdataverse.nba.nba_team_strength
       - sportsdataverse.wnba.wnba_team_strength
       - sportsdataverse.nba.nba_team_luck

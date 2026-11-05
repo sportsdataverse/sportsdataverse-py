@@ -208,12 +208,16 @@ nba:
   nba_coach_careers: {seasons: 2026}
   nba_game_flow: {seasons: 2026}
   nba_team_season_flow: {seasons: 2026}
+  nba_situational_team: {seasons: 2026}
+  nba_situational_player: {seasons: 2026}
+  nba_situational_lineup: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
   nba_cup_standings: {season: 2026}  # 30 rows x 17 cols (stats.nba.com scheduleleaguev2)
   nba_cup_sim: {season: 2026, as_of_date: 2025-11-14}  # 30 rows x 23 cols
   nba_season_standings: {games: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}  # 30 rows x 13 cols
   nba_draft_lottery_odds: {}  # 196 rows x 4 cols
   nba_possession_rate_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
+  nba_situation_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, pbp: {$call: nba.load_nba_stats_pbp, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_score_rows: {pbp: {$call: nba.load_nba_stats_pbp, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_impact_rows: {pbp: {$call: nba.load_nba_stats_pbp, args: {seasons: 2025}}, game_lineups: {$call: nba.load_nba_stats_game_lineups, args: {seasons: 2025}}, possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
   nba_player_props: {season: 2024, game_id: '401585828', home_team_id: '2', away_team_id: '6'}  # 36 rows x 7 cols
@@ -309,6 +313,9 @@ wnba:
   wnba_coach_careers: {seasons: 2025}
   wnba_game_flow: {seasons: 2025}
   wnba_team_season_flow: {seasons: 2025}
+  wnba_situational_team: {seasons: 2025}
+  wnba_situational_player: {seasons: 2025}
+  wnba_situational_lineup: {seasons: 2025}
   wnba_season_sim: {season: 2025, as_of_date: 2025-07-16}  # 13 rows x 43 cols
   wnba_season_standings: {games: {$call: wnba.load_wnba_stats_schedules, args: {seasons: 2025}}}  # 13 rows x 13 cols
   wnba_draft_lottery_odds: {}  # 25 rows x 4 cols
@@ -362,10 +369,14 @@ mbb:
   mbb_team_luck: {seasons: 2025}
   mbb_game_flow: {seasons: 2026}
   mbb_team_season_flow: {seasons: 2026}
+  mbb_situational_team: {seasons: 2026}
+  mbb_situational_player: {seasons: 2026}
+  mbb_situational_lineup: {seasons: 2026}
   mbb_strength_of_schedule: {seasons: [2025]}  # 364 rows x 48 cols
   mbb_bracketology: {season: 2025}  # 364 rows x 21 cols
   mbb_season_projections: {season: 2025, n_sims: 500}  # 364 rows x 40 cols
   ncaa_possession_rate_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
+  ncaa_situation_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
   ncaa_score_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2026}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2026}}}
   ncaa_impact_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}, possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}}
   ncaa_lineup_count_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}}
@@ -430,6 +441,9 @@ wbb:
   wbb_team_luck: {seasons: 2025}
   wbb_game_flow: {seasons: 2026}
   wbb_team_season_flow: {seasons: 2026}
+  wbb_situational_team: {seasons: 2026}
+  wbb_situational_player: {seasons: 2026}
+  wbb_situational_lineup: {seasons: 2026}
   wbb_strength_of_schedule: {seasons: [2025]}  # 362 rows x 48 cols
   wbb_bracketology: {season: 2025}  # 362 rows x 21 cols
   wbb_season_projections: {season: 2025, n_sims: 500}  # 362 rows x 40 cols

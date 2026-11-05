@@ -589,6 +589,9 @@ from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: 
 from sportsdataverse.wbb import wbb_schedule_crosswalk as wbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_season_projections as wbb_season_projections  # noqa: F401
 from sportsdataverse.wbb import wbb_season_sim as wbb_season_sim  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_lineup as wbb_situational_lineup  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_player as wbb_situational_player  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_team as wbb_situational_team  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
@@ -1166,6 +1169,9 @@ __all__ = [
     "wbb_schedule_crosswalk",
     "wbb_season_projections",
     "wbb_season_sim",
+    "wbb_situational_lineup",
+    "wbb_situational_player",
+    "wbb_situational_team",
     "wbb_strength_of_schedule",
     "wbb_team_crosswalk",
     "wbb_team_luck",

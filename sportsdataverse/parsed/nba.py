@@ -380,6 +380,10 @@ from sportsdataverse.nba import nba_season_sim as nba_season_sim  # noqa: F401
 from sportsdataverse.nba import nba_season_standings as nba_season_standings  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
+from sportsdataverse.nba import nba_situation_rows as nba_situation_rows  # noqa: F401
+from sportsdataverse.nba import nba_situational_lineup as nba_situational_lineup  # noqa: F401
+from sportsdataverse.nba import nba_situational_player as nba_situational_player  # noqa: F401
+from sportsdataverse.nba import nba_situational_team as nba_situational_team  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
@@ -818,6 +822,10 @@ __all__ = [
     "nba_season_standings",
     "nba_shot_value",
     "nba_shot_value_lineups",
+    "nba_situation_rows",
+    "nba_situational_lineup",
+    "nba_situational_player",
+    "nba_situational_team",
     "nba_spm",
     "nba_stats_leaguedashptstats",
     "nba_team_clutch",

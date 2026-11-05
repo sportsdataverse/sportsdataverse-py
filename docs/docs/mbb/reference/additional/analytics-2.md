@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot"
-sidebar_label: "Analytics: mbb_coach–mbb_shot"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational"
+sidebar_label: "Analytics: mbb_coach–mbb_situational"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot
+# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational
 
 ### mbb_coach_seasons {#mbb_coach_seasons}
 
@@ -698,4 +698,63 @@ sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
 # Pipeline next step (one line)
 
 sel.sort("selection_value", descending=True).head(10)
+```
+
+### mbb_situational_lineup {#mbb_situational_lineup}
+
+`mbb_situational_lineup(seasons: 'int | list[int]', *, league: 'str' = 'mens', top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College five-man unit splits by situation: the team splits over the possessions each unit started.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `top_n` | `int` | `25` | As `mbb_situational_team`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `top_n` is below 1. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup
+mbb_situational_lineup(2026).filter(split="not_garbage_time").sort("poss", descending=True).head()
 ```

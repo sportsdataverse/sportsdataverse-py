@@ -555,7 +555,9 @@ Map `nba_stats_possessions` rows onto the team-season-rates possession frame.
 
 Keeps the games of `schedule` whose `season_type` matches, takes the home team from the
 schedule, and sets each possession's start clock to the previous possession's end clock in the
-period (the period length for the first one). Points come from the made-shot counts.
+period (the period length for the first one). Points come from the made-shot counts. A game
+whose first period runs past 15 minutes is played in two 20-minute halves (the WNBA through
+2005): its periods are 20 minutes, `late` starts with the 2nd half and period 3 is overtime.
 
 `neutral_site` is always False: the stats schedule has no neutral-site or venue column, so
 a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
@@ -582,7 +584,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `game_id` | String | stats.nba.com game id. |
 | `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
 | `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 4th quarter or an overtime: the periods the clutch window can fall in. |
+| `late` | Boolean | True in the last regulation period (the 4th quarter; the 2nd half of a two-halves game) or an overtime: the periods the clutch window can fall in. |
 | `start_clock` | Float64 | Seconds left in the period when the possession starts (when the previous possession ended). |
 | `end_clock` | Float64 | Seconds left in the period when the possession ends. |
 | `offense_team_id` | Int64 | stats.nba.com id of the team with the ball. |
