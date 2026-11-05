@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_play–nba_team"
-sidebar_label: "Analytics: nba_play–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_play–nba_situation"
+sidebar_label: "Analytics: nba_play–nba_situation"
 sidebar_position: 15
-description: "NBA — additional Python functions — Analytics: nba_play–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_play–nba_situation — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_play–nba_team
+# NBA — additional Python functions — Analytics: nba_play–nba_situation
 
 ### nba_play_context {#nba_play_context}
 
@@ -445,7 +445,9 @@ Map `nba_stats_possessions` rows onto the team-season-rates possession frame.
 
 Keeps the games of `schedule` whose `season_type` matches, takes the home team from the
 schedule, and sets each possession's start clock to the previous possession's end clock in the
-period (the period length for the first one). Points come from the made-shot counts.
+period (the period length for the first one). Points come from the made-shot counts. A game
+whose first period runs past 15 minutes is played in two 20-minute halves (the WNBA through
+2005): its periods are 20 minutes, `late` starts with the 2nd half and period 3 is overtime.
 
 `neutral_site` is always False: the stats schedule has no neutral-site or venue column, so
 a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
@@ -472,7 +474,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `game_id` | String | stats.nba.com game id. |
 | `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
 | `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 4th quarter or an overtime: the periods the clutch window can fall in. |
+| `late` | Boolean | True in the last regulation period (the 4th quarter; the 2nd half of a two-halves game) or an overtime: the periods the clutch window can fall in. |
 | `start_clock` | Float64 | Seconds left in the period when the possession starts (when the previous possession ended). |
 | `end_clock` | Float64 | Seconds left in the period when the possession ends. |
 | `offense_team_id` | Int64 | stats.nba.com id of the team with the ball. |
@@ -966,34 +968,74 @@ from sportsdataverse.nba import nba_shot_value_lineups
 df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
 ```
 
-### nba_team_clutch {#nba_team_clutch}
+### nba_situation_rows {#nba_situation_rows}
 
-`nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_situation_rows(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
 
-Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
-
-Loads the season's clutch net rating (`nba_stats_leaguedashteamclutch`)
-and full-game net baseline (`nba_stats_leaguedashteamstats`), computes
-`clutch_delta`, and applies `shrink_clutch`.
+Map the stats.nba.com releases onto the situational-splits possession frame.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | End year of the season (e.g. `2024` for 2023-24). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows, every possession of each game (BB-D7 reads the previous possession and the starters). |
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows of the same games (`game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home`, `score_away`). |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep (as `~sportsdataverse.nba.nba_team_season_rates.nba_possession_rate_rows`). |
 
 **Returns**
 
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
+One row per possession in `~sportsdataverse._common.situational_splits.situation_row_schema` (Int64 player ids).
 
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.nba.com game id. |
+| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
+| `possession_number` | Int64 | Order of the possession in the game. |
+| `late` | Boolean | True in the last regulation period (the 4th quarter; the 2nd half of a two-halves game) or an overtime: the periods the clutch window can fall in. |
+| `start_clock` | Float64 | Seconds left in the period when the possession starts (when the previous possession ended). |
+| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
+| `offense_team_id` | Int64 | stats.nba.com id of the team with the ball. |
+| `defense_team_id` | Int64 | stats.nba.com id of the team on defense. |
+| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
+| `neutral_site` | Boolean | Always False: the schedule names a home team for every NBA and WNBA game. |
+| `points` | Int64 | Points the offense scored on the possession, from its made shots and free throws (2 * fg2m + 3 * fg3m + ftm). |
+| `fga` | Float64 | Offense field-goal attempts on the possession. |
+| `fgm` | Float64 | Offense field goals made on the possession. |
+| `fg3m` | Float64 | Offense three-pointers made on the possession. |
+| `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `oreb` | Float64 | Offense offensive rebounds on the possession. |
+| `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
+| `tov` | Float64 | Offense turnovers on the possession. |
+| `ff_poss` | Float64 | Turnover-rate denominator: 1 per possession. |
+| `reg_periods` | Int64 | Regulation periods of the game: 4 quarters, or 2 halves. |
+| `is_transition` | Boolean | The possession is transition (BB-D7's flag for the pros, the release's own for college). |
+| `is_garbage_time` | Boolean | The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college). |
+| `is_second_chance` | Boolean | The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts). |
+| `off_1` | Int64 | Offense player 1 on the floor as the possession starts. |
+| `off_2` | Int64 | Offense player 2 on the floor as the possession starts. |
+| `off_3` | Int64 | Offense player 3 on the floor as the possession starts. |
+| `off_4` | Int64 | Offense player 4 on the floor as the possession starts. |
+| `off_5` | Int64 | Offense player 5 on the floor as the possession starts. |
+| `def_1` | Int64 | Defense player 1 on the floor as the possession starts. |
+| `def_2` | Int64 | Defense player 2 on the floor as the possession starts. |
+| `def_3` | Int64 | Defense player 3 on the floor as the possession starts. |
+| `def_4` | Int64 | Defense player 4 on the floor as the possession starts. |
+| `def_5` | Int64 | Defense player 5 on the floor as the possession starts. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` or `season_type` is unknown, or `pbp` misses a possession's events. |
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_clutch import nba_team_clutch
-skill = nba_team_clutch(2024)
-skill.sort("clutch_skill_shrunk", descending=True).head()
+from sportsdataverse.nba import nba_loaders as L
+from sportsdataverse.nba.nba_situational import nba_situation_rows
+rows = nba_situation_rows(L.load_nba_stats_possessions(2025), L.load_nba_stats_pbp(2025),
+                          L.load_nba_stats_schedules(2025))
 ```

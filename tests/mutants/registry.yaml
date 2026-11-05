@@ -9914,3 +9914,106 @@
   test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
   expected: kill
   note: A pair that never shared the floor would publish NaN ratings together instead of nulls.
+
+# --- BB-D21: situational splits (clutch, period, half, garbage, score, venue, opponent, play type, chance) -------
+# Killers: tests/nba/test_nba_situational.py and tests/mbb/test_mbb_situational.py, on the 2023-24 NBA season,
+# 30 WNBA 2002 two-halves games and two teams' 2024-25 college seasons (tests/fixtures/bb_situational/README.md).
+- id: bb-sit-clutch-label
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '_flag("clutch", "clutch", "not_clutch").alias("clutch"),'
+  mutant: '_flag("clutch", "not_clutch", "clutch").alias("clutch"),'
+  test: tests/nba/test_nba_situational.py::test_clutch_and_venue_are_bb_d3s
+  expected: kill
+  note: The clutch split would hold every possession outside BB-D3's (and stats.nba.com's) clutch window.
+
+- id: bb-sit-defense-margin-sign
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: 'margin = pl.when(own_home).then(pl.col("start_margin")).otherwise(-pl.col("start_margin"))'
+  mutant: 'margin = pl.col("start_margin")'
+  test: tests/nba/test_nba_situational.py::test_score_family_is_the_two_sides
+  expected: kill
+  note: The away side would read the home margin, so a team "leads" when it trails.
+
+- id: bb-sit-defense-venue
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: 'own_home = pl.col("offense_is_home") if is_off else ~pl.col("offense_is_home")'
+  mutant: 'own_home = pl.col("offense_is_home")'
+  test: tests/nba/test_nba_situational.py::test_clutch_and_venue_are_bb_d3s
+  expected: kill
+  note: A team's defensive possessions would land in the opponent's venue split.
+
+- id: bb-sit-top-n-order
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '.filter(pl.col("adj_net_rtg").rank("ordinal", descending=True).over("season") <= top_n)'
+  mutant: '.filter(pl.col("adj_net_rtg").rank("ordinal", descending=False).over("season") <= top_n)'
+  test: tests/nba/test_nba_situational.py::test_vs_top_is_the_bb_d19_top_ten
+  expected: kill
+  note: vs_top would be the games against the ten worst teams.
+
+- id: bb-sit-half-of-quarters
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '.then(pl.format("h{}", pl.when(reg == 2).then(period).otherwise(1)))'
+  mutant: '.then(pl.format("h{}", period))'
+  test: tests/nba/test_nba_situational.py::test_halves_are_their_quarters
+  expected: kill
+  note: The 2nd quarter would be its own "h2" beside the 3rd and 4th, and the 1st half would lose it.
+
+- id: bb-sit-offense-slots
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: '*[pl.col(f"off_player_{i}").alias(s) for i, s in enumerate(OFF_SLOTS, 1)],'
+  mutant: '*[pl.col(f"def_player_{i}").alias(s) for i, s in enumerate(OFF_SLOTS, 1)],'
+  test: tests/nba/test_nba_situational.py::test_player_clutch_against_stats_nba
+  expected: kill
+  note: The offense's possessions would be credited to the defenders, under the offense's team id.
+
+- id: bb-sit-college-slots
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/mbb/mbb_situational.py
+  snippet: '*slots(OFF_SLOTS, ours=True),'
+  mutant: '*slots(OFF_SLOTS, ours=False),'
+  test: tests/mbb/test_mbb_situational.py::test_players_are_five_times_the_team
+  expected: kill
+  note: A college team's offensive possessions would be credited to the opponents' players.
+
+- id: bb-sit-wnba-halves
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: 'return pl.when(first > _HALF_GAME_FIRST_PERIOD_SECONDS).then(2).otherwise(4)'
+  mutant: 'return pl.when(first > _HALF_GAME_FIRST_PERIOD_SECONDS).then(4).otherwise(4)'
+  test: tests/nba/test_nba_situational.py::test_wnba_two_halves_2002
+  expected: kill
+  note: A 1997-2005 WNBA half would start at 10:00 (half the game clock lost) and its 3rd period read as a quarter.
+
+- id: bb-sit-late-period
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(pl.col("period") >= n_reg).alias("late"),'
+  mutant: '(pl.col("period") >= 4).alias("late"),'
+  test: tests/nba/test_nba_situational.py::test_wnba_two_halves_2002
+  expected: kill
+  note: The WNBA's 2nd half (1997-2005) would never be clutch; only its 2nd overtime would.
+
+- id: bb-sit-college-qualifier
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/mbb/mbb_situational.py
+  snippet: 'keep = pl.col("games") >= 0.5 * pl.col("games").max().over("season")'
+  mutant: 'keep = pl.lit(True)'
+  test: tests/mbb/test_mbb_situational.py::test_vs_top_is_the_qualified_top_25
+  expected: kill
+  note: A non-D1 team rated on one or two games could rank in the top 25 its opponents are split against.
