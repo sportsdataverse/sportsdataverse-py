@@ -99,6 +99,7 @@ One row per `(season, game_id, team_id)` with the columns of `sportsdataverse.nb
 | `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
 | `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
 | `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
 | `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
 | `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
 | `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |
@@ -418,14 +419,14 @@ One row per `(season, team_id)` with the columns of `sportsdataverse.nba.nba_gam
 | `double_kills_pg_pct` | Float64 | Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `kills_per_100_pct` | Float64 | Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `avg_margin_n` | Int64 | Sample size of avg_margin: games. |
-| `avg_wp_n` | Int64 | Sample size of avg_wp: games. |
+| `avg_wp_n` | Int64 | Sample size of avg_wp: the games with a win probability. |
 | `lead_pct_n` | Int64 | Sample size of lead_pct: games. |
 | `runs_10_pg_n` | Int64 | Sample size of runs_10_pg: games. |
 | `opp_runs_10_pg_n` | Int64 | Sample size of opp_runs_10_pg: games. |
 | `avg_longest_drought_sec_n` | Int64 | Sample size of avg_longest_drought_sec: games. |
 | `stop_pct_n` | Int64 | Sample size of stop_pct: the teams defensive possessions. |
-| `kills_pg_n` | Int64 | Sample size of kills_pg: games. |
-| `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: games. |
+| `kills_pg_n` | Int64 | Sample size of kills_pg: the games with published possessions. |
+| `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: the games with published possessions. |
 | `kills_per_100_n` | Int64 | Sample size of kills_per_100: the teams defensive possessions. |
 
 **Example**

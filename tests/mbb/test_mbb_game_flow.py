@@ -86,6 +86,8 @@ def test_points_match_espn_except_the_swapped_contest(league: tuple[str, pl.Data
 
 def test_lead_changes_largest_lead_and_lead_pct_match_espn(league: tuple[str, pl.DataFrame]) -> None:
     lg, flow = league
+    stats = ("lead_changes", "largest_lead", "largest_deficit", "lead_pct", "avg_wp", "max_run")
+    assert flow.select(pl.col(*stats).null_count()).row(0) == (0,) * len(stats)  # a null never slips past the filters
     j = _vs_espn(lg, flow).filter(pl.col("pts") == pl.col("espn_pts"))
     lc_miss = set(j.filter(pl.col("lead_changes") != pl.col("espn_lead_changes"))["game_id"])
     assert lc_miss == ESPN_ZERO_GAMES[lg]
@@ -112,6 +114,12 @@ def test_a_non_d1_side_gets_no_row(league: tuple[str, pl.DataFrame]) -> None:
     rows = flow.filter(pl.col("game_id") == game)
     assert rows["team_id"].to_list() == [team]
     assert rows["opp_team_id"].null_count() == 1
+    # the non-D1 side's runs still count against the D1 team
+    want, _ = recount_runs(
+        ncaa_score_rows(_read(lg, "pbp"), _read(lg, "sched"), league=LEAGUES[lg]).filter(pl.col("game_id") == game)
+    )
+    opp_home = not rows["is_home"].item()
+    assert rows["opp_runs_10"].item() == want[(game, opp_home)][1]
 
 
 def test_stops_and_kills_recount(league: tuple[str, pl.DataFrame]) -> None:

@@ -198,7 +198,7 @@ def nba_game_flow(
         One row per ``(season, game_id, team_id)``: ``opp_team_id``, ``is_home``, ``pts`` /
         ``opp_pts`` and ``won``; ``game_seconds``; ``lead_sec`` / ``trail_sec`` / ``tied_sec`` and
         ``lead_pct``; ``lead_changes`` and ``times_tied`` (game totals); ``largest_lead``,
-        ``largest_deficit`` and ``comeback``; ``max_run`` and ``runs_10`` (unanswered-point runs);
+        ``largest_deficit`` and ``comeback``; ``max_run``, ``runs_10`` and ``opp_runs_10`` (unanswered-point runs);
         ``longest_drought_sec``; ``avg_margin`` and ``avg_wp`` (game control); ``def_poss``,
         ``stops``, ``kills`` and ``double_kills``. Ids are the stats.nba.com ids (Int64; ``game_id``
         a String). Empty input returns that schema with zero rows.
@@ -243,7 +243,8 @@ def nba_team_season_flow(
         ``def_poss``, ``stops``, ``stop_pct``; ``kills``, ``double_kills``, ``kills_pg``,
         ``double_kills_pg`` and ``kills_per_100``. The ten rated metrics carry ``<m>_rank`` (1 =
         best; ``opp_runs_10_pg`` and ``avg_longest_drought_sec`` rank low first), ``<m>_pct`` and
-        ``<m>_n`` (games, or defensive possessions for ``stop_pct`` and ``kills_per_100``), among
+        ``<m>_n`` (games; the games with possessions for ``kills_pg`` / ``double_kills_pg`` and with a win
+        probability for ``avg_wp``; defensive possessions for ``stop_pct`` and ``kills_per_100``), among
         teams with at least half the season's most games, null under five teams. Empty input
         returns that schema with zero rows.
 

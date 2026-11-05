@@ -1122,6 +1122,7 @@ One row per `(season, game_id, team_id)` with the columns of `sportsdataverse.nb
 | `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
 | `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
 | `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
 | `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
 | `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
 | `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |

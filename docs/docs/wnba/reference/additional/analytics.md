@@ -328,7 +328,7 @@ WNBA game flow per team and game: runs, droughts, kills, lead changes, time lead
 
 **Returns**
 
-One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp_pts` and `won`; `game_seconds`; `lead_sec` / `trail_sec` / `tied_sec` and `lead_pct`; `lead_changes` and `times_tied` (game totals); `largest_lead`, `largest_deficit` and `comeback`; `max_run` and `runs_10` (unanswered-point runs); `longest_drought_sec`; `avg_margin` and `avg_wp` (game control); `def_poss`, `stops`, `kills` and `double_kills`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp_pts` and `won`; `game_seconds`; `lead_sec` / `trail_sec` / `tied_sec` and `lead_pct`; `lead_changes` and `times_tied` (game totals); `largest_lead`, `largest_deficit` and `comeback`; `max_run`, `runs_10` and `opp_runs_10` (unanswered-point runs); `longest_drought_sec`; `avg_margin` and `avg_wp` (game control); `def_poss`, `stops`, `kills` and `double_kills`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -352,6 +352,7 @@ One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp
 | `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
 | `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
 | `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
 | `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
 | `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
 | `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |
@@ -830,7 +831,7 @@ WNBA game flow per team and season, with ranks (league_id='10'). See sportsdatav
 
 **Returns**
 
-One row per `(season, team_id)`: `games`, `wins`; `lead_pct`, `trail_pct`, `tied_pct`, `avg_margin` and `avg_wp` (weighted by game clock); `lead_changes_pg` and `times_tied_pg`; `largest_lead`, `largest_comeback` and `max_run` (season bests); `runs_10` / `opp_runs_10` and their per-game rates; `avg_longest_drought_sec`; `def_poss`, `stops`, `stop_pct`; `kills`, `double_kills`, `kills_pg`, `double_kills_pg` and `kills_per_100`. The ten rated metrics carry `<m>_rank` (1 = best; `opp_runs_10_pg` and `avg_longest_drought_sec` rank low first), `<m>_pct` and `<m>_n` (games, or defensive possessions for `stop_pct` and `kills_per_100`), among teams with at least half the season's most games, null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id)`: `games`, `wins`; `lead_pct`, `trail_pct`, `tied_pct`, `avg_margin` and `avg_wp` (weighted by game clock); `lead_changes_pg` and `times_tied_pg`; `largest_lead`, `largest_comeback` and `max_run` (season bests); `runs_10` / `opp_runs_10` and their per-game rates; `avg_longest_drought_sec`; `def_poss`, `stops`, `stop_pct`; `kills`, `double_kills`, `kills_pg`, `double_kills_pg` and `kills_per_100`. The ten rated metrics carry `<m>_rank` (1 = best; `opp_runs_10_pg` and `avg_longest_drought_sec` rank low first), `<m>_pct` and `<m>_n` (games; the games with possessions for `kills_pg` / `double_kills_pg` and with a win probability for `avg_wp`; defensive possessions for `stop_pct` and `kills_per_100`), among teams with at least half the season's most games, null under five teams. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -882,14 +883,14 @@ One row per `(season, team_id)`: `games`, `wins`; `lead_pct`, `trail_pct`, `tied
 | `double_kills_pg_pct` | Float64 | Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `kills_per_100_pct` | Float64 | Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `avg_margin_n` | Int64 | Sample size of avg_margin: games. |
-| `avg_wp_n` | Int64 | Sample size of avg_wp: games. |
+| `avg_wp_n` | Int64 | Sample size of avg_wp: the games with a win probability. |
 | `lead_pct_n` | Int64 | Sample size of lead_pct: games. |
 | `runs_10_pg_n` | Int64 | Sample size of runs_10_pg: games. |
 | `opp_runs_10_pg_n` | Int64 | Sample size of opp_runs_10_pg: games. |
 | `avg_longest_drought_sec_n` | Int64 | Sample size of avg_longest_drought_sec: games. |
 | `stop_pct_n` | Int64 | Sample size of stop_pct: the teams defensive possessions. |
-| `kills_pg_n` | Int64 | Sample size of kills_pg: games. |
-| `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: games. |
+| `kills_pg_n` | Int64 | Sample size of kills_pg: the games with published possessions. |
+| `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: the games with published possessions. |
 | `kills_per_100_n` | Int64 | Sample size of kills_per_100: the teams defensive possessions. |
 
 ### wnba_team_season_rates {#wnba_team_season_rates}

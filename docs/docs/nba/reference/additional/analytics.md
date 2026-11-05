@@ -1251,7 +1251,7 @@ of the 2025 WNBA season all three equal cdn.wnba.com's in every game.
 
 **Returns**
 
-One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp_pts` and `won`; `game_seconds`; `lead_sec` / `trail_sec` / `tied_sec` and `lead_pct`; `lead_changes` and `times_tied` (game totals); `largest_lead`, `largest_deficit` and `comeback`; `max_run` and `runs_10` (unanswered-point runs); `longest_drought_sec`; `avg_margin` and `avg_wp` (game control); `def_poss`, `stops`, `kills` and `double_kills`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp_pts` and `won`; `game_seconds`; `lead_sec` / `trail_sec` / `tied_sec` and `lead_pct`; `lead_changes` and `times_tied` (game totals); `largest_lead`, `largest_deficit` and `comeback`; `max_run`, `runs_10` and `opp_runs_10` (unanswered-point runs); `longest_drought_sec`; `avg_margin` and `avg_wp` (game control); `def_poss`, `stops`, `kills` and `double_kills`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -1275,6 +1275,7 @@ One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp
 | `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
 | `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
 | `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
 | `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
 | `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
 | `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |

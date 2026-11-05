@@ -14,7 +14,7 @@ The gates are the values observed on these games; never lower one to make a chan
 from __future__ import annotations
 
 from collections import Counter
-from itertools import pairwise
+from itertools import accumulate, pairwise
 from pathlib import Path
 
 import polars as pl
@@ -137,6 +137,7 @@ def test_the_two_rows_of_a_game_mirror(league: tuple[str, pl.DataFrame]) -> None
     assert both.height == flow.height
     assert (both["lead_sec"] == both["trail_sec_o"]).all()
     assert (both["largest_lead"] == both["largest_deficit_o"]).all()
+    assert (both["opp_runs_10"] == both["runs_10_o"]).all()
     assert ((both["avg_margin"] + both["avg_margin_o"]).abs() < 1e-9).all()
     assert ((both["avg_wp"] + both["avg_wp_o"] - 1).abs() < 1e-9).all()
     assert (both["won"] != both["won_o"]).all()
@@ -155,9 +156,10 @@ def recount_runs(rows: pl.DataFrame) -> tuple[dict[tuple[str, bool], tuple[int, 
     branches: Counter[str] = Counter()
     for (gid,), g in rows.sort("game_id", "order").group_by("game_id", maintain_order=True):
         seq = list(zip(g["elapsed"], g["home_score"], g["away_score"], strict=True))
+        clock = list(accumulate(g["elapsed"], max))  # a clock that runs back holds at its high
         length = g["game_seconds"][0]
-        ends = [t for t, _, _ in seq[1:]] + [length]
-        area = sum((h - a) * max(end - t, 0.0) for (t, h, a), end in zip(seq, ends, strict=True))
+        ends = [*clock[1:], length]
+        area = sum((h - a) * max(end - t, 0.0) for t, (_, h, a), end in zip(clock, seq, ends, strict=True))
         runs: list[tuple[str, int]] = []
         scored: dict[str, list[float]] = {"home": [0.0], "away": [0.0]}
         prev = (0, 0)

@@ -61,6 +61,9 @@ columns:
 - name: runs_10
   type: integer
   description: ''
+- name: opp_runs_10
+  type: integer
+  description: ''
 - name: longest_drought_sec
   type: double
   description: ''

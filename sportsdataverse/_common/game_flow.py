@@ -22,7 +22,8 @@ Definitions, per team and game:
 * ``largest_lead`` / ``largest_deficit`` -- the team's biggest lead and biggest deficit (0 if
   never ahead / behind). ``comeback`` is the largest deficit of a game the team won, else 0.
 * ``max_run`` -- the most points the team scored without the opponent scoring (an n-0 run), and
-  ``runs_10`` the number of its runs of :data:`RUN_POINTS` (10) or more. A score correction (the
+  ``runs_10`` the number of its runs of :data:`RUN_POINTS` (10) or more (``opp_runs_10`` the
+  opponent's, a non-D1 opponent's included). A score correction (the
   running score going down) does not break a run; it comes off the run when it is the running
   team's own score, so a run is that team's net points.
 * ``longest_drought_sec`` -- the longest stretch of game clock between two of the team's scores,
@@ -112,6 +113,7 @@ GAME_FLOW_SCHEMA: dict[str, pl.DataType] = {
     "comeback": pl.Int64(),
     "max_run": pl.Int64(),
     "runs_10": pl.Int64(),
+    "opp_runs_10": pl.Int64(),
     "longest_drought_sec": pl.Float64(),
     "avg_margin": pl.Float64(),
     "avg_wp": pl.Float64(),
@@ -124,14 +126,14 @@ GAME_FLOW_SCHEMA: dict[str, pl.DataType] = {
 #: Rated season metric -> (sample-size expression, lower is better).
 _RATED: dict[str, tuple[pl.Expr, bool]] = {
     "avg_margin": (pl.col("games"), False),
-    "avg_wp": (pl.col("games"), False),
+    "avg_wp": (pl.col("_wp_games"), False),
     "lead_pct": (pl.col("games"), False),
     "runs_10_pg": (pl.col("games"), False),
     "opp_runs_10_pg": (pl.col("games"), True),
     "avg_longest_drought_sec": (pl.col("games"), True),
     "stop_pct": (pl.col("def_poss"), False),
-    "kills_pg": (pl.col("games"), False),
-    "double_kills_pg": (pl.col("games"), False),
+    "kills_pg": (pl.col("_poss_games"), False),
+    "double_kills_pg": (pl.col("_poss_games"), False),
     "kills_per_100": (pl.col("def_poss"), False),
 }
 _LOWER_IS_BETTER = tuple(m for m, (_, low) in _RATED.items() if low)
@@ -213,10 +215,12 @@ def attach_home_wp(rows: pl.DataFrame, *, league: str) -> pl.DataFrame:
 
 def _states(rows: pl.DataFrame) -> pl.DataFrame:
     """Each score row with its margin, the clock it holds for (``_dur``) and what changed."""
-    nxt = pl.col("elapsed").shift(-1).over(_G).fill_null(pl.col("game_seconds"))
+    # a clock that runs back (a feed glitch) must not count the same seconds twice
+    t = pl.col("elapsed").cum_max().over(_G)
+    nxt = t.shift(-1).over(_G).fill_null(pl.col("game_seconds"))
     return rows.with_columns(
         (pl.col("home_score") - pl.col("away_score")).alias("_m"),
-        (nxt - pl.col("elapsed")).clip(lower_bound=0.0).alias("_dur"),
+        (nxt - t).clip(lower_bound=0.0).alias("_dur"),
         (pl.col("home_score") - pl.col("home_score").shift(1).over(_G).fill_null(0)).alias("_dh"),
         (pl.col("away_score") - pl.col("away_score").shift(1).over(_G).fill_null(0)).alias("_da"),
     ).with_columns(
@@ -393,6 +397,8 @@ def game_flow(score_rows: pl.DataFrame, possessions: pl.DataFrame) -> pl.DataFra
             (pl.col("lead_sec") / pl.col("game_seconds")).alias("lead_pct"),
             pl.col("max_run", "runs_10").fill_null(0),
         )
+        # before the team filter, so a non-D1 opponent's runs still count against the D1 side
+        .with_columns((pl.col("runs_10").sum().over(_G) - pl.col("runs_10")).alias("opp_runs_10"))
         .with_columns(pl.when(pl.col("won")).then(pl.col("largest_deficit")).otherwise(0).alias("comeback"))
     )
     return out.sort(_G, "is_home", descending=[False, True]).select(list(GAME_FLOW_SCHEMA)).cast(GAME_FLOW_SCHEMA)
@@ -414,12 +420,13 @@ def team_season_flow(games: pl.DataFrame) -> pl.DataFrame:
     """
     if games.height == 0:
         return pl.DataFrame(schema=TEAM_SEASON_FLOW_SCHEMA)
-    opp = games.select(_G, pl.col("team_id").alias("opp_team_id"), pl.col("runs_10").alias("opp_runs_10"))
-    g = games.join(opp, on=[_G, "opp_team_id"], how="left")
+    g = games
     secs = pl.col("game_seconds")
     wp_secs = secs.filter(pl.col("avg_wp").is_not_null())
     agg = g.group_by("season", "team_id").agg(
         pl.len().cast(pl.Int64).alias("games"),
+        pl.col("def_poss").is_not_null().sum().cast(pl.Int64).alias("_poss_games"),
+        pl.col("avg_wp").is_not_null().sum().cast(pl.Int64).alias("_wp_games"),
         pl.col("won").sum().cast(pl.Int64).alias("wins"),
         (pl.col("lead_sec").sum() / secs.sum()).alias("lead_pct"),
         (pl.col("trail_sec").sum() / secs.sum()).alias("trail_pct"),

@@ -73893,6 +73893,7 @@ nba_game_flow:
   opp_team_id: The opponent's team id.
   pts: 'The team''s final points: its running score after the last play.'
   runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   stops: Defensive possessions on which the opponent scored no points.
   team_id: stats.nba.com team id.
@@ -73914,7 +73915,7 @@ nba_team_season_flow:
   avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
     the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
-  avg_wp_n: 'Sample size of avg_wp: games.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
   avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
     the rank is null.'
   avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
@@ -73922,7 +73923,7 @@ nba_team_season_flow:
   def_poss: Defensive possessions, summed.
   double_kills: Double kills (six straight stops), summed.
   double_kills_pg: Double kills per game.
-  double_kills_pg_n: 'Sample size of double_kills_pg: games.'
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
   double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
@@ -73936,7 +73937,7 @@ nba_team_season_flow:
   kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
     half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   kills_pg: Kills per game.
-  kills_pg_n: 'Sample size of kills_pg: games.'
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
   kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
     when the rank is null.'
   kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
@@ -74004,6 +74005,7 @@ wnba_game_flow:
   opp_team_id: The opponent's team id.
   pts: 'The team''s final points: its running score after the last play.'
   runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   stops: Defensive possessions on which the opponent scored no points.
   team_id: stats.wnba.com team id.
@@ -74025,7 +74027,7 @@ wnba_team_season_flow:
   avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
     the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
-  avg_wp_n: 'Sample size of avg_wp: games.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
   avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
     the rank is null.'
   avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
@@ -74033,7 +74035,7 @@ wnba_team_season_flow:
   def_poss: Defensive possessions, summed.
   double_kills: Double kills (six straight stops), summed.
   double_kills_pg: Double kills per game.
-  double_kills_pg_n: 'Sample size of double_kills_pg: games.'
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
   double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
@@ -74047,7 +74049,7 @@ wnba_team_season_flow:
   kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
     half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   kills_pg: Kills per game.
-  kills_pg_n: 'Sample size of kills_pg: games.'
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
   kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
     when the rank is null.'
   kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
@@ -74115,6 +74117,7 @@ mbb_game_flow:
   opp_team_id: The opponent's team id.
   pts: 'The team''s final points: its running score after the last play.'
   runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   stops: Defensive possessions on which the opponent scored no points.
   team_id: ESPN team id; a non-D1 opponent has none and gets no row.
@@ -74136,7 +74139,7 @@ mbb_team_season_flow:
   avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
     the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
-  avg_wp_n: 'Sample size of avg_wp: games.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
   avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
     the rank is null.'
   avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
@@ -74144,7 +74147,7 @@ mbb_team_season_flow:
   def_poss: Defensive possessions, summed.
   double_kills: Double kills (six straight stops), summed.
   double_kills_pg: Double kills per game.
-  double_kills_pg_n: 'Sample size of double_kills_pg: games.'
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
   double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
@@ -74158,7 +74161,7 @@ mbb_team_season_flow:
   kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
     half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   kills_pg: Kills per game.
-  kills_pg_n: 'Sample size of kills_pg: games.'
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
   kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
     when the rank is null.'
   kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
@@ -74226,6 +74229,7 @@ wbb_game_flow:
   opp_team_id: The opponent's team id.
   pts: 'The team''s final points: its running score after the last play.'
   runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   stops: Defensive possessions on which the opponent scored no points.
   team_id: ESPN team id; a non-D1 opponent has none and gets no row.
@@ -74247,7 +74251,7 @@ wbb_team_season_flow:
   avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
     the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
-  avg_wp_n: 'Sample size of avg_wp: games.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
   avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
     the rank is null.'
   avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
@@ -74255,7 +74259,7 @@ wbb_team_season_flow:
   def_poss: Defensive possessions, summed.
   double_kills: Double kills (six straight stops), summed.
   double_kills_pg: Double kills per game.
-  double_kills_pg_n: 'Sample size of double_kills_pg: games.'
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
   double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
@@ -74269,7 +74273,7 @@ wbb_team_season_flow:
   kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
     half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   kills_pg: Kills per game.
-  kills_pg_n: 'Sample size of kills_pg: games.'
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
   kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
     when the rank is null.'
   kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
