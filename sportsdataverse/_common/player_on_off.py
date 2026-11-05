@@ -14,12 +14,13 @@ team is on the floor for exactly one set of its players, and
   (stats.nba.com's on/off limits the off side to the games he was on the roster.)
 * **WOWY** (:func:`player_wowy`): for two teammates A and B, the team's season split four ways:
   both on the floor (``_both``), A without B (``_a_only``), B without A (``_b_only``) and neither
-  (``_neither``). The four add up to the team's totals. Every pair of the team's players is a row,
+  (``_neither``). The four splits' totals add up to the team's (the ratings are not additive). Every pair of the team's players is a row,
   the pairs that never shared the floor too (all ``_both`` totals 0).
 
 A game counts only with both play-by-play and possessions
-(:func:`~sportsdataverse._common.game_impact.games_with_possessions`). A stint with an unknown
-player (a gap in the source lineup) still counts for the team, so it is off the floor for everyone.
+(:func:`~sportsdataverse._common.game_impact.games_with_possessions`). A stint with a gap in the
+source lineup still counts for the team: its known players are on the floor for it, everyone else
+off it (a stint with no known player is off the floor for everyone).
 
 Per side: ``minutes``, ``poss`` / ``opp_poss`` (offensive / defensive possessions), ``pts`` /
 ``opp_pts`` (points scored / allowed), ``plus_minus`` and ``off_rtg`` / ``def_rtg`` / ``net_rtg`` per
@@ -208,7 +209,8 @@ def player_wowy(rows: pl.DataFrame, *, player_dtype: pl.DataType) -> pl.DataFram
         One row per ``(season, team_id, player_id_a, player_id_b)`` in :func:`player_wowy_schema`,
         ``player_id_a`` sorting before ``player_id_b``, for every pair of players who were on the
         floor for the team that season. For each split in :data:`WOWY_SIDES` the totals and
-        ratings; the four splits of a total add up to the team's season total. Sorted by season,
+        ratings; the four splits of a total add up to the team's season total (recompute a rating
+        from summed totals: ratings do not add). Sorted by season,
         team and minutes together (most first). Empty input returns that schema with zero rows.
 
     Example:

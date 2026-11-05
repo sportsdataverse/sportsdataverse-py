@@ -378,7 +378,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_player_on_off](additional/analytics-2.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
 | [mbb_player_wowy](additional/analytics-2.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [mbb_shot_selection](additional/analytics-2.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
-| [mbb_strength_of_schedule](additional/analytics-2.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_strength_of_schedule](additional/analytics-3.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
 | [mbb_team_luck](additional/analytics-3.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_flow](additional/analytics-3.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-3.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
@@ -388,7 +388,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_lineup_count_rows](additional/analytics-3.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
 | [ncaa_mbb_lineups](additional/analytics-3.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-3.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
-| [ncaa_mbb_player_combos](additional/analytics-3.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
+| [ncaa_mbb_player_combos](additional/analytics-4.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-4.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
 | [ncaa_possession_rate_rows](additional/analytics-4.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |
 | [ncaa_score_rows](additional/analytics-4.md#ncaa_score_rows) | Map the stats.ncaa.org play-by-play onto the game-flow score rows. |

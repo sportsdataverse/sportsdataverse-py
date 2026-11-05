@@ -81,8 +81,8 @@ def mbb_player_wowy(
         One row per ``(season, team_id, player_id_a, player_id_b)`` (``player_id_a`` sorting first
         as a string) for every pair of the team's players: for ``_both`` (together), ``_a_only``,
         ``_b_only`` and ``_neither`` the ``minutes``, ``poss`` / ``opp_poss``, ``pts`` /
-        ``opp_pts``, ``plus_minus`` and ``off_rtg`` / ``def_rtg`` / ``net_rtg``. The four splits
-        add up to the team's season. Empty input returns that schema with zero rows.
+        ``opp_pts``, ``plus_minus`` and ``off_rtg`` / ``def_rtg`` / ``net_rtg``. The four splits'
+        totals add up to the team's season; the ratings do not add. Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.

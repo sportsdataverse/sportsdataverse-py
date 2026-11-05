@@ -24,7 +24,7 @@ Delegates to `sportsdataverse.mbb.mbb_player_on_off.mbb_player_wowy` with
 
 **Returns**
 
-One row per `(season, team_id, player_id_a, player_id_b)`: the `_both`, `_a_only`, `_b_only` and `_neither` totals and ratings, which add up to the team's season. See the mbb core for the definitions.
+One row per `(season, team_id, player_id_a, player_id_b)`: the `_both`, `_a_only`, `_b_only` and `_neither` totals, which add up to the team's season, and ratings (not additive: recompute them from summed totals). See the mbb core for the definitions.
 
 | col_name | type | description |
 |---|---|---|

@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_strength"
-sidebar_label: "Analytics: mbb_coach–mbb_strength"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot"
+sidebar_label: "Analytics: mbb_coach–mbb_shot"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_strength — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_strength
+# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot
 
 ### mbb_coach_seasons {#mbb_coach_seasons}
 
@@ -553,7 +553,7 @@ The definitions are in `sportsdataverse._common.player_on_off`.
 
 **Returns**
 
-One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` sorting first as a string) for every pair of the team's players: for `_both` (together), `_a_only`, `_b_only` and `_neither` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg`. The four splits add up to the team's season. Empty input returns that schema with zero rows.
+One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` sorting first as a string) for every pair of the team's players: for `_both` (together), `_a_only`, `_b_only` and `_neither` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg`. The four splits' totals add up to the team's season; the ratings do not add. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -655,94 +655,4 @@ sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
 # Pipeline next step (one line)
 
 sel.sort("selection_value", descending=True).head(10)
-```
-
-### mbb_strength_of_schedule {#mbb_strength_of_schedule}
-
-`mbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
-
-Loads the released ESPN schedule and team box per season and builds
-`~sportsdataverse.mbb.mbb_college_season.season_resume` from the games strictly
-before `as_of_date`: opponent-adjusted ratings, SoS (mean opponent AdjEM), WAB, the
-NCAA Quad 1-4 record (opponents ranked by the NET estimate), the NCAA RPI
-(25% WP / 50% OWP / 25% OOWP, location-weighted WP) and the NET-style estimate
-(`0.8 * z(AdjEM) + 0.2 * z(WAB)`). Division I teams only; RPI, SoS, WAB and the quads
-count Division I games only.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
-| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. Applies to every season in `seasons`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (sets `eligible`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per Division I (season, team_id), best `net_estimate_rank` first. The `_rank` / `_pct` columns (1 is best, average ties, within the season) and `_n` (the Division I games behind each number; all games for `adj_em`) follow BB-D2's league-context grammar.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by its end year (2024 is 2023-24). |
-| `as_of_date` | Date | The as-of date: only games strictly before it count as played. Null when every completed game is used. |
-| `team_id` | String | ESPN team id (Utf8). |
-| `team` | String | Team (ESPN location name). |
-| `conference_id` | String | ESPN conference id, read off the schedule (Utf8). |
-| `conference` | String | Conference short name. Null for independents, which get no auto-bid. |
-| `eligible` | Boolean | False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason ban). It counts in every rating and résumé but gets no bid. |
-| `wins` | Int64 | Wins in played games, against every opponent (non-Division I included). |
-| `losses` | Int64 | Losses in played games, against every opponent. |
-| `conf_wins` | Int64 | Regular-season conference wins (conference tournaments and multi-team events excluded). |
-| `conf_losses` | Int64 | Regular-season conference losses. |
-| `games` | Int64 | Games behind the ratings (every played game with a usable box score). |
-| `adj_o` | Float64 | Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings). |
-| `adj_d` | Float64 | Opponent-adjusted defensive efficiency: points allowed per 100 possessions. |
-| `adj_em` | Float64 | Adjusted efficiency margin, adj_o - adj_d. |
-| `adj_em_z` | Float64 | adj_em z-scored over Division I within the season. |
-| `sos` | Float64 | Strength of schedule: mean opponent adj_em over Division I games. |
-| `wab` | Float64 | Wins above bubble: Division I wins minus a bubble-quality team's expected wins against the same schedule and venues. |
-| `quad1_w` | Int64 | Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
-| `quad1_l` | Int64 | Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges. |
-| `quad2_w` | Int64 | Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
-| `quad2_l` | Int64 | Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges. |
-| `quad3_w` | Int64 | Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
-| `quad3_l` | Int64 | Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges. |
-| `quad4_w` | Int64 | Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
-| `quad4_l` | Int64 | Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges. |
-| `quality_wins` | Int64 | Quad 1 plus Quad 2 wins. |
-| `rpi_games` | Int64 | Division I games behind the RPI. |
-| `rpi_wp` | Float64 | RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4, a road loss 0.6, neutral 1.0 (men's from 2004-05, women's from 2011-12). |
-| `rpi_owp` | Float64 | Opponents' winning percentage: each opponent's unweighted Division I record without its games against this team, averaged over this team's games. |
-| `rpi_oowp` | Float64 | Opponents' opponents' winning percentage: the opponents' rpi_owp averaged over this team's games. |
-| `rpi` | Float64 | NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp. |
-| `net_estimate` | Float64 | NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET's efficiency and results halves; weights fitted to the men's 2024 NET). Higher is better. |
-| `adj_em_rank` | Float64 | Rank of adj_em within the season among Division I teams: 1 is best, average ties. |
-| `adj_em_pct` | Float64 | Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1). |
-| `adj_em_n` | Int64 | Sample size of adj_em: the games behind the ratings. |
-| `sos_rank` | Float64 | Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties. |
-| `sos_pct` | Float64 | Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1). |
-| `sos_n` | Int64 | Sample size of sos: the team's Division I games. |
-| `wab_rank` | Float64 | Rank of wab within the season among Division I teams: 1 is best, average ties. |
-| `wab_pct` | Float64 | Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1). |
-| `wab_n` | Int64 | Sample size of wab: the team's Division I games. |
-| `rpi_rank` | Float64 | Rank of rpi within the season among Division I teams: 1 is best, average ties. |
-| `rpi_pct` | Float64 | Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1). |
-| `rpi_n` | Int64 | Sample size of rpi: the team's Division I games. |
-| `net_estimate_rank` | Float64 | Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams: 1 is best, average ties. |
-| `net_estimate_pct` | Float64 | Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1). |
-| `net_estimate_n` | Int64 | Sample size of net_estimate: the team's Division I games. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_strength_of_schedule
-resume = mbb_strength_of_schedule([2024])
-
-# Pipeline next step (one line)
-
-resume.sort("rpi_rank").head(25)
 ```
