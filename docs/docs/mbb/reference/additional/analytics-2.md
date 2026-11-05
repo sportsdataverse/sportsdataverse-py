@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational"
-sidebar_label: "Analytics: mbb_coach–mbb_situational"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot"
+sidebar_label: "Analytics: mbb_coach–mbb_shot"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_situational
+# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_shot
 
 ### mbb_coach_seasons {#mbb_coach_seasons}
 
@@ -578,6 +578,66 @@ on_off = mbb_player_on_off(2025)
 on_off.sort("net_rtg_diff_rank").head()
 ```
 
+### mbb_player_war {#mbb_player_war}
+
+`mbb_player_war(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WAR and VORP per player-season, from our box BPM.
+
+Box BPM is anchored to the team and centred on Division I, so 0 is an average D1 player.
+`vorp` is points per 100 team possessions above a replacement player over one team's
+season of possessions (Basketball-Reference's VORP scale); `war` is wins above replacement
+against an average D1 schedule. A replacement-level player has 0, and a season's `war`
+adds up to the D1 teams' wins minus those of a team of replacement players. The replacement
+level and points per win are fitted per league
+(`~sportsdataverse._common.player_war.REPLACEMENT_LEVEL`,
+`~sportsdataverse._common.player_war.PTS_PER_WIN`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_player_war.wbb_player_war`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, player_id)` (ESPN ids, String) of a D1 team: `player_name`, `team_id` (the team he played most possessions for), `teams`, `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war`, with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `player_id` | String | The player's ESPN athlete id, as text (the box-score id the college player-value models key on). |
+| `player_name` | String | Player name, from the box score. |
+| `team_id` | String | ESPN team id of the Division I team he played the most possessions for. |
+| `teams` | Int64 | How many Division I teams he played for. |
+| `min` | Float64 | Minutes in the season's box scores. |
+| `poss` | Float64 | Possessions: minutes / 40 * the team's adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College has no published on-court possessions for every game. The minutes basis of vorp and war. |
+| `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference's VORP scale. |
+| `war` | Float64 | Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91, WBB 47.10). 0 at replacement level; a replacement team wins about .35. |
+| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
+| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
+| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
+| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"` (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_war import mbb_player_war
+war = mbb_player_war(2025)
+war.select("player_name", "poss", "rating", "vorp", "war").head(10)
+```
+
 ### mbb_player_wowy {#mbb_player_wowy}
 
 `mbb_player_wowy(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -698,63 +758,4 @@ sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
 # Pipeline next step (one line)
 
 sel.sort("selection_value", descending=True).head(10)
-```
-
-### mbb_situational_lineup {#mbb_situational_lineup}
-
-`mbb_situational_lineup(seasons: 'int | list[int]', *, league: 'str' = 'mens', top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-College five-man unit splits by situation: the team splits over the possessions each unit started.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `top_n` | `int` | `25` | As `mbb_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
-| `player_1` | String | Player 1 of the unit, in lineup_id order. |
-| `player_2` | String | Player 2 of the unit, in lineup_id order. |
-| `player_3` | String | Player 3 of the unit, in lineup_id order. |
-| `player_4` | String | Player 4 of the unit, in lineup_id order. |
-| `player_5` | String | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `top_n` is below 1. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup
-mbb_situational_lineup(2026).filter(split="not_garbage_time").sort("poss", descending=True).head()
 ```

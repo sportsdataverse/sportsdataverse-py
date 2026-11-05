@@ -6,6 +6,52 @@ description: "Women's college basketball — additional Python functions — Ana
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_player–weighted_avg
 
+### wbb_player_war {#wbb_player_war}
+
+`wbb_player_war(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college WAR and VORP per player-season, from our box BPM.
+
+Delegates to `sportsdataverse.mbb.mbb_player_war.mbb_player_war` with
+`league="womens"`. Box BPM covers every D1 team from 2017 (about 80 teams in 2014-2016).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, player_id)` of a D1 team: `player_name`, `team_id`, `teams`, `min`, `poss`, `rating`, `vorp`, `war` and the `_rank` / `_pct` / `_n` columns. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `player_id` | String | The player's ESPN athlete id, as text (the box-score id the college player-value models key on). |
+| `player_name` | String | Player name, from the box score. |
+| `team_id` | String | ESPN team id of the Division I team he played the most possessions for. |
+| `teams` | Int64 | How many Division I teams he played for. |
+| `min` | Float64 | Minutes in the season's box scores. |
+| `poss` | Float64 | Possessions: minutes / 40 * the team's adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College has no published on-court possessions for every game. The minutes basis of vorp and war. |
+| `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference's VORP scale. |
+| `war` | Float64 | Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91, WBB 47.10). 0 at replacement level; a replacement team wins about .35. |
+| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
+| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
+| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
+| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_player_war
+wbb_player_war(2025).select("player_name", "rating", "war").head()
+```
+
 ### wbb_player_wowy {#wbb_player_wowy}
 
 `wbb_player_wowy(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

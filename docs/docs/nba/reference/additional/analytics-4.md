@@ -1,10 +1,126 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_situation–nba_tracking"
-sidebar_label: "Analytics: nba_situation–nba_tracking"
+title: "NBA — additional Python functions — Analytics: nba_season–nba_team"
+sidebar_label: "Analytics: nba_season–nba_team"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: nba_situation–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_season–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_situation–nba_tracking
+# NBA — additional Python functions — Analytics: nba_season–nba_team
+
+### nba_season_standings {#nba_season_standings}
+
+`nba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Standings with the league's tiebreakers from completed regular-season games.
+
+NBA: conference seeds and division ranks under the NBA tie-break procedure (division leaders
+first, postseason-eligible = a top-10 conference record). WNBA: one league table under the
+WNBA procedure. The rules and their sources are in `sportsdataverse.nba.nba_season_rules`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `season`, `home_team_id`, `away_team_id` (Int64 stats.nba.com ids), `home_pts` and `away_pts`; rows without both scores are not played yet and are skipped. A `load_nba_stats_schedules` frame can be passed as is: with a `season_type` column only the `"regular-season"` rows count (the NBA Cup final, preseason, play-in and playoffs do not). |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `seed` | `int` | `0` | Seeds the drawing that ends a tie no criterion breaks. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)` that played: `conference` / `division` (NBA; the WNBA rows say `"WNBA"`), `games`, `wins`, `losses`, `win_pct`, `point_diff`, `division_rank` (1 = the division winner), `division_leader`, `seed` (rank in the conference for the NBA, in the league for the WNBA, 1 = best) and `games_back` (behind the seed-1 team). Sorted by season, conference and seed.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
+| `team_id` | Int64 | stats.nba.com team id (Int64). |
+| `conference` | String | NBA conference (East / West); "WNBA" for every WNBA team. |
+| `division` | String | NBA division; "WNBA" for every WNBA team. |
+| `games` | Int64 | Regular-season games played. |
+| `wins` | Int64 | Regular-season wins. |
+| `losses` | Int64 | Regular-season losses. |
+| `win_pct` | Float64 | Regular-season winning percentage, wins divided by games played; the first key of the seeding. |
+| `point_diff` | Int64 | Points scored minus points allowed over the regular-season games. |
+| `division_rank` | Int64 | Rank within the division under the NBA tiebreakers, 1 = the division winner (the WNBA rows rank the league). |
+| `division_leader` | Boolean | True for the NBA division winner after the division tiebreak; False for every WNBA row. |
+| `seed` | Int64 | Seed under the league's tiebreakers: rank in the conference (NBA) or the league (WNBA), 1 = best. |
+| `games_back` | Float64 | Games behind the seed-1 team of the conference (NBA) or league (WNBA): ((leader wins - wins) + (losses - leader losses)) / 2. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or an NBA team id is unknown. |
+| `TypeError` | If the team-id columns are not Int64. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_stats_schedules
+from sportsdataverse.nba.nba_season_rules import nba_season_standings
+nba_season_standings(load_nba_stats_schedules(2025)).filter(pl.col("seed") <= 10)
+```
+
+### nba_shot_value {#nba_shot_value}
+
+`nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
+
+One-call shot-value spine: fetch, score, and run all five models.
+
+Fetches each player's `shotchartdetail`, scores per-shot expected points
+from the free `LeagueAverages` zone table, and returns the scored shots
+plus shooter talent, selection quality, and zone-value maps (and the
+defender/shot-clock context tables when `include_context=True`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_ids` | `list[int]` |  | Player ids to fetch. |
+| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables, once per player and team his fetched shots came from. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"shots", "talent", "selection", "zones"}` (plus `"context"` when requested). An empty fetch returns a dict of zero-row frames.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_shot_value
+out = nba_shot_value([201939], "2022-23")
+out["talent"].head()
+```
+
+### nba_shot_value_lineups {#nba_shot_value_lineups}
+
+`nba_shot_value_lineups(group_id: 'str', season: 'str', *, team_id: 'int', league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `group_id` | `str` |  | The 5-man lineup group id (dash-joined player ids); kept `Utf8`. |
+| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
+| `team_id` | `int` |  | The lineup's team id. |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The lineup's shots scored by `score_shot_xpoints` (with `xpoints`). Empty fetch returns the augmented zero-row schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_shot_value_lineups
+df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
+```
 
 ### nba_situation_rows {#nba_situation_rows}
 
@@ -715,91 +831,4 @@ strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov")
 # WNBA via ``league_id``
 
 wnba = nba_team_strength(2025, league_id="10")
-```
-
-### nba_tracking_drive_value {#nba_tracking_drive_value}
-
-`nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Drive value over expected + rim-pressure, per player-season.
-
-Fetches the `Drives` `leaguedashptstats` measure and computes
-`drive_pts_oe = drive_pts - drives * bucket_pts_per_drive`. `rim_pressure`
-is the z-score of `drive_fta / drives` within the player's role bucket
-(a proxy for foul-drawing pressure independent of scoring efficiency).
-`drive_ast`/`drive_tov` are passed through unchanged.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_drive_value
-df = nba_tracking_drive_value(2024)
-print(df.sort("drive_pts_oe", descending=True).head())
-```
-
-### nba_tracking_pass_value {#nba_tracking_pass_value}
-
-`nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Expected-assists / passer value: `ast_oe` per player-season.
-
-Fetches the `Passing` `leaguedashptstats` measure (one call) and computes
-`ast_oe = ast - passes * bucket_assist_rate`. When
-`fetch_potential_assists=True`, also fetches `nba_stats_playerdashptpass`
-for the top-`max_players` passers (capped, optional -- never a hard
-dependency) and recomputes the residual against the richer
-`potential_assists` denominator for that subset; `max_players=0`
-(default) makes exactly one request total. `ast_pts_created` is passed
-through directly from the Passing measure (it is already computed there;
-not re-derived).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
-| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_pass_value
-df = nba_tracking_pass_value(2024)
-print(df.sort("ast_oe", descending=True).head())
-
-# With potential-assist enrichment for the top 50 passers
-
-df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
 ```

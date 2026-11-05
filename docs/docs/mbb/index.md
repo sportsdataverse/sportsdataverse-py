@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 372 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 373 | — |
 
 ## ESPN {#espn}
 
@@ -223,9 +223,10 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_lineup_seasons`](reference/additional/analytics-2#mbb_lineup_seasons)
 - [`mbb_play_styles`](reference/additional/analytics-2#mbb_play_styles)
 - [`mbb_player_on_off`](reference/additional/analytics-2#mbb_player_on_off)
+- [`mbb_player_war`](reference/additional/analytics-2#mbb_player_war)
 - [`mbb_player_wowy`](reference/additional/analytics-2#mbb_player_wowy)
 - [`mbb_shot_selection`](reference/additional/analytics-2#mbb_shot_selection)
-- [`mbb_situational_lineup`](reference/additional/analytics-2#mbb_situational_lineup)
+- [`mbb_situational_lineup`](reference/additional/analytics-3#mbb_situational_lineup)
 - [`mbb_situational_player`](reference/additional/analytics-3#mbb_situational_player)
 - [`mbb_situational_team`](reference/additional/analytics-3#mbb_situational_team)
 - [`mbb_strength_of_schedule`](reference/additional/analytics-3#mbb_strength_of_schedule)
@@ -235,7 +236,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_team_strength`](reference/additional/analytics-3#mbb_team_strength)
 - [`ncaa_coach_stints`](reference/additional/analytics-3#ncaa_coach_stints)
 - [`ncaa_impact_rows`](reference/additional/analytics-3#ncaa_impact_rows)
-- [`ncaa_lineup_count_rows`](reference/additional/analytics-3#ncaa_lineup_count_rows)
+- [`ncaa_lineup_count_rows`](reference/additional/analytics-4#ncaa_lineup_count_rows)
 - [`ncaa_mbb_lineups`](reference/additional/analytics-4#ncaa_mbb_lineups)
 - [`ncaa_mbb_on_off`](reference/additional/analytics-4#ncaa_mbb_on_off)
 - [`ncaa_mbb_player_combos`](reference/additional/analytics-4#ncaa_mbb_player_combos)

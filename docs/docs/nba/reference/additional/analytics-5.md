@@ -6,6 +6,93 @@ description: "NBA — additional Python functions — Analytics: nba_tracking–
 ---
 # NBA — additional Python functions — Analytics: nba_tracking–zone_value
 
+### nba_tracking_drive_value {#nba_tracking_drive_value}
+
+`nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Drive value over expected + rim-pressure, per player-season.
+
+Fetches the `Drives` `leaguedashptstats` measure and computes
+`drive_pts_oe = drive_pts - drives * bucket_pts_per_drive`. `rim_pressure`
+is the z-score of `drive_fta / drives` within the player's role bucket
+(a proxy for foul-drawing pressure independent of scoring efficiency).
+`drive_ast`/`drive_tov` are passed through unchanged.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_drive_value
+df = nba_tracking_drive_value(2024)
+print(df.sort("drive_pts_oe", descending=True).head())
+```
+
+### nba_tracking_pass_value {#nba_tracking_pass_value}
+
+`nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Expected-assists / passer value: `ast_oe` per player-season.
+
+Fetches the `Passing` `leaguedashptstats` measure (one call) and computes
+`ast_oe = ast - passes * bucket_assist_rate`. When
+`fetch_potential_assists=True`, also fetches `nba_stats_playerdashptpass`
+for the top-`max_players` passers (capped, optional -- never a hard
+dependency) and recomputes the residual against the richer
+`potential_assists` denominator for that subset; `max_players=0`
+(default) makes exactly one request total. `ast_pts_created` is passed
+through directly from the Passing measure (it is already computed there;
+not re-derived).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
+| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_pass_value
+df = nba_tracking_pass_value(2024)
+print(df.sort("ast_oe", descending=True).head())
+
+# With potential-assist enrichment for the top 50 passers
+
+df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
+```
+
 ### nba_tracking_reb_oe {#nba_tracking_reb_oe}
 
 `nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`

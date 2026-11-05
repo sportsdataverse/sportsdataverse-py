@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_play–nba_shot"
-sidebar_label: "Analytics: nba_play–nba_shot"
+title: "NBA — additional Python functions — Analytics: nba_play–nba_season"
+sidebar_label: "Analytics: nba_play–nba_season"
 sidebar_position: 15
-description: "NBA — additional Python functions — Analytics: nba_play–nba_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_play–nba_season — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_play–nba_shot
+# NBA — additional Python functions — Analytics: nba_play–nba_season
 
 ### nba_play_context {#nba_play_context}
 
@@ -423,6 +423,77 @@ props = nba_player_props(2024, "401585828", "2", "6")
 
 import datetime as dt
 props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
+```
+
+### nba_player_war {#nba_player_war}
+
+`nba_player_war(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season).
+
+Each rating is anchored to the team (a team's five players on the floor add up to its net
+rating) and centred on the league, so 0 is a league-average player. `vorp` is points per
+100 team possessions above a replacement player over one team's season of possessions
+(Basketball-Reference's VORP scale); `war` is wins above replacement. A replacement-level
+player has 0, and a season's `war` adds up to the league's wins minus those of a team of
+replacement players. `rating` / `war` are the mean of the three sources; `rating_<s>`
+/ `war_<s>` are each one. The replacement level and points per win are fitted per league
+(`~sportsdataverse._common.player_war.REPLACEMENT_LEVEL`,
+`~sportsdataverse._common.player_war.PTS_PER_WIN`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `team_id` (the team he played most possessions for), `teams` (how many he played for), `min`, `poss` (on-court possessions, offensive plus defensive over 2), `rating` and `rating_bpm` / `rating_rapm` / `rating_boban` (anchored, per 100), `vorp`, `war` and `war_bpm` / `war_rapm` / `war_boban`, with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year). |
+| `player_id` | Int64 | stats.nba.com player id. |
+| `player_name` | String | Player name, from the player impact release. |
+| `team_id` | Int64 | stats.nba.com team id of the team he played the most possessions for. |
+| `teams` | Int64 | How many teams he played for in the regular season. |
+| `min` | Float64 | Regular-season minutes (the player impact release's). |
+| `poss` | Float64 | On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's convention). The minutes basis of vorp and war. |
+| `rating` | Float64 | Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban. |
+| `rating_bpm` | Float64 | Our BPM per 100, team-anchored and centred: the release's bpm with its team constant repaired (minute-weighted team mean = net rating / 5, BPM 2.0's), minus the player's team mean, plus the team's net rating / 5, centred so the league's possession-weighted mean is 0. |
+| `rating_rapm` | Float64 | Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read: the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset. |
+| `rating_boban` | Float64 | Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference's VORP scale: a season of possessions at R + 1 is 1. |
+| `war` | Float64 | Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement level; a season's war adds up to the league's wins minus a team of replacement players' (.189 NBA 2024-25, .104 WNBA 2025). |
+| `war_bpm` | Float64 | war from rating_bpm alone. Every source shares the league's replacement level, so war_bpm, war_rapm and war_boban add up to the same league total. |
+| `war_rapm` | Float64 | war from rating_rapm alone. |
+| `war_boban` | Float64 | war from rating_boban alone. BOBAN shrinks low-minute players toward average, so the replacement pool carries more war_boban than war_bpm (the replacement level is a box-score level). |
+| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
+| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
+| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
+| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"` (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_war import nba_player_war
+war = nba_player_war(2026)
+war.select("player_name", "poss", "rating", "vorp", "war").head(10)
+
+# WNBA via ``league_id``
+
+wnba = nba_player_war(2025, league_id="10")
 ```
 
 ### nba_player_wowy {#nba_player_wowy}
@@ -960,120 +1031,4 @@ sim.select("team_id", "wins", "proj_wins", "p_playoffs", "p_pick_1").head()
 # WNBA via ``league_id``
 
 nba_season_sim(2025, as_of_date=dt.date(2025, 7, 1), league_id="10")
-```
-
-### nba_season_standings {#nba_season_standings}
-
-`nba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '00', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Standings with the league's tiebreakers from completed regular-season games.
-
-NBA: conference seeds and division ranks under the NBA tie-break procedure (division leaders
-first, postseason-eligible = a top-10 conference record). WNBA: one league table under the
-WNBA procedure. The rules and their sources are in `sportsdataverse.nba.nba_season_rules`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `DataFrame` |  | One row per game with `season`, `home_team_id`, `away_team_id` (Int64 stats.nba.com ids), `home_pts` and `away_pts`; rows without both scores are not played yet and are skipped. A `load_nba_stats_schedules` frame can be passed as is: with a `season_type` column only the `"regular-season"` rows count (the NBA Cup final, preseason, play-in and playoffs do not). |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `seed` | `int` | `0` | Seeds the drawing that ends a tie no criterion breaks. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id)` that played: `conference` / `division` (NBA; the WNBA rows say `"WNBA"`), `games`, `wins`, `losses`, `win_pct`, `point_diff`, `division_rank` (1 = the division winner), `division_leader`, `seed` (rank in the conference for the NBA, in the league for the WNBA, 1 = best) and `games_back` (behind the seed-1 team). Sorted by season, conference and seed.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
-| `team_id` | Int64 | stats.nba.com team id (Int64). |
-| `conference` | String | NBA conference (East / West); "WNBA" for every WNBA team. |
-| `division` | String | NBA division; "WNBA" for every WNBA team. |
-| `games` | Int64 | Regular-season games played. |
-| `wins` | Int64 | Regular-season wins. |
-| `losses` | Int64 | Regular-season losses. |
-| `win_pct` | Float64 | Regular-season winning percentage, wins divided by games played; the first key of the seeding. |
-| `point_diff` | Int64 | Points scored minus points allowed over the regular-season games. |
-| `division_rank` | Int64 | Rank within the division under the NBA tiebreakers, 1 = the division winner (the WNBA rows rank the league). |
-| `division_leader` | Boolean | True for the NBA division winner after the division tiebreak; False for every WNBA row. |
-| `seed` | Int64 | Seed under the league's tiebreakers: rank in the conference (NBA) or the league (WNBA), 1 = best. |
-| `games_back` | Float64 | Games behind the seed-1 team of the conference (NBA) or league (WNBA): ((leader wins - wins) + (losses - leader losses)) / 2. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or an NBA team id is unknown. |
-| `TypeError` | If the team-id columns are not Int64. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_loaders import load_nba_stats_schedules
-from sportsdataverse.nba.nba_season_rules import nba_season_standings
-nba_season_standings(load_nba_stats_schedules(2025)).filter(pl.col("seed") <= 10)
-```
-
-### nba_shot_value {#nba_shot_value}
-
-`nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
-
-One-call shot-value spine: fetch, score, and run all five models.
-
-Fetches each player's `shotchartdetail`, scores per-shot expected points
-from the free `LeagueAverages` zone table, and returns the scored shots
-plus shooter talent, selection quality, and zone-value maps (and the
-defender/shot-clock context tables when `include_context=True`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_ids` | `list[int]` |  | Player ids to fetch. |
-| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables, once per player and team his fetched shots came from. |
-| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
-
-**Returns**
-
-`{"shots", "talent", "selection", "zones"}` (plus `"context"` when requested). An empty fetch returns a dict of zero-row frames.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_shot_value
-out = nba_shot_value([201939], "2022-23")
-out["talent"].head()
-```
-
-### nba_shot_value_lineups {#nba_shot_value_lineups}
-
-`nba_shot_value_lineups(group_id: 'str', season: 'str', *, team_id: 'int', league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `group_id` | `str` |  | The 5-man lineup group id (dash-joined player ids); kept `Utf8`. |
-| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
-| `team_id` | `int` |  | The lineup's team id. |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The lineup's shots scored by `score_shot_xpoints` (with `xpoints`). Empty fetch returns the augmented zero-row schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_shot_value_lineups
-df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
 ```
