@@ -1,10 +1,214 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg"
-sidebar_label: "Analytics: wbb_team–weighted_avg"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_player–weighted_avg"
+sidebar_label: "Analytics: wbb_player–weighted_avg"
 sidebar_position: 12
-description: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_player–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg
+# Women's college basketball — additional Python functions — Analytics: wbb_player–weighted_avg
+
+### wbb_player_wowy {#wbb_player_wowy}
+
+`wbb_player_wowy(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college WOWY pairs: a team's season with two teammates together, apart and both off.
+
+Delegates to `sportsdataverse.mbb.mbb_player_on_off.mbb_player_wowy` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id_a, player_id_b)`: the `_both`, `_a_only`, `_b_only` and `_neither` totals, which add up to the team's season, and ratings (not additive: recompute them from summed totals). See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id_a` | String | The first player of the pair, the smaller id as a string. |
+| `player_id_b` | String | The second player of the pair, the larger id as a string. |
+| `minutes_both` | Float64 | Game-clock minutes of the team's season with both A and B on the floor. |
+| `poss_both` | Int64 | The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_both` | Int64 | The team's defensive possessions with both A and B on the floor. |
+| `pts_both` | Int64 | The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_both` | Int64 | The opponent's points with both A and B on the floor, credited as pts_both is. |
+| `plus_minus_both` | Int64 | pts_both - opp_pts_both. |
+| `off_rtg_both` | Float64 | Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions. |
+| `def_rtg_both` | Float64 | Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions. |
+| `net_rtg_both` | Float64 | Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null. |
+| `minutes_a_only` | Float64 | Game-clock minutes of the team's season with A on the floor and B off. |
+| `poss_a_only` | Int64 | The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_a_only` | Int64 | The team's defensive possessions with A on the floor and B off. |
+| `pts_a_only` | Int64 | The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_a_only` | Int64 | The opponent's points with A on the floor and B off, credited as pts_a_only is. |
+| `plus_minus_a_only` | Int64 | pts_a_only - opp_pts_a_only. |
+| `off_rtg_a_only` | Float64 | Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions. |
+| `def_rtg_a_only` | Float64 | Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions. |
+| `net_rtg_a_only` | Float64 | Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null. |
+| `minutes_b_only` | Float64 | Game-clock minutes of the team's season with B on the floor and A off. |
+| `poss_b_only` | Int64 | The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_b_only` | Int64 | The team's defensive possessions with B on the floor and A off. |
+| `pts_b_only` | Int64 | The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_b_only` | Int64 | The opponent's points with B on the floor and A off, credited as pts_b_only is. |
+| `plus_minus_b_only` | Int64 | pts_b_only - opp_pts_b_only. |
+| `off_rtg_b_only` | Float64 | Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions. |
+| `def_rtg_b_only` | Float64 | Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions. |
+| `net_rtg_b_only` | Float64 | Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null. |
+| `minutes_neither` | Float64 | Game-clock minutes of the team's season with neither A nor B on the floor. |
+| `poss_neither` | Int64 | The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_neither` | Int64 | The team's defensive possessions with neither A nor B on the floor. |
+| `pts_neither` | Int64 | The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_neither` | Int64 | The opponent's points with neither A nor B on the floor, credited as pts_neither is. |
+| `plus_minus_neither` | Int64 | pts_neither - opp_pts_neither. |
+| `off_rtg_neither` | Float64 | Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions. |
+| `def_rtg_neither` | Float64 | Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with no possessions. |
+| `net_rtg_neither` | Float64 | Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_player_wowy
+wbb_player_wowy(2025).sort("minutes_both", descending=True).head()
+```
+
+### wbb_strength_of_schedule {#wbb_strength_of_schedule}
+
+`wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
+
+Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with `league="womens"` (WBB loaders, women's constants and quad ranges; RPI location weights from 2011-12).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (sets `eligible`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per Division I (season, team_id) -- see the mbb core for the full contract.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by its end year (2024 is 2023-24). |
+| `as_of_date` | Date | The as-of date: only games strictly before it count as played. Null when every completed game is used. |
+| `team_id` | String | ESPN team id (Utf8). |
+| `team` | String | Team (ESPN location name). |
+| `conference_id` | String | ESPN conference id, read off the schedule (Utf8). |
+| `conference` | String | Conference short name. Null for independents, which get no auto-bid. |
+| `eligible` | Boolean | False for a team the caller listed as barred from the NCAA tournament (reclassifying to Division I, a postseason ban). It counts in every rating and résumé but gets no bid. |
+| `wins` | Int64 | Wins in played games, against every opponent (non-Division I included). |
+| `losses` | Int64 | Losses in played games, against every opponent. |
+| `conf_wins` | Int64 | Regular-season conference wins (conference tournaments and multi-team events excluded). |
+| `conf_losses` | Int64 | Regular-season conference losses. |
+| `games` | Int64 | Games behind the ratings (every played game with a usable box score). |
+| `adj_o` | Float64 | Opponent-adjusted offensive efficiency: points per 100 possessions (mbb_team_ratings). |
+| `adj_d` | Float64 | Opponent-adjusted defensive efficiency: points allowed per 100 possessions. |
+| `adj_em` | Float64 | Adjusted efficiency margin, adj_o - adj_d. |
+| `adj_em_z` | Float64 | adj_em z-scored over Division I within the season. |
+| `sos` | Float64 | Strength of schedule: mean opponent adj_em over Division I games. |
+| `wab` | Float64 | Wins above bubble: Division I wins minus a bubble-quality team's expected wins against the same schedule and venues. |
+| `quad1_w` | Int64 | Quad 1 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
+| `quad1_l` | Int64 | Quad 1 losses to Division I opponents, by the same opponent rank and venue ranges. |
+| `quad2_w` | Int64 | Quad 2 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
+| `quad2_l` | Int64 | Quad 2 losses to Division I opponents, by the same opponent rank and venue ranges. |
+| `quad3_w` | Int64 | Quad 3 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
+| `quad3_l` | Int64 | Quad 3 losses to Division I opponents, by the same opponent rank and venue ranges. |
+| `quad4_w` | Int64 | Quad 4 wins over Division I opponents, by the opponent's NET-estimate rank and the venue (NCAA ranges, men's and women's differ). |
+| `quad4_l` | Int64 | Quad 4 losses to Division I opponents, by the same opponent rank and venue ranges. |
+| `quality_wins` | Int64 | Quad 1 plus Quad 2 wins. |
+| `rpi_games` | Int64 | Division I games behind the RPI. |
+| `rpi_wp` | Float64 | RPI winning percentage over Division I games, location weighted: a home win 0.6, a road win 1.4, a home loss 1.4, a road loss 0.6, neutral 1.0 (men's from 2004-05, women's from 2011-12). |
+| `rpi_owp` | Float64 | Opponents' winning percentage: each opponent's unweighted Division I record without its games against this team, averaged over this team's games. |
+| `rpi_oowp` | Float64 | Opponents' opponents' winning percentage: the opponents' rpi_owp averaged over this team's games. |
+| `rpi` | Float64 | NCAA Rating Percentage Index: 0.25 * rpi_wp + 0.50 * rpi_owp + 0.25 * rpi_oowp. |
+| `net_estimate` | Float64 | NET-style score: 0.8 * z(adj_em) + 0.2 * z(wab) within the season (the NET's efficiency and results halves; weights fitted to the men's 2024 NET). Higher is better. |
+| `adj_em_rank` | Float64 | Rank of adj_em within the season among Division I teams: 1 is best, average ties. |
+| `adj_em_pct` | Float64 | Percentile of adj_em within the season: 100 * (n + 1 - rank) / (n + 1). |
+| `adj_em_n` | Int64 | Sample size of adj_em: the games behind the ratings. |
+| `sos_rank` | Float64 | Rank of sos (1 = hardest schedule) within the season among Division I teams: 1 is best, average ties. |
+| `sos_pct` | Float64 | Percentile of sos within the season: 100 * (n + 1 - rank) / (n + 1). |
+| `sos_n` | Int64 | Sample size of sos: the team's Division I games. |
+| `wab_rank` | Float64 | Rank of wab within the season among Division I teams: 1 is best, average ties. |
+| `wab_pct` | Float64 | Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1). |
+| `wab_n` | Int64 | Sample size of wab: the team's Division I games. |
+| `rpi_rank` | Float64 | Rank of rpi within the season among Division I teams: 1 is best, average ties. |
+| `rpi_pct` | Float64 | Percentile of rpi within the season: 100 * (n + 1 - rank) / (n + 1). |
+| `rpi_n` | Int64 | Sample size of rpi: the team's Division I games. |
+| `net_estimate_rank` | Float64 | Rank of net_estimate (the NET-estimate ranking the quads use) within the season among Division I teams: 1 is best, average ties. |
+| `net_estimate_pct` | Float64 | Percentile of net_estimate within the season: 100 * (n + 1 - rank) / (n + 1). |
+| `net_estimate_n` | Int64 | Sample size of net_estimate: the team's Division I games. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_strength_of_schedule
+wbb_strength_of_schedule([2024]).sort("rpi_rank").head(20)
+```
+
+### wbb_team_luck {#wbb_team_luck}
+
+`wbb_team_luck(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L.
+
+Delegates to `sportsdataverse.mbb.mbb_team_luck.mbb_team_luck` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)`: `games`, `wins`, `losses`, `pts`, `opp_pts`, `win_pct`, `pythag_win_pct`, `exp_wins`, `luck_wins`, `pbp_games`, the close-game record and the `_rank` / `_pct` / `_n` columns. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id. Non-D1 opponents get rows of their own (a game or two) and no ranks. |
+| `games` | Int64 | Games in the season's completed ESPN games, postseason included. |
+| `wins` | Int64 | Wins in the season's completed ESPN games, postseason included. |
+| `losses` | Int64 | Losses in the season's completed ESPN games, postseason included. |
+| `pts` | Int64 | Points scored in those games (final scores). |
+| `opp_pts` | Int64 | Points allowed in those games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['wbb'], fitted on past seasons by tools/fit_team_luck_pythag.py. |
+| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
+| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
+| `pbp_games` | Int64 | Games with published possessions (ncaa_wbb_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
+| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter (the 2nd half before 2015-16) or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
+| `close_wins` | Int64 | Wins in close games. |
+| `close_losses` | Int64 | Losses in close games. |
+| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
+| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
+| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
+| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
+| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_team_luck
+wbb_team_luck(2025).sort("luck_wins", descending=True).head()
+```
 
 ### wbb_team_season_flow {#wbb_team_season_flow}
 

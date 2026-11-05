@@ -44,6 +44,7 @@ from sportsdataverse.wnba.wnba_playtype_impact import *
 from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_season_rates  # noqa: F401
 from sportsdataverse.wnba.wnba_game_impact import wnba_game_lineups_used, wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba.wnba_lineup_seasons import wnba_lineup_seasons  # noqa: F401
+from sportsdataverse.wnba.wnba_player_on_off import wnba_player_on_off, wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba.wnba_game_flow import wnba_game_flow, wnba_team_season_flow  # noqa: F401
 from sportsdataverse.wnba.wnba_team_strength import wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba.wnba_team_luck import wnba_team_luck  # noqa: F401

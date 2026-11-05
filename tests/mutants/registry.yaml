@@ -9589,7 +9589,7 @@
   group: bb-lineup-seasons
   finding: BB-D4
   file: sportsdataverse/_common/lineup_seasons.py
-  snippet: 'rows = rows.join(played, on=["season", "game_id"], how="semi")'
+  snippet: 'rows = games_with_possessions(rows)'
   mutant: 'rows = rows'
   test: tests/nba/test_nba_lineup_seasons.py::test_a_game_needs_both_play_by_play_and_possessions
   expected: kill
@@ -9843,3 +9843,74 @@
   test: tests/nba/test_nba_game_flow.py::test_season_table
   expected: kill
   note: Ranking every team lets a team with a handful of games (a college non-D1 opponent) into the cohort.
+
+# --- BB-D5: player on/off and WOWY pairs ------------------------------------------------------------
+- id: bb-oo-off-is-team-minus-on
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'out = out.with_columns((pl.col(f"{c}_team") - pl.col(f"{c}_on")).alias(f"{c}_off") for c in _TOTALS)'
+  mutant: 'out = out.with_columns((pl.col(f"{c}_team")).alias(f"{c}_off") for c in _TOTALS)'
+  test: tests/nba/test_nba_player_on_off.py::test_on_plus_off_is_the_team_season
+  expected: kill
+  note: An off side that kept the on-court stints would count every possession twice for the player.
+
+- id: bb-oo-gate-both-sides
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'gate = pl.min_horizontal(pl.col("poss_on") + pl.col("opp_poss_on"), pl.col("poss_off") + pl.col("opp_poss_off"))'
+  mutant: 'gate = pl.col("poss_on") + pl.col("opp_poss_on")'
+  test: tests/nba/test_nba_player_on_off.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: A player who almost never sat would be ranked on an off-court sample of a few possessions.
+
+- id: bb-oo-lower-is-better
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'lower_is_better=[m for m, low in _RANKED.items() if low],'
+  mutant: 'lower_is_better=[],'
+  test: tests/nba/test_nba_player_on_off.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Without the lower-is-better list the worst defensive on-off ranks first.
+
+- id: bb-oo-games-with-possessions
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'sides = _sides(games_with_possessions(rows))'
+  mutant: 'sides = _sides(rows)'
+  test: tests/nba/test_nba_player_on_off.py::test_a_game_without_possessions_adds_nothing
+  expected: kill
+  note: A game without possessions would add points and minutes with no possessions under them.
+
+- id: bb-wowy-neither
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '(pl.col(f"{c}_team") - pl.col(f"{c}_a") - pl.col(f"{c}_b") + pl.col(f"{c}_both")).alias(f"{c}_neither")'
+  mutant: '(pl.col(f"{c}_team") - pl.col(f"{c}_a") - pl.col(f"{c}_b")).alias(f"{c}_neither")'
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: Without adding back the time together it is taken off twice and the four splits fall short of the team.
+
+- id: bb-wowy-never-together
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'pairs = pairs.with_columns(pl.col(f"{c}_both").fill_null(0) for c in _TOTALS).with_columns('
+  mutant: 'pairs = pairs.with_columns(pl.col(f"{c}_both") for c in _TOTALS).with_columns('
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: Two teammates who never shared the floor would get null splits instead of their seasons apart.
+
+- id: bb-oo-null-not-nan
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '*[pl.when(e.is_finite()).then(e).alias(f"{m}_{side}") for m, e in per100.items()],'
+  mutant: '*[e.alias(f"{m}_{side}") for m, e in per100.items()],'
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: A pair that never shared the floor would publish NaN ratings together instead of nulls.

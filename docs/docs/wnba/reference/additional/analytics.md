@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Analytics: make_prob–wnba_referee"
-sidebar_label: "Analytics: make_prob–wnba_referee"
+title: "WNBA — additional Python functions — Analytics: make_prob–wnba_player"
+sidebar_label: "Analytics: make_prob–wnba_player"
 sidebar_position: 7
-description: "WNBA — additional Python functions — Analytics: make_prob–wnba_referee — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: make_prob–wnba_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: make_prob–wnba_referee
+# WNBA — additional Python functions — Analytics: make_prob–wnba_player
 
 ### make_prob_by_context {#make_prob_by_context}
 
@@ -779,6 +779,76 @@ d = wnba_matchup_drapm("2024")
 print(d.sort("matchup_drapm", descending=True).head())
 ```
 
+### wnba_player_on_off {#wnba_player_on_off}
+
+`wnba_player_on_off(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', min_poss: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `season_type` | `str` | `'regular-season'` |  |
+| `min_poss` | `int \| None` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, team_id, player_id)`: `games` on the floor and `team_games`, then for `_on` and `_off` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions); `<rating>_diff` (on minus off); `<m>_rank` / `<m>_pct` for the on and diff ratings (within the season, among players with at least `min_poss` both ways) and `<m>_n` for every rating. `poss_on + poss_off` is the team's possessions. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `games` | Int64 | Games the player was on the floor for the team. |
+| `team_games` | Int64 | Games the team played in the season (with play-by-play and possessions); games well short of it marks a player who missed time or was with the team for part of the season. |
+| `minutes_on` | Float64 | Game-clock minutes of the team's season with the player on the floor. |
+| `poss_on` | Int64 | The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_on` | Int64 | The team's defensive possessions with the player on the floor. |
+| `pts_on` | Int64 | The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_on` | Int64 | The opponent's points with the player on the floor, credited as pts_on is. |
+| `plus_minus_on` | Int64 | pts_on - opp_pts_on. |
+| `off_rtg_on` | Float64 | Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions. |
+| `def_rtg_on` | Float64 | Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions. |
+| `net_rtg_on` | Float64 | Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null. |
+| `minutes_off` | Float64 | Game-clock minutes of the team's season with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
+| `poss_off` | Int64 | The team's offensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_off` | Int64 | The team's defensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
+| `pts_off` | Int64 | The team's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_off` | Int64 | The opponent's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off is. |
+| `plus_minus_off` | Int64 | pts_off - opp_pts_off. |
+| `off_rtg_off` | Float64 | Offensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off; null with no possessions. |
+| `def_rtg_off` | Float64 | Defensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off; null with no possessions. |
+| `net_rtg_off` | Float64 | Net rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null when either is null. |
+| `off_rtg_diff` | Float64 | On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null. |
+| `def_rtg_diff` | Float64 | On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null. |
+| `net_rtg_diff` | Float64 | On-off net rating: net_rtg_on - net_rtg_off; null when either is null. |
+| `off_rtg_on_rank` | Float64 | Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `def_rtg_on_rank` | Float64 | Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `net_rtg_on_rank` | Float64 | Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `off_rtg_diff_rank` | Float64 | Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `def_rtg_diff_rank` | Float64 | Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `net_rtg_diff_rank` | Float64 | Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `off_rtg_on_pct` | Float64 | Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `def_rtg_on_pct` | Float64 | Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `net_rtg_on_pct` | Float64 | Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `off_rtg_diff_pct` | Float64 | Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `def_rtg_diff_pct` | Float64 | Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `net_rtg_diff_pct` | Float64 | Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `off_rtg_on_n` | Int64 | Sample size of off_rtg_on: poss_on. |
+| `def_rtg_on_n` | Int64 | Sample size of def_rtg_on: opp_poss_on. |
+| `net_rtg_on_n` | Int64 | Sample size of net_rtg_on: poss_on + opp_poss_on. |
+| `off_rtg_off_n` | Int64 | Sample size of off_rtg_off: poss_off. |
+| `def_rtg_off_n` | Int64 | Sample size of def_rtg_off: opp_poss_off. |
+| `net_rtg_off_n` | Int64 | Sample size of net_rtg_off: poss_off + opp_poss_off. |
+| `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
+| `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
+| `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
+
 ### wnba_player_props {#wnba_player_props}
 
 `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -810,102 +880,3 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_ast_exp` | Float64 |  |
 | `stat_fg3m_exp` | Float64 |  |
 | `pace_proj` | Float64 |  |
-
-### wnba_playtype_ratings {#wnba_playtype_ratings}
-
-`wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`).
-
-Thin wrapper binding
-`sportsdataverse.nba.nba_playtype.nba_playtype_ratings` to the
-women's league. Synergy coverage is sparse for the WNBA; an empty upstream
-fetch degrades to a zero-row frame (never raises).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2024"`. |
-| `off_team` | `Optional[DataFrame]` | `None` | Injected Synergy offensive team frame (bypasses the live fetch). |
-| `def_team` | `Optional[DataFrame]` | `None` | Injected Synergy defensive team frame. |
-| `schedule` | `Optional[DataFrame]` | `None` | Injected `team_id`/`opp_team_id` schedule frame. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Same schema as `sportsdataverse.nba.nba_playtype.nba_playtype_ratings`.
-
-No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.wnba import wnba_playtype_ratings
-r = wnba_playtype_ratings("2024")
-print(r.sort("adj_off", descending=True).head())
-```
-
-### wnba_referee_assignments {#wnba_referee_assignments}
-
-`wnba_referee_assignments(date: 'str | _dt.date', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
-
-Fetch and parse WNBA referee assignments for a given date from official.nba.com.
-
-Retrieves the referee crew assignments and replay center officials for all WNBA
-games on a given date. The `crew_position` column (1–4) represents the feed's
-slot order; slot 1 is inferred to be the crew chief. The `season` column is
-the WNBA single-year season (feed year converted as-is). This is a thin shim
-over `sportsdataverse.nba.nba_officiating.nba_referee_assignments` that
-sets `league="wnba"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `date` | `str \| date` |  | The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date). |
-| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames. |
-| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
-
-**Returns**
-
-A dict with keys `"officials"` and `"replay_center"` mapping to DataFrames. If `raw=True`, returns the full three-league JSON payload instead.
-
-| col_name | type | description |
-|---|---|---|
-| `officials.league` | String | League the assignment belongs to: nba, gl (G League), or wnba. |
-| `officials.game_id` | String | 10-digit game id (zero-padded) for the assigned game. |
-| `officials.game_date` | Date | Game date parsed from the feed's MM/DD/YYYY format. |
-| `officials.season` | Int64 | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
-| `officials.season_type` | String | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `officials.game_code` | String | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
-| `officials.home_team_id` | Int64 | 10-digit team id of the home team. |
-| `officials.home_team_abbr` | String | Three-letter abbreviation of the home team. |
-| `officials.away_team_id` | Int64 | 10-digit team id of the away team. |
-| `officials.away_team_abbr` | String | Three-letter abbreviation of the away team. |
-| `officials.crew_position` | Int64 | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
-| `officials.official_id` | Int64 | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
-| `officials.official_name` | String | Official's display name for this crew slot. |
-| `officials.jersey_num` | String | Official's jersey number as a string, from the feed's official{n}_JNum field. |
-| `replay_center.league` | String | League the replay-center staffing belongs to: nba, gl, or wnba. |
-| `replay_center.game_date` | Date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
-| `replay_center.official_id` | Int64 | Numeric replay-center official id from the feed. |
-| `replay_center.official_name` | String | Replay-center official's display name for that date. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | `date` is not a valid "YYYY-MM-DD" date (checked before any request). |
-| `NoDataError` | Official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without WNBA games is not this (see the Note). |
-| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), the 200 body is not a JSON object, or the `wnba` block's `Table`/`Table1` rows are missing or malformed (a row without `game_id` included). With `raw=True` all three leagues (nba, gl and wnba) are checked, since the whole payload is returned. |
-
-**Example**
-
-```python
-from sportsdataverse.wnba.wnba_officiating import wnba_referee_assignments
-result = wnba_referee_assignments("2026-06-13")
-officials = result["officials"]
-print(f"Found {officials.height} official slots")
-```

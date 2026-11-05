@@ -51,6 +51,7 @@ __all__ = [
     "game_lineups_used_schema",
     "game_player_impact",
     "game_player_impact_schema",
+    "games_with_possessions",
     "impact_row_schema",
 ]
 
@@ -146,6 +147,21 @@ def credit_free_throws_to_foul_lineup(
         pl.when(has).then(pl.col("seconds") * 0).otherwise(pl.col("seconds")).alias("seconds"),
     )
     return pl.concat([credited, clock]).drop("_at_foul")
+
+
+def games_with_possessions(rows: pl.DataFrame) -> pl.DataFrame:
+    """Keep the impact rows of games that carry possessions.
+
+    A season table counts a game only with both play-by-play and possessions: without possessions
+    its points and minutes would land on players and units with no possessions.
+    """
+    played = (
+        rows.group_by(["season", "game_id"])
+        .agg((pl.col("home_poss") + pl.col("away_poss")).sum().alias("_poss"))
+        .filter(pl.col("_poss") > 0)
+        .drop("_poss")
+    )
+    return rows.join(played, on=["season", "game_id"], how="semi")
 
 
 def _sides(rows: pl.DataFrame) -> pl.DataFrame:
