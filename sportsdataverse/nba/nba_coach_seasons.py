@@ -69,6 +69,8 @@ logger = logging.getLogger(__name__)
 
 _ESPN_LEAGUE = {"00": "nba", "10": "wnba"}
 _MINUTES = {"00": 48, "10": 40}
+#: The first ``*_stats_coaches`` loader season (the loaders raise below it).
+_STAFF_FLOOR = {"00": 1996, "10": 1997}
 _REGULAR = "regular-season"
 
 #: ESPN coach records: one row per (season, ESPN team, coach) with the regular-season W-L.
@@ -293,16 +295,27 @@ def carry_last_coach(games: pl.DataFrame, regular: pl.DataFrame, credit: pl.Data
     )
 
 
+#: The first season of the ESPN-to-stats team crosswalk releases; ESPN's counts start there.
+_CROSSWALK_FLOOR = 2002
+_CROSSWALK_SCHEMA: dict[str, pl.DataType] = {"season": pl.Int64(), "espn_team_id": pl.Int64(), "team_id": pl.Int64()}
+
+
 def _crosswalk(seasons: list[int], league_id: str) -> pl.DataFrame:
+    """``(season, espn_team_id, team_id)`` for ``seasons`` from the crosswalk releases (2002+)."""
+    seasons = [s for s in seasons if s >= _CROSSWALK_FLOOR]
+    if not seasons:
+        return pl.DataFrame(schema=_CROSSWALK_SCHEMA)
     if league_id == "10":
         from sportsdataverse.wnba.wnba_loaders import load_wnba_team_crosswalk
 
-        xw = load_wnba_team_crosswalk(seasons)
-        return xw.select("season", "espn_team_id", pl.col("wnba_team_id").alias("team_id")) if xw.height else xw
-    from sportsdataverse.nba.nba_loaders import load_nba_team_crosswalk
+        xw, col = load_wnba_team_crosswalk(seasons), "wnba_team_id"
+    else:
+        from sportsdataverse.nba.nba_loaders import load_nba_team_crosswalk
 
-    xw = load_nba_team_crosswalk(seasons)
-    return xw.select("season", "espn_team_id", pl.col("nba_team_id").alias("team_id")) if xw.height else xw
+        xw, col = load_nba_team_crosswalk(seasons), "nba_team_id"
+    if xw.height == 0:
+        return pl.DataFrame(schema=_CROSSWALK_SCHEMA)
+    return xw.select("season", "espn_team_id", pl.col(col).alias("team_id")).cast(_CROSSWALK_SCHEMA)
 
 
 def _staff_loader(league_id: str):  # type: ignore[no-untyped-def]
@@ -356,7 +369,7 @@ def nba_coach_seasons(
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         season_type: ``"regular-season"`` (default), ``"playoffs"`` or ``"play-in"``; the
             postseason games go to the coach of the team's last regular-season game.
-        espn: Read ESPN's per-coach records to split a team-season that changed coach (about 90
+        espn: Read ESPN's per-coach records (2002 on) to split a team-season that changed coach (about 90
             requests a season). ``False`` credits only the seasons one coach had throughout.
         return_as_pandas: Return a pandas frame instead of polars.
 
@@ -393,17 +406,14 @@ def nba_coach_seasons(
     wanted = [seasons] if isinstance(seasons, int) else list(seasons)
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([s - offset for s in wanted])
-    staff = _staff_loader(league_id)(sorted({s - offset for s in wanted} | {s - 1 - offset for s in wanted}))
-    records = (
-        pl.concat([espn_coach_records(s, league_id=league_id) for s in wanted])
-        if espn
-        else pl.DataFrame(schema=ESPN_RECORDS_SCHEMA)
+    # the file before each season too (its opener); the first published file has no file before it
+    files = {s - offset for s in wanted} | {s - 1 - offset for s in wanted}
+    staff = _staff_loader(league_id)(sorted(f for f in files if f >= _STAFF_FLOOR[league_id]))
+    counted = [s for s in wanted if s >= _CROSSWALK_FLOOR] if espn else []  # ESPN's ids map from 2002
+    records = pl.concat(
+        [pl.DataFrame(schema=ESPN_RECORDS_SCHEMA), *(espn_coach_records(s, league_id=league_id) for s in counted)]
     )
-    xw = (
-        _crosswalk(wanted, league_id)
-        if espn
-        else pl.DataFrame(schema={"season": pl.Int64, "espn_team_id": pl.Int64, "team_id": pl.Int64})
-    )
+    xw = _crosswalk(counted, league_id)
     stints = nba_coach_stints(head_coaches(staff), records, xw).filter(pl.col("season").is_in(wanted))
     regular = nba_team_games(schedule)
     credit = coach_of_record(regular, stints)

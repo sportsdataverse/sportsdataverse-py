@@ -1141,7 +1141,7 @@ only. Who coached each game: see `sportsdataverse.nba.nba_coach_seasons`.
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
 | `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"playoffs"` or `"play-in"`; the postseason games go to the coach of the team's last regular-season game. |
-| `espn` | `bool` | `True` | Read ESPN's per-coach records to split a team-season that changed coach (about 90 requests a season). `False` credits only the seasons one coach had throughout. |
+| `espn` | `bool` | `True` | Read ESPN's per-coach records (2002 on) to split a team-season that changed coach (about 90 requests a season). `False` credits only the seasons one coach had throughout. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**

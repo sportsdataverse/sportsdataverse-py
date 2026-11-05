@@ -293,3 +293,6 @@ def test_nba_coach_seasons_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
     assert out["pbp_games"].sum() == out["games"].sum()
     with pytest.raises(ValueError, match="preseason"):
         mod.nba_coach_seasons(2024, season_type="preseason")
+    calls.clear()
+    mod.nba_coach_seasons(1997)  # 1996-97: the first staff file; there is none before it to read
+    assert calls["staff"] == [1996]
