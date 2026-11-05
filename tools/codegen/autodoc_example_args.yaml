@@ -198,6 +198,9 @@ nba:
   nba_lineup_seasons: {seasons: 2025}
   nba_player_on_off: {seasons: 2025}
   nba_player_wowy: {seasons: 2025}
+  nba_player_play_styles: {seasons: 2025}
+  nba_team_play_styles: {seasons: 2025}
+  nba_play_style_features: {seasons: 2025}
   nba_lineup_count_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2024}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2024}}}
   nba_team_strength: {seasons: 2026}  # 30 rows x 77 cols
   nba_team_luck: {seasons: 2026}
@@ -353,6 +356,8 @@ mbb:
   mbb_lineup_seasons: {seasons: 2025}
   mbb_player_on_off: {seasons: 2025}
   mbb_player_wowy: {seasons: 2025}
+  mbb_play_styles: {seasons: 2026}
+  college_play_style_features: {seasons: 2026}
   mbb_team_strength: {seasons: 2025}
   mbb_team_luck: {seasons: 2025}
   mbb_game_flow: {seasons: 2026}
@@ -420,6 +425,7 @@ wbb:
   wbb_lineup_seasons: {seasons: 2025}
   wbb_player_on_off: {seasons: 2025}
   wbb_player_wowy: {seasons: 2025}
+  wbb_play_styles: {seasons: 2026}
   wbb_team_strength: {seasons: 2025}
   wbb_team_luck: {seasons: 2025}
   wbb_game_flow: {seasons: 2026}

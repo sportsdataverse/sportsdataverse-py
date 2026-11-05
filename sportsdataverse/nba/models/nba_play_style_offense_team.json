@@ -1,0 +1,177 @@
+{
+ "feature_cols": [
+  "pt_isolation",
+  "pt_prballhandler",
+  "pt_postup",
+  "pt_spotup",
+  "pt_offscreen",
+  "pt_transition",
+  "fga3_share",
+  "mid_pts_share",
+  "sec_after_miss",
+  "sec_after_live_tov"
+ ],
+ "k": 4,
+ "seed": 20261105,
+ "train_seasons": [
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022
+ ],
+ "centers": [
+  [
+   0.02380500474167479,
+   0.6465827982450741,
+   -0.07429176062325227,
+   -0.5612359801785339,
+   -0.05575253776426234,
+   -0.42854870401639517,
+   -0.5676035535012918,
+   0.5854374427884631,
+   0.01053176111010673,
+   0.0014088019090275627
+  ],
+  [
+   -0.1459940652642848,
+   0.4231861439641872,
+   -0.7480941264950589,
+   0.8147508925424758,
+   0.08772458584570925,
+   -0.532783201187197,
+   0.8357006990858569,
+   -0.6998958654382149,
+   0.6615962085288892,
+   0.6095702259287434
+  ],
+  [
+   0.08971081585090056,
+   -0.7612559988668294,
+   -0.10348302117153206,
+   -0.13603436396620427,
+   0.13369883884906922,
+   1.2240654489995253,
+   0.2874775056139548,
+   -0.42451429733904544,
+   -1.0353856745764392,
+   -0.8850111856904734
+  ],
+  [
+   -0.09811249837820264,
+   -0.7175370314997066,
+   1.6355756017602625,
+   0.09265298249770898,
+   -0.41949107354477444,
+   -0.43925724212697453,
+   -0.7535618189544203,
+   0.7066633549765988,
+   0.7810464509543501,
+   0.6068760598363082
+  ]
+ ],
+ "labels": [
+  "pick-and-roll offense",
+  "three-point heavy",
+  "transition offense",
+  "post-up offense"
+ ],
+ "n_train": 210,
+ "holdout_seasons": [
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "k_sweep": [
+  {
+   "k": 4,
+   "score": 0.3988,
+   "holdout_ari": 0.3069,
+   "train_bootstrap_ari": 0.4907,
+   "holdout_persistence": 0.5333,
+   "holdout_chance_persistence": 0.2654
+  },
+  {
+   "k": 5,
+   "score": 0.3935,
+   "holdout_ari": 0.2541,
+   "train_bootstrap_ari": 0.5328,
+   "holdout_persistence": 0.4333,
+   "holdout_chance_persistence": 0.2178
+  },
+  {
+   "k": 6,
+   "score": 0.3358,
+   "holdout_ari": 0.129,
+   "train_bootstrap_ari": 0.5426,
+   "holdout_persistence": 0.4417,
+   "holdout_chance_persistence": 0.1961
+  },
+  {
+   "k": 7,
+   "score": 0.3584,
+   "holdout_ari": 0.2182,
+   "train_bootstrap_ari": 0.4986,
+   "holdout_persistence": 0.4,
+   "holdout_chance_persistence": 0.1685
+  }
+ ],
+ "stability": {
+  "holdout_ari": 0.3069,
+  "train_bootstrap_ari": 0.4907,
+  "holdout_persistence": 0.5333,
+  "n_persistence_pairs": 120,
+  "holdout_chance_persistence": 0.2654,
+  "persistence_by_pair": {
+   "2022-2023": 0.5667,
+   "2023-2024": 0.5,
+   "2024-2025": 0.4,
+   "2025-2026": 0.6667
+  },
+  "holdout_cluster_shares": {
+   "2023": {
+    "pick-and-roll offense": 0.3333,
+    "post-up offense": 0.2,
+    "three-point heavy": 0.1667,
+    "transition offense": 0.3
+   },
+   "2024": {
+    "pick-and-roll offense": 0.3667,
+    "post-up offense": 0.2,
+    "three-point heavy": 0.2667,
+    "transition offense": 0.1667
+   },
+   "2025": {
+    "pick-and-roll offense": 0.3333,
+    "post-up offense": 0.1,
+    "three-point heavy": 0.3,
+    "transition offense": 0.2667
+   },
+   "2026": {
+    "pick-and-roll offense": 0.3,
+    "post-up offense": 0.1333,
+    "three-point heavy": 0.3,
+    "transition offense": 0.2667
+   }
+  },
+  "n_holdout": 120
+ },
+ "script": "tools/models/play_style/fit_play_style.py",
+ "corpus": "tests/fixtures/bb_play_style/nba_play_style_offense_team.parquet",
+ "n_by_season": {
+  "2016": 30,
+  "2017": 30,
+  "2018": 30,
+  "2019": 30,
+  "2020": 30,
+  "2021": 30,
+  "2022": 30,
+  "2023": 30,
+  "2024": 30,
+  "2025": 30,
+  "2026": 30
+ }
+}

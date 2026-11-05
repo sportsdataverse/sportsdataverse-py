@@ -636,6 +636,47 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
+### college_play_style_features {#college_play_style_features}
+
+`college_play_style_features(seasons: 'int | list[int]', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+The college play-style features, one row per qualifying player-season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+, the box and shots releases' floor). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+`player_id` (Utf8, ESPN), `season`, `team_id` (Utf8), `player`, `min` and the raw features of `COLLEGE_PLAY_STYLE_FEATURES`. Empty input returns zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id. |
+| `season` | Int64 | Season (2026 is 2025-26). |
+| `team_id` | String | ESPN team id. |
+| `player` | String | Player name. |
+| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
+| `usage` | Float64 | Possessions used (FGA + 0.44 FTA + TOV) per 100 minutes. |
+| `rim_share` | Float64 | Share of field-goal attempts at the rim (layups, dunks, tips). |
+| `mid_share` | Float64 | Share of field-goal attempts from mid-range. |
+| `three_share` | Float64 | Share of field-goal attempts from three. |
+| `ftr` | Float64 | Free-throw attempts per field-goal attempt. |
+| `ast_per100` | Float64 | Assists per 100 minutes. |
+| `tov_pct` | Float64 | Turnovers per possession used. |
+| `oreb_pct` | Float64 | Offensive rebounds as a share of the player's rebounds. |
+| `reb_per100` | Float64 | Rebounds per 100 minutes. |
+| `blk_pct` | Float64 | Blocks per field-goal attempt. |
+| `stl_pct` | Float64 | Steals per field-goal attempt. |
+| `assisted_share` | Float64 | Share of made field goals with an assister on the play (shots release). |
+| `dunk_share` | Float64 | Dunks as a share of rim attempts. |
+| `tip_share` | Float64 | Tip shots as a share of field-goal attempts. |
+| `starter_share` | Float64 | Share of the player's games he started. |
+| `mpg_share` | Float64 | Minutes per game as a share of a 40-minute game. |
+
 ### complete_weighted_avg {#complete_weighted_avg}
 
 `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'`

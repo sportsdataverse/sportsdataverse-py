@@ -256,9 +256,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_lineup_count_rows](additional/analytics-2.md#nba_lineup_count_rows) | Map `nba_stats_possessions` rows onto the lineup-seasons count frame. |
 | [nba_lineup_seasons](additional/analytics-2.md#nba_lineup_seasons) | Lineup seasons: 2-, 3- and 5-man units with possessions, minutes, ratings and four factors. |
 | [nba_play_context](additional/analytics-3.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
+| [nba_play_style_features](additional/analytics-3.md#nba_play_style_features) | The play-style clustering features, one row per qualifying player- or team-season. |
 | [nba_player_ages](additional/analytics-3.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
 | [nba_player_identity](additional/analytics-3.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
 | [nba_player_on_off](additional/analytics-3.md#nba_player_on_off) | Player on/off: each player's team with him on the floor and without him, per team-season. |
+| [nba_player_play_styles](additional/analytics-3.md#nba_player_play_styles) | Offensive and defensive play-style archetypes per player-season (BB-D20). |
 | [nba_player_positions](additional/analytics-3.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
 | [nba_player_props](additional/analytics-3.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_player_wowy](additional/analytics-3.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
@@ -272,8 +274,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_season_standings](additional/analytics-3.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-3.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-3.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
-| [nba_team_clutch](additional/analytics-3.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
+| [nba_team_clutch](additional/analytics-4.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_luck](additional/analytics-4.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
+| [nba_team_play_styles](additional/analytics-4.md#nba_team_play_styles) | Offensive and defensive play-style archetypes per team-season (BB-D20). |
 | [nba_team_season_flow](additional/analytics-4.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
 | [nba_team_season_rates](additional/analytics-4.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
 | [nba_team_strength](additional/analytics-4.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
@@ -284,9 +287,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_shot_diet_value](additional/analytics-4.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-4.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-4.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
-| [player_play_context](additional/analytics-4.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
-| [player_rates](additional/analytics-4.md#player_rates) | Per-player per-minute rate stats from box logs. |
-| [players_on_court_from_pbp](additional/analytics-4.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
+| [player_play_context](additional/analytics-5.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
+| [player_rates](additional/analytics-5.md#player_rates) | Per-player per-minute rate stats from box logs. |
+| [players_on_court_from_pbp](additional/analytics-5.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
 | [players_on_court_from_quarter_boxscores](additional/analytics-5.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |
 | [players_on_court_from_rotation](additional/analytics-5.md#players_on_court_from_rotation) | Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm. |
 | [prob_over](additional/analytics-5.md#prob_over) | Probability a stat finishes strictly above `line`. |

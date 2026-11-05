@@ -450,6 +450,49 @@ units = mbb_lineup_seasons(2025)
 units.filter(n_players=2).sort("net_rtg_rank").head()
 ```
 
+### mbb_play_styles {#mbb_play_styles}
+
+`mbb_play_styles(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College player play-style archetypes: box, shot and lineup-role features (BB-D20).
+
+The features and their sources are in `sportsdataverse.mbb.mbb_play_style`; the method
+(season-relative z-scores, centers fit on 2025 and frozen, applied as-of) in
+`sportsdataverse._common.play_style`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per qualifying `(player_id, season, team_id)`: `player_id` / `team_id` (Utf8, ESPN ids), `season`, `player`, `min` and the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`. Empty input returns that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id. |
+| `season` | Int64 | Season (2026 is 2025-26). |
+| `team_id` | String | ESPN team id. |
+| `player` | String | Player name. |
+| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
+| `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
+| `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |
+| `dist_to_center` | Float64 | Euclidean distance (z-space) to the archetype's center; small means a prototypical example. |
+| `second_archetype` | String | The next-nearest archetype, the style a hybrid leans toward. |
+| `margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_play_style import mbb_play_styles
+styles = mbb_play_styles(2026)
+styles.group_by("archetype").len()
+```
+
 ### mbb_player_on_off {#mbb_player_on_off}
 
 `mbb_player_on_off(seasons: 'int | list[int]', *, league: 'str' = 'mens', min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

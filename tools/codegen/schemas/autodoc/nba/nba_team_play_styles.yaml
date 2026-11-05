@@ -1,0 +1,42 @@
+schema: nba_team_play_styles
+kind: dataframe
+columns:
+- name: team_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: off_archetype
+  type: character
+  description: ''
+- name: off_cluster
+  type: integer
+  description: ''
+- name: off_dist_to_center
+  type: double
+  description: ''
+- name: off_second_archetype
+  type: character
+  description: ''
+- name: off_margin
+  type: double
+  description: ''
+- name: def_archetype
+  type: character
+  description: ''
+- name: def_cluster
+  type: integer
+  description: ''
+- name: def_dist_to_center
+  type: double
+  description: ''
+- name: def_second_archetype
+  type: character
+  description: ''
+- name: def_margin
+  type: double
+  description: ''

@@ -142,6 +142,11 @@ from sportsdataverse.nba.nba_lineup_seasons import (  # noqa: F401
     nba_lineup_seasons,
 )
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off, nba_player_wowy  # noqa: F401
+from sportsdataverse.nba.nba_play_style import (  # noqa: F401
+    nba_play_style_features,
+    nba_player_play_styles,
+    nba_team_play_styles,
+)
 from sportsdataverse.nba.nba_game_impact import (  # noqa: F401
     nba_game_lineups_used,
     nba_game_player_impact,

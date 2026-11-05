@@ -245,6 +245,7 @@ def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
         "season",
         "team_id",
         "minutes",
+        "starter",
         *(_COUNT_COLS),
     ]
     frames = []
@@ -270,7 +271,13 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
             continue
         if not df.is_empty():
             frames.append(
-                df.select([c for c in ("athlete_id_1", "season", "type_text", "score_value") if c in df.columns])
+                df.select(
+                    [
+                        c
+                        for c in ("athlete_id_1", "athlete_id_2", "season", "type_text", "score_value", "scoring_play")
+                        if c in df.columns
+                    ]
+                )
             )
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
@@ -310,7 +317,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
 
     Returns:
         One row per (player_id, season, team_id): ``player_id:Utf8, season,
-        team_id:Utf8, player, minutes`` + the counting columns + ``fga_rim,
+        team_id:Utf8, player, position, minutes, games, starter_share`` (the share
+        of his box rows marked starter) + the counting columns + ``fga_rim,
         fga_mid, fga_three``. Empty input returns zero rows.
 
     Example:
@@ -335,6 +343,12 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
                 else pl.lit(None, dtype=pl.Utf8)
             ).alias("position"),
             pl.col("minutes").cast(pl.Float64).sum().alias("minutes"),
+            pl.len().alias("games"),
+            (
+                pl.col("starter").cast(pl.Float64).mean()
+                if "starter" in box.columns
+                else pl.lit(None, dtype=pl.Float64)
+            ).alias("starter_share"),
             *[pl.col(c).cast(pl.Float64).sum() for c in _COUNT_COLS if c in box.columns],
         )
         .with_columns(

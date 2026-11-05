@@ -887,7 +887,7 @@ all remaining attempts fold into `fga_mid`.
 
 **Returns**
 
-One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, minutes` + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
+One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, position, minutes, games, starter_share` (the share of his box rows marked starter) + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
 
 | col_name | type | description |
 |---|---|---|

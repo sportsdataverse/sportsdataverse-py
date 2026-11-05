@@ -357,6 +357,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_possessions](additional/analytics.md#calculate_possessions) | Top-level entry point: calculate team/opponent possessions for a |
 | [calculate_possessions_by_event](additional/analytics.md#calculate_possessions_by_event) | Drive the batch loop + per-clump scoring over an already-flattened |
 | [calculate_stats](additional/analytics.md#calculate_stats) | Calculate one direction's possession-fragment for one merged clump |
+| [college_play_style_features](additional/analytics.md#college_play_style_features) | The college play-style features, one row per qualifying player-season. |
 | [complete_weighted_avg](additional/analytics.md#complete_weighted_avg) | Finish a `weighted_avg` accumulator into true weighted averages. |
 | [concurrent_event_handler](additional/analytics.md#concurrent_event_handler) | Batch a stream of singleton/boundary clumps into merged |
 | [count_matching](additional/analytics.md#count_matching) | Count events on one side matching any of the given parsers. |
@@ -375,6 +376,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_game_lineups_used](additional/analytics-2.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [mbb_game_player_impact](additional/analytics-2.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_lineup_seasons](additional/analytics-2.md#mbb_lineup_seasons) | College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
+| [mbb_play_styles](additional/analytics-2.md#mbb_play_styles) | College player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [mbb_player_on_off](additional/analytics-2.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
 | [mbb_player_wowy](additional/analytics-2.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [mbb_shot_selection](additional/analytics-2.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |

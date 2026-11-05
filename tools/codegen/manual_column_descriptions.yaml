@@ -76482,3 +76482,112 @@ wbb_player_wowy:
     (a free throw to the lineup at the last foul).
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id; a non-D1 team has none and gets no rows.
+nba_player_play_styles:
+  player_id: stats.nba.com player id.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  player_name: Player name.
+  team_id: stats.nba.com team id (the league-dashboard team; a traded player's last team).
+  min: Regular-season minutes; the qualifier is a quarter of the season's most minutes.
+  off_archetype: 'Offensive play-style archetype: the label of the nearest frozen KMeans center to the player-season''s within-season
+    z-scored features; null when the player does not qualify on that side or the season is not covered.'
+  off_cluster: Index of the offensive archetype's center in the bundled artifact (0-based).
+  off_dist_to_center: Euclidean distance (z-space) to the offensive archetype's center; small means a prototypical example.
+  off_second_archetype: The next-nearest offensive archetype, the style a hybrid leans toward.
+  off_margin: Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes.
+  def_archetype: 'Defensive play-style archetype: the label of the nearest frozen KMeans center to the player-season''s within-season
+    z-scored features; null when the player does not qualify on that side or the season is not covered.'
+  def_cluster: Index of the defensive archetype's center in the bundled artifact (0-based).
+  def_dist_to_center: Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example.
+  def_second_archetype: The next-nearest defensive archetype, the style a hybrid leans toward.
+  def_margin: Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes.
+nba_team_play_styles:
+  team_id: stats.nba.com team id.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  team_name: Team name.
+  off_archetype: 'Offensive play-style archetype: the label of the nearest frozen KMeans center to the team-season''s within-season
+    z-scored features; null when the team does not qualify on that side or the season is not covered.'
+  off_cluster: Index of the offensive archetype's center in the bundled artifact (0-based).
+  off_dist_to_center: Euclidean distance (z-space) to the offensive archetype's center; small means a prototypical example.
+  off_second_archetype: The next-nearest offensive archetype, the style a hybrid leans toward.
+  off_margin: Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes.
+  def_archetype: 'Defensive play-style archetype: the label of the nearest frozen KMeans center to the team-season''s within-season
+    z-scored features; null when the team does not qualify on that side or the season is not covered.'
+  def_cluster: Index of the defensive archetype's center in the bundled artifact (0-based).
+  def_dist_to_center: Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example.
+  def_second_archetype: The next-nearest defensive archetype, the style a hybrid leans toward.
+  def_margin: Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes.
+nba_play_style_features:
+  player_id: stats.nba.com player id.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  player_name: Player name.
+  team_id: stats.nba.com team id (the league-dashboard team; a traded player's last team).
+  min: Regular-season minutes; the qualifier is a quarter of the season's most minutes.
+  pt_isolation: Share of the player's Synergy possessions that were isolations (stats.nba.com play-type frequency).
+  pt_prballhandler: Share of Synergy possessions as the pick-and-roll ball handler.
+  pt_prrollman: Share of Synergy possessions as the pick-and-roll roll man.
+  pt_postup: Share of Synergy possessions that were post-ups.
+  pt_spotup: Share of Synergy possessions that were spot-ups.
+  pt_handoff: Share of Synergy possessions out of handoffs.
+  pt_offscreen: Share of Synergy possessions coming off screens.
+  pt_cut: Share of Synergy possessions on cuts.
+  pt_transition: Share of Synergy possessions in transition.
+  pt_offrebound: Share of Synergy possessions on putbacks after an offensive rebound.
+  fga3_share: Share of field-goal attempts that were threes.
+  uast_share: Share of made field goals that were unassisted.
+  paint_pts_share: Share of points scored in the paint.
+  mid_pts_share: Share of points from mid-range twos.
+  drives_p36: Drives per 36 minutes (tracking).
+  touches_p36: Touches per 36 minutes (tracking).
+  sec_per_touch: Average seconds per touch (tracking).
+  drib_per_touch: Average dribbles per touch (tracking).
+  catch_shoot_share: Catch-and-shoot attempts as a share of field-goal attempts.
+  pull_up_share: Pull-up attempts as a share of field-goal attempts.
+  post_touches_p36: Post touches per 36 minutes.
+  paint_touches_p36: Paint touches per 36 minutes.
+  potential_ast_p36: Potential assists per 36 minutes.
+mbb_play_styles:
+  player_id: ESPN athlete id.
+  season: Season (2026 is 2025-26).
+  team_id: ESPN team id.
+  player: Player name.
+  min: Season minutes; the qualifier is a quarter of the season's most minutes.
+  archetype: 'Play-style archetype: the label of the nearest frozen KMeans center to the player-season''s within-season z-scored
+    box, shot and lineup-role features.'
+  cluster: Index of the archetype's center in the bundled artifact (0-based).
+  dist_to_center: Euclidean distance (z-space) to the archetype's center; small means a prototypical example.
+  second_archetype: The next-nearest archetype, the style a hybrid leans toward.
+  margin: Distance to the second center minus distance to the nearest; small means a hybrid.
+wbb_play_styles:
+  player_id: ESPN athlete id.
+  season: Season (2026 is 2025-26).
+  team_id: ESPN team id.
+  player: Player name.
+  min: Season minutes; the qualifier is a quarter of the season's most minutes.
+  archetype: 'Play-style archetype: the label of the nearest frozen KMeans center to the player-season''s within-season z-scored
+    box, shot and lineup-role features.'
+  cluster: Index of the archetype's center in the bundled artifact (0-based).
+  dist_to_center: Euclidean distance (z-space) to the archetype's center; small means a prototypical example.
+  second_archetype: The next-nearest archetype, the style a hybrid leans toward.
+  margin: Distance to the second center minus distance to the nearest; small means a hybrid.
+college_play_style_features:
+  player_id: ESPN athlete id.
+  season: Season (2026 is 2025-26).
+  team_id: ESPN team id.
+  player: Player name.
+  min: Season minutes; the qualifier is a quarter of the season's most minutes.
+  usage: Possessions used (FGA + 0.44 FTA + TOV) per 100 minutes.
+  rim_share: Share of field-goal attempts at the rim (layups, dunks, tips).
+  mid_share: Share of field-goal attempts from mid-range.
+  three_share: Share of field-goal attempts from three.
+  ftr: Free-throw attempts per field-goal attempt.
+  ast_per100: Assists per 100 minutes.
+  tov_pct: Turnovers per possession used.
+  oreb_pct: Offensive rebounds as a share of the player's rebounds.
+  reb_per100: Rebounds per 100 minutes.
+  blk_pct: Blocks per field-goal attempt.
+  stl_pct: Steals per field-goal attempt.
+  assisted_share: Share of made field goals with an assister on the play (shots release).
+  dunk_share: Dunks as a share of rim attempts.
+  tip_share: Tip shots as a share of field-goal attempts.
+  starter_share: Share of the player's games he started.
+  mpg_share: Minutes per game as a share of a 40-minute game.

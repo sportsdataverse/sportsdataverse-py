@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_play–nba_team"
-sidebar_label: "Analytics: nba_play–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_play–nba_shot"
+sidebar_label: "Analytics: nba_play–nba_shot"
 sidebar_position: 15
-description: "NBA — additional Python functions — Analytics: nba_play–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_play–nba_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_play–nba_team
+# NBA — additional Python functions — Analytics: nba_play–nba_shot
 
 ### nba_play_context {#nba_play_context}
 
@@ -47,6 +47,69 @@ clean = poss.filter(
     (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
 )
 print(clean["is_transition"].mean())
+```
+
+### nba_play_style_features {#nba_play_style_features}
+
+`nba_play_style_features(seasons: 'int | list[int]', *, side: 'str' = 'offense', entity: 'str' = 'player', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+The play-style clustering features, one row per qualifying player- or team-season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). Seasons before `NBA_PLAY_STYLE_FIRST_SEASON` are skipped. |
+| `side` | `str` | `'offense'` | `"offense"` or `"defense"`. |
+| `entity` | `str` | `'player'` | `"player"` or `"team"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The ids, `season` (and `min` for players) and the raw (unstandardized) features of `NBA_PLAY_STYLE_FEATURES` for `(side, entity)`. A season no release covers yet is skipped.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | stats.nba.com player id. |
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
+| `player_name` | String | Player name. |
+| `team_id` | Int64 | stats.nba.com team id (the league-dashboard team; a traded player's last team). |
+| `min` | Float64 | Regular-season minutes; the qualifier is a quarter of the season's most minutes. |
+| `pt_isolation` | Float64 | Share of the player's Synergy possessions that were isolations (stats.nba.com play-type frequency). |
+| `pt_prballhandler` | Float64 | Share of Synergy possessions as the pick-and-roll ball handler. |
+| `pt_prrollman` | Float64 | Share of Synergy possessions as the pick-and-roll roll man. |
+| `pt_postup` | Float64 | Share of Synergy possessions that were post-ups. |
+| `pt_spotup` | Float64 | Share of Synergy possessions that were spot-ups. |
+| `pt_handoff` | Float64 | Share of Synergy possessions out of handoffs. |
+| `pt_offscreen` | Float64 | Share of Synergy possessions coming off screens. |
+| `pt_cut` | Float64 | Share of Synergy possessions on cuts. |
+| `pt_transition` | Float64 | Share of Synergy possessions in transition. |
+| `pt_offrebound` | Float64 | Share of Synergy possessions on putbacks after an offensive rebound. |
+| `fga3_share` | Float64 | Share of field-goal attempts that were threes. |
+| `uast_share` | Float64 | Share of made field goals that were unassisted. |
+| `paint_pts_share` | Float64 | Share of points scored in the paint. |
+| `mid_pts_share` | Float64 | Share of points from mid-range twos. |
+| `drives_p36` | Float64 | Drives per 36 minutes (tracking). |
+| `touches_p36` | Float64 | Touches per 36 minutes (tracking). |
+| `sec_per_touch` | Float64 | Average seconds per touch (tracking). |
+| `drib_per_touch` | Float64 | Average dribbles per touch (tracking). |
+| `catch_shoot_share` | Float64 | Catch-and-shoot attempts as a share of field-goal attempts. |
+| `pull_up_share` | Float64 | Pull-up attempts as a share of field-goal attempts. |
+| `post_touches_p36` | Float64 | Post touches per 36 minutes. |
+| `paint_touches_p36` | Float64 | Paint touches per 36 minutes. |
+| `potential_ast_p36` | Float64 | Potential assists per 36 minutes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `side` or `entity` is not one of the values above. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_play_style import nba_play_style_features
+feats = nba_play_style_features(2025, side="defense", entity="team")
 ```
 
 ### nba_player_ages {#nba_player_ages}
@@ -217,6 +280,53 @@ One row per `(season, team_id, player_id)`: `games` on the floor and `team_games
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off
 on_off = nba_player_on_off(2025)
 on_off.sort("net_rtg_diff_rank").head()
+```
+
+### nba_player_play_styles {#nba_player_play_styles}
+
+`nba_player_play_styles(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Offensive and defensive play-style archetypes per player-season (BB-D20).
+
+The method is in `sportsdataverse._common.play_style` and the features in
+`sportsdataverse.nba.nba_play_style`. A player qualifies on a side with at least a quarter
+of the season's most minutes (`PLAYER_MIN_SHARE`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). Offense covers 2016+, defense 2018+; an uncovered side is null. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(player_id, season)` qualifying on either side: `player_id` (Int64), `season`, `player_name`, `team_id` (Int64), `min` (season minutes) and for `off_` and `def_` the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | stats.nba.com player id. |
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
+| `player_name` | String | Player name. |
+| `team_id` | Int64 | stats.nba.com team id (the league-dashboard team; a traded player's last team). |
+| `min` | Float64 | Regular-season minutes; the qualifier is a quarter of the season's most minutes. |
+| `off_archetype` | String | Offensive play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored features; null when the player does not qualify on that side or the season is not covered. |
+| `off_cluster` | Int64 | Index of the offensive archetype's center in the bundled artifact (0-based). |
+| `off_dist_to_center` | Float64 | Euclidean distance (z-space) to the offensive archetype's center; small means a prototypical example. |
+| `off_second_archetype` | String | The next-nearest offensive archetype, the style a hybrid leans toward. |
+| `off_margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes. |
+| `def_archetype` | String | Defensive play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored features; null when the player does not qualify on that side or the season is not covered. |
+| `def_cluster` | Int64 | Index of the defensive archetype's center in the bundled artifact (0-based). |
+| `def_dist_to_center` | Float64 | Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example. |
+| `def_second_archetype` | String | The next-nearest defensive archetype, the style a hybrid leans toward. |
+| `def_margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_play_style import nba_player_play_styles
+styles = nba_player_play_styles(2025)
+styles.group_by("off_archetype").len()
 ```
 
 ### nba_player_positions {#nba_player_positions}
@@ -964,36 +1074,4 @@ No returns table is published for this function: no capture: it reads stats.nba.
 ```python
 from sportsdataverse.nba import nba_shot_value_lineups
 df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
-```
-
-### nba_team_clutch {#nba_team_clutch}
-
-`nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
-
-Loads the season's clutch net rating (`nba_stats_leaguedashteamclutch`)
-and full-game net baseline (`nba_stats_leaguedashteamstats`), computes
-`clutch_delta`, and applies `shrink_clutch`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | End year of the season (e.g. `2024` for 2023-24). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_clutch import nba_team_clutch
-skill = nba_team_clutch(2024)
-skill.sort("clutch_skill_shrunk", descending=True).head()
 ```

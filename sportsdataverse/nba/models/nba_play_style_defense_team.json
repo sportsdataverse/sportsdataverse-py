@@ -1,0 +1,167 @@
+{
+ "feature_cols": [
+  "opp_fg3a_rate",
+  "opp_fta_rate",
+  "opp_tov_rate",
+  "opp_paint_share",
+  "opp_fb_share",
+  "opp_oreb_rate",
+  "deflections_per_poss",
+  "contested_3pt_rate"
+ ],
+ "k": 4,
+ "seed": 20261105,
+ "train_seasons": [
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022
+ ],
+ "centers": [
+  [
+   -0.17433178849072736,
+   0.2867006652608607,
+   -0.037170904486593714,
+   0.3704527330256202,
+   1.0390163477602279,
+   0.7472117145230011,
+   0.10877122338522187,
+   -0.7318683488714852
+  ],
+  [
+   -0.9763669602262292,
+   -0.5738467447674029,
+   -0.5817503249626974,
+   0.913427167849738,
+   -0.3233237274252346,
+   -0.3618289200000607,
+   -0.5403196662392572,
+   -0.14473314405151125
+  ],
+  [
+   0.475138824670999,
+   -0.4127402675656812,
+   -0.7021660076423067,
+   -0.7724702498385426,
+   -0.6212698161539862,
+   -0.7465047911738247,
+   -0.8448243015773444,
+   0.20406631333497838
+  ],
+  [
+   0.6132113394951213,
+   0.5223268121066641,
+   0.9668812287920808,
+   -0.5130400472497555,
+   -0.10863140603219006,
+   0.22558868875154683,
+   0.9174553435789318,
+   0.5404448042917958
+  ]
+ ],
+ "labels": [
+  "allows transition",
+  "allows paint points",
+  "allows threes",
+  "forces turnovers"
+ ],
+ "n_train": 210,
+ "holdout_seasons": [
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "k_sweep": [
+  {
+   "k": 4,
+   "score": 0.4524,
+   "holdout_ari": 0.4378,
+   "train_bootstrap_ari": 0.4669,
+   "holdout_persistence": 0.5,
+   "holdout_chance_persistence": 0.2568
+  },
+  {
+   "k": 5,
+   "score": 0.3417,
+   "holdout_ari": 0.2817,
+   "train_bootstrap_ari": 0.4017,
+   "holdout_persistence": 0.45,
+   "holdout_chance_persistence": 0.2043
+  },
+  {
+   "k": 6,
+   "score": 0.3184,
+   "holdout_ari": 0.2748,
+   "train_bootstrap_ari": 0.362,
+   "holdout_persistence": 0.4167,
+   "holdout_chance_persistence": 0.18
+  },
+  {
+   "k": 7,
+   "score": 0.2734,
+   "holdout_ari": 0.1546,
+   "train_bootstrap_ari": 0.3923,
+   "holdout_persistence": 0.4333,
+   "holdout_chance_persistence": 0.1626
+  }
+ ],
+ "stability": {
+  "holdout_ari": 0.4378,
+  "train_bootstrap_ari": 0.4669,
+  "holdout_persistence": 0.5,
+  "n_persistence_pairs": 120,
+  "holdout_chance_persistence": 0.2568,
+  "persistence_by_pair": {
+   "2022-2023": 0.6,
+   "2023-2024": 0.4333,
+   "2024-2025": 0.4333,
+   "2025-2026": 0.5333
+  },
+  "holdout_cluster_shares": {
+   "2023": {
+    "allows paint points": 0.3667,
+    "allows threes": 0.0667,
+    "allows transition": 0.2333,
+    "forces turnovers": 0.3333
+   },
+   "2024": {
+    "allows paint points": 0.1667,
+    "allows threes": 0.2667,
+    "allows transition": 0.3,
+    "forces turnovers": 0.2667
+   },
+   "2025": {
+    "allows paint points": 0.2667,
+    "allows threes": 0.2,
+    "allows transition": 0.2333,
+    "forces turnovers": 0.3
+   },
+   "2026": {
+    "allows paint points": 0.3,
+    "allows threes": 0.2,
+    "allows transition": 0.2333,
+    "forces turnovers": 0.2667
+   }
+  },
+  "n_holdout": 120
+ },
+ "script": "tools/models/play_style/fit_play_style.py",
+ "corpus": "tests/fixtures/bb_play_style/nba_play_style_defense_team.parquet",
+ "n_by_season": {
+  "2016": 30,
+  "2017": 30,
+  "2018": 30,
+  "2019": 30,
+  "2020": 30,
+  "2021": 30,
+  "2022": 30,
+  "2023": 30,
+  "2024": 30,
+  "2025": 30,
+  "2026": 30
+ }
+}

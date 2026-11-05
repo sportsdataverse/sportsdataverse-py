@@ -590,6 +590,45 @@ from sportsdataverse.wbb import wbb_lineup_seasons
 wbb_lineup_seasons(2025).filter(n_players=5).sort("poss").tail()
 ```
 
+### wbb_play_styles {#wbb_play_styles}
+
+`wbb_play_styles(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20).
+
+Delegates to `sportsdataverse.mbb.mbb_play_style.mbb_play_styles` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per qualifying `(player_id, season, team_id)`: the ESPN ids, `player`, `min` and the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id. |
+| `season` | Int64 | Season (2026 is 2025-26). |
+| `team_id` | String | ESPN team id. |
+| `player` | String | Player name. |
+| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
+| `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
+| `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |
+| `dist_to_center` | Float64 | Euclidean distance (z-space) to the archetype's center; small means a prototypical example. |
+| `second_archetype` | String | The next-nearest archetype, the style a hybrid leans toward. |
+| `margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_play_styles
+wbb_play_styles(2026).group_by("archetype").len()
+```
+
 ### wbb_player_on_off {#wbb_player_on_off}
 
 `wbb_player_on_off(seasons: 'int | list[int]', *, min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
