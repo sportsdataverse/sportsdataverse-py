@@ -46,6 +46,7 @@ from sportsdataverse.wnba.wnba_game_impact import wnba_game_lineups_used, wnba_g
 from sportsdataverse.wnba.wnba_game_flow import wnba_game_flow, wnba_team_season_flow  # noqa: F401
 from sportsdataverse.wnba.wnba_team_strength import wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba.wnba_team_luck import wnba_team_luck  # noqa: F401
+from sportsdataverse.wnba.wnba_coach_seasons import wnba_coach_careers, wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba.wnba_season_sim import (  # noqa: F401
     wnba_draft_lottery_odds,
     wnba_season_sim,

@@ -84,5 +84,6 @@ from sportsdataverse.mbb.mbb_game_flow import *
 from sportsdataverse.mbb.mbb_team_season_rates import *
 from sportsdataverse.mbb.mbb_team_strength import *
 from sportsdataverse.mbb.mbb_team_luck import *
+from sportsdataverse.mbb.mbb_coach_seasons import *
 from sportsdataverse.mbb.mbb_teams import *
 from sportsdataverse.mbb.mbb_win_prob import *

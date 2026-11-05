@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 99 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 101 | — |
 
 ## ESPN {#espn}
 
@@ -79,6 +79,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`shooter_talent`](reference/additional/analytics#shooter_talent)
 - [`shot_selection_quality`](reference/additional/analytics#shot_selection_quality)
 - [`wnba_availability`](reference/additional/analytics#wnba_availability)
+- [`wnba_coach_careers`](reference/additional/analytics#wnba_coach_careers)
+- [`wnba_coach_seasons`](reference/additional/analytics#wnba_coach_seasons)
 - [`wnba_draft_lottery_odds`](reference/additional/analytics#wnba_draft_lottery_odds)
 - [`wnba_expected_turnovers`](reference/additional/analytics#wnba_expected_turnovers)
 - [`wnba_foul_drawing`](reference/additional/analytics#wnba_foul_drawing)
@@ -93,9 +95,9 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_season_standings`](reference/additional/analytics#wnba_season_standings)
 - [`wnba_shot_value`](reference/additional/analytics#wnba_shot_value)
 - [`wnba_team_clutch`](reference/additional/analytics#wnba_team_clutch)
-- [`wnba_team_luck`](reference/additional/analytics#wnba_team_luck)
-- [`wnba_team_season_flow`](reference/additional/analytics#wnba_team_season_flow)
-- [`wnba_team_season_rates`](reference/additional/analytics#wnba_team_season_rates)
+- [`wnba_team_luck`](reference/additional/analytics-2#wnba_team_luck)
+- [`wnba_team_season_flow`](reference/additional/analytics-2#wnba_team_season_flow)
+- [`wnba_team_season_rates`](reference/additional/analytics-2#wnba_team_season_rates)
 - [`wnba_team_strength`](reference/additional/analytics-2#wnba_team_strength)
 - [`wnba_tracking_drive_value`](reference/additional/analytics-2#wnba_tracking_drive_value)
 - [`wnba_tracking_pass_value`](reference/additional/analytics-2#wnba_tracking_pass_value)

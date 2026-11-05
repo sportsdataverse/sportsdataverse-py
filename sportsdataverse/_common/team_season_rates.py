@@ -55,8 +55,11 @@ __all__ = [
     "CLUTCH_SECONDS",
     "COUNT_ROWS_SCHEMA",
     "RATE_ROWS_SCHEMA",
+    "SIDE_COUNTS",
     "SPLITS",
     "TEAM_SEASON_RATES_SCHEMA",
+    "rates_from_counts",
+    "season_counts",
     "team_season_rates",
     "team_season_rates_league_averages",
 ]
@@ -242,39 +245,7 @@ def team_season_rates(
             raise KeyError(f"{name} missing columns: {missing}")
     if rows.height == 0:
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
-    rows = _with_clutch(rows.select(list(RATE_ROWS_SCHEMA)).cast(RATE_ROWS_SCHEMA))
-    rows = rows.with_columns((pl.col("start_clock") - pl.col("end_clock")).alias("duration"))
-    sides = _sides(rows, n_poss=1) if counts is None else _with_box_sides(rows, counts)
-    agg = (
-        _split_rows(sides)
-        .group_by(["season", "team_id", "split"])
-        .agg(
-            pl.col("game_id").filter(pl.col("n_poss") > 0).n_unique().cast(pl.Int64).alias("games"),
-            pl.col("n_poss").filter(pl.col("side") == "o").sum().alias("poss"),
-            pl.col("n_poss").filter(pl.col("side") == "d").sum().alias("opp_poss"),
-            pl.col("points").filter(pl.col("side") == "o").sum().alias("pts"),
-            pl.col("points").filter(pl.col("side") == "d").sum().alias("opp_pts"),
-            # each possession is in both sides' rows, so this is the clock of the team's games
-            pl.col("duration").filter(pl.col("n_poss") > 0).sum().alias("_seconds"),
-            *[_side_sum(c, s) for c in _COUNTS for s in ("o", "d")],
-        )
-    )
-    efg = {s: (pl.col(f"{s}_fgm") + 0.5 * pl.col(f"{s}_fg3m")) / pl.col(f"{s}_fga") for s in ("o", "d")}
-    rates = agg.with_columns(
-        (100 * pl.col("pts") / pl.col("poss")).alias("off_rtg"),
-        (100 * pl.col("opp_pts") / pl.col("opp_poss")).alias("def_rtg"),
-        (minutes_per_game * 60 * (pl.col("poss") + pl.col("opp_poss")) / 2 / pl.col("_seconds")).alias("pace"),
-        efg["o"].alias("efg_pct"),
-        (pl.col("o_tov") / pl.col("o_ff_poss")).alias("tov_pct"),
-        (pl.col("o_oreb") / (pl.col("o_oreb") + pl.col("o_dreb"))).alias("orb_pct"),
-        (pl.col("o_fta") / pl.col("o_fga")).alias("ft_rate"),
-        efg["d"].alias("opp_efg_pct"),
-        (pl.col("d_tov") / pl.col("d_ff_poss")).alias("opp_tov_pct"),
-        (pl.col("d_oreb") / (pl.col("d_oreb") + pl.col("d_dreb"))).alias("opp_orb_pct"),
-        (pl.col("d_fta") / pl.col("d_fga")).alias("opp_ft_rate"),
-    ).with_columns((pl.col("off_rtg") - pl.col("def_rtg")).alias("net_rtg"))
-    # A zero denominator (no possessions or attempts on a side) is undefined, not a rate.
-    rates = rates.with_columns(pl.when(pl.col(m).is_finite()).then(pl.col(m)).otherwise(None).alias(m) for m in _RATED)
+    rates = rates_from_counts(season_counts(rows, counts=counts), minutes_per_game=minutes_per_game)
     order = pl.col("split").replace_strict({s: i for i, s in enumerate(SPLITS)}, return_dtype=pl.Int64)
     return (
         rates.pipe(
@@ -290,6 +261,73 @@ def team_season_rates(
         .select(list(TEAM_SEASON_RATES_SCHEMA))
         .cast(TEAM_SEASON_RATES_SCHEMA)
     )
+
+
+#: The counts :func:`season_counts` sums per side: ``o_<c>`` the team's, ``d_<c>`` its opponents'.
+SIDE_COUNTS: tuple[str, ...] = tuple(f"{s}_{c}" for c in _COUNTS for s in ("o", "d"))
+
+
+def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> pl.DataFrame:
+    """The summed counts behind :func:`team_season_rates`, one row per ``(season, team_id, split)``.
+
+    ``games``, ``poss``, ``opp_poss``, ``pts``, ``opp_pts`` (possession points), ``seconds`` (the
+    game clock the team's possessions used) and the four-factor counts :data:`SIDE_COUNTS`. Sums of
+    these over any set of rows give the pooled rates (:func:`rates_from_counts`), so a career is
+    the rate of its summed counts, never an average of season rates.
+
+    Args:
+        rows: The possessions, in :data:`RATE_ROWS_SCHEMA` (already validated by the caller).
+        counts: Game-level counts in :data:`COUNT_ROWS_SCHEMA`, as :func:`team_season_rates`.
+
+    Returns:
+        The counts, unsorted, one row per ``(season, team_id, split)``.
+    """
+    rows = _with_clutch(rows.select(list(RATE_ROWS_SCHEMA)).cast(RATE_ROWS_SCHEMA))
+    rows = rows.with_columns((pl.col("start_clock") - pl.col("end_clock")).alias("duration"))
+    sides = _sides(rows, n_poss=1) if counts is None else _with_box_sides(rows, counts)
+    return (
+        _split_rows(sides)
+        .group_by(["season", "team_id", "split"])
+        .agg(
+            pl.col("game_id").filter(pl.col("n_poss") > 0).n_unique().cast(pl.Int64).alias("games"),
+            pl.col("n_poss").filter(pl.col("side") == "o").sum().alias("poss"),
+            pl.col("n_poss").filter(pl.col("side") == "d").sum().alias("opp_poss"),
+            pl.col("points").filter(pl.col("side") == "o").sum().alias("pts"),
+            pl.col("points").filter(pl.col("side") == "d").sum().alias("opp_pts"),
+            # each possession is in both sides' rows, so this is the clock of the team's games
+            pl.col("duration").filter(pl.col("n_poss") > 0).sum().alias("seconds"),
+            *[_side_sum(c, s) for c in _COUNTS for s in ("o", "d")],
+        )
+    )
+
+
+def rates_from_counts(agg: pl.DataFrame, *, minutes_per_game: int) -> pl.DataFrame:
+    """``agg`` (:func:`season_counts` columns, any grouping) with the twelve rates appended.
+
+    Args:
+        agg: Summed counts: ``poss``, ``opp_poss``, ``pts``, ``opp_pts``, ``seconds`` and
+            :data:`SIDE_COUNTS`.
+        minutes_per_game: Regulation minutes, the pace basis.
+
+    Returns:
+        ``agg`` plus ``off_rtg`` .. ``opp_ft_rate`` and ``net_rtg``; a zero denominator gives null.
+    """
+    efg = {s: (pl.col(f"{s}_fgm") + 0.5 * pl.col(f"{s}_fg3m")) / pl.col(f"{s}_fga") for s in ("o", "d")}
+    rates = agg.with_columns(
+        (100 * pl.col("pts") / pl.col("poss")).alias("off_rtg"),
+        (100 * pl.col("opp_pts") / pl.col("opp_poss")).alias("def_rtg"),
+        (minutes_per_game * 60 * (pl.col("poss") + pl.col("opp_poss")) / 2 / pl.col("seconds")).alias("pace"),
+        efg["o"].alias("efg_pct"),
+        (pl.col("o_tov") / pl.col("o_ff_poss")).alias("tov_pct"),
+        (pl.col("o_oreb") / (pl.col("o_oreb") + pl.col("o_dreb"))).alias("orb_pct"),
+        (pl.col("o_fta") / pl.col("o_fga")).alias("ft_rate"),
+        efg["d"].alias("opp_efg_pct"),
+        (pl.col("d_tov") / pl.col("d_ff_poss")).alias("opp_tov_pct"),
+        (pl.col("d_oreb") / (pl.col("d_oreb") + pl.col("d_dreb"))).alias("opp_orb_pct"),
+        (pl.col("d_fta") / pl.col("d_fga")).alias("opp_ft_rate"),
+    ).with_columns((pl.col("off_rtg") - pl.col("def_rtg")).alias("net_rtg"))
+    # A zero denominator (no possessions or attempts on a side) is undefined, not a rate.
+    return rates.with_columns(pl.when(pl.col(m).is_finite()).then(pl.col(m)).otherwise(None).alias(m) for m in _RATED)
 
 
 def team_season_rates_league_averages(rates: pl.DataFrame, *, level: str) -> pl.DataFrame:
