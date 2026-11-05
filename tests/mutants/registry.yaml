@@ -10331,3 +10331,176 @@
   test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
   expected: kill
   note: Team possessions five times too many, so the replicate's raw net rating shrinks toward zero.
+
+# --- BB-D24: EPV and EPV added (sportsdataverse/nba/nba_epv.py) -----------------------------------
+# Killers: tests/nba/test_nba_epv.py on the committed 2024-25 NBA holdout games
+# (tests/fixtures/bb_epv), scored with the bundled booster.
+- id: bb-epv-start-margin-before-event
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(prev["_h"] - prev["_a"]).alias("_pre_home_margin")'
+  mutant: '(pl.col("_h") - pl.col("_a")).alias("_pre_home_margin")'
+  test: tests/nba/test_nba_epv.py::test_start_margin_is_the_lead_before_the_first_event
+  expected: kill
+  note: The margin after the start event counts a possession's own first basket in its starting state.
+
+- id: bb-epv-transition-as-of
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(seen & pl.col("is_transition"))'
+  mutant: 'pl.when(pl.col("is_transition"))'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: is_transition is known only once the first shot is taken; before it the flag leaks the future.
+
+- id: bb-epv-added-points-term
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(pl.col("points") + pl.col("epv_after") - pl.col("epv_before"))'
+  mutant: '(pl.col("epv_after") - pl.col("epv_before"))'
+  test: tests/nba/test_nba_epv.py::test_epv_added_telescopes_over_each_possession
+  expected: kill
+  note: Without the points on the play a made shot reads as a loss of EPV.
+
+- id: bb-epv-end-prices-next-start
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(float(mean) - pl.col("_next_start"))'
+  mutant: '.then(0.0)'
+  test: tests/nba/test_nba_epv.py::test_a_possession_end_prices_the_next_start
+  expected: kill
+  note: A live-ball turnover and a dead-ball one would cost the offense the same.
+
+- id: bb-epv-offense-points-side
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(pl.col("_dh"))'
+  mutant: '.then(pl.col("_da"))'
+  test: tests/nba/test_nba_epv.py::test_labels_sum_to_the_engine_points
+  expected: kill
+  note: The label must be the offense's points, read from its own side of the score.
+
+- id: bb-epv-ft-foul-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=pl.lit(False),'
+  test: tests/nba/test_nba_epv.py::test_free_throws_land_on_the_foul_lineup
+  expected: kill
+  note: BB-D6's rule; a player subbed in between a foul and its free throws is not on for them.
+
+- id: bb-epv-action-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'slot = {k: pl.when(known).then(pl.col(f"_{k}")).otherwise(v) for k, v in slot.items()}'
+  mutant: 'known = known'
+  test: tests/nba/test_nba_epv.py::test_on_court_reads_the_action_lineup
+  expected: kill
+  note: Without the game lineups release a mid-possession substitute is credited with nothing.
+
+- id: bb-epv-steal-credit
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(-prev)'
+  mutant: '.then(None)'
+  test: tests/nba/test_nba_epv.py::test_own_actions_credit_the_actor
+  expected: kill
+  note: A steal or block credits the defender with the turnover or miss it ended.
+
+- id: bb-epv-nba-start-year
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'start = [x - 1 for x in _check_seasons(seasons)]'
+  mutant: 'start = _check_seasons(seasons)'
+  test: tests/nba/test_nba_epv.py::test_season_loaders_take_the_start_year
+  expected: kill
+  note: The NBA loaders take the start year; season 2025 is the 2024 asset.
+
+- id: bb-epv-window-closes-at-dead-ball
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '& ~stopped'
+  mutant: '& pl.lit(True)'
+  test: tests/nba/test_nba_epv.py::test_the_transition_window_closes_at_a_dead_ball
+  expected: kill
+  note: After a timeout or a foul the defense is set; the window must not stay open on the clock alone.
+
+- id: bb-epv-team-event-team-id
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(pl.col("team_id").fill_null(0) == 0)'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The feed files a team rebound under team_id 0; read raw, every one is the defense's.
+
+- id: bb-epv-rebound-between-free-throws
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(between_fts).then(None).otherwise(_last_event_code())'
+  mutant: '_last_event_code()'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The dead-ball rebound after a missed first free throw leaves the trip going, not a live board.
+
+- id: bb-epv-shot-zone-three
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(et.is_in(_SHOTS) & (pl.col("shot_value") == 3))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_shot_zones_are_coded_and_matter
+  expected: kill
+  note: Threes must be their own zone, not long twos by distance.
+
+- id: bb-epv-technical-keeps-trip
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'technical = et.is_in(["foul", "free_throw"]) & pl.col("sub_type").fill_null("").str.contains("Technical")'
+  mutant: 'technical = pl.lit(False)'
+  test: tests/nba/test_nba_epv.py::test_a_technical_inside_a_trip_leaves_it_pending
+  expected: kill
+  note: A technical between an ordinary trip's free throws does not end the trip.
+
+- id: bb-epv-ordinary-ft-skips-technical-foul
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=(pl.col("event_type") == "foul"),'
+  test: tests/nba/test_nba_epv.py::test_an_ordinary_free_throw_after_a_technical_stays_on_its_foul_lineup
+  expected: kill
+  note: An ordinary free throw belongs to its shooting foul's ten, not to a later technical's.
+
+- id: bb-epv-lineup-five-distinct
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.filter(pl.col("_five").list.drop_nulls().list.n_unique() == 5)'
+  mutant: '.filter(pl.col("_five").list.drop_nulls().list.len() == 5)'
+  test: tests/nba/test_nba_epv.py::test_a_lineup_with_a_repeated_player_is_left_out
+  expected: kill
+  note: A slot glitch repeating one player must not publish a four-player unit.
+
+- id: bb-epv-bundled-booster-season-floor
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '_check_seasons(states["season"].drop_nulls().unique().to_list())'
+  mutant: 'pass'
+  test: tests/nba/test_nba_epv.py::test_inputs_are_checked
+  expected: kill
+  note: The bundled booster refuses a season before its first training one, whoever calls it.
