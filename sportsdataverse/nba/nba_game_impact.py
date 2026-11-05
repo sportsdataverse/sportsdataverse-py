@@ -48,6 +48,23 @@ _PBP_COLUMNS = (
 )  # fmt: skip
 
 
+def _running_score(side: str) -> pl.Expr:
+    """``score_home`` / ``score_away`` as the running score after each action, per game.
+
+    The pre-2019-20 feed writes "0" (not null) on non-scoring rows, the later one leaves them
+    blank; a running score never drops back to 0, so a 0 is a gap and the last score carries
+    forward (0 before the first basket). The frame must be in game order.
+
+    Args:
+        side: ``"home"`` or ``"away"``.
+
+    Returns:
+        An Int64 expression over ``game_id``.
+    """
+    score = pl.col(f"score_{side}").cast(pl.Int64, strict=False)
+    return pl.when(score != 0).then(score).forward_fill().over("game_id").fill_null(0)
+
+
 def _check_league(league_id: str) -> None:
     if league_id not in _QUARTER:
         raise ValueError(f"league_id must be one of {sorted(_QUARTER)}, got {league_id!r}")
@@ -70,16 +87,7 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         .then(pl.when(halves).then(pl.lit(2 * quarter)).otherwise(pl.lit(quarter)))
         .otherwise(pl.lit(_OT_SECONDS))
     )
-    # The pre-2019-20 feed writes "0" (not null) on non-scoring rows; a running score never drops
-    # back to 0, so a 0 is a gap and the last score carries forward.
-    score = {
-        side: pl.when(pl.col(f"score_{side}").cast(pl.Int64, strict=False) != 0)
-        .then(pl.col(f"score_{side}").cast(pl.Int64, strict=False))
-        .forward_fill()
-        .over("game_id")
-        .fill_null(0)
-        for side in ("home", "away")
-    }
+    score = {side: _running_score(side) for side in ("home", "away")}
     actions = (
         pbp.select(_PBP_COLUMNS)
         .with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("action_number").cast(pl.Int64))

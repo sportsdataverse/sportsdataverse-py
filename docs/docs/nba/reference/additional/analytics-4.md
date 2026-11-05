@@ -1,10 +1,423 @@
 ---
-title: "NBA — additional Python functions — Analytics: project_player–zone_value"
-sidebar_label: "Analytics: project_player–zone_value"
+title: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value"
+sidebar_label: "Analytics: nbadraft_mock–zone_value"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: project_player–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: project_player–zone_value
+# NBA — additional Python functions — Analytics: nbadraft_mock–zone_value
+
+### nbadraft_mock_draft {#nbadraft_mock_draft}
+
+`nbadraft_mock_draft(year: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+The current consensus mock draft from NBADraft.net.
+
+One row per pick across both rounds. The page renders round 1 and round 2 as
+the first two pick tables and then **repeats round 1 in a third table**, so
+only the first two are taken -- concatenating all three double-counts round 1.
+The `<noscript>` fallback is another false-positive JS challenge; the pick
+tables are static. A traded pick's team cell carries `*`, which is stripped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Optional[int]` | `None` | Draft year (e.g. `2025`). `None` (default) reads the site's current mock; a year uses the `/nba-mock-drafts/{year}/` path where NBADraft.net has one. |
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `weight`, `position`, `school` and `class`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `round` | Int64 | Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables). |
+| `pick` | Int64 | Pick number within the round. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Int64 | Player weight in pounds. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `school` | String | Player school / pre-draft team. |
+| `class` | String | College class / draft eligibility note. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the page cannot be fetched or carries no pick table; the call still returns an empty frame. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nbadraft_mock_draft
+
+mock = nbadraft_mock_draft()
+print(mock.shape)
+
+# A specific draft year, as pandas
+
+mock_pd = nbadraft_mock_draft(year=2025, return_as_pandas=True)
+
+# Pipeline next step (lottery only)
+
+mock.filter((pl.col("round") == 1) & (pl.col("pick") <= 14))
+```
+
+### player_play_context {#player_play_context}
+
+`player_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half).
+
+For each player: their team's offensive play-context **with them on the floor**
+(`on_*`), **without them** (`off_*`), and the on-minus-off difference
+(`diff_*`) — which is the number CTG actually displays.
+
+The OFF side is derived by **subtraction** (team total minus on-court), not by a
+second scan. That is deliberate: it makes the partition exact by construction —
+`on_poss + off_poss == team_poss` and the same for points — so a leak (a
+double-counted possession, a dropped lineup slot) is impossible to hide. The
+test suite asserts that identity directly.
+
+Like CTG's on/off, this is a **raw** split: no luck adjustment, no opponent
+adjustment, no minutes threshold. It is a descriptive difference, not a causal
+estimate — for that, use the RAPM surface
+(`~sportsdataverse.nba.nba_rapm.nba_rapm`).
+
+Requires `off_player_1..5` from
+`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_play_context` **with lineups attached**. |
+| `league_non_transition_ppp` | `Optional[float]` | `None` | Pts+/Poss baseline; see `team_play_context`. One baseline is shared across the on and off sides so the diffs are comparable. |
+| `apply_ctg_filters` | `bool` | `True` | Drop garbage-time / heave / non-counting possessions first. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input returns a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `on_poss` | Int64 |  |
+| `off_poss` | Int64 |  |
+| `on_points` | Int64 |  |
+| `off_points` | Int64 |  |
+| `on_pts_per_100` | Float64 |  |
+| `off_pts_per_100` | Float64 |  |
+| `diff_pts_per_100` | Float64 |  |
+| `on_transition_freq` | Float64 |  |
+| `off_transition_freq` | Float64 |  |
+| `diff_transition_freq` | Float64 |  |
+| `on_transition_pts_per_100` | Float64 |  |
+| `off_transition_pts_per_100` | Float64 |  |
+| `diff_transition_pts_per_100` | Float64 |  |
+| `on_halfcourt_pts_per_100` | Float64 |  |
+| `off_halfcourt_pts_per_100` | Float64 |  |
+| `diff_halfcourt_pts_per_100` | Float64 |  |
+| `on_transition_pts_added_per_100` | Float64 |  |
+| `off_transition_pts_added_per_100` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When the `off_player_*` columns are missing. |
+
+**Example**
+
+```python
+poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+onoff = player_play_context(poss)
+print(onoff.sort("diff_pts_per_100", descending=True).head())
+
+# Who makes their team run?
+
+print(onoff.sort("diff_transition_freq", descending=True).head())
+```
+
+### player_rates {#player_rates}
+
+`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Per-player per-minute rate stats from box logs.
+
+Rows with null minutes (DNPs) are dropped. Rate = total stat / total
+minutes across the player's games; `minutes_pg` is the mean minutes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
+
+**Returns**
+
+One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `games` | Int64 | Games played. |
+| `minutes_pg` | Float64 |  |
+| `pts_per_min` | Float64 |  |
+| `reb_per_min` | Float64 |  |
+| `ast_per_min` | Float64 |  |
+| `fg3m_per_min` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import player_rates
+rates = player_rates(box_logs)
+```
+
+### players_on_court_from_pbp {#players_on_court_from_pbp}
+
+`players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
+
+Pure function (no network). A gamerotation-free alternative to
+`players_on_court_from_rotation` returning the identical
+`LINEUPS_SCHEMA` frame (one row per action, slots sorted ascending or
+`None`). See the module design for the algorithm.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `enhanced_pbp_from_payload`. Must carry `game_id`, `action_number`, `order_index`, `period`, `team_id`, `person_id`, `description`, `is_substitution`. |
+| `raw_box` | `dict` |  | Raw `boxscoretraditionalv3` dict (starters + name map). |
+| `home_team_id` | `int` |  | Home team id (from `boxscore_home_away`). |
+| `away_team_id` | `int` |  | Away team id (from `boxscore_home_away`). |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA`. Empty input returns a zero-row frame (never raises).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, players_on_court_from_pbp,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+oc = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
+print(oc.shape)
+```
+
+### players_on_court_from_quarter_boxscores {#players_on_court_from_quarter_boxscores}
+
+`players_on_court_from_quarter_boxscores(enhanced_pbp: 'pl.DataFrame', period_boxscores: 'Dict[int, dict]', raw_box: 'Optional[dict]' = None, *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible.
+
+A structural sibling of `players_on_court_from_pbp` — same
+`LINEUPS_SCHEMA` output, same sub-batching walk / ffill-bfill / ascending
+sort tail — whose only difference is *how each period is seeded*: when
+that period's range-boxscore (`_period_box_oncourt`) narrows to
+exactly 5 on-court candidates for a team, the period is seeded EXACTLY
+from it; otherwise it falls back to the same gamerotation-free
+first-appearance inference `players_on_court_from_pbp` uses
+(`_period_starters`, carrying the prior period's ending lineup as
+the silent-starter fallback). See `_period_box_oncourt` for the
+narrowing recipe (empirically re-derived against pbpstats'
+`StartOfPeriod._get_starters_from_boxscore_request` — see that
+function's docstring for the concrete evidence behind its zero-sentinel
+polarity).
+
+Substitution name resolution merges up to three sources via
+`_merge_name_maps`: `_name_map_from_period_boxes` (the union
+of every period's range-box roster), `_name_map_from_pbp_actors`
+(every row's own actor identity — covers bench players who never touch a
+period boundary but do record at least one action), and — when the
+caller supplies it — `_boxscore_name_map` over the full-game
+`raw_box` payload, the SAME full-roster source
+`players_on_court_from_pbp` uses. That third source is what fixes
+the one residual name-resolution gap the first two cannot cover: a
+player who is subbed in and then records **zero** further pbp actions for
+the rest of the game (so never appears in `_name_map_from_pbp_actors`)
+and never happens to be on court at an exact period-opening tick (so
+never appears in `_name_map_from_period_boxes`) is still present in the
+full-game boxscore roster — which lists every player on both teams
+regardless of playing time — and therefore still resolvable. Passing
+`raw_box` is optional (`None` preserves the pre-existing two-source
+behavior) but strongly recommended: without it this producer's per-game
+agreement with the gamerotation oracle can regress well below
+`players_on_court_from_pbp`'s own floor on a fixture with a
+late, stat-less bench appearance (see
+`tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. Must carry `game_id`, `action_number`, `order_index`, `period`, `team_id`, `person_id`, `player_name`, `player_name_i`, `description`, `is_substitution`. |
+| `period_boxscores` | `Dict[int, dict]` |  | `{period: raw_boxscoretraditionalv3_range_payload}` — one entry per period, captured at that period's `_period_start_range` window. A missing period key falls back to pbp seeding for that period only (never raises). |
+| `raw_box` | `Optional[dict]` | `None` | Optional raw full-game `boxscoretraditionalv3` payload (the same one `players_on_court_from_pbp` and `boxscore_home_away` consume) — supplies the full-roster name map described above. `None` (default) falls back to resolving names from `period_boxscores` + pbp actors only. |
+| `home_team_id` | `int` |  | Home team id (from `boxscore_home_away`). |
+| `away_team_id` | `int` |  | Away team id (from `boxscore_home_away`). |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA`. Empty `enhanced_pbp` returns a zero-row frame (never raises).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, players_on_court_from_quarter_boxscores,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+periods = json.loads(pathlib.Path("boxv3_periods.json").read_text())
+period_boxscores = {int(k): v for k, v in periods.items()}
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+oc = players_on_court_from_quarter_boxscores(
+    enh, period_boxscores, box, home_team_id=home, away_team_id=away
+)
+print(oc.shape)
+```
+
+### players_on_court_from_rotation {#players_on_court_from_rotation}
+
+`players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int', league_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm.
+
+Pure function — no network calls.  Port of hoopR's `.players_on_court_v3()`
+(R/nba_stats_pbp.R lines 857-1041).
+
+The rotation dict may use either `"HomeTeam"`/`"AwayTeam"` or
+`"homeTeam"`/`"awayTeam"` as keys — both are accepted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. Must contain `game_id`, `action_number`, `period`, `seconds_remaining`, `is_substitution`, and `team_id`. |
+| `rotation` | `dict[str, list[dict]]` |  | Parsed rotation dict, typically from `parse_rotation_resultsets`. Each team's list contains stint dicts with numeric `PERSON_ID`, `IN_TIME_REAL`, `OUT_TIME_REAL`. |
+| `home_team_id` | `int` |  | Integer team ID of the home team. |
+| `away_team_id` | `int` |  | Integer team ID of the away team. |
+| `league_id` | `Optional[str]` | `None` | `"00"` NBA, `"10"` WNBA, `"15"` Summer League, `"20"` G League. Sets the period lengths the rotation clock runs on; when `None` the league is read off the game id. |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA` with one row per action in *enhanced_pbp* (same row count, same ordering). Never raises — an empty or malformed rotation (stints that do not sum to five players' game time, or carry negative / inverted clocks) logs a warning and returns a zero-row frame, so callers fall back to another lineup source.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+import polars as pl
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+rot = json.loads(pathlib.Path("gamerotation.json").read_text())
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+rotation = parse_rotation_resultsets(rot)
+df = players_on_court_from_rotation(
+    enh, rotation, home_team_id=home, away_team_id=away
+)
+print(df.shape)
+```
+
+### prob_over {#prob_over}
+
+`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'`
+
+Probability a stat finishes strictly above `line`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_value` | `float` |  | Projected mean of the stat. |
+| `line` | `float` |  | The prop line. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `league_id` | `str` | `'00'` | Accepted for parity. |
+
+**Returns**
+
+`P(stat > line)` in `[0, 1]`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import prob_over
+prob_over(24.0, 22.5, "pts")
+```
 
 ### project_player_line {#project_player_line}
 
