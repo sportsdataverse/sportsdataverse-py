@@ -235,3 +235,33 @@ def test_non_finite_features_and_duplicate_entity_seasons_are_refused():
     twice = pl.concat([f, f.filter(pl.col("season") == 2025).head(1)])
     with pytest.raises(ValueError, match=r"share an \(team_id, season\)"):
         ps.stability_report(twice, art, entity="team_id", holdout_seasons=art["holdout_seasons"], n_boot=1, n_ci=0)
+
+
+def test_load_season_reads_start_year_assets_and_end_year_leaguedash(monkeypatch):
+    """The multi-asset loaders take the start year (2024 for 2024-25); leaguedash takes the end year."""
+    from sportsdataverse.nba import nba_loaders_extra as X
+
+    calls: list[tuple[str, int]] = []
+
+    def stub(name, frame):
+        def load(season, *args, **kwargs):
+            calls.append((name, season))
+            return frame
+
+        return load
+
+    monkeypatch.setattr(X, "load_nba_stats_synergy", stub("synergy", _raw("synergy")))
+    monkeypatch.setattr(X, "load_nba_stats_matchups_rollup", stub("rollup", _raw("matchups_rollup")))
+    monkeypatch.setattr(X, "load_nba_stats_hustle_player", stub("hustle", _raw("hustle_player")))
+    monkeypatch.setattr(X, "load_nba_stats_hustle_team", stub("hustle_team", _raw("hustle_team")))
+    dash = {
+        "player_tracking_defense": _raw("player_tracking_defense"),
+        "team_stats_opponent": _raw("team_stats_opponent"),
+        "team_stats_defense": _raw("team_stats_defense"),
+    }
+    monkeypatch.setattr(X, "load_nba_stats_leaguedash", lambda fam, season: calls.append((fam, season)) or dash[fam])
+    assert nps._load_season(2025, "defense", "player").height > 250
+    assert nps._load_season(2025, "defense", "team").height == 30
+    years = dict(calls)
+    assert years["synergy"] == years["rollup"] == years["hustle"] == years["hustle_team"] == 2024
+    assert years["player_tracking_defense"] == years["team_stats_opponent"] == 2025

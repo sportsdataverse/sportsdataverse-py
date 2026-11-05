@@ -127,3 +127,18 @@ def test_lineup_role_features_are_hand_counts(monkeypatch):
         row = feats.filter(pl.col("player_id") == str(athlete))
         assert row["starter_share"].item() == pytest.approx(sum(s for _, s in g) / len(g))
         assert row["mpg_share"].item() == pytest.approx(sum(m for m, _ in g) / len(g) / 40)
+
+
+def test_wbb_wrapper_routes_the_womens_league(monkeypatch):
+    from sportsdataverse.wbb.wbb_play_style import wbb_play_styles
+
+    seen = {}
+
+    def features(seasons, league="mens"):
+        seen["league"] = league
+        return _corpus("wbb")
+
+    monkeypatch.setattr(mps, "college_play_style_features", features)
+    out = wbb_play_styles([2025, 2026])
+    assert seen["league"] == "womens"
+    assert set(out["archetype"]) == set(mps._artifact("wbb")["labels"])
