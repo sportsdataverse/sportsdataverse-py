@@ -190,10 +190,15 @@ def test_mbb_player_war_reads_box_bpm_and_ratings(monkeypatch: pytest.MonkeyPatc
     monkeypatch.setattr(war_mod, "mbb_box_bpm", box)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", ratings)
     monkeypatch.setattr("sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore", games)
-    out = wbb_mod.wbb_player_war(2025)
+    # an empty box leaves the stints without game rows: refused, never a silently null interval
+    with pytest.raises(ValueError, match="differ from their game rows"):
+        wbb_mod.wbb_player_war(2025)
     assert seen == [("ratings", "womens"), ("box", "womens"), ("games", "womens")]
-    assert "war_lo" in out.columns
-    assert out["war"].sum() == pytest.approx(_season("wbb")[2]["war"].sum())  # the WBB constants
+    calls: list[dict] = []
+    monkeypatch.setattr(war_mod, "player_war", lambda stints, net, **kw: calls.append(kw) or stints)
+    wbb_mod.wbb_player_war(2025)
+    assert calls[0]["league"] == "wbb" and calls[0]["sources"] == ["bpm"]  # the WBB constants
+    assert calls[0]["team_games"] is not None and calls[0]["player_games"] is not None
     with pytest.raises(ValueError, match="league"):
         war_mod.mbb_player_war(2025, league="coed")
 
@@ -227,8 +232,20 @@ def test_war_interval_on_forty_teams() -> None:
     out = player_war(stints, net, league="mbb", sources=["bpm"], team_games=team_games, player_games=player_games)
     out = out.with_columns((pl.col("war_hi") - pl.col("war_lo")).alias("width"))
     assert out["width"].null_count() == 0 and ((out["war_lo"] <= out["war"]) & (out["war"] <= out["war_hi"])).all()
-    # observed: median width 0.596; Johni Broome (most war) 5.20 in [4.73, 5.75], width 1.015;
-    # Spearman(width, poss) 0.953
-    assert out["width"].median() == pytest.approx(0.596, abs=0.001)
-    assert out.sort("war", descending=True)["width"][0] == pytest.approx(1.015, abs=0.001)
-    assert spearmanr(out["width"], out["poss"]).statistic >= 0.953
+    # observed: median width 0.612; Johni Broome (most war) 5.20 in [4.61, 5.73], width 1.120;
+    # Spearman(width, poss) 0.954
+    assert out["width"].median() == pytest.approx(0.612, abs=0.001)
+    assert out.sort("war", descending=True)["width"][0] == pytest.approx(1.120, abs=0.001)
+    assert spearmanr(out["width"], out["poss"]).statistic >= 0.954
+
+
+def test_the_public_college_path_ships_the_interval(monkeypatch: pytest.MonkeyPatch) -> None:
+    stints, net = _bb("mbb_stints_2025.parquet"), _bb("mbb_net_2025.parquet")
+    games = (_bb("mbb_player_games_2025.parquet"), _bb("mbb_team_games_2025.parquet"))
+    monkeypatch.setattr(war_mod, "mbb_box_bpm", lambda seasons, league="mens": stints)
+    monkeypatch.setattr(war_mod, "mbb_team_ratings", lambda seasons, league="mens": net)
+    monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: stints)
+    monkeypatch.setattr(war_mod, "_war_stints", lambda box, ratings: (stints, net))
+    monkeypatch.setattr(war_mod, "_game_rows", lambda box, ratings: games)
+    out = war_mod.mbb_player_war(2025)
+    assert out.height == 568 and out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0

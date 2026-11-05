@@ -321,9 +321,10 @@ def test_empty_input_returns_the_schema() -> None:
     assert out.schema["war_lo"] == out.schema["war_hi"] == pl.Float64
 
 
-#: The 90% interval on the 2025 fixtures (200 replicates, seed 0, so exact): median width, the
-#: league leader's width (Jokic / A'ja Wilson), and Spearman(width, possessions).
-INTERVAL_OBS = {"nba": (0.785, 3.630, 0.931), "wnba": (0.804, 2.068, 0.918)}
+#: The 90% interval on the 2025 fixtures (N_BOOT replicates, seeded per team-season, so exact):
+#: median width, the league leader's width (Jokic / A'ja Wilson), Spearman(width, possessions).
+#: Monte Carlo error at 1000 replicates (seed 0 vs 1): median 0.017 wins of width (2.9%), max 0.25.
+INTERVAL_OBS = {"nba": (0.795, 3.645, 0.935), "wnba": (0.793, 2.360, 0.922)}
 
 
 @LEAGUES
@@ -361,3 +362,34 @@ def test_war_interval(league: str) -> None:
     assert out.sort("war", descending=True)["width"][0] == pytest.approx(lead, abs=0.001)
     # possessions move together within a game: the interval widens with playing time
     assert spearmanr(out["width"], out["poss"]).statistic >= rho
+
+
+def test_a_season_s_interval_does_not_depend_on_the_rest_of_the_call() -> None:
+    rated, net, out = _season("nba")
+    team_games, player_games = _games("nba")
+    # the same frames again as a second season: each team-season draws from its own generator
+    two = [pl.concat([df, df.with_columns(pl.lit(2024, pl.Int64).alias("season"))]) for df in (rated, net)]
+    games = [
+        pl.concat([df, df.with_columns(pl.lit(2024, pl.Int64).alias("season"))]) for df in (team_games, player_games)
+    ]
+    both = player_war(*two, league="nba", sources=SOURCES, team_games=games[0], player_games=games[1])
+    again = both.filter(pl.col("season") == 2025).select("player_id", "war_lo", "war_hi")
+    j = out.select("player_id", "war_lo", "war_hi").join(again, on="player_id", validate="1:1")
+    assert (
+        j.height == out.height and (j["war_lo"] == j["war_lo_right"]).all() and (j["war_hi"] == j["war_hi_right"]).all()
+    )
+
+
+def test_stints_without_their_game_rows_are_refused() -> None:
+    rated, net, _ = _season("nba")
+    team_games, player_games = _games("nba")
+    one_team = player_games["team_id"][0]
+    with pytest.raises(ValueError, match="differ from their game rows"):
+        player_war(
+            rated,
+            net,
+            league="nba",
+            sources=SOURCES,
+            team_games=team_games,
+            player_games=player_games.filter(pl.col("team_id") != one_team),
+        )

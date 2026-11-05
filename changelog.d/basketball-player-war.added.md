@@ -5,5 +5,6 @@
   by `tools/fit_player_war.py` (NBA -1.98 per 100 and 31.56, WNBA -3.18 and 31.31, MBB -1.66, WBB -1.99). (#1114)
 - **Basketball:** WAR repairs the release's pro BPM team constant (five times too large) and ignores its `war`
   column, which double-counts possessions and adds up to more wins than the league played. (#1114)
-- **Basketball:** `war_lo` / `war_hi` give a 90% interval for `war` from a 200-replicate bootstrap that resamples each
-  team-season's games, so a game's possessions and margin move together; the source spread stays in `war_<s>`. (#1114)
+- **Basketball:** `war_lo` / `war_hi` give a 90% interval for `war` from a 1000-replicate bootstrap that resamples each
+  team-season's games, so a game's possessions and margin move together. (#1114)
+- **Basketball:** in the NBA and WNBA the source spread stays in `war_bpm` / `war_rapm` / `war_boban`. (#1114)

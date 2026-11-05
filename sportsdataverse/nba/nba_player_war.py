@@ -152,7 +152,7 @@ def nba_player_war(
         ``team_id`` (the team he played most possessions for), ``teams`` (how many he played
         for), ``min``, ``poss`` (on-court possessions, offensive plus defensive over 2),
         ``rating`` and ``rating_bpm`` / ``rating_rapm`` / ``rating_boban`` (anchored, per 100),
-        ``vorp``, ``war`` with ``war_lo`` / ``war_hi`` (a 90% interval from a bootstrap over each
+        ``vorp``, ``war`` with ``war_lo`` / ``war_hi`` (a nominal 90% interval from a bootstrap over each
         team-season's games: the sampling uncertainty of the team side and the playing time) and
         ``war_bpm`` / ``war_rapm`` / ``war_boban`` (the source spread), with ``_rank``
         (1 = most), ``_pct`` and ``_n`` (possessions) for ``vorp`` and ``war`` among every player

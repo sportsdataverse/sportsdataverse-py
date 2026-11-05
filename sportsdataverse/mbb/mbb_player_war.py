@@ -128,8 +128,9 @@ def mbb_player_war(
         own centring set, so a season is empty until its teams reach 10 games: ``player_name``,
         ``team_id`` (the team he played most possessions for), ``teams``, ``min``, ``poss``
         (minutes / 40 * the team's adjusted tempo), ``rating`` (anchored box BPM, per 100),
-        ``vorp`` and ``war`` with ``war_lo`` / ``war_hi`` (a 90% interval from a bootstrap over each
-        team-season's games), with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
+        ``vorp`` and ``war`` with ``war_lo`` / ``war_hi`` (a nominal 90% interval from a bootstrap
+        over each team-season's games: the sampling uncertainty of the team side and the playing
+        time, not of box BPM itself), with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
         ``vorp`` and ``war`` among every player of the season. Sorted by season and ``war``.
         Empty input returns that schema with zero rows.
 

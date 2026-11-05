@@ -36,15 +36,20 @@ above all ``war_boban`` the pool carries more WAR than under ``war_bpm`` (NBA 20
 season whose pool sits 0.8 above ``R``: 46 under ``war_bpm`` and ``war_rapm``, 90 under
 ``war_boban``, of 765).
 
-**Uncertainty.** ``war_lo`` / ``war_hi`` are a 90% interval (5th and 95th percentiles) from a
-cluster bootstrap: :data:`N_BOOT` replicates, each team-season's games resampled with replacement
-(as many as it played, seed fixed), so a player's possessions in a game, his team's possessions
-and its margin move together. Each replicate recomputes his possessions, the team's net rating
+**Uncertainty.** ``war_lo`` / ``war_hi`` are a nominal 90% interval (5th and 95th percentiles)
+from a cluster bootstrap: :data:`N_BOOT` replicates, each team-season's games resampled with
+replacement (as many as it played), so a player's possessions in a game, his team's possessions
+and its margin move together. Each team-season draws from its own generator, seeded on (seed,
+season, team id), and seasons run one at a time, so an interval does not depend on what else is
+in the call; Monte Carlo error at 1000 replicates is about 3% of the width (NBA 2024-25: median
+0.017 wins, at most 0.25). Coverage is not checked. Each replicate recomputes his possessions, the team's net rating
 (in college: the adjusted rating plus the replicate's change in the raw one), the team anchoring
 and the league centring, holding the source ratings and ``R`` fixed. It is the sampling
 uncertainty of the team side and the playing time, not of the source ratings themselves: the pro
 rows carry ``war_bpm`` / ``war_rapm`` / ``war_boban`` beside the mean, and their spread is that
-model uncertainty. ``R`` is a mean over 5-8 train seasons, standard error
+model uncertainty. College has one source, so box BPM's own sampling error is in no column.
+``vorp`` has the same interval scaled by ``vorp / war`` (the two differ by a season constant).
+``R`` is a mean over 5-8 train seasons, standard error
 0.09 (NBA), 0.18 (WNBA), 0.06 (MBB), 0.11 (WBB) per 100; a shift of ``dR`` moves a player's WAR
 by ``-dR * poss / 100 / pts_per_win`` (0.3 wins for an NBA starter per 0.1).
 
@@ -58,6 +63,8 @@ convention); college has no published on-court possessions for every game, so it
 
 from __future__ import annotations
 
+import zlib
+
 import numpy as np
 import polars as pl
 from scipy import sparse
@@ -65,9 +72,9 @@ from scipy import sparse
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
 
 __all__ = [
+    "N_BOOT",
     "PTS_PER_WIN",
     "REPLACEMENT_LEVEL",
-    "N_BOOT",
     "REPLACEMENT_SHARE",
     "player_war",
     "player_war_schema",
@@ -113,7 +120,7 @@ REPLACEMENT_LEVEL: dict[str, float] = {"nba": -1.98, "wnba": -3.18, "mbb": -1.66
 PTS_PER_WIN: dict[str, float] = {"nba": 31.56, "wnba": 31.31, "mbb": 38.91, "wbb": 47.10}
 
 #: Bootstrap replicates behind ``war_lo`` / ``war_hi``, and the interval's percentiles.
-N_BOOT = 200
+N_BOOT = 1000
 _INTERVAL = (5.0, 95.0)
 _SEED = 0
 
@@ -278,11 +285,14 @@ def _draw_counts(team_games: pl.DataFrame, n_boot: int) -> np.ndarray:
     """``counts[b, g]``: how often team-game ``g`` is drawn in replicate ``b``.
 
     Each team-season (``t``) draws as many of its own games as it played, with replacement, so
-    its game count is fixed and a game's possessions and margin move together.
+    its game count is fixed and a game's possessions and margin move together. Each team-season
+    has its own generator, seeded on (seed, season, team id), so its draws do not depend on which
+    other teams or seasons are in the call.
     """
-    rng = np.random.default_rng(_SEED)
     counts = np.zeros((n_boot, team_games.height))
-    for idx in team_games.group_by("t", maintain_order=True).agg("g")["g"].to_list():
+    groups = team_games.group_by("season", "team_id", "t", maintain_order=True).agg("g")
+    for season, team, _, idx in groups.iter_rows():
+        rng = np.random.default_rng([_SEED, int(season), zlib.crc32(str(team).encode())])
         counts[:, idx] = rng.multinomial(len(idx), np.full(len(idx), 1 / len(idx)), size=n_boot)
     return counts
 
@@ -301,21 +311,31 @@ def war_interval(
 
     Each replicate draws, for every team-season, as many of its games as it played, with
     replacement, and recomputes :func:`player_war`'s WAR from them (possessions, team net rating,
-    anchoring, centring; the source ratings and ``R`` held fixed).
+    anchoring, centring; the source ratings and ``R`` held fixed). Seasons run one at a time.
 
     Returns:
         ``season``, ``player_id``, ``war_lo`` and ``war_hi`` (the 5th and 95th percentiles).
+
+    Raises:
+        ValueError: If a stint's possessions are not the sum of its game rows: the bootstrap
+            would resample possessions the point estimate never counted (or miss some).
     """
-    frames = _boot_frames(stints, net, team_games, player_games)
-    counts = _draw_counts(frames["team_games"], n_boot)
-    # a team with no game rows has no possessions to resample: its players' interval is null
-    with np.errstate(divide="ignore", invalid="ignore"):
-        lo, hi = np.percentile(_replicate_war(frames, counts, league=league, sources=sources), _INTERVAL, axis=0)
-    players = frames["stints"].group_by("p").agg(pl.col("season").first(), pl.col("player_id").first()).sort("p")
-    assert players.height == frames["n_players"]
-    return players.select("season", "player_id").with_columns(
-        pl.Series("war_lo", lo).fill_nan(None), pl.Series("war_hi", hi).fill_nan(None)
-    )
+    keys = ["season", "team_id", "player_id"]
+    summed = player_games.group_by(keys).agg(pl.col("poss").sum().alias("_games"))
+    check = stints.join(net.select("season", "team_id"), on=keys[:2], how="semi").join(summed, on=keys, how="left")
+    gap = (pl.col("_games").fill_null(0.0) - pl.col("poss")).abs() > 1e-6 * pl.max_horizontal(pl.col("poss"), 1.0)
+    if (bad := check.filter(gap)).height:
+        raise ValueError(f"war_interval: {bad.height} stints' possessions differ from their game rows")
+    out = []
+    for season in sorted(stints["season"].unique()):
+        in_season = [df.filter(pl.col("season") == season) for df in (stints, net, team_games, player_games)]
+        frames = _boot_frames(*in_season)
+        draws = _replicate_war(frames, _draw_counts(frames["team_games"], n_boot), league=league, sources=sources)
+        lo, hi = np.percentile(draws, _INTERVAL, axis=0)
+        players = frames["stints"].group_by("p").agg(pl.col("season").first(), pl.col("player_id").first()).sort("p")
+        assert players.height == frames["n_players"]
+        out.append(players.select("season", "player_id").with_columns(pl.Series("war_lo", lo), pl.Series("war_hi", hi)))
+    return pl.concat(out)
 
 
 #: The season's possessions per team: on-court possessions / 5 / teams.

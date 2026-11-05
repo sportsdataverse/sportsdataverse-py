@@ -10504,3 +10504,33 @@
   test: tests/nba/test_nba_epv.py::test_inputs_are_checked
   expected: kill
   note: The bundled booster refuses a season before its first training one, whoever calls it.
+
+- id: bb-war-seed-per-team-season
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'rng = np.random.default_rng([_SEED, int(season), zlib.crc32(str(team).encode())])'
+  mutant: 'rng = np.random.default_rng(_SEED)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: Every team-season drawing the same stream would correlate the teams' resamples.
+
+- id: bb-war-interval-consistency
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'if (bad := check.filter(gap)).height:'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_player_war.py::test_stints_without_their_game_rows_are_refused
+  expected: kill
+  note: Without the check a team missing its game rows turns its whole season's interval to NaN.
+
+- id: bb-war-college-passes-games
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games=team_games, player_games=player_games'
+  mutant: 'team_games=None, player_games=None'
+  test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
+  expected: kill
+  note: The college public path would publish a null interval on every row.
