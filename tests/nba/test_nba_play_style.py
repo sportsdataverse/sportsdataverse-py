@@ -130,7 +130,8 @@ def test_stability_gates_on_the_holdout_seasons(side, entity):
     assert rep["holdout_persistence"] > 1.5 * rep["holdout_chance_persistence"]
     assert rep["holdout_ari"] > rep["null_holdout_ari"] == pytest.approx(art["stability"]["null_holdout_ari"], abs=1e-4)
     assert rep["min_share"] >= SHARE_GATES[(side, entity)][0] and rep["max_share"] <= SHARE_GATES[(side, entity)][1]
-    assert rep["n_persistence_pairs"] >= (900 if entity == "player" else 110)
+    assert rep["n_persistence_pairs"] >= (900 if entity == "player" else 110)  # observed 982 / 984 / 120
+    assert art["stability"]["holdout_ari_ci"][0] > art["stability"]["null_holdout_ari"]
 
 
 def test_a_season_missing_a_feature_is_refused():
@@ -142,6 +143,17 @@ def test_a_season_missing_a_feature_is_refused():
     )
     with pytest.raises(ValueError, match=r"\(2025, 'pull_up_share'\)"):
         ps.assign_play_style(broken, art, ["player_id", "season"])
+    gone = f.with_columns(
+        pl.when(pl.col("season") == 2019).then(None).otherwise(pl.col("pull_up_share")).alias("pull_up_share")
+    )
+    for call in (ps.fit_play_style, ps.selection_score):
+        kw = (
+            {"phrases": nps.NBA_PLAY_STYLE_PHRASES[("offense", "player")]}
+            if call is ps.fit_play_style
+            else {"entity": "player_id"}
+        )
+        with pytest.raises(ValueError, match=r"\(2019, 'pull_up_share'\)"):
+            call(gone, art["feature_cols"], k=5, train_seasons=art["train_seasons"], seed=0, **kw)
     ps.assign_play_style(broken.filter(pl.col("season") != 2025), art, ["player_id", "season"])
 
 

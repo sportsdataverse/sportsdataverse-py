@@ -139,7 +139,7 @@ def fit_one(key: str, rebuild: bool = False) -> dict:
     art["corpus_sha256"] = hashlib.sha256(corpus.read_bytes()).hexdigest()
     art["n_by_season"] = {str(s): n for s, n in feats.group_by("season").len().sort("season").iter_rows()}
     spec["path"].parent.mkdir(parents=True, exist_ok=True)
-    spec["path"].write_text(json.dumps(art, indent=1) + "\n", encoding="utf-8")
+    spec["path"].write_text(json.dumps(art, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(key, best, "labels =", art["labels"], json.dumps(art["stability"], indent=1), flush=True)
     return art
 

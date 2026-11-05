@@ -81,7 +81,8 @@ def test_stability_gates_on_the_2026_holdout(prefix):
         assert rep[metric] == pytest.approx(art["stability"][metric], abs=1e-4)
         assert rep[metric] >= gate, metric
     assert rep["holdout_persistence"] > 2 * rep["holdout_chance_persistence"]
-    assert rep["n_persistence_pairs"] > 1000
+    assert rep["n_persistence_pairs"] > 1000  # observed 1,440 / 1,435
+    assert art["stability"]["holdout_ari_ci"][0] > art["stability"]["null_holdout_ari"]
     assert rep["holdout_ari"] > rep["null_holdout_ari"] == pytest.approx(art["stability"]["null_holdout_ari"], abs=1e-4)
     assert SHARE_GATES[prefix][0] <= rep["min_share"] and rep["max_share"] <= SHARE_GATES[prefix][1]
 

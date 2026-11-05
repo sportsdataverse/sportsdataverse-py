@@ -164,6 +164,7 @@ def fit_play_style(
         ValueError: If the training seasons hold fewer rows than ``k``.
     """
     cols = list(feature_cols)
+    check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # fit
     train = season_zscores(features, cols).filter(pl.col("season").is_in(list(train_seasons)))
     if train.height < k:
         raise ValueError(f"{train.height} training rows for k={k}")
@@ -305,6 +306,7 @@ def selection_score(
         bootstrap alone without an inner split).
     """
     cols = list(feature_cols)
+    check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # selection
     seasons = sorted(int(s) for s in train_seasons)
     z = season_zscores(features.filter(pl.col("season").is_in(seasons)), cols)
     boot = group_bootstrap_ari(z.select(cols).to_numpy(), z[entity].to_numpy(), k=k, seed=seed, n_boot=n_boot)

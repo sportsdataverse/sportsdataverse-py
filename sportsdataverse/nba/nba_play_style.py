@@ -104,9 +104,10 @@ _DEFENSE_TEAM_SHORT: Final[tuple[str, ...]] = (
     "contested_3pt_rate",
 )
 
-#: The clustering features of each (side, entity), in artifact order. The team sets are short on
-#: purpose: with 30 teams a season, the full player-style vectors split teams on noise (the
-#: holdout ARI of an 18-feature team fit was 0.2-0.3; see the fitter's sweep).
+#: The clustering features of each (side, entity), in artifact order. The team defense set is the
+#: ``short`` candidate the training-only sweep chose over ``long``. Disclosure: that short set was
+#: first drawn up after a look at holdout ARI (in this item's first fit, before selection moved to
+#: the training seasons), so the team defense holdout numbers have been seen once and lean optimistic.
 NBA_PLAY_STYLE_FEATURES: Final[dict[tuple[str, str], tuple[str, ...]]] = {
     ("offense", "player"): (
         *(f"pt_{t}" for t in _OFF_TYPES),
@@ -266,7 +267,8 @@ def _keys(df: pl.DataFrame) -> pl.DataFrame:
 def _join(left: pl.DataFrame, right: pl.DataFrame, key: list[str], how: str = "left") -> pl.DataFrame:
     """``left.join(right)`` after asserting the key dtypes agree."""
     for k in key:
-        assert left.schema[k] == right.schema[k], f"{k}: {left.schema[k]} vs {right.schema[k]}"
+        if left.schema[k] != right.schema[k]:
+            raise TypeError(f"join key {k}: {left.schema[k]} vs {right.schema[k]}")
     return left.join(right, on=key, how=how)
 
 

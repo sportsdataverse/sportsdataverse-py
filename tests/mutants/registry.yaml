@@ -9984,3 +9984,23 @@
   test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
   expected: kill
   note: Without the guard a feature a release stopped carrying becomes the season mean for every row.
+
+- id: bb-ps-all-null-fit
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # fit'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: A training season that lost a feature would be fit with that feature at the mean for every row.
+
+- id: bb-ps-all-null-selection
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # selection'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: k would be chosen on a training season whose missing feature sits at the mean for every row.
