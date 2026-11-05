@@ -11,7 +11,7 @@ net rating, so a team's points above average are exactly its point margin, whate
 source carries (``o_adj_rapm`` / ``d_adj_rapm`` sit about +11 / -11, the ``adj_rapm`` sum is off
 by about +1). A traded player is anchored on each team for the possessions he played there. The
 ratings are then centred on the league: their possession-weighted mean is 0 each season. A
-player missing a rating is his team's average on that team.
+player missing a rating (null, NaN or infinite) is his team's average on that team.
 
 **Value.** With ``R`` the league's replacement level and ``poss`` his possessions:
 
@@ -168,7 +168,9 @@ def _anchor(stints: pl.DataFrame, net: pl.DataFrame, sources: list[str]) -> pl.D
     """Team-anchor every source on each stint, then centre it on the league (possession-weighted)."""
     keys = ["season", "team_id"]
     assert all(stints.schema[k] == net.schema[k] for k in keys), "key dtypes differ between stints and net"
-    out = stints.join(net.select(*keys, "net"), on=keys, how="inner", validate="m:1")
+    # a NaN or infinite rating would make its team's and season's means non-finite: treat it as missing
+    finite = stints.with_columns(pl.when(pl.col(s).is_finite()).then(pl.col(s)).alias(s) for s in sources)
+    out = finite.join(net.select(*keys, "net"), on=keys, how="inner", validate="m:1")
     out = out.with_columns(
         ((pl.col(s) - _wmean(s, "poss", keys)).fill_null(0.0) + pl.col("net") / 5).alias(s) for s in sources
     )

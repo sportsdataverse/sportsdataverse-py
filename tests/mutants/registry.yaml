@@ -10261,3 +10261,13 @@
   test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
   expected: kill
   note: An unrated player would get a null WAR instead of his team's average rating.
+
+- id: bb-war-non-finite-missing
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'finite = stints.with_columns(pl.when(pl.col(s).is_finite()).then(pl.col(s)).alias(s) for s in sources)'
+  mutant: 'finite = stints'
+  test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
+  expected: kill
+  note: One NaN rating would turn its team's and season's means, and so every WAR of the season, into NaN.

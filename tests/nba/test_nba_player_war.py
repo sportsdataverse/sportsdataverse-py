@@ -178,14 +178,18 @@ def test_team_war_tracks_team_wins(league: str) -> None:
 
 def test_a_player_without_a_rating_is_his_team_average() -> None:
     rated, net, _ = _season("nba")
-    who = rated.sort("poss", descending=True)["player_id"][0]
+    who, nan = rated.sort("poss", descending=True)["player_id"][:2]
     blank = rated.with_columns(
         *[pl.when(pl.col("player_id") == who).then(None).otherwise(pl.col(s)).alias(s) for s in SOURCES]
+    ).with_columns(  # a NaN rating is treated as missing, not spread over the season
+        *[pl.when(pl.col("player_id") == nan).then(float("nan")).otherwise(pl.col(s)).alias(s) for s in SOURCES]
     )
     a = _anchor(blank, net, SOURCES).filter(pl.col("player_id") == who)
     for s in SOURCES:  # net / 5: the margins sum to zero, so the league shift is nil
         assert np.allclose(a[s], a["net"] / 5, atol=1e-9), s
-    out = player_war(blank, net, league="nba", sources=SOURCES).filter(pl.col("player_id") == who)
+    full = player_war(blank, net, league="nba", sources=SOURCES)
+    assert full["war"].is_finite().all() and full["war_rank"].null_count() == 0
+    out = full.filter(pl.col("player_id") == who)
     assert out["war"].null_count() == 0 and out["war"].item() > 0
 
 

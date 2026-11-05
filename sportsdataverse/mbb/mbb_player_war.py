@@ -89,7 +89,9 @@ def mbb_player_war(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per ``(season, player_id)`` (ESPN ids, String) of a D1 team: ``player_name``,
+        One row per ``(season, player_id)`` (ESPN ids, String) of a D1 team -- one with 10 or
+        more games in :func:`~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's
+        own centring set, so a season is empty until its teams reach 10 games: ``player_name``,
         ``team_id`` (the team he played most possessions for), ``teams``, ``min``, ``poss``
         (minutes / 40 * the team's adjusted tempo), ``rating`` (anchored box BPM, per 100),
         ``vorp`` and ``war``, with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
