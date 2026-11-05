@@ -361,8 +361,10 @@ from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F4
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
+from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
@@ -794,8 +796,10 @@ __all__ = [
     "nba_player_ages",
     "nba_player_crosswalk",
     "nba_player_identity",
+    "nba_player_on_off",
     "nba_player_positions",
     "nba_player_props",
+    "nba_player_wowy",
     "nba_playtype_ratings",
     "nba_possession_rate_rows",
     "nba_predict_games",

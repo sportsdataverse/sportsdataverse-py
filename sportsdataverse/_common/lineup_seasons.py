@@ -36,7 +36,7 @@ from itertools import combinations
 
 import polars as pl
 
-from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, game_lineups_used
+from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, game_lineups_used, games_with_possessions
 from sportsdataverse._common.league_context import (
     LEAGUE_AVERAGES_SCHEMA,
     MIN_COHORT_PLAYERS,
@@ -270,13 +270,8 @@ def lineup_seasons(
     # A game counts only with both play-by-play and possessions: without possessions its points
     # and minutes would land on units with no possessions, without play-by-play (the impact rows
     # then carry none of its possessions) its shots and turnovers would.
-    played = (
-        rows.group_by(["season", "game_id"])
-        .agg((pl.col("home_poss") + pl.col("away_poss")).sum().alias("_poss"))
-        .filter(pl.col("_poss") > 0)
-        .drop("_poss")
-    )
-    rows = rows.join(played, on=["season", "game_id"], how="semi")
+    rows = games_with_possessions(rows)
+    played = rows.select("season", "game_id").unique()
     counts = counts.select(list(count_schema)).cast(count_schema).join(played, on=["season", "game_id"], how="semi")
     used = game_lineups_used(rows, player_dtype=player_dtype)
     if used.height == 0:

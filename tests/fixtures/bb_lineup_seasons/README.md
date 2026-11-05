@@ -9,7 +9,8 @@
 
 # BB-D4 lineup-seasons corpus
 
-Real captures for `tests/nba/test_nba_lineup_seasons.py` and `tests/mbb/test_mbb_lineup_seasons.py`,
+Real captures for `tests/nba/test_nba_lineup_seasons.py` and `tests/mbb/test_mbb_lineup_seasons.py` (BB-D4), and
+`tests/nba/test_nba_player_on_off.py` and `tests/mbb/test_mbb_player_on_off.py` (BB-D5),
 downloaded from the sportsdataverse-data releases on 2026-11-04 and projected to the columns the
 lineup-seasons builders read (zstd level 19). Nothing is synthetic or edited: rows are only filtered
 (whole games) and columns only dropped.
@@ -21,6 +22,7 @@ lineup-seasons builders read (zstd level 19). Nothing is synthetic or edited: ro
 | `nba_game_lineups_2025.parquet` | 115,618 | `nba_stats_game_lineups/nba_lineups_2025` | The same games, every column. |
 | `nba_possessions_2025.parquet` | 46,572 | `nba_stats_possessions/nba_possessions_2025` | The same games. Cols: `game_id, offense_team_id, defense_team_id, off_player_1..5, def_player_1..5, fg2a, fg2m, fg3a, fg3m, fta, oreb, dreb, tov, season`. |
 | `nba_lineups_dashboard_2025.parquet` | 420 | `nba_stats_lineups/lineups_2025` | stats.nba.com's five-man lineups dashboard for the three teams, `season_type == "regular-season"`, `per_mode == "totals"`, `measure_type in (base, advanced)`: the oracle. Cols: `team_id, group_id, measure_type, gp, min, poss, pts, plus_minus, off_rating, def_rating, net_rating, efg_pct, tm_tov_pct, oreb_pct, season, season_type`. |
+| `nba_on_off_summary_2025.parquet` | 140 | live: stats.nba.com `teamplayeronoffsummary` | Captured 2026-11-05 with `nba_stats_teamplayeronoffsummary(season="2024-25", team_id=..., measure_type_detailed_defense="Base")` for the three teams (Regular Season, Totals; the Advanced call returns the same columns and values): the `PlayersOnCourt...` and `PlayersOffCourt...` result sets stacked, the BB-D5 oracle. Cols (ids Int64): `team_id, player_id` (its `vs_player_id`), `court_status, gp, min, off_rating, def_rating, net_rating`. Its off-court side covers only the games a player was on the roster. |
 | `wnba_{schedule,pbp,game_lineups,possessions}_2025.parquet` | 16 / 6,461 / 6,461 / 2,496 | `wnba_stats_schedules/wnba_schedule_2025`, `wnba_stats_pbp/wnba_play_by_play_2025`, `wnba_stats_game_lineups/wnba_lineups_2025`, `wnba_stats_possessions/wnba_possessions_2025` | 16 regular-season games of 2025 (`game_id.sort().sample(16, seed=6)`), the NBA columns. |
 | `wnba_{schedule,pbp,game_lineups,possessions}_2005.parquet` | 4 / 1,651 / 1,651 / 596 | the same tags, `_2005` | Four 2005 regular-season games from the two-half era (through 2005 the WNBA played two 20-minute halves): three regulation games (`sample(3, seed=6)` of the sorted non-overtime game ids: 1020500099, 1020500142, 1020500154) and one double-overtime game (1020500163), the NBA columns. |
 | `ncaa_{mbb,wbb}_pbp_2025.parquet` | 6,258 / 5,944 | `ncaa_{mbb,wbb}_pbp/ncaa_{mbb,wbb}_pbp_2025` | The BB-D6 contests (`tests/fixtures/bb_game_impact/README.md`). Cols: `contest_id, season, period, game_seconds, home, away, home_score, away_score, event_team, event_type, event_result, shot_value, foul_class, {home,away}_{1..5}_player_id, home_espn_team_id, away_espn_team_id`. |

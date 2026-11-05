@@ -272,7 +272,9 @@ from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_games as wnba_predict_games  # noqa: F401
@@ -551,7 +553,9 @@ __all__ = [
     "wnba_pbp_disk",
     "wnba_play_context",
     "wnba_player_crosswalk",
+    "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_wowy",
     "wnba_playtype_ratings",
     "wnba_possessions",
     "wnba_predict_games",

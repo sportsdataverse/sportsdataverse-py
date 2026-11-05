@@ -122,9 +122,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_player_impact](additional/analytics.md#wnba_game_player_impact) | WNBA game impact box (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_player_impact. |
 | [wnba_lineup_seasons](additional/analytics.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
 | [wnba_matchup_drapm](additional/analytics.md#wnba_matchup_drapm) | WNBA matchup defensive RAPM (`league_id="10"`). |
+| [wnba_player_on_off](additional/analytics.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
 | [wnba_player_props](additional/analytics.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
-| [wnba_playtype_ratings](additional/analytics.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
-| [wnba_referee_assignments](additional/analytics.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |
+| [wnba_player_wowy](additional/analytics-2.md#wnba_player_wowy) | WNBA WOWY pairs (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_wowy. |
+| [wnba_playtype_ratings](additional/analytics-2.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
+| [wnba_referee_assignments](additional/analytics-2.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |
 | [wnba_season_sim](additional/analytics-2.md#wnba_season_sim) | WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim. |
 | [wnba_season_standings](additional/analytics-2.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
 | [wnba_shot_value](additional/analytics-2.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
@@ -135,11 +137,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_team_strength](additional/analytics-2.md#wnba_team_strength) | WNBA team strength: adjusted ratings, SOS, SOV, pace and four factors (league_id='10'). See sportsdataverse.nba.nba_team_strength.nba_team_strength. |
 | [wnba_tracking_drive_value](additional/analytics-2.md#wnba_tracking_drive_value) | WNBA drive value + rim-pressure (`league_id="10"` by-reference shim). |
 | [wnba_tracking_pass_value](additional/analytics-2.md#wnba_tracking_pass_value) | WNBA expected-assists / passer value (`league_id="10"` by-reference shim). |
-| [wnba_tracking_reb_oe](additional/analytics-2.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |
-| [wnba_tracking_rim_protect_value](additional/analytics-2.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |
-| [wnba_tracking_shot_diet_value](additional/analytics-2.md#wnba_tracking_shot_diet_value) | WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"` |
-| [wnba_tracking_touch_value](additional/analytics-2.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
-| [zone_value_map](additional/analytics-2.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
+| [wnba_tracking_reb_oe](additional/analytics-3.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |
+| [wnba_tracking_rim_protect_value](additional/analytics-3.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |
+| [wnba_tracking_shot_diet_value](additional/analytics-3.md#wnba_tracking_shot_diet_value) | WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"` |
+| [wnba_tracking_touch_value](additional/analytics-3.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
+| [zone_value_map](additional/analytics-3.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
 ## Dates and seasons
 

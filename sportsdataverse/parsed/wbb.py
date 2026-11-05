@@ -582,6 +582,8 @@ from sportsdataverse.wbb import wbb_in_game_win_prob as wbb_in_game_win_prob  # 
 from sportsdataverse.wbb import wbb_lineup_seasons as wbb_lineup_seasons  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
 from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: F401
 from sportsdataverse.wbb import wbb_schedule_crosswalk as wbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_season_projections as wbb_season_projections  # noqa: F401
@@ -1156,6 +1158,8 @@ __all__ = [
     "wbb_lineup_seasons",
     "wbb_pbp_disk",
     "wbb_player_crosswalk",
+    "wbb_player_on_off",
+    "wbb_player_wowy",
     "wbb_predict_games",
     "wbb_schedule_crosswalk",
     "wbb_season_projections",

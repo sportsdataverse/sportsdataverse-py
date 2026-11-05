@@ -75968,3 +75968,517 @@ ncaa_score_rows:
   order: The play's position in its game (the pbp order_index, or the release row order for college).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   sec_left: 'The win-probability clock: seconds left in regulation, or in the overtime period.'
+nba_player_on_off:
+  def_rtg_diff: 'On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null.'
+  def_rtg_diff_n: 'Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n.'
+  def_rtg_diff_pct: 'Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_diff_rank: Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  def_rtg_off: 'Defensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off;
+    null with no possessions.'
+  def_rtg_off_n: 'Sample size of def_rtg_off: opp_poss_off.'
+  def_rtg_on: 'Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions.'
+  def_rtg_on_n: 'Sample size of def_rtg_on: opp_poss_on.'
+  def_rtg_on_pct: 'Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  games: Games the player was on the floor for the team.
+  minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
+    games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  minutes_on: Game-clock minutes of the team's season with the player on the floor.
+  net_rtg_diff: 'On-off net rating: net_rtg_on - net_rtg_off; null when either is null.'
+  net_rtg_diff_n: 'Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n.'
+  net_rtg_diff_pct: 'Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_diff_rank: Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  net_rtg_off: 'Net rating with the player off the floor: the rest of the team''s season, the games he missed included (and,
+    for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null
+    when either is null.'
+  net_rtg_off_n: 'Sample size of net_rtg_off: poss_off + opp_poss_off.'
+  net_rtg_on: 'Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null.'
+  net_rtg_on_n: 'Sample size of net_rtg_on: poss_on + opp_poss_on.'
+  net_rtg_on_pct: 'Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
+  off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
+  off_rtg_diff_pct: 'Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off;
+    null with no possessions.'
+  off_rtg_off_n: 'Sample size of off_rtg_off: poss_off.'
+  off_rtg_on: 'Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions.'
+  off_rtg_on_n: 'Sample size of off_rtg_on: poss_on.'
+  off_rtg_on_pct: 'Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA));
+    null below 10 qualifiers.
+  opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
+    he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  opp_poss_on: The team's defensive possessions with the player on the floor.
+  opp_pts_off: 'The opponent''s points with the player off the floor: the rest of the team''s season, the games he missed
+    included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off
+    is.'
+  opp_pts_on: The opponent's points with the player on the floor, credited as pts_on is.
+  player_id: stats.nba.com player (person) id.
+  plus_minus_off: pts_off - opp_pts_off.
+  plus_minus_on: pts_on - opp_pts_on.
+  poss_off: 'The team''s offensive possessions with the player off the floor: the rest of the team''s season, the games he
+    missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession
+    belongs to the five on the floor when it starts).'
+  poss_on: The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when
+    it starts).
+  pts_off: 'The team''s points with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited
+    to the lineup at that action (a free throw to the lineup at the last foul).'
+  pts_on: The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free
+    throw to the lineup at the last foul).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  team_games: Games the team played in the season (with play-by-play and possessions); games well short of it marks a player
+    who missed time or was with the team for part of the season.
+  team_id: stats.nba.com team id.
+nba_player_wowy:
+  def_rtg_a_only: 'Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions.'
+  def_rtg_b_only: 'Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions.'
+  def_rtg_both: 'Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions.'
+  def_rtg_neither: 'Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with
+    no possessions.'
+  minutes_a_only: Game-clock minutes of the team's season with A on the floor and B off.
+  minutes_b_only: Game-clock minutes of the team's season with B on the floor and A off.
+  minutes_both: Game-clock minutes of the team's season with both A and B on the floor.
+  minutes_neither: Game-clock minutes of the team's season with neither A nor B on the floor.
+  net_rtg_a_only: 'Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null.'
+  net_rtg_b_only: 'Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null.'
+  net_rtg_both: 'Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null.'
+  net_rtg_neither: 'Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null.'
+  off_rtg_a_only: 'Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions.'
+  off_rtg_b_only: 'Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions.'
+  off_rtg_both: 'Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions.'
+  off_rtg_neither: 'Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions.'
+  opp_poss_a_only: The team's defensive possessions with A on the floor and B off.
+  opp_poss_b_only: The team's defensive possessions with B on the floor and A off.
+  opp_poss_both: The team's defensive possessions with both A and B on the floor.
+  opp_poss_neither: The team's defensive possessions with neither A nor B on the floor.
+  opp_pts_a_only: The opponent's points with A on the floor and B off, credited as pts_a_only is.
+  opp_pts_b_only: The opponent's points with B on the floor and A off, credited as pts_b_only is.
+  opp_pts_both: The opponent's points with both A and B on the floor, credited as pts_both is.
+  opp_pts_neither: The opponent's points with neither A nor B on the floor, credited as pts_neither is.
+  player_id_a: The first player of the pair, the smaller id.
+  player_id_b: The second player of the pair, the larger id.
+  plus_minus_a_only: pts_a_only - opp_pts_a_only.
+  plus_minus_b_only: pts_b_only - opp_pts_b_only.
+  plus_minus_both: pts_both - opp_pts_both.
+  plus_minus_neither: pts_neither - opp_pts_neither.
+  poss_a_only: The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor
+    when it starts).
+  poss_b_only: The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor
+    when it starts).
+  poss_both: The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor
+    when it starts).
+  poss_neither: The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the
+    floor when it starts).
+  pts_a_only: The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_b_only: The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_both: The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_neither: The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action
+    (a free throw to the lineup at the last foul).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  team_id: stats.nba.com team id.
+wnba_player_on_off:
+  def_rtg_diff: 'On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null.'
+  def_rtg_diff_n: 'Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n.'
+  def_rtg_diff_pct: 'Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_diff_rank: Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  def_rtg_off: 'Defensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off;
+    null with no possessions.'
+  def_rtg_off_n: 'Sample size of def_rtg_off: opp_poss_off.'
+  def_rtg_on: 'Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions.'
+  def_rtg_on_n: 'Sample size of def_rtg_on: opp_poss_on.'
+  def_rtg_on_pct: 'Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  games: Games the player was on the floor for the team.
+  minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
+    games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  minutes_on: Game-clock minutes of the team's season with the player on the floor.
+  net_rtg_diff: 'On-off net rating: net_rtg_on - net_rtg_off; null when either is null.'
+  net_rtg_diff_n: 'Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n.'
+  net_rtg_diff_pct: 'Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_diff_rank: Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  net_rtg_off: 'Net rating with the player off the floor: the rest of the team''s season, the games he missed included (and,
+    for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null
+    when either is null.'
+  net_rtg_off_n: 'Sample size of net_rtg_off: poss_off + opp_poss_off.'
+  net_rtg_on: 'Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null.'
+  net_rtg_on_n: 'Sample size of net_rtg_on: poss_on + opp_poss_on.'
+  net_rtg_on_pct: 'Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
+  off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
+  off_rtg_diff_pct: 'Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off;
+    null with no possessions.'
+  off_rtg_off_n: 'Sample size of off_rtg_off: poss_off.'
+  off_rtg_on: 'Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions.'
+  off_rtg_on_n: 'Sample size of off_rtg_on: poss_on.'
+  off_rtg_on_pct: 'Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
+    he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  opp_poss_on: The team's defensive possessions with the player on the floor.
+  opp_pts_off: 'The opponent''s points with the player off the floor: the rest of the team''s season, the games he missed
+    included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off
+    is.'
+  opp_pts_on: The opponent's points with the player on the floor, credited as pts_on is.
+  player_id: stats.nba.com player (person) id.
+  plus_minus_off: pts_off - opp_pts_off.
+  plus_minus_on: pts_on - opp_pts_on.
+  poss_off: 'The team''s offensive possessions with the player off the floor: the rest of the team''s season, the games he
+    missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession
+    belongs to the five on the floor when it starts).'
+  poss_on: The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when
+    it starts).
+  pts_off: 'The team''s points with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited
+    to the lineup at that action (a free throw to the lineup at the last foul).'
+  pts_on: The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free
+    throw to the lineup at the last foul).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  team_games: Games the team played in the season (with play-by-play and possessions); games well short of it marks a player
+    who missed time or was with the team for part of the season.
+  team_id: stats.nba.com team id.
+wnba_player_wowy:
+  def_rtg_a_only: 'Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions.'
+  def_rtg_b_only: 'Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions.'
+  def_rtg_both: 'Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions.'
+  def_rtg_neither: 'Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with
+    no possessions.'
+  minutes_a_only: Game-clock minutes of the team's season with A on the floor and B off.
+  minutes_b_only: Game-clock minutes of the team's season with B on the floor and A off.
+  minutes_both: Game-clock minutes of the team's season with both A and B on the floor.
+  minutes_neither: Game-clock minutes of the team's season with neither A nor B on the floor.
+  net_rtg_a_only: 'Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null.'
+  net_rtg_b_only: 'Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null.'
+  net_rtg_both: 'Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null.'
+  net_rtg_neither: 'Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null.'
+  off_rtg_a_only: 'Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions.'
+  off_rtg_b_only: 'Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions.'
+  off_rtg_both: 'Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions.'
+  off_rtg_neither: 'Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions.'
+  opp_poss_a_only: The team's defensive possessions with A on the floor and B off.
+  opp_poss_b_only: The team's defensive possessions with B on the floor and A off.
+  opp_poss_both: The team's defensive possessions with both A and B on the floor.
+  opp_poss_neither: The team's defensive possessions with neither A nor B on the floor.
+  opp_pts_a_only: The opponent's points with A on the floor and B off, credited as pts_a_only is.
+  opp_pts_b_only: The opponent's points with B on the floor and A off, credited as pts_b_only is.
+  opp_pts_both: The opponent's points with both A and B on the floor, credited as pts_both is.
+  opp_pts_neither: The opponent's points with neither A nor B on the floor, credited as pts_neither is.
+  player_id_a: The first player of the pair, the smaller id.
+  player_id_b: The second player of the pair, the larger id.
+  plus_minus_a_only: pts_a_only - opp_pts_a_only.
+  plus_minus_b_only: pts_b_only - opp_pts_b_only.
+  plus_minus_both: pts_both - opp_pts_both.
+  plus_minus_neither: pts_neither - opp_pts_neither.
+  poss_a_only: The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor
+    when it starts).
+  poss_b_only: The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor
+    when it starts).
+  poss_both: The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor
+    when it starts).
+  poss_neither: The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the
+    floor when it starts).
+  pts_a_only: The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_b_only: The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_both: The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_neither: The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action
+    (a free throw to the lineup at the last foul).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  team_id: stats.nba.com team id.
+mbb_player_on_off:
+  def_rtg_diff: 'On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null.'
+  def_rtg_diff_n: 'Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n.'
+  def_rtg_diff_pct: 'Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_diff_rank: Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  def_rtg_off: 'Defensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off;
+    null with no possessions.'
+  def_rtg_off_n: 'Sample size of def_rtg_off: opp_poss_off.'
+  def_rtg_on: 'Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions.'
+  def_rtg_on_n: 'Sample size of def_rtg_on: opp_poss_on.'
+  def_rtg_on_pct: 'Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  games: Games the player was on the floor for the team.
+  minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
+    games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  minutes_on: Game-clock minutes of the team's season with the player on the floor.
+  net_rtg_diff: 'On-off net rating: net_rtg_on - net_rtg_off; null when either is null.'
+  net_rtg_diff_n: 'Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n.'
+  net_rtg_diff_pct: 'Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_diff_rank: Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  net_rtg_off: 'Net rating with the player off the floor: the rest of the team''s season, the games he missed included (and,
+    for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null
+    when either is null.'
+  net_rtg_off_n: 'Sample size of net_rtg_off: poss_off + opp_poss_off.'
+  net_rtg_on: 'Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null.'
+  net_rtg_on_n: 'Sample size of net_rtg_on: poss_on + opp_poss_on.'
+  net_rtg_on_pct: 'Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
+  off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
+  off_rtg_diff_pct: 'Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off;
+    null with no possessions.'
+  off_rtg_off_n: 'Sample size of off_rtg_off: poss_off.'
+  off_rtg_on: 'Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions.'
+  off_rtg_on_n: 'Sample size of off_rtg_on: poss_on.'
+  off_rtg_on_pct: 'Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
+    he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  opp_poss_on: The team's defensive possessions with the player on the floor.
+  opp_pts_off: 'The opponent''s points with the player off the floor: the rest of the team''s season, the games he missed
+    included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off
+    is.'
+  opp_pts_on: The opponent's points with the player on the floor, credited as pts_on is.
+  player_id: stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet).
+  plus_minus_off: pts_off - opp_pts_off.
+  plus_minus_on: pts_on - opp_pts_on.
+  poss_off: 'The team''s offensive possessions with the player off the floor: the rest of the team''s season, the games he
+    missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession
+    belongs to the five on the floor when it starts).'
+  poss_on: The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when
+    it starts).
+  pts_off: 'The team''s points with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited
+    to the lineup at that action (a free throw to the lineup at the last foul).'
+  pts_on: The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free
+    throw to the lineup at the last foul).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_games: Games the team played in the season (with play-by-play and possessions); games well short of it marks a player
+    who missed time or was with the team for part of the season.
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+mbb_player_wowy:
+  def_rtg_a_only: 'Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions.'
+  def_rtg_b_only: 'Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions.'
+  def_rtg_both: 'Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions.'
+  def_rtg_neither: 'Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with
+    no possessions.'
+  minutes_a_only: Game-clock minutes of the team's season with A on the floor and B off.
+  minutes_b_only: Game-clock minutes of the team's season with B on the floor and A off.
+  minutes_both: Game-clock minutes of the team's season with both A and B on the floor.
+  minutes_neither: Game-clock minutes of the team's season with neither A nor B on the floor.
+  net_rtg_a_only: 'Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null.'
+  net_rtg_b_only: 'Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null.'
+  net_rtg_both: 'Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null.'
+  net_rtg_neither: 'Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null.'
+  off_rtg_a_only: 'Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions.'
+  off_rtg_b_only: 'Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions.'
+  off_rtg_both: 'Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions.'
+  off_rtg_neither: 'Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions.'
+  opp_poss_a_only: The team's defensive possessions with A on the floor and B off.
+  opp_poss_b_only: The team's defensive possessions with B on the floor and A off.
+  opp_poss_both: The team's defensive possessions with both A and B on the floor.
+  opp_poss_neither: The team's defensive possessions with neither A nor B on the floor.
+  opp_pts_a_only: The opponent's points with A on the floor and B off, credited as pts_a_only is.
+  opp_pts_b_only: The opponent's points with B on the floor and A off, credited as pts_b_only is.
+  opp_pts_both: The opponent's points with both A and B on the floor, credited as pts_both is.
+  opp_pts_neither: The opponent's points with neither A nor B on the floor, credited as pts_neither is.
+  player_id_a: The first player of the pair, the smaller id as a string.
+  player_id_b: The second player of the pair, the larger id as a string.
+  plus_minus_a_only: pts_a_only - opp_pts_a_only.
+  plus_minus_b_only: pts_b_only - opp_pts_b_only.
+  plus_minus_both: pts_both - opp_pts_both.
+  plus_minus_neither: pts_neither - opp_pts_neither.
+  poss_a_only: The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor
+    when it starts).
+  poss_b_only: The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor
+    when it starts).
+  poss_both: The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor
+    when it starts).
+  poss_neither: The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the
+    floor when it starts).
+  pts_a_only: The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_b_only: The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_both: The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_neither: The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action
+    (a free throw to the lineup at the last foul).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+wbb_player_on_off:
+  def_rtg_diff: 'On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null.'
+  def_rtg_diff_n: 'Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n.'
+  def_rtg_diff_pct: 'Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_diff_rank: Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  def_rtg_off: 'Defensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off;
+    null with no possessions.'
+  def_rtg_off_n: 'Sample size of def_rtg_off: opp_poss_off.'
+  def_rtg_on: 'Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions.'
+  def_rtg_on_n: 'Sample size of def_rtg_on: opp_poss_on.'
+  def_rtg_on_pct: 'Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  games: Games the player was on the floor for the team.
+  minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
+    games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  minutes_on: Game-clock minutes of the team's season with the player on the floor.
+  net_rtg_diff: 'On-off net rating: net_rtg_on - net_rtg_off; null when either is null.'
+  net_rtg_diff_n: 'Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n.'
+  net_rtg_diff_pct: 'Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_diff_rank: Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  net_rtg_off: 'Net rating with the player off the floor: the rest of the team''s season, the games he missed included (and,
+    for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null
+    when either is null.'
+  net_rtg_off_n: 'Sample size of net_rtg_off: poss_off + opp_poss_off.'
+  net_rtg_on: 'Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null.'
+  net_rtg_on_n: 'Sample size of net_rtg_on: poss_on + opp_poss_on.'
+  net_rtg_on_pct: 'Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
+  off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
+  off_rtg_diff_pct: 'Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off;
+    null with no possessions.'
+  off_rtg_off_n: 'Sample size of off_rtg_off: poss_off.'
+  off_rtg_on: 'Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions.'
+  off_rtg_on_n: 'Sample size of off_rtg_on: poss_on.'
+  off_rtg_on_pct: 'Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null where the rank is.'
+  off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
+    with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers.
+  opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
+    he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
+  opp_poss_on: The team's defensive possessions with the player on the floor.
+  opp_pts_off: 'The opponent''s points with the player off the floor: the rest of the team''s season, the games he missed
+    included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off
+    is.'
+  opp_pts_on: The opponent's points with the player on the floor, credited as pts_on is.
+  player_id: stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet).
+  plus_minus_off: pts_off - opp_pts_off.
+  plus_minus_on: pts_on - opp_pts_on.
+  poss_off: 'The team''s offensive possessions with the player off the floor: the rest of the team''s season, the games he
+    missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession
+    belongs to the five on the floor when it starts).'
+  poss_on: The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when
+    it starts).
+  pts_off: 'The team''s points with the player off the floor: the rest of the team''s season, the games he missed included
+    (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited
+    to the lineup at that action (a free throw to the lineup at the last foul).'
+  pts_on: The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free
+    throw to the lineup at the last foul).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_games: Games the team played in the season (with play-by-play and possessions); games well short of it marks a player
+    who missed time or was with the team for part of the season.
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
+wbb_player_wowy:
+  def_rtg_a_only: 'Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions.'
+  def_rtg_b_only: 'Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions.'
+  def_rtg_both: 'Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions.'
+  def_rtg_neither: 'Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with
+    no possessions.'
+  minutes_a_only: Game-clock minutes of the team's season with A on the floor and B off.
+  minutes_b_only: Game-clock minutes of the team's season with B on the floor and A off.
+  minutes_both: Game-clock minutes of the team's season with both A and B on the floor.
+  minutes_neither: Game-clock minutes of the team's season with neither A nor B on the floor.
+  net_rtg_a_only: 'Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null.'
+  net_rtg_b_only: 'Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null.'
+  net_rtg_both: 'Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null.'
+  net_rtg_neither: 'Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null.'
+  off_rtg_a_only: 'Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions.'
+  off_rtg_b_only: 'Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions.'
+  off_rtg_both: 'Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions.'
+  off_rtg_neither: 'Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions.'
+  opp_poss_a_only: The team's defensive possessions with A on the floor and B off.
+  opp_poss_b_only: The team's defensive possessions with B on the floor and A off.
+  opp_poss_both: The team's defensive possessions with both A and B on the floor.
+  opp_poss_neither: The team's defensive possessions with neither A nor B on the floor.
+  opp_pts_a_only: The opponent's points with A on the floor and B off, credited as pts_a_only is.
+  opp_pts_b_only: The opponent's points with B on the floor and A off, credited as pts_b_only is.
+  opp_pts_both: The opponent's points with both A and B on the floor, credited as pts_both is.
+  opp_pts_neither: The opponent's points with neither A nor B on the floor, credited as pts_neither is.
+  player_id_a: The first player of the pair, the smaller id as a string.
+  player_id_b: The second player of the pair, the larger id as a string.
+  plus_minus_a_only: pts_a_only - opp_pts_a_only.
+  plus_minus_b_only: pts_b_only - opp_pts_b_only.
+  plus_minus_both: pts_both - opp_pts_both.
+  plus_minus_neither: pts_neither - opp_pts_neither.
+  poss_a_only: The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor
+    when it starts).
+  poss_b_only: The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor
+    when it starts).
+  poss_both: The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor
+    when it starts).
+  poss_neither: The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the
+    floor when it starts).
+  pts_a_only: The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_b_only: The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_both: The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a
+    free throw to the lineup at the last foul).
+  pts_neither: The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action
+    (a free throw to the lineup at the last foul).
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: ESPN team id; a non-D1 team has none and gets no rows.
