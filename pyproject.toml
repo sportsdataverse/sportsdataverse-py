@@ -683,6 +683,7 @@ files = [
     "sportsdataverse/nba/nba_team_ratings.py",
     "sportsdataverse/nba/nba_team_season_rates.py",
     "sportsdataverse/nba/nba_game_impact.py",
+    "sportsdataverse/nba/nba_epv.py",
     "sportsdataverse/nba/nba_lineup_seasons.py",
     "sportsdataverse/nba/nba_player_on_off.py",
     "sportsdataverse/nba/nba_play_style.py",
