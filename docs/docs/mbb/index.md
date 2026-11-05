@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 359 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 362 | — |
 
 ## ESPN {#espn}
 
@@ -216,20 +216,23 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_bracketology`](reference/additional/analytics#mbb_bracketology)
 - [`mbb_coach_careers`](reference/additional/analytics#mbb_coach_careers)
 - [`mbb_coach_seasons`](reference/additional/analytics-2#mbb_coach_seasons)
+- [`mbb_game_flow`](reference/additional/analytics-2#mbb_game_flow)
 - [`mbb_game_lineups_used`](reference/additional/analytics-2#mbb_game_lineups_used)
 - [`mbb_game_player_impact`](reference/additional/analytics-2#mbb_game_player_impact)
 - [`mbb_shot_selection`](reference/additional/analytics-2#mbb_shot_selection)
 - [`mbb_strength_of_schedule`](reference/additional/analytics-2#mbb_strength_of_schedule)
 - [`mbb_team_luck`](reference/additional/analytics-2#mbb_team_luck)
+- [`mbb_team_season_flow`](reference/additional/analytics-2#mbb_team_season_flow)
 - [`mbb_team_season_rates`](reference/additional/analytics-2#mbb_team_season_rates)
-- [`mbb_team_strength`](reference/additional/analytics-2#mbb_team_strength)
-- [`ncaa_coach_stints`](reference/additional/analytics-2#ncaa_coach_stints)
-- [`ncaa_impact_rows`](reference/additional/analytics-2#ncaa_impact_rows)
+- [`mbb_team_strength`](reference/additional/analytics-3#mbb_team_strength)
+- [`ncaa_coach_stints`](reference/additional/analytics-3#ncaa_coach_stints)
+- [`ncaa_impact_rows`](reference/additional/analytics-3#ncaa_impact_rows)
 - [`ncaa_mbb_lineups`](reference/additional/analytics-3#ncaa_mbb_lineups)
 - [`ncaa_mbb_on_off`](reference/additional/analytics-3#ncaa_mbb_on_off)
 - [`ncaa_mbb_player_combos`](reference/additional/analytics-3#ncaa_mbb_player_combos)
 - [`ncaa_mbb_player_lineups`](reference/additional/analytics-3#ncaa_mbb_player_lineups)
 - [`ncaa_possession_rate_rows`](reference/additional/analytics-3#ncaa_possession_rate_rows)
+- [`ncaa_score_rows`](reference/additional/analytics-3#ncaa_score_rows)
 - [`ncaa_team_box_count_rows`](reference/additional/analytics-3#ncaa_team_box_count_rows)
 - [`ncaa_team_coaches`](reference/additional/analytics-3#ncaa_team_coaches)
 - [`order_lineup`](reference/additional/analytics-3#order_lineup)

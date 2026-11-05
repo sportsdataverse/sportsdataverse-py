@@ -340,6 +340,7 @@ from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
 from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_game_flow as nba_game_flow  # noqa: F401
 from sportsdataverse.nba import nba_game_lineups_used as nba_game_lineups_used  # noqa: F401
 from sportsdataverse.nba import nba_game_player_impact as nba_game_player_impact  # noqa: F401
 from sportsdataverse.nba import nba_impact_rows as nba_impact_rows  # noqa: F401
@@ -368,6 +369,7 @@ from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_seas
 from sportsdataverse.nba import nba_referee_assignments as nba_referee_assignments  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
 from sportsdataverse.nba import nba_schedule_crosswalk as nba_schedule_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_score_rows as nba_score_rows  # noqa: F401
 from sportsdataverse.nba import nba_season_sim as nba_season_sim  # noqa: F401
 from sportsdataverse.nba import nba_season_standings as nba_season_standings  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
@@ -377,6 +379,7 @@ from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_luck as nba_team_luck  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
+from sportsdataverse.nba import nba_team_season_flow as nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba import nba_team_season_rates as nba_team_season_rates  # noqa: F401
 from sportsdataverse.nba import nba_team_strength as nba_team_strength  # noqa: F401
 from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
@@ -768,6 +771,7 @@ __all__ = [
     "nba_expected_turnovers",
     "nba_foul_drawing",
     "nba_four_factor_rapm",
+    "nba_game_flow",
     "nba_game_lineups_used",
     "nba_game_player_impact",
     "nba_impact_rows",
@@ -796,6 +800,7 @@ __all__ = [
     "nba_referee_assignments",
     "nba_rookie_projection",
     "nba_schedule_crosswalk",
+    "nba_score_rows",
     "nba_season_sim",
     "nba_season_standings",
     "nba_shot_value",
@@ -806,6 +811,7 @@ __all__ = [
     "nba_team_crosswalk",
     "nba_team_luck",
     "nba_team_ratings",
+    "nba_team_season_flow",
     "nba_team_season_rates",
     "nba_team_strength",
     "nba_tracking_drive_value",

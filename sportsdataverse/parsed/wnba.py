@@ -260,6 +260,7 @@ from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
 from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa: F401
+from sportsdataverse.wnba import wnba_game_flow as wnba_game_flow  # noqa: F401
 from sportsdataverse.wnba import wnba_game_lineups_used as wnba_game_lineups_used  # noqa: F401
 from sportsdataverse.wnba import wnba_game_player_impact as wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba import wnba_in_game_win_prob as wnba_in_game_win_prob  # noqa: F401
@@ -287,6 +288,7 @@ from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
+from sportsdataverse.wnba import wnba_team_season_flow as wnba_team_season_flow  # noqa: F401
 from sportsdataverse.wnba import wnba_team_season_rates as wnba_team_season_rates  # noqa: F401
 from sportsdataverse.wnba import wnba_team_strength as wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
@@ -536,6 +538,7 @@ __all__ = [
     "wnba_enhanced_pbp",
     "wnba_expected_turnovers",
     "wnba_foul_drawing",
+    "wnba_game_flow",
     "wnba_game_lineups_used",
     "wnba_game_player_impact",
     "wnba_in_game_win_prob",
@@ -563,6 +566,7 @@ __all__ = [
     "wnba_team_crosswalk",
     "wnba_team_luck",
     "wnba_team_ratings",
+    "wnba_team_season_flow",
     "wnba_team_season_rates",
     "wnba_team_strength",
     "wnba_tracking_drive_value",

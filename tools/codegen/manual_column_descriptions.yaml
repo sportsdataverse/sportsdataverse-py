@@ -74741,3 +74741,479 @@ ncaa_coach_stints:
   games: Always null here; the card coach has the whole season (a season the card shows changing hands has no stint).
   wins: Always null here, as games.
   position: Always any; one whole-season stint per team-season.
+nba_game_flow:
+  avg_margin: 'Game control: the team''s score margin averaged over the game clock.'
+  avg_wp: 'Game control: the team''s in-game win probability averaged over the game clock (the league''s in-game model with a home-court-only
+    prior, 0.5 at a neutral site).'
+  comeback: largest_deficit for a game the team won, else 0.
+  def_poss: The team's defensive possessions (every row of the possessions release); null for a game with no published possessions.
+  double_kills: 'Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill).'
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  is_home: True for the home side.
+  kills: 'Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period
+    breaks).'
+  largest_deficit: The team's biggest deficit in points (0 if never behind).
+  largest_lead: The team's biggest lead in points (0 if never ahead).
+  lead_changes: How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of
+    a game.
+  lead_pct: lead_sec / game_seconds.
+  lead_sec: Game-clock seconds with the team ahead; the score after a play holds until the next play.
+  longest_drought_sec: The longest stretch of game clock between two of the team's scores, counted from the tip to its first score
+    and from its last score to the end.
+  max_run: The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the
+    run of the side it lowers. 0 if the team never scored.
+  opp_pts: The opponent's final points.
+  opp_team_id: The opponent's team id.
+  pts: 'The team''s final points: its running score after the last play.'
+  runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stops: Defensive possessions on which the opponent scored no points.
+  team_id: stats.nba.com team id.
+  tied_sec: Game-clock seconds with the score level, the clock before the first play included.
+  times_tied: How often the score became level, the 0-0 start not counted; the same on both rows of a game.
+  trail_sec: Game-clock seconds with the team behind.
+  won: True when pts > opp_pts.
+nba_team_season_flow:
+  avg_longest_drought_sec: The team's longest scoring drought, in seconds, averaged over its games.
+  avg_longest_drought_sec_n: 'Sample size of avg_longest_drought_sec: games.'
+  avg_longest_drought_sec_pct: 'Percentile of avg_longest_drought_sec among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  avg_longest_drought_sec_rank: Rank of avg_longest_drought_sec within the season (the lowest value ranks 1; ties average), among
+    teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_margin: 'Game control: the score margin averaged over the season''s game clock.'
+  avg_margin_n: 'Sample size of avg_margin: games.'
+  avg_margin_pct: 'Percentile of avg_margin among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
+  avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
+    the rank is null.'
+  avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
+    most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  def_poss: Defensive possessions, summed.
+  double_kills: Double kills (six straight stops), summed.
+  double_kills_pg: Double kills per game.
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
+  double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
+    least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  games: Games played (completed games of the season type).
+  kills: Kills (three straight stops), summed.
+  kills_per_100: Kills per 100 defensive possessions; null with no possessions.
+  kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
+  kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  kills_pg: Kills per game.
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
+  kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  largest_comeback: The biggest deficit the team overcame in a win this season (0 if none).
+  largest_lead: The team's biggest lead of the season.
+  lead_changes_pg: Lead changes per game.
+  lead_pct: Share of the team's game clock spent ahead (sum lead_sec / sum game_seconds).
+  lead_pct_n: 'Sample size of lead_pct: games.'
+  lead_pct_pct: 'Percentile of lead_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  lead_pct_rank: Rank of lead_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  max_run: The team's biggest n-0 run of the season.
+  opp_runs_10: The opponents' runs of 10 or more unanswered points against the team, summed.
+  opp_runs_10_pg: The opponents' 10-0 (or better) runs against the team per game.
+  opp_runs_10_pg_n: 'Sample size of opp_runs_10_pg: games.'
+  opp_runs_10_pg_pct: 'Percentile of opp_runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  opp_runs_10_pg_rank: Rank of opp_runs_10_pg within the season (the lowest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  runs_10: The team's runs of 10 or more unanswered points, summed over the season.
+  runs_10_pg: The team's 10-0 (or better) runs per game.
+  runs_10_pg_n: 'Sample size of runs_10_pg: games.'
+  runs_10_pg_pct: 'Percentile of runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  runs_10_pg_rank: Rank of runs_10_pg within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stop_pct: stops / def_poss; null with no possessions.
+  stop_pct_n: 'Sample size of stop_pct: the teams defensive possessions.'
+  stop_pct_pct: 'Percentile of stop_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  stop_pct_rank: Rank of stop_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  stops: Stops (scoreless defensive possessions), summed.
+  team_id: stats.nba.com team id.
+  tied_pct: Share of the team's game clock spent tied.
+  times_tied_pg: Times tied per game.
+  trail_pct: Share of the team's game clock spent behind (sum trail_sec / sum game_seconds).
+  wins: Games the team won among its completed games of the season type (pts > opp_pts).
+wnba_game_flow:
+  avg_margin: 'Game control: the team''s score margin averaged over the game clock.'
+  avg_wp: 'Game control: the team''s in-game win probability averaged over the game clock (the league''s in-game model with a home-court-only
+    prior, 0.5 at a neutral site).'
+  comeback: largest_deficit for a game the team won, else 0.
+  def_poss: The team's defensive possessions (every row of the possessions release); null for a game with no published possessions.
+  double_kills: 'Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill).'
+  game_id: stats.wnba.com game id (e.g. 1022500001).
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  is_home: True for the home side.
+  kills: 'Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period
+    breaks).'
+  largest_deficit: The team's biggest deficit in points (0 if never behind).
+  largest_lead: The team's biggest lead in points (0 if never ahead).
+  lead_changes: How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of
+    a game.
+  lead_pct: lead_sec / game_seconds.
+  lead_sec: Game-clock seconds with the team ahead; the score after a play holds until the next play.
+  longest_drought_sec: The longest stretch of game clock between two of the team's scores, counted from the tip to its first score
+    and from its last score to the end.
+  max_run: The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the
+    run of the side it lowers. 0 if the team never scored.
+  opp_pts: The opponent's final points.
+  opp_team_id: The opponent's team id.
+  pts: 'The team''s final points: its running score after the last play.'
+  runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stops: Defensive possessions on which the opponent scored no points.
+  team_id: stats.wnba.com team id.
+  tied_sec: Game-clock seconds with the score level, the clock before the first play included.
+  times_tied: How often the score became level, the 0-0 start not counted; the same on both rows of a game.
+  trail_sec: Game-clock seconds with the team behind.
+  won: True when pts > opp_pts.
+wnba_team_season_flow:
+  avg_longest_drought_sec: The team's longest scoring drought, in seconds, averaged over its games.
+  avg_longest_drought_sec_n: 'Sample size of avg_longest_drought_sec: games.'
+  avg_longest_drought_sec_pct: 'Percentile of avg_longest_drought_sec among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  avg_longest_drought_sec_rank: Rank of avg_longest_drought_sec within the season (the lowest value ranks 1; ties average), among
+    teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_margin: 'Game control: the score margin averaged over the season''s game clock.'
+  avg_margin_n: 'Sample size of avg_margin: games.'
+  avg_margin_pct: 'Percentile of avg_margin among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
+  avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
+    the rank is null.'
+  avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
+    most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  def_poss: Defensive possessions, summed.
+  double_kills: Double kills (six straight stops), summed.
+  double_kills_pg: Double kills per game.
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
+  double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
+    least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  games: Games played (completed games of the season type).
+  kills: Kills (three straight stops), summed.
+  kills_per_100: Kills per 100 defensive possessions; null with no possessions.
+  kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
+  kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  kills_pg: Kills per game.
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
+  kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  largest_comeback: The biggest deficit the team overcame in a win this season (0 if none).
+  largest_lead: The team's biggest lead of the season.
+  lead_changes_pg: Lead changes per game.
+  lead_pct: Share of the team's game clock spent ahead (sum lead_sec / sum game_seconds).
+  lead_pct_n: 'Sample size of lead_pct: games.'
+  lead_pct_pct: 'Percentile of lead_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  lead_pct_rank: Rank of lead_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  max_run: The team's biggest n-0 run of the season.
+  opp_runs_10: The opponents' runs of 10 or more unanswered points against the team, summed.
+  opp_runs_10_pg: The opponents' 10-0 (or better) runs against the team per game.
+  opp_runs_10_pg_n: 'Sample size of opp_runs_10_pg: games.'
+  opp_runs_10_pg_pct: 'Percentile of opp_runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  opp_runs_10_pg_rank: Rank of opp_runs_10_pg within the season (the lowest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  runs_10: The team's runs of 10 or more unanswered points, summed over the season.
+  runs_10_pg: The team's 10-0 (or better) runs per game.
+  runs_10_pg_n: 'Sample size of runs_10_pg: games.'
+  runs_10_pg_pct: 'Percentile of runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  runs_10_pg_rank: Rank of runs_10_pg within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stop_pct: stops / def_poss; null with no possessions.
+  stop_pct_n: 'Sample size of stop_pct: the teams defensive possessions.'
+  stop_pct_pct: 'Percentile of stop_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  stop_pct_rank: Rank of stop_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  stops: Stops (scoreless defensive possessions), summed.
+  team_id: stats.wnba.com team id.
+  tied_pct: Share of the team's game clock spent tied.
+  times_tied_pg: Times tied per game.
+  trail_pct: Share of the team's game clock spent behind (sum trail_sec / sum game_seconds).
+  wins: Games the team won among its completed games of the season type (pts > opp_pts).
+mbb_game_flow:
+  avg_margin: 'Game control: the team''s score margin averaged over the game clock.'
+  avg_wp: 'Game control: the team''s in-game win probability averaged over the game clock (the league''s in-game model with a home-court-only
+    prior, 0.5 at a neutral site).'
+  comeback: largest_deficit for a game the team won, else 0.
+  def_poss: The team's defensive possessions (every row of the possessions release); null for a game with no published possessions.
+  double_kills: 'Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill).'
+  game_id: stats.ncaa.org contest id.
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  is_home: True for the home side.
+  kills: 'Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period
+    breaks).'
+  largest_deficit: The team's biggest deficit in points (0 if never behind).
+  largest_lead: The team's biggest lead in points (0 if never ahead).
+  lead_changes: How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of
+    a game.
+  lead_pct: lead_sec / game_seconds.
+  lead_sec: Game-clock seconds with the team ahead; the score after a play holds until the next play.
+  longest_drought_sec: The longest stretch of game clock between two of the team's scores, counted from the tip to its first score
+    and from its last score to the end.
+  max_run: The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the
+    run of the side it lowers. 0 if the team never scored.
+  opp_pts: The opponent's final points.
+  opp_team_id: The opponent's team id.
+  pts: 'The team''s final points: its running score after the last play.'
+  runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stops: Defensive possessions on which the opponent scored no points.
+  team_id: ESPN team id; a non-D1 opponent has none and gets no row.
+  tied_sec: Game-clock seconds with the score level, the clock before the first play included.
+  times_tied: How often the score became level, the 0-0 start not counted; the same on both rows of a game.
+  trail_sec: Game-clock seconds with the team behind.
+  won: True when pts > opp_pts.
+mbb_team_season_flow:
+  avg_longest_drought_sec: The team's longest scoring drought, in seconds, averaged over its games.
+  avg_longest_drought_sec_n: 'Sample size of avg_longest_drought_sec: games.'
+  avg_longest_drought_sec_pct: 'Percentile of avg_longest_drought_sec among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  avg_longest_drought_sec_rank: Rank of avg_longest_drought_sec within the season (the lowest value ranks 1; ties average), among
+    teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_margin: 'Game control: the score margin averaged over the season''s game clock.'
+  avg_margin_n: 'Sample size of avg_margin: games.'
+  avg_margin_pct: 'Percentile of avg_margin among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
+  avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
+    the rank is null.'
+  avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
+    most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  def_poss: Defensive possessions, summed.
+  double_kills: Double kills (six straight stops), summed.
+  double_kills_pg: Double kills per game.
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
+  double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
+    least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  games: Games played (completed games of the season type).
+  kills: Kills (three straight stops), summed.
+  kills_per_100: Kills per 100 defensive possessions; null with no possessions.
+  kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
+  kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  kills_pg: Kills per game.
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
+  kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  largest_comeback: The biggest deficit the team overcame in a win this season (0 if none).
+  largest_lead: The team's biggest lead of the season.
+  lead_changes_pg: Lead changes per game.
+  lead_pct: Share of the team's game clock spent ahead (sum lead_sec / sum game_seconds).
+  lead_pct_n: 'Sample size of lead_pct: games.'
+  lead_pct_pct: 'Percentile of lead_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  lead_pct_rank: Rank of lead_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  max_run: The team's biggest n-0 run of the season.
+  opp_runs_10: The opponents' runs of 10 or more unanswered points against the team, summed.
+  opp_runs_10_pg: The opponents' 10-0 (or better) runs against the team per game.
+  opp_runs_10_pg_n: 'Sample size of opp_runs_10_pg: games.'
+  opp_runs_10_pg_pct: 'Percentile of opp_runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  opp_runs_10_pg_rank: Rank of opp_runs_10_pg within the season (the lowest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  runs_10: The team's runs of 10 or more unanswered points, summed over the season.
+  runs_10_pg: The team's 10-0 (or better) runs per game.
+  runs_10_pg_n: 'Sample size of runs_10_pg: games.'
+  runs_10_pg_pct: 'Percentile of runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  runs_10_pg_rank: Rank of runs_10_pg within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stop_pct: stops / def_poss; null with no possessions.
+  stop_pct_n: 'Sample size of stop_pct: the teams defensive possessions.'
+  stop_pct_pct: 'Percentile of stop_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  stop_pct_rank: Rank of stop_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  stops: Stops (scoreless defensive possessions), summed.
+  team_id: ESPN team id; a non-D1 opponent has none and gets no row.
+  tied_pct: Share of the team's game clock spent tied.
+  times_tied_pg: Times tied per game.
+  trail_pct: Share of the team's game clock spent behind (sum trail_sec / sum game_seconds).
+  wins: Games the team won among its completed games of the season type (pts > opp_pts).
+wbb_game_flow:
+  avg_margin: 'Game control: the team''s score margin averaged over the game clock.'
+  avg_wp: 'Game control: the team''s in-game win probability averaged over the game clock (the league''s in-game model with a home-court-only
+    prior, 0.5 at a neutral site).'
+  comeback: largest_deficit for a game the team won, else 0.
+  def_poss: The team's defensive possessions (every row of the possessions release); null for a game with no published possessions.
+  double_kills: 'Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill).'
+  game_id: stats.ncaa.org contest id.
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  is_home: True for the home side.
+  kills: 'Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period
+    breaks).'
+  largest_deficit: The team's biggest deficit in points (0 if never behind).
+  largest_lead: The team's biggest lead in points (0 if never ahead).
+  lead_changes: How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of
+    a game.
+  lead_pct: lead_sec / game_seconds.
+  lead_sec: Game-clock seconds with the team ahead; the score after a play holds until the next play.
+  longest_drought_sec: The longest stretch of game clock between two of the team's scores, counted from the tip to its first score
+    and from its last score to the end.
+  max_run: The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the
+    run of the side it lowers. 0 if the team never scored.
+  opp_pts: The opponent's final points.
+  opp_team_id: The opponent's team id.
+  pts: 'The team''s final points: its running score after the last play.'
+  runs_10: The team's runs of 10 or more unanswered points.
+  opp_runs_10: The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stops: Defensive possessions on which the opponent scored no points.
+  team_id: ESPN team id; a non-D1 opponent has none and gets no row.
+  tied_sec: Game-clock seconds with the score level, the clock before the first play included.
+  times_tied: How often the score became level, the 0-0 start not counted; the same on both rows of a game.
+  trail_sec: Game-clock seconds with the team behind.
+  won: True when pts > opp_pts.
+wbb_team_season_flow:
+  avg_longest_drought_sec: The team's longest scoring drought, in seconds, averaged over its games.
+  avg_longest_drought_sec_n: 'Sample size of avg_longest_drought_sec: games.'
+  avg_longest_drought_sec_pct: 'Percentile of avg_longest_drought_sec among the same qualified teams: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  avg_longest_drought_sec_rank: Rank of avg_longest_drought_sec within the season (the lowest value ranks 1; ties average), among
+    teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_margin: 'Game control: the score margin averaged over the season''s game clock.'
+  avg_margin_n: 'Sample size of avg_margin: games.'
+  avg_margin_pct: 'Percentile of avg_margin among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  avg_margin_rank: Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  avg_wp: 'Game control: the in-game win probability averaged over the season''s game clock.'
+  avg_wp_n: 'Sample size of avg_wp: the games with a win probability.'
+  avg_wp_pct: 'Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when
+    the rank is null.'
+  avg_wp_rank: Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's
+    most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  def_poss: Defensive possessions, summed.
+  double_kills: Double kills (six straight stops), summed.
+  double_kills_pg: Double kills per game.
+  double_kills_pg_n: 'Sample size of double_kills_pg: the games with published possessions.'
+  double_kills_pg_pct: 'Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  double_kills_pg_rank: Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at
+    least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  games: Games played (completed games of the season type).
+  kills: Kills (three straight stops), summed.
+  kills_per_100: Kills per 100 defensive possessions; null with no possessions.
+  kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
+  kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  kills_per_100_rank: Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  kills_pg: Kills per game.
+  kills_pg_n: 'Sample size of kills_pg: the games with published possessions.'
+  kills_pg_pct: 'Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  kills_pg_rank: Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  largest_comeback: The biggest deficit the team overcame in a win this season (0 if none).
+  largest_lead: The team's biggest lead of the season.
+  lead_changes_pg: Lead changes per game.
+  lead_pct: Share of the team's game clock spent ahead (sum lead_sec / sum game_seconds).
+  lead_pct_n: 'Sample size of lead_pct: games.'
+  lead_pct_pct: 'Percentile of lead_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  lead_pct_rank: Rank of lead_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  max_run: The team's biggest n-0 run of the season.
+  opp_runs_10: The opponents' runs of 10 or more unanswered points against the team, summed.
+  opp_runs_10_pg: The opponents' 10-0 (or better) runs against the team per game.
+  opp_runs_10_pg_n: 'Sample size of opp_runs_10_pg: games.'
+  opp_runs_10_pg_pct: 'Percentile of opp_runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  opp_runs_10_pg_rank: Rank of opp_runs_10_pg within the season (the lowest value ranks 1; ties average), among teams with at least
+    half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  runs_10: The team's runs of 10 or more unanswered points, summed over the season.
+  runs_10_pg: The team's 10-0 (or better) runs per game.
+  runs_10_pg_n: 'Sample size of runs_10_pg: games.'
+  runs_10_pg_pct: 'Percentile of runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  runs_10_pg_rank: Rank of runs_10_pg within the season (the highest value ranks 1; ties average), among teams with at least half
+    the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  stop_pct: stops / def_poss; null with no possessions.
+  stop_pct_n: 'Sample size of stop_pct: the teams defensive possessions.'
+  stop_pct_pct: 'Percentile of stop_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  stop_pct_rank: Rank of stop_pct within the season (the highest value ranks 1; ties average), among teams with at least half the
+    season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
+  stops: Stops (scoreless defensive possessions), summed.
+  team_id: ESPN team id; a non-D1 opponent has none and gets no row.
+  tied_pct: Share of the team's game clock spent tied.
+  times_tied_pg: Times tied per game.
+  trail_pct: Share of the team's game clock spent behind (sum trail_sec / sum game_seconds).
+  wins: Games the team won among its completed games of the season type (pts > opp_pts).
+nba_score_rows:
+  away_score: Away running score after the play.
+  away_team_id: The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor).
+  elapsed: Game-clock seconds run when the play happens, counted from the tip.
+  event_team_id: The play's team (the model's ball side); 0 or null for a team-less play.
+  game_id: stats.nba.com game id (e.g. 0022500101).
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  home_score: Home running score after the play.
+  home_team_id: The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host).
+  neutral_site: True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries
+    no venue.
+  order: The play's position in its game (the pbp order_index, or the release row order for college).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  sec_left: 'The win-probability clock: seconds left in regulation, or in the overtime period.'
+ncaa_score_rows:
+  away_score: Away running score after the play.
+  away_team_id: The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor).
+  elapsed: Game-clock seconds run when the play happens, counted from the tip.
+  event_team_id: The play's team (the model's ball side); 0 or null for a team-less play.
+  game_id: stats.ncaa.org contest id.
+  game_seconds: 'Game length in seconds: regulation plus the overtimes played.'
+  home_score: Home running score after the play.
+  home_team_id: The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host).
+  neutral_site: True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries
+    no venue.
+  order: The play's position in its game (the pbp order_index, or the release row order for college).
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  sec_left: 'The win-probability clock: seconds left in regulation, or in the overtime period.'

@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_cup–nba_referee"
-sidebar_label: "Analytics: nba_cup–nba_referee"
+title: "NBA — additional Python functions — Analytics: nba_cup–nba_score"
+sidebar_label: "Analytics: nba_cup–nba_score"
 sidebar_position: 14
-description: "NBA — additional Python functions — Analytics: nba_cup–nba_referee — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_cup–nba_score — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_cup–nba_referee
+# NBA — additional Python functions — Analytics: nba_cup–nba_score
 
 ### nba_cup_sim {#nba_cup_sim}
 
@@ -230,6 +230,75 @@ f = nba_foul_drawing("2023-24", base=base_df, player_mix=mix_df)
 # Pipeline next step
 
 f.filter(pl.col("poss") >= 200).sort("foul_draw_skill", descending=True)
+```
+
+### nba_game_flow {#nba_game_flow}
+
+`nba_game_flow(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Game flow per team and game: runs, droughts, kills, lead changes, time leading and game control.
+
+The definitions are in `sportsdataverse._common.game_flow`. Over the 1,315 games of the
+2025-26 NBA season (every season type), `lead_changes` equals the official cdn.nba.com box
+score's in every game and `times_tied` and `largest_lead` in all but one; over the 310 games
+of the 2025 WNBA season all three equal cdn.wnba.com's in every game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id)`: `opp_team_id`, `is_home`, `pts` / `opp_pts` and `won`; `game_seconds`; `lead_sec` / `trail_sec` / `tied_sec` and `lead_pct`; `lead_changes` and `times_tied` (game totals); `largest_lead`, `largest_deficit` and `comeback`; `max_run`, `runs_10` and `opp_runs_10` (unanswered-point runs); `longest_drought_sec`; `avg_margin` and `avg_wp` (game control); `def_poss`, `stops`, `kills` and `double_kills`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `is_home` | Boolean | True for the home side. |
+| `pts` | Int64 | The team's final points: its running score after the last play. |
+| `opp_pts` | Int64 | The opponent's final points. |
+| `won` | Boolean | True when pts > opp_pts. |
+| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
+| `lead_sec` | Float64 | Game-clock seconds with the team ahead; the score after a play holds until the next play. |
+| `trail_sec` | Float64 | Game-clock seconds with the team behind. |
+| `tied_sec` | Float64 | Game-clock seconds with the score level, the clock before the first play included. |
+| `lead_pct` | Float64 | lead_sec / game_seconds. |
+| `lead_changes` | Int64 | How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of a game. |
+| `times_tied` | Int64 | How often the score became level, the 0-0 start not counted; the same on both rows of a game. |
+| `largest_lead` | Int64 | The team's biggest lead in points (0 if never ahead). |
+| `largest_deficit` | Int64 | The team's biggest deficit in points (0 if never behind). |
+| `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
+| `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
+| `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
+| `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
+| `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
+| `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |
+| `def_poss` | Int64 | The team's defensive possessions (every row of the possessions release); null for a game with no published possessions. |
+| `stops` | Int64 | Defensive possessions on which the opponent scored no points. |
+| `kills` | Int64 | Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period breaks). |
+| `double_kills` | Int64 | Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_flow import nba_game_flow
+flow = nba_game_flow(2026)
+flow.sort("comeback", descending=True).head()
 ```
 
 ### nba_game_lineups_used {#nba_game_lineups_used}
@@ -1088,4 +1157,54 @@ print(f"Found {officials.height} official slots")
 
 result = nba_referee_assignments("2026-06-13", league="wnba")
 wnba_officials = result["officials"]
+```
+
+### nba_score_rows {#nba_score_rows}
+
+`nba_score_rows(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
+
+Map the stats.nba.com play-by-play onto the game-flow score rows.
+
+Keeps the completed games of `schedule` whose `season_type` matches.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `period`, `seconds_remaining`, `event_type`, `team_id`, `score_home`, `score_away`, `season`). |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `season_type`, `home_team_id`, `away_team_id`, `home_pts`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep (see `~sportsdataverse.nba.nba_team_season_rates.nba_possession_rate_rows`). |
+
+**Returns**
+
+Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `order` | Int64 | The play's position in its game (the pbp order_index, or the release row order for college). |
+| `home_team_id` | Int64 | The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host). |
+| `away_team_id` | Int64 | The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor). |
+| `neutral_site` | Boolean | True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries no venue. |
+| `elapsed` | Float64 | Game-clock seconds run when the play happens, counted from the tip. |
+| `sec_left` | Float64 | The win-probability clock: seconds left in regulation, or in the overtime period. |
+| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
+| `event_team_id` | Int64 | The play's team (the model's ball side); 0 or null for a team-less play. |
+| `home_score` | Int64 | Home running score after the play. |
+| `away_score` | Int64 | Away running score after the play. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` or `season_type` is unknown. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp, load_nba_stats_schedules
+from sportsdataverse.nba.nba_game_flow import nba_score_rows
+rows = nba_score_rows(load_nba_stats_pbp(2025), load_nba_stats_schedules(2025))
 ```

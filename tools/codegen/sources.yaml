@@ -851,6 +851,7 @@ categories:
       - sportsdataverse._common.league_context
       - sportsdataverse._common.team_season_rates
       - sportsdataverse._common.game_impact
+      - sportsdataverse._common.game_flow
       - sportsdataverse._common.team_strength
       - sportsdataverse._common.team_luck
       - sportsdataverse._common.coach_seasons
@@ -960,12 +961,16 @@ categories:
       - sportsdataverse.nba.nba_clutch
       - sportsdataverse.nba.nba_team_season_rates
       - sportsdataverse.nba.nba_game_impact
+      - sportsdataverse.nba.nba_game_flow
       - sportsdataverse.wnba.wnba_team_season_rates
       - sportsdataverse.wnba.wnba_game_impact
+      - sportsdataverse.wnba.wnba_game_flow
       - sportsdataverse.mbb.mbb_team_season_rates
       - sportsdataverse.mbb.mbb_game_impact
+      - sportsdataverse.mbb.mbb_game_flow
       - sportsdataverse.wbb.wbb_team_season_rates
       - sportsdataverse.wbb.wbb_game_impact
+      - sportsdataverse.wbb.wbb_game_flow
       - sportsdataverse.nba.nba_team_strength
       - sportsdataverse.wnba.wnba_team_strength
       - sportsdataverse.nba.nba_team_luck

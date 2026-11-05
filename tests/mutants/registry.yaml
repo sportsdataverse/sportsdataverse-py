@@ -9602,3 +9602,133 @@
   test: tests/mbb/test_mbb_coach_seasons.py::test_changed_season_card_figures_are_the_other_coachs
   expected: kill
   note: A changed season's card coach would be credited with his successor's or predecessor's games.
+# --- BB-D27: game flow and sequence stats (runs, droughts, kills, lead changes, game control) ---
+- id: bb-gf-scoring-events
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: '_SCORING_EVENTS = ("made_shot", "free_throw")'
+  mutant: '_SCORING_EVENTS = ("made_shot", "free_throw", "replay")'
+  test: tests/nba/test_nba_game_flow.py::test_stale_scores_on_period_and_replay_rows_are_not_read
+  expected: kill
+  note: Reading the replay rows' score takes 0022500109 from the official 7 lead changes to 9.
+
+- id: bb-gf-tie-is-not-a-lead
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'pl.when(pl.col("_m") != 0).then(pl.col("_m").sign()).forward_fill().shift(1).over(_G).alias("_prev_lead"),'
+  mutant: 'pl.col("_m").sign().shift(1).over(_G).alias("_prev_lead"),'
+  test: tests/nba/test_nba_game_flow.py::test_lead_changes_ties_largest_lead_and_time_leading_match_the_official_box
+  expected: kill
+  note: Counting a tie as a lead makes A ahead, tied, A ahead two lead changes, more than the official box counts.
+
+- id: bb-gf-times-tied
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '((m == 0) & (pl.col("_prev_m") != 0)).sum().cast(pl.Int64).alias("times_tied"),'
+  mutant: '(m == 0).sum().cast(pl.Int64).alias("times_tied"),'
+  test: tests/nba/test_nba_game_flow.py::test_lead_changes_ties_largest_lead_and_time_leading_match_the_official_box
+  expected: kill
+  note: Counting every tied row instead of each time the score became level overcounts times tied.
+
+- id: bb-gf-time-weighted-margin
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '((m * dur).sum() / pl.col("game_seconds").first()).alias("home_avg_margin"),'
+  mutant: 'm.mean().alias("home_avg_margin"),'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A per-row mean is not game control; the margin must be weighted by the clock it holds for.
+
+- id: bb-gf-run-corrections
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'scorer.forward_fill().over(_G).alias("side"),'
+  mutant: 'scorer.alias("side"),'
+  test: tests/nba/test_nba_game_flow.py::test_max_run_is_an_n0_run_inside_the_official_biggest_run
+  expected: kill
+  note: Dropping the score corrections from the run in progress overcounts runs (2025 WNBA 1022500008 reads 14 for the official 11).
+
+- id: bb-gf-run-threshold
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("_n") >= RUN_POINTS).sum().cast(pl.Int64).alias("runs_10"),'
+  mutant: '(pl.col("_n") > RUN_POINTS).sum().cast(pl.Int64).alias("runs_10"),'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A 10-0 run is a 10-point run.
+
+- id: bb-gf-kill-length
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("_stops") // KILL_STOPS).sum().cast(pl.Int64).alias("kills"),'
+  mutant: '(pl.col("_stops") // 2).sum().cast(pl.Int64).alias("kills"),'
+  test: tests/nba/test_nba_game_flow.py::test_stops_and_kills_recount
+  expected: kill
+  note: A kill is three straight stops.
+
+- id: bb-gf-stop-streak-per-defense
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '.with_columns((~pl.col("_stop")).cum_sum().over(_G, "defense_team_id").alias("_streak"))'
+  mutant: '.with_columns((~pl.col("_stop")).cum_sum().over(_G).alias("_streak"))'
+  test: tests/mbb/test_mbb_game_flow.py::test_stops_and_kills_recount
+  expected: kill
+  note: A streak counted over both teams' possessions lets the other side's scoring break it.
+
+- id: bb-gf-wp-side
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("home_avg_wp") if us == "home" else 1.0 - pl.col("home_avg_wp")).alias("avg_wp"),'
+  mutant: '(1.0 - pl.col("home_avg_wp") if us == "home" else pl.col("home_avg_wp")).alias("avg_wp"),'
+  test: tests/nba/test_nba_game_flow.py::test_game_control_tracks_the_margin
+  expected: kill
+  note: Giving each side the other's win probability makes game control run against the margin.
+
+- id: bb-gf-neutral-prior
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'prior, _ = home_prior(None, None, league=league, neutral_site=bool(neutral))'
+  mutant: 'prior, _ = home_prior(None, None, league=league, neutral_site=False)'
+  test: tests/mbb/test_mbb_game_flow.py::test_neutral_site_gets_the_even_prior
+  expected: kill
+  note: A neutral-site game has no home-court advantage in the prior.
+
+- id: bb-gf-wnba-halves
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: 'halves = clock.filter(period == 1).max().over("game_id") > _HALF_GAME_FIRST_PERIOD_SECONDS'
+  mutant: 'halves = clock.filter(period == 1).max().over("game_id") > 1e9'
+  test: tests/nba/test_nba_game_flow.py::test_wnba_halves_games
+  expected: kill
+  note: A 2002 WNBA game in quarters would be 5,400 seconds long, not 2,400.
+
+- id: bb-gf-both-scores-move
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '.then(pl.lit("both"))'
+  mutant: '.then(pl.lit("home"))'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A row where both scores move answers any run; crediting it to one side extends that side's run (0022500013, 0022500125).
+
+- id: bb-gf-season-qualifier
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '_QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over("season")'
+  mutant: '_QUALIFIER = pl.lit(True)'
+  test: tests/nba/test_nba_game_flow.py::test_season_table
+  expected: kill
+  note: Ranking every team lets a team with a handful of games (a college non-D1 opponent) into the cohort.
