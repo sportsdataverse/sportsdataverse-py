@@ -450,6 +450,49 @@ units = mbb_lineup_seasons(2025)
 units.filter(n_players=2).sort("net_rtg_rank").head()
 ```
 
+### mbb_play_styles {#mbb_play_styles}
+
+`mbb_play_styles(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College player play-style archetypes: box, shot and lineup-role features (BB-D20).
+
+The features and their sources are in `sportsdataverse.mbb.mbb_play_style`; the method
+(season-relative z-scores, centers fit on 2025 and frozen, applied as-of) in
+`sportsdataverse._common.play_style`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per qualifying `(player_id, season, team_id)`: `player_id` / `team_id` (Utf8, ESPN ids), `season`, `player`, `min` and the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`. Empty input returns that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id of the player, as text (the box and shots releases' athlete id). |
+| `season` | Int64 | Season (2026 is 2025-26). |
+| `team_id` | String | ESPN team id of the team the player-season belongs to, as text. |
+| `player` | String | Player's display name on ESPN. |
+| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
+| `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
+| `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |
+| `dist_to_center` | Float64 | Euclidean distance (z-space) to the archetype's center; small means a prototypical example. |
+| `second_archetype` | String | The next-nearest archetype, the style a hybrid leans toward. |
+| `margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_play_style import mbb_play_styles
+styles = mbb_play_styles(2026)
+styles.group_by("archetype").len()
+```
+
 ### mbb_player_on_off {#mbb_player_on_off}
 
 `mbb_player_on_off(seasons: 'int | list[int]', *, league: 'str' = 'mens', min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -714,58 +757,4 @@ One row per `(season, team_id, lineup_id, family, split)` with the columns of `s
 ```python
 from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup
 mbb_situational_lineup(2026).filter(split="not_garbage_time").sort("poss", descending=True).head()
-```
-
-### mbb_situational_player {#mbb_situational_player}
-
-`mbb_situational_player(seasons: 'int | list[int]', *, league: 'str' = 'mens', top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-College player on-floor splits by situation: the team splits over the possessions each player started.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `top_n` | `int` | `25` | As `mbb_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, player_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_player`; `player_id` is the stats.ncaa.org player id (String). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `player_id` | String | stats.ncaa.org player id (no NCAA-to-ESPN player crosswalk yet). A possession counts for the five on the floor as it starts, with all its points. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `top_n` is below 1. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_situational import mbb_situational_player
-mbb_situational_player(2026).filter(split="clutch").sort("net_rtg_n", descending=True).head()
 ```

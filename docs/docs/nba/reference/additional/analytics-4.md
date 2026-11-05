@@ -1,10 +1,82 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_situational–nba_tracking"
-sidebar_label: "Analytics: nba_situational–nba_tracking"
+title: "NBA — additional Python functions — Analytics: nba_situation–nba_tracking"
+sidebar_label: "Analytics: nba_situation–nba_tracking"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: nba_situational–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_situation–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_situational–nba_tracking
+# NBA — additional Python functions — Analytics: nba_situation–nba_tracking
+
+### nba_situation_rows {#nba_situation_rows}
+
+`nba_situation_rows(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
+
+Map the stats.nba.com releases onto the situational-splits possession frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows, every possession of each game (BB-D7 reads the previous possession and the starters). |
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows of the same games (`game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home`, `score_away`). |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep (as `~sportsdataverse.nba.nba_team_season_rates.nba_possession_rate_rows`). |
+
+**Returns**
+
+One row per possession in `~sportsdataverse._common.situational_splits.situation_row_schema` (Int64 player ids).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.nba.com game id. |
+| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
+| `possession_number` | Int64 | Order of the possession in the game. |
+| `late` | Boolean | True in the last regulation period (the 4th quarter; the 2nd half of a two-halves game) or an overtime: the periods the clutch window can fall in. |
+| `start_clock` | Float64 | Seconds left in the period when the possession starts (when the previous possession ended). |
+| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
+| `offense_team_id` | Int64 | stats.nba.com id of the team with the ball. |
+| `defense_team_id` | Int64 | stats.nba.com id of the team on defense. |
+| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
+| `neutral_site` | Boolean | Always False: the schedule names a home team for every NBA and WNBA game. |
+| `points` | Int64 | Points the offense scored on the possession, from its made shots and free throws (2 * fg2m + 3 * fg3m + ftm). |
+| `fga` | Float64 | Offense field-goal attempts on the possession. |
+| `fgm` | Float64 | Offense field goals made on the possession. |
+| `fg3m` | Float64 | Offense three-pointers made on the possession. |
+| `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `oreb` | Float64 | Offense offensive rebounds on the possession. |
+| `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
+| `tov` | Float64 | Offense turnovers on the possession. |
+| `ff_poss` | Float64 | Turnover-rate denominator: 1 per possession. |
+| `reg_periods` | Int64 | Regulation periods of the game: 4 quarters, or 2 halves. |
+| `is_transition` | Boolean | The possession is transition (BB-D7's flag for the pros, the release's own for college). |
+| `is_garbage_time` | Boolean | The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college). |
+| `is_second_chance` | Boolean | The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts). |
+| `off_1` | Int64 | Offense player 1 on the floor as the possession starts. |
+| `off_2` | Int64 | Offense player 2 on the floor as the possession starts. |
+| `off_3` | Int64 | Offense player 3 on the floor as the possession starts. |
+| `off_4` | Int64 | Offense player 4 on the floor as the possession starts. |
+| `off_5` | Int64 | Offense player 5 on the floor as the possession starts. |
+| `def_1` | Int64 | Defense player 1 on the floor as the possession starts. |
+| `def_2` | Int64 | Defense player 2 on the floor as the possession starts. |
+| `def_3` | Int64 | Defense player 3 on the floor as the possession starts. |
+| `def_4` | Int64 | Defense player 4 on the floor as the possession starts. |
+| `def_5` | Int64 | Defense player 5 on the floor as the possession starts. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` or `season_type` is unknown, or `pbp` misses the events of a possession of a `season_type` game (the other season types' games are not read). |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_loaders as L
+from sportsdataverse.nba.nba_situational import nba_situation_rows
+rows = nba_situation_rows(L.load_nba_stats_possessions(2025), L.load_nba_stats_pbp(2025),
+                          L.load_nba_stats_schedules(2025))
+```
 
 ### nba_situational_lineup {#nba_situational_lineup}
 
@@ -283,6 +355,50 @@ luck.sort("luck_wins", descending=True).select("team_id", "wins", "exp_wins", "l
 # WNBA via ``league_id``
 
 wnba = nba_team_luck(2025, league_id="10")
+```
+
+### nba_team_play_styles {#nba_team_play_styles}
+
+`nba_team_play_styles(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module).
+
+The method is in `sportsdataverse._common.play_style` and the features in
+`sportsdataverse.nba.nba_play_style`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), 2016+. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(team_id, season)`: `team_id` (Int64), `season`, `team_name` and the `def_archetype`, `def_cluster`, `def_dist_to_center`, `def_second_archetype` and `def_margin`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | Int64 | stats.nba.com team id. |
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
+| `team_name` | String | Team's full name on stats.nba.com (city and nickname). |
+| `def_archetype` | String | Defensive play-style archetype: the label of the nearest frozen KMeans center to the team-season's within-season z-scored features; null when the team does not qualify on that side or the season is not covered. |
+| `def_cluster` | Int64 | Index of the defensive archetype's center in the bundled artifact (0-based). |
+| `def_dist_to_center` | Float64 | Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example. |
+| `def_second_archetype` | String | The next-nearest defensive archetype, the style a hybrid leans toward. |
+| `def_margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a feature is null for a whole season (a release stopped carrying it). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_play_style import nba_team_play_styles
+teams = nba_team_play_styles(2025)
 ```
 
 ### nba_team_season_flow {#nba_team_season_flow}
@@ -686,105 +802,4 @@ print(df.sort("ast_oe", descending=True).head())
 # With potential-assist enrichment for the top 50 passers
 
 df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
-```
-
-### nba_tracking_reb_oe {#nba_tracking_reb_oe}
-
-`nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season.
-
-Fetches the `Rebounding` `leaguedashptstats` measure, attaches a
-`guard`/`wing`/`big` role bucket, and computes
-`reb_oe = reb - reb_chances * bucket_rate` (contest-difficulty-adjusted
-when the endpoint carries separate contested/uncontested CHANCE columns;
-the live `stats.nba.com` payload currently does not, so this degrades
-gracefully to the plain rate -- see the fixtures README for the finding).
-OREB/DREB residuals are computed identically against their own chance
-columns. Baselines are recomputed from the same season slice on every
-call -- there is no fitted constant or bundled artifact.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season (`int` ending-year or `"YYYY-YY"` string) or a list of seasons to concatenate. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within `guard`/`wing`/`big` buckets (default). `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame (see `_attach_role_bucket`); mostly for injecting a fixture in tests. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats` returning the raw payload dict directly -- offline testing hook. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_reb_oe
-df = nba_tracking_reb_oe(2024)
-print(df.sort("reb_oe", descending=True).head())
-
-# League-wide baseline (no position split)
-
-df_all = nba_tracking_reb_oe(2024, by_position=False)
-
-# Pandas output
-
-df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
-```
-
-### nba_tracking_rim_protect_value {#nba_tracking_rim_protect_value}
-
-`nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Rim-protection / shot-defend points-saved over expected, per player-season.
-
-Fetches the `Defense` `leaguedashptstats` measure -- which on the live
-`stats.nba.com` payload exposes only rim-band defended shooting
-(`def_rim_fgm`/`def_rim_fga`/`def_rim_fg_pct`, no separate overall
-figure -- see the fixtures README) -- and computes
-`rim_protect_pts_saved = (normal_fg_pct - d_fg_pct) * d_fga * 2` where
-`normal_fg_pct` is the bucket-mean defended rate (there is no
-shooters'-own-average column on this endpoint, so the bucket mean is the
-baseline; this is the same attempts-weighted construction as every other
-model, just sign-flipped so a defender who holds shooters BELOW the
-bucket mean gets a positive points-saved value).
-
-`source="shotdefend"` swaps in the `Less-Than-6-Ft` band from
-`nba_stats_playerdashptshotdefend` for the top-`max_players` defenders
-by attempt volume (capped, optional -- never a hard dependency);
-`max_players=0` (default) uses the leaguedash figures for everyone.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
-| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_rim_protect_value
-df = nba_tracking_rim_protect_value(2024)
-print(df.sort("rim_protect_pts_saved", descending=True).head())
 ```

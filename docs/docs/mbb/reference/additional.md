@@ -357,6 +357,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_possessions](additional/analytics.md#calculate_possessions) | Top-level entry point: calculate team/opponent possessions for a |
 | [calculate_possessions_by_event](additional/analytics.md#calculate_possessions_by_event) | Drive the batch loop + per-clump scoring over an already-flattened |
 | [calculate_stats](additional/analytics.md#calculate_stats) | Calculate one direction's possession-fragment for one merged clump |
+| [college_play_style_features](additional/analytics.md#college_play_style_features) | The college play-style features, one row per qualifying player-season. |
 | [complete_weighted_avg](additional/analytics.md#complete_weighted_avg) | Finish a `weighted_avg` accumulator into true weighted averages. |
 | [concurrent_event_handler](additional/analytics.md#concurrent_event_handler) | Batch a stream of singleton/boundary clumps into merged |
 | [count_matching](additional/analytics.md#count_matching) | Count events on one side matching any of the given parsers. |
@@ -375,11 +376,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_game_lineups_used](additional/analytics-2.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [mbb_game_player_impact](additional/analytics-2.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_lineup_seasons](additional/analytics-2.md#mbb_lineup_seasons) | College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
+| [mbb_play_styles](additional/analytics-2.md#mbb_play_styles) | College player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [mbb_player_on_off](additional/analytics-2.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
 | [mbb_player_wowy](additional/analytics-2.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [mbb_shot_selection](additional/analytics-2.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_situational_lineup](additional/analytics-2.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
-| [mbb_situational_player](additional/analytics-2.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
+| [mbb_situational_player](additional/analytics-3.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
 | [mbb_situational_team](additional/analytics-3.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
 | [mbb_strength_of_schedule](additional/analytics-3.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
 | [mbb_team_luck](additional/analytics-3.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
@@ -389,7 +391,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_coach_stints](additional/analytics-3.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-3.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-3.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
-| [ncaa_mbb_lineups](additional/analytics-3.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
+| [ncaa_mbb_lineups](additional/analytics-4.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-4.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-4.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-4.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |

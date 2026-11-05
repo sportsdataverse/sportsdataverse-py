@@ -10027,3 +10027,93 @@
   test: tests/nba/test_nba_situational.py::test_only_the_requested_season_type_is_flagged
   expected: kill
   note: A game of another season type with a gap in its play-by-play would fail the regular-season build.
+
+- id: bb-ps-season-relative-mean
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'mu = x.mean().over(by)'
+  mutant: 'mu = x.mean()'
+  test: tests/nba/test_nba_play_style.py::test_assignment_is_as_of_its_own_season
+  expected: kill
+  note: A pooled mean standardizes a season against the others, so a later season's rows would move an earlier one's archetypes.
+
+- id: bb-ps-z-clip
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: '.then(((x - mu) / sd).clip(-Z_CLIP, Z_CLIP))'
+  mutant: '.then((x - mu) / sd)'
+  test: tests/mbb/test_mbb_play_style.py::test_zscores_are_clipped
+  expected: kill
+  note: Unclipped, the one WBB dunker sits dozens of standard deviations from every center.
+
+- id: bb-ps-fit-train-only
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'train = season_zscores(features, cols).filter(pl.col("season").is_in(list(train_seasons)))'
+  mutant: 'train = season_zscores(features, cols)'
+  test: tests/nba/test_nba_play_style.py -k test_artifact_is_the_fit_of_the_committed_corpus
+  expected: kill
+  note: Fitting on every season would put the holdout seasons inside the centers they are scored against.
+
+- id: bb-ps-synergy-implied-total
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/nba/nba_play_style.py
+  snippet: 'pl.coalesce(implied.filter(pl.col("poss_pct") > 0).median(), pl.col("poss").sum()).alias("syn_poss")'
+  mutant: 'pl.col("poss").sum().alias("syn_poss")'
+  test: tests/nba/test_nba_play_style.py::test_synergy_mix_is_stats_nba_com_frequency
+  expected: kill
+  note: stats.nba.com hides a player's low-volume play types, so the published rows understate his possessions.
+
+- id: bb-ps-player-floor
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/nba/nba_play_style.py
+  snippet: 'return df.filter(pl.col("min") >= PLAYER_MIN_SHARE * pl.col("min").max().over("season"))'
+  mutant: 'return df'
+  test: tests/nba/test_nba_play_style.py::test_offense_player_builder_reproduces_the_corpus
+  expected: kill
+  note: Without the minutes floor, deep-bench players with a few possessions would be clustered and published.
+
+- id: bb-ps-college-games
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/mbb/mbb_player_value_constants.py
+  snippet: 'pl.len().alias("games"),'
+  mutant: 'pl.lit(30).alias("games"),'
+  test: tests/mbb/test_mbb_play_style.py::test_lineup_role_features_are_hand_counts
+  expected: kill
+  note: Minutes per game over a fixed season length would understate a player who missed games.
+
+- id: bb-ps-all-null-season
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features, cols)'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: Without the guard a feature a release stopped carrying becomes the season mean for every row.
+
+- id: bb-ps-all-null-fit
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # fit'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: A training season that lost a feature would be fit with that feature at the mean for every row.
+
+- id: bb-ps-all-null-selection
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # selection'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: k would be chosen on a training season whose missing feature sits at the mean for every row.

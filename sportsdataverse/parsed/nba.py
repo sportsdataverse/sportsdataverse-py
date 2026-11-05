@@ -358,10 +358,12 @@ from sportsdataverse.nba import nba_live_pbp as nba_live_pbp  # noqa: F401
 from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F401
+from sportsdataverse.nba import nba_play_style_features as nba_play_style_features  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: F401
+from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
@@ -386,6 +388,7 @@ from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_luck as nba_team_luck  # noqa: F401
+from sportsdataverse.nba import nba_team_play_styles as nba_team_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
 from sportsdataverse.nba import nba_team_season_flow as nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba import nba_team_season_rates as nba_team_season_rates  # noqa: F401
@@ -797,10 +800,12 @@ __all__ = [
     "nba_matchup_drapm",
     "nba_pbp_disk",
     "nba_play_context",
+    "nba_play_style_features",
     "nba_player_ages",
     "nba_player_crosswalk",
     "nba_player_identity",
     "nba_player_on_off",
+    "nba_player_play_styles",
     "nba_player_positions",
     "nba_player_props",
     "nba_player_wowy",
@@ -826,6 +831,7 @@ __all__ = [
     "nba_team_clutch",
     "nba_team_crosswalk",
     "nba_team_luck",
+    "nba_team_play_styles",
     "nba_team_ratings",
     "nba_team_season_flow",
     "nba_team_season_rates",

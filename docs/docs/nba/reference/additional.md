@@ -256,9 +256,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_lineup_count_rows](additional/analytics-2.md#nba_lineup_count_rows) | Map `nba_stats_possessions` rows onto the lineup-seasons count frame. |
 | [nba_lineup_seasons](additional/analytics-2.md#nba_lineup_seasons) | Lineup seasons: 2-, 3- and 5-man units with possessions, minutes, ratings and four factors. |
 | [nba_play_context](additional/analytics-3.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
+| [nba_play_style_features](additional/analytics-3.md#nba_play_style_features) | The play-style clustering features, one row per qualifying player- or team-season. |
 | [nba_player_ages](additional/analytics-3.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
 | [nba_player_identity](additional/analytics-3.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
 | [nba_player_on_off](additional/analytics-3.md#nba_player_on_off) | Player on/off: each player's team with him on the floor and without him, per team-season. |
+| [nba_player_play_styles](additional/analytics-3.md#nba_player_play_styles) | Offensive and defensive play-style archetypes per player-season (BB-D20). |
 | [nba_player_positions](additional/analytics-3.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
 | [nba_player_props](additional/analytics-3.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_player_wowy](additional/analytics-3.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
@@ -272,19 +274,20 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_season_standings](additional/analytics-3.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-3.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-3.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
-| [nba_situation_rows](additional/analytics-3.md#nba_situation_rows) | Map the stats.nba.com releases onto the situational-splits possession frame. |
+| [nba_situation_rows](additional/analytics-4.md#nba_situation_rows) | Map the stats.nba.com releases onto the situational-splits possession frame. |
 | [nba_situational_lineup](additional/analytics-4.md#nba_situational_lineup) | Five-man unit splits by situation: the team splits over the possessions each unit started. |
 | [nba_situational_player](additional/analytics-4.md#nba_situational_player) | Player on-floor splits by situation: the team splits over the possessions each player started on the floor. |
 | [nba_situational_team](additional/analytics-4.md#nba_situational_team) | Team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type, chance. |
 | [nba_team_clutch](additional/analytics-4.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_luck](additional/analytics-4.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
+| [nba_team_play_styles](additional/analytics-4.md#nba_team_play_styles) | Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module). |
 | [nba_team_season_flow](additional/analytics-4.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
 | [nba_team_season_rates](additional/analytics-4.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
 | [nba_team_strength](additional/analytics-4.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
 | [nba_tracking_drive_value](additional/analytics-4.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
 | [nba_tracking_pass_value](additional/analytics-4.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
-| [nba_tracking_reb_oe](additional/analytics-4.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
-| [nba_tracking_rim_protect_value](additional/analytics-4.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
+| [nba_tracking_reb_oe](additional/analytics-5.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
+| [nba_tracking_rim_protect_value](additional/analytics-5.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-5.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-5.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-5.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |

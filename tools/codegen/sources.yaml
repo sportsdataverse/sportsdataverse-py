@@ -853,6 +853,7 @@ categories:
       - sportsdataverse._common.game_impact
       - sportsdataverse._common.lineup_seasons
       - sportsdataverse._common.player_on_off
+      - sportsdataverse._common.play_style
       - sportsdataverse._common.game_flow
       - sportsdataverse._common.situational_splits
       - sportsdataverse._common.team_strength
@@ -966,6 +967,7 @@ categories:
       - sportsdataverse.nba.nba_game_impact
       - sportsdataverse.nba.nba_lineup_seasons
       - sportsdataverse.nba.nba_player_on_off
+      - sportsdataverse.nba.nba_play_style
       - sportsdataverse.nba.nba_game_flow
       - sportsdataverse.nba.nba_situational
       - sportsdataverse.wnba.wnba_team_season_rates
@@ -978,12 +980,14 @@ categories:
       - sportsdataverse.mbb.mbb_game_impact
       - sportsdataverse.mbb.mbb_lineup_seasons
       - sportsdataverse.mbb.mbb_player_on_off
+      - sportsdataverse.mbb.mbb_play_style
       - sportsdataverse.mbb.mbb_game_flow
       - sportsdataverse.mbb.mbb_situational
       - sportsdataverse.wbb.wbb_team_season_rates
       - sportsdataverse.wbb.wbb_game_impact
       - sportsdataverse.wbb.wbb_lineup_seasons
       - sportsdataverse.wbb.wbb_player_on_off
+      - sportsdataverse.wbb.wbb_play_style
       - sportsdataverse.wbb.wbb_game_flow
       - sportsdataverse.wbb.wbb_situational
       - sportsdataverse.nba.nba_team_strength
