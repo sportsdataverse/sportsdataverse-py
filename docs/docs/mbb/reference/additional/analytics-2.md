@@ -106,7 +106,7 @@ One row per `(season, team_id, coach_id)`: `coach_id` is the NCAA person id, `te
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
@@ -126,7 +126,7 @@ One row per `(season, team_id, coach_id)`: `coach_id` is the NCAA person id, `te
 
 ```python
 from sportsdataverse.mbb.mbb_coach_seasons import mbb_coach_seasons, ncaa_team_coaches
-coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", 2025)
+coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", [2024, 2025])
 mbb_coach_seasons(2025, coaches).sort("net_rtg_rank").select("coach", "team", "wins", "net_rtg").head()
 ```
 

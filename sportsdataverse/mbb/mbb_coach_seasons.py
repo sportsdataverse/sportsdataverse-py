@@ -60,6 +60,8 @@ __all__ = ["mbb_coach_careers", "mbb_coach_seasons", "ncaa_coach_stints", "ncaa_
 logger = logging.getLogger(__name__)
 
 _TREE = {"mens": "mbb", "womens": "wbb"}
+#: The first season of the ``ncaa_{mbb,wbb}_possessions`` releases.
+_PBP_FLOOR = 2010
 
 #: One row per NCAA team-season page with a coach card.
 NCAA_COACHES_SCHEMA: dict[str, pl.DataType] = {
@@ -88,7 +90,8 @@ def parse_ncaa_team_coach(html: str) -> dict | None:
         ``coach_id`` (the NCAA person id), ``coach``, ``career_seasons`` (his seasons as a head
         coach through this one, every school and division) and ``career_wins`` /
         ``career_losses`` (his record through this season); ``None`` when the page has no coach
-        card. A field the card lacks is None.
+        card or when its card has no ``/people/`` link (a card with no coach id cannot be keyed to
+        a coach, so it is no coach). Another field the card lacks is None.
     """
     doc = BeautifulSoup(html, "html.parser")
     header = doc.select_one("div.card-header:-soup-contains(Coach)")
@@ -328,7 +331,7 @@ def mbb_coach_seasons(
         Quick start (with a raw-repo checkout)::
 
             from sportsdataverse.mbb.mbb_coach_seasons import mbb_coach_seasons, ncaa_team_coaches
-            coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", 2025)
+            coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", [2024, 2025])
             mbb_coach_seasons(2025, coaches).sort("net_rtg_rank").select("coach", "team", "wins", "net_rtg").head()
     """
     _check_league(league)
@@ -341,8 +344,15 @@ def mbb_coach_seasons(
     stints = ncaa_coach_stints(coaches.filter(pl.col("season").is_in([*wanted, *(x - 1 for x in wanted)])), records)
     stints = stints.filter(pl.col("season").is_in(wanted))
     credit = coach_of_record(games, stints)
-    possessions = load_possessions(wanted)
-    rows = ncaa_possession_rate_rows(possessions, schedule, league=league)
+    pbp = [s for s in wanted if s >= _PBP_FLOOR]  # the NCAA possession releases start in 2010
+    possessions = (
+        load_possessions(pbp) if pbp else pl.DataFrame(schema={"contest_id": pl.Utf8, "espn_game_id": pl.Int64})
+    )
+    rows = (
+        ncaa_possession_rate_rows(possessions, schedule, league=league)
+        if pbp
+        else pl.DataFrame(schema={"game_id": pl.Utf8})
+    )
     ids = (
         possessions.filter(pl.col("espn_game_id").is_not_null())
         .select(
@@ -352,7 +362,7 @@ def mbb_coach_seasons(
         if possessions.height
         else pl.DataFrame(schema={"game_id": pl.Utf8, "espn_game_id": pl.Utf8})
     )
-    counts = ncaa_team_box_count_rows(load_team_box(wanted)) if rows.height else None
+    counts = ncaa_team_box_count_rows(load_team_box(pbp)) if rows.height else None
     out = coach_seasons(
         games,
         credit,
@@ -391,7 +401,8 @@ def mbb_coach_careers(
 
             from sportsdataverse.mbb.mbb_coach_seasons import mbb_coach_careers, ncaa_team_coaches
             seasons = list(range(2014, 2027))
-            mbb_coach_careers(seasons, ncaa_team_coaches("ncaa-mbb-hoops-raw", seasons)).head()
+            coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", [2013, *seasons])
+            mbb_coach_careers(seasons, coaches).head()
     """
     out = coach_careers(mbb_coach_seasons(seasons, coaches, league=league), minutes_per_game=40)
     return out.to_pandas() if return_as_pandas else out

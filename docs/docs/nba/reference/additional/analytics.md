@@ -1063,7 +1063,7 @@ One row per `coach_id`, most games first: `teams` (abbreviations, first to last)
 | `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions, over the coach's games. |
 | `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions, over the coach's games. |
 | `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
+| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
 | `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
 | `tov_pct` | Float64 | Turnovers per possession, as a fraction. |
 | `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
@@ -1102,7 +1102,7 @@ One row per `coach_id`, most games first: `teams` (abbreviations, first to last)
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
@@ -1123,136 +1123,4 @@ One row per `coach_id`, most games first: `teams` (abbreviations, first to last)
 ```python
 from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers
 nba_coach_careers(list(range(2016, 2027))).select("coach", "teams", "games", "win_pct").head()
-```
-
-### nba_coach_seasons {#nba_coach_seasons}
-
-`nba_coach_seasons(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', espn: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Head-coach seasons: W-L, ratings and four factors over the games each coach was on the bench for.
-
-One row per season, team and head coach. A coach who took over mid-season gets his games
-only. Who coached each game: see `sportsdataverse.nba.nba_coach_seasons`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"playoffs"` or `"play-in"`; the postseason games go to the coach of the team's last regular-season game. |
-| `espn` | `bool` | `True` | Read ESPN's per-coach records (2002 on) to split a team-season that changed coach (about 90 requests a season). `False` credits only the seasons one coach had throughout. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, coach_id)`: `coach_id` is the stats.nba.com coach id, `team` the team abbreviation, `role` `"HC"`. `team_games` is the team's completed games of `season_type`, `games` / `wins` / `losses` / `win_pct` / `pts` / `opp_pts` the coach's (final scores), `first_game_date` / `last_game_date` his span. `pbp_games`, `poss`, `opp_poss`, `poss_pts`, `opp_poss_pts`, `seconds` and the `o_*` / `d_*` four-factor counts come from his games' possessions, and give `off_rtg`, `def_rtg`, `net_rtg`, `pace` and `efg_pct` .. `opp_ft_rate`. `win_pct` and the twelve rates have `<m>_rank` (1 = best), `<m>_pct` and `<m>_n`, within the season among coaches with half the most games; null under five coaches. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `team` | String | Team abbreviation (the stats schedule's). |
-| `coach_id` | Int64 | stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches). |
-| `coach` | String | Head coach's name (stats.nba.com's staff list). |
-| `role` | String | HC: head coach (the only role the table carries). |
-| `team_games` | Int64 | The team's completed games in the season (and season type); games < team_games means the coach shared the season. |
-| `first_game_date` | Date | Date of the coach's first credited game that season. |
-| `last_game_date` | Date | Date of the coach's last credited game that season. |
-| `games` | Int64 | Games credited to the coach: each completed game goes to the coach of record for it. |
-| `wins` | Int64 | Wins in the coach's games (final scores). |
-| `losses` | Int64 | Losses in the coach's games (final scores). |
-| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
-| `pts` | Int64 | Points scored in the coach's games (final scores). |
-| `opp_pts` | Int64 | Points allowed in the coach's games (final scores). |
-| `pbp_games` | Int64 | The coach's games with published possessions; the ratings and four factors cover these. |
-| `poss` | Int64 | Offensive possessions in the coach's games. |
-| `opp_poss` | Int64 | Defensive possessions in the coach's games. |
-| `poss_pts` | Int64 | Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game). |
-| `opp_poss_pts` | Int64 | Points allowed on those possessions (the def_rtg numerator). |
-| `seconds` | Float64 | Game clock, in seconds, that the coach's possessions used (the pace denominator). |
-| `o_fga` | Float64 | The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none). |
-| `d_fga` | Float64 | Opponents' field-goal attempts in the coach's games (a four-factor count). |
-| `o_fgm` | Float64 | The team's field goals made in the coach's games (a four-factor count; null when the source has none). |
-| `d_fgm` | Float64 | Opponents' field goals made in the coach's games (a four-factor count). |
-| `o_fg3m` | Float64 | The team's three-pointers made in the coach's games (a four-factor count; null when the source has none). |
-| `d_fg3m` | Float64 | Opponents' three-pointers made in the coach's games (a four-factor count). |
-| `o_fta` | Float64 | The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none). |
-| `d_fta` | Float64 | Opponents' free-throw attempts in the coach's games (a four-factor count). |
-| `o_oreb` | Float64 | The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none). |
-| `d_oreb` | Float64 | Opponents' offensive rebounds in the coach's games (a four-factor count). |
-| `o_dreb` | Float64 | The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none). |
-| `d_dreb` | Float64 | Opponents' defensive rebounds in the coach's games (a four-factor count). |
-| `o_tov` | Float64 | The team's turnovers in the coach's games (a four-factor count; null when the source has none). |
-| `d_tov` | Float64 | Opponents' turnovers in the coach's games (a four-factor count). |
-| `o_ff_poss` | Float64 | The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count; null when the source has none). |
-| `d_ff_poss` | Float64 | Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count). |
-| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions, over the coach's games. |
-| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions, over the coach's games. |
-| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
-| `tov_pct` | Float64 | Turnovers per possession, as a fraction. |
-| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
-| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. |
-| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, as a fraction. |
-| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. |
-| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction. |
-| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. |
-| `win_pct_rank` | Float64 | Rank of win_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `pace_rank` | Float64 | Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
-| `win_pct_pct` | Float64 | Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `pace_pct` | Float64 | Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
-| `win_pct_n` | Int64 | Sample size of win_pct: games. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: field-goal attempts. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: opponents' field-goal attempts. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opponents' turnover-rate possessions. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: opponents' offensive-rebound chances. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: opponents' field-goal attempts. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the three above (checked before any data is loaded). |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_coach_seasons import nba_coach_seasons
-coaches = nba_coach_seasons(2026)
-coaches.sort("net_rtg", descending=True).select("coach", "team", "games", "wins", "net_rtg").head()
-
-# Without ESPN (only the coaches who had the whole season)
-
-nba_coach_seasons(2026, espn=False)
 ```

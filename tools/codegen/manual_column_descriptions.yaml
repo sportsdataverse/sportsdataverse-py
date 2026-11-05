@@ -73949,8 +73949,8 @@ nba_coach_seasons:
   orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
     coaches) (the highest value ranks 1; ties average).
-  pace: 'Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
     (the highest value ranks 1; ties average).
@@ -74057,8 +74057,8 @@ nba_coach_careers:
   orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
     the input; null under five) (the highest value ranks 1; ties average).
-  pace: 'Pace: possessions per 48 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
     input; null under five) (the highest value ranks 1; ties average).
@@ -74164,7 +74164,7 @@ wnba_coach_seasons:
   orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
     coaches) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
     (the highest value ranks 1; ties average).
@@ -74272,7 +74272,7 @@ wnba_coach_careers:
   orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
     the input; null under five) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
     input; null under five) (the highest value ranks 1; ties average).
@@ -74378,7 +74378,7 @@ mbb_coach_seasons:
   orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
     coaches) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
     (the highest value ranks 1; ties average).
@@ -74486,7 +74486,7 @@ mbb_coach_careers:
   orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
     the input; null under five) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
     input; null under five) (the highest value ranks 1; ties average).
@@ -74592,7 +74592,7 @@ wbb_coach_seasons:
   orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
     coaches) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
     (the highest value ranks 1; ties average).
@@ -74700,7 +74700,7 @@ wbb_coach_careers:
   orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
     the input; null under five) (the highest value ranks 1; ties average).
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
-  pace_n: 'Sample size of pace: games.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
   pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
   pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
     input; null under five) (the highest value ranks 1; ties average).

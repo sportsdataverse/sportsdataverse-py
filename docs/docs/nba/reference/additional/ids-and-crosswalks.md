@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 18
+sidebar_position: 19
 description: "NBA — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — IDs and crosswalks

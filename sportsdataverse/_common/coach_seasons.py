@@ -113,7 +113,11 @@ _MAX_ITEMS = 6
 
 _RATES = list(_RATED)
 _METRICS = ["win_pct", *_RATES]
-_SIZES: dict[str, pl.Expr] = {"win_pct": pl.col("games"), **{m: e for m, (e, _) in _RATED.items()}}
+_SIZES: dict[str, pl.Expr] = {
+    "win_pct": pl.col("games"),
+    **{m: e for m, (e, _) in _RATED.items()},
+    "pace": pl.col("pbp_games"),  # pace comes from the games with possessions only
+}
 
 #: The possession counts a row carries (``poss_pts`` / ``opp_poss_pts`` are points on possessions,
 #: ``pts`` / ``opp_pts`` the final scores).
@@ -245,7 +249,7 @@ def _assign(won: list[bool], stints: list[dict]) -> list[int | None] | None:
                 raise ValueError(f"stints: two count-less {s['position']} stints for {s['season']} team {s['team_id']}")
             fill[s["position"]] = i
     too_many = sum(n for _, n, _, _ in known) > len(won) or len(known) + 1 > _MAX_ITEMS
-    if too_many or any(w is None for _, _, w, _ in known):
+    if too_many or any(w is None or n < 0 or w < 0 or w > n for _, n, w, _ in known):
         return None
     found = _placements(won, known, fill)
     return list(found.pop()) if len(found) == 1 else None
@@ -331,10 +335,10 @@ def _poss_counts(
 ) -> pl.DataFrame:
     """:data:`_POSS_COUNTS` per ``group`` (``_key`` plus whatever ``keys`` carries)."""
     empty = pl.DataFrame(schema={**keys.select(group).schema, **_POSS_COUNTS})
+    counts = None if counts is None else _check(counts, COUNT_ROWS_SCHEMA, "counts")
     if rows is None or rows.height == 0:
         return empty
     rows = _check(rows, RATE_ROWS_SCHEMA, "rows")
-    counts = None if counts is None else _check(counts, COUNT_ROWS_SCHEMA, "counts")
     ids = keys.select("game_id", "team_id", "_key")
     keyed = _keyed(rows, ids)
     agg = season_counts(keyed, counts=None if counts is None else _keyed(counts, ids)).filter(pl.col("split") == "all")
@@ -416,12 +420,18 @@ def coach_seasons(
             pl.col("opp_pts").sum(),
         )
         .join(team_n, on=["season", "team_id"], how="left", validate="m:1")
+        .join(
+            team_n.group_by("season").agg(pl.col("team_games").max().alias("_season_max")),
+            on="season",
+            how="left",
+            validate="m:1",
+        )
         .with_columns(pl.struct(key).rank("dense").cast(pl.Int64).alias("_key"))
     )
     keys = played.join(record.select(*key, "_key"), on=key, how="inner").select("game_id", "team_id", "_key")
     poss = _poss_counts(rows, counts, keys, ["_key"])
     out = record.join(poss, on="_key", how="left", validate="1:1").with_columns(pl.lit("HC").alias("role"))
-    qualifier = pl.col("games") >= 0.5 * pl.col("team_games").max().over("season")
+    qualifier = pl.col("games") >= 0.5 * pl.col("_season_max")
     out = _with_rates(out, minutes_per_game=minutes_per_game, by=("season",), qualifier=qualifier)
     return (
         out.sort("season", "team_id", "first_game_date").select(list(COACH_SEASONS_SCHEMA)).cast(COACH_SEASONS_SCHEMA)

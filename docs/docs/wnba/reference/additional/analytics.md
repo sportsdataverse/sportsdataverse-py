@@ -318,7 +318,7 @@ One row per `coach_id`, most games first: `teams` (abbreviations, first to last)
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
@@ -429,7 +429,7 @@ One row per `(season, team_id, coach_id)`: `coach_id` is the stats.nba.com coach
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |

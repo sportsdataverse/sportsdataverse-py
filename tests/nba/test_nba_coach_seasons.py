@@ -173,6 +173,12 @@ def test_unplaceable_team_season_is_left_uncredited(caplog: pytest.LogCaptureFix
     )
     assert real.filter(pl.col("games").is_not_null())["position"].to_list() == ["last"]
     assert coach_of_record(games, lue_opens).height == 0
+    negative = real.with_columns(
+        pl.when(pl.col("games").is_not_null()).then(pl.lit(-41)).otherwise(None).alias("games")
+    )
+    assert coach_of_record(games, negative).height == 0  # a negative count is a source error, never a placement
+    empty = mod.nba_coach_seasons([])
+    assert dict(empty.schema) == COACH_SEASONS_SCHEMA and empty.height == 0
 
 
 def _rows(season: int) -> pl.DataFrame:

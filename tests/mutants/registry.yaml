@@ -9489,8 +9489,8 @@
   group: bb-coach-seasons
   finding: BB-D8
   file: sportsdataverse/nba/nba_coach_seasons.py
-  snippet: 'on=["season", "team_id", "_name"], how="inner"'
-  mutant: 'on=["season", "team_id"], how="inner"'
+  snippet: 'spellings.join(rec.select("season", "team_id", "_name", "wins", "losses"), on=["season", "team_id", "_name"])'
+  mutant: 'spellings.join(rec.select("season", "team_id", "wins", "losses"), on=["season", "team_id"])'
   test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
   expected: kill
   note: Taking ESPN's count for any coach it lists under the team (its assistants too) puts the wrong runs on the stats candidates.

@@ -8,7 +8,7 @@ Example:
 
         from sportsdataverse.mbb.mbb_coach_seasons import ncaa_team_coaches
         from sportsdataverse.wbb.wbb_coach_seasons import wbb_coach_seasons
-        coaches = ncaa_team_coaches("ncaa-wbb-hoops-raw", 2025, league="womens")
+        coaches = ncaa_team_coaches("ncaa-wbb-hoops-raw", [2024, 2025], league="womens")
         wbb_coach_seasons(2025, coaches).head()
 """
 
@@ -36,7 +36,7 @@ def wbb_coach_seasons(
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
         coaches: :func:`~sportsdataverse.mbb.mbb_coach_seasons.ncaa_team_coaches` rows
-            (``league="womens"``) for those seasons.
+            (``league="womens"``) for those seasons and the season before each.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:

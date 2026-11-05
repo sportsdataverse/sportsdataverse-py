@@ -158,7 +158,7 @@ One row per `coach_id`, most games first; see the mbb core.
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
@@ -189,7 +189,7 @@ Delegates to `sportsdataverse.mbb.mbb_coach_seasons.mbb_coach_seasons` with
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `coaches` | `DataFrame` |  | `~sportsdataverse.mbb.mbb_coach_seasons.ncaa_team_coaches` rows (`league="womens"`) for those seasons. |
+| `coaches` | `DataFrame` |  | `~sportsdataverse.mbb.mbb_coach_seasons.ncaa_team_coaches` rows (`league="womens"`) for those seasons and the season before each. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -277,7 +277,7 @@ One row per `(season, team_id, coach_id)`; see the mbb core for the columns.
 | `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
-| `pace_n` | Int64 | Sample size of pace: games. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |

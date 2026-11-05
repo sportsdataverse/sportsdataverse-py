@@ -51,6 +51,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._common.coach_seasons import (
     COACH_GAMES_SCHEMA,
+    COACH_SEASONS_SCHEMA,
     STINTS_SCHEMA,
     TEAM_GAMES_SCHEMA,
     coach_careers,
@@ -181,45 +182,50 @@ def nba_coach_stints(heads: pl.DataFrame, espn: pl.DataFrame, crosswalk: pl.Data
         .join(xw.unique(["season", "espn_team_id"]), on=["season", "espn_team_id"], how="inner", validate="m:1")
         .with_columns(_name_key("coach").alias("_name"))
     )
-    # ESPN's count, only for a coach stats.nba.com names for that team-season, at his position there
-    named = cands.group_by("season", "team_id", "_name").agg(
-        pl.col("coach_id").first(),
-        pl.col("coach").first(),
-        pl.when(pl.col("position").n_unique() > 1)
-        .then(pl.lit("any"))
-        .otherwise(pl.col("position").first())
-        .alias("position"),
+    # one candidate per person: the same coach id (a file can respell him) or the same name (a file
+    # can re-id him); "any" when he opened and closed
+    person = pl.col("_name").min().over("season", "team_id", "coach_id")
+    named = (
+        cands.with_columns(person.alias("_person"))
+        .group_by("season", "team_id", "_person")
+        .agg(
+            pl.col("coach_id").last(),
+            pl.col("coach").last(),
+            pl.col("_name").unique().alias("_names"),
+            pl.when(pl.col("position").n_unique() > 1)
+            .then(pl.lit("any"))
+            .otherwise(pl.col("position").first())
+            .alias("position"),
+        )
+        .drop("_person")
     )
-    unmatched = rec.join(named, on=["season", "team_id", "_name"], how="anti").height
+    spellings = named.select("season", "team_id", "coach_id", pl.col("_names").alias("_name")).explode("_name")
+    unmatched = rec.join(spellings, on=["season", "team_id", "_name"], how="anti").height
     if unmatched:
         logger.info("nba_coach_stints: %d ESPN coach records name no stats.nba.com candidate (dropped)", unmatched)
-    counted = (
-        named.join(
-            rec.select("season", "team_id", "_name", "wins", "losses"), on=["season", "team_id", "_name"], how="inner"
-        )
-        .unique(["season", "team_id", "_name"], keep="first")
-        .select(
-            "season",
-            "team_id",
-            "coach_id",
-            "coach",
-            (pl.col("wins") + pl.col("losses")).alias("games"),
-            "wins",
-            "position",
-            "_name",
-        )
+    # ESPN's count, only for a coach stats.nba.com names for that team-season, at his position there
+    counts = (
+        spellings.join(rec.select("season", "team_id", "_name", "wins", "losses"), on=["season", "team_id", "_name"])
+        .unique(["season", "team_id", "coach_id"], keep="first")
+        .drop("_name")
+    )
+    counted = named.join(counts, on=["season", "team_id", "coach_id"], how="inner").select(
+        "season",
+        "team_id",
+        "coach_id",
+        "coach",
+        (pl.col("wins") + pl.col("losses")).alias("games"),
+        "wins",
+        "position",
     )
     # a closer with no count of his own never fills a gap: the staff after the season is often
     # next season's hire (John Beilein for Larry Drew's 76 games, 2018-19 Cleveland)
-    rest = named.join(
-        counted.select("season", "team_id", "_name"), on=["season", "team_id", "_name"], how="anti"
-    ).filter(pl.col("position") != "last")
+    rest = named.join(counted.select("season", "team_id", "coach_id"), on=["season", "team_id", "coach_id"], how="anti")
+    rest = rest.filter(pl.col("position") != "last").drop("_names")
     out = pl.concat(
         [
-            counted.drop("_name"),
-            rest.drop("_name").with_columns(
-                pl.lit(None, dtype=pl.Int64).alias("games"), pl.lit(None, dtype=pl.Int64).alias("wins")
-            ),
+            counted,
+            rest.with_columns(pl.lit(None, dtype=pl.Int64).alias("games"), pl.lit(None, dtype=pl.Int64).alias("wins")),
         ],
         how="diagonal",
     )
@@ -404,6 +410,9 @@ def nba_coach_seasons(
     if season_type == "preseason":
         raise ValueError("season_type: preseason has no coach of record; use regular-season, playoffs or play-in")
     wanted = [seasons] if isinstance(seasons, int) else list(seasons)
+    if not wanted:
+        empty = pl.DataFrame(schema=COACH_SEASONS_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([s - offset for s in wanted])
     # the file before each season too (its opener); the first published file has no file before it
