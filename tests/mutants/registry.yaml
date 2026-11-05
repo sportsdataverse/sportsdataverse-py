@@ -9484,6 +9484,117 @@
   expected: kill
   note: College possessions without events, or with a poss_team that is neither side, would be published.
 
+# --- BB-D4: lineup seasons -------------------------------------------------------------------------
+- id: bb-ls-unit-subsets
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'for idx in combinations(range(5), k):'
+  mutant: 'for idx in combinations(range(1, 5), k):'
+  test: tests/nba/test_nba_lineup_seasons.py::test_two_and_three_man_units_are_ten_times_the_fives
+  expected: kill
+  note: Subsets drawn from four of the five players would give six pairs per five, not ten, and no five-man rows.
+
+- id: bb-ls-dreb-owner
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/nba/nba_lineup_seasons.py
+  snippet: 'c: on_ball[other] if c == "dreb" else on_ball[side]'
+  mutant: 'c: on_ball[side] if c == "dreb" else on_ball[side]'
+  test: tests/nba/test_nba_lineup_seasons.py::test_five_man_counts_add_up_to_the_possessions
+  expected: kill
+  note: A possession's defensive rebounds belong to the defense; on the offense they break the ORB% chances.
+
+- id: bb-ls-lower-is-better
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'lower = [m for m, (_, low) in rated.items() if low]'
+  mutant: 'lower = []'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Without the lower-is-better list the worst defensive rating ranks first.
+
+- id: bb-ls-rank-gate
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'return pl.col("poss") + pl.col("opp_poss") >= min_poss'
+  mutant: 'return pl.lit(True)'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Units under the possession gate would be ranked.
+
+- id: bb-ls-ncaa-free-throw-lineup
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/mbb/mbb_lineup_seasons.py
+  snippet: 'events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()'
+  mutant: 'events, is_free_throw=pl.lit(False), is_foul=pl.col("foul_class").is_not_null()'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_free_throws_count_on_the_foul_lineup
+  expected: kill
+  note: Free-throw attempts would sit on the lineup at the free throw while their points sit on the foul lineup.
+
+- id: bb-ls-ncaa-rim-made
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/mbb/mbb_lineup_seasons.py
+  snippet: '"rimm": rim & made,'
+  mutant: '"rimm": rim,'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_counts_equal_the_team_box
+  expected: kill
+  note: Rim makes would count every rim attempt, off the team box's rimm.
+
+- id: bb-ls-one-direction
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '"tov_pct": (pl.col("poss"), True),'
+  mutant: '"tov_pct": (pl.col("poss"), False),'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: One flipped direction flag would publish the most turnover-prone units as rank 1.
+
+- id: bb-ls-zone-direction
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '"opp_rim_pct": (pl.col("d_rima"), True),'
+  mutant: '"opp_rim_pct": (pl.col("d_rima"), False),'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: The rim percentage a unit allows ranks low first.
+
+- id: bb-ls-counts-reach-the-fives
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '.filter(pl.col("team_id").is_not_null() & (pl.col("players").list.len() == 5))'
+  mutant: '.filter(pl.col("team_id").is_not_null() & (pl.col("players").list.len() == 4))'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_five_man_rows_hold_the_team_box
+  expected: kill
+  note: Counts that miss their five-man unit fall out of the left join as zeros; the season table would no longer hold the team box.
+
+- id: bb-ls-wnba-halves
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'halves = pl.col("seconds_remaining").filter(pl.col("period") == 1).max().over("game_id") > quarter'
+  mutant: 'halves = pl.lit(False)'
+  test: tests/nba/test_nba_lineup_seasons.py::test_wnba_half_seasons_count_the_whole_game
+  expected: kill
+  note: A 1997-2005 WNBA half read as a 10-minute quarter gives each half about ten minutes of clock.
+
+- id: bb-ls-games-with-possessions
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'rows = rows.join(played, on=["season", "game_id"], how="semi")'
+  mutant: 'rows = rows'
+  test: tests/nba/test_nba_lineup_seasons.py::test_a_game_needs_both_play_by_play_and_possessions
+  expected: kill
+  note: A game with play-by-play but no possessions would add points and minutes to units with no possessions.
+
 # --- BB-D8: coach seasons and careers (sportsdataverse/_common/coach_seasons.py + adapters) -------
 - id: bb-cs-espn-name-filter
   group: bb-coach-seasons

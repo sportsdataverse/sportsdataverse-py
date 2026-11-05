@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 101 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 102 | — |
 
 ## ESPN {#espn}
 
@@ -87,14 +87,15 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_game_flow`](reference/additional/analytics#wnba_game_flow)
 - [`wnba_game_lineups_used`](reference/additional/analytics#wnba_game_lineups_used)
 - [`wnba_game_player_impact`](reference/additional/analytics#wnba_game_player_impact)
+- [`wnba_lineup_seasons`](reference/additional/analytics#wnba_lineup_seasons)
 - [`wnba_matchup_drapm`](reference/additional/analytics#wnba_matchup_drapm)
 - [`wnba_player_props`](reference/additional/analytics#wnba_player_props)
 - [`wnba_playtype_ratings`](reference/additional/analytics#wnba_playtype_ratings)
 - [`wnba_referee_assignments`](reference/additional/analytics#wnba_referee_assignments)
-- [`wnba_season_sim`](reference/additional/analytics#wnba_season_sim)
-- [`wnba_season_standings`](reference/additional/analytics#wnba_season_standings)
-- [`wnba_shot_value`](reference/additional/analytics#wnba_shot_value)
-- [`wnba_team_clutch`](reference/additional/analytics#wnba_team_clutch)
+- [`wnba_season_sim`](reference/additional/analytics-2#wnba_season_sim)
+- [`wnba_season_standings`](reference/additional/analytics-2#wnba_season_standings)
+- [`wnba_shot_value`](reference/additional/analytics-2#wnba_shot_value)
+- [`wnba_team_clutch`](reference/additional/analytics-2#wnba_team_clutch)
 - [`wnba_team_luck`](reference/additional/analytics-2#wnba_team_luck)
 - [`wnba_team_season_flow`](reference/additional/analytics-2#wnba_team_season_flow)
 - [`wnba_team_season_rates`](reference/additional/analytics-2#wnba_team_season_rates)

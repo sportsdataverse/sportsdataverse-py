@@ -186,7 +186,8 @@ def _possession_rows(possessions: pl.DataFrame, played: pl.Series) -> pl.DataFra
     )
 
 
-def _load_rows(seasons: int | list[int], league: str) -> pl.DataFrame:
+def _load_releases(seasons: int | list[int], league: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """The (pbp, possessions) releases for ``seasons``."""
     _check_league(league)
     if league == "womens":
         from sportsdataverse.wbb.wbb_loaders import load_ncaa_wbb_pbp as load_pbp
@@ -194,7 +195,11 @@ def _load_rows(seasons: int | list[int], league: str) -> pl.DataFrame:
     else:
         from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp as load_pbp
         from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_possessions as load_poss
-    return ncaa_impact_rows(load_pbp(seasons), load_poss(seasons), league=league)
+    return load_pbp(seasons), load_poss(seasons)
+
+
+def _load_rows(seasons: int | list[int], league: str) -> pl.DataFrame:
+    return ncaa_impact_rows(*_load_releases(seasons, league), league=league)
 
 
 def mbb_game_player_impact(

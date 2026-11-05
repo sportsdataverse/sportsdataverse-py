@@ -351,6 +351,8 @@ from sportsdataverse.nba import nba_injury_report_url as nba_injury_report_url  
 from sportsdataverse.nba import nba_l2m as nba_l2m  # noqa: F401
 from sportsdataverse.nba import nba_l2m_games as nba_l2m_games  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
+from sportsdataverse.nba import nba_lineup_count_rows as nba_lineup_count_rows  # noqa: F401
+from sportsdataverse.nba import nba_lineup_seasons as nba_lineup_seasons  # noqa: F401
 from sportsdataverse.nba import nba_live_boxscore as nba_live_boxscore  # noqa: F401
 from sportsdataverse.nba import nba_live_pbp as nba_live_pbp  # noqa: F401
 from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
@@ -782,6 +784,8 @@ __all__ = [
     "nba_l2m",
     "nba_l2m_games",
     "nba_la_rapm",
+    "nba_lineup_count_rows",
+    "nba_lineup_seasons",
     "nba_live_boxscore",
     "nba_live_pbp",
     "nba_matchup_drapm",

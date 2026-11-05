@@ -1,10 +1,169 @@
 ---
-title: "WNBA — additional Python functions — Analytics: wnba_team–zone_value"
-sidebar_label: "Analytics: wnba_team–zone_value"
+title: "WNBA — additional Python functions — Analytics: wnba_season–zone_value"
+sidebar_label: "Analytics: wnba_season–zone_value"
 sidebar_position: 8
-description: "WNBA — additional Python functions — Analytics: wnba_team–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: wnba_season–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: wnba_team–zone_value
+# WNBA — additional Python functions — Analytics: wnba_season–zone_value
+
+### wnba_season_sim {#wnba_season_sim}
+
+`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, cup_schedule: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `as_of_date` | `date \| None` | `None` |  |
+| `league_id` | `str` | `'10'` |  |
+| `n_sims` | `int` | `10000` |  |
+| `seed` | `int` | `20261103` |  |
+| `chances` | `list[float] \| None` | `None` |  |
+| `cup_schedule` | `DataFrame \| None` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean seed: * `wins` / `losses` so far, `games_remaining`, and the as-of `adj_net_rtg` with its posterior sd `adj_net_rtg_sd` (capped so two teams' shift carries at most 3/4 of a game's variance; it binds only near the prior, before many games are played). * `proj_wins` / `proj_losses` (means), `proj_wins_sd`, the 10th and 90th percentiles, and `proj_wins_se` (the Monte Carlo error of the mean). * `p_division` (NBA), `p_seed_1` .. `p_seed_15` (the regular-season finish in the conference, NBA, or the league, WNBA) and `mean_seed`. * `p_top4` (first-round home court), `p_top6` (NBA, straight to the playoffs), `p_play_in` (NBA, seeds 7-10), `p_playoffs` (NBA: top 6 or through the play-in; WNBA: top 8) and its Monte Carlo `p_playoffs_se`. * `p_lottery`, `p_pick_1`, `p_drawn_pick` (a pick from the drawing: the NBA's top four, the WNBA's top two) and `mean_pick` (given a lottery finish). The pick columns are null when the league has no published chances for that many lottery teams. * `n_sims`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
+| `as_of_date` | Date | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
+| `team_id` | Int64 | stats.nba.com team id (Int64). |
+| `conference` | String | NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table). |
+| `division` | String | NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team. |
+| `wins` | Int64 | Regular-season wins in the games already played. |
+| `losses` | Int64 | Regular-season losses in the games already played. |
+| `games_remaining` | Int64 | Regular-season games on the schedule still to play (simulated). |
+| `adj_net_rtg` | Float64 | As-of adjusted net rating from the possession ridge at the sim's penalty: points per 100 over an average opponent on a neutral court. |
+| `adj_net_rtg_sd` | Float64 | Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most 3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws. |
+| `proj_wins` | Float64 | Mean final regular-season wins over the simulated seasons (played wins plus simulated ones). |
+| `proj_losses` | Float64 | Mean final regular-season losses over the simulated seasons. |
+| `proj_wins_sd` | Float64 | Standard deviation of the final wins over the simulated seasons. |
+| `proj_wins_p10` | Float64 | 10th percentile of the final wins over the simulated seasons. |
+| `proj_wins_p90` | Float64 | 90th percentile of the final wins over the simulated seasons. |
+| `proj_wins_se` | Float64 | Monte Carlo standard error of proj_wins: proj_wins_sd / sqrt(n_sims). |
+| `p_division` | Float64 | Share of simulated seasons in which the team wins its division under the NBA tiebreakers; null for the WNBA. |
+| `p_seed_1` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 1: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_2` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 2: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_3` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 3: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_4` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 4: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_5` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 5: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_6` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 6: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_7` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 7: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_8` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 8: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_9` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 9: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_10` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 10: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_11` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 11: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_12` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 12: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_13` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 13: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_14` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 14: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `p_seed_15` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 15: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
+| `mean_seed` | Float64 | Mean regular-season seed over the simulated seasons (1 = best). |
+| `p_top4` | Float64 | Share of simulated seasons with a top-4 seed: first-round home court. |
+| `p_top6` | Float64 | NBA: share of simulated seasons with a top-6 conference seed, straight to the playoffs; null for the WNBA. |
+| `p_play_in` | Float64 | NBA: share of simulated seasons with a conference seed of 7 to 10, the play-in; null for the WNBA. |
+| `p_playoffs` | Float64 | Share of simulated seasons in which the team makes the playoffs: NBA top 6 or through the simulated play-in; WNBA top 8. |
+| `p_playoffs_se` | Float64 | Monte Carlo standard error of p_playoffs: sqrt(p (1 - p) / n_sims). |
+| `p_lottery` | Float64 | Share of simulated seasons in which the team misses the playoffs and enters the draft lottery. |
+| `p_pick_1` | Float64 | Share of simulated seasons in which the team's own lottery slot draws the first pick; null when the league has no published chances for that many lottery teams. |
+| `p_drawn_pick` | Float64 | Share of simulated seasons in which the team's slot gets a drawn pick (NBA top 4, WNBA top 2); null as p_pick_1. |
+| `mean_pick` | Float64 | Mean draft pick over the simulated seasons in which the team is in the lottery; null when it never is, or as p_pick_1. |
+| `n_sims` | Int64 | Number of simulated seasons behind every share on the row. |
+
+### wnba_season_standings {#wnba_season_standings}
+
+`wnba_season_standings(games: 'pl.DataFrame', *, league_id: 'str' = '10', seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `seed` | `int` | `0` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, team_id)` that played: `conference` / `division` (NBA; the WNBA rows say `"WNBA"`), `games`, `wins`, `losses`, `win_pct`, `point_diff`, `division_rank` (1 = the division winner), `division_leader`, `seed` (rank in the conference for the NBA, in the league for the WNBA, 1 = best) and `games_back` (behind the seed-1 team). Sorted by season, conference and seed.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
+| `team_id` | Int64 | stats.nba.com team id (Int64). |
+| `conference` | String | NBA conference (East / West); "WNBA" for every WNBA team. |
+| `division` | String | NBA division; "WNBA" for every WNBA team. |
+| `games` | Int64 | Regular-season games played. |
+| `wins` | Int64 | Regular-season wins. |
+| `losses` | Int64 | Regular-season losses. |
+| `win_pct` | Float64 | Regular-season winning percentage, wins divided by games played; the first key of the seeding. |
+| `point_diff` | Int64 | Points scored minus points allowed over the regular-season games. |
+| `division_rank` | Int64 | Rank within the division under the NBA tiebreakers, 1 = the division winner (the WNBA rows rank the league). |
+| `division_leader` | Boolean | True for the NBA division winner after the division tiebreak; False for every WNBA row. |
+| `seed` | Int64 | Seed under the league's tiebreakers: rank in the conference (NBA) or the league (WNBA), 1 = best. |
+| `games_back` | Float64 | Games behind the seed-1 team of the conference (NBA) or league (WNBA): ((leader wins - wins) + (losses - leader losses)) / 2. |
+
+### wnba_shot_value {#wnba_shot_value}
+
+`wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
+
+WNBA one-call shot-value spine (`league_id="10"`).
+
+Thin wrapper binding `sportsdataverse.nba.nba_shot_value.nba_shot_value`
+to the women's league; fetches each player's `shotchartdetail`, scores
+per-shot expected points from the free `LeagueAverages` zone table, and
+returns the scored shots plus shooter talent, selection quality, and
+zone-value maps (and the defender/shot-clock context tables when
+`include_context=True`). Women's court geometry + shrinkage constant are
+keyed `"10"` in `nba_shot_value_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_ids` | `list[int]` |  | Player ids to fetch. |
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"shots", "talent", "selection", "zones"}` (plus `"context"` when requested). An empty fetch returns a dict of zero-row frames.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_shot_value
+out = wnba_shot_value([1628886], "2024")
+out["talent"].head()
+```
+
+### wnba_team_clutch {#wnba_team_clutch}
+
+`wnba_team_clutch(season: 'int', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
+
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 ### wnba_team_luck {#wnba_team_luck}
 

@@ -120,14 +120,15 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_flow](additional/analytics.md#wnba_game_flow) | WNBA game flow per team and game: runs, droughts, kills, lead changes, time leading, game control (league_id='10'). See … |
 | [wnba_game_lineups_used](additional/analytics.md#wnba_game_lineups_used) | WNBA lineups used per game (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_lineups_used. |
 | [wnba_game_player_impact](additional/analytics.md#wnba_game_player_impact) | WNBA game impact box (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_player_impact. |
+| [wnba_lineup_seasons](additional/analytics.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
 | [wnba_matchup_drapm](additional/analytics.md#wnba_matchup_drapm) | WNBA matchup defensive RAPM (`league_id="10"`). |
 | [wnba_player_props](additional/analytics.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
 | [wnba_playtype_ratings](additional/analytics.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
 | [wnba_referee_assignments](additional/analytics.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |
-| [wnba_season_sim](additional/analytics.md#wnba_season_sim) | WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim. |
-| [wnba_season_standings](additional/analytics.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
-| [wnba_shot_value](additional/analytics.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
-| [wnba_team_clutch](additional/analytics.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
+| [wnba_season_sim](additional/analytics-2.md#wnba_season_sim) | WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim. |
+| [wnba_season_standings](additional/analytics-2.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
+| [wnba_shot_value](additional/analytics-2.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
+| [wnba_team_clutch](additional/analytics-2.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
 | [wnba_team_luck](additional/analytics-2.md#wnba_team_luck) | WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck. |
 | [wnba_team_season_flow](additional/analytics-2.md#wnba_team_season_flow) | WNBA game flow per team and season, with ranks (league_id='10'). See sportsdataverse.nba.nba_game_flow.nba_team_season_flow. |
 | [wnba_team_season_rates](additional/analytics-2.md#wnba_team_season_rates) | WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates. |

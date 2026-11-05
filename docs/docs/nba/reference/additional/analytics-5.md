@@ -1,10 +1,280 @@
 ---
-title: "NBA — additional Python functions — Analytics: team_play–zone_value"
-sidebar_label: "Analytics: team_play–zone_value"
+title: "NBA — additional Python functions — Analytics: score_shot–zone_value"
+sidebar_label: "Analytics: score_shot–zone_value"
 sidebar_position: 17
-description: "NBA — additional Python functions — Analytics: team_play–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: score_shot–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: team_play–zone_value
+# NBA — additional Python functions — Analytics: score_shot–zone_value
+
+### score_shot_xpoints {#score_shot_xpoints}
+
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Score each shot with expected points from the league-average baseline.
+
+Joins the per-shot frame to the zone baseline (falling back to the
+within-`shot_zone_range` mean when a zone triple is unmatched) and adds
+`shot_value` (3 for a `3PT` shot else 2), `xpoints = base_fg_pct *
+shot_value`, and `actual_points = shot_made_flag * shot_value`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type` + the three zone keys + `shot_made_flag`). |
+| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
+
+No returns table is published for this function: no capture: its input is stats.nba.com shot-chart detail (shot zones and types), which answers HTTP 403 to the datacenter IP the docs are built on and is not in the raw store.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A zone join key has a different dtype on the two frames. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
+scored = score_shot_xpoints(shots, league_avgs)
+
+# Pipeline next step (one line)
+
+scored.group_by("player_id").agg(pl.col("xpoints").sum())
+```
+
+### shooter_talent {#shooter_talent}
+
+`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
+
+Aggregates `score_shot_xpoints` output per shooter and regresses the
+raw over-expected rate toward zero by `n/(n+k)` (`k =
+get_shrinkage_k(league_id)`, fitted split-half). **As-of leakage
+boundary:** to score a shooter's talent for shots after date *D*, pass
+only that shooter's shots before *D* -- this function does not enforce the
+cut itself.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_made_flag`, `base_fg_pct`, `xpoints`, `actual_points`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts (unstable estimate). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
+
+No returns table is published for this function: no capture: its input is stats.nba.com shot-chart detail (shot zones and types), which answers HTTP 403 to the datacenter IP the docs are built on and is not in the raw store.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shooter_talent
+talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+talent.sort("talent_pct", descending=True).head(15)
+```
+
+### shot_selection_quality {#shot_selection_quality}
+
+`shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Player shot-selection quality: mean expected value vs the league mean.
+
+`xev_per_shot` is a player's mean `xpoints` (the value of the LOOKS
+they take, independent of makes); `selection_quality` is that minus the
+league-wide mean `xpoints` over the same frame -- a rim-and-three diet
+scores positive, a mid-range diet negative.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `xpoints`). |
+| `min_attempts` | `int` | `50` | Drop players with fewer attempts. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `player_id`: `player_id:Int64, n_att:Int64, xev_per_shot:Float64, league_xev_per_shot:Float64, selection_quality:Float64`. Empty input returns the zero-row schema.
+
+No returns table is published for this function: no capture: its input is stats.nba.com shot-chart detail (shot zones and types), which answers HTTP 403 to the datacenter IP the docs are built on and is not in the raw store.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shot_selection_quality
+sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+sel.sort("selection_quality", descending=True).head(15)
+```
+
+### shrink_clutch {#shrink_clutch}
+
+`shrink_clutch(delta: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
+
+Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero.
+
+Per-team sampling variance is `σ²_i = scale / clutch_poss` (small samples
+shrink harder); the between-team signal variance `τ²` is the observed
+variance of `clutch_delta` net of mean sampling variance; the shrink
+factor `k_i = τ² / (τ² + σ²_i)` and `clutch_skill_shrunk = k_i · delta_i`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `delta` | `DataFrame` |  | Output of `clutch_delta` (needs `clutch_delta` + `clutch_poss`). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` (accepted for parity; the scale is currently league-shared). |
+
+**Returns**
+
+`delta` with an added `clutch_skill_shrunk` column. Empty input returns the input schema plus that column.
+
+No returns table is published for this function: no capture: its clutch frame is built from stats.nba.com leaguedashteamclutch, which answers HTTP 403 to the datacenter IP the docs are built on.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
+skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
+```
+
+### spotrac_team_cap {#spotrac_team_cap}
+
+`spotrac_team_cap(season: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Team salary-cap allocations from Spotrac.
+
+One row per team: cap allocations, cap space, active-player count and average
+roster age for a season. No API key required.
+
+The page carries a `<noscript>` fallback that looks like a JS challenge but
+is not -- the cap table is in the static HTML. The team cell duplicates the
+abbreviation (`"ORL ORL"`), so only the first token is kept, and every
+`$`-formatted column is parsed to `Float64`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ENDING-year form (`2024` = the 2023-24 season). Defaults to `~sportsdataverse.nba.nba_schedule.most_recent_nba_season`. |
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team. Columns follow Spotrac's table -- `rank`, `team`, `record`, `players_active`, `avg_age_team`, `total_cap_allocations`, `cap_space_all` -- plus `season`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | Int64 | Rank. |
+| `team` | String | Team-side label or team identifier. |
+| `record` | String | Overall win-loss record. |
+| `players_active` | Int64 | Number of active players. |
+| `avg_age_team` | Float64 | Average roster age. |
+| `total_cap_allocations` | Float64 | Total cap allocations (USD). |
+| `cap_space_all` | Float64 | Cap space / over-the-cap amount (USD). |
+| `season` | Int64 | Season year. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the page cannot be fetched or carries no table; the call still returns an empty frame. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import spotrac_team_cap
+
+cap = spotrac_team_cap(season=2024)
+print(cap.shape)
+
+# As pandas
+
+cap_pd = spotrac_team_cap(season=2024, return_as_pandas=True)
+
+# Pipeline next step (most cap space)
+
+cap.sort("cap_space_all", descending=True).head()
+```
+
+### starters_on_court_counts {#starters_on_court_counts}
+
+`starters_on_court_counts(possessions: 'pl.DataFrame', starters: 'dict[int, list[int]]') -> 'dict[int, int]'`
+
+Count, per possession, how many **starters** are on the floor across BOTH teams.
+
+This supplies the second half of CTG's garbage-time rule — "there have to be
+**two or fewer starters on the floor combined between the two teams**" — which
+`flag_garbage_time` cannot evaluate on its own (the possession frame does
+not carry who is on the floor).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession frame with the ten on-court columns `off_player_1..5` **and** `def_player_1..5` (from `~sportsdataverse.nba.nba_possessions.attach_possession_lineups`). |
+| `starters` | `dict[int, list[int]]` |  | `{team_id: [player_id, ...]}` — e.g. from `~sportsdataverse.nba.nba_lineups._starters_from_boxscore_v3`. Player ids are matched across both teams' starting fives, so the offense/defense split of the lineup columns does not matter. |
+
+**Returns**
+
+`{possession_number: starters_on_floor}`, each value in `0..10`. An **empty** *starters* map yields all-zero counts, which would make CTG's `<= 2` clause vacuously true and flag every margin-qualifying possession. The counts are reported honestly rather than guessed — do not pass an empty map and then read the result as CTG-exact.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When the `off_player_*` / `def_player_*` columns are absent. |
+
+**Example**
+
+```python
+counts = starters_on_court_counts(poss, _starters_from_boxscore_v3(box))
+print(max(counts.values()))  # 10 at the opening tip
+```
+
+### team_pace_projection {#team_pace_projection}
+
+`team_pace_projection(home_team_id: 'str', away_team_id: 'str', ratings: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'float'`
+
+Expected possessions for a matchup (Phase-3 `expected_possessions`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_team_id` | `str` |  | Home team id (matched against `ratings['team_id']`). |
+| `away_team_id` | `str` |  | Away team id. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_pace`. |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
+
+**Returns**
+
+Expected possessions for the game.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import team_pace_projection
+poss = team_pace_projection("1", "2", ratings)
+```
 
 ### team_play_context {#team_play_context}
 
