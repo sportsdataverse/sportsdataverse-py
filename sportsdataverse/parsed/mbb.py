@@ -491,6 +491,7 @@ from sportsdataverse.mbb import mbb_box_bpm as mbb_box_bpm  # noqa: F401
 from sportsdataverse.mbb import mbb_bracket_sim as mbb_bracket_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F401
 from sportsdataverse.mbb import mbb_draft_projection as mbb_draft_projection  # noqa: F401
+from sportsdataverse.mbb import mbb_game_flow as mbb_game_flow  # noqa: F401
 from sportsdataverse.mbb import mbb_game_lineups_used as mbb_game_lineups_used  # noqa: F401
 from sportsdataverse.mbb import mbb_game_player_impact as mbb_game_player_impact  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
@@ -510,6 +511,7 @@ from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_sche
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
+from sportsdataverse.mbb import mbb_team_season_flow as mbb_team_season_flow  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
 from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
@@ -536,6 +538,7 @@ from sportsdataverse.mbb import ncaa_mbb_team_roster as ncaa_mbb_team_roster  # 
 from sportsdataverse.mbb import ncaa_mbb_team_schedule as ncaa_mbb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # noqa: F401
 from sportsdataverse.mbb import ncaa_possession_rate_rows as ncaa_possession_rate_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_score_rows as ncaa_score_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
@@ -1136,6 +1139,7 @@ __all__ = [
     "mbb_bracket_sim",
     "mbb_bracketology",
     "mbb_draft_projection",
+    "mbb_game_flow",
     "mbb_game_lineups_used",
     "mbb_game_player_impact",
     "mbb_in_game_win_prob",
@@ -1155,6 +1159,7 @@ __all__ = [
     "mbb_team_crosswalk",
     "mbb_team_luck",
     "mbb_team_ratings",
+    "mbb_team_season_flow",
     "mbb_team_season_rates",
     "mbb_team_strength",
     "mbb_transfer_projection",
@@ -1181,6 +1186,7 @@ __all__ = [
     "ncaa_mbb_team_schedule",
     "ncaa_mbb_team_stats",
     "ncaa_possession_rate_rows",
+    "ncaa_score_rows",
     "ncaa_team_box_count_rows",
     "normalize_player_key",
     "normalize_team_roster_columns",

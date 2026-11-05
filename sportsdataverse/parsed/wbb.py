@@ -573,6 +573,7 @@ from sportsdataverse.wbb import validate_box_score as validate_box_score  # noqa
 from sportsdataverse.wbb import validate_lineup as validate_lineup  # noqa: F401
 from sportsdataverse.wbb import wbb_bracket_sim as wbb_bracket_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_bracketology as wbb_bracketology  # noqa: F401
+from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_in_game_win_prob as wbb_in_game_win_prob  # noqa: F401
@@ -586,6 +587,7 @@ from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_sche
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
+from sportsdataverse.wbb import wbb_team_season_flow as wbb_team_season_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_team_season_rates as wbb_team_season_rates  # noqa: F401
 from sportsdataverse.wbb import wbb_team_strength as wbb_team_strength  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
@@ -1142,6 +1144,7 @@ __all__ = [
     "validate_lineup",
     "wbb_bracket_sim",
     "wbb_bracketology",
+    "wbb_game_flow",
     "wbb_game_lineups_used",
     "wbb_game_player_impact",
     "wbb_in_game_win_prob",
@@ -1155,6 +1158,7 @@ __all__ = [
     "wbb_team_crosswalk",
     "wbb_team_luck",
     "wbb_team_ratings",
+    "wbb_team_season_flow",
     "wbb_team_season_rates",
     "wbb_team_strength",
     "weighted_avg",
