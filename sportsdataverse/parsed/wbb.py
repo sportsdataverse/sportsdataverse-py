@@ -573,6 +573,8 @@ from sportsdataverse.wbb import validate_box_score as validate_box_score  # noqa
 from sportsdataverse.wbb import validate_lineup as validate_lineup  # noqa: F401
 from sportsdataverse.wbb import wbb_bracket_sim as wbb_bracket_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_bracketology as wbb_bracketology  # noqa: F401
+from sportsdataverse.wbb import wbb_coach_careers as wbb_coach_careers  # noqa: F401
+from sportsdataverse.wbb import wbb_coach_seasons as wbb_coach_seasons  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_in_game_win_prob as wbb_in_game_win_prob  # noqa: F401
@@ -1142,6 +1144,8 @@ __all__ = [
     "validate_lineup",
     "wbb_bracket_sim",
     "wbb_bracketology",
+    "wbb_coach_careers",
+    "wbb_coach_seasons",
     "wbb_game_lineups_used",
     "wbb_game_player_impact",
     "wbb_in_game_win_prob",

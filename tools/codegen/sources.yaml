@@ -853,6 +853,7 @@ categories:
       - sportsdataverse._common.game_impact
       - sportsdataverse._common.team_strength
       - sportsdataverse._common.team_luck
+      - sportsdataverse._common.coach_seasons
       - sportsdataverse._common.metrics
       - sportsdataverse._common.ratings
       - sportsdataverse.cfb.model_calculators
@@ -969,6 +970,8 @@ categories:
       - sportsdataverse.wnba.wnba_team_strength
       - sportsdataverse.nba.nba_team_luck
       - sportsdataverse.wnba.wnba_team_luck
+      - sportsdataverse.nba.nba_coach_seasons
+      - sportsdataverse.wnba.wnba_coach_seasons
       - sportsdataverse.nba.nba_season_rules
       - sportsdataverse.nba.nba_season_sim
       - sportsdataverse.nba.nba_cup
@@ -977,6 +980,8 @@ categories:
       - sportsdataverse.wbb.wbb_team_strength
       - sportsdataverse.mbb.mbb_team_luck
       - sportsdataverse.wbb.wbb_team_luck
+      - sportsdataverse.mbb.mbb_coach_seasons
+      - sportsdataverse.wbb.wbb_coach_seasons
       - sportsdataverse.nba.nba_foul_drawing
       - sportsdataverse.nba.nba_player_ages
       - sportsdataverse.nba.nba_playtype

@@ -252,6 +252,8 @@ from sportsdataverse.wnba import underscore as underscore  # noqa: F401
 from sportsdataverse.wnba import wnba_aging_curve as wnba_aging_curve  # noqa: F401
 from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa: F401
 from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
+from sportsdataverse.wnba import wnba_coach_careers as wnba_coach_careers  # noqa: F401
+from sportsdataverse.wnba import wnba_coach_seasons as wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba import wnba_crosswalks_from_archive as wnba_crosswalks_from_archive  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_lottery_odds as wnba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
@@ -526,6 +528,8 @@ __all__ = [
     "wnba_aging_curve",
     "wnba_availability",
     "wnba_career_trajectory",
+    "wnba_coach_careers",
+    "wnba_coach_seasons",
     "wnba_crosswalks_from_archive",
     "wnba_draft_lottery_odds",
     "wnba_draft_model",
