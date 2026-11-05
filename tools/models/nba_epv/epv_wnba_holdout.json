@@ -1,15 +1,15 @@
 {
   "league_id": "10",
-  "train_seasons": [
-    2021,
-    2022,
-    2023
-  ],
-  "holdout_season": 2024,
-  "confirmation_season": 2025,
-  "n_train_states": 364676,
-  "rounds": 41,
-  "start_epv_mean": 1.0220504999160767,
+  "splits": {
+    "2022": "train",
+    "2023": "train",
+    "2024": "train",
+    "2025": "holdout",
+    "2026": "confirmation"
+  },
+  "n_train_states": 392365,
+  "rounds": 50,
+  "start_epv_mean": 1.0310149192810059,
   "params": {
     "objective": "reg:squarederror",
     "eval_metric": "rmse",
@@ -33,56 +33,209 @@
   "gates": {
     "max_large_bias": 0.02,
     "max_bucket_bias": 0.06,
-    "min_bucket": 5000
+    "min_bucket": 500,
+    "min_gated_share": 0.99,
+    "slope_band": [
+      0.9,
+      1.1
+    ]
   },
-  "holdout": {
-    "states": 134645,
-    "possessions": 38037,
-    "mse": 0.7413179535684536,
-    "mse_constant": 0.9670474358835099,
-    "mse_cell_mean": 0.7497285736919241,
-    "skill_vs_constant": 0.2334213131011782,
-    "mse_start": 1.328004254178484,
-    "mse_start_constant": 1.3360851256091295,
-    "mean_epv": 0.6246859389597946,
-    "mean_label": 0.6258680233205838,
-    "large_bias": -0.0011820843607891485,
-    "calibration_slope": 1.0240860847758535,
-    "buckets": 7,
-    "max_bucket_bias": 0.028590025304531013,
-    "worst_bucket": {
-      "last_event": 2,
-      "transition": 2,
-      "n": 5510,
-      "bias": -0.028590025304531013
+  "seasons": {
+    "2025": {
+      "split": "holdout",
+      "states": 160259,
+      "possessions": 44589,
+      "mse": 0.7452045873778546,
+      "mse_constant": 0.9850026348161783,
+      "mse_cell_mean": 0.7506247973255156,
+      "skill_vs_constant": 0.2434491431417084,
+      "paired_vs_cell_mean": {
+        "games": 286,
+        "mean": -0.005376740683119304,
+        "ci_lo": -0.006395755668801898,
+        "ci_hi": -0.00435772569743671
+      },
+      "mse_start": 1.35255747539666,
+      "mse_start_constant": 1.3608554144317495,
+      "mean_epv": 0.6335201928485804,
+      "mean_label": 0.636407315657779,
+      "large_bias": -0.0028871228091985612,
+      "calibration_slope": 1.0109262827127894,
+      "buckets": 31,
+      "gated_buckets": 22,
+      "gated_state_share": 0.9934730654752619,
+      "max_bucket_bias": 0.08160538430085384,
+      "bucket_failures": 0,
+      "worst_bucket": {
+        "last_event": 13,
+        "transition": 2,
+        "n": 779,
+        "bias": 0.08160538430085384,
+        "allowed": 0.12018970141005295
+      },
+      "ungated_max_bias": 1.2563962936401367,
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 16025,
+          "mean_epv": 0.0015100053193574509,
+          "mean_y": 0.00043681747269890795
+        },
+        {
+          "decile": 1,
+          "n": 16026,
+          "mean_epv": 0.012778024376850841,
+          "mean_y": 0.003993510545363784
+        },
+        {
+          "decile": 2,
+          "n": 16026,
+          "mean_epv": 0.09094546930500665,
+          "mean_y": 0.08386372145263946
+        },
+        {
+          "decile": 3,
+          "n": 16026,
+          "mean_epv": 0.28085490133537566,
+          "mean_y": 0.28166729065268936
+        },
+        {
+          "decile": 4,
+          "n": 16026,
+          "mean_epv": 0.5795030756310162,
+          "mean_y": 0.6000249594409085
+        },
+        {
+          "decile": 5,
+          "n": 16026,
+          "mean_epv": 0.932575754982158,
+          "mean_y": 0.918257831024585
+        },
+        {
+          "decile": 6,
+          "n": 16026,
+          "mean_epv": 0.997573572520711,
+          "mean_y": 1.0048670909771622
+        },
+        {
+          "decile": 7,
+          "n": 16026,
+          "mean_epv": 1.0320154810597444,
+          "mean_y": 1.0390615250218396
+        },
+        {
+          "decile": 8,
+          "n": 16026,
+          "mean_epv": 1.093778729847899,
+          "mean_y": 1.1036440783726444
+        },
+        {
+          "decile": 9,
+          "n": 16026,
+          "mean_epv": 1.3136274775553625,
+          "mean_y": 1.328216647947086
+        }
+      ]
     },
-    "small_buckets": 29,
-    "small_bucket_max_bias": 0.7085643410682678,
-    "identity_max_residual": 0.0
+    "2026": {
+      "split": "confirmation",
+      "states": 192646,
+      "possessions": 52756,
+      "mse": 0.7619329152985012,
+      "mse_constant": 1.0170778382792365,
+      "mse_cell_mean": 0.7666630128651961,
+      "skill_vs_constant": 0.25086076343223385,
+      "paired_vs_cell_mean": {
+        "games": 330,
+        "mean": -0.004714453483500126,
+        "ci_lo": -0.005638329074155205,
+        "ci_hi": -0.003790577892845047
+      },
+      "mse_start": 1.3746671477261205,
+      "mse_start_constant": 1.3834906086558791,
+      "mean_epv": 0.6389481156055433,
+      "mean_label": 0.6687084081683502,
+      "large_bias": -0.029760292562806878,
+      "calibration_slope": 1.043743347890506,
+      "buckets": 31,
+      "gated_buckets": 23,
+      "gated_state_share": 0.9962106661960279,
+      "max_bucket_bias": 0.07372394665059392,
+      "bucket_failures": 0,
+      "worst_bucket": {
+        "last_event": 11,
+        "transition": 1,
+        "n": 47918,
+        "bias": -0.05401159492332901,
+        "allowed": 0.07598663159925811
+      },
+      "ungated_max_bias": 1.1181083917617798,
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 19264,
+          "mean_epv": 0.0016791559485182157,
+          "mean_y": 0.00046719269102990036
+        },
+        {
+          "decile": 1,
+          "n": 19265,
+          "mean_epv": 0.015862731940878998,
+          "mean_y": 0.006799896184791072
+        },
+        {
+          "decile": 2,
+          "n": 19265,
+          "mean_epv": 0.09517698364964158,
+          "mean_y": 0.09810537243706204
+        },
+        {
+          "decile": 3,
+          "n": 19264,
+          "mean_epv": 0.2844802830584867,
+          "mean_y": 0.3125519102990033
+        },
+        {
+          "decile": 4,
+          "n": 19265,
+          "mean_epv": 0.6174071398348799,
+          "mean_y": 0.6482221645471061
+        },
+        {
+          "decile": 5,
+          "n": 19265,
+          "mean_epv": 0.9337846457540541,
+          "mean_y": 0.9792888658188424
+        },
+        {
+          "decile": 6,
+          "n": 19264,
+          "mean_epv": 0.9975484923283227,
+          "mean_y": 1.0463039867109634
+        },
+        {
+          "decile": 7,
+          "n": 19265,
+          "mean_epv": 1.0313387266666958,
+          "mean_y": 1.0901635089540618
+        },
+        {
+          "decile": 8,
+          "n": 19265,
+          "mean_epv": 1.0933706034940773,
+          "mean_y": 1.1377108746431353
+        },
+        {
+          "decile": 9,
+          "n": 19264,
+          "mean_epv": 1.3188348200753877,
+          "mean_y": 1.3674730066445182
+        }
+      ]
+    }
   },
-  "confirmation": {
-    "states": 160259,
-    "possessions": 44589,
-    "mse": 0.7577730421364921,
-    "mse_constant": 0.9850478692648265,
-    "mse_cell_mean": 0.7669708457194281,
-    "skill_vs_constant": 0.23072465229325045,
-    "mse_start": 1.3527976495775338,
-    "mse_start_constant": 1.3609727913202525,
-    "mean_epv": 0.6305755701380887,
-    "mean_label": 0.636407315657779,
-    "large_bias": -0.005831745519690235,
-    "calibration_slope": 1.0274931625218078,
-    "buckets": 11,
-    "max_bucket_bias": 0.027979672058226764,
-    "worst_bucket": {
-      "last_event": 2,
-      "transition": 2,
-      "n": 6286,
-      "bias": -0.027979672058226764
-    },
-    "small_buckets": 25,
-    "small_bucket_max_bias": 0.5218736082315445
-  },
-  "failed_gates": []
+  "holdout_identity_max_residual": 0.0,
+  "failed_gates": [
+    "confirmation 2026: calibration-in-the-large bias -0.0298 over 0.02"
+  ]
 }

@@ -706,7 +706,6 @@ files = [
     "sportsdataverse/wnba/wnba_team_ratings.py",
     "sportsdataverse/wnba/wnba_team_season_rates.py",
     "sportsdataverse/wnba/wnba_game_impact.py",
-    "sportsdataverse/wnba/wnba_epv.py",
     "sportsdataverse/wnba/wnba_lineup_seasons.py",
     "sportsdataverse/wnba/wnba_player_on_off.py",
     "sportsdataverse/wnba/wnba_game_flow.py",

@@ -66,20 +66,19 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/nfl/models/qbr_model.ubj` | `akeaswaran/cfb_qbr` `qbr_xgb.R` (`ca94e63`, 2021; a CFB-trained model) | `2e52d0625a` (re-saved with feature names, trees unchanged) | n/a (no release) |
 | `sportsdataverse/nfl/models/nfl_playcall.ubj` | sdv-py `tools/models/nfl_scheme/train_playcall.py` (`04b729e6d2`) | `04b729e6d2` | n/a (bundle only) |
 
-### Basketball and baseball (8)
+### Basketball and baseball (7)
 
 | artifact | fitting script | bundled in |
 |---|---|---|
 | `sportsdataverse/nba/models/nba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 00` (`2413d0bfb2`) | `2413d0bfb2` |
 | `sportsdataverse/nba/models/wnba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 10 --artifact wnba_in_game_wp.ubj` (`2413d0bfb2`) | `2413d0bfb2` |
-| `sportsdataverse/nba/models/nba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 00` (train 2021-2023, holdout 2024, confirmation 2025; gates in `tools/models/nba_epv/epv_nba_holdout.json`) | this PR |
-| `sportsdataverse/nba/models/wnba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 10` (train 2021-2023, holdout 2024, confirmation 2025; gates in `tools/models/nba_epv/epv_wnba_holdout.json`) | this PR |
+| `sportsdataverse/nba/models/nba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 00` (train 2022-2024, holdout 2025, confirmation 2026; gates, partition and importance beside it) | this PR |
 | `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` | **gap**: `dev/mbb_prediction/train_in_game_wp.py` exists only on the maintainer's disk (untracked) | `5c3eaba8de` |
 | `sportsdataverse/mbb/models/wbb_in_game_wp.ubj` | **gap**: same untracked script | `5c3eaba8de` |
 | `sportsdataverse/mlb/models/mlb_stuff_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_stuff_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 | `sportsdataverse/mlb/models/mlb_command_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_command_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 
-None of these eight ships a card.
+None of these seven ships a card.
 
 ## Fitted constants
 

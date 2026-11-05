@@ -307,10 +307,6 @@ wnba:
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
   wnba_game_player_impact: {seasons: 2026}  # 7008 rows x 18 cols
-  wnba_epv_plays: {seasons: 2025}
-  wnba_epv_player_games: {seasons: 2025}
-  wnba_epv_lineup_games: {seasons: 2025}
-  wnba_epv_team_games: {seasons: 2025}
   wnba_game_lineups_used: {seasons: 2026}  # 10481 rows x 23 cols
   wnba_lineup_seasons: {seasons: 2025}
   wnba_player_on_off: {seasons: 2025}

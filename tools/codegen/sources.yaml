@@ -973,7 +973,6 @@ categories:
       - sportsdataverse.nba.nba_situational
       - sportsdataverse.wnba.wnba_team_season_rates
       - sportsdataverse.wnba.wnba_game_impact
-      - sportsdataverse.wnba.wnba_epv
       - sportsdataverse.wnba.wnba_lineup_seasons
       - sportsdataverse.wnba.wnba_player_on_off
       - sportsdataverse.wnba.wnba_game_flow

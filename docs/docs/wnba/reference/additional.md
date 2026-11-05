@@ -115,10 +115,6 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_coach_careers](additional/analytics.md#wnba_coach_careers) | WNBA head-coach careers over the given seasons (league_id='10'). See sportsdataverse.nba.nba_coach_seasons.nba_coach_careers. |
 | [wnba_coach_seasons](additional/analytics.md#wnba_coach_seasons) | WNBA head-coach seasons: W-L, ratings and four factors over each coach's games (league_id='10'). See sportsdataverse.nba.nba_coach_seasons.nba_coach_seasons. |
 | [wnba_draft_lottery_odds](additional/analytics.md#wnba_draft_lottery_odds) | WNBA draft-lottery odds by slot, two picks drawn (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_draft_lottery_odds. |
-| [wnba_epv_lineup_games](additional/analytics.md#wnba_epv_lineup_games) | WNBA EPV added per five-man unit and game (league_id='10'). See sportsdataverse.nba.nba_epv.nba_epv_lineup_games. |
-| [wnba_epv_player_games](additional/analytics.md#wnba_epv_player_games) | WNBA EPV added per player and game (league_id='10'). See sportsdataverse.nba.nba_epv.nba_epv_player_games. |
-| [wnba_epv_plays](additional/analytics.md#wnba_epv_plays) | WNBA EPV and EPV added per play (league_id='10'). See sportsdataverse.nba.nba_epv.nba_epv_plays. |
-| [wnba_epv_team_games](additional/analytics.md#wnba_epv_team_games) | WNBA EPV added per team and game (league_id='10'). See sportsdataverse.nba.nba_epv.nba_epv_team_games. |
 | [wnba_expected_turnovers](additional/analytics.md#wnba_expected_turnovers) | WNBA expected turnovers / ball-security skill (`league_id="10"`). |
 | [wnba_foul_drawing](additional/analytics.md#wnba_foul_drawing) | WNBA foul-drawing / FT-generation (`league_id="10"`). |
 | [wnba_game_flow](additional/analytics.md#wnba_game_flow) | WNBA game flow per team and game: runs, droughts, kills, lead changes, time leading, game control (league_id='10'). See … |
@@ -126,8 +122,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_player_impact](additional/analytics.md#wnba_game_player_impact) | WNBA game impact box (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_player_impact. |
 | [wnba_lineup_seasons](additional/analytics.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
 | [wnba_matchup_drapm](additional/analytics.md#wnba_matchup_drapm) | WNBA matchup defensive RAPM (`league_id="10"`). |
-| [wnba_player_on_off](additional/analytics-2.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
-| [wnba_player_props](additional/analytics-2.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
+| [wnba_player_on_off](additional/analytics.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
+| [wnba_player_props](additional/analytics.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
 | [wnba_player_wowy](additional/analytics-2.md#wnba_player_wowy) | WNBA WOWY pairs (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_wowy. |
 | [wnba_playtype_ratings](additional/analytics-2.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
 | [wnba_referee_assignments](additional/analytics-2.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |

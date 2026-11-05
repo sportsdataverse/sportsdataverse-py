@@ -1,4 +1,4 @@
-"""Expected possession value (EPV) and EPV added for NBA / WNBA play-by-play (BB-D24).
+"""Expected possession value (EPV) and EPV added for NBA play-by-play (BB-D24).
 
 EPV is basketball's expected points: the points the team with the ball is expected to score
 before the possession ends, given the game state. EPV added is basketball's EPA: what a play
@@ -13,16 +13,16 @@ possession leaks in):
   It is the margin at the start, not the garbage-time trigger: a possession can trigger garbage
   time on its own basket (see :mod:`sportsdataverse.nba.nba_possession_flags`).
 * ``transition`` -- 0 half court, 1 the transition window is open (a live-ball start that is not
-  its period's first, no shot yet, within :data:`TRANSITION_SECONDS` of the change of
-  possession), 2 a transition possession whose first shot has been taken (the possession's
-  ``is_transition`` flag, known once that shot happens).
+  its period's first, no shot and no dead ball yet, within :data:`TRANSITION_SECONDS` of the
+  change of possession), 2 a transition possession whose first shot has been taken (the
+  possession's ``is_transition`` flag, known once that shot happens).
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
   substitutions and replays carry the previous one.
 * ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1).
 * ``shot_zone`` -- the zone of the possession's latest field-goal attempt (:data:`SHOT_ZONES`),
   0 before its first.
 
-The possession's start is a state too (``last_event`` 0), at the clock of the change of
+The possession's start is a state too (``last_event`` ``start``), at the clock of the change of
 possession.
 
 **EPV added** on an event is ``points + epv_after - epv_before``: the offense's points on the
@@ -37,13 +37,18 @@ credits its actor: the offensive actor gets the EPV added, a defensive actor (a 
 rebounder, a fouler) its negative, and a steal or block credits the stealer or blocker with
 the negative of the turnover or missed shot it ended. On-court EPV +/- gives every player on
 the floor the offense's EPV added (the defenders its negative): the ten at each action from
-the ``{nba,wnba}_stats_game_lineups`` release when it is passed (the loaders do), else the
+the ``nba_stats_game_lineups`` release when it is passed (the loaders do), else the
 possession's starting ten. Free throws go on the lineup of the foul that led to them (:func:`~sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`,
 BB-D6's rule). The release carries no assist or foul-drawn player, so neither is credited.
 
 The model is an XGBoost regression on the remaining points of the possession, fitted by
-``tools/models/nba_epv/train_epv.py`` on disjoint train, holdout and confirmation seasons
-(the seasons and gates are in the booster's attributes and in that folder's holdout reports).
+``tools/models/nba_epv/train_epv.py`` on disjoint train, holdout, confirmation and monitor
+seasons (the seasons and gates are in the booster's attributes and in that folder's holdout
+reports). It is served from its first training season on; earlier seasons are refused.
+
+Most of the skill is inside the possession (after a miss, a foul, a free throw); possession
+starts differ little (about 0.15 points from a dead ball to a live-ball turnover), so the
+possession-ending term moves EPV added by tenths of a point, not whole points.
 """
 
 from __future__ import annotations
@@ -55,7 +60,6 @@ from typing import TYPE_CHECKING, Final
 import polars as pl
 
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
-from sportsdataverse.nba.nba_game_page import _QUARTERS_FROM
 from sportsdataverse.nba.nba_possession_flags import TRANSITION_SECONDS, TRANSITION_START_TYPES, add_possession_flags
 
 if TYPE_CHECKING:
@@ -87,11 +91,15 @@ START_TYPES: Final[tuple[str, ...]] = (
     "OffMissedShot",
     "OffLiveBallTurnover",
 )
-#: ``last_event`` codes (the index). ``start`` is the possession's start state.
+#: ``last_event`` codes (the index). ``start`` is the possession's start state. The order is the
+#: states' typical remaining points, lowest first (2021-23 NBA), so a tree split on the code
+#: groups like states: an offensive foul (worth nothing, the turnover follows) never sits
+#: between two fouls that send the offense to the line.
 LAST_EVENTS: Final[tuple[str, ...]] = (
-    "start", "made_shot", "missed_shot", "off_rebound", "def_rebound", "shooting_foul", "offensive_foul",
-    "other_foul", "free_throw", "turnover", "timeout", "violation", "jump_ball",
+    "turnover", "offensive_foul", "made_shot", "def_rebound", "missed_shot", "free_throw", "jump_ball",
+    "off_team_rebound", "violation", "timeout", "other_foul", "start", "off_rebound", "shooting_foul",
 )  # fmt: skip
+_START_EVENT: Final[int] = LAST_EVENTS.index("start")
 #: ``shot_zone`` codes: 0 no shot yet, then by ``shot_distance`` in feet (a three is zone 4).
 SHOT_ZONES: Final[dict[int, str]] = {
     0: "none",
@@ -105,16 +113,20 @@ EPV_FEATURES: Final[list[str]] = [
     "start_type", "period", "seconds_remaining", "start_margin", "transition", "last_event", "ft_pending", "shot_zone",
 ]  # fmt: skip
 
-#: league_id -> (booster file, first season it is served for, or None for every season). The WNBA
-#: played two 20-minute halves before its first quarters season; the model is fitted on quarters,
-#: so those seasons are refused.
-_LEAGUES: Final[dict[str, tuple[str, int | None]]] = {
-    "00": ("nba_epv.ubj", None),
-    "10": ("wnba_epv.ubj", _QUARTERS_FROM["wnba"]),
-}
+#: league_id -> booster file. Each booster is served from its first training season on
+#: (:func:`_check_seasons`): the older feeds code about a third of their two-point attempts at
+#: 0 ft, which would read as rim shots, and the gates cover the training era only.
+_LEAGUES: Final[dict[str, str]] = {"00": "nba_epv.ubj"}
+#: ``shot_zone`` cut points, in feet: under the first a rim shot, under the second a short one.
+_RIM_FEET: Final[int] = 4
+_SHORT_FEET: Final[int] = 14
 _SHOTS: Final[tuple[str, ...]] = ("made_shot", "missed_shot")
-#: Events that close a free-throw trip or a shot's zone (substitutions, timeouts and replays do not).
-_LIVE: Final[tuple[str, ...]] = ("made_shot", "missed_shot", "rebound", "turnover", "jump_ball", "violation", "foul")
+#: Events that close a free-throw trip. Not a rebound: the dead-ball team rebound filed after a missed
+#: first free throw leaves the rest of the trip to come (nor substitutions, timeouts or replays).
+_LIVE: Final[tuple[str, ...]] = ("made_shot", "missed_shot", "turnover", "jump_ball", "violation", "foul")
+#: Dead-ball events: once one happens the defense is set, so the transition window closes (a team
+#: rebound, filed when the ball goes out of bounds, is one too).
+_DEAD_BALL: Final[tuple[str, ...]] = ("timeout", "foul", "violation", "jump_ball", "substitution", "replay")
 _SLOTS: Final[list[str]] = [f"{side}_player_{i}" for side in ("off", "def") for i in range(1, 6)]
 _POSS_COLS: Final[list[str]] = [
     "game_id", "period", "possession_number", "number_in_period", "start_order_index", "end_order_index",
@@ -139,7 +151,14 @@ def _scored_events(pbp: pl.DataFrame) -> pl.DataFrame:
     """The pbp in game order with each side's points on the event, the margin before it and the home team."""
     ev = (
         pbp.select(_PBP_COLS)
-        .with_columns(pl.col("game_id").cast(pl.Utf8))
+        .with_columns(
+            pl.col("game_id").cast(pl.Utf8),
+            # team events (a team rebound, a team timeout) carry team_id 0 and the team in person_id
+            pl.when(pl.col("team_id").fill_null(0) == 0)
+            .then(pl.col("person_id"))
+            .otherwise(pl.col("team_id"))
+            .alias("team_id"),
+        )
         .sort("game_id", "order_index")
         .with_columns(_running("score_home").alias("_h"), _running("score_away").alias("_a"))
     )
@@ -173,7 +192,7 @@ def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFr
                 "_live_start"
             ),
             pl.col("possession_start_type")
-            .replace_strict(START_TYPES, list(range(len(START_TYPES))), default=0, return_dtype=pl.Int32)
+            .replace_strict(START_TYPES, list(range(len(START_TYPES))), return_dtype=pl.Int32)
             .alias("start_type"),
         )
     )
@@ -187,6 +206,13 @@ def _last_event_code() -> pl.Expr:
         .then(codes["made_shot"])
         .when(et == "missed_shot")
         .then(codes["missed_shot"])
+        # a team rebound is a dead ball (an inbound follows), a player's a live one (a putback can)
+        .when(
+            (et == "rebound")
+            & (pl.col("team_id") == pl.col("offense_team_id"))
+            & (pl.col("person_id") == pl.col("team_id"))
+        )
+        .then(codes["off_team_rebound"])
         .when((et == "rebound") & (pl.col("team_id") == pl.col("offense_team_id")))
         .then(codes["off_rebound"])
         .when(et == "rebound")
@@ -212,9 +238,9 @@ def _last_event_code() -> pl.Expr:
     )
 
 
-def _carried(expr: pl.Expr) -> pl.Expr:
-    """``expr`` carried forward inside the possession, 0 before its first value."""
-    return expr.forward_fill().over(_KEY).fill_null(0)
+def _carried(expr: pl.Expr, start: int = 0) -> pl.Expr:
+    """``expr`` carried forward inside the possession, ``start`` before its first value."""
+    return expr.forward_fill().over(_KEY).fill_null(start)
 
 
 def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
@@ -223,9 +249,9 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     zone = (
         pl.when(et.is_in(_SHOTS) & (pl.col("shot_value") == 3))
         .then(4)
-        .when(et.is_in(_SHOTS) & (pl.col("shot_distance").fill_null(0) < 4))
+        .when(et.is_in(_SHOTS) & (pl.col("shot_distance").fill_null(0) < _RIM_FEET))
         .then(1)
-        .when(et.is_in(_SHOTS) & (pl.col("shot_distance").fill_null(0) < 14))
+        .when(et.is_in(_SHOTS) & (pl.col("shot_distance").fill_null(0) < _SHORT_FEET))
         .then(2)
         .when(et.is_in(_SHOTS))
         .then(3)
@@ -252,14 +278,21 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     )
     first_shot = rows.filter(et.is_in(_SHOTS)).group_by(_KEY).agg(pl.col("order_index").min().alias("_first_shot"))
     seen = (pl.col("order_index") >= pl.col("_first_shot")).fill_null(False)
-    return rows.join(first_shot, on=_KEY, how="left").with_columns(
-        _carried(_last_event_code()).alias("last_event"),
-        _carried(pending.cast(pl.Int32)).alias("ft_pending"),
+    team_rebound = (et == "rebound") & (pl.col("person_id") == pl.col("team_id"))
+    stopped = (et.is_in(_DEAD_BALL) | team_rebound).cast(pl.Int32).cum_max().over(_KEY) > 0
+    # a rebound with free throws still to come is the dead-ball one between them: it changes nothing
+    between_fts = (et == "rebound") & (pl.col("ft_pending") > 0)
+    rows = rows.join(first_shot, on=_KEY, how="left").with_columns(_carried(pending.cast(pl.Int32)).alias("ft_pending"))
+    return rows.with_columns(
+        _carried(pl.when(between_fts).then(None).otherwise(_last_event_code()), _START_EVENT).alias("last_event"),
         _carried(zone.cast(pl.Int32)).alias("shot_zone"),
         pl.when(seen & pl.col("is_transition"))
         .then(2)
         .when(
-            pl.col("_live_start") & ~seen & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= TRANSITION_SECONDS)
+            pl.col("_live_start")
+            & ~seen
+            & ~stopped
+            & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= TRANSITION_SECONDS)
         )
         .then(1)
         .otherwise(0)
@@ -280,7 +313,8 @@ def _start_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     return poss.join(pre, on=["game_id", "start_order_index"], how="inner").with_columns(
         pl.col("_ball_clock").alias("seconds_remaining"),
         pl.when(pl.col("_live_start")).then(1).otherwise(0).cast(pl.Int32).alias("transition"),
-        *[pl.lit(0, dtype=pl.Int32).alias(c) for c in ("last_event", "ft_pending", "shot_zone")],
+        pl.lit(_START_EVENT, dtype=pl.Int32).alias("last_event"),
+        *[pl.lit(0, dtype=pl.Int32).alias(c) for c in ("ft_pending", "shot_zone")],
         pl.lit(0, dtype=pl.Int64).alias("points"),
     )
 
@@ -309,8 +343,9 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
         ``description`` / player slots.
 
     Raises:
-        ValueError: If a needed column is missing or ``pbp`` has no event for a possession (the
-            BB-D7 flags' checks).
+        ValueError: If a needed column is missing, a ``possession_start_type`` is not one of
+            :data:`START_TYPES`, or ``pbp`` has no event for a possession (the start of one, or
+            any: the BB-D7 flags' check).
     """
     missing = [c for c in _PBP_COLS if c not in pbp.columns] + [c for c in _POSS_COLS if c not in possessions.columns]
     if missing:
@@ -319,6 +354,8 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     poss = _possession_frame(possessions, pbp)
     events = _event_states(ev, poss).with_columns(pl.int_range(1, pl.len() + 1).over(_KEY).alias("step"))
     starts = _start_states(ev, poss).with_columns(pl.lit(0, dtype=pl.Int64).alias("step"))
+    if starts.height != possessions.height:
+        raise ValueError(f"pbp has no first event for {possessions.height - starts.height} possessions")
     margin = (
         pl.when(pl.col("offense_team_id") == pl.col("home_team_id"))
         .then(pl.col("_pre_home_margin"))
@@ -366,7 +403,7 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
 
 @lru_cache(maxsize=2)
 def load_epv_model(league_id: str = "00") -> xgb.Booster:
-    """The bundled EPV booster for ``league_id`` (``"00"`` NBA, ``"10"`` WNBA).
+    """The bundled EPV booster for ``league_id`` (``"00"`` NBA; the state builder takes WNBA frames too).
 
     Its attributes carry ``start_epv_mean`` (the average start value the possession-ending term
     is measured against), the train / holdout / confirmation seasons and the fitting script.
@@ -376,8 +413,15 @@ def load_epv_model(league_id: str = "00") -> xgb.Booster:
     if league_id not in _LEAGUES:
         raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
     booster = xgb.Booster()
-    booster.load_model(bytearray(files("sportsdataverse.nba.models").joinpath(_LEAGUES[league_id][0]).read_bytes()))
+    booster.load_model(bytearray(files("sportsdataverse.nba.models").joinpath(_LEAGUES[league_id]).read_bytes()))
+    _check_features(booster)
     return booster
+
+
+def _check_features(booster: xgb.Booster) -> None:
+    """The booster must read :data:`EPV_FEATURES` in order (``inplace_predict`` on an array never checks)."""
+    if list(booster.feature_names or []) != EPV_FEATURES:
+        raise ValueError(f"the booster reads {booster.feature_names}, not {EPV_FEATURES}")
 
 
 def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster | None = None) -> pl.DataFrame:
@@ -385,7 +429,7 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
 
     Args:
         states: :func:`epv_states` output (whole possessions: the start row and every event).
-        league_id: ``"00"`` NBA or ``"10"`` WNBA, picking the bundled booster.
+        league_id: The bundled booster to use: ``"00"`` NBA (the only one shipped).
         booster: A booster to use instead (the fitting script scores candidates with it); it must
             carry the ``start_epv_mean`` attribute.
 
@@ -400,6 +444,8 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
     import numpy as np
 
     booster = booster if booster is not None else load_epv_model(league_id)
+    if booster.attr("start_epv_mean") is not None:
+        _check_features(booster)
     mean = booster.attr("start_epv_mean")
     if mean is None:
         raise ValueError("the booster has no start_epv_mean attribute; fit it with tools/models/nba_epv/train_epv.py")
@@ -516,7 +562,7 @@ def epv_player_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
 
     Args:
         plays: :func:`add_epv` output (or :func:`nba_epv_plays`).
-        game_lineups: The ``{nba,wnba}_stats_game_lineups`` release (``game_id``,
+        game_lineups: The ``nba_stats_game_lineups`` release (``game_id``,
             ``action_number``, ``home_player_1..5``, ``away_player_1..5``): the ten on the floor
             at each action. Without it each play takes its possession's starting ten.
 
@@ -525,7 +571,8 @@ def epv_player_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
         (the EPV credited to the player's own events, and how many), ``off_epv_on`` /
         ``def_epv_on`` (the offense's EPV added while the player's team / the opponent had the
         ball with the player on the floor) and ``epv_on`` (their difference: on-court EPV +/-).
-        Sorted by game, team and ``epv_on`` (best first).
+        Sorted by game, team and player. These are accounting sums, like a box score's +/-, not
+        estimates of a player's value: one game carries no interval and is not a ranking.
     """
     on = (
         _on_court(plays, game_lineups)
@@ -549,7 +596,7 @@ def epv_player_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
         )
         .with_columns((pl.col("off_epv_on") - pl.col("def_epv_on")).alias("epv_on"))
         .select(*keys, "epv_own", "own_actions", "off_epv_on", "def_epv_on", "epv_on")
-        .sort(["game_id", "team_id", "epv_on"], descending=[False, False, True])
+        .sort("game_id", "team_id", "player_id")
     )
 
 
@@ -564,7 +611,8 @@ def epv_lineup_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
         One row per ``(season, game_id, team_id, lineup_id)``: ``lineup_id`` (the five player ids
         sorted and joined with ``-``), ``off_epv`` / ``def_epv`` (EPV added by the unit's team / by
         the opponent while it was on), ``net_epv`` and ``plays``. Events with an unknown slot are
-        left out. Sorted by game, team and ``net_epv`` (best first).
+        left out. Sorted by game, team and unit; accounting sums, not estimates (as
+        :func:`epv_player_games`).
     """
     return (
         _on_court(plays, game_lineups)
@@ -574,7 +622,7 @@ def epv_lineup_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
         .agg(pl.col("off_epv").sum(), pl.col("def_epv").sum(), pl.len().cast(pl.Int64).alias("plays"))
         .with_columns((pl.col("off_epv") - pl.col("def_epv")).alias("net_epv"))
         .select("season", "game_id", "team_id", "lineup_id", "off_epv", "def_epv", "net_epv", "plays")
-        .sort(["game_id", "team_id", "net_epv"], descending=[False, False, True])
+        .sort("game_id", "team_id", "lineup_id")
     )
 
 
@@ -609,62 +657,48 @@ def epv_team_games(plays: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _check_seasons(seasons: int | list[int], league_id: str) -> list[int]:
-    if league_id not in _LEAGUES:
-        raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+def _check_seasons(seasons: int | list[int]) -> list[int]:
+    """The seasons as a list; refuses one before the booster's first training season."""
     out = [seasons] if isinstance(seasons, int) else list(seasons)
-    first = _LEAGUES[league_id][1]
-    if first is not None and any(s < first for s in out):
-        raise ValueError(f"EPV is served from {first} for league_id {league_id!r}, got {out}")
+    first = min(int(x) for x in load_epv_model().attr("train_seasons").split(","))
+    if any(s < first for s in out):
+        raise ValueError(f"EPV is served from the {first} season on, got {out}")
     return out
 
 
-def _load(
-    seasons: int | list[int], league_id: str, *, lineups: bool = False
-) -> tuple[pl.DataFrame, pl.DataFrame | None]:
-    """The scored event rows of ``seasons`` (``{nba,wnba}_stats_pbp`` / ``_possessions``) and, asked, the game lineups."""
-    s = _check_seasons(seasons, league_id)
-    if league_id == "10":
-        from sportsdataverse.wnba import wnba_loaders as W
+def _load(seasons: int | list[int], *, lineups: bool = False) -> tuple[pl.DataFrame, pl.DataFrame | None]:
+    """The scored event rows of ``seasons`` (``nba_stats_pbp`` / ``_possessions``) and, asked, the game lineups."""
+    from sportsdataverse.nba import nba_loaders as N
 
-        pbp, poss = W.load_wnba_stats_pbp(s), W.load_wnba_stats_possessions(s)
-        tens = W.load_wnba_stats_game_lineups(s) if lineups else None
-    else:
-        from sportsdataverse.nba import nba_loaders as N
-
-        start = [x - 1 for x in s]  # the NBA loaders take the start year
-        pbp, poss = N.load_nba_stats_pbp(start), N.load_nba_stats_possessions(start)
-        tens = N.load_nba_stats_game_lineups(start) if lineups else None
-    return add_epv(epv_states(poss, pbp), league_id=league_id), tens
+    start = [x - 1 for x in _check_seasons(seasons)]  # the NBA loaders take the start year
+    pbp, poss = N.load_nba_stats_pbp(start), N.load_nba_stats_possessions(start)
+    tens = N.load_nba_stats_game_lineups(start) if lineups else None
+    return add_epv(epv_states(poss, pbp)), tens
 
 
 def _out(frame: pl.DataFrame, return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
     return frame.to_pandas() if return_as_pandas else frame
 
 
-def nba_epv_plays(
-    seasons: int | list[int], *, league_id: str = "00", return_as_pandas: bool = False
-) -> pl.DataFrame | pd.DataFrame:
+def nba_epv_plays(seasons: int | list[int], *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """EPV and EPV added on every play-by-play event inside a possession.
 
     Args:
-        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
-            The WNBA season is its calendar year (2006 on: the earlier two-halves seasons are not
-            modelled).
-        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26),
+            from the booster's first training season (2022) on.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
         One row per event, in game order: ``season``, ``game_id``, ``possession_number``,
-        ``step`` (the event's place in the possession), ``order_index``, the offense, defense and
-        home team ids, the event's ``team_id`` / ``person_id`` / ``event_type`` / ``description``,
-        the ten player slots, the state (:data:`EPV_FEATURES`), ``points``,
-        ``remaining_points``, ``is_last``, ``next_in_period``, ``epv``, ``epv_start``,
-        ``epv_before``, ``epv_after`` and ``epv_added``.
+        ``step`` (the event's place in the possession), ``order_index``, ``action_number``, the
+        offense, defense and home team ids, the event's ``team_id`` / ``person_id`` /
+        ``event_type`` / ``description``, the possession's starting ten, the state
+        (:data:`EPV_FEATURES`), ``points``, ``remaining_points``, ``is_last``,
+        ``next_in_period``, ``epv``, ``epv_start``, ``epv_before``, ``epv_after`` and
+        ``epv_added``. Every game of every season type is scored.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or a season is before the first
-            one served.
+        ValueError: If a season is before the first one served.
 
     Example:
         The biggest plays of a game::
@@ -673,28 +707,25 @@ def nba_epv_plays(
             plays = nba_epv_plays(2026)
             plays.filter(game_id="0022500101").sort("epv_added", descending=True).head(5)
     """
-    return _out(_load(seasons, league_id)[0], return_as_pandas)
+    return _out(_load(seasons)[0], return_as_pandas)
 
 
-def nba_epv_player_games(
-    seasons: int | list[int], *, league_id: str = "00", return_as_pandas: bool = False
-) -> pl.DataFrame | pd.DataFrame:
+def nba_epv_player_games(seasons: int | list[int], *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Per player and game: EPV added on the player's own actions and on-court EPV +/-.
 
     Args:
-        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
-            The WNBA season is its calendar year (2006 on).
-        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26),
+            from the booster's first training season (2022) on.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        :func:`epv_player_games` of the seasons' plays: one row per ``(season, game_id, team_id,
+        :func:`epv_player_games` of the seasons' plays, on-court from the
+        ``nba_stats_game_lineups`` release: one row per ``(season, game_id, team_id,
         player_id)`` with ``epv_own``, ``own_actions``, ``off_epv_on``, ``def_epv_on`` and
         ``epv_on``. Ids are the stats.nba.com ids (Int64; ``game_id`` a String).
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or a season is before the first
-            one served.
+        ValueError: If a season is before the first one served.
 
     Example:
         A game's EPV box::
@@ -703,47 +734,41 @@ def nba_epv_player_games(
             box = nba_epv_player_games(2026)
             box.filter(game_id="0022500101")
     """
-    return _out(epv_player_games(*_load(seasons, league_id, lineups=True)), return_as_pandas)
+    return _out(epv_player_games(*_load(seasons, lineups=True)), return_as_pandas)
 
 
-def nba_epv_lineup_games(
-    seasons: int | list[int], *, league_id: str = "00", return_as_pandas: bool = False
-) -> pl.DataFrame | pd.DataFrame:
+def nba_epv_lineup_games(seasons: int | list[int], *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Per five-man unit and game: the EPV added with the unit on the floor.
 
     Args:
-        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
-            The WNBA season is its calendar year (2006 on).
-        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26),
+            from the booster's first training season (2022) on.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        :func:`epv_lineup_games` of the seasons' plays: one row per ``(season, game_id, team_id,
+        :func:`epv_lineup_games` of the seasons' plays, on-court from the
+        ``nba_stats_game_lineups`` release: one row per ``(season, game_id, team_id,
         lineup_id)`` with ``off_epv``, ``def_epv``, ``net_epv`` and ``plays``.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or a season is before the first
-            one served.
+        ValueError: If a season is before the first one served.
 
     Example:
-        A game's best units::
+        A game's units::
 
             from sportsdataverse.nba.nba_epv import nba_epv_lineup_games
             units = nba_epv_lineup_games(2026)
-            units.filter(game_id="0022500101").group_by("team_id").head(3)
+            units.filter(game_id="0022500101")
     """
-    return _out(epv_lineup_games(*_load(seasons, league_id, lineups=True)), return_as_pandas)
+    return _out(epv_lineup_games(*_load(seasons, lineups=True)), return_as_pandas)
 
 
-def nba_epv_team_games(
-    seasons: int | list[int], *, league_id: str = "00", return_as_pandas: bool = False
-) -> pl.DataFrame | pd.DataFrame:
+def nba_epv_team_games(seasons: int | list[int], *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Per team and game: EPV added on offense and allowed on defense.
 
     Args:
-        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
-            The WNBA season is its calendar year (2006 on).
-        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26),
+            from the booster's first training season (2022) on.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -752,15 +777,14 @@ def nba_epv_team_games(
         ``off_epv_per_poss`` and ``def_epv_per_poss``.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or a season is before the first
-            one served.
+        ValueError: If a season is before the first one served.
 
     Example:
-        A season's best offenses by EPV::
+        A season's offenses by EPV added per possession::
 
             import polars as pl
             from sportsdataverse.nba.nba_epv import nba_epv_team_games
             teams = nba_epv_team_games(2026)
             teams.group_by("team_id").agg(pl.col("off_epv_per_poss").mean()).sort("off_epv_per_poss")
     """
-    return _out(epv_team_games(_load(seasons, league_id)[0]), return_as_pandas)
+    return _out(epv_team_games(_load(seasons)[0]), return_as_pandas)

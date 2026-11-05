@@ -1,9 +1,9 @@
-"""BB-D24: expected possession value (EPV) and EPV added on NBA / WNBA play-by-play.
+"""BB-D24: expected possession value (EPV) and EPV added on NBA play-by-play.
 
 Every test runs on committed real releases (``tests/fixtures/bb_epv/README.md``): the first 40
-regular-season games of the 2023-24 NBA and the first 20 of the 2024 WNBA, the holdout season
-of both bundled boosters (neither saw it in training). Floors are the observed values on these
-captures less stated headroom; never lower one to make a test pass.
+regular-season games of the 2024-25 NBA, the holdout season of the bundled booster (it never saw
+them in training). Floors are the observed values on these captures less stated headroom; never
+lower one to make a test pass.
 """
 
 from __future__ import annotations
@@ -30,14 +30,18 @@ from sportsdataverse.nba.nba_epv import (
 from sportsdataverse.nba.nba_possession_flags import TRANSITION_SECONDS, add_possession_flags
 
 D = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "bb_epv"
-LEAGUE = {"nba": "00", "wnba": "10"}
+LEAGUE = {"nba": "00"}
+#: The booster's holdout season: the fixture's.
+HOLDOUT = 2025
 KEY = ["game_id", "possession_number"]
 SLOTS = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
 
 
 @lru_cache(maxsize=2)
 def _raw(lg: str) -> tuple[pl.DataFrame, pl.DataFrame]:
-    return pl.read_parquet(D / f"{lg}_possessions_2024.parquet"), pl.read_parquet(D / f"{lg}_pbp_2024.parquet")
+    return pl.read_parquet(D / f"{lg}_possessions_{HOLDOUT}.parquet"), pl.read_parquet(
+        D / f"{lg}_pbp_{HOLDOUT}.parquet"
+    )
 
 
 @lru_cache(maxsize=2)
@@ -89,12 +93,24 @@ def test_start_margin_is_the_lead_before_the_first_event(lg: str) -> None:
     rows = s.join(first, on=KEY).select(
         "game_id", "start_order_index", "start_margin", "offense_team_id", "home_team_id"
     )
-    want = [oracle[(g, oi)] * (1 if off == home else -1) for g, oi, _, off, home in rows.iter_rows()]
-    assert rows["start_margin"].to_list() == [float(w) for w in want]
+    want = pl.Series([float(oracle[(g, oi)] * (1 if off == home else -1)) for g, oi, _, off, home in rows.iter_rows()])
+    off = rows.filter(rows["start_margin"] != want)
+    # The running score is the feed's cumulative max (BB-D7's rule, which survives the pre-2019 "0"
+    # rows), so a score a replay review lowers reads high until it is passed again. That is the only
+    # source of a miss: each one sits in a game whose feed score falls somewhere.
+    falls = (
+        pbp.sort("game_id", "order_index")
+        .with_columns(pl.col("score_home", "score_away").cast(pl.Int64, strict=False))
+        .filter(pl.col("score_home") > 0)
+        .group_by("game_id")
+        .agg(((pl.col("score_home").diff() < 0) | (pl.col("score_away").diff() < 0)).any().alias("falls"))
+    )
+    assert off.join(falls.filter("falls"), on="game_id", how="anti").height == 0
+    assert off.height <= 0.01 * rows.height  # observed 2 of 8,012 possessions (one reviewed basket)
     scored_first = (
         _states(lg).filter((pl.col("step") == 1) & (pl.col("points") > 0)).select(*KEY).join(s, on=KEY).height
     )
-    assert scored_first > 500  # observed 2,215 (NBA) / 893 (WNBA): the case is well covered
+    assert scored_first > 500  # observed 2,200+: the case is well covered
 
 
 @pytest.mark.parametrize("lg", list(LEAGUE))
@@ -165,7 +181,7 @@ def test_features_do_not_see_later_events() -> None:
         b = full.filter(mine & (pl.col("step") <= a["step"].max())).select("step", *EPV_FEATURES)
         assert a.equals(b), row["possession_number"]
         checked += 1
-    assert checked > 50  # observed 104 possessions in game 0022300001
+    assert checked > 50  # observed in game 0022400001
 
 
 @pytest.mark.parametrize("lg", list(LEAGUE))
@@ -220,19 +236,19 @@ def test_states_order_as_the_game_does(lg: str) -> None:
     assert by_type[START_TYPES.index("OffLiveBallTurnover")] > by_type[START_TYPES.index("OffDeadball")]
     late = st.filter(pl.col("seconds_remaining") <= 2)["epv_start"].mean()
     early = st.filter(pl.col("seconds_remaining") >= 30)["epv_start"].mean()
-    assert late < early - 0.3  # observed gaps of 0.50 (NBA) and 0.45 (WNBA): a heave is worth little
+    assert late < early - 0.3  # observed a 0.88 gap: a heave is worth little
     ft = s.filter(pl.col("last_event") == nba_epv.LAST_EVENTS.index("free_throw"))
     one_left = ft.filter(pl.col("ft_pending") == 1)["epv"].mean() - ft.filter(pl.col("ft_pending") == 0)["epv"].mean()
-    assert 0.6 < one_left < 0.9  # a free throw still to come is worth about a free-throw percentage
+    assert 0.6 < one_left < 0.9  # observed 0.70: a free throw still to come is worth about a make rate
     oreb = s.filter(pl.col("last_event") == nba_epv.LAST_EVENTS.index("off_rebound"))["epv"].mean()
     miss = s.filter(pl.col("last_event") == nba_epv.LAST_EVENTS.index("missed_shot"))["epv"].mean()
-    assert oreb > miss + 0.5
+    assert oreb > miss + 0.5  # observed 0.91
 
 
-#: Observed on the holdout fixtures with the shipped boosters: (skill vs the training label mean,
-#: |mean(epv) - mean(label)|). The floors keep 0.02 of skill and allow 0.03 points of bias (40 and
-#: 20 games, so a season's drift plus sampling).
-OBSERVED_FIT = {"nba": (0.263, 0.017), "wnba": (0.212, 0.001)}
+#: Observed on the holdout fixture with the shipped booster: (skill vs the training label mean,
+#: |mean(epv) - mean(label)|). The floor keeps 0.02 of skill and allows 0.03 points of bias (40
+#: games, so a season's drift plus sampling).
+OBSERVED_FIT = {"nba": (0.262, 0.014)}
 
 
 @pytest.mark.parametrize("lg", list(LEAGUE))
@@ -242,7 +258,7 @@ def test_holdout_fit_and_calibration(lg: str) -> None:
     train = {int(x) for x in booster.attr("train_seasons").split(",")}
     held = {int(booster.attr("holdout_season")), int(booster.attr("confirmation_season"))}
     assert not train & held and len(held) == 2
-    assert int(booster.attr("holdout_season")) == 2024  # the fixture's season is out of sample
+    assert int(booster.attr("holdout_season")) == HOLDOUT  # the fixture's season is out of sample
     s = _states(lg)
     pred = booster.inplace_predict(s.select(pl.col(EPV_FEATURES).cast(pl.Float64)).to_numpy())
     y = s["remaining_points"].to_numpy()
@@ -272,7 +288,7 @@ AWAY = [f"away_player_{i}" for i in range(1, 6)]
 
 @lru_cache(maxsize=2)
 def _tens(lg: str) -> pl.DataFrame:
-    return pl.read_parquet(D / f"{lg}_game_lineups_2024.parquet")
+    return pl.read_parquet(D / f"{lg}_game_lineups_{HOLDOUT}.parquet")
 
 
 def _complete_games(p: pl.DataFrame) -> pl.DataFrame:
@@ -286,7 +302,7 @@ def test_on_court_is_five_times_the_team(lg: str) -> None:
     """Every player on the floor carries the play: per team-game, the players sum to five times the team."""
     p = _plays(lg)
     games = _complete_games(p)
-    assert games.height >= 0.9 * p["game_id"].n_unique()  # observed 39 of 40 (NBA), 20 of 20 (WNBA)
+    assert games.height >= 0.9 * p["game_id"].n_unique()  # observed 40 of 40
     p = p.join(games, on="game_id", how="semi")
     pg = epv_player_games(p, _tens(lg)).group_by("game_id", "team_id").agg(pl.col("off_epv_on", "def_epv_on").sum())
     tg = epv_team_games(p).join(pg, on=["game_id", "team_id"])
@@ -318,7 +334,7 @@ def test_on_court_reads_the_action_lineup(lg: str) -> None:
         & ((pl.col("_home").list.concat("_away").list.sort()) != own.list.sort())
         & (pl.col("event_type") != "free_throw")
     )
-    assert moved.height > 100  # observed 1,300+ (NBA) / 700+ (WNBA) plays after a mid-possession substitution
+    assert moved.height > 100  # observed 2,652 plays after a mid-possession substitution
     row = moved.row(0, named=True)
     new = next(x for x in row["_home"] + row["_away"] if x not in [row[c] for c in SLOTS])
     pg = epv_player_games(_plays(lg), _tens(lg))
@@ -345,7 +361,7 @@ def test_free_throws_land_on_the_foul_lineup(lg: str) -> None:
         & pl.col("_foul").is_not_null()
         & (pl.col("_own").list.sort() != pl.col("_foul").list.sort())
     )
-    assert ft.height > 10  # observed 40+ (NBA) / 20+ (WNBA) free throws after a substitution
+    assert ft.height > 10  # observed 408 free throws after a substitution
     row = ft.row(0, named=True)
     came_in = next(x for x in row["_own"] if x not in row["_foul"])
     went_out = next(x for x in row["_foul"] if x not in row["_own"])
@@ -403,9 +419,10 @@ def test_inputs_are_checked() -> None:
     with pytest.raises(ValueError, match="missing columns"):
         epv_states(poss.drop("possession_start_type"), pbp)
     with pytest.raises(ValueError, match="league_id"):
-        load_epv_model("20")
-    with pytest.raises(ValueError, match="served from 2006"):
-        nba_epv.nba_epv_plays(2005, league_id="10")
+        load_epv_model("10")  # the WNBA booster is not shipped
+    first = min(int(x) for x in load_epv_model().attr("train_seasons").split(","))
+    with pytest.raises(ValueError, match=f"served from the {first} season"):
+        nba_epv.nba_epv_plays(first - 1)
 
     class _NoAttr:
         def attr(self, _: str) -> None:
@@ -413,8 +430,65 @@ def test_inputs_are_checked() -> None:
 
     with pytest.raises(ValueError, match="start_epv_mean"):
         add_epv(_states("nba"), booster=_NoAttr())  # type: ignore[arg-type]
-    empty = add_epv(_states("nba").head(0), league_id="00")
+    empty = add_epv(_states("nba").head(0))
     assert empty.height == 0 and "epv_added" in empty.columns
+    with pytest.raises(ValueError, match="no first event"):
+        first_events = poss.select("game_id", pl.col("start_order_index").alias("order_index"))
+        epv_states(poss, pbp.join(first_events.head(1), on=["game_id", "order_index"], how="anti"))
+    with pytest.raises(pl.exceptions.InvalidOperationError):
+        epv_states(poss.with_columns(pl.lit("OffSomethingNew").alias("possession_start_type")), pbp)
+
+
+def test_the_booster_reads_the_features_in_order() -> None:
+    """``inplace_predict`` on an array never checks names, so the loader does."""
+    booster = load_epv_model()
+    assert list(booster.feature_names or []) == EPV_FEATURES
+    swapped = booster.copy()
+    swapped.feature_names = [*EPV_FEATURES[1:], EPV_FEATURES[0]]
+    with pytest.raises(ValueError, match="reads"):
+        nba_epv._check_features(swapped)
+    with pytest.raises(ValueError, match="reads"):
+        add_epv(_states("nba"), booster=swapped)
+
+
+def test_shot_zones_are_coded_and_matter() -> None:
+    """Every zone occurs; a rim miss leaves more EPV than a missed three (more putbacks)."""
+    s = _plays("nba")
+    counts = dict(
+        s.filter(pl.col("event_type").is_in(["made_shot", "missed_shot"])).group_by("shot_zone").len().iter_rows()
+    )
+    # observed on the 40 games: rim 1,829, short 1,684, mid 582, three 3,063 field-goal attempts
+    assert all(counts.get(z, 0) > 300 for z in (1, 2, 3, 4)) and 0 not in counts
+    miss = s.filter(pl.col("event_type") == "missed_shot").group_by("shot_zone").agg(pl.col("epv").mean())
+    by = dict(miss.iter_rows())
+    assert by[1] > by[4] + 0.1  # observed a 0.20 gap
+    threes = s.filter(pl.col("event_type").is_in(["made_shot", "missed_shot"]) & (pl.col("shot_zone") == 4))
+    assert threes["description"].str.contains("3PT").mean() > 0.99
+
+
+def test_the_transition_window_closes_at_a_dead_ball() -> None:
+    """A timeout, foul, violation, substitution or team rebound sets the defense: the window shuts."""
+    s = _states("nba").filter(pl.col("step") > 0)
+    dead = pl.col("event_type").is_in(["timeout", "foul", "violation", "jump_ball", "substitution", "replay"]) | (
+        (pl.col("event_type") == "rebound") & (pl.col("person_id") == pl.col("team_id"))
+    )
+    s = s.with_columns((dead.cast(pl.Int32).cum_max().over(KEY) > 0).alias("_stopped"))
+    assert s.filter(pl.col("_stopped") & (pl.col("transition") == 1)).height == 0
+    assert s.filter(pl.col("transition") == 1).height > 500  # observed 1,084: the window still opens
+    assert s.filter(pl.col("transition") == 2).height > 2000  # observed 4,209 transition-possession states
+
+
+def test_team_rebounds_are_dead_balls_of_the_right_side() -> None:
+    """The feed files a team rebound under team_id 0 with the team in person_id; it is read as that team's."""
+    s = _states("nba").filter(pl.col("event_type") == "rebound")
+    team = s.filter(pl.col("person_id") == pl.col("team_id"))
+    assert team.height > 300  # observed 681 team rebounds in the 40 games
+    codes = {e: nba_epv.LAST_EVENTS.index(e) for e in ("off_team_rebound", "def_rebound", "free_throw")}
+    off = team.filter(pl.col("team_id") == pl.col("offense_team_id"))
+    assert off.height > 50 and off["last_event"].is_in([codes["off_team_rebound"], codes["free_throw"]]).all()
+    assert (team.filter(pl.col("team_id") == pl.col("defense_team_id"))["last_event"] == codes["def_rebound"]).all()
+    between = s.filter(pl.col("ft_pending") > 0)
+    assert between.height > 50 and (between["last_event"] == codes["free_throw"]).all()  # the trip goes on
 
 
 def _same(a: pl.DataFrame, b: pl.DataFrame) -> None:
@@ -424,32 +498,27 @@ def _same(a: pl.DataFrame, b: pl.DataFrame) -> None:
 
 
 def test_season_loaders_take_the_start_year(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The NBA loaders are keyed by the start year: season 2024 reads 2023; the WNBA its own year."""
+    """The NBA loaders are keyed by the start year: season 2025 reads the 2024 asset."""
     from sportsdataverse.nba import nba_loaders
-    from sportsdataverse.wnba import wnba_loaders
 
     seen: dict[str, list[int]] = {}
 
-    def fake(lg: str, which: str):  # type: ignore[no-untyped-def]
+    def fake(which: str):  # type: ignore[no-untyped-def]
         def f(seasons: list[int]) -> pl.DataFrame:
-            seen[f"{lg}_{which}"] = list(seasons)
-            poss, pbp = _raw(lg)
-            return {"pbp": pbp, "poss": poss, "tens": _tens(lg)}[which]
+            seen[which] = list(seasons)
+            poss, pbp = _raw("nba")
+            return {"pbp": pbp, "poss": poss, "tens": _tens("nba")}[which]
 
         return f
 
-    for lg, mod in (("nba", nba_loaders), ("wnba", wnba_loaders)):
-        monkeypatch.setattr(mod, f"load_{lg}_stats_pbp", fake(lg, "pbp"))
-        monkeypatch.setattr(mod, f"load_{lg}_stats_possessions", fake(lg, "poss"))
-        monkeypatch.setattr(mod, f"load_{lg}_stats_game_lineups", fake(lg, "tens"))
-    t = nba_epv.nba_epv_team_games(2024)
-    assert seen["nba_pbp"] == [2023] and seen["nba_poss"] == [2023] and "nba_tens" not in seen
+    monkeypatch.setattr(nba_loaders, "load_nba_stats_pbp", fake("pbp"))
+    monkeypatch.setattr(nba_loaders, "load_nba_stats_possessions", fake("poss"))
+    monkeypatch.setattr(nba_loaders, "load_nba_stats_game_lineups", fake("tens"))
+    t = nba_epv.nba_epv_team_games(HOLDOUT)
+    assert seen["pbp"] == [HOLDOUT - 1] and seen["poss"] == [HOLDOUT - 1] and "tens" not in seen
     assert t.height == 80
-    pg = nba_epv.nba_epv_player_games(2024)
-    assert seen["nba_tens"] == [2023]
+    pg = nba_epv.nba_epv_player_games(HOLDOUT)
+    assert seen["tens"] == [HOLDOUT - 1]
     _same(pg, epv_player_games(_plays("nba"), _tens("nba")))
-    from sportsdataverse.wnba.wnba_epv import wnba_epv_lineup_games
-
-    w = wnba_epv_lineup_games(2024)
-    assert seen["wnba_pbp"] == [2024] and seen["wnba_tens"] == [2024]
-    _same(w, epv_lineup_games(_plays("wnba"), _tens("wnba")))
+    _same(nba_epv.nba_epv_lineup_games(HOLDOUT), epv_lineup_games(_plays("nba"), _tens("nba")))
+    assert nba_epv.nba_epv_plays(HOLDOUT, return_as_pandas=True).shape[0] == _plays("nba").height

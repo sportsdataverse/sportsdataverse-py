@@ -316,7 +316,7 @@ nba_draft_lottery_odds(league_id="10", chances=[442, 276, 178, 104])
 
 ### nba_epv_lineup_games {#nba_epv_lineup_games}
 
-`nba_epv_lineup_games(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_epv_lineup_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per five-man unit and game: the EPV added with the unit on the floor.
 
@@ -324,13 +324,12 @@ Per five-man unit and game: the EPV added with the unit on the floor.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year (2006 on). |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-`epv_lineup_games` of the seasons' plays: one row per `(season, game_id, team_id, lineup_id)` with `off_epv`, `def_epv`, `net_epv` and `plays`.
+`epv_lineup_games` of the seasons' plays, on-court from the `nba_stats_game_lineups` release: one row per `(season, game_id, team_id, lineup_id)` with `off_epv`, `def_epv`, `net_epv` and `plays`.
 
 | col_name | type | description |
 |---|---|---|
@@ -347,19 +346,19 @@ Per five-man unit and game: the EPV added with the unit on the floor.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or a season is before the first one served. |
+| `ValueError` | If a season is before the first one served. |
 
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_epv import nba_epv_lineup_games
 units = nba_epv_lineup_games(2026)
-units.filter(game_id="0022500101").group_by("team_id").head(3)
+units.filter(game_id="0022500101")
 ```
 
 ### nba_epv_player_games {#nba_epv_player_games}
 
-`nba_epv_player_games(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_epv_player_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per player and game: EPV added on the player's own actions and on-court EPV +/-.
 
@@ -367,13 +366,12 @@ Per player and game: EPV added on the player's own actions and on-court EPV +/-.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year (2006 on). |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-`epv_player_games` of the seasons' plays: one row per `(season, game_id, team_id, player_id)` with `epv_own`, `own_actions`, `off_epv_on`, `def_epv_on` and `epv_on`. Ids are the stats.nba.com ids (Int64; `game_id` a String).
+`epv_player_games` of the seasons' plays, on-court from the `nba_stats_game_lineups` release: one row per `(season, game_id, team_id, player_id)` with `epv_own`, `own_actions`, `off_epv_on`, `def_epv_on` and `epv_on`. Ids are the stats.nba.com ids (Int64; `game_id` a String).
 
 | col_name | type | description |
 |---|---|---|
@@ -391,7 +389,7 @@ Per player and game: EPV added on the player's own actions and on-court EPV +/-.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or a season is before the first one served. |
+| `ValueError` | If a season is before the first one served. |
 
 **Example**
 
@@ -403,7 +401,7 @@ box.filter(game_id="0022500101")
 
 ### nba_epv_plays {#nba_epv_plays}
 
-`nba_epv_plays(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_epv_plays(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 EPV and EPV added on every play-by-play event inside a possession.
 
@@ -411,13 +409,12 @@ EPV and EPV added on every play-by-play event inside a possession.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year (2006 on: the earlier two-halves seasons are not modelled). |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per event, in game order: `season`, `game_id`, `possession_number`, `step` (the event's place in the possession), `order_index`, the offense, defense and home team ids, the event's `team_id` / `person_id` / `event_type` / `description`, the ten player slots, the state (`EPV_FEATURES`), `points`, `remaining_points`, `is_last`, `next_in_period`, `epv`, `epv_start`, `epv_before`, `epv_after` and `epv_added`.
+One row per event, in game order: `season`, `game_id`, `possession_number`, `step` (the event's place in the possession), `order_index`, `action_number`, the offense, defense and home team ids, the event's `team_id` / `person_id` / `event_type` / `description`, the possession's starting ten, the state (`EPV_FEATURES`), `points`, `remaining_points`, `is_last`, `next_in_period`, `epv`, `epv_start`, `epv_before`, `epv_after` and `epv_added`. Every game of every season type is scored.
 
 | col_name | type | description |
 |---|---|---|
@@ -430,7 +427,7 @@ One row per event, in game order: `season`, `game_id`, `possession_number`, `ste
 | `offense_team_id` | Int64 | Team id of the offense (the team with the ball). |
 | `defense_team_id` | Int64 | Team id of the defense. |
 | `home_team_id` | Int64 | Team id of the home team. |
-| `team_id` | Int64 | Team id on the event (the team of the player who made it); 0 or null on some team events. |
+| `team_id` | Int64 | Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id). |
 | `person_id` | Int64 | Player id on the event; the team id, or 0, on team events. |
 | `event_type` | String | The release's event type (made_shot, missed_shot, rebound, foul, free_throw, turnover, ...). |
 | `description` | String | The play-by-play text of the event. |
@@ -448,8 +445,8 @@ One row per event, in game order: `season`, `game_id`, `possession_number`, `ste
 | `period` | Int64 | State: the period, overtimes folded to 5. |
 | `seconds_remaining` | Float64 | State: seconds left in the period after the event. |
 | `start_margin` | Float64 | State: the offense's lead when the possession started (before its first event). |
-| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot yet, within 10 s), 2 a transition possession after its first shot. |
-| `last_event` | Int64 | State: the event just processed, coded as in nba_epv.LAST_EVENTS (0 the start). |
+| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot. |
+| `last_event` | Int64 | State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start). |
 | `ft_pending` | Int64 | State: free throws still to come in the trip. |
 | `shot_zone` | Int64 | State: zone of the possession's latest shot, 0 none, 1 rim, 2 short, 3 mid two, 4 three. |
 | `points` | Int64 | The offense's points on the event. |
@@ -466,7 +463,7 @@ One row per event, in game order: `season`, `game_id`, `possession_number`, `ste
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or a season is before the first one served. |
+| `ValueError` | If a season is before the first one served. |
 
 **Example**
 
@@ -478,7 +475,7 @@ plays.filter(game_id="0022500101").sort("epv_added", descending=True).head(5)
 
 ### nba_epv_team_games {#nba_epv_team_games}
 
-`nba_epv_team_games(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_epv_team_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per team and game: EPV added on offense and allowed on defense.
 
@@ -486,8 +483,7 @@ Per team and game: EPV added on offense and allowed on defense.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year (2006 on). |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -512,7 +508,7 @@ Per team and game: EPV added on offense and allowed on defense.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or a season is before the first one served. |
+| `ValueError` | If a season is before the first one served. |
 
 **Example**
 

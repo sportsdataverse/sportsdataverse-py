@@ -10119,8 +10119,8 @@
   note: k would be chosen on a training season whose missing feature sits at the mean for every row.
 
 # --- BB-D24: EPV and EPV added (sportsdataverse/nba/nba_epv.py) -----------------------------------
-# Killers: tests/nba/test_nba_epv.py on the committed 2023-24 NBA and 2024 WNBA holdout games
-# (tests/fixtures/bb_epv), scored with the bundled boosters.
+# Killers: tests/nba/test_nba_epv.py on the committed 2024-25 NBA holdout games
+# (tests/fixtures/bb_epv), scored with the bundled booster.
 - id: bb-epv-start-margin-before-event
   group: bb-epv
   finding: BB-D24
@@ -10205,8 +10205,48 @@
   group: bb-epv
   finding: BB-D24
   file: sportsdataverse/nba/nba_epv.py
-  snippet: 'start = [x - 1 for x in s]'
-  mutant: 'start = s'
+  snippet: 'start = [x - 1 for x in _check_seasons(seasons)]'
+  mutant: 'start = _check_seasons(seasons)'
   test: tests/nba/test_nba_epv.py::test_season_loaders_take_the_start_year
   expected: kill
-  note: The NBA loaders take the start year; season 2024 is the 2023 asset.
+  note: The NBA loaders take the start year; season 2025 is the 2024 asset.
+
+- id: bb-epv-window-closes-at-dead-ball
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '& ~stopped'
+  mutant: '& pl.lit(True)'
+  test: tests/nba/test_nba_epv.py::test_the_transition_window_closes_at_a_dead_ball
+  expected: kill
+  note: After a timeout or a foul the defense is set; the window must not stay open on the clock alone.
+
+- id: bb-epv-team-event-team-id
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(pl.col("team_id").fill_null(0) == 0)'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The feed files a team rebound under team_id 0; read raw, every one is the defense's.
+
+- id: bb-epv-rebound-between-free-throws
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(between_fts).then(None).otherwise(_last_event_code())'
+  mutant: '_last_event_code()'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The dead-ball rebound after a missed first free throw leaves the trip going, not a live board.
+
+- id: bb-epv-shot-zone-three
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(et.is_in(_SHOTS) & (pl.col("shot_value") == 3))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_shot_zones_are_coded_and_matter
+  expected: kill
+  note: Threes must be their own zone, not long twos by distance.
