@@ -76626,8 +76626,8 @@ wnba_situational_lineup:
 mbb_situational_team:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -76641,14 +76641,14 @@ mbb_situational_team:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 mbb_situational_player:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -76664,14 +76664,14 @@ mbb_situational_player:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 mbb_situational_lineup:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   lineup_id: The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
@@ -76691,14 +76691,14 @@ mbb_situational_lineup:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 wbb_situational_team:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -76712,14 +76712,14 @@ wbb_situational_team:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 wbb_situational_player:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -76735,14 +76735,14 @@ wbb_situational_player:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 wbb_situational_lineup:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
-  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
-    the splits add up to the all row.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
   lineup_id: The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id).
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
@@ -76762,8 +76762,8 @@ wbb_situational_lineup:
   pts: Points scored on the offensive possessions.
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
-  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
-    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 nba_situation_rows:
   def_1: Defense player 1 on the floor as the possession starts.

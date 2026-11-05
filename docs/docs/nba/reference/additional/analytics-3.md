@@ -1029,7 +1029,7 @@ One row per possession in `~sportsdataverse._common.situational_splits.situation
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` or `season_type` is unknown, or `pbp` misses a possession's events. |
+| `ValueError` | If `league_id` or `season_type` is unknown, or `pbp` misses the events of a possession of a `season_type` game (the other season types' games are not read). |
 
 **Example**
 

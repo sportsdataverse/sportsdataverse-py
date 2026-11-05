@@ -106,8 +106,8 @@ One row per `(season, team_id, lineup_id, family, split)` with the columns of `s
 | `player_3` | String | Player 3 of the unit, in lineup_id order. |
 | `player_4` | String | Player 4 of the unit, in lineup_id order. |
 | `player_5` | String | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
 | `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
 | `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
 | `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
@@ -155,8 +155,8 @@ One row per `(season, team_id, player_id, family, split)` with the columns of `s
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
 | `team_id` | Int64 | ESPN team id of the team (Int64). |
 | `player_id` | String | stats.ncaa.org player id (no NCAA-to-ESPN player crosswalk yet). A possession counts for the five on the floor as it starts, with all its points. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
 | `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
 | `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
 | `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
@@ -203,8 +203,8 @@ One row per `(season, team_id, family, split)` with the columns of `sportsdatave
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
 | `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
 | `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
 | `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
 | `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |

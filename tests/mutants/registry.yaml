@@ -10017,3 +10017,13 @@
   test: tests/mbb/test_mbb_situational.py::test_vs_top_is_the_qualified_top_25
   expected: kill
   note: A non-D1 team rated on one or two games could rank in the top 25 its opponents are split against.
+
+- id: bb-sit-flag-requested-games
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: 'poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")'
+  mutant: 'poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))'
+  test: tests/nba/test_nba_situational.py::test_only_the_requested_season_type_is_flagged
+  expected: kill
+  note: A game of another season type with a gap in its play-by-play would fail the regular-season build.

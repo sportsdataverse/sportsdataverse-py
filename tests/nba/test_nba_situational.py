@@ -344,3 +344,21 @@ def test_wnba_two_halves_2002(monkeypatch: pytest.MonkeyPatch) -> None:
     per_game = whole["minutes"].sum() / whole["games"].sum()
     assert 40.4 <= per_game <= 40.5, per_game  # observed 40.44
     assert team.filter(split="clutch")["poss"].sum() > 0
+
+
+def test_only_the_requested_season_type_is_flagged() -> None:
+    """A game of another season type with no play-by-play does not fail the requested one."""
+    poss = pl.read_parquet(SIT / "wnba_possessions_2002.parquet")
+    pbp = pl.read_parquet(FIXTURES / "bb_possession_flags" / "wnba_pbp_2002.parquet")
+    sched = pl.read_parquet(SIT / "wnba_schedule_2002.parquet")
+    other = sched["game_id"].sort()[0]
+    # one game relabelled a playoff game and its play-by-play dropped
+    sched = sched.with_columns(
+        pl.when(pl.col("game_id") == other).then(pl.lit("playoffs")).otherwise("season_type").alias("season_type")
+    )
+    pbp = pbp.filter(pl.col("game_id") != other)
+    with pytest.raises(ValueError, match="pbp has no events"):
+        add_possession_flags(poss.drop("is_second_chance"), pbp)
+    rows = nba_situation_rows(poss, pbp, sched, league_id="10")
+    assert rows["game_id"].n_unique() == 29 and other not in rows["game_id"]
+    assert nba_situation_rows(poss, pbp, sched, league_id="10", season_type="play-in").height == 0

@@ -80,8 +80,8 @@ def nba_situation_rows(
         :func:`~sportsdataverse._common.situational_splits.situation_row_schema` (Int64 player ids).
 
     Raises:
-        ValueError: If ``league_id`` or ``season_type`` is unknown, or ``pbp`` misses a possession's
-            events.
+        ValueError: If ``league_id`` or ``season_type`` is unknown, or ``pbp`` misses the events of a
+            possession of a ``season_type`` game (the other season types' games are not read).
 
     Example:
         Quick start::
@@ -94,8 +94,15 @@ def nba_situation_rows(
     _check_args(league_id, season_type)
     if possessions.height == 0 or schedule.height == 0:
         return pl.DataFrame(schema=_ROWS)
-    poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))
-    flagged = add_possession_flags(poss, pbp.select(_PBP_COLUMNS).with_columns(pl.col("game_id").cast(pl.Utf8)))
+    # flag the requested games only: another season type's game with a gap in its pbp must not fail this one
+    games = schedule.filter(pl.col("season_type") == season_type).select(pl.col("game_id").cast(pl.Utf8)).unique()
+    poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")
+    if poss.height == 0:
+        return pl.DataFrame(schema=_ROWS)
+    events = (
+        pbp.select(_PBP_COLUMNS).with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")
+    )
+    flagged = add_possession_flags(poss, events)
     extras = flagged.select(
         *_KEY,
         _regulation_periods().alias("reg_periods"),
