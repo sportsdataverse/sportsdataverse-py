@@ -302,3 +302,30 @@ def test_nba_coach_seasons_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
     calls.clear()
     mod.nba_coach_seasons(1997)  # 1996-97: the first staff file; there is none before it to read
     assert calls["staff"] == [1996]
+
+
+def test_espn_records_skip_an_absent_ref(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.errors import NoDataError
+
+    base = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba"
+    pages = {
+        f"{base}/seasons/2016/coaches": {"items": [{"$ref": "coach/a"}, {"$ref": "coach/gone"}]},
+        "coach/a": {
+            "firstName": "David",
+            "lastName": "Blatt",
+            "records": [
+                {"team": {"$ref": f"{base}/seasons/2016/teams/5?lang=en"}, "record": {"$ref": "rec/types/2/a"}},
+                {"team": {"$ref": f"{base}/seasons/2016/teams/5?lang=en"}, "record": {"$ref": "rec/types/2/gone"}},
+            ],
+        },
+        "rec/types/2/a": {"stats": [{"name": "wins", "value": 30.0}, {"name": "losses", "value": 11.0}]},
+    }
+
+    def get(url, params=None):  # type: ignore[no-untyped-def]
+        if url not in pages:
+            raise NoDataError(url)
+        return pages[url]
+
+    monkeypatch.setattr(mod, "_get", get)
+    out = mod.espn_coach_records(2016)
+    assert out.rows() == [(2016, 5, "David Blatt", 30, 11)]

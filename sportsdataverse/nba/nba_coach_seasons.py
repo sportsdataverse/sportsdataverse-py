@@ -232,6 +232,14 @@ def nba_coach_stints(heads: pl.DataFrame, espn: pl.DataFrame, crosswalk: pl.Data
     return out.select(list(STINTS_SCHEMA)).cast(STINTS_SCHEMA).sort("season", "team_id", "position")
 
 
+def _get_or_none(url: str) -> dict | None:
+    """``_get`` with a 404 as ``None``: an absent coach or record ref is skipped, a failed fetch still raises."""
+    try:
+        return _get(url)
+    except NoDataError:
+        return None
+
+
 def espn_coach_records(season: int, *, league_id: str = "00") -> pl.DataFrame:
     """ESPN's regular-season record of each coach it lists for ``season`` (core API).
 
@@ -243,7 +251,9 @@ def espn_coach_records(season: int, *, league_id: str = "00") -> pl.DataFrame:
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
 
     Returns:
-        Rows in :data:`ESPN_RECORDS_SCHEMA`; empty when ESPN has no coach list for the season.
+        Rows in :data:`ESPN_RECORDS_SCHEMA`; empty when ESPN has no coach list for the season. A
+        coach or record the list links to that answers 404 is skipped; any other failed fetch
+        raises.
     """
     base = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/{_ESPN_LEAGUE[league_id]}"
     try:
@@ -252,14 +262,19 @@ def espn_coach_records(season: int, *, league_id: str = "00") -> pl.DataFrame:
         return pl.DataFrame(schema=ESPN_RECORDS_SCHEMA)
     rows = []
     for item in listing.get("items") or []:
-        coach = _get(item["$ref"])
+        coach = _get_or_none(item["$ref"])
+        if coach is None:
+            continue
         name = " ".join(p for p in (coach.get("firstName"), coach.get("lastName")) if p)
         for rec in coach.get("records") or []:
             team_ref = (rec.get("team") or {}).get("$ref") or ""
             rec_ref = (rec.get("record") or {}).get("$ref") or ""
             if "/teams/" not in team_ref or "/types/2/" not in rec_ref:  # the regular season only
                 continue
-            stats = {s.get("name"): s.get("value") for s in (_get(rec_ref).get("stats") or [])}
+            record = _get_or_none(rec_ref)
+            if record is None:
+                continue
+            stats = {s.get("name"): s.get("value") for s in (record.get("stats") or [])}
             team = team_ref.split("/teams/")[1].split("?")[0]
             rows.append(
                 {
