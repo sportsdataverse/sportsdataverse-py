@@ -276,7 +276,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_shot_value_lineups](additional/analytics-3.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-4.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_luck](additional/analytics-4.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
-| [nba_team_play_styles](additional/analytics-4.md#nba_team_play_styles) | Offensive and defensive play-style archetypes per team-season (BB-D20). |
+| [nba_team_play_styles](additional/analytics-4.md#nba_team_play_styles) | Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module). |
 | [nba_team_season_flow](additional/analytics-4.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
 | [nba_team_season_rates](additional/analytics-4.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
 | [nba_team_strength](additional/analytics-4.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
@@ -287,7 +287,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_shot_diet_value](additional/analytics-4.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-4.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-4.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
-| [player_play_context](additional/analytics-5.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
+| [player_play_context](additional/analytics-4.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
 | [player_rates](additional/analytics-5.md#player_rates) | Per-player per-minute rate stats from box logs. |
 | [players_on_court_from_pbp](additional/analytics-5.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
 | [players_on_court_from_quarter_boxscores](additional/analytics-5.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |

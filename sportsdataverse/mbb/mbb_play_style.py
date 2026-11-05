@@ -5,7 +5,8 @@ rates and the rim / mid-range / three split of his attempts. This model keeps th
 shot-zone features and adds:
 
 * **shot features** from the ESPN shots release: the assisted share of his made field goals (an
-  assister on the play), the dunk share of his rim attempts and the tip-in share of his attempts;
+  assister on the play) and the dunk share of his rim attempts (a tip-in share was left out: ESPN's
+  ``TipShot`` labels doubled from 2025 to 2026, a labelling change rather than a style one);
 * **lineup-role features** from the box: the share of his games he started and his minutes per
   game as a share of a 40-minute game.
 
@@ -64,7 +65,6 @@ COLLEGE_PLAY_STYLE_FEATURES: Final[tuple[str, ...]] = (
     "stl_pct",
     "assisted_share",
     "dunk_share",
-    "tip_share",
     "starter_share",
     "mpg_share",
 )
@@ -84,7 +84,6 @@ COLLEGE_PLAY_STYLE_PHRASES: Final[dict[str, str]] = {
     "stl_pct": "ball hawk",
     "assisted_share": "play finisher",
     "dunk_share": "lob threat",
-    "tip_share": "putback big",
     "starter_share": "starter",
     "mpg_share": "heavy-minutes starter",
 }
@@ -93,7 +92,7 @@ _RIM = "(?i)layup|dunk|tip"
 
 
 def _shot_features(shots: pl.DataFrame) -> pl.DataFrame:
-    """Per-shooter assisted, dunk and tip shares from the shots release (free throws dropped)."""
+    """Per-shooter assisted and dunk shares from the shots release (free throws dropped)."""
     if shots.is_empty() or "athlete_id_2" not in shots.columns:
         return pl.DataFrame(
             schema={
@@ -101,7 +100,6 @@ def _shot_features(shots: pl.DataFrame) -> pl.DataFrame:
                 "season": pl.Int64,
                 "assisted_share": pl.Float64,
                 "dunk_share": pl.Float64,
-                "tip_share": pl.Float64,
             }
         )
     fga = shots.filter(
@@ -123,9 +121,8 @@ def _shot_features(shots: pl.DataFrame) -> pl.DataFrame:
                 "assisted_share"
             ),
             (t.str.contains("(?i)dunk").sum() / rim.sum().clip(lower_bound=1)).alias("dunk_share"),
-            (t.str.contains("(?i)tip").sum() / pl.len()).alias("tip_share"),
         )
-        .with_columns(pl.col("assisted_share", "dunk_share", "tip_share").cast(pl.Float64))
+        .with_columns(pl.col("assisted_share", "dunk_share").cast(pl.Float64))
     )
 
 

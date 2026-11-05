@@ -24,15 +24,21 @@ FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_play_style"
 #: Max |share - poss_pct| over one-team players: poss_pct is published to three decimals, so the
 #: implied totals carry its rounding (2024-25; never raise it to pass).
 DIFF_GATE = 0.0035  # observed max 0.0030
-MODELS = [("offense", "player"), ("offense", "team"), ("defense", "player"), ("defense", "team")]
+MODELS = [("offense", "player"), ("defense", "player"), ("defense", "team")]
 
 #: Observed on the holdout seasons by the bundled artifacts (truncated): holdout ARI (frozen
 #: centers vs a fresh fit on the holdout rows) and year-over-year persistence.
 GATES = {
-    ("offense", "player"): {"holdout_ari": 0.78, "holdout_persistence": 0.73},
-    ("offense", "team"): {"holdout_ari": 0.30, "holdout_persistence": 0.53},
+    ("offense", "player"): {"holdout_ari": 0.47, "holdout_persistence": 0.78},
     ("defense", "player"): {"holdout_ari": 0.72, "holdout_persistence": 0.75},
     ("defense", "team"): {"holdout_ari": 0.43, "holdout_persistence": 0.50},
+}
+#: Smallest and largest archetype share in any holdout season (observed 0.1006 / 0.305,
+#: 0.066 / 0.3569, 0.0667 / 0.3667): no archetype empties out or swallows the league.
+SHARE_GATES = {
+    ("offense", "player"): (0.10, 0.31),
+    ("defense", "player"): (0.06, 0.36),
+    ("defense", "team"): (0.06, 0.37),
 }
 
 
@@ -80,44 +86,16 @@ def test_offense_player_builder_reproduces_the_corpus():
     _compare(built, _corpus("offense", "player"), ["player_id"], cols)
 
 
-def test_offense_team_builder_reproduces_the_corpus():
-    poss = _raw("possessions").with_columns(pl.lit(2025, dtype=pl.Int64).alias("season"))
-    built = nps.offense_team_features(_raw("synergy"), _raw("team_stats_scoring"), poss)
-    _compare(built, _corpus("offense", "team"), ["team_id"], nps.NBA_PLAY_STYLE_FEATURES[("offense", "team")])
-
-
 def test_defense_builders_reproduce_the_corpus():
     built = nps.defense_player_features(
         _raw("synergy"), _raw("matchups_rollup"), _raw("hustle_player"), _raw("player_tracking_defense")
     )
     _compare(built, _corpus("defense", "player"), ["player_id"], nps.NBA_PLAY_STYLE_FEATURES[("defense", "player")])
-    built = nps.defense_team_features(_raw("team_stats_opponent"), _raw("team_stats_defense"), _raw("hustle_team"))
-    _compare(built, _corpus("defense", "team"), ["team_id"], nps.NBA_PLAY_STYLE_FEATURES[("defense", "team")])
-
-
-def test_possession_tempo_is_the_mean_length_by_start_type():
-    """Independent walk of one team's season: previous possession's end minus this one's, by start type."""
-    p = _raw("possessions").with_columns(pl.lit(2025, dtype=pl.Int64).alias("season"))
-    tempo = nps._possession_tempo(p).filter(pl.col("team_id") == 1610612760)
-    lengths: dict[str, list[float]] = {"OffMissedShot": [], "OffLiveBallTurnover": []}
-    prev: dict[tuple, float] = {}
-    for r in p.sort("game_id", "period", "possession_number").iter_rows(named=True):
-        key = (r["game_id"], r["period"])
-        before = prev.get(key)
-        prev[key] = r["end_seconds_remaining"]
-        mine = r["offense_team_id"] == 1610612760 and r["count_as_possession"]
-        if mine and before is not None and r["possession_start_type"] in lengths:
-            lengths[r["possession_start_type"]].append(before - r["end_seconds_remaining"])
-    assert tempo["sec_after_miss"].item() == pytest.approx(np.mean(lengths["OffMissedShot"]))
-    assert tempo["sec_after_live_tov"].item() == pytest.approx(np.mean(lengths["OffLiveBallTurnover"]))
-    assert len(lengths["OffMissedShot"]) > 2000
-    assert tempo["sec_after_live_tov"].item() < tempo["sec_after_miss"].item()  # steals are pushed
-
-
-def test_player_qualifier_is_a_share_of_the_season_max():
-    f = _corpus("offense", "player")
-    floor = f.group_by("season").agg((pl.col("min").min() / pl.col("min").max()).alias("r"))
-    assert floor["r"].min() >= nps.PLAYER_MIN_SHARE
+    built = nps.defense_team_features(
+        _raw("synergy"), _raw("team_stats_opponent"), _raw("team_stats_defense"), _raw("hustle_team")
+    )
+    cols = nps.NBA_TEAM_FEATURE_CANDIDATES[("defense", "team")]["long"]
+    _compare(built, _corpus("defense", "team"), ["team_id"], cols)
 
 
 @pytest.mark.parametrize(("side", "entity"), MODELS)
@@ -144,12 +122,27 @@ def test_stability_gates_on_the_holdout_seasons(side, entity):
     """Holdout stability recomputed from the corpus: above the pinned gates and above chance."""
     art = nps._artifact(side, entity)
     rep = ps.stability_report(
-        _corpus(side, entity), art, entity=f"{entity}_id", holdout_seasons=art["holdout_seasons"], n_boot=1
+        _corpus(side, entity), art, entity=f"{entity}_id", holdout_seasons=art["holdout_seasons"], n_boot=1, n_ci=0
     )
     for metric, gate in GATES[(side, entity)].items():
         assert rep[metric] == pytest.approx(art["stability"][metric], abs=1e-4)
         assert rep[metric] >= gate, metric
     assert rep["holdout_persistence"] > 1.5 * rep["holdout_chance_persistence"]
+    assert rep["holdout_ari"] > rep["null_holdout_ari"] == pytest.approx(art["stability"]["null_holdout_ari"], abs=1e-4)
+    assert rep["min_share"] >= SHARE_GATES[(side, entity)][0] and rep["max_share"] <= SHARE_GATES[(side, entity)][1]
+    assert rep["n_persistence_pairs"] >= (900 if entity == "player" else 110)
+
+
+def test_a_season_missing_a_feature_is_refused():
+    """A release that stops carrying a feature must fail, not drop it from the clustering silently."""
+    f = _corpus("offense", "player")
+    art = nps._artifact("offense", "player")
+    broken = f.with_columns(
+        pl.when(pl.col("season") == 2025).then(None).otherwise(pl.col("pull_up_share")).alias("pull_up_share")
+    )
+    with pytest.raises(ValueError, match=r"\(2025, 'pull_up_share'\)"):
+        ps.assign_play_style(broken, art, ["player_id", "season"])
+    ps.assign_play_style(broken.filter(pl.col("season") != 2025), art, ["player_id", "season"])
 
 
 def test_assignment_is_as_of_its_own_season():
@@ -169,7 +162,8 @@ def test_assignment_is_as_of_its_own_season():
     [
         ("offense", "Rudy Gobert", "rim runner"),
         ("offense", "Jalen Brunson", "primary ball handler"),
-        ("offense", "Klay Thompson", "off-screen shooter"),
+        ("offense", "Duncan Robinson", "off-ball shooter"),
+        ("offense", "Nikola Jokić", "post-up scorer"),
         ("defense", "Rudy Gobert", "big-man defender"),
         ("defense", "Dyson Daniels", "ball hawk"),
     ],
@@ -196,9 +190,12 @@ def test_public_frames_join_both_sides(monkeypatch):
     )
     both = players.filter(pl.col("season") == 2025)
     assert both["off_archetype"].null_count() == 0 and both["def_archetype"].null_count() < both.height
+    assert players.schema["season"] == pl.Int64 and players.schema["player_id"] == pl.Int64
+    assert nps.nba_player_play_styles(2017).schema["season"] == pl.Int64  # one side only
     teams = nps.nba_team_play_styles(2025)
-    assert teams.height == 30 and teams["off_archetype"].null_count() == teams["def_archetype"].null_count() == 0
-    assert (teams["off_margin"] >= 0).all() and (teams["off_second_archetype"] != teams["off_archetype"]).all()
+    assert teams.columns == ["team_id", "season", "team_name", *(f"def_{c}" for c in ps.ASSIGN_SCHEMA)]
+    assert teams.height == 30 and teams["def_archetype"].null_count() == 0
+    assert (teams["def_margin"] >= 0).all() and (teams["def_second_archetype"] != teams["def_archetype"]).all()
 
 
 def test_empty_and_bad_arguments():

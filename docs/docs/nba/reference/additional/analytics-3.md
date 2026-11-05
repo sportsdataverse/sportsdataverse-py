@@ -72,7 +72,7 @@ The ids, `season` (and `min` for players) and the raw (unstandardized) features 
 |---|---|---|
 | `player_id` | Int64 | stats.nba.com player id. |
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `player_name` | String | Player name. |
+| `player_name` | String | Player's display name on stats.nba.com. |
 | `team_id` | Int64 | stats.nba.com team id (the league-dashboard team; a traded player's last team). |
 | `min` | Float64 | Regular-season minutes; the qualifier is a quarter of the season's most minutes. |
 | `pt_isolation` | Float64 | Share of the player's Synergy possessions that were isolations (stats.nba.com play-type frequency). |
@@ -307,7 +307,7 @@ One row per `(player_id, season)` qualifying on either side: `player_id` (Int64)
 |---|---|---|
 | `player_id` | Int64 | stats.nba.com player id. |
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `player_name` | String | Player name. |
+| `player_name` | String | Player's display name on stats.nba.com. |
 | `team_id` | Int64 | stats.nba.com team id (the league-dashboard team; a traded player's last team). |
 | `min` | Float64 | Regular-season minutes; the qualifier is a quarter of the season's most minutes. |
 | `off_archetype` | String | Offensive play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored features; null when the player does not qualify on that side or the season is not covered. |

@@ -15,11 +15,16 @@ The shared core of the offensive and defensive play-style archetypes for NBA pla
 * **Applied as-of.** :func:`assign_play_style` gives every qualifying row the nearest frozen
   center. The output also carries the runner-up archetype and the margin between the two
   distances, so a hybrid is visible rather than hidden behind a single label.
+* **Chosen on training seasons only.** ``k`` (and, for teams, the feature set) is picked by
+  :func:`selection_score`: an inner split of the training seasons (fit on all but the last two,
+  score the last two) plus a bootstrap over players or teams. The holdout seasons only report.
 * **Stability reported.** :func:`stability_report` measures, on the holdout seasons, (1) the
   agreement (adjusted Rand index) between the frozen assignment and a fresh fit on the holdout
-  rows, and (2) year-over-year persistence: the share of players or teams seen in consecutive
-  seasons who keep their archetype, against the chance rate of the cluster shares. The fitter
-  writes the report into the artifact and the tests pin gates from the observed values.
+  rows, against the same pipeline on features shuffled within season (a no-structure null), and
+  (2) year-over-year persistence: the share of players or teams seen in consecutive seasons who
+  keep their archetype, against the chance rate of the paired entities' cluster shares, both with
+  intervals from resampling players or teams. The fitter writes the report into the artifact and
+  the tests pin gates from the observed values.
 
 Labels are derived from each center by :func:`label_centers`: a cluster is named after its most
 distinctive feature (the largest positive z), and a second feature is added only where two
@@ -35,18 +40,19 @@ from collections.abc import Mapping, Sequence
 import numpy as np
 import polars as pl
 
-from sportsdataverse.mbb.mbb_player_value_constants import _ari, bootstrap_ari, kmeans_fit
+from sportsdataverse.mbb.mbb_player_value_constants import _ari, kmeans_fit
 
 __all__ = [
     "ASSIGN_SCHEMA",
     "Z_CLIP",
     "assign_play_style",
-    "chance_persistence",
+    "check_features",
     "fit_play_style",
+    "group_bootstrap_ari",
     "label_centers",
     "season_zscores",
+    "selection_score",
     "stability_report",
-    "yoy_persistence",
 ]
 
 #: Z-scores are clipped to +/- this many standard deviations, so one extreme player-season (a
@@ -66,9 +72,9 @@ ASSIGN_SCHEMA: dict[str, pl.DataType] = {
 def season_zscores(df: pl.DataFrame, feature_cols: Sequence[str], *, by: str = "season") -> pl.DataFrame:
     """Z-score each feature within its season (population sd), clipped to +/- :data:`Z_CLIP`.
 
-    A null feature becomes 0 (the season mean).
-
-    A feature with no spread in a season (sd 0 or a single row) scores 0 for every row of it.
+    A null value becomes 0 (the season mean); a feature with no spread in a season (sd 0 or a single
+    row) scores 0 for every row of it. Pass a whole qualifying season: the z-scores of a subset (one
+    team's players) are relative to that subset.
 
     Args:
         df: One row per entity-season with ``by`` and the ``feature_cols``.
@@ -186,11 +192,15 @@ def assign_play_style(features: pl.DataFrame, artifact: Mapping, id_cols: Sequen
         ``id_cols`` plus :data:`ASSIGN_SCHEMA`: the ``archetype`` label and ``cluster`` index,
         ``dist_to_center`` (small = prototypical), the runner-up ``second_archetype`` and the
         ``margin`` between the two distances (small = a hybrid). Empty input returns that schema.
+
+    Raises:
+        ValueError: If a feature is null for every row of a season (see :func:`check_features`).
     """
     schema = {c: features.schema[c] for c in id_cols} | ASSIGN_SCHEMA
     if features.is_empty():
         return pl.DataFrame(schema=schema)
     cols = list(artifact["feature_cols"])
+    check_features(features, cols)
     Z = season_zscores(features, cols).select(cols).to_numpy()
     centers = np.asarray(artifact["centers"], float)
     d, nearest = _nearest(Z, centers)
@@ -206,31 +216,181 @@ def assign_play_style(features: pl.DataFrame, artifact: Mapping, id_cols: Sequen
     )
 
 
-def yoy_persistence(assigned: pl.DataFrame, entity: str) -> float:
-    """Share of entities seen in consecutive seasons that keep their archetype.
+def check_features(features: pl.DataFrame, feature_cols: Sequence[str]) -> None:
+    """Refuse a season in which a feature is null for every row.
+
+    :func:`season_zscores` turns a null into the season mean, so a feature a release stopped
+    carrying (a dropped column, a season below a source's floor) would silently fall out of the
+    clustering for that season instead of failing.
 
     Args:
-        assigned: :func:`assign_play_style` output with ``season``, ``entity`` and ``cluster``.
-        entity: The entity id column (``player_id`` / ``team_id``).
+        features: Entity-seasons with ``season`` and the ``feature_cols``.
+        feature_cols: The clustering features.
+
+    Raises:
+        ValueError: Naming each (season, feature) with no value.
+    """
+    missing = [c for c in feature_cols if c not in features.columns]
+    if missing:
+        raise ValueError(f"features missing: {missing}")
+    empty = (
+        features.group_by("season")
+        .agg(pl.col(c).is_not_null().any() for c in feature_cols)
+        .unpivot(index="season", variable_name="feature", value_name="has")
+        .filter(pl.col("has") == False)  # noqa: E712
+    )
+    if empty.height:
+        raise ValueError(f"a feature is null for a whole season: {sorted(empty.select('season', 'feature').rows())}")
+
+
+def _refit_ari(Z: np.ndarray, centers: np.ndarray, k: int, seed: int) -> float:
+    """ARI between the nearest of ``centers`` and a fresh seeded KMeans on the same rows."""
+    return _ari(_nearest(Z, centers)[1], kmeans_fit(Z, k, seed=seed)[1])
+
+
+def group_bootstrap_ari(Z: np.ndarray, ids: np.ndarray, *, k: int, seed: int, n_boot: int = 20) -> float:
+    """Mean ARI between the full fit and refits on resampled entities (all of an entity's seasons together).
+
+    A player or team appears in several training seasons, so resampling rows would treat its seasons
+    as independent draws and overstate the stability; this resamples entities.
+
+    Args:
+        Z: ``(n, d)`` z-scores.
+        ids: The ``n`` entity ids.
+        k: Clusters.
+        seed: Seed for the fits and the resampling.
+        n_boot: Resamples.
 
     Returns:
-        The persistence rate over every (season, season + 1) pair, or NaN with no pair.
+        The mean adjusted Rand index of the full sample's assignment to each refit's centers
+        against the full fit's labels.
     """
+    rng = np.random.default_rng(seed)
+    _, base = kmeans_fit(Z, k, seed=seed)
+    uniq, inverse = np.unique(ids, return_inverse=True)
+    rows_of = [np.flatnonzero(inverse == g) for g in range(len(uniq))]
+    scores = []
+    for _ in range(n_boot):
+        rows = np.concatenate([rows_of[g] for g in rng.integers(0, len(uniq), len(uniq))])
+        centers, _ = kmeans_fit(Z[rows], k, seed=seed)
+        scores.append(_ari(base, _nearest(Z, centers)[1]))
+    return float(np.mean(scores))
+
+
+def selection_score(
+    features: pl.DataFrame,
+    feature_cols: Sequence[str],
+    *,
+    k: int,
+    train_seasons: Sequence[int],
+    entity: str,
+    seed: int,
+    n_boot: int = 20,
+) -> dict:
+    """Training-only evidence for choosing ``k`` and the feature set: the holdout seasons are not read.
+
+    Args:
+        features: Qualifying entity-seasons (any seasons; only ``train_seasons`` are read).
+        feature_cols: The candidate features.
+        k: The candidate number of archetypes.
+        train_seasons: The training seasons.
+        entity: The entity id column.
+        seed: KMeans and resampling seed.
+        n_boot: Entity resamples for the bootstrap ARI.
+
+    Returns:
+        ``inner_ari`` (centers fit on all but the last two training seasons, scored on those two
+        against a fresh fit; null with fewer than four training seasons), ``train_bootstrap_ari``
+        (:func:`group_bootstrap_ari` on the training seasons) and ``score``, their mean (the
+        bootstrap alone without an inner split).
+    """
+    cols = list(feature_cols)
+    seasons = sorted(int(s) for s in train_seasons)
+    z = season_zscores(features.filter(pl.col("season").is_in(seasons)), cols)
+    boot = group_bootstrap_ari(z.select(cols).to_numpy(), z[entity].to_numpy(), k=k, seed=seed, n_boot=n_boot)
+    inner = None
+    if len(seasons) >= 4:
+        fit_rows = z.filter(pl.col("season").is_in(seasons[:-2])).select(cols).to_numpy()
+        val_rows = z.filter(pl.col("season").is_in(seasons[-2:])).select(cols).to_numpy()
+        inner = _refit_ari(val_rows, kmeans_fit(fit_rows, k, seed=seed)[0], k, seed)
+    score = boot if inner is None else (inner + boot) / 2
+    return {
+        "inner_ari": None if inner is None else round(inner, 4),
+        "train_bootstrap_ari": round(boot, 4),
+        "score": round(score, 4),
+    }
+
+
+def _pairs(assigned: pl.DataFrame, entity: str, later_seasons: Sequence[int]) -> pl.DataFrame:
+    """Entities assigned in a season and the one before it: ``cluster`` (before) and ``cluster_next``."""
     a = assigned.select(entity, "season", "cluster")
-    pairs = a.join(a.with_columns(pl.col("season") - 1), on=[entity, "season"], suffix="_next")
+    return a.join(a.with_columns(pl.col("season") - 1), on=[entity, "season"], suffix="_next").filter(
+        (pl.col("season") + 1).is_in(list(later_seasons))
+    )
+
+
+def _persistence(pairs: pl.DataFrame) -> tuple[float, float]:
+    """Kept-archetype rate of ``pairs`` and its chance rate, ``sum_k p_before,k * p_after,k`` per pair of seasons."""
     if pairs.is_empty():
-        return float("nan")
-    return float((pairs["cluster"] == pairs["cluster_next"]).mean())
+        return float("nan"), float("nan")
+    kept = float((pairs["cluster"] == pairs["cluster_next"]).mean())
+    chance = 0.0
+    for _, g in pairs.group_by("season"):
+        before = g["cluster"].value_counts(normalize=True).rename({"proportion": "p"})
+        after = g["cluster_next"].value_counts(normalize=True).rename({"cluster_next": "cluster", "proportion": "q"})
+        both = before.join(after, on="cluster")
+        chance += float((both["p"] * both["q"]).sum()) * g.height / pairs.height
+    return kept, chance
 
 
-def chance_persistence(assigned: pl.DataFrame) -> float:
-    """The persistence two independent draws from the cluster shares would show: ``sum(p_k^2)``."""
-    p = assigned["cluster"].value_counts(normalize=True)["proportion"].to_numpy()
-    return float((p**2).sum())
+def _shuffled(z: pl.DataFrame, cols: Sequence[str], seed: int) -> pl.DataFrame:
+    """Each feature permuted independently within season: the marginals kept, the joint structure gone."""
+    return z.with_columns(pl.col(c).shuffle(seed=seed + i).over("season") for i, c in enumerate(cols))
+
+
+def _interval(values: Sequence[float]) -> list[float]:
+    return [
+        round(float(np.percentile(values, 2.5)), 4),
+        round(float(np.percentile(values, 97.5)), 4),
+    ]
+
+
+def _resampled_rows(ids: np.ndarray, rng: np.random.Generator, n: int) -> list[np.ndarray]:
+    """``n`` row-index draws, each resampling entities with replacement (all of an entity's rows together)."""
+    uniq, inverse = np.unique(ids, return_inverse=True)
+    rows_of = [np.flatnonzero(inverse == g) for g in range(len(uniq))]
+    return [np.concatenate([rows_of[g] for g in rng.integers(0, len(uniq), len(uniq))]) for _ in range(n)]
+
+
+def _intervals(
+    Zh: np.ndarray,
+    hold_ids: np.ndarray,
+    pairs: pl.DataFrame,
+    artifact: Mapping,
+    entity: str,
+    n_ci: int,
+) -> dict:
+    """Entity-resampled 95% intervals of the holdout ARI (50 refits at most) and the persistence."""
+    k, seed = int(artifact["k"]), int(artifact["seed"])
+    centers = np.asarray(artifact["centers"], float)
+    rng = np.random.default_rng(seed)
+    aris = [_refit_ari(Zh[rows], centers, k, seed) for rows in _resampled_rows(hold_ids, rng, min(n_ci, 50))]
+    kept = pairs["cluster"].to_numpy() == pairs["cluster_next"].to_numpy()
+    draws = [kept[rows].mean() for rows in _resampled_rows(pairs[entity].to_numpy(), rng, n_ci)]
+    return {
+        "holdout_ari_ci": _interval(aris),
+        "holdout_persistence_ci": _interval(draws),
+    }
 
 
 def stability_report(
-    features: pl.DataFrame, artifact: Mapping, *, entity: str, holdout_seasons: Sequence[int], n_boot: int = 20
+    features: pl.DataFrame,
+    artifact: Mapping,
+    *,
+    entity: str,
+    holdout_seasons: Sequence[int],
+    n_boot: int = 20,
+    n_ci: int = 200,
 ) -> dict:
     """Stability of the frozen archetypes on the holdout seasons (and of the fit on the training ones).
 
@@ -239,61 +399,74 @@ def stability_report(
         artifact: A :func:`fit_play_style` payload.
         entity: The entity id column.
         holdout_seasons: The seasons outside the fit.
-        n_boot: Bootstrap refits for the training-season ARI.
+        n_boot: Entity resamples for the training bootstrap ARI.
+        n_ci: Entity resamples for the intervals (0 skips them).
 
     Returns:
         ``holdout_ari`` (frozen centers vs a fresh fit with the same ``k`` and seed on the holdout
-        rows), ``train_bootstrap_ari``, ``holdout_persistence`` (the share of entities
-        that keep their archetype from the season before a holdout season into it, pooled over the
-        holdout seasons, with ``n_persistence_pairs``) against ``holdout_chance_persistence``,
-        ``persistence_by_pair`` (``"2023-2024"`` to its rate), ``holdout_cluster_shares`` per
-        season and ``n_holdout``.
+        rows), ``null_holdout_ari`` (the same fit-and-compare on features shuffled within season),
+        ``train_bootstrap_ari``, ``holdout_persistence`` (the share of entities that keep their
+        archetype from the season before a holdout season into it, pooled, with
+        ``n_persistence_pairs``) against ``holdout_chance_persistence`` (the paired entities'
+        cluster shares), ``persistence_by_pair``, ``holdout_cluster_shares`` per season with
+        their ``min_share`` / ``max_share``, ``n_holdout``, and with ``n_ci`` the entity-resampled
+        ``holdout_ari_ci`` / ``holdout_persistence_ci``.
     """
     cols = list(artifact["feature_cols"])
     k, seed = int(artifact["k"]), int(artifact["seed"])
+    train_seasons = list(artifact["train_seasons"])
     z = season_zscores(features, cols)
     hold = z.filter(pl.col("season").is_in(list(holdout_seasons)))
-    train = z.filter(pl.col("season").is_in(list(artifact["train_seasons"])))
-    centers = np.asarray(artifact["centers"], float)
+    train = z.filter(pl.col("season").is_in(train_seasons))
     Zh = hold.select(cols).to_numpy()
-    _, frozen = _nearest(Zh, centers)
-    _, refit = kmeans_fit(Zh, k, seed=seed)
+    shuffled = _shuffled(z, cols, seed)
+    null_centers, _ = kmeans_fit(
+        shuffled.filter(pl.col("season").is_in(train_seasons)).select(cols).to_numpy(),
+        k,
+        seed=seed,
+    )
+    null_rows = shuffled.filter(pl.col("season").is_in(list(holdout_seasons))).select(cols).to_numpy()
     # Persistence pairs each holdout season with the season before it (which may be a training
     # season): both sides are scored with the frozen centers, each against its own season.
     seasons = sorted({*holdout_seasons, *(s - 1 for s in holdout_seasons)})
     both = assign_play_style(features.filter(pl.col("season").is_in(seasons)), artifact, [entity, "season"])
-    assigned = both.filter(pl.col("season").is_in(list(holdout_seasons)))
-    by_pair = {
-        f"{s - 1}-{s}": round(yoy_persistence(both.filter(pl.col("season").is_in([s - 1, s])), entity), 4)
-        for s in sorted(holdout_seasons)
-    }
-    a = both.select(entity, "season", "cluster")
-    joined = a.join(a.with_columns(pl.col("season") - 1), on=[entity, "season"], suffix="_next").filter(
-        (pl.col("season") + 1).is_in(list(holdout_seasons))
-    )
+    pairs = _pairs(both, entity, holdout_seasons)
+    kept, chance = _persistence(pairs)
     shares = (
-        assigned.group_by("season", "archetype")
+        both.filter(pl.col("season").is_in(list(holdout_seasons)))
+        .group_by("season", "archetype")
         .len()
         .with_columns((pl.col("len") / pl.col("len").sum().over("season")).round(4).alias("share"))
         .sort("season", "archetype")
     )
-    return {
-        "holdout_ari": round(_ari(frozen, refit), 4),
+    report = {
+        "holdout_ari": round(_refit_ari(Zh, np.asarray(artifact["centers"], float), k, seed), 4),
+        "null_holdout_ari": round(_refit_ari(null_rows, null_centers, k, seed), 4),
         "train_bootstrap_ari": round(
-            bootstrap_ari(
-                lambda X: kmeans_fit(X, k, seed=seed), train.select(cols).to_numpy(), n_boot=n_boot, seed=seed
+            group_bootstrap_ari(
+                train.select(cols).to_numpy(),
+                train[entity].to_numpy(),
+                k=k,
+                seed=seed,
+                n_boot=n_boot,
             ),
             4,
         ),
-        "holdout_persistence": round(float((joined["cluster"] == joined["cluster_next"]).mean()), 4)
-        if joined.height
-        else float("nan"),
-        "n_persistence_pairs": int(joined.height),
-        "holdout_chance_persistence": round(chance_persistence(assigned), 4),
-        "persistence_by_pair": by_pair,
+        "holdout_persistence": round(kept, 4),
+        "holdout_chance_persistence": round(chance, 4),
+        "n_persistence_pairs": int(pairs.height),
+        "persistence_by_pair": {
+            f"{s - 1}-{s}": round(_persistence(pairs.filter(pl.col("season") == s - 1))[0], 4)
+            for s in sorted(holdout_seasons)
+        },
         "holdout_cluster_shares": {
             str(s): {r["archetype"]: r["share"] for r in shares.filter(pl.col("season") == s).iter_rows(named=True)}
             for s in sorted(holdout_seasons)
         },
+        "min_share": float(shares["share"].min()),
+        "max_share": float(shares["share"].max()),
         "n_holdout": int(hold.height),
     }
+    if n_ci:
+        report |= _intervals(Zh, hold[entity].to_numpy(), pairs, artifact, entity, n_ci)
+    return report

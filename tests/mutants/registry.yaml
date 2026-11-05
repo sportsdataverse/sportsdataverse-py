@@ -9955,16 +9955,6 @@
   expected: kill
   note: stats.nba.com hides a player's low-volume play types, so the published rows understate his possessions.
 
-- id: bb-ps-tempo-previous-end
-  group: bb-play-style
-  finding: BB-D20
-  file: sportsdataverse/nba/nba_play_style.py
-  snippet: 'pl.col("end_seconds_remaining").shift(1).over("game_id", "period")'
-  mutant: 'pl.col("end_seconds_remaining").shift(-1).over("game_id", "period")'
-  test: tests/nba/test_nba_play_style.py::test_possession_tempo_is_the_mean_length_by_start_type
-  expected: kill
-  note: A possession runs from the previous possession's end; the next one's end gives a negative length.
-
 - id: bb-ps-player-floor
   group: bb-play-style
   finding: BB-D20
@@ -9974,3 +9964,23 @@
   test: tests/nba/test_nba_play_style.py::test_offense_player_builder_reproduces_the_corpus
   expected: kill
   note: Without the minutes floor, deep-bench players with a few possessions would be clustered and published.
+
+- id: bb-ps-college-games
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/mbb/mbb_player_value_constants.py
+  snippet: 'pl.len().alias("games"),'
+  mutant: 'pl.lit(30).alias("games"),'
+  test: tests/mbb/test_mbb_play_style.py::test_lineup_role_features_are_hand_counts
+  expected: kill
+  note: Minutes per game over a fixed season length would understate a player who missed games.
+
+- id: bb-ps-all-null-season
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features, cols)'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: Without the guard a feature a release stopped carrying becomes the season mean for every row.

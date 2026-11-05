@@ -55,9 +55,6 @@ columns:
 - name: dunk_share
   type: double
   description: ''
-- name: tip_share
-  type: double
-  description: ''
 - name: starter_share
   type: double
   description: ''

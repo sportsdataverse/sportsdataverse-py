@@ -156,54 +156,52 @@
   2025,
   2026
  ],
+ "selection": "max training-only score: mean of inner-split ARI and entity-bootstrap ARI (holdout unread)",
+ "feature_set": "all",
  "k_sweep": [
   {
+   "feature_set": "all",
    "k": 5,
-   "score": 0.8139,
-   "holdout_ari": 0.7253,
-   "train_bootstrap_ari": 0.9026,
-   "holdout_persistence": 0.7571,
-   "holdout_chance_persistence": 0.2387
+   "inner_ari": 0.6478,
+   "train_bootstrap_ari": 0.7795,
+   "score": 0.7136
   },
   {
+   "feature_set": "all",
    "k": 6,
-   "score": 0.6094,
-   "holdout_ari": 0.5373,
-   "train_bootstrap_ari": 0.6815,
-   "holdout_persistence": 0.6921,
-   "holdout_chance_persistence": 0.18
+   "inner_ari": 0.5203,
+   "train_bootstrap_ari": 0.7177,
+   "score": 0.619
   },
   {
+   "feature_set": "all",
    "k": 7,
-   "score": 0.5901,
-   "holdout_ari": 0.4382,
-   "train_bootstrap_ari": 0.742,
-   "holdout_persistence": 0.6657,
-   "holdout_chance_persistence": 0.1625
+   "inner_ari": 0.6371,
+   "train_bootstrap_ari": 0.6781,
+   "score": 0.6576
   },
   {
+   "feature_set": "all",
    "k": 8,
-   "score": 0.5204,
-   "holdout_ari": 0.3997,
-   "train_bootstrap_ari": 0.6411,
-   "holdout_persistence": 0.6535,
-   "holdout_chance_persistence": 0.1529
+   "inner_ari": 0.4522,
+   "train_bootstrap_ari": 0.6451,
+   "score": 0.5486
   },
   {
+   "feature_set": "all",
    "k": 9,
-   "score": 0.5175,
-   "holdout_ari": 0.3863,
-   "train_bootstrap_ari": 0.6487,
-   "holdout_persistence": 0.6423,
-   "holdout_chance_persistence": 0.1512
+   "inner_ari": 0.4441,
+   "train_bootstrap_ari": 0.5857,
+   "score": 0.5149
   }
  ],
  "stability": {
   "holdout_ari": 0.7253,
-  "train_bootstrap_ari": 0.9026,
+  "null_holdout_ari": 0.147,
+  "train_bootstrap_ari": 0.7795,
   "holdout_persistence": 0.7571,
+  "holdout_chance_persistence": 0.2456,
   "n_persistence_pairs": 984,
-  "holdout_chance_persistence": 0.2387,
   "persistence_by_pair": {
    "2022-2023": 0.76,
    "2023-2024": 0.7273,
@@ -240,10 +238,21 @@
     "wing defender / screen chaser": 0.2814
    }
   },
-  "n_holdout": 1288
+  "min_share": 0.066,
+  "max_share": 0.3569,
+  "n_holdout": 1288,
+  "holdout_ari_ci": [
+   0.4484,
+   0.8013
+  ],
+  "holdout_persistence_ci": [
+   0.7244,
+   0.785
+  ]
  },
  "script": "tools/models/play_style/fit_play_style.py",
  "corpus": "tests/fixtures/bb_play_style/nba_play_style_defense_player.parquet",
+ "corpus_sha256": "14f29c71fd90bf2eab53acb2899e5c4a882680f2cde708cbe183d9cf3903ac55",
  "n_by_season": {
   "2018": 309,
   "2019": 319,

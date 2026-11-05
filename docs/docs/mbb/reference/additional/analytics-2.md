@@ -474,10 +474,10 @@ One row per qualifying `(player_id, season, team_id)`: `player_id` / `team_id` (
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | String | ESPN athlete id. |
+| `player_id` | String | ESPN athlete id of the player, as text (the box and shots releases' athlete id). |
 | `season` | Int64 | Season (2026 is 2025-26). |
-| `team_id` | String | ESPN team id. |
-| `player` | String | Player name. |
+| `team_id` | String | ESPN team id of the team the player-season belongs to, as text. |
+| `player` | String | Player's display name on ESPN. |
 | `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
 | `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
 | `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |

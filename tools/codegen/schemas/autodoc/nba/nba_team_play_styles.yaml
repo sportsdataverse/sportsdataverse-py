@@ -10,21 +10,6 @@ columns:
 - name: team_name
   type: character
   description: ''
-- name: off_archetype
-  type: character
-  description: ''
-- name: off_cluster
-  type: integer
-  description: ''
-- name: off_dist_to_center
-  type: double
-  description: ''
-- name: off_second_archetype
-  type: character
-  description: ''
-- name: off_margin
-  type: double
-  description: ''
 - name: def_archetype
   type: character
   description: ''

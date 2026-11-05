@@ -75,46 +75,73 @@
   2025,
   2026
  ],
+ "selection": "max training-only score: mean of inner-split ARI and entity-bootstrap ARI (holdout unread)",
+ "feature_set": "short",
  "k_sweep": [
   {
+   "feature_set": "short",
    "k": 4,
-   "score": 0.4524,
-   "holdout_ari": 0.4378,
-   "train_bootstrap_ari": 0.4669,
-   "holdout_persistence": 0.5,
-   "holdout_chance_persistence": 0.2568
+   "inner_ari": 0.4528,
+   "train_bootstrap_ari": 0.455,
+   "score": 0.4539
   },
   {
+   "feature_set": "short",
    "k": 5,
-   "score": 0.3417,
-   "holdout_ari": 0.2817,
-   "train_bootstrap_ari": 0.4017,
-   "holdout_persistence": 0.45,
-   "holdout_chance_persistence": 0.2043
+   "inner_ari": 0.4275,
+   "train_bootstrap_ari": 0.405,
+   "score": 0.4162
   },
   {
+   "feature_set": "short",
    "k": 6,
-   "score": 0.3184,
-   "holdout_ari": 0.2748,
-   "train_bootstrap_ari": 0.362,
-   "holdout_persistence": 0.4167,
-   "holdout_chance_persistence": 0.18
+   "inner_ari": 0.3316,
+   "train_bootstrap_ari": 0.3316,
+   "score": 0.3316
   },
   {
+   "feature_set": "short",
    "k": 7,
-   "score": 0.2734,
-   "holdout_ari": 0.1546,
-   "train_bootstrap_ari": 0.3923,
-   "holdout_persistence": 0.4333,
-   "holdout_chance_persistence": 0.1626
+   "inner_ari": 0.4082,
+   "train_bootstrap_ari": 0.3731,
+   "score": 0.3907
+  },
+  {
+   "feature_set": "long",
+   "k": 4,
+   "inner_ari": 0.3644,
+   "train_bootstrap_ari": 0.4479,
+   "score": 0.4061
+  },
+  {
+   "feature_set": "long",
+   "k": 5,
+   "inner_ari": 0.3106,
+   "train_bootstrap_ari": 0.3799,
+   "score": 0.3453
+  },
+  {
+   "feature_set": "long",
+   "k": 6,
+   "inner_ari": 0.2487,
+   "train_bootstrap_ari": 0.3664,
+   "score": 0.3075
+  },
+  {
+   "feature_set": "long",
+   "k": 7,
+   "inner_ari": 0.1846,
+   "train_bootstrap_ari": 0.3281,
+   "score": 0.2563
   }
  ],
  "stability": {
   "holdout_ari": 0.4378,
-  "train_bootstrap_ari": 0.4669,
+  "null_holdout_ari": 0.0784,
+  "train_bootstrap_ari": 0.455,
   "holdout_persistence": 0.5,
+  "holdout_chance_persistence": 0.2536,
   "n_persistence_pairs": 120,
-  "holdout_chance_persistence": 0.2568,
   "persistence_by_pair": {
    "2022-2023": 0.6,
    "2023-2024": 0.4333,
@@ -147,10 +174,21 @@
     "forces turnovers": 0.2667
    }
   },
-  "n_holdout": 120
+  "min_share": 0.0667,
+  "max_share": 0.3667,
+  "n_holdout": 120,
+  "holdout_ari_ci": [
+   0.1952,
+   0.4889
+  ],
+  "holdout_persistence_ci": [
+   0.425,
+   0.5917
+  ]
  },
  "script": "tools/models/play_style/fit_play_style.py",
  "corpus": "tests/fixtures/bb_play_style/nba_play_style_defense_team.parquet",
+ "corpus_sha256": "473ea2ccc17d6a5249bb0f1293273d0a7b6589526d260cfd9ea90c3053635e37",
  "n_by_season": {
   "2016": 30,
   "2017": 30,

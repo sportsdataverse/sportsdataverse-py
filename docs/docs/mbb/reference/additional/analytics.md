@@ -655,10 +655,10 @@ The college play-style features, one row per qualifying player-season.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | String | ESPN athlete id. |
+| `player_id` | String | ESPN athlete id of the player, as text (the box and shots releases' athlete id). |
 | `season` | Int64 | Season (2026 is 2025-26). |
-| `team_id` | String | ESPN team id. |
-| `player` | String | Player name. |
+| `team_id` | String | ESPN team id of the team the player-season belongs to, as text. |
+| `player` | String | Player's display name on ESPN. |
 | `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
 | `usage` | Float64 | Possessions used (FGA + 0.44 FTA + TOV) per 100 minutes. |
 | `rim_share` | Float64 | Share of field-goal attempts at the rim (layups, dunks, tips). |
@@ -673,7 +673,6 @@ The college play-style features, one row per qualifying player-season.
 | `stl_pct` | Float64 | Steals per field-goal attempt. |
 | `assisted_share` | Float64 | Share of made field goals with an assister on the play (shots release). |
 | `dunk_share` | Float64 | Dunks as a share of rim attempts. |
-| `tip_share` | Float64 | Tip shots as a share of field-goal attempts. |
 | `starter_share` | Float64 | Share of the player's games he started. |
 | `mpg_share` | Float64 | Minutes per game as a share of a 40-minute game. |
 

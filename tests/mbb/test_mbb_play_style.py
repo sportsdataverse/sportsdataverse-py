@@ -20,9 +20,11 @@ from sportsdataverse.mbb import mbb_play_style as mps
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_play_style"
 GATES = {
-    "mbb": {"holdout_ari": 0.82, "holdout_persistence": 0.50},
-    "wbb": {"holdout_ari": 0.74, "holdout_persistence": 0.49},
+    "mbb": {"holdout_ari": 0.79, "holdout_persistence": 0.50},
+    "wbb": {"holdout_ari": 0.73, "holdout_persistence": 0.50},
 }
+#: Smallest / largest archetype share in 2026 (observed MBB 0.1192 / 0.1905, WBB 0.1079 / 0.1827).
+SHARE_GATES = {"mbb": (0.11, 0.20), "wbb": (0.10, 0.19)}
 
 
 @cache
@@ -31,14 +33,14 @@ def _corpus(prefix: str) -> pl.DataFrame:
 
 
 def test_shot_features_reproduce_the_corpus():
-    """One team's full 2025 shots give its players the corpus's assisted, dunk and tip shares."""
+    """One team's full 2025 shots give its players the corpus's assisted and dunk shares."""
     shots = pl.read_parquet(FIX / "mbb_shots_2025_team.parquet")
     built = mps._shot_features(shots)
     team = str(shots["team_id"][0])
     corpus = _corpus("mbb").filter((pl.col("season") == 2025) & (pl.col("team_id") == team))
     joined = corpus.join(built, on=["player_id", "season"], suffix="_built")
     assert joined.height == corpus.height > 5
-    for c in ("assisted_share", "dunk_share", "tip_share"):
+    for c in ("assisted_share", "dunk_share"):
         np.testing.assert_allclose(joined[c].to_numpy(), joined[f"{c}_built"].round(6).to_numpy(), atol=1e-6)
 
 
@@ -74,12 +76,14 @@ def test_artifact_is_the_fit_of_the_committed_corpus(prefix):
 @pytest.mark.parametrize("prefix", ["mbb", "wbb"])
 def test_stability_gates_on_the_2026_holdout(prefix):
     art = mps._artifact(prefix)
-    rep = ps.stability_report(_corpus(prefix), art, entity="player_id", holdout_seasons=[2026], n_boot=1)
+    rep = ps.stability_report(_corpus(prefix), art, entity="player_id", holdout_seasons=[2026], n_boot=1, n_ci=0)
     for metric, gate in GATES[prefix].items():
         assert rep[metric] == pytest.approx(art["stability"][metric], abs=1e-4)
         assert rep[metric] >= gate, metric
     assert rep["holdout_persistence"] > 2 * rep["holdout_chance_persistence"]
     assert rep["n_persistence_pairs"] > 1000
+    assert rep["holdout_ari"] > rep["null_holdout_ari"] == pytest.approx(art["stability"]["null_holdout_ari"], abs=1e-4)
+    assert SHARE_GATES[prefix][0] <= rep["min_share"] and rep["max_share"] <= SHARE_GATES[prefix][1]
 
 
 def test_zscores_are_clipped():
@@ -99,3 +103,26 @@ def test_public_frame(monkeypatch):
     monkeypatch.setattr(mps, "college_play_style_features", lambda seasons, league="mens": pl.DataFrame())
     empty = mps.mbb_play_styles(2030)
     assert empty.height == 0 and empty.columns == out.columns
+
+
+def test_lineup_role_features_are_hand_counts(monkeypatch):
+    """One team's real 2025 box: starts and minutes per game counted by hand for a part-time starter."""
+    from sportsdataverse.mbb import mbb_player_value_constants as pv
+
+    box = pl.read_parquet(FIX / "mbb_player_box_2025_team.parquet")
+    shots = pl.read_parquet(FIX / "mbb_shots_2025_team.parquet")
+    monkeypatch.setattr(pv, "_load_player_box", lambda seasons, league: box)
+    monkeypatch.setattr(pv, "_load_shots", lambda seasons, league: shots)
+    monkeypatch.setattr(mps, "_load_shots", lambda seasons, league: shots)
+    feats = mps.college_play_style_features(2025)
+    games: dict[int, list[tuple[float, bool]]] = {}
+    for r in box.iter_rows(named=True):
+        if r["minutes"] is not None and r["minutes"] > 0:
+            games.setdefault(r["athlete_id"], []).append((r["minutes"], bool(r["starter"])))
+    part_time = [a for a, g in games.items() if 0 < sum(s for _, s in g) < len(g) and str(a) in feats["player_id"]]
+    assert part_time
+    for athlete in part_time:
+        g = games[athlete]
+        row = feats.filter(pl.col("player_id") == str(athlete))
+        assert row["starter_share"].item() == pytest.approx(sum(s for _, s in g) / len(g))
+        assert row["mpg_share"].item() == pytest.approx(sum(m for m, _ in g) / len(g) / 40)

@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_team–nbadraft_mock"
-sidebar_label: "Analytics: nba_team–nbadraft_mock"
+title: "NBA — additional Python functions — Analytics: nba_team–player_play"
+sidebar_label: "Analytics: nba_team–player_play"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: nba_team–nbadraft_mock — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_team–player_play — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_team–nbadraft_mock
+# NBA — additional Python functions — Analytics: nba_team–player_play
 
 ### nba_team_clutch {#nba_team_clutch}
 
@@ -114,7 +114,7 @@ wnba = nba_team_luck(2025, league_id="10")
 
 `nba_team_play_styles(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Offensive and defensive play-style archetypes per team-season (BB-D20).
+Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module).
 
 The method is in `sportsdataverse._common.play_style` and the features in
 `sportsdataverse.nba.nba_play_style`.
@@ -128,23 +128,24 @@ The method is in `sportsdataverse._common.play_style` and the features in
 
 **Returns**
 
-One row per `(team_id, season)`: `team_id` (Int64), `season`, `team_name` and for `off_` and `def_` the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`.
+One row per `(team_id, season)`: `team_id` (Int64), `season`, `team_name` and the `def_archetype`, `def_cluster`, `def_dist_to_center`, `def_second_archetype` and `def_margin`.
 
 | col_name | type | description |
 |---|---|---|
 | `team_id` | Int64 | stats.nba.com team id. |
 | `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `team_name` | String | Team name. |
-| `off_archetype` | String | Offensive play-style archetype: the label of the nearest frozen KMeans center to the team-season's within-season z-scored features; null when the team does not qualify on that side or the season is not covered. |
-| `off_cluster` | Int64 | Index of the offensive archetype's center in the bundled artifact (0-based). |
-| `off_dist_to_center` | Float64 | Euclidean distance (z-space) to the offensive archetype's center; small means a prototypical example. |
-| `off_second_archetype` | String | The next-nearest offensive archetype, the style a hybrid leans toward. |
-| `off_margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes. |
+| `team_name` | String | Team's full name on stats.nba.com (city and nickname). z-scored features; null when the team does not qualify on that side or the season is not covered.' |
 | `def_archetype` | String | Defensive play-style archetype: the label of the nearest frozen KMeans center to the team-season's within-season z-scored features; null when the team does not qualify on that side or the season is not covered. |
 | `def_cluster` | Int64 | Index of the defensive archetype's center in the bundled artifact (0-based). |
 | `def_dist_to_center` | Float64 | Euclidean distance (z-space) to the defensive archetype's center; small means a prototypical example. |
 | `def_second_archetype` | String | The next-nearest defensive archetype, the style a hybrid leans toward. |
 | `def_margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid between the two archetypes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a feature is null for a whole season (a release stopped carrying it). |
 
 **Example**
 
@@ -792,4 +793,82 @@ mock_pd = nbadraft_mock_draft(year=2025, return_as_pandas=True)
 # Pipeline next step (lottery only)
 
 mock.filter((pl.col("round") == 1) & (pl.col("pick") <= 14))
+```
+
+### player_play_context {#player_play_context}
+
+`player_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half).
+
+For each player: their team's offensive play-context **with them on the floor**
+(`on_*`), **without them** (`off_*`), and the on-minus-off difference
+(`diff_*`) — which is the number CTG actually displays.
+
+The OFF side is derived by **subtraction** (team total minus on-court), not by a
+second scan. That is deliberate: it makes the partition exact by construction —
+`on_poss + off_poss == team_poss` and the same for points — so a leak (a
+double-counted possession, a dropped lineup slot) is impossible to hide. The
+test suite asserts that identity directly.
+
+Like CTG's on/off, this is a **raw** split: no luck adjustment, no opponent
+adjustment, no minutes threshold. It is a descriptive difference, not a causal
+estimate — for that, use the RAPM surface
+(`~sportsdataverse.nba.nba_rapm.nba_rapm`).
+
+Requires `off_player_1..5` from
+`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_play_context` **with lineups attached**. |
+| `league_non_transition_ppp` | `Optional[float]` | `None` | Pts+/Poss baseline; see `team_play_context`. One baseline is shared across the on and off sides so the diffs are comparable. |
+| `apply_ctg_filters` | `bool` | `True` | Drop garbage-time / heave / non-counting possessions first. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input returns a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `on_poss` | Int64 |  |
+| `off_poss` | Int64 |  |
+| `on_points` | Int64 |  |
+| `off_points` | Int64 |  |
+| `on_pts_per_100` | Float64 |  |
+| `off_pts_per_100` | Float64 |  |
+| `diff_pts_per_100` | Float64 |  |
+| `on_transition_freq` | Float64 |  |
+| `off_transition_freq` | Float64 |  |
+| `diff_transition_freq` | Float64 |  |
+| `on_transition_pts_per_100` | Float64 |  |
+| `off_transition_pts_per_100` | Float64 |  |
+| `diff_transition_pts_per_100` | Float64 |  |
+| `on_halfcourt_pts_per_100` | Float64 |  |
+| `off_halfcourt_pts_per_100` | Float64 |  |
+| `diff_halfcourt_pts_per_100` | Float64 |  |
+| `on_transition_pts_added_per_100` | Float64 |  |
+| `off_transition_pts_added_per_100` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When the `off_player_*` columns are missing. |
+
+**Example**
+
+```python
+poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+onoff = player_play_context(poss)
+print(onoff.sort("diff_pts_per_100", descending=True).head())
+
+# Who makes their team run?
+
+print(onoff.sort("diff_transition_freq", descending=True).head())
 ```
