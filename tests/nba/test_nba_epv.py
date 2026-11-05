@@ -435,8 +435,12 @@ def test_inputs_are_checked() -> None:
     with pytest.raises(ValueError, match="no first event"):
         first_events = poss.select("game_id", pl.col("start_order_index").alias("order_index"))
         epv_states(poss, pbp.join(first_events.head(1), on=["game_id", "order_index"], how="anti"))
-    with pytest.raises(pl.exceptions.InvalidOperationError):
+    with pytest.raises(ValueError, match="unknown possession_start_type"):
         epv_states(poss.with_columns(pl.lit("OffSomethingNew").alias("possession_start_type")), pbp)
+    early = _states("nba").with_columns(pl.lit(first - 1).alias("season"))
+    with pytest.raises(ValueError, match="served from"):
+        add_epv(early)  # the bundled booster refuses a season before its first training one
+    assert add_epv(early, booster=load_epv_model()).height > 0  # an explicit booster is the caller's call
 
 
 def test_the_booster_reads_the_features_in_order() -> None:
@@ -489,6 +493,63 @@ def test_team_rebounds_are_dead_balls_of_the_right_side() -> None:
     assert (team.filter(pl.col("team_id") == pl.col("defense_team_id"))["last_event"] == codes["def_rebound"]).all()
     between = s.filter(pl.col("ft_pending") > 0)
     assert between.height > 50 and (between["last_event"] == codes["free_throw"]).all()  # the trip goes on
+
+
+@lru_cache(maxsize=1)
+def _technicals() -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Games 0022400072 and 0022400337: a technical inside an ordinary free-throw trip."""
+    poss, pbp, tens = (
+        pl.read_parquet(D / f"nba_{n}_2025_technicals.parquet") for n in ("possessions", "pbp", "game_lineups")
+    )
+    return add_epv(epv_states(poss, pbp)), tens
+
+
+def test_a_technical_inside_a_trip_leaves_it_pending() -> None:
+    """A technical foul or free throw between "1 of 2" and "2 of 2" leaves one ordinary free throw to come."""
+    plays, _ = _technicals()
+    tech = plays.filter(pl.col("sub_type").fill_null("").str.contains("Technical"))
+    inside = tech.filter(pl.col("game_id") == "0022400072")
+    assert inside.height == 2 and (inside["ft_pending"] == 1).all()  # the technical foul and its free throw
+    trip = tech.filter((pl.col("game_id") == "0022400337") & pl.col("order_index").is_between(141, 146))
+    assert trip.height == 3 and (trip["ft_pending"] == 1).all()  # two technical fouls and their free throw
+
+
+def test_an_ordinary_free_throw_after_a_technical_stays_on_its_foul_lineup() -> None:
+    """In 0022400337 a substitution comes between the shooting foul and the technicals; the second
+    ordinary free throw belongs to the ten at the shooting foul, the technical's own to its ten."""
+    plays, tens = _technicals()
+    game = plays.filter(pl.col("game_id") == "0022400337")
+    rows = nba_epv._on_court(game, tens)
+    ft = game.filter(pl.col("description").str.contains("Free Throw 2 of 2") & (pl.col("order_index") == 146))
+    assert ft.height == 1
+
+    def ten(order_index: int) -> set[int]:
+        action = game.filter(pl.col("order_index") == order_index)["action_number"][0]
+        row = tens.filter((pl.col("game_id") == "0022400337") & (pl.col("action_number") == action))
+        return set(row.select(pl.concat_list(pl.exclude("game_id", "action_number"))).item())
+
+    at_foul, at_shot = ten(140), ten(146)
+    assert at_foul != at_shot  # the substitution at 142 changed the floor
+    epv = ft["epv_added"][0]
+    credited = {
+        x
+        for r in rows.filter((pl.col("off_epv") == epv) | (pl.col("def_epv") == epv)).iter_rows(named=True)
+        for x in r["_five"]
+    }
+    assert credited == at_foul
+
+
+def test_a_lineup_with_a_repeated_player_is_left_out() -> None:
+    """A source glitch that lists one player twice never becomes a four-player unit."""
+    p, tens = _plays("nba"), _tens("nba")
+    glitch = tens.with_columns(
+        pl.when(pl.col("action_number") == tens["action_number"].min())
+        .then(pl.col("home_player_1"))
+        .otherwise(pl.col("home_player_2"))
+        .alias("home_player_2")
+    )
+    ids = epv_lineup_games(p, glitch)["lineup_id"].str.split("-")
+    assert (ids.list.n_unique() == 5).all()
 
 
 def _same(a: pl.DataFrame, b: pl.DataFrame) -> None:

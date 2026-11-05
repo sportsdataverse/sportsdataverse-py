@@ -37,6 +37,9 @@ columns:
 - name: event_type
   type: character
   description: ''
+- name: sub_type
+  type: character
+  description: ''
 - name: description
   type: character
   description: ''

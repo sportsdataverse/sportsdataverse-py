@@ -414,7 +414,7 @@ EPV and EPV added on every play-by-play event inside a possession.
 
 **Returns**
 
-One row per event, in game order: `season`, `game_id`, `possession_number`, `step` (the event's place in the possession), `order_index`, `action_number`, the offense, defense and home team ids, the event's `team_id` / `person_id` / `event_type` / `description`, the possession's starting ten, the state (`EPV_FEATURES`), `points`, `remaining_points`, `is_last`, `next_in_period`, `epv`, `epv_start`, `epv_before`, `epv_after` and `epv_added`. Every game of every season type is scored.
+One row per event, in game order: `season`, `game_id`, `possession_number`, `step` (the event's place in the possession), `order_index`, `action_number`, the offense, defense and home team ids, the event's `team_id` / `person_id` / `event_type` / `sub_type` / `description`, the possession's starting ten, the state (`EPV_FEATURES`), `points`, `remaining_points`, `is_last`, `next_in_period`, `epv`, `epv_start`, `epv_before`, `epv_after` and `epv_added`. Every game of every season type is scored.
 
 | col_name | type | description |
 |---|---|---|
@@ -430,6 +430,7 @@ One row per event, in game order: `season`, `game_id`, `possession_number`, `ste
 | `team_id` | Int64 | Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id). |
 | `person_id` | Int64 | Player id on the event; the team id, or 0, on team events. |
 | `event_type` | String | The release's event type (made_shot, missed_shot, rebound, foul, free_throw, turnover, ...). |
+| `sub_type` | String | The release's event sub type (the foul or free-throw kind, the shot type, ...). |
 | `description` | String | The play-by-play text of the event. |
 | `off_player_1` | Int64 | stats.nba.com player id of offensive player 1 of 5 when the possession started. |
 | `off_player_2` | Int64 | stats.nba.com player id of offensive player 2 of 5 when the possession started. |

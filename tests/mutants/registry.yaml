@@ -10175,8 +10175,8 @@
   group: bb-epv
   finding: BB-D24
   file: sportsdataverse/nba/nba_epv.py
-  snippet: 'is_foul=pl.col("event_type") == "foul"'
-  mutant: 'is_foul=pl.lit(False)'
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=pl.lit(False),'
   test: tests/nba/test_nba_epv.py::test_free_throws_land_on_the_foul_lineup
   expected: kill
   note: BB-D6's rule; a player subbed in between a foul and its free throws is not on for them.
@@ -10250,3 +10250,43 @@
   test: tests/nba/test_nba_epv.py::test_shot_zones_are_coded_and_matter
   expected: kill
   note: Threes must be their own zone, not long twos by distance.
+
+- id: bb-epv-technical-keeps-trip
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'technical = et.is_in(["foul", "free_throw"]) & pl.col("sub_type").fill_null("").str.contains("Technical")'
+  mutant: 'technical = pl.lit(False)'
+  test: tests/nba/test_nba_epv.py::test_a_technical_inside_a_trip_leaves_it_pending
+  expected: kill
+  note: A technical between an ordinary trip's free throws does not end the trip.
+
+- id: bb-epv-ordinary-ft-skips-technical-foul
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=(pl.col("event_type") == "foul"),'
+  test: tests/nba/test_nba_epv.py::test_an_ordinary_free_throw_after_a_technical_stays_on_its_foul_lineup
+  expected: kill
+  note: An ordinary free throw belongs to its shooting foul's ten, not to a later technical's.
+
+- id: bb-epv-lineup-five-distinct
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.filter(pl.col("_five").list.drop_nulls().list.n_unique() == 5)'
+  mutant: '.filter(pl.col("_five").list.drop_nulls().list.len() == 5)'
+  test: tests/nba/test_nba_epv.py::test_a_lineup_with_a_repeated_player_is_left_out
+  expected: kill
+  note: A slot glitch repeating one player must not publish a four-player unit.
+
+- id: bb-epv-bundled-booster-season-floor
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '_check_seasons(states["season"].drop_nulls().unique().to_list())'
+  mutant: 'pass'
+  test: tests/nba/test_nba_epv.py::test_inputs_are_checked
+  expected: kill
+  note: The bundled booster refuses a season before its first training one, whoever calls it.

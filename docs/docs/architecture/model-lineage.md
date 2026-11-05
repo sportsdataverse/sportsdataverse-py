@@ -19,7 +19,7 @@ A script in another repository is cited as `repo` + path + the commit it was rea
 at. "Byte-identical" means the bundled file's sha256 equals the GitHub release
 asset's `digest` (checked 2026-10-22).
 
-## Bundled boosters (26)
+## Bundled boosters (27)
 
 ### CFB (`sportsdataverse/cfb/models/`, 11)
 

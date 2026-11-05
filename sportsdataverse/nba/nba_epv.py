@@ -177,6 +177,9 @@ def _scored_events(pbp: pl.DataFrame) -> pl.DataFrame:
 
 def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     """Possessions with the change-of-possession clock, the BB-D7 transition flag and the next one's period."""
+    unknown = possessions.filter(~pl.col("possession_start_type").is_in(START_TYPES))["possession_start_type"]
+    if unknown.len():
+        raise ValueError(f"unknown possession_start_type {sorted(unknown.unique().to_list(), key=str)}")
     flags = add_possession_flags(possessions.select(_POSS_COLS), pbp.select(_PBP_COLS))
     return (
         flags.with_columns(pl.col("game_id").cast(pl.Utf8))
@@ -257,8 +260,13 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
         .then(3)
     )
     of = pl.col("sub_type").str.extract_groups(r"(\d) of (\d)")
+    # a technical (its foul, or its lone free throw) can fall inside an ordinary trip: it leaves
+    # the trip's count as it was
+    technical = et.is_in(["foul", "free_throw"]) & pl.col("sub_type").fill_null("").str.contains("Technical")
     pending = (
-        pl.when(et == "free_throw")
+        pl.when(technical)
+        .then(None)
+        .when(et == "free_throw")
         .then((of.struct.field("2").cast(pl.Int32) - of.struct.field("1").cast(pl.Int32)).fill_null(0))
         .when(et.is_in(_LIVE))
         .then(0)
@@ -339,7 +347,7 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
         then one row per event. Carries :data:`EPV_FEATURES`, ``points`` (the offense's points on
         the event), ``remaining_points`` (the offense's points after the state, to the end of the
         possession: the model's label), ``is_last`` (the possession's last event),
-        ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` /
+        ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
         ``description`` / player slots.
 
     Raises:
@@ -390,6 +398,7 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
             "team_id",
             "person_id",
             "event_type",
+            "sub_type",
             "description",
             *_SLOTS,
             *EPV_FEATURES,
@@ -443,7 +452,9 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
     """
     import numpy as np
 
-    booster = booster if booster is not None else load_epv_model(league_id)
+    if booster is None:
+        _check_seasons(states["season"].drop_nulls().unique().to_list())
+        booster = load_epv_model(league_id)
     if booster.attr("start_epv_mean") is not None:
         _check_features(booster)
     mean = booster.attr("start_epv_mean")
@@ -535,8 +546,11 @@ def _on_court(plays: pl.DataFrame, game_lineups: pl.DataFrame | None) -> pl.Data
         home_pts=pl.when(home).then(pl.col("epv_added")).otherwise(0.0),
         away_pts=pl.when(home).then(0.0).otherwise(pl.col("epv_added")),
     )
+    technical = pl.col("sub_type").fill_null("").str.contains("Technical")
     rows = credit_free_throws_to_foul_lineup(
-        rows, is_free_throw=pl.col("event_type") == "free_throw", is_foul=pl.col("event_type") == "foul"
+        rows,
+        is_free_throw=(pl.col("event_type") == "free_throw") & ~technical,
+        is_foul=(pl.col("event_type") == "foul") & ~technical,
     )
     away_team = pl.when(home).then(pl.col("defense_team_id")).otherwise(pl.col("offense_team_id"))
     sides = []
@@ -616,7 +630,7 @@ def epv_lineup_games(plays: pl.DataFrame, game_lineups: pl.DataFrame | None = No
     """
     return (
         _on_court(plays, game_lineups)
-        .filter(pl.col("_five").list.drop_nulls().list.len() == 5)
+        .filter(pl.col("_five").list.drop_nulls().list.n_unique() == 5)  # a repeated id is a source glitch
         .with_columns(pl.col("_five").list.sort().cast(pl.List(pl.Utf8)).list.join("-").alias("lineup_id"))
         .group_by("season", "game_id", "team_id", "lineup_id")
         .agg(pl.col("off_epv").sum(), pl.col("def_epv").sum(), pl.len().cast(pl.Int64).alias("plays"))
@@ -692,7 +706,7 @@ def nba_epv_plays(seasons: int | list[int], *, return_as_pandas: bool = False) -
         One row per event, in game order: ``season``, ``game_id``, ``possession_number``,
         ``step`` (the event's place in the possession), ``order_index``, ``action_number``, the
         offense, defense and home team ids, the event's ``team_id`` / ``person_id`` /
-        ``event_type`` / ``description``, the possession's starting ten, the state
+        ``event_type`` / ``sub_type`` / ``description``, the possession's starting ten, the state
         (:data:`EPV_FEATURES`), ``points``, ``remaining_points``, ``is_last``,
         ``next_in_period``, ``epv``, ``epv_start``, ``epv_before``, ``epv_after`` and
         ``epv_added``. Every game of every season type is scored.

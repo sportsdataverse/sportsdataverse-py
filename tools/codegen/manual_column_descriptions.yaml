@@ -76981,6 +76981,7 @@ nba_epv_plays:
   start_margin: 'State: the offense''s lead when the possession started (before its first event).'
   start_type: 'State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover.'
   step: 'The event''s place in its possession, from 1.'
+  sub_type: 'The release''s event sub type (the foul or free-throw kind, the shot type, ...).'
   team_id: 'Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id).'
   transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
 nba_epv_player_games:

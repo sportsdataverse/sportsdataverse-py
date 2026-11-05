@@ -30,3 +30,8 @@ inherits; and one basket in game `0022400030` is lowered by a replay review, whi
 
 Files are named by the END year, as the releases stamp `season`. Regenerate by rerunning the fitting
 script (it rewrites these files from the holdout season after the gates pass).
+
+`nba_{pbp,possessions,game_lineups}_2025_technicals.parquet` (1,059 / 421 / 1,059 rows): games `0022400072` and
+`0022400337` of the same releases, the same columns, cut by hand on 2026-11-05: in both a technical foul (and its free
+throw) falls between an ordinary "1 of 2" and "2 of 2", and in `0022400337` a substitution comes between the shooting
+foul and the technicals (order_index 140-146), so the trip's last free throw and its lineup can be checked.
