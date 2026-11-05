@@ -38818,22 +38818,27 @@ nba_lineup_seasons:
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
+    shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator.'
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
+    turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
@@ -38842,53 +38847,68 @@ nba_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com''s
     lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4% higher).'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
+    possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
+    rebounds and turnovers count for the lineup that started it, even after a substitution inside it.'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
+    Each possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.'
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponent''s offensive-rebound chances.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
-  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator.
+  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
+    throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
+    possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.'
   orb_pct_n: 'Sample size of orb_pct: the unit''s offensive-rebound chances.'
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -38901,35 +38921,42 @@ nba_lineup_seasons:
     to the lineup at the last foul).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   team_id: stats.nba.com team id.
-  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator.
+  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free
+    throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   tov_pct_n: 'Sample size of tov_pct: poss.'
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 400); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
 wnba_lineup_seasons:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
+    shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator.'
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
+    turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
@@ -38938,52 +38965,67 @@ wnba_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
+    possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
+    rebounds and turnovers count for the lineup that started it, even after a substitution inside it.'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
+    Each possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.'
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponent''s offensive-rebound chances.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
-  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator.
+  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
+    throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
+    possession''s shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
+    inside it.'
   orb_pct_n: 'Sample size of orb_pct: the unit''s offensive-rebound chances.'
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -38996,64 +39038,79 @@ wnba_lineup_seasons:
     to the lineup at the last foul).
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   team_id: stats.nba.com team id.
-  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator.
+  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free
+    throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   tov_pct_n: 'Sample size of tov_pct: poss.'
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
 mbb_lineup_seasons:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
+    counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  fg3_pct: Three-point percentage, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
+    at it (a free throw: the lineup at the last foul).'
   fg3_pct_n: 'Sample size of fg3_pct: the unit''s three-point attempts.'
   fg3_pct_pct: 'Percentile of fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   fg3_pct_rank: Rank of fg3_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  fg3_rate: Share of the unit's field-goal attempts that are threes. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  fg3_rate: 'Share of the unit''s field-goal attempts that are threes. Null with a zero denominator. Each event counts for
+    the lineup on the floor at it (a free throw: the lineup at the last foul).'
   fg3_rate_n: 'Sample size of fg3_rate: the unit''s field-goal attempts.'
   fg3_rate_pct: 'Percentile of fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   fg3_rate_rank: Rank of fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it
+    (a free throw: the lineup at the last foul).'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   lineup_id: The unit's stats.ncaa.org player ids, sorted as text and joined with '-'.
-  mid_pct: Mid-range field-goal percentage, as a fraction. Null with a zero denominator.
+  mid_pct: 'Mid-range field-goal percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   mid_pct_n: 'Sample size of mid_pct: the unit''s mid-range attempts.'
   mid_pct_pct: 'Percentile of mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   mid_pct_rank: Rank of mid_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  mid_rate: Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  mid_rate: 'Share of the unit''s field-goal attempts that are other twos (mid-range). Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   mid_rate_n: 'Sample size of mid_rate: the unit''s field-goal attempts.'
   mid_rate_pct: 'Percentile of mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   mid_rate_rank: Rank of mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -39061,94 +39118,118 @@ mbb_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_fg3_pct: The opponent's three-point percentage. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_fg3_pct: 'The opponent''s three-point percentage. Null with a zero denominator. Each event counts for the lineup on
+    the floor at it (a free throw: the lineup at the last foul).'
   opp_fg3_pct_n: 'Sample size of opp_fg3_pct: the opponent''s three-point attempts.'
   opp_fg3_pct_pct: 'Percentile of opp_fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_fg3_pct_rank: Rank of opp_fg3_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_fg3_rate: Share of the opponent's field-goal attempts that are threes. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_fg3_rate: 'Share of the opponent''s field-goal attempts that are threes. Null with a zero denominator. Each event counts
+    for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_fg3_rate_n: 'Sample size of opp_fg3_rate: the opponent''s field-goal attempts.'
   opp_fg3_rate_pct: 'Percentile of opp_fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_fg3_rate_rank: Rank of opp_fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_mid_pct: The opponent's mid-range field-goal percentage. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_mid_pct: 'The opponent''s mid-range field-goal percentage. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   opp_mid_pct_n: 'Sample size of opp_mid_pct: the opponent''s mid-range attempts.'
   opp_mid_pct_pct: 'Percentile of opp_mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_mid_pct_rank: Rank of opp_mid_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_mid_rate: Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_mid_rate: 'Share of the opponent''s field-goal attempts that are mid-range twos. Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_mid_rate_n: 'Sample size of opp_mid_rate: the opponent''s field-goal attempts.'
   opp_mid_rate_pct: 'Percentile of opp_mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_mid_rate_rank: Rank of opp_mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponent''s offensive-rebound chances.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
-  opp_rim_pct: The opponent's field-goal percentage at the rim. Null with a zero denominator.
+  opp_rim_pct: 'The opponent''s field-goal percentage at the rim. Null with a zero denominator. Each event counts for the
+    lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_pct_n: 'Sample size of opp_rim_pct: the opponent''s rim attempts.'
   opp_rim_pct_pct: 'Percentile of opp_rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_rim_pct_rank: Rank of opp_rim_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_rim_rate: Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_rim_rate: 'Share of the opponent''s field-goal attempts at the rim with the unit on the floor. Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_rate_n: 'Sample size of opp_rim_rate: the opponent''s field-goal attempts.'
   opp_rim_rate_pct: 'Percentile of opp_rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_rim_rate_rank: Rank of opp_rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_tov_pct: 'The opponent''s turnovers per defensive possession. Null with a zero denominator. Each event counts for the
+    lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   orb_pct_n: 'Sample size of orb_pct: the unit''s offensive-rebound chances.'
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39159,80 +39240,99 @@ mbb_lineup_seasons:
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
-  rim_pct: Field-goal percentage at the rim, as a fraction. Null with a zero denominator.
+  rim_pct: 'Field-goal percentage at the rim, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   rim_pct_n: 'Sample size of rim_pct: the unit''s rim attempts.'
   rim_pct_pct: 'Percentile of rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   rim_pct_rank: Rank of rim_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  rim_rate: Share of the unit's field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  rim_rate: 'Share of the unit''s field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   rim_rate_n: 'Sample size of rim_rate: the unit''s field-goal attempts.'
   rim_rate_pct: 'Percentile of rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   rim_rate_rank: Rank of rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id of the unit's team.
-  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator.
+  tov_pct: 'Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   tov_pct_n: 'Sample size of tov_pct: poss.'
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
 wbb_lineup_seasons:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
+    counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
   efg_pct_pct: 'Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  fg3_pct: Three-point percentage, as a fraction. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
+    at it (a free throw: the lineup at the last foul).'
   fg3_pct_n: 'Sample size of fg3_pct: the unit''s three-point attempts.'
   fg3_pct_pct: 'Percentile of fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   fg3_pct_rank: Rank of fg3_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  fg3_rate: Share of the unit's field-goal attempts that are threes. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  fg3_rate: 'Share of the unit''s field-goal attempts that are threes. Null with a zero denominator. Each event counts for
+    the lineup on the floor at it (a free throw: the lineup at the last foul).'
   fg3_rate_n: 'Sample size of fg3_rate: the unit''s field-goal attempts.'
   fg3_rate_pct: 'Percentile of fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   fg3_rate_rank: Rank of fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it
+    (a free throw: the lineup at the last foul).'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
   ft_rate_pct: 'Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   lineup_id: The unit's stats.ncaa.org player ids, sorted as text and joined with '-'.
-  mid_pct: Mid-range field-goal percentage, as a fraction. Null with a zero denominator.
+  mid_pct: 'Mid-range field-goal percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   mid_pct_n: 'Sample size of mid_pct: the unit''s mid-range attempts.'
   mid_pct_pct: 'Percentile of mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   mid_pct_rank: Rank of mid_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  mid_rate: Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  mid_rate: 'Share of the unit''s field-goal attempts that are other twos (mid-range). Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   mid_rate_n: 'Sample size of mid_rate: the unit''s field-goal attempts.'
   mid_rate_pct: 'Percentile of mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   mid_rate_rank: Rank of mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   minutes: Game-clock minutes the unit shared the floor over the season.
   n_players: 'Unit size: 2, 3 or 5 players.'
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
@@ -39240,94 +39340,118 @@ wbb_lineup_seasons:
   net_rtg_pct: 'Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_fg3_pct: The opponent's three-point percentage. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_fg3_pct: 'The opponent''s three-point percentage. Null with a zero denominator. Each event counts for the lineup on
+    the floor at it (a free throw: the lineup at the last foul).'
   opp_fg3_pct_n: 'Sample size of opp_fg3_pct: the opponent''s three-point attempts.'
   opp_fg3_pct_pct: 'Percentile of opp_fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_fg3_pct_rank: Rank of opp_fg3_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_fg3_rate: Share of the opponent's field-goal attempts that are threes. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_fg3_rate: 'Share of the opponent''s field-goal attempts that are threes. Null with a zero denominator. Each event counts
+    for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_fg3_rate_n: 'Sample size of opp_fg3_rate: the opponent''s field-goal attempts.'
   opp_fg3_rate_pct: 'Percentile of opp_fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_fg3_rate_rank: Rank of opp_fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponent''s field-goal attempts.'
   opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_mid_pct: The opponent's mid-range field-goal percentage. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_mid_pct: 'The opponent''s mid-range field-goal percentage. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   opp_mid_pct_n: 'Sample size of opp_mid_pct: the opponent''s mid-range attempts.'
   opp_mid_pct_pct: 'Percentile of opp_mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_mid_pct_rank: Rank of opp_mid_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_mid_rate: Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_mid_rate: 'Share of the opponent''s field-goal attempts that are mid-range twos. Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_mid_rate_n: 'Sample size of opp_mid_rate: the opponent''s field-goal attempts.'
   opp_mid_rate_pct: 'Percentile of opp_mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_mid_rate_rank: Rank of opp_mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponent''s offensive-rebound chances.'
   opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
-  opp_rim_pct: The opponent's field-goal percentage at the rim. Null with a zero denominator.
+  opp_rim_pct: 'The opponent''s field-goal percentage at the rim. Null with a zero denominator. Each event counts for the
+    lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_pct_n: 'Sample size of opp_rim_pct: the opponent''s rim attempts.'
   opp_rim_pct_pct: 'Percentile of opp_rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_rim_pct_rank: Rank of opp_rim_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_rim_rate: Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_rim_rate: 'Share of the opponent''s field-goal attempts at the rim with the unit on the floor. Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_rate_n: 'Sample size of opp_rim_rate: the opponent''s field-goal attempts.'
   opp_rim_rate_pct: 'Percentile of opp_rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_rim_rate_rank: Rank of opp_rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  opp_tov_pct: 'The opponent''s turnovers per defensive possession. Null with a zero denominator. Each event counts for the
+    lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
-  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator.'
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
+  orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
+    event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   orb_pct_n: 'Sample size of orb_pct: the unit''s offensive-rebound chances.'
   orb_pct_pct: 'Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39338,29 +39462,35 @@ wbb_lineup_seasons:
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
-  rim_pct: Field-goal percentage at the rim, as a fraction. Null with a zero denominator.
+  rim_pct: 'Field-goal percentage at the rim, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   rim_pct_n: 'Sample size of rim_pct: the unit''s rim attempts.'
   rim_pct_pct: 'Percentile of rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   rim_pct_rank: Rank of rim_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
-  rim_rate: Share of the unit's field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
+  rim_rate: 'Share of the unit''s field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator.
+    Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   rim_rate_n: 'Sample size of rim_rate: the unit''s field-goal attempts.'
   rim_rate_pct: 'Percentile of rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   rim_rate_rank: Rank of rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average),
-    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate,
-    or fewer than ten qualifiers.
+    among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
+    and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
+    one value.
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id of the unit's team.
-  tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator.
+  tov_pct: 'Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each event counts for the lineup
+    on the floor at it (a free throw: the lineup at the last foul).'
   tov_pct_n: 'Sample size of tov_pct: poss.'
   tov_pct_pct: 'Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
-    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier, a null rate, or fewer
-    than ten qualifiers.
+    units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and
+    for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one
+    value.
 nba_lineup_count_rows:
   away_1: stats.nba.com id of away player 1 on the floor when the possession starts.
   away_2: stats.nba.com id of away player 2 on the floor when the possession starts.
@@ -74488,6 +74618,880 @@ nbadraft_mock_draft:
 rotowire_injuries:
   return_date: Projected return date as RotoWire shows it; null for non-subscribers (the endpoint sends "Subscribers Only")
     and when the cell is blank.
+nba_coach_seasons:
+  coach: Head coach's name (stats.nba.com's staff list).
+  coach_id: stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  first_game_date: Date of the coach's first credited game that season.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  games: 'Games credited to the coach: each completed game goes to the coach of record for it.'
+  last_game_date: Date of the coach's last credited game that season.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
+    (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  team: Team abbreviation (the stats schedule's).
+  team_games: The team's completed games in the season (and season type); games < team_games means the coach shared the season.
+  team_id: stats.nba.com team id (the 10-digit franchise id).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+nba_coach_careers:
+  coach: Head coach's name (stats.nba.com's staff list).
+  coach_id: stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  first_season: First season in the career.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  games: Games credited to the coach over the seasons passed in.
+  last_season: Last season in the career.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
+    input; null under five) (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  seasons: Distinct seasons in the career (only the seasons passed in).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  teams: Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+wnba_coach_seasons:
+  coach: Head coach's name (stats.nba.com's staff list).
+  coach_id: stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  first_game_date: Date of the coach's first credited game that season.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  games: 'Games credited to the coach: each completed game goes to the coach of record for it.'
+  last_game_date: Date of the coach's last credited game that season.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
+    (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  team: Team abbreviation (the stats schedule's).
+  team_games: The team's completed games in the season (and season type); games < team_games means the coach shared the season.
+  team_id: stats.nba.com team id (the 10-digit franchise id).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+wnba_coach_careers:
+  coach: Head coach's name (stats.nba.com's staff list).
+  coach_id: stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  first_season: First season in the career.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  games: Games credited to the coach over the seasons passed in.
+  last_season: Last season in the career.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
+    input; null under five) (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  seasons: Distinct seasons in the career (only the seasons passed in).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  teams: Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+mbb_coach_seasons:
+  coach: Head coach's name (the stats.ncaa.org coach card).
+  coach_id: NCAA person id of the head coach (stats.ncaa.org /people/{id}).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  first_game_date: Date of the coach's first credited game that season.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  games: 'Games credited to the coach: each completed game goes to the coach of record for it.'
+  last_game_date: Date of the coach's last credited game that season.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
+    (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  team: School (ESPN location).
+  team_games: The team's completed games in the season (and season type); games < team_games means the coach shared the season.
+  team_id: ESPN team id of the school (ESPN's schedule and the crosswalk of the NCAA team-season id).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+mbb_coach_careers:
+  coach: Head coach's name (the stats.ncaa.org coach card).
+  coach_id: NCAA person id of the head coach (stats.ncaa.org /people/{id}).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  first_season: First season in the career.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  games: Games credited to the coach over the seasons passed in.
+  last_season: Last season in the career.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
+    input; null under five) (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  seasons: Distinct seasons in the career (only the seasons passed in).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  teams: Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+wbb_coach_seasons:
+  coach: Head coach's name (the stats.ncaa.org coach card).
+  coach_id: NCAA person id of the head coach (stats.ncaa.org /people/{id}).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  first_game_date: Date of the coach's first credited game that season.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  games: 'Games credited to the coach: each completed game goes to the coach of record for it.'
+  last_game_date: Date of the coach's last credited game that season.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under
+    five coaches) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches)
+    (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  team: School (ESPN location).
+  team_games: The team's completed games in the season (and season type); games < team_games means the coach shared the season.
+  team_id: ESPN team id of the school (ESPN's schedule and the crosswalk of the NCAA team-season id).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct within the season among coaches with at least half the most games any team played (null under five
+    coaches) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+wbb_coach_careers:
+  coach: Head coach's name (the stats.ncaa.org coach card).
+  coach_id: NCAA person id of the head coach (stats.ncaa.org /people/{id}).
+  d_dreb: Opponents' defensive rebounds in the coach's games (a four-factor count).
+  d_ff_poss: Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count).
+  d_fg3m: Opponents' three-pointers made in the coach's games (a four-factor count).
+  d_fga: Opponents' field-goal attempts in the coach's games (a four-factor count).
+  d_fgm: Opponents' field goals made in the coach's games (a four-factor count).
+  d_fta: Opponents' free-throw attempts in the coach's games (a four-factor count).
+  d_oreb: Opponents' offensive rebounds in the coach's games (a four-factor count).
+  d_tov: Opponents' turnovers in the coach's games (a four-factor count).
+  def_rtg: 'Defensive rating: points allowed per 100 defensive possessions, over the coach''s games.'
+  def_rtg_n: 'Sample size of def_rtg: defensive possessions.'
+  def_rtg_pct: 'Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  def_rtg_rank: Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
+  efg_pct_n: 'Sample size of efg_pct: field-goal attempts.'
+  efg_pct_pct: 'Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  efg_pct_rank: Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  first_season: First season in the career.
+  ft_rate: Free-throw rate, FTA / FGA.
+  ft_rate_n: 'Sample size of ft_rate: field-goal attempts.'
+  ft_rate_pct: 'Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  ft_rate_rank: Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  games: Games credited to the coach over the seasons passed in.
+  last_season: Last season in the career.
+  losses: Losses in the coach's games (final scores).
+  net_rtg: 'Net rating: off_rtg minus def_rtg.'
+  net_rtg_n: 'Sample size of net_rtg: offensive plus defensive possessions.'
+  net_rtg_pct: 'Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  net_rtg_rank: Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  o_dreb: The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_ff_poss: The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor
+    count; null when the source has none).
+  o_fg3m: The team's three-pointers made in the coach's games (a four-factor count; null when the source has none).
+  o_fga: The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none).
+  o_fgm: The team's field goals made in the coach's games (a four-factor count; null when the source has none).
+  o_fta: The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none).
+  o_oreb: The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none).
+  o_tov: The team's turnovers in the coach's games (a four-factor count; null when the source has none).
+  off_rtg: 'Offensive rating: points scored per 100 offensive possessions, over the coach''s games.'
+  off_rtg_n: 'Sample size of off_rtg: offensive possessions.'
+  off_rtg_pct: 'Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  off_rtg_rank: Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  opp_efg_pct: Opponents' effective field-goal percentage, as a fraction.
+  opp_efg_pct_n: 'Sample size of opp_efg_pct: opponents'' field-goal attempts.'
+  opp_efg_pct_pct: 'Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_efg_pct_rank: Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
+  opp_ft_rate_n: 'Sample size of opp_ft_rate: opponents'' field-goal attempts.'
+  opp_ft_rate_pct: 'Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_ft_rate_rank: Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_orb_pct: Opponents' offensive rebound rate, as a fraction.
+  opp_orb_pct_n: 'Sample size of opp_orb_pct: opponents'' offensive-rebound chances.'
+  opp_orb_pct_pct: 'Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_orb_pct_rank: Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the lowest value ranks 1; ties average).
+  opp_poss: Defensive possessions in the coach's games.
+  opp_poss_pts: Points allowed on those possessions (the def_rtg numerator).
+  opp_pts: Points allowed in the coach's games (final scores).
+  opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
+  opp_tov_pct_n: 'Sample size of opp_tov_pct: opponents'' turnover-rate possessions.'
+  opp_tov_pct_pct: 'Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with
+    a value.'
+  opp_tov_pct_rank: Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a
+    season of the input; null under five) (the highest value ranks 1; ties average).
+  orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB), as a fraction.'
+  orb_pct_n: 'Sample size of orb_pct: offensive-rebound chances.'
+  orb_pct_pct: 'Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  orb_pct_rank: Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
+  pace_n: 'Sample size of pace: the games with possessions (pbp_games).'
+  pace_pct: 'Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  pace_rank: Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the
+    input; null under five) (the highest value ranks 1; ties average).
+  pbp_games: The coach's games with published possessions; the ratings and four factors cover these.
+  poss: Offensive possessions in the coach's games.
+  poss_pts: Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game).
+  pts: Points scored in the coach's games (final scores).
+  role: 'HC: head coach (the only role the table carries).'
+  seasons: Distinct seasons in the career (only the seasons passed in).
+  seconds: Game clock, in seconds, that the coach's possessions used (the pace denominator).
+  teams: Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros).
+  tov_pct: Turnovers per possession, as a fraction.
+  tov_pct_n: 'Sample size of tov_pct: turnover-rate possessions.'
+  tov_pct_pct: 'Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  tov_pct_rank: Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the lowest value ranks 1; ties average).
+  win_pct: 'Win fraction: wins divided by games, from the final scores.'
+  win_pct_n: 'Sample size of win_pct: games.'
+  win_pct_pct: 'Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value.'
+  win_pct_rank: Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of
+    the input; null under five) (the highest value ranks 1; ties average).
+  wins: Wins in the coach's games (final scores).
+ncaa_team_coaches:
+  season: Season, named by the year it ends (2025 is 2024-25).
+  ncaa_team_id: stats.ncaa.org team-season id (the roster page's file name, teams/{id}).
+  team_id: ESPN team id of the school, from the season's teams/json crosswalk; null when the crosswalk has none.
+  team: School name as stats.ncaa.org's crosswalk gives it.
+  coach_id: NCAA person id of the head coach (stats.ncaa.org /people/{id}).
+  coach: Head coach's name on the page's Coach card.
+  career_seasons: The coach's seasons as a head coach through this one, every school and division (the card's Seasons).
+  career_wins: The coach's career wins through this season (the card's Record; the NCAA drops vacated wins).
+  career_losses: The coach's career losses through this season (the card's Record).
+ncaa_coach_stints:
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: ESPN team id of the school (from the card's NCAA team-season crosswalk).
+  coach_id: NCAA person id of the card's head coach (stats.ncaa.org /people/{id}).
+  coach: Head coach's name on the card.
+  games: Always null here; the card coach has the whole season (a season the card shows changing hands has no stint).
+  wins: Always null here, as games.
+  position: Always any; one whole-season stint per team-season.
 nba_game_flow:
   avg_margin: 'Game control: the team''s score margin averaged over the game clock.'
   avg_wp: 'Game control: the team''s in-game win probability averaged over the game clock (the league''s in-game model with a home-court-only

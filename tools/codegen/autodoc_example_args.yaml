@@ -199,6 +199,8 @@ nba:
   nba_lineup_count_rows: {possessions: {$call: nba.load_nba_stats_possessions, args: {seasons: 2024}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2024}}}
   nba_team_strength: {seasons: 2026}  # 30 rows x 77 cols
   nba_team_luck: {seasons: 2026}
+  nba_coach_seasons: {seasons: 2026}
+  nba_coach_careers: {seasons: 2026}
   nba_game_flow: {seasons: 2026}
   nba_team_season_flow: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
@@ -296,6 +298,8 @@ wnba:
   wnba_lineup_seasons: {seasons: 2025}
   wnba_team_strength: {seasons: 2025}  # 13 rows x 77 cols
   wnba_team_luck: {seasons: 2025}
+  wnba_coach_seasons: {seasons: 2025}
+  wnba_coach_careers: {seasons: 2025}
   wnba_game_flow: {seasons: 2025}
   wnba_team_season_flow: {seasons: 2025}
   wnba_season_sim: {season: 2025, as_of_date: 2025-07-16}  # 13 rows x 43 cols

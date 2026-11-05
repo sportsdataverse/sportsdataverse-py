@@ -1,0 +1,31 @@
+schema: ncaa_team_coaches
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: ncaa_team_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: coach_id
+  type: integer
+  description: ''
+- name: coach
+  type: character
+  description: ''
+- name: career_seasons
+  type: integer
+  description: ''
+- name: career_wins
+  type: integer
+  description: ''
+- name: career_losses
+  type: integer
+  description: ''

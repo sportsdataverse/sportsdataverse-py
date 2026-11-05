@@ -241,44 +241,46 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [make_prob_joint](additional/analytics.md#make_prob_joint) | Independence-combined defender x shot-clock make probability. |
 | [nba_availability](additional/analytics.md#nba_availability) | Project games-available % for a season (or seasons) from career GP history. |
 | [nba_box_logs](additional/analytics.md#nba_box_logs) | Fetch per-player and per-team game logs for a season (bulk, one call each). |
-| [nba_cup_sim](additional/analytics.md#nba_cup_sim) | NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win. |
-| [nba_cup_standings](additional/analytics.md#nba_cup_standings) | NBA Cup Group Play standings as of a date, with the official tiebreak order and wild cards. |
-| [nba_draft_lottery_odds](additional/analytics.md#nba_draft_lottery_odds) | Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick. |
-| [nba_foul_drawing](additional/analytics.md#nba_foul_drawing) | Expected FTA + residual foul-drawing skill from Synergy play-type mix. |
-| [nba_game_flow](additional/analytics.md#nba_game_flow) | Game flow per team and game: runs, droughts, kills, lead changes, time leading and game control. |
-| [nba_game_lineups_used](additional/analytics.md#nba_game_lineups_used) | The lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
-| [nba_game_player_impact](additional/analytics.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
+| [nba_coach_careers](additional/analytics.md#nba_coach_careers) | Head-coach careers over `seasons`: `nba_coach_seasons` summed per coach, rates recomputed. |
+| [nba_coach_seasons](additional/analytics-2.md#nba_coach_seasons) | Head-coach seasons: W-L, ratings and four factors over the games each coach was on the bench for. |
+| [nba_cup_sim](additional/analytics-2.md#nba_cup_sim) | NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win. |
+| [nba_cup_standings](additional/analytics-2.md#nba_cup_standings) | NBA Cup Group Play standings as of a date, with the official tiebreak order and wild cards. |
+| [nba_draft_lottery_odds](additional/analytics-2.md#nba_draft_lottery_odds) | Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick. |
+| [nba_foul_drawing](additional/analytics-2.md#nba_foul_drawing) | Expected FTA + residual foul-drawing skill from Synergy play-type mix. |
+| [nba_game_flow](additional/analytics-2.md#nba_game_flow) | Game flow per team and game: runs, droughts, kills, lead changes, time leading and game control. |
+| [nba_game_lineups_used](additional/analytics-2.md#nba_game_lineups_used) | The lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [nba_game_player_impact](additional/analytics-2.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [nba_impact_rows](additional/analytics-2.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
 | [nba_l2m](additional/analytics-2.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
 | [nba_l2m_games](additional/analytics-2.md#nba_l2m_games) | Fetch the list of games with Last Two Minute reports for an NBA season. |
 | [nba_lineup_count_rows](additional/analytics-2.md#nba_lineup_count_rows) | Map `nba_stats_possessions` rows onto the lineup-seasons count frame. |
 | [nba_lineup_seasons](additional/analytics-2.md#nba_lineup_seasons) | Lineup seasons: 2-, 3- and 5-man units with possessions, minutes, ratings and four factors. |
-| [nba_play_context](additional/analytics-2.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
-| [nba_player_ages](additional/analytics-2.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
-| [nba_player_identity](additional/analytics-2.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
-| [nba_player_positions](additional/analytics-2.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
-| [nba_player_props](additional/analytics-2.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
-| [nba_playtype_ratings](additional/analytics-2.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
-| [nba_possession_rate_rows](additional/analytics-2.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
-| [nba_ratings_panel](additional/analytics-2.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
-| [nba_raw_store_season_frame](additional/analytics-2.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
-| [nba_referee_assignments](additional/analytics-2.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
-| [nba_score_rows](additional/analytics-2.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
-| [nba_season_sim](additional/analytics-2.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
+| [nba_play_context](additional/analytics-3.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
+| [nba_player_ages](additional/analytics-3.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
+| [nba_player_identity](additional/analytics-3.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
+| [nba_player_positions](additional/analytics-3.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
+| [nba_player_props](additional/analytics-3.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
+| [nba_playtype_ratings](additional/analytics-3.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
+| [nba_possession_rate_rows](additional/analytics-3.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
+| [nba_ratings_panel](additional/analytics-3.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
+| [nba_raw_store_season_frame](additional/analytics-3.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
+| [nba_referee_assignments](additional/analytics-3.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
+| [nba_score_rows](additional/analytics-3.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
+| [nba_season_sim](additional/analytics-3.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-3.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-3.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-3.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-3.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
 | [nba_team_luck](additional/analytics-3.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [nba_team_season_flow](additional/analytics-3.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
-| [nba_team_season_rates](additional/analytics-3.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
-| [nba_team_strength](additional/analytics-3.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
-| [nba_tracking_drive_value](additional/analytics-3.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
-| [nba_tracking_pass_value](additional/analytics-3.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
-| [nba_tracking_reb_oe](additional/analytics-3.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
-| [nba_tracking_rim_protect_value](additional/analytics-3.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
-| [nba_tracking_shot_diet_value](additional/analytics-3.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
-| [nba_tracking_touch_value](additional/analytics-3.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
+| [nba_team_season_rates](additional/analytics-4.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
+| [nba_team_strength](additional/analytics-4.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
+| [nba_tracking_drive_value](additional/analytics-4.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
+| [nba_tracking_pass_value](additional/analytics-4.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
+| [nba_tracking_reb_oe](additional/analytics-4.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
+| [nba_tracking_rim_protect_value](additional/analytics-4.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
+| [nba_tracking_shot_diet_value](additional/analytics-4.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
+| [nba_tracking_touch_value](additional/analytics-4.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-4.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
 | [player_play_context](additional/analytics-4.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
 | [player_rates](additional/analytics-4.md#player_rates) | Per-player per-minute rate stats from box logs. |
@@ -290,16 +292,16 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [prop_distribution](additional/analytics-4.md#prop_distribution) | Distribution family + parameters for a projected stat mean. |
 | [ratings_as_of](additional/analytics-4.md#ratings_as_of) | Fit `model` on every possession dated on or before `asof` and return ratings. |
 | [rotowire_injuries](additional/analytics-4.md#rotowire_injuries) | The current NBA injury report from RotoWire. |
-| [score_shot_xpoints](additional/analytics-4.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
-| [shooter_talent](additional/analytics-4.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
-| [shot_selection_quality](additional/analytics-4.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
-| [shrink_clutch](additional/analytics-4.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |
-| [spotrac_team_cap](additional/analytics-4.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |
-| [starters_on_court_counts](additional/analytics-4.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
-| [team_pace_projection](additional/analytics-4.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
-| [team_play_context](additional/analytics-4.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
-| [xpoints_baseline](additional/analytics-4.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
-| [zone_value_map](additional/analytics-4.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
+| [score_shot_xpoints](additional/analytics-5.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
+| [shooter_talent](additional/analytics-5.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
+| [shot_selection_quality](additional/analytics-5.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
+| [shrink_clutch](additional/analytics-5.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |
+| [spotrac_team_cap](additional/analytics-5.md#spotrac_team_cap) | Team salary-cap allocations from Spotrac. |
+| [starters_on_court_counts](additional/analytics-5.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
+| [team_pace_projection](additional/analytics-5.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
+| [team_play_context](additional/analytics-5.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
+| [xpoints_baseline](additional/analytics-5.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
+| [zone_value_map](additional/analytics-5.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
 ## Dates and seasons
 

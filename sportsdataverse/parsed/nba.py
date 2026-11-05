@@ -328,6 +328,8 @@ from sportsdataverse.nba import nba_availability as nba_availability  # noqa: F4
 from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
 from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
 from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  # noqa: F401
+from sportsdataverse.nba import nba_coach_careers as nba_coach_careers  # noqa: F401
+from sportsdataverse.nba import nba_coach_seasons as nba_coach_seasons  # noqa: F401
 from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_from_archive  # noqa: F401
 from sportsdataverse.nba import nba_cup_sim as nba_cup_sim  # noqa: F401
 from sportsdataverse.nba import nba_cup_standings as nba_cup_standings  # noqa: F401
@@ -759,6 +761,8 @@ __all__ = [
     "nba_box_logs",
     "nba_bpm",
     "nba_career_trajectory",
+    "nba_coach_careers",
+    "nba_coach_seasons",
     "nba_crosswalks_from_archive",
     "nba_cup_sim",
     "nba_cup_standings",

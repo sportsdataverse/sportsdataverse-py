@@ -9595,6 +9595,124 @@
   expected: kill
   note: A game with play-by-play but no possessions would add points and minutes to units with no possessions.
 
+# --- BB-D8: coach seasons and careers (sportsdataverse/_common/coach_seasons.py + adapters) -------
+- id: bb-cs-espn-name-filter
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'spellings.join(rec.select("season", "team_id", "_name", "wins", "losses"), on=["season", "team_id", "_name"])'
+  mutant: 'spellings.join(rec.select("season", "team_id", "wins", "losses"), on=["season", "team_id"])'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Taking ESPN's count for any coach it lists under the team (its assistants too) puts the wrong runs on the stats candidates.
+- id: bb-cs-opener-shift
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'heads.with_columns(pl.col("season") + 1, pl.lit("first").alias("position")),'
+  mutant: 'heads.with_columns(pl.col("season") + 0, pl.lit("first").alias("position")),'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Reading the opener from the season's own file makes every closer look like he had the whole season.
+- id: bb-cs-gap-position
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: '"all" if last == 0 else "first" if j == 0 else "last" if j == last else "middle"'
+  mutant: '"all" if last == 0 else "last" if j == 0 else "first" if j == last else "middle"'
+  test: tests/nba/test_nba_coach_seasons.py::test_mid_season_change_is_split_by_game
+  expected: kill
+  note: A gap at the start filled by the closer credits Lue with Blatt's 41 games.
+- id: bb-cs-run-wins
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'elif sum(won[len(out) : len(out) + n]) == w:'
+  mutant: 'elif True:'
+  test: tests/nba/test_nba_coach_seasons.py::test_unplaceable_team_season_is_left_uncredited
+  expected: kill
+  note: Without the win check a count that fits no run of games is placed anyway.
+- id: bb-cs-career-sums
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'then(pl.col(c).sum()).alias(c)'
+  mutant: 'then(pl.col(c).mean()).alias(c)'
+  test: tests/nba/test_nba_coach_seasons.py::test_careers_pool_counts
+  expected: kill
+  note: A career is its summed counts; a mean of seasons halves a two-season career's games.
+- id: bb-cs-defense-key
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'pl.col("_defense_key").alias("defense_team_id")'
+  mutant: 'pl.col("_offense_key").alias("defense_team_id")'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_rates_add_up_to_the_team
+  expected: kill
+  note: Keying the defense by the offense's coach credits a team's own possessions as its defense.
+- id: bb-cs-card-first-season
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: 'first = pl.col("career_seasons") == 1'
+  mutant: 'first = pl.col("career_seasons") == 0'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_card_record_against_espn_final_scores
+  expected: kill
+  note: A first-year coach's career record is his season; dropping it leaves those seasons unchecked.
+- id: bb-cs-card-record
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: '"career_wins": int(record.group(1)) if record else None,'
+  mutant: '"career_wins": int(record.group(2)) if record else None,'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_parse_the_coach_card
+  expected: kill
+  note: The card reads W-L; swapping the groups reads losses as wins.
+- id: bb-cs-closer-never-fills
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'pl.col("position") != "last"'
+  mutant: 'pl.col("position") != "none"'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_season_counts_against_basketball_reference
+  expected: kill
+  note: A count-less closer filling the games after a counted opener gives John Beilein Larry Drew's 76 games of 2018-19.
+- id: bb-cs-positions-pinned
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'if _misplaced(order, last):'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_coach_seasons.py::test_unplaceable_team_season_is_left_uncredited
+  expected: kill
+  note: Without the position check a counted opener can be placed at the end of the season.
+- id: bb-cs-unique-placement
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'return list(found.pop()) if len(found) == 1 else None'
+  mutant: 'return list(found.pop()) if len(found) >= 1 else None'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Taking one of several fitting placements guesses which end of the season a coach had.
+- id: bb-cs-carry-final-game
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'final = regular.sort("game_date", "game_id").group_by("season", "team_id").agg(pl.col("game_id").last())'
+  mutant: 'final = regular.sort("game_date", "game_id").group_by("season", "team_id").agg(pl.col("game_id").first())'
+  test: tests/nba/test_nba_coach_seasons.py::test_playoffs_go_to_the_last_regular_season_coach
+  expected: kill
+  note: Carrying an earlier game's coach gives Sacramento's 2024-25 postseason to Mike Brown, fired in December.
+- id: bb-cs-college-change-uncredited
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: 'joined.filter(~changed.fill_null(False))'
+  mutant: 'joined.filter(pl.lit(True))'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_changed_season_card_figures_are_the_other_coachs
+  expected: kill
+  note: A changed season's card coach would be credited with his successor's or predecessor's games.
 # --- BB-D27: game flow and sequence stats (runs, droughts, kills, lead changes, game control) ---
 - id: bb-gf-scoring-events
   group: bb-game-flow

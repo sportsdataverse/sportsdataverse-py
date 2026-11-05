@@ -55,7 +55,7 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
         with Int64 player ids.
 
     Raises:
-        ValueError: If a count column holds a null.
+        ValueError: If a count column holds a null in a possession of a ``schedule`` game.
 
     Example:
         Quick start::
@@ -70,6 +70,8 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
         pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64), pl.col("away_team_id").cast(pl.Int64)
     ).unique("game_id")
     sources = ("fg2a", "fg2m", "fg3a", "fg3m", "fta", "oreb", "dreb", "tov")
+    # Only the schedule's games: a null in a possession the build never reads must not stop it.
+    possessions = possessions.filter(pl.col("game_id").cast(pl.Utf8).is_in(games["game_id"].implode()))
     nulls = [c for c in sources if possessions[c].null_count()]
     if nulls:  # a missing count would zero a known one (fga = fg2a + fg3a) and skew every rate over it
         raise ValueError(f"possessions carry null counts in {nulls}; the four factors need every count")

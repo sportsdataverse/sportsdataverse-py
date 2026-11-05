@@ -152,6 +152,7 @@ from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_team_strength import nba_team_strength  # noqa: F401
 from sportsdataverse.nba.nba_team_luck import nba_team_luck  # noqa: F401
+from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers, nba_coach_seasons  # noqa: F401
 from sportsdataverse.nba.nba_game_flow import nba_game_flow, nba_score_rows, nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_season_standings  # noqa: F401
 from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401

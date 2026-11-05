@@ -281,3 +281,14 @@ def test_wnba_half_seasons_count_the_whole_game() -> None:
     both = want.join(got, on="team_id", validate="1:1")
     assert both.height == 6 and set(periods["period"]) == {2, 4}  # six teams; three regulation games, one 2OT
     assert ((both["minutes"] - both["want"]).abs() < 1e-3).all(), both
+
+
+def test_null_counts_raise_only_in_the_built_games() -> None:
+    poss, schedule = _read("nba", "possessions"), _read("nba", "schedule")
+    game = schedule["game_id"].sort()[0]
+    gapped = poss.with_columns(pl.when(pl.col("game_id") == game).then(None).otherwise(pl.col("fg3a")).alias("fg3a"))
+    with pytest.raises(ValueError, match="fg3a"):
+        nba_lineup_count_rows(gapped, schedule)
+    # the same null in a game the build leaves out (another season type, say) is never read
+    others = schedule.filter(pl.col("game_id") != game)
+    assert nba_lineup_count_rows(gapped, others).equals(nba_lineup_count_rows(poss, others))

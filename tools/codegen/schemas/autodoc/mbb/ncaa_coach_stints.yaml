@@ -1,0 +1,25 @@
+schema: ncaa_coach_stints
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: coach_id
+  type: integer
+  description: ''
+- name: coach
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: wins
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
