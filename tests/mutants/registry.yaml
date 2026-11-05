@@ -10117,3 +10117,96 @@
   test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
   expected: kill
   note: k would be chosen on a training season whose missing feature sits at the mean for every row.
+
+# --- BB-D24: EPV and EPV added (sportsdataverse/nba/nba_epv.py) -----------------------------------
+# Killers: tests/nba/test_nba_epv.py on the committed 2023-24 NBA and 2024 WNBA holdout games
+# (tests/fixtures/bb_epv), scored with the bundled boosters.
+- id: bb-epv-start-margin-before-event
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(prev["_h"] - prev["_a"]).alias("_pre_home_margin")'
+  mutant: '(pl.col("_h") - pl.col("_a")).alias("_pre_home_margin")'
+  test: tests/nba/test_nba_epv.py::test_start_margin_is_the_lead_before_the_first_event
+  expected: kill
+  note: The margin after the start event counts a possession's own first basket in its starting state.
+
+- id: bb-epv-transition-as-of
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(seen & pl.col("is_transition"))'
+  mutant: 'pl.when(pl.col("is_transition"))'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: is_transition is known only once the first shot is taken; before it the flag leaks the future.
+
+- id: bb-epv-added-points-term
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(pl.col("points") + pl.col("epv_after") - pl.col("epv_before"))'
+  mutant: '(pl.col("epv_after") - pl.col("epv_before"))'
+  test: tests/nba/test_nba_epv.py::test_epv_added_telescopes_over_each_possession
+  expected: kill
+  note: Without the points on the play a made shot reads as a loss of EPV.
+
+- id: bb-epv-end-prices-next-start
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(float(mean) - pl.col("_next_start"))'
+  mutant: '.then(0.0)'
+  test: tests/nba/test_nba_epv.py::test_a_possession_end_prices_the_next_start
+  expected: kill
+  note: A live-ball turnover and a dead-ball one would cost the offense the same.
+
+- id: bb-epv-offense-points-side
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(pl.col("_dh"))'
+  mutant: '.then(pl.col("_da"))'
+  test: tests/nba/test_nba_epv.py::test_labels_sum_to_the_engine_points
+  expected: kill
+  note: The label must be the offense's points, read from its own side of the score.
+
+- id: bb-epv-ft-foul-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=pl.col("event_type") == "foul"'
+  mutant: 'is_foul=pl.lit(False)'
+  test: tests/nba/test_nba_epv.py::test_free_throws_land_on_the_foul_lineup
+  expected: kill
+  note: BB-D6's rule; a player subbed in between a foul and its free throws is not on for them.
+
+- id: bb-epv-action-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'slot = {k: pl.when(known).then(pl.col(f"_{k}")).otherwise(v) for k, v in slot.items()}'
+  mutant: 'known = known'
+  test: tests/nba/test_nba_epv.py::test_on_court_reads_the_action_lineup
+  expected: kill
+  note: Without the game lineups release a mid-possession substitute is credited with nothing.
+
+- id: bb-epv-steal-credit
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(-prev)'
+  mutant: '.then(None)'
+  test: tests/nba/test_nba_epv.py::test_own_actions_credit_the_actor
+  expected: kill
+  note: A steal or block credits the defender with the turnover or miss it ended.
+
+- id: bb-epv-nba-start-year
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'start = [x - 1 for x in s]'
+  mutant: 'start = s'
+  test: tests/nba/test_nba_epv.py::test_season_loaders_take_the_start_year
+  expected: kill
+  note: The NBA loaders take the start year; season 2024 is the 2023 asset.

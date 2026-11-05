@@ -258,6 +258,10 @@ from sportsdataverse.wnba import wnba_crosswalks_from_archive as wnba_crosswalks
 from sportsdataverse.wnba import wnba_draft_lottery_odds as wnba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_lineup_games as wnba_epv_lineup_games  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_player_games as wnba_epv_player_games  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_plays as wnba_epv_plays  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_team_games as wnba_epv_team_games  # noqa: F401
 from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
 from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa: F401
 from sportsdataverse.wnba import wnba_game_flow as wnba_game_flow  # noqa: F401
@@ -542,6 +546,10 @@ __all__ = [
     "wnba_draft_lottery_odds",
     "wnba_draft_model",
     "wnba_enhanced_pbp",
+    "wnba_epv_lineup_games",
+    "wnba_epv_player_games",
+    "wnba_epv_plays",
+    "wnba_epv_team_games",
     "wnba_expected_turnovers",
     "wnba_foul_drawing",
     "wnba_game_flow",

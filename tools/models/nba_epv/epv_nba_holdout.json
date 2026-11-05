@@ -1,0 +1,88 @@
+{
+  "league_id": "00",
+  "train_seasons": [
+    2021,
+    2022,
+    2023
+  ],
+  "holdout_season": 2024,
+  "confirmation_season": 2025,
+  "n_train_states": 2421821,
+  "rounds": 82,
+  "start_epv_mean": 1.1332021951675415,
+  "params": {
+    "objective": "reg:squarederror",
+    "eval_metric": "rmse",
+    "max_depth": 6,
+    "eta": 0.1,
+    "min_child_weight": 50,
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42
+  },
+  "features": [
+    "start_type",
+    "period",
+    "seconds_remaining",
+    "start_margin",
+    "transition",
+    "last_event",
+    "ft_pending",
+    "shot_zone"
+  ],
+  "gates": {
+    "max_large_bias": 0.02,
+    "max_bucket_bias": 0.06,
+    "min_bucket": 5000
+  },
+  "holdout": {
+    "states": 838041,
+    "possessions": 242618,
+    "mse": 0.7657775130120534,
+    "mse_constant": 1.0389751531868516,
+    "mse_cell_mean": 0.7754018852128282,
+    "skill_vs_constant": 0.2629491565191123,
+    "mse_start": 1.4055280596316908,
+    "mse_start_constant": 1.415197366625126,
+    "mean_epv": 0.6633326373904926,
+    "mean_label": 0.674416884138127,
+    "large_bias": -0.011084246747634308,
+    "calibration_slope": 1.019994499250483,
+    "buckets": 19,
+    "max_bucket_bias": 0.04999172792533519,
+    "worst_bucket": {
+      "last_event": 7,
+      "transition": 1,
+      "n": 11580,
+      "bias": -0.04999172792533519
+    },
+    "small_buckets": 17,
+    "small_bucket_max_bias": 0.21866771942231714,
+    "identity_max_residual": 0.0
+  },
+  "confirmation": {
+    "states": 847106,
+    "possessions": 243735,
+    "mse": 0.7802043668703889,
+    "mse_constant": 1.0496736253914523,
+    "mse_cell_mean": 0.7890406238071849,
+    "skill_vs_constant": 0.25671718523038134,
+    "mse_start": 1.4235889599803995,
+    "mse_start_constant": 1.4333085384377562,
+    "mean_epv": 0.6669597795181748,
+    "mean_label": 0.6742166859873499,
+    "large_bias": -0.007256906469175095,
+    "calibration_slope": 1.0105068461227242,
+    "buckets": 19,
+    "max_bucket_bias": 0.03640358529178523,
+    "worst_bucket": {
+      "last_event": 5,
+      "transition": 1,
+      "n": 7345,
+      "bias": -0.03640358529178523
+    },
+    "small_buckets": 17,
+    "small_bucket_max_bias": 0.1742514482010966
+  },
+  "failed_gates": []
+}

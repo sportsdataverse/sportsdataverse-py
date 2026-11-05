@@ -337,6 +337,10 @@ from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
+from sportsdataverse.nba import nba_epv_lineup_games as nba_epv_lineup_games  # noqa: F401
+from sportsdataverse.nba import nba_epv_player_games as nba_epv_player_games  # noqa: F401
+from sportsdataverse.nba import nba_epv_plays as nba_epv_plays  # noqa: F401
+from sportsdataverse.nba import nba_epv_team_games as nba_epv_team_games  # noqa: F401
 from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
@@ -779,6 +783,10 @@ __all__ = [
     "nba_decay_rapm",
     "nba_draft_lottery_odds",
     "nba_draft_model",
+    "nba_epv_lineup_games",
+    "nba_epv_player_games",
+    "nba_epv_plays",
+    "nba_epv_team_games",
     "nba_expected_turnovers",
     "nba_foul_drawing",
     "nba_four_factor_rapm",

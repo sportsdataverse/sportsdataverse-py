@@ -147,6 +147,12 @@ from sportsdataverse.nba.nba_play_style import (  # noqa: F401
     nba_player_play_styles,
     nba_team_play_styles,
 )
+from sportsdataverse.nba.nba_epv import (  # noqa: F401
+    nba_epv_lineup_games,
+    nba_epv_player_games,
+    nba_epv_plays,
+    nba_epv_team_games,
+)
 from sportsdataverse.nba.nba_game_impact import (  # noqa: F401
     nba_game_lineups_used,
     nba_game_player_impact,
