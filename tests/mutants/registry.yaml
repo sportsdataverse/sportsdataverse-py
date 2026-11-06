@@ -10594,3 +10594,13 @@
   test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
   expected: kill
   note: The college public path would publish a null interval on every row.
+
+- id: bb-epv-college-wrong-basket-ends
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("Wrong Basket")'
+  mutant: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("No Such Event")'
+  test: tests/mbb/test_mbb_epv.py::test_a_wrong_basket_ends_its_possession
+  expected: kill
+  note: A wrong-basket two would trail into the next possession, crediting the side it was scored against.
