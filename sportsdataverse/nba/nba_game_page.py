@@ -1150,7 +1150,7 @@ def game_page_tables(
         if two_teams
         else pl.DataFrame(schema=_TEAM_RATES_SCHEMA),
         "player_game_rates": player_game_rates(player_box, team_box, periods=periods, league=lg, regulation_periods=reg)
-        if two_teams
+        if two_teams and not player_box.is_empty()
         else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
         "periods": periods,
         "regulation_periods": reg,
@@ -1196,8 +1196,9 @@ def game_page_frames(
     Returns:
         ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods",
         "prior", "league", "regulation_periods", "period_kind", "neutral_site"}``; see
-        :func:`game_page_tables` for the shared keys. Before both team box rows exist,
-        ``team_game_rates`` and ``player_game_rates`` are empty frames with their documented columns.
+        :func:`game_page_tables` for the shared keys. Missing boxes retain empty identifier columns.
+        Team rates need both team rows, and player rates also need player rows. Unavailable rates
+        are empty frames with their documented columns.
 
     Raises:
         ValueError: If the league is unknown or ``league`` contradicts ``league_id``.
@@ -1252,9 +1253,13 @@ def game_page_frames(
     )
     return {
         "pbp": tables["pbp"],
-        "team_box": team_box,
+        # The release converters return zero columns for unavailable boxes. Keep the
+        # lookup keys selectable so live consumers can still serve play-by-play.
+        "team_box": team_box if team_box.width else pl.DataFrame(schema={"team_id": pl.Int32}),
         "team_game_rates": tables["team_game_rates"],
-        "player_box": player_box,
+        "player_box": player_box
+        if player_box.width
+        else pl.DataFrame(schema={"team_id": pl.Int32, "athlete_id": pl.Int32}),
         "player_game_rates": tables["player_game_rates"],
         "periods": tables["periods"],
         "prior": tables["prior"],

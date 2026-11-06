@@ -565,3 +565,19 @@ def test_a_format_that_is_not_an_object_falls_back_to_the_season_era(
     final = _final(monkeypatch, "wnba", "summary_wnba.json")
     final["format"] = fmt  # game-on-paper-app's route test sends a string here; it used to raise AttributeError
     assert gp.game_page_frames(final, league="wnba")["regulation_periods"] == 4  # WNBA 2024: quarters
+
+
+def test_live_mbb_game_without_winner_flags_keeps_plays_and_selectable_box_keys(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    name = "mbb_401920423_live.json.gz"
+    final, pbp, team_box, player_box = _frames(monkeypatch, "mbb", name)
+    assert team_box.shape == player_box.shape == (0, 0)
+
+    frames = gp.game_page_frames(final, league="mbb")
+    assert frames["pbp"].height == pbp.height > 0
+    assert frames["pbp"]["home_win_prob"].null_count() == 0
+    assert frames["team_box"].filter(pl.col("team_id") == 258).is_empty()
+    assert frames["player_box"].select("team_id", "athlete_id").is_empty()
+    assert frames["team_game_rates"].is_empty()
+    assert frames["player_game_rates"].is_empty()

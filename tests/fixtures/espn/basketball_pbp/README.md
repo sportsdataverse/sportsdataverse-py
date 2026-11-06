@@ -50,3 +50,5 @@ raw captures. They live apart because `tests/basketball/test_sources.py` runs ev
 | `final/wnba_final_401230795.json.gz` | wehoop-wnba-raw @ 74eadad88 (`wnba/json/final/401230795.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` away favored by 8 |
 | `final/nba_final_400578320.json.gz` | hoopR-nba-raw @ 95bb2c4ee43 (`nba/json/final/400578320.json`), trimmed the same way, copied 2026-11-04 | #1088: baked 2.5 / unavailable; `pickcenter` home -3 |
 | `final/wbb_final_400995120.json.gz` | wehoop-wbb-raw @ f6e7d5dc342 (`wbb/json/final/400995120.json`), trimmed the same way, copied 2026-11-04 | #1088 / #1044: baked 2.5 / unavailable and no spread in `pickcenter`: the line stays null |
+
+- `mbb_401920423_live.json.gz` is the ESPN summary for Northeastern at Virginia, captured on November 6, 2026 during the second half. Both teams have statistics, and neither competitor has a `winner` field. [ESPN summary](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event=401920423)
