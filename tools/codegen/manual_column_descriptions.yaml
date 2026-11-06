@@ -77632,3 +77632,76 @@ wnba_player_factor_rapm:
   ridge_alpha: 'The ridge penalty of the season''s fit: RidgeCV''s leave-one-out pick for points over the nba_rapm grid, shared
     by every component so they add up.'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
+wnba_epv_plays:
+  action_number: stats.wnba.com action number of the event (the game lineups release's key).
+  def_player_1: stats.wnba.com player id of defensive player 1 of 5 when the possession started.
+  def_player_2: stats.wnba.com player id of defensive player 2 of 5 when the possession started.
+  def_player_3: stats.wnba.com player id of defensive player 3 of 5 when the possession started.
+  def_player_4: stats.wnba.com player id of defensive player 4 of 5 when the possession started.
+  def_player_5: stats.wnba.com player id of defensive player 5 of 5 when the possession started.
+  defense_team_id: Team id of the defense.
+  description: The play-by-play text of the event.
+  epv: Expected points for the offense to the end of the possession, after the event. Scaled by the game's as-of scoring level (the season's points per possession on earlier dates).
+  epv_added: 'EPV added: points + epv_after - epv_before, the offense''s (the defense''s is its negative).'
+  epv_after: EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end).
+  epv_before: EPV before the event (the previous event's, or the start's).
+  epv_start: EPV at the possession's start.
+  event_type: The release's event type (made_shot, missed_shot, rebound, foul, free_throw, turnover, ...).
+  ft_pending: 'State: free throws still to come in the trip.'
+  game_id: stats.wnba.com game id (e.g. 1022600001).
+  home_team_id: Team id of the home team.
+  is_last: Whether the event is its possession's last.
+  last_event: 'State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start).'
+  next_in_period: Whether another possession follows in the same period.
+  off_player_1: stats.wnba.com player id of offensive player 1 of 5 when the possession started.
+  off_player_2: stats.wnba.com player id of offensive player 2 of 5 when the possession started.
+  off_player_3: stats.wnba.com player id of offensive player 3 of 5 when the possession started.
+  off_player_4: stats.wnba.com player id of offensive player 4 of 5 when the possession started.
+  off_player_5: stats.wnba.com player id of offensive player 5 of 5 when the possession started.
+  offense_team_id: Team id of the offense (the team with the ball).
+  order_index: The event's order in the game's play-by-play.
+  period: 'State: the period, overtimes folded to 5.'
+  person_id: Player id on the event; the team id, or 0, on team events.
+  points: The offense's points on the event.
+  possession_number: The possession's number in the game (the possessions release's).
+  remaining_points: The offense's points after the event to the end of the possession (the model's label).
+  season: 'Season: the WNBA season is its calendar year.'
+  seconds_remaining: 'State: seconds left in the period after the event.'
+  shot_zone: 'State: zone of the possession''s latest shot, 0 none, 1 rim, 2 short, 3 mid two, 4 three.'
+  start_margin: 'State: the offense''s lead when the possession started (before its first event).'
+  start_type: 'State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover.'
+  step: The event's place in its possession, from 1.
+  sub_type: The release's event sub type (the foul or free-throw kind, the shot type, ...).
+  team_id: 'Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id).'
+  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
+wnba_epv_player_games:
+  def_epv_on: EPV added by the opponent with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
+  epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
+  epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
+  game_id: stats.wnba.com game id (e.g. 1022600001).
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
+  own_actions: How many of the player's own events were credited.
+  player_id: stats.wnba.com player (person) id.
+  season: 'Season: the WNBA season is its calendar year.'
+  team_id: stats.wnba.com team id.
+wnba_epv_lineup_games:
+  def_epv: EPV added by the opponent with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
+  game_id: stats.wnba.com game id (e.g. 1022600001).
+  lineup_id: The five player ids, sorted and joined with '-'.
+  net_epv: off_epv - def_epv.
+  off_epv: EPV added by the unit's team with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
+  plays: Play-by-play events with the unit on the floor.
+  season: 'Season: the WNBA season is its calendar year.'
+  team_id: stats.wnba.com team id.
+wnba_epv_team_games:
+  def_epv: The opponent's EPV added with the ball over the game.
+  def_epv_per_poss: def_epv per possession.
+  game_id: stats.wnba.com game id (e.g. 1022600001).
+  net_epv: off_epv - def_epv.
+  off_epv: The team's EPV added with the ball over the game.
+  off_epv_per_poss: off_epv per possession.
+  opp_poss: The opponent's possessions with at least one event.
+  opp_team_id: The opponent's team id.
+  poss: The team's possessions with at least one event.
+  season: 'Season: the WNBA season is its calendar year.'
+  team_id: stats.wnba.com team id.

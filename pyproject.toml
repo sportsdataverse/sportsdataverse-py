@@ -715,6 +715,7 @@ files = [
     "sportsdataverse/wnba/wnba_player_on_off.py",
     "sportsdataverse/wnba/wnba_player_factor_rapm.py",
     "sportsdataverse/wnba/wnba_game_flow.py",
+    "sportsdataverse/wnba/wnba_epv.py",
     "sportsdataverse/wnba/wnba_situational.py",
     "sportsdataverse/wnba/wnba_team_strength.py",
     "sportsdataverse/wnba/wnba_team_luck.py",

@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [BB-D24 EPV corpus](#bb-d24-epv-corpus)
+  - [WNBA (`tests/wnba/test_wnba_epv.py`)](#wnba-testswnbatest_wnba_epvpy)
   - [College (`tests/mbb/test_mbb_epv.py`)](#college-testsmbbtest_mbb_epvpy)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -36,6 +37,19 @@ script (it rewrites these files from the holdout season after the gates pass).
 `0022400337` of the same releases, the same columns, cut by hand on 2026-11-05: in both a technical foul (and its free
 throw) falls between an ordinary "1 of 2" and "2 of 2", and in `0022400337` a substitution comes between the shooting
 foul and the technicals (order_index 140-146), so the trip's last free throw and its lineup can be checked.
+
+## WNBA (`tests/wnba/test_wnba_epv.py`)
+
+Written by `train_epv.py --league-id 10` (`write_fixture`) on 2026-11-06 from the wehoop-wnba-stats-data checkout:
+the first 20 regular-season games of 2025 by `game_id` (`1022500001`-`1022500020`, played 2025-05-16 to 2025-05-23
+on 8 dates), the holdout season of the bundled WNBA booster.
+
+| File | Rows | Release asset | Kept |
+|---|---:|---|---|
+| `wnba_pbp_2025.parquet` | 8,529 | `wnba_stats_pbp/wnba_play_by_play_2025` | The columns `epv_states` reads (the WNBA pbp has no player slots). |
+| `wnba_possessions_2025.parquet` | 3,191 | `wnba_stats_possessions/wnba_possessions_2025` | The NBA fixture's columns. |
+| `wnba_game_lineups_2025.parquet` | 8,529 | `wnba_stats_game_lineups/wnba_lineups_2025` | `game_id, action_number, home_player_1..5, away_player_1..5`. |
+| `wnba_schedule_2025.parquet` | 20 | `wnba_stats_schedules/wnba_schedule_2025` (one row per game) | `game_id, season, season_type, game_date` as released; the test parses `game_date` with `wnba_epv._game_order`. |
 
 ## College (`tests/mbb/test_mbb_epv.py`)
 
