@@ -12,8 +12,15 @@ ratings, pace and the four factors for and against).
   sum to zero. ``adj_off_rtg`` / ``adj_def_rtg`` are the intercept plus the team's offense /
   defense coefficient: points scored / allowed per 100 against an average opponent on a neutral
   court. ``adj_net_rtg`` is their difference. The penalty is :data:`RIDGE_LAMBDA`.
-* **Adjusted ratings, college**: the published ``mbb_ratings`` / ``wbb_ratings`` (the
-  :mod:`sportsdataverse.mbb.mbb_team_ratings` fixed point), ``adj_o`` / ``adj_d`` / ``adj_em``.
+* **Adjusted ratings, college: two methods side by side.**
+
+  * ``adj_off_rtg`` / ``adj_def_rtg`` / ``adj_net_rtg`` are the published ``mbb_ratings`` /
+    ``wbb_ratings`` (the :mod:`sportsdataverse.mbb.mbb_team_ratings` fixed point on ESPN
+    box-score games), ``adj_o`` / ``adj_d`` / ``adj_em``. SOS and SOV use these.
+  * ``adj_off_rtg_ridge`` / ``adj_def_rtg_ridge`` / ``adj_net_rtg_ridge`` are the NBA / WNBA
+    possession ridge above, fit on the stats.ncaa.org possessions at
+    :data:`COLLEGE_RIDGE_LAMBDA`, with ESPN's neutral-site flags. A possession against a
+    non-Division I opponent (no ESPN team id) is left out of the fit.
 * **Strength of schedule** (``sos``): the mean ``adj_net_rtg`` of the opponents of every game the
   team played, one weight per game (an opponent met four times counts four times). Opponents
   with no rating (college non-D1) are left out; ``sos_n`` counts the games that are in.
@@ -39,6 +46,8 @@ from sportsdataverse._common.ratings import opponent_adjusted_ridge
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA
 
 __all__ = [
+    "COLLEGE_RIDGE_LAMBDA",
+    "COLLEGE_TEAM_STRENGTH_SCHEMA",
     "GAMES_SCHEMA",
     "RATINGS_SCHEMA",
     "RIDGE_LAMBDA",
@@ -58,6 +67,15 @@ __all__ = [
 #: 800, regret 0 except 2021 (0.46, own best 400). The curve is flat near the optimum: the
 #: penalty moves predictions little, but it sets how far a team's rating shrinks to average.
 RIDGE_LAMBDA: dict[str, float] = {"00": 1600.0, "10": 800.0}
+
+#: league (``"mens"`` / ``"womens"``) -> the college possession ridge's penalty, by the same CV
+#: in ``tools/fit_team_strength_ridge.py`` (2026-11-06) on 2016-2020, 2022 and 2023 (2021, the
+#: COVID season, left out; 2024-2026 kept for ``tools/compare_college_team_strength.py``).
+#: Men's -> 200 (pooled MSE 13213.271 vs 13213.332 at 100); each held-out season gets 200 from
+#: the other six, regret <= 0.21 (2016, own best 100). Women's -> 50 (12293.456 vs 12293.500 at
+#: 100); each held-out season gets 50, regret <= 0.022. College penalties are far below the NBA's
+#: 1600: college teams spread much wider, so shrinking a rating toward average costs more.
+COLLEGE_RIDGE_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 50.0}
 
 #: Adjusted team ratings, one row per (season, team).
 RATINGS_SCHEMA: dict[str, pl.DataType] = {
@@ -90,6 +108,9 @@ _METRICS = (*_NEW, *_RATES)
 # The BB-D3 gate over the season (its `all` split is the whole season).
 _QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over("season")
 
+#: The college possession-ridge ratings, appended after the published ones (same rank rules).
+_RIDGE: dict[str, tuple[pl.Expr, bool]] = {f"{m}_ridge": _NEW[m] for m in ("adj_off_rtg", "adj_def_rtg", "adj_net_rtg")}
+
 TEAM_STRENGTH_SCHEMA: dict[str, pl.DataType] = {
     "season": pl.Int64(),
     "team_id": pl.Int64(),
@@ -104,6 +125,15 @@ TEAM_STRENGTH_SCHEMA: dict[str, pl.DataType] = {
     **{f"{m}_rank": pl.Float64() for m in _METRICS},
     **{f"{m}_pct": pl.Float64() for m in _METRICS},
     **{f"{m}_n": pl.Int64() for m in _METRICS},
+}
+
+#: :data:`TEAM_STRENGTH_SCHEMA` plus the possession-ridge ratings, for ``mbb`` / ``wbb``.
+COLLEGE_TEAM_STRENGTH_SCHEMA: dict[str, pl.DataType] = {
+    **TEAM_STRENGTH_SCHEMA,
+    **{m: pl.Float64() for m in _RIDGE},
+    **{f"{m}_rank": pl.Float64() for m in _RIDGE},
+    **{f"{m}_pct": pl.Float64() for m in _RIDGE},
+    **{f"{m}_n": pl.Int64() for m in _RIDGE},
 }
 
 
@@ -182,8 +212,16 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFr
             .with_columns(pl.col("off_dev", "def_dev").fill_null(0.0))
             .with_columns((pl.col("y") - pl.col("off_dev") - pl.col("def_dev")).alias("y"))
         )
+    # Possessions sharing (offense, defense, home term) share a design row: fit their mean,
+    # weighted by their count. Same coefficients, and a college season (~360 teams, ~800k
+    # possessions) stays a few thousand rows instead of a dense matrix of gigabytes.
+    design = design.group_by("season", "offense_id", "defense_id", "hfa").agg(
+        pl.col("y").mean(), pl.len().cast(pl.Float64).alias("_n")
+    )
     frames = []
-    for (season,), sub in design.group_by("season", maintain_order=True):
+    for (season,), sub in design.sort("season", "offense_id", "defense_id", "hfa").group_by(
+        "season", maintain_order=True
+    ):
         coef, intercept, hfa = opponent_adjusted_ridge(
             sub,
             off_col="offense_id",
@@ -192,6 +230,7 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFr
             resp_col="y",
             lam=lam,
             hfa_col="hfa",
+            weight_col="_n",
         )
         if prior is not None and prior.height:
             coef = (
@@ -251,19 +290,26 @@ def schedule_strength(games: pl.DataFrame, ratings: pl.DataFrame) -> pl.DataFram
     )
 
 
-def team_strength(rates: pl.DataFrame, ratings: pl.DataFrame, games: pl.DataFrame) -> pl.DataFrame:
+def team_strength(
+    rates: pl.DataFrame, ratings: pl.DataFrame, games: pl.DataFrame, *, ridge: pl.DataFrame | None = None
+) -> pl.DataFrame:
     """The team-strength table: BB-D3's ``all`` split plus adjusted ratings, SOS and SOV.
 
     Args:
         rates: A ``*_team_season_rates`` frame (:data:`TEAM_SEASON_RATES_SCHEMA`); only the
             ``all`` split is used.
-        ratings: Adjusted ratings in :data:`RATINGS_SCHEMA` (extra columns are ignored).
+        ratings: Adjusted ratings in :data:`RATINGS_SCHEMA` (extra columns are ignored). SOS and
+            SOV are averaged over these.
         games: Completed games in :data:`GAMES_SCHEMA`.
+        ridge: College only: a second set of adjusted ratings in :data:`RATINGS_SCHEMA` (the
+            possession ridge), published beside ``ratings`` as ``adj_*_rtg_ridge`` with their own
+            ranks, percentiles and ``_n``. SOS and SOV do not use it.
 
     Returns:
-        One row per (season, team) of ``rates`` in :data:`TEAM_STRENGTH_SCHEMA`, sorted by season
-        and team. A team with no rating has null adjusted ratings, and no ranks for them; a team
-        with no completed game has null ``wins`` / ``losses`` / ``sos`` / ``sov``.
+        One row per (season, team) of ``rates`` in :data:`TEAM_STRENGTH_SCHEMA`, or
+        :data:`COLLEGE_TEAM_STRENGTH_SCHEMA` when ``ridge`` is given, sorted by season and team. A
+        team with no rating has null adjusted ratings, and no ranks for them; a team with no
+        completed game has null ``wins`` / ``losses`` / ``sos`` / ``sov``.
 
     Raises:
         TypeError: If a join key's dtype differs between the inputs.
@@ -271,24 +317,30 @@ def team_strength(rates: pl.DataFrame, ratings: pl.DataFrame, games: pl.DataFram
     base = rates.filter(pl.col("split") == "all").drop("split")
     rated = ratings.select(list(RATINGS_SCHEMA))
     record = schedule_strength(games.select(list(GAMES_SCHEMA)), rated)
-    for name, frame in (("ratings", rated), ("games", record)):
+    new, schema = dict(_NEW), TEAM_STRENGTH_SCHEMA
+    extra = [("ratings", rated), ("games", record)]
+    if ridge is not None:
+        ridged = ridge.select(list(RATINGS_SCHEMA)).rename({m.removesuffix("_ridge"): m for m in _RIDGE})
+        extra.append(("ridge", ridged))
+        new, schema = {**_NEW, **_RIDGE}, COLLEGE_TEAM_STRENGTH_SCHEMA
+    for name, frame in extra:
         for key in ("season", "team_id"):
             if base.schema[key] != frame.schema[key]:
                 raise TypeError(f"{key} dtype differs: rates {base.schema[key]}, {name} {frame.schema[key]}")
-    out = base.join(rated, on=["season", "team_id"], how="left", validate="1:1").join(
-        record, on=["season", "team_id"], how="left", validate="1:1"
-    )
+    out = base
+    for _, frame in extra:
+        out = out.join(frame, on=["season", "team_id"], how="left", validate="1:1")
     return (
         out.pipe(
             attach_ranks,
-            list(_NEW),
+            list(new),
             min_cohort=MIN_COHORT_TEAMS,
             by=("season",),
-            lower_is_better=tuple(m for m, (_, low) in _NEW.items() if low),
+            lower_is_better=tuple(m for m, (_, low) in new.items() if low),
             qualifier=_QUALIFIER,
         )
-        .pipe(attach_sample_sizes, {m: e.fill_null(0) for m, (e, _) in _NEW.items()})
+        .pipe(attach_sample_sizes, {m: e.fill_null(0) for m, (e, _) in new.items()})
         .sort("season", "team_id")
-        .select(list(TEAM_STRENGTH_SCHEMA))
-        .cast(TEAM_STRENGTH_SCHEMA)
+        .select(list(schema))
+        .cast(schema)
     )

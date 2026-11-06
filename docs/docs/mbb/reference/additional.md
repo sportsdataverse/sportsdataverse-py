@@ -410,7 +410,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [project_bracket](additional/analytics-4.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics-4.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
 | [strength_of_schedule](additional/analytics-4.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-4.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [test_positional_aware_filter](additional/analytics-5.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics-5.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 

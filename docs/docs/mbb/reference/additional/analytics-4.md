@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional"
-sidebar_label: "Analytics: mbb_team–test_positional"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of"
+sidebar_label: "Analytics: mbb_team–strength_of"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional
+# Men's college basketball — additional Python functions — Analytics: mbb_team–strength_of
 
 ### mbb_team_strength {#mbb_team_strength}
 
@@ -12,9 +12,13 @@ description: "Men's college basketball — additional Python functions — Analy
 
 College team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
-One row per team and season. The adjusted ratings are the published college ratings
-(`load_mbb_ratings` / `load_wbb_ratings`). SOS is the mean opponent `adj_net_rtg` over
-the team's completed ESPN games (unrated opponents left out), SOV the same over its wins.
+One row per team and season, with two adjusted-rating methods. `adj_*_rtg` are the
+published college ratings (`load_mbb_ratings` / `load_wbb_ratings`, a fixed point on ESPN
+box scores). `adj_*_rtg_ridge` are the NBA / WNBA possession ridge on the stats.ncaa.org
+possessions (points per 100 against an average Division I opponent on a neutral court; home
+court fitted, neutral sites from ESPN, non-Division I opponents left out). SOS is the mean
+opponent `adj_net_rtg` over the team's completed ESPN games (unrated opponents left out),
+SOV the same over its wins. Bracketology and the season sims keep the fixed point.
 
 **Parameters**
 
@@ -26,7 +30,7 @@ the team's completed ESPN games (unrated opponents left out), SOV the same over 
 
 **Returns**
 
-One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), and null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov`, `adj_off_rtg_ridge`, `adj_def_rtg_ridge`, `adj_net_rtg_ridge` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `adj_def_rtg_ridge`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), and null under five teams. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -107,6 +111,18 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the season, 0 when the rate is null. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the season, 0 when the rate is null. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the season, 0 when the rate is null. |
+| `adj_off_rtg_ridge` | Float64 | Adjusted offensive rating, possession-ridge method: points per 100 possessions against an average Division I defense on a neutral court. The NBA / WNBA ridge (possession_ridge_ratings) on the ncaa_mbb_possessions release, penalty COLLEGE_RIDGE_LAMBDA, home court fitted and ESPN neutral sites; possessions against a non-Division I opponent left out. Published beside the fixed-point adj_off_rtg, which it does not replace. |
+| `adj_def_rtg_ridge` | Float64 | Adjusted defensive rating, possession-ridge method: points allowed per 100 possessions against an average Division I offense on a neutral court; lower is better. |
+| `adj_net_rtg_ridge` | Float64 | Adjusted net rating, possession-ridge method: adj_off_rtg_ridge minus adj_def_rtg_ridge. |
+| `adj_off_rtg_ridge_rank` | Float64 | Rank of adj_off_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_def_rtg_ridge_rank` | Float64 | Rank of adj_def_rtg_ridge within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_net_rtg_ridge_rank` | Float64 | Rank of adj_net_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_off_rtg_ridge_pct` | Float64 | Percentile of adj_off_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_def_rtg_ridge_pct` | Float64 | Percentile of adj_def_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_net_rtg_ridge_pct` | Float64 | Percentile of adj_net_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_off_rtg_ridge_n` | Int64 | Sample size of adj_off_rtg_ridge: the team's offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_def_rtg_ridge_n` | Int64 | Sample size of adj_def_rtg_ridge: the team's defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_net_rtg_ridge_n` | Int64 | Sample size of adj_net_rtg_ridge: the team's offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
 
 **Raises**
 
@@ -120,6 +136,10 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 from sportsdataverse.mbb.mbb_team_strength import mbb_team_strength
 strength = mbb_team_strength(2025)
 strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
+
+# The two methods side by side
+
+strength.select("team_id", "adj_net_rtg_rank", "adj_net_rtg_ridge_rank").head()
 ```
 
 ### ncaa_coach_stints {#ncaa_coach_stints}
@@ -1227,42 +1247,4 @@ No returns table is published for this function: no capture: it needs a schedule
 ```python
 from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 resume = strength_of_schedule(results, ratings)
-```
-
-### test_positional_aware_filter {#test_positional_aware_filter}
-
-`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
-
-Check a positional-aware filter (from `build_positional_aware_filter`)
-
-against a sorted (`order_lineup`-ordered) lineup array.
-
-Faithful port of `PositionUtils.testPositionalAwareFilter`
-(`PositionUtils.ts:831-858`). A fragment matches if any of its
-position-restricted slots (or, when `pos` is empty, any slot at all)
-has a `code`/`id` containing the fragment's filter text
-(case-insensitive substring match). Every positive fragment must match
-(vacuously true if there are none); no negative fragment may match
-(vacuously true if there are none).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
-| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
-| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
-
-**Returns**
-
-Whether the lineup satisfies both the positive and negative filters.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
-lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
-test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
 ```

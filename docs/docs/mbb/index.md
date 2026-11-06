@@ -255,7 +255,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`project_bracket`](reference/additional/analytics-4#project_bracket)
 - [`regress_shot_quality`](reference/additional/analytics-4#regress_shot_quality)
 - [`strength_of_schedule`](reference/additional/analytics-4#strength_of_schedule)
-- [`test_positional_aware_filter`](reference/additional/analytics-4#test_positional_aware_filter)
+- [`test_positional_aware_filter`](reference/additional/analytics-5#test_positional_aware_filter)
 - [`using_roster_pos`](reference/additional/analytics-5#using_roster_pos)
 - [`weighted_avg`](reference/additional/analytics-5#weighted_avg)
 

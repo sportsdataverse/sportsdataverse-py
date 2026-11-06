@@ -1,9 +1,11 @@
 # tools/fit_team_strength_ridge.py
-"""Fit the NBA / WNBA team-strength ridge penalty by season-disjoint, game-grouped CV.
+"""Fit the team-strength ridge penalty by season-disjoint, game-grouped CV, all four leagues.
 
 The fitted values are frozen into
-``sportsdataverse._common.team_strength.RIDGE_LAMBDA`` with a comment citing this script --
-never tuned ad hoc.
+``sportsdataverse._common.team_strength.RIDGE_LAMBDA`` (NBA / WNBA) and
+``COLLEGE_RIDGE_LAMBDA`` (men's / women's college) with a comment citing this script -- never
+tuned ad hoc. College reads the ``ncaa_{mbb,wbb}_possessions`` releases and the ESPN schedule's
+neutral sites; possessions against a non-Division I opponent (no ESPN team id) are left out.
 
 The model is the one :func:`sportsdataverse._common.team_strength.possession_ridge_ratings`
 fits: points per 100 on each possession, regressed on the offense and defense team indicators
@@ -21,13 +23,16 @@ Two levels of holdout:
   lowest pooled error over all seasons; the leave-one-season-out table shows it carries to a
   season it was not chosen on.
 
-Inputs are the ``nba_stats_possessions`` / ``wnba_stats_possessions`` and schedule releases,
-read through the package loaders (network).
+Inputs are the ``nba_stats_possessions`` / ``wnba_stats_possessions`` / ``ncaa_*_possessions`` and
+schedule releases, read through the package loaders (network). The college seasons must stay
+disjoint from the 2024-2026 comparison in ``tools/compare_college_team_strength.py``.
 
 Usage::
 
     uv run python tools/fit_team_strength_ridge.py --league nba --seasons 2022 2023 2024 2025 2026
     uv run python tools/fit_team_strength_ridge.py --league wnba --seasons 2021 2022 2023 2024 2025
+    uv run python tools/fit_team_strength_ridge.py --league mbb --seasons 2016 2017 2018 2019 2020 2022 2023
+    uv run python tools/fit_team_strength_ridge.py --league wbb --seasons 2016 2017 2018 2019 2020 2022 2023
 """
 
 from __future__ import annotations
@@ -40,11 +45,26 @@ import polars as pl
 
 from sportsdataverse._common.team_strength import ridge_design
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
+from sportsdataverse.mbb.mbb_team_season_rates import _league_loaders as _college_loaders
+from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
 from sportsdataverse.nba.nba_team_season_rates import _league_loaders, nba_possession_rate_rows
 
 GRID = [25.0, 50.0, 100.0, 200.0, 400.0, 800.0, 1600.0, 3200.0]
 _LEAGUE_ID = {"nba": "00", "wnba": "10"}
+_COLLEGE = {"mbb": "mens", "wbb": "womens"}
 _FOLDS = 5
+
+
+def season_rows(league: str, season: int) -> pl.DataFrame:
+    """One season's possessions in the team-season-rates frame, from the package loaders."""
+    if league in _COLLEGE:
+        load_possessions, _, load_schedule = _college_loaders(_COLLEGE[league])
+        return ncaa_possession_rate_rows(load_possessions(season), load_schedule(season), league=_COLLEGE[league])
+    league_id = _LEAGUE_ID[league]
+    load_possessions, load_schedule, offset = _league_loaders(league_id)
+    return nba_possession_rate_rows(
+        load_possessions([season - offset]), load_schedule([season - offset]), league_id=league_id
+    )
 
 
 def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float, int]]:
@@ -53,6 +73,9 @@ def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float,
     out = {lam: (0.0, 0) for lam in grid}
     for k in range(_FOLDS):
         train, test = design.filter(pl.col("_fold") != k), design.filter(pl.col("_fold") == k)
+        # identical possessions share a design row: their mean, weighted by their count
+        train = train.group_by("offense_id", "defense_id", "hfa").agg(pl.col("y").mean(), pl.len().alias("n"))
+        train = train.sort("offense_id", "defense_id", "hfa")
         for lam in grid:
             coef, b0, hfa = opponent_adjusted_ridge(
                 train,
@@ -62,6 +85,7 @@ def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float,
                 resp_col="y",
                 lam=lam,
                 hfa_col="hfa",
+                weight_col="n",
             )
             off = dict(zip(coef["team_id"], coef["off_coef"]))
             de = dict(zip(coef["team_id"], coef["def_coef"]))
@@ -80,7 +104,7 @@ def season_cv(rows: pl.DataFrame, grid: list[float]) -> dict[float, tuple[float,
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
-    ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
+    ap.add_argument("--league", choices=sorted({**_LEAGUE_ID, **_COLLEGE}), required=True)
     ap.add_argument("--seasons", type=int, nargs="+", required=True, help="seasons by END year")
     args = ap.parse_args(argv)
     if len(set(args.seasons)) != len(args.seasons):
@@ -88,13 +112,9 @@ def main(argv: list[str] | None = None) -> int:
     if len(args.seasons) < 2:
         ap.error("--seasons needs at least two distinct seasons: each one is scored on a penalty chosen on the others")
 
-    league_id = _LEAGUE_ID[args.league]
-    load_possessions, load_schedule, offset = _league_loaders(league_id)
     per_season: dict[int, dict[float, tuple[float, int]]] = {}
     for season in args.seasons:
-        rows = nba_possession_rate_rows(
-            load_possessions([season - offset]), load_schedule([season - offset]), league_id=league_id
-        )
+        rows = season_rows(args.league, season)
         per_season[season] = season_cv(rows, GRID)
         if per_season[season][GRID[0]][1] == 0:
             ap.error(f"season {season}: no possessions with both team ids to fit")

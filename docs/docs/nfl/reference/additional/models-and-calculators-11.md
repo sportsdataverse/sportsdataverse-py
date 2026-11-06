@@ -172,17 +172,15 @@ usage.sort("proj_wopr", descending=True).head()
 
 ### opponent_adjusted_ridge {#opponent_adjusted_ridge}
 
-`opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None) -> 'tuple[pl.DataFrame, float, float]'`
+`opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None, weight_col: 'str | None' = None) -> 'tuple[pl.DataFrame, float, float]'`
 
 Ridge-regress `resp_col` on offense + defense team indicators + HFA.
 
-League-agnostic (column names are arguments): builds the full
-offense/defense-indicator + intercept + home design and solves the
-ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only team
-coefficients are penalised; the intercept (and, unless
-`penalize_home`, the home term) is free. Moved (T7.2) from
-`sportsdataverse.nfl.nfl_ratings`. Callers: NFL ratings, and CFB
-adjusted EPA (`cfb_adjusted_epa._fit_team_strengths`, via `hfa_col`);
+League-agnostic (column names are arguments): builds the full offense/defense-indicator +
+intercept + home design and solves the ridge normal equations `beta = (X'WX + lam*R)^-1
+X'Wy`. Only team coefficients are penalised; the intercept (and, unless `penalize_home`,
+the home term) is free. Moved (T7.2) from `sportsdataverse.nfl.nfl_ratings`. Callers: NFL
+ratings, CFB adjusted EPA (via `hfa_col`) and basketball team strength (via `weight_col`);
 `cfb_ratings` uses the different `dropped_level_ridge`.
 
 **Parameters**
@@ -197,6 +195,7 @@ adjusted EPA (`cfb_adjusted_epa._fit_team_strengths`, via `hfa_col`);
 | `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
 | `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. Must not contain nulls (raises `ValueError`). |
+| `weight_col` | `str \| None` | `None` | Optional per-row weight `W` (no nulls or negatives, else `ValueError`): a row standing for that many identical rows, with `resp_col` their mean, gives the uncollapsed fit's coefficients. |
 
 **Returns**
 
