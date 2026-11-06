@@ -473,7 +473,7 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
 
     Raises:
         ValueError: If the booster lacks ``level_ppp`` or ``level_k``, ``game_order``'s ``game_id``
-            dtype differs from the states', or a game has no ``game_order``.
+            dtype differs from the states', or a game has no ``game_order`` or two.
     """
     if booster.attr("level_ppp") is None or booster.attr("level_k") is None:
         raise ValueError("the booster has no level_ppp / level_k attributes")
@@ -488,7 +488,10 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
     else:
         if game_order.schema["game_id"] != games.schema["game_id"]:
             raise ValueError(f"game_order game_id is {game_order.schema['game_id']}, not {games.schema['game_id']}")
-        games = games.join(game_order.select("game_id", "game_order").unique("game_id"), on="game_id", how="left")
+        dates = game_order.select("game_id", "game_order").unique()
+        if dates["game_id"].is_duplicated().any():
+            raise ValueError(f"game_order gives {dates['game_id'].is_duplicated().sum()} rows of games two orders")
+        games = games.join(dates, on="game_id", how="left")
         if games["game_order"].null_count():
             # an undated game would be pooled after every dated one and see the whole season
             raise ValueError(f"{games['game_order'].null_count()} games have no game_order")

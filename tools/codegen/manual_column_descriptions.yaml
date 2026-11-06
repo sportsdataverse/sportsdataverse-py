@@ -77197,7 +77197,7 @@ mbb_epv_player_games:
   epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
   epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
   game_id: stats.ncaa.org contest id.
-  off_epv_on: EPV added by the player's team with the ball while the player was on the floor.
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor (the ten on each event's row; the possession's starting ten where the row's is incomplete).
   own_actions: How many of the player's own events were credited.
   player_id: stats.ncaa.org player id.
   season: Season, named by the year it ends.
@@ -77208,7 +77208,7 @@ mbb_epv_lineup_games:
   lineup_id: The five stats.ncaa.org player ids, sorted and joined with '-'.
   net_epv: off_epv - def_epv.
   off_epv: EPV added by the unit's team with the ball while the unit was on.
-  plays: Play-by-play events with the unit on the floor.
+  plays: Play-by-play events with the unit on the floor (the ten on the event's row; the possession's starting ten where the row's is incomplete).
   season: Season, named by the year it ends.
   team_id: ESPN team id of the unit's team.
 mbb_epv_team_games:
@@ -77270,7 +77270,7 @@ wbb_epv_player_games:
   epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
   epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
   game_id: stats.ncaa.org contest id.
-  off_epv_on: EPV added by the player's team with the ball while the player was on the floor.
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor (the ten on each event's row; the possession's starting ten where the row's is incomplete).
   own_actions: How many of the player's own events were credited.
   player_id: stats.ncaa.org player id.
   season: Season, named by the year it ends.
@@ -77281,7 +77281,7 @@ wbb_epv_lineup_games:
   lineup_id: The five stats.ncaa.org player ids, sorted and joined with '-'.
   net_epv: off_epv - def_epv.
   off_epv: EPV added by the unit's team with the ball while the unit was on.
-  plays: Play-by-play events with the unit on the floor.
+  plays: Play-by-play events with the unit on the floor (the ten on the event's row; the possession's starting ten where the row's is incomplete).
   season: Season, named by the year it ends.
   team_id: ESPN team id of the unit's team.
 wbb_epv_team_games:

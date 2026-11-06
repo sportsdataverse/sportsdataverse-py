@@ -63,15 +63,14 @@ def _fixture(lg: str) -> str:
 
 
 def _finals(name: str) -> pl.DataFrame:
-    """Each game's points, both teams, from the release's last scores, less its wrong-basket twos.
+    """Each game's points, both teams, from the release's last scores.
 
-    A wrong basket scores for the side without the ball, so no possession's offense gets it.
+    A wrong basket counts too: it is the offense's two, put in by a defender.
     """
-    wrong = pl.col("event_type").str.starts_with("Wrong Basket")
     return (
         _release(name)
         .group_by(pl.col("contest_id").cast(pl.Utf8).alias("game_id"))
-        .agg((pl.col("home_score").max() + pl.col("away_score").max() - 2 * wrong.sum()).alias("final"))
+        .agg((pl.col("home_score").max() + pl.col("away_score").max()).alias("final"))
     )
 
 
@@ -248,6 +247,25 @@ def test_the_level_is_the_shrunk_points_per_possession_of_earlier_dates() -> Non
     assert max(want.values()) != min(want.values())
 
 
+def test_a_wrong_basket_ends_its_possession() -> None:
+    """5722807's wrong-basket two stays the last event of its possession; the next starts as after a basket."""
+    poss, pbp, _, _ = _inputs(f"mbb_pbp_{HOLDOUT}_quirks")
+    wb = (
+        pbp.filter(pl.col("event_type_right").str.starts_with("Wrong Basket"))
+        if "event_type_right" in pbp.columns
+        else None
+    )
+    rel = _release(f"mbb_pbp_{HOLDOUT}_quirks").filter(pl.col("contest_id") == "5722807")
+    row = rel.with_row_index("order_index").filter(pl.col("event_type").str.starts_with("Wrong Basket"))
+    assert row.height == 1
+    oi = int(row["order_index"][0])
+    g = poss.filter(pl.col("game_id") == "5722807").sort("possession_number")
+    mine = g.filter(pl.col("start_order_index") <= oi).tail(1)
+    assert mine["end_order_index"][0] == oi
+    nxt = g.filter(pl.col("possession_number") == mine["possession_number"][0] + 1)
+    assert nxt["possession_start_type"][0] == "OffMadeShot"
+
+
 def test_the_level_refuses_an_undated_game_and_a_booster_without_one() -> None:
     name = _fixture("mbb")
     order = _inputs(name)[3].select("game_id", "game_order")
@@ -255,6 +273,10 @@ def test_the_level_refuses_an_undated_game_and_a_booster_without_one() -> None:
         epv_level(_states(name), load_epv_model("mbb"), order.head(3))
     with pytest.raises(ValueError, match="dtype|is "):
         epv_level(_states(name), load_epv_model("mbb"), order.with_columns(pl.col("game_id").cast(pl.Int64)))
+    two = pl.concat([order, order.head(1).with_columns(pl.col("game_order") + pl.duration(days=1))])
+    with pytest.raises(ValueError, match="two orders"):
+        epv_level(_states(name), load_epv_model("mbb"), two)
+    assert epv_level(_states(name), load_epv_model("mbb"), pl.concat([order, order.head(1)])).height == order.height
     with pytest.raises(ValueError, match="level_ppp"):
         epv_level(_states(name), load_epv_model("00"))
     assert load_epv_model("00").attr("level_ppp") is None  # the NBA booster is served without a level
@@ -262,7 +284,7 @@ def test_the_level_refuses_an_undated_game_and_a_booster_without_one() -> None:
 
 #: Observed on the fixture with the shipped boosters: skill vs the training label mean (the level
 #: bias was +0.004 men, -0.039 women, on 20 games over the season's first 17-18 dates).
-OBSERVED_FIT = {"mbb": 0.267, "wbb": 0.272}
+OBSERVED_FIT = {"mbb": 0.267, "wbb": 0.273}
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))

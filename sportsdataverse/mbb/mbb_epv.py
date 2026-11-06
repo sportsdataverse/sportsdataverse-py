@@ -96,7 +96,7 @@ def _running_score(side: int) -> pl.Expr:
     ten (612 of 6,293 men's games in 2024-25) ``home_score`` is the ``away`` team's, and now and
     then a basket's points land a row early. Summed from the events, a game's score matches the
     release's final in 99.8% of men's and 99.9% of women's games (the rest miss an event).
-    A wrong-basket two counts for the other side.
+    A wrong-basket two counts for the other side (the offense, a defender having put it in).
     """
     et = pl.col("event_type")
     made = (et.is_in(_SHOTS) | (et == "Free Throw")) & (pl.col("event_result") == "made")
@@ -176,6 +176,13 @@ def _events(pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _live() -> pl.Expr:
+    """An event a possession can end on: :data:`_LIVE_EVENTS`, or a wrong-basket two (a basket for the other side)."""
+    return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("Wrong Basket").fill_null(
+        False
+    )
+
+
 def _segments(ev: pl.DataFrame) -> pl.DataFrame:
     """``_seg`` (the game's possessions, numbered from 1) and ``_off_side`` (each one's offense).
 
@@ -196,7 +203,7 @@ def _segments(ev: pl.DataFrame) -> pl.DataFrame:
 def _regroup(ev: pl.DataFrame) -> pl.DataFrame:
     """Possessions as :func:`_segments`, the rows trailing each one's last live event moved to the next of the period."""
     ev = _segments(ev)
-    live = pl.col("_nba_type").is_in(_LIVE_EVENTS)
+    live = _live()
     nxt = ev.group_by("game_id", "_seg").agg(pl.col("period").first().alias("_next_period"))
     return (
         ev.with_columns(pl.col("order_index").filter(live).max().over("game_id", "_seg").alias("_last_live"))
@@ -214,7 +221,7 @@ def _regroup(ev: pl.DataFrame) -> pl.DataFrame:
 
 def _start_types(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     """``poss`` with the coarse NBA ``possession_start_type`` of each possession (see the module docstring)."""
-    live = pl.col("_nba_type").is_in(_LIVE_EVENTS)
+    live = _live()
     first_live = pl.col("order_index").filter(live).min().over(_KEY)
     lead = ev.with_columns(first_live.fill_null(pl.col("order_index").max().over(_KEY) + 1).alias("_first_live"))
     lead = (
@@ -234,6 +241,7 @@ def _start_types(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
         (pl.col("possession_number") + 1).alias("possession_number"),
         pl.col("_nba_type").alias("_prev_type"),
         (pl.col("event_result") == "made").alias("_prev_made"),
+        pl.col("event_type").str.starts_with("Wrong Basket").fill_null(False).alias("_prev_wrong"),
         (pl.col("event_type") == "Defensive Rebound").alias("_prev_dreb"),
         (pl.col("person_id") != pl.col("team_id")).fill_null(False).alias("_prev_player"),
     )
@@ -248,14 +256,17 @@ def _start_types(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
             .then(pl.lit("OffTimeout"))
             .when(pl.col("_lead_steal") == True)
             .then(pl.lit("OffLiveBallTurnover"))
-            .when(pl.col("_prev_type").is_in(["made_shot", "free_throw"]) & (pl.col("_prev_made") == True))
+            .when(
+                (pl.col("_prev_type").is_in(["made_shot", "free_throw"]) & (pl.col("_prev_made") == True))
+                | (pl.col("_prev_wrong") == True)
+            )
             .then(pl.lit("OffMadeShot"))
             .when((pl.col("_prev_dreb") == True) & (pl.col("_prev_player") == True))
             .then(pl.lit("OffMissedShot"))
             .otherwise(pl.lit("OffDeadball"))
             .alias("possession_start_type")
         )
-        .drop("_lead_timeout", "_lead_steal", "_prev_type", "_prev_made", "_prev_dreb", "_prev_player")
+        .drop("_lead_timeout", "_lead_steal", "_prev_type", "_prev_made", "_prev_wrong", "_prev_dreb", "_prev_player")
     )
 
 
@@ -402,8 +413,9 @@ def mbb_epv_plays(
     Returns:
         The columns of :func:`sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in game
         order. ``game_id`` is the NCAA contest id; the team ids are ESPN ids (Int64, null for a
-        non-D1 team); ``person_id`` and the player slots are stats.ncaa.org player ids (String,
-        null on a team event); ``event_type`` is the NBA engine's vocabulary.
+        non-D1 team); ``person_id`` is the stats.ncaa.org player id on the event (String, null on
+        a team event) and the slots the possession's starting ten (String, null only where the
+        release has no player); ``event_type`` is the NBA engine's vocabulary.
 
     Raises:
         ValueError: If ``league`` is not ``"mens"`` or ``"womens"``, or a season is before the

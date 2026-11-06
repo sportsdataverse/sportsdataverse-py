@@ -157,7 +157,7 @@ Per college five-man unit and game: the EPV added with the unit on the floor.
 | `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
 | `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
 | `net_epv` | Float64 | off_epv - def_epv. |
-| `plays` | Int64 | Play-by-play events with the unit on the floor. |
+| `plays` | Int64 | Play-by-play events with the unit on the floor (the ten on the event's row; the possession's starting ten where the row's is incomplete). |
 
 **Raises**
 
@@ -199,7 +199,7 @@ Per college player and game: EPV added on the player's own actions and on-court 
 | `player_id` | String | stats.ncaa.org player id. |
 | `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
 | `own_actions` | Int64 | How many of the player's own events were credited. |
-| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor (the ten on each event's row; the possession's starting ten where the row's is incomplete). |
 | `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
 | `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
 
@@ -233,7 +233,7 @@ EPV and EPV added on every college play-by-play event inside a possession.
 
 **Returns**
 
-The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in game order. `game_id` is the NCAA contest id; the team ids are ESPN ids (Int64, null for a non-D1 team); `person_id` and the player slots are stats.ncaa.org player ids (String, null on a team event); `event_type` is the NBA engine's vocabulary.
+The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in game order. `game_id` is the NCAA contest id; the team ids are ESPN ids (Int64, null for a non-D1 team); `person_id` is the stats.ncaa.org player id on the event (String, null on a team event) and the slots the possession's starting ten (String, null only where the release has no player); `event_type` is the NBA engine's vocabulary.
 
 | col_name | type | description |
 |---|---|---|

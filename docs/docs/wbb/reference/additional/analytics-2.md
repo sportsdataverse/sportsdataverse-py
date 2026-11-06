@@ -322,7 +322,7 @@ The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_lineup_games`.
 | `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
 | `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
 | `net_epv` | Float64 | off_epv - def_epv. |
-| `plays` | Int64 | Play-by-play events with the unit on the floor. |
+| `plays` | Int64 | Play-by-play events with the unit on the floor (the ten on the event's row; the possession's starting ten where the row's is incomplete). |
 
 **Raises**
 
@@ -364,7 +364,7 @@ The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_player_games`.
 | `player_id` | String | stats.ncaa.org player id. |
 | `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
 | `own_actions` | Int64 | How many of the player's own events were credited. |
-| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor (the ten on each event's row; the possession's starting ten where the row's is incomplete). |
 | `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
 | `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
 

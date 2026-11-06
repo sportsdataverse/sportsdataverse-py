@@ -253,18 +253,19 @@ def level_k(cfg: dict[str, Any], league_id: str, data_root: Path | None) -> dict
 
 def load_inputs(
     league_id: str, season: int, data_root: Path | None
-) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame | None, pl.DataFrame | None]:
-    """The season's (pbp, possessions, game lineups, game order) in the engine's shape.
+) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame | None, pl.DataFrame | None, pl.DataFrame | None]:
+    """The season's (pbp, possessions, game lineups, game order, college release) in the engine's shape.
 
     The NBA and WNBA read their releases (regular season only; the lineups only for the
     fixture, so ``None`` here) and order games by ``game_id``; college converts its release with
     ``ncaa_epv_inputs`` and orders games by date.
     """
     if league_id in _COLLEGE:
-        poss, pbp, tens, games = ncaa_epv_inputs(_college_pbp(league_id, season, data_root))
-        return pbp, poss, tens, games.select("game_id", "game_order")
+        release = _college_pbp(league_id, season, data_root)
+        poss, pbp, tens, games = ncaa_epv_inputs(release)
+        return pbp, poss, tens, games.select("game_id", "game_order"), release
     pbp, poss = load_season(league_id, season, data_root)
-    return pbp, poss, None, None
+    return pbp, poss, None, None, None
 
 
 def load_season(league_id: str, season: int, data_root: Path | None) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -593,7 +594,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     if len(split) != len(cfg["train"]) + 2 + len(cfg["monitor"]):
         raise ValueError(f"train, holdout, confirmation and monitor seasons must be disjoint: {cfg}")
     raw = {s: load_inputs(league_id, s, data_root) for s in split}
-    states = {s: epv_states(poss, pbp) for s, (pbp, poss, _, _) in raw.items()}
+    states = {s: epv_states(poss, pbp) for s, (pbp, poss, *_) in raw.items()}
     order = {s: r[3] for s, r in raw.items()}
     tr = {s: states[s] for s in cfg["train"]}
     level = level_k(cfg, league_id, data_root) if cfg["level"] else None
@@ -639,9 +640,9 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     booster.save_model(str(cfg["models"] / cfg["artifact"]))
     write_lineage(cfg, states, booster)
     if league_id in _COLLEGE:
-        write_college_fixture(league_id, cfg["holdout"], _college_pbp(league_id, cfg["holdout"], data_root))
+        write_college_fixture(league_id, cfg["holdout"], raw[cfg["holdout"]][4])  # the release the gates scored
     else:
-        pbp, poss, _, _ = raw[cfg["holdout"]]
+        pbp, poss, *_ = raw[cfg["holdout"]]
         write_fixture(league_id, cfg["holdout"], pbp, poss, load_lineups(league_id, cfg["holdout"], data_root))
     return report
 
