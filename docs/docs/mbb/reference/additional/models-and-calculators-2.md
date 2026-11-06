@@ -1,10 +1,63 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc"
-sidebar_label: "Models and calculators: build_priors–poss_calc"
+title: "Men's college basketball — additional Python functions — Models and calculators: build_player–pick_ridge"
+sidebar_label: "Models and calculators: build_player–pick_ridge"
 sidebar_position: 11
-description: "Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: build_player–pick_ridge — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: build_priors–poss_calc
+# Men's college basketball — additional Python functions — Models and calculators: build_player–pick_ridge
+
+### build_player_context {#build_player_context}
+
+`build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'`
+
+Build the context object the RAPM matrix-solve layer consumes.
+
+Faithful port of `RapmUtils.buildPlayerContext` (`RapmUtils.ts:427-541`).
+Removes low-possession players (`config["removal_pct"]` of total
+on+off possessions), flags fully-removed lineups (mutating `lineups`
+in place -- see the module docstring's landmine 5), builds the
+player-to-column index, and folds `build_priors` into
+`prior_info`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `list[PlayerOnOffStats]` |  | The per-player on/off splits (`PlayerOnOffStats`), e.g. `mbb_lineup_stats.lineup_to_team_report(...)["players"]`. |
+| `lineups` | `list[LineupStatSet]` |  | The per-lineup `LineupStatSet` docs feeding this team's aggregate (**mutated in place** -- see landmine 5). |
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- forwarded to `build_priors` unchanged. |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set -- forwarded to `build_priors` unchanged. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `agg_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- forwarded to `build_priors` as its `value_key` (only affects prior calculations, not the lineup-filtering/aggregation above it). |
+| `config` | `RapmConfig` | `{'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}` | Removal-percent / prior-mode / regression config. Defaults to `DEFAULT_RAPM_CONFIG`; never mutated by this function (only `config["removal_pct"]`/`config["prior_mode"]` are read), matching the TS default parameter's own read-only usage. |
+
+**Returns**
+
+A `RapmPlayerContext`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ZeroDivisionError` | If `total_lineups` (derived from `players[0]`'s on/off possession totals) is exactly `0` -- see the module docstring's landmine 2. Not exercised by this task's oracle fixtures. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
+from sportsdataverse.mbb.mbb_rapm import build_player_context, DEFAULT_RAPM_CONFIG
+
+report = lineup_to_team_report({"lineups": buckets, "error_code": None})
+ctx = build_player_context(
+    report["players"], buckets, {}, {}, 100.0, "value", DEFAULT_RAPM_CONFIG
+)
+print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
+
+# Filtering lineups by side (the ``filtered_lineups`` closure)
+
+off_lineups = ctx["filtered_lineups"]("off")
+def_lineups = ctx["filtered_lineups"]("def")
+```
 
 ### build_priors {#build_priors}
 
@@ -1532,88 +1585,4 @@ off_results, def_results = pick_ridge_regression(
     off_weights, def_weights, ctx, None, False
 )
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
-```
-
-### player_per100_features {#player_per100_features}
-
-`player_per100_features(season_stats: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Per-100 / rate features for every (player_id, season).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season_stats` | `DataFrame` |  | One row per player-season with the canonical counting columns (`minutes, field_goals_made, field_goals_attempted, three_point_field_goals_made, free_throws_attempted, turnovers, points, fga_rim, fga_mid, fga_three, offensive_rebounds, defensive_rebounds, assists, blocks, steals`) -- built from the player-boxscore aggregation (see the Phase-0 fitters). |
-
-**Returns**
-
-One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 features. Empty input returns the schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `season` | Int64 | Season year. |
-| `team_id` | String | Unique team identifier. |
-| `min` | Float64 | Minutes played. |
-| `usage` | Float64 | Usage rate. |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `efg_pct` | Float64 |  |
-| `ast_pct` | Float64 | Assist percentage. |
-| `tov_pct` | Float64 |  |
-| `oreb_pct` | Float64 |  |
-| `dreb_pct` | Float64 |  |
-| `blk_pct` | Float64 | Blocks percentage (0-1 decimal). |
-| `stl_pct` | Float64 | Steals percentage (0-1 decimal). |
-| `ftr` | Float64 | Free-throw rate (offense). |
-| `rim_share` | Float64 |  |
-| `mid_share` | Float64 |  |
-| `three_share` | Float64 |  |
-| `pts_per100` | Float64 |  |
-| `reb_per100` | Float64 |  |
-| `ast_per100` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_player_value_constants import player_per100_features
-feats = player_per100_features(season_stats)
-```
-
-### poss_calc_fragment_sum {#poss_calc_fragment_sum}
-
-`poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'`
-
-Field-wise add two `PossCalcFragment`\ s
-
-(`PossCalcFragment.sum`).
-
-The Scala original uses `shapeless.Generic` to zip the two case
-classes' fields and sum pairwise; since every field is a plain `Int`,
-a plain `zip` over `dataclasses.astuple` reproduces the same
-behavior without the generic-programming machinery.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `a` | `PossCalcFragment` |  | The left-hand fragment. |
-| `b` | `PossCalcFragment` |  | The right-hand fragment. |
-
-**Returns**
-
-A new `PossCalcFragment` with each field summed.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import (
-    PossCalcFragment,
-    poss_calc_fragment_sum,
-)
-
-frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
-frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
-poss_calc_fragment_sum(frag1, frag2)
-# PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
 ```

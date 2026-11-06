@@ -278,7 +278,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_mbb_season_wp](additional/models-and-calculators.md#build_mbb_season_wp) | A season's play-by-play with win-probability columns joined in. |
 | [build_net_points](additional/models-and-calculators.md#build_net_points) | Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown. |
 | [build_o_rtg](additional/models-and-calculators.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
-| [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
+| [build_player_context](additional/models-and-calculators-2.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
 | [build_priors](additional/models-and-calculators-2.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
 | [build_productivity](additional/models-and-calculators-2.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
 | [build_weak_prior_from_rapm](additional/models-and-calculators-2.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
@@ -315,8 +315,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_ratings](additional/models-and-calculators-2.md#mbb_team_ratings) | Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season. |
 | [mbb_transfer_projection](additional/models-and-calculators-2.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
 | [pick_ridge_regression](additional/models-and-calculators-2.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
-| [player_per100_features](additional/models-and-calculators-2.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
-| [poss_calc_fragment_sum](additional/models-and-calculators-2.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
+| [player_per100_features](additional/models-and-calculators-3.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
+| [poss_calc_fragment_sum](additional/models-and-calculators-3.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
 | [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted efficiency margins. |
 | [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted efficiencies and tempos. |
 | [preseason_prior](additional/models-and-calculators-3.md#preseason_prior) | The preseason prior for one season: last season's final ratings, regressed to the mean. |
