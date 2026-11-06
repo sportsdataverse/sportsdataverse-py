@@ -355,6 +355,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_lineup_seasons](additional/analytics-2.md#wbb_lineup_seasons) | Women's college lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
 | [wbb_play_styles](additional/analytics-2.md#wbb_play_styles) | Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [wbb_player_on_off](additional/analytics-2.md#wbb_player_on_off) | Women's college player on/off: each player's team with her on the floor and without her. |
+| [wbb_player_war](additional/analytics-3.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
 | [wbb_player_wowy](additional/analytics-3.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
 | [wbb_situational_lineup](additional/analytics-3.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
 | [wbb_situational_player](additional/analytics-3.md#wbb_situational_player) | Women's college player on-floor splits by situation. |

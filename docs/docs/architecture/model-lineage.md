@@ -88,6 +88,7 @@ None of these seven ships a card.
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["00"]` / `["20"]` (70.1) | `tools/fit_nba_shot_shrinkage_k.py` | tracked (moved from untracked `dev/nba_shot_value/fit_shrinkage_k.py`; reruns to 70.1 on the committed fixture) |
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["10"]` (60.0) | none | **seeded placeholder**, not a fit: no WNBA shot fixture is committed |
 | `team_luck.PYTHAG_EXPONENT` (nba 14.02, wnba 10.64, mbb 8.07, wbb 6.80) | `tools/fit_team_luck_pythag.py` | tracked; reruns to the frozen values on the committed `tests/fixtures/bb_team_luck` records (`tests/tools/test_fit_team_luck_pythag.py`); refit when `SPANS` is extended |
+| `player_war.REPLACEMENT_LEVEL` (nba -1.98, wnba -3.18, mbb -1.66, wbb -1.99) and `player_war.PTS_PER_WIN` (nba 31.56, wnba 31.31, mbb 38.91, wbb 47.10) | `tools/fit_player_war.py` | tracked; reruns to the frozen values on the committed `tests/fixtures/bb_player_war` player-seasons and `bb_team_luck` records (`tests/tools/test_fit_player_war.py`); refit every year after the season, moving `SPANS` forward a season and re-deriving the holdout gates (the replacement level drifts up with roster depth; the college holdout seasons sit 0.23 / 0.42 per 100 above the frozen level) |
 | `paper_index` weights | `game-on-paper-app` `python/tools/fit_paper_index.py` (`43fd699f`) | tracked in that repo |
 | `nfl_prediction_constants.RatingsConfig.ridge_lambda`, `NFL_CONSTANTS`, `PROP_CONSTANTS` | `dev/nfl_prediction/fit_{ridge_lambda,pregame,props}.py` | **lost** (see below) |
 

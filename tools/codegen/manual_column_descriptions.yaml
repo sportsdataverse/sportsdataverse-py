@@ -76947,6 +76947,136 @@ college_play_style_features:
   dunk_share: Dunks as a share of rim attempts.
   starter_share: Share of the player's games he started.
   mpg_share: Minutes per game as a share of a 40-minute game.
+nba_player_war:
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  player_id: stats.nba.com player id.
+  player_name: Player name, from the player impact release.
+  team_id: stats.nba.com team id of the team he played the most possessions for.
+  teams: How many teams he played for in the regular season.
+  min: Regular-season minutes (the player impact release's).
+  poss: On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's
+    convention). The minutes basis of vorp and war.
+  rating: 'Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban.'
+  rating_bpm: 'Our BPM per 100, team-anchored and centred: the release''s bpm with its team constant repaired (minute-weighted team
+    mean = net rating / 5, BPM 2.0''s), minus the player''s team mean, plus the team''s net rating / 5, centred so the league''s possession-weighted
+    mean is 0.'
+  rating_rapm: 'Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read:
+    the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
+  rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
+  vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+  war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
+    level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
+  war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
+  war_lo: 'Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its
+    own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
+    then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
+    are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread
+    is the source uncertainty.'
+  war_bpm: war from rating_bpm alone. Every source shares the league's replacement level, so war_bpm, war_rapm and war_boban add up
+    to the same league total.
+  war_rapm: war from rating_rapm alone.
+  war_boban: war from rating_boban alone. BOBAN shrinks low-minute players toward average, so the replacement pool carries more war_boban
+    than war_bpm (the replacement level is a box-score level).
+  vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
+  war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
+  vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
+  war_n: 'Sample size of war: on-court possessions, rounded.'
+wnba_player_war:
+  season: Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year).
+  player_id: stats.nba.com player id.
+  player_name: Player name, from the player impact release.
+  team_id: stats.nba.com team id of the team he played the most possessions for.
+  teams: How many teams he played for in the regular season.
+  min: Regular-season minutes (the player impact release's).
+  poss: On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's
+    convention). The minutes basis of vorp and war.
+  rating: 'Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban.'
+  rating_bpm: 'Our BPM per 100, team-anchored and centred: the release''s bpm with its team constant repaired (minute-weighted team
+    mean = net rating / 5, BPM 2.0''s), minus the player''s team mean, plus the team''s net rating / 5, centred so the league''s possession-weighted
+    mean is 0.'
+  rating_rapm: 'Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read:
+    the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
+  rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
+  vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+  war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
+    level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
+  war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
+  war_lo: 'Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its
+    own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
+    then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
+    are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread
+    is the source uncertainty.'
+  war_bpm: war from rating_bpm alone. Every source shares the league's replacement level, so war_bpm, war_rapm and war_boban add up
+    to the same league total.
+  war_rapm: war from rating_rapm alone.
+  war_boban: war from rating_boban alone. BOBAN shrinks low-minute players toward average, so the replacement pool carries more war_boban
+    than war_bpm (the replacement level is a box-score level).
+  vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
+  war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
+  vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
+  war_n: 'Sample size of war: on-court possessions, rounded.'
+mbb_player_war:
+  season: Season, named by the year it ends (2025 is 2024-25).
+  player_id: The player's ESPN athlete id, as text (the box-score id the college player-value models key on).
+  player_name: Player name, from the box score.
+  team_id: ESPN team id of the Division I team he played the most possessions for.
+  teams: How many Division I teams he played for.
+  min: Minutes in the season's box scores.
+  poss: 'Possessions: minutes / 40 * the team''s adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College
+    has no published on-court possessions for every game. The minutes basis of vorp and war.'
+  rating: 'Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine),
+    re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
+    mean is 0.'
+  vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+  war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
+    WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
+  war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
+  war_lo: 'Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its
+    own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
+    then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
+    are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate''s adjusted
+    net rating is the adjusted rating plus the change in the raw one); box BPM''s own sampling error is in no column.'
+  vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
+  war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
+  vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
+  war_n: 'Sample size of war: on-court possessions, rounded.'
+wbb_player_war:
+  season: Season, named by the year it ends (2025 is 2024-25).
+  player_id: The player's ESPN athlete id, as text (the box-score id the college player-value models key on).
+  player_name: Player name, from the box score.
+  team_id: ESPN team id of the Division I team he played the most possessions for.
+  teams: How many Division I teams he played for.
+  min: Minutes in the season's box scores.
+  poss: 'Possessions: minutes / 40 * the team''s adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College
+    has no published on-court possessions for every game. The minutes basis of vorp and war.'
+  rating: 'Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine),
+    re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
+    mean is 0.'
+  vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+  war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
+    WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
+  war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
+  war_lo: 'Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its
+    own): each team-season''s games resampled with replacement (a game''s player possessions, team possessions and margin move together),
+    then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level
+    are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate''s adjusted
+    net rating is the adjusted rating plus the change in the raw one); box BPM''s own sampling error is in no column.'
+  vorp_rank: Rank of vorp within the season among every player (1 = most; ties average); null under 10 players.
+  war_rank: Rank of war within the season among every player (1 = most; ties average); null under 10 players.
+  vorp_pct: 'Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
+  vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
+  war_n: 'Sample size of war: on-court possessions, rounded.'
 nba_epv_plays:
   action_number: 'stats.nba.com action number of the event (the game lineups release''s key).'
   def_player_1: 'stats.nba.com player id of defensive player 1 of 5 when the possession started.'
