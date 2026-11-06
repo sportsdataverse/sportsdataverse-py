@@ -969,6 +969,7 @@ categories:
       - sportsdataverse.nba.nba_epv
       - sportsdataverse.nba.nba_lineup_seasons
       - sportsdataverse.nba.nba_player_on_off
+      - sportsdataverse.nba.nba_player_factor_rapm
       - sportsdataverse.nba.nba_play_style
       - sportsdataverse.nba.nba_game_flow
       - sportsdataverse.nba.nba_situational
@@ -976,6 +977,7 @@ categories:
       - sportsdataverse.wnba.wnba_game_impact
       - sportsdataverse.wnba.wnba_lineup_seasons
       - sportsdataverse.wnba.wnba_player_on_off
+      - sportsdataverse.wnba.wnba_player_factor_rapm
       - sportsdataverse.wnba.wnba_game_flow
       - sportsdataverse.wnba.wnba_situational
       - sportsdataverse.mbb.mbb_team_season_rates

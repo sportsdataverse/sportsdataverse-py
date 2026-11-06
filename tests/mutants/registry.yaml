@@ -10505,6 +10505,127 @@
   expected: kill
   note: The bundled booster refuses a season before its first training one, whoever calls it.
 
+# --- BB-D10: four-factor RAPM split ----------------------------------------------------------------
+- id: bb-frapm-ft-chances
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'ftr = pl.when(pl.col("fta") > 0).then((pl.col("points") - fg_pts) - v * chances.clip(lower_bound=0)).otherwise(0)'
+  mutant: 'ftr = pl.when(pl.col("fta") > 0).then(pl.col("points") - fg_pts).otherwise(0)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_part_on_real_possessions
+  expected: kill
+  note: Without the shot each free-throw chance replaced the sum still holds (the remainder absorbs it), but every trip is overvalued by v.
+
+- id: bb-frapm-one-penalty
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'coef, var, cov = _ridge(X, Y, alpha, games)'
+  mutant: 'coef, var, cov = _ridge(X, Y, alpha, games); coef[:, 1:] = _ridge(X, Y[:, 1:], 10 * alpha, games)[0]'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_components_add_up_to_the_totals
+  expected: kill
+  note: The components only add up to the total when every response is fit at the one penalty.
+
+- id: bb-frapm-defense-sign
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'cols[d] = -100 * coef[P:, k]'
+  mutant: 'cols[d] = (100 if k else -100) * coef[P:, k]'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_components_add_up_to_the_totals
+  expected: kill
+  note: A defensive component left unflipped reads lower-is-better and no longer adds up to d_rapm.
+
+- id: bb-frapm-centred-gram
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
+  mutant: 'gram = (X.T @ X).toarray()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_totals_are_the_published_plain_rapm
+  expected: kill
+  note: An uncentred Gram matrix fits a different ridge than nba_rapm's intercept-fitted one.
+
+- id: bb-frapm-season-apart
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'for (season,), part in possessions.partition_by("season", as_dict=True).items():'
+  mutant: 'for season, part in [(possessions["season"].max(), possessions)]:'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_seasons_are_fit_apart_and_repeat
+  expected: kill
+  note: A pooled fit would put one season's possessions into another season's ratings.
+
+- id: bb-frapm-season-type
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_player_factor_rapm.py
+  snippet: 'games = schedule.filter(pl.col("season_type") == season_type).select(pl.col("game_id").cast(pl.Utf8)).unique()'
+  mutant: 'games = schedule.select(pl.col("game_id").cast(pl.Utf8)).unique()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_totals_are_the_published_plain_rapm
+  expected: kill
+  note: The regular-season split would take in the playoff possessions.
+
+- id: bb-frapm-value-through-fit
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'Y = factor_targets(poss, v).to_numpy()'
+  mutant: 'Y = factor_targets(poss, 1.0).to_numpy()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: A fit with a fixed shot value still adds up, but values every turnover and rebound at the wrong price.
+
+- id: bb-frapm-defense-labels
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '_DEF_NAME = {f: f"d_{''drb'' if f == ''orb'' else f}_rapm" for f in FACTORS}'
+  mutant: '_DEF_NAME = {f: f"d_{ {''orb'': ''drb'', ''tov'': ''ftr'', ''ftr'': ''tov''}.get(f, f)}_rapm" for f in FACTORS}'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: Two swapped defensive labels keep the sum but publish forced turnovers as opponent free throws.
+
+- id: bb-frapm-factor-order
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'FACTORS = ("efg", "tov", "orb", "ftr", "other")'
+  mutant: 'FACTORS = ("efg", "orb", "tov", "ftr", "other")'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: A factor list out of step with the response columns labels the turnover fit as rebounding.
+
+- id: bb-frapm-se-by-game
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'games = poss[GAME].cast(pl.Utf8).rank("dense").cast(pl.Int64).to_numpy() - 1'
+  mutant: 'games = np.arange(poss.height)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_standard_errors_are_clustered_by_game
+  expected: kill
+  note: Possession-level errors ignore that a game's possessions share players and conditions.
+
+- id: bb-frapm-value-moves
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '(-v * pl.col("tov")).cast(pl.Float64).alias("tov"),'
+  mutant: '(-v * pl.col("tov") - v * pl.col("oreb")).cast(pl.Float64).alias("tov"),'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_part_on_real_possessions
+  expected: kill
+  note: Value moved between parts (rebounds charged to turnovers) keeps every sum; only the per-possession parts show it.
+
+- id: bb-frapm-zero-match-warning
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_player_factor_rapm.py
+  snippet: '    if out.height == 0:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_public_builders
+  expected: kill
+  note: A season type with no game would return an empty table without a word.
+
 - id: bb-wp-rated-prior-ignored
   group: bb-wp-cards
   finding: BB-D25
