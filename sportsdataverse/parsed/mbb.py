@@ -494,6 +494,10 @@ from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F4
 from sportsdataverse.mbb import mbb_coach_careers as mbb_coach_careers  # noqa: F401
 from sportsdataverse.mbb import mbb_coach_seasons as mbb_coach_seasons  # noqa: F401
 from sportsdataverse.mbb import mbb_draft_projection as mbb_draft_projection  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_lineup_games as mbb_epv_lineup_games  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_player_games as mbb_epv_player_games  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_plays as mbb_epv_plays  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_team_games as mbb_epv_team_games  # noqa: F401
 from sportsdataverse.mbb import mbb_game_flow as mbb_game_flow  # noqa: F401
 from sportsdataverse.mbb import mbb_game_lineups_used as mbb_game_lineups_used  # noqa: F401
 from sportsdataverse.mbb import mbb_game_player_impact as mbb_game_player_impact  # noqa: F401
@@ -1157,6 +1161,10 @@ __all__ = [
     "mbb_coach_careers",
     "mbb_coach_seasons",
     "mbb_draft_projection",
+    "mbb_epv_lineup_games",
+    "mbb_epv_player_games",
+    "mbb_epv_plays",
+    "mbb_epv_team_games",
     "mbb_game_flow",
     "mbb_game_lineups_used",
     "mbb_game_player_impact",

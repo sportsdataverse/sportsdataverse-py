@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_player"
-sidebar_label: "Analytics: wbb_bracketology–wbb_player"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup"
+sidebar_label: "Analytics: wbb_bracketology–wbb_lineup"
 sidebar_position: 11
-description: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_player
+# Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup
 
 ### wbb_bracketology {#wbb_bracketology}
 
@@ -292,6 +292,216 @@ One row per `(season, team_id, coach_id)`; see the mbb core for the columns.
 ```python
 from sportsdataverse.wbb import wbb_coach_seasons
 wbb_coach_seasons(2025, coaches).sort("net_rtg_rank").head()
+```
+
+### wbb_epv_lineup_games {#wbb_epv_lineup_games}
+
+`wbb_epv_lineup_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per women's college five-woman unit and game: the EPV added with the unit on the floor.
+
+Delegates to `sportsdataverse.mbb.mbb_epv.mbb_epv_lineup_games` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_lineup_games`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id. |
+| `lineup_id` | String | The five stats.ncaa.org player ids, sorted and joined with '-'. |
+| `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
+| `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `plays` | Int64 | Play-by-play events with the unit on the floor. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_epv_lineup_games
+wbb_epv_lineup_games(2026).sort("net_epv", descending=True).head()
+```
+
+### wbb_epv_player_games {#wbb_epv_player_games}
+
+`wbb_epv_player_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per women's college player and game: EPV added on her own actions and on-court EPV +/-.
+
+Delegates to `sportsdataverse.mbb.mbb_epv.mbb_epv_player_games` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_player_games`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id. |
+| `player_id` | String | stats.ncaa.org player id. |
+| `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
+| `own_actions` | Int64 | How many of the player's own events were credited. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. |
+| `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
+| `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_epv_player_games
+wbb_epv_player_games(2026).sort("epv_on", descending=True).head()
+```
+
+### wbb_epv_plays {#wbb_epv_plays}
+
+`wbb_epv_plays(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+EPV and EPV added on every women's college play-by-play event inside a possession.
+
+Delegates to `sportsdataverse.mbb.mbb_epv.mbb_epv_plays` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_plays`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `possession_number` | Int64 | The possession's number in the game, from 1 (the release's, split where the other side shoots). |
+| `step` | Int64 | The event's place in its possession, from 1. |
+| `order_index` | Int64 | The row's order in the game's release play-by-play, from 0. |
+| `action_number` | Int64 | The row's order in the game's release play-by-play (the key of its ten on the floor). |
+| `offense_team_id` | Int64 | ESPN team id of the offense (null for a non-D1 team). |
+| `defense_team_id` | Int64 | ESPN team id of the defense (null for a non-D1 team). |
+| `home_team_id` | Int64 | ESPN team id of the home team (null for a non-D1 team). |
+| `team_id` | Int64 | ESPN team id of the team on the event (null for a non-D1 team). |
+| `person_id` | String | stats.ncaa.org player id on the event; null on a team event. |
+| `event_type` | String | The event in the NBA engine's vocabulary (made_shot, missed_shot, rebound, foul, free_throw, turnover, timeout, jump_ball, substitution, other). |
+| `sub_type` | String | The free-throw trip (Free Throw n of m) or the foul kind (Shooting, Offensive, Technical, Personal). |
+| `description` | String | The play-by-play text of the event (a steal or block is prefixed STEAL / BLOCK). |
+| `off_player_1` | String | stats.ncaa.org player id of offensive player 1 of 5 when the possession started. |
+| `off_player_2` | String | stats.ncaa.org player id of offensive player 2 of 5 when the possession started. |
+| `off_player_3` | String | stats.ncaa.org player id of offensive player 3 of 5 when the possession started. |
+| `off_player_4` | String | stats.ncaa.org player id of offensive player 4 of 5 when the possession started. |
+| `off_player_5` | String | stats.ncaa.org player id of offensive player 5 of 5 when the possession started. |
+| `def_player_1` | String | stats.ncaa.org player id of defensive player 1 of 5 when the possession started. |
+| `def_player_2` | String | stats.ncaa.org player id of defensive player 2 of 5 when the possession started. |
+| `def_player_3` | String | stats.ncaa.org player id of defensive player 3 of 5 when the possession started. |
+| `def_player_4` | String | stats.ncaa.org player id of defensive player 4 of 5 when the possession started. |
+| `def_player_5` | String | stats.ncaa.org player id of defensive player 5 of 5 when the possession started. |
+| `start_type` | Int64 | State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover. |
+| `period` | Int64 | State: the period (halves for men, quarters for women), overtimes folded to 5. |
+| `seconds_remaining` | Float64 | State: seconds left in the period after the event. |
+| `start_margin` | Float64 | State: the offense's lead when the possession started (before its first event). |
+| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot. |
+| `last_event` | Int64 | State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start). |
+| `ft_pending` | Int64 | State: free throws still to come in the trip (from the release's ft_number of ft_attempts). |
+| `shot_zone` | Int64 | State: zone of the possession's latest shot, 0 none, 1 paint two, 3 other two, 4 three (2 is unused: the feed has no distance). |
+| `points` | Int64 | The offense's points on the event. |
+| `remaining_points` | Int64 | The offense's points after the event to the end of the possession (the model's label). |
+| `is_last` | Boolean | Whether the event is its possession's last. |
+| `next_in_period` | Boolean | Whether another possession follows in the same period. |
+| `epv` | Float64 | Expected points for the offense to the end of the possession, after the event (scaled by the game's as-of scoring level). |
+| `epv_start` | Float64 | EPV at the possession's start. |
+| `epv_before` | Float64 | EPV before the event (the previous event's, or the start's). |
+| `epv_after` | Float64 | EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end). |
+| `epv_added` | Float64 | EPV added: points + epv_after - epv_before, the offense's (the defense's is its negative). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_epv_plays
+wbb_epv_plays(2026).sort("epv_added", descending=True).head()
+```
+
+### wbb_epv_team_games {#wbb_epv_team_games}
+
+`wbb_epv_team_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per women's college team and game: EPV added on offense and allowed on defense.
+
+Delegates to `sportsdataverse.mbb.mbb_epv.mbb_epv_team_games` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_team_games`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id. |
+| `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
+| `off_epv` | Float64 | The team's EPV added with the ball over the game. |
+| `poss` | Int64 | The team's possessions with at least one event. |
+| `def_epv` | Float64 | The opponent's EPV added with the ball over the game. |
+| `opp_poss` | Int64 | The opponent's possessions with at least one event. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `off_epv_per_poss` | Float64 | off_epv per possession. |
+| `def_epv_per_poss` | Float64 | def_epv per possession. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wbb import wbb_epv_team_games
+wbb_epv_team_games(2026).group_by("team_id").agg(pl.col("off_epv_per_poss").mean())
 ```
 
 ### wbb_game_flow {#wbb_game_flow}
@@ -588,121 +798,4 @@ One row per `(season, team_id, n_players, lineup_id)`: `player_1..5`, `minutes`,
 ```python
 from sportsdataverse.wbb import wbb_lineup_seasons
 wbb_lineup_seasons(2025).filter(n_players=5).sort("poss").tail()
-```
-
-### wbb_play_styles {#wbb_play_styles}
-
-`wbb_play_styles(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20).
-
-Delegates to `sportsdataverse.mbb.mbb_play_style.mbb_play_styles` with `league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per qualifying `(player_id, season, team_id)`: the ESPN ids, `player`, `min` and the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | ESPN athlete id of the player, as text (the box and shots releases' athlete id). |
-| `season` | Int64 | Season (2026 is 2025-26). |
-| `team_id` | String | ESPN team id of the team the player-season belongs to, as text. |
-| `player` | String | Player's display name on ESPN. |
-| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
-| `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
-| `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |
-| `dist_to_center` | Float64 | Euclidean distance (z-space) to the archetype's center; small means a prototypical example. |
-| `second_archetype` | String | The next-nearest archetype, the style a hybrid leans toward. |
-| `margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_play_styles
-wbb_play_styles(2026).group_by("archetype").len()
-```
-
-### wbb_player_on_off {#wbb_player_on_off}
-
-`wbb_player_on_off(seasons: 'int | list[int]', *, min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Women's college player on/off: each player's team with her on the floor and without her.
-
-Delegates to `sportsdataverse.mbb.mbb_player_on_off.mbb_player_on_off` with
-`league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `min_poss` | `int` | `200` | The rank gate, offensive plus defensive possessions both on and off the floor (default 200). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, player_id)`: `games`, `team_games`, the `_on` and `_off` totals and ratings, `<rating>_diff`, the ranks and the sample sizes. `poss_on + poss_off` is the team's possessions. See the mbb core for the definitions.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
-| `player_id` | String | stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet). |
-| `games` | Int64 | Games the player was on the floor for the team. |
-| `team_games` | Int64 | Games the team played in the season (with play-by-play and possessions); games well short of it marks a player who missed time or was with the team for part of the season. |
-| `minutes_on` | Float64 | Game-clock minutes of the team's season with the player on the floor. |
-| `poss_on` | Int64 | The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_on` | Int64 | The team's defensive possessions with the player on the floor. |
-| `pts_on` | Int64 | The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_on` | Int64 | The opponent's points with the player on the floor, credited as pts_on is. |
-| `plus_minus_on` | Int64 | pts_on - opp_pts_on. |
-| `off_rtg_on` | Float64 | Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions. |
-| `def_rtg_on` | Float64 | Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions. |
-| `net_rtg_on` | Float64 | Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null. |
-| `minutes_off` | Float64 | Game-clock minutes of the team's season with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
-| `poss_off` | Int64 | The team's offensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_off` | Int64 | The team's defensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
-| `pts_off` | Int64 | The team's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_off` | Int64 | The opponent's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off is. |
-| `plus_minus_off` | Int64 | pts_off - opp_pts_off. |
-| `off_rtg_off` | Float64 | Offensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off; null with no possessions. |
-| `def_rtg_off` | Float64 | Defensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off; null with no possessions. |
-| `net_rtg_off` | Float64 | Net rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null when either is null. |
-| `off_rtg_diff` | Float64 | On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null. |
-| `def_rtg_diff` | Float64 | On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null. |
-| `net_rtg_diff` | Float64 | On-off net rating: net_rtg_on - net_rtg_off; null when either is null. |
-| `off_rtg_on_rank` | Float64 | Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `def_rtg_on_rank` | Float64 | Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `net_rtg_on_rank` | Float64 | Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `off_rtg_diff_rank` | Float64 | Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `def_rtg_diff_rank` | Float64 | Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `net_rtg_diff_rank` | Float64 | Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
-| `off_rtg_on_pct` | Float64 | Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `def_rtg_on_pct` | Float64 | Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `net_rtg_on_pct` | Float64 | Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `off_rtg_diff_pct` | Float64 | Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `def_rtg_diff_pct` | Float64 | Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `net_rtg_diff_pct` | Float64 | Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `off_rtg_on_n` | Int64 | Sample size of off_rtg_on: poss_on. |
-| `def_rtg_on_n` | Int64 | Sample size of def_rtg_on: opp_poss_on. |
-| `net_rtg_on_n` | Int64 | Sample size of net_rtg_on: poss_on + opp_poss_on. |
-| `off_rtg_off_n` | Int64 | Sample size of off_rtg_off: poss_off. |
-| `def_rtg_off_n` | Int64 | Sample size of def_rtg_off: opp_poss_off. |
-| `net_rtg_off_n` | Int64 | Sample size of net_rtg_off: poss_off + opp_poss_off. |
-| `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
-| `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
-| `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_player_on_off
-wbb_player_on_off(2025).sort("net_rtg_diff_rank").head()
 ```

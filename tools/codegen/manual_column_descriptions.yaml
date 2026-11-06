@@ -77015,3 +77015,149 @@ nba_epv_team_games:
   poss: 'The team''s possessions with at least one event.'
   season: 'Season, named by the year it ends (the WNBA season is its calendar year).'
   team_id: 'stats.nba.com team id.'
+mbb_epv_plays:
+  action_number: The row's order in the game's release play-by-play (the key of its ten on the floor).
+  def_player_1: stats.ncaa.org player id of defensive player 1 of 5 when the possession started.
+  def_player_2: stats.ncaa.org player id of defensive player 2 of 5 when the possession started.
+  def_player_3: stats.ncaa.org player id of defensive player 3 of 5 when the possession started.
+  def_player_4: stats.ncaa.org player id of defensive player 4 of 5 when the possession started.
+  def_player_5: stats.ncaa.org player id of defensive player 5 of 5 when the possession started.
+  defense_team_id: ESPN team id of the defense (null for a non-D1 team).
+  description: The play-by-play text of the event (a steal or block is prefixed STEAL / BLOCK).
+  epv: Expected points for the offense to the end of the possession, after the event (scaled by the game's as-of scoring level).
+  epv_added: 'EPV added: points + epv_after - epv_before, the offense''s (the defense''s is its negative).'
+  epv_after: EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end).
+  epv_before: EPV before the event (the previous event's, or the start's).
+  epv_start: EPV at the possession's start.
+  event_type: The event in the NBA engine's vocabulary (made_shot, missed_shot, rebound, foul, free_throw, turnover, timeout, jump_ball, substitution, other).
+  ft_pending: 'State: free throws still to come in the trip (from the release''s ft_number of ft_attempts).'
+  game_id: stats.ncaa.org contest id.
+  home_team_id: ESPN team id of the home team (null for a non-D1 team).
+  is_last: Whether the event is its possession's last.
+  last_event: 'State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start).'
+  next_in_period: Whether another possession follows in the same period.
+  off_player_1: stats.ncaa.org player id of offensive player 1 of 5 when the possession started.
+  off_player_2: stats.ncaa.org player id of offensive player 2 of 5 when the possession started.
+  off_player_3: stats.ncaa.org player id of offensive player 3 of 5 when the possession started.
+  off_player_4: stats.ncaa.org player id of offensive player 4 of 5 when the possession started.
+  off_player_5: stats.ncaa.org player id of offensive player 5 of 5 when the possession started.
+  offense_team_id: ESPN team id of the offense (null for a non-D1 team).
+  order_index: The row's order in the game's release play-by-play, from 0.
+  period: 'State: the period (halves for men, quarters for women), overtimes folded to 5.'
+  person_id: stats.ncaa.org player id on the event; null on a team event.
+  points: The offense's points on the event.
+  possession_number: The possession's number in the game, from 1 (the release's, split where the other side shoots).
+  remaining_points: The offense's points after the event to the end of the possession (the model's label).
+  season: Season, named by the year it ends.
+  seconds_remaining: 'State: seconds left in the period after the event.'
+  shot_zone: 'State: zone of the possession''s latest shot, 0 none, 1 paint two, 3 other two, 4 three (2 is unused: the feed has no distance).'
+  start_margin: 'State: the offense''s lead when the possession started (before its first event).'
+  start_type: 'State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover.'
+  step: The event's place in its possession, from 1.
+  sub_type: The free-throw trip (Free Throw n of m) or the foul kind (Shooting, Offensive, Technical, Personal).
+  team_id: ESPN team id of the team on the event (null for a non-D1 team).
+  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
+mbb_epv_player_games:
+  def_epv_on: EPV added by the opponent with the ball while the player was on the floor.
+  epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
+  epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
+  game_id: stats.ncaa.org contest id.
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor.
+  own_actions: How many of the player's own events were credited.
+  player_id: stats.ncaa.org player id.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.
+mbb_epv_lineup_games:
+  def_epv: EPV added by the opponent with the ball while the unit was on.
+  game_id: stats.ncaa.org contest id.
+  lineup_id: The five stats.ncaa.org player ids, sorted and joined with '-'.
+  net_epv: off_epv - def_epv.
+  off_epv: EPV added by the unit's team with the ball while the unit was on.
+  plays: Play-by-play events with the unit on the floor.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.
+mbb_epv_team_games:
+  def_epv: The opponent's EPV added with the ball over the game.
+  def_epv_per_poss: def_epv per possession.
+  game_id: stats.ncaa.org contest id.
+  net_epv: off_epv - def_epv.
+  off_epv: The team's EPV added with the ball over the game.
+  off_epv_per_poss: off_epv per possession.
+  opp_poss: The opponent's possessions with at least one event.
+  opp_team_id: The opponent's ESPN team id (null for a non-D1 opponent).
+  poss: The team's possessions with at least one event.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.
+wbb_epv_plays:
+  action_number: The row's order in the game's release play-by-play (the key of its ten on the floor).
+  def_player_1: stats.ncaa.org player id of defensive player 1 of 5 when the possession started.
+  def_player_2: stats.ncaa.org player id of defensive player 2 of 5 when the possession started.
+  def_player_3: stats.ncaa.org player id of defensive player 3 of 5 when the possession started.
+  def_player_4: stats.ncaa.org player id of defensive player 4 of 5 when the possession started.
+  def_player_5: stats.ncaa.org player id of defensive player 5 of 5 when the possession started.
+  defense_team_id: ESPN team id of the defense (null for a non-D1 team).
+  description: The play-by-play text of the event (a steal or block is prefixed STEAL / BLOCK).
+  epv: Expected points for the offense to the end of the possession, after the event (scaled by the game's as-of scoring level).
+  epv_added: 'EPV added: points + epv_after - epv_before, the offense''s (the defense''s is its negative).'
+  epv_after: EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end).
+  epv_before: EPV before the event (the previous event's, or the start's).
+  epv_start: EPV at the possession's start.
+  event_type: The event in the NBA engine's vocabulary (made_shot, missed_shot, rebound, foul, free_throw, turnover, timeout, jump_ball, substitution, other).
+  ft_pending: 'State: free throws still to come in the trip (from the release''s ft_number of ft_attempts).'
+  game_id: stats.ncaa.org contest id.
+  home_team_id: ESPN team id of the home team (null for a non-D1 team).
+  is_last: Whether the event is its possession's last.
+  last_event: 'State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start).'
+  next_in_period: Whether another possession follows in the same period.
+  off_player_1: stats.ncaa.org player id of offensive player 1 of 5 when the possession started.
+  off_player_2: stats.ncaa.org player id of offensive player 2 of 5 when the possession started.
+  off_player_3: stats.ncaa.org player id of offensive player 3 of 5 when the possession started.
+  off_player_4: stats.ncaa.org player id of offensive player 4 of 5 when the possession started.
+  off_player_5: stats.ncaa.org player id of offensive player 5 of 5 when the possession started.
+  offense_team_id: ESPN team id of the offense (null for a non-D1 team).
+  order_index: The row's order in the game's release play-by-play, from 0.
+  period: 'State: the period (halves for men, quarters for women), overtimes folded to 5.'
+  person_id: stats.ncaa.org player id on the event; null on a team event.
+  points: The offense's points on the event.
+  possession_number: The possession's number in the game, from 1 (the release's, split where the other side shoots).
+  remaining_points: The offense's points after the event to the end of the possession (the model's label).
+  season: Season, named by the year it ends.
+  seconds_remaining: 'State: seconds left in the period after the event.'
+  shot_zone: 'State: zone of the possession''s latest shot, 0 none, 1 paint two, 3 other two, 4 three (2 is unused: the feed has no distance).'
+  start_margin: 'State: the offense''s lead when the possession started (before its first event).'
+  start_type: 'State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover.'
+  step: The event's place in its possession, from 1.
+  sub_type: The free-throw trip (Free Throw n of m) or the foul kind (Shooting, Offensive, Technical, Personal).
+  team_id: ESPN team id of the team on the event (null for a non-D1 team).
+  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
+wbb_epv_player_games:
+  def_epv_on: EPV added by the opponent with the ball while the player was on the floor.
+  epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
+  epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
+  game_id: stats.ncaa.org contest id.
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor.
+  own_actions: How many of the player's own events were credited.
+  player_id: stats.ncaa.org player id.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.
+wbb_epv_lineup_games:
+  def_epv: EPV added by the opponent with the ball while the unit was on.
+  game_id: stats.ncaa.org contest id.
+  lineup_id: The five stats.ncaa.org player ids, sorted and joined with '-'.
+  net_epv: off_epv - def_epv.
+  off_epv: EPV added by the unit's team with the ball while the unit was on.
+  plays: Play-by-play events with the unit on the floor.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.
+wbb_epv_team_games:
+  def_epv: The opponent's EPV added with the ball over the game.
+  def_epv_per_poss: def_epv per possession.
+  game_id: stats.ncaa.org contest id.
+  net_epv: off_epv - def_epv.
+  off_epv: The team's EPV added with the ball over the game.
+  off_epv_per_poss: off_epv per possession.
+  opp_poss: The opponent's possessions with at least one event.
+  opp_team_id: The opponent's ESPN team id (null for a non-D1 opponent).
+  poss: The team's possessions with at least one event.
+  season: Season, named by the year it ends.
+  team_id: ESPN team id.

@@ -372,15 +372,19 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_bracketology](additional/analytics.md#mbb_bracketology) | The daily `bracketology` table: the projected field, seeds and bubble as of a date. |
 | [mbb_coach_careers](additional/analytics.md#mbb_coach_careers) | College head-coach careers over `seasons`: `mbb_coach_seasons` summed per coach. |
 | [mbb_coach_seasons](additional/analytics-2.md#mbb_coach_seasons) | College head-coach seasons: W-L, ratings and four factors of the team-seasons each coached. |
+| [mbb_epv_lineup_games](additional/analytics-2.md#mbb_epv_lineup_games) | Per college five-man unit and game: the EPV added with the unit on the floor. |
+| [mbb_epv_player_games](additional/analytics-2.md#mbb_epv_player_games) | Per college player and game: EPV added on the player's own actions and on-court EPV +/-. |
+| [mbb_epv_plays](additional/analytics-2.md#mbb_epv_plays) | EPV and EPV added on every college play-by-play event inside a possession. |
+| [mbb_epv_team_games](additional/analytics-2.md#mbb_epv_team_games) | Per college team and game: EPV added on offense and allowed on defense. |
 | [mbb_game_flow](additional/analytics-2.md#mbb_game_flow) | College game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [mbb_game_lineups_used](additional/analytics-2.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [mbb_game_player_impact](additional/analytics-2.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_lineup_seasons](additional/analytics-2.md#mbb_lineup_seasons) | College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
 | [mbb_play_styles](additional/analytics-2.md#mbb_play_styles) | College player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [mbb_player_on_off](additional/analytics-2.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
-| [mbb_player_wowy](additional/analytics-2.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
-| [mbb_shot_selection](additional/analytics-2.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
-| [mbb_situational_lineup](additional/analytics-2.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
+| [mbb_player_wowy](additional/analytics-3.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
+| [mbb_shot_selection](additional/analytics-3.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
+| [mbb_situational_lineup](additional/analytics-3.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
 | [mbb_situational_player](additional/analytics-3.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
 | [mbb_situational_team](additional/analytics-3.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
 | [mbb_strength_of_schedule](additional/analytics-3.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
@@ -388,9 +392,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_season_flow](additional/analytics-3.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-3.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-3.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
-| [ncaa_coach_stints](additional/analytics-3.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
-| [ncaa_impact_rows](additional/analytics-3.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
-| [ncaa_lineup_count_rows](additional/analytics-3.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
+| [ncaa_coach_stints](additional/analytics-4.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
+| [ncaa_impact_rows](additional/analytics-4.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
+| [ncaa_lineup_count_rows](additional/analytics-4.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
 | [ncaa_mbb_lineups](additional/analytics-4.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-4.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-4.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |

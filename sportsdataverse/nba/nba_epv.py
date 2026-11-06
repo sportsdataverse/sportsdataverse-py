@@ -47,7 +47,11 @@ own action's ten. The release carries no assist or foul-drawn player, so neither
 The model is an XGBoost regression on the remaining points of the possession, fitted by
 ``tools/models/nba_epv/train_epv.py`` on disjoint train, holdout, confirmation and monitor
 seasons (the seasons and gates are in the booster's attributes and in that folder's holdout
-reports). It is served from its first training season on; earlier seasons are refused.
+reports). It is served from its first training season on; earlier seasons are refused. The
+college boosters (:mod:`sportsdataverse.mbb.mbb_epv`) also carry an as-of scoring level: each
+game's EPV is scaled by the season's points per possession before it over the training seasons'
+(:func:`epv_level`). The NBA booster has no level, and no WNBA booster is shipped (its fit fails
+the gates on 2026; see the fitting script).
 
 Most of the skill is inside the possession (after a miss, a foul, a free throw); possession
 starts differ little (about 0.2 points from a dead ball to a live-ball turnover), so the
@@ -116,10 +120,15 @@ EPV_FEATURES: Final[list[str]] = [
     "start_type", "period", "seconds_remaining", "start_margin", "transition", "last_event", "ft_pending", "shot_zone",
 ]  # fmt: skip
 
-#: league_id -> booster file. Each booster is served from its first training season on
-#: (:func:`_check_seasons`): the older feeds code about a third of their two-point attempts at
-#: 0 ft, which would read as rim shots, and the gates cover the training era only.
-_LEAGUES: Final[dict[str, str]] = {"00": "nba_epv.ubj"}
+#: league_id -> (package, booster file): ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` men's and women's
+#: college (:mod:`sportsdataverse.mbb.mbb_epv`). Each booster is served from its first
+#: training season on (:func:`_check_seasons`): the older NBA feeds code about a third of their
+#: two-point attempts at 0 ft, which would read as rim shots, and the gates cover the training era only.
+_LEAGUES: Final[dict[str, tuple[str, str]]] = {
+    "00": ("sportsdataverse.nba.models", "nba_epv.ubj"),
+    "mbb": ("sportsdataverse.mbb.models", "mbb_epv.ubj"),
+    "wbb": ("sportsdataverse.mbb.models", "wbb_epv.ubj"),
+}
 #: ``shot_zone`` cut points, in feet: under the first a rim shot, under the second a short one.
 _RIM_FEET: Final[int] = 4
 _SHORT_FEET: Final[int] = 14
@@ -413,19 +422,21 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=4)
 def load_epv_model(league_id: str = "00") -> xgb.Booster:
-    """The bundled EPV booster for ``league_id`` (``"00"`` NBA; the state builder takes WNBA frames too).
+    """The bundled EPV booster for ``league_id``: ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` college (no WNBA one ships).
 
     Its attributes carry ``start_epv_mean`` (the average start value the possession-ending term
-    is measured against), the train / holdout / confirmation seasons and the fitting script.
+    is measured against), the train / holdout / confirmation seasons and the fitting script; the
+    college boosters also carry ``level_ppp`` and ``level_k`` (:func:`epv_level`).
     """
     import xgboost as xgb
 
     if league_id not in _LEAGUES:
         raise ValueError(f"league_id must be one of {sorted(_LEAGUES)}, got {league_id!r}")
+    package, name = _LEAGUES[league_id]
     booster = xgb.Booster()
-    booster.load_model(bytearray(files("sportsdataverse.nba.models").joinpath(_LEAGUES[league_id]).read_bytes()))
+    booster.load_model(bytearray(files(package).joinpath(name).read_bytes()))
     _check_features(booster)
     return booster
 
@@ -436,19 +447,75 @@ def _check_features(booster: xgb.Booster) -> None:
         raise ValueError(f"the booster reads {booster.feature_names}, not {EPV_FEATURES}")
 
 
-def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster | None = None) -> pl.DataFrame:
+def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFrame | None = None) -> pl.DataFrame:
+    """Each game's scoring level as of its tip, over the booster's training level (``level_scale``).
+
+    A booster fitted on some seasons predicts their scoring level; when a league's points per
+    possession move (the WNBA's rose 0.04 in 2026, men's college's 0.06 from 2022 to 2026), its
+    EPV runs low or high all season. The level of a game is the season's points per possession
+    over the games that started before it, shrunk to the training level with ``level_k``
+    possessions (an empirical-Bayes weight fitted on the seasons before the holdout):
+    ``(level_k * level_ppp + points_before) / (level_k + possessions_before)``. Each season starts
+    at the training level, and a game never sees its own possessions or any later game's.
+
+    Args:
+        states: :func:`epv_states` output for whole seasons (the level is read from the games passed).
+        booster: A booster carrying ``level_ppp`` (its training seasons' points per possession) and
+            ``level_k``.
+        game_order: ``game_id`` and ``game_order`` (a date, or anything that sorts as the games were
+            played): games sharing a ``game_order`` do not see each other. Without it games are in
+            ``game_id`` order, which the NBA and WNBA assign in schedule order.
+
+    Returns:
+        One row per ``game_id`` with ``level_scale`` (Float64; 1.0 is the training level).
+    """
+    ppp, k = float(booster.attr("level_ppp") or "nan"), float(booster.attr("level_k") or "nan")
+    games = (
+        states.filter(pl.col("step") == 0)
+        .group_by("season", "game_id")
+        .agg(pl.col("remaining_points").sum().cast(pl.Float64).alias("_p"), pl.len().cast(pl.Float64).alias("_n"))
+    )
+    if game_order is None:
+        games = games.with_columns(pl.col("game_id").alias("game_order"))
+    else:
+        games = games.join(game_order.select("game_id", "game_order").unique("game_id"), on="game_id", how="left")
+    days = (
+        games.group_by("season", "game_order")
+        .agg(pl.col("_p").sum(), pl.col("_n").sum())
+        .sort("season", "game_order", nulls_last=True)
+        .with_columns(
+            (pl.col("_p").cum_sum().over("season") - pl.col("_p")).alias("_p_before"),
+            (pl.col("_n").cum_sum().over("season") - pl.col("_n")).alias("_n_before"),
+        )
+    )
+    return games.join(days.drop("_p", "_n"), on=["season", "game_order"], how="left", nulls_equal=True).select(
+        "game_id",
+        ((k * ppp + pl.col("_p_before")) / (k + pl.col("_n_before")) / ppp).alias("level_scale"),
+    )
+
+
+def add_epv(
+    states: pl.DataFrame,
+    *,
+    league_id: str = "00",
+    booster: xgb.Booster | None = None,
+    game_order: pl.DataFrame | None = None,
+) -> pl.DataFrame:
     """Score :func:`epv_states` and return its event rows with ``epv_before``, ``epv_after`` and ``epv_added``.
 
     Args:
-        states: :func:`epv_states` output (whole possessions: the start row and every event).
-        league_id: The bundled booster to use: ``"00"`` NBA (the only one shipped).
+        states: :func:`epv_states` output (whole possessions: the start row and every event; whole
+            seasons for a booster with a level, :func:`epv_level`).
+        league_id: The bundled booster to use: ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` college.
         booster: A booster to use instead (the fitting script scores candidates with it); it must
             carry the ``start_epv_mean`` attribute.
+        game_order: For a booster with a level: the games' order (:func:`epv_level`).
 
     Returns:
         The event rows (``step`` >= 1) with ``epv`` (the state after the event), ``epv_start``
         (the possession's start value), ``epv_before``, ``epv_after`` and ``epv_added``, defined in
-        the module docstring.
+        the module docstring. A booster with ``level_ppp`` has every value (and the average start
+        the possession-ending term is measured against) scaled by the game's ``level_scale``.
 
     Raises:
         ValueError: If the booster has no ``start_epv_mean`` attribute.
@@ -456,7 +523,7 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
     import numpy as np
 
     if booster is None:
-        _check_seasons(states["season"].drop_nulls().unique().to_list())
+        _check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)
         booster = load_epv_model(league_id)
     if booster.attr("start_epv_mean") is not None:
         _check_features(booster)
@@ -470,6 +537,11 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
         )
     x = states.select(pl.col(EPV_FEATURES).cast(pl.Float64)).to_numpy()
     scored = states.with_columns(pl.Series("epv", np.asarray(booster.inplace_predict(x), dtype=np.float64)))
+    scale = pl.lit(1.0)
+    if booster.attr("level_ppp") is not None:
+        scored = scored.join(epv_level(states, booster, game_order), on="game_id", how="left")
+        scored = scored.with_columns(pl.col("epv") * pl.col("level_scale"))
+        scale = pl.col("level_scale")
     start = scored.filter(pl.col("step") == 0).select(*_KEY, pl.col("epv").alias("epv_start"))
     nxt = start.select("game_id", (pl.col("possession_number") - 1).alias("possession_number"), "epv_start")
     return (
@@ -481,13 +553,13 @@ def add_epv(states: pl.DataFrame, *, league_id: str = "00", booster: xgb.Booster
             pl.when(~pl.col("is_last"))
             .then(pl.col("epv"))
             .when(pl.col("next_in_period") & pl.col("_next_start").is_not_null())
-            .then(float(mean) - pl.col("_next_start"))
+            .then(float(mean) * scale - pl.col("_next_start"))
             .otherwise(0.0)
             .alias("epv_after")
         )
         .with_columns((pl.col("points") + pl.col("epv_after") - pl.col("epv_before")).alias("epv_added"))
         .filter(pl.col("step") > 0)
-        .drop("_next_start")
+        .drop("_next_start", "level_scale", strict=False)
     )
 
 
@@ -674,10 +746,10 @@ def epv_team_games(plays: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _check_seasons(seasons: int | list[int]) -> list[int]:
-    """The seasons as a list; refuses one before the booster's first training season."""
+def _check_seasons(seasons: int | list[int], league_id: str = "00") -> list[int]:
+    """The seasons as a list; refuses one before the league booster's first training season."""
     out = [seasons] if isinstance(seasons, int) else list(seasons)
-    first = min(int(x) for x in load_epv_model().attr("train_seasons").split(","))
+    first = min(int(x) for x in load_epv_model(league_id).attr("train_seasons").split(","))
     if any(s < first for s in out):
         raise ValueError(f"EPV is served from the {first} season on, got {out}")
     return out

@@ -1,14 +1,24 @@
-"""Fit, gate and bundle the NBA / WNBA EPV boosters (BB-D24).
+"""Fit, gate and bundle the NBA, WNBA and college EPV boosters (BB-D24).
 
-Run (the ``{nba,wnba}_stats_pbp`` / ``_possessions`` releases; ``--data-root`` reads the producer
-checkouts' parquet instead, the same files)::
+Run (the ``{nba,wnba}_stats_pbp`` / ``_possessions`` and ``ncaa_{mbb,wbb}_pbp`` releases;
+``--data-root`` reads a producer checkout's parquet instead, the same files)::
 
     uv run python tools/models/nba_epv/train_epv.py --league-id 00
     uv run python tools/models/nba_epv/train_epv.py --league-id 10
+    uv run python tools/models/nba_epv/train_epv.py --league-id mbb
+    uv run python tools/models/nba_epv/train_epv.py --league-id wbb
 
-Only the NBA booster ships. The WNBA fit runs and writes its report, but fails gate 2 on its
-2026 confirmation season (WNBA points per possession rose about 0.04 that season), so nothing is
-bundled for it; refit when a season after 2026 can confirm a fit that includes 2026.
+The NBA, men's and women's college boosters ship. The WNBA fit runs and writes its report but
+ships nothing: without a level it fails gate 2 on 2026 (WNBA points per possession rose 0.04 that
+season, seven game-clustered standard errors); with the level it passes gate 2 but one state
+bucket (a shooting foul in a transition possession, which it already over-prices on the 2025
+holdout) fails gate 3.
+
+The WNBA and college boosters carry an as-of scoring level (``nba_epv.epv_level``): a season's
+points per possession move (men's college rose from 1.01 in 2022 to 1.08 in 2026), and a booster
+alone predicts its training seasons' level. Its weight ``level_k`` is fitted on seasons before the
+holdout (:func:`level_k`); the gates score the level-scaled EPV, as it is served, and the report
+also gives each season's bias without it.
 
 Seasons (named by the year they end; train, holdout, confirmation and monitor disjoint):
 
@@ -22,7 +32,8 @@ Seasons (named by the year they end; train, holdout, confirmation and monitor di
   its first training season on (``nba_epv._check_seasons``); earlier ones are refused, because
   the older feeds code a third of their two-point attempts at 0 ft (the rim zone).
 
-Only regular-season games (``game_id`` ``002...``) are fitted and gated. The label is the
+Only regular-season NBA / WNBA games (``game_id`` ``002...``) are fitted and gated; college fits
+and gates every game (its contest ids carry no season type). The label is the
 offense's points from the state to the end of the possession (``remaining_points``), the loss
 squared error: the Brier score of a points target.
 
@@ -58,33 +69,70 @@ import numpy as np
 import polars as pl
 import xgboost as xgb
 
-from sportsdataverse.nba.nba_epv import EPV_FEATURES, add_epv, epv_states
+from sportsdataverse.mbb.mbb_epv import ncaa_epv_inputs
+from sportsdataverse.nba.nba_epv import EPV_FEATURES, add_epv, epv_level, epv_states
 
 REPO = Path(__file__).resolve().parents[3]
-MODELS_DIR = REPO / "sportsdataverse" / "nba" / "models"
 FIXTURE_DIR = REPO / "tests" / "fixtures" / "bb_epv"
 HERE = Path(__file__).resolve().parent
+_NBA_MODELS = REPO / "sportsdataverse" / "nba" / "models"
+_COLLEGE_MODELS = REPO / "sportsdataverse" / "mbb" / "models"
 
+#: ``level``: the booster carries an as-of scoring level (``nba_epv.epv_level``), its weight
+#: ``level_k`` fitted on the ``history`` seasons (all before the holdout). The NBA booster, fitted
+#: first, has none.
 LEAGUES: dict[str, dict[str, Any]] = {
     "00": {
         "lg": "nba",
+        "models": _NBA_MODELS,
         "artifact": "nba_epv.ubj",
         "train": [2022, 2023, 2024],
         "holdout": 2025,
         "confirmation": 2026,
         "monitor": [],
         "fixture_games": 40,
+        "level": False,
     },
     "10": {
         "lg": "wnba",
+        "models": _NBA_MODELS,
         "artifact": "wnba_epv.ubj",
         "train": [2022, 2023, 2024],
         "holdout": 2025,
         "confirmation": 2026,
         "monitor": [],
         "fixture_games": 20,
+        "level": True,
+        "history": list(range(2010, 2025)),
+    },
+    "mbb": {
+        "lg": "mbb",
+        "models": _COLLEGE_MODELS,
+        "artifact": "mbb_epv.ubj",
+        "train": [2022, 2023, 2024],
+        "holdout": 2025,
+        "confirmation": 2026,
+        "monitor": [],
+        "fixture_games": 20,
+        "level": True,
+        "history": list(range(2010, 2025)),
+    },
+    "wbb": {
+        "lg": "wbb",
+        "models": _COLLEGE_MODELS,
+        "artifact": "wbb_epv.ubj",
+        "train": [2022, 2023, 2024],
+        "holdout": 2025,
+        "confirmation": 2026,
+        "monitor": [],
+        "fixture_games": 20,
+        "level": True,
+        "history": list(range(2010, 2025)),
     },
 }
+_COLLEGE = ("mbb", "wbb")
+#: The level's trailing window: a season's level is compared with the mean of this many before it.
+_LEVEL_TRAIL = 3
 #: Gate 2: |mean(epv) - mean(label)| over a whole season, in points. Read off the 2024 holdout:
 #: the largest seen was 0.011 (NBA), plus 0.01 of headroom for a season's points-per-possession
 #: drift (about 0.01 a season in the NBA from 2016 to 2023).
@@ -133,6 +181,84 @@ def _local(data_root: Path, lg: str, kind: str, stem: str, season: int) -> pl.Da
     return pl.read_parquet(path if path.exists() else d / f"{stem}_{season}.parquet")
 
 
+def _college_pbp(league_id: str, season: int, data_root: Path | None) -> pl.DataFrame:
+    """The season's ``ncaa_{mbb,wbb}_pbp`` release (every game: college has no season-type code in its ids)."""
+    if data_root is not None:
+        return pl.read_parquet(data_root / league_id / "pbp" / "parquet" / f"ncaa_{league_id}_pbp_{season}.parquet")
+    if league_id == "wbb":
+        from sportsdataverse.wbb.wbb_loaders import load_ncaa_wbb_pbp
+
+        return load_ncaa_wbb_pbp([season])
+    from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+
+    return load_ncaa_mbb_pbp([season])
+
+
+def season_ppp(league_id: str, season: int, data_root: Path | None) -> tuple[float, float]:
+    """A season's points per possession and the variance of a possession's points (the possessions release)."""
+    if league_id in _COLLEGE:
+        if data_root is not None:
+            d = data_root / league_id / "possessions" / "parquet" / f"ncaa_{league_id}_possessions_{season}.parquet"
+            pts = pl.read_parquet(d, columns=["pts"])["pts"]
+        else:
+            from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_possessions
+            from sportsdataverse.wbb.wbb_loaders import load_ncaa_wbb_possessions
+
+            load = load_ncaa_wbb_possessions if league_id == "wbb" else load_ncaa_mbb_possessions
+            pts = load([season])["pts"]
+    else:
+        lg = LEAGUES[league_id]["lg"]
+        if data_root is not None:
+            poss = _local(data_root, lg, "possessions", "possessions", season)
+        elif league_id == "10":
+            from sportsdataverse.wnba.wnba_loaders import load_wnba_stats_possessions
+
+            poss = load_wnba_stats_possessions([season])
+        else:
+            from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions
+
+            poss = load_nba_stats_possessions([season - 1])
+        pts = poss.filter(pl.col("game_id").cast(pl.Utf8).str.slice(2, 1) == "2")["points"]
+    return float(pts.mean()), float(pts.var())
+
+
+def level_k(cfg: dict[str, Any], league_id: str, data_root: Path | None) -> dict[str, float]:
+    """The level's empirical-Bayes weight, from the ``history`` seasons (all before the holdout).
+
+    ``tau2`` is the mean squared gap between a season's points per possession and the mean of the
+    :data:`_LEVEL_TRAIL` seasons before it; ``sigma2`` a possession's variance in the training
+    seasons. ``level_k = sigma2 / tau2`` possessions: the weight at which a season's own games
+    tell as much about its level as the training level does.
+    """
+    if max(cfg["history"]) >= cfg["holdout"]:
+        raise ValueError("the level's history must end before the holdout season")
+    ppp = {s: season_ppp(league_id, s, data_root)[0] for s in cfg["history"]}
+    gaps = [
+        ppp[s] - float(np.mean([ppp[s - j] for j in range(1, _LEVEL_TRAIL + 1)]))
+        for s in cfg["history"]
+        if all(s - j in ppp for j in range(1, _LEVEL_TRAIL + 1))
+    ]
+    tau2 = float(np.mean(np.square(gaps)))
+    sigma2 = float(np.mean([season_ppp(league_id, s, data_root)[1] for s in cfg["train"]]))
+    return {"tau2": tau2, "sigma2": sigma2, "level_k": sigma2 / tau2, "n_gaps": len(gaps)}
+
+
+def load_inputs(
+    league_id: str, season: int, data_root: Path | None
+) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame | None, pl.DataFrame | None]:
+    """The season's (pbp, possessions, game lineups, game order) in the engine's shape.
+
+    The NBA and WNBA read their releases (regular season only; the lineups only for the
+    fixture, so ``None`` here) and order games by ``game_id``; college converts its release with
+    ``ncaa_epv_inputs`` and orders games by date.
+    """
+    if league_id in _COLLEGE:
+        poss, pbp, tens, games = ncaa_epv_inputs(_college_pbp(league_id, season, data_root))
+        return pbp, poss, tens, games.select("game_id", "game_order")
+    pbp, poss = load_season(league_id, season, data_root)
+    return pbp, poss, None, None
+
+
 def load_season(league_id: str, season: int, data_root: Path | None) -> tuple[pl.DataFrame, pl.DataFrame]:
     """The season's (pbp, possessions), regular season only."""
     if data_root is not None:
@@ -169,8 +295,8 @@ def _dmat(states: pl.DataFrame) -> xgb.DMatrix:
     )
 
 
-def fit(train: dict[int, pl.DataFrame]) -> xgb.Booster:
-    """Early-stop on the last training season, refit on all of them, stamp ``start_epv_mean``."""
+def fit(train: dict[int, pl.DataFrame], level: dict[str, float] | None = None) -> xgb.Booster:
+    """Early-stop on the last training season, refit on all of them, stamp ``start_epv_mean`` (and the level)."""
     *fit_s, val_s = sorted(train)
     probe = xgb.train(
         _XGB_PARAMS,
@@ -190,6 +316,12 @@ def fit(train: dict[int, pl.DataFrame]) -> xgb.Booster:
         rounds=str(rounds),
         validation_season=str(val_s),
     )
+    if level is not None:
+        # the training seasons' points per possession, as the labels count them
+        booster.set_attr(
+            level_ppp=repr(float(every.filter(pl.col("step") == 0)["remaining_points"].mean())),
+            level_k=repr(float(level["level_k"])),
+        )
     return booster
 
 
@@ -204,20 +336,31 @@ def cell_means(train: pl.DataFrame) -> pl.DataFrame:
     return _with_clock(train).group_by(_CELL).agg(pl.col("remaining_points").mean().alias("_cell"))
 
 
-def _scored(states: pl.DataFrame, booster: xgb.Booster, cells: pl.DataFrame, const: float) -> pl.DataFrame:
-    """The states with ``epv``, the baseline ``_cell`` and both squared errors."""
+def _scored(
+    states: pl.DataFrame,
+    booster: xgb.Booster,
+    cells: pl.DataFrame,
+    const: float,
+    order: pl.DataFrame | None = None,
+) -> pl.DataFrame:
+    """The states with ``epv``, the baseline ``_cell`` and both squared errors.
+
+    A booster with a level has ``epv`` scaled by its game's ``level_scale``, as ``add_epv`` serves
+    it, and so has the baseline, so gate 1 measures the states' skill, not the level's.
+    ``_epv_raw`` keeps the unscaled value.
+    """
     pred = np.asarray(booster.inplace_predict(_x(states)), dtype=np.float64)
     y = pl.col("remaining_points").cast(pl.Float64)
-    return (
-        _with_clock(states)
-        .with_columns(pl.Series("epv", pred))
-        .join(cells, on=_CELL, how="left")
-        .with_columns(pl.col("_cell").fill_null(const))
-        .with_columns(
-            (pl.col("epv") - y).alias("_err"),
-            ((pl.col("epv") - y) ** 2).alias("_se"),
-            ((pl.col("_cell") - y) ** 2).alias("_se_cell"),
+    out = _with_clock(states).with_columns(pl.Series("epv", pred), pl.Series("_epv_raw", pred))
+    out = out.join(cells, on=_CELL, how="left").with_columns(pl.col("_cell").fill_null(const))
+    if booster.attr("level_ppp") is not None:
+        out = out.join(epv_level(states, booster, order), on="game_id", how="left").with_columns(
+            pl.col("epv") * pl.col("level_scale"), pl.col("_cell") * pl.col("level_scale")
         )
+    return out.with_columns(
+        (pl.col("epv") - y).alias("_err"),
+        ((pl.col("epv") - y) ** 2).alias("_se"),
+        ((pl.col("_cell") - y) ** 2).alias("_se_cell"),
     )
 
 
@@ -274,9 +417,10 @@ def metrics(
     cells: pl.DataFrame,
     const: float,
     start_const: float,
+    order: pl.DataFrame | None = None,
 ) -> dict[str, Any]:
     """The gate metrics of ``booster`` on one season's states (see the module docstring)."""
-    s = _scored(states, booster, cells, const)
+    s = _scored(states, booster, cells, const, order)
     y, p = s["remaining_points"].cast(pl.Float64).to_numpy(), s["epv"].to_numpy()
     mse = float(s["_se"].mean())
     start = s.filter(pl.col("step") == 0)
@@ -293,6 +437,7 @@ def metrics(
         "mean_epv": float(p.mean()),
         "mean_label": float(y.mean()),
         "large_bias": float(p.mean() - y.mean()),
+        "large_bias_without_level": float(s["_epv_raw"].mean() - y.mean()),
         "calibration_slope": float(np.polyfit(p, y, 1)[0]),
         **_buckets(s),
         "deciles": _deciles(s),
@@ -356,6 +501,21 @@ def write_fixture(
         )
 
 
+def write_college_fixture(league_id: str, season: int, pbp: pl.DataFrame) -> None:
+    """The first ``fixture_games`` holdout games (by ``contest_id``) of the college release, the columns
+    ``ncaa_epv_inputs`` reads."""
+    from sportsdataverse.mbb.mbb_epv import _PBP_COLS
+
+    n = LEAGUES[league_id]["fixture_games"]
+    games = pbp.select(pl.col("contest_id").cast(pl.Utf8)).unique().sort("contest_id").head(n)
+    out = pbp.with_columns(pl.col("contest_id").cast(pl.Utf8)).filter(
+        pl.col("contest_id").is_in(games["contest_id"].implode())
+    )
+    out.select(_PBP_COLS).write_parquet(
+        FIXTURE_DIR / f"{league_id}_pbp_{season}.parquet", compression="zstd", compression_level=19
+    )
+
+
 def _splits(cfg: dict[str, Any]) -> dict[int, str]:
     return {
         **dict.fromkeys(cfg["train"], "train"),
@@ -384,9 +544,9 @@ def write_lineage(cfg: dict[str, Any], states: dict[int, pl.DataFrame], booster:
     (HERE / f"epv_{cfg['lg']}_importance.json").write_text(json.dumps(imp, indent=2) + "\n", encoding="utf-8")
 
 
-def _identity(states: pl.DataFrame, booster: xgb.Booster) -> float:
+def _identity(states: pl.DataFrame, booster: xgb.Booster, order: pl.DataFrame | None) -> float:
     """Over a season: |EPV added summed over a possession - (points - start + after-end)|, at most."""
-    plays = add_epv(states, booster=booster)
+    plays = add_epv(states, booster=booster, game_order=order)
     ident = plays.group_by("game_id", "possession_number").agg(
         (pl.col("epv_added").sum() - pl.col("points").sum() + pl.col("epv_start").first() - pl.col("epv_after").last())
         .abs()
@@ -400,10 +560,12 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     split = _splits(cfg)
     if len(split) != len(cfg["train"]) + 2 + len(cfg["monitor"]):
         raise ValueError(f"train, holdout, confirmation and monitor seasons must be disjoint: {cfg}")
-    raw = {s: load_season(league_id, s, data_root) for s in split}
-    states = {s: epv_states(poss, pbp) for s, (pbp, poss) in raw.items()}
+    raw = {s: load_inputs(league_id, s, data_root) for s in split}
+    states = {s: epv_states(poss, pbp) for s, (pbp, poss, _, _) in raw.items()}
+    order = {s: r[3] for s, r in raw.items()}
     tr = {s: states[s] for s in cfg["train"]}
-    booster = fit(tr)
+    level = level_k(cfg, league_id, data_root) if cfg["level"] else None
+    booster = fit(tr, level)
     booster.set_attr(
         train_seasons=",".join(map(str, cfg["train"])),
         holdout_season=str(cfg["holdout"]),
@@ -413,13 +575,14 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     every = pl.concat(tr.values())
     cells, const = cell_means(every), float(every["remaining_points"].mean())
     start_const = float(every.filter(pl.col("step") == 0)["remaining_points"].mean())
-    scored = {s: metrics(states[s], booster, cells, const, start_const) for s in split if split[s] != "train"}
+    scored = {s: metrics(states[s], booster, cells, const, start_const, order[s]) for s in split if split[s] != "train"}
     report: dict[str, Any] = {
         "league_id": league_id,
         "splits": {str(s): v for s, v in split.items()},
         "n_train_states": every.height,
         "rounds": int(booster.attr("rounds")),
         "start_epv_mean": float(booster.attr("start_epv_mean")),
+        "level": None if level is None else {**level, "level_ppp": float(booster.attr("level_ppp"))},
         "params": _XGB_PARAMS,
         "features": EPV_FEATURES,
         "gates": {
@@ -430,7 +593,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
             "slope_band": SLOPE_BAND,
         },
         "seasons": {str(s): {"split": split[s], **m} for s, m in scored.items()},
-        "holdout_identity_max_residual": _identity(states[cfg["holdout"]], booster),
+        "holdout_identity_max_residual": _identity(states[cfg["holdout"]], booster, order[cfg["holdout"]]),
     }
     failed = [f for s, m in scored.items() for f in gate(f"{split[s]} {s}", m)]
     report["failed_gates"] = failed
@@ -441,14 +604,13 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     print(json.dumps({"rounds": report["rounds"], "seasons": brief, "failed": failed}, indent=2))
     if failed:
         raise SystemExit("gates failed:\n" + "\n".join(failed))
-    booster.save_model(str(MODELS_DIR / cfg["artifact"]))
+    booster.save_model(str(cfg["models"] / cfg["artifact"]))
     write_lineage(cfg, states, booster)
-    write_fixture(
-        league_id,
-        cfg["holdout"],
-        *raw[cfg["holdout"]],
-        load_lineups(league_id, cfg["holdout"], data_root),
-    )
+    if league_id in _COLLEGE:
+        write_college_fixture(league_id, cfg["holdout"], _college_pbp(league_id, cfg["holdout"], data_root))
+    else:
+        pbp, poss, _, _ = raw[cfg["holdout"]]
+        write_fixture(league_id, cfg["holdout"], pbp, poss, load_lineups(league_id, cfg["holdout"], data_root))
     return report
 
 
@@ -458,7 +620,7 @@ if __name__ == "__main__":
     ap.add_argument(
         "--data-root",
         type=Path,
-        help="a producer checkout's data dir (holding <lg>_stats/)",
+        help="a producer checkout's data dir (holding <lg>_stats/, or mbb/ / wbb/ for college)",
     )
     args = ap.parse_args()
     train(args.league_id, args.data_root)

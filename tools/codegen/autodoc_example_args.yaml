@@ -372,6 +372,10 @@ mbb:
   mbb_team_strength: {seasons: 2025}
   mbb_team_luck: {seasons: 2025}
   mbb_game_flow: {seasons: 2026}
+  mbb_epv_plays: {seasons: 2026}
+  mbb_epv_player_games: {seasons: 2026}
+  mbb_epv_lineup_games: {seasons: 2026}
+  mbb_epv_team_games: {seasons: 2026}
   mbb_team_season_flow: {seasons: 2026}
   mbb_situational_team: {seasons: 2026}
   mbb_situational_player: {seasons: 2026}
@@ -444,6 +448,10 @@ wbb:
   wbb_team_strength: {seasons: 2025}
   wbb_team_luck: {seasons: 2025}
   wbb_game_flow: {seasons: 2026}
+  wbb_epv_plays: {seasons: 2026}
+  wbb_epv_player_games: {seasons: 2026}
+  wbb_epv_lineup_games: {seasons: 2026}
+  wbb_epv_team_games: {seasons: 2026}
   wbb_team_season_flow: {seasons: 2026}
   wbb_situational_team: {seasons: 2026}
   wbb_situational_player: {seasons: 2026}
