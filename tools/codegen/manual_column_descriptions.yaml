@@ -49107,8 +49107,8 @@ load_wnba_player_impact:
   ospm: 'Offensive statistical plus-minus: box-score features regressed onto the offensive RAPM target, per 100 possessions.'
   rapm: 'Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. The ridge penalty
     is one fixed WNBA value (1,931, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the
-    scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2025).
-    Seasons published before November 2026 were fit at a per-season RidgeCV pick: 1,931 in 22 of 29 regular seasons, but
+    scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2026).
+    Seasons published before November 2026 were fit at a per-season RidgeCV pick: 1,931 in 23 of 30 regular seasons, but
     5,179 or 13,895 in 1999, 2001, 2002, 2004, 2011, 2014 and 2016 (sd 0.32 to 0.93 there) and 268 to 100,000 in the
     playoffs. Do not compare those seasons with others or with values fit at the fixed penalty.'
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.

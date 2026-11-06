@@ -26,20 +26,26 @@ DEFAULT_RAPM_ALPHAS: np.ndarray = np.logspace(2, 5, 8)
 #: The plain-RAPM ridge penalty per league id, one value for every season and season type. Fitted by
 #: ``tools/fit_rapm_penalty.py`` (run 2026-11-06): the point of its grid (steps of x1.18) that
 #: minimizes the game-grouped 10-fold CV error summed over the complete regular seasons from 1997
-#: (NBA through 2025-26, 30 seasons; WNBA through 2025, 29) of the ``{nba,wnba}_stats_possessions``
-#: releases. NBA 2,683: its neighbours lose 0.06 / 0.07 basis points of MSE (SE 0.03 across seasons)
-#: and 5,179 loses 1.0 (all 30 seasons prefer 2,683 to it). WNBA 1,931: 2,276 is within noise (0.05
-#: basis points, SE 0.06), 2,683 loses 0.27. The penalty is the per-possession noise variance over the
-#: prior variance of a player's coefficient, which does not depend on a season's length, so one value
-#: keeps the shrinkage, and the RAPM scale, the same in every season. Until this was frozen each fit
-#: took RidgeCV's leave-one-possession-out pick over :data:`DEFAULT_RAPM_ALPHAS`: one season's error
-#: moves by under 0.5% over that whole grid, so the pick flipped between grid points (NBA 5,179 in
-#: 2023-24 and 2024-25, 1,931 in 2025-26; WNBA up to 13,895 in 2004) and the spread of RAPM followed
-#: (NBA 1.15 to 2.34 per 100). RAPM fit before the change is not comparable across seasons, nor with
-#: RAPM fit after it. One hindsight caveat: the value is pooled over every complete season, so a
-#: season's fit uses a scalar its later seasons informed; pooled over only that season and the ones
-#: before it, the pick equals the frozen value for every NBA season from 2018-19 and is one grid step
-#: lower (2,276) before. The G League (``"20"``) is not fitted (no possessions release): the NBA value.
+#: (NBA through 2025-26, WNBA through 2026; 30 each) of the ``{nba,wnba}_stats_possessions`` releases.
+#: NBA 2,683: its neighbours lose 0.05 / 0.09 basis points of MSE (SE 0.03 across seasons) and 5,179
+#: loses 1.07 (all 30 seasons prefer 2,683 to it). WNBA 1,931: 2,276 is within noise (0.05 basis
+#: points, SE 0.06), 1,638 loses 0.14 and 5,179 loses 2.6. The penalty is the per-possession noise
+#: variance over the prior variance of a player's coefficient, which does not depend on a season's
+#: length, so one value keeps the same prior, and the RAPM scale, in every season (a player's own
+#: shrinkage still depends on his possessions: the NBA regular-season spread is 1.53 per 100 in the
+#: 1999 lockout, 1.65 to 1.99 in full seasons). Until this was frozen each fit took RidgeCV's
+#: leave-one-possession-out pick over :data:`DEFAULT_RAPM_ALPHAS`: one season's error moves by under
+#: 0.5% over that whole grid, so the pick flipped between grid points (NBA 5,179 in 2023-24 and 2024-25,
+#: 1,931 in 2025-26; WNBA up to 13,895 in 2004) and the spread of RAPM followed (NBA 1.15 to 2.34 per
+#: 100). RAPM fit before the change is not comparable across seasons, nor with RAPM fit after it.
+#: Two caveats. Hindsight: the value is pooled over every complete season, so a season's fit uses a
+#: scalar its later seasons informed; pooled over only that season and the ones before it, the pick is
+#: the frozen value for every NBA season from 2018-19 (2,276 before) and every WNBA season but 1997,
+#: 1999-2007 and 2016 (2,276 there). Year-over-year rank stability: it rises with the penalty (NBA
+#: Spearman 0.35 at 1,931, 0.37 at 2,683, 0.40 at 5,179), so the old rule's heavy picks bought some;
+#: against it the frozen value repeats at WNBA -0.008 Spearman (SE 0.004 over 29 season pairs) and NBA
+#: +0.001 (0.004), while next-season R^2 of a fitted line improves (NBA +0.027, SE 0.009). The G League
+#: (``"20"``) is seeded with the NBA value, not fitted (it has no possessions release).
 RAPM_PENALTY: dict[str, float] = {"00": 2682.6957952797247, "10": 1930.6977288832495}
 RAPM_PENALTY["20"] = RAPM_PENALTY["00"]
 
@@ -168,9 +174,10 @@ def rapm_penalty(possessions: pl.DataFrame | None = None, league_id: str | None 
     """The ridge penalty plain RAPM is fit at: :data:`RAPM_PENALTY` of the possessions' league.
 
     Args:
-        possessions: Possession rows. When ``league_id`` is ``None`` the league is read from a String
-            ``game_id``'s first two characters (``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G League); a frame
-            without one (or with integer ids) is taken as NBA.
+        possessions: Possession rows. When ``league_id`` is ``None`` the league is read from the
+            ``game_id``: the first two digits of the ten-digit id (``"00"`` NBA, ``"10"`` WNBA, ``"20"``
+            G League; an integer id is zero-padded to ten digits first). A frame without a ``game_id``
+            is taken as NBA.
         league_id: ``"00"``, ``"10"`` or ``"20"``; overrides the inference.
 
     Returns:
@@ -187,8 +194,9 @@ def rapm_penalty(possessions: pl.DataFrame | None = None, league_id: str | None 
             rapm_penalty(league_id="10")  # 1930.70, the same in every season
     """
     found: set[str] = set()
-    if possessions is not None and possessions.schema.get("game_id") == pl.Utf8:
-        found = set(possessions["game_id"].str.slice(0, 2).drop_nulls().unique()) & set(RAPM_PENALTY)
+    if possessions is not None and "game_id" in possessions.columns:
+        ids = possessions["game_id"].cast(pl.Utf8).str.zfill(10)
+        found = set(ids.str.slice(0, 2).drop_nulls().unique()) & set(RAPM_PENALTY)
     if len(found) > 1 or (league_id is not None and found and found != {league_id}):
         raise ValueError(f"possessions' game_id prefixes name leagues {sorted(found)}, league_id is {league_id!r}")
     league = league_id or (found.pop() if found else "00")
@@ -273,7 +281,7 @@ def nba_rapm(
             Rows with any null lineup cell are silently dropped.
             An empty or fully-null-lineup frame returns a zero-row result.
         league_id: ``"00"`` NBA, ``"10"`` WNBA or ``"20"`` G League, which selects the
-            penalty. ``None`` (default) reads it from a String ``game_id``'s prefix and
+            penalty. ``None`` (default) reads it from the ``game_id`` prefix and
             otherwise takes the NBA (see :func:`rapm_penalty`).
         alpha: A ridge penalty to fit at instead of the league's.
 
@@ -304,7 +312,7 @@ def nba_rapm(
             df = nba_rapm(poss)
             print(df.sort("rapm", descending=True).head(10))
 
-        WNBA possessions (the penalty is the WNBA's; the String game ids say so too)::
+        WNBA possessions (the penalty is the WNBA's; the game ids say so too)::
 
             wnba = nba_rapm(wnba_poss, league_id="10")
 

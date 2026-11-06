@@ -5,15 +5,16 @@ citing this script, never tuned by hand.
 
 Why one penalty per league and not one per season. The ridge penalty is the ratio of the
 per-possession noise variance to the prior variance of a player's coefficient, so it does not depend
-on how many possessions a season has: one league-wide value keeps the shrinkage, and so the RAPM
-scale, the same in every season. Choosing it per season (``RidgeCV``'s leave-one-possession-out over
+on how many possessions a season has: one league-wide value keeps the same prior, and so the RAPM
+scale, in every season (a player's own shrinkage still depends on his possessions). Choosing it per season (``RidgeCV``'s leave-one-possession-out over
 an 8-step grid, the old rule) let the scale jump with the pick: NBA 2025-26 got 1,931 where 2023-24
 and 2024-25 got 5,179, and the spread of RAPM rose from 1.33 to 2.34 per 100.
 
 Why games are the folds. Possessions of one game share their lineups and score context, so leaving
-out single possessions scores a held-out row with its game's other rows in the fit, which flatters a
-small penalty. Each fold here holds out whole games (``GroupKFold`` on ``game_id``, 10 folds); a
-player unseen in the training folds predicts 0.
+out single possessions scores a held-out row with its game's other rows in the fit. Each fold here
+holds out whole games (``GroupKFold`` on ``game_id``, 10 folds); a player unseen in the training folds
+predicts 0. Measured, the leave-one-possession-out criterion does not under-shrink: pooled it picks
+one grid step heavier (NBA 3,162, WNBA 2,276) than the grouped one.
 
 Stages:
 
@@ -22,9 +23,13 @@ Stages:
   grouped-CV SSE per fold over :data:`GRID`, and the whole coefficient path (every player's ``o_rapm``
   / ``d_rapm`` at every grid value), so ``report`` can score any penalty offline.
 * ``report`` reads them and prints, per league: the per-season picks (old rule, grouped CV, 1-SE),
-  the pooled pick over the training seasons and the as-of pick of each season (pooled over the
-  seasons before it), the RAPM spread per season at the old and the frozen penalty, and the
-  year-over-year Spearman and next-season out-of-sample R^2 at both.
+  the pooled pick over the training seasons and the as-of pick of each season (pooled over that
+  season and the ones before it), the RAPM spread per season at the old and the frozen penalty, the
+  year-over-year Spearman and next-season out-of-sample R^2 at the old, frozen and as-of penalties
+  with their paired differences from the old rule, and the same scores over a sweep of constant
+  penalties. It writes ``report.json`` and ``cv_sse.parquet`` (the pooled grouped-CV error per league,
+  season and grid point), which ``tests/fixtures/bb_rapm_penalty`` commits so a test re-derives
+  :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY` offline.
 
 Usage::
 
@@ -52,11 +57,14 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 GRID = np.logspace(1, 6, 71)
 FOLDS = 10
 #: league -> (season end years in the releases, training end years for the frozen value, rank gate,
-#: year-over-year possession floor). The last season is the one in progress, left out of training.
+#: year-over-year possession floor). Training is every complete season: NBA 2026-27 is in progress
+#: (fit 2026-11-06); the WNBA 2026 season is complete.
 LEAGUES = {
     "nba": (range(1997, 2028), range(1997, 2027), 400, 2000),
-    "wnba": (range(1997, 2027), range(1997, 2026), 200, 1000),
+    "wnba": (range(1997, 2027), range(1997, 2027), 200, 1000),
 }
+#: Constant penalties the report scores year over year beside the rules (the old grid's middle points).
+SWEEP = (1930.6977288832495, 2682.6957952797247, 5179.474679231207, 13894.95494373136)
 #: The schedule season types fit, as the publishers fit them (regular season and playoffs apart).
 SEASON_TYPES = {"rs": "regular-season", "po": "playoffs"}
 _CHUNK = 20_000
@@ -208,6 +216,16 @@ def _forecast(frames: dict[int, pl.DataFrame], floor: int) -> list[dict]:
     return out
 
 
+def _paired(yoy: dict[str, list[dict]], rule: str) -> dict[str, list[float]]:
+    """Per pair, ``rule`` minus the old rule: ``{metric: [mean, standard error over pairs, pairs]}``."""
+    both = pl.DataFrame(yoy[rule]).join(pl.DataFrame(yoy["old"]), on="season", suffix="_old")
+    out = {}
+    for m in ("spearman", "r2_as_is", "r2_fitted"):
+        d = both.select(pl.col(m) - pl.col(f"{m}_old")).to_series().drop_nulls().to_numpy()
+        out[m] = [float(d.mean()), float(d.std(ddof=1) / np.sqrt(d.size)), int(d.size)]
+    return out
+
+
 def _league_report(out: Path, league: str) -> dict:
     """Per-season picks and spread, the pooled and as-of picks, and the year-over-year scores, for one league."""
     seasons, train, gate, floor = LEAGUES[league]
@@ -237,29 +255,55 @@ def _league_report(out: Path, league: str) -> dict:
             "loo_flat": float(v["loo_mse"][old_grid].max() / v["loo_mse"].min() - 1),
             "cv_old_vs_frozen": float(mse[np.isclose(GRID, old)][0] / mse[np.isclose(GRID, frozen)][0] - 1),
         }
-        for name in ("old", "asof"):
-            row[f"sd_{name}"] = float(_ratings(v, row[name]).filter(pl.col("poss") >= gate)["rapm"].std())
-        row["sd_frozen"] = float(_ratings(v, frozen).filter(pl.col("poss") >= gate)["rapm"].std())
+        for name, a in (("old", old), ("asof", row["asof"]), ("frozen", frozen)):
+            row[f"sd_{name}"] = float(_ratings(v, a).filter(pl.col("poss") >= gate)["rapm"].std())
         rows.append(row)
+    rs = {s: z[(s, "rs")] for s in train if (s, "rs") in z}
     yoy = {}
     for name in ("old", "frozen", "asof"):
         pick = {r["season"]: (frozen if name == "frozen" else r[name]) for r in rows if r["type"] == "rs"}
-        yoy[name] = _forecast({s: _ratings(z[(s, "rs")], a) for s, a in pick.items()}, floor)
-    return {"frozen": frozen, "train": [min(train), max(train)], "seasons": rows, "yoy": yoy}
+        yoy[name] = _forecast({s: _ratings(v, pick[s]) for s, v in rs.items()}, floor)
+    sweep = {}
+    for a in SWEEP:
+        f = pl.DataFrame(_forecast({s: _ratings(v, a) for s, v in rs.items()}, floor))
+        sweep[f"{a:.0f}"] = f.select(pl.col("spearman", "r2_as_is", "r2_fitted").mean()).row(0, named=True)
+    return {
+        "frozen": frozen,
+        "train": [min(train), max(train)],
+        "seasons": rows,
+        "yoy": yoy,
+        "paired": {rule: _paired(yoy, rule) for rule in ("frozen", "asof")},
+        "sweep": sweep,
+    }
 
 
 def report(out: Path) -> None:
-    """Print the per-league report and write it to ``OUT_DIR/report.json``."""
+    """Print the per-league report; write ``report.json`` and ``cv_sse.parquet`` to ``OUT_DIR``."""
     res = {league: _league_report(out, league) for league in LEAGUES}
     (out / "report.json").write_text(json.dumps(res, indent=1))
+    sse = [
+        {
+            "league": lg,
+            "season": s,
+            "alpha": GRID.tolist(),
+            "sse": np.load(f)["cv_sse"].sum(axis=0).tolist(),
+        }
+        for lg, (seasons, *_) in LEAGUES.items()
+        for s in seasons
+        if (f := out / f"{lg}_{s}_rs.npz").exists()
+    ]
+    pl.DataFrame(sse).explode("alpha", "sse", empty_as_null=False).write_parquet(out / "cv_sse.parquet")
     with pl.Config(tbl_rows=-1, tbl_cols=-1, tbl_width_chars=250, float_precision=3):
         for league, r in res.items():
             print(f"\n== {league}: frozen penalty {r['frozen']:,.0f} (grouped CV pooled over {r['train']})")
             print(pl.DataFrame(r["seasons"]))
-            for name, y in r["yoy"].items():
-                f = pl.DataFrame(y)
-                if f.height:
-                    print(name, f.select(pl.selectors.exclude("season", "n").mean()).row(0, named=True))
+            for rule, d in r["paired"].items():
+                print(
+                    f"{rule} - old, mean / SE over pairs:",
+                    {m: [round(x, 4) for x in v[:2]] for m, v in d.items()},
+                )
+            for a, m in r["sweep"].items():
+                print(f"constant {a}:", {k: round(v, 4) for k, v in m.items()})
 
 
 def main(argv: list[str] | None = None) -> int:

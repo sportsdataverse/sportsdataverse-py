@@ -299,6 +299,7 @@ def _wnba(season: int, season_type: str = "regular-season") -> pl.DataFrame:
 
 def test_rapm_is_the_ridge_at_the_league_penalty():
     # An independent solver at the frozen WNBA penalty: the fit is that ridge, not a per-season pick.
+    # Observed max gap 7.8e-12 per 100; never loosen the gate to make a change pass.
     rows = _wnba(2025)
     X, y, _ = build_rapm_design(rows)
     out = nba_rapm(rows, league_id="10")
@@ -327,7 +328,14 @@ def test_penalty_league_comes_from_the_game_ids():
     rows = _wnba(2024)
     assert rapm_penalty(rows) == RAPM_PENALTY["10"]  # String ids "10..." are WNBA games
     assert rapm_penalty(rows.drop("game_id")) == RAPM_PENALTY["00"]  # no ids: the NBA
-    assert rapm_penalty(rows.with_columns(pl.col("game_id").cast(pl.Int64))) == RAPM_PENALTY["00"]
+    assert rapm_penalty(rows.with_columns(pl.col("game_id").cast(pl.Int64))) == RAPM_PENALTY["10"]  # 1022400001
+    nba_ids = pl.DataFrame({"game_id": ["0022400001", "0042400101"]})
+    assert (
+        rapm_penalty(nba_ids)
+        == rapm_penalty(nba_ids.with_columns(pl.col("game_id").cast(pl.Int64)))
+        == RAPM_PENALTY["00"]
+    )
+    assert rapm_penalty(pl.DataFrame({"game_id": [2022400001]})) == RAPM_PENALTY["20"]  # an integer G League id
     assert nba_rapm(rows).equals(nba_rapm(rows, league_id="10"))
     assert RAPM_PENALTY["20"] == RAPM_PENALTY["00"]  # the G League is not fitted: the NBA value
     with pytest.raises(ValueError, match="name leagues"):

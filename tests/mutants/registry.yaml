@@ -10776,3 +10776,23 @@
   test: tests/nba/test_nba_player_factor_rapm.py::test_one_penalty_for_every_season_and_type
   expected: kill
   note: The split must fit at plain RAPM's fixed penalty; a per-season pick puts its components on a season-varying scale.
+
+- id: bb-rapm-penalty-centred-solve
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '    gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
+  mutant: '    gram = (X.T @ X).toarray()'
+  test: tests/nba/test_nba_rapm.py::test_rapm_is_the_ridge_at_the_league_penalty
+  expected: kill
+  note: An uncentred Gram matrix penalizes the intercept direction, a different ridge from the intercept-fitted one.
+
+- id: bb-rapm-penalty-hand-moved
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: 'RAPM_PENALTY: dict[str, float] = {"00": 2682.6957952797247, "10": 1930.6977288832495}'
+  mutant: 'RAPM_PENALTY: dict[str, float] = {"00": 5179.474679231207, "10": 1930.6977288832495}'
+  test: tests/tools/test_fit_rapm_penalty.py::test_frozen_values_are_the_pooled_pick
+  expected: kill
+  note: A frozen value moved by hand (here back to the old rule's recent NBA pick) no longer matches the committed CV corpus.
