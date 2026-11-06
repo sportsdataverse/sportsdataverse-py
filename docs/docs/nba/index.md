@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 245 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 246 | — |
 
 ## ESPN {#espn}
 
@@ -191,6 +191,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_play_context`](reference/additional/analytics-3#nba_play_context)
 - [`nba_play_style_features`](reference/additional/analytics-3#nba_play_style_features)
 - [`nba_player_ages`](reference/additional/analytics-3#nba_player_ages)
+- [`nba_player_factor_rapm`](reference/additional/analytics-3#nba_player_factor_rapm)
 - [`nba_player_identity`](reference/additional/analytics-3#nba_player_identity)
 - [`nba_player_on_off`](reference/additional/analytics-3#nba_player_on_off)
 - [`nba_player_play_styles`](reference/additional/analytics-3#nba_player_play_styles)
@@ -199,9 +200,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_war`](reference/additional/analytics-3#nba_player_war)
 - [`nba_player_wowy`](reference/additional/analytics-3#nba_player_wowy)
 - [`nba_playtype_ratings`](reference/additional/analytics-3#nba_playtype_ratings)
-- [`nba_possession_rate_rows`](reference/additional/analytics-3#nba_possession_rate_rows)
-- [`nba_ratings_panel`](reference/additional/analytics-3#nba_ratings_panel)
-- [`nba_raw_store_season_frame`](reference/additional/analytics-3#nba_raw_store_season_frame)
+- [`nba_possession_rate_rows`](reference/additional/analytics-4#nba_possession_rate_rows)
+- [`nba_ratings_panel`](reference/additional/analytics-4#nba_ratings_panel)
+- [`nba_raw_store_season_frame`](reference/additional/analytics-4#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-4#nba_referee_assignments)
 - [`nba_score_rows`](reference/additional/analytics-4#nba_score_rows)
 - [`nba_season_sim`](reference/additional/analytics-4#nba_season_sim)
