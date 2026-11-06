@@ -1,10 +1,80 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg"
-sidebar_label: "Analytics: ncaa_mbb–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: ncaa_lineup–weighted_avg"
+sidebar_label: "Analytics: ncaa_lineup–weighted_avg"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ncaa_lineup–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: ncaa_lineup–weighted_avg
+
+### ncaa_lineup_count_rows {#ncaa_lineup_count_rows}
+
+`ncaa_lineup_count_rows(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Map the stats.ncaa.org pbp onto the lineup-seasons count frame.
+
+Each shot, free throw, rebound and turnover counts for the side whose `event_team` it is,
+on the lineup at the event; a free throw on the lineup at the most recent foul
+(`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`). Events with
+no count are dropped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order. |
+
+**Returns**
+
+One row per counted event in `sportsdataverse._common.lineup_seasons.lineup_count_schema` (with the shot zones) and String player ids.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `home_team_id` | Int64 | ESPN team id of the home side. |
+| `away_team_id` | Int64 | ESPN team id of the away side. |
+| `home_1` | String | stats.ncaa.org id of home player 1 on the floor at the event (a free throw: at the last foul). |
+| `home_2` | String | stats.ncaa.org id of home player 2 on the floor at the event (a free throw: at the last foul). |
+| `home_3` | String | stats.ncaa.org id of home player 3 on the floor at the event (a free throw: at the last foul). |
+| `home_4` | String | stats.ncaa.org id of home player 4 on the floor at the event (a free throw: at the last foul). |
+| `home_5` | String | stats.ncaa.org id of home player 5 on the floor at the event (a free throw: at the last foul). |
+| `away_1` | String | stats.ncaa.org id of away player 1 on the floor at the event (a free throw: at the last foul). |
+| `away_2` | String | stats.ncaa.org id of away player 2 on the floor at the event (a free throw: at the last foul). |
+| `away_3` | String | stats.ncaa.org id of away player 3 on the floor at the event (a free throw: at the last foul). |
+| `away_4` | String | stats.ncaa.org id of away player 4 on the floor at the event (a free throw: at the last foul). |
+| `away_5` | String | stats.ncaa.org id of away player 5 on the floor at the event (a free throw: at the last foul). |
+| `home_fga` | Int64 | The home side's field-goal attempts on the event (0 or 1). |
+| `home_fgm` | Int64 | The home side's field goals made on the event (0 or 1). |
+| `home_fg3a` | Int64 | The home side's three-point attempts on the event (0 or 1). |
+| `home_fg3m` | Int64 | The home side's threes made on the event (0 or 1). |
+| `home_fta` | Int64 | The home side's free-throw attempts on the event (0 or 1). |
+| `home_oreb` | Int64 | The home side's offensive rebounds on the event (0 or 1). |
+| `home_dreb` | Int64 | The home side's defensive rebounds on the event (0 or 1). |
+| `home_tov` | Int64 | The home side's turnovers on the event (0 or 1). |
+| `home_rima` | Int64 | The home side's rim attempts on the event (0 or 1). |
+| `home_rimm` | Int64 | The home side's rim makes on the event (0 or 1). |
+| `home_mida` | Int64 | The home side's mid-range attempts on the event (0 or 1). |
+| `home_midm` | Int64 | The home side's mid-range makes on the event (0 or 1). |
+| `away_fga` | Int64 | The away side's field-goal attempts on the event (0 or 1). |
+| `away_fgm` | Int64 | The away side's field goals made on the event (0 or 1). |
+| `away_fg3a` | Int64 | The away side's three-point attempts on the event (0 or 1). |
+| `away_fg3m` | Int64 | The away side's threes made on the event (0 or 1). |
+| `away_fta` | Int64 | The away side's free-throw attempts on the event (0 or 1). |
+| `away_oreb` | Int64 | The away side's offensive rebounds on the event (0 or 1). |
+| `away_dreb` | Int64 | The away side's defensive rebounds on the event (0 or 1). |
+| `away_tov` | Int64 | The away side's turnovers on the event (0 or 1). |
+| `away_rima` | Int64 | The away side's rim attempts on the event (0 or 1). |
+| `away_rimm` | Int64 | The away side's rim makes on the event (0 or 1). |
+| `away_mida` | Int64 | The away side's mid-range attempts on the event (0 or 1). |
+| `away_midm` | Int64 | The away side's mid-range makes on the event (0 or 1). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+from sportsdataverse.mbb.mbb_lineup_seasons import ncaa_lineup_count_rows
+rows = ncaa_lineup_count_rows(load_ncaa_mbb_pbp(2025))
+```
 
 ### ncaa_mbb_lineups {#ncaa_mbb_lineups}
 
