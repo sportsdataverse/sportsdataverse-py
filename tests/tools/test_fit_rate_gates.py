@@ -59,7 +59,10 @@ def test_refit_lands_on_the_frozen_gates(league: str) -> None:
         assert not set(train_span) & set(hold_span) and max(train_span) < min(hold_span)
         for r in train.iter_rows(named=True):
             m = fit.fit_m(fit.parse_curve(r["curve"]))
-            assert m == r["m"] or (math.isinf(m) and math.isinf(r["m"])), f"{league} {r['rate']}"
+            # the grid search is exact up to the platform's float summation (Windows vs Linux numpy)
+            assert m == pytest.approx(r["m"], rel=1e-9) or (math.isinf(m) and math.isinf(r["m"])), (
+                f"{league} {r['rate']}"
+            )
             frozen = table[league][r["rate"]]
             assert frozen == (fit.gate(m) if math.isfinite(m) else math.inf), f"{league} {kind} {r['rate']}"
             if math.isfinite(m):

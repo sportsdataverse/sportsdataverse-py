@@ -13,9 +13,9 @@ it is never ranked.
 
 Fitted by ``tools/fit_rate_gates.py`` on each league's train seasons (its ``SPANS``; the later
 holdout seasons are scored in ``tests/tools/test_fit_rate_gates.py``), from the ESPN team box
-scores (team rates) and the BB-D6 game impact box (on/off). The study, both candidate units for
-``_n`` compared, and the published conventions are in the ClaudeCowork note
-``notes/2026-11-06-n-stabilization.md``.
+scores (team rates) and the BB-D6 game impact box (on/off). The study behind the unit choice
+(real denominator against possessions everywhere, and the published conventions) is summarised
+in sportsdataverse-py #1126.
 
 * :data:`TEAM_MIN_N` gates the team rates (``{lg}_team_season_rates``, and the BB-D3 rates
   ``{lg}_team_strength`` carries) and the lineup rates (``{lg}_lineup_seasons``). A full team season

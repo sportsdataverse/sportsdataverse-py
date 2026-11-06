@@ -3,8 +3,7 @@
 
 The fitted values are frozen into :mod:`sportsdataverse._common.rate_gates` (``TEAM_MIN_N`` and
 ``ON_OFF_MIN_N``) with a comment citing this script -- never tuned ad hoc. The study behind it
-(both units compared, the published conventions) is the ClaudeCowork note
-``notes/2026-11-06-n-stabilization.md``.
+(both units compared, the published conventions) is summarised in sportsdataverse-py #1126.
 
 **Method** (Blackport's truncated split-half, at game granularity). A team-season's regular-season
 games are ordered by date and split odd / even. For a sample of ``n`` units of the rate's own
