@@ -575,6 +575,10 @@ from sportsdataverse.wbb import wbb_bracket_sim as wbb_bracket_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_bracketology as wbb_bracketology  # noqa: F401
 from sportsdataverse.wbb import wbb_coach_careers as wbb_coach_careers  # noqa: F401
 from sportsdataverse.wbb import wbb_coach_seasons as wbb_coach_seasons  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_lineup_games as wbb_epv_lineup_games  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_player_games as wbb_epv_player_games  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_plays as wbb_epv_plays  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_team_games as wbb_epv_team_games  # noqa: F401
 from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
@@ -1156,6 +1160,10 @@ __all__ = [
     "wbb_bracketology",
     "wbb_coach_careers",
     "wbb_coach_seasons",
+    "wbb_epv_lineup_games",
+    "wbb_epv_player_games",
+    "wbb_epv_plays",
+    "wbb_epv_team_games",
     "wbb_game_flow",
     "wbb_game_lineups_used",
     "wbb_game_player_impact",

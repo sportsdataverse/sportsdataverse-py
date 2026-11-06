@@ -10369,7 +10369,7 @@
   group: bb-epv
   finding: BB-D24
   file: sportsdataverse/nba/nba_epv.py
-  snippet: '.then(float(mean) - pl.col("_next_start"))'
+  snippet: '.then(float(mean) * scale - pl.col("_next_start"))'
   mutant: '.then(0.0)'
   test: tests/nba/test_nba_epv.py::test_a_possession_end_prices_the_next_start
   expected: kill
@@ -10499,11 +10499,71 @@
   group: bb-epv
   finding: BB-D24
   file: sportsdataverse/nba/nba_epv.py
-  snippet: '_check_seasons(states["season"].drop_nulls().unique().to_list())'
+  snippet: '_check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)'
   mutant: 'pass'
   test: tests/nba/test_nba_epv.py::test_inputs_are_checked
   expected: kill
   note: The bundled booster refuses a season before its first training one, whoever calls it.
+
+- id: bb-epv-college-split-other-sides-shots
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: 'shooter.forward_fill().over("game_id", "poss_num").fill_null(pl.col("_poss_side")).alias("_off_side")'
+  mutant: 'pl.col("_poss_side").alias("_off_side")'
+  test: tests/mbb/test_mbb_epv.py::test_no_possession_holds_the_other_sides_shots
+  expected: kill
+  note: The release stamps a few free throws on the other side's possession; unsplit, their points credit no one.
+
+- id: bb-epv-college-score-from-baskets
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '*[_running_score(side).alias(name) for side, name in ((_HOME, "score_home"), (_AWAY, "score_away"))],'
+  mutant: 'pl.col("home_score").cast(pl.Int64).alias("score_home"), pl.col("away_score").cast(pl.Int64).alias("score_away"),'
+  test: tests/mbb/test_mbb_epv.py::test_the_score_is_summed_from_the_baskets
+  expected: kill
+  note: About one game in ten has home_score on the away team, and some baskets score a row early.
+
+- id: bb-epv-college-trailing-rows-move
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '.then(pl.col("_seg") + 1)'
+  mutant: '.then(pl.col("_seg"))'
+  test: tests/mbb/test_mbb_epv.py::test_a_steal_opens_the_next_possession
+  expected: kill
+  note: The steal after a turnover would end the turnover's possession instead of starting the next one live.
+
+- id: bb-epv-college-steal-starts-live
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '.then(pl.lit("OffLiveBallTurnover"))'
+  mutant: '.then(pl.lit("OffDeadball"))'
+  test: tests/mbb/test_mbb_epv.py::test_a_steal_opens_the_next_possession
+  expected: kill
+  note: A live-ball turnover start would read as a dead ball.
+
+- id: bb-epv-level-as-of
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(pl.col("_p").cum_sum().over("season") - pl.col("_p")).alias("_p_before"),'
+  mutant: 'pl.col("_p").cum_sum().over("season").alias("_p_before"),'
+  test: tests/mbb/test_mbb_epv.py::test_the_level_is_as_of_each_game
+  expected: kill
+  note: A game's level would read its own day's points (its own possessions among them).
+
+- id: bb-epv-level-applied
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'scored = scored.with_columns(pl.col("epv") * pl.col("level_scale"))'
+  mutant: 'scored = scored.with_columns(pl.col("epv"))'
+  test: tests/mbb/test_mbb_epv.py::test_the_level_scales_every_value
+  expected: kill
+  note: The level would be fitted and gated but never served.
 
 # --- BB-D10: four-factor RAPM split ----------------------------------------------------------------
 - id: bb-frapm-ft-chances
@@ -10675,3 +10735,13 @@
   test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
   expected: kill
   note: The college public path would publish a null interval on every row.
+
+- id: bb-epv-college-wrong-basket-ends
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("Wrong Basket")'
+  mutant: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("No Such Event")'
+  test: tests/mbb/test_mbb_epv.py::test_a_wrong_basket_ends_its_possession
+  expected: kill
+  note: A wrong-basket two would trail into the next possession, crediting the side it was scored against.
