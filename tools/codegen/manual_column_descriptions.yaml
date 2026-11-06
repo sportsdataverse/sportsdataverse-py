@@ -40415,6 +40415,23 @@ nba_cup_standings:
   tiebreak: 'The criterion that placed the team among the teams with its group record: head_to_head, point_diff, points,
     prior_record or random; null when the record alone did.'
   wins: Group Play wins.
+nba_rated_priors:
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  game_id: ESPN game id (Int32, as in the pbp release).
+  game_date: Game date (ESPN schedule); the ratings use the games dated strictly before it.
+  home_team_id: ESPN home team id.
+  away_team_id: ESPN away team id.
+  neutral_site: ESPN's neutral-site flag; a neutral game gets no home term.
+  stats_game_id: The stats.nba.com / stats.wnba.com game id matched on date and team names; null for a game with no
+    match (All-Star games).
+  home_adj_net_rtg: Home team's adjusted net rating before the game, points per 100 over an average opponent on a neutral
+    court (the season sim's as-of possession ridge, shrunk toward last season's regressed rating).
+  away_adj_net_rtg: Away team's adjusted net rating before the game, points per 100, on the same basis.
+  hfa: The as-of ridge's home term, points per 100 for the home offense over a neutral court (applied to both offenses).
+  exp_home_margin: 'Expected home margin in points: (home_adj_net_rtg - away_adj_net_rtg + 2 * hfa) * possessions per
+    game / 100, without the home term at a neutral site.'
+  rated_home_prob: 'Rated pregame home win probability: Phi(exp_home_margin / margin_sd) with the season sim''s probit
+    scale; the in-game WP prior when the game has no line.'
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
@@ -49794,7 +49811,7 @@ nba_live_pbp:
   y_legacy: Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
 score_win_prob:
   pregame_home_prob: 'Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line).'
-  prior_source: 'Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5).'
+  prior_source: 'Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5).'
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'

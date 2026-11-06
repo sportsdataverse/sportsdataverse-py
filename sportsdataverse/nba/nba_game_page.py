@@ -232,6 +232,7 @@ def home_prior(
     league_id: Optional[str] = None,
     league: Optional[str] = None,
     neutral_site: Optional[bool] = False,
+    rated_home_prob: Optional[float] = None,
 ) -> tuple[float, str]:
     """Pregame home win probability for the in-game model, and where it came from.
 
@@ -239,8 +240,10 @@ def home_prior(
     (positive when the home side is favoured). With no line, every basketball pickcenter helper leaves
     it ``None`` (older releases carry an invented ``+2.5``), so the value is only trusted when
     ``game_spread_available`` is true. A line
-    already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
-    site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use
+    already prices the venue. Without one the prior is ``rated_home_prob`` when given (the NBA / WNBA
+    as-of team-ratings prior, :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, which prices
+    the venue itself), else home-court advantage alone, and at a neutral site (common in college
+    tournaments) there is none: the prior is 0.5. NBA and WNBA use
     :func:`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted ``hfa``;
     MBB and WBB use :func:`~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
     ``league="mens"`` / ``"womens"``.
@@ -252,9 +255,11 @@ def home_prior(
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
         neutral_site: ESPN ``neutralSite`` / the schedule's ``neutral_site``; ``None``, NaN or ``pd.NA``
             counts as false.
+        rated_home_prob: The game's rated pregame home win probability, used when there is no line;
+            ``None`` or NaN falls through to home-court advantage.
 
     Returns:
-        ``(probability, source)`` with ``source`` ``"spread"``, ``"neutral"`` or ``"hfa"``.
+        ``(probability, source)`` with ``source`` ``"spread"``, ``"rated"``, ``"neutral"`` or ``"hfa"``.
 
     Raises:
         ValueError: If the league is unknown or ``league`` contradicts ``league_id``.
@@ -265,6 +270,7 @@ def home_prior(
             from sportsdataverse.nba.nba_game_page import home_prior
             home_prior(3.0, True)      # (0.58, 'spread')
             home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+            home_prior(None, False, rated_home_prob=0.71)  # (0.71, 'rated')
 
         A lineless college tournament game::
 
@@ -280,6 +286,8 @@ def home_prior(
     lg = _resolve_league(league, league_id)
     if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
         return _margin_to_prob(lg, float(home_team_spread)), "spread"
+    if rated_home_prob is not None and not math.isnan(float(rated_home_prob)):
+        return float(rated_home_prob), "rated"
     if _is_neutral(neutral_site):
         return _margin_to_prob(lg, 0.0), "neutral"
     return _margin_to_prob(lg, _hfa(lg)), "hfa"
@@ -348,6 +356,7 @@ def score_win_prob(
     league: Optional[str] = None,
     regulation_periods: Optional[int] = None,
     neutral_site: Optional[bool] = False,
+    rated_home_prob: Optional[float] = None,
 ) -> pl.DataFrame:
     """Per-play home win probability, its play-to-play delta, and the prior, for one game.
 
@@ -367,9 +376,12 @@ def score_win_prob(
             frame's ``season`` via :func:`game_regulation_periods`.
         neutral_site: Whether the game is at a neutral site: no home-court advantage in a lineless
             prior; see :func:`home_prior`.
+        rated_home_prob: The game's rated pregame home win probability (NBA / WNBA:
+            :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`), the prior when there is
+            no line; see :func:`home_prior`.
 
     Returns:
-        The input plus ``pregame_home_prob``, ``prior_source`` (``"spread"``, ``"neutral"`` or
+        The input plus ``pregame_home_prob``, ``prior_source`` (``"spread"``, ``"rated"``, ``"neutral"`` or
         ``"hfa"``), ``wp_regime``, ``home_win_prob`` and ``wp_delta`` (the first play's delta is
         measured from the prior). ``home_win_prob`` is settled to 1.0 / 0.0 on "End Game" /
         "End Period" rows (``type_text``) from the last regulation period on (period 2 in a halves
@@ -434,7 +446,11 @@ def score_win_prob(
     filled = pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
     first = filled.row(0, named=True)
     prior, source = home_prior(
-        first["home_team_spread"], first["game_spread_available"], league=lg, neutral_site=neutral_site
+        first["home_team_spread"],
+        first["game_spread_available"],
+        league=lg,
+        neutral_site=neutral_site,
+        rated_home_prob=rated_home_prob,
     )
     tagged = ot_adjusted_seconds(filled, regulation_periods=reg)
     wp = _in_game_win_prob(lg, tagged, prior)
@@ -1047,6 +1063,7 @@ def game_page_tables(
     league: Optional[str] = None,
     regulation_periods: Optional[int] = None,
     neutral_site: Optional[bool] = False,
+    rated_home_prob: Optional[float] = None,
 ) -> dict[str, object]:
     """Every game-page table for one game, from its basketball pbp / team box / player box frames.
 
@@ -1068,6 +1085,8 @@ def game_page_tables(
             :func:`game_regulation_periods` when you have it.
         neutral_site: Whether the game was at a neutral site (no home-court advantage in a lineless
             prior); ``None``, NaN or ``pd.NA`` counts as false.
+        rated_home_prob: The game's rated pregame home win probability, the prior when there is no
+            line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
 
     Returns:
         ``{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods",
@@ -1109,12 +1128,16 @@ def game_page_tables(
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     periods = int(pbp["period_number"].max() or reg) if pbp.height else reg
     if pbp.height:  # a game with 10 or fewer plays parses to a zero-column frame; nothing to score yet
-        pbp = shot_coordinates(score_win_prob(pbp, league=lg, regulation_periods=reg, neutral_site=neutral_site))
+        pbp = shot_coordinates(
+            score_win_prob(
+                pbp, league=lg, regulation_periods=reg, neutral_site=neutral_site, rated_home_prob=rated_home_prob
+            )
+        )
         prior_prob, prior_source = pbp["pregame_home_prob"][0], pbp["prior_source"][0]
         spread, available = pbp["home_team_spread"][0], bool(pbp["game_spread_available"][0] or False)
     else:
         (prior_prob, prior_source), spread, available = (
-            home_prior(None, None, league=lg, neutral_site=neutral_site),
+            home_prior(None, None, league=lg, neutral_site=neutral_site, rated_home_prob=rated_home_prob),
             None,
             False,
         )

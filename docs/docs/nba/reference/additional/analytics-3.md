@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_lineup–nba_score"
-sidebar_label: "Analytics: nba_lineup–nba_score"
+title: "NBA — additional Python functions — Analytics: nba_lineup–nba_referee"
+sidebar_label: "Analytics: nba_lineup–nba_referee"
 sidebar_position: 15
-description: "NBA — additional Python functions — Analytics: nba_lineup–nba_score — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_lineup–nba_referee — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_lineup–nba_score
+# NBA — additional Python functions — Analytics: nba_lineup–nba_referee
 
 ### nba_lineup_seasons {#nba_lineup_seasons}
 
@@ -713,6 +713,61 @@ from sportsdataverse.nba.nba_team_season_rates import nba_possession_rate_rows
 rows = nba_possession_rate_rows(load_nba_stats_possessions(2025), load_nba_stats_schedules(2025))
 ```
 
+### nba_rated_priors {#nba_rated_priors}
+
+`nba_rated_priors(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Rated pregame home win probability for every ESPN game of a season, as of each game's date.
+
+The in-game win-probability prior when a game has no betting line
+(`~sportsdataverse.nba.nba_game_page.home_prior`'s `rated_home_prob`); see the module
+docstring for the model and the as-of boundary.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | The season, named by the year it ends (`2026` is 2025-26); the WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `home_team_id`, `away_team_id` (ESPN ids, Int32, as in the pbp release), `neutral_site`, `stats_game_id`, the two teams' adjusted net ratings before the game (`home_adj_net_rtg`, `away_adj_net_rtg`, per 100), the home term `hfa` (per 100, applied to both offenses), `exp_home_margin` (points) and `rated_home_prob`. The last six are null for a game with no stats.nba.com match (All-Star games).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | Int64 | ESPN game id (Int32, as in the pbp release). |
+| `game_date` | Date | Game date (ESPN schedule); the ratings use the games dated strictly before it. |
+| `home_team_id` | Int64 | ESPN home team id. |
+| `away_team_id` | Int64 | ESPN away team id. |
+| `neutral_site` | Boolean | ESPN's neutral-site flag; a neutral game gets no home term. |
+| `stats_game_id` | String | The stats.nba.com / stats.wnba.com game id matched on date and team names; null for a game with no match (All-Star games). |
+| `home_adj_net_rtg` | Float64 | Home team's adjusted net rating before the game, points per 100 over an average opponent on a neutral court (the season sim's as-of possession ridge, shrunk toward last season's regressed rating). |
+| `away_adj_net_rtg` | Float64 | Away team's adjusted net rating before the game, points per 100, on the same basis. |
+| `hfa` | Float64 | The as-of ridge's home term, points per 100 for the home offense over a neutral court (applied to both offenses). |
+| `exp_home_margin` | Float64 | Expected home margin in points: (home_adj_net_rtg - away_adj_net_rtg + 2 * hfa) * possessions per game / 100, without the home term at a neutral site. |
+| `rated_home_prob` | Float64 | Rated pregame home win probability: Phi(exp_home_margin / margin_sd) with the season sim's probit scale; the in-game WP prior when the game has no line. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rated_prior import nba_rated_priors
+priors = nba_rated_priors(2026)
+priors.select("game_id", "game_date", "exp_home_margin", "rated_home_prob").head()
+
+# WNBA
+
+nba_rated_priors(2025, league_id="10")
+```
+
 ### nba_ratings_panel {#nba_ratings_panel}
 
 `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -913,54 +968,4 @@ print(f"Found {officials.height} official slots")
 
 result = nba_referee_assignments("2026-06-13", league="wnba")
 wnba_officials = result["officials"]
-```
-
-### nba_score_rows {#nba_score_rows}
-
-`nba_score_rows(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
-
-Map the stats.nba.com play-by-play onto the game-flow score rows.
-
-Keeps the completed games of `schedule` whose `season_type` matches.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `period`, `seconds_remaining`, `event_type`, `team_id`, `score_home`, `score_away`, `season`). |
-| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `season_type`, `home_team_id`, `away_team_id`, `home_pts`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
-| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep (see `~sportsdataverse.nba.nba_team_season_rates.nba_possession_rate_rows`). |
-
-**Returns**
-
-Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
-| `order` | Int64 | The play's position in its game (the pbp order_index, or the release row order for college). |
-| `home_team_id` | Int64 | The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host). |
-| `away_team_id` | Int64 | The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor). |
-| `neutral_site` | Boolean | True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries no venue. |
-| `elapsed` | Float64 | Game-clock seconds run when the play happens, counted from the tip. |
-| `sec_left` | Float64 | The win-probability clock: seconds left in regulation, or in the overtime period. |
-| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
-| `event_team_id` | Int64 | The play's team (the model's ball side); 0 or null for a team-less play. |
-| `home_score` | Int64 | Home running score after the play. |
-| `away_score` | Int64 | Away running score after the play. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` or `season_type` is unknown. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp, load_nba_stats_schedules
-from sportsdataverse.nba.nba_game_flow import nba_score_rows
-rows = nba_score_rows(load_nba_stats_pbp(2025), load_nba_stats_schedules(2025))
 ```

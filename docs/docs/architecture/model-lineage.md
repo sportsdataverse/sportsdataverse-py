@@ -78,7 +78,9 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/mlb/models/mlb_stuff_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_stuff_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 | `sportsdataverse/mlb/models/mlb_command_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_command_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 
-None of these seven ships a card.
+The NBA and WNBA in-game WP boosters each ship a `.card.json` beside them, built by sdv-py
+`tools/models/nba_prediction/wp_model_cards.py` from the fit report, the holdout scoring and the booster
+(`tests/nba/test_nba_wp_model_cards.py` fails on a stale card). The other five ship none.
 
 ## Fitted constants
 
