@@ -979,6 +979,7 @@ categories:
       - sportsdataverse.wnba.wnba_player_on_off
       - sportsdataverse.wnba.wnba_player_factor_rapm
       - sportsdataverse.wnba.wnba_game_flow
+      - sportsdataverse.wnba.wnba_epv
       - sportsdataverse.wnba.wnba_situational
       - sportsdataverse.mbb.mbb_team_season_rates
       - sportsdataverse.mbb.mbb_game_impact

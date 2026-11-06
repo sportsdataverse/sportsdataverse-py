@@ -1,10 +1,125 @@
 ---
-title: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team"
-sidebar_label: "Analytics: wnba_player–wnba_team"
+title: "WNBA — additional Python functions — Analytics: wnba_lineup–wnba_shot"
+sidebar_label: "Analytics: wnba_lineup–wnba_shot"
 sidebar_position: 8
-description: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: wnba_lineup–wnba_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: wnba_player–wnba_team
+# WNBA — additional Python functions — Analytics: wnba_lineup–wnba_shot
+
+### wnba_lineup_seasons {#wnba_lineup_seasons}
+
+`wnba_lineup_seasons(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', min_poss: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `season_type` | `str` | `'regular-season'` |  |
+| `min_poss` | `int \| None` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`) as fractions, and for every rate `<m>_rank` / `<m>_pct` (within the season and unit size, among units with at least `min_poss`) and `<m>_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `n_players` | Int64 | Unit size: 2, 3 or 5 players. |
+| `lineup_id` | String | The unit's stats.nba.com player ids, sorted numerically and joined with '-'. |
+| `player_1` | Int64 | Player 1 of the unit, in lineup_id order; null past n_players. |
+| `player_2` | Int64 | Player 2 of the unit, in lineup_id order; null past n_players. |
+| `player_3` | Int64 | Player 3 of the unit, in lineup_id order; null past n_players. |
+| `player_4` | Int64 | Player 4 of the unit, in lineup_id order; null past n_players. |
+| `player_5` | Int64 | Player 5 of the unit, in lineup_id order; null past n_players. |
+| `minutes` | Float64 | Game-clock minutes the unit shared the floor over the season. |
+| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a 2- or 3-man unit sums the fives that contain it). |
+| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
+| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
+| `plus_minus` | Int64 | The unit's +/- over the season: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `orb_pct` | Float64 | Offensive-rebound rate: OREB / (OREB + the opponent's DREB), as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate: its OREB / (its OREB + the unit's DREB). Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
+
+### wnba_matchup_drapm {#wnba_matchup_drapm}
+
+`wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+WNBA matchup defensive RAPM (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame. |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig` override. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_matchup_drapm
+d = wnba_matchup_drapm("2024")
+print(d.sort("matchup_drapm", descending=True).head())
+```
 
 ### wnba_player_factor_rapm {#wnba_player_factor_rapm}
 
@@ -546,153 +661,3 @@ from sportsdataverse.wnba import wnba_shot_value
 out = wnba_shot_value([1628886], "2024")
 out["talent"].head()
 ```
-
-### wnba_situational_lineup {#wnba_situational_lineup}
-
-`wnba_situational_lineup(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA five-man unit splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_lineup.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `top_n` | `int \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, lineup_id, family, split)`: `lineup_id` is the five player ids sorted and joined with `-` (BB-D4's id), `player_1..5` the same ids, then the columns of `nba_situational_team`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
-| `player_1` | Int64 | Player 1 of the unit, in lineup_id order. |
-| `player_2` | Int64 | Player 2 of the unit, in lineup_id order. |
-| `player_3` | Int64 | Player 3 of the unit, in lineup_id order. |
-| `player_4` | Int64 | Player 4 of the unit, in lineup_id order. |
-| `player_5` | Int64 | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_situational_player {#wnba_situational_player}
-
-`wnba_situational_player(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `top_n` | `int \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, player_id, family, split)`, the columns of `nba_situational_team`: the team's possessions, points and ratings with the player on the floor as the possession starts. `player_id` is the stats.nba.com person id (Int64). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `player_id` | Int64 | stats.nba.com person id. A possession counts for the five on the floor as it starts, with all its points. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_situational_team {#wnba_situational_team}
-
-`wnba_situational_team(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `top_n` | `int \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, family, split)`: `games`, `minutes` / `seconds`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions) and their `_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_team_clutch {#wnba_team_clutch}
-
-`wnba_team_clutch(season: 'int', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
-
-No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
