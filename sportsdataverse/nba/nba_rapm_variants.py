@@ -280,6 +280,7 @@ def nba_decay_rapm(
     asof: Optional[datetime.date] = None,
     half_life_days: float = 180.0,
     alphas: Optional[np.ndarray] = None,
+    league_id: Optional[str] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Time-decay RAPM: ridge weighted by ``0.5 ** (days_ago / half_life_days)``.
@@ -315,6 +316,9 @@ def nba_decay_rapm(
             auto-selects plain RAPM's league penalty
             (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when ``asof is None`` or :func:`oracle_rapm_alphas` (evaluated at
             the possession count) when ``asof`` is set.
+        league_id: ``"00"`` / ``"10"`` / ``"20"``, the league whose plain-RAPM penalty the
+            ``asof=None`` branch fits at; ``None`` reads it from the ``game_id`` prefix
+            (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`).
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -369,7 +373,7 @@ def nba_decay_rapm(
 
     if asof is None:
         # Plain-RAPM-equivalent branch: reproduce nba_rapm's own schedule exactly.
-        fit_alphas = alphas if alphas is not None else np.asarray([rapm_penalty(frame)])
+        fit_alphas = alphas if alphas is not None else np.asarray([rapm_penalty(frame, league_id)])
         fit_cv: Optional[int] = None
     else:
         # Decay-weighted branch: oracle regularization schedule (binding WP2 ruling),

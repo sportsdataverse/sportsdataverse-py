@@ -149,11 +149,11 @@ def curves(out: Path) -> None:
                 )
                 part = poss.join(games, on="game_id", how="semi").drop_nulls(["game_id", "points"])
                 X, y, pids = build_rapm_design(part)
-                if X.shape[0] < 2 * FOLDS:
-                    print(f"{league} {season} {slug}: {X.shape[0]} possessions, skipped", flush=True)
-                    continue
                 kept = part.drop_nulls([f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)])
                 gid = kept["game_id"].rank("dense").cast(pl.Int64).to_numpy()
+                if X.shape[0] < 2 * FOLDS or np.unique(gid).size < 2:  # grouped CV needs two games
+                    print(f"{league} {season} {slug}: {X.shape[0]} possessions, skipped", flush=True)
+                    continue
                 res = season_curves(X, y, gid)
                 counts = np.asarray(X.sum(axis=0)).ravel()
                 np.savez_compressed(out / f"{league}_{season}_{slug}.npz", pids=np.asarray(pids), counts=counts, **res)
@@ -221,8 +221,11 @@ def _paired(yoy: dict[str, list[dict]], rule: str) -> dict[str, list[float]]:
     both = pl.DataFrame(yoy[rule]).join(pl.DataFrame(yoy["old"]), on="season", suffix="_old")
     out = {}
     for m in ("spearman", "r2_as_is", "r2_fitted"):
+        if m not in both.columns:  # r2_fitted needs a pair before the first scored one
+            continue
         d = both.select(pl.col(m) - pl.col(f"{m}_old")).to_series().drop_nulls().to_numpy()
-        out[m] = [float(d.mean()), float(d.std(ddof=1) / np.sqrt(d.size)), int(d.size)]
+        se = float(d.std(ddof=1) / np.sqrt(d.size)) if d.size > 1 else float("nan")
+        out[m] = [float(d.mean()), se, int(d.size)]
     return out
 
 
@@ -234,7 +237,10 @@ def _league_report(out: Path, league: str) -> dict:
         (s, t): dict(np.load(f)) for s in seasons for t in SEASON_TYPES if (f := out / f"{league}_{s}_{t}.npz").exists()
     }
     pooled = {s: v["cv_sse"].sum(axis=0) for (s, t), v in z.items() if t == "rs"}
-    frozen = _pick(sum(pooled[s] for s in train if s in pooled))
+    missing = sorted(set(train) - set(pooled))
+    if missing:  # never fit the frozen value from a partial corpus
+        raise SystemExit(f"{league}: no regular-season curves for training seasons {missing}; run `curves` first")
+    frozen = _pick(sum(pooled[s] for s in train))
     rows = []
     for (s, t), v in sorted(z.items()):
         mse = v["cv_sse"].sum(axis=0) / v["cv_n"].sum()
@@ -266,7 +272,7 @@ def _league_report(out: Path, league: str) -> dict:
     sweep = {}
     for a in SWEEP:
         f = pl.DataFrame(_forecast({s: _ratings(v, a) for s, v in rs.items()}, floor))
-        sweep[f"{a:.0f}"] = f.select(pl.col("spearman", "r2_as_is", "r2_fitted").mean()).row(0, named=True)
+        sweep[f"{a:.0f}"] = f.select(pl.exclude("season", "n").mean()).row(0, named=True)
     return {
         "frozen": frozen,
         "train": [min(train), max(train)],

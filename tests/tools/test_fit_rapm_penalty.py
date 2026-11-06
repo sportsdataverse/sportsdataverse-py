@@ -47,9 +47,12 @@ def test_the_old_grid_is_on_the_fit_grid() -> None:
 def test_curves_are_sklearn_and_the_exact_ridge() -> None:
     X, y, c, _ = _season(2024)
     old = np.isin(np.round(fit.GRID, 6), np.round(DEFAULT_RAPM_ALPHAS, 6))
-    ref = RidgeCV(alphas=DEFAULT_RAPM_ALPHAS, store_cv_results=True).fit(X, y)
+    # scikit-learn 1.5 renamed store_cv_values / cv_values_ to store_cv_results / cv_results_
+    new = "store_cv_results" in RidgeCV().get_params()
+    ref = RidgeCV(alphas=DEFAULT_RAPM_ALPHAS, **{"store_cv_results" if new else "store_cv_values": True}).fit(X, y)
+    loo = (ref.cv_results_ if new else ref.cv_values_).mean(axis=0)
     # observed 1.9e-14: the eigenbasis leave-one-out is sklearn's
-    assert np.abs(c["loo_mse"][old] / ref.cv_results_.mean(axis=0) - 1).max() < 1e-10
+    assert np.abs(c["loo_mse"][old] / loo - 1).max() < 1e-10
     k = int(np.argmin(np.abs(fit.GRID - RAPM_PENALTY["10"])))
     assert np.abs(c["coef"][:, k] - ridge_rapm_coef(X, y, RAPM_PENALTY["10"])).max() < 1e-10  # observed 2.4e-16
     assert c["cv_sse"].shape == (fit.FOLDS, fit.GRID.size) and c["cv_n"].sum() == X.shape[0]
@@ -112,3 +115,20 @@ def test_grouped_cv_is_sklearns() -> None:
         )
         # observed relative gap 4.4e-15: each fold re-centred on its own training rows
         assert np.abs(-neg * c["cv_n"] / c["cv_sse"][:, k] - 1).max() < 1e-8, alpha
+
+
+def test_report_as_of_pick_ignores_later_seasons(tmp_path: Path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    # The report's own as-of column: tilt 2025's curve hard toward the grid's heaviest penalty; the
+    # pooled pick follows it, 2024's as-of pick must not.
+    monkeypatch.setattr(fit, "LEAGUES", {"wnba": (range(2024, 2026), range(2024, 2026), 200, 1000)})
+    for season in (2024, 2025):
+        X, _, c, _ = _season(season)
+        c = dict(c)
+        if season == 2025:
+            c["cv_sse"] = c["cv_sse"] + 1e6 * (fit.GRID.size - np.arange(fit.GRID.size))
+        counts = np.asarray(X.sum(axis=0)).ravel()
+        np.savez(tmp_path / f"wnba_{season}_rs.npz", pids=np.arange(X.shape[1] // 2), counts=counts, **c)
+    rep = fit._league_report(tmp_path, "wnba")
+    asof = {r["season"]: r["asof"] for r in rep["seasons"]}
+    assert rep["frozen"] == fit.GRID[-1] and asof[2025] == fit.GRID[-1]
+    assert round(asof[2024]) == 1638  # 2024's own grouped-CV pick, untouched by 2025

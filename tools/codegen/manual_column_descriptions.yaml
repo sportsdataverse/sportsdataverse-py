@@ -41504,7 +41504,8 @@ load_nba_player_impact:
     ridge coefficients trained on that season''s o_rapm target.'
   rapm: 'Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. The ridge penalty
     is one fixed NBA value (2,683, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the scale
-    compares across seasons (regular-season sd 1.53 to 1.99 per 100 over players with 400 possessions, 1997-2026). Seasons
+    compares across seasons (regular-season sd 1.53 to 1.99 per 100 over players with 400 possessions, 1997-2026; a shorter
+    season, such as the 1999 lockout (1.53), shrinks harder, so part of a spread difference is sample size). Seasons
     published before November 2026 were fit at a per-season RidgeCV pick (1,931 or 5,179 in the regular season, up to 37,276
     in the playoffs), and their spread jumps with it (sd 1.15 to 2.34): do not compare those values across seasons or with
     values fit at the fixed penalty.'
@@ -49107,7 +49108,8 @@ load_wnba_player_impact:
   ospm: 'Offensive statistical plus-minus: box-score features regressed onto the offensive RAPM target, per 100 possessions.'
   rapm: 'Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. The ridge penalty
     is one fixed WNBA value (1,931, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the
-    scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2026).
+    scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2026;
+    fewer possessions shrink harder, so part of a spread difference is sample size).
     Seasons published before November 2026 were fit at a per-season RidgeCV pick: 1,931 in 23 of 30 regular seasons, but
     5,179 or 13,895 in 1999, 2001, 2002, 2004, 2011, 2014 and 2016 (sd 0.32 to 0.93 there) and 268 to 100,000 in the
     playoffs. Do not compare those seasons with others or with values fit at the fixed penalty.'

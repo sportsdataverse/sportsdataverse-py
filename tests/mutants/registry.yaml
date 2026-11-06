@@ -10751,8 +10751,8 @@
   group: bb-rapm-penalty
   finding: BB-D10
   file: sportsdataverse/nba/nba_rapm.py
-  snippet: '    penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha'
-  mutant: '    penalty = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_) if alpha is None else alpha'
+  snippet: '        penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha'
+  mutant: '        penalty = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_) if alpha is None else alpha'
   test: tests/nba/test_nba_rapm.py::test_penalty_does_not_follow_the_season
   expected: kill
   note: The old rule, RidgeCV's pick per fit, whose flips between grid points made the RAPM scale jump between seasons.

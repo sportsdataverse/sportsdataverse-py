@@ -344,3 +344,18 @@ def test_penalty_league_comes_from_the_game_ids():
         rapm_penalty(pl.concat([rows.head(3), rows.head(3).with_columns(pl.lit("0022400001").alias("game_id"))]))
     with pytest.raises(ValueError, match="league_id must be one of"):
         rapm_penalty(None, "99")
+
+
+def test_alphas_is_deprecated_and_keeps_the_old_rule():
+    # The old rule stays callable for the deprecation window (CONTRIBUTING: two minor releases).
+    rows = _wnba(2024, "playoffs")
+    X, y, _ = build_rapm_design(rows)
+    old = float(RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_)
+    with pytest.warns(DeprecationWarning, match=r"nba_rapm\(alphas=...\).*0\.4\.0"):
+        got = nba_rapm(rows, alphas=DEFAULT_RAPM_ALPHAS)
+    assert got.equals(nba_rapm(rows, alpha=old))
+
+
+def test_penalty_must_be_positive():
+    with pytest.raises(ValueError, match="must be positive"):
+        nba_rapm(_wnba(2024), alpha=0.0)

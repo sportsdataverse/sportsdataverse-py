@@ -13,6 +13,9 @@ import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
+from sklearn.linear_model import RidgeCV
+
+from sportsdataverse._deprecation import warn_deprecated
 
 # ---------------------------------------------------------------------------
 # Module-level constants
@@ -219,6 +222,9 @@ def ridge_rapm_coef(X: csr_matrix, y: np.ndarray, alpha: float) -> np.ndarray:
     Returns:
         The ``(2P,)`` (or ``(2P, k)``) coefficients.
 
+    Raises:
+        ValueError: If ``alpha`` is not positive (the centred Gram matrix is singular without it).
+
     Example:
         The coefficients :func:`nba_rapm` reports, before the per-100 scaling::
 
@@ -226,6 +232,8 @@ def ridge_rapm_coef(X: csr_matrix, y: np.ndarray, alpha: float) -> np.ndarray:
             X, y, player_ids = build_rapm_design(possessions)
             coef = ridge_rapm_coef(X, y, RAPM_PENALTY["00"])
     """
+    if not alpha > 0:
+        raise ValueError(f"the ridge penalty must be positive, got {alpha!r}")
     n = X.shape[0]
     mean = np.asarray(X.mean(axis=0)).ravel()
     gram = (X.T @ X).toarray() - n * np.outer(mean, mean)
@@ -239,6 +247,7 @@ def nba_rapm(
     *,
     league_id: str | None = None,
     alpha: float | None = None,
+    alphas: np.ndarray | None = None,
 ) -> pl.DataFrame:
     """Fit plain Regularized Adjusted Plus-Minus (RAPM) via ridge regression.
 
@@ -283,7 +292,10 @@ def nba_rapm(
         league_id: ``"00"`` NBA, ``"10"`` WNBA or ``"20"`` G League, which selects the
             penalty. ``None`` (default) reads it from the ``game_id`` prefix and
             otherwise takes the NBA (see :func:`rapm_penalty`).
-        alpha: A ridge penalty to fit at instead of the league's.
+        alpha: A ridge penalty to fit at instead of the league's (positive).
+        alphas: **Deprecated** (removed in 0.4.0): the old rule, RidgeCV's leave-one-out pick over
+            this grid for this fit alone, whose scale is not comparable across seasons. Warns
+            ``DeprecationWarning``; pass ``alpha=`` instead.
 
     Returns:
         A :class:`polars.DataFrame` with exactly the columns defined in
@@ -334,7 +346,17 @@ def nba_rapm(
 
     P = len(player_ids)
 
-    penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha
+    if alphas is not None:
+        warn_deprecated(
+            "nba_rapm(alphas=...)",
+            replacement="nba_rapm(alpha=...) or the league penalty (league_id=...)",
+            since="0.2.0",
+            removed_in="0.4.0",
+            extra="It picks the penalty per fit, so its RAPM scale is not comparable across seasons.",
+        )
+        penalty = float(RidgeCV(alphas=alphas).fit(X, y).alpha_) if X.shape[0] > 1 else float(max(alphas))
+    else:
+        penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha
     coef: np.ndarray = ridge_rapm_coef(X, y, penalty)  # shape (2P,)
 
     # Per-100-possessions scale; sign-flip defense so positive = good defender
