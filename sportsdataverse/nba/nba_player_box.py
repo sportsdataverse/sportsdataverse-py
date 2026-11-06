@@ -26,7 +26,7 @@ from sportsdataverse.wnba.wnba_player_box import _FINAL_ORDER as _FINAL_ORDER
 __all__ = ["helper_nba_player_box"]
 
 
-def helper_nba_player_box(final: dict) -> pl.DataFrame:
+def helper_nba_player_box(final: dict, *, allow_partial: bool = False) -> pl.DataFrame:
     """Parse one game's ESPN summary payload into the released player-box frame.
 
     Faithful polars port of ``hoopR:::helper_espn_nba_player_box``
@@ -64,4 +64,6 @@ def helper_nba_player_box(final: dict) -> pl.DataFrame:
     """
     # NBA's R gate omits WBB's valid_athletes (both-teams) probe (matches WNBA),
     # so a game whose second team ships no athletes still publishes team-1 rows.
-    return _basketball_player_box(final, final_order=_FINAL_ORDER, require_both_teams=False)
+    return _basketball_player_box(
+        final, final_order=_FINAL_ORDER, require_both_teams=False, allow_partial=allow_partial
+    )

@@ -1164,7 +1164,7 @@ def game_page_tables(
     }
 
 
-def _converter(lg: str, kind: str) -> Callable[[dict], pl.DataFrame]:
+def _converter(lg: str, kind: str) -> Callable[..., pl.DataFrame]:
     """``helper_<lg>_<kind>`` from ``sportsdataverse.<lg>.<lg>_<kind>`` (play_by_play / team_box / player_box)."""
     return getattr(importlib.import_module(f"sportsdataverse.{lg}.{lg}_{kind}"), f"helper_{lg}_{kind}")
 
@@ -1240,12 +1240,42 @@ def game_page_frames(
     )
     neutral = _is_neutral(comp.get("neutralSite"))
     pbp = _converter(lg, "play_by_play")(final)  # same converter order as the shipped NBA function
-    team_box = _converter(lg, "team_box")(final)
-    player_box = _converter(lg, "player_box")(final)
+    live = ((comp.get("status") or {}).get("type") or {}).get("state") == "in"
+    if live:
+        from sportsdataverse.wbb.wbb_team_box import helper_wbb_team_box
+
+        team_box = helper_wbb_team_box(final, allow_partial=True)
+        player_box = _converter(lg, "player_box")(final, allow_partial=True)
+    else:
+        team_box = _converter(lg, "team_box")(final)
+        player_box = _converter(lg, "player_box")(final)
+    rate_team_box, rate_player_box = team_box, player_box
+    if live:
+        # Missing rate inputs propagate as nulls. Keep the original box columns
+        # intact and let the normal two-team requirement suppress one-sided rates.
+        team_inputs = (
+            "field_goals_made",
+            "field_goals_attempted",
+            "three_point_field_goals_made",
+            "free_throws_attempted",
+            "offensive_rebounds",
+            "defensive_rebounds",
+            "total_turnovers" if lg in {"nba", "wnba"} else "turnovers",
+        )
+        player_inputs = ("field_goals_attempted", "free_throws_attempted", "turnovers", "points")
+        if team_box.height == 2:
+            rate_team_box = team_box.with_columns(
+                pl.lit(None, dtype=pl.Int32).alias(col) for col in team_inputs if col not in team_box.columns
+            )
+        if player_box.height:
+            rate_player_box = player_box.with_columns(
+                [pl.lit(None, dtype=pl.Int32).alias(col) for col in player_inputs if col not in player_box.columns]
+                + ([pl.lit(None, dtype=pl.Float64).alias("minutes")] if "minutes" not in player_box.columns else [])
+            )
     tables = game_page_tables(
         pbp,
-        team_box,
-        player_box,
+        rate_team_box,
+        rate_player_box,
         league=lg,
         regulation_periods=reg,
         neutral_site=neutral,
