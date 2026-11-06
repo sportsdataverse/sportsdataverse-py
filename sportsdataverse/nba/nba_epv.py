@@ -451,7 +451,7 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
     """Each game's scoring level as of its tip, over the booster's training level (``level_scale``).
 
     A booster fitted on some seasons predicts their scoring level; when a league's points per
-    possession move (the WNBA's rose 0.04 in 2026, men's college's 0.06 from 2022 to 2026), its
+    possession move (the WNBA's rose 0.04 in 2026, men's college's from 1.011 in 2022 to 1.075 in 2026), its
     EPV runs low or high all season. The level of a game is the season's points per possession
     over the games that started before it, shrunk to the training level with ``level_k``
     possessions (an empirical-Bayes weight fitted on the seasons before the holdout):
@@ -463,13 +463,21 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
         booster: A booster carrying ``level_ppp`` (its training seasons' points per possession) and
             ``level_k``.
         game_order: ``game_id`` and ``game_order`` (a date, or anything that sorts as the games were
-            played): games sharing a ``game_order`` do not see each other. Without it games are in
-            ``game_id`` order, which the NBA and WNBA assign in schedule order.
+            played): games sharing a ``game_order`` do not see each other. Every game needs one.
+            Without it each game is its own group in ``game_id`` order (the NBA and WNBA assign ids
+            in schedule order): same-day games then see each other, and a postponed game is counted
+            before its make-up date, so the shipped (college) boosters are always given dates.
 
     Returns:
         One row per ``game_id`` with ``level_scale`` (Float64; 1.0 is the training level).
+
+    Raises:
+        ValueError: If the booster lacks ``level_ppp`` or ``level_k``, ``game_order``'s ``game_id``
+            dtype differs from the states', or a game has no ``game_order``.
     """
-    ppp, k = float(booster.attr("level_ppp") or "nan"), float(booster.attr("level_k") or "nan")
+    if booster.attr("level_ppp") is None or booster.attr("level_k") is None:
+        raise ValueError("the booster has no level_ppp / level_k attributes")
+    ppp, k = float(booster.attr("level_ppp")), float(booster.attr("level_k"))
     games = (
         states.filter(pl.col("step") == 0)
         .group_by("season", "game_id")
@@ -478,17 +486,22 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
     if game_order is None:
         games = games.with_columns(pl.col("game_id").alias("game_order"))
     else:
+        if game_order.schema["game_id"] != games.schema["game_id"]:
+            raise ValueError(f"game_order game_id is {game_order.schema['game_id']}, not {games.schema['game_id']}")
         games = games.join(game_order.select("game_id", "game_order").unique("game_id"), on="game_id", how="left")
+        if games["game_order"].null_count():
+            # an undated game would be pooled after every dated one and see the whole season
+            raise ValueError(f"{games['game_order'].null_count()} games have no game_order")
     days = (
         games.group_by("season", "game_order")
         .agg(pl.col("_p").sum(), pl.col("_n").sum())
-        .sort("season", "game_order", nulls_last=True)
+        .sort("season", "game_order")
         .with_columns(
             (pl.col("_p").cum_sum().over("season") - pl.col("_p")).alias("_p_before"),
             (pl.col("_n").cum_sum().over("season") - pl.col("_n")).alias("_n_before"),
         )
     )
-    return games.join(days.drop("_p", "_n"), on=["season", "game_order"], how="left", nulls_equal=True).select(
+    return games.join(days.drop("_p", "_n"), on=["season", "game_order"], how="left").select(
         "game_id",
         ((k * ppp + pl.col("_p_before")) / (k + pl.col("_n_before")) / ppp).alias("level_scale"),
     )

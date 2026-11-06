@@ -218,18 +218,56 @@ def test_the_level_scales_every_value() -> None:
     order = _inputs(name)[3].select("game_id", "game_order")
     s = _states(name).filter(pl.col("step") > 0)
     raw = booster.inplace_predict(s.select(pl.col(EPV_FEATURES).cast(pl.Float64)).to_numpy())
-    lv = s.select("game_id").join(epv_level(_states(name), booster, order), on="game_id", how="left")
+    lv = s.select("game_id").join(
+        epv_level(_states(name), booster, order), on="game_id", how="left", maintain_order="left"
+    )
     p = _plays(name).sort("game_id", "possession_number", "step")
     assert np.allclose(p["epv"].to_numpy(), raw * lv["level_scale"].to_numpy())
 
 
-#: Observed on the fixture with the shipped boosters: (skill vs the training label mean, level bias).
-OBSERVED_FIT = {"mbb": (0.267, 0.004), "wbb": (0.272, -0.039)}
+def test_the_level_is_the_shrunk_points_per_possession_of_earlier_dates() -> None:
+    """``level_scale`` against a hand walk over the release's own possessions, date by date."""
+    name = _fixture("mbb")
+    booster = load_epv_model("mbb")
+    ppp, k = float(booster.attr("level_ppp")), float(booster.attr("level_k"))
+    poss, _, _, games = _inputs(name)
+    starts = _states(name).filter(pl.col("step") == 0)
+    per_game = {
+        g: (float(p), n)
+        for g, p, n in starts.group_by("game_id").agg(pl.col("remaining_points").sum(), pl.len()).iter_rows()
+    }
+    date = dict(games.select("game_id", "game_order").iter_rows())
+    want = {}
+    for g in per_game:
+        before = [h for h in per_game if date[h] < date[g]]
+        pts, n = sum(per_game[h][0] for h in before), sum(per_game[h][1] for h in before)
+        want[g] = (k * ppp + pts) / (k + n) / ppp
+    got = dict(epv_level(_states(name), booster, games.select("game_id", "game_order")).iter_rows())
+    assert got.keys() == want.keys()
+    assert all(abs(got[g] - want[g]) < 1e-12 for g in want)
+    assert max(want.values()) != min(want.values())
+
+
+def test_the_level_refuses_an_undated_game_and_a_booster_without_one() -> None:
+    name = _fixture("mbb")
+    order = _inputs(name)[3].select("game_id", "game_order")
+    with pytest.raises(ValueError, match="no game_order"):
+        epv_level(_states(name), load_epv_model("mbb"), order.head(3))
+    with pytest.raises(ValueError, match="dtype|is "):
+        epv_level(_states(name), load_epv_model("mbb"), order.with_columns(pl.col("game_id").cast(pl.Int64)))
+    with pytest.raises(ValueError, match="level_ppp"):
+        epv_level(_states(name), load_epv_model("00"))
+    assert load_epv_model("00").attr("level_ppp") is None  # the NBA booster is served without a level
+
+
+#: Observed on the fixture with the shipped boosters: skill vs the training label mean (the level
+#: bias was +0.004 men, -0.039 women, on 20 games over the season's first 17-18 dates).
+OBSERVED_FIT = {"mbb": 0.267, "wbb": 0.272}
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
 def test_the_booster_is_out_of_sample_and_calibrated(lg: str) -> None:
-    """The fixture season is the holdout; on it EPV beats the training mean and is level within 0.03."""
+    """The fixture season is the holdout; on it EPV beats the training mean and is level within 3 game-clustered SE."""
     booster = load_epv_model(lg)
     train = {int(x) for x in booster.attr("train_seasons").split(",")}
     held = {int(booster.attr("holdout_season")), int(booster.attr("confirmation_season"))}
@@ -239,9 +277,8 @@ def test_the_booster_is_out_of_sample_and_calibrated(lg: str) -> None:
     y = p["remaining_points"].to_numpy()
     const = float(booster.attr("train_label_mean"))
     skill = 1 - np.mean((p["epv"].to_numpy() - y) ** 2) / np.mean((const - y) ** 2)
-    floor, _ = OBSERVED_FIT[lg]
-    assert skill > floor - 0.02
-    # level within three standard errors of a game-clustered mean (20 games of the season's first days)
+    assert skill > OBSERVED_FIT[lg] - 0.02
+    # level within three standard errors of a game-clustered mean
     g = (
         p.with_columns((pl.col("epv") - pl.col("remaining_points")).alias("e"))
         .group_by("game_id")
@@ -308,4 +345,13 @@ def test_public_tables_carry_espn_teams_and_ncaa_players(lg: str, monkeypatch: p
     assert non_d1.height > 0  # the fixture has non-D1 opponents: one team row each, not two
     assert team.height == 2 * games.height - non_d1.height
     assert plays.schema["person_id"] == pl.Utf8 and plays.height == _plays(_fixture(lg)).height
+    # the league routes to its own booster: the women's plays are not the men's booster's
+    plays = plays.sort("game_id", "order_index")
+    assert np.allclose(plays["epv"].to_numpy(), _plays(_fixture(lg)).sort("game_id", "order_index")["epv"].to_numpy())
+    other = add_epv(
+        _states(_fixture(lg)),
+        league_id="wbb" if lg == "mbb" else "mbb",
+        game_order=_inputs(_fixture(lg))[3].select("game_id", "game_order"),
+    ).sort("game_id", "order_index")
+    assert not np.allclose(plays["epv"].to_numpy(), other["epv"].to_numpy())
     assert len(units) > 0

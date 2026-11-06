@@ -10,15 +10,23 @@ Run (the ``{nba,wnba}_stats_pbp`` / ``_possessions`` and ``ncaa_{mbb,wbb}_pbp`` 
 
 The NBA, men's and women's college boosters ship. The WNBA fit runs and writes its report but
 ships nothing: without a level it fails gate 2 on 2026 (WNBA points per possession rose 0.04 that
-season, seven game-clustered standard errors); with the level it passes gate 2 but one state
-bucket (a shooting foul in a transition possession, which it already over-prices on the 2025
-holdout) fails gate 3.
+season; ``large_bias_game_se`` in its report gives the game-clustered standard error); with the
+level it passes gate 2 but one state bucket (a shooting foul in a transition possession, which it
+already over-prices on the 2025 holdout) fails gate 3. The WNBA level orders games by ``game_id``
+(its releases carry no date), so same-day games see each other there; pass dates before a WNBA ship.
 
 The WNBA and college boosters carry an as-of scoring level (``nba_epv.epv_level``): a season's
-points per possession move (men's college rose from 1.01 in 2022 to 1.08 in 2026), and a booster
+points per possession move (men's college rose from 1.011 in 2022 to 1.075 in 2026), and a booster
 alone predicts its training seasons' level. Its weight ``level_k`` is fitted on seasons before the
 holdout (:func:`level_k`); the gates score the level-scaled EPV, as it is served, and the report
-also gives each season's bias without it.
+also gives each season's bias without it, by month and per state bucket.
+
+**The level was added after the seasons it is gated on were seen** (the WNBA's 2026 failure, and the
+2025 / 2026 college points per possession), so for the men's booster 2026 is a design season for
+gate 2, not a clean confirmation: it passes with the level (-0.008) and fails without it (-0.031).
+2027 (2026-27) is the pre-registered confirmation of the level: when it completes, add it as a
+``monitor`` season and gate it with these thresholds, unchanged. The women's booster passes gate 2
+on both seasons without the level too (the level moves its bias from -0.005 to -0.009).
 
 Seasons (named by the year they end; train, holdout, confirmation and monitor disjoint):
 
@@ -384,6 +392,7 @@ def _buckets(s: pl.DataFrame) -> dict[str, Any]:
             pl.len().alias("n"),
             pl.col("_err").mean().alias("bias"),
             pl.col("_err").std().alias("sd"),
+            (pl.col("_epv_raw") - pl.col("remaining_points")).mean().alias("bias_without_level"),
         )
         .with_columns((MAX_BUCKET_BIAS + 3 * pl.col("sd") / pl.col("n").sqrt()).alias("allowed"))
     )
@@ -395,9 +404,30 @@ def _buckets(s: pl.DataFrame) -> dict[str, Any]:
         "gated_state_share": float(gated["n"].sum() / s.height),
         "max_bucket_bias": float(gated["bias"].abs().max()),
         "bucket_failures": gated.filter(pl.col("bias").abs() > pl.col("allowed")).height,
-        "worst_bucket": {k: worst[k] for k in (*_BUCKET, "n", "bias", "allowed")},
+        "worst_bucket": {k: worst[k] for k in (*_BUCKET, "n", "bias", "allowed", "bias_without_level")},
         "ungated_max_bias": float(b.filter(pl.col("n") < MIN_BUCKET)["bias"].abs().max() or 0.0),
     }
+
+
+def _game_se(s: pl.DataFrame) -> float:
+    """The standard error of the level bias with games as clusters (a ratio estimator)."""
+    g = s.group_by("game_id").agg(pl.col("_err").sum().alias("e"), pl.len().alias("n"))
+    e, n = g["e"].to_numpy(), g["n"].to_numpy().astype(np.float64)
+    bias = e.sum() / n.sum()
+    return float(np.sqrt(np.sum((e - bias * n) ** 2) / (len(n) * (len(n) - 1))) / n.mean())
+
+
+def _by_month(s: pl.DataFrame, order: pl.DataFrame | None) -> list[dict[str, Any]]:
+    """Level bias by month of the season, with and without the level (college: games are dated)."""
+    if order is None:
+        return []
+    m = s.join(order, on="game_id", how="left").with_columns(pl.col("game_order").dt.strftime("%Y-%m").alias("month"))
+    t = m.group_by("month").agg(
+        pl.col("game_id").n_unique().alias("games"),
+        pl.col("_err").mean().alias("bias"),
+        (pl.col("_epv_raw") - pl.col("remaining_points")).mean().alias("bias_without_level"),
+    )
+    return t.sort("month").to_dicts()
 
 
 def _deciles(s: pl.DataFrame) -> list[dict[str, float]]:
@@ -438,8 +468,10 @@ def metrics(
         "mean_label": float(y.mean()),
         "large_bias": float(p.mean() - y.mean()),
         "large_bias_without_level": float(s["_epv_raw"].mean() - y.mean()),
+        "large_bias_game_se": _game_se(s),
         "calibration_slope": float(np.polyfit(p, y, 1)[0]),
         **_buckets(s),
+        "by_month": _by_month(s, order),
         "deciles": _deciles(s),
     }
 

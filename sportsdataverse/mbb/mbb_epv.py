@@ -426,7 +426,7 @@ def mbb_epv_plays(
         ),
         games,
         team_cols,
-    )
+    ).sort("game_id", "possession_number", "step")
     return _out(out, return_as_pandas)
 
 
@@ -435,7 +435,8 @@ def _ids(frame: pl.DataFrame, games: pl.DataFrame, team_cols: list[str]) -> pl.D
     out = _espn(frame, games, team_cols)
     if "player_id" in out.columns:
         out = out.with_columns(pl.col("player_id").cast(pl.Utf8))
-    return out.filter(pl.col("team_id").is_not_null())
+    keys = ["game_id", "team_id", *[c for c in ("player_id", "lineup_id") if c in out.columns]]
+    return out.filter(pl.col("team_id").is_not_null()).sort(keys)
 
 
 def mbb_epv_player_games(
