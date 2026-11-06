@@ -4,9 +4,8 @@ The helper enriches the pbp dataset **in place**: it appends two columns
 (``pregame_home_prob``, ``home_win_prob``) to the ``load_mbb_pbp`` frame and
 preserves every original column + dtype. ``home_win_prob`` is
 :func:`mbb_in_game_win_prob`'s output unchanged, so the **reproduction gate**
-below (byte parity for a game) transitively guarantees the decile-calibration
-gate already proven on the model in
-``test_mbb_prediction_backtest.test_in_game_wp_decile_calibration``.
+below (byte parity for a game) transitively carries the model's holdout
+gate (``tests/mbb/test_mbb_wp_model_cards.py``) over to the release column.
 """
 
 from __future__ import annotations

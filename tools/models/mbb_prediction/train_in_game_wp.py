@@ -7,9 +7,9 @@ Run (any IP: the ESPN pbp / schedule / team-box releases)::
 
 Defaults, both leagues (train and holdout seasons disjoint): train 2022, 2023, 2025 (2025 is also the
 early-stopping validation season); holdout 2026; confirmation season 2024. 2024 is the pregame-constants
-and ``pbp_sample_2024`` decile-gate season (tests/mbb, tests/wbb ``*_prediction_backtest.py``), so it
-stays out of training and is scored once as a second out-of-sample season. 2021 (the COVID season) is
-not used.
+season (and was the retired ``pbp_sample_2024`` decile gate's), so it stays out of training and is scored
+once as a second out-of-sample season. 2021 (the COVID season) is not used. The holdout gate and the
+model cards are ``wp_model_cards.py`` beside this script.
 
 This is the NBA / WNBA refit's contract (``tools/models/nba_prediction/train_in_game_wp.py``, #1075),
 applied to college: the same features (``_IN_GAME_FEATURES``), monotone constraints, xgboost params,
