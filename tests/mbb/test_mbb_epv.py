@@ -148,6 +148,14 @@ def test_a_steal_opens_the_next_possession(lg: str) -> None:
     assert own["own_actions"].sum() > 0
     # a steal gives the stealer the negative of the turnover it ended: turnovers cost the offense
     assert prev["_pa"].mean() < 0
+    from sportsdataverse.nba.nba_epv import _own_credit
+
+    credit = _own_credit(plays)
+    named = prev.filter(pl.col("person_id").is_not_null()).head(5)
+    assert named.height > 0
+    for gid, pid, pa in named.select("game_id", "person_id", "_pa").iter_rows():
+        mine = credit.filter((pl.col("game_id") == gid) & (pl.col("player_id") == pid))["_credit"].to_list()
+        assert any(abs(c + pa) < 1e-12 for c in mine)  # the stealer's own actions hold -turnover
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
@@ -222,6 +230,18 @@ def test_the_level_scales_every_value() -> None:
     )
     p = _plays(name).sort("game_id", "possession_number", "step")
     assert np.allclose(p["epv"].to_numpy(), raw * lv["level_scale"].to_numpy())
+    # a possession's end gives up the next start over the average start, both at the game's level
+    mean = float(booster.attr("start_epv_mean"))
+    nxt = p.select("game_id", (pl.col("possession_number") - 1).alias("possession_number"), "epv_start").unique()
+    last = (
+        p.filter(pl.col("is_last") & pl.col("next_in_period"))
+        .join(nxt.rename({"epv_start": "_next"}), on=KEY)
+        .join(epv_level(_states(name), booster, order), on="game_id")
+        .filter(pl.col("level_scale") != 1.0)
+    )
+    assert last.height > 0
+    want = mean * last["level_scale"].to_numpy() - last["_next"].to_numpy()
+    assert np.allclose(last["epv_after"].to_numpy(), want)
 
 
 def test_the_level_is_the_shrunk_points_per_possession_of_earlier_dates() -> None:
