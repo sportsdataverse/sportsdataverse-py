@@ -252,8 +252,10 @@ def test_the_public_college_path_ships_the_interval(monkeypatch: pytest.MonkeyPa
 
 
 def test_a_played_row_without_an_athlete_is_dropped_on_both_sides(monkeypatch: pytest.MonkeyPatch) -> None:
-    # every 2013-14 box row of ESPN team 2724 (Wichita State): the release carries one played row
-    # with no athlete (game 400500056, 2 minutes, every stat 0), which failed the 2014 backfill
+    """The 2014 backfill failure, on every 2013-14 box row of ESPN team 2724 (Wichita State).
+
+    The release carries one played row with no athlete (game 400500056, 2 minutes, every stat 0).
+    """
     box, ratings = _bb("mbb_box_slice_2014.parquet"), _bb("mbb_ratings_slice_2014.parquet")
     played = box.filter(pl.col("minutes") > 0)
     assert played.filter(pl.col("athlete_id").is_null()).select("game_id", "minutes").rows() == [(400500056, 2.0)]
