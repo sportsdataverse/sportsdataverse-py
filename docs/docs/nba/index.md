@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 245 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 246 | — |
 
 ## ESPN {#espn}
 
@@ -125,7 +125,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_career_trajectory`](reference/additional/models-and-calculators#nba_career_trajectory)
 - [`nba_darko`](reference/additional/models-and-calculators#nba_darko)
 - [`nba_decay_rapm`](reference/additional/models-and-calculators#nba_decay_rapm)
-- [`nba_draft_model`](reference/additional/models-and-calculators#nba_draft_model)
+- [`nba_draft_model`](reference/additional/models-and-calculators-2#nba_draft_model)
 - [`nba_expected_turnovers`](reference/additional/models-and-calculators-2#nba_expected_turnovers)
 - [`nba_four_factor_rapm`](reference/additional/models-and-calculators-2#nba_four_factor_rapm)
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators-2#nba_in_game_win_prob)
@@ -200,6 +200,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_wowy`](reference/additional/analytics-3#nba_player_wowy)
 - [`nba_playtype_ratings`](reference/additional/analytics-3#nba_playtype_ratings)
 - [`nba_possession_rate_rows`](reference/additional/analytics-3#nba_possession_rate_rows)
+- [`nba_rated_priors`](reference/additional/analytics-3#nba_rated_priors)
 - [`nba_ratings_panel`](reference/additional/analytics-3#nba_ratings_panel)
 - [`nba_raw_store_season_frame`](reference/additional/analytics-3#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-4#nba_referee_assignments)

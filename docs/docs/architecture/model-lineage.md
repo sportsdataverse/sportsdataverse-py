@@ -80,7 +80,9 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/mlb/models/mlb_stuff_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_stuff_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 | `sportsdataverse/mlb/models/mlb_command_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_command_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 
-None of these seven ships a card.
+The NBA and WNBA in-game WP boosters each ship a `.card.json` beside them, built by sdv-py
+`tools/models/nba_prediction/wp_model_cards.py` from the fit report, the holdout scoring and the booster
+(`tests/nba/test_nba_wp_model_cards.py` fails on a stale card). The other five ship none.
 
 ## Fitted constants
 
@@ -134,7 +136,7 @@ Not cited from package source, so outside the test, but still gaps:
   and `wbb_in_game_wp.ubj`.
 - `cfb_cp_model.card.json`, `cfb_cp_model_air_yards.card.json` and
   `fd_model.card.json` carry `training_seasons: null` and `n_training_rows: null`.
-- No NFL, MBB, NBA or MLB booster ships a card.
+- No NFL, MBB or MLB booster ships a card; of the NBA boosters, only the in-game WP pair does (`nba_epv.ubj` ships none).
 - `nfl-data`'s registry lists the NFL QBR fitting script as TODO; the trainer
   named above (`cfb_qbr/qbr_xgb.R`) is the one the 2.7 feature-order fix traced
   the artifact to, not an NFL-trained replacement.

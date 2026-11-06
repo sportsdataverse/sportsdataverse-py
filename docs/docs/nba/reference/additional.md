@@ -194,7 +194,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_career_trajectory](additional/models-and-calculators.md#nba_career_trajectory) | Age-adjust player-season values with the bundled aging curve. |
 | [nba_darko](additional/models-and-calculators.md#nba_darko) | Project each player's next-season rating via a per-player Kalman filter + aging curve. |
 | [nba_decay_rapm](additional/models-and-calculators.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
-| [nba_draft_model](additional/models-and-calculators.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
+| [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
 | [nba_expected_turnovers](additional/models-and-calculators-2.md#nba_expected_turnovers) | Expected TOV + residual ball-security skill from Synergy play-type mix. |
 | [nba_four_factor_rapm](additional/models-and-calculators-2.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
 | [nba_in_game_win_prob](additional/models-and-calculators-2.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
@@ -271,6 +271,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_wowy](additional/analytics-3.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [nba_playtype_ratings](additional/analytics-3.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_possession_rate_rows](additional/analytics-3.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
+| [nba_rated_priors](additional/analytics-3.md#nba_rated_priors) | Rated pregame home win probability for every ESPN game of a season, as of each game's date. |
 | [nba_ratings_panel](additional/analytics-3.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics-3.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics-4.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
