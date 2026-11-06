@@ -1,30 +1,35 @@
 """Four-factor RAPM split (BB-D10): the shared core behind ``{lg}_player_factor_rapm``.
 
 Plain RAPM (:func:`sportsdataverse.nba.nba_rapm.nba_rapm`) regresses each possession's points on
-the ten players on the floor. This module splits those points into Dean Oliver's four factors and
-fits the same ridge to each part, offense and defense, so every player gets eight components:
+the ten players on the floor. This module splits those points into Dean Oliver's four factors plus
+a bookkeeping remainder and fits the same ridge to each part, offense and defense, so every player
+gets ten components:
 
 * ``o_efg_rapm`` / ``d_efg_rapm`` -- shooting: field-goal points over the league's points per
   field-goal attempt ``v`` times the attempts (``2*fg2m + 3*fg3m - v*fga``), the eFG% factor;
 * ``o_tov_rapm`` / ``d_tov_rapm`` -- turnovers: ``-v`` per turnover, a lost shot;
 * ``o_orb_rapm`` / ``d_drb_rapm`` -- offensive rebounding (on defense, defensive rebounding):
   ``+v`` per offensive rebound, an extra shot;
-* ``o_ftr_rapm`` / ``d_ftr_rapm`` -- free throws: the possession's other points (free throws)
-  less ``v`` for each chance that ended in neither a shot nor a turnover
-  (``1 + oreb - tov - fga``), the FT-rate factor (it carries FT% too). It also takes the
-  possession's bookkeeping remainder: an empty possession (a period running out before a shot)
-  costs ``-v`` here, and one with an unrecorded offensive rebound (more shots and turnovers than
-  chances) gains ``+v``: 1.5% of the 2024 and of the 2025 WNBA regular-season possessions.
+* ``o_ftr_rapm`` / ``d_ftr_rapm`` -- free throws, on possessions with a free-throw attempt only: the
+  free-throw points (the points not from field goals) less ``v`` for each chance that ended in
+  neither a shot nor a turnover (``c = 1 + oreb - tov - fga``, at least 0), the FT-rate factor (it
+  carries FT% too);
+* ``o_other_rapm`` / ``d_other_rapm`` -- the rest, so the parts add up: ``-v`` for a chance that
+  ended with no shot, turnover or free throw (a period running out), ``+v`` for a shot or turnover
+  beyond the recorded chances (an unrecorded offensive rebound), and any non-field-goal point on a
+  possession without a free-throw attempt. It is bookkeeping, not a skill; it keeps the free-throw
+  factor clean.
 
 ``v`` is field-goal points per field-goal attempt over the season's possessions: a turnover is
 valued as the shot it lost, not as a possession's worth of points (Oliver's weights would value it
 nearer points per possession). Any ``v`` keeps the identity below; it moves value between factors.
 
-The four parts add up to ``points - v`` on every possession, whatever ``v`` is, and a ridge fit is
-linear in its response: fitting all five responses (points and the four parts) at the one penalty
-picked for points makes ``o_efg + o_tov + o_orb + o_ftr`` equal ``o_rapm`` exactly (and the same on
-defense), up to floating point. That penalty is the best one for points, not for each factor, so a
-noisy factor (opponent shooting, free throws) is shrunk less than its own cross-validation would. ``o_rapm`` / ``d_rapm`` are the plain-RAPM fit of
+The five parts add up to ``points - v`` on every possession (the remainder is what the four factors
+leave), and a ridge fit is linear in its response: fitting all six responses (points and the five
+parts) at the one penalty picked for points makes ``o_efg + o_tov + o_orb + o_ftr + o_other`` equal
+``o_rapm`` (and the same on defense), up to floating point. That penalty is the best one for points,
+not for each factor, so a noisy factor (opponent shooting, free throws) is shrunk less than its own
+cross-validation would. ``o_rapm`` / ``d_rapm`` are the plain-RAPM fit of
 :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` on the same possessions: the penalty is its
 :class:`~sklearn.linear_model.RidgeCV` pick over the same grid.
 
@@ -58,14 +63,14 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 __all__ = ["COUNTS", "FACTORS", "factor_rapm", "factor_rapm_schema", "factor_targets"]
 
 #: The possession counts the split reads (the ``nba_stats_possessions`` columns).
-COUNTS = ("points", "fg2a", "fg2m", "fg3a", "fg3m", "oreb", "tov")
+COUNTS = ("points", "fg2a", "fg2m", "fg3a", "fg3m", "fta", "oreb", "tov")
 #: The cluster key of the standard errors.
 GAME = "game_id"
-#: The four factors, in output order.
-FACTORS = ("efg", "tov", "orb", "ftr")
+#: The four factors and the remainder, in output order.
+FACTORS = ("efg", "tov", "orb", "ftr", "other")
 _SLOTS = [f"{side}_player_{i}" for side in ("off", "def") for i in range(1, 6)]
 #: Factor -> its defensive column (the defensive side of offensive rebounding is defensive rebounding).
-_DEF_NAME = {"efg": "d_efg_rapm", "tov": "d_tov_rapm", "orb": "d_drb_rapm", "ftr": "d_ftr_rapm"}
+_DEF_NAME = {f: f"d_{'drb' if f == 'orb' else f}_rapm" for f in FACTORS}
 _OFF_COLS = ["o_rapm", *[f"o_{f}_rapm" for f in FACTORS]]
 _DEF_COLS = ["d_rapm", *[_DEF_NAME[f] for f in FACTORS]]
 #: Every ranked metric (all higher-is-better) -> its sample size.
@@ -94,26 +99,30 @@ def factor_rapm_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
 
 
 def factor_targets(possessions: pl.DataFrame, pts_per_fga: float) -> pl.DataFrame:
-    """Split each possession's points into the four factor parts.
+    """Split each possession's points into the four factor parts and the remainder.
 
     Args:
         possessions: Rows carrying :data:`COUNTS`.
         pts_per_fga: ``v``, the value of one field-goal attempt (the sample's points per attempt).
 
     Returns:
-        ``points`` and one Float64 column per factor (:data:`FACTORS`), whose sum is
+        ``points`` and one Float64 column per part (:data:`FACTORS`), whose sum is
         ``points - pts_per_fga`` on every row.
     """
     v = pts_per_fga
     fga = pl.col("fg2a") + pl.col("fg3a")
     fg_pts = 2 * pl.col("fg2m") + 3 * pl.col("fg3m")
-    return possessions.select(
+    chances = 1 + pl.col("oreb") - pl.col("tov") - fga  # chances that ended in neither a shot nor a turnover
+    ftr = pl.when(pl.col("fta") > 0).then((pl.col("points") - fg_pts) - v * chances.clip(lower_bound=0)).otherwise(0)
+    parts = possessions.select(
         pl.col("points").cast(pl.Float64),
         (fg_pts - v * fga).cast(pl.Float64).alias("efg"),
         (-v * pl.col("tov")).cast(pl.Float64).alias("tov"),
         (v * pl.col("oreb")).cast(pl.Float64).alias("orb"),
-        ((pl.col("points") - fg_pts) - v * (1 + pl.col("oreb") - pl.col("tov") - fga)).cast(pl.Float64).alias("ftr"),
+        ftr.cast(pl.Float64).alias("ftr"),
     )
+    # the remainder is what the four factors leave of points - v
+    return parts.with_columns((pl.col("points") - v - pl.sum_horizontal(FACTORS[:-1])).alias("other"))
 
 
 def _ridge(X: csr_matrix, Y: np.ndarray, alpha: float, games: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -155,7 +164,7 @@ def _ridge(X: csr_matrix, Y: np.ndarray, alpha: float, games: np.ndarray) -> tup
 
 
 def _fit_season(possessions: pl.DataFrame, alphas: np.ndarray) -> pl.DataFrame | None:
-    """One season's split: totals and the eight components per player, or ``None`` with no possessions."""
+    """One season's split: totals and the ten components per player, or ``None`` with no possessions."""
     poss = possessions.drop_nulls([*_SLOTS, *COUNTS, GAME])
     X, points, player_ids = build_rapm_design(poss)
     if not player_ids:
@@ -200,7 +209,7 @@ def factor_rapm(
     min_poss: int,
     alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
 ) -> pl.DataFrame:
-    """Per player and season: plain RAPM and its four-factor split, offense and defense.
+    """Per player and season: plain RAPM and its four-factor split (and the remainder), offense and defense.
 
     Each season is fit on its own. A possession with a null lineup slot or count is left out.
 
@@ -213,7 +222,7 @@ def factor_rapm(
 
     Returns:
         One row per ``(season, player_id)`` in :func:`factor_rapm_schema`: possessions, ``rapm`` /
-        ``o_rapm`` / ``d_rapm`` and the eight components (per 100 possessions, higher is better),
+        ``o_rapm`` / ``d_rapm`` and the ten components (per 100 possessions, higher is better),
         ``<m>_rank`` / ``<m>_pct`` within the season among players with at least ``min_poss``
         possessions, ``<m>_se`` (clustered by game), ``<m>_n``, and the ``pts_per_fga`` and ``ridge_alpha`` the season was fit
         with. Sorted by season and ``rapm`` (best first). Empty input returns that schema with zero rows.

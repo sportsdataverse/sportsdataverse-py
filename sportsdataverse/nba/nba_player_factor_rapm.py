@@ -2,17 +2,22 @@
 
 Builds :mod:`sportsdataverse._common.factor_rapm` from two stats.nba.com releases:
 ``nba_stats_possessions`` (the ten players on the floor and the possession's points, shots,
-offensive rebounds and turnovers) and ``nba_stats_schedules`` (each game's season type).
+free-throw attempts, offensive rebounds and turnovers) and ``nba_stats_schedules`` (each game's season type).
 ``league_id="10"`` reads the WNBA twins; :mod:`sportsdataverse.wnba.wnba_player_factor_rapm` binds it.
 
 ``o_rapm`` / ``d_rapm`` are :func:`sportsdataverse.nba.nba_rapm.nba_rapm` on the season's
 possessions, the plain RAPM of ``nba.player_impact``. Checked against that release (regular season):
 WNBA 2024 and 2025 equal it to 1e-11 on every player (157 and 181); NBA 2024-25 and 2025-26 correlate
-0.997 (o_rapm) and 0.997 (d_rapm) on all 569 and 582 players, a max difference of 1.3, because the
-possessions release is not the exact frame the RAPM was fit on (off_poss differs by up to 184).
+0.997 (o_rapm) and 0.997 (d_rapm) on all 569 and 582 players, a max difference of 1.31. The cause is
+lineups, not possessions: the possessions release (2026-08-13) predates the ``player_impact`` fit
+(2026-10-12), which ran on a re-compile with the same 243,735 / 245,646 possessions but some on-floor
+lineups changed (players' possessions differ by up to 184, net zero over the season). The live test
+``test_nba_totals_track_the_published_release`` holds both numbers.
 """
 
 from __future__ import annotations
+
+import warnings
 
 import pandas as pd
 import polars as pl
@@ -38,17 +43,22 @@ def nba_factor_rapm_rows(possessions: pl.DataFrame, schedule: pl.DataFrame, seas
 
     Returns:
         ``game_id``, ``season``, ``off_player_1..5``, ``def_player_1..5`` (Int64) and the counts, one row
-        per possession.
+        per possession. Warns (``UserWarning``) when possessions are given but none is in such a game.
     """
     cols = ["season", *_SLOTS, *COUNTS]
     if possessions.height == 0 or schedule.height == 0:
         return pl.DataFrame(schema={"game_id": pl.Utf8(), **{c: pl.Int64() for c in cols}})
     games = schedule.filter(pl.col("season_type") == season_type).select(pl.col("game_id").cast(pl.Utf8)).unique()
-    return (
-        possessions.with_columns(pl.col("game_id").cast(pl.Utf8))
-        .join(games, on="game_id", how="semi")
-        .select("game_id", pl.col(cols).cast(pl.Int64))
-    )
+    poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))
+    assert poss.schema["game_id"] == games.schema["game_id"], "game_id dtypes differ between possessions and schedule"
+    out = poss.join(games, on="game_id", how="semi").select("game_id", pl.col(cols).cast(pl.Int64))
+    if out.height == 0:
+        warnings.warn(
+            f"nba_factor_rapm_rows: none of {poss.height} possessions is in a {season_type!r} game of the schedule",
+            UserWarning,
+            stacklevel=2,
+        )
+    return out
 
 
 def _load(seasons: int | list[int], league_id: str) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -75,8 +85,8 @@ def nba_player_factor_rapm(
     """Player RAPM split into Dean Oliver's four factors, offense and defense, per player-season.
 
     The definitions are in :mod:`sportsdataverse._common.factor_rapm`: ``o_efg_rapm + o_tov_rapm +
-    o_orb_rapm + o_ftr_rapm`` is ``o_rapm`` and ``d_efg_rapm + d_tov_rapm + d_drb_rapm + d_ftr_rapm``
-    is ``d_rapm``, each season fit on its own.
+    o_orb_rapm + o_ftr_rapm + o_other_rapm`` is ``o_rapm`` and the five ``d_*`` components add up to
+    ``d_rapm``, each season fit on its own.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
@@ -89,10 +99,10 @@ def nba_player_factor_rapm(
 
     Returns:
         One row per ``(season, player_id)``: ``off_poss`` / ``def_poss``, ``rapm`` / ``o_rapm`` /
-        ``d_rapm``, the eight components (per 100 possessions, higher is better), ``<m>_rank`` /
-        ``<m>_pct`` within the season among players with at least ``min_poss`` possessions,
-        ``<m>_se`` (clustered by game), ``<m>_n``, and the ``pts_per_fga`` and ``ridge_alpha`` of the fit. Ids are the
-        stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
+        ``d_rapm``, the ten components (the four factors and the remainder, each way; per 100
+        possessions, higher is better), ``<m>_rank`` / ``<m>_pct`` within the season among players
+        with at least ``min_poss`` possessions, ``<m>_se`` (clustered by game), ``<m>_n``, and the
+        ``pts_per_fga`` and ``ridge_alpha`` of the fit. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"`` or ``season_type`` is not one

@@ -103,7 +103,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_situational_player`](reference/additional/analytics-2#wnba_situational_player)
 - [`wnba_situational_team`](reference/additional/analytics-2#wnba_situational_team)
 - [`wnba_team_clutch`](reference/additional/analytics-2#wnba_team_clutch)
-- [`wnba_team_luck`](reference/additional/analytics-2#wnba_team_luck)
+- [`wnba_team_luck`](reference/additional/analytics-3#wnba_team_luck)
 - [`wnba_team_season_flow`](reference/additional/analytics-3#wnba_team_season_flow)
 - [`wnba_team_season_rates`](reference/additional/analytics-3#wnba_team_season_rates)
 - [`wnba_team_strength`](reference/additional/analytics-3#wnba_team_strength)

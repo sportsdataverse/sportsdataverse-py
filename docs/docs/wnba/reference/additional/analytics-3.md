@@ -6,6 +6,53 @@ description: "WNBA — additional Python functions — Analytics: wnba_team–zo
 ---
 # WNBA — additional Python functions — Analytics: wnba_team–zone_value
 
+### wnba_team_luck {#wnba_team_luck}
+
+`wnba_team_luck(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `season_type` | `str` | `'regular-season'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from the final scores; `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (`close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, the calendar year. |
+| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
+| `games` | Int64 | Games in the season type's completed games (the stats schedule's final scores). |
+| `wins` | Int64 | Wins in the season type's completed games (the stats schedule's final scores). |
+| `losses` | Int64 | Losses in the season type's completed games (the stats schedule's final scores). |
+| `pts` | Int64 | Points scored in those games (final scores). |
+| `opp_pts` | Int64 | Points allowed in those games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['wnba'], fitted on past seasons by tools/fit_team_luck_pythag.py. |
+| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
+| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
+| `pbp_games` | Int64 | Games with published possessions (wnba_stats_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
+| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
+| `close_wins` | Int64 | Wins in close games. |
+| `close_losses` | Int64 | Losses in close games. |
+| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
+| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
+| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
+| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
+| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
+| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
+
 ### wnba_team_season_flow {#wnba_team_season_flow}
 
 `wnba_team_season_flow(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

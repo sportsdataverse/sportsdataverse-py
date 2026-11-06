@@ -24,7 +24,7 @@ WNBA four-factor RAPM split (league_id='10'). See sportsdataverse.nba.nba_player
 
 **Returns**
 
-One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / `d_rapm`, the eight components (per 100 possessions, higher is better), `<m>_rank` / `<m>_pct` within the season among players with at least `min_poss` possessions, `<m>_se` (clustered by game), `<m>_n`, and the `pts_per_fga` and `ridge_alpha` of the fit. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
+One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / `d_rapm`, the ten components (the four factors and the remainder, each way; per 100 possessions, higher is better), `<m>_rank` / `<m>_pct` within the season among players with at least `min_poss` possessions, `<m>_se` (clustered by game), `<m>_n`, and the `pts_per_fga` and `ridge_alpha` of the fit. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -33,38 +33,44 @@ One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / 
 | `off_poss` | Int64 | Offensive possessions the player was on the floor for (with all ten lineup slots and counts known). |
 | `def_poss` | Int64 | Defensive possessions the player was on the floor for (with all ten lineup slots and counts known). |
 | `rapm` | Float64 | Plain RAPM per 100 possessions: o_rapm + d_rapm. |
-| `o_rapm` | Float64 | Offensive plain RAPM per 100 possessions (nba_rapm's single-season ridge, shrunk to zero); equals o_efg_rapm + o_tov_rapm + o_orb_rapm + o_ftr_rapm. Equals wnba_player_impact's o_rapm (2024, 2025: to 1e-11). |
-| `d_rapm` | Float64 | Defensive plain RAPM per 100 possessions, sign-flipped so higher is better; equals d_efg_rapm + d_tov_rapm + d_drb_rapm + d_ftr_rapm. Equals wnba_player_impact's d_rapm (2024, 2025: to 1e-11). |
+| `o_rapm` | Float64 | Offensive plain RAPM per 100 possessions (nba_rapm's single-season ridge, shrunk to zero); equals o_efg_rapm + o_tov_rapm + o_orb_rapm + o_ftr_rapm + o_other_rapm. Equals wnba_player_impact's (2024, 2025: to 1e-11). |
+| `d_rapm` | Float64 | Defensive plain RAPM per 100 possessions, sign-flipped so higher is better; equals d_efg_rapm + d_tov_rapm + d_drb_rapm + d_ftr_rapm + d_other_rapm. Equals wnba_player_impact's (2024, 2025: to 1e-11). |
 | `o_efg_rapm` | Float64 | Offensive shooting (eFG) component of o_rapm: the ridge fit to field-goal points less pts_per_fga per attempt, per 100 offensive possessions. |
 | `o_tov_rapm` | Float64 | Offensive turnover component of o_rapm: the ridge fit to -pts_per_fga per turnover, per 100 offensive possessions (positive = fewer turnovers). |
 | `o_orb_rapm` | Float64 | Offensive rebounding component of o_rapm: the ridge fit to +pts_per_fga per offensive rebound, per 100 offensive possessions. |
-| `o_ftr_rapm` | Float64 | Offensive free-throw component of o_rapm: the ridge fit to free-throw points less pts_per_fga per chance ending in neither a shot nor a turnover (FT rate and FT%), per 100 offensive possessions. It also takes the bookkeeping remainder of about 1.5% of possessions (an empty end-of-period possession, an unrecorded offensive rebound). |
+| `o_ftr_rapm` | Float64 | Offensive free-throw component of o_rapm, on possessions with a free-throw attempt: the ridge fit to free-throw points less pts_per_fga per chance that ended in neither a shot nor a turnover (FT rate and FT%), per 100 offensive possessions. |
+| `o_other_rapm` | Float64 | Offensive remainder of o_rapm (bookkeeping, not a skill): the ridge fit to what the four factors leave of points - pts_per_fga, i.e. -pts_per_fga per chance with no shot, turnover or free throw (a period running out) and +pts_per_fga per shot or turnover beyond the recorded chances (an unrecorded offensive rebound); non-zero on about 1% of possessions. |
 | `d_efg_rapm` | Float64 | Defensive shooting (opponent eFG) component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive = the opponent shoots worse. |
 | `d_tov_rapm` | Float64 | Defensive turnover component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive = forces more turnovers. |
 | `d_drb_rapm` | Float64 | Defensive rebounding component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive = fewer opponent offensive rebounds. |
-| `d_ftr_rapm` | Float64 | Defensive free-throw component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive = fewer opponent free-throw points (and the same bookkeeping remainder as o_ftr_rapm). |
-| `rapm_rank` | Float64 | Rank of rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `rapm_pct` | Float64 | Percentile of rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `o_rapm_rank` | Float64 | Rank of o_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `o_rapm_pct` | Float64 | Percentile of o_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `d_rapm_rank` | Float64 | Rank of d_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `d_rapm_pct` | Float64 | Percentile of d_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `o_efg_rapm_rank` | Float64 | Rank of o_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `o_efg_rapm_pct` | Float64 | Percentile of o_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `o_tov_rapm_rank` | Float64 | Rank of o_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `o_tov_rapm_pct` | Float64 | Percentile of o_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `o_orb_rapm_rank` | Float64 | Rank of o_orb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `o_orb_rapm_pct` | Float64 | Percentile of o_orb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `o_ftr_rapm_rank` | Float64 | Rank of o_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `o_ftr_rapm_pct` | Float64 | Percentile of o_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `d_efg_rapm_rank` | Float64 | Rank of d_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `d_efg_rapm_pct` | Float64 | Percentile of d_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `d_tov_rapm_rank` | Float64 | Rank of d_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `d_tov_rapm_pct` | Float64 | Percentile of d_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `d_drb_rapm_rank` | Float64 | Rank of d_drb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `d_drb_rapm_pct` | Float64 | Percentile of d_drb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
-| `d_ftr_rapm_rank` | Float64 | Rank of d_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. |
-| `d_ftr_rapm_pct` | Float64 | Percentile of d_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `d_ftr_rapm` | Float64 | Defensive free-throw component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive = fewer opponent free-throw points. |
+| `d_other_rapm` | Float64 | Defensive remainder of d_rapm (bookkeeping, not a skill), per 100 possessions, sign-flipped so higher is better: the opponent's o_other part. |
+| `rapm_rank` | Float64 | Rank of rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) rapm repeats at Spearman 0.374, so single-season ranks are noisy. |
+| `rapm_pct` | Float64 | Percentile of rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) rapm repeats at Spearman 0.374, so single-season ranks are noisy. |
+| `o_rapm_rank` | Float64 | Rank of o_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_rapm repeats at Spearman 0.352, so single-season ranks are noisy. |
+| `o_rapm_pct` | Float64 | Percentile of o_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_rapm repeats at Spearman 0.352, so single-season ranks are noisy. |
+| `d_rapm_rank` | Float64 | Rank of d_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_rapm repeats at Spearman 0.163, so single-season ranks are noisy. |
+| `d_rapm_pct` | Float64 | Percentile of d_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_rapm repeats at Spearman 0.163, so single-season ranks are noisy. |
+| `o_efg_rapm_rank` | Float64 | Rank of o_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_efg_rapm repeats at Spearman 0.304, so single-season ranks are noisy. |
+| `o_efg_rapm_pct` | Float64 | Percentile of o_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_efg_rapm repeats at Spearman 0.304, so single-season ranks are noisy. |
+| `o_tov_rapm_rank` | Float64 | Rank of o_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_tov_rapm repeats at Spearman 0.357, so single-season ranks are noisy. |
+| `o_tov_rapm_pct` | Float64 | Percentile of o_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_tov_rapm repeats at Spearman 0.357, so single-season ranks are noisy. |
+| `o_orb_rapm_rank` | Float64 | Rank of o_orb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_orb_rapm repeats at Spearman 0.307, so single-season ranks are noisy. |
+| `o_orb_rapm_pct` | Float64 | Percentile of o_orb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_orb_rapm repeats at Spearman 0.307, so single-season ranks are noisy. |
+| `o_ftr_rapm_rank` | Float64 | Rank of o_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_ftr_rapm repeats at Spearman 0.391, so single-season ranks are noisy. |
+| `o_ftr_rapm_pct` | Float64 | Percentile of o_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_ftr_rapm repeats at Spearman 0.391, so single-season ranks are noisy. |
+| `o_other_rapm_rank` | Float64 | Rank of o_other_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_other_rapm repeats at Spearman 0.157, so single-season ranks are noisy. |
+| `o_other_rapm_pct` | Float64 | Percentile of o_other_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) o_other_rapm repeats at Spearman 0.157, so single-season ranks are noisy. |
+| `d_efg_rapm_rank` | Float64 | Rank of d_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_efg_rapm repeats at Spearman 0.128, so single-season ranks are noisy. |
+| `d_efg_rapm_pct` | Float64 | Percentile of d_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_efg_rapm repeats at Spearman 0.128, so single-season ranks are noisy. |
+| `d_tov_rapm_rank` | Float64 | Rank of d_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_tov_rapm repeats at Spearman 0.337, so single-season ranks are noisy. |
+| `d_tov_rapm_pct` | Float64 | Percentile of d_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_tov_rapm repeats at Spearman 0.337, so single-season ranks are noisy. |
+| `d_drb_rapm_rank` | Float64 | Rank of d_drb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_drb_rapm repeats at Spearman 0.128, so single-season ranks are noisy. |
+| `d_drb_rapm_pct` | Float64 | Percentile of d_drb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_drb_rapm repeats at Spearman 0.128, so single-season ranks are noisy. |
+| `d_ftr_rapm_rank` | Float64 | Rank of d_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_ftr_rapm repeats at Spearman 0.306, so single-season ranks are noisy. |
+| `d_ftr_rapm_pct` | Float64 | Percentile of d_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_ftr_rapm repeats at Spearman 0.306, so single-season ranks are noisy. |
+| `d_other_rapm_rank` | Float64 | Rank of d_other_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (off_poss + def_poss, default 200); null below 10 qualifiers. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_other_rapm repeats at Spearman 0.343, so single-season ranks are noisy. |
+| `d_other_rapm_pct` | Float64 | Percentile of d_other_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. Year over year (2024 to 2025, 92 players over 1,000 possessions) d_other_rapm repeats at Spearman 0.343, so single-season ranks are noisy. |
 | `rapm_se` | Float64 | Standard error of rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `o_rapm_se` | Float64 | Standard error of o_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `d_rapm_se` | Float64 | Standard error of d_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
@@ -72,10 +78,12 @@ One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / 
 | `o_tov_rapm_se` | Float64 | Standard error of o_tov_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `o_orb_rapm_se` | Float64 | Standard error of o_orb_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `o_ftr_rapm_se` | Float64 | Standard error of o_ftr_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
+| `o_other_rapm_se` | Float64 | Standard error of o_other_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `d_efg_rapm_se` | Float64 | Standard error of d_efg_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `d_tov_rapm_se` | Float64 | Standard error of d_tov_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `d_drb_rapm_se` | Float64 | Standard error of d_drb_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `d_ftr_rapm_se` | Float64 | Standard error of d_ftr_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
+| `d_other_rapm_se` | Float64 | Standard error of d_other_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not the shrinkage bias. |
 | `rapm_n` | Int64 | Sample size of rapm: off_poss + def_poss. |
 | `o_rapm_n` | Int64 | Sample size of o_rapm: off_poss. |
 | `d_rapm_n` | Int64 | Sample size of d_rapm: def_poss. |
@@ -83,10 +91,12 @@ One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / 
 | `o_tov_rapm_n` | Int64 | Sample size of o_tov_rapm: off_poss. |
 | `o_orb_rapm_n` | Int64 | Sample size of o_orb_rapm: off_poss. |
 | `o_ftr_rapm_n` | Int64 | Sample size of o_ftr_rapm: off_poss. |
+| `o_other_rapm_n` | Int64 | Sample size of o_other_rapm: off_poss. |
 | `d_efg_rapm_n` | Int64 | Sample size of d_efg_rapm: def_poss. |
 | `d_tov_rapm_n` | Int64 | Sample size of d_tov_rapm: def_poss. |
 | `d_drb_rapm_n` | Int64 | Sample size of d_drb_rapm: def_poss. |
 | `d_ftr_rapm_n` | Int64 | Sample size of d_ftr_rapm: def_poss. |
+| `d_other_rapm_n` | Int64 | Sample size of d_other_rapm: def_poss. |
 | `pts_per_fga` | Float64 | The season's points per field-goal attempt, the value of one shot used in the split (pts_per_fga per turnover, offensive rebound and free-throw chance). |
 | `ridge_alpha` | Float64 | The ridge penalty of the season's fit: RidgeCV's leave-one-out pick for points over the nba_rapm grid, shared by every component so they add up. |
 
@@ -686,50 +696,3 @@ WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_
 One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-### wnba_team_luck {#wnba_team_luck}
-
-`wnba_team_luck(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from the final scores; `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (`close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, the calendar year. |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `games` | Int64 | Games in the season type's completed games (the stats schedule's final scores). |
-| `wins` | Int64 | Wins in the season type's completed games (the stats schedule's final scores). |
-| `losses` | Int64 | Losses in the season type's completed games (the stats schedule's final scores). |
-| `pts` | Int64 | Points scored in those games (final scores). |
-| `opp_pts` | Int64 | Points allowed in those games (final scores). |
-| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
-| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['wnba'], fitted on past seasons by tools/fit_team_luck_pythag.py. |
-| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
-| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
-| `pbp_games` | Int64 | Games with published possessions (wnba_stats_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
-| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
-| `close_wins` | Int64 | Wins in close games. |
-| `close_losses` | Int64 | Losses in close games. |
-| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
-| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
-| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
-| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
-| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
