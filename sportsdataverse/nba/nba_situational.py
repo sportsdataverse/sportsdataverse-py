@@ -34,7 +34,7 @@ from sportsdataverse._common.situational_splits import (
     situational_team,
 )
 from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings
-from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+from sportsdataverse.nba.nba_possession_flags import POSSESSION_FLAGS_SCHEMA, add_possession_flags
 from sportsdataverse.nba.nba_team_season_rates import _check_args, _regulation_periods, nba_possession_rate_rows
 
 if TYPE_CHECKING:
@@ -102,7 +102,8 @@ def nba_situation_rows(
     events = (
         pbp.select(_PBP_COLUMNS).with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")
     )
-    flagged = add_possession_flags(poss, events)
+    # a release that already carries BB-D7's flags is re-flagged: this version's window, never a clash
+    flagged = add_possession_flags(poss.drop(*POSSESSION_FLAGS_SCHEMA, strict=False), events)
     extras = flagged.select(
         *_KEY,
         _regulation_periods().alias("reg_periods"),

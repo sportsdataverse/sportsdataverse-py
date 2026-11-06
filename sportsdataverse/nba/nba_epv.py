@@ -13,7 +13,7 @@ possession leaks in):
   It is the margin at the start, not the garbage-time trigger: a possession can trigger garbage
   time on its own basket (see :mod:`sportsdataverse.nba.nba_possession_flags`).
 * ``transition`` -- 0 half court, 1 the transition window is open (a live-ball start that is not
-  its period's first, no shot and no dead ball yet, within :data:`TRANSITION_SECONDS` of the
+  its period's first, no shot and no dead ball yet, within :data:`EPV_TRANSITION_SECONDS` of the
   change of possession), 2 a transition possession whose first shot has been taken (the
   possession's ``is_transition`` flag, known once that shot happens).
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
@@ -67,7 +67,7 @@ from typing import TYPE_CHECKING, Final
 import polars as pl
 
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
-from sportsdataverse.nba.nba_possession_flags import TRANSITION_SECONDS, TRANSITION_START_TYPES, add_possession_flags
+from sportsdataverse.nba.nba_possession_flags import TRANSITION_START_TYPES, add_possession_flags
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -134,6 +134,11 @@ _LEAGUES: Final[dict[str, tuple[str, str]]] = {
 _RIM_FEET: Final[int] = 4
 _SHORT_FEET: Final[int] = 14
 _SHOTS: Final[tuple[str, ...]] = ("made_shot", "missed_shot")
+#: The ``transition`` state's window: 10 seconds, the one the bundled boosters were fitted on. It is
+#: pinned here, not read from BB-D7's :data:`~sportsdataverse.nba.nba_possession_flags.TRANSITION_SECONDS`
+#: (8), so the published possessions' window can change without silently shifting every booster's input.
+#: Refit the boosters (``tools/models/nba_epv/train_epv.py``) before changing it.
+EPV_TRANSITION_SECONDS: Final[float] = 10.0
 #: Events that close a free-throw trip. Not a rebound: the dead-ball team rebound filed after a missed
 #: first free throw leaves the rest of the trip to come (nor substitutions, timeouts or replays).
 _LIVE: Final[tuple[str, ...]] = ("made_shot", "missed_shot", "turnover", "jump_ball", "violation", "foul")
@@ -193,7 +198,9 @@ def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFr
     unknown = possessions.filter(~pl.col("possession_start_type").is_in(START_TYPES))["possession_start_type"]
     if unknown.len():
         raise ValueError(f"unknown possession_start_type {sorted(unknown.unique().to_list(), key=str)}")
-    flags = add_possession_flags(possessions.select(_POSS_COLS), pbp.select(_PBP_COLS))
+    flags = add_possession_flags(
+        possessions.select(_POSS_COLS), pbp.select(_PBP_COLS), transition_seconds=EPV_TRANSITION_SECONDS
+    )
     return (
         flags.with_columns(pl.col("game_id").cast(pl.Utf8))
         .sort(_KEY)
@@ -313,7 +320,7 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
             pl.col("_live_start")
             & ~seen
             & ~stopped
-            & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= TRANSITION_SECONDS)
+            & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= EPV_TRANSITION_SECONDS)
         )
         .then(1)
         .otherwise(0)

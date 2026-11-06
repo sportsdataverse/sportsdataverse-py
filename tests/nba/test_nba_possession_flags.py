@@ -20,6 +20,7 @@ import pytest
 
 from sportsdataverse.nba.nba_possession_flags import (
     POSSESSION_FLAGS_SCHEMA,
+    TRANSITION_SECONDS,
     TRANSITION_START_TYPES,
     _running_score,
     add_possession_flags,
@@ -29,13 +30,14 @@ FIX = pathlib.Path(__file__).resolve().parents[1] / "fixtures"
 D = FIX / "bb_possession_flags"
 LINEUP = [f"{x}_player_{i}" for x in ("off", "def") for i in range(1, 6)]
 
-#: Observed on the committed captures (2026-11-04): rows, games, transition possessions,
-#: garbage-time possessions, games with any garbage time.
+#: Observed on the committed captures (2026-11-06, the 8-second window; 60,782 / 10,357 / 798 / 51
+#: transition possessions at 10 s): rows, games, transition possessions, garbage-time possessions,
+#: games with any garbage time.
 OBSERVED = {
-    "nba_2024": (242_618, 1_230, 60_782, 8_542, 398),
-    "wnba_2025": (48_401, 310, 10_357, 1_357, 92),
-    "wnba_2002": (4_405, 30, 798, 159, 15),
-    "nba_2021_0022000983": (206, 1, 51, 2, 1),
+    "nba_2024": (242_618, 1_230, 45_615, 8_542, 398),
+    "wnba_2025": (48_401, 310, 7_665, 1_357, 92),
+    "wnba_2002": (4_405, 30, 611, 159, 15),
+    "nba_2021_0022000983": (206, 1, 41, 2, 1),
 }
 
 
@@ -160,17 +162,17 @@ def test_row_order_does_not_change_the_flags() -> None:
 
 
 def test_transition_definition_holds_row_by_row(season: tuple[str, pl.DataFrame, pl.DataFrame, pl.DataFrame]) -> None:
-    """Transition = a live start, not the period's first possession, first FGA within 10 s."""
+    """Transition = a live start, not the period's first possession, first FGA within the window."""
     _, _, _, out = season
     trans = out.filter(pl.col("is_transition") == True)  # noqa: E712
     assert trans["possession_start_type"].is_in(TRANSITION_START_TYPES).all()
     assert (trans["number_in_period"] > 1).all()
-    assert (trans["seconds_to_first_shot"] <= 10.0).all()
+    assert (trans["seconds_to_first_shot"] <= TRANSITION_SECONDS).all()
     assert out["seconds_to_first_shot"].min() >= 0
     missed = out.filter(
         pl.col("possession_start_type").is_in(TRANSITION_START_TYPES)
         & (pl.col("number_in_period") > 1)
-        & (pl.col("seconds_to_first_shot") <= 10.0)
+        & (pl.col("seconds_to_first_shot") <= TRANSITION_SECONDS)
         & (pl.col("is_transition") == False)  # noqa: E712
     )
     assert missed.is_empty()
@@ -196,11 +198,17 @@ def test_seconds_to_first_shot_counts_from_the_change_of_possession() -> None:
 def test_transition_tracks_synergy_2024() -> None:
     """Team transition possessions per game track Synergy's ``Transition`` play type for 2023-24.
 
-    Observed: Pearson r 0.844 and Spearman 0.788 over the 30 teams; 24.6 a game against
-    Synergy's 19.1 (ratio 1.29). The level differs because Synergy tags a possession by how it
-    was finished (a transition possession that ends in a putback or a later half-court set is
-    not ``Transition``), while this flag tags every live start whose first shot comes inside 10
-    seconds. The gate is the team ordering, with the ratio bounded.
+    Observed at the 8-second window: Pearson r 0.892 and Spearman 0.860 over the 30 teams; 18.4
+    a game against Synergy's 19.1 (ratio 0.97). At 10 s it was r 0.844, Spearman 0.788 and 24.6
+    a game (ratio 1.29), which is why the window is 8 (``TRANSITION_SECONDS``). The level still
+    differs a little because Synergy tags a possession by how it was finished (a transition
+    possession that ends in a putback or a later half-court set is not ``Transition``), while
+    this flag tags every live start whose first shot comes inside the window. The gate is the
+    team ordering, with the ratio bounded.
+
+    2023-24 is one of the seasons the window was chosen on (``tools/models/nba_transition_window.csv``
+    holds all eleven), so this pins the choice rather than validating it. The ratio band is what
+    separates 8 s from 6 s (r 0.909, Spearman 0.892, but a ratio of 0.65).
     """
     poss, pbp = _load("nba_2024")
     out = add_possession_flags(poss, pbp)
@@ -217,9 +225,9 @@ def test_transition_tracks_synergy_2024() -> None:
     assert team.schema["offense_team_id"] == syn.schema["offense_team_id"]
     m = team.join(syn, on="offense_team_id", how="inner")
     assert m.height == 30
-    assert m.select(pl.corr("tr_pg", "syn_pg")).item() >= 0.84
-    assert m.select(pl.corr("tr_pg", "syn_pg", method="spearman")).item() >= 0.78
-    assert 1.25 <= m["tr_pg"].mean() / m["syn_pg"].mean() <= 1.33
+    assert m.select(pl.corr("tr_pg", "syn_pg")).item() >= 0.89
+    assert m.select(pl.corr("tr_pg", "syn_pg", method="spearman")).item() >= 0.85
+    assert 0.93 <= m["tr_pg"].mean() / m["syn_pg"].mean() <= 1.00
 
 
 def test_running_score_survives_the_old_zero_filled_feed() -> None:

@@ -35,6 +35,9 @@ LEAGUE = {"nba": "00"}
 HOLDOUT = 2025
 KEY = ["game_id", "possession_number"]
 SLOTS = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
+#: The transition window the bundled boosters were fitted on (10 s; BB-D7's published flag moved to
+#: ``TRANSITION_SECONDS`` = 8 s without a refit, so the EPV state must keep this one).
+BOOSTER_WINDOW = 10.0
 
 
 @lru_cache(maxsize=2)
@@ -115,10 +118,14 @@ def test_start_margin_is_the_lead_before_the_first_event(lg: str) -> None:
 
 @pytest.mark.parametrize("lg", list(LEAGUE))
 def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
-    """``transition`` 2 only once the first shot is taken; 1 only before it, on a live start, inside the window."""
+    """``transition`` 2 only once the first shot is taken; 1 only before it, on a live start, inside the window.
+
+    The window is the boosters' 10 s, not the published flag's :data:`TRANSITION_SECONDS`.
+    """
+    assert TRANSITION_SECONDS != BOOSTER_WINDOW  # else this test cannot tell the two apart
     poss, pbp = _raw(lg)
     flags = (
-        add_possession_flags(poss, pbp)
+        add_possession_flags(poss, pbp, transition_seconds=BOOSTER_WINDOW)
         .sort(KEY)
         .select(
             *KEY,
@@ -145,11 +152,11 @@ def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     assert window.height > 0
     assert window["possession_start_type"].is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"]).all()
     assert (window["number_in_period"] > 1).all()
-    assert ((window["_ball_clock"] - window["seconds_remaining"]) <= TRANSITION_SECONDS).all()
+    assert ((window["_ball_clock"] - window["seconds_remaining"]) <= BOOSTER_WINDOW).all()
     shut = before.filter(
         pl.col("possession_start_type").is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"])
         & (pl.col("number_in_period") > 1)
-        & ((pl.col("_ball_clock") - pl.col("seconds_remaining")) > TRANSITION_SECONDS)
+        & ((pl.col("_ball_clock") - pl.col("seconds_remaining")) > BOOSTER_WINDOW)
     )
     assert shut.height > 0 and (shut["transition"] == 0).all()  # the window closes after 10 s
 
