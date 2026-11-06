@@ -365,6 +365,7 @@ from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F4
 from sportsdataverse.nba import nba_play_style_features as nba_play_style_features  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_player_factor_rapm as nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: F401
 from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
@@ -811,6 +812,7 @@ __all__ = [
     "nba_play_style_features",
     "nba_player_ages",
     "nba_player_crosswalk",
+    "nba_player_factor_rapm",
     "nba_player_identity",
     "nba_player_on_off",
     "nba_player_play_styles",
