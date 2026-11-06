@@ -505,7 +505,7 @@ One row per `(season, team_id)`: `games`, `wins`, `losses`, `pts`, `opp_pts`, `w
 | `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
 | `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
 | `pbp_games` | Int64 | Games with published possessions (ncaa_wbb_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
-| `close_games` | Int64 | Close games: at least one possession in play with 5:00 or less left (starting there, or live at the 5:00 mark) in the 4th quarter (the 2nd half before 2015-16) or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1215 of 1229 games. |
+| `close_games` | Int64 | Close games: at least one possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half before 2015-16) or an overtime, the score within 5 as that possession starts (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1215 of 1229 games. |
 | `close_wins` | Int64 | Wins in close games. |
 | `close_losses` | Int64 | Losses in close games. |
 | `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
@@ -637,7 +637,7 @@ One row per `(season, team_id, split)`: `games`, `poss`, `opp_poss`, `pts`, `opp
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or the one live at the 5:00 mark) in the 4th quarter (the 2nd half before 2016) or an overtime, the score within 5 as it starts). |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half before 2016) or an overtime, the score within 5 as it starts). |
 | `games` | Int64 | Games with at least one possession in the split. |
 | `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
 | `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
