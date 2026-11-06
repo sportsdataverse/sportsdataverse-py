@@ -29,7 +29,10 @@ also gives each season's bias without it, by month and per state bucket.
 gate 2, not a clean confirmation: it passes with the level (-0.008) and fails without it (-0.031).
 2027 (2026-27) is the pre-registered confirmation of the level: when it completes, add it as a
 ``monitor`` season and gate it with these thresholds, unchanged. The women's booster passes gate 2
-on both seasons without the level too (the level moves its bias from -0.005 to -0.009).
+on both seasons without the level too (the level moves its bias from -0.005 to -0.009). For the
+WNBA too the level came after its 2026 gate-2 failure had been seen (then with games in ``game_id``
+order); the owner ruled on 2026-11-06 that 2026 stands as its confirmation, with the date ordering
+and the gate-2 rule fixed before the refit, and 2027 as the pre-registered monitor.
 
 Seasons (named by the year they end; train, holdout, confirmation and monitor disjoint):
 
@@ -119,6 +122,15 @@ LEAGUES: dict[str, dict[str, Any]] = {
         # possession over these seasons (2011-2025, through the holdout; never the confirmation)
         "gate2_drift": list(range(2010, 2026)),
         "card": "wnba_epv.card.json",
+        "card_notes": [
+            "2026 stands as the confirmation season by the owner's ruling of 2026-11-06. The level was first "
+            "introduced after the WNBA's 2026 gate-2 failure (with games in game_id order); the date ordering "
+            "and the gate-2 rule were fixed before this refit. 2027 is the pre-registered monitor season: gate "
+            "it with these thresholds, unchanged, when it completes.",
+            "Playoff games are scored with the regular-season booster and level but are not gated (the fit and "
+            "gates use regular-season games only).",
+            "The player, lineup and team tables are accounting sums of EPV added (like +/-), with no interval.",
+        ],
     },
     "mbb": {
         "lg": "mbb",
@@ -207,6 +219,7 @@ _FIXTURE_PBP = [
     "shot_distance", "shot_value", "team_id", "person_id", "location", "score_home", "score_away",
     *[f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)],
 ]  # fmt: skip
+_FIXTURE_SCHEDULE = ["game_id", "season", "season_type", "game_date"]
 _FIXTURE_POSS = [
     "game_id", "period", "possession_number", "number_in_period", "start_order_index", "end_order_index",
     "start_seconds_remaining", "end_seconds_remaining", "possession_start_type", "offense_team_id",
@@ -306,15 +319,20 @@ def max_large_bias(cfg: dict[str, Any], league_id: str, data_root: Path | None) 
     }
 
 
-def _wnba_order(season: int, data_root: Path | None) -> pl.DataFrame:
-    """The WNBA games' dates (``wnba_stats_schedules``), for the level: same-day games never see each other."""
-    from sportsdataverse.wnba.wnba_epv import _game_order
-
+def _wnba_schedule(season: int, data_root: Path | None) -> pl.DataFrame:
+    """The season's ``wnba_stats_schedules`` release (``wnba_schedule_<season>``: one row per game)."""
     if data_root is not None:
-        return _game_order(_local(data_root, "wnba", "schedules", "stats_schedule", season))
+        return _local(data_root, "wnba", "schedules", "schedule", season)
     from sportsdataverse.wnba.wnba_loaders import load_wnba_stats_schedules
 
-    return _game_order(load_wnba_stats_schedules([season]))
+    return load_wnba_stats_schedules([season])
+
+
+def _wnba_order(season: int, data_root: Path | None) -> pl.DataFrame:
+    """The WNBA games' dates, for the level: same-day games never see each other."""
+    from sportsdataverse.wnba.wnba_epv import _game_order
+
+    return _game_order(_wnba_schedule(season, data_root))
 
 
 def load_inputs(
@@ -604,7 +622,8 @@ def write_fixture(
     tens: pl.DataFrame,
     order: pl.DataFrame | None = None,
 ) -> None:
-    """The first ``fixture_games`` holdout games (by ``game_id``) for the offline tests (and their dates)."""
+    """The first ``fixture_games`` holdout games (by ``game_id``) for the offline tests (and, ``order``, their
+    schedule release rows)."""
     lg, n = LEAGUES[league_id]["lg"], LEAGUES[league_id]["fixture_games"]
     games = poss.select(pl.col("game_id").cast(pl.Utf8)).unique().sort("game_id").head(n)
     FIXTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -618,7 +637,8 @@ def write_fixture(
         ("pbp", pbp, pbp_cols),
         ("possessions", poss, _FIXTURE_POSS),
         ("game_lineups", tens, tens_cols),
-        *((("schedule", order, ["game_id", "game_order"]),) if order is not None else ()),
+        # the schedule's release rows, as the loader returns them (the test parses their game_date)
+        *((("schedule", order, [c for c in _FIXTURE_SCHEDULE if c in order.columns]),) if order is not None else ()),
     ):
         out = frame.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi").select(cols)
         out.write_parquet(
@@ -713,14 +733,30 @@ def epv_card(cfg: dict[str, Any], report: dict[str, Any], booster_path: Path) ->
         "seasons": seasons,
         "failed_gates": report["failed_gates"],
         "accepted_bucket_exceptions": report.get("accepted_bucket_exceptions", []),
-        "caveats": [
-            "Accepted exception, not a pass: one gate-3 state bucket on the 2026 confirmation is over its "
-            "threshold and was accepted by the owner (accepted_bucket_exceptions); the threshold is unchanged.",
-            "Gate 2's threshold is the league's own: 0.01 plus the SD of its year-over-year points per possession "
-            "(gates.max_large_bias_rule).",
-            "The scoring level reads each game's date from wnba_stats_schedules; a season starts at the training level.",
-        ],
+        "caveats": _card_caveats(cfg, report),
     }
+
+
+def _card_caveats(cfg: dict[str, Any], report: dict[str, Any]) -> list[str]:
+    """The card's caveats, each only where it applies (the report's numbers, the config's rulings)."""
+    out = []
+    for e in report.get("accepted_bucket_exceptions", []):
+        o = e["observed"]
+        out.append(
+            f"Accepted exception, not a pass: on {e['season']} the gate-3 bucket last_event {o['last_event']} x "
+            f"transition {o['transition']} (n {o['n']}) is {o['bias']:+.3f} against {o['allowed']:.3f} allowed; "
+            f"accepted by the {e['by']} on {e['accepted']}. The threshold is unchanged."
+        )
+    rule = report["gates"]["max_large_bias_rule"]
+    if "drift_sd" in rule:
+        worst = max(abs(m["large_bias"]) for m in report["seasons"].values())
+        out.append(
+            f"Gate 2's threshold is the league's own, {rule['max_large_bias']:.4f} (0.01 plus the SD of its "
+            f"year-over-year points per possession, {rule['drift_seasons'][0]}-{rule['drift_seasons'][1]}); the "
+            f"booster's largest level bias, {worst:.4f}, is inside the NBA-derived {MAX_LARGE_BIAS} too."
+        )
+    out.extend(cfg.get("card_notes", []))
+    return out
 
 
 def write_card(cfg: dict[str, Any], report: dict[str, Any]) -> None:
@@ -808,7 +844,8 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     else:
         pbp, poss, _, hold_order, _ = raw[cfg["holdout"]]
         tens = load_lineups(league_id, cfg["holdout"], data_root)
-        write_fixture(league_id, cfg["holdout"], pbp, poss, tens, hold_order)
+        schedule = _wnba_schedule(cfg["holdout"], data_root) if hold_order is not None else None
+        write_fixture(league_id, cfg["holdout"], pbp, poss, tens, schedule)
     return report
 
 

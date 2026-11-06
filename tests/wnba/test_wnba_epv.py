@@ -55,9 +55,14 @@ def _states() -> pl.DataFrame:
     return epv_states(_f("possessions"), _f("pbp"))
 
 
+def _order() -> pl.DataFrame:
+    """The games' dates, parsed from the schedule release's own rows."""
+    return wnba_epv._game_order(_f("schedule"))
+
+
 @lru_cache(maxsize=1)
 def _plays() -> pl.DataFrame:
-    return add_epv(_states(), league_id="10", game_order=_f("schedule"))
+    return add_epv(_states(), league_id="10", game_order=_order())
 
 
 def test_labels_sum_to_the_engine_points() -> None:
@@ -86,7 +91,8 @@ def test_epv_added_telescopes_and_teams_reconcile() -> None:
 def test_the_level_reads_the_schedule_dates() -> None:
     """Same-day games share a level and never see each other; the first date is the training level."""
     booster = load_epv_model("10")
-    order = _f("schedule")
+    order = _order()
+    assert order.height == _f("schedule").height and order.schema["game_order"] == pl.Date
     lv = epv_level(_states(), booster, order).join(order, on="game_id")
     by_day = lv.group_by("game_order").agg(pl.col("level_scale").n_unique())
     assert (by_day["level_scale"] == 1).all()
@@ -110,7 +116,7 @@ def test_the_level_scales_every_value() -> None:
     s = _states().filter(pl.col("step") > 0).sort("game_id", "possession_number", "step")
     raw = booster.inplace_predict(s.select(pl.col(EPV_FEATURES).cast(pl.Float64)).to_numpy())
     lv = s.select("game_id").join(
-        epv_level(_states(), booster, _f("schedule")), on="game_id", how="left", maintain_order="left"
+        epv_level(_states(), booster, _order()), on="game_id", how="left", maintain_order="left"
     )
     p = _plays().sort("game_id", "possession_number", "step")
     assert np.allclose(p["epv"].to_numpy(), raw * lv["level_scale"].to_numpy())
@@ -166,6 +172,8 @@ def test_the_accepted_bucket_is_excused_and_no_other() -> None:
     assert T.gate("c", other, thr, 2026, exc)  # a second failing bucket fails the run
     moved = {**m, "failing_buckets": [{**m["failing_buckets"][0], "bias": 0.13}]}
     assert T.gate("c", moved, thr, 2026, exc)  # the accepted bucket getting worse fails the run
+    regrown = {**m, "failing_buckets": [{**m["failing_buckets"][0], "n": 1040}]}
+    assert T.gate("c", regrown, thr, 2026, exc)  # a different sample of that bucket is not the one accepted
     assert r["failed_gates"] == []
     assert [e["observed"]["n"] for e in r["accepted_bucket_exceptions"]] == [1041]
 
@@ -191,8 +199,6 @@ def test_public_functions_read_the_season_and_its_dates(monkeypatch: pytest.Monk
     def fake(which: str):  # type: ignore[no-untyped-def]
         def f(seasons: list[int]) -> pl.DataFrame:
             seen[which] = list(seasons)
-            if which == "schedule":
-                return _f("schedule").with_columns(pl.col("game_order").cast(pl.Utf8).alias("game_date"))
             return _f(which)
 
         return f

@@ -496,7 +496,7 @@ Per WNBA five-woman unit and game: the EPV added with the unit on the floor.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a season is before the first one served. |
+| `ValueError` | If a season is before the first one served, or a game has no date in the schedule release (a schedule that lags the play-by-play fails the season loudly). |
 
 **Example**
 
@@ -538,7 +538,7 @@ Per WNBA player and game: EPV added on her own actions and on-court EPV +/-.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a season is before the first one served. |
+| `ValueError` | If a season is before the first one served, or a game has no date in the schedule release (a schedule that lags the play-by-play fails the season loudly). |
 
 **Example**
 
@@ -612,7 +612,7 @@ The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a season is before the first one served. |
+| `ValueError` | If a season is before the first one served, or a game has no date in the schedule release (a schedule that lags the play-by-play fails the season loudly). |
 
 **Example**
 
@@ -657,7 +657,7 @@ Per WNBA team and game: EPV added on offense and allowed on defense.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a season is before the first one served. |
+| `ValueError` | If a season is before the first one served, or a game has no date in the schedule release (a schedule that lags the play-by-play fails the season loudly). |
 
 **Example**
 

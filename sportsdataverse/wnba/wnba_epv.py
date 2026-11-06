@@ -7,7 +7,9 @@ The states, labels, EPV added and credit are :mod:`sportsdataverse.nba.nba_epv`'
 ``wnba_stats_schedules`` release, so a game never sees one played the same day or later.
 
 Seasons are calendar years (the WNBA season is its year), served from the booster's first
-training season (2022) on. The booster's fit and gates are in
+training season (2022) on. Playoff games are scored with the same booster and level, but the
+fit and its gates use regular-season games only. The player, lineup and team tables are
+accounting sums of EPV added (like +/-), with no interval. The booster's fit and gates are in
 ``tools/models/nba_epv/epv_wnba_holdout.json`` and its card, ``sportsdataverse/nba/models/wnba_epv.card.json``:
 it passes every gate on the 2025 holdout and the 2026 confirmation but one state bucket on 2026,
 which the owner accepted as a stated exception (a shooting foul in a transition possession,
@@ -72,7 +74,8 @@ def wnba_epv_plays(seasons: int | list[int], *, return_as_pandas: bool = False) 
         order, with stats.wnba.com ids. Every game of every season type is scored.
 
     Raises:
-        ValueError: If a season is before the first one served.
+        ValueError: If a season is before the first one served, or a game has no date in the
+            schedule release (a schedule that lags the play-by-play fails the season loudly).
 
     Example:
         The biggest plays of a season::
@@ -98,7 +101,8 @@ def wnba_epv_player_games(seasons: int | list[int], *, return_as_pandas: bool = 
         player_id)`` with ``epv_own``, ``own_actions``, ``off_epv_on``, ``def_epv_on`` and ``epv_on``.
 
     Raises:
-        ValueError: If a season is before the first one served.
+        ValueError: If a season is before the first one served, or a game has no date in the
+            schedule release (a schedule that lags the play-by-play fails the season loudly).
 
     Example:
         A season's EPV boxes::
@@ -122,7 +126,8 @@ def wnba_epv_lineup_games(seasons: int | list[int], *, return_as_pandas: bool = 
         ``(season, game_id, team_id, lineup_id)`` with ``off_epv``, ``def_epv``, ``net_epv`` and ``plays``.
 
     Raises:
-        ValueError: If a season is before the first one served.
+        ValueError: If a season is before the first one served, or a game has no date in the
+            schedule release (a schedule that lags the play-by-play fails the season loudly).
 
     Example:
         A season's units::
@@ -147,7 +152,8 @@ def wnba_epv_team_games(seasons: int | list[int], *, return_as_pandas: bool = Fa
         ``poss``, ``opp_poss``, ``off_epv_per_poss`` and ``def_epv_per_poss``.
 
     Raises:
-        ValueError: If a season is before the first one served.
+        ValueError: If a season is before the first one served, or a game has no date in the
+            schedule release (a schedule that lags the play-by-play fails the season loudly).
 
     Example:
         A season's offenses by EPV added per possession::

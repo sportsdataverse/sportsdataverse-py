@@ -49,7 +49,7 @@ on 8 dates), the holdout season of the bundled WNBA booster.
 | `wnba_pbp_2025.parquet` | 8,529 | `wnba_stats_pbp/wnba_play_by_play_2025` | The columns `epv_states` reads (the WNBA pbp has no player slots). |
 | `wnba_possessions_2025.parquet` | 3,191 | `wnba_stats_possessions/wnba_possessions_2025` | The NBA fixture's columns. |
 | `wnba_game_lineups_2025.parquet` | 8,529 | `wnba_stats_game_lineups/wnba_lineups_2025` | `game_id, action_number, home_player_1..5, away_player_1..5`. |
-| `wnba_schedule_2025.parquet` | 20 | `wnba_stats_schedules/wnba_stats_schedule_2025` | `game_id` and `game_order`, the `game_date` parsed to a Date (what the level reads). |
+| `wnba_schedule_2025.parquet` | 20 | `wnba_stats_schedules/wnba_schedule_2025` (one row per game) | `game_id, season, season_type, game_date` as released; the test parses `game_date` with `wnba_epv._game_order`. |
 
 ## College (`tests/mbb/test_mbb_epv.py`)
 

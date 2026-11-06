@@ -10775,3 +10775,13 @@
   test: tests/wnba/test_wnba_epv.py::test_the_level_reads_the_schedule_dates
   expected: kill
   note: Without dates the level would order games by game_id, so same-day games would see each other.
+
+- id: bb-epv-accepted-exception-n
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and e["n"] == bucket["n"]'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: A different sample of the accepted bucket (another n) would stay excused.
