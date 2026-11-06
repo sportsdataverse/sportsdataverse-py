@@ -23,6 +23,7 @@ import polars as pl
 from sportsdataverse._common.player_war import player_war
 from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore
 from sportsdataverse.mbb.mbb_box_bpm import mbb_box_bpm
+from sportsdataverse.mbb.mbb_player_value_constants import _played_rows
 from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 
 if TYPE_CHECKING:
@@ -80,17 +81,18 @@ def _game_rows(box: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFrame, 
 
     Returns:
         ``(player_games, team_games)`` for the D1 teams: one row per ``(season, team_id, game_id,
-        player_id)`` with ``poss`` (minutes / 40 * adj_tempo, the minutes box BPM sums: positive
-        and set), and one per ``(season, team_id, game_id)`` with the team's ``poss`` (its players'
+        player_id)`` with ``poss`` (minutes / 40 * adj_tempo over the rows box BPM sums: minutes
+        positive and an athlete set), and one per ``(season, team_id, game_id)`` with the team's ``poss`` (its players'
         over 5) and ``margin`` (``team_score - opponent_team_score``).
     """
     d1 = ratings.filter(_D1).select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Utf8), "adj_tempo")
-    rows = box.filter(pl.col("minutes").is_not_null() & (pl.col("minutes") > 0)).select(
-        pl.col("season").cast(pl.Int64),
-        pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+    # the rows box BPM's player-seasons sum (aggregate_player_seasons), so the two sides cannot drift
+    rows = _played_rows(box).select(
+        "season",
+        "team_id",
         pl.col("game_id").cast(pl.Utf8),
-        pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
-        pl.col("minutes").cast(pl.Float64),
+        "player_id",
+        "minutes",
         (pl.col("team_score").cast(pl.Float64) - pl.col("opponent_team_score").cast(pl.Float64)).alias("margin"),
     )
     assert rows.schema["team_id"] == d1.schema["team_id"], "team_id dtype differs between box and ratings"

@@ -249,3 +249,29 @@ def test_the_public_college_path_ships_the_interval(monkeypatch: pytest.MonkeyPa
     monkeypatch.setattr(war_mod, "_game_rows", lambda box, ratings: games)
     out = war_mod.mbb_player_war(2025)
     assert out.height == 568 and out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0
+
+
+def test_a_played_row_without_an_athlete_is_dropped_on_both_sides(monkeypatch: pytest.MonkeyPatch) -> None:
+    # every 2013-14 box row of ESPN team 2724 (Wichita State): the release carries one played row
+    # with no athlete (game 400500056, 2 minutes, every stat 0), which failed the 2014 backfill
+    box, ratings = _bb("mbb_box_slice_2014.parquet"), _bb("mbb_ratings_slice_2014.parquet")
+    played = box.filter(pl.col("minutes") > 0)
+    assert played.filter(pl.col("athlete_id").is_null()).select("game_id", "minutes").rows() == [(400500056, 2.0)]
+    pvc = importlib.import_module("sportsdataverse.mbb.mbb_player_value_constants")
+    monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
+    monkeypatch.setattr(pvc, "_load_shots", lambda seasons, league: pl.DataFrame())  # no 2014 shots release
+    monkeypatch.setattr(bpm_mod, "mbb_team_ratings", lambda seasons, league="mens": ratings)
+    monkeypatch.setattr(war_mod, "mbb_team_ratings", lambda seasons, league="mens": ratings)
+    monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: box)
+    agg = pvc.aggregate_player_seasons([2014])
+    assert agg["player_id"].null_count() == 0
+    assert agg["minutes"].sum() == pytest.approx(played["minutes"].sum() - 2.0)
+    # the game rows drop it too, so a team-game is still exactly its players' possessions over 5
+    player_games, team_games = war_mod._game_rows(box, ratings)
+    assert player_games["player_id"].null_count() == 0
+    assert player_games["poss"].sum() == pytest.approx(agg["minutes"].sum() / 40 * ratings["adj_tempo"].item())
+    assert team_games["poss"].sum() * 5 == pytest.approx(player_games["poss"].sum())
+    # the production path the backfill runs: raised "1 stints' possessions differ" before the fix
+    out = war_mod.mbb_player_war(2014)
+    assert out.height == agg.height and out["min"].sum() == pytest.approx(agg["minutes"].sum())
+    assert out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0
