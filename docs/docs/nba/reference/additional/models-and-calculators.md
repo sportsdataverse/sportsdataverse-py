@@ -1501,14 +1501,14 @@ print(proj.sort("projected_rating", descending=True).head())
 
 ### nba_decay_rapm {#nba_decay_rapm}
 
-`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
 
 `asof=None` disables decay: every possession is weighted `1.0` and the
 fit uses **exactly** plain `~sportsdataverse.nba.nba_rapm.nba_rapm`'s
-own schedule (`alphas=DEFAULT_RAPM_ALPHAS`, sklearn's efficient default
-LOOCV) so the two agree byte-for-byte (see
+own penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`, the league's
+fixed value) so the two agree byte-for-byte (see
 `test_decay_rapm_asof_none_equals_plain_rapm`). When `asof` is set,
 possessions dated after `asof` are dropped, the remainder is
 exponentially down-weighted by age, and the fit switches to the
@@ -1523,7 +1523,8 @@ the binding WP2 ridge-schedule ruling documented in the module docstring.
 | `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
 | `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
 | `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects plain RAPM's league penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose plain-RAPM penalty the `asof=None` branch fits at; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**

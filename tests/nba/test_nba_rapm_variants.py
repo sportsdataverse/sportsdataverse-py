@@ -31,8 +31,7 @@ def _same_schedule_reference(poss: pl.DataFrame, response_col: str) -> pl.DataFr
     """Internal oracle-schedule reference fit: ``_fit_weighted`` at ``(oracle_rapm_alphas, ORACLE_RAPM_CV)``.
 
     Used by the WP2 variants' reduces-to-plain gates instead of the public
-    ``nba_rapm`` (which fits at the plain ``DEFAULT_RAPM_ALPHAS``/``cv=None``
-    schedule) -- comparing against ``nba_rapm`` directly would be a
+    ``nba_rapm`` (which fits at the fixed league penalty ``RAPM_PENALTY``) -- comparing against ``nba_rapm`` directly would be a
     cross-schedule comparison per the controller ruling extending decision #8.
     """
     X, y, _w, pids = _prepare(poss, response_col, weight_col=None)
@@ -277,7 +276,7 @@ def test_fit_weighted_equals_plain_rapm_on_points():
     o, d, off_poss, def_poss = _fit_weighted(X, y)
     ref = nba_rapm(poss).sort("player_id")
     got = pl.DataFrame({"player_id": pids, "o": o, "d": d}).sort("player_id")
-    # same design + same RidgeCV grid + unit weights => byte-close to nba_rapm
+    # same design + the same fixed penalty + unit weights => byte-close to nba_rapm
     assert np.allclose(got["o"].to_numpy(), ref["o_rapm"].to_numpy(), atol=1e-6)
     assert np.allclose(got["d"].to_numpy(), ref["d_rapm"].to_numpy(), atol=1e-6)
 
@@ -374,7 +373,7 @@ def test_la_rapm_equals_same_schedule_reference_when_rates_realized():
     # (oracle_rapm_alphas + cv=ORACLE_RAPM_CV), same as every other WP2 variant --
     # so this reduces-to-plain-response gate must compare against a SAME-SCHEDULE
     # internal reference (_same_schedule_reference), never the public nba_rapm
-    # (which fits at the plain DEFAULT_RAPM_ALPHAS/cv=None schedule -- a
+    # (which fits at the fixed league penalty RAPM_PENALTY -- a
     # cross-schedule comparison would conflate "response recipe is correct" with
     # "ridge schedule happens to match", which it no longer does).
     poss = _with_possession_number(_synth()).with_columns((pl.col("points") // 3).alias("fg3m"), pl.lit(1).alias("ftm"))

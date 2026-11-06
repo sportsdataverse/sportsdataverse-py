@@ -47,6 +47,12 @@ from sportsdataverse.wnba.wnba_lineup_seasons import wnba_lineup_seasons  # noqa
 from sportsdataverse.wnba.wnba_player_on_off import wnba_player_on_off, wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba.wnba_player_factor_rapm import wnba_player_factor_rapm  # noqa: F401
 from sportsdataverse.wnba.wnba_game_flow import wnba_game_flow, wnba_team_season_flow  # noqa: F401
+from sportsdataverse.wnba.wnba_epv import (  # noqa: F401
+    wnba_epv_lineup_games,
+    wnba_epv_player_games,
+    wnba_epv_plays,
+    wnba_epv_team_games,
+)
 from sportsdataverse.wnba.wnba_situational import (  # noqa: F401
     wnba_situational_lineup,
     wnba_situational_player,

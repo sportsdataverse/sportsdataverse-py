@@ -321,6 +321,10 @@ wnba:
   wnba_coach_seasons: {seasons: 2025}
   wnba_coach_careers: {seasons: 2025}
   wnba_game_flow: {seasons: 2025}
+  wnba_epv_plays: {seasons: 2026}
+  wnba_epv_player_games: {seasons: 2026}
+  wnba_epv_lineup_games: {seasons: 2026}
+  wnba_epv_team_games: {seasons: 2026}
   wnba_team_season_flow: {seasons: 2025}
   wnba_situational_team: {seasons: 2025}
   wnba_situational_player: {seasons: 2025}
