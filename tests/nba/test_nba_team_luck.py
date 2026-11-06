@@ -17,7 +17,7 @@ possessions' made-shot points do not add up to the final margin (250 of 1230 gam
 points, so the running margin drifts). The possession live at the 5:00 mark counts in the window
 (it starts before 5:00 and ends after it); before that rule 5 more NBA games (1210) and 2 WNBA
 games (282) missed, and the 2026 close games were 546, not 551. Per team, the season's close-game
-count is within 3 of ESPN's (NBA; mean 0.93) and 1 (WNBA).
+count is within 3 of ESPN's (NBA; mean 0.73, 0.93 before) and 1 (WNBA).
 
 The ``bb-team-luck`` rows of ``tests/mutants/registry.yaml`` go red here.
 """

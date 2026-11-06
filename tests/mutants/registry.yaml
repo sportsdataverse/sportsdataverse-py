@@ -8740,7 +8740,7 @@
   group: bb-team-season-rates
   finding: BB-D21
   file: sportsdataverse/_common/team_season_rates.py
-  snippet: '& ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS))'
+  snippet: '& ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS).fill_null(False))'
   mutant: '& (pl.col("start_clock") <= CLUTCH_SECONDS)'
   test: tests/nba/test_nba_situational.py::test_possession_live_at_five_minutes_is_clutch
   expected: kill

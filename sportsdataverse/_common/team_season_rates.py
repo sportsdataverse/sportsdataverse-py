@@ -159,7 +159,7 @@ def _with_clutch(rows: pl.DataFrame) -> pl.DataFrame:
                 pl.col("late")
                 # in play at or after the 5:00 mark: it starts inside the window, or it is the
                 # possession live at 5:00 (starts before the mark and ends after it)
-                & ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS))
+                & ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS).fill_null(False))
                 & (pl.col("start_margin").abs() <= CLUTCH_MARGIN)
             ).alias("clutch")
         )
