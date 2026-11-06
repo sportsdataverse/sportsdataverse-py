@@ -275,6 +275,7 @@ from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk 
 from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
 from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
@@ -560,6 +561,7 @@ __all__ = [
     "wnba_player_factor_rapm",
     "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_war",
     "wnba_player_wowy",
     "wnba_playtype_ratings",
     "wnba_possessions",

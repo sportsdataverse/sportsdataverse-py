@@ -371,6 +371,7 @@ from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: 
 from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
@@ -818,6 +819,7 @@ __all__ = [
     "nba_player_play_styles",
     "nba_player_positions",
     "nba_player_props",
+    "nba_player_war",
     "nba_player_wowy",
     "nba_playtype_ratings",
     "nba_possession_rate_rows",

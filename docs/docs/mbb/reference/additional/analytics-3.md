@@ -1,10 +1,114 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_situational–ncaa_lineup"
-sidebar_label: "Analytics: mbb_situational–ncaa_lineup"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_shot–ncaa_impact"
+sidebar_label: "Analytics: mbb_shot–ncaa_impact"
 sidebar_position: 15
-description: "Men's college basketball — additional Python functions — Analytics: mbb_situational–ncaa_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_shot–ncaa_impact — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_situational–ncaa_lineup
+# Men's college basketball — additional Python functions — Analytics: mbb_shot–ncaa_impact
+
+### mbb_shot_selection {#mbb_shot_selection}
+
+`mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Per shooter/team expected points per attempt vs the league-average mix.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `xpoints, point_value, made` + the group column). |
+| `group` | `str` | `'shooter_id'` | `"shooter_id"` or `"team_id"`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (interface parity; the math is league-free). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_value, selection_value_total` (all value columns Float64). The attempt-weighted `selection_value` sums to zero across the league. Empty input returns the zero-row schema.
+
+| col_name | type | description |
+|---|---|---|
+| `shooter_id` | String | Unique identifier for shooter. |
+| `n_shots` | Int64 |  |
+| `xppp` | Float64 |  |
+| `actual_ppp` | Float64 |  |
+| `selection_value` | Float64 |  |
+| `selection_value_total` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown `group`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shot_selection
+sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
+
+# Pipeline next step (one line)
+
+sel.sort("selection_value", descending=True).head(10)
+```
+
+### mbb_situational_lineup {#mbb_situational_lineup}
+
+`mbb_situational_lineup(seasons: 'int | list[int]', *, league: 'str' = 'mens', top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College five-man unit splits by situation: the team splits over the possessions each unit started.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `top_n` | `int` | `25` | As `mbb_situational_team`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `top_n` is below 1. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup
+mbb_situational_lineup(2026).filter(split="not_garbage_time").sort("poss", descending=True).head()
+```
 
 ### mbb_situational_player {#mbb_situational_player}
 
@@ -676,74 +780,4 @@ Rows in `sportsdataverse._common.game_impact.impact_row_schema` with String play
 from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp, load_ncaa_mbb_possessions
 from sportsdataverse.mbb.mbb_game_impact import ncaa_impact_rows
 rows = ncaa_impact_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025))
-```
-
-### ncaa_lineup_count_rows {#ncaa_lineup_count_rows}
-
-`ncaa_lineup_count_rows(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Map the stats.ncaa.org pbp onto the lineup-seasons count frame.
-
-Each shot, free throw, rebound and turnover counts for the side whose `event_team` it is,
-on the lineup at the event; a free throw on the lineup at the most recent foul
-(`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`). Events with
-no count are dropped.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order. |
-
-**Returns**
-
-One row per counted event in `sportsdataverse._common.lineup_seasons.lineup_count_schema` (with the shot zones) and String player ids.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | stats.ncaa.org contest id. |
-| `home_team_id` | Int64 | ESPN team id of the home side. |
-| `away_team_id` | Int64 | ESPN team id of the away side. |
-| `home_1` | String | stats.ncaa.org id of home player 1 on the floor at the event (a free throw: at the last foul). |
-| `home_2` | String | stats.ncaa.org id of home player 2 on the floor at the event (a free throw: at the last foul). |
-| `home_3` | String | stats.ncaa.org id of home player 3 on the floor at the event (a free throw: at the last foul). |
-| `home_4` | String | stats.ncaa.org id of home player 4 on the floor at the event (a free throw: at the last foul). |
-| `home_5` | String | stats.ncaa.org id of home player 5 on the floor at the event (a free throw: at the last foul). |
-| `away_1` | String | stats.ncaa.org id of away player 1 on the floor at the event (a free throw: at the last foul). |
-| `away_2` | String | stats.ncaa.org id of away player 2 on the floor at the event (a free throw: at the last foul). |
-| `away_3` | String | stats.ncaa.org id of away player 3 on the floor at the event (a free throw: at the last foul). |
-| `away_4` | String | stats.ncaa.org id of away player 4 on the floor at the event (a free throw: at the last foul). |
-| `away_5` | String | stats.ncaa.org id of away player 5 on the floor at the event (a free throw: at the last foul). |
-| `home_fga` | Int64 | The home side's field-goal attempts on the event (0 or 1). |
-| `home_fgm` | Int64 | The home side's field goals made on the event (0 or 1). |
-| `home_fg3a` | Int64 | The home side's three-point attempts on the event (0 or 1). |
-| `home_fg3m` | Int64 | The home side's threes made on the event (0 or 1). |
-| `home_fta` | Int64 | The home side's free-throw attempts on the event (0 or 1). |
-| `home_oreb` | Int64 | The home side's offensive rebounds on the event (0 or 1). |
-| `home_dreb` | Int64 | The home side's defensive rebounds on the event (0 or 1). |
-| `home_tov` | Int64 | The home side's turnovers on the event (0 or 1). |
-| `home_rima` | Int64 | The home side's rim attempts on the event (0 or 1). |
-| `home_rimm` | Int64 | The home side's rim makes on the event (0 or 1). |
-| `home_mida` | Int64 | The home side's mid-range attempts on the event (0 or 1). |
-| `home_midm` | Int64 | The home side's mid-range makes on the event (0 or 1). |
-| `away_fga` | Int64 | The away side's field-goal attempts on the event (0 or 1). |
-| `away_fgm` | Int64 | The away side's field goals made on the event (0 or 1). |
-| `away_fg3a` | Int64 | The away side's three-point attempts on the event (0 or 1). |
-| `away_fg3m` | Int64 | The away side's threes made on the event (0 or 1). |
-| `away_fta` | Int64 | The away side's free-throw attempts on the event (0 or 1). |
-| `away_oreb` | Int64 | The away side's offensive rebounds on the event (0 or 1). |
-| `away_dreb` | Int64 | The away side's defensive rebounds on the event (0 or 1). |
-| `away_tov` | Int64 | The away side's turnovers on the event (0 or 1). |
-| `away_rima` | Int64 | The away side's rim attempts on the event (0 or 1). |
-| `away_rimm` | Int64 | The away side's rim makes on the event (0 or 1). |
-| `away_mida` | Int64 | The away side's mid-range attempts on the event (0 or 1). |
-| `away_midm` | Int64 | The away side's mid-range makes on the event (0 or 1). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
-from sportsdataverse.mbb.mbb_lineup_seasons import ncaa_lineup_count_rows
-rows = ncaa_lineup_count_rows(load_ncaa_mbb_pbp(2025))
 ```
