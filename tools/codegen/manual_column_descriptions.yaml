@@ -40742,6 +40742,15 @@ mbb_strength_of_schedule:
   wab_pct: 'Percentile of wab within the season: 100 * (n + 1 - rank) / (n + 1).'
   wab_rank: 'Rank of wab within the season among Division I teams: 1 is best, average ties.'
   wins: Wins in played games, against every opponent (non-Division I included).
+mbb_tournament_ineligible:
+  confidence: 'How well the source documents the row: high (the NCAA, the school or the conference says so) or medium (a secondary source).'
+  detail: Short note on the row, such as the reclassification year or the case behind the ban.
+  league: mens or womens.
+  reason: 'Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other.'
+  season: Season, as the end year (2024 is 2023-24).
+  source_url: The source that documents the row.
+  team: School name.
+  team_id: ESPN team id (Utf8).
 wbb_bracketology:
   as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
   at_large_prob: 'At-large probability: a logistic in resume_score centred midway between the last at-large team in and the

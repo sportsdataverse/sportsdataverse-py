@@ -393,6 +393,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_season_flow](additional/analytics-3.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-3.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-4.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [mbb_tournament_ineligible](additional/analytics-4.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
 | [ncaa_coach_stints](additional/analytics-4.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-4.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-4.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
@@ -410,7 +411,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [project_bracket](additional/analytics-4.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics-4.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
 | [strength_of_schedule](additional/analytics-4.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-4.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [test_positional_aware_filter](additional/analytics-5.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics-5.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
