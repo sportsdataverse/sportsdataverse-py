@@ -25,8 +25,8 @@ never ``len(player_ids)``.
 
 The shared :func:`_fit_weighted` engine below stays a generic ``(alphas, cv)``
 knob so a **single** fitting routine serves both conventions: its defaults
-(``alphas=DEFAULT_RAPM_ALPHAS``, ``cv=None``) intentionally reproduce
-``nba_rapm`` byte-for-byte (see ``test_fit_weighted_equals_plain_rapm_on_points``
+(``alphas=None``, i.e. plain RAPM's fixed NBA penalty ``RAPM_PENALTY["00"]``, ``cv=None``) intentionally
+reproduce ``nba_rapm`` byte-for-byte (see ``test_fit_weighted_equals_plain_rapm_on_points``
 in the test module — a scaffold-only invariant, since plain RAPM has no
 weights or alternate response to justify diverging from it); the variant
 functions added on top of this scaffold pass ``alphas=oracle_rapm_alphas(n)``
@@ -45,7 +45,7 @@ import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
-from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
+from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design, rapm_penalty
 
 _OFF: list[str] = [f"off_player_{i}" for i in range(1, 6)]
 _DEF: list[str] = [f"def_player_{i}" for i in range(1, 6)]
@@ -214,7 +214,7 @@ def _fit_weighted(
     y: np.ndarray,
     *,
     weights: Optional[np.ndarray] = None,
-    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    alphas: Optional[np.ndarray] = None,
     cv: Optional[int] = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Fit a (optionally weighted) RidgeCV and return per-100 offense/defense + poss counts.
@@ -223,9 +223,9 @@ def _fit_weighted(
     ``d`` is the NEGATED raw defense coefficient x 100 (positive = good defender).
 
     This is the **shared** fitting engine for every RAPM variant in this module.
-    Its defaults (``alphas=DEFAULT_RAPM_ALPHAS``, ``cv=None`` i.e. sklearn's
-    efficient LOOCV) intentionally reproduce plain ``nba_rapm``'s own fit when
-    called unweighted with no overrides. RAPM variants call this with
+    Its defaults (``alphas=None``, the one-point grid of plain RAPM's fixed NBA
+    penalty, and ``cv=None``) intentionally reproduce plain ``nba_rapm``'s own fit
+    when called unweighted with no overrides. RAPM variants call this with
     ``alphas=oracle_rapm_alphas(n_samples)`` (``n_samples`` = possession /
     design-row count, NOT player count) and ``cv=ORACLE_RAPM_CV`` per the
     binding oracle-ridge-schedule ruling documented in the module docstring.
@@ -234,7 +234,7 @@ def _fit_weighted(
         X: Sparse design ``(n, 2P)`` from :func:`_prepare`.
         y: Row-aligned response ``(n,)``.
         weights: Optional per-possession sample weights ``(n,)``.
-        alphas: RidgeCV alpha grid.
+        alphas: RidgeCV alpha grid; ``None`` is ``[RAPM_PENALTY["00"]]``, plain RAPM's NBA penalty.
         cv: Cross-validation fold count forwarded to ``RidgeCV(cv=...)``.
             ``None`` (default) uses sklearn's efficient LOOCV -- the plain-
             ``nba_rapm`` convention. Pass :data:`ORACLE_RAPM_CV` (``5``) for
@@ -244,7 +244,8 @@ def _fit_weighted(
         ``(o_per100, d_per100, off_poss, def_poss)`` each shape ``(P,)``.
     """
     P = X.shape[1] // 2
-    model = RidgeCV(alphas=alphas, fit_intercept=True, cv=cv)
+    grid = np.asarray([RAPM_PENALTY["00"]]) if alphas is None else alphas
+    model = RidgeCV(alphas=grid, fit_intercept=True, cv=cv)
     # RidgeCV.fit accepts sample_weight with a sparse csr design under the default
     # ("auto") solver; verified by test_fit_weighted_honors_weights. If a future
     # sklearn drops sparse+weight support, fall back to Ridge + an explicit KFold
@@ -285,8 +286,8 @@ def nba_decay_rapm(
 
     ``asof=None`` disables decay: every possession is weighted ``1.0`` and the
     fit uses **exactly** plain :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s
-    own schedule (``alphas=DEFAULT_RAPM_ALPHAS``, sklearn's efficient default
-    LOOCV) so the two agree byte-for-byte (see
+    own penalty (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`, the league's
+    fixed value) so the two agree byte-for-byte (see
     ``test_decay_rapm_asof_none_equals_plain_rapm``). When ``asof`` is set,
     possessions dated after ``asof`` are dropped, the remainder is
     exponentially down-weighted by age, and the fit switches to the
@@ -311,8 +312,8 @@ def nba_decay_rapm(
         asof: Reference date; ``None`` -> unweighted, plain-RAPM-equivalent fit.
         half_life_days: Weight half-life in days (default 180).
         alphas: Optional RidgeCV alpha grid override. ``None`` (default)
-            auto-selects :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS`
-            when ``asof is None`` or :func:`oracle_rapm_alphas` (evaluated at
+            auto-selects plain RAPM's league penalty
+            (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when ``asof is None`` or :func:`oracle_rapm_alphas` (evaluated at
             the possession count) when ``asof`` is set.
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
@@ -368,7 +369,7 @@ def nba_decay_rapm(
 
     if asof is None:
         # Plain-RAPM-equivalent branch: reproduce nba_rapm's own schedule exactly.
-        fit_alphas = alphas if alphas is not None else DEFAULT_RAPM_ALPHAS
+        fit_alphas = alphas if alphas is not None else np.asarray([rapm_penalty(frame)])
         fit_cv: Optional[int] = None
     else:
         # Decay-weighted branch: oracle regularization schedule (binding WP2 ruling),
@@ -579,7 +580,7 @@ def nba_la_rapm(
         at the post-filter possession count, ``X.shape[0]``) with
         ``cv=`` :data:`ORACLE_RAPM_CV`, matching every other WP2 RAPM variant
         -- **not** plain :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s own
-        ``DEFAULT_RAPM_ALPHAS`` / ``cv=None`` schedule (an earlier revision of
+        fixed league penalty (an earlier revision of
         this function fit at the plain schedule solely to satisfy the
         reduces-to-plain gate; the controller ruling supersedes that).
         Consequently the reduces-to-plain-response correctness gate
@@ -722,8 +723,8 @@ def nba_four_factor_rapm(
         fit uses :func:`oracle_rapm_alphas` (evaluated once, at the possession
         count shared by all four fits since they use the identical design)
         with ``cv=`` :data:`ORACLE_RAPM_CV` -- not plain
-        :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s ``DEFAULT_RAPM_ALPHAS``/
-        ``cv=None`` schedule. Pass an explicit ``alphas=`` to override.
+        :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s fixed league penalty
+        (``RAPM_PENALTY``). Pass an explicit ``alphas=`` to override.
 
     .. note::
         **TOV polarity (bugfix)**: unlike efg/ftr/orbd, ``RA_TOV`` is fit on

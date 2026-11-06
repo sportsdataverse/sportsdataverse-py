@@ -41478,7 +41478,7 @@ load_nba_player_impact:
   adj_rapm: Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm.
   d_adj_rapm: Defensive regularized adjusted plus/minus after the ridge opponent adjustment.
   d_rapm: Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so
-    a positive value marks a defender who suppresses opponent scoring.
+    a positive value marks a defender who suppresses opponent scoring; fit at the fixed NBA penalty described under rapm.
   boban_filtered_skill: BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
     i.e. his current-form rating after aging drift and possession-weighted observation noise.
   boban_projected_rating: One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the
@@ -41496,12 +41496,18 @@ load_nba_player_impact:
     trained on the d_rapm target.
   o_adj_rapm: Offensive regularized adjusted plus/minus after the ridge opponent adjustment.
   o_rapm: Offensive regularized adjusted plus-minus per 100 possessions from the single-season ridge fit over possession-level
-    lineup indicators; positive means the player raised his team's scoring rate while on offense.
+    lineup indicators, at the fixed NBA penalty described under rapm; positive means the player raised his team's scoring
+    rate while on offense.
   off_poss: Number of possessions the player was on the floor on offense, the count of design-matrix rows carrying his offensive
     indicator and therefore the offensive-side sample size behind o_rapm.
   ospm: 'Offensive statistical plus-minus per 100 possessions: the player''s per-100 box-score feature vector scored through
     ridge coefficients trained on that season''s o_rapm target.'
-  rapm: Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm.
+  rapm: 'Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. The ridge penalty
+    is one fixed NBA value (2,683, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the scale
+    compares across seasons (regular-season sd 1.53 to 1.99 per 100 over players with 400 possessions, 1997-2026). Seasons
+    published before November 2026 were fit at a per-season RidgeCV pick (1,931 or 5,179 in the regular season, up to 37,276
+    in the playoffs), and their spread jumps with it (sd 1.15 to 2.34): do not compare those values across seasons or with
+    values fit at the fixed penalty.'
   spm: Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm.
   war: Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided
     by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin.
@@ -49084,7 +49090,8 @@ load_wnba_player_crosswalk:
 load_wnba_player_impact:
   adj_rapm: Total prior-informed RAPM (offense plus defense), in points per 100 possessions.
   d_adj_rapm: 'Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
-  d_rapm: 'Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions.'
+  d_rapm: 'Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions, at the fixed
+    WNBA penalty described under rapm.'
   boban_filtered_skill: BOBAN Kalman-filtered estimate of the player's current skill level.
   boban_projected_rating: BOBAN projected forward rating, including the empirical aging-curve drift.
   boban_projected_sd: Posterior standard deviation of the BOBAN projected rating.
@@ -49094,10 +49101,16 @@ load_wnba_player_impact:
   def_poss: Defensive possessions the player was on the floor for in the RAPM sample.
   dspm: 'Defensive statistical plus-minus: box-score features regressed onto the defensive RAPM target, per 100 possessions.'
   o_adj_rapm: 'Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
-  o_rapm: 'Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions.'
+  o_rapm: 'Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions, at the fixed
+    WNBA penalty described under rapm.'
   off_poss: Offensive possessions the player was on the floor for in the RAPM sample.
   ospm: 'Offensive statistical plus-minus: box-score features regressed onto the offensive RAPM target, per 100 possessions.'
-  rapm: 'Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions.'
+  rapm: 'Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. The ridge penalty
+    is one fixed WNBA value (1,931, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the
+    scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2025).
+    Seasons published before November 2026 were fit at a per-season RidgeCV pick: 1,931 in 22 of 29 regular seasons, but
+    5,179 or 13,895 in 1999, 2001, 2002, 2004, 2011, 2014 and 2016 (sd 0.32 to 0.93 there) and 268 to 100,000 in the
+    playoffs. Do not compare those seasons with others or with values fit at the fixed penalty.'
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   spm: 'Statistical plus-minus: offensive plus defensive box-score estimate of the RAPM target, per 100 possessions.'
   war: Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win.
@@ -77320,10 +77333,10 @@ nba_player_factor_rapm:
   d_drb_rapm_n: 'Sample size of d_drb_rapm: def_poss.'
   d_drb_rapm_pct: 'Percentile of d_drb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_drb_rapm repeats
-    at Spearman 0.23, so single-season ranks are noisy.'
+    at Spearman 0.229, so single-season ranks are noisy.'
   d_drb_rapm_rank: Rank of d_drb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_drb_rapm repeats at Spearman 0.23, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_drb_rapm repeats at Spearman 0.229, so single-season
     ranks are noisy.
   d_drb_rapm_se: 'Standard error of d_drb_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77332,10 +77345,10 @@ nba_player_factor_rapm:
   d_efg_rapm_n: 'Sample size of d_efg_rapm: def_poss.'
   d_efg_rapm_pct: 'Percentile of d_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_efg_rapm repeats
-    at Spearman 0.248, so single-season ranks are noisy.'
+    at Spearman 0.247, so single-season ranks are noisy.'
   d_efg_rapm_rank: Rank of d_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_efg_rapm repeats at Spearman 0.248, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_efg_rapm repeats at Spearman 0.247, so single-season
     ranks are noisy.
   d_efg_rapm_se: 'Standard error of d_efg_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77344,10 +77357,10 @@ nba_player_factor_rapm:
   d_ftr_rapm_n: 'Sample size of d_ftr_rapm: def_poss.'
   d_ftr_rapm_pct: 'Percentile of d_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_ftr_rapm repeats
-    at Spearman 0.348, so single-season ranks are noisy.'
+    at Spearman 0.341, so single-season ranks are noisy.'
   d_ftr_rapm_rank: Rank of d_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_ftr_rapm repeats at Spearman 0.348, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_ftr_rapm repeats at Spearman 0.341, so single-season
     ranks are noisy.
   d_ftr_rapm_se: 'Standard error of d_ftr_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77356,23 +77369,25 @@ nba_player_factor_rapm:
   d_other_rapm_n: 'Sample size of d_other_rapm: def_poss.'
   d_other_rapm_pct: 'Percentile of d_other_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_other_rapm repeats
-    at Spearman 0.366, so single-season ranks are noisy.'
+    at Spearman 0.376, so single-season ranks are noisy.'
   d_other_rapm_rank: Rank of d_other_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_other_rapm repeats at Spearman 0.366, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_other_rapm repeats at Spearman 0.376, so single-season
     ranks are noisy.
   d_other_rapm_se: 'Standard error of d_other_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk
     estimate, not the shrinkage bias.'
   d_rapm: 'Defensive plain RAPM per 100 possessions, sign-flipped so higher is better; equals d_efg_rapm + d_tov_rapm + d_drb_rapm
-    + d_ftr_rapm + d_other_rapm. Fit on the possessions release (2026-08-13), so it differs from nba_player_impact''s (fit
-    2026-10-12 on a re-compile with the same possessions and some different lineups): 2025-26 corr 0.997, max 1.31.'
+    + d_ftr_rapm + d_other_rapm. Fit at the fixed NBA penalty (see ridge_alpha) on the possessions release (2026-08-13). At
+    the same penalty it tracks nba_player_impact''s (fit 2026-10-12 on a re-compile with the same possessions and some
+    different lineups): 2025-26 corr 0.997, max 1.31. nba_player_impact releases published before November 2026 were fit at
+    a per-season penalty, so they differ in scale until re-published.'
   d_rapm_n: 'Sample size of d_rapm: def_poss.'
   d_rapm_pct: 'Percentile of d_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_rapm repeats at Spearman
-    0.364, so single-season ranks are noisy.'
+    0.361, so single-season ranks are noisy.'
   d_rapm_rank: Rank of d_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with
     at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year over
-    year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_rapm repeats at Spearman 0.364, so single-season ranks
+    year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_rapm repeats at Spearman 0.361, so single-season ranks
     are noisy.
   d_rapm_se: 'Standard error of d_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77381,10 +77396,10 @@ nba_player_factor_rapm:
   d_tov_rapm_n: 'Sample size of d_tov_rapm: def_poss.'
   d_tov_rapm_pct: 'Percentile of d_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_tov_rapm repeats
-    at Spearman 0.384, so single-season ranks are noisy.'
+    at Spearman 0.387, so single-season ranks are noisy.'
   d_tov_rapm_rank: Rank of d_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_tov_rapm repeats at Spearman 0.384, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) d_tov_rapm repeats at Spearman 0.387, so single-season
     ranks are noisy.
   d_tov_rapm_se: 'Standard error of d_tov_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77394,10 +77409,10 @@ nba_player_factor_rapm:
   o_efg_rapm_n: 'Sample size of o_efg_rapm: off_poss.'
   o_efg_rapm_pct: 'Percentile of o_efg_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_efg_rapm repeats
-    at Spearman 0.314, so single-season ranks are noisy.'
+    at Spearman 0.308, so single-season ranks are noisy.'
   o_efg_rapm_rank: Rank of o_efg_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_efg_rapm repeats at Spearman 0.314, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_efg_rapm repeats at Spearman 0.308, so single-season
     ranks are noisy.
   o_efg_rapm_se: 'Standard error of o_efg_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77406,10 +77421,10 @@ nba_player_factor_rapm:
   o_ftr_rapm_n: 'Sample size of o_ftr_rapm: off_poss.'
   o_ftr_rapm_pct: 'Percentile of o_ftr_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_ftr_rapm repeats
-    at Spearman 0.362, so single-season ranks are noisy.'
+    at Spearman 0.366, so single-season ranks are noisy.'
   o_ftr_rapm_rank: Rank of o_ftr_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_ftr_rapm repeats at Spearman 0.362, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_ftr_rapm repeats at Spearman 0.366, so single-season
     ranks are noisy.
   o_ftr_rapm_se: 'Standard error of o_ftr_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77418,10 +77433,10 @@ nba_player_factor_rapm:
   o_orb_rapm_n: 'Sample size of o_orb_rapm: off_poss.'
   o_orb_rapm_pct: 'Percentile of o_orb_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_orb_rapm repeats
-    at Spearman 0.431, so single-season ranks are noisy.'
+    at Spearman 0.423, so single-season ranks are noisy.'
   o_orb_rapm_rank: Rank of o_orb_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_orb_rapm repeats at Spearman 0.431, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_orb_rapm repeats at Spearman 0.423, so single-season
     ranks are noisy.
   o_orb_rapm_se: 'Standard error of o_orb_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77431,23 +77446,25 @@ nba_player_factor_rapm:
   o_other_rapm_n: 'Sample size of o_other_rapm: off_poss.'
   o_other_rapm_pct: 'Percentile of o_other_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_other_rapm repeats
-    at Spearman 0.255, so single-season ranks are noisy.'
+    at Spearman 0.259, so single-season ranks are noisy.'
   o_other_rapm_rank: Rank of o_other_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_other_rapm repeats at Spearman 0.255, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_other_rapm repeats at Spearman 0.259, so single-season
     ranks are noisy.
   o_other_rapm_se: 'Standard error of o_other_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk
     estimate, not the shrinkage bias.'
-  o_rapm: 'Offensive plain RAPM per 100 possessions (nba_rapm''s single-season ridge, shrunk to zero); equals o_efg_rapm +
-    o_tov_rapm + o_orb_rapm + o_ftr_rapm + o_other_rapm. Fit on the possessions release (2026-08-13), so it differs from nba_player_impact''s
-    (fit 2026-10-12 on a re-compile with the same possessions and some different lineups): 2025-26 corr 0.997, max 1.31.'
+  o_rapm: 'Offensive plain RAPM per 100 possessions (nba_rapm''s single-season ridge at the fixed NBA penalty, see ridge_alpha,
+    shrunk to zero); equals o_efg_rapm + o_tov_rapm + o_orb_rapm + o_ftr_rapm + o_other_rapm. Fit on the possessions release
+    (2026-08-13). At the same penalty it tracks nba_player_impact''s (fit 2026-10-12 on a re-compile with the same possessions
+    and some different lineups): 2025-26 corr 0.997, max 1.31. nba_player_impact releases published before November 2026 were
+    fit at a per-season penalty, so they differ in scale until re-published.'
   o_rapm_n: 'Sample size of o_rapm: off_poss.'
   o_rapm_pct: 'Percentile of o_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
     null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_rapm repeats at Spearman
-    0.291, so single-season ranks are noisy.'
+    0.292, so single-season ranks are noisy.'
   o_rapm_rank: Rank of o_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with
     at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year over
-    year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_rapm repeats at Spearman 0.291, so single-season ranks
+    year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_rapm repeats at Spearman 0.292, so single-season ranks
     are noisy.
   o_rapm_se: 'Standard error of o_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77456,10 +77473,10 @@ nba_player_factor_rapm:
   o_tov_rapm_n: 'Sample size of o_tov_rapm: off_poss.'
   o_tov_rapm_pct: 'Percentile of o_tov_rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number
     ranked; null where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_tov_rapm repeats
-    at Spearman 0.328, so single-season ranks are noisy.'
+    at Spearman 0.334, so single-season ranks are noisy.'
   o_tov_rapm_rank: Rank of o_tov_rapm within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year
-    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_tov_rapm repeats at Spearman 0.328, so single-season
+    over year (2024-25 to 2025-26, 293 players over 2,000 possessions) o_tov_rapm repeats at Spearman 0.334, so single-season
     ranks are noisy.
   o_tov_rapm_se: 'Standard error of o_tov_rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate,
     not the shrinkage bias.'
@@ -77470,15 +77487,16 @@ nba_player_factor_rapm:
   rapm: 'Plain RAPM per 100 possessions: o_rapm + d_rapm.'
   rapm_n: 'Sample size of rapm: off_poss + def_poss.'
   rapm_pct: 'Percentile of rapm among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
-    where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) rapm repeats at Spearman 0.32,
+    where the rank is. Year over year (2024-25 to 2025-26, 293 players over 2,000 possessions) rapm repeats at Spearman 0.322,
     so single-season ranks are noisy.'
   rapm_rank: Rank of rapm within the season, league-wide (1 = best, highest first, ties averaged), among players with at least
     min_poss possessions (off_poss + def_poss, default 400 (NBA) or 200 (WNBA)); null below 10 qualifiers. Year over year
-    (2024-25 to 2025-26, 293 players over 2,000 possessions) rapm repeats at Spearman 0.32, so single-season ranks are noisy.
+    (2024-25 to 2025-26, 293 players over 2,000 possessions) rapm repeats at Spearman 0.322, so single-season ranks are noisy.
   rapm_se: 'Standard error of rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not
     the shrinkage bias.'
-  ridge_alpha: 'The ridge penalty of the season''s fit: RidgeCV''s leave-one-out pick for points over the nba_rapm grid, shared
-    by every component so they add up.'
+  ridge_alpha: 'The ridge penalty of the fit, shared by every component so they add up: plain RAPM''s fixed league value
+    (NBA 2,683, WNBA 1,931; sportsdataverse.nba.nba_rapm.RAPM_PENALTY), the same in every season. Rows fit before November
+    2026 carry RidgeCV''s per-season leave-one-out pick instead, on a scale that changed with it.'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
 wnba_player_factor_rapm:
   d_drb_rapm: 'Defensive rebounding component of d_rapm, per 100 possessions, sign-flipped so higher is better: positive =
@@ -77629,6 +77647,7 @@ wnba_player_factor_rapm:
     over 1,000 possessions) rapm repeats at Spearman 0.374, so single-season ranks are noisy.
   rapm_se: 'Standard error of rapm, clustered by game (the ridge sandwich): sampling noise around the shrunk estimate, not
     the shrinkage bias.'
-  ridge_alpha: 'The ridge penalty of the season''s fit: RidgeCV''s leave-one-out pick for points over the nba_rapm grid, shared
-    by every component so they add up.'
+  ridge_alpha: 'The ridge penalty of the fit, shared by every component so they add up: plain RAPM''s fixed league value
+    (NBA 2,683, WNBA 1,931; sportsdataverse.nba.nba_rapm.RAPM_PENALTY), the same in every season. Rows fit before November
+    2026 carry RidgeCV''s per-season leave-one-out pick instead, on a scale that changed with it.'
   season: Season, named by the year it ends (the WNBA season is its calendar year).

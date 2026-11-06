@@ -467,5 +467,5 @@ def wnba_rapm_from_games(
     if not frames:
         out = nba_rapm(pl.DataFrame())
         return out.to_pandas() if return_as_pandas else out
-    out = nba_rapm(pl.concat(frames, how="diagonal_relaxed"))
+    out = nba_rapm(pl.concat(frames, how="diagonal_relaxed"), league_id="10")
     return out.to_pandas() if return_as_pandas else out

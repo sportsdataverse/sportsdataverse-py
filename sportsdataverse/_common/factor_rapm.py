@@ -30,8 +30,10 @@ parts) at the one penalty picked for points makes ``o_efg + o_tov + o_orb + o_ft
 ``o_rapm`` (and the same on defense), up to floating point. That penalty is the best one for points,
 not for each factor, so a noisy factor (opponent shooting, free throws) is shrunk less than its own
 cross-validation would. ``o_rapm`` / ``d_rapm`` are the plain-RAPM fit of
-:func:`~sportsdataverse.nba.nba_rapm.nba_rapm` on the same possessions: the penalty is its
-:class:`~sklearn.linear_model.RidgeCV` pick over the same grid.
+:func:`~sportsdataverse.nba.nba_rapm.nba_rapm` on the same possessions: the penalty is the same
+fixed league value, :func:`~sportsdataverse.nba.nba_rapm.rapm_penalty` (one for every season, so
+the components are on one scale across seasons; before November 2026 it was RidgeCV's per-season
+pick, whose scale jumped between seasons, and values fit then are not comparable with these).
 
 Every component is per 100 possessions, sign-flipped on defense (``d_* = -100 * coef``) so higher
 is better throughout: a positive ``d_tov_rapm`` forces turnovers, a positive ``d_drb_rapm`` keeps
@@ -55,10 +57,9 @@ from __future__ import annotations
 import numpy as np
 import polars as pl
 from scipy.sparse import csr_matrix
-from sklearn.linear_model import RidgeCV
 
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
-from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
+from sportsdataverse.nba.nba_rapm import build_rapm_design, rapm_penalty
 
 __all__ = ["COUNTS", "FACTORS", "factor_rapm", "factor_rapm_schema", "factor_targets"]
 
@@ -163,19 +164,18 @@ def _ridge(X: csr_matrix, Y: np.ndarray, alpha: float, games: np.ndarray) -> tup
     return coef, var, cov
 
 
-def _fit_season(possessions: pl.DataFrame, alphas: np.ndarray) -> pl.DataFrame | None:
+def _fit_season(possessions: pl.DataFrame, league_id: str | None) -> pl.DataFrame | None:
     """One season's split: totals and the ten components per player, or ``None`` with no possessions."""
     poss = possessions.drop_nulls([*_SLOTS, *COUNTS, GAME])
-    X, points, player_ids = build_rapm_design(poss)
+    X, _, player_ids = build_rapm_design(poss)
     if not player_ids:
         return None
     fga = poss.select((pl.col("fg2a") + pl.col("fg3a")).sum()).item()
     fg_pts = poss.select((2 * pl.col("fg2m") + 3 * pl.col("fg3m")).sum()).item()
     v = fg_pts / fga if fga else 0.0
     Y = factor_targets(poss, v).to_numpy()
-    # The penalty nba_rapm would pick (RidgeCV's leave-one-out over the same grid; one possession
-    # cannot be cross-validated, so it takes the strongest), then every response at that penalty.
-    alpha = float(RidgeCV(alphas=alphas, fit_intercept=True).fit(X, points).alpha_) if X.shape[0] > 1 else max(alphas)
+    # The penalty nba_rapm fits at (the league's fixed one), then every response at that penalty.
+    alpha = rapm_penalty(poss, league_id)
     games = poss[GAME].cast(pl.Utf8).rank("dense").cast(pl.Int64).to_numpy() - 1
     coef, var, cov = _ridge(X, Y, alpha, games)
     P = len(player_ids)
@@ -207,7 +207,7 @@ def factor_rapm(
     *,
     player_dtype: pl.DataType,
     min_poss: int,
-    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    league_id: str | None = None,
 ) -> pl.DataFrame:
     """Per player and season: plain RAPM and its four-factor split (and the remainder), offense and defense.
 
@@ -218,7 +218,8 @@ def factor_rapm(
             ``off_player_1..5``, ``def_player_1..5`` and :data:`COUNTS`, one season type of games.
         player_dtype: The league's player id dtype.
         min_poss: The rank gate: a player is ranked when ``off_poss + def_poss`` is at least this.
-        alphas: The ridge penalty grid (default :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS`).
+        league_id: ``"00"`` NBA or ``"10"`` WNBA, which selects the ridge penalty
+            (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`; ``None`` reads it from the ``game_id`` prefix).
 
     Returns:
         One row per ``(season, player_id)`` in :func:`factor_rapm_schema`: possessions, ``rapm`` /
@@ -240,7 +241,7 @@ def factor_rapm(
         return pl.DataFrame(schema=schema)
     fits = []
     for (season,), part in possessions.partition_by("season", as_dict=True).items():
-        fit = _fit_season(part, alphas)
+        fit = _fit_season(part, league_id)
         if fit is not None:
             fits.append(fit.with_columns(pl.lit(season).cast(pl.Int64).alias("season")))
     if not fits:

@@ -6,9 +6,14 @@ free-throw attempts, offensive rebounds and turnovers) and ``nba_stats_schedules
 ``league_id="10"`` reads the WNBA twins; :mod:`sportsdataverse.wnba.wnba_player_factor_rapm` binds it.
 
 ``o_rapm`` / ``d_rapm`` are :func:`sportsdataverse.nba.nba_rapm.nba_rapm` on the season's
-possessions, the plain RAPM of ``nba.player_impact``. Checked against that release (regular season):
-WNBA 2024 and 2025 equal it to 1e-11 on every player (157 and 181); NBA 2024-25 and 2025-26 correlate
-0.997 (o_rapm) and 0.997 (d_rapm) on all 569 and 582 players, a max difference of 1.31. The cause is
+possessions, the plain RAPM of ``nba.player_impact``, at the league's fixed ridge penalty
+(:data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY`, NBA 2,683, WNBA 1,931, the same every season).
+The ``player_impact`` releases published before November 2026 were fit at RidgeCV's per-season pick
+instead (NBA 2024-25 5,179, 2025-26 1,931): at the fixed penalty the NBA o_rapm differs in scale from
+them (2024-25 r 0.986, max difference 1.66; 2025-26 r 0.994, 1.24) until they are re-published. At the release's own
+penalty (regular season): WNBA 2024 and 2025 equal it to 1e-11 on every player (157 and 181; their
+pick was 1,931, the fixed WNBA value); NBA 2024-25 and 2025-26 correlate 0.997 (o_rapm) and 0.997
+(d_rapm) on all 569 and 582 players, a max difference of 1.31. The cause is
 lineups, not possessions: the possessions release (2026-08-13) predates the ``player_impact`` fit
 (2026-10-12), which ran on a re-compile with the same 243,735 / 245,646 possessions but some on-floor
 lineups changed (players' possessions differ by up to 184, net zero over the season). The live test
@@ -131,5 +136,5 @@ def nba_player_factor_rapm(
         raise ValueError(f"season_type must be one of {list(_SEASON_TYPES)}, got {season_type!r}")
     rows = nba_factor_rapm_rows(*_load(seasons, league_id), season_type)
     gate = _MIN_POSS[league_id] if min_poss is None else min_poss
-    out = factor_rapm(rows, player_dtype=_PLAYER, min_poss=gate)
+    out = factor_rapm(rows, player_dtype=_PLAYER, min_poss=gate, league_id=league_id)
     return out.to_pandas() if return_as_pandas else out
