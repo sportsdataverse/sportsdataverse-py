@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 9
+sidebar_position: 10
 description: "WNBA — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — Dates and seasons

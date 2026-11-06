@@ -18,17 +18,18 @@ Metrics: Brier of ``p_playoffs``, ``p_top6`` / ``p_play_in`` / ``p_division`` (N
 plus the games left at the current winning percentage); and how often the final wins fall in
 the sim's 10-90% band (0.80 if calibrated).
 
-With ``--closes DIR`` (WNBA only; private ClaudeCowork data, not in this repo) it also scores the
-sim's game model one day ahead (ratings refit before each date, the first 20 games of the
-season skipped, as the 2026-11-02 sim-vs-market bench did) against the closing market and the
-engine bench on the same games: Brier with paired differences, SE clustered by date.
+With ``--closes DIR`` (WNBA only; a directory of ``closes_wnba_{season}.parquet`` files with
+``game_id``, ``mkt_p_home`` and ``mkt_margin``, the closing market, not shipped in this repo) it
+also scores the sim's game model one day ahead (ratings refit before each date, the first 20
+games of the season skipped, as the 2026-11-02 sim-vs-market bench did) against the closing
+market and the engine bench on the same games: Brier with paired differences, SE clustered by
+date.
 
 Usage::
 
     uv run python tools/validate_pro_season_sim.py --league nba --seasons 2024 2025 2026
     uv run python tools/validate_pro_season_sim.py --league wnba --seasons 2024 2025 \
-        --closes ../ClaudeCowork/data/2026-11-02-wnba-sim-vs-market \
-        --bench ../sdv-engine/dev/wnba_market
+        --closes path/to/wnba_closes --bench path/to/wnba_bench
 """
 
 from __future__ import annotations

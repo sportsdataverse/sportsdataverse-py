@@ -1,0 +1,39 @@
+schema: ncaa_score_rows
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: order
+  type: integer
+  description: ''
+- name: home_team_id
+  type: integer
+  description: ''
+- name: away_team_id
+  type: integer
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: elapsed
+  type: double
+  description: ''
+- name: sec_left
+  type: double
+  description: ''
+- name: game_seconds
+  type: double
+  description: ''
+- name: event_team_id
+  type: integer
+  description: ''
+- name: home_score
+  type: integer
+  description: ''
+- name: away_score
+  type: integer
+  description: ''

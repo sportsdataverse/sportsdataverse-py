@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: add_ctg–nba_player"
-sidebar_label: "Analytics: add_ctg–nba_player"
+title: "NBA — additional Python functions — Analytics: add_ctg–nba_coach"
+sidebar_label: "Analytics: add_ctg–nba_coach"
 sidebar_position: 13
-description: "NBA — additional Python functions — Analytics: add_ctg–nba_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: add_ctg–nba_coach — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: add_ctg–nba_player
+# NBA — additional Python functions — Analytics: add_ctg–nba_coach
 
 ### add_ctg_shot_zones {#add_ctg_shot_zones}
 
@@ -151,6 +151,108 @@ from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
 from sportsdataverse.nba.nba_play_context import add_play_context
 poss = add_play_context(enhanced_pbp_from_payload(payload))
 print(poss["possession_start_type_ctg"].value_counts())
+```
+
+### add_possession_flags {#add_possession_flags}
+
+`add_possession_flags(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 10.0) -> 'pl.DataFrame'`
+
+Append `seconds_to_first_shot`, `is_transition` and `is_garbage_time` to possessions.
+
+Works for the NBA and the WNBA, on any number of games at once. `possessions` is the
+`nba_stats_possessions` / `wnba_stats_possessions` frame (or the producer's
+`attach_possession_lineups` output) and `pbp` the play-by-play it was built from:
+the `nba_stats_pbp` release or the enhanced pbp frame. The input's columns, values,
+row count and row order are unchanged; only the three columns are appended.
+
+**seconds_to_first_shot** (Float64): seconds from the change of possession to the
+possession's first field-goal attempt. The change of possession is the clock at the
+previous possession's last event (`start_seconds_remaining` is the clock at this
+possession's first event, which after a rebound is often the shot itself). A period's
+first possession counts from its own first event. Null when the possession has no field
+goal attempt (turnovers, free-throw-only trips). It can pass 24 when the shot clock
+reset inside the possession (a kicked ball, a foul).
+
+**is_transition** (Boolean, never null): `possession_start_type` is `OffMadeShot`,
+`OffMissedShot` or `OffLiveBallTurnover`, the possession is not its period's first,
+and `seconds_to_first_shot <= transition_seconds` (10 by default: hoop-math's and
+bigballR's college window).
+
+**is_garbage_time** (Boolean, never null): bigballR's rule, the one behind the college
+flag. A possession triggers it when any of its events has an absolute score margin of
+at least 25 with 10:00 or less left in regulation, at least 20 with 5:00 or less, or at
+least 15 with 2:00 or less (or at least 15 in overtime), with at most 3 of the game's 10
+starters on the floor (the first possession's 10). Once a game triggers, it stays
+garbage time to the end. The module docstring lists where this differs from bigballR
+and why the triggering possession can qualify on its own basket.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Every possession of each game it holds (the previous possession's clock and the first possession's starters are read from it, so do not filter it to `count_as_possession` or to one team first). Needs `game_id`, `period`, `possession_number`, `number_in_period`, `start_order_index`, `end_order_index`, `start_seconds_remaining`, `end_seconds_remaining`, `possession_start_type` and `off_player_1..5` / `def_player_1..5`. |
+| `pbp` | `DataFrame` |  | The play-by-play of those games. Needs `game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home` and `score_away` (Utf8 or integer; the margin is the running score after each event). |
+| `transition_seconds` | `float` | `10.0` | The transition window in seconds. Default 10.0. |
+
+**Returns**
+
+`possessions` with `POSSESSION_FLAGS_SCHEMA` appended. An empty frame returns zero rows with those columns.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 | NBA Stats team id of the defending team for the possession. |
+| `start_order_index` | Int64 | order_index of the play-by-play event that starts the possession. |
+| `end_order_index` | Int64 | order_index of the play-by-play event that ends the possession. |
+| `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession started. |
+| `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
+| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
+| `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
+| `fg2a` | Int64 | Two-point field goal attempts during the possession. |
+| `fg2m` | Int64 | Two-point field goals made during the possession. |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 for the possession. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 for the possession. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 for the possession. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 for the possession. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 for the possession. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 for the possession. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 for the possession. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 for the possession. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 for the possession. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 for the possession. |
+| `lineup_source` | String | Provenance of the on-court lineup identification for the row (how the five-man units were resolved). |
+| `season` | Int64 | Season year. |
+| `seconds_to_first_shot` | Float64 | Seconds from the change of possession (the clock at the previous possession's last event) to the possession's first field-goal attempt; null when it has no field-goal attempt. |
+| `is_transition` | Boolean | True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is not its period's first, and seconds_to_first_shot is at most transition_seconds (default 10, hoop-math's and bigballR's window). Never null. |
+| `is_garbage_time` | Boolean | True from the possession that first meets bigballR's garbage-time rule (the college ncaa_*_possessions rule) to the end of the game. At some event of the possession the absolute margin is 25+ with 10:00 or less left in regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a needed column is missing, a column the flags would write already exists, `game_id` differs in dtype between the two frames, or `pbp` has no event for some possession. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import load_nba_stats_pbp, load_nba_stats_possessions
+from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+
+poss = add_possession_flags(load_nba_stats_possessions(2023), load_nba_stats_pbp(2023))
+print(poss.group_by("is_transition").len())
 ```
 
 ### add_start_type_detail {#add_start_type_detail}
@@ -901,597 +1003,124 @@ logs = nba_box_logs("2023-24")
 print(logs["player"].shape)
 ```
 
-### nba_cup_sim {#nba_cup_sim}
+### nba_coach_careers {#nba_coach_careers}
 
-`nba_cup_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 20261103, cup_schedule: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_coach_careers(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', espn: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win.
-
-Runs the season sim (`sportsdataverse.nba.nba_season_sim.nba_season_sim`: the as-of
-possession ridge with the preseason prior, one rating shift per team per simulated season, the
-same seed and draws) with the Cup inside it, ranks every simulated group with the Cup
-tiebreakers (`nba_cup_standings`), and plays the knockout: seed 1 hosts the wild card
-and seed 2 seed 3 in each conference, the semifinals neutral through 2025-26 and at the
-higher seed from 2026-27, the final neutral. A knockout game already played keeps its result.
+Head-coach careers over `seasons`: `nba_coach_seasons` summed per coach, rates recomputed.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | The season, named by the year it ends (`2027` is 2026-27); from 2024. |
-| `as_of_date` | `date \| None` | `None` | Games on or after this date are simulated even when they have a score (a backtest). None: every final game counts as played. |
-| `n_sims` | `int` | `10000` | Simulated Cups (Monte Carlo error: the `_se` columns). |
-| `seed` | `int` | `20261103` | Seeds the generator; the same data and seed give the same output. |
-| `cup_schedule` | `DataFrame \| None` | `None` | A `~sportsdataverse.nba.nba_stats.nba_stats_scheduleleaguev2` frame; None fetches it from stats.nba.com (residential connection). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team (`team_id`, Int64), sorted by conference, group and mean group rank: the Group Play `wins` / `losses` / `point_diff` so far, the as-of `adj_net_rtg`, `p_win_group`, `p_wild_card`, `p_quarterfinal` (either), `p_semifinal`, `p_final`, `p_champion`, each with its Monte Carlo `_se` (`sqrt(p (1 - p) / n_sims)`), `mean_group_rank` and `n_sims`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2027 is 2026-27). |
-| `as_of_date` | Date | The as-of date: games on or after it are simulated. Null when every final game counts as played. |
-| `conference` | String | NBA conference (East / West). |
-| `cup_group` | String | The team's NBA Cup group (East Group A .. West Group C). |
-| `team_id` | Int64 | stats.nba.com team id (Int64). |
-| `wins` | Int64 | Group Play wins in the games already played. |
-| `losses` | Int64 | Group Play losses in the games already played. |
-| `point_diff` | Int64 | Group Play point differential in the games already played, 0 for a game that went to overtime. |
-| `adj_net_rtg` | Float64 | As-of adjusted net rating from the season sim's possession ridge: points per 100 over an average opponent on a neutral court. |
-| `p_win_group` | Float64 | Share of simulated Cups in which the team wins its group under the Cup tiebreakers. |
-| `p_wild_card` | Float64 | Share of simulated Cups in which the team takes its conference's wild card: the best second-place team. |
-| `p_quarterfinal` | Float64 | Share of simulated Cups in which the team reaches the knockout: a group win or the wild card. |
-| `p_semifinal` | Float64 | Share of simulated Cups in which the team wins its quarterfinal. |
-| `p_final` | Float64 | Share of simulated Cups in which the team reaches the final. |
-| `p_champion` | Float64 | Share of simulated Cups the team wins (the final included). |
-| `p_win_group_se` | Float64 | Monte Carlo standard error of p_win_group: sqrt(p (1 - p) / n_sims). |
-| `p_wild_card_se` | Float64 | Monte Carlo standard error of p_wild_card: sqrt(p (1 - p) / n_sims). |
-| `p_quarterfinal_se` | Float64 | Monte Carlo standard error of p_quarterfinal: sqrt(p (1 - p) / n_sims). |
-| `p_semifinal_se` | Float64 | Monte Carlo standard error of p_semifinal: sqrt(p (1 - p) / n_sims). |
-| `p_final_se` | Float64 | Monte Carlo standard error of p_final: sqrt(p (1 - p) / n_sims). |
-| `p_champion_se` | Float64 | Monte Carlo standard error of p_champion: sqrt(p (1 - p) / n_sims). |
-| `mean_group_rank` | Float64 | Mean Group Play finish (1-5) over the simulated Cups. |
-| `n_sims` | Int64 | Number of simulated Cups behind every share on the row. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `season` is before 2024 or `n_sims < 1`. |
-
-**Example**
-
-```python
-import datetime as dt
-from sportsdataverse.nba.nba_cup import nba_cup_sim
-nba_cup_sim(2027, as_of_date=dt.date(2026, 11, 6)).select("team_id", "p_quarterfinal", "p_champion")
-```
-
-### nba_cup_standings {#nba_cup_standings}
-
-`nba_cup_standings(season: 'int', *, as_of_date: 'dt.date | None' = None, cup_schedule: 'pl.DataFrame | None' = None, seed: 'int' = 20261103, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-NBA Cup Group Play standings as of a date, with the official tiebreak order and wild cards.
-
-The rules (NBA.com, "Emirates NBA Cup 101", https://www.nba.com/news/nba-cup-101, read
-2026-11-04) are in `sportsdataverse.nba.nba_cup`: Group Play record, then head-to-head,
-point differential and points scored in Group Play (overtime excluded), the previous
-regular-season record and a random drawing; the wild card is the best second-place team of
-each conference by the same order without head-to-head.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | The season, named by the year it ends (`2027` is 2026-27); from 2024. |
-| `as_of_date` | `date \| None` | `None` | Games on or after this date are unplayed. None: every final game counts. |
-| `cup_schedule` | `DataFrame \| None` | `None` | A `~sportsdataverse.nba.nba_stats.nba_stats_scheduleleaguev2` frame for the season. None fetches it from stats.nba.com (a residential connection: the site hangs on datacenter IPs). |
-| `seed` | `int` | `20261103` | Seeds the random drawing, the last tiebreaker. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team (stats.nba.com `team_id`, Int64), sorted by conference, group and rank: `group_rank` with `wins` / `losses` / `games_remaining`, the tiebreak inputs `point_diff` / `points` (overtime excluded) / `prior_win_pct`, `tiebreak` (the criterion that placed the team among those with its record; null when the record alone did), `conference_rank` (the group leaders 1-3, then the rest, the wild-card race), `leads_group`, `holds_wild_card` and `knockout_seed` (1-4 on the current table).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2027 is 2026-27). |
-| `as_of_date` | Date | The as-of date: games on or after it are not counted. Null when every final game counts. |
-| `conference` | String | NBA conference (East / West). |
-| `cup_group` | String | The team's NBA Cup group (East Group A .. West Group C). |
-| `team_id` | Int64 | stats.nba.com team id (Int64). |
-| `group_rank` | Int64 | Place in the group (1-5) by Group Play record, then head-to-head, point differential, points scored, the previous season's record and a random drawing. |
-| `wins` | Int64 | Group Play wins. |
-| `losses` | Int64 | Group Play losses. |
-| `games_remaining` | Int64 | Group Play games still to play. |
-| `point_diff` | Int64 | Group Play point differential, 0 for a game that went to overtime (the Cup rule). |
-| `points` | Int64 | Group Play points scored, overtime points excluded (the Cup rule). |
-| `prior_win_pct` | Float64 | The previous regular season's winning percentage, the fourth tiebreaker. |
-| `tiebreak` | String | The criterion that placed the team among the teams with its group record: head_to_head, point_diff, points, prior_record or random; null when the record alone did. |
-| `conference_rank` | Int64 | Rank in the conference as stats.nba.com orders it: the group leaders 1-3 (the seeding order), then the second-place teams (the wild-card race), then the rest, each by record and the tiebreakers without head-to-head. |
-| `leads_group` | Boolean | Whether the team leads (or won) its group. |
-| `holds_wild_card` | Boolean | Whether the team holds its conference's wild card on the current table (the best second-place team). |
-| `knockout_seed` | Int64 | Knockout seed (1-3 the group leaders by record, 4 the wild card) on the current table; null otherwise. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `season` is before 2024 or the schedule does not hold six groups of five. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_cup import nba_cup_standings
-nba_cup_standings(2026).filter(pl.col("knockout_seed").is_not_null())
-```
-
-### nba_draft_lottery_odds {#nba_draft_lottery_odds}
-
-`nba_draft_lottery_odds(*, league_id: 'str' = '00', chances: 'Sequence[float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Exact draft-lottery odds by pre-lottery slot: the chance each slot gets each pick.
-
-NBA: the 2019 odds, 14 slots, four picks drawn. WNBA: two picks drawn, with the published
-chances for the number of lottery teams. Every ordered draw is enumerated (24,024 for the
-NBA), so the odds are exact, not simulated.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | The seasons the careers cover (a career counts only these). |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `chances` | `Sequence[float] \| None` | `None` | Chances per slot, worst record first. Default: `NBA_LOTTERY_CHANCES` (NBA) or the five-team `WNBA_LOTTERY_CHANCES` table (WNBA, the 2026 lottery). |
+| `season_type` | `str` | `'regular-season'` | As `nba_coach_seasons`. |
+| `espn` | `bool` | `True` | As `nba_coach_seasons`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per `(lottery_slot, pick)`: `lottery_slot` (1 = the worst record), `chances` (the slot's chances), `pick` and `probability`.
+One row per `coach_id`, most games first: `teams` (abbreviations, first to last), `seasons`, `first_season`, `last_season`, the summed record and counts and the recomputed rates, with ranks among coaches with at least a full season of games. To build careers from coach seasons already in hand, call `~sportsdataverse._common.coach_seasons.coach_careers` on them.
 
 | col_name | type | description |
 |---|---|---|
-| `lottery_slot` | Int64 | Pre-lottery slot, 1 = the worst record. |
-| `chances` | Float64 | The slot's chances in 1,000 (NBA 2019 table; WNBA published table or the caller's). |
-| `pick` | Int64 | Draft pick number. |
-| `probability` | Float64 | Exact probability that the slot gets the pick, from enumerating every ordered draw. |
+| `coach_id` | Int64 | stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches). |
+| `coach` | String | Head coach's name (stats.nba.com's staff list). |
+| `role` | String | HC: head coach (the only role the table carries). |
+| `teams` | String | Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros). |
+| `seasons` | Int64 | Distinct seasons in the career (only the seasons passed in). |
+| `first_season` | Int64 | First season in the career. |
+| `last_season` | Int64 | Last season in the career. |
+| `games` | Int64 | Games credited to the coach over the seasons passed in. |
+| `wins` | Int64 | Wins in the coach's games (final scores). |
+| `losses` | Int64 | Losses in the coach's games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pts` | Int64 | Points scored in the coach's games (final scores). |
+| `opp_pts` | Int64 | Points allowed in the coach's games (final scores). |
+| `pbp_games` | Int64 | The coach's games with published possessions; the ratings and four factors cover these. |
+| `poss` | Int64 | Offensive possessions in the coach's games. |
+| `opp_poss` | Int64 | Defensive possessions in the coach's games. |
+| `poss_pts` | Int64 | Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game). |
+| `opp_poss_pts` | Int64 | Points allowed on those possessions (the def_rtg numerator). |
+| `seconds` | Float64 | Game clock, in seconds, that the coach's possessions used (the pace denominator). |
+| `o_fga` | Float64 | The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fga` | Float64 | Opponents' field-goal attempts in the coach's games (a four-factor count). |
+| `o_fgm` | Float64 | The team's field goals made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fgm` | Float64 | Opponents' field goals made in the coach's games (a four-factor count). |
+| `o_fg3m` | Float64 | The team's three-pointers made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fg3m` | Float64 | Opponents' three-pointers made in the coach's games (a four-factor count). |
+| `o_fta` | Float64 | The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fta` | Float64 | Opponents' free-throw attempts in the coach's games (a four-factor count). |
+| `o_oreb` | Float64 | The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_oreb` | Float64 | Opponents' offensive rebounds in the coach's games (a four-factor count). |
+| `o_dreb` | Float64 | The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_dreb` | Float64 | Opponents' defensive rebounds in the coach's games (a four-factor count). |
+| `o_tov` | Float64 | The team's turnovers in the coach's games (a four-factor count; null when the source has none). |
+| `d_tov` | Float64 | Opponents' turnovers in the coach's games (a four-factor count). |
+| `o_ff_poss` | Float64 | The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count; null when the source has none). |
+| `d_ff_poss` | Float64 | Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count). |
+| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions, over the coach's games. |
+| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions, over the coach's games. |
+| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
+| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
+| `tov_pct` | Float64 | Turnovers per possession, as a fraction. |
+| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
+| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. |
+| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, as a fraction. |
+| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. |
+| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction. |
+| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. |
+| `win_pct_rank` | Float64 | Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `off_rtg_rank` | Float64 | Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `def_rtg_rank` | Float64 | Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `net_rtg_rank` | Float64 | Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `pace_rank` | Float64 | Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `efg_pct_rank` | Float64 | Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `tov_pct_rank` | Float64 | Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `orb_pct_rank` | Float64 | Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `ft_rate_rank` | Float64 | Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `win_pct_pct` | Float64 | Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `pace_pct` | Float64 | Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `win_pct_n` | Int64 | Sample size of win_pct: games. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: opponents' field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opponents' turnover-rate possessions. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: opponents' offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: opponents' field-goal attempts. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `chances` has a non-positive or non-finite entry or fewer entries than picks drawn. |
+| `ValueError` | As `nba_coach_seasons`. |
 
 **Example**
 
 ```python
-import polars as pl
-from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds
-odds = nba_draft_lottery_odds()
-odds.filter(pl.col("lottery_slot") == 1)
-
-# A WNBA lottery with its own chances
-
-nba_draft_lottery_odds(league_id="10", chances=[442, 276, 178, 104])
-```
-
-### nba_foul_drawing {#nba_foul_drawing}
-
-`nba_foul_drawing(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, advanced: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Expected FTA + residual foul-drawing skill from Synergy play-type mix.
-
-`lg_ft_rate_t` = poss-weighted league mean of `ft_freq` for play type
-`t` (`Σ_players(ft_freq_t·poss_t) / Σ_players(poss_t)`).
-`expected_fta = scale · Σ_t poss_t · lg_ft_rate_t`;
-`foul_draw_skill = 100·(fta − expected_fta)/poss`.
-
-`ft_freq` (Synergy's `ft_poss_pct`) counts FT-drawing *trips*, not
-individual free-throw attempts (a shooting foul is typically a 2-shot
-trip) -- `scale = Σ actual fta / Σ raw trip-based estimate` is derived
-from the fetched season itself (never hard-coded) so the trip-to-attempt
-conversion self-normalizes and `Σ expected_fta ≡ Σ fta` holds exactly.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `fta`, `poss` (bypasses the live fetch). |
-| `advanced` | `Optional[DataFrame]` | `None` | Injected `Advanced`-measure frame with `player_id`, `pfd` (personal fouls drawn); optional -- `pfd` is `null` when omitted (`fta` is the always-present proxy). |
-| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `ft_freq`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per player: `player_id` (Int64), `poss`/`fta`/ `expected_fta`/`foul_draw_skill` (Float64), `pfd` (Float64, null when *advanced* has no data for that player or is omitted). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_foul_drawing
-f = nba_foul_drawing("2023-24")
-print(f.sort("foul_draw_skill", descending=True).head(10))
-
-# Injected offline (oracle / test) path
-
-f = nba_foul_drawing("2023-24", base=base_df, player_mix=mix_df)
-
-# Pipeline next step
-
-f.filter(pl.col("poss") >= 200).sort("foul_draw_skill", descending=True)
-```
-
-### nba_l2m {#nba_l2m}
-
-`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
-
-Fetch and parse an NBA Last Two Minute report from official.nba.com.
-
-Retrieves the L2M report for a given game and returns parsed tables of calls,
-game metadata, and error statistics. The game_id is zero-padded to 10 digits
-(e.g., 42500405 becomes "0042500405"). A report is published for any game that
-is within 3 points (5 points before the 2017-18 season) at any point during the
-last two minutes of the fourth quarter or overtime -- not only playoff games.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
-| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
-| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
-
-**Returns**
-
-If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
-
-| col_name | type | description |
-|---|---|---|
-| `calls.game_id` | String | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
-| `calls.period` | Int64 | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
-| `calls.period_name` | String | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
-| `calls.pc_time` | String | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
-| `calls.seconds_remaining` | Float64 | Seconds remaining in the period at the graded play, parsed out of pc_time. |
-| `calls.call_type` | String | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
-| `calls.call` | String | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
-| `calls.type` | String | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
-| `calls.committing` | String | Player, team nickname, or coach responsible for the graded action. |
-| `calls.disadvantaged` | String | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
-| `calls.decision` | String | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
-| `calls.decision_raw` | String | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
-| `calls.comment` | String | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
-| `calls.difficulty` | String | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
-| `calls.video_event_id` | String | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
-| `calls.pos_id` | Int64 | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
-| `calls.pos_start` | String | Game clock at the start of the possession containing this graded play. |
-| `calls.pos_end` | String | Game clock at the end of the possession containing this graded play. |
-| `calls.pos_team_id` | Int64 | 10-digit NBA team id of the team in possession during the graded play. |
-| `game.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
-| `game.game_date` | Date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
-| `game.season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `game.home_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the home team. |
-| `game.away_team_id` | Int64 | 10-digit NBA team id (1610612xxx) of the away team. |
-| `game.home_team_abbr` | String | Three-letter abbreviation of the home team. |
-| `game.away_team_abbr` | String | Three-letter abbreviation of the away team. |
-| `game.home_team_name` | String | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
-| `game.away_team_name` | String | Away team nickname as published in the report. |
-| `game.home_score` | Int64 | Home team's final score for the game. |
-| `game.away_score` | Int64 | Away team's final score for the game. |
-| `game.l2m_comments` | String | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
-| `stats.game_id` | String | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
-| `stats.stat_name` | String | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
-| `stats.home` | Int64 | Value of stat_name attributed to the home team. |
-| `stats.away` | Int64 | Value of stat_name attributed to the away team. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
-| `NoDataError` | The game has no L2M report (a 404, or S3's `AccessDenied` 403). Only games within 3 points (5 before 2017-18) at some point in the last two minutes of the fourth quarter or overtime get one, so most games have none; a game that just ended may not be graded yet. |
-| `AssetFetchError` | The fetch failed (a transport error, a rate limit, an Akamai WAF block, or a 5xx that outlived the retry budget), or the 200 body is not a JSON object whose `game` is exactly one row, or its `l2m`/`stats` table is not a list of records (empty is fine) -- an error envelope or a changed schema, checked with `raw=True` too. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_officiating import nba_l2m
-result = nba_l2m("0042500405")
-calls = result["calls"]
-print(f"Game had {calls.height} tracked plays in the L2M window")
-
-# Parse as pandas instead
-
-result = nba_l2m("0042500405", return_as_pandas=True)
-calls_pd = result["calls"]
-
-# Access raw JSON
-
-payload = nba_l2m("0042500405", raw=True)
-print(payload["game"])
-```
-
-### nba_l2m_games {#nba_l2m_games}
-
-`nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Fetch the list of games with Last Two Minute reports for an NBA season.
-
-Retrieves and parses the L2M season index page from official.nba.com,
-returning a table of all games for which L2M reports exist. JSON reports
-exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
-which this function ignores. A release loader for historical (PDF-era)
-reports is planned but does not exist yet.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int \| str` |  | The NBA season (end year) as a 4-digit int or string, e.g. 2026 for the 2025-26 season. |
-| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
-
-**Returns**
-
-A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | String | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
-| `season` | Int64 | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
-| `season_type` | String | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `label` | String | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | `season` is not a 4-digit year (an int or an all-digit string), checked before any request. |
-| `NoDataError` | Official.nba.com has no listing page for that season (a 404, or S3's `AccessDenied` 403) -- e.g. a future season, or one from before the L2M program began. |
-| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), or a 200 response that is missing the expected "Last Two Minute" page marker (an Akamai interstitial, a blank body, or a redesigned page), or that links reports in a shape the parser does not read (a redesigned page) -- checked here, not in `parse_nba_l2m_games`, so the parser itself never raises. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_officiating import nba_l2m_games
-df = nba_l2m_games(2026)
-print(f"Season had {df.height} games with L2M reports")
-
-# Get playoff games only
-
-df = nba_l2m_games(2026)
-playoffs = df.filter(df["season_type"] == "playoffs")
-
-# Convert to pandas
-
-df = nba_l2m_games(2026, return_as_pandas=True)
-```
-
-### nba_play_context {#nba_play_context}
-
-`nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Fetch one game and return its possessions with the full CTG play-context surface.
-
-Single live call to `nba_stats_playbyplayv3`, then
-`add_play_context`. Works for NBA (`league_id="00"`), WNBA and the
-G-League — `stats.wnba.com` ships the same play-by-play shapes, and every
-threshold here is league-agnostic.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `str` |  | Ten-character game identifier (e.g. `"0022200001"`). |
-| `league_id` | `str` | `'00'` | League identifier (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
-| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
-| `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Possession frame with the play-context columns. Empty/malformed payloads return a zero-row frame — never raises.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_play_context import nba_play_context
-poss = nba_play_context("0022200001")
-print(poss["possession_start_type_ctg"].value_counts())
-
-# Transition rate for the game
-
-import polars as pl
-clean = poss.filter(
-    (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
-)
-print(clean["is_transition"].mean())
-```
-
-### nba_player_ages {#nba_player_ages}
-
-`nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
-
-Per-player age for a season (bulk), for the DARKO aging curve.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | NBA season, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | LeagueID (`"00"` NBA). |
-| `fetch` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable `nba_stats_leaguedashplayerbiostats` replacement for offline tests. |
-
-**Returns**
-
-Frame `player_id:Int64, age:Float64`.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_player_ages
-ages = nba_player_ages("2023-24")
-print(ages.head())
-```
-
-### nba_player_identity {#nba_player_identity}
-
-`nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Human-readable identity for every player in a season's box logs.
-
-Model outputs key on `player_id` alone, which makes them unusable without a
-second lookup -- a leaderboard reads `1628983` instead of
-`Shai Gilgeous-Alexander`. This derives the display columns from the season's
-own game logs, so they are **season-accurate**: a player's team is what he
-actually played for that year, not his current one (which is what a player
-directory would give and would silently mislabel every historical season).
-
-A traded player has rows for several teams. `team_*` is his **primary** team
-by minutes -- the one a reader means when they say "his team that season" --
-and `teams` lists every abbreviation he appeared for, in descending minutes,
-so a trade is visible rather than silently collapsed.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_logs` | `DataFrame` |  | Per-player-per-game rows from `leaguegamelog` (the `player_or_team="P"` variant), carrying `player_id`, `player_name`, `team_id`, `team_abbreviation`, `team_name` and `min`. |
-
-**Returns**
-
-One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one. A malformed frame yields the typed zero-row frame instead of raising, so a caller can join unconditionally.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | Unique player identifier. |
-| `player_name` | String | Player name. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `teams` | String | Nested list of member-team membership spans. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba import nba_player_identity
-
-logs = pl.DataFrame({
-    "player_id": [1628983],
-    "player_name": ["Shai Gilgeous-Alexander"],
-    "team_id": [1610612760],
-    "team_abbreviation": ["OKC"],
-    "team_name": ["Oklahoma City Thunder"],
-    "min": [34.0],
-})
-ratings = pl.DataFrame({"player_id": [1628983], "war": [21.9]})
-named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
-print(named.select("player_name", "team_name", "war"))
-```
-
-### nba_player_positions {#nba_player_positions}
-
-`nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
-
-Fetch league-wide listed positions for a season as numeric 1-5.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | NBA season, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | LeagueID (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
-| `fetch` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable `nba_stats_playerindex` replacement for offline tests. |
-
-**Returns**
-
-Frame with columns `player_id:Int64, position_num:Float64`.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ImportError` | If `curl_cffi` is not installed (required by the stats runtime). |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_player_positions
-pos = nba_player_positions("2023-24")
-print(pos.head())
-
-# Offline / injectable fetch for testing
-
-import polars as pl
-stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
-pos = nba_player_positions("2023-24", fetch=stub)
-```
-
-### nba_player_props {#nba_player_props}
-
-`nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Per-player expected prop lines + team pace projection for a matchup.
-
-Loads the season's player box logs + team ratings, keeps only games played
-strictly before `as_of_date` (both inputs), computes per-minute
-`player_rates`, and projects each player's line onto their mean
-minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
-two teams in the matchup are returned.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | End year of the season (e.g. `2024`). |
-| `game_id` | `str` |  | The game id. When `as_of_date` is `None` and this game is in the season's box logs or schedule, its date becomes the cut, so the default call never sees the game's own or any later line. |
-| `home_team_id` | `str` |  | Home team id. |
-| `away_team_id` | `str` |  | Away team id. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `as_of_date` | `Union[date, None]` | `None` | Only box lines and ratings games with `game_date < as_of_date` (strict) are used. `None` = the target game's date from the box logs, else from the schedule (one extra schedule read, only when the game is missing from the logs); a game in neither gets no cut and an `~sportsdataverse.errors.AsOfCutWarning`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `stat_pts_exp` | Float64 |  |
-| `stat_reb_exp` | Float64 |  |
-| `stat_ast_exp` | Float64 |  |
-| `stat_fg3m_exp` | Float64 |  |
-| `pace_proj` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied). |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_player_props import nba_player_props
-props = nba_player_props(2024, "401585828", "2", "6")
-
-# Backtest as of a date
-
-import datetime as dt
-props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
+from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers
+nba_coach_careers(list(range(2016, 2027))).select("coach", "teams", "games", "win_pct").head()
 ```

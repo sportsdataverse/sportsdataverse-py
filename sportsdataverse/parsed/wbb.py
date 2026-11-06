@@ -573,16 +573,35 @@ from sportsdataverse.wbb import validate_box_score as validate_box_score  # noqa
 from sportsdataverse.wbb import validate_lineup as validate_lineup  # noqa: F401
 from sportsdataverse.wbb import wbb_bracket_sim as wbb_bracket_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_bracketology as wbb_bracketology  # noqa: F401
+from sportsdataverse.wbb import wbb_coach_careers as wbb_coach_careers  # noqa: F401
+from sportsdataverse.wbb import wbb_coach_seasons as wbb_coach_seasons  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_lineup_games as wbb_epv_lineup_games  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_player_games as wbb_epv_player_games  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_plays as wbb_epv_plays  # noqa: F401
+from sportsdataverse.wbb import wbb_epv_team_games as wbb_epv_team_games  # noqa: F401
+from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
+from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
+from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_in_game_win_prob as wbb_in_game_win_prob  # noqa: F401
+from sportsdataverse.wbb import wbb_lineup_seasons as wbb_lineup_seasons  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
+from sportsdataverse.wbb import wbb_play_styles as wbb_play_styles  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_war as wbb_player_war  # noqa: F401
+from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
 from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: F401
 from sportsdataverse.wbb import wbb_schedule_crosswalk as wbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_season_projections as wbb_season_projections  # noqa: F401
 from sportsdataverse.wbb import wbb_season_sim as wbb_season_sim  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_lineup as wbb_situational_lineup  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_player as wbb_situational_player  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_team as wbb_situational_team  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
+from sportsdataverse.wbb import wbb_team_season_flow as wbb_team_season_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_team_season_rates as wbb_team_season_rates  # noqa: F401
 from sportsdataverse.wbb import wbb_team_strength as wbb_team_strength  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
@@ -1139,16 +1158,35 @@ __all__ = [
     "validate_lineup",
     "wbb_bracket_sim",
     "wbb_bracketology",
+    "wbb_coach_careers",
+    "wbb_coach_seasons",
+    "wbb_epv_lineup_games",
+    "wbb_epv_player_games",
+    "wbb_epv_plays",
+    "wbb_epv_team_games",
+    "wbb_game_flow",
+    "wbb_game_lineups_used",
+    "wbb_game_player_impact",
     "wbb_in_game_win_prob",
+    "wbb_lineup_seasons",
     "wbb_pbp_disk",
+    "wbb_play_styles",
     "wbb_player_crosswalk",
+    "wbb_player_on_off",
+    "wbb_player_war",
+    "wbb_player_wowy",
     "wbb_predict_games",
     "wbb_schedule_crosswalk",
     "wbb_season_projections",
     "wbb_season_sim",
+    "wbb_situational_lineup",
+    "wbb_situational_player",
+    "wbb_situational_team",
     "wbb_strength_of_schedule",
     "wbb_team_crosswalk",
+    "wbb_team_luck",
     "wbb_team_ratings",
+    "wbb_team_season_flow",
     "wbb_team_season_rates",
     "wbb_team_strength",
     "weighted_avg",

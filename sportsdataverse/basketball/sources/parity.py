@@ -75,10 +75,10 @@ LIVE_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
     # liveData is tenths; margin 0.04 / 0.044 ft
     "shot_error_median_ft": (None, 0.55),
     "shot_error_p95_ft": (None, 0.9),
-    # each source's own prior: liveData has no line, so the prior is home court (KNOWN_LOSSY). Worst 0.7905
-    # (WNBA 401857097); margin 0.0055
-    "wp_corr": (0.785, None),
-    # ESPN's line and neutral site given to both: worst 0.99967 (NBA 401809837); margin 0.00017
+    # each source's own prior: liveData has no line, so the prior is home court (KNOWN_LOSSY). Worst 0.97329
+    # (WNBA 401918020) since #1075's WP refit, which weighs the prior less (0.7905 before); margin 0.0033
+    "wp_corr": (0.97, None),
+    # ESPN's line and neutral site given to both: worst 0.999705 (NBA 401809837); margin 0.000205
     "wp_corr_equal_prior": (0.9995, None),
 }
 GATES: dict[tuple[str, str], dict[str, tuple[Optional[float], Optional[float]]]] = {

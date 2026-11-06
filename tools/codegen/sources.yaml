@@ -850,7 +850,16 @@ categories:
       - sportsdataverse.nhl.nhl_war
       - sportsdataverse._common.league_context
       - sportsdataverse._common.team_season_rates
+      - sportsdataverse._common.game_impact
+      - sportsdataverse._common.lineup_seasons
+      - sportsdataverse._common.player_on_off
+      - sportsdataverse._common.play_style
+      - sportsdataverse._common.game_flow
+      - sportsdataverse._common.situational_splits
       - sportsdataverse._common.team_strength
+      - sportsdataverse._common.team_luck
+      - sportsdataverse._common.player_war
+      - sportsdataverse._common.coach_seasons
       - sportsdataverse._common.metrics
       - sportsdataverse._common.ratings
       - sportsdataverse.cfb.model_calculators
@@ -956,17 +965,58 @@ categories:
       - sportsdataverse.mlb.mlb_stolen_base
       - sportsdataverse.nba.nba_clutch
       - sportsdataverse.nba.nba_team_season_rates
+      - sportsdataverse.nba.nba_game_impact
+      - sportsdataverse.nba.nba_epv
+      - sportsdataverse.nba.nba_lineup_seasons
+      - sportsdataverse.nba.nba_player_on_off
+      - sportsdataverse.nba.nba_player_factor_rapm
+      - sportsdataverse.nba.nba_play_style
+      - sportsdataverse.nba.nba_game_flow
+      - sportsdataverse.nba.nba_situational
       - sportsdataverse.wnba.wnba_team_season_rates
+      - sportsdataverse.wnba.wnba_game_impact
+      - sportsdataverse.wnba.wnba_lineup_seasons
+      - sportsdataverse.wnba.wnba_player_on_off
+      - sportsdataverse.wnba.wnba_player_factor_rapm
+      - sportsdataverse.wnba.wnba_game_flow
+      - sportsdataverse.wnba.wnba_situational
       - sportsdataverse.mbb.mbb_team_season_rates
+      - sportsdataverse.mbb.mbb_game_impact
+      - sportsdataverse.mbb.mbb_lineup_seasons
+      - sportsdataverse.mbb.mbb_player_on_off
+      - sportsdataverse.mbb.mbb_play_style
+      - sportsdataverse.mbb.mbb_game_flow
+      - sportsdataverse.mbb.mbb_epv
+      - sportsdataverse.mbb.mbb_situational
       - sportsdataverse.wbb.wbb_team_season_rates
+      - sportsdataverse.wbb.wbb_game_impact
+      - sportsdataverse.wbb.wbb_lineup_seasons
+      - sportsdataverse.wbb.wbb_player_on_off
+      - sportsdataverse.wbb.wbb_play_style
+      - sportsdataverse.wbb.wbb_game_flow
+      - sportsdataverse.wbb.wbb_epv
+      - sportsdataverse.wbb.wbb_situational
       - sportsdataverse.nba.nba_team_strength
       - sportsdataverse.wnba.wnba_team_strength
+      - sportsdataverse.nba.nba_team_luck
+      - sportsdataverse.wnba.wnba_team_luck
+      - sportsdataverse.nba.nba_player_war
+      - sportsdataverse.wnba.wnba_player_war
+      - sportsdataverse.nba.nba_coach_seasons
+      - sportsdataverse.wnba.wnba_coach_seasons
       - sportsdataverse.nba.nba_season_rules
       - sportsdataverse.nba.nba_season_sim
+      - sportsdataverse.nba.nba_rated_prior
       - sportsdataverse.nba.nba_cup
       - sportsdataverse.wnba.wnba_season_sim
       - sportsdataverse.mbb.mbb_team_strength
       - sportsdataverse.wbb.wbb_team_strength
+      - sportsdataverse.mbb.mbb_team_luck
+      - sportsdataverse.wbb.wbb_team_luck
+      - sportsdataverse.mbb.mbb_player_war
+      - sportsdataverse.wbb.wbb_player_war
+      - sportsdataverse.mbb.mbb_coach_seasons
+      - sportsdataverse.wbb.wbb_coach_seasons
       - sportsdataverse.nba.nba_foul_drawing
       - sportsdataverse.nba.nba_player_ages
       - sportsdataverse.nba.nba_playtype
@@ -977,6 +1027,7 @@ categories:
       - sportsdataverse.nba.nba_ratings_panel
       - sportsdataverse.nba.nba_salary_draft
       - sportsdataverse.nba.nba_play_context
+      - sportsdataverse.nba.nba_possession_flags
       - sportsdataverse.nhl.nhl_zone_transitions
       - sportsdataverse.cfb.cfb_tempo
       - sportsdataverse.cfb.cfb_resume

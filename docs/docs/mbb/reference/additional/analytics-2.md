@@ -1,92 +1,120 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg"
-sidebar_label: "Analytics: mbb_team–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player"
+sidebar_label: "Analytics: mbb_coach–mbb_player"
 sidebar_position: 14
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: mbb_coach–mbb_player
 
-### mbb_team_season_rates {#mbb_team_season_rates}
+### mbb_coach_seasons {#mbb_coach_seasons}
 
-`mbb_team_season_rates(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`mbb_coach_seasons(seasons: 'int | list[int]', coaches: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits.
-
-One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
-Clutch is a possession that starts with 5:00 or less left in the 2nd half (the 4th quarter
-in women's basketball from 2016) or an overtime, the score within 5; a close game is one with
-a clutch possession. The full definitions are in `sportsdataverse._common.team_season_rates`.
+College head-coach seasons: W-L, ratings and four factors of the team-seasons each coached.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_season_rates.wbb_team_season_rates`). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). NCAA possessions start in 2010; earlier seasons get null ratings. |
+| `coaches` | `DataFrame` |  | `ncaa_team_coaches` rows for those seasons and the season before each (the card record check, `ncaa_coach_stints`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_coach_seasons.wbb_coach_seasons`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss` (offensive / defensive possessions) and `pts` / `opp_pts` are the split's totals. The twelve rates are `off_rtg`, `def_rtg`, `net_rtg` (per 100 possessions), `pace` (possessions per 40 minutes), the four factors `efg_pct`, `tov_pct`, `orb_pct`, `ft_rate` and the same four against (`opp_*`), all fractions. The four factors are game-level (the NCAA team box) and null in the `clutch` split. Each rate has `<m>_rank` (1 = best; `def_rtg`, `tov_pct`, `opp_efg_pct`, `opp_orb_pct` and `opp_ft_rate` rank low first; pace ranks high first), `<m>_pct` (the Weibull percentile) and `<m>_n` (the sample: possessions for the ratings, games for pace, field-goal attempts for eFG% and FT rate, the box possessions for turnover rate, rebound chances for ORB%). Ranks are within the season and split, among teams with at least half the most games (which leaves out the non-D1 opponents), and null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id, coach_id)`: `coach_id` is the NCAA person id, `team_id` the ESPN team id, `team` the school. The columns are those of `sportsdataverse.nba.nba_coach_seasons.nba_coach_seasons`; `pace` is per 40 minutes. Ranks are within the season among coaches with half the most games (which leaves out the non-D1 opponents, who have no coach). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left in the 2nd half or an overtime, the score within 5 as it starts). |
-| `games` | Int64 | Games with at least one possession in the split. |
-| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the split. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
-| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the school (ESPN's schedule and the crosswalk of the NCAA team-season id). |
+| `team` | String | School (ESPN location). |
+| `coach_id` | Int64 | NCAA person id of the head coach (stats.ncaa.org /people/{id}). |
+| `coach` | String | Head coach's name (the stats.ncaa.org coach card). |
+| `role` | String | HC: head coach (the only role the table carries). |
+| `team_games` | Int64 | The team's completed games in the season (and season type); games < team_games means the coach shared the season. |
+| `first_game_date` | Date | Date of the coach's first credited game that season. |
+| `last_game_date` | Date | Date of the coach's last credited game that season. |
+| `games` | Int64 | Games credited to the coach: each completed game goes to the coach of record for it. |
+| `wins` | Int64 | Wins in the coach's games (final scores). |
+| `losses` | Int64 | Losses in the coach's games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pts` | Int64 | Points scored in the coach's games (final scores). |
+| `opp_pts` | Int64 | Points allowed in the coach's games (final scores). |
+| `pbp_games` | Int64 | The coach's games with published possessions; the ratings and four factors cover these. |
+| `poss` | Int64 | Offensive possessions in the coach's games. |
+| `opp_poss` | Int64 | Defensive possessions in the coach's games. |
+| `poss_pts` | Int64 | Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game). |
+| `opp_poss_pts` | Int64 | Points allowed on those possessions (the def_rtg numerator). |
+| `seconds` | Float64 | Game clock, in seconds, that the coach's possessions used (the pace denominator). |
+| `o_fga` | Float64 | The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fga` | Float64 | Opponents' field-goal attempts in the coach's games (a four-factor count). |
+| `o_fgm` | Float64 | The team's field goals made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fgm` | Float64 | Opponents' field goals made in the coach's games (a four-factor count). |
+| `o_fg3m` | Float64 | The team's three-pointers made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fg3m` | Float64 | Opponents' three-pointers made in the coach's games (a four-factor count). |
+| `o_fta` | Float64 | The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fta` | Float64 | Opponents' free-throw attempts in the coach's games (a four-factor count). |
+| `o_oreb` | Float64 | The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_oreb` | Float64 | Opponents' offensive rebounds in the coach's games (a four-factor count). |
+| `o_dreb` | Float64 | The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_dreb` | Float64 | Opponents' defensive rebounds in the coach's games (a four-factor count). |
+| `o_tov` | Float64 | The team's turnovers in the coach's games (a four-factor count; null when the source has none). |
+| `d_tov` | Float64 | Opponents' turnovers in the coach's games (a four-factor count). |
+| `o_ff_poss` | Float64 | The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count; null when the source has none). |
+| `d_ff_poss` | Float64 | Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count). |
+| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions, over the coach's games. |
+| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions, over the coach's games. |
 | `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
 | `pace` | Float64 | Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
-| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
-| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
-| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split. |
-| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
-| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
-| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level, from the NCAA team box; null in the clutch split. |
-| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `pace_rank` | Float64 | Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `off_rtg_pct` | Float64 | Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `def_rtg_pct` | Float64 | Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `net_rtg_pct` | Float64 | Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pace_pct` | Float64 | Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `efg_pct_pct` | Float64 | Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `tov_pct_pct` | Float64 | Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `orb_pct_pct` | Float64 | Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `ft_rate_pct` | Float64 | Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: the team's offensive possessions in the split. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: the team's defensive possessions in the split. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: the team's offensive plus defensive possessions in the split. |
-| `pace_n` | Int64 | Sample size of pace: games in the split. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: the team's field-goal attempts in the split, 0 when the rate is null. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: the NCAA team box's possessions (o_poss) in the split, 0 when the rate is null. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: the team's offensive-rebound chances in the split, 0 when the rate is null. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: the team's field-goal attempts in the split, 0 when the rate is null. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponents' field-goal attempts in the split, 0 when the rate is null. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the split, 0 when the rate is null. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the split, 0 when the rate is null. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the split, 0 when the rate is null. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
+| `tov_pct` | Float64 | Turnovers per possession, as a fraction. |
+| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
+| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. |
+| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, as a fraction. |
+| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. |
+| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction. |
+| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. |
+| `win_pct_rank` | Float64 | Rank of win_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `pace_rank` | Float64 | Rank of pace within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the highest value ranks 1; ties average). |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season among coaches with at least half the most games any team played (null under five coaches) (the lowest value ranks 1; ties average). |
+| `win_pct_pct` | Float64 | Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `pace_pct` | Float64 | Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `win_pct_n` | Int64 | Sample size of win_pct: games. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: opponents' field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opponents' turnover-rate possessions. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: opponents' offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: opponents' field-goal attempts. |
 
 **Raises**
 
@@ -97,668 +125,271 @@ One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_season_rates
-rates = mbb_team_season_rates(2025)
-rates.filter(split="all").sort("net_rtg_rank").head()
+from sportsdataverse.mbb.mbb_coach_seasons import mbb_coach_seasons, ncaa_team_coaches
+coaches = ncaa_team_coaches("ncaa-mbb-hoops-raw", [2024, 2025])
+mbb_coach_seasons(2025, coaches).sort("net_rtg_rank").select("coach", "team", "wins", "net_rtg").head()
 ```
 
-### mbb_team_strength {#mbb_team_strength}
+### mbb_epv_lineup_games {#mbb_epv_lineup_games}
 
-`mbb_team_strength(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`mbb_epv_lineup_games(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-College team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
-
-One row per team and season. The adjusted ratings are the published college ratings
-(`load_mbb_ratings` / `load_wbb_ratings`). SOS is the mean opponent `adj_net_rtg` over
-the team's completed ESPN games (unrated opponents left out), SOV the same over its wins.
+Per college five-man unit and game: the EPV added with the unit on the floor.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_strength.wbb_team_strength`). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_epv.wbb_epv_lineup_games`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), and null under five teams. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
-| `games` | Int64 | Games with at least one possession in the season (from the possession release). |
-| `wins` | Int64 | Wins in the season's completed ESPN games. |
-| `losses` | Int64 | Losses in the season's completed ESPN games. |
-| `poss` | Int64 | Offensive possessions in the season, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the season (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the season. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the season. |
-| `adj_off_rtg` | Float64 | Adjusted offensive rating: points per 100 possessions against an average defense, from the published college ratings (adj_o, the mbb_team_ratings fixed point). |
-| `adj_def_rtg` | Float64 | Adjusted defensive rating: points allowed per 100 possessions against an average offense, from the published college ratings (adj_d); lower is better. |
-| `adj_net_rtg` | Float64 | Adjusted net rating: adj_off_rtg minus adj_def_rtg. |
-| `sos` | Float64 | Strength of schedule: the mean adj_net_rtg of the opponents of the team's completed games, one weight per game (an opponent met four times counts four times). Opponents with no rating are left out. |
-| `sov` | Float64 | Strength of victory: the mean adj_net_rtg of the opponents the team beat, one weight per win; null with no win. |
-| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
-| `pace` | Float64 | Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box. |
-| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box. |
-| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. Game-level, from the NCAA team box. |
-| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. Game-level, from the NCAA team box. |
-| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box. |
-| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box. |
-| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level, from the NCAA team box. |
-| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box. |
-| `adj_off_rtg_rank` | Float64 | Rank of adj_off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `adj_def_rtg_rank` | Float64 | Rank of adj_def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `adj_net_rtg_rank` | Float64 | Rank of adj_net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `sos_rank` | Float64 | Rank of sos within the season (the highest value ranks 1; the hardest schedule ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `sov_rank` | Float64 | Rank of sov within the season (the highest value ranks 1; the strongest wins rank 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `pace_rank` | Float64 | Rank of pace within the season (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `adj_off_rtg_pct` | Float64 | Percentile of adj_off_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `adj_def_rtg_pct` | Float64 | Percentile of adj_def_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `adj_net_rtg_pct` | Float64 | Percentile of adj_net_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `sos_pct` | Float64 | Percentile of sos within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `sov_pct` | Float64 | Percentile of sov within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `off_rtg_pct` | Float64 | Percentile of off_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `def_rtg_pct` | Float64 | Percentile of def_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `net_rtg_pct` | Float64 | Percentile of net_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pace_pct` | Float64 | Percentile of pace within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `efg_pct_pct` | Float64 | Percentile of efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `tov_pct_pct` | Float64 | Percentile of tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `orb_pct_pct` | Float64 | Percentile of orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `ft_rate_pct` | Float64 | Percentile of ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `adj_off_rtg_n` | Int64 | Sample size of adj_off_rtg: the team's offensive possessions in the season. |
-| `adj_def_rtg_n` | Int64 | Sample size of adj_def_rtg: the team's defensive possessions in the season. |
-| `adj_net_rtg_n` | Int64 | Sample size of adj_net_rtg: the team's offensive plus defensive possessions in the season. |
-| `sos_n` | Int64 | Sample size of sos: the completed games against a rated opponent. |
-| `sov_n` | Int64 | Sample size of sov: the wins against a rated opponent. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: the team's offensive possessions in the season. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: the team's defensive possessions in the season. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: the team's offensive plus defensive possessions in the season. |
-| `pace_n` | Int64 | Sample size of pace: games in the season. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: the team's field-goal attempts in the season, 0 when the rate is null. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: the NCAA team box's possessions (o_poss) in the season, 0 when the rate is null. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: the team's offensive-rebound chances in the season, 0 when the rate is null. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: the team's field-goal attempts in the season, 0 when the rate is null. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponents' field-goal attempts in the season, 0 when the rate is null. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the season, 0 when the rate is null. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the season, 0 when the rate is null. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the season, 0 when the rate is null. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_team_strength import mbb_team_strength
-strength = mbb_team_strength(2025)
-strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
-```
-
-### ncaa_mbb_lineups {#ncaa_mbb_lineups}
-
-`ncaa_mbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Aggregate bigballR-contract play-by-play into per-lineup stats.
-
-Port of bigballR `get_lineups` (`all_functions.R:1945-2521`). Rows
-with any missing on-court player and substitution rows are dropped, each
-row's home/away five are byte-sorted so a lineup always occupies the same
-columns, and the home + away passes are combined per `(p1..p5, team)`.
-Ratios are derived from the summed counters, rounded to 3 decimals, and
-NA/Inf are zeroed exactly where R does it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games. |
-| `include_transition` | `bool` | `False` | When True, append the `_trans`/`_half` split surface plus `o_trans_pct`/`d_trans_pct` (213 columns total). |
-| `fix_tip_in` | `bool` | `True` | When True (default), rim stats count the scrape engine's real `"Tip In"` vocabulary. When False, reproduce R's literal `"Tip-In"` test (`all_functions.R:2012`) — tip-ins silently excluded — for oracle parity. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per lineup+team — 75 columns (`LINEUPS_COLUMNS`) or 213 with `include_transition=True` (`LINEUPS_TRANSITION_COLUMNS`), rows sorted by `p1..p5, team`. Empty input yields an empty frame with the documented schema.
-
-| col_name | type | description |
-|---|---|---|
-| `p1` | String |  |
-| `p2` | String |  |
-| `p3` | String |  |
-| `p4` | String |  |
-| `p5` | String |  |
-| `team` | String | Team-side label or team identifier. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_lineups
-lineups = ncaa_mbb_lineups(pbp)
-print(lineups.shape)
-
-# Transition/half-court splits, pandas out
-
-df_pd = ncaa_mbb_lineups(pbp, include_transition=True, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-lineups.filter(pl.col("mins") > 10).sort("netrtg", descending=True).head()
-```
-
-### ncaa_mbb_on_off {#ncaa_mbb_on_off}
-
-`ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Team stats for every on/off combination of the given players.
-
-Port of bigballR `on_off_generator` (`all_functions.R:2555-2749`,
-`include_transition=F` path). For k players, all `2^k` on/off
-assignments are enumerated in R's `expand.grid` order (first player
-varies fastest; first row all-On, last all-Off); each combination sums
-the lineups whose membership matches exactly, re-derives the full ratio
-block (including `e_poss`), rounds to 3 decimals, and zeroes NA/Inf.
-Combinations matching zero lineups produce an all-zero row.
-
-Faithful R quirk (kept, flagged): when `included`/`excluded` is
-passed, the base lineup set comes from the membership filter ONLY — the
-inferred-team filter is skipped (`all_functions.R:2584-2589`), so an
-included player on another team would leak that team's lineups in.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players` | `Union[str, Sequence[str]]` |  | Player name(s) to split on (the `Status` axis). |
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with `2^k` rows — `status` (e.g. `"A.PLAYER On | B.PLAYER Off"`) + the 69 stat columns (`ON_OFF_COLUMNS`).
-
-| col_name | type | description |
-|---|---|---|
-| `status` | String | Status label. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the players' team cannot be uniquely inferred from the lineups (R's `"ERROR- Player team not found"`). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_on_off
-split = ncaa_mbb_on_off("KEATON.WAGLER", lineups)
-print(split.shape)
-
-# Two-player interaction
-
-duo = ncaa_mbb_on_off(["A.PLAYER", "B.PLAYER"], lineups)
-
-# Pipeline next step (one line)
-
-split.select("status", "netrtg")
-```
-
-### ncaa_mbb_player_combos {#ncaa_mbb_player_combos}
-
-`ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Team stats for every n-player combination on the court together.
-
-Port of bigballR `get_player_combos` + `team_comb`
-(`get_player_combos.R:19-38` + `:42-191`). Combos are enumerated per
-team over the byte-sorted unique player pool (lexicographic
-`gtools::combinations` order), filtered to combos whose lineups total
-strictly more than `min_mins` minutes, then each combo's lineup rows
-are summed and the ratio block re-derived. **Rounding is 2 decimals**
-here (R rounds 3 in `get_lineups` / `on_off_generator`) and `e_poss`
-is the SUM of the per-lineup estimates, not a recompute — both faithful.
-
-R's `include_transition` switch is dead code (an exact-match guard at
-`get_player_combos.R:28-30` always forces it back to `FALSE`); the
-port implements the suffix-match intent but keeps the `False` default,
-which is the only R-reachable behavior.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
-| `n` | `int` | `2` | Combination size, 1-5. |
-| `min_mins` | `float` | `0` | Keep combos with total on-court minutes strictly greater than this (summed over the rounded per-lineup `mins`). |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be on the court in every lineup considered. |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be off the court in every lineup considered. |
-| `include_transition` | `bool` | `False` | Re-derive the `_trans`/`_half` ratio surface (requires a transition lineups frame; forced `False` otherwise). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per combo: `team, p1..pn` + the stat surface of the input frame. Teams appear in byte-sorted order.
-
-| col_name | type | description |
-|---|---|---|
-| `team` | String | Team-side label or team identifier. |
-| `p1` | String |  |
-| `p2` | String |  |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `n` is not an integer from 1 to 5. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_combos
-duos = ncaa_mbb_player_combos(lineups, n=2, min_mins=5)
-print(duos.shape)
-
-# Anchored on one player
-
-trios = ncaa_mbb_player_combos(lineups, n=3, included="KEATON.WAGLER")
-
-# Pipeline next step (one line)
-
-duos.sort("netrtg", descending=True).head()
-```
-
-### ncaa_mbb_player_lineups {#ncaa_mbb_player_lineups}
-
-`ncaa_mbb_player_lineups(lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Filter a lineups frame by on-court player membership.
-
-Port of bigballR `get_player_lineups` (`all_functions.R:2761-2792`):
-keep rows where every `included` player is on the court (in `p1..p5`)
-and no `excluded` player is. With both filters `None` the input is
-returned unchanged (R's `Included = NA, Excluded = NA` passthrough).
-Membership is tested by name against `p1..p5` (R tests the positional
-first five columns); row order is preserved.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups` (any frame with `p1..p5` works). |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must ALL be on the court. |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must NONE be on the court. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-Row-subset of `lineups`; schema unchanged.
-
-| col_name | type | description |
-|---|---|---|
-| `p1` | String |  |
-| `p2` | String |  |
-| `p3` | String |  |
-| `p4` | String |  |
-| `p5` | String |  |
-| `team` | String | Team-side label or team identifier. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_lineups
-on = ncaa_mbb_player_lineups(lineups, included="KEATON.WAGLER")
-print(on.shape)
-
-# Included + excluded combination
-
-df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER"])
-
-# Pipeline next step (one line)
-
-on.select(pl.col("mins").sum())
-```
-
-### ncaa_possession_rate_rows {#ncaa_possession_rate_rows}
-
-`ncaa_possession_rate_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
-| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`), joined on `espn_game_id`. |
-| `league` | `str` | `'mens'` | `"mens"` (two 20-minute halves) or `"womens"` (10-minute quarters from 2016, halves before). |
-
-**Returns**
-
-One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`, with null four-factor counts.
+`sportsdataverse.nba.nba_epv.epv_lineup_games` of the seasons' plays: one row per `(season, game_id, team_id, lineup_id)` with `off_epv`, `def_epv`, `net_epv` and `plays`. `lineup_id` joins the five stats.ncaa.org player ids with `-`; a non-D1 team's units get no row.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
-| `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the clutch window can fall in. |
-| `start_clock` | Float64 | Seconds left in the period when the possession starts: its length plus the lengths of the later possessions in the period. |
-| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
-| `offense_team_id` | Int64 | ESPN id of the team with the ball; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of the team on defense; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
-| `neutral_site` | Boolean | True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the home nor the away split. |
-| `points` | Int64 | Points the offense scored on the possession. |
-| `fga` | Float64 | Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `ff_poss` | Float64 | Always null: the turnover rate's denominator comes from the team box. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id of the unit's team. |
+| `lineup_id` | String | The five stats.ncaa.org player ids, sorted and joined with '-'. |
+| `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
+| `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `plays` | Int64 | Play-by-play events with the unit on the floor (the ten on the event's row; the possession's starting ten where the row's is incomplete). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_epv import mbb_epv_lineup_games
+units = mbb_epv_lineup_games(2026)
+units.sort("net_epv", descending=True).head()
+```
+
+### mbb_epv_player_games {#mbb_epv_player_games}
+
+`mbb_epv_player_games(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per college player and game: EPV added on the player's own actions and on-court EPV +/-.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_epv.wbb_epv_player_games`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+`sportsdataverse.nba.nba_epv.epv_player_games` of the seasons' plays, on-court from the ten the release puts on each row: one row per `(season, game_id, team_id, player_id)` with `epv_own`, `own_actions`, `off_epv_on`, `def_epv_on` and `epv_on`. `team_id` is the ESPN id (Int64), `player_id` the stats.ncaa.org id (String); a non-D1 team's players get no row.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id of the player's team. |
+| `player_id` | String | stats.ncaa.org player id. |
+| `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
+| `own_actions` | Int64 | How many of the player's own events were credited. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor (the ten on each event's row; the possession's starting ten where the row's is incomplete). |
+| `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
+| `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_epv import mbb_epv_player_games
+box = mbb_epv_player_games(2026)
+box.sort("epv_on", descending=True).head()
+```
+
+### mbb_epv_plays {#mbb_epv_plays}
+
+`mbb_epv_plays(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+EPV and EPV added on every college play-by-play event inside a possession.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_epv.wbb_epv_plays`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in game order. `game_id` is the NCAA contest id; the team ids are ESPN ids (Int64, null for a non-D1 team); `person_id` is the stats.ncaa.org player id on the event (String, null on a team event) and the slots the possession's starting ten (String, null only where the release has no player); `event_type` is the NBA engine's vocabulary.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `possession_number` | Int64 | The possession's number in the game, from 1 (the release's, split where the other side shoots). |
+| `step` | Int64 | The event's place in its possession, from 1. |
+| `order_index` | Int64 | The row's order in the game's release play-by-play, from 0. |
+| `action_number` | Int64 | The row's order in the game's release play-by-play (the key of its ten on the floor). |
+| `offense_team_id` | Int64 | ESPN team id of the offense (null for a non-D1 team). |
+| `defense_team_id` | Int64 | ESPN team id of the defense (null for a non-D1 team). |
+| `home_team_id` | Int64 | ESPN team id of the home team (null for a non-D1 team). |
+| `team_id` | Int64 | ESPN team id of the team on the event (null for a non-D1 team). |
+| `person_id` | String | stats.ncaa.org player id on the event; null on a team event. |
+| `event_type` | String | The event in the NBA engine's vocabulary (made_shot, missed_shot, rebound, foul, free_throw, turnover, timeout, jump_ball, substitution, other). |
+| `sub_type` | String | The free-throw trip (Free Throw n of m) or the foul kind (Shooting, Offensive, Technical, Personal). |
+| `description` | String | The play-by-play text of the event (a steal or block is prefixed STEAL / BLOCK). |
+| `off_player_1` | String | stats.ncaa.org player id of offensive player 1 of 5 when the possession started. |
+| `off_player_2` | String | stats.ncaa.org player id of offensive player 2 of 5 when the possession started. |
+| `off_player_3` | String | stats.ncaa.org player id of offensive player 3 of 5 when the possession started. |
+| `off_player_4` | String | stats.ncaa.org player id of offensive player 4 of 5 when the possession started. |
+| `off_player_5` | String | stats.ncaa.org player id of offensive player 5 of 5 when the possession started. |
+| `def_player_1` | String | stats.ncaa.org player id of defensive player 1 of 5 when the possession started. |
+| `def_player_2` | String | stats.ncaa.org player id of defensive player 2 of 5 when the possession started. |
+| `def_player_3` | String | stats.ncaa.org player id of defensive player 3 of 5 when the possession started. |
+| `def_player_4` | String | stats.ncaa.org player id of defensive player 4 of 5 when the possession started. |
+| `def_player_5` | String | stats.ncaa.org player id of defensive player 5 of 5 when the possession started. |
+| `start_type` | Int64 | State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover. |
+| `period` | Int64 | State: the period (halves for men, quarters for women), overtimes folded to 5. |
+| `seconds_remaining` | Float64 | State: seconds left in the period after the event. |
+| `start_margin` | Float64 | State: the offense's lead when the possession started (before its first event). |
+| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot. |
+| `last_event` | Int64 | State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start). |
+| `ft_pending` | Int64 | State: free throws still to come in the trip (from the release's ft_number of ft_attempts). |
+| `shot_zone` | Int64 | State: zone of the possession's latest shot, 0 none, 1 paint two, 3 other two, 4 three (2 is unused: the feed has no distance). |
+| `points` | Int64 | The offense's points on the event. |
+| `remaining_points` | Int64 | The offense's points after the event to the end of the possession (the model's label). |
+| `is_last` | Boolean | Whether the event is its possession's last. |
+| `next_in_period` | Boolean | Whether another possession follows in the same period. |
+| `epv` | Float64 | Expected points for the offense to the end of the possession, after the event (scaled by the game's as-of scoring level). |
+| `epv_start` | Float64 | EPV at the possession's start. |
+| `epv_before` | Float64 | EPV before the event (the previous event's, or the start's). |
+| `epv_after` | Float64 | EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end). |
+| `epv_added` | Float64 | EPV added: points + epv_after - epv_before, the offense's (the defense's is its negative). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_epv import mbb_epv_plays
+plays = mbb_epv_plays(2026)
+plays.sort("epv_added", descending=True).head(5)
+```
+
+### mbb_epv_team_games {#mbb_epv_team_games}
+
+`mbb_epv_team_games(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per college team and game: EPV added on offense and allowed on defense.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26), from the booster's first training season (2022) on. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_epv.wbb_epv_team_games`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+`sportsdataverse.nba.nba_epv.epv_team_games` of the seasons' plays: one row per `(season, game_id, team_id)` with `opp_team_id`, `off_epv`, `def_epv`, `net_epv`, `poss`, `opp_poss`, `off_epv_per_poss` and `def_epv_per_poss`. ESPN team ids; a non-D1 team gets no row (`opp_team_id` is null against one).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id of the team (a non-D1 team gets no row). |
+| `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
+| `off_epv` | Float64 | The team's EPV added with the ball over the game. |
+| `poss` | Int64 | The team's possessions with at least one event. |
+| `def_epv` | Float64 | The opponent's EPV added with the ball over the game. |
+| `opp_poss` | Int64 | The opponent's possessions with at least one event. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `off_epv_per_poss` | Float64 | off_epv per possession. |
+| `def_epv_per_poss` | Float64 | def_epv per possession. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or a season is before the first one served. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mbb.mbb_epv import mbb_epv_team_games
+teams = mbb_epv_team_games(2026)
+teams.group_by("team_id").agg(pl.col("off_epv_per_poss").mean()).sort("off_epv_per_poss")
+```
+
+### mbb_game_flow {#mbb_game_flow}
+
+`mbb_game_flow(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College game flow per team and game: runs, droughts, kills, lead changes, time leading, game control.
+
+The definitions are in `sportsdataverse._common.game_flow`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_game_flow.wbb_game_flow`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id)` with the columns of `sportsdataverse.nba.nba_game_flow.nba_game_flow`. `game_id` is the NCAA contest id, `team_id` the ESPN team id (Int64). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 opponent has none and gets no row. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `is_home` | Boolean | True for the home side. |
+| `pts` | Int64 | The team's final points: its running score after the last play. |
+| `opp_pts` | Int64 | The opponent's final points. |
+| `won` | Boolean | True when pts > opp_pts. |
+| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
+| `lead_sec` | Float64 | Game-clock seconds with the team ahead; the score after a play holds until the next play. |
+| `trail_sec` | Float64 | Game-clock seconds with the team behind. |
+| `tied_sec` | Float64 | Game-clock seconds with the score level, the clock before the first play included. |
+| `lead_pct` | Float64 | lead_sec / game_seconds. |
+| `lead_changes` | Int64 | How often the leader flipped (a tie is not a lead, and the first lead is not a change); the same on both rows of a game. |
+| `times_tied` | Int64 | How often the score became level, the 0-0 start not counted; the same on both rows of a game. |
+| `largest_lead` | Int64 | The team's biggest lead in points (0 if never ahead). |
+| `largest_deficit` | Int64 | The team's biggest deficit in points (0 if never behind). |
+| `comeback` | Int64 | largest_deficit for a game the team won, else 0. |
+| `max_run` | Int64 | The most points the team scored in a row with the opponent scoring none (an n-0 run); a score correction comes off the run of the side it lowers. 0 if the team never scored. |
+| `runs_10` | Int64 | The team's runs of 10 or more unanswered points. |
+| `opp_runs_10` | Int64 | The opponent's runs of 10 or more unanswered points (a non-D1 opponent's included). |
+| `longest_drought_sec` | Float64 | The longest stretch of game clock between two of the team's scores, counted from the tip to its first score and from its last score to the end. |
+| `avg_margin` | Float64 | Game control: the team's score margin averaged over the game clock. |
+| `avg_wp` | Float64 | Game control: the team's in-game win probability averaged over the game clock (the league's in-game model with a home-court-only prior, 0.5 at a neutral site). |
+| `def_poss` | Int64 | The team's defensive possessions (every row of the possessions release); null for a game with no published possessions. |
+| `stops` | Int64 | Defensive possessions on which the opponent scored no points. |
+| `kills` | Int64 | Kills: each run of n straight stops adds n // 3 (a kill is three straight stops; a run of stops goes on across period breaks). |
+| `double_kills` | Int64 | Double kills: each run of n straight stops adds n // 6 (six straight stops are two kills and one double kill). |
 
 **Raises**
 
@@ -769,356 +400,390 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
-rows = ncaa_possession_rate_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
+from sportsdataverse.mbb.mbb_game_flow import mbb_game_flow
+flow = mbb_game_flow(2026)
 ```
 
-### ncaa_team_box_count_rows {#ncaa_team_box_count_rows}
+### mbb_game_lineups_used {#mbb_game_lineups_used}
 
-`ncaa_team_box_count_rows(team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
+`mbb_game_lineups_used(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame.
-
-Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, offensive rebounds and
-turnovers, the opponent's defensive rebounds (`d_drb`) and its own possessions (`o_poss`).
-`offense_is_home` is the box's own home designation (`team == home`).
+The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_box` | `DataFrame` |  | `load_ncaa_mbb_team_box` / `load_ncaa_wbb_team_box` rows. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_game_impact.wbb_game_lineups_used`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per (game, team) in `~sportsdataverse._common.team_season_rates.COUNT_ROWS_SCHEMA`.
+One row per `(season, game_id, team_id, lineup_id)`: `lineup_id` (the five NCAA player ids sorted and joined with `-`), `player_1..5`, and the same totals and ratings as `mbb_game_player_impact`, sorted by minutes within each team and game. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `offense_team_id` | Int64 | ESPN id of the team whose offense the row counts; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of its opponent; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the team is the game's (nominal) home team in the NCAA team box; a neutral-site game is in neither split. |
-| `fga` | Float64 | Field-goal attempts in the game. |
-| `fgm` | Float64 | Field goals made in the game. |
-| `fg3m` | Float64 | Three-pointers made in the game. |
-| `fta` | Float64 | Free-throw attempts in the game. |
-| `oreb` | Float64 | Offensive rebounds in the game. |
-| `dreb` | Float64 | The opponent's defensive rebounds in the game (the other half of the offensive-rebound chances). |
-| `tov` | Float64 | Turnovers in the game. |
-| `ff_poss` | Float64 | The team box's offensive possessions in the game, the turnover-rate denominator. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_team_box
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_team_box_count_rows
-counts = ncaa_team_box_count_rows(load_ncaa_mbb_team_box(2025))
-```
-
-### order_lineup {#order_lineup}
-
-`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
-
-Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
-
-Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
-Greedily fits each player (in input order) to their best-scoring slot via
-`_fit_player` (dominated by `pos_class_to_score` on the
-player's `posClass`, tie-broken by their raw `posConfidences`),
-evicting and recursively re-fitting any player displaced along the way,
-then applies `apply_relative_positional_overrides` (keyed on
-`team_season`) as a final hand-tuned correction pass.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
-| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
-| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
-
-**Returns**
-
-A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import order_lineup
-players_by_id = {
-    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
-    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
-}
-order_lineup(
-    [{"code": "AnCowan", "id": "Cowan, Anthony"},
-     {"code": "ErAyala", "id": "Ayala, Eric"}],
-    players_by_id, "",
-)
-```
-
-### pos_class_to_score {#pos_class_to_score}
-
-`pos_class_to_score(pos_class: 'str') -> 'int'`
-
-Ordinal "positional weight" for a position class, PG=1000..C=8000.
-
-Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
-a literal `switch`). Unmapped classes default to `4000` (the TS
-default-case comment notes "won't happen").
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
-
-**Returns**
-
-The class's ordinal score.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import pos_class_to_score
-pos_class_to_score("WF")
-```
-
-### project_bracket {#project_bracket}
-
-`project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'`
-
-Select and seed a tournament field from a per-team résumé frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid teams (see `~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always in the field. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
-| `field_size` | `int` | `68` | Tournament field size (68). |
-
-**Returns**
-
-One row per input team: `season, team_id, resume_score, projected_seed` (1-16, null outside the field; in a 68-team field the last four at-large teams and the four worst auto-bids share First Four slots, so every line has four slots), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `at_large_rank` (1 = the best résumé without an auto-bid; null for auto-bids), `bid` (exactly `field_size` true).
-
-No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_bracketology import project_bracket
-field = project_bracket(resume, auto_bids)
-```
-
-### regress_shot_quality {#regress_shot_quality}
-
-`regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'`
-
-Shrink a small-sample shot-quality stat toward its positional average.
-
-Faithful port of `PositionUtils.regressShotQuality`
-(`PositionUtils.ts:216-258`). Only the three relative shot-quality
-features (`calc_three_relative` / `calc_rim_relative` /
-`calc_mid_relative`) are regressed; any other `feat` passes `stat`
-through unchanged. A player is regressed toward the positional average
-whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
-(i.e. under 25% of their attempts come from that zone, floored at 15
-attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
-left at `0` to avoid widespread changes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stat` | `float` |  | The raw (unregressed) feature value. |
-| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
-| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
-| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
-
-**Returns**
-
-The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `lineup_id` | String | The five player ids of the unit, sorted and joined with '-'. |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_positions import regress_shot_quality
-player = {"total_off_fga": {"value": 25},
-          "total_off_3p_attempts": {"value": 1}}
-regress_shot_quality(-15.5, 2, "misc_feature", player)
-
-# Low-volume shrink toward the positional average
-
-regress_shot_quality(100, 3, "calc_rim_relative",
-    {"total_off_fga": {"value": 25},
-     "total_off_2prim_attempts": {"value": 8}})
+from sportsdataverse.mbb.mbb_game_impact import mbb_game_lineups_used
+units = mbb_game_lineups_used(2025)
 ```
 
-### strength_of_schedule {#strength_of_schedule}
+### mbb_game_player_impact {#mbb_game_player_impact}
 
-`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+`mbb_game_player_impact(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
+The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings.
+
+The definitions are in `sportsdataverse._common.game_impact`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
-| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_game_impact.wbb_game_player_impact`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
+One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` and `seconds` on the floor, `poss` / `opp_poss` (offensive / defensive possessions on the floor), `pts` / `opp_pts` (points scored / allowed while on), `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions) and their `_n` sample sizes. `game_id` is the NCAA contest id, `team_id` the ESPN team id (Int64), `player_id` the NCAA player id (String). Empty input returns that schema with zero rows.
 
-No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | String | stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet). |
+| `minutes` | Float64 | Game-clock minutes on the floor (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action. |
+| `poss` | Int64 | Offensive possessions on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions on the floor. |
+| `pts` | Int64 | The team's points while on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul, the official scorer's rule). |
+| `opp_pts` | Int64 | The opponent's points while on the floor, credited as pts is. |
+| `plus_minus` | Int64 | On-court +/-: pts - opp_pts. |
+| `off_rtg` | Float64 | On-court offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | On-court net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
-resume = strength_of_schedule(results, ratings)
+from sportsdataverse.mbb.mbb_game_impact import mbb_game_player_impact
+box = mbb_game_player_impact(2025)
 ```
 
-### test_positional_aware_filter {#test_positional_aware_filter}
+### mbb_lineup_seasons {#mbb_lineup_seasons}
 
-`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
+`mbb_lineup_seasons(seasons: 'int | list[int]', *, league: 'str' = 'mens', min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Check a positional-aware filter (from `build_positional_aware_filter`)
+College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones.
 
-against a sorted (`order_lineup`-ordered) lineup array.
-
-Faithful port of `PositionUtils.testPositionalAwareFilter`
-(`PositionUtils.ts:831-858`). A fragment matches if any of its
-position-restricted slots (or, when `pos` is empty, any slot at all)
-has a `code`/`id` containing the fragment's filter text
-(case-insensitive substring match). Every positive fragment must match
-(vacuously true if there are none); no negative fragment may match
-(vacuously true if there are none).
+The definitions are in `sportsdataverse._common.lineup_seasons`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
-| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
-| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_lineup_seasons.wbb_lineup_seasons`). |
+| `min_poss` | `int` | `200` | The rank gate, offensive plus defensive possessions (default 200). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-Whether the lineup satisfies both the positive and negative filters.
+One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), `lineup_id` (the NCAA player ids sorted and joined with `-`), `player_1..5`, `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for and against (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`, `opp_*`), the shot zones for and against (`rim_rate`, `mid_rate`, `fg3_rate` shares of field-goal attempts and `rim_pct`, `mid_pct`, `fg3_pct` make rates, `opp_*`), and for every rate `<m>_rank` / `<m>_pct` (within the season and unit size, among units with at least `min_poss`) and `<m>_n`. `team_id` is the ESPN team id (Int64). Empty input returns that schema with zero rows.
 
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
-lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
-test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
-```
-
-### using_roster_pos {#using_roster_pos}
-
-`using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'`
-
-Reconcile a stats-derived position class against roster metadata.
-
-Faithful port of `PositionUtils.usingRosterPos` (`PositionUtils.ts:583-626`).
-When the classifier landed on an "unsure" bucket (`"G?"`/`"F/C?"`),
-roster info narrows it (a roster `"C"` always wins outright); otherwise
-an obviously-wrong stats classification is compromised toward the
-roster-implied side, gated by `pos_class_to_score` thresholds.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | The stats-derived position class. |
-| `roster_pos` | `str \| None` |  | The roster-reported position (`"G"`/`"F"`/`"C"`), or `None`/`""` when unknown. `if (rosterPos)` (ts:587) is a plain JS truthiness check on a string -- `""` and `None` behave identically (both mean "no correction"), so `if not roster_pos` is the faithful Python mirror, not an `is None` landmine. |
-
-**Returns**
-
-A `(position, info)` tuple. `info` is `None` when no correction/explanation applies (matches the TS `undefined`), else a human-readable note on why the position was adjusted.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_positions import using_roster_pos
-using_roster_pos("G?", "C")
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id of the unit's team. |
+| `n_players` | Int64 | Unit size: 2, 3 or 5 players. |
+| `lineup_id` | String | The unit's stats.ncaa.org player ids, sorted as text and joined with '-'. |
+| `player_1` | String | Player 1 of the unit, in lineup_id order; null past n_players. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order; null past n_players. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order; null past n_players. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order; null past n_players. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order; null past n_players. |
+| `minutes` | Float64 | Game-clock minutes the unit shared the floor over the season. |
+| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a 2- or 3-man unit sums the fives that contain it). |
+| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
+| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
+| `plus_minus` | Int64 | The unit's +/- over the season: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `orb_pct` | Float64 | Offensive-rebound rate: OREB / (OREB + the opponent's DREB), as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate: its OREB / (its OREB + the unit's DREB). Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `rim_rate` | Float64 | Share of the unit's field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `mid_rate` | Float64 | Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `fg3_rate` | Float64 | Share of the unit's field-goal attempts that are threes. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `rim_pct` | Float64 | Field-goal percentage at the rim, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `mid_pct` | Float64 | Mid-range field-goal percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `fg3_pct` | Float64 | Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_rim_rate` | Float64 | Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_mid_rate` | Float64 | Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_fg3_rate` | Float64 | Share of the opponent's field-goal attempts that are threes. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_rim_pct` | Float64 | The opponent's field-goal percentage at the rim. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_mid_pct` | Float64 | The opponent's mid-range field-goal percentage. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `opp_fg3_pct` | Float64 | The opponent's three-point percentage. Null with a zero denominator. Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul). |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `rim_rate_rank` | Float64 | Rank of rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `mid_rate_rank` | Float64 | Rank of mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `fg3_rate_rank` | Float64 | Rank of fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `rim_pct_rank` | Float64 | Rank of rim_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `mid_pct_rank` | Float64 | Rank of mid_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `fg3_pct_rank` | Float64 | Rank of fg3_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_rim_rate_rank` | Float64 | Rank of opp_rim_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_mid_rate_rank` | Float64 | Rank of opp_mid_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_fg3_rate_rank` | Float64 | Rank of opp_fg3_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_rim_pct_rank` | Float64 | Rank of opp_rim_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_mid_pct_rank` | Float64 | Rank of opp_mid_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `opp_fg3_pct_rank` | Float64 | Rank of opp_fg3_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_rate_pct` | Float64 | Percentile of rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_rate_pct` | Float64 | Percentile of mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `fg3_rate_pct` | Float64 | Percentile of fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_pct_pct` | Float64 | Percentile of rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_pct_pct` | Float64 | Percentile of mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `fg3_pct_pct` | Float64 | Percentile of fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_rim_rate_pct` | Float64 | Percentile of opp_rim_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_mid_rate_pct` | Float64 | Percentile of opp_mid_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_fg3_rate_pct` | Float64 | Percentile of opp_fg3_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_rim_pct_pct` | Float64 | Percentile of opp_rim_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_mid_pct_pct` | Float64 | Percentile of opp_mid_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_fg3_pct_pct` | Float64 | Percentile of opp_fg3_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
+| `rim_rate_n` | Int64 | Sample size of rim_rate: the unit's field-goal attempts. |
+| `mid_rate_n` | Int64 | Sample size of mid_rate: the unit's field-goal attempts. |
+| `fg3_rate_n` | Int64 | Sample size of fg3_rate: the unit's field-goal attempts. |
+| `rim_pct_n` | Int64 | Sample size of rim_pct: the unit's rim attempts. |
+| `mid_pct_n` | Int64 | Sample size of mid_pct: the unit's mid-range attempts. |
+| `fg3_pct_n` | Int64 | Sample size of fg3_pct: the unit's three-point attempts. |
+| `opp_rim_rate_n` | Int64 | Sample size of opp_rim_rate: the opponent's field-goal attempts. |
+| `opp_mid_rate_n` | Int64 | Sample size of opp_mid_rate: the opponent's field-goal attempts. |
+| `opp_fg3_rate_n` | Int64 | Sample size of opp_fg3_rate: the opponent's field-goal attempts. |
+| `opp_rim_pct_n` | Int64 | Sample size of opp_rim_pct: the opponent's rim attempts. |
+| `opp_mid_pct_n` | Int64 | Sample size of opp_mid_pct: the opponent's mid-range attempts. |
+| `opp_fg3_pct_n` | Int64 | Sample size of opp_fg3_pct: the opponent's three-point attempts. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
 
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
+from sportsdataverse.mbb.mbb_lineup_seasons import mbb_lineup_seasons
+units = mbb_lineup_seasons(2025)
+units.filter(n_players=2).sort("net_rtg_rank").head()
+```
 
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
+### mbb_play_styles {#mbb_play_styles}
 
-# Two-lineup possession-weighted merge
+`mbb_play_styles(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
+College player play-style archetypes: box, shot and lineup-role features (BB-D20).
+
+The features and their sources are in `sportsdataverse.mbb.mbb_play_style`; the method
+(season-relative z-scores, centers fit on 2025 and frozen, applied as-of) in
+`sportsdataverse._common.play_style`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2025+). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per qualifying `(player_id, season, team_id)`: `player_id` / `team_id` (Utf8, ESPN ids), `season`, `player`, `min` and the `archetype`, `cluster`, `dist_to_center`, `second_archetype` and `margin`. Empty input returns that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id of the player, as text (the box and shots releases' athlete id). |
+| `season` | Int64 | Season (2026 is 2025-26). |
+| `team_id` | String | ESPN team id of the team the player-season belongs to, as text. |
+| `player` | String | Player's display name on ESPN. |
+| `min` | Float64 | Season minutes; the qualifier is a quarter of the season's most minutes. |
+| `archetype` | String | Play-style archetype: the label of the nearest frozen KMeans center to the player-season's within-season z-scored box, shot and lineup-role features. |
+| `cluster` | Int64 | Index of the archetype's center in the bundled artifact (0-based). |
+| `dist_to_center` | Float64 | Euclidean distance (z-space) to the archetype's center; small means a prototypical example. |
+| `second_archetype` | String | The next-nearest archetype, the style a hybrid leans toward. |
+| `margin` | Float64 | Distance to the second center minus distance to the nearest; small means a hybrid. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_play_style import mbb_play_styles
+styles = mbb_play_styles(2026)
+styles.group_by("archetype").len()
+```
+
+### mbb_player_on_off {#mbb_player_on_off}
+
+`mbb_player_on_off(seasons: 'int | list[int]', *, league: 'str' = 'mens', min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College player on/off: each player's team with him on the floor and without him, per team-season.
+
+The definitions are in `sportsdataverse._common.player_on_off`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_player_on_off.wbb_player_on_off`). |
+| `min_poss` | `int` | `200` | The rank gate, offensive plus defensive possessions both on and off the floor (default 200). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id)`: `games` on the floor and `team_games`, then for `_on` and `_off` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions); `<rating>_diff` (on minus off); `<m>_rank` / `<m>_pct` for the on and diff ratings (within the season, among players with at least `min_poss` both ways) and `<m>_n` for every rating. `poss_on + poss_off` is the team's possessions. `team_id` is the ESPN team id (Int64), `player_id` the NCAA id (String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id` | String | stats.ncaa.org player id (there is no NCAA-to-ESPN player crosswalk yet). |
+| `games` | Int64 | Games the player was on the floor for the team. |
+| `team_games` | Int64 | Games the team played in the season (with play-by-play and possessions); games well short of it marks a player who missed time or was with the team for part of the season. |
+| `minutes_on` | Float64 | Game-clock minutes of the team's season with the player on the floor. |
+| `poss_on` | Int64 | The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_on` | Int64 | The team's defensive possessions with the player on the floor. |
+| `pts_on` | Int64 | The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_on` | Int64 | The opponent's points with the player on the floor, credited as pts_on is. |
+| `plus_minus_on` | Int64 | pts_on - opp_pts_on. |
+| `off_rtg_on` | Float64 | Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions. |
+| `def_rtg_on` | Float64 | Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions. |
+| `net_rtg_on` | Float64 | Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null. |
+| `minutes_off` | Float64 | Game-clock minutes of the team's season with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
+| `poss_off` | Int64 | The team's offensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left) (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_off` | Int64 | The team's defensive possessions with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left). |
+| `pts_off` | Int64 | The team's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_off` | Int64 | The opponent's points with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left), credited as pts_off is. |
+| `plus_minus_off` | Int64 | pts_off - opp_pts_off. |
+| `off_rtg_off` | Float64 | Offensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off; null with no possessions. |
+| `def_rtg_off` | Float64 | Defensive rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): opp_pts_off per 100 opp_poss_off; null with no possessions. |
+| `net_rtg_off` | Float64 | Net rating with the player off the floor: the rest of the team's season, the games he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left): off_rtg_off - def_rtg_off; null when either is null. |
+| `off_rtg_diff` | Float64 | On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null. |
+| `def_rtg_diff` | Float64 | On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null. |
+| `net_rtg_diff` | Float64 | On-off net rating: net_rtg_on - net_rtg_off; null when either is null. |
+| `off_rtg_on_rank` | Float64 | Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `def_rtg_on_rank` | Float64 | Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `net_rtg_on_rank` | Float64 | Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `off_rtg_diff_rank` | Float64 | Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `def_rtg_diff_rank` | Float64 | Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `net_rtg_diff_rank` | Float64 | Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players with at least min_poss possessions (offense plus defense) both on and off the floor (default 200); null below 10 qualifiers. |
+| `off_rtg_on_pct` | Float64 | Percentile of off_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `def_rtg_on_pct` | Float64 | Percentile of def_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `net_rtg_on_pct` | Float64 | Percentile of net_rtg_on among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `off_rtg_diff_pct` | Float64 | Percentile of off_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `def_rtg_diff_pct` | Float64 | Percentile of def_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `net_rtg_diff_pct` | Float64 | Percentile of net_rtg_diff among the same qualified players: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null where the rank is. |
+| `off_rtg_on_n` | Int64 | Sample size of off_rtg_on: poss_on. |
+| `def_rtg_on_n` | Int64 | Sample size of def_rtg_on: opp_poss_on. |
+| `net_rtg_on_n` | Int64 | Sample size of net_rtg_on: poss_on + opp_poss_on. |
+| `off_rtg_off_n` | Int64 | Sample size of off_rtg_off: poss_off. |
+| `def_rtg_off_n` | Int64 | Sample size of def_rtg_off: opp_poss_off. |
+| `net_rtg_off_n` | Int64 | Sample size of net_rtg_off: poss_off + opp_poss_off. |
+| `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
+| `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
+| `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_on_off import mbb_player_on_off
+on_off = mbb_player_on_off(2025)
+on_off.sort("net_rtg_diff_rank").head()
 ```

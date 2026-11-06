@@ -245,6 +245,7 @@ def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
         "season",
         "team_id",
         "minutes",
+        "starter",
         *(_COUNT_COLS),
     ]
     frames = []
@@ -253,6 +254,30 @@ def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
         if not df.is_empty():
             frames.append(df.select([c for c in keep if c in df.columns]))
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+
+
+def _played_rows(box: pl.DataFrame) -> pl.DataFrame:
+    """The box rows a player-value model counts, ids cast once at the boundary.
+
+    A row counts when it has minutes (> 0) and an athlete. ``athlete_id`` becomes ``player_id`` and
+    ``team_id`` stays ``team_id``, both String (the raw integer, cast through Int64; an id that is not
+    an integer raises rather than turning null); ``season`` is Int64 and ``minutes`` Float64. A played
+    row without an athlete belongs to no player, so it is dropped, never kept as a null-id
+    player-season: a join never matches a null key, so such a row falls out of one side of every
+    join. A scan of the 2006-2026 MBB and WBB box releases (2026-11-05) found two, both 2014: MBB game
+    400500056, team 2724, 2 minutes; WBB game 400542774, team 2426, 1 minute. Both have every stat 0.
+    :func:`aggregate_player_seasons` and the WAR game rows both read through here.
+    """
+    return (
+        box.with_columns(
+            pl.col("athlete_id").cast(pl.Int64).cast(pl.Utf8).alias("player_id"),
+            pl.col("team_id").cast(pl.Int64).cast(pl.Utf8),
+            pl.col("season").cast(pl.Int64),
+            pl.col("minutes").cast(pl.Float64),
+        )
+        .filter((pl.col("minutes") > 0) & pl.col("player_id").is_not_null())
+        .drop("athlete_id")
+    )
 
 
 def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
@@ -270,7 +295,21 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
             continue
         if not df.is_empty():
             frames.append(
-                df.select([c for c in ("athlete_id_1", "season", "type_text", "score_value") if c in df.columns])
+                df.select(
+                    [
+                        c
+                        for c in (
+                            "athlete_id_1",
+                            "athlete_id_2",
+                            "team_id",
+                            "season",
+                            "type_text",
+                            "score_value",
+                            "scoring_play",
+                        )
+                        if c in df.columns
+                    ]
+                )
             )
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
@@ -297,6 +336,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
 
     Sums the per-game player boxscores into one row per (player_id, season,
     team_id) with the counting columns :func:`player_per100_features` expects.
+    Only rows with minutes are counted, and a row with minutes but no athlete
+    (one per league in 2014) is dropped rather than kept as a null player_id.
     Shot-location splits come from the shots release (2025+): free throws
     (``MadeFreeThrow``) are excluded, layup/dunk/tip = rim, and jump shots
     split three vs mid by ``score_value`` (the release's ``type_text`` carries
@@ -310,7 +351,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
 
     Returns:
         One row per (player_id, season, team_id): ``player_id:Utf8, season,
-        team_id:Utf8, player, minutes`` + the counting columns + ``fga_rim,
+        team_id:Utf8, player, position, minutes, games, starter_share`` (the share
+        of his box rows marked starter) + the counting columns + ``fga_rim,
         fga_mid, fga_three``. Empty input returns zero rows.
 
     Example:
@@ -325,8 +367,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
     if box.is_empty():
         return pl.DataFrame()
     agg = (
-        box.filter(pl.col("minutes").is_not_null() & (pl.col("minutes") > 0))
-        .group_by("athlete_id", "season", "team_id")
+        _played_rows(box)
+        .group_by("season", "team_id", "player_id")
         .agg(
             pl.col("athlete_display_name").first().alias("player"),
             (
@@ -334,15 +376,16 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
                 if "athlete_position_abbreviation" in box.columns
                 else pl.lit(None, dtype=pl.Utf8)
             ).alias("position"),
-            pl.col("minutes").cast(pl.Float64).sum().alias("minutes"),
+            pl.col("minutes").sum(),
+            pl.len().alias("games"),
+            (
+                pl.col("starter").cast(pl.Float64).mean()
+                if "starter" in box.columns
+                else pl.lit(None, dtype=pl.Float64)
+            ).alias("starter_share"),
             *[pl.col(c).cast(pl.Float64).sum() for c in _COUNT_COLS if c in box.columns],
         )
-        .with_columns(
-            pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
-            pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
-            pl.col("season").cast(pl.Int64),
-        )
-        .drop("athlete_id")
+        .select(pl.exclude("player_id"), "player_id")  # the documented column order
     )
 
     # _load_shots handles the per-season release floor internally (skips below-floor

@@ -19,7 +19,7 @@ A script in another repository is cited as `repo` + path + the commit it was rea
 at. "Byte-identical" means the bundled file's sha256 equals the GitHub release
 asset's `digest` (checked 2026-10-22).
 
-## Bundled boosters (26)
+## Bundled boosters (29)
 
 ### CFB (`sportsdataverse/cfb/models/`, 11)
 
@@ -66,18 +66,23 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/nfl/models/qbr_model.ubj` | `akeaswaran/cfb_qbr` `qbr_xgb.R` (`ca94e63`, 2021; a CFB-trained model) | `2e52d0625a` (re-saved with feature names, trees unchanged) | n/a (no release) |
 | `sportsdataverse/nfl/models/nfl_playcall.ubj` | sdv-py `tools/models/nfl_scheme/train_playcall.py` (`04b729e6d2`) | `04b729e6d2` | n/a (bundle only) |
 
-### Basketball and baseball (6)
+### Basketball and baseball (9)
 
 | artifact | fitting script | bundled in |
 |---|---|---|
 | `sportsdataverse/nba/models/nba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 00` (`2413d0bfb2`) | `2413d0bfb2` |
 | `sportsdataverse/nba/models/wnba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 10 --artifact wnba_in_game_wp.ubj` (`2413d0bfb2`) | `2413d0bfb2` |
+| `sportsdataverse/nba/models/nba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 00` (train 2022-2024, holdout 2025, confirmation 2026; gates, partition and importance beside it) | #1113 |
+| `sportsdataverse/mbb/models/mbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id mbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
+| `sportsdataverse/mbb/models/wbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id wbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
 | `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` | **gap**: `dev/mbb_prediction/train_in_game_wp.py` exists only on the maintainer's disk (untracked) | `5c3eaba8de` |
 | `sportsdataverse/mbb/models/wbb_in_game_wp.ubj` | **gap**: same untracked script | `5c3eaba8de` |
 | `sportsdataverse/mlb/models/mlb_stuff_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_stuff_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 | `sportsdataverse/mlb/models/mlb_command_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_command_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 
-None of these six ships a card.
+The NBA and WNBA in-game WP boosters each ship a `.card.json` beside them, built by sdv-py
+`tools/models/nba_prediction/wp_model_cards.py` from the fit report, the holdout scoring and the booster
+(`tests/nba/test_nba_wp_model_cards.py` fails on a stale card). The other five ship none.
 
 ## Fitted constants
 
@@ -86,6 +91,8 @@ None of these six ships a card.
 | `mbb_ncaa_rapm_league.DEFAULT_RIDGE_LAMBDA` (1000.0) | `tools/fit_ncaa_rapm_lambda.py` | tracked (moved from untracked `dev/ncaa_rapm/fit_lambda_league.py`) |
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["00"]` / `["20"]` (70.1) | `tools/fit_nba_shot_shrinkage_k.py` | tracked (moved from untracked `dev/nba_shot_value/fit_shrinkage_k.py`; reruns to 70.1 on the committed fixture) |
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["10"]` (60.0) | none | **seeded placeholder**, not a fit: no WNBA shot fixture is committed |
+| `team_luck.PYTHAG_EXPONENT` (nba 14.02, wnba 10.64, mbb 8.07, wbb 6.80) | `tools/fit_team_luck_pythag.py` | tracked; reruns to the frozen values on the committed `tests/fixtures/bb_team_luck` records (`tests/tools/test_fit_team_luck_pythag.py`); refit when `SPANS` is extended |
+| `player_war.REPLACEMENT_LEVEL` (nba -1.98, wnba -3.18, mbb -1.66, wbb -1.99) and `player_war.PTS_PER_WIN` (nba 31.56, wnba 31.31, mbb 38.91, wbb 47.10) | `tools/fit_player_war.py` | tracked; reruns to the frozen values on the committed `tests/fixtures/bb_player_war` player-seasons and `bb_team_luck` records (`tests/tools/test_fit_player_war.py`); refit every year after the season, moving `SPANS` forward a season and re-deriving the holdout gates (the replacement level drifts up with roster depth; the college holdout seasons sit 0.23 / 0.42 per 100 above the frozen level) |
 | `paper_index` weights | `game-on-paper-app` `python/tools/fit_paper_index.py` (`43fd699f`) | tracked in that repo |
 | `nfl_prediction_constants.RatingsConfig.ridge_lambda`, `NFL_CONSTANTS`, `PROP_CONSTANTS` | `dev/nfl_prediction/fit_{ridge_lambda,pregame,props}.py` | **lost** (see below) |
 
@@ -129,7 +136,7 @@ Not cited from package source, so outside the test, but still gaps:
   and `wbb_in_game_wp.ubj`.
 - `cfb_cp_model.card.json`, `cfb_cp_model_air_yards.card.json` and
   `fd_model.card.json` carry `training_seasons: null` and `n_training_rows: null`.
-- No NFL, MBB, NBA or MLB booster ships a card.
+- No NFL, MBB or MLB booster ships a card; of the NBA boosters, only the in-game WP pair does (`nba_epv.ubj` ships none).
 - `nfl-data`'s registry lists the NFL QBR fitting script as TODO; the trainer
   named above (`cfb_qbr/qbr_xgb.R`) is the one the 2.7 feature-order fix traced
   the artifact to, not an NFL-trained replacement.

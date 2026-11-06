@@ -7,6 +7,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
+    _alias_columns,  # noqa: F401  (used only by loaders declaring column_aliases)
     _as_season_list,
     _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
@@ -52,6 +53,9 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
     if df is None:
         cli_warn("{{ ld.fn }}: no published asset (returning an empty frame)")
     out = df if df is not None else {{ ld.empty }}
+{% if ld.column_aliases %}
+    out = _alias_columns(out, {{ ld.column_aliases|py_repr }})
+{% endif %}
 {% if ld.id_int64 %}
     out = _cast_ids_int64(out, {{ ld.id_int64|py_repr }})
 {% endif %}
@@ -70,6 +74,10 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
         if df is None:
             missing.append(season)
             continue
+{% if ld.column_aliases %}
+        # Both names of a renamed column, whichever the release ships (deprecation window).
+        df = _alias_columns(df, {{ ld.column_aliases|py_repr }})
+{% endif %}
         frames.append(df)
     if missing:
         cli_warn("{{ ld.fn }}: no data for season(s) {missing} (skipped)".format(missing=missing))
@@ -77,6 +85,10 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
     # over the years) -- union columns, null-fill gaps.
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = pl.concat(frames, how="diagonal_relaxed") if frames else {{ ld.empty }}
+{% if ld.column_aliases %}
+    # diagonal_relaxed appends a column first seen in a later season at the end; restore the pair order.
+    out = _alias_columns(out, {{ ld.column_aliases|py_repr }})
+{% endif %}
 {% if ld.id_int64 %}
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.

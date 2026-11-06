@@ -1,0 +1,239 @@
+{
+  "league_id": "00",
+  "splits": {
+    "2022": "train",
+    "2023": "train",
+    "2024": "train",
+    "2025": "holdout",
+    "2026": "confirmation"
+  },
+  "n_train_states": 2522171,
+  "rounds": 63,
+  "start_epv_mean": 1.1432299613952637,
+  "params": {
+    "objective": "reg:squarederror",
+    "eval_metric": "rmse",
+    "max_depth": 6,
+    "eta": 0.1,
+    "min_child_weight": 50,
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42
+  },
+  "features": [
+    "start_type",
+    "period",
+    "seconds_remaining",
+    "start_margin",
+    "transition",
+    "last_event",
+    "ft_pending",
+    "shot_zone"
+  ],
+  "gates": {
+    "max_large_bias": 0.02,
+    "max_bucket_bias": 0.06,
+    "min_bucket": 500,
+    "min_gated_share": 0.99,
+    "slope_band": [
+      0.9,
+      1.1
+    ]
+  },
+  "seasons": {
+    "2025": {
+      "split": "holdout",
+      "states": 847106,
+      "possessions": 243735,
+      "mse": 0.7682370531691872,
+      "mse_constant": 1.0495907984045958,
+      "mse_cell_mean": 0.7733149214519993,
+      "skill_vs_constant": 0.2680604152237932,
+      "paired_vs_cell_mean": {
+        "games": 1230,
+        "mean": -0.005042858611036725,
+        "ci_lo": -0.005409252247875529,
+        "ci_hi": -0.00467646497419792
+      },
+      "mse_start": 1.4234270087028207,
+      "mse_start_constant": 1.433160038933104,
+      "mean_epv": 0.6728691681443381,
+      "mean_label": 0.6742166859873499,
+      "large_bias": -0.0013475178430117918,
+      "calibration_slope": 1.005438297486538,
+      "buckets": 31,
+      "gated_buckets": 26,
+      "gated_state_share": 0.9996576579554388,
+      "max_bucket_bias": 0.061339575383398265,
+      "bucket_failures": 0,
+      "worst_bucket": {
+        "last_event": 0,
+        "transition": 2,
+        "n": 896,
+        "bias": 0.015376493378643172,
+        "allowed": 0.06159780905402618
+      },
+      "ungated_max_bias": 1.1046901606023312,
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 84710,
+          "mean_epv": -0.0005821634556500507,
+          "mean_y": 0.00014165978042734033
+        },
+        {
+          "decile": 1,
+          "n": 84711,
+          "mean_epv": 0.009073181218029417,
+          "mean_y": 0.004096280294176672
+        },
+        {
+          "decile": 2,
+          "n": 84711,
+          "mean_epv": 0.07840301557244547,
+          "mean_y": 0.06817296455005843
+        },
+        {
+          "decile": 3,
+          "n": 84710,
+          "mean_epv": 0.2580763500121813,
+          "mean_y": 0.2737811356392398
+        },
+        {
+          "decile": 4,
+          "n": 84711,
+          "mean_epv": 0.564875089334235,
+          "mean_y": 0.5655936064973852
+        },
+        {
+          "decile": 5,
+          "n": 84711,
+          "mean_epv": 0.9936089115837946,
+          "mean_y": 0.9854682390716673
+        },
+        {
+          "decile": 6,
+          "n": 84710,
+          "mean_epv": 1.112959445972339,
+          "mean_y": 1.1113091724707826
+        },
+        {
+          "decile": 7,
+          "n": 84711,
+          "mean_epv": 1.1420855285161315,
+          "mean_y": 1.1422129357462432
+        },
+        {
+          "decile": 8,
+          "n": 84711,
+          "mean_epv": 1.1854417649435711,
+          "mean_y": 1.1937646822726682
+        },
+        {
+          "decile": 9,
+          "n": 84710,
+          "mean_epv": 1.384751310048482,
+          "mean_y": 1.3976271986778421
+        }
+      ]
+    },
+    "2026": {
+      "split": "confirmation",
+      "states": 864752,
+      "possessions": 245646,
+      "mse": 0.7714916803408715,
+      "mse_constant": 1.0545425946743647,
+      "mse_cell_mean": 0.7766819807644443,
+      "skill_vs_constant": 0.26841107771554484,
+      "paired_vs_cell_mean": {
+        "games": 1230,
+        "mean": -0.005171692794864021,
+        "ci_lo": -0.005540673449991857,
+        "ci_hi": -0.004802712139736186
+      },
+      "mse_start": 1.4144123031966902,
+      "mse_start_constant": 1.4255298455152832,
+      "mean_epv": 0.6744464853469371,
+      "mean_label": 0.6884262771291654,
+      "large_bias": -0.013979791782228301,
+      "calibration_slope": 1.0163185943736635,
+      "buckets": 30,
+      "gated_buckets": 25,
+      "gated_state_share": 0.9996704257405591,
+      "max_bucket_bias": 0.062357103146952274,
+      "bucket_failures": 0,
+      "worst_bucket": {
+        "last_event": 4,
+        "transition": 0,
+        "n": 90550,
+        "bias": -0.03548710345035786,
+        "allowed": 0.06833154342076367
+      },
+      "ungated_max_bias": 1.519515484571457,
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 86475,
+          "mean_epv": -0.00038402290186820634,
+          "mean_y": 0.0004163052905464007
+        },
+        {
+          "decile": 1,
+          "n": 86475,
+          "mean_epv": 0.01173934219932239,
+          "mean_y": 0.00819890141659439
+        },
+        {
+          "decile": 2,
+          "n": 86475,
+          "mean_epv": 0.08509715489015719,
+          "mean_y": 0.07692396646429604
+        },
+        {
+          "decile": 3,
+          "n": 86476,
+          "mean_epv": 0.26740794031526643,
+          "mean_y": 0.29793237430038394
+        },
+        {
+          "decile": 4,
+          "n": 86475,
+          "mean_epv": 0.5822998817237893,
+          "mean_y": 0.6004278693263949
+        },
+        {
+          "decile": 5,
+          "n": 86475,
+          "mean_epv": 0.9894180675123633,
+          "mean_y": 1.0112980630239954
+        },
+        {
+          "decile": 6,
+          "n": 86476,
+          "mean_epv": 1.1085100668702659,
+          "mean_y": 1.1427216800037006
+        },
+        {
+          "decile": 7,
+          "n": 86475,
+          "mean_epv": 1.1396054087501277,
+          "mean_y": 1.1439953743856606
+        },
+        {
+          "decile": 8,
+          "n": 86475,
+          "mean_epv": 1.1821296629818852,
+          "mean_y": 1.2008441746169414
+        },
+        {
+          "decile": 9,
+          "n": 86475,
+          "mean_epv": 1.378641038609571,
+          "mean_y": 1.4015033246603064
+        }
+      ]
+    }
+  },
+  "holdout_identity_max_residual": 0.0,
+  "failed_gates": []
+}

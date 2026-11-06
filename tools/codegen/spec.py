@@ -256,6 +256,10 @@ class Loader:
     # rosters.athlete_id, the crosswalk / NCAA bridge espn_* ids), so the join keys
     # are schema-equal, not merely joinable.
     id_int32: List[str] = field(default_factory=list)
+    # ``{new_name: deprecated_old_name}`` for a column the producer is renaming: the loader emits BOTH
+    # names whichever one the release ships (see ``_alias_columns``), so callers keep working for the
+    # one-release deprecation window. Drop the entry when the old names are removed.
+    column_aliases: Dict[str, str] = field(default_factory=dict)
     # What the sdv-py loader does when a requested season has no published asset:
     # ``skip`` (default; the generated loaders -- the season is dropped) or ``raise``
     # (the hand-written nfl_loaders -- ``NoDataError``). Machine-readable so ports
@@ -547,6 +551,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             deprecated_for=ld.get("deprecated_for"),
             id_int64=list(ld.get("id_int64", []) or []),
             id_int32=list(ld.get("id_int32", []) or []),
+            column_aliases=dict(ld.get("column_aliases", {}) or {}),
             on_missing=_on_missing(ld),
         )
         for ld in raw["loaders"]

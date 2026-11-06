@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_draft"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_decay"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_draft
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -888,7 +888,7 @@ game_minutes(4, league="mbb")  # 50
 
 ### game_page_frames {#game_page_frames}
 
-`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None) -> 'dict[str, object]'`
+`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, rated_home_prob: 'Optional[float]' = None) -> 'dict[str, object]'`
 
 Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload.
 
@@ -906,6 +906,7 @@ the warehouse's copies of the same frames.
 | `final` | `dict` |  | The dict `espn_<league>_pbp(..., return_parsed=False)` returns (for example `~sportsdataverse.nba.nba_pbp.espn_nba_pbp`). |
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
 
 **Returns**
 
@@ -936,7 +937,7 @@ frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'h
 
 ### game_page_tables {#game_page_tables}
 
-`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False) -> 'dict[str, object]'`
+`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'dict[str, object]'`
 
 Every game-page table for one game, from its basketball pbp / team box / player box frames.
 
@@ -958,6 +959,7 @@ and calls this too, so a game renders identically from either source. Runs
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default `game_regulation_periods` from the frame's `season`. Pass the schedule's `format_regulation_periods` through `game_regulation_periods` when you have it. |
 | `neutral_site` | `Optional[bool]` | `False` | Whether the game was at a neutral site (no home-court advantage in a lineless prior); `None`, NaN or `pd.NA` counts as false. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
 
 **Returns**
 
@@ -1089,7 +1091,7 @@ get_shrinkage_k("00")
 
 ### home_prior {#home_prior}
 
-`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False) -> 'tuple[float, str]'`
+`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'tuple[float, str]'`
 
 Pregame home win probability for the in-game model, and where it came from.
 
@@ -1097,8 +1099,10 @@ Pregame home win probability for the in-game model, and where it came from.
 (positive when the home side is favoured). With no line, every basketball pickcenter helper leaves
 it `None` (older releases carry an invented `+2.5`), so the value is only trusted when
 `game_spread_available` is true. A line
-already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
-site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use
+already prices the venue. Without one the prior is `rated_home_prob` when given (the NBA / WNBA
+as-of team-ratings prior, `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, which prices
+the venue itself), else home-court advantage alone, and at a neutral site (common in college
+tournaments) there is none: the prior is 0.5. NBA and WNBA use
 `~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted `hfa`;
 MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
 `league="mens"` / `"womens"`.
@@ -1112,10 +1116,11 @@ MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` wit
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None`, NaN or `pd.NA` counts as false. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, used when there is no line; `None`, NaN or a value outside [0, 1] falls through to home-court advantage. |
 
 **Returns**
 
-`(probability, source)` with `source` `"spread"`, `"neutral"` or `"hfa"`.
+`(probability, source)` with `source` `"spread"`, `"rated"`, `"neutral"` or `"hfa"`.
 
 **Raises**
 
@@ -1129,6 +1134,7 @@ MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` wit
 from sportsdataverse.nba.nba_game_page import home_prior
 home_prior(3.0, True)      # (0.58, 'spread')
 home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+home_prior(None, False, rated_home_prob=0.71)  # (0.71, 'rated')
 
 # A lineless college tournament game
 
@@ -1551,48 +1557,4 @@ print(df.sort("decay_rapm", descending=True).head())
 # Plain-RAPM-equivalent (no decay)
 
 df = nba_decay_rapm(season_poss)  # asof=None
-```
-
-### nba_draft_model {#nba_draft_model}
-
-`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Project prospect career value + draft probability from combine measurements.
-
-Loads the draft-combine wrappers for `draft_year` (or each year in the
-list), builds the shared combine-feature vector
-(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
-and applies the bundled ridge (`proj_career_value`) / logistic
-(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
-| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
-| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
-| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_draft_model
-board = nba_draft_model(2019)
-print(board.sort("proj_career_value", descending=True).head())
-
-# With a college-side prior
-
-board = nba_draft_model(2019, college_prior=mbb_prior_df)
-
-# Pipeline next step (one line)
-
-board.filter(pl.col("pro_tier") == "lottery")
 ```
