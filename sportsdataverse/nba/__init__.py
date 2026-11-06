@@ -142,6 +142,7 @@ from sportsdataverse.nba.nba_lineup_seasons import (  # noqa: F401
     nba_lineup_seasons,
 )
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off, nba_player_wowy  # noqa: F401
+from sportsdataverse.nba.nba_player_factor_rapm import nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba.nba_play_style import (  # noqa: F401
     nba_play_style_features,
     nba_player_play_styles,
@@ -175,6 +176,7 @@ from sportsdataverse.nba.nba_situational import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_season_standings  # noqa: F401
 from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401
+from sportsdataverse.nba.nba_rated_prior import nba_rated_priors  # noqa: F401
 from sportsdataverse.nba.nba_cup import nba_cup_sim, nba_cup_standings  # noqa: F401
 from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
     expected_possessions,

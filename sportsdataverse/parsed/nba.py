@@ -365,6 +365,7 @@ from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F4
 from sportsdataverse.nba import nba_play_style_features as nba_play_style_features  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_player_factor_rapm as nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: F401
 from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
@@ -375,6 +376,7 @@ from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
+from sportsdataverse.nba import nba_rated_priors as nba_rated_priors  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_season_frame  # noqa: F401
 from sportsdataverse.nba import nba_referee_assignments as nba_referee_assignments  # noqa: F401
@@ -812,6 +814,7 @@ __all__ = [
     "nba_play_style_features",
     "nba_player_ages",
     "nba_player_crosswalk",
+    "nba_player_factor_rapm",
     "nba_player_identity",
     "nba_player_on_off",
     "nba_player_play_styles",
@@ -822,6 +825,7 @@ __all__ = [
     "nba_playtype_ratings",
     "nba_possession_rate_rows",
     "nba_predict_games",
+    "nba_rated_priors",
     "nba_ratings_panel",
     "nba_raw_store_season_frame",
     "nba_referee_assignments",
