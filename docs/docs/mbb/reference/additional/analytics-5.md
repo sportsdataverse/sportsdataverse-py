@@ -1,10 +1,380 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg"
-sidebar_label: "Analytics: using_roster–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg"
+sidebar_label: "Analytics: ncaa_situation–weighted_avg"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg
+
+### ncaa_situation_rows {#ncaa_situation_rows}
+
+`ncaa_situation_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Map `ncaa_{mbb,wbb}_possessions` rows onto the situational-splits possession frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
+| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+One row per possession in `~sportsdataverse._common.situational_splits.situation_row_schema` (String player ids, null `is_second_chance`).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends. |
+| `game_id` | String | The stats.ncaa.org contest id. |
+| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
+| `possession_number` | Int64 | Order of the possession in the game. |
+| `late` | Boolean | True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the clutch window can fall in. |
+| `start_clock` | Float64 | Seconds left in the period when the possession starts: its length plus the lengths of the later possessions in the period. |
+| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
+| `offense_team_id` | Int64 | ESPN id of the team with the ball; null for a non-D1 team. |
+| `defense_team_id` | Int64 | ESPN id of the team on defense; null for a non-D1 team. |
+| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
+| `neutral_site` | Boolean | True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the home nor the away split. |
+| `points` | Int64 | Points the offense scored on the possession. |
+| `fga` | Float64 | Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `ff_poss` | Float64 | Always null: the turnover rate's denominator comes from the team box. |
+| `reg_periods` | Int64 | Regulation periods of the game: 4 quarters, or 2 halves. |
+| `is_transition` | Boolean | The possession is transition (BB-D7's flag for the pros, the release's own for college). |
+| `is_garbage_time` | Boolean | The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college). |
+| `is_second_chance` | Boolean | The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts). |
+| `off_1` | String | Offense player 1 on the floor as the possession starts. |
+| `off_2` | String | Offense player 2 on the floor as the possession starts. |
+| `off_3` | String | Offense player 3 on the floor as the possession starts. |
+| `off_4` | String | Offense player 4 on the floor as the possession starts. |
+| `off_5` | String | Offense player 5 on the floor as the possession starts. |
+| `def_1` | String | Defense player 1 on the floor as the possession starts. |
+| `def_2` | String | Defense player 2 on the floor as the possession starts. |
+| `def_3` | String | Defense player 3 on the floor as the possession starts. |
+| `def_4` | String | Defense player 4 on the floor as the possession starts. |
+| `def_5` | String | Defense player 5 on the floor as the possession starts. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
+from sportsdataverse.mbb.mbb_situational import ncaa_situation_rows
+rows = ncaa_situation_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
+```
+
+### ncaa_team_box_count_rows {#ncaa_team_box_count_rows}
+
+`ncaa_team_box_count_rows(team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame.
+
+Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, offensive rebounds and
+turnovers, the opponent's defensive rebounds (`d_drb`) and its own possessions (`o_poss`).
+`offense_is_home` is the box's own home designation (`team == home`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_box` | `DataFrame` |  | `load_ncaa_mbb_team_box` / `load_ncaa_wbb_team_box` rows. |
+
+**Returns**
+
+One row per (game, team) in `~sportsdataverse._common.team_season_rates.COUNT_ROWS_SCHEMA`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | The stats.ncaa.org contest id. |
+| `offense_team_id` | Int64 | ESPN id of the team whose offense the row counts; null for a non-D1 team. |
+| `defense_team_id` | Int64 | ESPN id of its opponent; null for a non-D1 team. |
+| `offense_is_home` | Boolean | True when the team is the game's (nominal) home team in the NCAA team box; a neutral-site game is in neither split. |
+| `fga` | Float64 | Field-goal attempts in the game. |
+| `fgm` | Float64 | Field goals made in the game. |
+| `fg3m` | Float64 | Three-pointers made in the game. |
+| `fta` | Float64 | Free-throw attempts in the game. |
+| `oreb` | Float64 | Offensive rebounds in the game. |
+| `dreb` | Float64 | The opponent's defensive rebounds in the game (the other half of the offensive-rebound chances). |
+| `tov` | Float64 | Turnovers in the game. |
+| `ff_poss` | Float64 | The team box's offensive possessions in the game, the turnover-rate denominator. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_team_box
+from sportsdataverse.mbb.mbb_team_season_rates import ncaa_team_box_count_rows
+counts = ncaa_team_box_count_rows(load_ncaa_mbb_team_box(2025))
+```
+
+### ncaa_team_coaches {#ncaa_team_coaches}
+
+`ncaa_team_coaches(root: 'str | Path', seasons: 'int | list[int]', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `root` | `str \| Path` |  | The `ncaa-mbb-hoops-raw` / `ncaa-wbb-hoops-raw` checkout. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+One row per page with a coach card, in `NCAA_COACHES_SCHEMA`; `team_id` is the ESPN team id from the season's `teams/json` crosswalk (null when it has none). A season with no crosswalk file is skipped with a warning.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `ncaa_team_id` | Int64 | stats.ncaa.org team-season id (the roster page's file name, teams/{id}). |
+| `team_id` | Int64 | ESPN team id of the school, from the season's teams/json crosswalk; null when the crosswalk has none. |
+| `team` | String | School name as stats.ncaa.org's crosswalk gives it. |
+| `coach_id` | Int64 | NCAA person id of the head coach (stats.ncaa.org /people/{id}). |
+| `coach` | String | Head coach's name on the page's Coach card. |
+| `career_seasons` | Int64 | The coach's seasons as a head coach through this one, every school and division (the card's Seasons). |
+| `career_wins` | Int64 | The coach's career wins through this season (the card's Record; the NCAA drops vacated wins). |
+| `career_losses` | Int64 | The coach's career losses through this season (the card's Record). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+### order_lineup {#order_lineup}
+
+`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
+
+Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
+
+Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
+Greedily fits each player (in input order) to their best-scoring slot via
+`_fit_player` (dominated by `pos_class_to_score` on the
+player's `posClass`, tie-broken by their raw `posConfidences`),
+evicting and recursively re-fitting any player displaced along the way,
+then applies `apply_relative_positional_overrides` (keyed on
+`team_season`) as a final hand-tuned correction pass.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
+| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
+
+**Returns**
+
+A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import order_lineup
+players_by_id = {
+    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
+    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
+}
+order_lineup(
+    [{"code": "AnCowan", "id": "Cowan, Anthony"},
+     {"code": "ErAyala", "id": "Ayala, Eric"}],
+    players_by_id, "",
+)
+```
+
+### pos_class_to_score {#pos_class_to_score}
+
+`pos_class_to_score(pos_class: 'str') -> 'int'`
+
+Ordinal "positional weight" for a position class, PG=1000..C=8000.
+
+Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
+a literal `switch`). Unmapped classes default to `4000` (the TS
+default-case comment notes "won't happen").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
+
+**Returns**
+
+The class's ordinal score.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import pos_class_to_score
+pos_class_to_score("WF")
+```
+
+### project_bracket {#project_bracket}
+
+`project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'`
+
+Select and seed a tournament field from a per-team résumé frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid teams (see `~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always in the field. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
+| `field_size` | `int` | `68` | Tournament field size (68). |
+
+**Returns**
+
+One row per input team: `season, team_id, resume_score, projected_seed` (1-16, null outside the field; in a 68-team field the last four at-large teams and the four worst auto-bids share First Four slots, so every line has four slots), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `at_large_rank` (1 = the best résumé without an auto-bid; null for auto-bids), `bid` (exactly `field_size` true).
+
+No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_bracketology import project_bracket
+field = project_bracket(resume, auto_bids)
+```
+
+### regress_shot_quality {#regress_shot_quality}
+
+`regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'`
+
+Shrink a small-sample shot-quality stat toward its positional average.
+
+Faithful port of `PositionUtils.regressShotQuality`
+(`PositionUtils.ts:216-258`). Only the three relative shot-quality
+features (`calc_three_relative` / `calc_rim_relative` /
+`calc_mid_relative`) are regressed; any other `feat` passes `stat`
+through unchanged. A player is regressed toward the positional average
+whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
+(i.e. under 25% of their attempts come from that zone, floored at 15
+attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
+left at `0` to avoid widespread changes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stat` | `float` |  | The raw (unregressed) feature value. |
+| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
+| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
+| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
+
+**Returns**
+
+The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import regress_shot_quality
+player = {"total_off_fga": {"value": 25},
+          "total_off_3p_attempts": {"value": 1}}
+regress_shot_quality(-15.5, 2, "misc_feature", player)
+
+# Low-volume shrink toward the positional average
+
+regress_shot_quality(100, 3, "calc_rim_relative",
+    {"total_off_fga": {"value": 25},
+     "total_off_2prim_attempts": {"value": 8}})
+```
+
+### strength_of_schedule {#strength_of_schedule}
+
+`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
+| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
+
+No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
+resume = strength_of_schedule(results, ratings)
+```
+
+### test_positional_aware_filter {#test_positional_aware_filter}
+
+`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
+
+Check a positional-aware filter (from `build_positional_aware_filter`)
+
+against a sorted (`order_lineup`-ordered) lineup array.
+
+Faithful port of `PositionUtils.testPositionalAwareFilter`
+(`PositionUtils.ts:831-858`). A fragment matches if any of its
+position-restricted slots (or, when `pos` is empty, any slot at all)
+has a `code`/`id` containing the fragment's filter text
+(case-insensitive substring match). Every positive fragment must match
+(vacuously true if there are none); no negative fragment may match
+(vacuously true if there are none).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
+| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
+| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
+
+**Returns**
+
+Whether the lineup satisfies both the positive and negative filters.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
+lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+```
 
 ### using_roster_pos {#using_roster_pos}
 

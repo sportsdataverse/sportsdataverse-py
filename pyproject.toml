@@ -515,6 +515,7 @@ files = [
     "sportsdataverse/espn_snapshots.py",
     "sportsdataverse/_common/__init__.py",
     "sportsdataverse/_common/league_context.py",
+    "sportsdataverse/_common/rate_gates.py",
     "sportsdataverse/_common/team_season_rates.py",
     "sportsdataverse/_common/game_impact.py",
     "sportsdataverse/_common/lineup_seasons.py",

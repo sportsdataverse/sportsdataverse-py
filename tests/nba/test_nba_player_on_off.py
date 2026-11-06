@@ -20,6 +20,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse._common.rate_gates import ON_OFF_MIN_N
 from sportsdataverse._common.lineup_seasons import lineup_seasons
 from sportsdataverse._common.player_on_off import (
     WOWY_SIDES,
@@ -53,8 +54,8 @@ def _rows(lg: str = "nba", season: int = 2025) -> pl.DataFrame:
 
 
 @cache
-def _on_off() -> pl.DataFrame:
-    return player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400)
+def _on_off(level: str | None = None) -> pl.DataFrame:
+    return player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, level=level)
 
 
 @cache
@@ -252,12 +253,15 @@ def test_public_builders_read_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
     for loader, name in names.items():
         monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture("nba", name, 2024))
         monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture("wnba", name, 2025))
-    assert nba_player_on_off(2025).equals(_on_off())
+    assert nba_player_on_off(2025).equals(_on_off(level="nba"))
+    assert not _on_off(level="nba").equals(_on_off())  # the adapter's level gate changes ranks
     assert nba_player_wowy(2025).equals(_wowy())
     assert nba_player_on_off(2025, season_type="preseason").height == 0  # the fixture has no preseason game
     wnba = wnba_player_on_off(2025)
     ranked = wnba.filter(pl.col("net_rtg_on_rank").is_not_null())
-    assert ranked.filter(pl.col("poss_off") + pl.col("opp_poss_off") < 200).height == 0  # the WNBA gate is 200
+    assert ranked.filter(pl.col("poss_off") + pl.col("opp_poss_off") < 200).height == 0  # the WNBA floor is 200
+    thin = wnba.filter(pl.col("net_rtg_on_n") < ON_OFF_MIN_N["wnba"]["net_rtg_on"])
+    assert thin.height > 0 and thin["net_rtg_on_rank"].null_count() == thin.height  # the WNBA sample gate
     assert wnba_player_wowy(2025).height > 0
 
 

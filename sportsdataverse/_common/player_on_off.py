@@ -27,7 +27,10 @@ Per side: ``minutes``, ``poss`` / ``opp_poss`` (offensive / defensive possession
 100 possessions (null with no possessions). On/off adds ``<m>_diff`` (on minus off) and the BB-D2
 league context: ``<m>_rank`` / ``<m>_pct`` for the on and diff ratings, league-wide within the
 season among players with at least ``min_poss`` possessions (offense plus defense) both on and off
-the floor, and ``<m>_n`` for every rating. WOWY carries no ranks: a pair is not a cohort, and its
+the floor whose ``<m>_n`` also reaches the league's gate in
+:data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N` (the sample at which the rating is half
+signal: most rotation players clear the on-court gates, few players clear a difference gate in a
+season and none in college), and ``<m>_n`` for every rating (a difference's is its thinner side's). WOWY carries no ranks: a pair is not a cohort, and its
 possession columns are the sample sizes.
 
 **Internal** -- not re-exported at the top-level ``sportsdataverse`` package.
@@ -39,6 +42,7 @@ import polars as pl
 
 from sportsdataverse._common.game_impact import _sides, games_with_possessions
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
+from sportsdataverse._common.rate_gates import on_off_gates
 
 __all__ = [
     "WOWY_SIDES",
@@ -138,7 +142,9 @@ def _season_totals(rows: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame, pl.D
     return team, on, sets
 
 
-def player_on_off(rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: int) -> pl.DataFrame:
+def player_on_off(
+    rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: int, level: str | None = None
+) -> pl.DataFrame:
     """Per player and team-season: the team with him on the floor and without him.
 
     Args:
@@ -146,6 +152,9 @@ def player_on_off(rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: in
         player_dtype: The league's player id dtype.
         min_poss: The rank gate: a player is ranked when ``poss + opp_poss`` is at least this both
             on and off the floor.
+        level: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``: rank a rating only when its ``<m>_n``
+            also reaches that league's :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N`
+            gate. ``None`` applies no sample gate (the league adapters always pass one).
 
     Returns:
         One row per ``(season, team_id, player_id)`` in :func:`player_on_off_schema`: ``games`` he
@@ -153,6 +162,9 @@ def player_on_off(rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: in
         minus off), the ranks and the sample sizes. ``<total>_on + <total>_off`` is the team's
         season total. Sorted by season, team and minutes on (most first). Empty input returns that
         schema with zero rows.
+
+    Raises:
+        KeyError: If ``level`` is unknown.
 
     Example:
         Quick start::
@@ -164,6 +176,7 @@ def player_on_off(rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: in
             player_on_off(nba_impact_rows(pbp, gl, poss, sched), player_dtype=pl.Int64(), min_poss=1000)
     """
     schema = player_on_off_schema(player_dtype)
+    gates = on_off_gates(level, _RANKED)
     team, on, _ = _season_totals(rows)
     if on.height == 0:
         return pl.DataFrame(schema=schema)
@@ -176,22 +189,23 @@ def player_on_off(rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: in
     out = _side_rates(_side_rates(out, "on"), "off").with_columns(
         (pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS
     )
-    # ponytail: min_poss defaults to BB-D4's lineup gate (400 NBA, 200 elsewhere), reused on purpose so
-    # one rank gate reads the same across the season tables; a larger one if on-off ranks prove too noisy.
+    # min_poss (BB-D4's lineup floor, 400 NBA, 200 elsewhere) keeps the cohort; the per-rating
+    # reliability gates (ON_OFF_MIN_N, fitted) decide which ratings are ranked.
     gate = pl.min_horizontal(pl.col("poss_on") + pl.col("opp_poss_on"), pl.col("poss_off") + pl.col("opp_poss_off"))
     n = {f"{r}_{s}": _n_expr(r, s) for s in ("on", "off") for r in _RATINGS}
     # a difference is as good as its thinner side
     n |= {f"{r}_diff": pl.min_horizontal(_n_expr(r, "on"), _n_expr(r, "off")) for r in _RATINGS}
     return (
-        out.pipe(
+        out.pipe(attach_sample_sizes, n)
+        .pipe(
             attach_ranks,
             list(_RANKED),
             min_cohort=MIN_COHORT_PLAYERS,
             by=("season",),
             lower_is_better=[m for m, low in _RANKED.items() if low],
             qualifier=gate >= min_poss,
+            min_n=gates,
         )
-        .pipe(attach_sample_sizes, n)
         .select(list(schema))
         .cast(schema)
         .sort(["season", "team_id", "minutes_on", "player_id"], descending=[False, False, True, False])

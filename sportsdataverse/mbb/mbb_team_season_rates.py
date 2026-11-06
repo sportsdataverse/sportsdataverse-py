@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.team_season_rates import (
     COUNT_ROWS_SCHEMA,
     RATE_ROWS_SCHEMA,
@@ -201,11 +202,12 @@ def mbb_team_season_rates(
         in the ``clutch`` split. Each rate has ``<m>_rank`` (1 = best; ``def_rtg``,
         ``tov_pct``, ``opp_efg_pct``, ``opp_orb_pct`` and ``opp_ft_rate`` rank low first; pace
         ranks high first), ``<m>_pct`` (the Weibull percentile) and ``<m>_n`` (the sample:
-        possessions for the ratings, games for pace, field-goal attempts for eFG% and FT rate,
-        the box possessions for turnover rate, rebound chances for ORB%). Ranks are within the
-        season and split, among teams with at least half the most games (which leaves out the
-        non-D1 opponents), and null under five teams. Empty input returns that schema with zero
-        rows.
+        possessions for the ratings, the clock in regulation games for pace, field-goal attempts
+        for eFG% and FT rate, the box possessions for turnover rate, rebound chances for ORB%).
+        Ranks are within the season and split, among teams with at least half the most games
+        (which leaves out the non-D1 opponents) whose ``<m>_n`` reaches the league's
+        :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null under five teams.
+        Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
@@ -221,7 +223,9 @@ def mbb_team_season_rates(
     load_possessions, load_team_box, load_schedule = _league_loaders(league)
     rows = ncaa_possession_rate_rows(load_possessions(seasons), load_schedule(seasons), league=league)
     out = (
-        team_season_rates(rows, minutes_per_game=40, counts=ncaa_team_box_count_rows(load_team_box(seasons)))
+        team_season_rates(
+            rows, minutes_per_game=40, counts=ncaa_team_box_count_rows(load_team_box(seasons)), level=NCAA_LEVEL[league]
+        )
         if rows.height
         else pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     )
