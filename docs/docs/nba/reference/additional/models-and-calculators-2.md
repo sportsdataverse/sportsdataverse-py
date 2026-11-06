@@ -1,10 +1,54 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_expected–win_prob"
-sidebar_label: "Models and calculators: nba_expected–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_draft–win_prob"
+sidebar_label: "Models and calculators: nba_draft–win_prob"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_expected–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_draft–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_expected–win_prob
+# NBA — additional Python functions — Models and calculators: nba_draft–win_prob
+
+### nba_draft_model {#nba_draft_model}
+
+`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Project prospect career value + draft probability from combine measurements.
+
+Loads the draft-combine wrappers for `draft_year` (or each year in the
+list), builds the shared combine-feature vector
+(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
+and applies the bundled ridge (`proj_career_value`) / logistic
+(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
+| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_draft_model
+board = nba_draft_model(2019)
+print(board.sort("proj_career_value", descending=True).head())
+
+# With a college-side prior
+
+board = nba_draft_model(2019, college_prior=mbb_prior_df)
+
+# Pipeline next step (one line)
+
+board.filter(pl.col("pro_tier") == "lottery")
+```
 
 ### nba_expected_turnovers {#nba_expected_turnovers}
 
@@ -776,7 +820,7 @@ with open("validation_card.md", "w") as f:
 
 ### score_win_prob {#score_win_prob}
 
-`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False) -> 'pl.DataFrame'`
+`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'pl.DataFrame'`
 
 Per-play home win probability, its play-to-play delta, and the prior, for one game.
 
@@ -794,15 +838,16 @@ games with the men's / women's college booster
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 halves, 4 quarters); default from the frame's `season` via `game_regulation_periods`. |
 | `neutral_site` | `Optional[bool]` | `False` | Whether the game is at a neutral site: no home-court advantage in a lineless prior; see `home_prior`. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`), the prior when there is no line; see `home_prior`. |
 
 **Returns**
 
-The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
+The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"rated"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
 
 | col_name | type | description |
 |---|---|---|
-| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
-| `prior_source` | String | Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5). |
+| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else rated_home_prob when the caller passed one (nba_rated_priors), else home-court advantage alone (0.5 at a neutral site). |
+| `prior_source` | String | Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5). |
 | `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
 | `home_win_prob` | Float64 | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
 | `wp_delta` | Float64 | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |

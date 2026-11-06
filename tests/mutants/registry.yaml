@@ -10505,6 +10505,26 @@
   expected: kill
   note: The bundled booster refuses a season before its first training one, whoever calls it.
 
+- id: bb-wp-rated-prior-ignored
+  group: bb-wp-cards
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_game_page.py
+  snippet: '    if rated_home_prob is not None and 0.0 <= float(rated_home_prob) <= 1.0:  # NaN and inf fall through'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_wp_model_cards.py::test_rated_prior_beats_the_home_court_fallback
+  expected: kill
+  note: A home_prior that drops the rating serves home court alone to every lineless game.
+
+- id: bb-wp-rated-prior-same-day
+  group: bb-wp-cards
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_rated_prior.py
+  snippet: 'rows.filter(pl.col("game_date") < day)'
+  mutant: 'rows.filter(pl.col("game_date") <= day)'
+  test: tests/nba/test_nba_wp_model_cards.py::test_rating_uses_only_games_before_the_tip
+  expected: kill
+  note: An inclusive boundary rates a game from possessions played the same day (as-of leakage).
+
 - id: bb-war-seed-per-team-season
   group: bb-player-war
   finding: BB-D26
