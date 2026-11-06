@@ -77071,7 +77071,7 @@ mbb_epv_player_games:
   own_actions: How many of the player's own events were credited.
   player_id: stats.ncaa.org player id.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the player's team.
 mbb_epv_lineup_games:
   def_epv: EPV added by the opponent with the ball while the unit was on.
   game_id: stats.ncaa.org contest id.
@@ -77080,7 +77080,7 @@ mbb_epv_lineup_games:
   off_epv: EPV added by the unit's team with the ball while the unit was on.
   plays: Play-by-play events with the unit on the floor.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the unit's team.
 mbb_epv_team_games:
   def_epv: The opponent's EPV added with the ball over the game.
   def_epv_per_poss: def_epv per possession.
@@ -77092,7 +77092,7 @@ mbb_epv_team_games:
   opp_team_id: The opponent's ESPN team id (null for a non-D1 opponent).
   poss: The team's possessions with at least one event.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the team (a non-D1 team gets no row).
 wbb_epv_plays:
   action_number: The row's order in the game's release play-by-play (the key of its ten on the floor).
   def_player_1: stats.ncaa.org player id of defensive player 1 of 5 when the possession started.
@@ -77144,7 +77144,7 @@ wbb_epv_player_games:
   own_actions: How many of the player's own events were credited.
   player_id: stats.ncaa.org player id.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the player's team.
 wbb_epv_lineup_games:
   def_epv: EPV added by the opponent with the ball while the unit was on.
   game_id: stats.ncaa.org contest id.
@@ -77153,7 +77153,7 @@ wbb_epv_lineup_games:
   off_epv: EPV added by the unit's team with the ball while the unit was on.
   plays: Play-by-play events with the unit on the floor.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the unit's team.
 wbb_epv_team_games:
   def_epv: The opponent's EPV added with the ball over the game.
   def_epv_per_poss: def_epv per possession.
@@ -77165,4 +77165,4 @@ wbb_epv_team_games:
   opp_team_id: The opponent's ESPN team id (null for a non-D1 opponent).
   poss: The team's possessions with at least one event.
   season: Season, named by the year it ends.
-  team_id: ESPN team id.
+  team_id: ESPN team id of the team (a non-D1 team gets no row).

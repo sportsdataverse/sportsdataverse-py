@@ -317,7 +317,7 @@ The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_lineup_games`.
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends. |
 | `game_id` | String | stats.ncaa.org contest id. |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the unit's team. |
 | `lineup_id` | String | The five stats.ncaa.org player ids, sorted and joined with '-'. |
 | `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
 | `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
@@ -360,7 +360,7 @@ The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_player_games`.
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends. |
 | `game_id` | String | stats.ncaa.org contest id. |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the player's team. |
 | `player_id` | String | stats.ncaa.org player id. |
 | `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
 | `own_actions` | Int64 | How many of the player's own events were credited. |
@@ -480,7 +480,7 @@ The columns of `sportsdataverse.mbb.mbb_epv.mbb_epv_team_games`.
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends. |
 | `game_id` | String | stats.ncaa.org contest id. |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the team (a non-D1 team gets no row). |
 | `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
 | `off_epv` | Float64 | The team's EPV added with the ball over the game. |
 | `poss` | Int64 | The team's possessions with at least one event. |
