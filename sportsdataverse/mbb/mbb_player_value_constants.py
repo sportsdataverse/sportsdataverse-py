@@ -336,6 +336,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
 
     Sums the per-game player boxscores into one row per (player_id, season,
     team_id) with the counting columns :func:`player_per100_features` expects.
+    Only rows with minutes are counted, and a row with minutes but no athlete
+    (one per league in 2014) is dropped rather than kept as a null player_id.
     Shot-location splits come from the shots release (2025+): free throws
     (``MadeFreeThrow``) are excluded, layup/dunk/tip = rim, and jump shots
     split three vs mid by ``score_value`` (the release's ``type_text`` carries
