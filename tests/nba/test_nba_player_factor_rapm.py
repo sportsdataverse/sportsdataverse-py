@@ -6,7 +6,9 @@ plain RAPM of the ``wnba_player_impact`` release for both seasons (the oracle).
 
 The acceptance is the identity of the split: the five offensive components (four factors and the
 remainder) add up to ``o_rapm`` and the five defensive ones to ``d_rapm``, and ``o_rapm`` /
-``d_rapm`` are the published plain RAPM. The gates are the values observed on these seasons; never lower one to make a change pass.
+``d_rapm`` are plain RAPM (``nba_rapm``) at the league's fixed penalty. The release was fit before the
+penalty was frozen, at RidgeCV's per-season pick; that is 1,931 in both WNBA seasons here, the frozen
+WNBA value, so the published WNBA rows still match. The gates are the values observed on these seasons; never lower one to make a change pass.
 The ``bb-factor-rapm`` rows of ``tests/mutants/registry.yaml`` go red here.
 """
 
@@ -22,9 +24,9 @@ from sklearn.linear_model import Ridge
 
 from sportsdataverse._common.factor_rapm import FACTORS, factor_rapm, factor_rapm_schema, factor_targets
 from sportsdataverse.nba import nba_loaders
-from sportsdataverse.nba.nba_rapm import build_rapm_design
+from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, RAPM_PENALTY, build_rapm_design, nba_rapm
 from tests.conftest import skip_if_no_live
-from sportsdataverse.nba.nba_player_factor_rapm import nba_factor_rapm_rows, nba_player_factor_rapm
+from sportsdataverse.nba.nba_player_factor_rapm import _load, nba_factor_rapm_rows, nba_player_factor_rapm
 from sportsdataverse.wnba import wnba_loaders
 from sportsdataverse.wnba.wnba_player_factor_rapm import wnba_player_factor_rapm
 
@@ -131,10 +133,34 @@ def test_the_remainder_is_rare_and_small() -> None:
         assert parts["other"].abs().max() < 3, season
 
 
+def test_one_penalty_for_every_season_and_type() -> None:
+    # The split fits at plain RAPM's fixed league penalty, the same every season and season type, so
+    # the components share one scale across seasons; the old per-season RidgeCV pick did not.
+    playoffs = factor_rapm(_rows(2025, "playoffs"), player_dtype=pl.Int64(), min_poss=50)
+    for out in (_split(2024), _split(2025), playoffs):
+        assert out["ridge_alpha"].unique().to_list() == [RAPM_PENALTY["10"]]
+    for season_type in ("regular-season", "playoffs"):
+        rows = _rows(2025, season_type)
+        got = factor_rapm(rows, player_dtype=pl.Int64(), min_poss=50).sort("player_id")
+        want = nba_rapm(rows).sort("player_id")  # plain RAPM on the same possessions
+        for c in ("o_rapm", "d_rapm", "rapm"):
+            assert (got[c] - want[c]).abs().max() < 1e-9, (season_type, c)
+
+
 def test_totals_are_the_published_plain_rapm() -> None:
+    # The wnba_player_impact release (fit before the penalty was frozen) is plain RAPM at the old rule's
+    # pick, RidgeCV's 1,931 (DEFAULT_RAPM_ALPHAS[3]) in both seasons: the same possessions and ridge
+    # reproduce it at that penalty. At the league penalty the values differ (they are on the new scale).
     oracle = pl.read_parquet(FIX / "wnba_player_impact_2024_2025.parquet")
     for season, players in ((2024, 157), (2025, 181)):
-        got = _split(season)
+        got = (
+            _split(season)
+            .select("season", "player_id", "off_poss", "def_poss")
+            .join(
+                nba_rapm(_rows(season), alpha=float(DEFAULT_RAPM_ALPHAS[3])).drop("off_poss", "def_poss"),
+                on="player_id",
+            )
+        )
         want = oracle.filter(pl.col("season") == season)
         assert got.schema["player_id"] == want.schema["player_id"]
         both = got.join(want, on=["season", "player_id"], how="full", suffix="_pub", validate="1:1")
@@ -142,19 +168,23 @@ def test_totals_are_the_published_plain_rapm() -> None:
         assert both.filter(pl.col("off_poss") != pl.col("off_poss_pub")).height == 0
         assert both.filter(pl.col("def_poss") != pl.col("def_poss_pub")).height == 0
         for c in ("o_rapm", "d_rapm", "rapm"):
-            # observed 7.2e-12 at most: the same ridge at the same RidgeCV penalty
+            # observed 7.2e-12 at most: the same ridge at the old rule's penalty
             assert both.select((pl.col(c) - pl.col(f"{c}_pub")).abs().max()).item() < 1e-9, (season, c)
 
 
 @skip_if_no_live
-@pytest.mark.parametrize("season", [2025, 2026])
-def test_nba_totals_track_the_published_release(season: int) -> None:
-    # Live: the NBA possessions and player_impact release assets (network, about 4 GB peak). Observed
-    # 2024-25: r 0.9978 / 0.9973, max |diff| 0.43 / 0.37; 2025-26: r 0.9966 / 0.9969, max 1.31 / 1.00
-    # (o_rapm / d_rapm). The gap is lineups, not possessions: the possessions release (2026-08-13)
-    # predates the player_impact fit (2026-10-12), whose re-compile has the same possessions but some
-    # different on-floor lineups, so each season's total possessions agree exactly.
-    out = nba_player_factor_rapm(season)
+@pytest.mark.parametrize(("season", "old_penalty"), [(2025, DEFAULT_RAPM_ALPHAS[4]), (2026, DEFAULT_RAPM_ALPHAS[3])])
+def test_nba_totals_track_the_published_release(season: int, old_penalty: float) -> None:
+    # Live: the NBA possessions and player_impact release assets (network, about 4 GB peak). The
+    # release was fit before the penalty was frozen, at RidgeCV's pick (5,179 for 2024-25, 1,931 for
+    # 2025-26), so plain RAPM at that pick is compared. Observed 2024-25: r 0.9978 / 0.9973, max |diff|
+    # 0.43 / 0.37; 2025-26: r 0.9966 / 0.9969, max 1.31 / 1.00 (o_rapm / d_rapm). The gap is lineups,
+    # not possessions: the possessions release (2026-08-13) predates the player_impact fit (2026-10-12),
+    # whose re-compile has the same possessions but some different on-floor lineups.
+    split = nba_player_factor_rapm(season)
+    assert split["ridge_alpha"].unique().to_list() == [RAPM_PENALTY["00"]]
+    rows = nba_factor_rapm_rows(*_load(season, "00"), "regular-season")
+    out = nba_rapm(rows, alpha=float(old_penalty))
     pub = nba_loaders.load_nba_player_impact(season).filter(pl.col("season_type") == "Regular Season")
     assert out.schema["player_id"] == pub.schema["player_id"]
     both = out.join(pub, on="player_id", how="full", suffix="_pub", validate="1:1")
@@ -164,7 +194,7 @@ def test_nba_totals_track_the_published_release(season: int) -> None:
         r = both.select(pl.corr(c, f"{c}_pub")).item()
         gap = both.select((pl.col(c) - pl.col(f"{c}_pub")).abs().max()).item()
         assert r >= 0.995 and gap <= 1.31, (season, c, r, gap)
-    worst = out.select((pl.sum_horizontal(_OFF) - pl.col("o_rapm")).abs().max()).item()
+    worst = split.select((pl.sum_horizontal(_OFF) - pl.col("o_rapm")).abs().max()).item()
     assert worst < 1e-9  # observed 1.0e-11
 
 
@@ -209,19 +239,21 @@ def test_ranks_follow_the_gate() -> None:
 
 
 def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fixture(name: str, want: int, season: int = 2025):  # type: ignore[no-untyped-def]
+    def fixture(name: str, want: int, prefix: str):  # type: ignore[no-untyped-def]
         def load(seasons: list[int]) -> pl.DataFrame:
             assert list(seasons) == [want], f"{name}: called with {seasons}"
-            return _read(name, season)
+            # the NBA path is fed the WNBA games under NBA ids ("00..."): the penalty follows the ids
+            return _read(name, 2025).with_columns((pl.lit(prefix) + pl.col("game_id").str.slice(2)).alias("game_id"))
 
         return load
 
     for loader, name in (("possessions", "possessions"), ("schedules", "schedule")):
-        monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture(name, 2025))
-        monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture(name, 2024))
+        monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture(name, 2025, "10"))
+        monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture(name, 2024, "00"))
     assert wnba_player_factor_rapm(2025).equals(_split(2025))
     nba = nba_player_factor_rapm(2025)  # the NBA loaders take the start year
     assert nba.height == _split(2025).height
+    assert nba["ridge_alpha"].unique().to_list() == [RAPM_PENALTY["00"]]
     assert (
         nba.filter(pl.col("rapm_rank").is_not_null()).select((pl.col("off_poss") + pl.col("def_poss")).min()).item()
         >= 400
