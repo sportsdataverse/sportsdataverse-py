@@ -1,0 +1,39 @@
+schema: nba_rated_priors
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: integer
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: home_team_id
+  type: integer
+  description: ''
+- name: away_team_id
+  type: integer
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: stats_game_id
+  type: character
+  description: ''
+- name: home_adj_net_rtg
+  type: double
+  description: ''
+- name: away_adj_net_rtg
+  type: double
+  description: ''
+- name: hfa
+  type: double
+  description: ''
+- name: exp_home_margin
+  type: double
+  description: ''
+- name: rated_home_prob
+  type: double
+  description: ''

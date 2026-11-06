@@ -218,6 +218,7 @@ nba:
   nba_situational_player: {seasons: 2026}
   nba_situational_lineup: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
+  nba_rated_priors: {season: 2026}
   nba_cup_standings: {season: 2026}  # 30 rows x 17 cols (stats.nba.com scheduleleaguev2)
   nba_cup_sim: {season: 2026, as_of_date: 2025-11-14}  # 30 rows x 23 cols
   nba_season_standings: {games: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}  # 30 rows x 13 cols
