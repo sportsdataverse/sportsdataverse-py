@@ -33,7 +33,7 @@ from sportsdataverse._common.situational_splits import (
     situational_team,
     situational_team_schema,
 )
-from sportsdataverse._common.team_season_rates import team_season_rates
+from sportsdataverse._common.team_season_rates import _with_clutch, team_season_rates
 from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings
 from sportsdataverse.nba import nba_loaders
 from sportsdataverse.nba.nba_possession_flags import add_possession_flags
@@ -180,7 +180,7 @@ def test_clutch_and_venue_are_bb_d3s(tables: dict[str, pl.DataFrame], releases: 
 
 
 def test_team_clutch_against_stats_nba(tables: dict[str, pl.DataFrame]) -> None:
-    """stats.nba.com's team clutch dashboard (last 5:00, within 5): observed 0.996 / 0.982."""
+    """stats.nba.com's team clutch dashboard (last 5:00, within 5): observed 0.997 / 0.992."""
     oracle = pl.read_parquet(FIXTURES / "nba_prediction" / "clutch_team_2024.parquet").with_columns(
         pl.col("team_id").cast(pl.Int64)
     )
@@ -188,12 +188,36 @@ def test_team_clutch_against_stats_nba(tables: dict[str, pl.DataFrame]) -> None:
     assert clutch.schema["team_id"] == oracle.schema["team_id"]
     j = clutch.join(oracle, on="team_id", how="inner", validate="1:1")
     assert j.height == 30
-    assert j.select(pl.corr("poss", "clutch_poss")).item() >= 0.99
-    assert j.select(pl.corr("net_rtg", "clutch_net_rating")).item() >= 0.98
-    # the level, not only the order: stats.nba.com counts a possession that starts just before 5:00
-    # and acts inside it, so it has 23 more a team (14 to 29); the net ratings agree on average
-    assert 20.0 <= (j["clutch_poss"] - j["poss"]).mean() <= 26.0
-    assert abs((j["net_rtg"] - j["clutch_net_rating"]).mean()) <= 0.5
+    assert j.select(pl.corr("poss", "clutch_poss")).item() >= 0.996
+    assert j.select(pl.corr("net_rtg", "clutch_net_rating")).item() >= 0.99
+    # the level, not only the order. Counting the possession live at 5:00 took stats.nba.com's lead
+    # from 23 a team (14 to 29) to 12 (5 to 20); most of the rest is the margin moving inside a
+    # possession, which stats.nba.com tracks event by event and we take as the possession starts
+    gap = j["clutch_poss"] - j["poss"]
+    assert 10.0 <= gap.mean() <= 14.0
+    assert gap.min() >= 5 and gap.max() <= 20
+    assert abs((j["net_rtg"] - j["clutch_net_rating"]).mean()) <= 0.1
+
+
+def test_possession_live_at_five_minutes_is_clutch(releases: tuple[pl.DataFrame, ...]) -> None:
+    """The possession in play at the 5:00 mark is in the window (owner decision, 2026-11-06).
+
+    2023-24 regular season: 1,154 games have a 4th-quarter possession that starts before 5:00 and
+    ends after it; the 328 of them within 5 as they start are clutch, and so 328 of the 8,401
+    clutch possessions. A possession that ends exactly at 5:00 (76 of them) is not: the next one
+    starts the window.
+    """
+    poss, _, sched = releases
+    rows = _with_clutch(nba_possession_rate_rows(poss, sched))
+    late = rows.filter(pl.col("late") & (pl.col("start_clock") > 300))
+    live = late.filter(pl.col("end_clock") < 300)
+    assert live.height == live["game_id"].n_unique() == 1154
+    within = live["start_margin"].abs() <= 5
+    assert (live["clutch"] == within).all()
+    assert int(within.sum()) == 328
+    assert late.filter(pl.col("end_clock") == 300)["clutch"].sum() == 0
+    assert late.filter(pl.col("end_clock") == 300).height == 76
+    assert rows["clutch"].sum() == 8401
 
 
 def test_player_clutch_against_stats_nba(tables: dict[str, pl.DataFrame]) -> None:

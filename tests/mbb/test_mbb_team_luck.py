@@ -13,9 +13,11 @@ Fixtures, none synthetic:
 The ESPN recount is independent of the NCAA possessions: a different source, its own clock, keyed
 straight on ESPN's game id. Observed agreement on the committed games (gate = observed; never
 loosen a gate to pass): men's
-404 of 412, women's 387 of 390. On the full 2025 releases it is 5998 of 6129 (97.9%) and 5386 of
-5456 (98.7%), the pbp-only side larger in both (the score at the 5:00 mark is read only when a
-possession starts there).
+405 of 412, women's 386 of 390. The possession live at the 5:00 mark counts in the window, with its
+margin read as it starts: that rule turned one men's miss into a match (404 before) and one women's
+match into a miss (387 before; ESPN 401756990, where a possession within 4 as it starts scores
+before 5:00 and leaves the game at 6). Before the rule, on the full 2025 releases, it was 5998 of
+6129 (97.9%) and 5386 of 5456 (98.7%), the pbp-only side larger in both.
 """
 
 from __future__ import annotations
@@ -36,7 +38,7 @@ tsr = importlib.import_module("sportsdataverse.mbb.mbb_team_season_rates")
 mod = importlib.import_module("sportsdataverse.mbb.mbb_team_luck")
 LEAGUE = {"mbb": "mens", "wbb": "womens"}
 #: league -> (games agreeing with the ESPN recount, games recounted).
-RECOUNT = {"mbb": (404, 412), "wbb": (387, 390)}
+RECOUNT = {"mbb": (405, 412), "wbb": (386, 390)}
 
 
 def _loader(path: Path):  # type: ignore[no-untyped-def]
