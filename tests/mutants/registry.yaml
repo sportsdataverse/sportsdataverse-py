@@ -10118,6 +10118,220 @@
   expected: kill
   note: k would be chosen on a training season whose missing feature sits at the mean for every row.
 
+# --- BB-D26: our own WAR and VORP --------------------------------------------------------------
+# Killers: tests/nba/test_nba_player_war.py, tests/mbb/test_mbb_player_war.py and
+# tests/tools/test_fit_player_war.py, on committed real captures (tests/fixtures/bb_player_war,
+# the player-value and team-luck corpora).
+- id: bb-war-bpm-repair
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '.with_columns((pl.col("bpm") - _wmean("bpm", "min", keys) + pl.col("_net") / 5).alias("bpm"))'
+  mutant: '.with_columns(pl.col("bpm").alias("bpm"))'
+  test: tests/nba/test_nba_player_war.py::test_bpm_repair_restores_the_team_constant
+  expected: kill
+  note: Without the repair the release's BPM keeps a team constant five times too large.
+
+- id: bb-war-anchor-net-fifth
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '((pl.col(s) - _wmean(s, "poss", keys)).fill_null(0.0) + pl.col("net") / 5).alias(s) for s in sources'
+  mutant: '((pl.col(s) - _wmean(s, "poss", keys)).fill_null(0.0) + pl.col("net")).alias(s) for s in sources'
+  test: tests/nba/test_nba_player_war.py::test_anchor_makes_each_team_add_up_to_its_margin
+  expected: kill
+  note: The pro BPM bug itself -- each of five players carrying the whole team rating.
+
+- id: bb-war-league-centre
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'return out.with_columns((pl.col(s) - _wmean(s, "poss", ["season"])).alias(s) for s in sources)'
+  mutant: 'return out'
+  test: tests/mbb/test_mbb_player_war.py::test_league_war_and_vorp_totals
+  expected: kill
+  note: College adj_em is centred on the plain D1 mean; uncentred, 0 is not the average player and the total drifts.
+
+- id: bb-war-replacement
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'a = a.with_columns(((pl.col(s) - repl) * pl.col("poss")).alias(f"_par_{s}") for s in rated)'
+  mutant: 'a = a.with_columns((pl.col(s) * pl.col("poss")).alias(f"_par_{s}") for s in rated)'
+  test: tests/nba/test_nba_player_war.py::test_league_war_is_wins_minus_replacement_team_wins
+  expected: kill
+  note: Value above average, not replacement -- the league total would be zero wins.
+
+- id: bb-war-pts-per-win
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '*[(pl.col(f"_par_{s}") / 100 / ppw).alias("war" if s == "rating" else f"war_{s}") for s in rated],'
+  mutant: '*[(pl.col(f"_par_{s}") / 100).alias("war" if s == "rating" else f"war_{s}") for s in rated],'
+  test: tests/nba/test_nba_player_war.py::test_war_and_vorp_formulas
+  expected: kill
+  note: Points above replacement, not wins.
+
+- id: bb-war-vorp-scale
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '(pl.col("_par_rating") / pl.col("_lg_poss")).alias("vorp"),'
+  mutant: '(pl.col("_par_rating") / 100).alias("vorp"),'
+  test: tests/nba/test_nba_player_war.py::test_war_and_vorp_formulas
+  expected: kill
+  note: VORP in points, not per 100 team possessions of a season (Basketball-Reference's scale).
+
+- id: bb-war-pool-share
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'ranked.filter(pl.col("_cum") <= share)'
+  mutant: 'ranked.filter(pl.col("_cum") <= 1.0)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: The whole league as the pool puts replacement at the league average.
+
+- id: bb-war-poss-halved
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/nba/nba_player_war.py
+  snippet: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg((pl.len() / 2).alias("poss"))'
+  mutant: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg(pl.len().cast(pl.Float64).alias("poss"))'
+  test: tests/nba/test_nba_player_war.py::test_possession_stints_count_regular_season_possessions_and_points
+  expected: kill
+  note: Offensive plus defensive possessions not halved -- the release war column's double count.
+
+- id: bb-war-regular-season
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/nba/nba_player_war.py
+  snippet: 'games = schedule.filter(pl.col("season_type") == "regular-season").select(pl.col("game_id").cast(pl.Utf8))'
+  mutant: 'games = schedule.select(pl.col("game_id").cast(pl.Utf8))'
+  test: tests/nba/test_nba_player_war.py::test_possession_stints_count_regular_season_possessions_and_points
+  expected: kill
+  note: Playoff possessions would count toward the regular season.
+
+- id: bb-war-college-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '(pl.col("min") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")'
+  mutant: '(pl.col("min") * pl.col("adj_tempo")).alias("poss")'
+  test: tests/mbb/test_mbb_player_war.py::test_stints_are_division_i_with_minutes_times_tempo
+  expected: kill
+  note: Tempo is possessions per 40 minutes.
+
+- id: bb-war-college-d1
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '_D1 = pl.col("games") >= _D1_MIN_GAMES'
+  mutant: '_D1 = pl.col("games") >= 0'
+  test: tests/mbb/test_mbb_player_war.py::test_stints_are_division_i_with_minutes_times_tempo
+  expected: kill
+  note: The non-D1 opponents (a game or two each) would join the league and its centring.
+
+- id: bb-war-fit-level
+  group: bb-player-war
+  finding: BB-D26
+  file: tools/fit_player_war.py
+  snippet: 'return round(float(replacement_level_by_season(player_seasons)["replacement_level"].mean()), 2)'
+  mutant: 'return round(float(replacement_level_by_season(player_seasons)["replacement_level"].max()), 2)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: The frozen level must be the train mean.
+
+- id: bb-war-fit-ppw
+  group: bb-player-war
+  finding: BB-D26
+  file: tools/fit_player_war.py
+  snippet: 'return round(1.0 / slope, 2)'
+  mutant: 'return round(slope, 2)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: Wins per point, not points per win.
+
+- id: bb-war-unrated-team-average
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '.fill_null(0.0) + pl.col("net") / 5).alias(s)'
+  mutant: ' + pl.col("net") / 5).alias(s)'
+  test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
+  expected: kill
+  note: An unrated player would get a null WAR instead of his team's average rating.
+
+- id: bb-war-non-finite-missing
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'finite = stints.with_columns(pl.when(pl.col(s).is_finite()).then(pl.col(s)).alias(s) for s in sources)'
+  mutant: 'finite = stints'
+  test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
+  expected: kill
+  note: One NaN rating would turn its team's and season's means, and so every WAR of the season, into NaN.
+
+- id: bb-war-draw-within-team
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'counts[:, idx] = rng.multinomial(len(idx), np.full(len(idx), 1 / len(idx)), size=n_boot)'
+  mutant: 'counts[:, idx] = 1.0'
+  test: tests/nba/test_nba_player_war.py
+  expected: kill
+  note: No resampling, so every replicate is the season and the interval collapses to the point.
+
+- id: bb-war-poss-move-together
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'poss = (occ @ counts.T).T  # replicate x stint'
+  mutant: 'poss = np.repeat(np.asarray(occ.sum(axis=1)).T, counts.shape[0], axis=0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A player's possessions held at the season total instead of moving with the drawn games.
+
+- id: bb-war-net-resampled
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'net = frames["net"] + (t_margin / t_poss - raw) * 100'
+  mutant: 'net = frames["net"] + 0 * t_poss'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: The team net rating held fixed -- the team side's sampling noise left out of the interval.
+
+- id: bb-war-interval-percentiles
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '_INTERVAL = (5.0, 95.0)'
+  mutant: '_INTERVAL = (25.0, 75.0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A 50% interval published as the 90% one.
+
+- id: bb-war-college-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '(pl.col("minutes") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")'
+  mutant: '(pl.col("minutes") * pl.col("adj_tempo")).alias("poss")'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Game possessions off the box BPM minutes basis, so the interval would resample the wrong playing time.
+
+- id: bb-war-college-team-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games = rows.group_by(keys).agg((pl.col("poss").sum() / 5).alias("poss"), pl.col("margin").first())'
+  mutant: 'team_games = rows.group_by(keys).agg(pl.col("poss").sum().alias("poss"), pl.col("margin").first())'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Team possessions five times too many, so the replicate's raw net rating shrinks toward zero.
+
 # --- BB-D24: EPV and EPV added (sportsdataverse/nba/nba_epv.py) -----------------------------------
 # Killers: tests/nba/test_nba_epv.py on the committed 2024-25 NBA holdout games
 # (tests/fixtures/bb_epv), scored with the bundled booster.
@@ -10350,3 +10564,33 @@
   test: tests/mbb/test_mbb_epv.py::test_the_level_scales_every_value
   expected: kill
   note: The level would be fitted and gated but never served.
+
+- id: bb-war-seed-per-team-season
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'rng = np.random.default_rng([_SEED, int(season), zlib.crc32(str(team).encode())])'
+  mutant: 'rng = np.random.default_rng([_SEED, int(season)])'
+  test: tests/nba/test_nba_player_war.py::test_a_team_s_draws_do_not_depend_on_the_other_teams
+  expected: kill
+  note: Without the team in the seed, every team in a season would draw the same counts.
+
+- id: bb-war-interval-consistency
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'if (bad := check.filter(gap)).height:'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_player_war.py::test_stints_without_their_game_rows_are_refused
+  expected: kill
+  note: Without the check a team missing its game rows turns its whole season's interval to NaN.
+
+- id: bb-war-college-passes-games
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games=team_games, player_games=player_games'
+  mutant: 'team_games=None, player_games=None'
+  test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
+  expected: kill
+  note: The college public path would publish a null interval on every row.

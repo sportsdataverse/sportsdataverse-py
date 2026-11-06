@@ -507,6 +507,7 @@ from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_play_styles as mbb_play_styles  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_player_on_off as mbb_player_on_off  # noqa: F401
+from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
 from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
@@ -1174,6 +1175,7 @@ __all__ = [
     "mbb_play_styles",
     "mbb_player_crosswalk",
     "mbb_player_on_off",
+    "mbb_player_war",
     "mbb_player_wowy",
     "mbb_predict_games",
     "mbb_recruiting_projection",

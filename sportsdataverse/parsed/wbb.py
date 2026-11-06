@@ -588,6 +588,7 @@ from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import wbb_play_styles as wbb_play_styles  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_war as wbb_player_war  # noqa: F401
 from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
 from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: F401
 from sportsdataverse.wbb import wbb_schedule_crosswalk as wbb_schedule_crosswalk  # noqa: F401
@@ -1172,6 +1173,7 @@ __all__ = [
     "wbb_play_styles",
     "wbb_player_crosswalk",
     "wbb_player_on_off",
+    "wbb_player_war",
     "wbb_player_wowy",
     "wbb_predict_games",
     "wbb_schedule_crosswalk",
