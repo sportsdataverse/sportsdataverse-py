@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [BB-D10 factor-RAPM corpus](#bb-d10-factor-rapm-corpus)
+  - [Observed on the full NBA seasons (not in the fixture)](#observed-on-the-full-nba-seasons-not-in-the-fixture)
+  - [Standard errors (WNBA 2025, on the fixture)](#standard-errors-wnba-2025-on-the-fixture)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # BB-D10 factor-RAPM corpus
 
 Real captures for `tests/nba/test_nba_player_factor_rapm.py` (BB-D10), downloaded from the
