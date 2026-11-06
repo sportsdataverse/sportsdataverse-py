@@ -5,6 +5,7 @@
 - [BB-D10 factor-RAPM corpus](#bb-d10-factor-rapm-corpus)
   - [Observed on the full seasons (the release assets)](#observed-on-the-full-seasons-the-release-assets)
   - [Why the NBA totals differ from `nba_player_impact`](#why-the-nba-totals-differ-from-nba_player_impact)
+  - [The penalty](#the-penalty)
   - [Each part's own RidgeCV penalty](#each-parts-own-ridgecv-penalty)
   - [Year over year](#year-over-year)
   - [Standard errors (WNBA 2025, on the fixture)](#standard-errors-wnba-2025-on-the-fixture)
@@ -54,30 +55,40 @@ assets were last uploaded 2026-08-13 and `nba_player_impact` 2026-10-12: the imp
 later re-compile of the possessions in the producer (hoopR-nba-stats-data) that was never
 re-published. Re-publishing `nba_stats_possessions` from that compile would close the gap.
 
+## The penalty
+
+The split fits every part at plain RAPM's penalty (so the parts add up): since November 2026 the fixed
+league value `nba_rapm.RAPM_PENALTY` (NBA 2,683, WNBA 1,931, fitted by `tools/fit_rapm_penalty.py`), the
+same in every season. Before that it was RidgeCV's leave-one-possession-out pick per season over
+`np.logspace(2, 5, 8)`, which the `player_impact` releases still carry until they are re-published:
+NBA 5,179 for 2024-25 and 1,931 for 2025-26 (so the NBA comparison in the table above is at those
+picks), WNBA 1,931 for both seasons here (the fixed value, so the WNBA release still matches).
+
 ## Each part's own RidgeCV penalty
 
-The split fits every part at the penalty RidgeCV picks for points (so the parts add up). Each part's
-own pick over the same grid (`np.logspace(2, 5, 8)`):
+Each part's own RidgeCV pick over that grid, beside the shared penalty:
 
 | Season | Shared (points) | efg | tov | orb | ftr | other |
 |---|---:|---:|---:|---:|---:|---:|
-| NBA 2024-25 | 5,179 | 5,179 | 1,931 | 1,931 | 1,931 | 5,179 |
-| NBA 2025-26 | 1,931 | 5,179 | 1,931 | 1,931 | 1,931 | 1,931 |
+| NBA 2024-25 | 2,683 | 5,179 | 1,931 | 1,931 | 1,931 | 5,179 |
+| NBA 2025-26 | 2,683 | 5,179 | 1,931 | 1,931 | 1,931 | 1,931 |
 | WNBA 2024 | 1,931 | 5,179 | 1,931 | 1,931 | 1,931 | 13,895 |
 | WNBA 2025 | 1,931 | 5,179 | 1,931 | 5,179 | 5,179 | 100,000 |
 
-Shooting would take a heavier penalty than the shared one in three of four seasons, the remainder
-the grid's heaviest in WNBA 2025: their shared-penalty values are the least shrunk of the parts.
+Shooting would take a heavier penalty than the shared one in all four seasons, the remainder the
+grid's heaviest in WNBA 2025: their shared-penalty values are the least shrunk of the parts.
 
 ## Year over year
 
-Spearman of each metric between consecutive seasons, over players above a possession floor in both:
+Spearman of each metric between consecutive seasons, over players above a possession floor in both
+(NBA at the fixed 2,683; at the old picks it read 0.320 / 0.291 / 0.364, 0.314 / 0.328 / 0.431 / 0.362 /
+0.255 and 0.248 / 0.384 / 0.230 / 0.348 / 0.366):
 
 | Metric | NBA 2024-25 to 2025-26 (293 over 2,000) | WNBA 2024 to 2025 (92 over 1,000) |
 |---|---:|---:|
-| rapm / o_rapm / d_rapm | 0.320 / 0.291 / 0.364 | 0.374 / 0.352 / 0.163 |
-| o_efg / o_tov / o_orb / o_ftr / o_other | 0.314 / 0.328 / 0.431 / 0.362 / 0.255 | 0.304 / 0.357 / 0.307 / 0.391 / 0.157 |
-| d_efg / d_tov / d_drb / d_ftr / d_other | 0.248 / 0.384 / 0.230 / 0.348 / 0.366 | 0.128 / 0.337 / 0.128 / 0.306 / 0.343 |
+| rapm / o_rapm / d_rapm | 0.322 / 0.292 / 0.361 | 0.374 / 0.352 / 0.163 |
+| o_efg / o_tov / o_orb / o_ftr / o_other | 0.308 / 0.334 / 0.423 / 0.366 / 0.259 | 0.304 / 0.357 / 0.307 / 0.391 / 0.157 |
+| d_efg / d_tov / d_drb / d_ftr / d_other | 0.247 / 0.387 / 0.229 / 0.341 / 0.376 | 0.128 / 0.337 / 0.128 / 0.306 / 0.343 |
 
 ## Standard errors (WNBA 2025, on the fixture)
 
