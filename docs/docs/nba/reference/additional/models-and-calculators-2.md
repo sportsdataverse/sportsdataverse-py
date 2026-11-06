@@ -846,7 +846,7 @@ The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"rated"`, `"neu
 
 | col_name | type | description |
 |---|---|---|
-| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
+| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else rated_home_prob when the caller passed one (nba_rated_priors), else home-court advantage alone (0.5 at a neutral site). |
 | `prior_source` | String | Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5). |
 | `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
 | `home_win_prob` | Float64 | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |

@@ -256,7 +256,7 @@ def home_prior(
         neutral_site: ESPN ``neutralSite`` / the schedule's ``neutral_site``; ``None``, NaN or ``pd.NA``
             counts as false.
         rated_home_prob: The game's rated pregame home win probability, used when there is no line;
-            ``None`` or NaN falls through to home-court advantage.
+            ``None``, NaN or a value outside [0, 1] falls through to home-court advantage.
 
     Returns:
         ``(probability, source)`` with ``source`` ``"spread"``, ``"rated"``, ``"neutral"`` or ``"hfa"``.
@@ -286,7 +286,7 @@ def home_prior(
     lg = _resolve_league(league, league_id)
     if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
         return _margin_to_prob(lg, float(home_team_spread)), "spread"
-    if rated_home_prob is not None and not math.isnan(float(rated_home_prob)):
+    if rated_home_prob is not None and 0.0 <= float(rated_home_prob) <= 1.0:  # NaN and inf fall through
         return float(rated_home_prob), "rated"
     if _is_neutral(neutral_site):
         return _margin_to_prob(lg, 0.0), "neutral"
@@ -1170,7 +1170,11 @@ def _converter(lg: str, kind: str) -> Callable[[dict], pl.DataFrame]:
 
 
 def game_page_frames(
-    final: dict, *, league_id: Optional[str] = None, league: Optional[str] = None
+    final: dict,
+    *,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    rated_home_prob: Optional[float] = None,
 ) -> dict[str, object]:
     """Everything the Game on Paper basketball game page needs, from one ``espn_<league>_pbp`` payload.
 
@@ -1186,6 +1190,8 @@ def game_page_frames(
             :func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp`).
         league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        rated_home_prob: The game's rated pregame home win probability, the prior when there is no
+            line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
 
     Returns:
         ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods",
@@ -1235,7 +1241,15 @@ def game_page_frames(
     pbp = _converter(lg, "play_by_play")(final)  # same converter order as the shipped NBA function
     team_box = _converter(lg, "team_box")(final)
     player_box = _converter(lg, "player_box")(final)
-    tables = game_page_tables(pbp, team_box, player_box, league=lg, regulation_periods=reg, neutral_site=neutral)
+    tables = game_page_tables(
+        pbp,
+        team_box,
+        player_box,
+        league=lg,
+        regulation_periods=reg,
+        neutral_site=neutral,
+        rated_home_prob=rated_home_prob,
+    )
     return {
         "pbp": tables["pbp"],
         "team_box": team_box,

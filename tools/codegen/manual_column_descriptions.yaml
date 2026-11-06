@@ -40436,7 +40436,8 @@ nba_rated_priors:
   exp_home_margin: 'Expected home margin in points: (home_adj_net_rtg - away_adj_net_rtg + 2 * hfa) * possessions per
     game / 100, without the home term at a neutral site.'
   rated_home_prob: 'Rated pregame home win probability: Phi(exp_home_margin / margin_sd) with the season sim''s probit
-    scale; the in-game WP prior when the game has no line.'
+    scale. Pass it to score_win_prob / game_page_tables as rated_home_prob to make it the prior of a game with no line;
+    without it that game gets home-court advantage (0.5 at a neutral site).'
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
@@ -49815,7 +49816,7 @@ nba_live_pbp:
   y: Shot location across the court's width on a 0-100 scale, 50 at the baskets' centerline; populated only on 2pt/3pt shots, like y_legacy.
   y_legacy: Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
 score_win_prob:
-  pregame_home_prob: 'Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line).'
+  pregame_home_prob: 'Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else rated_home_prob when the caller passed one (nba_rated_priors), else home-court advantage alone (0.5 at a neutral site).'
   prior_source: 'Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5).'
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).

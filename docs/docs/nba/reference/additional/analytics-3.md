@@ -733,7 +733,7 @@ docstring for the model and the as-of boundary.
 
 **Returns**
 
-One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `home_team_id`, `away_team_id` (ESPN ids, Int32, as in the pbp release), `neutral_site`, `stats_game_id`, the two teams' adjusted net ratings before the game (`home_adj_net_rtg`, `away_adj_net_rtg`, per 100), the home term `hfa` (per 100, applied to both offenses), `exp_home_margin` (points) and `rated_home_prob`. The last six are null for a game with no stats.nba.com match (All-Star games).
+One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `home_team_id`, `away_team_id` (ESPN ids, Int32, as in the pbp release), `neutral_site`, `stats_game_id`, the two teams' adjusted net ratings before the game (`home_adj_net_rtg`, `away_adj_net_rtg`, per 100), the home term `hfa` (per 100, applied to both offenses), `exp_home_margin` (points) and `rated_home_prob`. The last six are null for a game with no stats.nba.com match (All-Star games and the WNBA Commissioner's Cup final).
 
 | col_name | type | description |
 |---|---|---|
@@ -748,7 +748,7 @@ One row per game of the ESPN schedule release (scheduled games included): `seaso
 | `away_adj_net_rtg` | Float64 | Away team's adjusted net rating before the game, points per 100, on the same basis. |
 | `hfa` | Float64 | The as-of ridge's home term, points per 100 for the home offense over a neutral court (applied to both offenses). |
 | `exp_home_margin` | Float64 | Expected home margin in points: (home_adj_net_rtg - away_adj_net_rtg + 2 * hfa) * possessions per game / 100, without the home term at a neutral site. |
-| `rated_home_prob` | Float64 | Rated pregame home win probability: Phi(exp_home_margin / margin_sd) with the season sim's probit scale; the in-game WP prior when the game has no line. |
+| `rated_home_prob` | Float64 | Rated pregame home win probability: Phi(exp_home_margin / margin_sd) with the season sim's probit scale. Pass it to score_win_prob / game_page_tables as rated_home_prob to make it the prior of a game with no line; without it that game gets home-court advantage (0.5 at a neutral site). |
 
 **Raises**
 

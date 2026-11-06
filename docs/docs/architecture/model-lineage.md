@@ -133,7 +133,7 @@ Not cited from package source, so outside the test, but still gaps:
   and `wbb_in_game_wp.ubj`.
 - `cfb_cp_model.card.json`, `cfb_cp_model_air_yards.card.json` and
   `fd_model.card.json` carry `training_seasons: null` and `n_training_rows: null`.
-- No NFL, MBB, NBA or MLB booster ships a card.
+- No NFL, MBB or MLB booster ships a card; of the NBA boosters, only the in-game WP pair does (`nba_epv.ubj` ships none).
 - `nfl-data`'s registry lists the NFL QBR fitting script as TODO; the trainer
   named above (`cfb_qbr/qbr_xgb.R`) is the one the 2.7 feature-order fix traced
   the artifact to, not an NFL-trained replacement.

@@ -888,7 +888,7 @@ game_minutes(4, league="mbb")  # 50
 
 ### game_page_frames {#game_page_frames}
 
-`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None) -> 'dict[str, object]'`
+`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, rated_home_prob: 'Optional[float]' = None) -> 'dict[str, object]'`
 
 Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload.
 
@@ -906,6 +906,7 @@ the warehouse's copies of the same frames.
 | `final` | `dict` |  | The dict `espn_<league>_pbp(..., return_parsed=False)` returns (for example `~sportsdataverse.nba.nba_pbp.espn_nba_pbp`). |
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
 
 **Returns**
 
@@ -1115,7 +1116,7 @@ MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` wit
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None`, NaN or `pd.NA` counts as false. |
-| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, used when there is no line; `None` or NaN falls through to home-court advantage. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, used when there is no line; `None`, NaN or a value outside [0, 1] falls through to home-court advantage. |
 
 **Returns**
 

@@ -169,7 +169,7 @@ def nba_rated_priors(
         before the game (``home_adj_net_rtg``, ``away_adj_net_rtg``, per 100), the home term
         ``hfa`` (per 100, applied to both offenses), ``exp_home_margin`` (points) and
         ``rated_home_prob``. The last six are null for a game with no stats.nba.com match
-        (All-Star games).
+        (All-Star games and the WNBA Commissioner's Cup final).
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
@@ -203,16 +203,20 @@ def nba_rated_priors(
         )
     except SeasonNotFoundError:  # the season before the release floor: average until possessions arrive
         pass
-    espn = load_espn([season]).select(
-        pl.col("season").cast(pl.Int32),
-        pl.col("game_id").cast(pl.Int32),
-        pl.col("game_date").cast(pl.Date),
-        pl.col("home_id").cast(pl.Int32).alias("home_team_id"),
-        pl.col("away_id").cast(pl.Int32).alias("away_team_id"),
-        pl.col("neutral_site").fill_null(False),
-        pl.col("home_display_name").str.to_lowercase().alias("_h"),
-        pl.col("away_display_name").str.to_lowercase().alias("_a"),
-    )
+    espn = (
+        load_espn([season])
+        .select(
+            pl.col("season").cast(pl.Int32),
+            pl.col("game_id").cast(pl.Int32),
+            pl.col("game_date").cast(pl.Date),
+            pl.col("home_id").cast(pl.Int32).alias("home_team_id"),
+            pl.col("away_id").cast(pl.Int32).alias("away_team_id"),
+            pl.col("neutral_site").fill_null(False),
+            pl.col("home_display_name").str.to_lowercase().alias("_h"),
+            pl.col("away_display_name").str.to_lowercase().alias("_a"),
+        )
+        .unique("game_id", keep="first", maintain_order=True)
+    )  # one row per game, as the pbp release has
     keyed = games.unique(["game_date", "_h", "_a"], keep="none")  # a doubled key would match the wrong game
     stats = keyed.select("game_date", "_h", "_a", "stats_game_id", "home_team_id", "away_team_id", "season_type")
     matched = espn.join(

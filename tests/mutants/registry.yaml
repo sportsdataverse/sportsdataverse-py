@@ -10295,7 +10295,7 @@
   group: bb-wp-cards
   finding: BB-D25
   file: sportsdataverse/nba/nba_game_page.py
-  snippet: '    if rated_home_prob is not None and not math.isnan(float(rated_home_prob)):'
+  snippet: '    if rated_home_prob is not None and 0.0 <= float(rated_home_prob) <= 1.0:  # NaN and inf fall through'
   mutant: '    if False:'
   test: tests/nba/test_nba_wp_model_cards.py::test_rated_prior_beats_the_home_court_fallback
   expected: kill

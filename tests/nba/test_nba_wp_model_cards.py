@@ -37,8 +37,8 @@ ROOT = Path(__file__).resolve().parents[2]
 FIX = ROOT / "tests" / "fixtures" / "nba_prediction"
 MODELS = ROOT / "sportsdataverse" / "nba" / "models"
 LEAGUES = ("nba", "wnba")
-# observed 2026-11-05: (games, games rated); the unrated are the All-Star games and the WNBA Commissioner's Cup final
-GATE_GAMES = {"nba": (3969, 3961), "wnba": (576, 572)}
+# observed 2026-11-05: (finished games, games rated); unrated: an All-Star game, the WNBA All-Star and Commissioner's Cup finals
+GATE_GAMES = {"nba": (3961, 3960), "wnba": (576, 572)}
 
 
 @pytest.fixture(scope="module")
@@ -91,7 +91,7 @@ def test_rated_prior_beats_the_home_court_fallback(cards: Any, lg: str) -> None:
     assert gate["games"] >= games_n and gate["games_rated"] >= rated_n  # a broken name join drops ratings
     assert card["constants"] == cards.rated_prior_constants(cards.LEAGUE_IDS[lg])  # scored with today's constants
     rated = gate["paired_log_loss"]["rated - hfa"]
-    # observed (2026-11-05): NBA -0.0755 +- 0.0057 over 3,969 games, WNBA -0.0639 +- 0.0165 over 576
+    # observed (2026-11-05): NBA -0.0756 +- 0.0057 over 3,961 games, WNBA -0.0639 +- 0.0165 over 576
     assert rated["diff"] + 2 * rated["se"] < 0
     assert all(gate["pass"].values())
     if lg == "wnba":  # no line in the release: passing the rating changes every game
@@ -102,7 +102,8 @@ def test_rated_prior_beats_the_home_court_fallback(cards: Any, lg: str) -> None:
 def test_home_prior_order_line_then_rating_then_home_court() -> None:
     assert home_prior(-4.0, True, rated_home_prob=0.9) == home_prior(-4.0, True)
     assert home_prior(None, False, rated_home_prob=0.71) == (0.71, "rated")
-    assert home_prior(2.5, False, rated_home_prob=float("nan"))[1] == "hfa"
+    for bad in (float("nan"), float("inf"), 1.5, -0.1):  # not a probability: home court
+        assert home_prior(2.5, False, rated_home_prob=bad)[1] == "hfa"
     assert home_prior(None, False, league="wnba", neutral_site=True, rated_home_prob=0.6) == (0.6, "rated")
 
 

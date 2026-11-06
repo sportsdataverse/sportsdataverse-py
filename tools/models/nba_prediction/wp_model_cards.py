@@ -119,14 +119,25 @@ def season_pbp(lg: str, season: int) -> pl.DataFrame:
 
 
 def season_games(lg: str, season: int, pbp: pl.DataFrame, cache: Path) -> pl.DataFrame:
-    """One row per finished, untied game of ``pbp``: the line, the rated prior, the outcome (cached)."""
-    path = cache / f"{lg}_rated_games_{season}.parquet"
+    """One row per finished, untied game of ``pbp``: the line, the rated prior, the outcome (cached).
+
+    Finished means the game has an "End Game" play. The cache is keyed on the sim constants the
+    rating used; clear it after any other change to :mod:`sportsdataverse.nba.nba_rated_prior`.
+    """
+    const = rated_prior_constants(LEAGUE_IDS[lg])
+    key = "_".join(f"{v:g}" for v in (*const["sim_constants"], *const["prior_constants"]))
+    path = cache / f"{lg}_rated_games_{season}_{key}.parquet"
     if path.exists():
         return pl.read_parquet(path)
-    finals = pbp.group_by("game_id").agg(
-        pl.col("home_team_spread", "game_spread_available").first(),
-        pl.col("home_score").last().alias("h"),
-        pl.col("away_score").last().alias("a"),
+    ended = pbp.filter(pl.col("type_text") == "End Game").select("game_id").unique()
+    finals = (
+        pbp.join(ended, on="game_id", how="semi")
+        .group_by("game_id")
+        .agg(
+            pl.col("home_team_spread", "game_spread_available").first(),
+            pl.col("home_score").last().alias("h"),
+            pl.col("away_score").last().alias("a"),
+        )
     )
     finals = finals.filter(pl.col("h") != pl.col("a")).with_columns(
         (pl.col("h") > pl.col("a")).cast(pl.Float64).alias("y")
