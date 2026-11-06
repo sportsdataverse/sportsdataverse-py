@@ -6,6 +6,154 @@ description: "NBA — additional Python functions — Analytics: players_on–zo
 ---
 # NBA — additional Python functions — Analytics: players_on–zone_value
 
+### players_on_court_from_pbp {#players_on_court_from_pbp}
+
+`players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
+
+Pure function (no network). A gamerotation-free alternative to
+`players_on_court_from_rotation` returning the identical
+`LINEUPS_SCHEMA` frame (one row per action, slots sorted ascending or
+`None`). See the module design for the algorithm.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `enhanced_pbp_from_payload`. Must carry `game_id`, `action_number`, `order_index`, `period`, `team_id`, `person_id`, `description`, `is_substitution`. |
+| `raw_box` | `dict` |  | Raw `boxscoretraditionalv3` dict (starters + name map). |
+| `home_team_id` | `int` |  | Home team id (from `boxscore_home_away`). |
+| `away_team_id` | `int` |  | Away team id (from `boxscore_home_away`). |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA`. Empty input returns a zero-row frame (never raises).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, players_on_court_from_pbp,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+oc = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
+print(oc.shape)
+```
+
+### players_on_court_from_quarter_boxscores {#players_on_court_from_quarter_boxscores}
+
+`players_on_court_from_quarter_boxscores(enhanced_pbp: 'pl.DataFrame', period_boxscores: 'Dict[int, dict]', raw_box: 'Optional[dict]' = None, *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
+
+Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible.
+
+A structural sibling of `players_on_court_from_pbp` — same
+`LINEUPS_SCHEMA` output, same sub-batching walk / ffill-bfill / ascending
+sort tail — whose only difference is *how each period is seeded*: when
+that period's range-boxscore (`_period_box_oncourt`) narrows to
+exactly 5 on-court candidates for a team, the period is seeded EXACTLY
+from it; otherwise it falls back to the same gamerotation-free
+first-appearance inference `players_on_court_from_pbp` uses
+(`_period_starters`, carrying the prior period's ending lineup as
+the silent-starter fallback). See `_period_box_oncourt` for the
+narrowing recipe (empirically re-derived against pbpstats'
+`StartOfPeriod._get_starters_from_boxscore_request` — see that
+function's docstring for the concrete evidence behind its zero-sentinel
+polarity).
+
+Substitution name resolution merges up to three sources via
+`_merge_name_maps`: `_name_map_from_period_boxes` (the union
+of every period's range-box roster), `_name_map_from_pbp_actors`
+(every row's own actor identity — covers bench players who never touch a
+period boundary but do record at least one action), and — when the
+caller supplies it — `_boxscore_name_map` over the full-game
+`raw_box` payload, the SAME full-roster source
+`players_on_court_from_pbp` uses. That third source is what fixes
+the one residual name-resolution gap the first two cannot cover: a
+player who is subbed in and then records **zero** further pbp actions for
+the rest of the game (so never appears in `_name_map_from_pbp_actors`)
+and never happens to be on court at an exact period-opening tick (so
+never appears in `_name_map_from_period_boxes`) is still present in the
+full-game boxscore roster — which lists every player on both teams
+regardless of playing time — and therefore still resolvable. Passing
+`raw_box` is optional (`None` preserves the pre-existing two-source
+behavior) but strongly recommended: without it this producer's per-game
+agreement with the gamerotation oracle can regress well below
+`players_on_court_from_pbp`'s own floor on a fixture with a
+late, stat-less bench appearance (see
+`tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. Must carry `game_id`, `action_number`, `order_index`, `period`, `team_id`, `person_id`, `player_name`, `player_name_i`, `description`, `is_substitution`. |
+| `period_boxscores` | `Dict[int, dict]` |  | `{period: raw_boxscoretraditionalv3_range_payload}` — one entry per period, captured at that period's `_period_start_range` window. A missing period key falls back to pbp seeding for that period only (never raises). |
+| `raw_box` | `Optional[dict]` | `None` | Optional raw full-game `boxscoretraditionalv3` payload (the same one `players_on_court_from_pbp` and `boxscore_home_away` consume) — supplies the full-roster name map described above. `None` (default) falls back to resolving names from `period_boxscores` + pbp actors only. |
+| `home_team_id` | `int` |  | Home team id (from `boxscore_home_away`). |
+| `away_team_id` | `int` |  | Away team id (from `boxscore_home_away`). |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA`. Empty `enhanced_pbp` returns a zero-row frame (never raises).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, players_on_court_from_quarter_boxscores,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+periods = json.loads(pathlib.Path("boxv3_periods.json").read_text())
+period_boxscores = {int(k): v for k, v in periods.items()}
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+oc = players_on_court_from_quarter_boxscores(
+    enh, period_boxscores, box, home_team_id=home, away_team_id=away
+)
+print(oc.shape)
+```
+
 ### players_on_court_from_rotation {#players_on_court_from_rotation}
 
 `players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int', league_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
