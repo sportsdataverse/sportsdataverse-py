@@ -1034,6 +1034,14 @@ def test_legacy_dialect_missed_free_throws_are_misses(game_id: str) -> None:
     assert not any(is_made_ft_row(r) for r in misses.to_dicts())
     poss = build_possessions(pbp)
     assert 0 < poss["ftm"].sum() < poss["fta"].sum()
+    # a missed last free throw no longer ends the possession (the release ends 2, 11 and 3 on one)
+    ends = poss.select(pl.col("end_order_index").cast(pl.Int64))
+    assert (
+        ends.join(
+            misses.select(pl.col("order_index").cast(pl.Int64).alias("end_order_index")), on="end_order_index"
+        ).height
+        == 0
+    )
     points = poss.with_columns((2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms"))
     home = pl.col("offense_team_id") == game["home_team_id"]
     assert points.filter(home)["ms"].sum() == game["home_pts"]
