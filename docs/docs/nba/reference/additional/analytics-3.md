@@ -342,7 +342,13 @@ split.select("player_id", "rapm", "o_efg_rapm", "o_tov_rapm", "d_drb_rapm").head
 
 # The six-factor view (free throws folded into shooting)
 
-split.with_columns(o_shooting=pl.col("o_efg_rapm") + pl.col("o_ftr_rapm"))
+six = split.select(
+    "season", "player_id",
+    o_shooting=pl.col("o_efg_rapm") + pl.col("o_ftr_rapm"),
+    o_tov=pl.col("o_tov_rapm"), o_reb=pl.col("o_orb_rapm"),
+    d_shooting=pl.col("d_efg_rapm") + pl.col("d_ftr_rapm"),
+    d_tov=pl.col("d_tov_rapm"), d_reb=pl.col("d_drb_rapm"),
+)
 ```
 
 ### nba_player_identity {#nba_player_identity}

@@ -146,9 +146,8 @@ def _ridge(X: csr_matrix, Y: np.ndarray, alpha: float, games: np.ndarray) -> tup
     cov = np.empty((P, Y.shape[1]))
     for k in range(Y.shape[1]):
         # each game's score of the centred design, (x_i - m) * e_i summed over its rows
-        score = np.asarray(by_game @ X.multiply(resid[:, [k]]).tocsr().toarray()) - np.outer(
-            by_game @ resid[:, k], mean
-        )
+        # summed by game while sparse: a dense (n, 2P) score is ~2 GB for an NBA season
+        score = (by_game @ X.multiply(resid[:, [k]]).tocsr()).toarray() - np.outer(by_game @ resid[:, k], mean)
         lever = inv @ score.T  # (2P, games)
         var[:, k] = (lever**2).sum(axis=1)
         cov[:, k] = (lever[:P] * lever[P:]).sum(axis=1)
