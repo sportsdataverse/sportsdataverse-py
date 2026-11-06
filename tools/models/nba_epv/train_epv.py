@@ -9,11 +9,11 @@ Run (the ``{nba,wnba}_stats_pbp`` / ``_possessions`` and ``ncaa_{mbb,wbb}_pbp`` 
     uv run python tools/models/nba_epv/train_epv.py --league-id wbb
 
 The NBA, men's and women's college boosters ship. The WNBA fit runs and writes its report but
-ships nothing: without a level it fails gate 2 on 2026 (WNBA points per possession rose 0.04 that
-season; ``large_bias_game_se`` in its report gives the game-clustered standard error); with the
-level it passes gate 2 but one state bucket (a shooting foul in a transition possession, which it
-already over-prices on the 2025 holdout) fails gate 3. The WNBA level orders games by ``game_id``
-(its releases carry no date), so same-day games see each other there; pass dates before a WNBA ship.
+ships nothing. Its gate-2 threshold is its own (:func:`max_large_bias`: 0.01 plus the SD of its
+year-over-year points per possession, 2011-2025), and its level reads each game's date from the
+``wnba_stats_schedules`` release. With both it passes gates 1, 2 and 4 on 2025 and 2026, but one
+state bucket (a shooting foul in a transition possession, which it already over-prices on the 2025
+holdout) fails gate 3 on 2026; that bucket passes without the level. Thresholds are left as they are.
 
 The WNBA and college boosters carry an as-of scoring level (``nba_epv.epv_level``): a season's
 points per possession move (men's college rose from 1.011 in 2022 to 1.075 in 2026), and a booster
@@ -112,6 +112,9 @@ LEAGUES: dict[str, dict[str, Any]] = {
         "fixture_games": 20,
         "level": True,
         "history": list(range(2010, 2025)),
+        # gate 2's drift allowance is the WNBA's own: the season-to-season change in points per
+        # possession over these seasons (2011-2025, through the holdout; never the confirmation)
+        "gate2_drift": list(range(2010, 2026)),
     },
     "mbb": {
         "lg": "mbb",
@@ -141,10 +144,14 @@ LEAGUES: dict[str, dict[str, Any]] = {
 _COLLEGE = ("mbb", "wbb")
 #: The level's trailing window: a season's level is compared with the mean of this many before it.
 _LEVEL_TRAIL = 3
-#: Gate 2: |mean(epv) - mean(label)| over a whole season, in points. Read off the 2024 holdout:
-#: the largest seen was 0.011 (NBA), plus 0.01 of headroom for a season's points-per-possession
-#: drift (about 0.01 a season in the NBA from 2016 to 2023).
+#: Gate 2: |mean(epv) - mean(label)| over a whole season, in points. The rule: an allowance for the
+#: holdout's own error (:data:`GATE2_BASE`) plus the league's season-to-season drift in points per
+#: possession (the SD of the year-over-year change). For the NBA, read off the 2024 holdout: the
+#: largest seen was 0.011, plus 0.01 for its drift (about 0.01 a season from 2016 to 2023); the
+#: college boosters use the same 0.02. The WNBA's drift is derived from its seasons
+#: (``gate2_drift``, :func:`max_large_bias`).
 MAX_LARGE_BIAS = 0.02
+GATE2_BASE = 0.01
 #: Gate 3: |bias| per state bucket, in points, on top of three standard errors of the bucket mean.
 #: Read off the 2024 holdout the same way: the largest bias in a 5,000-state NBA bucket was 0.050.
 MAX_BUCKET_BIAS = 0.06
@@ -251,21 +258,61 @@ def level_k(cfg: dict[str, Any], league_id: str, data_root: Path | None) -> dict
     return {"tau2": tau2, "sigma2": sigma2, "level_k": sigma2 / tau2, "n_gaps": len(gaps)}
 
 
+def max_large_bias(cfg: dict[str, Any], league_id: str, data_root: Path | None) -> dict[str, Any]:
+    """Gate 2's threshold: :data:`GATE2_BASE` plus the SD of the year-over-year change in a league's
+    points per possession over its ``gate2_drift`` seasons (all on or before the holdout).
+
+    Leagues without ``gate2_drift`` keep :data:`MAX_LARGE_BIAS`, the NBA-derived value.
+    """
+    if "gate2_drift" not in cfg:
+        return {"max_large_bias": MAX_LARGE_BIAS, "rule": "MAX_LARGE_BIAS (NBA-derived)"}
+    if max(cfg["gate2_drift"]) > cfg["holdout"]:
+        raise ValueError("gate 2's drift seasons must end at the holdout")
+    ppp = {s: season_ppp(league_id, s, data_root)[0] for s in cfg["gate2_drift"]}
+    yoy = [ppp[s] - ppp[s - 1] for s in cfg["gate2_drift"] if s - 1 in ppp]
+    sd = float(np.std(yoy, ddof=1))
+    return {
+        "max_large_bias": GATE2_BASE + sd,
+        "rule": "GATE2_BASE + sd(year-over-year points per possession)",
+        "base": GATE2_BASE,
+        "drift_sd": sd,
+        "drift_seasons": [min(cfg["gate2_drift"]) + 1, max(cfg["gate2_drift"])],
+        "season_ppp": {str(k): v for k, v in ppp.items()},
+    }
+
+
+def _game_order(schedule: pl.DataFrame) -> pl.DataFrame:
+    """``game_id`` and ``game_order`` (the game's date) from a ``wnba_stats_schedules`` release."""
+    return schedule.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d").alias("game_order"),
+    ).unique()
+
+
+def _wnba_order(season: int, data_root: Path | None) -> pl.DataFrame:
+    """The WNBA games' dates (``wnba_stats_schedules``), for the level: same-day games never see each other."""
+    if data_root is not None:
+        return _game_order(_local(data_root, "wnba", "schedules", "stats_schedule", season))
+    from sportsdataverse.wnba.wnba_loaders import load_wnba_stats_schedules
+
+    return _game_order(load_wnba_stats_schedules([season]))
+
+
 def load_inputs(
     league_id: str, season: int, data_root: Path | None
 ) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame | None, pl.DataFrame | None, pl.DataFrame | None]:
     """The season's (pbp, possessions, game lineups, game order, college release) in the engine's shape.
 
     The NBA and WNBA read their releases (regular season only; the lineups only for the
-    fixture, so ``None`` here) and order games by ``game_id``; college converts its release with
-    ``ncaa_epv_inputs`` and orders games by date.
+    fixture, so ``None`` here); the WNBA's games are ordered by their schedule date. College
+    converts its release with ``ncaa_epv_inputs`` and orders games by date.
     """
     if league_id in _COLLEGE:
         release = _college_pbp(league_id, season, data_root)
         poss, pbp, tens, games = ncaa_epv_inputs(release)
         return pbp, poss, tens, games.select("game_id", "game_order"), release
     pbp, poss = load_season(league_id, season, data_root)
-    return pbp, poss, None, None, None
+    return pbp, poss, None, (_wnba_order(season, data_root) if league_id == "10" else None), None
 
 
 def load_season(league_id: str, season: int, data_root: Path | None) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -477,13 +524,13 @@ def metrics(
     }
 
 
-def gate(name: str, m: dict[str, Any]) -> list[str]:
-    """The failed gates of one season's metrics."""
+def gate(name: str, m: dict[str, Any], max_bias: float = MAX_LARGE_BIAS) -> list[str]:
+    """The failed gates of one season's metrics (``max_bias``: gate 2's threshold for the league)."""
     out = []
     if not m["paired_vs_cell_mean"]["ci_hi"] < 0:
         out.append(f"{name}: paired mse vs the cell-mean baseline not below 0: {m['paired_vs_cell_mean']}")
-    if abs(m["large_bias"]) > MAX_LARGE_BIAS:
-        out.append(f"{name}: calibration-in-the-large bias {m['large_bias']:+.4f} over {MAX_LARGE_BIAS}")
+    if abs(m["large_bias"]) > max_bias:
+        out.append(f"{name}: calibration-in-the-large bias {m['large_bias']:+.4f} over {max_bias:.4f}")
     if m["bucket_failures"] or m["gated_state_share"] < MIN_GATED_SHARE:
         out.append(f"{name}: {m['bucket_failures']} buckets over the bias gate, worst {m['worst_bucket']}")
     if not SLOPE_BAND[0] <= m["calibration_slope"] <= SLOPE_BAND[1]:
@@ -510,8 +557,9 @@ def write_fixture(
     pbp: pl.DataFrame,
     poss: pl.DataFrame,
     tens: pl.DataFrame,
+    order: pl.DataFrame | None = None,
 ) -> None:
-    """The first ``fixture_games`` holdout games (by ``game_id``) for the offline tests."""
+    """The first ``fixture_games`` holdout games (by ``game_id``) for the offline tests (and their dates)."""
     lg, n = LEAGUES[league_id]["lg"], LEAGUES[league_id]["fixture_games"]
     games = poss.select(pl.col("game_id").cast(pl.Utf8)).unique().sort("game_id").head(n)
     FIXTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -525,6 +573,7 @@ def write_fixture(
         ("pbp", pbp, pbp_cols),
         ("possessions", poss, _FIXTURE_POSS),
         ("game_lineups", tens, tens_cols),
+        *((("schedule", order, ["game_id", "game_order"]),) if order is not None else ()),
     ):
         out = frame.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi").select(cols)
         out.write_parquet(
@@ -598,6 +647,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     order = {s: r[3] for s, r in raw.items()}
     tr = {s: states[s] for s in cfg["train"]}
     level = level_k(cfg, league_id, data_root) if cfg["level"] else None
+    gate2 = max_large_bias(cfg, league_id, data_root)
     booster = fit(tr, level)
     booster.set_attr(
         train_seasons=",".join(map(str, cfg["train"])),
@@ -619,7 +669,8 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
         "params": _XGB_PARAMS,
         "features": EPV_FEATURES,
         "gates": {
-            "max_large_bias": MAX_LARGE_BIAS,
+            "max_large_bias": gate2["max_large_bias"],
+            "max_large_bias_rule": gate2,
             "max_bucket_bias": MAX_BUCKET_BIAS,
             "min_bucket": MIN_BUCKET,
             "min_gated_share": MIN_GATED_SHARE,
@@ -628,7 +679,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
         "seasons": {str(s): {"split": split[s], **m} for s, m in scored.items()},
         "holdout_identity_max_residual": _identity(states[cfg["holdout"]], booster, order[cfg["holdout"]]),
     }
-    failed = [f for s, m in scored.items() for f in gate(f"{split[s]} {s}", m)]
+    failed = [f for s, m in scored.items() for f in gate(f"{split[s]} {s}", m, gate2["max_large_bias"])]
     report["failed_gates"] = failed
     (HERE / f"epv_{cfg['lg']}_holdout.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     brief = {
@@ -642,8 +693,9 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     if league_id in _COLLEGE:
         write_college_fixture(league_id, cfg["holdout"], raw[cfg["holdout"]][4])  # the release the gates scored
     else:
-        pbp, poss, *_ = raw[cfg["holdout"]]
-        write_fixture(league_id, cfg["holdout"], pbp, poss, load_lineups(league_id, cfg["holdout"], data_root))
+        pbp, poss, _, hold_order, _ = raw[cfg["holdout"]]
+        tens = load_lineups(league_id, cfg["holdout"], data_root)
+        write_fixture(league_id, cfg["holdout"], pbp, poss, tens, hold_order)
     return report
 
 
