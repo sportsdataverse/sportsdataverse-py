@@ -1316,6 +1316,11 @@ adjust_pressure_pairs:
   pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
   season: Season of the aggregate.
   team: Team abbreviation.
+aggregate_player_seasons:
+  fga_mid: Mid-range field-goal attempts (non-rim twos), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box two-point attempts.
+  fga_rim: Rim field-goal attempts (layups, dunks, tips), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; 0 in seasons without shots data.
+  fga_three: Three-point field-goal attempts, the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box three-point attempts.
+  starter_share: Share of the player's positive-minute box-score rows for the team-season, among those with a known starter flag, that mark them a starter (0-1); null when the box release has no starter column.
 ahl_leaders:
   photo_small: URL of the small-format headshot image for the AHL leader-board player.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
