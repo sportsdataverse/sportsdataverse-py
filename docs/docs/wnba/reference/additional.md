@@ -124,7 +124,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_flow](additional/analytics.md#wnba_game_flow) | WNBA game flow per team and game: runs, droughts, kills, lead changes, time leading, game control (league_id='10'). See … |
 | [wnba_game_lineups_used](additional/analytics.md#wnba_game_lineups_used) | WNBA lineups used per game (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_lineups_used. |
 | [wnba_game_player_impact](additional/analytics.md#wnba_game_player_impact) | WNBA game impact box (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_player_impact. |
-| [wnba_lineup_seasons](additional/analytics.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
+| [wnba_lineup_seasons](additional/analytics-2.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
 | [wnba_matchup_drapm](additional/analytics-2.md#wnba_matchup_drapm) | WNBA matchup defensive RAPM (`league_id="10"`). |
 | [wnba_player_factor_rapm](additional/analytics-2.md#wnba_player_factor_rapm) | WNBA four-factor RAPM split (league_id='10'). See sportsdataverse.nba.nba_player_factor_rapm.nba_player_factor_rapm. |
 | [wnba_player_on_off](additional/analytics-2.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
@@ -136,10 +136,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_season_sim](additional/analytics-2.md#wnba_season_sim) | WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim. |
 | [wnba_season_standings](additional/analytics-2.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
 | [wnba_shot_value](additional/analytics-2.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
-| [wnba_situational_lineup](additional/analytics-2.md#wnba_situational_lineup) | WNBA five-man unit splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_lineup. |
-| [wnba_situational_player](additional/analytics-2.md#wnba_situational_player) | WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player. |
-| [wnba_situational_team](additional/analytics-2.md#wnba_situational_team) | WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team. |
-| [wnba_team_clutch](additional/analytics-2.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
+| [wnba_situational_lineup](additional/analytics-3.md#wnba_situational_lineup) | WNBA five-man unit splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_lineup. |
+| [wnba_situational_player](additional/analytics-3.md#wnba_situational_player) | WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player. |
+| [wnba_situational_team](additional/analytics-3.md#wnba_situational_team) | WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team. |
+| [wnba_team_clutch](additional/analytics-3.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
 | [wnba_team_luck](additional/analytics-3.md#wnba_team_luck) | WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck. |
 | [wnba_team_season_flow](additional/analytics-3.md#wnba_team_season_flow) | WNBA game flow per team and season, with ranks (league_id='10'). See sportsdataverse.nba.nba_game_flow.nba_team_season_flow. |
 | [wnba_team_season_rates](additional/analytics-3.md#wnba_team_season_rates) | WNBA season team rates from possessions (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_season_rates. |

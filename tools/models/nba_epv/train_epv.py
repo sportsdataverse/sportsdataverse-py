@@ -750,10 +750,11 @@ def _card_caveats(cfg: dict[str, Any], report: dict[str, Any]) -> list[str]:
     rule = report["gates"]["max_large_bias_rule"]
     if "drift_sd" in rule:
         worst = max(abs(m["large_bias"]) for m in report["seasons"].values())
+        inside = "inside" if worst <= MAX_LARGE_BIAS else "outside"
         out.append(
             f"Gate 2's threshold is the league's own, {rule['max_large_bias']:.4f} (0.01 plus the SD of its "
             f"year-over-year points per possession, {rule['drift_seasons'][0]}-{rule['drift_seasons'][1]}); the "
-            f"booster's largest level bias, {worst:.4f}, is inside the NBA-derived {MAX_LARGE_BIAS} too."
+            f"booster's largest level bias, {worst:.4f}, is {inside} the NBA-derived {MAX_LARGE_BIAS}."
         )
     out.extend(cfg.get("card_notes", []))
     return out

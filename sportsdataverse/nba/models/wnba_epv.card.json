@@ -157,7 +157,7 @@
   ],
   "caveats": [
     "Accepted exception, not a pass: on 2026 the gate-3 bucket last_event 13 x transition 2 (n 1041) is +0.117 against 0.110 allowed; accepted by the owner on 2026-11-06. The threshold is unchanged.",
-    "Gate 2's threshold is the league's own, 0.0335 (0.01 plus the SD of its year-over-year points per possession, 2011-2025); the booster's largest level bias, 0.0044, is inside the NBA-derived 0.02 too.",
+    "Gate 2's threshold is the league's own, 0.0335 (0.01 plus the SD of its year-over-year points per possession, 2011-2025); the booster's largest level bias, 0.0044, is inside the NBA-derived 0.02.",
     "2026 stands as the confirmation season by the owner's ruling of 2026-11-06. The level was first introduced after the WNBA's 2026 gate-2 failure (with games in game_id order); the date ordering and the gate-2 rule were fixed before this refit. 2027 is the pre-registered monitor season: gate it with these thresholds, unchanged, when it completes.",
     "Playoff games are scored with the regular-season booster and level but are not gated (the fit and gates use regular-season games only).",
     "The player, lineup and team tables are accounting sums of EPV added (like +/-), with no interval."

@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Analytics: make_prob–wnba_lineup"
-sidebar_label: "Analytics: make_prob–wnba_lineup"
+title: "WNBA — additional Python functions — Analytics: make_prob–wnba_game"
+sidebar_label: "Analytics: make_prob–wnba_game"
 sidebar_position: 7
-description: "WNBA — additional Python functions — Analytics: make_prob–wnba_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: make_prob–wnba_game — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: make_prob–wnba_lineup
+# WNBA — additional Python functions — Analytics: make_prob–wnba_game
 
 ### make_prob_by_context {#make_prob_by_context}
 
@@ -487,8 +487,8 @@ Per WNBA five-woman unit and game: the EPV added with the unit on the floor.
 | `game_id` | String | stats.wnba.com game id (e.g. 1022600001). |
 | `team_id` | Int64 | stats.wnba.com team id. |
 | `lineup_id` | String | The five player ids, sorted and joined with '-'. |
-| `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
-| `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
+| `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution. |
+| `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution. |
 | `net_epv` | Float64 | off_epv - def_epv. |
 | `plays` | Int64 | Play-by-play events with the unit on the floor. |
 
@@ -530,8 +530,8 @@ Per WNBA player and game: EPV added on her own actions and on-court EPV +/-.
 | `player_id` | Int64 | stats.wnba.com player (person) id. |
 | `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
 | `own_actions` | Int64 | How many of the player's own events were credited. |
-| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. |
-| `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution. |
+| `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution. |
 | `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
 
 **Raises**
@@ -867,85 +867,3 @@ One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` an
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_lineup_seasons {#wnba_lineup_seasons}
-
-`wnba_lineup_seasons(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', min_poss: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `min_poss` | `int \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`) as fractions, and for every rate `<m>_rank` / `<m>_pct` (within the season and unit size, among units with at least `min_poss`) and `<m>_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `n_players` | Int64 | Unit size: 2, 3 or 5 players. |
-| `lineup_id` | String | The unit's stats.nba.com player ids, sorted numerically and joined with '-'. |
-| `player_1` | Int64 | Player 1 of the unit, in lineup_id order; null past n_players. |
-| `player_2` | Int64 | Player 2 of the unit, in lineup_id order; null past n_players. |
-| `player_3` | Int64 | Player 3 of the unit, in lineup_id order; null past n_players. |
-| `player_4` | Int64 | Player 4 of the unit, in lineup_id order; null past n_players. |
-| `player_5` | Int64 | Player 5 of the unit, in lineup_id order; null past n_players. |
-| `minutes` | Float64 | Game-clock minutes the unit shared the floor over the season. |
-| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a 2- or 3-man unit sums the fives that contain it). |
-| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
-| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
-| `plus_minus` | Int64 | The unit's +/- over the season: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `orb_pct` | Float64 | Offensive-rebound rate: OREB / (OREB + the opponent's DREB), as a fraction. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate: its OREB / (its OREB + the unit's DREB). Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. Each possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average), among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10' (WNBA)); null for a non-qualifier or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share one value. |
-| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |

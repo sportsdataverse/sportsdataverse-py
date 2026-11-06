@@ -77675,21 +77675,21 @@ wnba_epv_plays:
   team_id: 'Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id).'
   transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
 wnba_epv_player_games:
-  def_epv_on: EPV added by the opponent with the ball while the player was on the floor.
+  def_epv_on: EPV added by the opponent with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
   epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
   epv_own: 'EPV credited to the player''s own events: as the offensive actor the play''s epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended.'
   game_id: stats.wnba.com game id (e.g. 1022600001).
-  off_epv_on: EPV added by the player's team with the ball while the player was on the floor.
+  off_epv_on: EPV added by the player's team with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
   own_actions: How many of the player's own events were credited.
   player_id: stats.wnba.com player (person) id.
   season: 'Season: the WNBA season is its calendar year.'
   team_id: stats.wnba.com team id.
 wnba_epv_lineup_games:
-  def_epv: EPV added by the opponent with the ball while the unit was on.
+  def_epv: EPV added by the opponent with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
   game_id: stats.wnba.com game id (e.g. 1022600001).
   lineup_id: The five player ids, sorted and joined with '-'.
   net_epv: off_epv - def_epv.
-  off_epv: EPV added by the unit's team with the ball while the unit was on.
+  off_epv: EPV added by the unit's team with the ball while the unit was on. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
   plays: Play-by-play events with the unit on the floor.
   season: 'Season: the WNBA season is its calendar year.'
   team_id: stats.wnba.com team id.
