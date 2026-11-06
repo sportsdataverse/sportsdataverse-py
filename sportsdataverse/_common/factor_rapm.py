@@ -173,7 +173,7 @@ def _fit_season(possessions: pl.DataFrame, alphas: np.ndarray) -> pl.DataFrame |
     P = len(player_ids)
     poss_counts = np.asarray(X.sum(axis=0)).ravel()
     cols: dict[str, np.ndarray] = {}
-    for k, (o, d) in enumerate(zip(_OFF_COLS, _DEF_COLS)):
+    for k, (o, d) in enumerate(zip(_OFF_COLS, _DEF_COLS, strict=True)):
         cols[o] = 100 * coef[:P, k]
         cols[d] = -100 * coef[P:, k]
         cols[f"{o}_se"] = 100 * np.sqrt(var[:P, k])
