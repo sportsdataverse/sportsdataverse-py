@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [BB-D24 EPV corpus](#bb-d24-epv-corpus)
+  - [College (`tests/mbb/test_mbb_epv.py`)](#college-testsmbbtest_mbb_epvpy)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -35,3 +36,13 @@ script (it rewrites these files from the holdout season after the gates pass).
 `0022400337` of the same releases, the same columns, cut by hand on 2026-11-05: in both a technical foul (and its free
 throw) falls between an ordinary "1 of 2" and "2 of 2", and in `0022400337` a substitution comes between the shooting
 foul and the technicals (order_index 140-146), so the trip's last free throw and its lineup can be checked.
+
+## College (`tests/mbb/test_mbb_epv.py`)
+
+| File | Rows | Release asset | Kept |
+|---|---:|---|---|
+| `mbb_pbp_2025.parquet` | 9,972 | `ncaa_mbb_pbp/ncaa_mbb_pbp_2025` | The first 20 games of 2024-25 by `contest_id`, written by `train_epv.py --league-id mbb` (`write_college_fixture`) on 2026-11-05 from the ncaa-mbb-hoops-data checkout. Cols: what `ncaa_epv_inputs` reads (`mbb_epv._PBP_COLS`). Two games have a non-D1 opponent (no ESPN team id). |
+| `wbb_pbp_2025.parquet` | 10,082 | `ncaa_wbb_pbp/ncaa_wbb_pbp_2025` | The same for the women (ncaa-wbb-hoops-data), `--league-id wbb`. |
+| `mbb_pbp_2025_quirks.parquet` | 916 | `ncaa_mbb_pbp/ncaa_mbb_pbp_2025` | Cut by hand on 2026-11-05: game `5722807` (Ole Miss v Colorado St.), whose `home_score` is the away team's and which has a wrong-basket two, and `5722014`, where the free throws after a foul on a turnover are stamped on the fouled-out side's possession. |
+
+2025 is the holdout season of both college boosters (trained on 2022-2024). Nothing is synthetic or edited.
