@@ -10745,3 +10745,33 @@
   test: tests/mbb/test_mbb_epv.py::test_a_wrong_basket_ends_its_possession
   expected: kill
   note: A wrong-basket two would trail into the next possession, crediting the side it was scored against.
+
+- id: bb-epv-accepted-exception-season
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'e["season"] == season'
+  mutant: 'True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted WNBA bucket would be excused in any season, not only its 2026 confirmation.
+
+- id: bb-epv-accepted-exception-value
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and abs(e["bias"] - bucket["bias"]) <= _EXCEPTION_TOL'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted bucket would stay excused however far its bias moved on a refit.
+
+- id: bb-epv-level-needs-dates
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'raise ValueError("a booster with a level needs game_order (each game''s date)")'
+  mutant: 'game_order = games.select("game_id", pl.col("game_id").alias("game_order"))'
+  test: tests/wnba/test_wnba_epv.py::test_the_level_reads_the_schedule_dates
+  expected: kill
+  note: Without dates the level would order games by game_id, so same-day games would see each other.

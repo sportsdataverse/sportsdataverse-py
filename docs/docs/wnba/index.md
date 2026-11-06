@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 109 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 113 | — |
 
 ## ESPN {#espn}
 
@@ -82,13 +82,17 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_coach_careers`](reference/additional/analytics#wnba_coach_careers)
 - [`wnba_coach_seasons`](reference/additional/analytics#wnba_coach_seasons)
 - [`wnba_draft_lottery_odds`](reference/additional/analytics#wnba_draft_lottery_odds)
+- [`wnba_epv_lineup_games`](reference/additional/analytics#wnba_epv_lineup_games)
+- [`wnba_epv_player_games`](reference/additional/analytics#wnba_epv_player_games)
+- [`wnba_epv_plays`](reference/additional/analytics#wnba_epv_plays)
+- [`wnba_epv_team_games`](reference/additional/analytics#wnba_epv_team_games)
 - [`wnba_expected_turnovers`](reference/additional/analytics#wnba_expected_turnovers)
 - [`wnba_foul_drawing`](reference/additional/analytics#wnba_foul_drawing)
 - [`wnba_game_flow`](reference/additional/analytics#wnba_game_flow)
 - [`wnba_game_lineups_used`](reference/additional/analytics#wnba_game_lineups_used)
 - [`wnba_game_player_impact`](reference/additional/analytics#wnba_game_player_impact)
 - [`wnba_lineup_seasons`](reference/additional/analytics#wnba_lineup_seasons)
-- [`wnba_matchup_drapm`](reference/additional/analytics#wnba_matchup_drapm)
+- [`wnba_matchup_drapm`](reference/additional/analytics-2#wnba_matchup_drapm)
 - [`wnba_player_factor_rapm`](reference/additional/analytics-2#wnba_player_factor_rapm)
 - [`wnba_player_on_off`](reference/additional/analytics-2#wnba_player_on_off)
 - [`wnba_player_props`](reference/additional/analytics-2#wnba_player_props)

@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Analytics: make_prob–wnba_matchup"
-sidebar_label: "Analytics: make_prob–wnba_matchup"
+title: "WNBA — additional Python functions — Analytics: make_prob–wnba_lineup"
+sidebar_label: "Analytics: make_prob–wnba_lineup"
 sidebar_position: 7
-description: "WNBA — additional Python functions — Analytics: make_prob–wnba_matchup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: make_prob–wnba_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: make_prob–wnba_matchup
+# WNBA — additional Python functions — Analytics: make_prob–wnba_lineup
 
 ### make_prob_by_context {#make_prob_by_context}
 
@@ -464,6 +464,210 @@ One row per `(lottery_slot, pick)`: `lottery_slot` (1 = the worst record), `chan
 | `pick` | Int64 | Draft pick number. |
 | `probability` | Float64 | Exact probability that the slot gets the pick, from enumerating every ordered draw. |
 
+### wnba_epv_lineup_games {#wnba_epv_lineup_games}
+
+`wnba_epv_lineup_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per WNBA five-woman unit and game: the EPV added with the unit on the floor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (the WNBA season is its year), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+`sportsdataverse.nba.nba_epv.epv_lineup_games` of the seasons' plays: one row per `(season, game_id, team_id, lineup_id)` with `off_epv`, `def_epv`, `net_epv` and `plays`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season: the WNBA season is its calendar year. |
+| `game_id` | String | stats.wnba.com game id (e.g. 1022600001). |
+| `team_id` | Int64 | stats.wnba.com team id. |
+| `lineup_id` | String | The five player ids, sorted and joined with '-'. |
+| `off_epv` | Float64 | EPV added by the unit's team with the ball while the unit was on. |
+| `def_epv` | Float64 | EPV added by the opponent with the ball while the unit was on. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `plays` | Int64 | Play-by-play events with the unit on the floor. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_epv import wnba_epv_lineup_games
+wnba_epv_lineup_games(2026).sort("net_epv", descending=True).head()
+```
+
+### wnba_epv_player_games {#wnba_epv_player_games}
+
+`wnba_epv_player_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per WNBA player and game: EPV added on her own actions and on-court EPV +/-.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (the WNBA season is its year), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+`sportsdataverse.nba.nba_epv.epv_player_games` of the seasons' plays, on-court from the `wnba_stats_game_lineups` release: one row per `(season, game_id, team_id, player_id)` with `epv_own`, `own_actions`, `off_epv_on`, `def_epv_on` and `epv_on`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season: the WNBA season is its calendar year. |
+| `game_id` | String | stats.wnba.com game id (e.g. 1022600001). |
+| `team_id` | Int64 | stats.wnba.com team id. |
+| `player_id` | Int64 | stats.wnba.com player (person) id. |
+| `epv_own` | Float64 | EPV credited to the player's own events: as the offensive actor the play's epv_added, as a defensive actor its negative, a steal or block the negative of the turnover or miss it ended. |
+| `own_actions` | Int64 | How many of the player's own events were credited. |
+| `off_epv_on` | Float64 | EPV added by the player's team with the ball while the player was on the floor. |
+| `def_epv_on` | Float64 | EPV added by the opponent with the ball while the player was on the floor. |
+| `epv_on` | Float64 | On-court EPV +/-: off_epv_on - def_epv_on. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_epv import wnba_epv_player_games
+wnba_epv_player_games(2026).sort("epv_on", descending=True).head()
+```
+
+### wnba_epv_plays {#wnba_epv_plays}
+
+`wnba_epv_plays(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+EPV and EPV added on every WNBA play-by-play event inside a possession.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (the WNBA season is its year), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in game order, with stats.wnba.com ids. Every game of every season type is scored.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season: the WNBA season is its calendar year. |
+| `game_id` | String | stats.wnba.com game id (e.g. 1022600001). |
+| `possession_number` | Int64 | The possession's number in the game (the possessions release's). |
+| `step` | Int64 | The event's place in its possession, from 1. |
+| `order_index` | Int64 | The event's order in the game's play-by-play. |
+| `action_number` | Int64 | stats.wnba.com action number of the event (the game lineups release's key). |
+| `offense_team_id` | Int64 | Team id of the offense (the team with the ball). |
+| `defense_team_id` | Int64 | Team id of the defense. |
+| `home_team_id` | Int64 | Team id of the home team. |
+| `team_id` | Int64 | Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id). |
+| `person_id` | Int64 | Player id on the event; the team id, or 0, on team events. |
+| `event_type` | String | The release's event type (made_shot, missed_shot, rebound, foul, free_throw, turnover, ...). |
+| `sub_type` | String | The release's event sub type (the foul or free-throw kind, the shot type, ...). |
+| `description` | String | The play-by-play text of the event. |
+| `off_player_1` | Int64 | stats.wnba.com player id of offensive player 1 of 5 when the possession started. |
+| `off_player_2` | Int64 | stats.wnba.com player id of offensive player 2 of 5 when the possession started. |
+| `off_player_3` | Int64 | stats.wnba.com player id of offensive player 3 of 5 when the possession started. |
+| `off_player_4` | Int64 | stats.wnba.com player id of offensive player 4 of 5 when the possession started. |
+| `off_player_5` | Int64 | stats.wnba.com player id of offensive player 5 of 5 when the possession started. |
+| `def_player_1` | Int64 | stats.wnba.com player id of defensive player 1 of 5 when the possession started. |
+| `def_player_2` | Int64 | stats.wnba.com player id of defensive player 2 of 5 when the possession started. |
+| `def_player_3` | Int64 | stats.wnba.com player id of defensive player 3 of 5 when the possession started. |
+| `def_player_4` | Int64 | stats.wnba.com player id of defensive player 4 of 5 when the possession started. |
+| `def_player_5` | Int64 | stats.wnba.com player id of defensive player 5 of 5 when the possession started. |
+| `start_type` | Int64 | State: how the possession started, 0 dead ball, 1 timeout, 2 made shot, 3 missed shot, 4 live-ball turnover. |
+| `period` | Int64 | State: the period, overtimes folded to 5. |
+| `seconds_remaining` | Float64 | State: seconds left in the period after the event. |
+| `start_margin` | Float64 | State: the offense's lead when the possession started (before its first event). |
+| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot. |
+| `last_event` | Int64 | State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start). |
+| `ft_pending` | Int64 | State: free throws still to come in the trip. |
+| `shot_zone` | Int64 | State: zone of the possession's latest shot, 0 none, 1 rim, 2 short, 3 mid two, 4 three. |
+| `points` | Int64 | The offense's points on the event. |
+| `remaining_points` | Int64 | The offense's points after the event to the end of the possession (the model's label). |
+| `is_last` | Boolean | Whether the event is its possession's last. |
+| `next_in_period` | Boolean | Whether another possession follows in the same period. |
+| `epv` | Float64 | Expected points for the offense to the end of the possession, after the event. Scaled by the game's as-of scoring level (the season's points per possession on earlier dates). |
+| `epv_start` | Float64 | EPV at the possession's start. |
+| `epv_before` | Float64 | EPV before the event (the previous event's, or the start's). |
+| `epv_after` | Float64 | EPV after the event; when it ends the possession, minus the opponent's next start over an average start (0 at a period's end). |
+| `epv_added` | Float64 | EPV added: points + epv_after - epv_before, the offense's (the defense's is its negative). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_epv import wnba_epv_plays
+plays = wnba_epv_plays(2026)
+plays.sort("epv_added", descending=True).head(5)
+```
+
+### wnba_epv_team_games {#wnba_epv_team_games}
+
+`wnba_epv_team_games(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per WNBA team and game: EPV added on offense and allowed on defense.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (the WNBA season is its year), from the booster's first training season (2022) on. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+`sportsdataverse.nba.nba_epv.epv_team_games` of the seasons' plays: one row per `(season, game_id, team_id)` with `opp_team_id`, `off_epv`, `def_epv`, `net_epv`, `poss`, `opp_poss`, `off_epv_per_poss` and `def_epv_per_poss`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season: the WNBA season is its calendar year. |
+| `game_id` | String | stats.wnba.com game id (e.g. 1022600001). |
+| `team_id` | Int64 | stats.wnba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `off_epv` | Float64 | The team's EPV added with the ball over the game. |
+| `poss` | Int64 | The team's possessions with at least one event. |
+| `def_epv` | Float64 | The opponent's EPV added with the ball over the game. |
+| `opp_poss` | Int64 | The opponent's possessions with at least one event. |
+| `net_epv` | Float64 | off_epv - def_epv. |
+| `off_epv_per_poss` | Float64 | off_epv per possession. |
+| `def_epv_per_poss` | Float64 | def_epv per possession. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a season is before the first one served. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wnba.wnba_epv import wnba_epv_team_games
+teams = wnba_epv_team_games(2026)
+teams.group_by("team_id").agg(pl.col("off_epv_per_poss").mean()).sort("off_epv_per_poss")
+```
+
 ### wnba_expected_turnovers {#wnba_expected_turnovers}
 
 `wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -745,36 +949,3 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
-
-### wnba_matchup_drapm {#wnba_matchup_drapm}
-
-`wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-WNBA matchup defensive RAPM (`league_id="10"`).
-
-Thin wrapper binding
-`sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm` to the
-women's league.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2024"`. |
-| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame. |
-| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig` override. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
-
-No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.wnba import wnba_matchup_drapm
-d = wnba_matchup_drapm("2024")
-print(d.sort("matchup_drapm", descending=True).head())
-```

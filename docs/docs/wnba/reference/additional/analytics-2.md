@@ -1,10 +1,43 @@
 ---
-title: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team"
-sidebar_label: "Analytics: wnba_player–wnba_team"
+title: "WNBA — additional Python functions — Analytics: wnba_matchup–wnba_team"
+sidebar_label: "Analytics: wnba_matchup–wnba_team"
 sidebar_position: 8
-description: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: wnba_matchup–wnba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: wnba_player–wnba_team
+# WNBA — additional Python functions — Analytics: wnba_matchup–wnba_team
+
+### wnba_matchup_drapm {#wnba_matchup_drapm}
+
+`wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+WNBA matchup defensive RAPM (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame. |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig` override. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_matchup_drapm
+d = wnba_matchup_drapm("2024")
+print(d.sort("matchup_drapm", descending=True).head())
+```
 
 ### wnba_player_factor_rapm {#wnba_player_factor_rapm}
 

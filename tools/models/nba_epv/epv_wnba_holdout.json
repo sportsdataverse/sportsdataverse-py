@@ -103,6 +103,7 @@
       "gated_state_share": 0.9934730654752619,
       "max_bucket_bias": 0.08716490541948885,
       "bucket_failures": 0,
+      "failing_buckets": [],
       "worst_bucket": {
         "last_event": 13,
         "transition": 2,
@@ -154,13 +155,13 @@
         {
           "decile": 1,
           "n": 16026,
-          "mean_epv": 0.013542469161987194,
+          "mean_epv": 0.01354246916198719,
           "mean_y": 0.004055909147635093
         },
         {
           "decile": 2,
           "n": 16026,
-          "mean_epv": 0.0918367801741915,
+          "mean_epv": 0.09183678017419147,
           "mean_y": 0.08348932983901161
         },
         {
@@ -172,19 +173,19 @@
         {
           "decile": 4,
           "n": 16026,
-          "mean_epv": 0.5809531586316267,
+          "mean_epv": 0.5809531586316268,
           "mean_y": 0.5966554349182578
         },
         {
           "decile": 5,
           "n": 16026,
-          "mean_epv": 0.9355025360630664,
+          "mean_epv": 0.9355025360630663,
           "mean_y": 0.9297391738425059
         },
         {
           "decile": 6,
           "n": 16026,
-          "mean_epv": 1.000344581417766,
+          "mean_epv": 1.0003445814177658,
           "mean_y": 1.0009359790340697
         },
         {
@@ -196,7 +197,7 @@
         {
           "decile": 8,
           "n": 16026,
-          "mean_epv": 1.0970451937433565,
+          "mean_epv": 1.097045193743357,
           "mean_y": 1.1014601272931486
         },
         {
@@ -234,6 +235,15 @@
       "gated_state_share": 0.9962106661960279,
       "max_bucket_bias": 0.11679148706735776,
       "bucket_failures": 1,
+      "failing_buckets": [
+        {
+          "last_event": 13,
+          "transition": 2,
+          "n": 1041,
+          "bias": 0.11679148706735776,
+          "allowed": 0.11022140622240101
+        }
+      ],
       "worst_bucket": {
         "last_event": 13,
         "transition": 2,
@@ -279,25 +289,25 @@
         {
           "decile": 0,
           "n": 19264,
-          "mean_epv": 0.0025099884296391796,
+          "mean_epv": 0.002509988429639179,
           "mean_y": 0.0006748338870431893
         },
         {
           "decile": 1,
           "n": 19265,
-          "mean_epv": 0.017397303615994373,
+          "mean_epv": 0.017397303615994376,
           "mean_y": 0.007111341811575396
         },
         {
           "decile": 2,
           "n": 19265,
-          "mean_epv": 0.0995769213530284,
+          "mean_epv": 0.09957692135302841,
           "mean_y": 0.09763820399688554
         },
         {
           "decile": 3,
           "n": 19264,
-          "mean_epv": 0.2938657006770517,
+          "mean_epv": 0.2938657006770518,
           "mean_y": 0.31468023255813954
         },
         {
@@ -309,7 +319,7 @@
         {
           "decile": 5,
           "n": 19265,
-          "mean_epv": 0.9700602364932539,
+          "mean_epv": 0.970060236493254,
           "mean_y": 0.9898261095250455
         },
         {
@@ -321,26 +331,44 @@
         {
           "decile": 7,
           "n": 19265,
-          "mean_epv": 1.0731396267471887,
+          "mean_epv": 1.0731396267471893,
           "mean_y": 1.0802491565014274
         },
         {
           "decile": 8,
           "n": 19265,
-          "mean_epv": 1.1376505512102233,
+          "mean_epv": 1.1376505512102237,
           "mean_y": 1.1408772385154424
         },
         {
           "decile": 9,
           "n": 19264,
-          "mean_epv": 1.3710340205525449,
+          "mean_epv": 1.3710340205525455,
           "mean_y": 1.364358388704319
         }
       ]
     }
   },
   "holdout_identity_max_residual": 6.661338147750939e-16,
-  "failed_gates": [
-    "confirmation 2026: 1 buckets over the bias gate, worst {'last_event': 13, 'transition': 2, 'n': 1041, 'bias': 0.11679148706735776, 'allowed': 0.11022140622240101, 'bias_without_level': 0.07560046342104015}"
-  ]
+  "accepted_bucket_exceptions": [
+    {
+      "season": 2026,
+      "last_event": 13,
+      "transition": 2,
+      "n": 1041,
+      "bias": 0.11679,
+      "allowed": 0.11022,
+      "accepted": "2026-11-06",
+      "by": "owner",
+      "note": "a shooting foul in a transition possession is over-priced by about 0.12 points on the 2026 confirmation (+0.087 of 0.120 allowed on the 2025 holdout; +0.076 without the level)",
+      "observed": {
+        "last_event": 13,
+        "transition": 2,
+        "n": 1041,
+        "bias": 0.11679148706735776,
+        "allowed": 0.11022140622240101
+      }
+    }
+  ],
+  "failed_gates": []
 }
