@@ -285,7 +285,8 @@ def evaluate(lg: str, cache: Path) -> dict[str, Any]:
             for name, (r, w) in passes.items()
         },
     }
-    (HERE / f"in_game_wp_{lg}_card_metrics.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    path = HERE / f"in_game_wp_{lg}_card_metrics.json"
+    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n")
     return report
 
 
