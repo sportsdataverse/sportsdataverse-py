@@ -10,6 +10,8 @@ import polars as pl
 import pytest
 
 from sportsdataverse._common.ratings import dropped_level_ridge, opponent_adjusted_ridge
+from sportsdataverse._common.team_strength import possession_ridge_ratings, ridge_design
+from sportsdataverse.nba.nba_team_season_rates import nba_possession_rate_rows
 
 
 def test_opponent_adjusted_ridge_empty_returns_schema() -> None:
@@ -136,3 +138,40 @@ def test_opponent_adjusted_ridge_rejects_null_home_regressor() -> None:
     )
     with pytest.raises(ValueError, match="hfa"):
         opponent_adjusted_ridge(plays, off_col="o", def_col="d", home_col="h", resp_col="y", lam=10.0, hfa_col="hfa")
+
+
+def test_weighted_collapsed_rows_give_the_uncollapsed_fit() -> None:
+    """A row standing for n identical possessions (their mean y, weight n) changes nothing.
+
+    On BB-D3's real WNBA 2025 possessions (``tests/fixtures/bb_team_season_rates``):
+    ``possession_ridge_ratings`` collapses before it fits, so it must equal the plain
+    possession-level fit, and an unweighted fit of the collapsed rows must not.
+    """
+    from pathlib import Path
+
+    rates = Path(__file__).resolve().parents[1] / "fixtures" / "bb_team_season_rates"
+    rows = nba_possession_rate_rows(
+        pl.read_parquet(rates / "wnba_possessions_2025.parquet"),
+        pl.read_parquet(rates / "wnba_schedule_2025.parquet"),
+        league_id="10",
+    )
+    design = ridge_design(rows)
+    kw = {"off_col": "offense_id", "def_col": "defense_id", "home_col": "offense_id", "resp_col": "y", "lam": 800.0}
+    full, b0, hfa = opponent_adjusted_ridge(design, hfa_col="hfa", **kw)
+    lib = possession_ridge_ratings(rows, lam=800.0)
+    got = dict(zip(lib["team_id"].cast(pl.Utf8).to_list(), lib["adj_net_rtg"].to_list(), strict=True))
+    want = dict(zip(full["team_id"].to_list(), (full["off_coef"] - full["def_coef"]).to_list(), strict=True))
+    assert got.keys() == want.keys()
+    assert max(abs(got[t] - want[t]) for t in want) < 1e-8
+    assert abs(lib["hfa"][0] - hfa) < 1e-8
+    collapsed = design.group_by("offense_id", "defense_id", "hfa").agg(pl.col("y").mean(), pl.len().alias("n"))
+    unweighted, _, _ = opponent_adjusted_ridge(collapsed, hfa_col="hfa", **kw)
+    flat = dict(zip(unweighted["team_id"].to_list(), (unweighted["off_coef"] - unweighted["def_coef"]).to_list()))
+    assert max(abs(flat[t] - want[t]) for t in want) > 0.1
+
+
+@pytest.mark.parametrize("bad", [None, -1.0])
+def test_a_null_or_negative_weight_is_refused(bad: float | None) -> None:
+    plays = pl.DataFrame({"o": ["A", "B"], "d": ["B", "A"], "y": [1.0, 0.0], "w": [2.0, bad]})
+    with pytest.raises(ValueError, match="negative weights"):
+        opponent_adjusted_ridge(plays, off_col="o", def_col="d", home_col="o", resp_col="y", lam=1.0, weight_col="w")

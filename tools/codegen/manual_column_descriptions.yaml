@@ -39706,6 +39706,10 @@ mbb_team_strength:
   adj_def_rtg_rank: Rank of adj_def_rtg within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_def_rtg_ridge: 'Adjusted defensive rating, possession-ridge method: points allowed per 100 possessions against an average Division I offense on a neutral court; lower is better.'
+  adj_def_rtg_ridge_n: 'Sample size of adj_def_rtg_ridge: the team''s defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_def_rtg_ridge_pct: 'Percentile of adj_def_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_def_rtg_ridge_rank: Rank of adj_def_rtg_ridge within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   adj_net_rtg: 'Adjusted net rating: adj_off_rtg minus adj_def_rtg.'
   adj_net_rtg_n: 'Sample size of adj_net_rtg: the team''s offensive plus defensive possessions in the season.'
   adj_net_rtg_pct: 'Percentile of adj_net_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -39713,6 +39717,10 @@ mbb_team_strength:
   adj_net_rtg_rank: Rank of adj_net_rtg within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_net_rtg_ridge: 'Adjusted net rating, possession-ridge method: adj_off_rtg_ridge minus adj_def_rtg_ridge.'
+  adj_net_rtg_ridge_n: 'Sample size of adj_net_rtg_ridge: the team''s offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_net_rtg_ridge_pct: 'Percentile of adj_net_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_net_rtg_ridge_rank: Rank of adj_net_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   adj_off_rtg: 'Adjusted offensive rating: points per 100 possessions against an average defense, from the published college
     ratings (adj_o, the mbb_team_ratings fixed point).'
   adj_off_rtg_n: 'Sample size of adj_off_rtg: the team''s offensive possessions in the season.'
@@ -39721,6 +39729,10 @@ mbb_team_strength:
   adj_off_rtg_rank: Rank of adj_off_rtg within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_off_rtg_ridge: 'Adjusted offensive rating, possession-ridge method: points per 100 possessions against an average Division I defense on a neutral court. The NBA / WNBA ridge (possession_ridge_ratings) on the ncaa_mbb_possessions release, penalty COLLEGE_RIDGE_LAMBDA, home court fitted and ESPN neutral sites; possessions against a non-Division I opponent left out. Published beside the fixed-point adj_off_rtg, which it does not replace.'
+  adj_off_rtg_ridge_n: 'Sample size of adj_off_rtg_ridge: the team''s offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_off_rtg_ridge_pct: 'Percentile of adj_off_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_off_rtg_ridge_rank: Rank of adj_off_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the season.'
   def_rtg_pct: 'Percentile of def_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
@@ -39964,6 +39976,10 @@ wbb_team_strength:
   adj_def_rtg_rank: Rank of adj_def_rtg within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_def_rtg_ridge: 'Adjusted defensive rating, possession-ridge method: points allowed per 100 possessions against an average Division I offense on a neutral court; lower is better.'
+  adj_def_rtg_ridge_n: 'Sample size of adj_def_rtg_ridge: the team''s defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_def_rtg_ridge_pct: 'Percentile of adj_def_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_def_rtg_ridge_rank: Rank of adj_def_rtg_ridge within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   adj_net_rtg: 'Adjusted net rating: adj_off_rtg minus adj_def_rtg.'
   adj_net_rtg_n: 'Sample size of adj_net_rtg: the team''s offensive plus defensive possessions in the season.'
   adj_net_rtg_pct: 'Percentile of adj_net_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -39971,6 +39987,10 @@ wbb_team_strength:
   adj_net_rtg_rank: Rank of adj_net_rtg within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_net_rtg_ridge: 'Adjusted net rating, possession-ridge method: adj_off_rtg_ridge minus adj_def_rtg_ridge.'
+  adj_net_rtg_ridge_n: 'Sample size of adj_net_rtg_ridge: the team''s offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_net_rtg_ridge_pct: 'Percentile of adj_net_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_net_rtg_ridge_rank: Rank of adj_net_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   adj_off_rtg: 'Adjusted offensive rating: points per 100 possessions against an average defense, from the published college
     ratings (adj_o, the mbb_team_ratings fixed point).'
   adj_off_rtg_n: 'Sample size of adj_off_rtg: the team''s offensive possessions in the season.'
@@ -39979,6 +39999,10 @@ wbb_team_strength:
   adj_off_rtg_rank: Rank of adj_off_rtg within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five
     qualifiers.
+  adj_off_rtg_ridge: 'Adjusted offensive rating, possession-ridge method: points per 100 possessions against an average Division I defense on a neutral court. The NBA / WNBA ridge (possession_ridge_ratings) on the ncaa_wbb_possessions release, penalty COLLEGE_RIDGE_LAMBDA, home court fitted and ESPN neutral sites; possessions against a non-Division I opponent left out. Published beside the fixed-point adj_off_rtg, which it does not replace.'
+  adj_off_rtg_ridge_n: 'Sample size of adj_off_rtg_ridge: the team''s offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out.'
+  adj_off_rtg_ridge_pct: 'Percentile of adj_off_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
+  adj_off_rtg_ridge_rank: Rank of adj_off_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers.
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the season.'
   def_rtg_pct: 'Percentile of def_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n
