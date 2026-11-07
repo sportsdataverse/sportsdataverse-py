@@ -1121,7 +1121,7 @@ proj.sort("exp_box_bpm", descending=True).head(15)
 
 ### mbb_season_projections {#mbb_season_projections}
 
-`mbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`mbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The daily `season_sim` table: projected W-L, conference standings, title and bid odds.
 
@@ -1141,7 +1141,7 @@ season, the regular-season conference titles, every unfinished conference tourna
 | `n_sims` | `int` | `10000` | Simulated seasons. |
 | `seed` | `int` | `0` | RNG seed. |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (no bid; see `~sportsdataverse.mbb.mbb_bracketology.mbb_bracketology`). |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament (no bid; see `~sportsdataverse.mbb.mbb_bracketology.mbb_bracketology`). `None` (default) reads the bundled list. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**

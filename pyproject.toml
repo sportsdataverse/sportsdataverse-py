@@ -790,6 +790,7 @@ files = [
     "sportsdataverse/wbb/wbb_shooter_talent.py",
     "sportsdataverse/mbb/mbb_game_predict.py",
     "sportsdataverse/mbb/mbb_strength_of_schedule.py",
+    "sportsdataverse/mbb/mbb_tournament_eligibility.py",
     "sportsdataverse/mbb/mbb_bracketology.py",
     "sportsdataverse/mbb/mbb_college_season.py",
     "sportsdataverse/mbb/mbb_win_prob.py",
