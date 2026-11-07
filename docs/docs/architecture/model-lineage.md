@@ -76,14 +76,16 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/nba/models/wnba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 10` (train 2022-2024, holdout 2025, confirmation 2026; dated as-of scoring level; one owner-accepted gate-3 bucket; card, gates, partition and importance beside it) | #1120 |
 | `sportsdataverse/mbb/models/mbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id mbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
 | `sportsdataverse/mbb/models/wbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id wbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
-| `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` | **gap**: `dev/mbb_prediction/train_in_game_wp.py` exists only on the maintainer's disk (untracked) | `5c3eaba8de` |
-| `sportsdataverse/mbb/models/wbb_in_game_wp.ubj` | **gap**: same untracked script | `5c3eaba8de` |
+| `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` | sdv-py `tools/models/mbb_prediction/train_in_game_wp.py --league mbb` (train 2022, 2023, 2025; holdout 2026; confirmation 2024) | #1104 |
+| `sportsdataverse/mbb/models/wbb_in_game_wp.ubj` | sdv-py `tools/models/mbb_prediction/train_in_game_wp.py --league wbb` (same seasons) | #1104 |
 | `sportsdataverse/mlb/models/mlb_stuff_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_stuff_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 | `sportsdataverse/mlb/models/mlb_command_plus.ubj` | sdv-py `tools/models/mlb_pitching/fit_command_plus.py`, names re-attached by `tools/models/mlb_pitching/relabel_boosters.py` (`9c883ae281`) | `9c883ae281` |
 
-The NBA and WNBA in-game WP boosters each ship a `.card.json` beside them, built by sdv-py
-`tools/models/nba_prediction/wp_model_cards.py` from the fit report, the holdout scoring and the booster
-(`tests/nba/test_nba_wp_model_cards.py` fails on a stale card). The other five ship none.
+The four in-game WP boosters each ship a `.card.json` beside them, built from the fit report, the holdout
+scoring and the booster: NBA and WNBA by sdv-py `tools/models/nba_prediction/wp_model_cards.py`
+(`tests/nba/test_nba_wp_model_cards.py`), MBB and WBB by `tools/models/mbb_prediction/wp_model_cards.py`
+(`tests/mbb/test_mbb_wp_model_cards.py`, which also holds the college holdout gate). Each test fails on a stale
+card. The other five ship none.
 
 ## Fitted constants
 
@@ -134,11 +136,9 @@ scripts) closes the gap.
 
 Not cited from package source, so outside the test, but still gaps:
 
-- `dev/mbb_prediction/train_in_game_wp.py` (untracked) trained `mbb_in_game_wp.ubj`
-  and `wbb_in_game_wp.ubj`.
 - `cfb_cp_model.card.json`, `cfb_cp_model_air_yards.card.json` and
   `fd_model.card.json` carry `training_seasons: null` and `n_training_rows: null`.
-- No NFL, MBB or MLB booster ships a card; of the NBA boosters, the in-game WP pair and `wnba_epv.ubj` do (`nba_epv.ubj` ships none).
+- No NFL or MLB booster ships a card; of the basketball boosters, the four in-game WP models and `wnba_epv.ubj` do (`nba_epv.ubj` and the college EPV boosters ship none).
 - `nfl-data`'s registry lists the NFL QBR fitting script as TODO; the trainer
   named above (`cfb_qbr/qbr_xgb.R`) is the one the 2.7 feature-order fix traced
   the artifact to, not an NFL-trained replacement.
