@@ -189,7 +189,7 @@ One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64).
 | `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
 | `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
 | `pbp_games` | Int64 | Games with published possessions (wnba_stats_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
-| `close_games` | Int64 | Close games: at least one possession started with 5:00 or less left in the 4th quarter or an overtime, the score within 5 (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1210 of 1229 games. |
+| `close_games` | Int64 | Close games: at least one possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter or an overtime, the score within 5 as that possession starts (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1215 of 1229 games. |
 | `close_wins` | Int64 | Wins in close games. |
 | `close_losses` | Int64 | Losses in close games. |
 | `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
@@ -305,7 +305,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 |---|---|---|
 | `season` | Int64 | WNBA season (its calendar year). |
 | `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games as the stats.nba.com schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left in the 4th quarter or an overtime, the score within 5 as it starts). |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games as the stats.nba.com schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter or an overtime, the score within 5 as it starts). |
 | `games` | Int64 | Games with at least one possession in the split. |
 | `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
 | `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |

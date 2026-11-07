@@ -198,9 +198,10 @@ def nba_team_season_rates(
     """Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits.
 
     One row per team, season and split (``all``, ``home``, ``away``, ``close``, ``clutch``).
-    Clutch is a possession that starts with 5:00 or less left in the 4th quarter or an overtime,
-    the score within 5 (stats.nba.com's clutch window); a close game is one with a clutch
-    possession. The full definitions are in :mod:`sportsdataverse._common.team_season_rates`.
+    Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
+    5:00 mark) in the 4th quarter or an overtime, the score within 5 as it starts (stats.nba.com's
+    clutch window); a close game is one with a clutch possession. The full definitions are in
+    :mod:`sportsdataverse._common.team_season_rates`.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
