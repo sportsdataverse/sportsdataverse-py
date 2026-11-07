@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.team_season_rates import team_season_rates
 from sportsdataverse._common.team_strength import (
     GAMES_SCHEMA,
@@ -103,9 +104,10 @@ def nba_team_strength(
         ``tov_pct`` and the opponent shooting, rebounding and free-throw rates rank low first;
         ``sos`` ranks the hardest schedule first), ``<m>_pct`` (the Weibull percentile) and
         ``<m>_n`` (possessions for the ratings, completed games against a rated opponent for
-        SOS, games for pace, wins over a rated opponent for SOV). Ranks are within the season,
-        among teams with at least half the most games, and null under five teams. Empty input
-        returns that schema with zero rows.
+        SOS, the clock in regulation games for pace, wins over a rated opponent for SOV). Ranks
+        are within the season, among teams with at least half the most games, the BB-D3 rates'
+        also behind their :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null
+        under five teams. Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
@@ -131,7 +133,7 @@ def nba_team_strength(
         load_possessions(loader_seasons), schedule, league_id=league_id, season_type=season_type
     )
     out = team_strength(
-        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1]),
+        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1], level=NBA_LEVEL[league_id]),
         possession_ridge_ratings(rows, lam=RIDGE_LAMBDA[league_id]),
         _schedule_games(schedule, season_type) if schedule.height else pl.DataFrame(schema=GAMES_SCHEMA),
     )

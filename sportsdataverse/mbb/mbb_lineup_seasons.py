@@ -24,6 +24,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
 from sportsdataverse._common.lineup_seasons import COUNTS, ZONE_COUNTS, lineup_count_schema, lineup_seasons
 from sportsdataverse.mbb.mbb_game_impact import _check_league, _load_releases, _slots, _teams, ncaa_impact_rows
@@ -152,5 +153,5 @@ def mbb_lineup_seasons(
     counts = ncaa_lineup_count_rows(pbp)
     rows = ncaa_impact_rows(pbp, possessions, league=league)
     del pbp, possessions  # the pbp read is most of the peak memory; free it before the roll-up
-    out = lineup_seasons(rows, counts, player_dtype=_PLAYER, min_poss=min_poss, zones=True)
+    out = lineup_seasons(rows, counts, player_dtype=_PLAYER, min_poss=min_poss, zones=True, level=NCAA_LEVEL[league])
     return out.to_pandas() if return_as_pandas else out

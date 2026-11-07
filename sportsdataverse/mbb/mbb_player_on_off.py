@@ -14,6 +14,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.player_on_off import player_on_off, player_wowy
 from sportsdataverse.mbb.mbb_game_impact import _check_league, _load_rows
 from sportsdataverse.mbb.mbb_lineup_seasons import MIN_POSS
@@ -61,7 +62,7 @@ def mbb_player_on_off(
             on_off.sort("net_rtg_diff_rank").head()
     """
     _check_league(league)
-    out = player_on_off(_load_rows(seasons, league), player_dtype=_PLAYER, min_poss=min_poss)
+    out = player_on_off(_load_rows(seasons, league), player_dtype=_PLAYER, min_poss=min_poss, level=NCAA_LEVEL[league])
     return out.to_pandas() if return_as_pandas else out
 
 

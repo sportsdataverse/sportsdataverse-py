@@ -298,8 +298,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_shot_diet_value](additional/analytics-5.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-5.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-5.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
-| [player_play_context](additional/analytics-5.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
-| [player_rates](additional/analytics-5.md#player_rates) | Per-player per-minute rate stats from box logs. |
+| [player_play_context](additional/analytics-6.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
+| [player_rates](additional/analytics-6.md#player_rates) | Per-player per-minute rate stats from box logs. |
 | [players_on_court_from_pbp](additional/analytics-6.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
 | [players_on_court_from_quarter_boxscores](additional/analytics-6.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |
 | [players_on_court_from_rotation](additional/analytics-6.md#players_on_court_from_rotation) | Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm. |

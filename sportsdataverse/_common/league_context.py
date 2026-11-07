@@ -13,8 +13,11 @@ in any league follows one suffix grammar:
   exactly 0 or 100.
 * ``<m>{suffix}`` (``_conf_pct``, ``_pos_pct``) -- the same percentile within a cohort,
   ranking ``<m>_rank`` so the direction carries over.
-* ``<m>_n`` -- the sample size of the rate: the possessions, games or attempts it is computed
-  over. A null denominator is 0.
+* ``<m>_n`` -- the sample size of the rate: its own denominator, the count its sampling noise
+  scales with (attempts for a shooting rate, chances for a rebound rate, possessions for a
+  rating, the clock in regulation games for pace), never possessions everywhere. A null denominator is 0. Where a table
+  passes ``min_n``, a rate is ranked only when ``<m>_n`` reaches its gate in
+  :mod:`sportsdataverse._common.rate_gates` (the sample at which the rate is half signal).
 * :func:`league_averages` -- one row per ``(season, level, entity, category, metric)`` with the
   ``mean / median / sd / n`` of the qualifying rows. Its ``n`` is the cohort count, the number of
   finite qualifying values (not a rate's ``<m>_n`` sample size). Where ranks exist it is the ``n``
@@ -33,7 +36,7 @@ builders import from here.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 
 import polars as pl
 
@@ -81,13 +84,14 @@ def attach_ranks(
     by: Sequence[str] = ("season",),
     lower_is_better: Sequence[str] = (),
     qualifier: pl.Expr | None = None,
+    min_n: Mapping[str, float] | None = None,
 ) -> pl.DataFrame:
     """Add ``<m>_rank`` and ``<m>_pct`` for every metric, among qualifiers within ``by``.
 
     A row gets a null rank and percentile when its metric is null or non-finite, when it fails
-    ``qualifier``, when a ``by`` key is null, when its group has fewer than ``min_cohort`` ranked
-    rows, or when the group has fewer than two distinct values. Every other row keeps its
-    rank: nothing is dropped.
+    ``qualifier``, when its ``<m>_n`` is under the metric's ``min_n`` gate, when a ``by`` key is
+    null, when its group has fewer than ``min_cohort`` ranked rows, or when the group has fewer
+    than two distinct values. Every other row keeps its rank: nothing is dropped.
 
     Args:
         df: The season table, one row per team or player and season.
@@ -98,15 +102,18 @@ def attach_ranks(
             Each one must also be in ``metrics``.
         qualifier: A boolean expression that rows must pass to be ranked (a minutes or
             possessions gate). ``None`` ranks every row.
+        min_n: Metric -> the smallest ``<m>_n`` it is ranked on (a per-metric sample gate,
+            :mod:`sportsdataverse._common.rate_gates`). Run :func:`attach_sample_sizes` first. A
+            metric without an entry has no sample gate.
 
     Returns:
         ``df`` with ``<m>_rank`` and then ``<m>_pct`` (both Float64) appended for every
         metric, in ``metrics`` order. An empty frame comes back with those columns.
 
     Raises:
-        KeyError: If a metric or a ``by`` key is not a column of ``df``.
-        ValueError: If a ``lower_is_better`` name is not in ``metrics``. Ignoring it would
-            silently rank that metric high-is-good.
+        KeyError: If a metric, a ``by`` key or a gated metric's ``<m>_n`` is not a column of ``df``.
+        ValueError: If a ``lower_is_better`` or ``min_n`` name is not in ``metrics``. Ignoring it
+            would silently rank that metric high-is-good, or without its gate.
 
     Example:
         Quick start::
@@ -123,13 +130,19 @@ def attach_ranks(
             f"lower_is_better entries missing from metrics: {stray}. "
             "They would be ignored and their metrics ranked high-is-good."
         )
+    gates = dict(min_n or {})
+    stray_n = sorted(set(gates) - set(metrics))
+    if stray_n:
+        raise ValueError(f"min_n entries missing from metrics: {stray_n}. They would never gate anything.")
     keys = list(by)
     _check_columns(df, [*metrics, *keys], "metrics or by keys")
+    _check_columns(df, [f"{m}_n" for m in gates], "sample sizes of the gated metrics (attach_sample_sizes first)")
     gate = pl.lit(True) if qualifier is None else qualifier
     keyed = pl.all_horizontal([pl.col(k).is_not_null() for k in keys]) if keys else pl.lit(True)
     ranks, pcts = [], []
     for m in metrics:
-        v = pl.when(gate & keyed & pl.col(m).cast(pl.Float64).is_finite()).then(pl.col(m).cast(pl.Float64))
+        sampled = (pl.col(f"{m}_n") >= gates[m]).fill_null(False) if m in gates else pl.lit(True)
+        v = pl.when(gate & keyed & sampled & pl.col(m).cast(pl.Float64).is_finite()).then(pl.col(m).cast(pl.Float64))
         n = v.count().over(keys) if keys else v.count()
         distinct = v.drop_nulls().n_unique().over(keys) if keys else v.drop_nulls().n_unique()
         r = v.rank(method="average", descending=m not in lower)
@@ -236,6 +249,7 @@ def league_averages(
     category: str,
     qualifier: pl.Expr | None = None,
     qualifier_min: float | None = None,
+    min_n: Mapping[str, float] | None = None,
 ) -> pl.DataFrame:
     """The league-average rows of a season table: mean / median / sd (ddof=1) / n per metric (football F1).
 
@@ -256,6 +270,8 @@ def league_averages(
         category: The table the rows describe (``"team_ratings"``).
         qualifier: The same gate passed to :func:`attach_ranks`. ``None`` keeps every row.
         qualifier_min: The gate's threshold, recorded on each row. Null when there is no gate.
+        min_n: The same per-metric sample gates passed to :func:`attach_ranks`: a value whose
+            ``<m>_n`` is under its gate is left out, so ``n`` stays the ``_pct`` cohort.
 
     Returns:
         One row per ``(season, metric)`` in :data:`LEAGUE_AVERAGES_SCHEMA`. An empty input
@@ -272,9 +288,12 @@ def league_averages(
             ratings = nba_team_ratings(2024)
             league_averages(ratings, ["adj_net_rtg"], level="nba", entity="team", category="team_ratings")
     """
-    _check_columns(df, [*metrics, "season"], "metrics or season")
+    gates = {m: g for m, g in (min_n or {}).items() if m in metrics}
+    _check_columns(df, [*metrics, "season", *(f"{m}_n" for m in gates)], "metrics, season or gated sample sizes")
     if qualifier is not None:
         df = df.filter(qualifier)
+    if gates:
+        df = df.with_columns(pl.when(pl.col(f"{m}_n") >= g).then(pl.col(m)).alias(m) for m, g in gates.items())
     if df.height == 0 or not metrics:
         return pl.DataFrame(schema=LEAGUE_AVERAGES_SCHEMA)
     long = (

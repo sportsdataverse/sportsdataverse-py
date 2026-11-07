@@ -82,8 +82,14 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
     for lg, mod in (("mbb", mbb_loaders), ("wbb", wbb_loaders)):
         monkeypatch.setattr(mod, f"load_ncaa_{lg}_pbp", fixture(lg, "pbp"))
         monkeypatch.setattr(mod, f"load_ncaa_{lg}_possessions", fixture(lg, "possessions"))
-    assert mbb_player_on_off(2025, min_poss=20).equals(player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20))
-    assert wbb_player_on_off(2025).equals(player_on_off(_rows("wbb"), player_dtype=pl.Utf8(), min_poss=200))
+    gated = player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20, level="mbb")
+    assert mbb_player_on_off(2025, min_poss=20).equals(gated)
+    assert not gated.equals(player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20))  # the level gate bites
+    # no WBB fixture player reaches the 200-possession floor both ways, so nothing ranks gated or
+    # ungated here; the mbb comparison above is the one that bites
+    assert wbb_player_on_off(2025).equals(
+        player_on_off(_rows("wbb"), player_dtype=pl.Utf8(), min_poss=200, level="wbb")
+    )
     assert mbb_player_wowy(2025).equals(player_wowy(_rows("mbb"), player_dtype=pl.Utf8()))
     assert wbb_player_wowy(2025).equals(player_wowy(_rows("wbb"), player_dtype=pl.Utf8()))
     with pytest.raises(ValueError, match="league"):

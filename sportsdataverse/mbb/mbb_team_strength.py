@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.team_season_rates import team_season_rates
 from sportsdataverse._common.team_strength import GAMES_SCHEMA, RATINGS_SCHEMA, team_strength
 from sportsdataverse.mbb.mbb_loaders import load_mbb_ratings
@@ -98,10 +99,11 @@ def mbb_team_strength(
         against). Each has ``<m>_rank`` (1 = best; ``adj_def_rtg``, ``def_rtg``, ``tov_pct`` and
         the opponent shooting, rebounding and free-throw rates rank low first; ``sos`` ranks the
         hardest schedule first), ``<m>_pct`` (the Weibull percentile) and ``<m>_n``
-        (possessions for the ratings, rated games for SOS, games for pace, wins over rated
-        opponents for SOV). Ranks are within the season, among teams with at least half the
-        most games (which leaves out the non-D1 opponents), and null under five teams. Empty
-        input returns that schema with zero rows.
+        (possessions for the ratings, rated games for SOS, the clock in regulation games for
+        pace, wins over rated opponents for SOV). Ranks are within the season, among teams with
+        at least half the most games (which leaves out the non-D1 opponents), the BB-D3 rates'
+        also behind their :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null
+        under five teams. Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
@@ -117,7 +119,9 @@ def mbb_team_strength(
     load_possessions, load_team_box, load_schedule = _league_loaders(league)
     schedule = load_schedule(seasons)
     rows = ncaa_possession_rate_rows(load_possessions(seasons), schedule, league=league)
-    rates = team_season_rates(rows, minutes_per_game=40, counts=ncaa_team_box_count_rows(load_team_box(seasons)))
+    rates = team_season_rates(
+        rows, minutes_per_game=40, counts=ncaa_team_box_count_rows(load_team_box(seasons)), level=NCAA_LEVEL[league]
+    )
     games = _schedule_games(schedule) if schedule.height else pl.DataFrame(schema=GAMES_SCHEMA)
     out = team_strength(rates, _ratings(_load_ratings(league)(seasons)), games)
     return out.to_pandas() if return_as_pandas else out
