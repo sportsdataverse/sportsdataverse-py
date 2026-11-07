@@ -10836,3 +10836,14 @@
   test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: A different sample of the accepted bucket (another n) would stay excused.
+
+# --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
+- id: nba-engine-legacy-missed-ft
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))'
+  mutant: '    return any((row.get(k) or "").strip() for k in ("score_home", "score_away"))'
+  test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
+  expected: kill
+  note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.

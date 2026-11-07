@@ -24,6 +24,7 @@ import polars as pl
 from sportsdataverse.errors import RawStoreMissError
 from sportsdataverse.nba.nba_possession_rules import (
     build_event_context,
+    is_made_ft_row,
     is_possession_ending_event,
     is_real_rebound,
     is_technical_ft_row,
@@ -160,8 +161,8 @@ def _offense_from_events(
 
 
 def _ft_made(ev: dict) -> bool:
-    """A made free throw carries a score string (same signal as boundary detection)."""
-    return bool((ev.get("score_home") or "").strip() or (ev.get("score_away") or "").strip())
+    """A made free throw carries a real score string (same signal as boundary detection)."""
+    return is_made_ft_row(ev)
 
 
 def _event_detail(
