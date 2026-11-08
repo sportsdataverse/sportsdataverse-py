@@ -1010,3 +1010,39 @@ def test_forward_fill_still_tracks_modern_running_scores():
     ]
     _forward_fill_scores(rows)
     assert [(r["_home"], r["_away"]) for r in rows] == [(0, 0), (3, 0), (3, 2), (5, 2)]
+
+
+LEGACY = FXROOT / "legacy_dialect"
+
+
+@pytest.mark.parametrize("game_id", ["0020900009", "0020900017", "1021000022"])
+def test_legacy_dialect_missed_free_throws_are_misses(game_id: str) -> None:
+    """Pre-2017-18 pbp writes ``"0"`` on missed free throws; they must not count as makes.
+
+    Real release rows (``legacy_dialect/README.md``): two 2009-10 NBA games and a 2010 WNBA one.
+    The old score-string test read every free throw as made (the published release has
+    ``ftm == fta`` in all three), so made-shot points ran over the final score. Each team's
+    made-shot points now equal the schedule's final score.
+    """
+    from sportsdataverse.nba.nba_possession_rules import is_made_ft_row
+
+    pbp = pl.read_parquet(LEGACY / "pbp_2010.parquet").filter(pl.col("game_id") == game_id)
+    game = pl.read_parquet(LEGACY / "schedule_2010.parquet").filter(pl.col("game_id") == game_id).row(0, named=True)
+    misses = pbp.filter((pl.col("event_type") == "free_throw") & pl.col("description").str.starts_with("MISS"))
+    assert misses.height > 0
+    assert (misses["score_home"] == "0").all() and (misses["score_away"] == "0").all()  # the legacy dialect
+    assert not any(is_made_ft_row(r) for r in misses.to_dicts())
+    poss = build_possessions(pbp)
+    assert 0 < poss["ftm"].sum() < poss["fta"].sum()
+    # a missed last free throw no longer ends the possession (the release ends 2, 11 and 3 on one)
+    ends = poss.select(pl.col("end_order_index").cast(pl.Int64))
+    assert (
+        ends.join(
+            misses.select(pl.col("order_index").cast(pl.Int64).alias("end_order_index")), on="end_order_index"
+        ).height
+        == 0
+    )
+    points = poss.with_columns((2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms"))
+    home = pl.col("offense_team_id") == game["home_team_id"]
+    assert points.filter(home)["ms"].sum() == game["home_pts"]
+    assert points.filter(~home)["ms"].sum() == game["away_pts"]
