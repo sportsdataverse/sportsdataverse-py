@@ -18,6 +18,8 @@ league on past seasons (`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
 `luck_wins` is `wins - exp_wins`. A close game is one within 5 points at the start of a
 possession in play in the last 5:00 of the 4th quarter or in overtime: one that starts there,
 or starts before 5:00 and ends after it (stats.nba.com's clutch window; BB-D3's `close` split).
+For the WNBA (`league_id="10"`) through 2005, two 20-minute halves, the window is the last
+5:00 of the 2nd half.
 
 **Parameters**
 
@@ -223,8 +225,9 @@ Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, wi
 One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
 Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
 5:00 mark) in the 4th quarter or an overtime, the score within 5 as it starts (stats.nba.com's
-clutch window); a close game is one with a clutch possession. The full definitions are in
-`sportsdataverse._common.team_season_rates`.
+clutch window); a close game is one with a clutch possession. For the WNBA (`league_id="10"`)
+through 2005, two 20-minute halves, the window is the last 5:00 of the 2nd half. The full
+definitions are in `sportsdataverse._common.team_season_rates`.
 
 **Parameters**
 
