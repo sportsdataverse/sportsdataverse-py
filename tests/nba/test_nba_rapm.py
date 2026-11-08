@@ -272,3 +272,90 @@ def test_nba_rapm_from_games_live():
     out = R.nba_rapm_from_games(["0022200001"])
     assert out.height > 0
     assert np.isfinite(out["rapm"].to_numpy()).all()
+
+
+# ---------------------------------------------------------------------------
+# The fixed league penalty (tools/fit_rapm_penalty.py), on the committed WNBA possessions
+# (tests/fixtures/bb_factor_rapm, README there).
+# ---------------------------------------------------------------------------
+
+import pytest
+from functools import cache
+from sklearn.linear_model import Ridge, RidgeCV
+
+from sportsdataverse.nba.nba_player_factor_rapm import nba_factor_rapm_rows
+from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, RAPM_PENALTY, rapm_penalty
+
+FIX_WNBA = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "bb_factor_rapm"
+
+
+@cache
+def _wnba(season: int, season_type: str = "regular-season") -> pl.DataFrame:
+    def read(name: str) -> pl.DataFrame:
+        return pl.read_parquet(FIX_WNBA / f"wnba_{name}_{season}.parquet")
+
+    return nba_factor_rapm_rows(read("possessions"), read("schedule"), season_type)
+
+
+def test_rapm_is_the_ridge_at_the_league_penalty():
+    # An independent solver at the frozen WNBA penalty: the fit is that ridge, not a per-season pick.
+    # Observed max gap 7.8e-12 per 100; never loosen the gate to make a change pass.
+    rows = _wnba(2025)
+    X, y, _ = build_rapm_design(rows)
+    out = nba_rapm(rows, league_id="10")
+    ref = Ridge(alpha=RAPM_PENALTY["10"], solver="sparse_cg", tol=1e-12).fit(X, y)
+    P = out.height
+    assert np.abs(100 * ref.coef_[:P] - out["o_rapm"].to_numpy()).max() < 1e-8
+    assert np.abs(-100 * ref.coef_[P:] - out["d_rapm"].to_numpy()).max() < 1e-8
+
+
+def test_penalty_does_not_follow_the_season():
+    # The old rule (RidgeCV leave-one-possession-out over DEFAULT_RAPM_ALPHAS, per fit) picks a
+    # different penalty for the 2024 regular season and its playoffs; the league penalty is one value.
+    picks = set()
+    for season_type in ("regular-season", "playoffs"):
+        rows = _wnba(2024, season_type)
+        X, y, _ = build_rapm_design(rows)
+        picks.add(float(RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_))
+        fixed = nba_rapm(rows, league_id="10")
+        assert fixed.equals(nba_rapm(rows, alpha=RAPM_PENALTY["10"]))
+        for old in picks - {RAPM_PENALTY["10"]}:
+            assert not fixed.equals(nba_rapm(rows, alpha=old))
+    assert len(picks) > 1, picks
+
+
+def test_penalty_league_comes_from_the_game_ids():
+    rows = _wnba(2024)
+    assert rapm_penalty(rows) == RAPM_PENALTY["10"]  # String ids "10..." are WNBA games
+    assert rapm_penalty(rows.drop("game_id")) == RAPM_PENALTY["00"]  # no ids: the NBA
+    assert rapm_penalty(rows.with_columns(pl.col("game_id").cast(pl.Int64))) == RAPM_PENALTY["10"]  # 1022400001
+    nba_ids = pl.DataFrame({"game_id": ["0022400001", "0042400101"]})
+    assert (
+        rapm_penalty(nba_ids)
+        == rapm_penalty(nba_ids.with_columns(pl.col("game_id").cast(pl.Int64)))
+        == RAPM_PENALTY["00"]
+    )
+    assert rapm_penalty(pl.DataFrame({"game_id": [2022400001]})) == RAPM_PENALTY["20"]  # an integer G League id
+    assert nba_rapm(rows).equals(nba_rapm(rows, league_id="10"))
+    assert RAPM_PENALTY["20"] == RAPM_PENALTY["00"]  # the G League is not fitted: the NBA value
+    with pytest.raises(ValueError, match="name leagues"):
+        nba_rapm(rows, league_id="00")  # WNBA games told they are NBA ones
+    with pytest.raises(ValueError, match="name leagues"):
+        rapm_penalty(pl.concat([rows.head(3), rows.head(3).with_columns(pl.lit("0022400001").alias("game_id"))]))
+    with pytest.raises(ValueError, match="league_id must be one of"):
+        rapm_penalty(None, "99")
+
+
+def test_alphas_is_deprecated_and_keeps_the_old_rule():
+    # The old rule stays callable for the deprecation window (CONTRIBUTING: two minor releases).
+    rows = _wnba(2024, "playoffs")
+    X, y, _ = build_rapm_design(rows)
+    old = float(RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_)
+    with pytest.warns(DeprecationWarning, match=r"nba_rapm\(alphas=...\).*0\.4\.0"):
+        got = nba_rapm(rows, alphas=DEFAULT_RAPM_ALPHAS)
+    assert got.equals(nba_rapm(rows, alpha=old))
+
+
+def test_penalty_must_be_positive():
+    with pytest.raises(ValueError, match="must be positive"):
+        nba_rapm(_wnba(2024), alpha=0.0)

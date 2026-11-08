@@ -159,7 +159,7 @@ def _team_row(
     return row
 
 
-def helper_wbb_team_box(final: dict) -> pl.DataFrame:
+def helper_wbb_team_box(final: dict, *, allow_partial: bool = False) -> pl.DataFrame:
     """Parse one game's ESPN summary payload into the released team-box frame.
 
     Faithful polars port of ``wehoop:::helper_espn_wbb_team_box``
@@ -168,6 +168,7 @@ def helper_wbb_team_box(final: dict) -> pl.DataFrame:
     ``espn_womens_college_basketball_team_boxscores`` parquet.
 
     Args:
+        allow_partial: Keep available live rows even when the other box or winner flags are missing.
         final: One game's ESPN summary JSON (the ``final.json`` payload the
             ``wehoop-wbb-raw`` scraper persists) as a dict.
 
@@ -208,19 +209,22 @@ def helper_wbb_team_box(final: dict) -> pl.DataFrame:
     # wehoop); matching it would drop ~97% of extractable 2006-2013 boxscores.
     teams = (final.get("boxscore") or {}).get("teams") or []
     competitors = comp.get("competitors") or []
-    if len(teams) < 2 or len(competitors) < 2 or not teams[0].get("statistics"):
+    if len(competitors) < 2:
         return pl.DataFrame()
-    # Degenerate payloads the R producer hard-errors on (tryCatch -> game skipped):
-    # an empty second statistics list, duplicate stat names (spread duplicate-id
-    # error; a dict would silently last-win), and `winner` absent from BOTH
-    # competitors (jsonlite drops the column -> ifelse length-zero error).
-    if not teams[1].get("statistics"):
+    if allow_partial:
+        # Align by team ID so a one-sided box still gets the correct opponent.
+        boxes = {_to_int((box.get("team") or {}).get("id")): box for box in teams}
+        teams = [boxes.get(_to_int(c.get("id")), {"team": c.get("team")}) for c in competitors[:2]]
+    elif len(teams) < 2 or all("winner" not in c for c in competitors[:2]):
         return pl.DataFrame()
-    for t in teams[:2]:
-        names = [s.get("name") for s in t.get("statistics") or [] if s.get("name")]
-        if len(names) != len(set(names)):
-            return pl.DataFrame()
-    if all("winner" not in c for c in competitors[:2]):
+
+    usable = []
+    for idx, team in enumerate(teams[:2]):
+        stats = team.get("statistics") or []
+        names = [stat["name"] for stat in stats if stat.get("name")]
+        if stats and len(names) == len(set(names)):
+            usable.append(idx)
+    if not usable or (not allow_partial and len(usable) != 2):
         return pl.DataFrame()
 
     game_date_time = _game_datetime(comp["date"])
@@ -233,16 +237,20 @@ def helper_wbb_team_box(final: dict) -> pl.DataFrame:
         "game_date_time": game_date_time,
     }
 
-    rows = [_team_row(0, teams, competitors, game_cols), _team_row(1, teams, competitors, game_cols)]
+    rows = [_team_row(idx, teams, competitors, game_cols) for idx in usable]
     # R bind_rows column union: row-1 order first, row-2-only columns appended.
     cols = list(rows[0])
-    cols += [c for c in rows[1] if c not in rows[0]]
+    if len(rows) == 2:
+        cols += [c for c in rows[1] if c not in rows[0]]
     # R tidyr::separate errors when a combined "M-A" stat is missing from the
     # bound frame entirely (absent for BOTH teams) -> tryCatch -> game skipped.
     required = [underscore(k) for pair in _SPLIT_STATS.values() for k in pair]
-    if not all(c in cols for c in required):
+    if not allow_partial and not all(c in cols for c in required):
         return pl.DataFrame()
-    df = pl.DataFrame({c: [r.get(c) for r in rows] for c in cols})
+    df = pl.DataFrame(
+        {c: [r.get(c) for r in rows] for c in cols},
+        schema_overrides={"team_winner": pl.Boolean} if allow_partial else None,
+    )
 
     int_cols = [c for c in (*_INT32_META, *_INT32_STATS) if c in df.columns]
     float_cols = [c for c in _FLOAT_STATS if c in df.columns]

@@ -1,8 +1,8 @@
 """Regularized Adjusted Plus-Minus (RAPM) pilot over the possession stint matrix.
 
-This module builds the sparse design matrix consumed by the Ridge regression
-solver and fits a plain-RAPM via :class:`sklearn.linear_model.RidgeCV` from
-possession-level lineup data produced by ``attach_possession_lineups``.
+This module builds the sparse design matrix consumed by the ridge solver and fits a plain RAPM
+from possession-level lineup data produced by ``attach_possession_lineups``, at one fixed ridge
+penalty per league (:data:`RAPM_PENALTY`).
 """
 
 from __future__ import annotations
@@ -13,14 +13,44 @@ import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
-from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.linear_model import RidgeCV
+
+from sportsdataverse._deprecation import warn_deprecated
 
 # ---------------------------------------------------------------------------
 # Module-level constants
 # ---------------------------------------------------------------------------
 
-#: Alpha grid for RidgeCV (logspace 100 … 100 000, 8 points).
+#: Alpha grid for RidgeCV (logspace 100 … 100 000, 8 points). Plain RAPM no longer picks its penalty
+#: from it (see :data:`RAPM_PENALTY`); the RAPM variants, the adjusted RAPM and the validation harness
+#: still cross-validate over it.
 DEFAULT_RAPM_ALPHAS: np.ndarray = np.logspace(2, 5, 8)
+
+#: The plain-RAPM ridge penalty per league id, one value for every season and season type. Fitted by
+#: ``tools/fit_rapm_penalty.py`` (run 2026-11-06): the point of its grid (steps of x1.18) that
+#: minimizes the game-grouped 10-fold CV error summed over the complete regular seasons from 1997
+#: (NBA through 2025-26, WNBA through 2026; 30 each) of the ``{nba,wnba}_stats_possessions`` releases.
+#: NBA 2,683: its neighbours lose 0.05 / 0.09 basis points of MSE (SE 0.03 across seasons) and 5,179
+#: loses 1.07 (all 30 seasons prefer 2,683 to it). WNBA 1,931: 2,276 is within noise (0.05 basis
+#: points, SE 0.06), 1,638 loses 0.14 and 5,179 loses 2.6. The penalty is the per-possession noise
+#: variance over the prior variance of a player's coefficient, which does not depend on a season's
+#: length, so one value keeps the same prior, and the RAPM scale, in every season (a player's own
+#: shrinkage still depends on his possessions: the NBA regular-season spread is 1.53 per 100 in the
+#: 1999 lockout, 1.65 to 1.99 in full seasons). Until this was frozen each fit took RidgeCV's
+#: leave-one-possession-out pick over :data:`DEFAULT_RAPM_ALPHAS`: one season's error moves by under
+#: 0.5% over that whole grid, so the pick flipped between grid points (NBA 5,179 in 2023-24 and 2024-25,
+#: 1,931 in 2025-26; WNBA up to 13,895 in 2004) and the spread of RAPM followed (NBA 1.15 to 2.34 per
+#: 100). RAPM fit before the change is not comparable across seasons, nor with RAPM fit after it.
+#: Two caveats. Hindsight: the value is pooled over every complete season, so a season's fit uses a
+#: scalar its later seasons informed; pooled over only that season and the ones before it, the pick is
+#: the frozen value for every NBA season from 2018-19 (2,276 before) and every WNBA season but 1997,
+#: 1999-2007 and 2016 (2,276 there). Year-over-year rank stability: it rises with the penalty (NBA
+#: Spearman 0.35 at 1,931, 0.37 at 2,683, 0.40 at 5,179), so the old rule's heavy picks bought some;
+#: against it the frozen value repeats at WNBA -0.008 Spearman (SE 0.004 over 29 season pairs) and NBA
+#: +0.001 (0.004), while next-season R^2 of a fitted line improves (NBA +0.027, SE 0.009). The G League
+#: (``"20"``) is seeded with the NBA value, not fitted (it has no possessions release).
+RAPM_PENALTY: dict[str, float] = {"00": 2682.6957952797247, "10": 1930.6977288832495}
+RAPM_PENALTY["20"] = RAPM_PENALTY["00"]
 
 #: Canonical output schema for :func:`nba_rapm`.
 #: Use this mapping both to build the zero-row empty frame and to enforce
@@ -143,17 +173,98 @@ def _empty_rapm_frame() -> pl.DataFrame:
     return pl.DataFrame({col: pl.Series([], dtype=dtype) for col, dtype in RAPM_SCHEMA.items()})
 
 
+def rapm_penalty(possessions: pl.DataFrame | None = None, league_id: str | None = None) -> float:
+    """The ridge penalty plain RAPM is fit at: :data:`RAPM_PENALTY` of the possessions' league.
+
+    Args:
+        possessions: Possession rows. When ``league_id`` is ``None`` the league is read from the
+            ``game_id``: the first two digits of the ten-digit id (``"00"`` NBA, ``"10"`` WNBA, ``"20"``
+            G League; an integer id is zero-padded to ten digits first). A frame without a ``game_id``
+            is taken as NBA.
+        league_id: ``"00"``, ``"10"`` or ``"20"``; overrides the inference.
+
+    Returns:
+        The penalty.
+
+    Raises:
+        ValueError: If ``league_id`` is not a key of :data:`RAPM_PENALTY`, the ``game_id`` prefixes name
+            more than one league, or they name another league than ``league_id``.
+
+    Example:
+        The penalty a WNBA season is fit at::
+
+            from sportsdataverse.nba.nba_rapm import rapm_penalty
+            rapm_penalty(league_id="10")  # 1930.70, the same in every season
+    """
+    found: set[str] = set()
+    if possessions is not None and "game_id" in possessions.columns:
+        ids = possessions["game_id"].cast(pl.Utf8).str.zfill(10)
+        found = set(ids.str.slice(0, 2).drop_nulls().unique()) & set(RAPM_PENALTY)
+    if len(found) > 1 or (league_id is not None and found and found != {league_id}):
+        raise ValueError(f"possessions' game_id prefixes name leagues {sorted(found)}, league_id is {league_id!r}")
+    league = league_id or (found.pop() if found else "00")
+    if league not in RAPM_PENALTY:
+        raise ValueError(f"league_id must be one of {sorted(RAPM_PENALTY)}, got {league!r}")
+    return RAPM_PENALTY[league]
+
+
+def ridge_rapm_coef(X: csr_matrix, y: np.ndarray, alpha: float) -> np.ndarray:
+    """The intercept-fitted ridge coefficients of ``y`` on ``X`` at ``alpha``, solved exactly.
+
+    The intercept is not penalized: the design is centred through its Gram matrix (``X'X - n m m'``),
+    so the solve is one dense ``2P x 2P`` system and no iterative tolerance enters the result.
+
+    Args:
+        X: The ``(n, 2P)`` design of :func:`build_rapm_design`.
+        y: The ``(n,)`` responses, or ``(n, k)`` for several at once.
+        alpha: The ridge penalty.
+
+    Returns:
+        The ``(2P,)`` (or ``(2P, k)``) coefficients.
+
+    Raises:
+        ValueError: If ``alpha`` is not positive (the centred Gram matrix is singular without it).
+
+    Example:
+        The coefficients :func:`nba_rapm` reports, before the per-100 scaling::
+
+            from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design, ridge_rapm_coef
+            X, y, player_ids = build_rapm_design(possessions)
+            coef = ridge_rapm_coef(X, y, RAPM_PENALTY["00"])
+    """
+    if not alpha > 0:
+        raise ValueError(f"the ridge penalty must be positive, got {alpha!r}")
+    n = X.shape[0]
+    mean = np.asarray(X.mean(axis=0)).ravel()
+    gram = (X.T @ X).toarray() - n * np.outer(mean, mean)
+    gram[np.diag_indices_from(gram)] += alpha
+    rhs = np.asarray(X.T @ y) - n * np.multiply.outer(mean, y.mean(axis=0))
+    return np.linalg.solve(gram, rhs)
+
+
 def nba_rapm(
     possessions: pl.DataFrame,
     *,
-    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    league_id: str | None = None,
+    alpha: float | None = None,
+    alphas: np.ndarray | None = None,
 ) -> pl.DataFrame:
     """Fit plain Regularized Adjusted Plus-Minus (RAPM) via ridge regression.
 
     Builds the sparse offense/defense indicator design matrix from *possessions*
-    (via :func:`build_rapm_design`) then fits a
-    :class:`~sklearn.linear_model.RidgeCV` model with cross-validated alpha
-    selection.  Coefficients are converted to a **per-100-possessions** scale.
+    (via :func:`build_rapm_design`) then fits an intercept-fitted ridge at the league's
+    fixed penalty (:data:`RAPM_PENALTY`, see :func:`rapm_penalty`), the same in every
+    season and season type so the RAPM scale is comparable across them.  Coefficients
+    are converted to a **per-100-possessions** scale.
+
+    .. warning::
+        Until the penalty was frozen (November 2026) each call picked it by
+        :class:`~sklearn.linear_model.RidgeCV` leave-one-possession-out over
+        :data:`DEFAULT_RAPM_ALPHAS`, which jumped between grid points from season to
+        season (NBA 5,179 in 2023-24 and 2024-25, 1,931 in 2025-26). RAPM fit that way,
+        including ``nba_player_impact`` / ``wnba_player_impact`` releases published before
+        the change, is on a different and season-varying scale: do not compare it across
+        seasons or with RAPM fit now.
 
     **Sign convention**
 
@@ -178,10 +289,13 @@ def nba_rapm(
             and ``points`` (Int64 points scored on the possession).
             Rows with any null lineup cell are silently dropped.
             An empty or fully-null-lineup frame returns a zero-row result.
-        alphas: 1-D array of ridge penalty values to evaluate via cross-
-            validation.  Defaults to :data:`DEFAULT_RAPM_ALPHAS`
-            (``np.logspace(2, 5, 8)``, i.e. 100 … 100 000). A single-possession
-            design cannot be cross-validated, so it is fit at ``max(alphas)``.
+        league_id: ``"00"`` NBA, ``"10"`` WNBA or ``"20"`` G League, which selects the
+            penalty. ``None`` (default) reads it from the ``game_id`` prefix and
+            otherwise takes the NBA (see :func:`rapm_penalty`).
+        alpha: A ridge penalty to fit at instead of the league's (positive).
+        alphas: **Deprecated** (removed in 0.4.0): the old rule, RidgeCV's leave-one-out pick over
+            this grid for this fit alone, whose scale is not comparable across seasons. Warns
+            ``DeprecationWarning``; pass ``alpha=`` instead.
 
     Returns:
         A :class:`polars.DataFrame` with exactly the columns defined in
@@ -210,10 +324,9 @@ def nba_rapm(
             df = nba_rapm(poss)
             print(df.sort("rapm", descending=True).head(10))
 
-        Custom alpha grid::
+        WNBA possessions (the penalty is the WNBA's; the game ids say so too)::
 
-            import numpy as np
-            df = nba_rapm(poss, alphas=np.logspace(1, 6, 12))
+            wnba = nba_rapm(wnba_poss, league_id="10")
 
         Downstream filter::
 
@@ -233,13 +346,18 @@ def nba_rapm(
 
     P = len(player_ids)
 
-    # Fit RidgeCV — accepts sparse csr_matrix with default solver="auto". Its leave-one-out CV is
-    # undefined for a single possession (it divides by zero), so that case falls back to a plain
-    # Ridge at the grid's strongest penalty instead of cross-validating.
-    model = RidgeCV(alphas=alphas, fit_intercept=True) if X.shape[0] > 1 else Ridge(alpha=max(alphas))
-    model.fit(X, y)
-
-    coef: np.ndarray = model.coef_  # shape (2P,)
+    if alphas is not None:
+        warn_deprecated(
+            "nba_rapm(alphas=...)",
+            replacement="nba_rapm(alpha=...) or the league penalty (league_id=...)",
+            since="0.2.0",
+            removed_in="0.4.0",
+            extra="It picks the penalty per fit, so its RAPM scale is not comparable across seasons.",
+        )
+        penalty = float(RidgeCV(alphas=alphas).fit(X, y).alpha_) if X.shape[0] > 1 else float(max(alphas))
+    else:
+        penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha
+    coef: np.ndarray = ridge_rapm_coef(X, y, penalty)  # shape (2P,)
 
     # Per-100-possessions scale; sign-flip defense so positive = good defender
     o_rapm: np.ndarray = coef[:P] * 100.0
@@ -379,7 +497,7 @@ def nba_rapm_from_games(
         return result
 
     combined = pl.concat(frames, how="diagonal_relaxed")
-    result = nba_rapm(combined)
+    result = nba_rapm(combined, league_id=league_id)
     if return_as_pandas:
         return result.to_pandas()
     return result

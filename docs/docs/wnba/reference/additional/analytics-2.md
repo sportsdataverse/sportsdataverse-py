@@ -213,7 +213,7 @@ One row per `(season, player_id)`: `off_poss` / `def_poss`, `rapm` / `o_rapm` / 
 | `d_ftr_rapm_n` | Int64 | Sample size of d_ftr_rapm: def_poss. |
 | `d_other_rapm_n` | Int64 | Sample size of d_other_rapm: def_poss. |
 | `pts_per_fga` | Float64 | The season's points per field-goal attempt, the value of one shot used in the split (pts_per_fga per turnover, offensive rebound and free-throw chance). |
-| `ridge_alpha` | Float64 | The ridge penalty of the season's fit: RidgeCV's leave-one-out pick for points over the nba_rapm grid, shared by every component so they add up. |
+| `ridge_alpha` | Float64 | The ridge penalty of the fit, shared by every component so they add up: plain RAPM's fixed league value (NBA 2,683, WNBA 1,931; sportsdataverse.nba.nba_rapm.RAPM_PENALTY), the same in every season. Rows fit before November 2026 carry RidgeCV's per-season leave-one-out pick instead, on a scale that changed with it. |
 
 ### wnba_player_on_off {#wnba_player_on_off}
 
