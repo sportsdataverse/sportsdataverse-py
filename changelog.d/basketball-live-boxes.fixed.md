@@ -1,0 +1,1 @@
+- **Basketball:** NBA, WNBA, MBB, and WBB game pages preserve play-by-play when ESPN box scores are unavailable. (#1128)

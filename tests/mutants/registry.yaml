@@ -10602,7 +10602,7 @@
   file: sportsdataverse/_common/factor_rapm.py
   snippet: 'gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
   mutant: 'gram = (X.T @ X).toarray()'
-  test: tests/nba/test_nba_player_factor_rapm.py::test_totals_are_the_published_plain_rapm
+  test: tests/nba/test_nba_player_factor_rapm.py::test_one_penalty_for_every_season_and_type
   expected: kill
   note: An uncentred Gram matrix fits a different ridge than nba_rapm's intercept-fitted one.
 
@@ -10745,3 +10745,105 @@
   test: tests/mbb/test_mbb_epv.py::test_a_wrong_basket_ends_its_possession
   expected: kill
   note: A wrong-basket two would trail into the next possession, crediting the side it was scored against.
+
+# --- BB-D10 follow-up: one plain-RAPM ridge penalty per league (tools/fit_rapm_penalty.py) ---------
+- id: bb-rapm-penalty-per-fit-pick
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '        penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha'
+  mutant: '        penalty = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_) if alpha is None else alpha'
+  test: tests/nba/test_nba_rapm.py::test_penalty_does_not_follow_the_season
+  expected: kill
+  note: The old rule, RidgeCV's pick per fit, whose flips between grid points made the RAPM scale jump between seasons.
+
+- id: bb-rapm-penalty-league-from-ids
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '    league = league_id or (found.pop() if found else "00")'
+  mutant: '    league = league_id or "00"'
+  test: tests/nba/test_nba_rapm.py::test_penalty_league_comes_from_the_game_ids
+  expected: kill
+  note: The WNBA publisher calls nba_rapm(poss) without a league; without the game-id prefix it would get the NBA penalty.
+
+- id: bb-frapm-penalty-per-season-pick
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '    alpha = rapm_penalty(poss, league_id)'
+  mutant: '    alpha = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=np.logspace(2, 5, 8)).fit(X, Y[:, 0]).alpha_)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_one_penalty_for_every_season_and_type
+  expected: kill
+  note: The split must fit at plain RAPM's fixed penalty; a per-season pick puts its components on a season-varying scale.
+
+- id: bb-rapm-penalty-centred-solve
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '    gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
+  mutant: '    gram = (X.T @ X).toarray()'
+  test: tests/nba/test_nba_rapm.py::test_rapm_is_the_ridge_at_the_league_penalty
+  expected: kill
+  note: An uncentred Gram matrix penalizes the intercept direction, a different ridge from the intercept-fitted one.
+
+- id: bb-rapm-penalty-hand-moved
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: 'RAPM_PENALTY: dict[str, float] = {"00": 2682.6957952797247, "10": 1930.6977288832495}'
+  mutant: 'RAPM_PENALTY: dict[str, float] = {"00": 5179.474679231207, "10": 1930.6977288832495}'
+  test: tests/tools/test_fit_rapm_penalty.py::test_frozen_values_are_the_pooled_pick
+  expected: kill
+  note: A frozen value moved by hand (here back to the old rule's recent NBA pick) no longer matches the committed CV corpus.
+
+- id: bb-epv-accepted-exception-season
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'e["season"] == season'
+  mutant: 'True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted WNBA bucket would be excused in any season, not only its 2026 confirmation.
+
+- id: bb-epv-accepted-exception-value
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and abs(e["bias"] - bucket["bias"]) <= _EXCEPTION_TOL'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted bucket would stay excused however far its bias moved on a refit.
+
+- id: bb-epv-level-needs-dates
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'raise ValueError("a booster with a level needs game_order (each game''s date)")'
+  mutant: 'game_order = games.select("game_id", pl.col("game_id").alias("game_order"))'
+  test: tests/wnba/test_wnba_epv.py::test_the_level_reads_the_schedule_dates
+  expected: kill
+  note: Without dates the level would order games by game_id, so same-day games would see each other.
+
+- id: bb-epv-accepted-exception-n
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and e["n"] == bucket["n"]'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: A different sample of the accepted bucket (another n) would stay excused.
+
+# --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
+- id: nba-engine-legacy-missed-ft
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))'
+  mutant: '    return any((row.get(k) or "").strip() for k in ("score_home", "score_away"))'
+  test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
+  expected: kill
+  note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.

@@ -419,7 +419,7 @@ def test_inputs_are_checked() -> None:
     with pytest.raises(ValueError, match="missing columns"):
         epv_states(poss.drop("possession_start_type"), pbp)
     with pytest.raises(ValueError, match="league_id"):
-        load_epv_model("10")  # the WNBA booster is not shipped
+        load_epv_model("99")  # no such league
     first = min(int(x) for x in load_epv_model().attr("train_seasons").split(","))
     with pytest.raises(ValueError, match=f"served from the {first} season"):
         nba_epv.nba_epv_plays(first - 1)
