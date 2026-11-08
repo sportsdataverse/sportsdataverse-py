@@ -48,10 +48,10 @@ The model is an XGBoost regression on the remaining points of the possession, fi
 ``tools/models/nba_epv/train_epv.py`` on disjoint train, holdout, confirmation and monitor
 seasons (the seasons and gates are in the booster's attributes and in that folder's holdout
 reports). It is served from its first training season on; earlier seasons are refused. The
-college boosters (:mod:`sportsdataverse.mbb.mbb_epv`) also carry an as-of scoring level: each
-game's EPV is scaled by the season's points per possession before it over the training seasons'
-(:func:`epv_level`). The NBA booster has no level, and no WNBA booster is shipped (its fit fails
-the gates on 2026; see the fitting script).
+WNBA (:mod:`sportsdataverse.wnba.wnba_epv`) and college (:mod:`sportsdataverse.mbb.mbb_epv`)
+boosters also carry an as-of scoring level: each game's EPV is scaled by the season's points per
+possession on earlier dates over the training seasons' (:func:`epv_level`). The NBA booster has
+no level.
 
 Most of the skill is inside the possession (after a miss, a foul, a free throw); possession
 starts differ little (about 0.2 points from a dead ball to a live-ball turnover), so the
@@ -120,12 +120,13 @@ EPV_FEATURES: Final[list[str]] = [
     "start_type", "period", "seconds_remaining", "start_margin", "transition", "last_event", "ft_pending", "shot_zone",
 ]  # fmt: skip
 
-#: league_id -> (package, booster file): ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` men's and women's
-#: college (:mod:`sportsdataverse.mbb.mbb_epv`). Each booster is served from its first
+#: league_id -> (package, booster file): ``"00"`` NBA, ``"10"`` WNBA, ``"mbb"`` / ``"wbb"`` men's
+#: and women's college (:mod:`sportsdataverse.mbb.mbb_epv`). Each booster is served from its first
 #: training season on (:func:`_check_seasons`): the older NBA feeds code about a third of their
 #: two-point attempts at 0 ft, which would read as rim shots, and the gates cover the training era only.
 _LEAGUES: Final[dict[str, tuple[str, str]]] = {
     "00": ("sportsdataverse.nba.models", "nba_epv.ubj"),
+    "10": ("sportsdataverse.nba.models", "wnba_epv.ubj"),
     "mbb": ("sportsdataverse.mbb.models", "mbb_epv.ubj"),
     "wbb": ("sportsdataverse.mbb.models", "wbb_epv.ubj"),
 }
@@ -424,11 +425,11 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
 
 @lru_cache(maxsize=4)
 def load_epv_model(league_id: str = "00") -> xgb.Booster:
-    """The bundled EPV booster for ``league_id``: ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` college (no WNBA one ships).
+    """The bundled EPV booster for ``league_id``: ``"00"`` NBA, ``"10"`` WNBA, ``"mbb"`` / ``"wbb"`` college.
 
     Its attributes carry ``start_epv_mean`` (the average start value the possession-ending term
     is measured against), the train / holdout / confirmation seasons and the fitting script; the
-    college boosters also carry ``level_ppp`` and ``level_k`` (:func:`epv_level`).
+    WNBA and college boosters also carry ``level_ppp`` and ``level_k`` (:func:`epv_level`).
     """
     import xgboost as xgb
 
@@ -463,17 +464,16 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
         booster: A booster carrying ``level_ppp`` (its training seasons' points per possession) and
             ``level_k``.
         game_order: ``game_id`` and ``game_order`` (a date, or anything that sorts as the games were
-            played): games sharing a ``game_order`` do not see each other. Every game needs one.
-            Without it each game is its own group in ``game_id`` order (the NBA and WNBA assign ids
-            in schedule order): same-day games then see each other, and a postponed game is counted
-            before its make-up date, so the shipped (college) boosters are always given dates.
+            played): games sharing a ``game_order`` do not see each other. Every game needs one,
+            and it is required: ordering by ``game_id`` would let same-day games see each other and
+            count a postponed game before its make-up date.
 
     Returns:
         One row per ``game_id`` with ``level_scale`` (Float64; 1.0 is the training level).
 
     Raises:
-        ValueError: If the booster lacks ``level_ppp`` or ``level_k``, ``game_order``'s ``game_id``
-            dtype differs from the states', or a game has no ``game_order`` or two.
+        ValueError: If the booster lacks ``level_ppp`` or ``level_k``, ``game_order`` is not given,
+            its ``game_id`` dtype differs from the states', or a game has no ``game_order`` or two.
     """
     if booster.attr("level_ppp") is None or booster.attr("level_k") is None:
         raise ValueError("the booster has no level_ppp / level_k attributes")
@@ -484,17 +484,16 @@ def epv_level(states: pl.DataFrame, booster: xgb.Booster, game_order: pl.DataFra
         .agg(pl.col("remaining_points").sum().cast(pl.Float64).alias("_p"), pl.len().cast(pl.Float64).alias("_n"))
     )
     if game_order is None:
-        games = games.with_columns(pl.col("game_id").alias("game_order"))
-    else:
-        if game_order.schema["game_id"] != games.schema["game_id"]:
-            raise ValueError(f"game_order game_id is {game_order.schema['game_id']}, not {games.schema['game_id']}")
-        dates = game_order.select("game_id", "game_order").unique()
-        if dates["game_id"].is_duplicated().any():
-            raise ValueError(f"game_order gives {dates['game_id'].is_duplicated().sum()} rows of games two orders")
-        games = games.join(dates, on="game_id", how="left")
-        if games["game_order"].null_count():
-            # an undated game would be pooled after every dated one and see the whole season
-            raise ValueError(f"{games['game_order'].null_count()} games have no game_order")
+        raise ValueError("a booster with a level needs game_order (each game's date)")
+    if game_order.schema["game_id"] != games.schema["game_id"]:
+        raise ValueError(f"game_order game_id is {game_order.schema['game_id']}, not {games.schema['game_id']}")
+    dates = game_order.select("game_id", "game_order").unique()
+    if dates["game_id"].is_duplicated().any():
+        raise ValueError(f"game_order gives {dates['game_id'].is_duplicated().sum()} rows of games two orders")
+    games = games.join(dates, on="game_id", how="left")
+    if games["game_order"].null_count():
+        # an undated game would be pooled after every dated one and see the whole season
+        raise ValueError(f"{games['game_order'].null_count()} games have no game_order")
     days = (
         games.group_by("season", "game_order")
         .agg(pl.col("_p").sum(), pl.col("_n").sum())
@@ -522,10 +521,10 @@ def add_epv(
     Args:
         states: :func:`epv_states` output (whole possessions: the start row and every event; whole
             seasons for a booster with a level, :func:`epv_level`).
-        league_id: The bundled booster to use: ``"00"`` NBA, ``"mbb"`` / ``"wbb"`` college.
+        league_id: The bundled booster to use: ``"00"`` NBA, ``"10"`` WNBA, ``"mbb"`` / ``"wbb"`` college.
         booster: A booster to use instead (the fitting script scores candidates with it); it must
             carry the ``start_epv_mean`` attribute.
-        game_order: For a booster with a level: the games' order (:func:`epv_level`).
+        game_order: For a booster with a level (WNBA, college): each game's date (:func:`epv_level`).
 
     Returns:
         The event rows (``step`` >= 1) with ``epv`` (the state after the event), ``epv_start``

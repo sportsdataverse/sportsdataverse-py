@@ -565,3 +565,45 @@ def test_a_format_that_is_not_an_object_falls_back_to_the_season_era(
     final = _final(monkeypatch, "wnba", "summary_wnba.json")
     final["format"] = fmt  # game-on-paper-app's route test sends a string here; it used to raise AttributeError
     assert gp.game_page_frames(final, league="wnba")["regulation_periods"] == 4  # WNBA 2024: quarters
+
+
+def test_live_mbb_game_recovers_team_and_player_stats(monkeypatch: pytest.MonkeyPatch) -> None:
+    name = "mbb_401920423_live.json.gz"
+    final, pbp, team_box, player_box = _frames(monkeypatch, "mbb", name)
+    assert team_box.shape == player_box.shape == (0, 0)  # release converters keep R parity
+
+    frames = gp.game_page_frames(final, league="mbb")
+    assert frames["pbp"].height == pbp.height == 245
+    assert frames["pbp"]["home_win_prob"].null_count() == 0
+    expected_scores = {int(c["id"]): int(c["score"]) for c in final["header"]["competitions"][0]["competitors"]}
+    assert dict(frames["team_box"].select("team_id", "team_score").iter_rows()) == expected_scores
+    assert frames["team_box"]["team_winner"].null_count() == 2
+
+    expected_points = {}
+    for team in final["boxscore"]["players"]:
+        stats = team["statistics"][0]
+        for athlete in stats["athletes"]:
+            if athlete["stats"]:
+                key = (int(team["team"]["id"]), int(athlete["athlete"]["id"]))
+                expected_points[key] = int(athlete["stats"][stats["keys"].index("points")])
+    assert len(expected_points) == 20
+    assert {
+        (team, player): points
+        for team, player, points in frames["player_box"].select("team_id", "athlete_id", "points").iter_rows()
+    } == expected_points
+    assert frames["team_game_rates"].height == 2
+    assert frames["player_game_rates"].height == 20
+
+
+def test_live_mbb_game_keeps_one_sided_boxes(monkeypatch: pytest.MonkeyPatch) -> None:
+    final = _final(monkeypatch, "mbb", "mbb_401920423_live.json.gz")
+    # Simulate an incomplete response by withholding the away box blocks from the real capture.
+    for kind in ("teams", "players"):
+        final["boxscore"][kind] = [b for b in final["boxscore"][kind] if b["team"]["id"] == "258"]
+
+    frames = gp.game_page_frames(final, league="mbb")
+    assert frames["pbp"].height == 245
+    assert frames["team_box"].select("team_id", "opponent_team_id").rows() == [(258, 111)]
+    assert frames["player_box"]["team_id"].to_list() == [258] * 11
+    assert frames["team_game_rates"].is_empty()
+    assert frames["player_game_rates"].is_empty()

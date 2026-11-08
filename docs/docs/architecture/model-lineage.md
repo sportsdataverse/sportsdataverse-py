@@ -19,7 +19,7 @@ A script in another repository is cited as `repo` + path + the commit it was rea
 at. "Byte-identical" means the bundled file's sha256 equals the GitHub release
 asset's `digest` (checked 2026-10-22).
 
-## Bundled boosters (29)
+## Bundled boosters (30)
 
 ### CFB (`sportsdataverse/cfb/models/`, 11)
 
@@ -66,13 +66,14 @@ the gates and cadence. No NFL booster ships a card in sdv-py.
 | `sportsdataverse/nfl/models/qbr_model.ubj` | `akeaswaran/cfb_qbr` `qbr_xgb.R` (`ca94e63`, 2021; a CFB-trained model) | `2e52d0625a` (re-saved with feature names, trees unchanged) | n/a (no release) |
 | `sportsdataverse/nfl/models/nfl_playcall.ubj` | sdv-py `tools/models/nfl_scheme/train_playcall.py` (`04b729e6d2`) | `04b729e6d2` | n/a (bundle only) |
 
-### Basketball and baseball (9)
+### Basketball and baseball (10)
 
 | artifact | fitting script | bundled in |
 |---|---|---|
 | `sportsdataverse/nba/models/nba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 00` (`2413d0bfb2`) | `2413d0bfb2` |
 | `sportsdataverse/nba/models/wnba_in_game_wp.ubj` | sdv-py `tools/models/nba_prediction/train_in_game_wp.py --league-id 10 --artifact wnba_in_game_wp.ubj` (`2413d0bfb2`) | `2413d0bfb2` |
 | `sportsdataverse/nba/models/nba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 00` (train 2022-2024, holdout 2025, confirmation 2026; gates, partition and importance beside it) | #1113 |
+| `sportsdataverse/nba/models/wnba_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id 10` (train 2022-2024, holdout 2025, confirmation 2026; dated as-of scoring level; one owner-accepted gate-3 bucket; card, gates, partition and importance beside it) | #1120 |
 | `sportsdataverse/mbb/models/mbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id mbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
 | `sportsdataverse/mbb/models/wbb_epv.ubj` | sdv-py `tools/models/nba_epv/train_epv.py --league-id wbb` (train 2022-2024, holdout 2025, confirmation 2026; as-of scoring level; gates, partition and importance beside it) | #1118 |
 | `sportsdataverse/mbb/models/mbb_in_game_wp.ubj` | **gap**: `dev/mbb_prediction/train_in_game_wp.py` exists only on the maintainer's disk (untracked) | `5c3eaba8de` |
@@ -88,6 +89,7 @@ The NBA and WNBA in-game WP boosters each ship a `.card.json` beside them, built
 
 | constant | fitting script | status |
 |---|---|---|
+| `nba_rapm.RAPM_PENALTY` (NBA 2,683, WNBA 1,931) | `tools/fit_rapm_penalty.py` | tracked; `curves` reads the possessions release assets (network), `report` scores offline and writes the pooled CV error that `tests/fixtures/bb_rapm_penalty` commits, from which `tests/tools/test_fit_rapm_penalty.py` re-derives both values and the as-of picks. The G League key `"20"` is **seeded** with the NBA value, not fitted. Refit policy: re-run after each complete season, and change a value only when the pooled pick moves off it by more than one standard error of the per-season differences (it moved once in the NBA history, 2,276 to 2,683 at 2018-19); a change re-scales every season, so it ships with a republish of every season's `player_impact`. Plain RAPM, `nba_player_impact` / `wnba_player_impact` and `{nba,wnba}_player_factor_rapm` fit before November 2026 used RidgeCV's per-season pick instead and are not comparable across seasons |
 | `mbb_ncaa_rapm_league.DEFAULT_RIDGE_LAMBDA` (1000.0) | `tools/fit_ncaa_rapm_lambda.py` | tracked (moved from untracked `dev/ncaa_rapm/fit_lambda_league.py`) |
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["00"]` / `["20"]` (70.1) | `tools/fit_nba_shot_shrinkage_k.py` | tracked (moved from untracked `dev/nba_shot_value/fit_shrinkage_k.py`; reruns to 70.1 on the committed fixture) |
 | `nba_shot_value_constants.TALENT_SHRINKAGE_K["10"]` (60.0) | none | **seeded placeholder**, not a fit: no WNBA shot fixture is committed |
@@ -136,7 +138,7 @@ Not cited from package source, so outside the test, but still gaps:
   and `wbb_in_game_wp.ubj`.
 - `cfb_cp_model.card.json`, `cfb_cp_model_air_yards.card.json` and
   `fd_model.card.json` carry `training_seasons: null` and `n_training_rows: null`.
-- No NFL, MBB or MLB booster ships a card; of the NBA boosters, only the in-game WP pair does (`nba_epv.ubj` ships none).
+- No NFL, MBB or MLB booster ships a card; of the NBA boosters, the in-game WP pair and `wnba_epv.ubj` do (`nba_epv.ubj` ships none).
 - `nfl-data`'s registry lists the NFL QBR fitting script as TODO; the trainer
   named above (`cfb_qbr/qbr_xgb.R`) is the one the 2.7 feature-order fix traced
   the artifact to, not an NFL-trained replacement.

@@ -39,7 +39,7 @@ __all__ = ["helper_mbb_player_box"]
 _MBB_FINAL_ORDER: tuple[str, ...] = tuple(c for c in _FINAL_ORDER if c != "active") + ("active",)
 
 
-def helper_mbb_player_box(final: dict) -> pl.DataFrame:
+def helper_mbb_player_box(final: dict, *, allow_partial: bool = False) -> pl.DataFrame:
     """Parse one game's ESPN summary payload into the released player-box frame.
 
     Faithful polars port of ``hoopR:::helper_espn_mbb_player_box``
@@ -79,4 +79,6 @@ def helper_mbb_player_box(final: dict) -> pl.DataFrame:
     # MBB's R gate carries WBB's valid_athletes (both-teams) probe, so a game
     # whose second team ships no athletes is skipped entirely, not partially
     # published.
-    return _basketball_player_box(final, final_order=_MBB_FINAL_ORDER, require_both_teams=True)
+    return _basketball_player_box(
+        final, final_order=_MBB_FINAL_ORDER, require_both_teams=True, allow_partial=allow_partial
+    )

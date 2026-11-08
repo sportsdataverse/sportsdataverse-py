@@ -225,9 +225,7 @@ def _rebound_missed_shot_index(ctx: EventContext, i: int) -> int:
         if et == "missed_shot":
             return j
         if et == "free_throw":
-            sh = (rows[j].get("score_home") or "").strip()
-            sa = (rows[j].get("score_away") or "").strip()
-            if not (sh or sa):  # missed FT (no score string -- same signal as _ft_made)
+            if not is_made_ft_row(rows[j]):  # missed FT (same signal as _ft_made)
                 return j
             return -1
         if et in ("made_shot", "turnover", "rebound", "jump_ball", "period"):
@@ -472,6 +470,19 @@ def _ft_trip_shape(row: dict) -> "tuple[int, int] | None":
         n = int(m.group(1))
         return (n, n)
     return None
+
+
+def is_made_ft_row(row: dict) -> bool:
+    """A free-throw row is a make when it carries a score string that is not the legacy ``"0"``.
+
+    Made free throws stamp the running score; misses carry none. Pre-2017-18 payloads (the NBA
+    through 2016-17, the WNBA through 2016) instead write the literal ``"0"`` on EVERY non-scoring
+    row, misses included, so a bare non-empty test read every missed free throw as made: about
+    6,000 phantom points an NBA season in ``ftm``, and a possession boundary after every missed
+    last free throw. A make always leaves one side at 1 or more, so ``"0"`` on both sides is a
+    miss in either dialect.
+    """
+    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))
 
 
 def is_technical_ft_row(row: dict) -> bool:
@@ -773,8 +784,7 @@ def ft_ends_possession(ctx: EventContext, i: int) -> bool:
     row = rows[i]
     if (row.get("event_type") or "") != "free_throw":
         return False
-    made = bool((row.get("score_home") or "").strip() or (row.get("score_away") or "").strip())
-    if not made:
+    if not is_made_ft_row(row):
         return False
     if not is_last_ft_of_trip(row):
         return False
