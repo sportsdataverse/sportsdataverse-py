@@ -136,7 +136,7 @@ def _stat_dict(stat_cols: list[str], stats: list[Any]) -> dict[str, Any]:
     return out
 
 
-def helper_wbb_player_box(final: dict) -> pl.DataFrame:
+def helper_wbb_player_box(final: dict, *, allow_partial: bool = False) -> pl.DataFrame:
     """Parse one game's ESPN summary payload into the released player-box frame.
 
     Faithful polars port of ``wehoop:::helper_espn_wbb_player_box``
@@ -172,11 +172,11 @@ def helper_wbb_player_box(final: dict) -> pl.DataFrame:
 
     .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    return _basketball_player_box(final, final_order=_FINAL_ORDER)
+    return _basketball_player_box(final, final_order=_FINAL_ORDER, allow_partial=allow_partial)
 
 
 def _basketball_player_box(
-    final: dict, *, final_order: tuple[str, ...], require_both_teams: bool = True
+    final: dict, *, final_order: tuple[str, ...], require_both_teams: bool = True, allow_partial: bool = False
 ) -> pl.DataFrame:
     """League-parameterized core shared by the WBB/WNBA release producers.
 
@@ -207,30 +207,32 @@ def _basketball_player_box(
     # in wehoop).
     team_blocks = (final.get("boxscore") or {}).get("players") or []
     competitors = comp.get("competitors") or []
-    if len(team_blocks) < 2 or len(competitors) < 2:
+    if len(competitors) < 2 or (len(team_blocks) < 2 and not allow_partial):
         return pl.DataFrame()
 
-    # R validity probes: the first athlete's stats vector is non-trivial and
-    # its 7th entry (rebounds) parses numeric. Failure -> producer skips the
-    # game. WBB additionally requires BOTH teams' athletes to be real frames
-    # (the valid_athletes probe); WNBA does not -- see the docstring.
-    try:
-        stats_block_0 = (team_blocks[0].get("statistics") or [])[0]
-        athletes_0 = stats_block_0.get("athletes") or []
-        if not athletes_0:
-            return pl.DataFrame()
-        if require_both_teams:
-            stats_block_1 = (team_blocks[1].get("statistics") or [])[0]
-            if not (stats_block_1.get("athletes") or []):
+    if not allow_partial:
+        # R validity probes: the first athlete's stats vector is non-trivial and
+        # its 7th entry (rebounds) parses numeric. Failure -> producer skips the
+        # game. WBB additionally requires BOTH teams' athletes to be real frames
+        # (the valid_athletes probe); WNBA does not -- see the docstring.
+        try:
+            stats_block_0 = (team_blocks[0].get("statistics") or [])[0]
+            athletes_0 = stats_block_0.get("athletes") or []
+            if not athletes_0:
                 return pl.DataFrame()
-        first_stats = athletes_0[0].get("stats") or []
-        if len(first_stats) <= 1:
+            if require_both_teams:
+                stats_block_1 = (team_blocks[1].get("statistics") or [])[0]
+                if not (stats_block_1.get("athletes") or []):
+                    return pl.DataFrame()
+            first_stats = athletes_0[0].get("stats") or []
+            if len(first_stats) <= 1:
+                return pl.DataFrame()
+            float(first_stats[6])
+        except (IndexError, TypeError, ValueError):
             return pl.DataFrame()
-        float(first_stats[6])
-    except (IndexError, TypeError, ValueError):
-        return pl.DataFrame()
 
-    stat_cols: list[str] = list(stats_block_0.get("keys") or [])
+        stat_cols: list[str] = list(stats_block_0.get("keys") or [])
+
     game_datetime = _game_datetime(comp["date"])
     season = header.get("season") or {}
     game_cols: dict[str, Any] = {
@@ -305,30 +307,49 @@ def _basketball_player_box(
         row.update(_side_cols(team_id))
         return row
 
-    # R: unnest keeps team-1 athletes then team-2; stats matrix is built from
-    # the non-empty stats vectors and positionally bound to the !didNotPlay
-    # rows (rbind drops zero-length vectors). A count mismatch is the case
-    # where R's bind_cols errors -> tryCatch skips the game.
-    entries = [
-        (entry, block.get("team") or {})
-        for block in team_blocks[:2]
-        for entry in ((block.get("statistics") or [{}])[0].get("athletes") or [])
-    ]
-    stats_vectors = [e.get("stats") for e, _ in entries if e.get("stats")]
-    played = [(e, t) for e, t in entries if e.get("didNotPlay") == False]  # noqa: E712
-    dnp = [(e, t) for e, t in entries if e.get("didNotPlay") == True]  # noqa: E712
-    # R producer contract: a stats/athletes count mismatch (bind_cols error), a
-    # ragged stats vector (rbind recycling warning), or missing keys (colnames
-    # error) all tryCatch-skip the game.
-    if not stat_cols or len(stats_vectors) != len(played) or any(len(s) != len(stat_cols) for s in stats_vectors):
-        return pl.DataFrame()
-
     rows: list[dict[str, Any]] = []
-    for (entry, team), stats in zip(played, stats_vectors):
-        row = _meta_row(entry, team)
-        row.update(_stat_dict(stat_cols, stats))
-        rows.append(row)
-    rows.extend(_meta_row(entry, team) for entry, team in dnp)
+    if allow_partial:
+        # Live feeds can list players who have yet to enter without a DNP flag.
+        # Bind stats to each athlete's own vector and each team's own keys.
+        for block in team_blocks:
+            team = block.get("team") or {}
+            stat_block = (block.get("statistics") or [{}])[0]
+            keys = stat_block.get("keys") or []
+            valid_keys = bool(keys) and len(keys) == len(set(keys))
+            for entry in stat_block.get("athletes") or []:
+                row = _meta_row(entry, team)
+                if row["athlete_id"] is None or row["team_id"] is None:
+                    continue
+                stats = entry.get("stats") or []
+                if entry.get("didNotPlay") is True:
+                    rows.append(row)
+                elif valid_keys and len(keys) == len(stats):
+                    row.update(_stat_dict(keys, stats))
+                    rows.append(row)
+    else:
+        # R: unnest keeps team-1 athletes then team-2; stats matrix is built from
+        # the non-empty stats vectors and positionally bound to the !didNotPlay
+        # rows (rbind drops zero-length vectors). A count mismatch is the case
+        # where R's bind_cols errors -> tryCatch skips the game.
+        entries = [
+            (entry, block.get("team") or {})
+            for block in team_blocks[:2]
+            for entry in ((block.get("statistics") or [{}])[0].get("athletes") or [])
+        ]
+        stats_vectors = [e.get("stats") for e, _ in entries if e.get("stats")]
+        played = [(e, t) for e, t in entries if e.get("didNotPlay") == False]  # noqa: E712
+        dnp = [(e, t) for e, t in entries if e.get("didNotPlay") == True]  # noqa: E712
+        # R producer contract: a stats/athletes count mismatch (bind_cols error), a
+        # ragged stats vector (rbind recycling warning), or missing keys (colnames
+        # error) all tryCatch-skip the game.
+        if not stat_cols or len(stats_vectors) != len(played) or any(len(s) != len(stat_cols) for s in stats_vectors):
+            return pl.DataFrame()
+
+        for (entry, team), stats in zip(played, stats_vectors):
+            row = _meta_row(entry, team)
+            row.update(_stat_dict(stat_cols, stats))
+            rows.append(row)
+        rows.extend(_meta_row(entry, team) for entry, team in dnp)
     if not rows:
         return pl.DataFrame()
 
