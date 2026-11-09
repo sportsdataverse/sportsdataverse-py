@@ -269,7 +269,7 @@ One row per ineligible `(season, league, team_id)`: `season, league, team_id` (E
 | `season` | Int64 | Season, as the end year (2024 is 2023-24). |
 | `league` | String | mens or womens. |
 | `team_id` | String | ESPN team id (Utf8). |
-| `team` | String | School name. |
+| `team` | String | School name of the barred program, as ESPN spells it. |
 | `reason` | String | Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other. |
 | `detail` | String | Short note on the row, such as the reclassification year or the case behind the ban. |
 | `source_url` | String | The source that documents the row. |
