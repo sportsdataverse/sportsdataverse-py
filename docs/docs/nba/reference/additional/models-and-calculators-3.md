@@ -1,10 +1,71 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: season_game–win_prob"
-sidebar_label: "Models and calculators: season_game–win_prob"
+title: "NBA — additional Python functions — Models and calculators: score_win–win_prob"
+sidebar_label: "Models and calculators: score_win–win_prob"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: season_game–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: score_win–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: season_game–win_prob
+# NBA — additional Python functions — Models and calculators: score_win–win_prob
+
+### score_win_prob {#score_win_prob}
+
+`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'pl.DataFrame'`
+
+Per-play home win probability, its play-to-play delta, and the prior, for one game.
+
+NBA and WNBA games score with the NBA / WNBA in-game booster
+(`~sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob`), men's and women's college
+games with the men's / women's college booster
+(`~sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema (needs `home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, the period clock (`start_quarter_seconds_remaining` or `start_period_seconds_remaining`), `home_score`, `away_score`, `team_id`, `home_team_id`), in play order. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 halves, 4 quarters); default from the frame's `season` via `game_regulation_periods`. |
+| `neutral_site` | `Optional[bool]` | `False` | Whether the game is at a neutral site: no home-court advantage in a lineless prior; see `home_prior`. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`), the prior when there is no line; see `home_prior`. |
+
+**Returns**
+
+The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"rated"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
+
+| col_name | type | description |
+|---|---|---|
+| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else rated_home_prob when the caller passed one (nba_rated_priors), else home-court advantage alone (0.5 at a neutral site). |
+| `prior_source` | String | Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5). |
+| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `home_win_prob` | Float64 | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
+| `wp_delta` | Float64 | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing (`home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`, or neither period clock column). |
+| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `pbp` holds more than one `game_id`. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import score_win_prob
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+one = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+wp = score_win_prob(one)
+
+# Biggest swings
+
+wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
+
+# A men's college tournament game
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+score_win_prob(one, league="mbb", neutral_site=True)
+```
 
 ### season_game_excitement {#season_game_excitement}
 
