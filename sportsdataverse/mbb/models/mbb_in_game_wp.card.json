@@ -1170,6 +1170,14 @@
       "decided_by": "owner (relayed by the lane-10 coordinator)",
       "decided_at": "2026-11-06 04:19 ET",
       "decision": "ship both leagues (#1104)"
+    },
+    "preregistered_confirmation": {
+      "season": 2027,
+      "decided_by": "owner",
+      "decided_at": "2026-11-09 03:53 ET",
+      "rule": "the holdout gate rule as written, the same blocks and the same fixed replaced booster, run once on the complete 2027 season with nothing re-tuned in between",
+      "why": "the overtime block is the least powered (326 MBB / 257 WBB holdout games), and 52 gate cells (22 MBB, 30 WBB) at a one-sided 2.5% false-failure rate each expect about 1.3 false failures per refit, so a single-season failure is confirmed on a season nothing was fit or tuned on",
+      "gate_form": "unchanged: |calibration in the large| compared paired, not a signed paired difference (owner: as is)"
     }
   },
   "confirmation_gate_reported": {
