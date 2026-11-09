@@ -121,3 +121,13 @@ def test_undefined_spearman_is_null() -> None:
     assert cmp._spearman({"a": 1.0}, {"a": 2.0}, {"a"}) is None
     assert cmp._spearman({"a": 1.0, "b": 1.0}, {"a": 2.0, "b": 3.0}, {"a", "b"}) is None
     assert cmp._spearman({"a": 1.0, "b": 2.0}, {"a": 2.0, "b": 3.0}, {"a", "b"}) == pytest.approx(1.0)
+
+
+def test_a_train_phase_without_games_is_named(monkeypatch: pytest.MonkeyPatch) -> None:
+    # train scores only weeks 1-4, so the 5-8 and 9+ mappings cannot be fit: a named error, not a polars one
+    frame = pl.DataFrame(
+        {"week": [1, 2], "margin": [3.0, -2.0], "home": [1.0, 1.0], "d_fixed": [1.0, -1.0], "d_ridge": [1.0, -1.0]}
+    )
+    monkeypatch.setattr(cmp, "season_frames", lambda *a, **k: (frame, pl.DataFrame()))
+    with pytest.raises(ValueError, match=r"phase\(s\) \['5-8', '9-'\]"):
+        cmp.compare("mbb", [2024], [2025], Path("."), 200.0)

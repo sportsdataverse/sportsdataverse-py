@@ -265,7 +265,12 @@ def _rounded(x: object) -> object:
 def compare(lg: str, train: list[int], holdout: list[int], cache: Path, lam: float) -> dict[str, object]:
     built = {s: season_frames(lg, s, cache, lam) for s in [*train, *holdout]}
     games = {s: g.with_columns(_phase(pl.col("week")).alias("phase")) for s, (g, _) in built.items()}
-    maps = fit_maps(pl.concat([games[s] for s in train]))
+    train_games = pl.concat([games[s] for s in train])
+    if train_games["phase"].n_unique() < len(PHASES):
+        labels = {f"{lo}-{hi if hi < 99 else ''}" for lo, hi in PHASES}
+        missing = sorted(labels - set(train_games["phase"].unique().to_list()))
+        raise ValueError(f"no scored train game in phase(s) {missing}: add train seasons that cover them")
+    maps = fit_maps(train_games)
     ho = predict(pl.concat([games[s] for s in holdout]), maps)
     if ho["phase"].n_unique() < len(PHASES):
         raise ValueError("a phase has no scored holdout game: the inputs are incomplete")
