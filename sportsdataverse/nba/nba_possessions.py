@@ -153,8 +153,14 @@ def _offense_from_events(
     possessions for the wrong team (the other team's basket then fell in that
     possession). Such a rebound decides the offense only when no other row of
     the group with a side (``location`` ``h`` / ``v``) can, a last-second
-    heave, say: every other cue, a jump ball or violation included, is tried
-    first.
+    heave, say: every other cue, a jump ball or a heave's ``other`` row
+    included, is tried first.
+
+    A ``violation`` row is skipped in the strict pass as well: the feed files
+    an offensive violation as a turnover, so a ``violation`` row is the
+    defense's (delay of game, kicked ball). Four NBA 2025-26 end-of-period
+    groups (a delay of game, then the other team's heave and team rebound)
+    gave the defense the possession.
     """
     scoring_types = frozenset(("made_shot", "missed_shot", "free_throw", "turnover", "rebound"))
     non_foul_types = frozenset(("foul", "period", "timeout", "substitution"))
@@ -164,7 +170,7 @@ def _offense_from_events(
                 ev
                 for ev in events
                 if not (ev.get("event_type") == "free_throw" and is_technical_ft_row(ev))
-                and (ev.get("_offense_cue", True) or not strict)
+                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)
             ]
             for ev in cues:
                 et = ev.get("event_type") or ""

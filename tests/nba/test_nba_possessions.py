@@ -1206,3 +1206,27 @@ def test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can(m
     assert last.height == 1 and last["offense_team_id"].item() == game["home_team_id"]
     monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
     assert build_possessions(pbp).height == poss.height
+
+
+def test_a_defense_violation_does_not_name_the_offense() -> None:
+    """The end of the 1st half of ``0022500108`` NYK @ MIA: a Knicks delay of game, a Heat heave, a team rebound.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``). The feed files an offensive violation
+    as a turnover, so the ``violation`` row is the defense's; the heave names the offense (MIA,
+    home), as in the four such NBA 2025-26 groups. Points and the possession count are unchanged.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500108")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500108")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    holder = poss.filter(pl.col("start_order_index") <= 255, pl.col("end_order_index") >= 255)
+    assert holder.height == 1 and holder["offense_team_id"].item() == game["home_team_id"]
+    ms = 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+    assert (poss.filter(home).select(ms.sum()).item(), poss.filter(~home).select(ms.sum()).item()) == (
+        game["home_pts"],
+        game["away_pts"],
+    )

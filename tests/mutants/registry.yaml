@@ -10990,8 +10990,17 @@
   group: nba-engine
   finding: BB-D21 margin drift
   file: sportsdataverse/nba/nba_possessions.py
-  snippet: '                and (ev.get("_offense_cue", True) or not strict)'
-  mutant: '                and ev.get("_offense_cue", True)'
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) and ev.get("event_type") != "violation")'
   test: tests/nba/test_nba_possessions.py::test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can
   expected: kill
   note: A group whose only sided row is a rebound that follows no miss (a last-second team attempt, then a team rebound) would get no offense and be dropped; 1 group in NBA 2025-26.
+- id: nba-engine-violation-not-an-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) or not strict)'
+  test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
+  expected: kill
+  note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).
