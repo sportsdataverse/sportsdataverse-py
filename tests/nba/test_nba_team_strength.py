@@ -248,3 +248,18 @@ def test_ridge_design_rejects_a_null_home_flag() -> None:
         ).height
         == ridge_design(rows).height
     )
+
+
+def test_adapters_pass_their_level(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The carried BB-D3 ranks are gated by the adapter's own league (``rate_gates.TEAM_MIN_N``)."""
+    seen: list[str] = []
+    real = mod.team_season_rates
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(str(kwargs["level"]))
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(mod, "team_season_rates", spy)
+    _strength("nba", 2026)
+    _strength("wnba", 2025)
+    assert seen == ["nba", "wnba"]

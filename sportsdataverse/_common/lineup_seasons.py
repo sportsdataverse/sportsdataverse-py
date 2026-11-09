@@ -21,9 +21,13 @@ Everything rolls up the BB-D6 game impact box (:mod:`sportsdataverse._common.gam
   the mid-range every other two, the classification of ``ncaa_{mbb,wbb}_lineups``.
 
 **League context** (BB-D2, :mod:`sportsdataverse._common.league_context`): every rate gets
-``<m>_rank`` (1 = best), the Weibull ``<m>_pct`` and ``<m>_n``. Ranks are within the season and unit
-size, league-wide, among units with at least ``min_poss`` possessions (offense plus defense), and
-null below :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` qualifiers. The shot
+``<m>_rank`` (1 = best), the Weibull ``<m>_pct`` and ``<m>_n`` (the rate's own denominator). Ranks are
+within the season and unit size, league-wide, among units with at least ``min_poss`` possessions
+(offense plus defense) whose ``<m>_n`` also reaches the league's team gate in
+:data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` (the sample at which the rate is half signal;
+most five-man units never reach the rating gates), and null below
+:data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` qualifiers. The rim and mid-range
+rates have no measured gate and rank on ``min_poss`` alone. The shot
 zone shares (``rim_rate``, ``mid_rate``, ``fg3_rate`` and their ``opp_`` twins) describe a style,
 not a quality: they rank high first on both sides.
 
@@ -44,6 +48,7 @@ from sportsdataverse._common.league_context import (
     attach_sample_sizes,
     league_averages,
 )
+from sportsdataverse._common.rate_gates import team_gates
 
 __all__ = [
     "COUNTS",
@@ -231,6 +236,7 @@ def lineup_seasons(
     player_dtype: pl.DataType,
     min_poss: int,
     zones: bool = False,
+    level: str | None = None,
 ) -> pl.DataFrame:
     """Season 2-, 3- and 5-man units: possessions, minutes, ORtg/DRtg/net and the four factors.
 
@@ -241,6 +247,9 @@ def lineup_seasons(
         player_dtype: The league's player id dtype.
         min_poss: The rank gate: a unit is ranked when ``poss + opp_poss`` is at least this.
         zones: Add the college shot-zone rates (``counts`` must carry :data:`ZONE_COUNTS`).
+        level: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``: rank a rate only when its ``<m>_n``
+            also reaches that league's :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate.
+            ``None`` applies no sample gate (the league adapters always pass one).
 
     Returns:
         One row per ``(season, team_id, n_players, lineup_id)`` in :func:`lineup_seasons_schema`.
@@ -249,7 +258,7 @@ def lineup_seasons(
         possessions (most first). Empty input returns that schema with zero rows.
 
     Raises:
-        KeyError: If ``counts`` is missing a schema column.
+        KeyError: If ``counts`` is missing a schema column, or ``level`` is unknown.
 
     Example:
         Quick start::
@@ -263,6 +272,8 @@ def lineup_seasons(
                                    player_dtype=pl.Int64(), min_poss=400)
     """
     schema = lineup_seasons_schema(player_dtype, zones=zones)
+    rated = _rated(zones)
+    gates = team_gates(level, rated)
     count_schema = lineup_count_schema(player_dtype, zones=zones)
     missing = sorted(set(count_schema) - set(counts.columns))
     if missing:
@@ -286,10 +297,10 @@ def lineup_seasons(
     # A unit with no count rows (it never started a possession, say) has zero events, not unknown ones.
     count_cols = [f"{s}_{c}" for s in ("o", "d") for c in names]
     fives = fives.join(tallies, on=keys, how="left", validate="1:1").with_columns(pl.col(count_cols).fill_null(0))
-    rated = _rated(zones)
     lower = [m for m, (_, low) in rated.items() if low]
     return (
         _rates(_units(fives, [*_TOTALS, *count_cols]), zones)
+        .pipe(attach_sample_sizes, {m: e for m, (e, _) in rated.items()})
         .pipe(
             attach_ranks,
             list(rated),
@@ -297,8 +308,8 @@ def lineup_seasons(
             by=("season", "n_players"),
             lower_is_better=lower,
             qualifier=_qualified(min_poss),
+            min_n=gates,
         )
-        .pipe(attach_sample_sizes, {m: e for m, (e, _) in rated.items()})
         .select(list(schema))
         .cast(schema)
         .sort(["season", "n_players", "team_id", "poss", "lineup_id"], descending=[False, False, False, True, False])
@@ -311,12 +322,14 @@ def lineup_seasons_league_averages(
     """The league-average rows of a lineup-seasons table, one block per unit size.
 
     The football F1 rows of :func:`~sportsdataverse._common.league_context.league_averages` over
-    the units the ranks use (``poss + opp_poss >= min_poss``), so ``n`` is the cohort count.
-    ``category`` is ``lineup_seasons_<n>man`` and ``qualifier_min`` is ``min_poss``.
+    the units the ranks use (``poss + opp_poss >= min_poss``, and each rate's ``level`` sample
+    gate), so ``n`` is the cohort count. ``category`` is ``lineup_seasons_<n>man`` and
+    ``qualifier_min`` is ``min_poss``.
 
     Args:
         table: Output of a ``*_lineup_seasons`` function.
-        level: The population label (``"nba"``, ``"wnba"``, ``"mbb"``, ``"wbb"``).
+        level: The population label (``"nba"``, ``"wnba"``, ``"mbb"``, ``"wbb"``), which also
+            picks the sample gates of :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N`.
         min_poss: The same gate the table was ranked with.
         zones: Summarise the college shot-zone rates too.
 
@@ -331,6 +344,7 @@ def lineup_seasons_league_averages(
             from sportsdataverse.nba.nba_lineup_seasons import nba_lineup_seasons
             lineup_seasons_league_averages(nba_lineup_seasons(2025), level="nba", min_poss=400)
     """
+    gates = team_gates(level, _rated(zones))
     frames = [
         league_averages(
             table.filter(pl.col("n_players") == k),
@@ -340,6 +354,7 @@ def lineup_seasons_league_averages(
             category=f"lineup_seasons_{k}man",
             qualifier=_qualified(min_poss),
             qualifier_min=float(min_poss),
+            min_n=gates,
         )
         for k in SIZES
     ]

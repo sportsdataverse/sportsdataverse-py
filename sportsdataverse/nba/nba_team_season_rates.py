@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA, team_season_rates
 from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
@@ -220,10 +221,12 @@ def nba_team_season_rates(
         the same four against (``opp_*``), all fractions. Each rate has ``<m>_rank`` (1 = best;
         ``def_rtg``, ``tov_pct``, ``opp_efg_pct``, ``opp_orb_pct`` and ``opp_ft_rate`` rank low
         first; pace ranks high first), ``<m>_pct`` (the Weibull percentile) and ``<m>_n`` (the
-        sample: possessions for the ratings, games for pace, field-goal attempts for eFG% and
-        FT rate, possessions for turnover rate, rebound chances for ORB%). Ranks are within the
-        season and split, among teams with at least half the most games, and null under five
-        teams. Empty input returns that schema with zero rows.
+        sample: possessions for the ratings, the clock in regulation games for pace, field-goal
+        attempts for eFG% and FT rate, possessions for turnover rate, rebound chances for ORB%).
+        Ranks are within the season and split, among teams with at least half the most games
+        whose ``<m>_n`` reaches the league's :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N`
+        gate (a clutch split reaches none), and null under five teams. Empty input returns that
+        schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
@@ -248,7 +251,7 @@ def nba_team_season_rates(
         load_possessions(loader_seasons), load_schedule(loader_seasons), league_id=league_id, season_type=season_type
     )
     out = (
-        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1])
+        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1], level=NBA_LEVEL[league_id])
         if rows.height
         else pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     )
