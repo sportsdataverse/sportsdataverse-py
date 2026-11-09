@@ -281,9 +281,10 @@ class TestCommonOpponentDescent:
         return by_rank[1], by_rank[2]
 
     def test_2025_acc_five_way_tie_goes_to_duke(self) -> None:
-        # Duke, Georgia Tech, Miami, Pitt and SMU tied at 6-2; no opponent was
-        # common to all five, so the descent cannot separate them and opponents'
-        # conference win % sends Duke (the real title-game pairing).
+        # Duke, Georgia Tech, Miami, Pitt and SMU tied at 6-2; Syracuse is the
+        # only opponent all five played and all five beat it, so the descent
+        # cannot separate them and opponents' conference win % sends Duke (the
+        # real title-game pairing).
         assert self._top2("ACC") == ("Virginia", "Duke")
 
     def test_2025_sec_four_way_tie_seeds_alabama_then_georgia(self) -> None:

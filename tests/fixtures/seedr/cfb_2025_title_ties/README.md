@@ -14,8 +14,9 @@ the SEC (64), with final scores. Both leagues finished with a multi-team tie
 for a title-game berth that the order-of-finish descent rung has to handle:
 
 - **ACC:** Virginia finished first at 7-1. Duke, Georgia Tech, Miami, Pitt and
-  SMU tied at 6-2. No conference opponent was played by all five, so steps A-D
-  could not separate them. Opponents' combined conference win % put Duke in,
+  SMU tied at 6-2. Their only common opponent, Syracuse, lost to all five, so
+  the common-opponent steps leave them level, and the order-of-finish step
+  has no other opponent to descend to. Opponents' combined conference win % put Duke in,
   and the title game was Virginia vs Duke.
 - **SEC:** Alabama, Georgia, Ole Miss and Texas A&M tied at 7-1. The title game
   was Alabama (seed 1, the designated home team) vs Georgia (seed 2).
