@@ -1,0 +1,27 @@
+schema: mbb_tournament_ineligible
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: league
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: reason
+  type: character
+  description: ''
+- name: detail
+  type: character
+  description: ''
+- name: source_url
+  type: character
+  description: ''
+- name: confidence
+  type: character
+  description: ''

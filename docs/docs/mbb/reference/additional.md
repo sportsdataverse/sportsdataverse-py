@@ -393,6 +393,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_season_flow](additional/analytics-3.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-4.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-4.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [mbb_tournament_ineligible](additional/analytics-4.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
 | [ncaa_coach_stints](additional/analytics-4.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-4.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-4.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |

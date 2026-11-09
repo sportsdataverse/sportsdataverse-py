@@ -38,7 +38,7 @@ def wbb_strength_of_schedule(
     seasons: list[int],
     *,
     as_of_date: datetime.date | None = None,
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``strength_of_schedule`` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
@@ -49,7 +49,8 @@ def wbb_strength_of_schedule(
         seasons: Seasons to compute (e.g. ``[2024]``).
         as_of_date: Only use games strictly before this date; ``None`` uses every
             completed game.
-        ineligible: Team ids barred from the NCAA tournament (sets ``eligible``).
+        ineligible: Team ids barred from the NCAA tournament (sets ``eligible``); ``None``
+            (default) reads the bundled list for each season.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:

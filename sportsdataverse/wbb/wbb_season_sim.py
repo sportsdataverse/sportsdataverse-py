@@ -135,7 +135,7 @@ def wbb_season_projections(
     as_of_date: datetime.date | None = None,
     n_sims: int = 10000,
     seed: int = 0,
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
@@ -148,7 +148,7 @@ def wbb_season_projections(
             completed game.
         n_sims: Simulated seasons.
         seed: RNG seed (deterministic output).
-        ineligible: Team ids barred from the NCAA tournament.
+        ineligible: Team ids barred from the NCAA tournament; ``None`` (default) reads the bundled list.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:

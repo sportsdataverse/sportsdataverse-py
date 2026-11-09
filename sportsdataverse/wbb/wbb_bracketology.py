@@ -35,7 +35,7 @@ def wbb_bracketology(
     season: int,
     *,
     as_of_date: datetime.date | None = None,
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Women's daily ``bracketology`` table: the projected field, seeds and bubble.
@@ -47,7 +47,8 @@ def wbb_bracketology(
         as_of_date: Only use games strictly before this date; ``None`` uses
             every completed game.
         ineligible: Team ids barred from the NCAA tournament (in 2024, Southern
-            Indiana won the OVC final while reclassifying; UT Martin took the bid).
+            Indiana won the OVC final while reclassifying; UT Martin took the bid). ``None``
+            (default) reads the bundled list.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -57,7 +58,7 @@ def wbb_bracketology(
         Quick start::
 
             from sportsdataverse.wbb import wbb_bracketology
-            field = wbb_bracketology(2024, ineligible={"88"})
+            field = wbb_bracketology(2024)
     """
     if return_as_pandas:
         return mbb_bracketology(

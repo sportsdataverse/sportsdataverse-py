@@ -218,6 +218,58 @@ strength = mbb_team_strength(2025)
 strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
 ```
 
+### mbb_tournament_ineligible {#mbb_tournament_ineligible}
+
+`mbb_tournament_ineligible(seasons: 'list[int] | None' = None, *, league: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Division I basketball programs that could not play in the NCAA tournament, per season.
+
+A bundled, hand-curated list (2010-2027): programs reclassifying to Division I (four seasons
+from Division II until 2025, three since the NCAA's January 2025 rule; St. Thomas came from
+Division III), and APR, NCAA-infractions and self-imposed postseason bans. Every row cites
+its source. The college season products (bracketology, season sim, strength of schedule) use
+it by default to set `eligible`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int] \| None` | `None` | Seasons to keep, as the end year (`2024` is 2023-24). `None` keeps all. |
+| `league` | `str \| None` | `None` | `"mens"`, `"womens"`, or `None` for both. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per ineligible `(season, league, team_id)`: `season, league, team_id` (ESPN team id, Utf8), `team`, `reason` (`reclassifying`, `apr_ban`, `infractions_ban`, `self_imposed_ban` or `other`), `detail`, `source_url` and `confidence` (`high` / `medium`).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, as the end year (2024 is 2023-24). |
+| `league` | String | mens or womens. |
+| `team_id` | String | ESPN team id (Utf8). |
+| `team` | String | School name. |
+| `reason` | String | Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other. |
+| `detail` | String | Short note on the row, such as the reclassification year or the case behind the ban. |
+| `source_url` | String | The source that documents the row. |
+| `confidence` | String | How well the source documents the row: high (the NCAA, the school or the conference says so) or medium (a secondary source). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"`, `"womens"` or `None`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_tournament_ineligible
+barred = mbb_tournament_ineligible([2023], league="mens")
+
+# Pipeline next step (one line)
+
+barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
+```
+
 ### ncaa_coach_stints {#ncaa_coach_stints}
 
 `ncaa_coach_stints(coaches: 'pl.DataFrame', records: 'pl.DataFrame') -> 'pl.DataFrame'`

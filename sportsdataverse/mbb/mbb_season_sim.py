@@ -294,7 +294,7 @@ def mbb_season_projections(
     n_sims: int = 10000,
     seed: int = 0,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -307,7 +307,7 @@ def mbb_season_projections(
     n_sims: int = 10000,
     seed: int = 0,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -319,7 +319,7 @@ def mbb_season_projections(
     n_sims: int = 10000,
     seed: int = 0,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """The daily ``season_sim`` table: projected W-L, conference standings, title and bid odds.
@@ -339,7 +339,8 @@ def mbb_season_projections(
         seed: RNG seed.
         league: ``"mens"`` or ``"womens"``.
         ineligible: Team ids barred from the NCAA tournament (no bid; see
-            :func:`~sportsdataverse.mbb.mbb_bracketology.mbb_bracketology`).
+            :func:`~sportsdataverse.mbb.mbb_bracketology.mbb_bracketology`). ``None`` (default)
+            reads the bundled list.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
