@@ -270,6 +270,15 @@ def test_flag_families_are_bb_d7s(tables: dict[str, pl.DataFrame], releases: tup
     assert got["second_chance"] == poss["is_second_chance"].sum() > 0
 
 
+def test_a_release_that_carries_the_flags_is_reflagged(releases: tuple[pl.DataFrame, ...]) -> None:
+    """The producers publish BB-D7's flags on the possessions release; the rows re-flag them with this
+    version's window (here a release flagged at the old 10 s), never raise on the clash."""
+    poss, pbp, sched = releases
+    stale = add_possession_flags(poss, pbp, transition_seconds=10.0)
+    assert stale["is_transition"].sum() != add_possession_flags(poss, pbp)["is_transition"].sum()
+    assert nba_situation_rows(stale, pbp, sched).equals(nba_situation_rows(poss, pbp, sched))
+
+
 def test_vs_top_is_the_bb_d19_top_ten(tables: dict[str, pl.DataFrame], releases: tuple[pl.DataFrame, ...]) -> None:
     """``vs_top`` games are the games against the ten best teams by BB-D19's adjusted net rating."""
     poss, _, sched = releases
