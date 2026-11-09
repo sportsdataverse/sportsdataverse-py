@@ -10876,3 +10876,12 @@
   test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
   expected: kill
   note: The possession after a putback whose rebound the pbp logs after it would start OffMissedShot instead of OffMadeShot (559 possessions in a 300-game 2016-17 sample).
+- id: bb-espn-live-summary-without-article
+  group: bb-sources
+  finding: BB-D12
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '"article": pbp_txt.get("article", []),  # a live game has no recap yet'
+  mutant: '"article": pbp_txt["article"],'
+  test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
+  expected: kill
+  note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
