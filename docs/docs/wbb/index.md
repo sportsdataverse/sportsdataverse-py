@@ -168,8 +168,8 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_predict_games`](reference/additional/models-and-calculators-2#wbb_predict_games)
 - [`wbb_season_projections`](reference/additional/models-and-calculators-2#wbb_season_projections)
 - [`wbb_season_sim`](reference/additional/models-and-calculators-2#wbb_season_sim)
-- [`wbb_team_ratings`](reference/additional/models-and-calculators-2#wbb_team_ratings)
-- [`win_prob_from_margin`](reference/additional/models-and-calculators-2#win_prob_from_margin)
+- [`wbb_team_ratings`](reference/additional/models-and-calculators-3#wbb_team_ratings)
+- [`win_prob_from_margin`](reference/additional/models-and-calculators-3#win_prob_from_margin)
 
 ### Analytics {#analytics}
 

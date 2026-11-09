@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 377 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 378 | — |
 
 ## ESPN {#espn}
 
@@ -161,7 +161,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_shot_quality_model`](reference/additional/models-and-calculators-2#mbb_shot_quality_model)
 - [`mbb_team_ratings`](reference/additional/models-and-calculators-2#mbb_team_ratings)
 - [`mbb_transfer_projection`](reference/additional/models-and-calculators-2#mbb_transfer_projection)
-- [`pick_ridge_regression`](reference/additional/models-and-calculators-2#pick_ridge_regression)
+- [`pick_ridge_regression`](reference/additional/models-and-calculators-3#pick_ridge_regression)
 - [`player_per100_features`](reference/additional/models-and-calculators-3#player_per100_features)
 - [`poss_calc_fragment_sum`](reference/additional/models-and-calculators-3#poss_calc_fragment_sum)
 - [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
@@ -238,6 +238,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_team_season_flow`](reference/additional/analytics-3#mbb_team_season_flow)
 - [`mbb_team_season_rates`](reference/additional/analytics-3#mbb_team_season_rates)
 - [`mbb_team_strength`](reference/additional/analytics-4#mbb_team_strength)
+- [`mbb_tournament_ineligible`](reference/additional/analytics-4#mbb_tournament_ineligible)
 - [`ncaa_coach_stints`](reference/additional/analytics-4#ncaa_coach_stints)
 - [`ncaa_impact_rows`](reference/additional/analytics-4#ncaa_impact_rows)
 - [`ncaa_lineup_count_rows`](reference/additional/analytics-4#ncaa_lineup_count_rows)
@@ -255,7 +256,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`project_bracket`](reference/additional/analytics-4#project_bracket)
 - [`regress_shot_quality`](reference/additional/analytics-4#regress_shot_quality)
 - [`strength_of_schedule`](reference/additional/analytics-4#strength_of_schedule)
-- [`test_positional_aware_filter`](reference/additional/analytics-4#test_positional_aware_filter)
+- [`test_positional_aware_filter`](reference/additional/analytics-5#test_positional_aware_filter)
 - [`using_roster_pos`](reference/additional/analytics-5#using_roster_pos)
 - [`weighted_avg`](reference/additional/analytics-5#weighted_avg)
 

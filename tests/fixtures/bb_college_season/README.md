@@ -24,6 +24,7 @@ ids are Utf8 (`Int -> Int64 -> Utf8`). The 2024 team box comes from `../mbb_pred
 | `mbb_ncaa_seeds_2025.parquet` / `wbb_ncaa_seeds_2025.parquet` | 68 / 68 | `espn_{mbb,wbb}_scoreboard` on the first four tournament dates (8 calls, 2 s apart) | `team_id, seed`: ESPN's `curatedRank.current`, which carries the committee seed during the tournament. Four per line plus two extra at 11 and 16. |
 | `mbb_warrennolan_2024.parquet` / `wbb_warrennolan_2024.parquet` | 362 / 360 | WarrenNolan, `https://www.warrennolan.com/basketball{,w}/2024/rpi-live` and `.../net` (4 pages, downloaded once) | End of season (postseason included). `rpi_rank`, `net_rank`, the Division I `record`, home / road / neutral records and the RPI-quadrant records `q1`..`q4`. WarrenNolan computes the RPI with the NCAA formula; its quadrants use the men's NET ranges for both leagues. |
 | `mbb_warrennolan_2025.parquet` / `wbb_warrennolan_2025.parquet` | 364 / 362 | the same pages, `.../2025/...` | Out of sample. Records agree for every men's team but only 122 of 362 women's: the 2025 women's ESPN release is missing games, so the women's 2025 RPI is not gated. |
+| `mbb_schedule_2023_nec.parquet` | 79 | `load_mbb_schedule([2023])` through `normalize_college_schedule`, captured 2026-11-06 by `dev/bb_ineligible/capture_nec_2023.py` | The 2023 men's NEC games between members (nine teams). Merrimack, reclassifying, won the final over Fairleigh Dickinson 67-66; FDU took the auto-bid. The 2023 release has no `TRNMNT` type, so the final is found by its note. |
 
 ## Matching WarrenNolan to ESPN
 

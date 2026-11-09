@@ -19,9 +19,10 @@ Two pure cores + a loader wrapper (mirrors ``mbb_team_ratings`` /
   (``test_mbb_prediction_backtest``); it is bucketed to week granularity so the
   fixed point runs ~25x/season instead of once per game.
 * :func:`_compile_season_wp` -- appends the two WP columns to the pbp frame.
-  Because ``home_win_prob`` is ``mbb_in_game_win_prob``'s output unchanged, the
-  enrichment inherits the model's decile calibration (gated in
-  ``test_mbb_prediction_backtest``).
+  Because ``home_win_prob`` is ``mbb_in_game_win_prob``'s output unchanged,
+  scored on the same clock as the game page, the enrichment inherits the
+  model's holdout gates (``tests/mbb/test_mbb_in_game_wp_late_game.py``, the
+  rated-prior cells, and the paired 2026 gate in ``test_mbb_wp_model_cards.py``).
 * :func:`build_mbb_season_wp` -- loads pbp/schedule/team-box for a season and
   runs the two cores. WBB is the ``league="womens"`` shim in ``wbb_win_prob``.
 """
@@ -150,6 +151,15 @@ def _compile_season_wp(
     Returns:
         The pbp frame with :data:`_WP_COLS` appended (both ``Float64``), sorted
         by ``game_id`` then ``game_play_number``. Empty pbp returns unchanged.
+        Each game is scored the way the game page scores it and the model was
+        fit (``nba_game_page.score_win_prob``): in play order, with a null score
+        carried forward (0 before the first score) and, when the frame has
+        ``period_number`` and a period clock, overtime plays on the period clock
+        (:func:`~sportsdataverse.nba.nba_game_page.ot_adjusted_seconds`). A frame
+        without ``period_number`` or a period clock is scored on its game clock as
+        given. The regulation period count comes from the frame's first ``season``
+        (one season per call; none means the league default). Only the model input
+        is changed; the returned columns are as given.
     """
     if pbp.height == 0:
         return pbp
@@ -163,12 +173,22 @@ def _compile_season_wp(
     # neutral games are negligible and the anchor is dominated by in-game state.
     fallback = win_prob_from_margin(predict_margin(0.0, 0.0, neutral=False, league=league), league=league)
 
+    from sportsdataverse.nba.nba_game_page import _CLOCK_COLUMNS, game_regulation_periods, ot_adjusted_seconds
+
+    reclock = "period_number" in pbp.columns and any(c in pbp.columns for c in _CLOCK_COLUMNS)
+    seasons = pbp["season"].drop_nulls() if "season" in pbp.columns else pl.Series([], dtype=pl.Int64)
+    reg = game_regulation_periods(
+        "wbb" if league == "womens" else "mbb", season=int(seasons[0]) if seasons.len() else None
+    )
     frames: list[pl.DataFrame] = []
-    for (gid,), sub in pbp.group_by("game_id", maintain_order=True):
+    for (gid,), sub in pbp.sort("game_id", "game_play_number").group_by("game_id", maintain_order=True):
         p0 = pmap.get(str(gid), fallback)
         if not math.isfinite(p0):  # never publish a non-finite anchor (belt-and-suspenders vs _pregame_probs)
             p0 = fallback
-        wp = mbb_in_game_win_prob(sub, p0, league=league)  # row-aligned with sub
+        model_in = sub.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
+        if reclock:
+            model_in = ot_adjusted_seconds(model_in, regulation_periods=reg)
+        wp = mbb_in_game_win_prob(model_in, p0, league=league)  # row-aligned with sub
         frames.append(
             sub.with_columns(
                 pl.lit(p0, dtype=pl.Float64).alias("pregame_home_prob"),

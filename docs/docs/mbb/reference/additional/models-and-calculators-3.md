@@ -1,10 +1,124 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: player_per100–win_prob"
-sidebar_label: "Models and calculators: player_per100–win_prob"
+title: "Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob"
+sidebar_label: "Models and calculators: pick_ridge–win_prob"
 sidebar_position: 12
-description: "Men's college basketball — additional Python functions — Models and calculators: player_per100–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: player_per100–win_prob
+# Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob
+
+### pick_ridge_regression {#pick_ridge_regression}
+
+`pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'`
+
+Adaptively pick a ridge-regression lambda and blend in the RAPM priors.
+
+Faithful port of `RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1001-1540`)
+-- the top-level driver that, per off/def side: scales a dimensionless
+`lambda_range` by the design matrix's mean singular value
+(`avg_eigen_val`) into an actual ridge strength, solves via
+`slow_regression`/`calculate_rapm`, blends in each player's
+strong prior (`_get_strong_weight`), reconciles the possession
+-weighted team total against the actual team efficiency
+(`[IMPORTANT-EQUATION-01]`, see below), nudges the result back towards
+the weak priors on any remaining error (`apply_weak_priors`), and
+decides whether to keep sweeping `lambda` upward, roll back to the
+previous step, or stop.
+
+**`[IMPORTANT-EQUATION-01]`** (`RapmUtils.ts:1306-1314`/`:1325-1333`):
+`combined_adj_eff = sum(pct_by_player[i] * rapm[i] for i) +
+add_low_volume_adj_rtg`, compared against `actual_eff[off_or_def]`
+(the team's actual, prior-basis-adjusted efficiency, including
+bench/removed-player possessions) to derive `adj_eff_err` -- the error
+signal both the weak-prior nudge and the stopping rule react to.
+
+**Stopping rule** (checked once per `lambda` step, in order): (1) once a
+*second* step has run (`not_first_step`) and, unless in `diag_mode`,
+the current step is past `lambda_range_to_use[3]`, roll back to the
+*previous* step's `soln_matrix`/`ridge_lambda` (but **not**
+`rapm_adj_ppp`/`rapm_raw_adj_ppp`/`sd_rapm`, which stay at the
+current, over-threshold step's values -- a faithful, non-obvious TS
+asymmetry, `RapmUtils.ts:1443-1448` vs `:1483-1484`) when
+`adj_eff_err >= error_exit_thresh` (`1.35` for the low-possession
+-count offense special case, else `1.05`) **and** the error is still
+increasing (`>= last_error`); else (2) stop in place once
+`mean_diff` (the mean per-player RAPM change since the previous step)
+drops below `pick_ridge_thresh` (`0.061` off / `0.091` def --
+"more confident in offensive priors"); else (3) keep sweeping.
+
+**Adaptive-weight / prior asymmetry** (the deep-equality oracle's load
+-bearing behavior): the per-player strong-prior blend
+(`_get_strong_weight(ctx["prior_info"], adaptive_correl_weights[i])`)
+only consults `adaptive_correl_weights` when
+`ctx["prior_info"]["strong_weight"] < 0` (adaptive mode) -- a fixed,
+non-negative `strong_weight` always wins. A fixture whose
+`players_strong` entries carry no `def_adj_ppp` key makes the blend's
+`stat.get(f"{off_or_def}_adj_ppp") or 0.0` term (and, transitively,
+`calc_lineup_outputs`'s own `strong_val` term) contribute exactly
+`0` on the def side regardless of `strong_weight` or
+`adaptive_correl_weights` -- see the oracle test's `def_results1`/
+`def_results2` invariance assertions.
+
+**`svd` is `numpy.linalg.svd(..., compute_uv=False)`, singular values
+only.** Upstream's `SVD(weights[side].valueOf())` (`svd-js`) also
+computes `u`/`v`, but only `svd.q` (the singular values, via
+`mean(svd.off.q)`/`mean(svd.def.q)` at `avg_eigen_val`,
+`RapmUtils.ts:1077`) is ever read -- `u`/`v` are dead. Skipping them
+is an efficiency-only deviation with an identical result (singular
+values are unique to a matrix regardless of the underlying SVD
+implementation).
+
+**Dead-debug computation promoted to a real output (Python-side
+addition, not upstream's own shape):** upstream also computes
+`residuals`/`errSq`/`paramErrs`/`sdRapm` at this point
+(`RapmUtils.ts:1363-1394`) purely to feed a `console.log` gated
+behind the same hardcoded-`False` `debugMode` as
+`apply_weak_priors` -- none of the four is ever stored on
+`acc.output` upstream (`RapmProcessingInputs` has no `sdRapm`
+field there either). Since this module builds
+`calculate_predicted_out`/`calculate_residual_error`/
+`calc_slow_pseudo_inverse`/`calculate_sd_rapm` specifically
+so this task could surface real standard errors, this port keeps
+calling all four (matching TS's actual computation, which reuses the
+exact same `XᵀX + ridge_lambda·I` inverse `slow_regression`
+already computed -- so no *new* failure mode is introduced by keeping
+this) and additionally stores the result on `sd_rapm` -- a superset
+of, not a divergence from, the upstream return shape.
+
+**`soln_matrix`/`sd_rapm` are nested Python `list`s, not
+`NDArray`s.** Every field on the returned `RapmProcessingInputs`
+is a plain (possibly nested) Python `list`/`float` specifically so
+the whole dict stays comparable via plain `==` -- the oracle's deep
+-equality assertions (e.g. `off_results1 == off_results`) would
+otherwise raise `ValueError: truth value of an array with more than one
+element is ambiguous` the moment Python's dict/list equality machinery
+tried to `bool()` a multi-element `ndarray` comparison.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `off_weights` | `NDArray[float64]` |  | The offensive design matrix (e.g. `calc_player_weights`'s first return value). |
+| `def_weights` | `NDArray[float64]` |  | The defensive design matrix. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`. |
+| `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`) -- see the "adaptive-weight / prior asymmetry" note above. |
+| `diag_mode` | `bool` |  | If `True`, keeps sweeping every remaining `lambda` step (collecting `prev_attempts` diagnostics for all of them) even after a stopping condition has already fired, and relaxes the rollback/pick eligibility guards for the first few (`< lambda_range_to_use[3]`) diagnostic-only steps. **Not exercised by this task's oracle** (always called with `False`) -- ported faithfully from TS, uncovered by test. |
+| `agg_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key team/aggregate-level reads (`actual_eff`, the low-volume player adjustment) prefer when present. |
+| `lineup_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- forwarded to `calc_lineup_outputs` as its `use_old_val_if_possible` flag (translated: `key == "old_value"`). |
+
+**Returns**
+
+`(off_results, def_results)` -- two `RapmProcessingInputs`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import pick_ridge_regression
+
+off_results, def_results = pick_ridge_regression(
+    off_weights, def_weights, ctx, None, False
+)
+print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
+```
 
 ### player_per100_features {#player_per100_features}
 

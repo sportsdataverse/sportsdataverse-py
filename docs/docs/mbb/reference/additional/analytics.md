@@ -1061,7 +1061,7 @@ roles.filter(pl.col("archetype") == "rim protector").sort("dist_to_center").head
 
 ### mbb_bracketology {#mbb_bracketology}
 
-`mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The daily `bracketology` table: the projected field, seeds and bubble as of a date.
 
@@ -1077,7 +1077,7 @@ selects and seeds the 68-team field with `project_bracket`.
 | `season` | `int` |  | Season to project (e.g. `2024`). |
 | `as_of_date` | `date \| None` | `None` | Only use games strictly before this date (Selection-Sunday style snapshots); `None` uses every completed game. |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (reclassifying programs, postseason bans): no at-large bid, and a barred conference champion passes the auto-bid to the final's runner-up. ESPN does not flag them. |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament (reclassifying programs, postseason bans): no at-large bid, and a barred conference champion passes the auto-bid to the final's runner-up. ESPN does not flag them. `None` (default) reads the bundled list (`~sportsdataverse.mbb.mbb_tournament_eligibility.mbb_tournament_ineligible`); `()` bars no one. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**

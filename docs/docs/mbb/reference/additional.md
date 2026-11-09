@@ -304,7 +304,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_box_bpm](additional/models-and-calculators-2.md#mbb_box_bpm) | Per-player-season box Plus/Minus (offense, defense, total). |
 | [mbb_bracket_sim](additional/models-and-calculators-2.md#mbb_bracket_sim) | Single-elimination Monte Carlo over a bracket-ordered field. |
 | [mbb_draft_projection](additional/models-and-calculators-2.md#mbb_draft_projection) | Draft probability, projected pick, and pro tier per player-season. |
-| [mbb_in_game_win_prob](additional/models-and-calculators-2.md#mbb_in_game_win_prob) | Per-play home win probability from the bundled in-game logistic. |
+| [mbb_in_game_win_prob](additional/models-and-calculators-2.md#mbb_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [mbb_predict_games](additional/models-and-calculators-2.md#mbb_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [mbb_recruiting_projection](additional/models-and-calculators-2.md#mbb_recruiting_projection) | Expected freshman box-BPM per recruit + over/under-performance residual. |
 | [mbb_season_projections](additional/models-and-calculators-2.md#mbb_season_projections) | The daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
@@ -314,7 +314,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_shot_quality_model](additional/models-and-calculators-2.md#mbb_shot_quality_model) | Empirical-Bayes `zone x type` make-rate / xPoints table. |
 | [mbb_team_ratings](additional/models-and-calculators-2.md#mbb_team_ratings) | Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season. |
 | [mbb_transfer_projection](additional/models-and-calculators-2.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
-| [pick_ridge_regression](additional/models-and-calculators-2.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
+| [pick_ridge_regression](additional/models-and-calculators-3.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
 | [player_per100_features](additional/models-and-calculators-3.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
 | [poss_calc_fragment_sum](additional/models-and-calculators-3.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
 | [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted efficiency margins. |
@@ -393,6 +393,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_season_flow](additional/analytics-3.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-3.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_strength](additional/analytics-4.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [mbb_tournament_ineligible](additional/analytics-4.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
 | [ncaa_coach_stints](additional/analytics-4.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-4.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-4.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
@@ -410,7 +411,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [project_bracket](additional/analytics-4.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics-4.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
 | [strength_of_schedule](additional/analytics-4.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-4.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [test_positional_aware_filter](additional/analytics-5.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics-5.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 

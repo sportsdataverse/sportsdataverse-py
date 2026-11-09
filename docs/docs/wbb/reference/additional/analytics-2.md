@@ -1,14 +1,14 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup"
 sidebar_label: "Analytics: wbb_bracketology–wbb_lineup"
-sidebar_position: 11
+sidebar_position: 12
 description: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup
 
 ### wbb_bracketology {#wbb_bracketology}
 
-`wbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `bracketology` table: the projected field, seeds and bubble.
 
@@ -20,7 +20,7 @@ Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `leagu
 |---|---|---|---|
 | `season` | `int` |  | Season to project (e.g. `2024`). |
 | `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (in 2024, Southern Indiana won the OVC final while reclassifying; UT Martin took the bid). |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament (in 2024, Southern Indiana won the OVC final while reclassifying; UT Martin took the bid). `None` (default) reads the bundled list. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -55,7 +55,7 @@ One row per Division I team -- see the mbb core for the full contract.
 
 ```python
 from sportsdataverse.wbb import wbb_bracketology
-field = wbb_bracketology(2024, ineligible={"88"})
+field = wbb_bracketology(2024)
 ```
 
 ### wbb_coach_careers {#wbb_coach_careers}

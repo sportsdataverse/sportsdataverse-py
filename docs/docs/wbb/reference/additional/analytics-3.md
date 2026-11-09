@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team"
 sidebar_label: "Analytics: wbb_play–wbb_team"
-sidebar_position: 12
+sidebar_position: 13
 description: "Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team
@@ -394,7 +394,7 @@ wbb_situational_team(2026).filter(split="clutch").sort("net_rtg", descending=Tru
 
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
-`wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 
@@ -406,7 +406,7 @@ Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_sched
 |---|---|---|---|
 | `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
 | `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament (sets `eligible`). |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament (sets `eligible`); `None` (default) reads the bundled list for each season. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**

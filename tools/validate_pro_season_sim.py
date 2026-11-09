@@ -222,11 +222,11 @@ def main(argv: list[str] | None = None) -> int:
     pooled: dict[str, list[pl.DataFrame]] = {"shift": [], "fixed": []}
     for season in args.seasons:
         schedule = load_schedule([season - offset])
-        full = _regular_games(schedule, None)
+        full = _regular_games(schedule, None, league_id)
         rows = nba_possession_rate_rows(load_possessions([season - offset]), schedule, league_id=league_id)
         final = nba_season_standings(full, league_id=league_id)
         cut = midseason(full)
-        games = _regular_games(schedule, cut)
+        games = _regular_games(schedule, cut, league_id)
         done = games.filter(pl.col("home_pts").is_not_null())
         last_schedule = load_schedule([season - 1 - offset])
         pre = None
@@ -239,11 +239,13 @@ def main(argv: list[str] | None = None) -> int:
         model = as_of_game_model(
             rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=pre
         )
-        prior = _records(_regular_games(last_schedule, None)) if league_id == "10" else None
+        prior = _records(_regular_games(last_schedule, None, league_id)) if league_id == "10" else None
         entry: dict[str, object] = {"as_of": str(cut), "standings_check": check_standings(final, schedule, league_id)}
         for name, unc in (("shift", True), ("fixed", False)):
             sim = simulate_pro_season(
-                games.select("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts"),
+                games.select(
+                    "season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts", "neutral_site"
+                ),
                 model,
                 league_id=league_id,
                 n_sims=args.n_sims,

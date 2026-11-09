@@ -103,11 +103,11 @@ def test_transition_frequency_gate_on_wnba_fixtures(monkeypatch) -> None:
         poss = W.wnba_play_context(gid)
         clean = poss.filter(
             (pl.col("count_as_possession") == True)  # noqa: E712
-            & (pl.col("is_garbage_time") == False)  # noqa: E712
+            & (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
             & (pl.col("is_heave_possession") == False)  # noqa: E712
         )
         assert clean.height >= 150, f"{gid}: only {clean.height} clean possessions — fixture shrunk?"
-        freqs.append(clean["is_transition"].mean())
+        freqs.append(clean["is_transition_ctg"].mean())
 
     mean = sum(freqs) / len(freqs)
     lo, hi = TRANSITION_FREQ_GATE

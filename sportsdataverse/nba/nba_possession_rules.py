@@ -951,3 +951,48 @@ def is_possession_ending_event(ctx: EventContext, i: int, offense_team_id: int, 
     if et == "jump_ball":
         return jump_ball_ends_possession(ctx, i)
     return False
+
+
+#: The team-level shot / free-throw counts of a possession row.
+SHOT_KEYS = ("fg2a", "fg2m", "fg3a", "fg3m", "fta", "ftm")
+
+
+def credit_defense_scoring(records: "list[dict]", carries: "list[tuple[int, int, int, dict[str, int]]]") -> None:
+    """Credit the defense's points and shots inside a possession to that team's next possession, in place.
+
+    A possession row has one offense, so a defense score inside it (a technical or flagrant free
+    throw, or a basket a misplaced boundary puts there) used to vanish: neither ``points`` nor the
+    shot counts kept it, and a game's possession points missed its final score. The possession
+    count is unchanged. ``points`` stays a score step and the shot counts stay event counts, as on
+    the offense side, so ``points == 2*fg2m + 3*fg3m + ftm`` holds on a receiving row exactly when
+    it holds for the carried part. It does not for a challenge award posted on a replay row with no
+    made-shot row (the step moves, no shot does), or for a G League single free throw worth 2 or 3
+    (one ``ftm``). pbpstats credits these per event; this is the per-row form.
+
+    Args:
+        records: The game's possession rows (dicts with ``offense_team_id``,
+            ``count_as_possession``, ``points`` and the :data:`SHOT_KEYS` counts), in order.
+        carries: ``(row, team, points, shots)``: the index of the row the defense scored in, the
+            defense team, its score step there and its shot counts there. Each is added to the
+            team's next counted row in the same period; else its last earlier counted row in the
+            same period; else its next counted row; else its last earlier counted row; else its
+            next row; else its last earlier row. Keeping the period keeps the period splits
+            right: in NBA 2025-26, of 382 carries none crosses a period, 6 land on an earlier
+            row and 4 cross the 4th quarter's 5:00 line. A team with no row at all keeps
+            nothing (it cannot happen in a real game).
+
+    Returns:
+        None. ``records`` is updated in place.
+    """
+    for at, team, pts, shots in carries:
+        later = [r for r in records[at + 1 :] if r["offense_team_id"] == team]
+        earlier = [r for r in reversed(records[:at]) if r["offense_team_id"] == team]
+        rows = later + earlier  # nearest first on each side
+        same = [r for r in rows if r["period"] == records[at]["period"]]
+        pools = ([r for r in same if r["count_as_possession"]], [r for r in rows if r["count_as_possession"]], rows)
+        target = next((p[0] for p in pools if p), None)
+        if target is None:  # ponytail: a team with no possession row at all; nothing to credit
+            continue
+        target["points"] += pts
+        for k, v in shots.items():
+            target[k] += v

@@ -191,7 +191,13 @@ def normalize_college_schedule(raw: pl.DataFrame) -> pl.DataFrame:
 
 
 def _is_conf_tourney() -> pl.Expr:
-    return (pl.col("type_abbreviation") == "TRNMNT") & (pl.col("conference_competition") == True)  # noqa: E712
+    # ESPN's releases through 2023 carry no TRNMNT/STD type (null or "N/A"); there the note names the
+    # tournament ("Northeast Conference Tournament - Final", "America East Playoffs - Semifinal")
+    kind = pl.col("type_abbreviation").fill_null("")
+    legacy = ~kind.is_in(["TRNMNT", "STD"]) & pl.col("notes_headline").fill_null("").str.contains(
+        r"(?i)tournament|championship|playoffs"
+    )
+    return ((kind == "TRNMNT") | legacy) & (pl.col("conference_competition") == True)  # noqa: E712
 
 
 def college_teams(schedule: pl.DataFrame, ineligible: Iterable[str] = ()) -> pl.DataFrame:
@@ -650,7 +656,9 @@ def conference_auto_bids(results: pl.DataFrame, teams: pl.DataFrame, resume: pl.
     The auto-bid goes to the conference-tournament champion: the winner of the conference's
     last tournament game, once that game's ESPN note ends in "Final" -- or the runner-up when
     the champion is ineligible (Southern Indiana won the 2024 women's OVC final; UT Martin took
-    the bid). Before the final the projected auto-bid is the conference leader among eligible
+    the bid), and the eligible member with the best conference record when both finalists are.
+    The ASUN and WAC give it to the regular-season leader instead (Bellarmine 2022, California
+    Baptist women 2021); that rule is not modelled. Before the final the projected auto-bid is the conference leader among eligible
     teams still alive in the tournament (no tournament loss): best conference winning
     percentage, ties to the higher ``net_estimate``. Independents get none.
 
@@ -671,8 +679,13 @@ def conference_auto_bids(results: pl.DataFrame, teams: pl.DataFrame, resume: pl.
     """
     status = _conference_status(results, teams)
     lead = (
-        resume.join(status.select("season", "conference_id", "alive"), on=["season", "conference_id"], how="inner")
-        .filter(pl.col("alive").list.contains(pl.col("team_id")) & (pl.col("eligible") == True))  # noqa: E712
+        resume.join(
+            status.select("season", "conference_id", "alive", "winner_id"), on=["season", "conference_id"], how="inner"
+        )
+        .filter(
+            (pl.col("alive").list.contains(pl.col("team_id")) | pl.col("winner_id").is_not_null())
+            & (pl.col("eligible") == True)  # noqa: E712
+        )
         .with_columns(
             (pl.col("conf_wins") / pl.max_horizontal(pl.col("conf_wins") + pl.col("conf_losses"), pl.lit(1))).alias(
                 "_pct"
@@ -688,7 +701,7 @@ def conference_auto_bids(results: pl.DataFrame, teams: pl.DataFrame, resume: pl.
             "season",
             "conference_id",
             pl.coalesce("champion_id", "leader").alias("team_id"),
-            pl.col("champion_id").is_not_null().alias("champion"),
+            pl.col("winner_id").is_not_null().alias("champion"),
         )
         .filter(pl.col("team_id").is_not_null())
         .sort("season", "conference_id")
@@ -726,7 +739,11 @@ def _conference_status(results: pl.DataFrame, teams: pl.DataFrame) -> pl.DataFra
             .alias("_l"),
         )
         .with_columns(
-            pl.when(pl.col("_w").is_in(barred)).then(pl.col("_l")).otherwise(pl.col("_w")).alias("champion_id")
+            pl.when(~pl.col("_w").is_in(barred))
+            .then(pl.col("_w"))
+            .when(~pl.col("_l").is_in(barred))
+            .then(pl.col("_l"))
+            .alias("champion_id")  # null when both finalists are barred: the best eligible record takes it
         )
         .rename({"_w": "winner_id"})
         .drop("_l")
@@ -1086,7 +1103,8 @@ def _conference_tournament(
     Neutral-site single elimination of the ``alive`` members, seeded by simulated conference
     record (AdjEM breaks ties), byes to the top seeds. Each game moves WAB and Quad-1 wins in
     place (``t["wab"]`` / ``t["q1"]``) and the title count (``t["title"]``). An ineligible
-    champion passes the auto-bid to the runner-up; a holder of -1 means no eligible holder.
+    champion passes the auto-bid to the runner-up, and when both finalists are barred to the
+    top-seeded eligible team; a holder of -1 means no eligible team is alive.
     """
     c = get_constants(league)
     em, b = t["em"], cpct.shape[0]
@@ -1115,7 +1133,9 @@ def _conference_tournament(
     champ = slot[:, 0]
     np.add.at(t["title"], champ, 1.0)
     holder = np.where(t["eligible"][champ] | (runner_up < 0), champ, runner_up)
-    return np.where(t["eligible"][holder], holder, -1)
+    elig = t["eligible"][ranked]  # both finalists barred: the top-seeded eligible team takes it
+    top = np.where(elig.any(axis=1), ranked[np.arange(b), np.argmax(elig, axis=1)], -1)
+    return np.where(t["eligible"][holder], holder, top)
 
 
 def _conference_bids(
@@ -1138,9 +1158,12 @@ def _conference_bids(
         st = status[k]
         mem = np.array([idx[x] for x in st["members"] if x in idx], dtype=np.int64)
         acc["reg"][mem] += (cpct[:, mem] >= cpct[:, mem].max(axis=1, keepdims=True) - 1e-12).sum(axis=0)
-        if st["champion_id"] is not None:  # the final is played
-            auto[:, idx[st["champion_id"]]] = True
+        if st["winner_id"] is not None:  # the final is played
             t["title"][idx[st["winner_id"]]] += b
+            if st["champion_id"] is not None:
+                auto[:, idx[st["champion_id"]]] = True
+            elif (ok := mem[t["eligible"][mem]]).size:  # both finalists barred: the best eligible record
+                auto[np.arange(b), ok[np.argmax(cpct[:, ok], axis=1)]] = True
             continue
         alive = np.array([idx[x] for x in st["alive"] if x in idx], dtype=np.int64)
         if alive.size:
@@ -1324,7 +1347,7 @@ def season_inputs(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     prior_season: tuple[pl.DataFrame, pl.DataFrame] | None = None,
 ) -> SeasonInputs:
     """Split, rate and résumé one season from a normalized schedule and its team box.
@@ -1335,7 +1358,8 @@ def season_inputs(
         as_of_date: Games strictly before this date count as played; ``None`` takes every
             completed game.
         league: ``"mens"`` or ``"womens"``.
-        ineligible: Team ids barred from the tournament (:func:`college_teams`).
+        ineligible: Team ids barred from the tournament (:func:`college_teams`). ``None`` (default) reads the bundled list
+            (:func:`~sportsdataverse.mbb.mbb_tournament_eligibility.mbb_tournament_ineligible`); ``()`` bars no one.
         prior_season: The previous season's ``(schedule, team_box)``, normalized the same way;
             its final ratings become the preseason prior (:func:`season_prior`). ``None`` rates
             on this season's games alone.
@@ -1355,7 +1379,11 @@ def season_inputs(
     """
     if schedule.get_column("season").n_unique() > 1:
         raise ValueError("season_inputs takes one season at a time")
-    teams = college_teams(schedule, ineligible)
+    if ineligible is None and schedule.height:
+        from sportsdataverse.mbb.mbb_tournament_eligibility import _ineligible_team_ids
+
+        ineligible = _ineligible_team_ids(int(schedule.get_column("season")[0]), league)
+    teams = college_teams(schedule, () if ineligible is None else ineligible)
     played, remaining = split_season(schedule, as_of_date)
     prior = None if prior_season is None else season_prior(*prior_season, teams, league=league)
     resume = season_resume(played, team_box, teams, league=league, as_of_date=as_of_date, prior=prior)
@@ -1367,7 +1395,7 @@ def load_season_inputs(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
 ) -> SeasonInputs:
     """:func:`season_inputs` from the released ESPN schedule and team box.
 
@@ -1378,7 +1406,8 @@ def load_season_inputs(
         season: The season (e.g. ``2024``).
         as_of_date: Games strictly before this date count as played.
         league: ``"mens"`` or ``"womens"``.
-        ineligible: Team ids barred from the tournament (:func:`college_teams`).
+        ineligible: Team ids barred from the tournament (:func:`college_teams`); ``None``
+            (default) reads the bundled list for the season.
 
     Returns:
         A :class:`SeasonInputs`.
