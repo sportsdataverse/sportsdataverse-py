@@ -89,3 +89,19 @@ def test_paired_difference_is_ridge_minus_fixed() -> None:
     d = np.array([1.0, -1.0, 0.0, -2.0])
     by_week = np.array([d[:2].sum(), d[2:].sum()]) - 2 * d.mean()
     assert np.isclose(out["ridge_minus_fixed_margin_mae"]["se_week"], np.sqrt((by_week**2).sum()) / 4)
+
+
+@pytest.mark.parametrize(
+    ("train", "holdout", "message"),
+    [
+        (["2016"], ["2016", "2025"], "train and holdout seasons must be disjoint"),
+        (["2024"], ["2023", "2025"], "penalty's fit seasons"),
+    ],
+)
+def test_holdout_must_be_unseen(
+    train: list[str], holdout: list[str], message: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exc:
+        cmp.main(["--league", "mbb", "--train", *train, "--holdout", *holdout])
+    assert exc.value.code == 2
+    assert message in capsys.readouterr().err

@@ -46,6 +46,7 @@ from sportsdataverse._common.ratings import opponent_adjusted_ridge
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA
 
 __all__ = [
+    "COLLEGE_RIDGE_FIT_SEASONS",
     "COLLEGE_RIDGE_LAMBDA",
     "COLLEGE_TEAM_STRENGTH_SCHEMA",
     "GAMES_SCHEMA",
@@ -76,6 +77,8 @@ RIDGE_LAMBDA: dict[str, float] = {"00": 1600.0, "10": 800.0}
 #: 100); each held-out season gets 50, regret <= 0.022. College penalties are far below the NBA's
 #: 1600: college teams spread much wider, so shrinking a rating toward average costs more.
 COLLEGE_RIDGE_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 50.0}
+#: The seasons :data:`COLLEGE_RIDGE_LAMBDA` was fit on: the comparison tool refuses to score them.
+COLLEGE_RIDGE_FIT_SEASONS: tuple[int, ...] = (2016, 2017, 2018, 2019, 2020, 2022, 2023)
 
 #: Adjusted team ratings, one row per (season, team).
 RATINGS_SCHEMA: dict[str, pl.DataType] = {

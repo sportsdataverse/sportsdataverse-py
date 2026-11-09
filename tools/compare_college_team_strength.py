@@ -53,7 +53,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fit_preseason_prior import cutoffs, load_college  # noqa: E402
 
 from sportsdataverse._common.metrics import brier_score, log_loss_score  # noqa: E402
-from sportsdataverse._common.team_strength import COLLEGE_RIDGE_LAMBDA, possession_ridge_ratings  # noqa: E402
+from sportsdataverse._common.team_strength import (  # noqa: E402
+    COLLEGE_RIDGE_FIT_SEASONS,
+    COLLEGE_RIDGE_LAMBDA,
+    possession_ridge_ratings,
+)
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency  # noqa: E402
 from sportsdataverse.mbb.mbb_team_season_rates import _league_loaders, ncaa_possession_rate_rows  # noqa: E402
 
@@ -296,6 +300,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     if set(args.train) & set(args.holdout):
         ap.error("train and holdout seasons must be disjoint")
+    if set(args.holdout) & set(COLLEGE_RIDGE_FIT_SEASONS):
+        ap.error(f"holdout seasons must be disjoint from the penalty's fit seasons {COLLEGE_RIDGE_FIT_SEASONS}")
     result = compare(args.league, args.train, args.holdout, args.cache, COLLEGE_RIDGE_LAMBDA[_COLLEGE[args.league]])
     text = json.dumps(result, indent=2)
     print(text)

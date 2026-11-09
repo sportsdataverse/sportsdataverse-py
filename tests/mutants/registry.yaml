@@ -8899,6 +8899,26 @@
   expected: kill
   note: The cutoff day's games would never be scored.
 
+- id: bb-ts-fit-tool-weight
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/fit_team_strength_ridge.py
+  snippet: '                weight_col="n",'
+  mutant: '                weight_col=None,'
+  test: tests/tools/test_fit_team_strength_ridge.py::test_grouped_weighted_cv_matches_the_ungrouped_fit
+  expected: kill
+  note: Collapsed possessions would count once each, so the CV that picks COLLEGE_RIDGE_LAMBDA scores a different fit.
+
+- id: bb-ts-compare-fit-seasons
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/compare_college_team_strength.py
+  snippet: '    if set(args.holdout) & set(COLLEGE_RIDGE_FIT_SEASONS):'
+  mutant: '    if False:'
+  test: tests/tools/test_compare_college_team_strength.py::test_holdout_must_be_unseen
+  expected: kill
+  note: A holdout could score the penalty on the seasons it was fit on.
+
 - id: bb-ps-two-team-point-diff-first
   group: bb-pro-season
   finding: BB-D18
