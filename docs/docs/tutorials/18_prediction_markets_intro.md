@@ -128,22 +128,22 @@ series = safe("Kalshi sports series", lambda: odds.kalshi_series_list(category="
 
 
     shape: (10, 3)
-    ┌───────────────────────┬───────────────────────────────────────────────────────┬───────────┐
-    │ ticker                ┆ title                                                 ┆ frequency │
-    │ ---                   ┆ ---                                                   ┆ ---       │
-    │ str                   ┆ str                                                   ┆ str       │
-    ╞═══════════════════════╪═══════════════════════════════════════════════════════╪═══════════╡
-    │ KXNFLASSCOACH         ┆ NFL Assistant Coach of the Year                       ┆ annual    │
-    │ KXNBAFIRSTTIMECHAMP   ┆ NBA First Time Champion                               ┆ custom    │
-    │ KXNBAEUROPEANNOUNCE   ┆ NBA Europe Inaugural Season Being Announced           ┆ custom    │
-    │ KXNCAAFTEAMRSHYDS     ┆ College Football Team Rushing Yards                   ┆ custom    │
-    │ KXNCAAFEQBTTS         ┆ College Football Both Teams to Score in Every Quarter ┆ custom    │
-    │ KXNCAAMB2H            ┆ Men's College Basketball 2nd Half Winner              ┆ custom    │
-    │ KXNBAPLAYOFFWINS      ┆ NBA Playoff Wins by Team                              ┆ custom    │
-    │ KXNHLSERIESTOTALGOALS ┆ NHL Series Total Goals                                ┆ custom    │
-    │ KXNBALADDERPTS        ┆ NBA Player Points Ladder                              ┆ custom    │
-    │ KXNCAAWB2QSPREAD      ┆ Women's College Basketball 2nd Quarter Spread         ┆ custom    │
-    └───────────────────────┴───────────────────────────────────────────────────────┴───────────┘
+    ┌────────────────────────┬───────────────────────────────────────────────────┬───────────┐
+    │ ticker                 ┆ title                                             ┆ frequency │
+    │ ---                    ┆ ---                                               ┆ ---       │
+    │ str                    ┆ str                                               ┆ str       │
+    ╞════════════════════════╪═══════════════════════════════════════════════════╪═══════════╡
+    │ KXNCAAMBCBC            ┆ Men's College Basketball Crown Winner             ┆ custom    │
+    │ KXNBAFINALSVIEWERGAME7 ┆ NBA finals viewership                             ┆ custom    │
+    │ KXWNBADRAFTTOP3        ┆ WNBA Draft Top 3                                  ┆ annual    │
+    │ KXNCAAFSBELTQUAL       ┆ College Football Sun Belt Championship Qualifiers ┆ annual    │
+    │ KXNBAFINMVP            ┆ NBA Finals MVP                                    ┆ annual    │
+    │ KXNCAAMB2ML            ┆ College Basketball 2-Moneyline Combo              ┆ one_off   │
+    │ KXNHL3PBTTS            ┆ NHL Both Teams to Score in 3rd Period             ┆ custom    │
+    │ KXNCAABBPLAYOFFS       ┆ College Baseball Playoff Qualifiers               ┆ custom    │
+    │ KXNBADRAFT6            ┆ NBA Draft Sixth Pick                              ┆ annual    │
+    │ KXNCAAFGAME            ┆ College Football Game                             ┆ custom    │
+    └────────────────────────┴───────────────────────────────────────────────────┴───────────┘
 
 
 
@@ -164,24 +164,24 @@ mkts.select([c for c in cols if c in mkts.columns]) if mkts is not None and mkts
 ```
 
     ✅ Kalshi NFL events
-    ✅ markets KXNFLGAME-26NOV05JACBAL
+    ✅ markets KXNFLGAME-26NOV09BUFMIN
 
 
 
 
 
     shape: (2, 6)
-    ┌─────────────────┬─────────────────┬────────────────┬────────────────┬────────────────┬───────────┐
-    │ ticker          ┆ title           ┆ yes_bid_dollar ┆ yes_ask_dollar ┆ last_price_dol ┆ volume_fp │
-    │ ---             ┆ ---             ┆ s              ┆ s              ┆ lars           ┆ ---       │
-    │ str             ┆ str             ┆ ---            ┆ ---            ┆ ---            ┆ str       │
-    │                 ┆                 ┆ str            ┆ str            ┆ str            ┆           │
-    ╞═════════════════╪═════════════════╪════════════════╪════════════════╪════════════════╪═══════════╡
-    │ KXNFLGAME-26NOV ┆ Baltimore wins  ┆ 0.1800         ┆ 0.1900         ┆ 0.1900         ┆ 548137.68 │
-    │ 05JACBAL-BAL    ┆                 ┆                ┆                ┆                ┆           │
-    │ KXNFLGAME-26NOV ┆ Jacksonville    ┆ 0.8100         ┆ 0.8200         ┆ 0.8200         ┆ 381833.30 │
-    │ 05JACBAL-JAC    ┆ wins            ┆                ┆                ┆                ┆           │
-    └─────────────────┴─────────────────┴────────────────┴────────────────┴────────────────┴───────────┘
+    ┌─────────────────┬────────────────┬────────────────┬────────────────┬────────────────┬────────────┐
+    │ ticker          ┆ title          ┆ yes_bid_dollar ┆ yes_ask_dollar ┆ last_price_dol ┆ volume_fp  │
+    │ ---             ┆ ---            ┆ s              ┆ s              ┆ lars           ┆ ---        │
+    │ str             ┆ str            ┆ ---            ┆ ---            ┆ ---            ┆ str        │
+    │                 ┆                ┆ str            ┆ str            ┆ str            ┆            │
+    ╞═════════════════╪════════════════╪════════════════╪════════════════╪════════════════╪════════════╡
+    │ KXNFLGAME-26NOV ┆ Buffalo wins   ┆ 0.6300         ┆ 0.6400         ┆ 0.6400         ┆ 3731011.95 │
+    │ 09BUFMIN-BUF    ┆                ┆                ┆                ┆                ┆            │
+    │ KXNFLGAME-26NOV ┆ Minnesota wins ┆ 0.3600         ┆ 0.3700         ┆ 0.3700         ┆ 2718892.69 │
+    │ 09BUFMIN-MIN    ┆                ┆                ┆                ┆                ┆            │
+    └─────────────────┴────────────────┴────────────────┴────────────────┴────────────────┴────────────┘
 
 
 
@@ -207,7 +207,7 @@ else:
     print("no order book to draw")
 ```
 
-    ✅ order book KXNFLGAME-26NOV05JACBAL-BAL
+    ✅ order book KXNFLGAME-26NOV09BUFMIN-BUF
 
 
 
@@ -222,7 +222,7 @@ trades = safe(f"trades {ticker}", lambda: odds.kalshi_trades(limit="20", ticker=
 trades.head() if trades is not None and trades.height else "no recent trades"
 ```
 
-    ✅ trades KXNFLGAME-26NOV05JACBAL-BAL
+    ✅ trades KXNFLGAME-26NOV09BUFMIN-BUF
 
 
 
@@ -235,26 +235,26 @@ trades.head() if trades is not None and trades.height else "no recent trades"
     │ str      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ str       ┆ str       ┆ ---       │
     │          ┆ str       ┆ bool      ┆ str       ┆   ┆ str       ┆           ┆           ┆ str       │
     ╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 47.76    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
-    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ cf89-a20d ┆           │
-    │          ┆ 4.17507Z  ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -664d-42a ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ ac8bd672d ┆           │
-    │ 99.61    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
-    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ a8c9-b2c9 ┆           │
-    │          ┆ 2.880027Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -57cc-eaa ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ c6ebf74f1 ┆           │
-    │ 14.94    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
-    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ 8909-b0c9 ┆           │
-    │          ┆ 0.973545Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -7f79-fa2 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 256174efd ┆           │
-    │ 24.90    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0727301e- ┆ 0.1900    │
-    │          ┆ 4T05:47:2 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ f4e9-84d5 ┆           │
-    │          ┆ 1.609841Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -2f00-3dc ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 88786273d ┆           │
-    │ 9.96     ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0727301f- ┆ 0.1900    │
-    │          ┆ 4T05:47:0 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ c389-9c0d ┆           │
-    │          ┆ 2.307212Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -daec-820 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 8be969681 ┆           │
+    │ 7.62     ┆ 2026-11-0 ┆ false     ┆ 0.3600    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0726b7e1- ┆ 0.6400    │
+    │          ┆ 9T23:00:2 ┆           ┆           ┆   ┆           ┆ -26NOV09B ┆ 0d29-b94f ┆           │
+    │          ┆ 0.236432Z ┆           ┆           ┆   ┆           ┆ UFMIN-BUF ┆ -3e4d-388 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ ee377f437 ┆           │
+    │ 14.00    ┆ 2026-11-0 ┆ false     ┆ 0.3600    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0726b7e2- ┆ 0.6400    │
+    │          ┆ 9T23:00:1 ┆           ┆           ┆   ┆           ┆ -26NOV09B ┆ ece9-b537 ┆           │
+    │          ┆ 8.432984Z ┆           ┆           ┆   ┆           ┆ UFMIN-BUF ┆ -9563-2d6 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 2026b4c7f ┆           │
+    │ 7.62     ┆ 2026-11-0 ┆ false     ┆ 0.3600    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0726b7e2- ┆ 0.6400    │
+    │          ┆ 9T23:00:1 ┆           ┆           ┆   ┆           ┆ -26NOV09B ┆ d3a9-8db3 ┆           │
+    │          ┆ 6.641867Z ┆           ┆           ┆   ┆           ┆ UFMIN-BUF ┆ -6b83-cce ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ c63774667 ┆           │
+    │ 14.00    ┆ 2026-11-0 ┆ false     ┆ 0.3600    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0726b7e2- ┆ 0.6400    │
+    │          ┆ 9T23:00:1 ┆           ┆           ┆   ┆           ┆ -26NOV09B ┆ c3c9-a48b ┆           │
+    │          ┆ 5.455444Z ┆           ┆           ┆   ┆           ┆ UFMIN-BUF ┆ -733e-039 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 9b5d4a95b ┆           │
+    │ 111.00   ┆ 2026-11-0 ┆ false     ┆ 0.3600    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0726b7e2- ┆ 0.6400    │
+    │          ┆ 9T23:00:1 ┆           ┆           ┆   ┆           ┆ -26NOV09B ┆ b369-9e13 ┆           │
+    │          ┆ 4.170392Z ┆           ┆           ┆   ┆           ┆ UFMIN-BUF ┆ -2a98-3b9 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ e3fab98eb ┆           │
     └──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
@@ -311,21 +311,24 @@ pmk.select("question", "outcomes", "outcome_prices", "volume") if pmk is not Non
 
 
     shape: (5, 4)
-    ┌────────────────────────────────────────────┬───────────────────┬────────────────────┬────────────┐
-    │ question                                   ┆ outcomes          ┆ outcome_prices     ┆ volume     │
-    │ ---                                        ┆ ---               ┆ ---                ┆ ---        │
-    │ str                                        ┆ str               ┆ str                ┆ str        │
-    ╞════════════════════════════════════════════╪═══════════════════╪════════════════════╪════════════╡
-    │ Will the US birth rate in 2026 be 53.0 or  ┆ ["Yes", "No"]     ┆ ["0.235", "0.765"] ┆ 99.999426  │
-    │ higher?                                    ┆                   ┆                    ┆            │
-    │ CD Tarancón vs. Levante UD: Levante UD 1st ┆ ["Over", "Under"] ┆ ["0.48", "0.52"]   ┆ 99.999286  │
-    │ Half O/U 1.5                               ┆                   ┆                    ┆            │
-    │ Will Jordan Love have 3,299.5+ passing     ┆ ["Yes", "No"]     ┆ ["0.865", "0.135"] ┆ 999.983821 │
-    │ yards in the 2026-27 …                     ┆                   ┆                    ┆            │
-    │ SK Rapid vs. Wolfsberger AC: O/U 5.5       ┆ ["Over", "Under"] ┆ ["0.17", "0.83"]   ┆ 99.9975    │
-    │ Fenerbahçe SK vs. Liverpool FC: 1st Half   ┆ ["Over", "Under"] ┆ ["0.053", "0.947"] ┆ 999.96975  │
-    │ O/U 4.5                                    ┆                   ┆                    ┆            │
-    └────────────────────────────────────────────┴───────────────────┴────────────────────┴────────────┘
+    ┌────────────────────────────────┬────────────────────────────────┬────────────────────┬───────────┐
+    │ question                       ┆ outcomes                       ┆ outcome_prices     ┆ volume    │
+    │ ---                            ┆ ---                            ┆ ---                ┆ ---       │
+    │ str                            ┆ str                            ┆ str                ┆ str       │
+    ╞════════════════════════════════╪════════════════════════════════╪════════════════════╪═══════════╡
+    │ CD Tarancón vs. Levante UD:    ┆ ["Over", "Under"]              ┆ ["0.32", "0.68"]   ┆ 99.999286 │
+    │ Levante UD 1st Half O/U 1.5    ┆                                ┆                    ┆           │
+    │ Counter-Strike: MEIA NOITE vs  ┆ ["MEIA NOITE", "BORRACHEIROS"] ┆ ["0.395", "0.605"] ┆ 99.9968   │
+    │ BORRACHEIROS (BO3) - CCT       ┆                                ┆                    ┆           │
+    │ South…                         ┆                                ┆                    ┆           │
+    │ Southport FC vs. Macclesfield  ┆ ["Over", "Under"]              ┆ ["0.505", "0.495"] ┆ 99.992197 │
+    │ FC: O/U 2.5                    ┆                                ┆                    ┆           │
+    │ Gateshead FC vs. Tamworth FC:  ┆ ["Over", "Under"]              ┆ ["0.5", "0.5"]     ┆ 99.990435 │
+    │ 1st Half O/U 0.5               ┆                                ┆                    ┆           │
+    │ Will Connor Bedard record 30+  ┆ ["Yes", "No"]                  ┆ ["0.525", "0.475"] ┆ 99.99     │
+    │ goals in the 2026-27 regular   ┆                                ┆                    ┆           │
+    │ s…                             ┆                                ┆                    ┆           │
+    └────────────────────────────────┴────────────────────────────────┴────────────────────┴───────────┘
 
 
 
@@ -347,13 +350,13 @@ out
 
 
     shape: (1, 1)
-    ┌───────┐
-    │ mid   │
-    │ ---   │
-    │ str   │
-    ╞═══════╡
-    │ 0.235 │
-    └───────┘
+    ┌──────┐
+    │ mid  │
+    │ ---  │
+    │ str  │
+    ╞══════╡
+    │ 0.32 │
+    └──────┘
 
 
 

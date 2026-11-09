@@ -1056,7 +1056,7 @@ redzone
     │ SEA     ┆ 27.0   ┆ 125      ┆ 21.6   │
     │ NO      ┆ 25.0   ┆ 120      ┆ 20.8   │
     │ NYJ     ┆ 31.0   ┆ 150      ┆ 20.7   │
-    │ WAS     ┆ 52.0   ┆ 255      ┆ 20.4   │
+    │ ARI     ┆ 32.0   ┆ 157      ┆ 20.4   │
     └─────────┴────────┴──────────┴────────┘
 
 
@@ -1266,7 +1266,7 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 
 
 
-    {'current_season': 2026, 'current_week': 8, 'most_recent_season': 2026}
+    {'current_season': 2026, 'current_week': 9, 'most_recent_season': 2026}
 
 
 

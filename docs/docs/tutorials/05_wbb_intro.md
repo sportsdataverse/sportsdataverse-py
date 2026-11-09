@@ -333,45 +333,45 @@ rankings = safe('rankings (AP/Coaches poll)', wbb.espn_wbb_rankings)
     │ i64     ┆ str       ┆ ---        ┆ str       ┆   ┆ ---       ┆ ---       ┆ str       ┆ ---       │
     │         ┆           ┆ str        ┆           ┆   ┆ str       ┆ str       ┆           ┆ str       │
     ╞═════════╪═══════════╪════════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ SC        ┆ 73000a    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ SC        ┆ 73000a    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ CONN      ┆ 0c2340    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ MICH      ┆ 00274c    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ USC       ┆ 9d2235    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ USC       ┆ 9d2235    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ DUKE      ┆ 00539b    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ CONN      ┆ 0c2340    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ MICH      ┆ 00274c    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ DUKE      ┆ 00539b    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
     │ …       ┆ …         ┆ …          ┆ …         ┆ … ┆ …         ┆ …         ┆ …         ┆ …         │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ VAN       ┆ 000000    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ VAN       ┆ 000000    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ LSU       ┆ 461d76    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ LSU       ┆ 461d76    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ IOWA      ┆ 231f20    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ IOWA      ┆ 231f20    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ UCLA      ┆ 2774ae    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ UCLA      ┆ 2774ae    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
-    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ UNC       ┆ 7bafd4    ┆ https://a ┆ 2026-10-2 │
-    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 0T19:32Z  │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ UK        ┆ 0033a0    ┆ https://a ┆ 2026-11-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 9T20:19Z  │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
     │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
     └─────────┴───────────┴────────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
@@ -706,22 +706,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5181772    ┆ Emily Scholl         ┆ Holy Cross              ┆ 34    ┆ 0            ┆ null │
-    │ 5174255    ┆ Maryn Archer         ┆ Arkansas                ┆ 33    ┆ 0            ┆ null │
-    │ 4594728    ┆ Nya Mitchels         ┆ UT Rio Grande           ┆ 29    ┆ 0            ┆ null │
-    │ 4900464    ┆ Yamani McCollough    ┆ Bethune                 ┆ 31    ┆ 0            ┆ null │
-    │ 5174714    ┆ Tate Chappell        ┆ Appalachian St          ┆ 32    ┆ 0            ┆ null │
-    │ 5107676    ┆ Draya Wacker         ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
-    │ 5176108    ┆ Jayda Allie          ┆ Marshall                ┆ 33    ┆ 0            ┆ null │
-    │ 5106157    ┆ Mikayla Parks        ┆ Kansas St               ┆ 34    ┆ 0            ┆ null │
-    │ 5177785    ┆ Morgan Cyiark        ┆ Florida A&M             ┆ 30    ┆ 0            ┆ null │
-    │ 5106192    ┆ Charia Smith         ┆ Marquette               ┆ 32    ┆ 0            ┆ null │
-    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬─────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name    ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                     ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                     ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪═════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 4704514    ┆ Jadaia Reid             ┆ Delaware                ┆ 31    ┆ 0            ┆ null │
+    │ 4704365    ┆ Rochelle Fourie         ┆ CSU Northridge          ┆ 30    ┆ 0            ┆ null │
+    │ 5174437    ┆ Gabby Brooks            ┆ Virginia Tech           ┆ 33    ┆ 0            ┆ null │
+    │ 4898430    ┆ Arielle Mackey-Williams ┆ BYU                     ┆ 33    ┆ 0            ┆ null │
+    │ 5176436    ┆ Tina Njike              ┆ Penn                    ┆ 28    ┆ 0            ┆ null │
+    │ 5178248    ┆ Izabella Forker         ┆ Merrimack               ┆ 31    ┆ 0            ┆ null │
+    │ 5178450    ┆ Maria Messling          ┆ W Illinois              ┆ 30    ┆ 0            ┆ null │
+    │ 5196144    ┆ Adhel Tac               ┆ South Carolina          ┆ 21    ┆ 0            ┆ null │
+    │ 5178514    ┆ McKenna Macon           ┆ W Michigan              ┆ 30    ┆ 0            ┆ null │
+    │ 5107676    ┆ Draya Wacker            ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
+    └────────────┴─────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -844,14 +844,14 @@ three_pt
     │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
     │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
     ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
+    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
     │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
-    │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
+    │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
     │ 127     ┆ Michigan State Spartans        ┆ 31    ┆ 283 ┆ 757  ┆ 37.4      │
     └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
@@ -991,12 +991,12 @@ dd
     │ 4433402    ┆ Angel Reese          ┆ LSU                     ┆ 27             │
     │ 4705101    ┆ Macy McGlone         ┆ E Illinois              ┆ 26             │
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
-    │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
-    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
-    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
     │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
+    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
+    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -1036,8 +1036,8 @@ defense
     │ 261     ┆ Vermont Catamounts        ┆ 37    ┆ 52.8    ┆ 59.4    ┆ 6.6     │
     │ 2450    ┆ Norfolk State Spartans    ┆ 33    ┆ 53.1    ┆ 67.0    ┆ 13.9    │
     │ 2670    ┆ VCU Rams                  ┆ 32    ┆ 53.2    ┆ 63.3    ┆ 10.1    │
-    │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
+    │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
     │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │

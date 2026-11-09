@@ -131,18 +131,14 @@ gsb.select([c for c in cols if c in gsb.columns]).head() if gsb is not None and 
 
 
 
-    shape: (5, 5)
-    ┌───────────────────┬────────────┬──────────────────────────────────┬────────────┬────────────┐
-    │ date              ┆ short_name ┆ status_type_detail               ┆ home_score ┆ away_score │
-    │ ---               ┆ ---        ┆ ---                              ┆ ---        ┆ ---        │
-    │ str               ┆ str        ┆ str                              ┆ str        ┆ str        │
-    ╞═══════════════════╪════════════╪══════════════════════════════════╪════════════╪════════════╡
-    │ 2026-11-07T00:00Z ┆ WES @ MNE  ┆ Fri, November 6th at 7:00 PM EST ┆ 0          ┆ 0          │
-    │ 2026-11-07T00:00Z ┆ LIN @ GBO  ┆ Fri, November 6th at 7:00 PM EST ┆ 0          ┆ 0          │
-    │ 2026-11-07T00:00Z ┆ CAP @ DEL  ┆ Fri, November 6th at 7:00 PM EST ┆ 0          ┆ 0          │
-    │ 2026-11-07T00:00Z ┆ RAP @ CPS  ┆ Fri, November 6th at 7:00 PM EST ┆ 0          ┆ 0          │
-    │ 2026-11-07T01:00Z ┆ NOB @ WCB  ┆ Fri, November 6th at 8:00 PM EST ┆ 0          ┆ 0          │
-    └───────────────────┴────────────┴──────────────────────────────────┴────────────┴────────────┘
+    shape: (1, 5)
+    ┌───────────────────┬────────────┬───────────────────────────────────┬────────────┬────────────┐
+    │ date              ┆ short_name ┆ status_type_detail                ┆ home_score ┆ away_score │
+    │ ---               ┆ ---        ┆ ---                               ┆ ---        ┆ ---        │
+    │ str               ┆ str        ┆ str                               ┆ str        ┆ str        │
+    ╞═══════════════════╪════════════╪═══════════════════════════════════╪════════════╪════════════╡
+    │ 2026-11-10T03:00Z ┆ SAN @ CVL  ┆ Mon, November 9th at 10:00 PM EST ┆ 0          ┆ 0          │
+    └───────────────────┴────────────┴───────────────────────────────────┴────────────┴────────────┘
 
 
 
@@ -227,12 +223,14 @@ else:
 ```
 
     ✅ F1 laps 2025 round 1
+
+
     ✅ F1 results 2025 round 1
 
 
 
 
-![png](19_more_sources_intro_files/19_more_sources_intro_11_1.png)
+![png](19_more_sources_intro_files/19_more_sources_intro_11_2.png)
 
 
 
@@ -325,11 +323,11 @@ news.select("published", "headline") if news is not None and news.height else "n
     │ ---                  ┆ ---                                                           │
     │ str                  ┆ str                                                           │
     ╞══════════════════════╪═══════════════════════════════════════════════════════════════╡
-    │ 2026-11-04T02:48:10Z ┆ Lakers' Luka Doncic has 2nd tech of season rescinded by NBA   │
-    │ 2026-11-04T02:13:31Z ┆ Raptors' Kawhi Leonard completes knee treatment, begins 'ret… │
-    │ 2026-11-03T20:03:50Z ┆ Dumonts take over as controlling owners of Mavericks          │
-    │ 2026-11-03T19:07:41Z ┆ Karabell's notebook: Gobert's slow start, Zion's steals, and… │
-    │ 2026-11-04T02:01:59Z ┆ NBA defends Rwanda partnership in letter to concerned senato… │
+    │ 2026-11-09T22:54:36Z ┆ Bronny James gets into verbal exchange with Pistons fans dur… │
+    │ 2026-11-09T20:55:38Z ┆ NBA buzz: Latest on trades, news, roster moves and intel      │
+    │ 2026-11-09T21:27:07Z ┆ Monday's fantasy hoops adds, NBA bets to make: Ty Jerome pri… │
+    │ 2026-11-09T18:59:48Z ┆ Sources: NBA finalizing Miami as 2028 All-Star Weekend host   │
+    │ 2026-11-09T16:40:47Z ┆ Fantasy risers and fallers: Add Burries, give more time to s… │
     └──────────────────────┴───────────────────────────────────────────────────────────────┘
 
 

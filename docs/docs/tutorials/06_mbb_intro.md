@@ -116,7 +116,7 @@ print("teams:", teams.shape)
 teams.select(["team_id", "team_location", "team_name", "team_abbreviation", "team_is_active"]).head()
 ```
 
-    teams: (362, 14)
+    teams: (365, 14)
 
 
 
@@ -297,16 +297,16 @@ out
     │ ---     ┆ --- ┆ ---  ┆ ---  ┆ ---  │
     │ str     ┆ str ┆ str  ┆ str  ┆ str  │
     ╞═════════╪═════╪══════╪══════╪══════╡
-    │ 1       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 2       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 3       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 4       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 5       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 6       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 7       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 8       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 9       ┆ 1   ┆ null ┆ null ┆ null │
-    │ 10      ┆ 1   ┆ null ┆ null ┆ null │
+    │ 1       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 2       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 3       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 4       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 5       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 6       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 7       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 8       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 9       ┆ 4   ┆ null ┆ null ┆ null │
+    │ 10      ┆ 4   ┆ null ┆ null ┆ null │
     └─────────┴─────┴──────┴──────┴──────┘
 
 
@@ -505,8 +505,8 @@ print("team box rows:", tbox.shape)
     │ Houston Cougars     ┆ 37  ┆ 73.5 ┆ 57.6    ┆ 15.9       │
     │ Gonzaga Bulldogs    ┆ 35  ┆ 84.5 ┆ 69.1    ┆ 15.4       │
     │ Arizona Wildcats    ┆ 36  ┆ 87.1 ┆ 72.1    ┆ 15.0       │
-    │ Auburn Tigers       ┆ 35  ┆ 83.1 ┆ 68.3    ┆ 14.8       │
     │ Saint Mary's Gaels  ┆ 34  ┆ 74.0 ┆ 59.2    ┆ 14.8       │
+    │ Auburn Tigers       ┆ 35  ┆ 83.1 ┆ 68.3    ┆ 14.8       │
     │ Iowa State Cyclones ┆ 37  ┆ 75.3 ┆ 61.5    ┆ 13.8       │
     │ James Madison Dukes ┆ 36  ┆ 83.2 ┆ 69.6    ┆ 13.6       │
     │ Purdue Boilermakers ┆ 39  ┆ 82.3 ┆ 69.0    ┆ 13.3       │
@@ -738,16 +738,16 @@ out
     │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
     │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
     ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 2     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 3     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
-    │ 4     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
-    │ 5     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 6     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 7     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
-    │ 8     ┆ 1   ┆ 0   ┆ 1   ┆ null ┆ null     │
-    │ 9     ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
-    │ 10    ┆ 1   ┆ 1   ┆ 0   ┆ null ┆ null     │
+    │ 1     ┆ 4   ┆ 1   ┆ 3   ┆ null ┆ null     │
+    │ 2     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
+    │ 3     ┆ 3   ┆ 0   ┆ 3   ┆ null ┆ null     │
+    │ 4     ┆ 3   ┆ 0   ┆ 3   ┆ null ┆ null     │
+    │ 5     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
+    │ 6     ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
+    │ 7     ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
+    │ 8     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
+    │ 9     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
+    │ 10    ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
     └───────┴─────┴─────┴─────┴──────┴──────────┘
 
 
@@ -839,10 +839,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6          Saint Thomas              UNCO              19
-    7         Fardaws Aimaq               CAL              19
-    8           Riley Minix              MORE              19
-    9       Yaxel Lendeborg               UAB              19
+    6         Fardaws Aimaq               CAL              19
+    7       Yaxel Lendeborg               UAB              19
+    8          Saint Thomas              UNCO              19
+    9           Riley Minix              MORE              19
 
 
 

@@ -486,8 +486,8 @@ top_scorers
     │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
     │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
     │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
-    │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
     │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
+    │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
     │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
     │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
     │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
@@ -894,21 +894,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ G   ┆ C   ┆ F   │
+    │ team_abbreviation ┆ G   ┆ F   ┆ C   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 7   ┆ 1   ┆ 4   │
-    │ CHI               ┆ 9   ┆ 2   ┆ 3   │
-    │ CONNECTICU        ┆ 8   ┆ 2   ┆ 5   │
-    │ DALLAS            ┆ 7   ┆ 1   ┆ 6   │
-    │ IND               ┆ 8   ┆ 2   ┆ 3   │
+    │ ATL               ┆ 7   ┆ 4   ┆ 1   │
+    │ CHI               ┆ 9   ┆ 3   ┆ 2   │
+    │ CONNECTICU        ┆ 8   ┆ 5   ┆ 2   │
+    │ DALLAS            ┆ 7   ┆ 6   ┆ 1   │
+    │ IND               ┆ 8   ┆ 3   ┆ 2   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 5   ┆ 1   ┆ 8   │
-    │ NY                ┆ 8   ┆ 2   ┆ 5   │
-    │ PHX               ┆ 7   ┆ 1   ┆ 7   │
-    │ SEA               ┆ 6   ┆ 3   ┆ 5   │
-    │ WSH               ┆ 9   ┆ 2   ┆ 3   │
+    │ MIN               ┆ 5   ┆ 8   ┆ 1   │
+    │ NY                ┆ 8   ┆ 5   ┆ 2   │
+    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
+    │ SEA               ┆ 6   ┆ 5   ┆ 3   │
+    │ WSH               ┆ 9   ┆ 3   ┆ 2   │
     └───────────────────┴─────┴─────┴─────┘
 
 
