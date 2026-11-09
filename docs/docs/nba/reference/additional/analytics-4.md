@@ -140,11 +140,10 @@ period (the period length for the first one). Points come from the made-shot cou
 whose first period runs past 15 minutes is played in two 20-minute halves (the WNBA through
 2005): its periods are 20 minutes, `late` starts with the 2nd half and period 3 is overtime.
 
-`neutral_site` is always False: the stats schedule has no neutral-site or venue column, so
-a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
-as a home game for the listed home team: at most five regular-season games a season.
-ESPN's schedule `neutral_site` is not a usable substitute: it marks the 2023-24 Cup
-semifinals False, and the ESPN-to-stats game id crosswalk starts at 2025-26.
+`neutral_site` comes from `sportsdataverse.nba.nba_neutral_site`: the 2020 bubbles and
+the curated games abroad and NBA Cup knockout games in Las Vegas, by stats `game_id`. The
+stats schedule has no neutral-site or venue column, and ESPN's `neutral_site` misses most of
+them (it marks the 2023-24 Cup semifinals False).
 
 **Parameters**
 

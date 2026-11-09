@@ -16,8 +16,8 @@ Builds the :mod:`sportsdataverse._common.game_flow` tables from three stats.nba.
 ``league_id="10"`` reads the WNBA twins; :mod:`sportsdataverse.wnba.wnba_game_flow` binds it.
 A game whose first period runs 20 minutes (the WNBA through 2005) is played in halves.
 
-There is no neutral-site column in the stats schedule, so every game gets the home-court prior
-(as BB-D3 treats them).
+The stats schedule has no neutral-site column; :mod:`sportsdataverse.nba.nba_neutral_site` marks
+the bubble, abroad and Las Vegas Cup games, which get the neutral prior (as BB-D3 treats them).
 """
 
 from __future__ import annotations
@@ -34,6 +34,7 @@ from sportsdataverse._common.game_flow import (
     game_flow,
     team_season_flow,
 )
+from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_game_impact import _running_score
 from sportsdataverse.nba.nba_team_season_rates import _check_args, nba_possession_rate_rows
 
@@ -89,7 +90,10 @@ def nba_score_rows(
     if pbp.height == 0 or schedule.height == 0:
         return pl.DataFrame(schema=SCORE_ROWS_SCHEMA)
     games = schedule.filter((pl.col("season_type") == season_type) & pl.col("home_pts").is_not_null()).select(
-        pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64), pl.col("away_team_id").cast(pl.Int64)
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("home_team_id").cast(pl.Int64),
+        pl.col("away_team_id").cast(pl.Int64),
+        nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site"),
     )
     quarter = _LEAGUES[league_id][0]
     period, clock = pl.col("period"), pl.col("seconds_remaining").cast(pl.Float64)
@@ -131,7 +135,7 @@ def nba_score_rows(
             pl.col("order_index").alias("order"),
             "home_team_id",
             "away_team_id",
-            pl.lit(False).alias("neutral_site"),
+            "neutral_site",
             "elapsed",
             "sec_left",
             "game_seconds",

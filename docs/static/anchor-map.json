@@ -5206,6 +5206,7 @@
   "nba_live_boxscore": "nba-stats-api",
   "nba_live_pbp": "nba-stats-api",
   "nba_matchup_drapm": "models-and-calculators-2",
+  "nba_neutral_site_games": "analytics-3",
   "nba_pbp_disk": "play-by-play-processing",
   "nba_play_context": "analytics-3",
   "nba_play_style_features": "analytics-3",
