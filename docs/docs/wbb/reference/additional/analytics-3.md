@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team"
 sidebar_label: "Analytics: wbb_play–wbb_team"
-sidebar_position: 12
+sidebar_position: 13
 description: "Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_play–wbb_team

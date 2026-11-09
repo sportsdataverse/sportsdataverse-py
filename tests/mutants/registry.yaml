@@ -9291,11 +9291,11 @@
   group: bb-possession-flags
   finding: BB-D7
   file: sportsdataverse/nba/nba_possession_flags.py
-  snippet: 'TRANSITION_SECONDS: Final[float] = 10.0'
-  mutant: 'TRANSITION_SECONDS: Final[float] = 8.0'
-  test: tests/nba/test_nba_possession_flags.py::test_observed_counts
+  snippet: 'TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'TRANSITION_SECONDS: Final[float] = 10.0'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_tracks_synergy_2024
   expected: kill
-  note: The published 10-second window is the default; 8 s fits Synergy's level better but is not a published rule.
+  note: 8 s tracks Synergy's Transition play type better than college's 10 s (r 0.892 vs 0.844, ratio 0.97 vs 1.29).
 
 # --- BB-D22: luck and close-game record (Pythagorean expected wins, close games) ----------------
 # Killers: tests/nba/test_nba_team_luck.py, tests/mbb/test_mbb_team_luck.py and
@@ -10037,6 +10037,46 @@
   test: tests/nba/test_nba_situational.py::test_only_the_requested_season_type_is_flagged
   expected: kill
   note: A game of another season type with a gap in its play-by-play would fail the regular-season build.
+
+- id: bb-epv-booster-transition-window
+  group: bb-epv
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+
+- id: bb-ctg-alias-never-overwrites
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    if old in possessions.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_play_context.py::test_the_copies_never_overwrite_a_published_flag
+  expected: kill
+  note: The deprecated plain-name copy would overwrite BB-D7's published is_transition / is_garbage_time.
+
+- id: bb-ctg-legacy-frame-names
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    df = _ctg_names(possessions)'
+  mutant: '    df = possessions'
+  test: tests/nba/test_nba_play_context.py::test_a_frame_saved_before_the_rename_still_rolls_up
+  expected: kill
+  note: A possessions frame saved before the *_ctg rename would raise in the rollups.
+
+- id: bb-sit-reflag-a-flagged-release
+  group: bb-situational
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: 'flagged = add_possession_flags(poss.drop(*POSSESSION_FLAGS_SCHEMA, strict=False), events)'
+  mutant: 'flagged = add_possession_flags(poss, events)'
+  test: tests/nba/test_nba_situational.py::test_a_release_that_carries_the_flags_is_reflagged
+  expected: kill
+  note: Once the producers publish BB-D7's flags on the possessions release, the rows would raise on the clash.
 
 - id: bb-ps-season-relative-mean
   group: bb-play-style

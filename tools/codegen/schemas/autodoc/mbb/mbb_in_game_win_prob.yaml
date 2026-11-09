@@ -16,6 +16,12 @@ columns:
 - name: home_has_ball
   type: integer
   description: ''
+- name: margin_per_sqrt_sec
+  type: double
+  description: ''
+- name: sqrt_sec_left_60
+  type: double
+  description: ''
 - name: home_win_prob
   type: double
   description: ''

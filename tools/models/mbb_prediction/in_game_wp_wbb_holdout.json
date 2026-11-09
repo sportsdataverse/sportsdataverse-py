@@ -1,0 +1,477 @@
+{
+  "league": "wbb",
+  "train_seasons": [
+    2022,
+    2023,
+    2025
+  ],
+  "validation_season": 2025,
+  "holdout_season": 2026,
+  "confirmation_season": 2024,
+  "confirmation_note": "2024 is in no training season, but the pregame constants (hfa, margin_sd, em_scale) that the rated prior and the naive model read were fit on it, and it precedes the 2025 training season",
+  "baseline_ref": "eb4207476e",
+  "artifact_sha256": "88e6e1a76c40c0add8674f1c04f1c86348b690f1e3188c6159815fed1fe8a567",
+  "rounds": 98,
+  "n_train_plays": 5069311,
+  "train_stats": {
+    "2022": {
+      "games": 5347,
+      "rated_games": 4826,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 521,
+      "hfa_swapped_games": 1206,
+      "rows": 1580739
+    },
+    "2023": {
+      "games": 5700,
+      "rated_games": 5145,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 555,
+      "hfa_swapped_games": 1286,
+      "rows": 1690340
+    },
+    "2025": {
+      "games": 5472,
+      "rated_games": 4964,
+      "ot_rows_reclocked": 0,
+      "unrated_games_dropped": 508,
+      "hfa_swapped_games": 1241,
+      "rows": 1798232
+    }
+  },
+  "params": {
+    "max_depth": 4,
+    "eta": 0.1,
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42,
+    "monotone_constraints": "(1,0,1,1,1)"
+  },
+  "features": [
+    "score_diff",
+    "sqrt_sec_left_60",
+    "pregame_logit",
+    "home_has_ball",
+    "margin_per_sqrt_sec"
+  ],
+  "hfa_prior_share": 0.25,
+  "keep_unrated": false,
+  "holdout": {
+    "hfa_prior": {
+      "refit": {
+        "plays": 2812064,
+        "brier": 0.12052279170645104,
+        "log_loss": 0.364797536259295,
+        "calibration_intercept": 0.018005129442587354,
+        "calibration_slope": 1.1125353172327304,
+        "max_decile_gap": 0.034141062059955374,
+        "brier_by_period": {
+          "1": 0.19359770833747303,
+          "2": 0.14004904557005757,
+          "3": 0.09954497549766875,
+          "4": 0.05555311382695589,
+          "ot": 0.15926853883571057
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.00016636167027116953,
+        "horn_step_median": 0.0003600120544433594,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3523480096148209,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 2812064,
+        "brier": 0.12154899161675606,
+        "log_loss": 0.36878964814445314,
+        "calibration_intercept": 0.04479066460159168,
+        "calibration_slope": 1.1222900071397732,
+        "max_decile_gap": 0.045818740778872935,
+        "brier_by_period": {
+          "1": 0.19512334393392267,
+          "2": 0.14106404861187585,
+          "3": 0.10046450761973215,
+          "4": 0.056225900258140366,
+          "ot": 0.16100599366947702
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.04691399101646981,
+        "horn_step_median": 0.008407811634242535,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3169373277833148,
+        "final_minute_away_share": 0.04531863750952688,
+        "grid_violations": 94
+      },
+      "naive": {
+        "plays": 2812064,
+        "brier": 0.12077798923103979,
+        "log_loss": 0.36746957989204887,
+        "calibration_intercept": 0.044409378692436136,
+        "calibration_slope": 0.9980548835384258,
+        "max_decile_gap": 0.02190952474914798,
+        "brier_by_period": {
+          "1": 0.19421079073924027,
+          "2": 0.14004613843553537,
+          "3": 0.099524095484898,
+          "4": 0.055924059770795766,
+          "ot": 0.16253349460219182
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.0,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3410330069766078,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0010261999103050375,
+          "ci95": [
+            -0.0013222237102967162,
+            -0.0007108753714456098
+          ]
+        },
+        "log_loss": {
+          "delta": -0.003992111885158101,
+          "ci95": [
+            -0.004730842216001142,
+            -0.0032358523643066022
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.0002551975245887632,
+          "ci95": [
+            -0.000482592059822458,
+            -4.621101977983805e-05
+          ]
+        },
+        "log_loss": {
+          "delta": -0.0026720436327538587,
+          "ci95": [
+            -0.0037952148268537034,
+            -0.001680184484875916
+          ]
+        }
+      }
+    },
+    "rated_prior": {
+      "refit": {
+        "plays": 2812064,
+        "brier": 0.10145829917574088,
+        "log_loss": 0.3133029168191022,
+        "calibration_intercept": -0.019427875507871364,
+        "calibration_slope": 0.9951880002253304,
+        "max_decile_gap": 0.01976314170527438,
+        "brier_by_period": {
+          "1": 0.14504218040851016,
+          "2": 0.1177790359877841,
+          "3": 0.09142045076156331,
+          "4": 0.05486782546688155,
+          "ot": 0.16249323028500756
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.00033272334054233906,
+        "horn_step_median": 0.00032700144220143557,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3508237087412792,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 2812064,
+        "brier": 0.10393034817784992,
+        "log_loss": 0.3255803265392516,
+        "calibration_intercept": 0.03006879654727292,
+        "calibration_slope": 0.9224406851996103,
+        "max_decile_gap": 0.03975443481120955,
+        "brier_by_period": {
+          "1": 0.14722910598909653,
+          "2": 0.12136309684286901,
+          "3": 0.09426308125275176,
+          "4": 0.05612196985456926,
+          "ot": 0.167048251543863
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.0524039261354184,
+        "horn_step_median": 0.006274521350860596,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3080260303687636,
+        "final_minute_away_share": 0.04824998534326083,
+        "grid_violations": 94
+      },
+      "naive": {
+        "plays": 2812064,
+        "brier": 0.10157786950002283,
+        "log_loss": 0.32037188493309116,
+        "calibration_intercept": 0.07587690812237369,
+        "calibration_slope": 0.8335312841003137,
+        "max_decile_gap": 0.041667194964918414,
+        "brier_by_period": {
+          "1": 0.14513696074114096,
+          "2": 0.11838192047102587,
+          "3": 0.09162899312808395,
+          "4": 0.05452433878930614,
+          "ot": 0.1601918654721244
+        },
+        "games_scored": 6011,
+        "games": 6011,
+        "horn_jump_share": 0.0,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 17057,
+        "final_minute_toward_share": 0.3378671513161752,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0024720490021090486,
+          "ci95": [
+            -0.0034889723438451536,
+            -0.0015574515520094224
+          ]
+        },
+        "log_loss": {
+          "delta": -0.012277409720149408,
+          "ci95": [
+            -0.0167608007265766,
+            -0.008410949131309126
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.0001195703242819611,
+          "ci95": [
+            -0.0008203113163996416,
+            0.0005145782089423838
+          ]
+        },
+        "log_loss": {
+          "delta": -0.007068968113989012,
+          "ci95": [
+            -0.011239378233466912,
+            -0.0035486739619446693
+          ]
+        }
+      }
+    }
+  },
+  "confirmation": {
+    "hfa_prior": {
+      "refit": {
+        "plays": 1898308,
+        "brier": 0.12366243698126524,
+        "log_loss": 0.3757787942432756,
+        "calibration_intercept": 0.10301347540336503,
+        "calibration_slope": 1.066637485627852,
+        "max_decile_gap": 0.050139861760818416,
+        "brier_by_period": {
+          "1": 0.19480259607003905,
+          "2": 0.1452784010795517,
+          "3": 0.10506839477707368,
+          "4": 0.05716641326111368,
+          "ot": 0.1455639295085565
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.0007196833393306944,
+        "horn_step_median": 0.00037875218549743295,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.36565236565236564,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 1898308,
+        "brier": 0.12455982467019765,
+        "log_loss": 0.37922023334739985,
+        "calibration_intercept": 0.12642249281178328,
+        "calibration_slope": 1.088317967848479,
+        "max_decile_gap": 0.05868834631867886,
+        "brier_by_period": {
+          "1": 0.19566736908435353,
+          "2": 0.146456950420917,
+          "3": 0.10615618374169514,
+          "4": 0.057658818334869924,
+          "ot": 0.14628531495539657
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.04318100035984167,
+        "horn_step_median": 0.009002381935715675,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.32967932967932967,
+        "final_minute_away_share": 0.04510804510804511,
+        "grid_violations": 94
+      },
+      "naive": {
+        "plays": 1898308,
+        "brier": 0.12402683406148343,
+        "log_loss": 0.3790575663615795,
+        "calibration_intercept": 0.12697201138355022,
+        "calibration_slope": 0.9527586238332416,
+        "max_decile_gap": 0.03740900414894732,
+        "brier_by_period": {
+          "1": 0.1954797279282952,
+          "2": 0.1453034742752778,
+          "3": 0.10516418290425161,
+          "4": 0.057713709610744894,
+          "ot": 0.14985052610422692
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.0007196833393306944,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.34574434574434576,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.0008973876889323975,
+          "ci95": [
+            -0.0012152060418642008,
+            -0.000564427402284554
+          ]
+        },
+        "log_loss": {
+          "delta": -0.003441439104124222,
+          "ci95": [
+            -0.004294367431316479,
+            -0.002479009950727756
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": -0.000364397080218197,
+          "ci95": [
+            -0.0005797398488509749,
+            -0.00014754073775936566
+          ]
+        },
+        "log_loss": {
+          "delta": -0.003278772118303889,
+          "ci95": [
+            -0.0053249318115831615,
+            -0.0017765209350018038
+          ]
+        }
+      }
+    },
+    "rated_prior": {
+      "refit": {
+        "plays": 1898308,
+        "brier": 0.10532639702975163,
+        "log_loss": 0.3276343128808612,
+        "calibration_intercept": 0.0757181114316457,
+        "calibration_slope": 0.9696046108870612,
+        "max_decile_gap": 0.03096652078879103,
+        "brier_by_period": {
+          "1": 0.15034084881131063,
+          "2": 0.12347595955541366,
+          "3": 0.09581842281151433,
+          "4": 0.056238151176600915,
+          "ot": 0.14846065776516715
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.0008996041741633681,
+        "horn_step_median": 0.00035262107849121094,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.3643293643293643,
+        "final_minute_away_share": 0.0,
+        "grid_violations": 0
+      },
+      "baseline": {
+        "plays": 1898308,
+        "brier": 0.10706757158217921,
+        "log_loss": 0.337154311724455,
+        "calibration_intercept": 0.11838112739910778,
+        "calibration_slope": 0.9158646066752743,
+        "max_decile_gap": 0.0353666733621536,
+        "brier_by_period": {
+          "1": 0.1517358695926486,
+          "2": 0.1256349630363547,
+          "3": 0.09823165462171676,
+          "4": 0.05732762949368121,
+          "ot": 0.1478684854289529
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.050017992083483266,
+        "horn_step_median": 0.007064410485327244,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.3201033201033201,
+        "final_minute_away_share": 0.049266049266049265,
+        "grid_violations": 94
+      },
+      "naive": {
+        "plays": 1898308,
+        "brier": 0.10521554990147429,
+        "log_loss": 0.33107398584743014,
+        "calibration_intercept": 0.16342972417691176,
+        "calibration_slope": 0.8310270433802595,
+        "max_decile_gap": 0.052535938713225344,
+        "brier_by_period": {
+          "1": 0.15016113994337676,
+          "2": 0.12351948147287808,
+          "3": 0.09603271630896122,
+          "4": 0.05574562986884071,
+          "ot": 0.14803899210257626
+        },
+        "games_scored": 5778,
+        "games": 5558,
+        "horn_jump_share": 0.0007196833393306944,
+        "horn_step_median": 0.0,
+        "final_minute_pairs": 15873,
+        "final_minute_toward_share": 0.34486234486234485,
+        "final_minute_away_share": 0.0,
+        "grid_violations": null
+      },
+      "refit_vs_baseline": {
+        "brier": {
+          "delta": -0.00174117455242759,
+          "ci95": [
+            -0.0026628076327710457,
+            -0.0008475658615083733
+          ]
+        },
+        "log_loss": {
+          "delta": -0.009519998843593822,
+          "ci95": [
+            -0.013506742981693343,
+            -0.0057146003295529026
+          ]
+        }
+      },
+      "refit_vs_naive": {
+        "brier": {
+          "delta": 0.00011084712827734977,
+          "ci95": [
+            -0.0004587157211719718,
+            0.0006915713883909508
+          ]
+        },
+        "log_loss": {
+          "delta": -0.003439672966568937,
+          "ci95": [
+            -0.006261401904868992,
+            -0.0006459335779734893
+          ]
+        }
+      }
+    }
+  }
+}
