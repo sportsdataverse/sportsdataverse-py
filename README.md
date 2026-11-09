@@ -2,44 +2,54 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [sportsdataverse-py](#sportsdataverse-py)
-  - [Supported leagues and data sources](#supported-leagues-and-data-sources)
-  - [Polars / pandas parser layer](#polars--pandas-parser-layer)
-  - [Data status](#data-status)
-  - [Installation](#installation)
+- [**sportsdataverse-py**](#sportsdataverse-py)
+  - [**Supported leagues and data sources**](#supported-leagues-and-data-sources)
+  - [**Polars / pandas parser layer**](#polars--pandas-parser-layer)
+  - [**Data status**](#data-status)
+  - [**Installation**](#installation)
     - [Standard install (pip)](#standard-install-pip)
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
     - [Development install](#development-install)
     - [Notes](#notes)
     - [Errors](#errors)
-  - [Examples and tutorials](#examples-and-tutorials)
-  - [Using with AI agents](#using-with-ai-agents)
-  - [Companion packages](#companion-packages)
-  - [Follow the SportsDataverse (@SportsDataverse) on X and star this repo](#follow-the-sportsdataverse-sportsdataverse-on-x-and-star-this-repo)
-  - [Our authors](#our-authors)
-  - [Cheat sheet](#cheat-sheet)
-  - [Citations](#citations)
+  - [**Examples and tutorials**](#examples-and-tutorials)
+  - [**Using with AI agents**](#using-with-ai-agents)
+  - [**Companion packages**](#companion-packages)
+  - [**The SportsDataverse**](#the-sportsdataverse)
+  - [**Follow the SportsDataverse on X and star this repo**](#follow-the-sportsdataverse-on-x-and-star-this-repo)
+  - [**Our Authors**](#our-authors)
+  - [**Cheat sheet**](#cheat-sheet)
+  - [**Citations**](#citations)
+  - [**License**](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# sportsdataverse-py
+# **sportsdataverse-py**
 
-<a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/docs/static/img/sdv-py-logo.png' align="right" width="20%" min-width="100px" alt="sportsdataverse-py logo" /></a>
+<a href='https://py.sportsdataverse.org'><img alt="sportsdataverse-py logo" src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/docs/static/img/sdv-py-logo.png' align="right" width="20%" min-width="100px"/></a>
+
+Free, tidy, analysis-ready sports data in Python: the Python member of the [SportsDataverse](https://www.sportsdataverse.org).
+
 <!-- badges: start -->
-
-![Lifecycle: beta](https://img.shields.io/badge/lifecycle-beta-blue.svg?style=for-the-badge&logo=github)
-[![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)<a href='https://pypi.org/project/sportsdataverse/'><img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge"></a>
-![Contributors](https://img.shields.io/github/contributors/sportsdataverse/sportsdataverse-py?style=for-the-badge)
-[![tests](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/tests.yml?branch=main&event=push&label=tests&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/tests.yml?query=branch%3Amain)
+[![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
+[![Python](https://img.shields.io/pypi/pyversions/sportsdataverse?logo=python&logoColor=white&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
+[![Downloads](https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge)](https://pypistats.org/packages/sportsdataverse)
+[![Total downloads](https://img.shields.io/pepy/dt/sportsdataverse?style=for-the-badge)](https://pepy.tech/projects/sportsdataverse)
+[![Dev version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2Fsportsdataverse-py%2Fmain%2Fpyproject.toml&query=%24.project.version&label=dev&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/)
+[![tests](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/tests.yml?branch=main&label=tests&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/tests.yml?query=branch%3Amain)
+[![quality](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/quality.yml?branch=main&label=quality&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/quality.yml?query=branch%3Amain)
+[![codegen](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/codegen.yml?branch=main&label=codegen&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/codegen.yml?query=branch%3Amain)
 [![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/quality.yml?query=branch%3Amain)
 [![coverage (all, incl. generated)](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage-all.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CONTRIBUTING.md#coverage-numbers)
-
+[![docs](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/docs-deploy.yml?branch=main&label=docs&logo=github&style=for-the-badge)](https://py.sportsdataverse.org)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/sportsdataverse/sportsdataverse-py?style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/graphs/contributors)
+[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/sportsdataverse-py?logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py)
+[![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
 <!-- badges: end -->
 
-[sportsdataverse-py](https://py.sportsdataverse.org) gives the community
-free, tidy, analysis-ready sports data in Python. It is the Python member
-of the **[SportsDataverse](https://www.sportsdataverse.org)** family and
-deliberately mirrors its R sisters — [hoopR](https://hoopR.sportsdataverse.org/)
+[sportsdataverse-py](https://py.sportsdataverse.org) deliberately mirrors its R sisters — [hoopR](https://hoopR.sportsdataverse.org/)
 (NBA/MBB), [wehoop](https://wehoop.sportsdataverse.org/) (WNBA/WBB),
 [cfbfastR](https://cfbfastR.sportsdataverse.org/) (CFB),
 [baseballr](https://baseballr.sportsdataverse.org/) (MLB), and
@@ -56,7 +66,7 @@ especially for American football.
 > on PyPI as the pre-release `0.2.0b1`. pip skips pre-releases unless you ask, so install it with
 > `pip install --pre sportsdataverse`. Release notes: [CHANGELOG](https://py.sportsdataverse.org/CHANGELOG).
 
-## Supported leagues and data sources
+## **Supported leagues and data sources**
 
 One row per sport group; each links to that sport's page on the docs site, which lists every league and
 provider. The [Getting Started table](https://py.sportsdataverse.org/docs/intro) maps every module to its sources.
@@ -90,7 +100,7 @@ for college football. **CBS Sports** adds 82 `cbs_napi_*` wrappers. `sportsdatav
 the `sportsdataversedata` R release utilities (GitHub-release asset publish / download helpers,
 including a pure-Python RDS writer).
 
-## Polars / pandas parser layer
+## **Polars / pandas parser layer**
 
 Parser-backed wrappers return a tidy polars DataFrame **by default**.
 Pass `return_parsed=False` for the raw `Dict`, or
@@ -118,7 +128,7 @@ See [py.sportsdataverse.org/docs/architecture/espn-cross-league](https://py.spor
 and [py.sportsdataverse.org/docs/parsers](https://py.sportsdataverse.org/docs/parsers/)
 for the full architecture + parser registry.
 
-## Data status
+## **Data status**
 
 The `load_*()` functions read release assets on [sportsdataverse-data](https://github.com/sportsdataverse/sportsdataverse-data/releases); most `load_nfl_*()` loaders read the nflverse-data releases instead. The badges below are rebuilt nightly from each producer's latest workflow run and newest release files; idle means the sport is out of season. Full detail: [sportsdataverse.org/status](https://sportsdataverse.org/status).
 
@@ -141,7 +151,7 @@ The `load_*()` functions read release assets on [sportsdataverse-data](https://g
 | [PWHL](https://github.com/sportsdataverse/fastRhockey-pwhl-data) | [![fastRhockey-pwhl-data data updated](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2FfastRhockey-pwhl-data%2Fupdated.json)](https://github.com/sportsdataverse/sportsdataverse-data/releases) | [![fastRhockey-pwhl-data through season](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2FfastRhockey-pwhl-data%2Fthrough.json)](https://github.com/sportsdataverse/sportsdataverse-data/releases) | [![fastRhockey-pwhl-data pipeline state](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2FfastRhockey-pwhl-data%2Fstatus.json)](https://sportsdataverse.org/status#fastRhockey-pwhl-data) | [![fastRhockey-pwhl-data daily_pwhl_python](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2FfastRhockey-pwhl-data%2Fwf-daily_pwhl_python.json)](https://github.com/sportsdataverse/fastRhockey-pwhl-data/actions/workflows/daily_pwhl_python.yml) [![fastRhockey-pwhl-data pwhl_xg_cron](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2FfastRhockey-pwhl-data%2Fwf-pwhl_xg_cron.json)](https://github.com/sportsdataverse/fastRhockey-pwhl-data/actions/workflows/pwhl_xg_cron.yml) |
 | [MLB and college baseball](https://github.com/sportsdataverse/baseballr-data) | [![baseballr-data data updated](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2Fbaseballr-data%2Fupdated.json)](https://github.com/sportsdataverse/sportsdataverse-data/releases) | [![baseballr-data through season](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2Fbaseballr-data%2Fthrough.json)](https://github.com/sportsdataverse/sportsdataverse-data/releases) | [![baseballr-data pipeline state](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2Fbaseballr-data%2Fstatus.json)](https://sportsdataverse.org/status#baseballr-data) | [![baseballr-data mlb_models_cron](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2Fbaseballr-data%2Fwf-mlb_models_cron.json)](https://github.com/sportsdataverse/baseballr-data/actions/workflows/mlb_models_cron.yml) [![baseballr-data daily_ncaa_baseball](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2F.github%2Fmain%2Fstatus%2Fbadges%2Fbaseballr-data%2Fwf-daily_ncaa_baseball.json)](https://github.com/sportsdataverse/baseballr-data/actions/workflows/daily_ncaa_baseball.yml) |
 
-## Installation
+## **Installation**
 
 The package metadata lives entirely in [`pyproject.toml`](pyproject.toml)
 (PEP 621 `[project]` table). There is no `setup.py`. sportsdataverse needs Python 3.10+
@@ -247,7 +257,7 @@ Three outcomes, never collapsed into one:
 From 0.2.0 the hand-written ESPN scrapers and every generated flat-API getter
 **raise** instead of returning an error body or an empty dict.
 
-## Examples and tutorials
+## **Examples and tutorials**
 
 Every public function ships a runnable `Example:` block in its docstring
 showing a quick-start call, common parameter combinations, and a one-line
@@ -281,7 +291,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `18_prediction_markets_intro.ipynb` | Kalshi and Polymarket market data: events, markets, order books |
 | `19_more_sources_intro.ipynb` | NBA G League (ESPN), Formula 1, TheSportsDB, ESPN content |
 
-## Using with AI agents
+## **Using with AI agents**
 
 - **[Context7](https://context7.com)** indexes these docs (`context7.json` scopes it to `docs/docs/`) and the SDV R packages (from their pkgdown `llms.txt`).
 - **llms.txt:** <https://py.sportsdataverse.org/llms.txt> links a Markdown copy of every docs page.
@@ -297,7 +307,7 @@ under [`examples/notebooks/`](examples/notebooks):
 
   The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 20 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
-## Companion packages
+## **Companion packages**
 
 `sportsdataverse-py` is one corner of the broader [SportsDataverse](https://www.sportsdataverse.org)
 ecosystem. The R sister packages cover the same data sources with deeper
@@ -321,28 +331,42 @@ The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.c
 the broader [nflverse](https://nflverse.nflverse.com) ecosystem is the
 upstream data source for many of those loaders.
 
-## Follow the SportsDataverse (@SportsDataverse) on X and star this repo
+## **The SportsDataverse**
+
+`sportsdataverse-py` fetches the data; the companion packages draw it and mirror it in other languages.
+
+| Package | Sport / Scope |
+| --- | --- |
+| [**sdvplot**](https://sdvplot.sportsdataverse.org/) | Team logos, wordmarks, headshots and colors for Python plots and tables |
+| [**sportypy**](https://sportypy.sportsdataverse.org/) | Playing-surface plots for Python |
+| [**sportsdataverse-R**](https://r.sportsdataverse.org/) | The R packages: hoopR, wehoop, cfbfastR, baseballr, fastRhockey and more |
+| [**sportsdataverse.js**](https://js.sportsdataverse.org/) | Node.js |
+| [**nflreadpy**](https://github.com/nflverse/nflreadpy) | nflverse data loaders for Python |
+
+See the full ecosystem at [sportsdataverse.org](https://sportsdataverse.org/).
+
+## **Follow the SportsDataverse on X and star this repo**
 
 [![X Follow](https://img.shields.io/badge/%40SportsDataverse-000000?logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
 
 [![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/sportsdataverse-py.svg?color=eee&logo=github&style=for-the-badge&label=Star%20sportsdataverse-py&maxAge=2592000)](https://github.com/sportsdataverse/sportsdataverse-py)
 
-<a href="https://github.com/sportsdataverse/sportsdataverse-py/stargazers">
+<a href="https://github.com/sportsdataverse/sportsdataverse-py">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/star-history/star-history-dark.svg">
     <img alt="Star history of sportsdataverse/sportsdataverse-py" src="https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/star-history/star-history.png" width="600">
   </picture>
 </a>
 
-## Our authors
+## **Our Authors**
 
--   [Saiem Gilani](https://twitter.com/saiemgilani)
-<a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/badge/%40saiemgilani-000000?logo=x&style=for-the-badge" alt="@saiemgilani" /></a>
+-   [Saiem Gilani](https://x.com/saiemgilani)
+<a href="https://x.com/saiemgilani" target="blank"><img src="https://img.shields.io/badge/%40saiemgilani-000000?logo=x&style=for-the-badge" alt="@saiemgilani" /></a>
 <a href="https://github.com/saiemgilani" target="blank"><img src="https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge" alt="@saiemgilani" /></a>
 
 
 <!-- cheatsheet-section -->
-## Cheat sheet
+## **Cheat sheet**
 
 A printable six-page reference, in four layouts (24 pages in all), for **sportsdataverse (Python)** — the loaders, the wrapper
 families, and what each one returns.
@@ -352,7 +376,7 @@ families, and what each one returns.
 Browse the other SportsDataverse cheat sheets at
 **[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
 
-## Citations
+## **Citations**
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
@@ -366,3 +390,7 @@ BibTeX Citation
   year = {2021}
 }
 ```
+
+## **License**
+
+This package is released under the [MIT License](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/LICENSE).
