@@ -531,8 +531,20 @@ def nba_bpm(
 
     if granularity == "season":
         out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust, league_ortg=league_ortg)
-        return out.to_pandas() if return_as_pandas else out
+    else:
+        out = _nba_bpm_by_game(player_logs, team_logs, positions, team_adjust=team_adjust, league_ortg=league_ortg)
+    return out.to_pandas() if return_as_pandas else out
 
+
+def _nba_bpm_by_game(
+    player_logs: pl.DataFrame,
+    team_logs: pl.DataFrame,
+    positions: pl.DataFrame,
+    *,
+    team_adjust: bool,
+    league_ortg: float | None,
+) -> pl.DataFrame:
+    """``nba_bpm(granularity="game")``: score each ``game_id`` on its own, game_id leading."""
     if "game_id" not in player_logs.columns:
         raise ValueError("player_logs must carry a game_id column for granularity='game'")
 
@@ -556,10 +568,8 @@ def nba_bpm(
         frames.append(scored.with_columns(pl.lit(gid).cast(pl.Utf8).alias("game_id")))
 
     if not frames:
-        out = pl.DataFrame(schema={"game_id": pl.Utf8, **_BPM_SEASON_SCHEMA})
-    else:
-        out = pl.concat(frames, how="diagonal_relaxed").select("game_id", *_BPM_SEASON_SCHEMA.keys())
-    return out.to_pandas() if return_as_pandas else out
+        return pl.DataFrame(schema={"game_id": pl.Utf8, **_BPM_SEASON_SCHEMA})
+    return pl.concat(frames, how="diagonal_relaxed").select("game_id", *_BPM_SEASON_SCHEMA.keys())
 
 
 class NbaBpmModel:
