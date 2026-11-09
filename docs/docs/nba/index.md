@@ -228,7 +228,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_tracking_touch_value`](reference/additional/analytics-5#nba_tracking_touch_value)
 - [`nbadraft_mock_draft`](reference/additional/analytics-5#nbadraft_mock_draft)
 - [`player_play_context`](reference/additional/analytics-5#player_play_context)
-- [`player_rates`](reference/additional/analytics-5#player_rates)
+- [`player_rates`](reference/additional/analytics-6#player_rates)
 - [`players_on_court_from_pbp`](reference/additional/analytics-6#players_on_court_from_pbp)
 - [`players_on_court_from_quarter_boxscores`](reference/additional/analytics-6#players_on_court_from_quarter_boxscores)
 - [`players_on_court_from_rotation`](reference/additional/analytics-6#players_on_court_from_rotation)

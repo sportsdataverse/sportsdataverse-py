@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_team–player_rates"
-sidebar_label: "Analytics: nba_team–player_rates"
+title: "NBA — additional Python functions — Analytics: nba_team–player_play"
+sidebar_label: "Analytics: nba_team–player_play"
 sidebar_position: 17
-description: "NBA — additional Python functions — Analytics: nba_team–player_rates — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_team–player_play — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_team–player_rates
+# NBA — additional Python functions — Analytics: nba_team–player_play
 
 ### nba_team_luck {#nba_team_luck}
 
@@ -18,8 +18,8 @@ league on past seasons (`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
 `luck_wins` is `wins - exp_wins`. A close game is one within 5 points at the start of a
 possession in play in the last 5:00 of the 4th quarter or in overtime: one that starts there,
 or starts before 5:00 and ends after it (stats.nba.com's clutch window; BB-D3's `close` split).
-For the WNBA (`league_id="10"`) through 2005, two 20-minute halves, the window is the last
-5:00 of the 2nd half.
+For the WNBA (`league_id="10"`) through 2005, two 20-minute halves, the regulation window is
+the last 5:00 of the 2nd half; overtime counts as above.
 
 **Parameters**
 
@@ -223,11 +223,12 @@ nba_team_season_flow(2026).sort("kills_pg_rank").select("team_id", "kills_pg", "
 Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits.
 
 One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
-Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
-5:00 mark) in the 4th quarter or an overtime, the score within 5 as it starts (stats.nba.com's
-clutch window); a close game is one with a clutch possession. For the WNBA (`league_id="10"`)
-through 2005, two 20-minute halves, the window is the last 5:00 of the 2nd half. The full
-definitions are in `sportsdataverse._common.team_season_rates`.
+Clutch is a possession in play with 5:00 or less left (starting there, or starting before 5:00
+and ending after it; one that ends at exactly 5:00 is out) in the 4th quarter or an overtime, the
+score within 5 as it starts (stats.nba.com's clutch window); a close game is one with a clutch
+possession. For the WNBA (`league_id="10"`) through 2005, two 20-minute halves, the regulation
+window is the last 5:00 of the 2nd half; overtime counts as above. The full definitions are in
+`sportsdataverse._common.team_season_rates`.
 
 **Parameters**
 
@@ -843,41 +844,4 @@ print(onoff.sort("diff_pts_per_100", descending=True).head())
 # Who makes their team run?
 
 print(onoff.sort("diff_transition_freq", descending=True).head())
-```
-
-### player_rates {#player_rates}
-
-`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Per-player per-minute rate stats from box logs.
-
-Rows with null minutes (DNPs) are dropped. Rate = total stat / total
-minutes across the player's games; `minutes_pg` is the mean minutes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
-
-**Returns**
-
-One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `games` | Int64 | Games played. |
-| `minutes_pg` | Float64 |  |
-| `pts_per_min` | Float64 |  |
-| `reb_per_min` | Float64 |  |
-| `ast_per_min` | Float64 |  |
-| `fg3m_per_min` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_player_props import player_rates
-rates = player_rates(box_logs)
 ```

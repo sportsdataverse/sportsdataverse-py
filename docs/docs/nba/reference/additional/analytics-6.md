@@ -1,10 +1,47 @@
 ---
-title: "NBA — additional Python functions — Analytics: players_on–zone_value"
-sidebar_label: "Analytics: players_on–zone_value"
+title: "NBA — additional Python functions — Analytics: player_rates–zone_value"
+sidebar_label: "Analytics: player_rates–zone_value"
 sidebar_position: 18
-description: "NBA — additional Python functions — Analytics: players_on–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: player_rates–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: players_on–zone_value
+# NBA — additional Python functions — Analytics: player_rates–zone_value
+
+### player_rates {#player_rates}
+
+`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Per-player per-minute rate stats from box logs.
+
+Rows with null minutes (DNPs) are dropped. Rate = total stat / total
+minutes across the player's games; `minutes_pg` is the mean minutes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
+
+**Returns**
+
+One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `games` | Int64 | Games played. |
+| `minutes_pg` | Float64 |  |
+| `pts_per_min` | Float64 |  |
+| `reb_per_min` | Float64 |  |
+| `ast_per_min` | Float64 |  |
+| `fg3m_per_min` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import player_rates
+rates = player_rates(box_logs)
+```
 
 ### players_on_court_from_pbp {#players_on_court_from_pbp}
 
