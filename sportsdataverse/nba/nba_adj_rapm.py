@@ -281,7 +281,7 @@ def nba_adj_rapm(
     Penalty and prior scale: one per league, :data:`ADJ_RAPM_PENALTY` and
     :data:`ADJ_RAPM_PRIOR_SCALE` (fitted by ``tools/fit_adj_rapm_penalty.py``; the constants'
     comment carries the evidence), as :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` takes
-    :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY`. Before #@@PR@@ each fit took RidgeCV's
+    :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY`. Before #1150 each fit took RidgeCV's
     per-season pick at the unscaled prior, which collapsed the spread in seven published WNBA
     seasons (2004: sd 0.64 against plain RAPM's 1.47) and held NBA 2025-26 at 0.77 of plain RAPM's.
 
