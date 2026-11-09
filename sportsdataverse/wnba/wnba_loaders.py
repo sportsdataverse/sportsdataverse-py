@@ -1439,6 +1439,45 @@ def load_wnba_player_impact(seasons, return_as_pandas: bool = False):
         |darko_filtered_skill   |Float64 |
         |darko_projected_rating |Float64 |
         |darko_projected_sd     |Float64 |
+        |o_rapm_n               |Int64   |
+        |d_rapm_n               |Int64   |
+        |rapm_n                 |Int64   |
+        |o_adj_rapm_n           |Int64   |
+        |d_adj_rapm_n           |Int64   |
+        |adj_rapm_n             |Int64   |
+        |ospm_n                 |Int64   |
+        |dspm_n                 |Int64   |
+        |spm_n                  |Int64   |
+        |obpm_n                 |Int64   |
+        |dbpm_n                 |Int64   |
+        |bpm_n                  |Int64   |
+        |war_n                  |Int64   |
+        |o_rapm_rank            |Float64 |
+        |d_rapm_rank            |Float64 |
+        |rapm_rank              |Float64 |
+        |o_adj_rapm_rank        |Float64 |
+        |d_adj_rapm_rank        |Float64 |
+        |adj_rapm_rank          |Float64 |
+        |ospm_rank              |Float64 |
+        |dspm_rank              |Float64 |
+        |spm_rank               |Float64 |
+        |obpm_rank              |Float64 |
+        |dbpm_rank              |Float64 |
+        |bpm_rank               |Float64 |
+        |war_rank               |Float64 |
+        |o_rapm_pct             |Float64 |
+        |d_rapm_pct             |Float64 |
+        |rapm_pct               |Float64 |
+        |o_adj_rapm_pct         |Float64 |
+        |d_adj_rapm_pct         |Float64 |
+        |adj_rapm_pct           |Float64 |
+        |ospm_pct               |Float64 |
+        |dspm_pct               |Float64 |
+        |spm_pct                |Float64 |
+        |obpm_pct               |Float64 |
+        |dbpm_pct               |Float64 |
+        |bpm_pct                |Float64 |
+        |war_pct                |Float64 |
 
     Note:
         The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boban_projected_rating and boban_projected_sd were renamed from darko_*; the loader returns both names for one release, so move to boban_* now (darko_* is deprecated and will be removed).

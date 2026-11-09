@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: add_ctg–nba_coach"
 sidebar_label: "Analytics: add_ctg–nba_coach"
-sidebar_position: 13
+sidebar_position: 14
 description: "NBA — additional Python functions — Analytics: add_ctg–nba_coach — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: add_ctg–nba_coach

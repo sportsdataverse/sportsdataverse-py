@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_player–nba_situational"
 sidebar_label: "Analytics: nba_player–nba_situational"
-sidebar_position: 16
+sidebar_position: 17
 description: "NBA — additional Python functions — Analytics: nba_player–nba_situational — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_player–nba_situational
