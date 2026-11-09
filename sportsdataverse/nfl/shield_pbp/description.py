@@ -53,11 +53,13 @@ def add_description_features(df: pl.DataFrame) -> pl.DataFrame:
         run_location=pl.when(pl.col("play_type") == "run").then(pl.col("run_location_raw")).otherwise(None),
         run_gap=pl.when(pl.col("play_type") == "run").then(pl.col("run_gap_raw")).otherwise(None),
     ).drop("run_location_raw", "run_gap_raw")
-    # Refine play_type: kneels/spikes override the rush/pass base class.
+    # Refine play_type: kneels/spikes override the rush/pass base class only (nflfastR
+    # translate_play_type_nfl), so a spike wiped out by a penalty stays no_play.
+    scrimmage = pl.col("play_type").is_in(["pass", "run"])
     df = df.with_columns(
-        play_type=pl.when(pl.col("qb_kneel") == 1)
+        play_type=pl.when(scrimmage & (pl.col("qb_kneel") == 1))
         .then(pl.lit("qb_kneel"))
-        .when(pl.col("qb_spike") == 1)
+        .when(scrimmage & (pl.col("qb_spike") == 1))
         .then(pl.lit("qb_spike"))
         .otherwise(pl.col("play_type"))
     )

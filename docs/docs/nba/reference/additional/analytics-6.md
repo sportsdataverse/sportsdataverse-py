@@ -150,8 +150,12 @@ print(onoff.sort("diff_transition_freq", descending=True).head())
 
 Per-player per-minute rate stats from box logs.
 
-Rows with null minutes (DNPs) are dropped. Rate = total stat / total
-minutes across the player's games; `minutes_pg` is the mean minutes.
+Rows with null, zero or negative minutes (DNPs) are dropped before anything
+is counted, so `games` counts only games the player logged minutes in.
+Rate = total stat / total minutes across those games; `minutes_pg` is the
+mean minutes. A traded player gets one row: the rates pool every team's
+games, and `team_id` is the team on the player's last kept input row
+(sort `box_logs` by date to make that the latest team).
 
 **Parameters**
 
@@ -161,7 +165,7 @@ minutes across the player's games; `minutes_pg` is the mean minutes.
 
 **Returns**
 
-One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`. Empty input returns that schema with zero rows.
+One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`; `games` is Int64. `player_id` and `team_id` keep the input's dtype (String from the `nba_player_props` loader; integer ids come back as integers); empty input returns the documented schema, with String ids, and zero rows.
 
 | col_name | type | description |
 |---|---|---|

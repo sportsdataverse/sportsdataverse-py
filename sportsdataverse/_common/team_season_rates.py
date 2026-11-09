@@ -15,11 +15,14 @@ rows, never estimated from minutes or box totals:
 
 * ``all`` -- every possession.
 * ``home`` / ``away`` -- the team's home or away games. Neutral-site games are in neither.
-* ``clutch`` -- a possession that starts with :data:`CLUTCH_SECONDS` (5:00) or less left in the
-  last regulation period (the 4th quarter; the 2nd half in men's college) or in any overtime, with
-  the score within :data:`CLUTCH_MARGIN` (5) points as it starts. This is stats.nba.com's clutch
-  window (``ClutchTime="Last 5 Minutes"``, ``PointDiff=5``, the definition ``nba_clutch`` reads), applied
-  to possessions. A possession starts when the previous one in the period ends (when the ball changes
+* ``clutch`` -- a possession in play with :data:`CLUTCH_SECONDS` (5:00) or less left in the last
+  regulation period (the 4th quarter; the 2nd half in men's college and in the WNBA through 2005) or
+  in any overtime, with the score within :data:`CLUTCH_MARGIN` (5) points as it starts. That is a
+  possession that starts with 5:00 or less left, or the one live at the 5:00 mark (it starts before
+  the mark and ends after it). One that starts before the mark and ends exactly at 5:00 is out; one
+  that starts at 5:00 is in, even if it also ends there. This is stats.nba.com's clutch window
+  (``ClutchTime="Last 5 Minutes"``, ``PointDiff=5``, the definition ``nba_clutch`` reads), applied to
+  possessions. A possession starts when the previous one in the period ends (when the ball changes
   hands), and the score is the running total of every earlier possession in the game.
 * ``close`` -- every possession of a close game: a game with at least one clutch possession, i.e.
   within 5 points at some point in the last 5 minutes of regulation or in overtime.
@@ -67,7 +70,8 @@ __all__ = [
     "team_season_rates_league_averages",
 ]
 
-#: The clutch window: the last five minutes of the final regulation period or any overtime...
+#: The clutch window: the last five minutes of the final regulation period or any overtime, the
+#: possession live at the mark included...
 CLUTCH_SECONDS = 300.0
 #: ... with the score within this many points.
 CLUTCH_MARGIN = 5
@@ -166,7 +170,9 @@ def _with_clutch(rows: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             (
                 pl.col("late")
-                & (pl.col("start_clock") <= CLUTCH_SECONDS)
+                # in play at or after the 5:00 mark: it starts inside the window, or it is the
+                # possession live at 5:00 (starts before the mark and ends after it)
+                & ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS).fill_null(False))
                 & (pl.col("start_margin").abs() <= CLUTCH_MARGIN)
             ).alias("clutch")
         )

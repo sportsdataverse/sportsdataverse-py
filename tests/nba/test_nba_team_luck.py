@@ -12,11 +12,12 @@ Fixtures (READMEs in each directory; none synthetic):
 The close-game recount from ESPN's score is independent of the possession engine: a game is close
 when the score before any play in the window is within 5. Observed agreement (gate = observed;
 never loosen a gate to pass):
-NBA 2026 1210 of 1229 games, WNBA 2025 282 of 286. Of the 19 NBA misses, 14 are games where the
+NBA 2026 1215 of 1229 games, WNBA 2025 284 of 286. All 14 NBA misses are games where the
 possessions' made-shot points do not add up to the final margin (250 of 1230 games are off by 1-6
-points, so the running margin drifts), and 5 are a possession that starts before 5:00 and ends
-in the window with the game within 5: BB-D3 only reads the margin at possession starts. Per team,
-the season's close-game count is within 3 of ESPN's (NBA; mean 0.93) and 1 (WNBA).
+points, so the running margin drifts). The possession live at the 5:00 mark counts in the window
+(it starts before 5:00 and ends after it); before that rule 5 more NBA games (1210) and 2 WNBA
+games (282) missed, and the 2026 close games were 546, not 551. Per team, the season's close-game
+count is within 3 of ESPN's (NBA; mean 0.73, 0.93 before) and 1 (WNBA).
 
 The ``bb-team-luck`` rows of ``tests/mutants/registry.yaml`` go red here.
 """
@@ -48,7 +49,7 @@ LUCK = FIXTURES / "bb_team_luck"
 tsr = importlib.import_module("sportsdataverse.nba.nba_team_season_rates")
 mod = importlib.import_module("sportsdataverse.nba.nba_team_luck")
 #: league -> (season, league_id, games agreeing with the ESPN recount, games, worst team |diff|).
-RECOUNT = {"nba": (2026, "00", 1210, 1229, 3), "wnba": (2025, "10", 282, 286, 1)}
+RECOUNT = {"nba": (2026, "00", 1215, 1229, 3), "wnba": (2025, "10", 284, 286, 1)}
 
 
 def _fixture_loader(name: str, expect: list[int]):  # type: ignore[no-untyped-def]
@@ -129,7 +130,7 @@ def test_close_games_are_bb_d3_close_split(nba_2026: pl.DataFrame) -> None:
     assert (joined["close_games"] == joined["rate_games"].fill_null(0)).all()
     assert (nba_2026["close_wins"] + nba_2026["close_losses"] == nba_2026["close_games"]).all()
     # every close game has one NBA winner and one NBA loser
-    assert nba_2026["close_wins"].sum() == nba_2026["close_losses"].sum() == 546
+    assert nba_2026["close_wins"].sum() == nba_2026["close_losses"].sum() == 551
 
 
 def _espn_recount(lg: str, season: int) -> pl.DataFrame:

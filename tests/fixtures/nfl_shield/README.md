@@ -26,6 +26,8 @@ payload bodies, gzipped verbatim (no trimming).
 | `2015_01_DET_SD_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2015.parquet` (downloaded 2026-10-26), 28 columns (© nflverse contributors, CC BY 4.0); an oracle for `test_matches_nflverse` |
 | `2002_16_STL_SEA.json.gz` | 2002 wk16 STL @ SEA (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2002/2002_16_STL_SEA.json`; the 2001-2002 drive conventions (compound codes without the comma, `endedWithScore`, no transition for a clock-ended drive) and a relocated club |
 | `2002_16_STL_SEA_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2002.parquet` (downloaded 2026-10-26), 28 columns (© nflverse contributors, CC BY 4.0); an oracle for `test_matches_nflverse` |
+| `2025_03_LA_PHI.json.gz` | 2025 wk3 LA @ PHI (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_03_LA_PHI.json` (blob `fcdf1738`); play 3600, a blocked field goal the kicker recovers and throws, must stay `field_goal` (`test_play_type.py`) |
+| `2025_02_SEA_PIT.json.gz` | 2025 wk2 SEA @ PIT (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_02_SEA_PIT.json` (blob `dd7d51d5`); play 3686, a sack-fumble reversed to an incomplete pass with intentional grounding: Shield `PASS`, pinned as `pass` although nflverse's stale feed type makes it `no_play` |
 
 The four `2026_02_DET_BUF` files are the live-path fixtures: the Q2 in-progress one exercises
 open-drive possession, the held-back game-outcome columns, the current-situation row

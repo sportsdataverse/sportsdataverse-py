@@ -11,8 +11,8 @@ Not :mod:`sportsdataverse.mbb.mbb_luck`, which is hoop-explorer's 3-point shooti
   game or two each, and stay out of the ranks.
 * The ``ncaa_{mbb,wbb}_possessions`` release, mapped by BB-D3's
   :func:`~sportsdataverse.mbb.mbb_team_season_rates.ncaa_possession_rate_rows`, gives the close
-  games: the last 5:00 of the 2nd half (the 4th quarter in women's basketball from 2016) or an
-  overtime, within 5. The possessions are keyed on the NCAA contest id and carry ESPN's game id;
+  games: a possession in play in the last 5:00 of the 2nd half (the 4th quarter in women's basketball
+  from 2016) or an overtime (the one live at the 5:00 mark included), within 5 as it starts. The possessions are keyed on the NCAA contest id and carry ESPN's game id;
   a contest with no ESPN id cannot be matched to a result and is left unclassed.
 """
 
@@ -103,7 +103,8 @@ def mbb_team_luck(
     final scores, ``games * pts^x / (pts^x + opp_pts^x)``, with the exponent ``x`` fitted per
     league on past seasons (:data:`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
     ``luck_wins`` is ``wins - exp_wins``. A close game is one within 5 points at the start of a
-    possession in the last 5:00 of the 2nd half (4th quarter, women's, from 2016) or overtime.
+    possession in play in the last 5:00 of the 2nd half (4th quarter, women's, from 2016) or
+    overtime: one that starts there, or starts before 5:00 and ends after it.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).

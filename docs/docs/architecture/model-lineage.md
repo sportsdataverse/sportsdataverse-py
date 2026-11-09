@@ -87,6 +87,14 @@ scoring and the booster: NBA and WNBA by sdv-py `tools/models/nba_prediction/wp_
 (`tests/mbb/test_mbb_wp_model_cards.py`, which also holds the college holdout gate). Each test fails on a stale
 card. The other five ship none.
 
+The college refit (#1104) has a pre-registered confirmation season, 2027 (owner decision, 2026-11-09): once
+it is complete, the 2026 holdout gate (the same rule, blocks and fixed replaced booster) is run on it once,
+with nothing re-tuned in between. The reason is the gate's power: the overtime block holds only 326 MBB /
+257 WBB holdout games, and 52 gate cells (22 MBB, 30 WBB) at a one-sided 2.5% false-failure rate expect
+about 1.3 false failures per refit. The gate keeps its absolute-value form (|calibration in the large|
+compared paired); the owner chose "as is" over a signed paired difference. Both cards carry it
+(`holdout_gate.preregistered_confirmation`), and the card test pins it.
+
 ## Fitted constants
 
 | constant | fitting script | status |

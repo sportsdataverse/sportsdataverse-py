@@ -39,6 +39,12 @@ to tune:
   bundled model at ``BASELINE_REF``), so the bar does not move with each refit.
 * A block fails when the shipped booster is significantly worse than the replaced one: the interval's lower
   end is above 0. However small the regression, if it is significant it fails.
+* Pre-registered confirmation (owner decision, 2026-11-09): 2027 is the confirmation season of this refit. When it
+  is complete, the same gate (this rule, the same blocks, the same fixed replaced booster) is run on it once, with
+  nothing re-tuned in between. A 2026 failure is read against it rather than refit on: the overtime block is the
+  least powered (326 MBB / 257 WBB games), and the 52 cells (22 MBB, 30 WBB) each fail a booster that is no worse
+  about 2.5% of the time, so a refit expects about 1.3 false failures. The gate keeps its absolute-value form
+  (|calibration in the large| compared paired): the owner chose "as is" over a signed paired difference.
 * Also gated, as on the NBA / WNBA cards: settled rows score Brier 0, the horn-jump share is at most
   0.005 and the final minute never moves away from the leader.
 
@@ -107,6 +113,18 @@ CAVEATS = [
     "The WBB 2024 release has two wrong horn rows (games 401574803 and 401601119), which the game page settles on "
     "their own score: settled Brier 0.0002 on that season.",
 ]
+#: The pre-registered confirmation season (module docstring), on every card; the test pins it.
+PREREGISTERED_CONFIRMATION = {
+    "season": 2027,
+    "decided_by": "owner",
+    "decided_at": "2026-11-09 03:53 ET",
+    "rule": "the holdout gate rule as written, the same blocks and the same fixed replaced booster, run once on the "
+    "complete 2027 season with nothing re-tuned in between",
+    "why": "the overtime block is the least powered (326 MBB / 257 WBB holdout games), and 52 gate cells (22 MBB, 30 WBB) "
+    "at a one-sided 2.5% false-failure rate each expect about 1.3 false failures per refit, so a single-season failure "
+    "is confirmed on a season nothing was fit or tuned on",
+    "gate_form": "unchanged: |calibration in the large| compared paired, not a signed paired difference (owner: as is)",
+}
 #: League-specific caveats; numbers live in the gate blocks they name, not here.
 #: Gate blocks that FAIL the holdout gate and ship anyway by the owner's decision. They are recorded as exceptions,
 #: never as passes; the test pins this set exactly, so any other failing block, or one of these passing, goes red.
@@ -355,6 +373,7 @@ def build_card(lg: str) -> dict[str, Any]:
             "season": metrics["holdout"]["season"],
             "by_prior": metrics["holdout"]["gate"],
             "owner_accepted_exceptions": OWNER_ACCEPTED_EXCEPTIONS.get(lg),
+            "preregistered_confirmation": PREREGISTERED_CONFIRMATION,
         },
         "confirmation_gate_reported": metrics["confirmation"]["gate"],
         # the confirmation cells where the shipped booster is significantly worse (reported, not gated)

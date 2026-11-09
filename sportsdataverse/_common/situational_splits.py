@@ -10,9 +10,11 @@ the defense (a defensive possession, its points allowed), and tagged once per sp
 family          splits                                      the possession is in the split when
 ==============  ==========================================  ==========================================
 ``all``         ``all``                                     always
-``clutch``      ``clutch``, ``not_clutch``                  BB-D3's clutch window: it starts with 5:00
-                                                            or less left in the last regulation period
-                                                            or an overtime, the score within 5
+``clutch``      ``clutch``, ``not_clutch``                  BB-D3's clutch window: it is in play with
+                                                            5:00 or less left (it starts there, or is
+                                                            the one live at 5:00) in the last
+                                                            regulation period or an overtime, the
+                                                            score within 5 as it starts
                                                             (stats.nba.com's ``nba_clutch`` window)
 ``period``      ``p1`` .. ``p4``, ``ot``                    its period; every overtime is ``ot``; a
                                                             two-halves game has ``p1`` and ``p2`` only

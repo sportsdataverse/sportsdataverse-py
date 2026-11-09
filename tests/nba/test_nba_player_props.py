@@ -49,6 +49,14 @@ def test_player_rates_per_minute() -> None:
     assert abs(p["pts_per_min"] - 0.5) < 1e-9
     assert abs(p["minutes_pg"] - 20.0) < 1e-9
     assert p["games"] == 2
+    assert r.schema["games"] == pl.Int64
+
+
+def test_player_rates_drops_nonpositive_minutes() -> None:
+    logs = pl.concat([_mini_logs(), _mini_logs().head(1).with_columns(minutes=pl.lit(0.0), pts=pl.lit(2.0))])
+    p = player_rates(logs).filter(pl.col("player_id") == "P").row(0, named=True)
+    assert p["games"] == 2
+    assert abs(p["pts_per_min"] - 0.5) < 1e-9
 
 
 def test_project_player_line_scales_with_minutes_and_pace() -> None:

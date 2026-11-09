@@ -37,9 +37,13 @@ loaders take the start year: `load_nba_stats_possessions(2023)` reads `nba_posse
 
 ## Observed on these files (the test gates)
 
-- NBA 2023-24 team clutch vs stats.nba.com: possessions r 0.996, ours 23 fewer a team on average
-  (14 to 29: stats.nba.com counts a possession that starts just before 5:00 and acts inside it); net
-  rating r 0.982, mean difference -0.02.
+- NBA 2023-24 team clutch vs stats.nba.com: possessions r 0.997, ours 12 fewer a team on average
+  (5 to 20); net rating r 0.992, mean difference -0.005. The possession live at the 5:00 mark counts
+  (owner decision 2026-11-06): 1,154 games have one, 328 of them within 5 as it starts, so 328 of
+  the 8,401 clutch possessions; before that rule ours were 23 fewer (14 to 29), r 0.996 / 0.982. Of
+  the remaining 12, about 1 a team is the margin drift (the running made-shot margin missing a
+  technical free throw and the like: 342 possessions flip with the pbp score's margin) and the rest
+  is the margin moving inside a possession, which stats.nba.com reads event by event.
 - Player clutch: 443 of the oracle's 469 players matched by (team, player); possessions r 0.965,
   minutes r 0.969; over the 137 with 150+ oracle possessions, net rating r 0.937, median |diff| 2.7.
   The 26 unmatched are fringe rows (median 2 clutch possessions, at most 51): 13 traded players whom
