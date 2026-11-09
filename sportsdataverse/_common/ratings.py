@@ -207,7 +207,6 @@ def opponent_adjusted_ridge(
         X[:, 2 * n_t + 1] = 0.0
         R[2 * n_t + 1, 2 * n_t + 1] = 1.0
     w = np.ones(n) if weight_col is None else plays[weight_col].cast(pl.Float64).fill_null(-1.0).to_numpy()
-    # ponytail: weights must be > 0, so a zero-weight row can never be the only home contrast
     if (~np.isfinite(w) | (w <= 0)).any():
         raise ValueError(f"opponent_adjusted_ridge: {weight_col!r} has nulls, NaNs or non-positive weights")
     beta = np.linalg.solve(X.T @ (X * w[:, None]) + lam * R, X.T @ (w * y))
