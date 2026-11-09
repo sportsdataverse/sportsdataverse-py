@@ -38558,9 +38558,10 @@ nba_team_season_rates:
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
   season: Season, named by the year it ends (2026 is 2025-26).
-  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games, from
-    the curated nba_neutral_site_games list, are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it)
-    in the 4th quarter or an overtime, the score within 5 as it starts).'
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither: the
+    curated nba_neutral_site_games list, plus every game dated inside the 2020 bubble (from the schedule''s game_date)); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it)
+    in the 4th quarter (the 2nd half for league_id=''10'' through 2005, when the WNBA played two 20-minute halves) or an
+    overtime, the score within 5 as it starts).'
   team_id: stats.nba.com team id (the 10-digit franchise id).
   tov_pct: Turnovers per offensive possession, as a fraction.
   tov_pct_n: 'Sample size of tov_pct: the team''s offensive possessions in the split.'
@@ -38820,8 +38821,8 @@ wnba_team_season_rates:
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
   season: WNBA season (its calendar year).
-  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games, from
-    the curated nba_neutral_site_games list, are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left
+  split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither: the
+    curated nba_neutral_site_games list, plus every game dated inside the 2020 bubble (from the schedule''s game_date)); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left
     (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half through 2005, when the
     WNBA played two 20-minute halves) or an overtime, the score within 5 as it starts).'
   team_id: stats.nba.com team id (the 10-digit franchise id).
@@ -40490,7 +40491,8 @@ mbb_team_luck:
   win_pct: 'Win fraction: wins divided by games, from the final scores.'
   wins: Wins in the season's completed ESPN games, postseason included.
 nba_team_luck:
-  close_games: 'Close games: at least one possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter or an overtime, the score
+  close_games: 'Close games: at least one possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half for
+    league_id=''10'' through 2005, when the WNBA played two 20-minute halves) or an overtime, the score
     within 5 as that possession starts (stats.nba.com''s clutch window; BB-D3''s close split). The margin is the running sum of the possessions'' points,
     so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1215 of 1229 games.'
   close_losses: Losses in close games.

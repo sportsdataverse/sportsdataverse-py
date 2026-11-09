@@ -99,8 +99,10 @@ wbb_team_season_flow(2026).sort("kills_pg_rank").head()
 Women's college season team rates from possessions, with home/away/close/clutch splits.
 
 Delegates to `sportsdataverse.mbb.mbb_team_season_rates.mbb_team_season_rates` with
-`league="womens"`. Clutch is the last 5:00 of the 4th quarter (the 2nd half before 2016)
-or an overtime, the score within 5 as the possession starts.
+`league="womens"`. Clutch is a possession in play in the last 5:00 of the 4th quarter (the
+2nd half before 2016) or an overtime, the score within 5 as it starts. That is one starting
+with 5:00 or less left, or the one live at the mark: a possession from 5:10 to 4:50 counts in
+full, one that ends exactly at 5:00 does not.
 
 **Parameters**
 
