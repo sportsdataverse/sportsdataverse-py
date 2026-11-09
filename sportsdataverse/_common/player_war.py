@@ -171,7 +171,7 @@ def repair_bpm_team_constant(ratings: pl.DataFrame, net: pl.DataFrame) -> pl.Dat
     2.0 has the minute-weighted SUM over five slots (the mean times 5) equal it. Every player on a
     team is off by 0.8 times the team's net rating (team sums run about 5x the margin), and the
     constant goes to ``obpm`` only, which is why every ``dbpm`` is positive (releases fit before
-    sportsdataverse-py #BPMPR; ``nba_bpm`` now applies the BPM 2.0 constants itself). This
+    sportsdataverse-py #1148; ``nba_bpm`` now applies the BPM 2.0 constants itself). This
     re-centres ``bpm`` on its team as listed in the release; it is idempotent, so on a rebuilt
     release it moves ``bpm`` only by the gap between the possession and box net ratings.
     ``obpm`` / ``dbpm`` are not used.
