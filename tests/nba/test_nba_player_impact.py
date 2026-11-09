@@ -14,7 +14,7 @@ import pytest
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS
 from sportsdataverse._common.rate_gates import ON_OFF_MIN_N
 from sportsdataverse.nba import nba_player_impact_context, nba_player_impact_league_averages
-from sportsdataverse.nba.nba_player_impact import IMPACT_RANKED
+from sportsdataverse.nba.nba_player_impact import IMPACT_LOWER_IS_BETTER, IMPACT_RANKED
 
 _FX = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "bb_player_impact"
 _LEAGUES = [("nba", "00"), ("wnba", "10")]
@@ -70,10 +70,11 @@ def test_a_rating_is_ranked_exactly_when_its_n_reaches_the_side_gate(ranked) -> 
 def test_rank_one_is_the_highest_value_and_pct_follows_the_weibull_formula(ranked) -> None:
     lg, _, out = ranked
     rs = out.filter(pl.col("season_type") == "Regular Season")
-    for m in IMPACT_RANKED:  # every metric is higher-is-better, the defensive ones included
+    for m in IMPACT_RANKED:  # higher-is-better (the defensive ones included) except boban_projected_sd
         ranked_rows = rs.filter(pl.col(f"{m}_rank").is_not_null())
         best = ranked_rows.filter(pl.col(f"{m}_rank") == 1.0)
-        assert best[m].item() == ranked_rows[m].max(), m
+        want = ranked_rows[m].min() if m in IMPACT_LOWER_IS_BETTER else ranked_rows[m].max()
+        assert best[m].item() == want, m
         n = ranked_rows.height
         assert ((ranked_rows[f"{m}_pct"] - 100 * (n + 1 - ranked_rows[f"{m}_rank"]) / (n + 1)).abs() < 1e-9).all()
     top = rs.filter(pl.col("adj_rapm_rank") == 1.0)["player_name"].item()
@@ -103,3 +104,25 @@ def test_league_averages_describe_the_ranked_cohort(ranked) -> None:
 def test_unknown_league_raises() -> None:
     with pytest.raises(ValueError, match="league_id"):
         nba_player_impact_context(_impact("nba"), league_id="20")
+
+
+def test_boban_columns_are_ranked_and_the_projection_sd_ascends(ranked) -> None:
+    """The three BOBAN columns take the net on-court gate on off_poss + def_poss; the projection sd ranks
+    ascending (1 = most certain), the skill and the projected rating descending."""
+    lg, _, out = ranked
+    rs = out.filter(pl.col("season_type") == "Regular Season")
+    gate = ON_OFF_MIN_N[lg]["net_rtg_on"]
+    for m in ("boban_filtered_skill", "boban_projected_rating", "boban_projected_sd"):
+        assert (rs[f"{m}_n"] == rs["off_poss"] + rs["def_poss"]).all()
+        assert rs.filter(pl.col(f"{m}_rank").is_not_null())[f"{m}_n"].min() >= gate
+        assert rs[f"{m}_rank"].count() == rs["rapm_rank"].count()  # same gate and sample as rapm
+    sd = rs.filter(pl.col("boban_projected_sd_rank").is_not_null()).sort("boban_projected_sd")
+    assert (
+        sd["boban_projected_sd_rank"][0] == 1.0
+        and sd["boban_projected_sd_pct"][0] == sd["boban_projected_sd_pct"].max()
+    )
+    sk = rs.filter(pl.col("boban_filtered_skill_rank") == 1.0)
+    assert (
+        sk["boban_filtered_skill"].item()
+        == rs.filter(pl.col("boban_filtered_skill_rank").is_not_null())["boban_filtered_skill"].max()
+    )

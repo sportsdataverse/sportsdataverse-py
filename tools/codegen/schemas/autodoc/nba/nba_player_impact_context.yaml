@@ -133,6 +133,15 @@ columns:
 - name: war_n
   type: integer
   description: ''
+- name: boban_filtered_skill_n
+  type: integer
+  description: ''
+- name: boban_projected_rating_n
+  type: integer
+  description: ''
+- name: boban_projected_sd_n
+  type: integer
+  description: ''
 - name: o_rapm_rank
   type: double
   description: ''
@@ -172,6 +181,15 @@ columns:
 - name: war_rank
   type: double
   description: ''
+- name: boban_filtered_skill_rank
+  type: double
+  description: ''
+- name: boban_projected_rating_rank
+  type: double
+  description: ''
+- name: boban_projected_sd_rank
+  type: double
+  description: ''
 - name: o_rapm_pct
   type: double
   description: ''
@@ -209,5 +227,14 @@ columns:
   type: double
   description: ''
 - name: war_pct
+  type: double
+  description: ''
+- name: boban_filtered_skill_pct
+  type: double
+  description: ''
+- name: boban_projected_rating_pct
+  type: double
+  description: ''
+- name: boban_projected_sd_pct
   type: double
   description: ''

@@ -14588,6 +14588,12 @@ load_nba_player_impact:
   type: Int64
 - name: war_n
   type: Int64
+- name: boban_filtered_skill_n
+  type: Int64
+- name: boban_projected_rating_n
+  type: Int64
+- name: boban_projected_sd_n
+  type: Int64
 - name: o_rapm_rank
   type: Float64
 - name: d_rapm_rank
@@ -14614,6 +14620,12 @@ load_nba_player_impact:
   type: Float64
 - name: war_rank
   type: Float64
+- name: boban_filtered_skill_rank
+  type: Float64
+- name: boban_projected_rating_rank
+  type: Float64
+- name: boban_projected_sd_rank
+  type: Float64
 - name: o_rapm_pct
   type: Float64
 - name: d_rapm_pct
@@ -14639,6 +14651,12 @@ load_nba_player_impact:
 - name: bpm_pct
   type: Float64
 - name: war_pct
+  type: Float64
+- name: boban_filtered_skill_pct
+  type: Float64
+- name: boban_projected_rating_pct
+  type: Float64
+- name: boban_projected_sd_pct
   type: Float64
 load_nba_player_season_stats:
 - name: season
@@ -31533,6 +31551,12 @@ load_wnba_player_impact:
   type: Int64
 - name: war_n
   type: Int64
+- name: boban_filtered_skill_n
+  type: Int64
+- name: boban_projected_rating_n
+  type: Int64
+- name: boban_projected_sd_n
+  type: Int64
 - name: o_rapm_rank
   type: Float64
 - name: d_rapm_rank
@@ -31559,6 +31583,12 @@ load_wnba_player_impact:
   type: Float64
 - name: war_rank
   type: Float64
+- name: boban_filtered_skill_rank
+  type: Float64
+- name: boban_projected_rating_rank
+  type: Float64
+- name: boban_projected_sd_rank
+  type: Float64
 - name: o_rapm_pct
   type: Float64
 - name: d_rapm_pct
@@ -31584,6 +31614,12 @@ load_wnba_player_impact:
 - name: bpm_pct
   type: Float64
 - name: war_pct
+  type: Float64
+- name: boban_filtered_skill_pct
+  type: Float64
+- name: boban_projected_rating_pct
+  type: Float64
+- name: boban_projected_sd_pct
   type: Float64
 load_wnba_player_season_stats:
 - name: season
