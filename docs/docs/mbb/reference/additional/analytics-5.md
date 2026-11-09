@@ -1,10 +1,48 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg"
-sidebar_label: "Analytics: using_roster–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: test_positional–weighted_avg"
+sidebar_label: "Analytics: test_positional–weighted_avg"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: test_positional–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: using_roster–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: test_positional–weighted_avg
+
+### test_positional_aware_filter {#test_positional_aware_filter}
+
+`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
+
+Check a positional-aware filter (from `build_positional_aware_filter`)
+
+against a sorted (`order_lineup`-ordered) lineup array.
+
+Faithful port of `PositionUtils.testPositionalAwareFilter`
+(`PositionUtils.ts:831-858`). A fragment matches if any of its
+position-restricted slots (or, when `pos` is empty, any slot at all)
+has a `code`/`id` containing the fragment's filter text
+(case-insensitive substring match). Every positive fragment must match
+(vacuously true if there are none); no negative fragment may match
+(vacuously true if there are none).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
+| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
+| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
+
+**Returns**
+
+Whether the lineup satisfies both the positive and negative filters.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
+lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+```
 
 ### using_roster_pos {#using_roster_pos}
 

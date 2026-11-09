@@ -181,7 +181,7 @@ def mbb_strength_of_schedule(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -192,7 +192,7 @@ def mbb_strength_of_schedule(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -202,7 +202,7 @@ def mbb_strength_of_schedule(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """The daily ``strength_of_schedule`` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
@@ -220,7 +220,8 @@ def mbb_strength_of_schedule(
         as_of_date: Only use games strictly before this date; ``None`` uses every completed
             game. Applies to every season in ``seasons``.
         league: ``"mens"`` or ``"womens"``.
-        ineligible: Team ids barred from the NCAA tournament (sets ``eligible``).
+        ineligible: Team ids barred from the NCAA tournament (sets ``eligible``); ``None``
+            (default) reads the bundled list for each season.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
