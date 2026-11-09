@@ -306,31 +306,66 @@ def _team_shares(player_logs: pl.DataFrame, team_logs: pl.DataFrame) -> pl.DataF
 
 
 def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame) -> pl.DataFrame:
-    """Add a per-team constant so minute-weighted team raw_bpm == the team's efficiency margin.
+    """BPM 2.0 team adjustment: one constant for BPM, a separate one for OBPM (Myers 2020).
+
+    Basketball-Reference's "About Box Plus/Minus (BPM)" (Daniel Myers, BPM 2.0) sets each team
+    adjustment so the players' ratings, weighted by %Min (minutes / (team minutes / 5), five
+    slots that sum to 5), add up to the team's rating: ``(team rating - sum(raw * %Min)) / 5``.
+    That is a minute-weighted team MEAN of ``rating / 5``. BPM is fit to the team's net rating
+    per 100 and OBPM, separately, to the team's offensive rating relative to the league;
+    DBPM is BPM - OBPM, so it lands on the defensive rating relative to the league.
 
     Args:
         raw: Frame with ``player_id``, ``raw_bpm``, ``raw_obpm``.
-        team_margin: Frame with ``team_id``, ``margin`` (efficiency margin per 100 possessions).
+        team_margin: Frame with ``team_id``, ``margin`` (net rating per 100) and ``o_margin``
+            (offensive rating per 100 minus the league's).
         ptm: Frame with ``player_id``, ``team_id``, ``min`` (total minutes per player).
 
     Returns:
         Frame with ``player_id``, ``obpm``, ``bpm`` (team-adjusted).
     """
     j = raw.join(ptm, on="player_id")  # ptm: player_id, team_id, min
-    cur = (
+
+    def wmean(c: str) -> pl.Expr:
+        return ((pl.col(c) * pl.col("min")).sum() / pl.col("min").sum()).alias(f"cur_{c}")
+
+    const = (
         j.group_by("team_id")
-        .agg(((pl.col("raw_bpm") * pl.col("min")).sum() / pl.col("min").sum()).alias("cur"))
+        .agg(wmean("raw_bpm"), wmean("raw_obpm"))
         .join(team_margin, on="team_id")
+        .select(
+            "team_id",
+            (pl.col("margin") / 5 - pl.col("cur_raw_bpm")).alias("k"),
+            (pl.col("o_margin") / 5 - pl.col("cur_raw_obpm")).alias("k_o"),
+        )
     )
-    const = cur.with_columns((pl.col("margin") - pl.col("cur")).alias("k")).select(["team_id", "k"])
     return (
         j.join(const, on="team_id")
         .with_columns(
             (pl.col("raw_bpm") + pl.col("k")).alias("bpm"),
-            (pl.col("raw_obpm") + pl.col("k")).alias("obpm"),
+            (pl.col("raw_obpm") + pl.col("k_o")).alias("obpm"),
         )
         .select(["player_id", "obpm", "bpm"])
     )
+
+
+_ORTG_COLS = ("pts", "fga", "oreb", "tov", "fta")
+
+
+def _league_ortg(team_logs: pl.DataFrame) -> float:
+    """League points per 100 possessions over ``team_logs`` (the box possession estimate).
+
+    Raises:
+        ValueError: If a team row has a null or non-finite total: dropping its points but keeping its
+            possessions (or a NaN reference) would shift every other team's OBPM.
+    """
+    tl = team_logs.select(pl.col(c).cast(pl.Float64) for c in _ORTG_COLS)
+    if not tl.select(pl.all_horizontal(pl.col(c).is_finite().fill_null(False) for c in _ORTG_COLS).all()).item():
+        raise ValueError(
+            f"team_logs has null or non-finite {list(_ORTG_COLS)} totals; the league offensive rating needs them all"
+        )
+    poss = tl["fga"].sum() - tl["oreb"].sum() + tl["tov"].sum() + 0.44 * tl["fta"].sum()
+    return float(tl["pts"].sum() / poss * 100) if poss else 0.0
 
 
 def _nba_bpm_one(
@@ -339,13 +374,14 @@ def _nba_bpm_one(
     positions: pl.DataFrame,
     *,
     team_adjust: bool = True,
+    league_ortg: float | None = None,
 ) -> pl.DataFrame:
     """Season-mode BPM 2.0 core (single frame in, single frame out — no game looping).
 
-    This is the exact pre-``granularity`` ``nba_bpm`` body, unchanged, so that
-    ``granularity="game"`` can call it once per game_id without duplicating any
-    of the position/role/team-adjustment logic. See :func:`nba_bpm` for the
-    public, documented entry point.
+    ``granularity="game"`` calls it once per game_id, so the position/role/team-adjustment logic
+    lives once. ``league_ortg`` is the league offensive rating the OBPM adjustment is relative
+    to; ``None`` takes it from ``team_logs`` (right for a season, wrong for one game, where it
+    would be the two teams' average). See :func:`nba_bpm` for the public entry point.
     """
     # box_features returns oreb/dreb; _raw_bpm expects orb/drb — rename at the boundary
     feats_raw = box_features(player_logs, team_logs)
@@ -370,6 +406,10 @@ def _nba_bpm_one(
             (pl.col("pm") / pl.col("poss") * 100).alias("margin"),
         )
     )
+    # season mode with no season_id groups: the logs are one season and season type by contract
+    lg_ortg = (_league_ortg(team_logs) if league_ortg is None else league_ortg) if team_adjust else 0.0
+    # offense relative to the league; margin - o_margin is the defense's, so DBPM follows it
+    tl = tl.with_columns((pl.col("tp") / pl.col("poss") * 100 - lg_ortg).alias("o_margin"))
     feats_adj = (
         feats_renamed.join(shares.select(["player_id", "team_id"]), on="player_id")
         .join(tl.select(["team_id", "pps_delta"]), on="team_id")
@@ -380,7 +420,7 @@ def _nba_bpm_one(
     ptm = shares.select(["player_id", "team_id", "min"])
 
     if team_adjust:
-        adj = _team_adjust(raw, tl.select(["team_id", "margin"]), ptm)
+        adj = _team_adjust(raw, tl.select(["team_id", "margin", "o_margin"]), ptm)
     else:
         adj = raw.select("player_id", pl.col("raw_obpm").alias("obpm"), pl.col("raw_bpm").alias("bpm"))
 
@@ -405,9 +445,25 @@ def nba_bpm(
     *,
     team_adjust: bool = True,
     granularity: str = "season",
+    league_ortg: float | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame:
     """Faithful BPM 2.0 per player, at season or single-game granularity.
+
+    Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
+    team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
+    ``bpm`` is its net rating per 100 / 5, and its minute-weighted ``obpm`` is (its offensive
+    rating - the league's) / 5, a separate constant. ``dbpm = bpm - obpm`` then averages (the
+    league's offensive rating - the team's defensive rating) / 5, positive for a good defense, so
+    league minute-weighted obpm and dbpm each sit near 0 (2025-26
+    NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
+    the schedule-adjusted ones Basketball-Reference uses. A traded player's minutes count with
+    the first team he appears for in the logs. Before #1148 every player took ``net - team mean``
+    on both bpm and obpm: a team-mean target of the full net rating, five times BPM 2.0's, and
+    all of the adjustment on offense, so dbpm stayed raw (2025-26 regular season, minute-weighted:
+    league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
+    Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
+    Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
 
     Args:
         player_logs: per-player-per-game box lines (``nba_box_logs``'s ``player``);
@@ -422,6 +478,12 @@ def nba_bpm(
             game-native, mirroring ``NbaBpmModel``'s existing fold-native design)
             and returns one row per (game_id, player_id) with a leading ``game_id``
             column; ``gp`` is always 1 in this mode.
+        league_ortg: The league offensive rating (points per 100) the OBPM adjustment is relative
+            to. ``None`` (default) takes it from ``team_logs``: per ``season_id`` when that
+            column is there (stats.nba.com's season_id also encodes the season type, so regular
+            season and playoffs stay apart), else over all of ``team_logs``, which must then be
+            one season and season type. Pass it when ``team_logs`` is not a whole league, for
+            example one game scored on its own.
         return_as_pandas: return pandas instead of polars.
 
     Returns:
@@ -468,7 +530,7 @@ def nba_bpm(
         raise ValueError(f"granularity must be one of {_VALID_BPM_GRANULARITY}, got {granularity!r}")
 
     if granularity == "season":
-        out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust)
+        out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust, league_ortg=league_ortg)
         return out.to_pandas() if return_as_pandas else out
 
     if "game_id" not in player_logs.columns:
@@ -476,12 +538,21 @@ def nba_bpm(
 
     game_ids = player_logs["game_id"].unique().to_list()
     frames: list[pl.DataFrame] = []
+    # one game's two teams are not the league: each game takes its season's league rating
+    by_season = league_ortg is None and "season_id" in team_logs.columns
+    if not team_adjust:
+        lg_ortg: dict = {None: 0.0}  # unused: raw BPM has no team reference
+    elif by_season:
+        lg_ortg = {s: _league_ortg(g) for (s,), g in team_logs.group_by("season_id")}
+    else:
+        lg_ortg = {None: _league_ortg(team_logs) if league_ortg is None else league_ortg}
     for gid in game_ids:
         pl_g = player_logs.filter(pl.col("game_id") == gid)
         tl_g = team_logs.filter(pl.col("game_id") == gid)
         if pl_g.is_empty() or tl_g.is_empty():
             continue
-        scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust)
+        lg = lg_ortg[tl_g["season_id"][0] if by_season and team_adjust else None]
+        scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust, league_ortg=lg)
         frames.append(scored.with_columns(pl.lit(gid).cast(pl.Utf8).alias("game_id")))
 
     if not frames:
