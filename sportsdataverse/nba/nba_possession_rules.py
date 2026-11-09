@@ -233,6 +233,51 @@ def _rebound_missed_shot_index(ctx: EventContext, i: int) -> int:
     return -1
 
 
+def rebound_can_set_offense(ctx: EventContext, i: int) -> bool:
+    """True when rebound row ``i`` is real and follows a missed shot or missed FT.
+
+    Any other rebound row (a placeholder, or one after a make, a turnover or a steal) names the
+    team that just had the ball, so it must not decide a possession's offense.
+
+    Args:
+        ctx: The game's event context (:func:`build_event_context`).
+        i: The index of a rebound row in ``ctx.rows``.
+
+    Returns:
+        Whether the row may decide its possession group's offense.
+    """
+    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0
+
+
+def is_rebound_logged_after_its_putback(rows: "list[dict]", i: int) -> bool:
+    """True when row ``i`` is a rebound the pbp logs right after its own team's made putback.
+
+    The made shot ``i - 1`` and the rebound share a side (``location``), a period and a clock, and a
+    rebound cannot follow a make, so the pbp has the two rows in the wrong order: it is the
+    offensive rebound the putback came from.
+
+    Args:
+        rows: Pbp rows in ``order_index`` order (row dicts).
+        i: The index of the candidate rebound row; out-of-range indexes return False.
+
+    Returns:
+        Whether rows ``i - 1`` and ``i`` are a made shot and its own rebound, logged out of order.
+    """
+    if i <= 0 or i >= len(rows):
+        return False
+    reb, shot = rows[i], rows[i - 1]
+    clock = reb.get("seconds_remaining")
+    return (
+        (reb.get("event_type") or "") == "rebound"
+        and (shot.get("event_type") or "") == "made_shot"
+        and reb.get("location") in ("h", "v")
+        and reb.get("location") == shot.get("location")
+        and reb.get("period") == shot.get("period")
+        and clock is not None
+        and clock == shot.get("seconds_remaining")
+    )
+
+
 _TURNOVER_COINCIDENT_SUBTYPES = frozenset(("shot clock turnover", "kicked ball violation"))
 
 
