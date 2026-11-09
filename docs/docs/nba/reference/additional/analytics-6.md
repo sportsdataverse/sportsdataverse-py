@@ -1,10 +1,70 @@
 ---
-title: "NBA — additional Python functions — Analytics: player_play–zone_value"
-sidebar_label: "Analytics: player_play–zone_value"
+title: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value"
+sidebar_label: "Analytics: nbadraft_mock–zone_value"
 sidebar_position: 18
-description: "NBA — additional Python functions — Analytics: player_play–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: player_play–zone_value
+# NBA — additional Python functions — Analytics: nbadraft_mock–zone_value
+
+### nbadraft_mock_draft {#nbadraft_mock_draft}
+
+`nbadraft_mock_draft(year: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+The current consensus mock draft from NBADraft.net.
+
+One row per pick across both rounds. The page renders round 1 and round 2 as
+the first two pick tables and then **repeats round 1 in a third table**, so
+only the first two are taken -- concatenating all three double-counts round 1.
+The `<noscript>` fallback is another false-positive JS challenge; the pick
+tables are static. A traded pick's team cell carries `*`, which is stripped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Optional[int]` | `None` | Draft year (e.g. `2025`). `None` (default) reads the site's current mock; a year uses the `/nba-mock-drafts/{year}/` path where NBADraft.net has one. |
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `weight`, `position`, `school` and `class`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `round` | Int64 | Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables). |
+| `pick` | Int64 | Pick number within the round. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Int64 | Player weight in pounds. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `school` | String | Player school / pre-draft team. |
+| `class` | String | College class / draft eligibility note. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the page cannot be fetched or carries no pick table; the call still returns an empty frame. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nbadraft_mock_draft
+
+mock = nbadraft_mock_draft()
+print(mock.shape)
+
+# A specific draft year, as pandas
+
+mock_pd = nbadraft_mock_draft(year=2025, return_as_pandas=True)
+
+# Pipeline next step (lottery only)
+
+mock.filter((pl.col("round") == 1) & (pl.col("pick") <= 14))
+```
 
 ### player_play_context {#player_play_context}
 

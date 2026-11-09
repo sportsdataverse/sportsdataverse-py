@@ -38357,7 +38357,7 @@ mbb_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split, whose net_rtg_n is at least 430 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
@@ -38374,7 +38374,7 @@ mbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_efg_pct_n is at least 630 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
@@ -38382,7 +38382,7 @@ mbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_ft_rate_n is at least 450 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
     from the NCAA team box; null in the clutch split.
@@ -38391,7 +38391,7 @@ mbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_orb_pct_n is at least 330 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38402,7 +38402,7 @@ mbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_tov_pct_n is at least 340 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
@@ -38491,7 +38491,7 @@ nba_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split, whose net_rtg_n is at least 2,000 possessions (offense plus
-    defense) (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
@@ -38507,7 +38507,7 @@ nba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_efg_pct_n is at least 1,900 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate, a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split.'
@@ -38515,7 +38515,7 @@ nba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_ft_rate_n is at least 1,500 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate, a null rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split.'
@@ -38523,7 +38523,7 @@ nba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_orb_pct_n is at least 1,200 opponent
-    offensive-rebound chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample
+    offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample
     under that gate, a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38533,7 +38533,7 @@ nba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_tov_pct_n is at least 960 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction.'
@@ -38643,7 +38643,7 @@ wbb_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split, whose net_rtg_n is at least 360 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
@@ -38660,7 +38660,7 @@ wbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_efg_pct_n is at least 600 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split, 0 when the rate is null.'
@@ -38668,7 +38668,7 @@ wbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_ft_rate_n is at least 420 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
     from the NCAA team box; null in the clutch split.
@@ -38677,7 +38677,7 @@ wbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_orb_pct_n is at least 240 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38688,7 +38688,7 @@ wbb_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_tov_pct_n is at least 300 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction. Game-level, from the NCAA team box; null in the clutch split.'
@@ -38755,7 +38755,7 @@ wnba_team_season_rates:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the split, whose net_rtg_n is at least 840 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
@@ -38771,7 +38771,7 @@ wnba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_efg_pct_n is at least 1,300 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate, a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the split.'
@@ -38779,7 +38779,7 @@ wnba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_ft_rate_n is at least 880 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the split.'
@@ -38787,7 +38787,7 @@ wnba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_orb_pct_n is at least 860 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38797,7 +38797,7 @@ wnba_team_season_rates:
     / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams
     that played at least half the most games any team played in the split, whose opp_tov_pct_n is at least 350 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction.'
@@ -38933,7 +38933,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose def_rtg_n is at least 2,000 defensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose def_rtg_n is at least 2,000 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
@@ -38943,7 +38943,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose efg_pct_n is at least 1,200 field-goal attempts (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose efg_pct_n is at least 1,200 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
@@ -38953,7 +38953,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose ft_rate_n is at least 1,300 field-goal attempts (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose ft_rate_n is at least 1,300 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
@@ -38965,7 +38965,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose net_rtg_n is at least 2,000 possessions (offense plus defense) (the sample at which the rate is half signal,
+    (WNBA)), whose net_rtg_n is at least 2,000 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com''s
@@ -38975,7 +38975,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose off_rtg_n is at least 1,300 offensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose off_rtg_n is at least 1,300 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
@@ -38986,7 +38986,7 @@ nba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_efg_pct_n is at least 1,900 opponent field-goal attempts (the sample at which the rate is half
+    '10' (WNBA)), whose opp_efg_pct_n is at least 1,900 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half
     signal, rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group
     when fewer than ten qualifying units have a finite value of this rate or they all share one value.
   opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
@@ -38996,7 +38996,7 @@ nba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_ft_rate_n is at least 1,500 opponent field-goal attempts (the sample at which the rate is half
+    '10' (WNBA)), whose opp_ft_rate_n is at least 1,500 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half
     signal, rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group
     when fewer than ten qualifying units have a finite value of this rate or they all share one value.
   opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
@@ -39019,7 +39019,7 @@ nba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_tov_pct_n is at least 960 defensive possessions (the sample at which the rate is half signal,
+    '10' (WNBA)), whose opp_tov_pct_n is at least 960 defensive possessions (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
@@ -39030,7 +39030,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose orb_pct_n is at least 410 offensive-rebound chances (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose orb_pct_n is at least 410 offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
@@ -39052,7 +39052,7 @@ nba_lineup_seasons:
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose tov_pct_n is at least 1,400 offensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose tov_pct_n is at least 1,400 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
 wnba_lineup_seasons:
@@ -39062,7 +39062,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose def_rtg_n is at least 810 defensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose def_rtg_n is at least 810 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
@@ -39072,7 +39072,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose efg_pct_n is at least 750 field-goal attempts (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose efg_pct_n is at least 750 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
@@ -39082,7 +39082,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose ft_rate_n is at least 720 field-goal attempts (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose ft_rate_n is at least 720 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   lineup_id: The unit's stats.nba.com player ids, sorted numerically and joined with '-'.
@@ -39094,7 +39094,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose net_rtg_n is at least 840 possessions (offense plus defense) (the sample at which the rate is half signal,
+    (WNBA)), whose net_rtg_n is at least 840 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
@@ -39103,7 +39103,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose off_rtg_n is at least 660 offensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose off_rtg_n is at least 660 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
@@ -39114,7 +39114,7 @@ wnba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_efg_pct_n is at least 1,300 opponent field-goal attempts (the sample at which the rate is half
+    '10' (WNBA)), whose opp_efg_pct_n is at least 1,300 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half
     signal, rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group
     when fewer than ten qualifying units have a finite value of this rate or they all share one value.
   opp_ft_rate: 'The opponent''s free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws,
@@ -39124,7 +39124,7 @@ wnba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_ft_rate_n is at least 880 opponent field-goal attempts (the sample at which the rate is half signal,
+    '10' (WNBA)), whose opp_ft_rate_n is at least 880 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
   opp_orb_pct: 'The opponent''s offensive-rebound rate: its OREB / (its OREB + the unit''s DREB). Null with a zero denominator.
@@ -39147,7 +39147,7 @@ wnba_lineup_seasons:
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id
-    '10' (WNBA)), whose opp_tov_pct_n is at least 350 defensive possessions (the sample at which the rate is half signal,
+    '10' (WNBA)), whose opp_tov_pct_n is at least 350 defensive possessions (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
@@ -39158,7 +39158,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose orb_pct_n is at least 220 offensive-rebound chances (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose orb_pct_n is at least 220 offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
@@ -39180,7 +39180,7 @@ wnba_lineup_seasons:
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 400 with league_id '00' (NBA), 200 with league_id '10'
-    (WNBA)), whose tov_pct_n is at least 1,100 offensive possessions (the sample at which the rate is half signal, rate_gates);
+    (WNBA)), whose tov_pct_n is at least 1,100 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
 mbb_lineup_seasons:
@@ -39190,7 +39190,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose def_rtg_n is at least 460 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
@@ -39200,7 +39200,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose efg_pct_n is at least 500 field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
@@ -39229,7 +39229,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose ft_rate_n is at least 530 field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   lineup_id: The unit's stats.ncaa.org player ids, sorted as text and joined with '-'.
@@ -39259,7 +39259,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose net_rtg_n is at least 430 possessions (offense
-    plus defense) (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that
+    plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that
     gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this
     rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
@@ -39268,7 +39268,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose off_rtg_n is at least 270 offensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
@@ -39278,7 +39278,7 @@ mbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_efg_pct_n is at least 630 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of
     this rate or they all share one value.
   opp_fg3_pct: 'The opponent''s three-point percentage. Null with a zero denominator. Each event counts for the lineup on
@@ -39307,7 +39307,7 @@ mbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_ft_rate_n is at least 450 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of
     this rate or they all share one value.
   opp_mid_pct: 'The opponent''s mid-range field-goal percentage. Null with a zero denominator. Each event counts for the lineup
@@ -39335,7 +39335,7 @@ mbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_orb_pct_n is at least 330 opponent
-    offensive-rebound chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample
+    offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample
     under that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value
     of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
@@ -39365,7 +39365,7 @@ mbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_tov_pct_n is at least 340 defensive
-    possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate
+    possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
@@ -39375,7 +39375,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose orb_pct_n is at least 160 offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
@@ -39415,7 +39415,7 @@ mbb_lineup_seasons:
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose tov_pct_n is at least 450 offensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
 wbb_lineup_seasons:
@@ -39425,7 +39425,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   def_rtg_rank: Rank of def_rtg within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose def_rtg_n is at least 470 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
@@ -39435,7 +39435,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   efg_pct_rank: Rank of efg_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose efg_pct_n is at least 230 field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
@@ -39445,7 +39445,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   fg3_pct_rank: Rank of fg3_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose fg3_pct_n is at least 350 three-point attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   fg3_rate: 'Share of the unit''s field-goal attempts that are threes. Null with a zero denominator. Each event counts for
@@ -39464,7 +39464,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   ft_rate_rank: Rank of ft_rate within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose ft_rate_n is at least 550 field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   lineup_id: The unit's stats.ncaa.org player ids, sorted as text and joined with '-'.
@@ -39494,7 +39494,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose net_rtg_n is at least 360 possessions (offense
-    plus defense) (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that
+    plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that
     gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this
     rate or they all share one value.
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
@@ -39503,7 +39503,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   off_rtg_rank: Rank of off_rtg within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose off_rtg_n is at least 130 offensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
   opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
@@ -39513,7 +39513,7 @@ wbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_efg_pct_n is at least 600 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of
     this rate or they all share one value.
   opp_fg3_pct: 'The opponent''s three-point percentage. Null with a zero denominator. Each event counts for the lineup on
@@ -39542,7 +39542,7 @@ wbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_ft_rate_n is at least 420 opponent
-    field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under
+    field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under
     that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of
     this rate or they all share one value.
   opp_mid_pct: 'The opponent''s mid-range field-goal percentage. Null with a zero denominator. Each event counts for the lineup
@@ -39570,7 +39570,7 @@ wbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_orb_pct_n is at least 240 opponent
-    offensive-rebound chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample
+    offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample
     under that gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value
     of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
@@ -39600,7 +39600,7 @@ wbb_lineup_seasons:
     ranked; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season and unit size, league-wide (the highest value ranks 1; ties average),
     among units with at least min_poss possessions (poss + opp_poss; default 200), whose opp_tov_pct_n is at least 300 defensive
-    possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate
+    possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
   orb_pct: 'Offensive-rebound rate: OREB / (OREB + the opponent''s DREB), as a fraction. Null with a zero denominator. Each
@@ -39610,7 +39610,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   orb_pct_rank: Rank of orb_pct within the season and unit size, league-wide (the highest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose orb_pct_n is at least 160 offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
@@ -39650,7 +39650,7 @@ wbb_lineup_seasons:
     null when the rank is null.'
   tov_pct_rank: Rank of tov_pct within the season and unit size, league-wide (the lowest value ranks 1; ties average), among
     units with at least min_poss possessions (poss + opp_poss; default 200), whose tov_pct_n is at least 210 offensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
 nba_lineup_count_rows:
@@ -39909,7 +39909,7 @@ mbb_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season, whose net_rtg_n is at least 430 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the season.'
@@ -39926,7 +39926,7 @@ mbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_efg_pct_n is at least 630 opponent field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
@@ -39934,7 +39934,7 @@ mbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_ft_rate_n is at least 450 opponent field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
     from the NCAA team box.
@@ -39944,7 +39944,7 @@ mbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_orb_pct_n is at least 330 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
@@ -39955,7 +39955,7 @@ mbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_tov_pct_n is at least 340 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction. Game-level, from the NCAA team box.'
@@ -40060,7 +40060,7 @@ nba_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season, whose net_rtg_n is at least 2,000 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the season.'
@@ -40076,7 +40076,7 @@ nba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_efg_pct_n is at least 1,900 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season.'
@@ -40084,7 +40084,7 @@ nba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_ft_rate_n is at least 1,500 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the season.'
@@ -40092,7 +40092,7 @@ nba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_orb_pct_n is at least 1,200 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
@@ -40102,7 +40102,7 @@ nba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_tov_pct_n is at least 960 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction.'
@@ -40208,7 +40208,7 @@ wbb_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season, whose net_rtg_n is at least 360 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the season.'
@@ -40225,7 +40225,7 @@ wbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_efg_pct_n is at least 600 opponent field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season, 0 when the rate is null.'
@@ -40233,7 +40233,7 @@ wbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_ft_rate_n is at least 420 opponent field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level,
     from the NCAA team box.
@@ -40243,7 +40243,7 @@ wbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_orb_pct_n is at least 240 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
@@ -40254,7 +40254,7 @@ wbb_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_tov_pct_n is at least 300 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction. Game-level, from the NCAA team box.'
@@ -40359,7 +40359,7 @@ wnba_team_strength:
     the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   net_rtg_rank: Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least
     half the most games any team played in the season, whose net_rtg_n is at least 840 possessions (offense plus defense)
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the season.'
@@ -40375,7 +40375,7 @@ wnba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_efg_pct_rank: Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_efg_pct_n is at least 1,300 opponent field-goal
-    attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_ft_rate: Opponents' free-throw rate, FTA / FGA.
   opp_ft_rate_n: 'Sample size of opp_ft_rate: the opponents'' field-goal attempts in the season.'
@@ -40383,7 +40383,7 @@ wnba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_ft_rate_rank: Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_ft_rate_n is at least 880 opponent field-goal attempts
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   opp_orb_pct: Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate).
   opp_orb_pct_n: 'Sample size of opp_orb_pct: the opponents'' offensive-rebound chances in the season.'
@@ -40391,7 +40391,7 @@ wnba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_orb_pct_rank: Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_orb_pct_n is at least 860 opponent offensive-rebound
-    chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate,
+    chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the season (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the season.
@@ -40401,7 +40401,7 @@ wnba_team_strength:
     + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null.'
   opp_tov_pct_rank: Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played
     at least half the most games any team played in the season, whose opp_tov_pct_n is at least 350 defensive possessions
-    (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
+    (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   orb_pct: 'Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense''s DREB),
     as a fraction.'
@@ -76297,7 +76297,7 @@ nba_player_on_off:
     ranked; null where the rank is.'
   def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA)),
-    whose def_rtg_on_n is at least 1,600 defensive possessions on the floor (the sample at which the rate is half signal,
+    whose def_rtg_on_n is at least 1,600 defensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null under that gate or below 10 qualifiers.
   games: Games the player was on the floor for the team.
   minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
@@ -76341,7 +76341,7 @@ nba_player_on_off:
     ranked; null where the rank is.'
   off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA)),
-    whose off_rtg_on_n is at least 1,700 offensive possessions on the floor (the sample at which the rate is half signal,
+    whose off_rtg_on_n is at least 1,700 offensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null under that gate or below 10 qualifiers.
   opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
     he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
@@ -76435,7 +76435,7 @@ wnba_player_on_off:
     ranked; null where the rank is.'
   def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose def_rtg_on_n
-    is at least 1,200 defensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 1,200 defensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   games: Games the player was on the floor for the team.
   minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
@@ -76459,7 +76459,7 @@ wnba_player_on_off:
     ranked; null where the rank is.'
   net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose net_rtg_on_n
-    is at least 1,600 possessions on the floor (offense plus defense) (the sample at which the rate is half signal, rate_gates);
+    is at least 1,600 possessions on the floor (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null under that gate or below 10 qualifiers.
   off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
   off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
@@ -76467,7 +76467,7 @@ wnba_player_on_off:
     ranked; null where the rank is.'
   off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose off_rtg_diff_n
-    is at least 720 offensive possessions on the thinner side (on or off the floor) (the sample at which the rate is half
+    is at least 720 offensive possessions on the thinner side (on or off the floor) (the sample at which the rate was, on the fit seasons, half
     signal, rate_gates); null under that gate or below 10 qualifiers.
   off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s season, the games he missed included
     (and, for a player traded or signed mid-season, the games before he joined or after he left): pts_off per 100 poss_off;
@@ -76479,7 +76479,7 @@ wnba_player_on_off:
     ranked; null where the rank is.'
   off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose off_rtg_on_n
-    is at least 610 offensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 610 offensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
     he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
@@ -76573,7 +76573,7 @@ mbb_player_on_off:
     ranked; null where the rank is.'
   def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose def_rtg_on_n
-    is at least 750 defensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 750 defensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   games: Games the player was on the floor for the team.
   minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
@@ -76597,7 +76597,7 @@ mbb_player_on_off:
     ranked; null where the rank is.'
   net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose net_rtg_on_n
-    is at least 1,100 possessions on the floor (offense plus defense) (the sample at which the rate is half signal, rate_gates);
+    is at least 1,100 possessions on the floor (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null under that gate or below 10 qualifiers.
   off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
   off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
@@ -76617,7 +76617,7 @@ mbb_player_on_off:
     ranked; null where the rank is.'
   off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose off_rtg_on_n
-    is at least 530 offensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 530 offensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
     he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
@@ -76711,7 +76711,7 @@ wbb_player_on_off:
     ranked; null where the rank is.'
   def_rtg_on_rank: Rank of def_rtg_on within the season, league-wide (1 = best, lowest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose def_rtg_on_n
-    is at least 590 defensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 590 defensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   games: Games the player was on the floor for the team.
   minutes_off: 'Game-clock minutes of the team''s season with the player off the floor: the rest of the team''s season, the
@@ -76735,7 +76735,7 @@ wbb_player_on_off:
     ranked; null where the rank is.'
   net_rtg_on_rank: Rank of net_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose net_rtg_on_n
-    is at least 600 possessions on the floor (offense plus defense) (the sample at which the rate is half signal, rate_gates);
+    is at least 600 possessions on the floor (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null under that gate or below 10 qualifiers.
   off_rtg_diff: 'On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null.'
   off_rtg_diff_n: 'Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n.'
@@ -76755,7 +76755,7 @@ wbb_player_on_off:
     ranked; null where the rank is.'
   off_rtg_on_rank: Rank of off_rtg_on within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose off_rtg_on_n
-    is at least 240 offensive possessions on the floor (the sample at which the rate is half signal, rate_gates); null under
+    is at least 240 offensive possessions on the floor (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null under
     that gate or below 10 qualifiers.
   opp_poss_off: 'The team''s defensive possessions with the player off the floor: the rest of the team''s season, the games
     he missed included (and, for a player traded or signed mid-season, the games before he joined or after he left).'
