@@ -42438,6 +42438,8 @@ load_nba_stats_possessions:
   off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
   off_player_4: NBA Stats player id of offensive on-court player 4 of 5 for the possession.
   off_player_5: NBA Stats player id of offensive on-court player 5 of 5 for the possession.
+  points: Points the offense scored in the possession (its score step), plus any score it made while on defense
+    since its previous possession (a technical free throw, say), credited here with its shots.
   possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
   start_order_index: order_index of the play-by-play event that starts the possession.
   start_seconds_remaining: Seconds remaining in the period when the possession started.
@@ -42461,6 +42463,8 @@ load_nba_stats_possessions_v3:
   off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
   off_player_4: NBA Stats player id of offensive on-court player 4 of 5 for the possession.
   off_player_5: NBA Stats player id of offensive on-court player 5 of 5 for the possession.
+  points: Points the offense scored in the possession (its score step), plus any score it made while on defense
+    since its previous possession (a technical free throw, say), credited here with its shots.
   possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
   start_order_index: order_index of the play-by-play event that starts the possession.
   start_seconds_remaining: Seconds remaining in the period when the possession started.
@@ -49250,6 +49254,8 @@ load_wnba_stats_possessions:
   off_player_3: stats.wnba.com identifier of offensive on-court player 3 of 5 for the possession (unordered slot).
   off_player_4: stats.wnba.com identifier of offensive on-court player 4 of 5 for the possession (unordered slot).
   off_player_5: stats.wnba.com identifier of offensive on-court player 5 of 5 for the possession (unordered slot).
+  points: Points the offense scored in the possession (its score step), plus any score it made while on defense
+    since its previous possession (a technical free throw, say), credited here with its shots.
   possession_start_type: 'How the possession began: OffDeadball, OffTimeout, OffMadeShot, OffMissedShot, or OffLiveBallTurnover.'
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   start_order_index: order_index of the first event in the possession; joins to the wnba_stats_pbp table.

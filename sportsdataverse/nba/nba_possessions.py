@@ -795,7 +795,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
         shooting.extend(_shooting_rows(events, game_id, poss_num, home_id, away_id))
         def_pts = (end_home - prev_home) if defense == home_id else (end_away - prev_away)
         def_shots = {k: v for k, v in _event_detail(events, defense, home_id, away_id).items() if k in SHOT_KEYS}
-        if def_pts > 0 or any(def_shots.values()):
+        if def_pts != 0 or any(def_shots.values()):
             carries.append((len(records) - 1, defense, def_pts, def_shots))
 
         prev_home = end_home
@@ -851,9 +851,14 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``dreb``, ``tov``)
         computed by :func:`_event_detail` from the possession's events, each
         filtered to the offense team (except ``dreb``, which counts the
-        defense's real rebounds); ``points == 2*fg2m + 3*fg3m + ftm`` holds
-        exactly on every NBA / WNBA possession (``points`` is a score delta,
-        and in the G League a single free throw can be worth 2 or 3 -- see
+        defense's real rebounds).  ``points`` is the offense's score step over
+        the possession plus any score the team made while on defense since
+        its previous possession (a technical FT), which
+        :func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`
+        credits to its next counted possession in the same period, shots and
+        all; ``points == 2*fg2m + 3*fg3m + ftm`` holds except where a
+        challenge posts points on a replay row with no made-shot row, and in
+        the G League, where a single free throw can be worth 2 or 3 (see
         :func:`_event_detail`).  Also includes three pbpstats-parity
         columns from :func:`_possession_start_type` / :func:`_count_as_possession`:
         ``number_in_period`` (Int64, the flat ``possession_number`` reset to 1

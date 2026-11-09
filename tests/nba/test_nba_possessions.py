@@ -862,8 +862,9 @@ def test_shooting_frame_matches_team_columns_offense_only(game_id):
     """Per team, the shooter sums == the team columns of its possessions.
 
     A defense shooter (a technical FT) stays in its own possession of the shooting frame, while the
-    team columns credit it to that team's next possession (``credit_defense_scoring``), so the two
-    agree per team and game, and per possession everywhere else.
+    team columns credit it to that team's next counted possession in the same period
+    (``credit_defense_scoring``), so the two agree per team and game, and per possession on every
+    row but a carry's source and receiver.
     """
     enh = _enh(game_id)
     poss = build_possessions(enh)
@@ -872,6 +873,33 @@ def test_shooting_frame_matches_team_columns_offense_only(game_id):
     by_shooter = sh.group_by(pl.col("team_id")).agg([pl.col(c).sum() for c in _SHOOT_COLS]).sort("team_id")
     by_team = poss.group_by(pl.col("offense_team_id").alias("team_id")).agg([pl.col(c).sum() for c in _SHOOT_COLS])
     assert by_shooter.to_dicts() == by_team.sort("team_id").to_dicts()
+    # per possession: equal on every row except a carry's source (a defense shooter) and its receiver,
+    # the scorer's next counted possession in the same period
+    rows = poss.sort("possession_number").to_dicts()
+    defense_shots = sh.join(poss.select("possession_number", "offense_team_id"), on="possession_number").filter(
+        pl.col("team_id") != pl.col("offense_team_id")
+    )
+    exempt = set()
+    for p, t in defense_shots.select("possession_number", "team_id").unique().iter_rows():
+        k = next(i for i, r in enumerate(rows) if r["possession_number"] == p)
+        later = [r for r in rows[k + 1 :] if r["offense_team_id"] == t]
+        earlier = [r for r in reversed(rows[:k]) if r["offense_team_id"] == t]
+        same = [r for r in later + earlier if r["period"] == rows[k]["period"] and r["count_as_possession"]]
+        exempt |= {p, (same or [r for r in later + earlier if r["count_as_possession"]])[0]["possession_number"]}
+    offense_sums = (
+        sh.join(poss.select("possession_number", "offense_team_id"), on="possession_number")
+        .filter(pl.col("team_id") == pl.col("offense_team_id"))
+        .group_by("possession_number")
+        .agg([pl.col(c).sum() for c in _SHOOT_COLS])
+    )
+    jj = poss.join(offense_sums, on="possession_number", how="left", suffix="_sh").with_columns(
+        [pl.col(f"{c}_sh").fill_null(0) for c in _SHOOT_COLS]
+    )
+    bad = jj.filter(
+        ~pl.col("possession_number").is_in(list(exempt)),
+        pl.any_horizontal([pl.col(c) != pl.col(f"{c}_sh") for c in _SHOOT_COLS]),
+    )
+    assert bad.height == 0, bad.select("possession_number", *_SHOOT_COLS).to_dicts()[:5]
 
 
 @pytest.mark.parametrize("game_id", GAMES)
@@ -1083,21 +1111,24 @@ def test_defense_scores_are_credited_to_the_scoring_team(monkeypatch: pytest.Mon
 
 
 @pytest.mark.parametrize(
-    ("teams", "counted", "want"),
+    ("teams", "counted", "periods", "want"),
     [
-        ([1, 2, 1, 1], [True, True, False, True], 3),  # the next counted row of the team
-        ([1, 2, 1, 1], [True, True, False, False], 0),  # none later: the last earlier counted row
-        ([1, 2, 1, 1], [False, True, False, False], 2),  # none counted: the next row of the team
-        ([1, 2, 2, 2], [False, True, True, True], 0),  # the team's only row is earlier and uncounted
+        ([1, 2, 1, 1], [True, True, False, True], [1, 1, 1, 1], 3),  # the next counted row of the team
+        ([1, 2, 1, 1], [True, True, False, False], [1, 1, 1, 1], 0),  # none later: the last earlier counted
+        ([1, 2, 1, 1], [False, True, False, False], [1, 1, 1, 1], 2),  # none counted: the next row
+        ([1, 2, 2, 2], [False, True, True, True], [1, 1, 1, 1], 0),  # the only row is earlier and uncounted
+        ([1, 2, 1, 1], [True, True, True, True], [1, 1, 2, 2], 0),  # the same period beats a later period
     ],
 )
-def test_credit_defense_scoring_picks_the_receiving_row(teams: list[int], counted: list[bool], want: int) -> None:
-    """Which row a carry lands on: next counted, else last earlier counted, else next, else last earlier."""
+def test_credit_defense_scoring_picks_the_receiving_row(
+    teams: list[int], counted: list[bool], periods: list[int], want: int
+) -> None:
+    """Which row a carry lands on: the same period first, counted rows first, later rows first."""
     from sportsdataverse.nba.nba_possession_rules import credit_defense_scoring
 
     rows = [
-        {"offense_team_id": t, "count_as_possession": c, "points": 0, **dict.fromkeys(SHOT_KEYS, 0)}
-        for t, c in zip(teams, counted)
+        {"offense_team_id": t, "count_as_possession": c, "period": p, "points": 0, **dict.fromkeys(SHOT_KEYS, 0)}
+        for t, c, p in zip(teams, counted, periods)
     ]
     credit_defense_scoring(rows, [(1, 1, 1, {**dict.fromkeys(SHOT_KEYS, 0), "fta": 1, "ftm": 1})])
     assert [k for k, r in enumerate(rows) if r["points"]] == [want]
