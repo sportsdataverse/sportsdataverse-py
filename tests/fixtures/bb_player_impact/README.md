@@ -21,6 +21,6 @@ the assets `load_nba_player_impact(2025)` and `load_wnba_player_impact(2025)` re
 Id dtypes: `player_id` / `team_id` / `season` / `off_poss` / `def_poss` Int64. `season` is the END
 year as the releases stamp it.
 
-These are the releases as published before the November 2026 rebuild, so their `o_adj_rapm` /
+These releases were fit before #1137, so their `o_adj_rapm` /
 `d_adj_rapm` still carry the no-intercept offsets (about +11 / -10). The rank tests do not depend
 on the values being centred: they check the grammar (gates, direction, percentile formula, cohort).

@@ -77,8 +77,11 @@ def nba_player_impact_context(
 
     Ranks are computed within ``(season, season_type)`` over the players whose ``<m>_n`` reaches
     the metric's gate (module docstring); a playoff run rarely reaches the regular-season gates,
-    so most playoff ranks are null. A null or non-finite metric is never ranked. Nothing is
-    dropped, and running it on its own output gives the same frame.
+    so most playoff ranks are null. A row's rank and percentile are also null when its metric is
+    null or non-finite, when its ``season`` or ``season_type`` is null, when fewer than
+    :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` players qualify in the
+    group, or when every qualifying value in the group is equal. Nothing is dropped, and running
+    it on its own output gives the same frame.
 
     Args:
         impact: A ``player_impact`` table: ``season``, ``season_type``, ``off_poss``, ``def_poss``
@@ -119,9 +122,12 @@ def nba_player_impact_league_averages(
     """The league-average rows of a ``player_impact`` table, one block per season type.
 
     The football F1 rows of :func:`~sportsdataverse._common.league_context.league_averages` over
-    the same players :func:`nba_player_impact_context` ranks (each metric's sample gate), so ``n``
-    is that metric's ranked cohort. ``category`` is ``player_impact_regular_season`` or
-    ``player_impact_playoffs``; ``qualifier_min`` is null (the gates differ by metric).
+    the players who pass each metric's sample gate, so ``n`` is that metric's qualified cohort:
+    the players with a finite value and enough possessions. It is reported even where
+    :func:`nba_player_impact_context` leaves the ranks null (fewer than 10 qualifiers, or all
+    equal). ``category`` is ``player_impact_`` plus the ``season_type`` lowercased with spaces as
+    underscores: ``player_impact_regular_season`` and ``player_impact_playoffs`` for the releases'
+    two season types. ``qualifier_min`` is null (the gates differ by metric).
 
     Args:
         impact: A ``player_impact`` table, as :func:`nba_player_impact_context` takes.
