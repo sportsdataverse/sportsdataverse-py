@@ -23,15 +23,21 @@ def test_rto_posterior_matches_closed_form() -> None:
     y = Xd @ beta_true + rng.normal(0, 0.5, n)
     X = csr_matrix(Xd)
     prior_mean = np.array([0.1, 0.0, 0.0, 0.0, 0.0, 0.0])
+    y = y + 1.1  # a league-like points-per-possession level, which the unpenalized intercept carries
     fit = _fit_prior_ridge(X, y, prior_mean, alphas=np.array([10.0]), n_samples=4000, seed=1)
     lam = 10.0
-    XtX = Xd.T @ Xd
-    beta_hat = prior_mean + np.linalg.solve(XtX + lam * np.eye(twoP), Xd.T @ (y - Xd @ prior_mean))
-    resid = y - Xd @ beta_hat
-    sigma2 = float(resid @ resid) / (n - twoP)
+    Xc = Xd - Xd.mean(axis=0)  # the intercept-fitted ridge is the ridge on the centred design
+    yp = y - Xd @ prior_mean
+    XtX = Xc.T @ Xc
+    delta = np.linalg.solve(XtX + lam * np.eye(twoP), Xc.T @ (yp - yp.mean()))
+    beta_hat = prior_mean + delta
+    intercept = yp.mean() - Xd.mean(axis=0) @ delta
+    resid = yp - Xd @ delta - intercept
+    sigma2 = float(resid @ resid) / (n - twoP - 1)
     cov_cf = sigma2 * np.linalg.inv(XtX + lam * np.eye(twoP))
     # RTO posterior mean ≈ β̂ ; RTO posterior cov ≈ closed-form (loose tol — sampling noise)
     assert np.allclose(fit.coef, beta_hat, atol=1e-6)
+    assert abs(fit.intercept - intercept) < 1e-9
     assert np.allclose(fit.posterior.mean(axis=0), beta_hat, atol=0.03)
     assert np.allclose(np.cov(fit.posterior.T), cov_cf, atol=0.02)
 
@@ -189,8 +195,10 @@ def test_adj_rapm_shrinks_to_the_real_prior_under_a_huge_penalty(real_possession
 
 
 def test_adj_rapm_prior_moves_the_real_fit(real_possessions_and_prior) -> None:
-    """At the default CV penalty the prior must still pull the estimates (corr with the prior net
-    0.2646 observed 2026-10-11) well above the prior-free fit on the same possessions (0.0761)."""
+    """At the default CV penalty the prior must still pull the estimates well above the prior-free fit
+    on the same possessions. Observed 2026-11-09 with the intercept fitted: corr with the prior net
+    1.0 (on three games the CV picks the largest penalty) against 0.1098 without the prior; the
+    no-intercept fit read 0.268 / 0.080."""
     poss, prior, rapm = real_possessions_and_prior
     net = rapm.select("player_id", (pl.col("o_rapm") + pl.col("d_rapm")).alias("prior_net"))
     with_prior = nba_adj_rapm(poss, prior, n_samples=50, seed=0).join(net, on="player_id", how="inner")
@@ -200,3 +208,18 @@ def test_adj_rapm_prior_moves_the_real_fit(real_possessions_and_prior) -> None:
     assert r_with >= 0.26, r_with
     assert r_with - r_without >= 0.15, (r_with, r_without)
     print("ADJ_RAPM_REAL_PRIOR_OK", round(r_with, 4), round(r_without, 4))
+
+
+def test_adj_rapm_o_and_d_are_centred_on_the_real_fit(real_possessions_and_prior) -> None:
+    """The unpenalized intercept carries the league's points per possession, so o and d sit on 0.
+
+    Without it the penalty split the ~1.1 points between every coefficient: on these possessions
+    the possession-weighted means read o +10.917 / d -9.621 (the published 2025-26 table: +12.03 /
+    -10.85); fitted with the intercept they read +0.700 / +0.001 (observed 2026-11-09)."""
+    poss, prior, _ = real_possessions_and_prior
+    out = nba_adj_rapm(poss, prior, n_samples=20, seed=0)
+    o = float((out["o_adj_rapm"] * out["off_poss"]).sum() / out["off_poss"].sum())
+    d = float((out["d_adj_rapm"] * out["def_poss"]).sum() / out["def_poss"].sum())
+    assert abs(o) < 1.5 and abs(d) < 1.5, (o, d)
+    assert (out["o_adj_rapm"] + out["d_adj_rapm"] - out["adj_rapm"]).abs().max() <= 1e-9
+    print("ADJ_RAPM_CENTRED_OK", round(o, 3), round(d, 3))

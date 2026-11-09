@@ -9,8 +9,8 @@ score: within a team-season, a player's rating minus his team's possession-weigh
 the team's net rating per 100 divided by 5. Over the season the team's possession-weighted mean
 rating is then its net rating / 5 (before the league centring, which shifts every team alike), so
 a team's points above average are exactly its point margin, whatever offset the
-source carries (``o_adj_rapm`` / ``d_adj_rapm`` sit about +11 / -11, the ``adj_rapm`` sum is off
-by about +1). A traded player is anchored on each team for the possessions he played there. The
+source carries (in releases built before November 2026 ``o_adj_rapm`` / ``d_adj_rapm`` sit about
++11 / -11 and the ``adj_rapm`` sum is off by about +1). A traded player is anchored on each team for the possessions he played there. The
 ratings are then centred on the league: their possession-weighted mean is 0 each season. A
 player missing a rating (null, NaN or infinite) is his team's average on that team.
 
