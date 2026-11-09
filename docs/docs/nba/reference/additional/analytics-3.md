@@ -104,6 +104,59 @@ units = nba_lineup_seasons(2025)
 units.filter(n_players=5).sort("net_rtg_rank").head()
 ```
 
+### nba_neutral_site_games {#nba_neutral_site_games}
+
+`nba_neutral_site_games(seasons: 'list[int] | None' = None, *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+The curated NBA / WNBA neutral-site games: played abroad, or NBA Cup knockout games in Las Vegas.
+
+The 2020 bubbles are a date rule (`BUBBLES`), not rows. The team ratings, the season sim,
+the rated priors and game flow drop the home-court term for every game in either.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int] \| None` | `None` | Seasons to keep, named by the year they end (`2026` is 2025-26; the WNBA season is its calendar year). `None` keeps all. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per game: `league`, `season`, `game_id` (the stats.nba.com id, Utf8), `game_date`, `season_type` (`regular-season`, or `nba-cup` for a Cup final), `home_team` / `away_team` (stats abbreviations, the designated home team first), `arena`, `city`, `country`, `reason` (`international` or `cup_knockout`) and `source_url`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | nba or wnba. |
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (Utf8). |
+| `game_date` | String | Game date (US Eastern), as in the stats schedule release. |
+| `season_type` | String | Schedule season type: regular-season, or nba-cup for an NBA Cup final (which does not count in the standings). |
+| `home_team` | String | Designated home team (stats.nba.com abbreviation). |
+| `away_team` | String | Away team (stats.nba.com abbreviation). |
+| `arena` | String | Arena the game was played in. |
+| `city` | String | City of the arena. |
+| `country` | String | Country of the arena. |
+| `reason` | String | Why the game is neutral: international (played abroad) or cup_knockout (an NBA Cup knockout game in Las Vegas). |
+| `source_url` | String | The source that documents the game. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_neutral_site_games
+games = nba_neutral_site_games([2026])
+
+# WNBA
+
+nba_neutral_site_games(league_id="10")
+```
+
 ### nba_play_context {#nba_play_context}
 
 `nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`

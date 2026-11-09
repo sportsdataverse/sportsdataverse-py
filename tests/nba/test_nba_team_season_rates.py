@@ -139,17 +139,33 @@ def test_for_and_against_balance(nba_2026: pl.DataFrame) -> None:
 
 
 def test_home_away_split_against_the_box_score(nba_2026: pl.DataFrame) -> None:
+    from sportsdataverse.nba.nba_neutral_site import nba_neutral_site_games
+
+    # 2025-26's neutral games (Mexico City, Berlin, London, the Cup semifinals) are in neither split
+    neutral = nba_neutral_site_games([2026])["game_id"].to_list()
     sched = pl.read_parquet(RATES / "nba_schedule_2026.parquet").filter(season_type="regular-season")
-    home_box = sched.group_by(pl.col("home_team_id").alias("team_id")).agg(pl.len().alias("home_games"))
+    is_neutral = pl.col("game_id").cast(pl.Utf8).is_in(neutral)
+    home_box = (
+        sched.filter(~is_neutral).group_by(pl.col("home_team_id").alias("team_id")).agg(pl.len().alias("home_games"))
+    )
+    n_neutral = (
+        pl.concat([sched.filter(is_neutral).select(pl.col(f"{s}_team_id").alias("team_id")) for s in ("home", "away")])
+        .group_by("team_id")
+        .agg(pl.len().alias("neutral_games"))
+    )
+    assert n_neutral["neutral_games"].sum() == 2 * 5  # 3 games abroad and the 2 semifinals, both sides
     wide = (
         nba_2026.filter(pl.col("split").is_in(["all", "home", "away"]))
         .pivot(on="split", index="team_id", values=["games", "poss", "pts"])
         .join(home_box, on="team_id", validate="1:1")
+        .join(n_neutral, on="team_id", how="left", validate="1:1")
+        .with_columns(pl.col("neutral_games").fill_null(0))
     )
     assert (wide["games_home"] == wide["home_games"]).all()
-    assert (wide["games_home"] + wide["games_away"] == wide["games_all"]).all()
-    assert (wide["poss_home"] + wide["poss_away"] == wide["poss_all"]).all()
-    assert (wide["pts_home"] + wide["pts_away"] == wide["pts_all"]).all()
+    assert (wide["games_home"] + wide["games_away"] + wide["neutral_games"] == wide["games_all"]).all()
+    plain = wide.filter(pl.col("neutral_games") == 0)
+    assert (plain["poss_home"] + plain["poss_away"] == plain["poss_all"]).all()
+    assert (plain["pts_home"] + plain["pts_away"] == plain["pts_all"]).all()
     # Home-court advantage is real in 2025-26: the league's home split outscores its away split.
     home = nba_2026.filter(split="home")
     away = nba_2026.filter(split="away")

@@ -35,6 +35,7 @@ import polars as pl
 from scipy.stats import norm
 
 from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_season_sim import PreseasonPrior, as_of_game_model, preseason_prior
 from sportsdataverse.nba.nba_team_season_rates import _league_loaders, nba_possession_rate_rows
 
@@ -221,6 +222,11 @@ def nba_rated_priors(
     stats = keyed.select("game_date", "_h", "_a", "stats_game_id", "home_team_id", "away_team_id", "season_type")
     matched = espn.join(
         stats.rename({"home_team_id": "_hs", "away_team_id": "_as"}), on=["game_date", "_h", "_a"], how="left"
+    ).with_columns(  # ESPN's flag is wrong both ways (misses the bubble, flags All-Star games): ours wins
+        pl.when(pl.col("stats_game_id").is_not_null())
+        .then(nba_neutral_site._neutral_site(espn, league_id, "stats_game_id"))
+        .otherwise(pl.col("neutral_site"))
+        .alias("neutral_site")
     )
     to_rate = matched.filter(pl.col("stats_game_id").is_not_null()).select(
         "game_id", "game_date", "neutral_site", pl.col("_hs").alias("home_team_id"), pl.col("_as").alias("away_team_id")

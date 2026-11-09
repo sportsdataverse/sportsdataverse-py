@@ -57,6 +57,7 @@ import polars as pl
 
 from sportsdataverse._common.team_strength import possession_ridge_ratings
 from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_cup import CUP_FIRST_SEASON, CupDraws, CupInputs, simulate_cup_draws
 from sportsdataverse.nba.nba_season_rules import (
     NBA_LOTTERY_DRAWS,
@@ -157,7 +158,7 @@ SIM_SCHEMA: dict[str, pl.DataType] = {
     "n_sims": pl.Int64(),
 }
 
-_GAME_COLS = ("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts")
+_GAME_COLS = ("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts", "neutral_site")
 
 
 @dataclass(frozen=True)
@@ -179,9 +180,9 @@ class GameModel:
     margin_sd: float
     prior_sd: float
 
-    def margin(self, net_home: np.ndarray, net_away: np.ndarray) -> np.ndarray:
-        """Expected home margin in points for home / away net ratings."""
-        return (net_home - net_away + 2.0 * self.hfa) * self.poss / 100.0
+    def margin(self, net_home: np.ndarray, net_away: np.ndarray, neutral: np.ndarray | bool = False) -> np.ndarray:
+        """Expected home margin in points for home / away net ratings; no home term at a neutral site."""
+        return (net_home - net_away + 2.0 * self.hfa * (1.0 - np.asarray(neutral, dtype=float))) * self.poss / 100.0
 
 
 @dataclass(frozen=True)
@@ -361,6 +362,7 @@ def _simulate_games(
     a: np.ndarray,
     played: tuple[np.ndarray, np.ndarray, np.ndarray],
     *,
+    neutral: np.ndarray | bool = False,
     n_sims: int,
     wnba: bool,
     uncertain: bool,
@@ -372,7 +374,7 @@ def _simulate_games(
     shift = rng.standard_normal((n_sims, n_t)) * sd if uncertain else np.zeros((n_sims, n_t))
     scale = model.poss / 100.0
     margins = (
-        model.margin(net[h], net[a])
+        model.margin(net[h], net[a], neutral)
         + (shift[:, h] - shift[:, a]) * scale
         + _noise_sd(model, sd[h], sd[a], uncertain) * rng.standard_normal((n_sims, h.size))
     )
@@ -624,7 +626,8 @@ def simulate_pro_season(
 
     Args:
         games: One season's regular-season games: ``season``, ``game_id``, ``home_team_id``,
-            ``away_team_id`` (Int64), ``home_pts`` / ``away_pts`` (null for a game to simulate).
+            ``away_team_id`` (Int64), ``home_pts`` / ``away_pts`` (null for a game to simulate), and
+            optionally ``neutral_site`` (no home term; :mod:`sportsdataverse.nba.nba_neutral_site`).
         model: The game model (:func:`as_of_game_model`).
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         n_sims: Simulated seasons.
@@ -724,8 +727,19 @@ def _simulate_season(
     sd = np.minimum(sd, np.sqrt(0.375) * model.margin_sd / (model.poss / 100.0))
     h = np.array([index[t] for t in future["home_team_id"].to_list()], dtype=np.int64)
     a = np.array([index[t] for t in future["away_team_id"].to_list()], dtype=np.int64)
+    neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False
     wins, pair, point_diff, shift, margins = _simulate_games(
-        model, net, sd, h, a, played, n_sims=n_sims, wnba=league_id == "10", uncertain=rating_uncertainty, rng=rng
+        model,
+        net,
+        sd,
+        h,
+        a,
+        played,
+        neutral=neutral,
+        n_sims=n_sims,
+        wnba=league_id == "10",
+        uncertain=rating_uncertainty,
+        rng=rng,
     )
     noise = _noise_sd(model, sd[:, None], sd[None, :], rating_uncertainty)
     known = played[0].sum(1) + played[0].sum(0) + np.bincount(h, minlength=n_t) + np.bincount(a, minlength=n_t)
@@ -774,8 +788,8 @@ def _simulate_season(
     return pl.DataFrame(out, schema=SIM_SCHEMA).sort("conference", "mean_seed"), cup_draws
 
 
-def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.DataFrame:
-    """The regular-season games, scores blanked on and after ``as_of_date``.
+def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None, league_id: str = "00") -> pl.DataFrame:
+    """The regular-season games, scores blanked on and after ``as_of_date``, with ``neutral_site``.
 
     Games without both teams are dropped: until December the release lists the NBA Cup knockout
     games with TBD teams (``team_id`` 0), which are not on any team's schedule yet.
@@ -787,6 +801,7 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None) -> pl.Dat
             pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date().alias("game_date"),
             pl.col("home_team_id").cast(pl.Int64),
             pl.col("away_team_id").cast(pl.Int64),
+            nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site"),
         )
         .filter((pl.col("home_team_id") > 0) & (pl.col("away_team_id") > 0))
     )
@@ -814,7 +829,7 @@ def _load_inputs(
     """
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([season - offset])
-    games = _regular_games(schedule, as_of_date)
+    games = _regular_games(schedule, as_of_date, league_id)
     done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
     possessions = load_possessions([season - offset])
     rows = nba_possession_rate_rows(possessions, schedule, league_id=league_id)
@@ -829,7 +844,7 @@ def _load_inputs(
         last_rows = nba_possession_rate_rows(
             load_possessions([season - 1 - offset]), last_schedule, league_id=league_id
         )
-        last = _regular_games(last_schedule, None)
+        last = _regular_games(last_schedule, None, league_id)
         prior = preseason_prior(
             last_rows,
             sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list())),
@@ -841,7 +856,7 @@ def _load_inputs(
     )
     records = None
     if league_id == "10" and last_schedule.height:
-        records = _records(_regular_games(last_schedule, None))
+        records = _records(_regular_games(last_schedule, None, league_id))
     season_games = _season_games(schedule, league_id)
     cup_in = None
     if league_id == "00" and season >= CUP_FIRST_SEASON and (cup == "always" or (cup == "auto" and season_games)):

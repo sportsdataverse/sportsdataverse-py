@@ -1,0 +1,39 @@
+schema: nba_neutral_site_games
+kind: dataframe
+columns:
+- name: league
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: game_date
+  type: character
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: arena
+  type: character
+  description: ''
+- name: city
+  type: character
+  description: ''
+- name: country
+  type: character
+  description: ''
+- name: reason
+  type: character
+  description: ''
+- name: source_url
+  type: character
+  description: ''

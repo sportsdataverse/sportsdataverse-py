@@ -8923,11 +8923,31 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'return (net_home - net_away + 2.0 * self.hfa) * self.poss / 100.0'
+  snippet: 'return (net_home - net_away + 2.0 * self.hfa * (1.0 - np.asarray(neutral, dtype=float))) * self.poss / 100.0'
   mutant: 'return (net_home - net_away) * self.poss / 100.0'
   test: tests/nba/test_nba_season_sim.py::test_game_model_home_term
   expected: kill
   note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
+
+- id: bb-ps-neutral-site-ignored-in-sim
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'model.margin(net[h], net[a], neutral)'
+  mutant: 'model.margin(net[h], net[a])'
+  test: tests/nba/test_nba_neutral_site.py::test_the_sim_plays_neutral_games_without_the_home_term
+  expected: kill
+  note: A neutral game (abroad, a Las Vegas Cup semifinal) is simulated without the home term.
+
+- id: bb-d3-neutral-site-ignored-in-rates
+  group: bb-pro-season
+  finding: BB-D19
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: 'nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site")'
+  mutant: 'pl.lit(False).alias("neutral_site")'
+  test: tests/nba/test_nba_neutral_site.py::test_possession_rows_drop_the_home_term_for_neutral_games
+  expected: kill
+  note: The possession rows carry the neutral flag, so the ridge drops the home term for those games.
 
 - id: bb-ps-rating-shift-off
   group: bb-pro-season
