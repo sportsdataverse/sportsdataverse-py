@@ -60,7 +60,14 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   played) — the same quantity as the ``sos`` column; the Big 12
   grouped-ties descent rule (compare records vs a tied group of common
   opponents collectively, prior to that group's own tiebreak) applies to ALL
-  registry descent rungs; multi-team combined head-to-head applies only when
+  registry descent rungs, and the SEC, Big Ten, ACC and Big 12 rungs
+  (``common_only``) descend only over opponents every tied team played, as
+  their policies say "common conference opponents played by all other teams
+  involved in the tie" (the Sun Belt's "next highest position" rung does not;
+  ``ponytail:`` the SEC's head-to-head split of a tied opponent pair and the
+  ACC's "with ties broken" opponent order are read as the collective group —
+  across the completed 2014-2026 seasons only two 2014 ACC ranks would move;
+  sportsdataverse/sportsdataverse-py#1140); multi-team combined head-to-head applies only when
   every tied pair played (otherwise only the defeated-all elimination
   applies, seeding the team that beat every other tied team it played;
   ``ponytail:`` the symmetric lost-to-all elimination is NOT separately
@@ -144,7 +151,7 @@ _GENERIC_CASCADE: list[_Rung] = [
 _P5_TEMPLATE: list[_Rung] = [
     {"kind": "h2h"},
     {"kind": "record_vs_common"},
-    {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
+    {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True, "common_only": True},
     {"kind": "opp_conf_win_pct"},
     {"kind": "analytics_rating"},
     {"kind": "coin_toss"},
@@ -221,7 +228,7 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
             [
                 {"kind": "h2h"},
                 {"kind": "record_vs_common"},
-                {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True},
+                {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True, "common_only": True},
                 {"kind": "opp_conf_win_pct"},
                 {"kind": "capped_scoring_margin", "off_cap": 42, "def_cap": 48},
                 {"kind": "coin_toss"},
@@ -237,7 +244,7 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
             [
                 {"kind": "h2h"},
                 {"kind": "record_vs_common"},
-                {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True},
+                {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},
                 {"kind": "opp_conf_win_pct"},
                 {"kind": "total_wins", "fcs_cap": 1},
                 {"kind": "analytics_rating"},
@@ -654,12 +661,27 @@ def _apply_record_vs_common_desc(
     cands: list[str],
     rec_sim: dict[str, dict[str, list[float]]],
     conf_pct_by_team: dict[str, float],
+    common_only: bool = False,
 ) -> list[str]:
     """Descend the conference standings (best to worst) comparing vs each common
     opponent (or tied GROUP of opponents, compared collectively — the Big 12
     grouped-ties rule, adopted for all registry descent rungs per ambiguity 2).
+
+    ``common_only`` (the SEC, Big Ten, ACC and Big 12 rungs) descends only over
+    opponents that EVERY tied team played: the Big Ten and Big 12 policies say
+    "common conference opponents played by all other teams involved in the
+    tie", and the SEC and ACC steps compare "common" opponents the same way.
+    Without it a tier counts once each tied team played any one of its teams,
+    so the 2025 ACC's 4-4 tier (Clemson, Louisville, California, Wake Forest),
+    none of which all five 6-2 teams played, cut that tie to Duke and Georgia
+    Tech, where the ACC ruled the step could not separate the five. The Sun
+    Belt rung ("the team in the next highest position in the final divisional
+    standings") keeps the looser reading.
     """
     others = [team for team in conf_pct_by_team if team not in cands]
+    if common_only:
+        commons = set.intersection(*(set(rec_sim.get(c, {})) for c in cands))
+        others = [team for team in others if team in commons]
     tiers: dict[float, list[str]] = {}
     for team in others:
         tiers.setdefault(round(conf_pct_by_team[team], 9), []).append(team)
@@ -687,7 +709,9 @@ def _apply_rung(
     if kind == "record_vs_common":
         return _apply_record_vs_common(cands, rec_sim)
     if kind == "record_vs_common_desc":
-        return _apply_record_vs_common_desc(cands, rec_sim, ctx.conf_pct_by_team)
+        return _apply_record_vs_common_desc(
+            cands, rec_sim, ctx.conf_pct_by_team, common_only=bool(rung.get("common_only"))
+        )
     if kind == "sov":
         return _keep_max(cands, {c: cast(float, metrics[c]["sov"]) for c in cands})
     if kind == "sos":
@@ -765,6 +789,12 @@ def _pick_winner(
     because every rung returns a subset, so a restart requires a strict size
     decrease (bounded by tie size - 1) and a rung that keeps every candidate
     advances.
+
+    ``ponytail:`` the Sun Belt, American and Mountain West texts restart only
+    once a tie is cut to two ("remaining teams will continue down the
+    tiebreaker" otherwise); that variant is not modeled because no completed
+    2014-2026 season ranks differently under it. Add a per-epoch restart flag
+    if one ever does.
     """
     cands = sorted(tied)
     i = 0

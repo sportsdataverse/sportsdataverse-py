@@ -11111,3 +11111,17 @@
   test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
   expected: kill
   note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).
+
+# --- #1140: the order-of-finish descent compares only opponents every tied team played --------------
+- id: cfb-standings-descent-common-opponents-only
+  group: cfb-standings
+  finding: '#1140'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '    if common_only:'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_standings.py::TestCommonOpponentDescent
+  expected: kill
+  note: >-
+    A tier counts once each tied team played any one of its teams, so the real 2025 ACC five-way tie is
+    cut to Duke/Georgia Tech and Georgia Tech takes the berth on head-to-head (the real pairing was
+    Virginia/Duke), and the 2025 SEC sends Ole Miss instead of Alabama.

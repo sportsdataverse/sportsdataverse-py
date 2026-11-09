@@ -1,0 +1,134 @@
+season,week,game_type,home_team,away_team,home_points,away_points,result,neutral
+2025,2,REG,Kentucky,Ole Miss,23,30,-7,0
+2025,2,REG,NC State,Virginia,35,31,4,0
+2025,3,REG,Georgia Tech,Clemson,24,21,3,0
+2025,3,REG,LSU,Florida,20,10,10,0
+2025,3,REG,Ole Miss,Arkansas,41,35,6,0
+2025,3,REG,South Carolina,Vanderbilt,7,31,-24,0
+2025,3,REG,Stanford,Boston College,30,20,10,0
+2025,3,REG,Tennessee,Georgia,41,44,-3,0
+2025,3,REG,Wake Forest,NC State,24,34,-10,0
+2025,4,REG,Clemson,Syracuse,21,34,-13,0
+2025,4,REG,Duke,NC State,45,33,12,0
+2025,4,REG,Missouri,South Carolina,29,20,9,0
+2025,4,REG,Oklahoma,Auburn,24,17,7,0
+2025,4,REG,Virginia,Stanford,48,20,28,0
+2025,5,REG,Boston College,California,24,28,-4,0
+2025,5,REG,Georgia,Alabama,21,24,-3,0
+2025,5,REG,Mississippi State,Tennessee,34,41,-7,0
+2025,5,REG,NC State,Virginia Tech,21,23,-2,0
+2025,5,REG,Ole Miss,LSU,24,19,5,0
+2025,5,REG,Pittsburgh,Louisville,27,34,-7,0
+2025,5,REG,South Carolina,Kentucky,35,13,22,0
+2025,5,REG,Syracuse,Duke,3,38,-35,0
+2025,5,REG,Texas A&M,Auburn,16,10,6,0
+2025,5,REG,Virginia,Florida State,46,38,8,0
+2025,5,REG,Wake Forest,Georgia Tech,29,30,-1,0
+2025,6,REG,Alabama,Vanderbilt,30,14,16,0
+2025,6,REG,California,Duke,21,45,-24,0
+2025,6,REG,Florida,Texas,29,21,8,0
+2025,6,REG,Florida State,Miami,22,28,-6,0
+2025,6,REG,Georgia,Kentucky,35,14,21,0
+2025,6,REG,Louisville,Virginia,27,30,-3,0
+2025,6,REG,North Carolina,Clemson,10,38,-28,0
+2025,6,REG,Pittsburgh,Boston College,48,7,41,0
+2025,6,REG,SMU,Syracuse,31,18,13,0
+2025,6,REG,Texas A&M,Mississippi State,31,9,22,0
+2025,6,REG,Virginia Tech,Wake Forest,23,30,-7,0
+2025,7,REG,Auburn,Georgia,10,20,-10,0
+2025,7,REG,Boston College,Clemson,10,41,-31,0
+2025,7,REG,Florida State,Pittsburgh,31,34,-3,0
+2025,7,REG,Georgia Tech,Virginia Tech,35,20,15,0
+2025,7,REG,LSU,South Carolina,20,10,10,0
+2025,7,REG,Missouri,Alabama,24,27,-3,0
+2025,7,REG,SMU,Stanford,34,10,24,0
+2025,7,REG,Tennessee,Arkansas,34,31,3,0
+2025,7,REG,Texas,Oklahoma,23,6,17,1
+2025,7,REG,Texas A&M,Florida,34,17,17,0
+2025,8,REG,Alabama,Tennessee,37,20,17,0
+2025,8,REG,Arkansas,Texas A&M,42,45,-3,0
+2025,8,REG,Auburn,Missouri,17,23,-6,0
+2025,8,REG,California,North Carolina,21,18,3,0
+2025,8,REG,Clemson,SMU,24,35,-11,0
+2025,8,REG,Duke,Georgia Tech,18,27,-9,0
+2025,8,REG,Florida,Mississippi State,23,21,2,0
+2025,8,REG,Georgia,Ole Miss,43,35,8,0
+2025,8,REG,Kentucky,Texas,13,16,-3,0
+2025,8,REG,Miami,Louisville,21,24,-3,0
+2025,8,REG,South Carolina,Oklahoma,7,26,-19,0
+2025,8,REG,Stanford,Florida State,20,13,7,0
+2025,8,REG,Syracuse,Pittsburgh,13,30,-17,0
+2025,8,REG,Vanderbilt,LSU,31,24,7,0
+2025,9,REG,Arkansas,Auburn,24,33,-9,0
+2025,9,REG,Georgia Tech,Syracuse,41,16,25,0
+2025,9,REG,Kentucky,Tennessee,34,56,-22,0
+2025,9,REG,LSU,Texas A&M,25,49,-24,0
+2025,9,REG,Louisville,Boston College,38,24,14,0
+2025,9,REG,Miami,Stanford,42,7,35,0
+2025,9,REG,Mississippi State,Texas,38,45,-7,0
+2025,9,REG,North Carolina,Virginia,16,17,-1,0
+2025,9,REG,Oklahoma,Ole Miss,26,34,-8,0
+2025,9,REG,Pittsburgh,NC State,53,34,19,0
+2025,9,REG,South Carolina,Alabama,22,29,-7,0
+2025,9,REG,Vanderbilt,Missouri,17,10,7,0
+2025,9,REG,Virginia Tech,California,42,34,8,0
+2025,9,REG,Wake Forest,SMU,13,12,1,0
+2025,10,REG,Arkansas,Mississippi State,35,38,-3,0
+2025,10,REG,Auburn,Kentucky,3,10,-7,0
+2025,10,REG,California,Virginia,21,31,-10,0
+2025,10,REG,Clemson,Duke,45,46,-1,0
+2025,10,REG,Florida,Georgia,20,24,-4,1
+2025,10,REG,Florida State,Wake Forest,42,7,35,0
+2025,10,REG,NC State,Georgia Tech,48,36,12,0
+2025,10,REG,Ole Miss,South Carolina,30,14,16,0
+2025,10,REG,SMU,Miami,26,20,6,0
+2025,10,REG,Stanford,Pittsburgh,20,35,-15,0
+2025,10,REG,Syracuse,North Carolina,10,27,-17,0
+2025,10,REG,Tennessee,Oklahoma,27,33,-6,0
+2025,10,REG,Texas,Vanderbilt,34,31,3,0
+2025,10,REG,Virginia Tech,Louisville,16,28,-12,0
+2025,11,REG,Alabama,LSU,20,9,11,0
+2025,11,REG,Boston College,SMU,13,45,-32,0
+2025,11,REG,Clemson,Florida State,24,10,14,0
+2025,11,REG,Kentucky,Florida,38,7,31,0
+2025,11,REG,Louisville,California,26,29,-3,0
+2025,11,REG,Miami,Syracuse,38,10,28,0
+2025,11,REG,Mississippi State,Georgia,21,41,-20,0
+2025,11,REG,Missouri,Texas A&M,17,38,-21,0
+2025,11,REG,North Carolina,Stanford,20,15,5,0
+2025,11,REG,Vanderbilt,Auburn,45,38,7,0
+2025,11,REG,Virginia,Wake Forest,9,16,-7,0
+2025,12,REG,Alabama,Oklahoma,21,23,-2,0
+2025,12,REG,Boston College,Georgia Tech,34,36,-2,0
+2025,12,REG,Duke,Virginia,17,34,-17,0
+2025,12,REG,Florida State,Virginia Tech,34,14,20,0
+2025,12,REG,Georgia,Texas,35,10,25,0
+2025,12,REG,LSU,Arkansas,23,22,1,0
+2025,12,REG,Louisville,Clemson,19,20,-1,0
+2025,12,REG,Miami,NC State,41,7,34,0
+2025,12,REG,Missouri,Mississippi State,49,27,22,0
+2025,12,REG,Ole Miss,Florida,34,24,10,0
+2025,12,REG,Texas A&M,South Carolina,31,30,1,0
+2025,12,REG,Wake Forest,North Carolina,28,12,16,0
+2025,13,REG,Florida,Tennessee,11,31,-20,0
+2025,13,REG,Georgia Tech,Pittsburgh,28,42,-14,0
+2025,13,REG,NC State,Florida State,21,11,10,0
+2025,13,REG,North Carolina,Duke,25,32,-7,0
+2025,13,REG,Oklahoma,Missouri,17,6,11,0
+2025,13,REG,SMU,Louisville,38,6,32,0
+2025,13,REG,Stanford,California,31,10,21,0
+2025,13,REG,Texas,Arkansas,52,37,15,0
+2025,13,REG,Vanderbilt,Kentucky,45,17,28,0
+2025,13,REG,Virginia Tech,Miami,17,34,-17,0
+2025,14,REG,Arkansas,Missouri,17,31,-14,0
+2025,14,REG,Auburn,Alabama,20,27,-7,0
+2025,14,REG,California,SMU,38,35,3,0
+2025,14,REG,Duke,Wake Forest,49,32,17,0
+2025,14,REG,Mississippi State,Ole Miss,19,38,-19,0
+2025,14,REG,NC State,North Carolina,42,19,23,0
+2025,14,REG,Oklahoma,LSU,17,13,4,0
+2025,14,REG,Pittsburgh,Miami,7,38,-31,0
+2025,14,REG,Syracuse,Boston College,12,34,-22,0
+2025,14,REG,Tennessee,Vanderbilt,24,45,-21,0
+2025,14,REG,Texas,Texas A&M,27,17,10,0
+2025,14,REG,Virginia,Virginia Tech,27,7,20,0

@@ -265,6 +265,33 @@ class TestRestartOnElimination:
         assert ranks["A"] == 4
 
 
+TITLE_TIES_2025_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_2025_title_ties"
+
+
+class TestCommonOpponentDescent:
+    """Real 2025 conference games (see the fixture README): the order-of-finish
+    descent compares only opponents every tied team played (#1140)."""
+
+    @staticmethod
+    def _top2(conference: str) -> tuple[str, str]:
+        games = pl.read_csv(TITLE_TIES_2025_DIR / "games.csv")
+        teams = pl.read_csv(TITLE_TIES_2025_DIR / "teams.csv")
+        st = cfb_standings(games, teams).filter(pl.col("conference") == conference)
+        by_rank = dict(zip(st["conf_rank"].to_list(), st["team"].to_list()))
+        return by_rank[1], by_rank[2]
+
+    def test_2025_acc_five_way_tie_goes_to_duke(self) -> None:
+        # Duke, Georgia Tech, Miami, Pitt and SMU tied at 6-2; no opponent was
+        # common to all five, so the descent cannot separate them and opponents'
+        # conference win % sends Duke (the real title-game pairing).
+        assert self._top2("ACC") == ("Virginia", "Duke")
+
+    def test_2025_sec_four_way_tie_seeds_alabama_then_georgia(self) -> None:
+        # Alabama, Georgia, Ole Miss and Texas A&M tied at 7-1; Alabama was
+        # seeded first and Georgia second (Alabama hosted the title game).
+        assert self._top2("SEC") == ("Alabama", "Georgia")
+
+
 class TestPlayoffSeeds:
     @staticmethod
     def _standings_14() -> pl.DataFrame:
