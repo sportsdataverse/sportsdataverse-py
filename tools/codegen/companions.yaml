@@ -37,7 +37,7 @@ soccer:
     note: matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
   - name: Football Charts
     url: https://www.football-charts.com/developers
-    note: REST API and CC BY 4.0 match dataset (98 leagues, 44 countries, 100 requests/day keyless) with calibrated 1X2 probabilities and Monte Carlo season projections that sdv-py does not wrap
+    note: REST API and CC BY 4.0 match dataset with calibrated 1X2 probabilities and Monte Carlo season projections that sdv-py does not wrap
 f1:
   - name: f1dataR
     url: https://scottyd22.github.io/f1dataR/
