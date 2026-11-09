@@ -1060,7 +1060,8 @@ def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
     Real 2025-26 release rows (``rebound_without_a_miss/README.md``). Such a rebound opened a
     possession for its own team, so the other team's next basket was lost. Now a putback's rebound
     logged after it stays in the putback's possession, and any other one does not set the offense:
-    each team's made-shot points equal the final, with the same number of possessions.
+    each team's made-shot points equal the final, with the same number of possessions. (Crediting
+    a defense score to the scorer would fix the totals too; this checks who has the ball.)
     """
     pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == game_id)
     game = (
@@ -1088,5 +1089,10 @@ def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
     monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
     monkeypatch.setattr(npm, "is_rebound_logged_after_its_putback", lambda rows, i: False)
     before = build_possessions(pbp)
-    assert totals(before) != (game["home_pts"], game["away_pts"])  # the published release's shortfall
     assert before.height == poss.height
+    # without the fix, the possession holding the rebound is the rebounding team's (the release's error)
+    was = before.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    if game_id == "0022500157":
+        assert was["start_order_index"].item() == rebound  # a phantom possession opened on the rebound
+    else:
+        assert was["offense_team_id"].item() == reb_team
