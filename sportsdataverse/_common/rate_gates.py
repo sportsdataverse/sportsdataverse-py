@@ -54,7 +54,7 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # team's, no span season predates 2015 (the two-halves era), and the team off_rtg of both sources
 # (ESPN box, stats.nba.com possessions) drops on 2023-2025 as off_rtg_on does. Pace's dip is 2025
 # alone (13 teams). tests/tools/test_fit_rate_gates.py pins exactly these (ACCEPTED_LOW_HOLDOUT);
-# evidence in sportsdataverse-py #PRNUM and docs/architecture/model-lineage.md.
+# evidence in sportsdataverse-py #1142 and docs/architecture/model-lineage.md.
 #: Level -> team / lineup rate -> the smallest ``<m>_n`` it is ranked on (``net_rtg``: poss +
 #: opp_poss; ``pace``: the clock in regulation games; ``orb_pct``: rebound chances; ``efg_pct`` /
 #: ``ft_rate``: FGA; ``fg3_pct``: 3PA).
