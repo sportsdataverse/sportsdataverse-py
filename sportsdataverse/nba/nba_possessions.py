@@ -23,7 +23,9 @@ import polars as pl
 
 from sportsdataverse.errors import RawStoreMissError
 from sportsdataverse.nba.nba_possession_rules import (
+    SHOT_KEYS,
     build_event_context,
+    credit_defense_scoring,
     is_made_ft_row,
     is_possession_ending_event,
     is_real_rebound,
@@ -179,8 +181,10 @@ def _event_detail(
     ``offense``; ``tov`` only counts a turnover whose team == ``offense``.
     This keeps ``points == 2*fg2m + 3*fg3m + ftm`` exact now that technical
     FTs are ordinary inline events: a DEFENSE technical FT shooter is present
-    in the group but its team != offense, so it contributes to NEITHER
-    ``points`` NOR ``ftm``.  The one league where the identity does not hold
+    in the group but its team != offense, so it is not counted here;
+    :func:`_assemble` credits it, points and shots, to that team's next
+    possession (:func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`).
+    The one league where the identity does not hold
     is the G League from 2019-20 (``rules/nbagl.yaml``
     ``nbagl-2020-single-free-throw``): a single ``'Free Throw 2PT'`` /
     ``'3PT'`` attempt counts ``fta = ftm = 1`` but is worth 2 or 3 points.
@@ -708,6 +712,8 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     # groups don't consume a slot in the per-period possession count).
     prev_record_period: Optional[int] = None
     number_in_period = 0
+    # (record index, defense team, defense score delta, defense shot counts): see credit_defense_scoring
+    carries: list[tuple[int, int, int, dict[str, int]]] = []
 
     for events, is_sc, offense in groups:
         end_home: int = events[-1]["_home"]
@@ -787,6 +793,10 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             }
         )
         shooting.extend(_shooting_rows(events, game_id, poss_num, home_id, away_id))
+        def_pts = (end_home - prev_home) if defense == home_id else (end_away - prev_away)
+        def_shots = {k: v for k, v in _event_detail(events, defense, home_id, away_id).items() if k in SHOT_KEYS}
+        if def_pts > 0 or any(def_shots.values()):
+            carries.append((len(records) - 1, defense, def_pts, def_shots))
 
         prev_home = end_home
         prev_away = end_away
@@ -796,6 +806,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
 
     if not records:
         return empty_poss, empty_shooting
+    credit_defense_scoring(records, carries)
 
     return (
         pl.DataFrame(records, schema=POSSESSIONS_SCHEMA),
@@ -817,7 +828,10 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
     by forward-filling ``score_home`` / ``score_away`` and differencing at
     possession boundaries.  The sum of ``points`` per offense team is
     reconciled against the boxscore oracle for the three canonical fixture
-    games.
+    games.  A score by the defense inside a possession (a technical or
+    flagrant free throw, or a basket a misplaced boundary puts there) is
+    credited to the scoring team's next counted possession, so each team's
+    possession points add up to its final score.
 
     Thin wrapper over :func:`_assemble`, which does the shared possession-group
     traversal once and also produces the per-shooter companion frame consumed

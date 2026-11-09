@@ -10847,3 +10847,14 @@
   test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
   expected: kill
   note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.
+
+# --- NBA / WNBA possession engine: defense scores inside a possession ------------------------------
+- id: nba-engine-defense-scores
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '    credit_defense_scoring(records, carries)'
+  mutant: '    pass'
+  test: tests/nba/test_nba_possessions.py::test_defense_scores_are_credited_to_the_scoring_team
+  expected: kill
+  note: A defense technical FT (or a basket inside the other team's possession) would be dropped again; 255 of 1,230 NBA 2025-26 games miss the final score.

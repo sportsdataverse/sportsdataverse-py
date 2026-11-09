@@ -906,3 +906,32 @@ def is_possession_ending_event(ctx: EventContext, i: int, offense_team_id: int, 
     if et == "jump_ball":
         return jump_ball_ends_possession(ctx, i)
     return False
+
+
+#: The team-level shot / free-throw counts of a possession row.
+SHOT_KEYS = ("fg2a", "fg2m", "fg3a", "fg3m", "fta", "ftm")
+
+
+def credit_defense_scoring(records: "list[dict]", carries: "list[tuple[int, int, int, dict[str, int]]]") -> None:
+    """Credit the defense's points and shots inside a possession to that team's next possession, in place.
+
+    A possession row has one offense, so a defense score inside it (a technical or flagrant free
+    throw, or a basket a misplaced boundary puts there) used to vanish: neither ``points`` nor the
+    shot counts kept it, and a game's possession points missed its final score. Each carry
+    ``(row, team, points, shots)`` is added to ``team``'s next row with ``count_as_possession``
+    (else its last earlier one), so every row keeps ``points == 2*fg2m + 3*fg3m + ftm`` and the
+    possession count is unchanged. pbpstats credits these per event; this is the per-row form.
+    """
+
+    def nearest(rows: "list[dict]") -> "dict | None":
+        return next((r for r in rows if r["count_as_possession"]), rows[0] if rows else None)
+
+    for at, team, pts, shots in carries:
+        later = [r for r in records[at + 1 :] if r["offense_team_id"] == team]
+        earlier = [r for r in reversed(records[:at]) if r["offense_team_id"] == team]
+        target = nearest(later) or nearest(earlier)
+        if target is None:  # ponytail: a team with no possession row at all; nothing to credit
+            continue
+        target["points"] += pts
+        for k, v in shots.items():
+            target[k] += v
