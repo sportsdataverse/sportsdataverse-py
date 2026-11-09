@@ -61,7 +61,7 @@ There are 50 rows:
 - **NBA international (40 games):**
   - Tokyo (1996, 1999), Mexico City (1997, then from 2014), Saitama (2003), London (2011-2019,
     2026), Paris (2020, 2023-2025), Berlin (2026).
-  - The 2026-27 games in Mexico City, Paris and Manchester are also listed; they are not played yet.
+  - The 2026-27 games are also listed: Mexico City (scheduled 2026-11-07), Paris and Manchester.
 - **NBA Cup knockout games in Las Vegas (9 games):** the two semifinals and the final in each of
   2023-24, 2024-25 and 2025-26.
   - From 2026-27 the semifinals are at the higher seed's arena, so they are home games.
@@ -92,7 +92,7 @@ Also left out:
 
 - Pre-2008 NBA and 2012-15 WNBA team season pages carry no arena column, so a neutral game in
   those seasons that is not an international game could be missing.
-- The 2026-27 rows are scheduled games: check their dates once they are played.
+- The 2026-27 rows were taken from the schedule: check each date and venue once the game is played.
 
 ## Maintaining the list
 
