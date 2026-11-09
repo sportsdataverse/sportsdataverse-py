@@ -38,7 +38,7 @@ from typing import Any
 from sportsdataverse.football.sources.contract import _MISSING, _get
 
 #: Bumped whenever a field or rule changes, so a provenance stamp says which contract passed.
-CONTRACT_VERSION = "1"
+CONTRACT_VERSION = "2"
 
 LEAGUES = ("nba", "wnba", "mbb", "wbb")
 
@@ -49,19 +49,18 @@ _TOP_LEVEL = (
     "gameInfo",
     "leaders",
     "broadcasts",
-    "predictor",
     "pickcenter",
     "againstTheSpread",
     "odds",
     "winprobability",
-    "article",
     "videos",
     "standings",
-    "espnWP",
 )
 
 #: Top-level keys ``helper_<league>_pbp`` reads by bracket: each must exist (the value may be empty).
 #: ``espn_<league>_pbp(raw=True)`` defaults them; the NBA and WNBA parsers also read ``seasonseries``.
+#: ``article``, ``predictor`` and ``espnWP`` are not here: ESPN's live summary omits them (no recap or
+#: pregame predictor mid-game), so the parsers default them (contract version 2).
 TOP_LEVEL_KEYS: dict[str, tuple[str, ...]] = {
     lg: _TOP_LEVEL + (("seasonseries",) if lg in ("nba", "wnba") else ()) for lg in LEAGUES
 }
