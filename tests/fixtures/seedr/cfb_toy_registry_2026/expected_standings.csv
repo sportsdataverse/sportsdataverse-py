@@ -37,6 +37,11 @@
 "ineligible","A","Big Ten",3,FALSE,0.25,0.25
 "ineligible","B","Big Ten",1,TRUE,0,0.5
 "ineligible","C","Big Ten",2,FALSE,0,0.75
+"mac_2024","A","MAC",1,TRUE,0.4285714286,0.4285714286
+"mac_2024","B","MAC",2,FALSE,0.2857142857,0.2857142857
+"mac_2024","C","MAC",3,FALSE,0.1666666667,0.5
+"mac_2024","D","MAC",4,FALSE,0,0.4444444444
+"mac_2024","E","MAC",5,FALSE,0,0.5555555556
 "mac_official","A","MAC",2,FALSE,0.4285714286,0.4285714286
 "mac_official","B","MAC",1,TRUE,0.2857142857,0.2857142857
 "mac_official","C","MAC",3,FALSE,0.1666666667,0.5

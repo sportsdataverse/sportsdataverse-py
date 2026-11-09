@@ -56,9 +56,13 @@ games <- rbind(
   # East E1/E2/E3 all 1-1, E2-E3 never met: div_pct seeds E2 (1-0 in division)
   # as East champion; W1 (2-0) is the West champion and ranks first
   g("sunbelt_div_pct", 2026, 1:5, c("E2", "E1", "W1", "E3", "W1"), c("E1", "E3", "E2", "W2", "W2"), 7),
-  epoch("cusa_apr", 2026),
+  # Conference USA's apr rung is in its 2024 cascade (the 2025 policy dropped it)
+  epoch("cusa_apr", 2024),
   # A 2-1 and B 2-1, A beat B; the composite still puts B first
   g("mw_composite", 2026, 1:6, c("A", "A", "D", "B", "B", "C"), c("B", "C", "A", "C", "D", "D"), 7),
+  # same games, season-keyed: the MAC's 2024 cascade reads opponents' win pct
+  # before SportSource (A first), its 2025 order SportSource first (B first)
+  epoch("mac_2024", 2024),
   epoch("mac_official", 2026),
   g("ineligible", 2026, 1:3, c("A", "A", "B"), c("B", "C", "C"), 7)
 )
@@ -74,6 +78,7 @@ teams <- rbind(
   tm("sunbelt_div_pct", c("E1", "E2", "E3", "W1", "W2"), "Sun Belt", c("East", "East", "East", "West", "West")),
   five("cusa_apr", "Conference USA"),
   tm("mw_composite", c("A", "B", "C", "D"), "Mountain West"),
+  five("mac_2024", "MAC"),
   five("mac_official", "MAC"),
   tm("ineligible", c("A", "B", "C"), "Big Ten", postseason_eligible = c(FALSE, NA, NA))
 )
@@ -92,6 +97,7 @@ tiebreak <- rbind(
   tb("cusa_apr", "analytics_ratings", c("A", "B"), c(1, 1)),
   tb("cusa_apr", "apr", c("A", "B"), c(980, 990)),
   tb("mw_composite", "analytics_ratings", c("A", "B"), c(1, 2)),
+  tb("mac_2024", "analytics_ratings", c("A", "B", "C"), c(1, 2, 0.5)),
   tb("mac_official", "analytics_ratings", c("A", "B", "C"), c(1, 2, 0.5))
 )
 
