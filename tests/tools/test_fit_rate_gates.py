@@ -12,6 +12,13 @@ refit and re-derive it): team rates NBA 0.479 / 0.39 (opp_orb_pct), WNBA 0.489 /
 0.492 / 0.43 (opp_ft_rate), WBB 0.503 / 0.41 (opp_efg_pct); on/off NBA 0.555 / 0.49, WNBA
 0.477 / 0.26 (off_rtg_on), MBB 0.513 / 0.50, WBB 0.542 / 0.53. A gate fitted on the train seasons
 is about half signal on seasons it never saw; single rates scatter (the WNBA has 36 holdout teams).
+
+Three WNBA rates sit under a third signal on the holdout and stay ranked as owner-accepted exceptions
+(2026-11-09): team ``pace`` 0.331, on/off ``off_rtg_on`` 0.267 and ``off_rtg_diff`` 0.314. Re-measured season by
+season on the current releases, no data or source defect drives them (``rate_gates``, model-lineage).
+These figures use the fitter's inputs: box possessions per game for pace, and on/off halves that include
+playoffs; the published tables rank possession-table pace and regular-season on/off.
+``test_low_holdout_rates_are_the_accepted_exceptions`` pins exactly that set.
 """
 
 from __future__ import annotations
@@ -38,6 +45,14 @@ HOLDOUT = {
     ("nba", "team"): (0.47, 0.39), ("wnba", "team"): (0.48, 0.33), ("mbb", "team"): (0.49, 0.43),
     ("wbb", "team"): (0.50, 0.41), ("nba", "on_off"): (0.55, 0.49), ("wnba", "on_off"): (0.47, 0.26),
     ("mbb", "on_off"): (0.51, 0.50), ("wbb", "on_off"): (0.54, 0.53),
+}  # fmt: skip
+#: Ranked rates under a third signal on the holdout, kept ranked by the owner's decision (2026-11-09; no data or
+#: source defect found, rate_gates and docs/architecture/model-lineage.md). Value: the observed holdout r at the
+#: frozen gate, rounded down at the third decimal; it may only rise on a refit. Any other ranked rate under 1/3,
+#: or one of these reaching 1/3, fails: change this only with the owner's call.
+ACCEPTED_LOW_HOLDOUT = {
+    ("wnba", "team", "pace"): 0.331, ("wnba", "on_off", "off_rtg_on"): 0.266,
+    ("wnba", "on_off", "off_rtg_diff"): 0.313,
 }  # fmt: skip
 
 
@@ -87,6 +102,21 @@ def test_frozen_gates_hold_out(league: str, kind: str) -> None:
     assert len(rel) >= 3
     median, worst = HOLDOUT[(league, kind)]
     assert float(np.median(rel)) >= median and min(rel) >= worst
+
+
+def test_low_holdout_rates_are_the_accepted_exceptions() -> None:
+    low = {}
+    for league, kind in HOLDOUT:
+        fits = _fits(league).filter(kind=kind, span="holdout")
+        held = {r["rate"]: fit.fit_m(fit.parse_curve(r["curve"])) for r in fits.iter_rows(named=True)}
+        for rate, g in FROZEN[kind][league].items():
+            if math.isfinite(g):
+                rel = g / (g + held[rate]) if math.isfinite(held[rate]) else 0.0
+                if rel < 1 / 3:
+                    low[(league, kind, rate)] = rel
+    assert set(low) == set(ACCEPTED_LOW_HOLDOUT)
+    for key, floor in ACCEPTED_LOW_HOLDOUT.items():
+        assert floor <= low[key] < floor + 0.001, key
 
 
 def test_gate_rounds_up_to_two_significant_figures() -> None:
