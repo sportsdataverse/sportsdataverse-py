@@ -1304,8 +1304,7 @@ out = luck_adjusted_response(possessions_df, shooting_df, {7: (0.4, 0.8)})
 
 ### nba_adj_rapm {#nba_adj_rapm}
 
-`nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
-         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, league_id: 'str | None' = None, alpha: 'float | None' = None, alphas: 'np.ndarray | None' = None, prior_scale: 'float | None' = None, n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 One-shot prior-informed RAPM over a possession frame -> per-player ratings.
 
@@ -1329,14 +1328,23 @@ coefficient: o / d read about +12 / -11 (2025-26 NBA +12.03 / -10.84), a thinly-
 player kept less of the offset (-8.9 on offense under 200 possessions), and so `adj_rapm`
 itself leaned toward heavy-minute players.
 
+Penalty and prior scale: one per league, `ADJ_RAPM_PENALTY` and
+`ADJ_RAPM_PRIOR_SCALE` (fitted by `tools/fit_adj_rapm_penalty.py`; the constants'
+comment carries the evidence), as `~sportsdataverse.nba.nba_rapm.nba_rapm` takes
+`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY`. Before #1150 each fit took RidgeCV's
+per-season pick at the unscaled prior, which collapsed the spread in seven published WNBA
+seasons (2004: sd 0.64 against plain RAPM's 1.47) and held NBA 2025-26 at 0.77 of plain RAPM's.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | A possession+lineup frame produced by the possession engine (`game_id`, `offense_team_id`, `points`, `off_player_1..5`, `def_player_1..5`). |
 | `prior` | `Dict[int, Tuple[float, float]]` |  | Per-player `{player_id: (o_prior, d_prior)}` in per-100 units. Players absent from `prior` receive a `(0.0, 0.0)` default. |
-| `alphas` | `ndarray` | `array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
-         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ])` | RidgeCV alpha grid for the regularisation strength (default `DEFAULT_RAPM_ALPHAS`). |
+| `league_id` | `str \| None` | `None` | `"00"`, `"10"` or `"20"`: the league whose penalty and prior scale are used. `None` reads it from the `game_id` prefix (NBA without one). |
+| `alpha` | `float \| None` | `None` | A penalty instead of the league's (positive; `ValueError` otherwise). |
+| `alphas` | `ndarray \| None` | `None` | Deprecated: pick the penalty per fit by RidgeCV over this grid (the old rule, whose scale is not comparable across seasons). |
+| `prior_scale` | `float \| None` | `None` | A multiplier on `prior` instead of the league's. |
 | `n_samples` | `int` | `200` | Number of RTO posterior samples (default 200). |
 | `seed` | `int` | `0` | RNG seed for the RTO sampler (default 0). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |

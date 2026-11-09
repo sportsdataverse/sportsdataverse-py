@@ -263,3 +263,22 @@ def test_player_identity_primary_team_does_not_depend_on_group_order():
     assert out.height == n
     assert out.filter(pl.col("team_abbreviation") != "LO").height == 0
     assert out.filter(pl.col("teams") != "LO,HI").height == 0
+
+
+def test_team_minutes_fall_back_to_the_players_when_the_feed_reports_zero():
+    """stats.wnba.com's 1997-2004 leaguegamelog gives team-game mins of 0 (2003: all) or 12, which zeroed per-100
+    rate (and the SPM trained on them). The players' minutes sum to the five-slot total, 200, instead."""
+    import pathlib
+
+    fx = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "nba_box_logs"
+    player = pl.read_parquet(fx / "wnba_2003_player_logs_slice.parquet")
+    team = pl.read_parquet(fx / "wnba_2003_team_logs_slice.parquet")
+    assert (team["min"] == 0).all()
+    got = box_features(player, team)
+    repaired = team.drop("min").join(
+        player.group_by("game_id", "team_id").agg(pl.col("min").sum()), on=["game_id", "team_id"]
+    )
+    want = box_features(player, repaired)
+    assert (repaired["min"] == 200).all()
+    assert got.sort("player_id").equals(want.sort("player_id"))
+    assert float(got["pts"].abs().sum()) > 0

@@ -12,8 +12,37 @@ from scipy.linalg import cho_factor, cho_solve
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
+from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse.nba.nba_model_validation import FitResult
-from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
+from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, _possessions_league, build_rapm_design
+
+#: The adjusted-RAPM ridge penalty per league id, one value for every season and season type (as
+#: :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY` is for plain RAPM, #1121). Fitted by
+#: ``tools/fit_adj_rapm_penalty.py`` (run 2026-11-09): the grid point (steps of x1.18) minimizing the
+#: game-grouped 10-fold CV error summed over the complete regular seasons from 1997 (NBA through
+#: 2025-26, WNBA through 2026; 30 each), on the prior-residualized problem at the frozen prior scale
+#: below. The prior is the previous season's SPM (RS + playoffs by minutes), trained on that season's
+#: plain RAPM, as the ``player_impact`` producers chain it. Until this was frozen each fit took
+#: RidgeCV's per-season pick over ``DEFAULT_RAPM_ALPHAS``, which flipped between 1,931 and 5,179
+#: (WNBA 2004: 13,895). The spread then collapsed in those seasons (WNBA 2004 sd 0.68 per 100
+#: against plain RAPM's 1.50, 2002 0.94 / 1.62) and ran past plain RAPM's in the 1,931 ones (NBA
+#: 2009 2.39 / 1.91). At the frozen values it is 0.85 to 1.10 times plain RAPM's in every NBA season
+#: and 0.83 to 1.18 in every WNBA one (off_poss >= 300). Next-season fit to plain RAPM rises: R^2 of
+#: a line fit the pair before, NBA 0.154 -> 0.196 (paired +0.041, SE 0.012 over 28 pairs), WNBA
+#: 0.072 -> 0.110 (+0.038, SE 0.016), against plain RAPM's 0.155 / 0.073 and SPM's 0.129 / 0.062;
+#: year-over-year Spearman of adjusted RAPM itself rises 0.470 -> 0.530 (NBA, +0.060, SE 0.006) and
+#: 0.446 -> 0.519 (WNBA, +0.073, SE 0.009). The G League (``"20"``) is seeded with the NBA value.
+ADJ_RAPM_PENALTY: dict[str, float] = {"00": 3727.593720314938, "10": 2682.6957952797247}
+ADJ_RAPM_PENALTY["20"] = ADJ_RAPM_PENALTY["00"]
+#: The multiplier on the SPM prior per league id. SPM is a ridge fit to shrunk RAPM (sd about 0.6 per
+#: 100 against RAPM's 1.8), so the prior is too narrow: on the same held-out games, scaling it by 2
+#: lowers the pooled error by 1.34 basis points against the unscaled prior (NBA, SE 0.10 over 30
+#: seasons; WNBA 1.89, SE 0.22) and is where next-season R^2 and Spearman peak on the grid 0 to 4
+#: (NBA R^2 0.181 at 1, 0.196 at 2, 0.186 at 4; WNBA 0.098, 0.110, 0.097). Held-out game error keeps
+#: falling past 2 (NBA minimum at 3, WNBA at 4 or beyond), so 2 is the conservative end of the range
+#: both criteria favour. ``nba_adj_rapm(..., prior_scale=1.0)`` fits the prior as given.
+ADJ_RAPM_PRIOR_SCALE: dict[str, float] = {"00": 2.0, "10": 2.0}
+ADJ_RAPM_PRIOR_SCALE["20"] = ADJ_RAPM_PRIOR_SCALE["00"]
 
 
 def _fit_prior_ridge(
@@ -21,6 +50,7 @@ def _fit_prior_ridge(
     y: np.ndarray,
     prior_mean: np.ndarray,
     *,
+    alpha: float | None = None,
     alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
     n_samples: int = 200,
     seed: int = 0,
@@ -50,6 +80,7 @@ def _fit_prior_ridge(
         X: Sparse design ``(n, 2P)`` from :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`.
         y: Possession points ``(n,)``.
         prior_mean: Per-possession prior mean ``(2P,)`` (the harness-aligned μ).
+        alpha: The penalty λ; ``None`` picks it by RidgeCV over ``alphas`` (the validation harness).
         alphas: RidgeCV grid for λ (prior strength).
         n_samples: Number of RTO posterior samples ``S``.
         seed: RNG seed for reproducibility.
@@ -80,8 +111,8 @@ def _fit_prior_ridge(
     # Residualize: y' = y - X @ prior_mean
     yprime = np.asarray(y, dtype=np.float64) - X @ prior_mean
 
-    # λ by cross-validation, with the intercept fitted (unpenalized), as nba_rapm picks it
-    lam = float(RidgeCV(alphas=alphas, fit_intercept=True).fit(X, yprime).alpha_)
+    # λ as given, else by cross-validation with the intercept fitted (unpenalized)
+    lam = float(alpha) if alpha is not None else float(RidgeCV(alphas=alphas, fit_intercept=True).fit(X, yprime).alpha_)
 
     # Intercept-fitted ridge: centre the design through its Gram matrix, A = XcᵀXc + λI
     mean = np.asarray(X.mean(axis=0), dtype=np.float64).ravel()
@@ -199,11 +230,31 @@ class AdjRapmModel:
         return cls(prior, **kw)
 
 
+def _penalty(league: str, alpha: float | None, alphas: np.ndarray | None) -> float | None:
+    """The ridge penalty of a fit: ``alpha``, else the league's; ``None`` (RidgeCV) when ``alphas`` is passed."""
+    if alphas is None:
+        penalty = ADJ_RAPM_PENALTY[league] if alpha is None else alpha
+        if not penalty > 0:
+            raise ValueError(f"the ridge penalty must be positive, got {penalty!r}")
+        return penalty
+    warn_deprecated(
+        "nba_adj_rapm(alphas=...)",
+        replacement="nba_adj_rapm(alpha=...) or the league penalty (league_id=...)",
+        since="0.2.0",
+        removed_in="0.4.0",
+        extra="It picks the penalty per fit, so its scale is not comparable across seasons.",
+    )
+    return None
+
+
 def nba_adj_rapm(
     possessions: pl.DataFrame,
     prior: Dict[int, Tuple[float, float]],
     *,
-    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    league_id: str | None = None,
+    alpha: float | None = None,
+    alphas: np.ndarray | None = None,
+    prior_scale: float | None = None,
     n_samples: int = 200,
     seed: int = 0,
     return_as_pandas: bool = False,
@@ -230,14 +281,25 @@ def nba_adj_rapm(
     player kept less of the offset (-8.9 on offense under 200 possessions), and so ``adj_rapm``
     itself leaned toward heavy-minute players.
 
+    Penalty and prior scale: one per league, :data:`ADJ_RAPM_PENALTY` and
+    :data:`ADJ_RAPM_PRIOR_SCALE` (fitted by ``tools/fit_adj_rapm_penalty.py``; the constants'
+    comment carries the evidence), as :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` takes
+    :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY`. Before #1150 each fit took RidgeCV's
+    per-season pick at the unscaled prior, which collapsed the spread in seven published WNBA
+    seasons (2004: sd 0.64 against plain RAPM's 1.47) and held NBA 2025-26 at 0.77 of plain RAPM's.
+
     Args:
         possessions: A possession+lineup frame produced by the possession engine
             (``game_id``, ``offense_team_id``, ``points``,
             ``off_player_1..5``, ``def_player_1..5``).
         prior: Per-player ``{player_id: (o_prior, d_prior)}`` in per-100 units.
             Players absent from ``prior`` receive a ``(0.0, 0.0)`` default.
-        alphas: RidgeCV alpha grid for the regularisation strength (default
-            ``DEFAULT_RAPM_ALPHAS``).
+        league_id: ``"00"``, ``"10"`` or ``"20"``: the league whose penalty and prior scale are
+            used. ``None`` reads it from the ``game_id`` prefix (NBA without one).
+        alpha: A penalty instead of the league's (positive; ``ValueError`` otherwise).
+        alphas: Deprecated: pick the penalty per fit by RidgeCV over this grid (the old rule,
+            whose scale is not comparable across seasons).
+        prior_scale: A multiplier on ``prior`` instead of the league's.
         n_samples: Number of RTO posterior samples (default 200).
         seed: RNG seed for the RTO sampler (default 0).
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
@@ -256,12 +318,17 @@ def nba_adj_rapm(
     """
     X, y, pids = build_rapm_design(possessions)
     P = len(pids)
+    league = _possessions_league(possessions, league_id)
+    scale = ADJ_RAPM_PRIOR_SCALE[league] if prior_scale is None else prior_scale
     prior_mean: np.ndarray = np.zeros(2 * P, dtype=np.float64)
     for k, pid in enumerate(pids):
         o, d = prior.get(int(pid), (0.0, 0.0))
-        prior_mean[k] = o / 100.0
-        prior_mean[P + k] = -d / 100.0
-    fit = _fit_prior_ridge(X, y, prior_mean, alphas=alphas, n_samples=n_samples, seed=seed)
+        prior_mean[k] = scale * o / 100.0
+        prior_mean[P + k] = -scale * d / 100.0
+    fit = _fit_prior_ridge(
+        X, y, prior_mean, alpha=_penalty(league, alpha, alphas),
+        alphas=DEFAULT_RAPM_ALPHAS if alphas is None else alphas, n_samples=n_samples, seed=seed,
+    )  # fmt: skip
     o_r = fit.coef[:P] * 100.0
     d_r = -fit.coef[P:] * 100.0
     off_poss = np.asarray(X[:, :P].sum(axis=0)).ravel().astype(np.int64)

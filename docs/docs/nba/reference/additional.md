@@ -188,7 +188,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [in_game_features](additional/models-and-calculators.md#in_game_features) | Per-play in-game win-probability features from a `load_nba_pbp` frame. |
 | [league_pbp_functions](additional/models-and-calculators.md#league_pbp_functions) | The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`. |
 | [luck_adjusted_response](additional/models-and-calculators.md#luck_adjusted_response) | Attach a per-possession `la_points` expected-points response. |
-| [nba_adj_rapm](additional/models-and-calculators.md#nba_adj_rapm) | 5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> … |
+| [nba_adj_rapm](additional/models-and-calculators.md#nba_adj_rapm) | One-shot prior-informed RAPM over a possession frame -> per-player ratings. |
 | [nba_aging_curve](additional/models-and-calculators.md#nba_aging_curve) | Load the bundled per-age value-multiplier curve. |
 | [nba_bpm](additional/models-and-calculators.md#nba_bpm) | Faithful BPM 2.0 per player, at season or single-game granularity. |
 | [nba_career_trajectory](additional/models-and-calculators.md#nba_career_trajectory) | Age-adjust player-season values with the bundled aging curve. |
@@ -208,7 +208,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_team_ratings](additional/models-and-calculators-2.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
 | [nba_war](additional/models-and-calculators-2.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-2.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
-| [player_game_rates](additional/models-and-calculators-2.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
+| [player_game_rates](additional/models-and-calculators-3.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
 | [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |

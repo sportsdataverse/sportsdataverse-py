@@ -139,7 +139,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_team_ratings`](reference/additional/models-and-calculators-2#nba_team_ratings)
 - [`nba_war`](reference/additional/models-and-calculators-2#nba_war)
 - [`ot_adjusted_seconds`](reference/additional/models-and-calculators-2#ot_adjusted_seconds)
-- [`player_game_rates`](reference/additional/models-and-calculators-2#player_game_rates)
+- [`player_game_rates`](reference/additional/models-and-calculators-3#player_game_rates)
 - [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
 - [`predict_total`](reference/additional/models-and-calculators-3#predict_total)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-3#raw_game_efficiency)

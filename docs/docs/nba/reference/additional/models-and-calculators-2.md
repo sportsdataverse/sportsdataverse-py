@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_decay–player_game"
-sidebar_label: "Models and calculators: nba_decay–player_game"
+title: "NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted"
+sidebar_label: "Models and calculators: nba_decay–ot_adjusted"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_decay–player_game — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_decay–player_game
+# NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted
 
 ### nba_decay_rapm {#nba_decay_rapm}
 
@@ -417,7 +417,7 @@ it on its own output gives the same frame.
 | `def_poss` | Int64 | Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss almost exactly because substitutions rarely split an offense-defense pair. |
 | `o_adj_rapm` | Float64 | Offensive prior-informed RAPM per 100 possessions: the ridge fit shrunk toward the player's box-score (SPM) prior. In releases fit with sportsdataverse-py #1137 or later it is relative to an average player, up to any offset the SPM prior carries (possession-weighted league mean near 0: 2025-26 +0.32). A player with no prior (a rookie, or no previous-season SPM) is shrunk toward 0 instead. Releases fit before #1137, whatever their build date, fit no intercept, so the league's points per possession leaked into every coefficient: o_adj_rapm averaged about +12.03 and d_adj_rapm -10.84 (2025-26), a thinly-used player kept less of that offset, and only their sum, adj_rapm, read on a common scale. |
 | `d_adj_rapm` | Float64 | Defensive prior-informed RAPM per 100 possessions, positive for a defender who lowers opponent scoring. In releases fit with sportsdataverse-py #1137 or later it is relative to an average player, up to any offset the SPM prior carries (possession-weighted league mean near 0: 2025-26 +0.06). Releases fit before #1137, whatever their build date, averaged about -10.84 here (see o_adj_rapm). |
-| `adj_rapm` | Float64 | Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases fit with sportsdataverse-py #1137 or later fit the ridge with an unpenalized intercept; releases fit before it (whatever their build date) fit none, which leaned this total toward heavy-minute players. |
+| `adj_rapm` | Float64 | Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases fit with sportsdataverse-py #1137 or later fit the ridge with an unpenalized intercept; releases fit before it (whatever their build date) fit none, which leaned this total toward heavy-minute players. Releases fit with #1150 or later also use one ridge penalty per league (NBA 3,728, WNBA 2,683) and the SPM prior doubled (nba_adj_rapm.ADJ_RAPM_PENALTY / ADJ_RAPM_PRIOR_SCALE); earlier ones took a per-season RidgeCV pick, whose spread collapsed in some seasons (WNBA 2004 sd 0.64 against plain RAPM's 1.47). |
 | `ospm` | Float64 | Offensive statistical plus-minus per 100 possessions: the player's per-100 box-score feature vector scored through ridge coefficients trained on that season's o_rapm target. |
 | `dspm` | Float64 | Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients trained on the d_rapm target. |
 | `spm` | Float64 | Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm. |
@@ -862,59 +862,4 @@ tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining"
 from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
 one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 ot_adjusted_seconds(one, regulation_periods=2)
-```
-
-### player_game_rates {#player_game_rates}
-
-`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'Optional[int]' = None, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'pl.DataFrame'`
-
-True-shooting and usage for every boxed player of one game.
-
-TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
-(`total_turnovers`, repaired where ESPN doubled or omitted it) and team
-minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
-WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009 and in a
-WBB game whose two teams together show fewer than 5, so usage is null there). A player with no shots, no minutes,
-or `did_not_play` gets `null`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
-| `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
-| `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods). |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league and the team box's `season`. |
-
-**Returns**
-
-One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
-| `athlete_id` | Int64 | ESPN athlete id, the join key to the player box score. |
-| `team_id` | Int64 | ESPN team id, the join key to the team box score. |
-| `ts_pct` | Float64 | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
-| `usg_pct` | Float64 | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `team_box` does not hold exactly two different teams of one `game_id` (a duplicated team row would double the player rows), or the league is unknown, or `league` contradicts `league_id`. |
-| `polars.exceptions.ColumnNotFoundError` | If a required box-score column is missing. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_game_page import player_game_rates
-from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_team_boxscore
-team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
 ```
