@@ -29,7 +29,9 @@ from sportsdataverse.nba.nba_possession_rules import (
     is_made_ft_row,
     is_possession_ending_event,
     is_real_rebound,
+    is_rebound_logged_after_its_putback,
     is_technical_ft_row,
+    rebound_can_set_offense,
     resolve_event_team,
 )
 
@@ -142,23 +144,39 @@ def _offense_from_events(
     group's offense attribution any more than it may seed
     :func:`_build_possession_groups`'s ``current_offense`` (same rationale,
     same real-fixture case — see that function's docstring/comment).
+
+    A rebound that is a placeholder, or follows no missed shot or missed FT
+    (``row["_offense_cue"]`` False, set by :func:`_build_possession_groups`),
+    is skipped too: a team rebound after a shot-clock turnover or a made FT,
+    a rebound after a steal, or an offensive rebound the pbp logs after its own
+    putback. Its ``location`` is the team that just had the ball, and it opened
+    possessions for the wrong team (the other team's basket then fell in that
+    possession). Such a rebound decides the offense only when no other row of
+    the group with a side (``location`` ``h`` / ``v``) can, a last-second
+    heave, say: every other cue, a jump ball or a heave's ``other`` row
+    included, is tried first.
+
+    A ``violation`` row is skipped in the strict pass as well: the feed files
+    an offensive violation as a turnover, so a ``violation`` row is the
+    defense's (delay of game, kicked ball). Four NBA 2025-26 end-of-period
+    groups (a delay of game, then the other team's heave and team rebound)
+    gave the defense the possession.
     """
     scoring_types = frozenset(("made_shot", "missed_shot", "free_throw", "turnover", "rebound"))
     non_foul_types = frozenset(("foul", "period", "timeout", "substitution"))
-    for ev in events:
-        et = ev.get("event_type") or ""
-        loc = ev.get("location") or ""
-        if et == "free_throw" and is_technical_ft_row(ev):
-            continue
-        if et in scoring_types and loc:
-            return home_id if loc == "h" else (away_id if loc == "v" else 0)
-    for ev in events:
-        loc = ev.get("location") or ""
-        et = ev.get("event_type") or ""
-        if et == "free_throw" and is_technical_ft_row(ev):
-            continue
-        if loc and et not in non_foul_types:
-            return home_id if loc == "h" else (away_id if loc == "v" else 0)
+    for strict in (True, False):
+        for wanted in (scoring_types, None):
+            cues = [
+                ev
+                for ev in events
+                if not (ev.get("event_type") == "free_throw" and is_technical_ft_row(ev))
+                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)
+            ]
+            for ev in cues:
+                et = ev.get("event_type") or ""
+                loc = ev.get("location") or ""
+                if loc in ("h", "v") and (et in wanted if wanted else et not in non_foul_types):
+                    return home_id if loc == "h" else (away_id if loc == "v" else 0)
     return 0
 
 
@@ -572,6 +590,7 @@ def _build_possession_groups(
     is_sc = False
     current_offense = 0
     prev_period: Optional[int] = None
+    deferred = False  # the boundary waits one row (a rebound logged after its putback)
 
     def _flush() -> None:
         nonlocal current, is_sc, current_offense
@@ -599,6 +618,7 @@ def _build_possession_groups(
         # _event_detail's oreb/dreb attribution read the same computed value.
         if et == "rebound":
             row["_is_real_rebound"] = is_real_rebound(ctx, i)
+            row["_offense_cue"] = rebound_can_set_offense(ctx, i)
 
         current.append(row)
 
@@ -628,7 +648,12 @@ def _build_possession_groups(
             if current_offense != 0 and reb_team != 0 and reb_team == current_offense:
                 is_sc = True
 
-        if is_possession_ending_event(ctx, i, current_offense, home_id, away_id):
+        # A putback the pbp logs before its own offensive rebound (same team, same clock): the
+        # rebound belongs to the possession the putback ends, so the boundary moves past it.
+        row["_putback_rebound"] = deferred  # this row ends a putback's possession (for _assemble)
+        ends = deferred or is_possession_ending_event(ctx, i, current_offense, home_id, away_id)
+        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)
+        if ends and not deferred:
             _flush()
 
     _flush()  # remaining events
@@ -718,6 +743,9 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     for events, is_sc, offense in groups:
         end_home: int = events[-1]["_home"]
         end_away: int = events[-1]["_away"]
+        # the row that ended the possession, for the next one's start type: a putback, not the
+        # rebound the pbp logs after it
+        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]
         cur_period = int(events[0].get("period") or 0)
 
         if prev_group_period is not None and cur_period != prev_group_period:
@@ -737,7 +765,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             if home_delta <= 0 and away_delta <= 0:
                 prev_home = end_home
                 prev_away = end_away
-                prev_end_row = events[-1]
+                prev_end_row = ender
                 prev_group_rows = events
                 prev_group_period = cur_period
                 continue
@@ -800,7 +828,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
 
         prev_home = end_home
         prev_away = end_away
-        prev_end_row = end_ev
+        prev_end_row = ender
         prev_group_rows = events
         prev_group_period = cur_period
 

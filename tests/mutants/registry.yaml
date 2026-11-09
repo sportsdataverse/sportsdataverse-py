@@ -10948,6 +10948,35 @@
   test: tests/nba/test_nba_possessions.py::test_defense_scores_are_credited_to_the_scoring_team
   expected: kill
   note: A defense technical FT (or a basket inside the other team's possession) would be dropped again; 255 of 1,230 NBA 2025-26 games miss the final score.
+
+# --- NBA / WNBA possession engine: rebounds that follow no miss ------------------------------------
+- id: nba-engine-rebound-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0'
+  mutant: '    return True'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: A placeholder rebound (a team rebound after a shot-clock turnover) or one after a steal would again open a possession for the team that just lost the ball.
+- id: nba-engine-putback-rebound-order
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)'
+  mutant: '        deferred = False'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: An offensive rebound the pbp logs after its own putback would again open a phantom possession (the largest pre-2017-18 drift cause, 65,454 points).
+- id: nba-engine-putback-start-type
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]'
+  mutant: '        ender = events[-1]'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: The possession after a putback whose rebound the pbp logs after it would start OffMissedShot instead of OffMadeShot (559 possessions in a 300-game 2016-17 sample).
 - id: bb-espn-live-summary-without-article
   group: bb-sources
   finding: BB-D12
@@ -10957,3 +10986,21 @@
   test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
   expected: kill
   note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
+- id: nba-engine-rebound-offense-fallback
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) and ev.get("event_type") != "violation")'
+  test: tests/nba/test_nba_possessions.py::test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can
+  expected: kill
+  note: A group whose only sided row is a rebound that follows no miss (a last-second team attempt, then a team rebound) would get no offense and be dropped; 1 group in NBA 2025-26.
+- id: nba-engine-violation-not-an-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) or not strict)'
+  test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
+  expected: kill
+  note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).
