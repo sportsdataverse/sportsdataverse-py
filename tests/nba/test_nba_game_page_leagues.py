@@ -222,6 +222,45 @@ def test_wnba_2005_halves_overtime(monkeypatch: pytest.MonkeyPatch) -> None:
     assert gp.score_win_prob(pbp, league="wnba", regulation_periods=4)["wp_regime"].unique().to_list() == ["reg"]
 
 
+@pytest.mark.parametrize(
+    ("lg", "league", "name"),
+    [
+        ("mbb", "mens", "mbb_401830342.json.gz"),
+        ("mbb", "mens", "mbb_401812161.json.gz"),
+        ("wbb", "womens", "summary_wbb.json"),
+    ],
+)
+def test_release_enrichment_scores_each_play_as_the_game_page_does(
+    monkeypatch: pytest.MonkeyPatch, lg: str, league: str, name: str
+) -> None:
+    """``build_mbb_season_wp`` (the pbp release WP) equals ``score_win_prob`` on every unsettled play.
+
+    Both feed the bundled college booster the same plays, scores and clock (mbb_401830342 is a
+    double-overtime game; these converters already carry the period clock on overtime plays, which the
+    enrichment's ``ot_adjusted_seconds`` call keeps true for frames that do not). The enrichment's
+    prior is pinned to the one the game page used.
+    """
+    from sportsdataverse.mbb import mbb_win_prob
+
+    _, pbp, _, _ = _frames(monkeypatch, lg, name)
+    gid = str(pbp["game_id"][0])
+    page = gp.score_win_prob(pbp, league=lg, neutral_site=True)
+    prior = float(page["pregame_home_prob"][0])
+    monkeypatch.setattr(
+        mbb_win_prob,
+        "_pregame_probs",
+        lambda *a, **k: pl.DataFrame({"game_id": [gid], "pregame_home_prob": [prior]}),
+    )
+    release = mbb_win_prob._compile_season_wp(pbp, pl.DataFrame(), pl.DataFrame(), league=league)
+    keep = ~page["type_text"].is_in(["End Period", "End Game"]).fill_null(False)
+    order = page.select("game_play_number", "home_win_prob").filter(keep).sort("game_play_number")
+    got = release.select("game_play_number", "home_win_prob").filter(
+        pl.col("game_play_number").is_in(order["game_play_number"].implode())
+    )
+    assert got.height == order.height > 0
+    assert got.sort("game_play_number")["home_win_prob"].to_list() == order["home_win_prob"].to_list()
+
+
 def test_wbb_scores_with_the_womens_model(monkeypatch: pytest.MonkeyPatch) -> None:
     _, pbp, _, _ = _frames(monkeypatch, "wbb", "summary_wbb.json")
     wp = gp.score_win_prob(pbp, league="wbb", neutral_site=True)

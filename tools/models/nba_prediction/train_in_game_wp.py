@@ -164,6 +164,11 @@ def _early_stop_rounds(train: pl.DataFrame, val: pl.DataFrame) -> int:
 
 def calibration_slope(y: np.ndarray, p: np.ndarray) -> float:
     """Cox calibration slope: the ``b`` in ``logit P(y) = a + b * logit(p)`` (IRLS, 1.0 is ideal)."""
+    return calibration_line(y, p)[1]
+
+
+def calibration_line(y: np.ndarray, p: np.ndarray) -> tuple[float, float]:
+    """Cox calibration ``(a, b)`` in ``logit P(y) = a + b * logit(p)`` (IRLS; ``(0, 1)`` is ideal)."""
     p = np.clip(p, 1e-6, 1 - 1e-6)
     X = np.column_stack([np.ones_like(p), np.log(p / (1 - p))])
     beta = np.zeros(2)
@@ -174,7 +179,7 @@ def calibration_slope(y: np.ndarray, p: np.ndarray) -> float:
         beta += step
         if np.abs(step).max() < 1e-10:
             break
-    return float(beta[1])
+    return float(beta[0]), float(beta[1])
 
 
 def _swap(booster: xgb.Booster) -> Any:
