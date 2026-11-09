@@ -10937,3 +10937,13 @@
   test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
   expected: kill
   note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.
+
+- id: bb-espn-live-summary-without-article
+  group: bb-sources
+  finding: BB-D12
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '"article": pbp_txt.get("article", []),  # a live game has no recap yet'
+  mutant: '"article": pbp_txt["article"],'
+  test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
+  expected: kill
+  note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
