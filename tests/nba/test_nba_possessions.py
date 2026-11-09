@@ -1028,12 +1028,12 @@ def test_legacy_dialect_missed_free_throws_are_misses(game_id: str) -> None:
 DEFENSE_SCORES = FXROOT / "defense_scores"
 
 
-@pytest.mark.parametrize("game_id", ["0022500003", "0022500102", "0022500157", "0022500290"])
+@pytest.mark.parametrize("game_id", ["0022500003", "0022500102", "0022500706"])
 def test_defense_scores_are_credited_to_the_scoring_team(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
     """A defense score inside the other team's possession is credited to the scorer's next possession.
 
     Real 2025-26 release rows (``defense_scores/README.md``): a technical FT, two FTs after a
-    same-clock foul, and two baskets that a misplaced boundary puts in the opponent's possession.
+    same-clock foul, and a basket after a shot the pbp logs past its team's shot-clock turnover.
     Each team's made-shot points now equal the schedule's final; the possession rows themselves
     (count, order, boundaries, ``count_as_possession``) are what they were without the credit.
     """
