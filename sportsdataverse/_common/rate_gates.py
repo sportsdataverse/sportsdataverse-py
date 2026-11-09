@@ -45,6 +45,16 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 
 # Fitted by tools/fit_rate_gates.py (train seasons of its SPANS; tests/fixtures/bb_rate_gates holds
 # the curves); refit and paste, never hand-tune. ``math.inf``: never ranked (see the module docstring).
+#
+# Owner-accepted exceptions (owner decision, 2026-11-09): three WNBA gates stay ranked although on the
+# unseen 2023-2025 seasons they are under a third signal (holdout r = gate / (gate + holdout M)): team
+# ``pace`` 7 games (0.331), on/off ``off_rtg_on`` 610 (0.267) and ``off_rtg_diff`` 720 (0.314).
+# Re-measured season by season on the current releases (possessions PIPELINE_VERSION 7), no data or
+# source defect drives them: the gates refit to the same values, on-court possessions tie out to the
+# team's, no span season predates 2015 (the two-halves era), and the team off_rtg of both sources
+# (ESPN box, stats.nba.com possessions) drops on 2023-2025 as off_rtg_on does. Pace's dip is 2025
+# alone (13 teams). tests/tools/test_fit_rate_gates.py pins exactly these (ACCEPTED_LOW_HOLDOUT);
+# evidence in sportsdataverse-py #PRNUM and docs/architecture/model-lineage.md.
 #: Level -> team / lineup rate -> the smallest ``<m>_n`` it is ranked on (``net_rtg``: poss +
 #: opp_poss; ``pace``: the clock in regulation games; ``orb_pct``: rebound chances; ``efg_pct`` /
 #: ``ft_rate``: FGA; ``fg3_pct``: 3PA).
