@@ -11017,6 +11017,23 @@
   expected: kill
   note: A different sample of the accepted bucket (another n) would stay excused.
 
+# --- PR1130: a partial elimination restarts the tiebreak cascade ------------------------------------
+# Killer: the three restart tests. The mutant is the pre-fix one-pass loop: an elimination advances
+# to the next rung instead of restarting, so a Big 12 tie cut to two is decided by opponents'
+# conference win % instead of the two-team head-to-head.
+- id: cfb-standings-tiebreak-restarts-on-elimination
+  group: cfb-standings
+  finding: PR1130
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '        i = 0 if len(cands) < before else i + 1'
+  mutant: '        i = i + 1'
+  test: tests/cfb/test_cfb_standings.py::TestRestartOnElimination
+  expected: kill
+  note: >-
+    One-pass cascade (the pre-fix behaviour): an elimination advances instead of re-testing the
+    survivors from rung 1, so BYU/Arizona after Texas Tech is dropped is decided by SOV rather than
+    the head-to-head BYU won.
+
 # --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
 - id: nba-engine-legacy-missed-ft
   group: nba-engine
