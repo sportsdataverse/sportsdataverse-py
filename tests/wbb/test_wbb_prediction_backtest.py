@@ -14,10 +14,9 @@ import polars as pl
 import pytest
 
 from sportsdataverse.mbb.mbb_bracketology import project_bracket
-from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob, mbb_predict_games
+from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
 from sportsdataverse.mbb.mbb_prediction_constants import (
     brier_score,
-    calibration_table,
     mae,
     spearman_corr,
 )
@@ -136,18 +135,12 @@ def test_wbb_pregame_spread_and_total_mae_vs_close(wbb_weekly_backtest, wbb_corp
     assert abs(float(j.get_column("exp_total").mean()) - float(j.get_column("close_total").mean())) <= 2.0
 
 
-def test_wbb_in_game_wp_decile_calibration(wbb_corpus):
-    """Phase-3 gate (same threshold): decile gap <= 0.03. Observed: 0.0224."""
-    sample = wbb_corpus["pbp_sample_2024"]
-    preds, obs = [], []
-    for (_gid,), sub in sample.group_by("game_id", maintain_order=True):
-        wp = mbb_in_game_win_prob(sub, float(sub["pregame_home_prob"][0]), league="womens")
-        preds.append(wp.get_column("home_win_prob").to_numpy())
-        obs.append(sub.get_column("home_win").to_numpy())
-    p, y = np.concatenate(preds), np.concatenate(obs)
-    tbl = calibration_table(y, p, n_bins=10)
-    gaps = (tbl.get_column("mean_pred") - tbl.get_column("mean_actual")).abs()
-    assert float(gaps.max()) <= 0.03, str(tbl.with_columns(gaps.alias("gap")))
+# The Phase-3 in-game decile gate (|mean_pred - mean_actual| <= 0.03 in every decile of every 25th play of 2024)
+# is retired (owner decision 2026-11-06, #1104 option a). On that one sample it could not tell the 2026-11 refit
+# (MBB 0.0326) from the booster it replaced (0.0298); WBB read 0.0281 / 0.0224: game-clustered 90% bands 0.025-0.055 vs 0.019-0.051. And 2024
+# is the season the pregame constants were fit on. Its replacement is the holdout gate on the full 2026 season, by
+# period, live and final, under both serving priors (tools/models/mbb_prediction/wp_model_cards.py,
+# tests/mbb/test_mbb_wp_model_cards.py).
 
 
 def test_wbb_sos_vs_espn_bpi(wbb_corpus):

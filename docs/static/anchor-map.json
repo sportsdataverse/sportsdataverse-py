@@ -3840,7 +3840,7 @@
   "peekableiteratorhas_next": "stats-ncaa-org",
   "peekableiteratorto_list": "stats-ncaa-org",
   "phase1_shot_event_enrichment": "stats-ncaa-org-3",
-  "pick_ridge_regression": "models-and-calculators-2",
+  "pick_ridge_regression": "models-and-calculators-3",
   "player_per100_features": "models-and-calculators-3",
   "playwright_transport": "stats-ncaa-org-3",
   "pos_class_to_score": "analytics-5",
@@ -10885,12 +10885,12 @@
   "wbb_strength_of_schedule": "analytics-3",
   "wbb_team_crosswalk": "ids-and-crosswalks",
   "wbb_team_luck": "analytics-3",
-  "wbb_team_ratings": "models-and-calculators-2",
+  "wbb_team_ratings": "models-and-calculators-3",
   "wbb_team_season_flow": "analytics-4",
   "wbb_team_season_rates": "analytics-4",
   "wbb_team_strength": "analytics-4",
   "weighted_avg": "analytics-4",
-  "win_prob_from_margin": "models-and-calculators-2"
+  "win_prob_from_margin": "models-and-calculators-3"
  },
  "/docs/wbb/reference/core": {
   "espn_wbb_award": "other",

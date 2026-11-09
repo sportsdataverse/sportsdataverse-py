@@ -58,10 +58,10 @@ def main() -> None:
             poss = add_play_context(enh, transition_seconds=secs)
             clean = poss.filter(
                 (pl.col("count_as_possession") == True)  # noqa: E712
-                & (pl.col("is_garbage_time") == False)  # noqa: E712
+                & (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
                 & (pl.col("is_heave_possession") == False)  # noqa: E712
             )
-            per_game.append(clean["is_transition"].mean())
+            per_game.append(clean["is_transition_ctg"].mean())
         mean = sum(per_game) / len(per_game)
         flag = "YES <-- adopted" if TARGET_LO <= mean <= TARGET_HI else ""
         print(f"{secs:5.1f} | {str([round(x, 3) for x in per_game]):38} | {mean:6.3f} | {flag}")

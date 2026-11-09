@@ -1263,6 +1263,33 @@ _global:
   yardline_text: Ball spot where the drive started, rendered as it appears on the scoreboard (e.g., "NEB 25").
   yards_covered: Net yards the offense gained over the course of the drive.
   yards_to_endzone: Distance from the current ball spot to the opponent's goal line, in yards.
+add_play_context:
+  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in
+    0.4.0). Not the possessions table's is_garbage_time (add_possession_flags).
+  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in
+    0.4.0). Not the possessions table's is_transition (add_possession_flags).
+  is_garbage_time_ctg: Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the
+    possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or
+    fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time
+    (add_possession_flags, bigballR's rule).
+  is_transition_ctg: Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play
+    (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the
+    chosen variant; never on a period's first possession or after a timeout. Not the possessions table's
+    is_transition (add_possession_flags), which uses an 8-second first-shot window.
+add_transition:
+  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in
+    0.4.0). Not the possessions table's is_transition (add_possession_flags).
+  is_transition_ctg: Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play
+    (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the
+    chosen variant; never on a period's first possession or after a timeout. Not the possessions table's
+    is_transition (add_possession_flags), which uses an 8-second first-shot window.
+flag_garbage_time:
+  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in
+    0.4.0). Not the possessions table's is_garbage_time (add_possession_flags).
+  is_garbage_time_ctg: Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the
+    possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or
+    fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time
+    (add_possession_flags, bigballR's rule).
 add_possession_flags:
   count_as_possession: Whether the row counts as a true possession for per-possession rate stats.
   def_player_1: NBA Stats player id of defensive on-court player 1 of 5 for the possession.
@@ -1291,8 +1318,8 @@ add_possession_flags:
     regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters
     (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null.
   is_transition: True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is
-    not its period's first, and seconds_to_first_shot is at most transition_seconds (default 10, hoop-math's and
-    bigballR's window). Never null.
+    not its period's first, and seconds_to_first_shot is at most transition_seconds (default 8, the window that tracks
+    Synergy's Transition play type; college's is 10). Never null.
   seconds_to_first_shot: Seconds from the change of possession (the clock at the previous possession's last event) to the
     possession's first field-goal attempt; null when it has no field-goal attempt.
 add_sequence_features:
@@ -50060,14 +50087,20 @@ ot_adjusted_seconds:
   wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men''s college frames) on overtime plays.'
 in_game_features:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 nba_in_game_win_prob:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
+mbb_in_game_win_prob:
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
+wbb_in_game_win_prob:
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 wnba_in_game_win_prob:
-  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column.'
-  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute.'
+  margin_per_sqrt_sec: 'Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column.'
+  sqrt_sec_left_60: 'Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute.'
 shot_coordinates:
   x_legacy: Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays.
   y_legacy: Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays.

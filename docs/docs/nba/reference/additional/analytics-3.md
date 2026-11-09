@@ -121,7 +121,7 @@ threshold here is league-agnostic.
 |---|---|---|---|
 | `game_id` | `str` |  | Ten-character game identifier (e.g. `"0022200001"`). |
 | `league_id` | `str` | `'00'` | League identifier (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
-| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 6.0). |
 | `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -142,9 +142,9 @@ print(poss["possession_start_type_ctg"].value_counts())
 
 import polars as pl
 clean = poss.filter(
-    (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
+    (pl.col("is_garbage_time_ctg") == False) & (pl.col("is_heave_possession") == False)
 )
-print(clean["is_transition"].mean())
+print(clean["is_transition_ctg"].mean())
 ```
 
 ### nba_play_style_features {#nba_play_style_features}

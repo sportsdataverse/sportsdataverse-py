@@ -19,11 +19,17 @@ documented public convention (see
 :mod:`sportsdataverse.nba.nba_play_context_constants`):
 
 * **Transition** — CTG says only "starting at the beginning of a possession and
-  only ending once the defense is set". Default: hoop-math's 10-second
-  initial-play rule (``transition_seconds``).
+  only ending once the defense is set". Default: a 6-second initial-play window
+  calibrated to CTG's published rates (``transition_seconds``).
 * **Putback** — CTG says "within a few seconds of the rebound". Default:
   pbpstats' 2-second same-player unassisted-two rule (``putback_seconds``).
 * **Garbage time / heaves** — CTG publishes these exactly; reproduced faithfully.
+
+The two flags here are ``is_transition_ctg`` and ``is_garbage_time_ctg``. The plain
+``is_transition`` / ``is_garbage_time`` belong to the possessions table
+(:func:`~sportsdataverse.nba.nba_possession_flags.add_possession_flags`), whose rules differ.
+The frames here still carry the plain names as deprecated copies of the ``*_ctg`` columns, so
+old reads keep working; move to ``*_ctg``, since the copies are removed in 0.4.0.
 
 CTG precedence rule reproduced here: a **transition putback stays transition**
 ("if a team comes down in transition and misses a shot but gets a putback, that
@@ -64,13 +70,44 @@ PLAY_CONTEXT_POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "possession_start_type_detail": pl.Utf8,
     "possession_start_type_ctg": pl.Utf8,
     "seconds_to_first_play": pl.Float64,
-    "is_transition": pl.Boolean,
+    "is_transition_ctg": pl.Boolean,
+    "is_transition": pl.Boolean,  # deprecated alias of is_transition_ctg (_CTG_ALIASES)
     "transition_source": pl.Utf8,
     "possession_context": pl.Utf8,
     "is_heave_possession": pl.Boolean,
-    "is_garbage_time": pl.Boolean,
+    "is_garbage_time_ctg": pl.Boolean,
+    "is_garbage_time": pl.Boolean,  # deprecated alias of is_garbage_time_ctg (_CTG_ALIASES)
     "garbage_time_basis": pl.Utf8,
 }
+
+#: The CTG flags' old plain names, ``{new: old}``. Each is emitted as a copy beside its ``*_ctg`` column
+#: until 0.4.0, then removed; the plain names belong to BB-D7's possessions flags.
+_CTG_ALIASES: dict[str, str] = {"is_transition_ctg": "is_transition", "is_garbage_time_ctg": "is_garbage_time"}
+
+
+def _ctg_alias(
+    possessions: pl.DataFrame, new: str, values: Union[pl.Series, pl.Expr]
+) -> list[Union[pl.Series, pl.Expr]]:
+    """The deprecated plain-name copy of ``new``, unless the input already has that column.
+
+    A frame that already carries the plain name (BB-D7's possessions flag) keeps it: the copy never
+    overwrites a published flag. Like the ``darko_*`` loader aliases (#1100) it does not warn: a
+    column cannot warn on read, and a per-call warning would also fire for callers already on
+    ``*_ctg``. The removal release is stated in the docs and the changelog instead.
+    """
+    old = _CTG_ALIASES[new]
+    if old in possessions.columns:
+        return []
+    return [values.alias(old)]
+
+
+def _ctg_names(possessions: pl.DataFrame) -> pl.DataFrame:
+    """A frame saved before the ``*_ctg`` rename, with the ``*_ctg`` columns derived from the old names."""
+    adds = [
+        pl.col(o).alias(n) for n, o in _CTG_ALIASES.items() if n not in possessions.columns and o in possessions.columns
+    ]
+    return possessions.with_columns(adds) if adds else possessions
+
 
 #: The Play-Context metric columns every rollup emits (team / lineup / player-on-off).
 #: Kept in one place so the three tables cannot drift apart.
@@ -467,13 +504,15 @@ def add_transition(
         possessions: Frame carrying ``possession_start_type_ctg`` (i.e. the output
             of :func:`add_start_type_detail`).
         enhanced_pbp: The enhanced PBP frame the possessions were built from.
-        transition_seconds: Initial-play cutoff. Default 10.0 (hoop-math).
-            Calibrate against Synergy transition frequency (league mean ~15-16%).
+        transition_seconds: Initial-play cutoff. Default 6.0
+            (:data:`~nba_play_context_constants.DEFAULT_TRANSITION_SECONDS`, calibrated to CTG's
+            published rates; hoop-math's college rule is 10.0).
         variant: One of :data:`~nba_play_context_constants.TRANSITION_VARIANTS`.
 
     Returns:
         ``possessions`` with ``seconds_to_first_play`` (Float64, null when the
-        possession had no play), ``is_transition`` (Boolean), ``transition_source``
+        possession had no play), ``is_transition_ctg`` (Boolean; also as the deprecated
+        ``is_transition``), ``transition_source``
         (Utf8: ``steal`` / ``live_rebound`` / ``made`` / ``deadball``; null when not
         transition) and ``possession_context`` (Utf8: ``transition`` / ``halfcourt``
         / ``misc``) appended.
@@ -485,7 +524,7 @@ def add_transition(
         Quick start::
 
             poss = add_transition(add_start_type_detail(poss, pbp), pbp)
-            print(poss["is_transition"].mean())          # transition frequency
+            print(poss["is_transition_ctg"].mean())          # transition frequency
 
         Tune the knob against the Synergy oracle::
 
@@ -496,7 +535,8 @@ def add_transition(
 
     empty_cols = (
         pl.lit(None, dtype=pl.Float64).alias("seconds_to_first_play"),
-        pl.lit(None, dtype=pl.Boolean).alias("is_transition"),
+        pl.lit(None, dtype=pl.Boolean).alias("is_transition_ctg"),
+        *_ctg_alias(possessions, "is_transition_ctg", pl.lit(None, dtype=pl.Boolean)),
         pl.lit(None, dtype=pl.Utf8).alias("transition_source"),
         pl.lit(None, dtype=pl.Utf8).alias("possession_context"),
     )
@@ -578,7 +618,8 @@ def add_transition(
 
     return possessions.sort("possession_number").with_columns(
         pl.Series("seconds_to_first_play", secs, dtype=pl.Float64),
-        pl.Series("is_transition", trans, dtype=pl.Boolean),
+        pl.Series("is_transition_ctg", trans, dtype=pl.Boolean),
+        *_ctg_alias(possessions, "is_transition_ctg", pl.Series(trans, dtype=pl.Boolean)),
         pl.Series("transition_source", source, dtype=pl.Utf8),
         pl.Series("possession_context", context, dtype=pl.Utf8),
     )
@@ -660,7 +701,8 @@ def flag_garbage_time(
             <= :data:`~nba_play_context_constants.GARBAGE_TIME_MAX_STARTERS`.
 
     Returns:
-        ``possessions`` with Boolean ``is_garbage_time`` and Utf8
+        ``possessions`` with Boolean ``is_garbage_time_ctg`` (also as the deprecated
+        ``is_garbage_time``) and Utf8
         ``garbage_time_basis`` (``"margin_and_starters"`` or ``"margin_only"``)
         appended.
 
@@ -668,7 +710,7 @@ def flag_garbage_time(
         Quick start (margin-only superset)::
 
             poss = flag_garbage_time(poss, pbp)
-            print(poss.filter(pl.col("is_garbage_time") == True).height)
+            print(poss.filter(pl.col("is_garbage_time_ctg") == True).height)
 
         CTG-exact, with the starters clause::
 
@@ -677,7 +719,8 @@ def flag_garbage_time(
     basis = "margin_and_starters" if starters_on_court is not None else "margin_only"
     if possessions.is_empty():
         return possessions.with_columns(
-            pl.lit(None, dtype=pl.Boolean).alias("is_garbage_time"),
+            pl.lit(None, dtype=pl.Boolean).alias("is_garbage_time_ctg"),
+            *_ctg_alias(possessions, "is_garbage_time_ctg", pl.lit(None, dtype=pl.Boolean)),
             pl.lit(basis, dtype=pl.Utf8).alias("garbage_time_basis"),
         )
 
@@ -711,7 +754,8 @@ def flag_garbage_time(
         flags.append(hit)
 
     return possessions.sort("possession_number").with_columns(
-        pl.Series("is_garbage_time", flags, dtype=pl.Boolean),
+        pl.Series("is_garbage_time_ctg", flags, dtype=pl.Boolean),
+        *_ctg_alias(possessions, "is_garbage_time_ctg", pl.Series(flags, dtype=pl.Boolean)),
         pl.lit(basis, dtype=pl.Utf8).alias("garbage_time_basis"),
     )
 
@@ -744,7 +788,7 @@ def build_play_context_shots(
       as part of the overall transition event."
 
     Args:
-        possessions: Frame from :func:`add_transition` (needs ``is_transition``).
+        possessions: Frame from :func:`add_transition` (needs ``is_transition_ctg``).
         enhanced_pbp: The enhanced PBP frame the possessions were built from.
         putback_seconds: Rebound-to-shot window. Default 2.0 (pbpstats).
 
@@ -761,11 +805,12 @@ def build_play_context_shots(
     """
     if possessions.is_empty() or enhanced_pbp.is_empty():
         return pl.DataFrame(schema=PLAY_CONTEXT_SHOTS_SCHEMA)
+    possessions = _ctg_names(possessions)
 
     pbp_rows = add_ctg_shot_zones(enhanced_pbp.sort("order_index")).to_dicts()
     trans_by_poss = {
-        r["possession_number"]: bool(r.get("is_transition"))
-        for r in possessions.select("possession_number", "is_transition").to_dicts()
+        r["possession_number"]: bool(r.get("is_transition_ctg"))
+        for r in possessions.select("possession_number", "is_transition_ctg").to_dicts()
     }
     # order-index window -> possession number
     windows = [
@@ -877,13 +922,13 @@ def add_play_context(
     CTG's defaults yourself::
 
         ctg = poss.filter(
-            (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
+            (pl.col("is_garbage_time_ctg") == False) & (pl.col("is_heave_possession") == False)
         )
 
     Args:
         enhanced_pbp: Frame from
             :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-        transition_seconds: Transition initial-play cutoff (default 10.0).
+        transition_seconds: Transition initial-play cutoff (default 6.0).
         transition_variant: See :func:`add_transition`.
         starters_on_court: Optional starters-on-floor counts; see
             :func:`flag_garbage_time`.
@@ -965,7 +1010,7 @@ def team_play_context(
 
             ctx = team_play_context(season_poss, league_non_transition_ppp=104.8)
     """
-    df = possessions
+    df = _ctg_names(possessions)
     if df.is_empty():
         out = pl.DataFrame(schema={"offense_team_id": pl.Int64, **_CONTEXT_METRIC_SCHEMA})
         return out.to_pandas() if return_as_pandas else out
@@ -985,7 +1030,7 @@ def _ctg_filtered(df: pl.DataFrame) -> pl.DataFrame:
     """CTG's default view: drop garbage time, heaves, and non-counting possessions."""
     return df.filter(
         (pl.col("count_as_possession") == True)  # noqa: E712
-        & (pl.col("is_garbage_time") == False)  # noqa: E712
+        & (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
         & (pl.col("is_heave_possession") == False)  # noqa: E712
     )
 
@@ -999,7 +1044,7 @@ def _league_non_transition_ppp(df: pl.DataFrame, supplied: Optional[float]) -> f
     """
     if supplied is not None:
         return supplied
-    nt = df.filter(pl.col("is_transition") == False)  # noqa: E712
+    nt = df.filter(pl.col("is_transition_ctg") == False)  # noqa: E712
     return 100.0 * nt["points"].sum() / nt.height if nt.height else 0.0
 
 
@@ -1011,7 +1056,7 @@ def _context_counts(df: pl.DataFrame, by: list[str]) -> pl.DataFrame:
     (team total - on-court), which is exactly what makes the on/off partition
     identity exact rather than approximate.
     """
-    is_trans = pl.col("is_transition") == True  # noqa: E712
+    is_trans = pl.col("is_transition_ctg") == True  # noqa: E712
     # Every count is cast to Int64 explicitly: pl.len() and Boolean.sum() are UInt32,
     # which (a) disagrees with the declared zero-row schema and (b) would wrap on the
     # subtraction that derives the OFF side in player_play_context.
@@ -1205,6 +1250,7 @@ def lineup_play_context(
         out = pl.DataFrame(schema=LINEUP_PLAY_CONTEXT_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
+    possessions = _ctg_names(possessions)
     df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
     league_non_transition_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
 
@@ -1284,10 +1330,11 @@ def player_play_context(
         out = pl.DataFrame(schema=PLAYER_PLAY_CONTEXT_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
+    possessions = _ctg_names(possessions)
     df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
     league_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
 
-    keep = ["game_id", "possession_number", "offense_team_id", "points", "is_transition", "transition_source"]
+    keep = ["game_id", "possession_number", "offense_team_id", "points", "is_transition_ctg", "transition_source"]
     long = (
         df.select(keep + _OFF_PLAYER_COLS)
         .unpivot(index=keep, on=_OFF_PLAYER_COLS, variable_name="_slot", value_name="player_id")
@@ -1367,7 +1414,7 @@ def nba_play_context(
     Args:
         game_id: Ten-character game identifier (e.g. ``"0022200001"``).
         league_id: League identifier (``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League).
-        transition_seconds: Transition initial-play cutoff (default 10.0).
+        transition_seconds: Transition initial-play cutoff (default 6.0).
         transition_variant: See :func:`add_transition`.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
@@ -1386,9 +1433,9 @@ def nba_play_context(
 
             import polars as pl
             clean = poss.filter(
-                (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
+                (pl.col("is_garbage_time_ctg") == False) & (pl.col("is_heave_possession") == False)
             )
-            print(clean["is_transition"].mean())
+            print(clean["is_transition_ctg"].mean())
 
         See Also:
             * `pbpstats`_ -- the reference possession parser this builds on.
