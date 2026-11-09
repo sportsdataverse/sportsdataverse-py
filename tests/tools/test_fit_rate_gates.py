@@ -16,6 +16,8 @@ is about half signal on seasons it never saw; single rates scatter (the WNBA has
 Three WNBA rates sit under a third signal on the holdout and stay ranked as owner-accepted exceptions
 (2026-11-09): team ``pace`` 0.331, on/off ``off_rtg_on`` 0.267 and ``off_rtg_diff`` 0.314. Re-measured season by
 season on the current releases, no data or source defect drives them (``rate_gates``, model-lineage).
+These figures use the fitter's inputs: box possessions per game for pace, and on/off halves that include
+playoffs; the published tables rank possession-table pace and regular-season on/off.
 ``test_low_holdout_rates_are_the_accepted_exceptions`` pins exactly that set.
 """
 
