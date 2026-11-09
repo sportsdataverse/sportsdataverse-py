@@ -17,20 +17,27 @@ holds for 5 of the 12 units here and 64.6% of the league (fixture README). The
 
 from __future__ import annotations
 
+import importlib
 from functools import cache
 from pathlib import Path
 
 import polars as pl
 import pytest
 
+from sportsdataverse._common.lineup_seasons import (
+    lineup_count_schema,
+    lineup_seasons,
+    lineup_seasons_league_averages,
+    lineup_seasons_schema,
+)
 from sportsdataverse._common.rate_gates import TEAM_MIN_N
-from sportsdataverse._common.lineup_seasons import lineup_count_schema, lineup_seasons, lineup_seasons_league_averages
-from sportsdataverse._common.lineup_seasons import lineup_seasons_schema
 from sportsdataverse.nba import nba_loaders
 from sportsdataverse.nba.nba_game_impact import nba_impact_rows
 from sportsdataverse.nba.nba_lineup_seasons import nba_lineup_count_rows, nba_lineup_seasons
 from sportsdataverse.wnba import wnba_loaders
 from sportsdataverse.wnba.wnba_lineup_seasons import wnba_lineup_seasons
+
+adapter = importlib.import_module("sportsdataverse.nba.nba_lineup_seasons")
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_lineup_seasons"
 LEAGUES = {"nba": "00", "wnba": "10"}
@@ -212,10 +219,21 @@ def test_public_builder_reads_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
     for loader, name in names.items():
         monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture("nba", name, 2024))
         monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture("wnba", name, 2025))
+    seen: list[object] = []
+    real = adapter.lineup_seasons
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(kwargs["level"])
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(adapter, "lineup_seasons", spy)
     assert nba_lineup_seasons(2025).equals(_built("nba", level="nba"))
     assert not _built("nba", level="nba").equals(_built("nba"))  # the adapter's level gate changes ranks
     assert nba_lineup_seasons(2025, season_type="preseason").height == 0  # the fixture has no preseason game
+    assert set(seen) == {"nba"}
+    seen.clear()
     wnba = wnba_lineup_seasons(2025)
+    assert seen == ["wnba"]  # each adapter passes its own level: a stricter one would pass the null checks below
     ranked = wnba.filter(pl.col("net_rtg_rank").is_not_null())
     assert ranked.filter(pl.col("poss") + pl.col("opp_poss") < 200).height == 0  # the WNBA floor is 200
     over_floor = wnba.filter(pl.col("poss") + pl.col("opp_poss") >= 200)

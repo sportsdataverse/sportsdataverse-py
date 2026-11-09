@@ -14,13 +14,13 @@ are the values observed on these teams; never lower one to make a change pass. T
 
 from __future__ import annotations
 
+import importlib
 from functools import cache
 from pathlib import Path
 
 import polars as pl
 import pytest
 
-from sportsdataverse._common.rate_gates import ON_OFF_MIN_N
 from sportsdataverse._common.lineup_seasons import lineup_seasons
 from sportsdataverse._common.player_on_off import (
     WOWY_SIDES,
@@ -29,12 +29,15 @@ from sportsdataverse._common.player_on_off import (
     player_wowy,
     player_wowy_schema,
 )
+from sportsdataverse._common.rate_gates import ON_OFF_MIN_N
 from sportsdataverse.nba import nba_loaders
 from sportsdataverse.nba.nba_game_impact import nba_impact_rows
 from sportsdataverse.nba.nba_lineup_seasons import nba_lineup_count_rows
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off, nba_player_wowy
 from sportsdataverse.wnba import wnba_loaders
 from sportsdataverse.wnba.wnba_player_on_off import wnba_player_on_off, wnba_player_wowy
+
+adapter = importlib.import_module("sportsdataverse.nba.nba_player_on_off")
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_lineup_seasons"
 #: The three NBA teams whose whole regular season the fixture holds.
@@ -253,11 +256,22 @@ def test_public_builders_read_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
     for loader, name in names.items():
         monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture("nba", name, 2024))
         monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture("wnba", name, 2025))
+    seen: list[object] = []
+    real = adapter.player_on_off
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(kwargs["level"])
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(adapter, "player_on_off", spy)
     assert nba_player_on_off(2025).equals(_on_off(level="nba"))
     assert not _on_off(level="nba").equals(_on_off())  # the adapter's level gate changes ranks
     assert nba_player_wowy(2025).equals(_wowy())
     assert nba_player_on_off(2025, season_type="preseason").height == 0  # the fixture has no preseason game
+    assert set(seen) == {"nba"}
+    seen.clear()
     wnba = wnba_player_on_off(2025)
+    assert seen == ["wnba"]  # each adapter passes its own level: a stricter one would pass the null checks below
     ranked = wnba.filter(pl.col("net_rtg_on_rank").is_not_null())
     assert ranked.filter(pl.col("poss_off") + pl.col("opp_poss_off") < 200).height == 0  # the WNBA floor is 200
     thin = wnba.filter(pl.col("net_rtg_on_n") < ON_OFF_MIN_N["wnba"]["net_rtg_on"])

@@ -11,6 +11,7 @@ stats.nba.com in ``tests/nba/test_nba_player_on_off.py``.
 
 from __future__ import annotations
 
+import importlib
 from functools import cache
 from pathlib import Path
 
@@ -23,6 +24,8 @@ from sportsdataverse.mbb.mbb_game_impact import ncaa_impact_rows
 from sportsdataverse.mbb.mbb_player_on_off import mbb_player_on_off, mbb_player_wowy
 from sportsdataverse.wbb import wbb_loaders
 from sportsdataverse.wbb.wbb_player_on_off import wbb_player_on_off, wbb_player_wowy
+
+adapter = importlib.import_module("sportsdataverse.mbb.mbb_player_on_off")
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 LEAGUES = {"mbb": "mens", "wbb": "womens"}
@@ -82,6 +85,14 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
     for lg, mod in (("mbb", mbb_loaders), ("wbb", wbb_loaders)):
         monkeypatch.setattr(mod, f"load_ncaa_{lg}_pbp", fixture(lg, "pbp"))
         monkeypatch.setattr(mod, f"load_ncaa_{lg}_possessions", fixture(lg, "possessions"))
+    seen: list[object] = []
+    real = adapter.player_on_off
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(kwargs["level"])
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(adapter, "player_on_off", spy)
     gated = player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20, level="mbb")
     assert mbb_player_on_off(2025, min_poss=20).equals(gated)
     assert not gated.equals(player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20))  # the level gate bites
@@ -90,6 +101,7 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
     assert wbb_player_on_off(2025).equals(
         player_on_off(_rows("wbb"), player_dtype=pl.Utf8(), min_poss=200, level="wbb")
     )
+    assert seen == ["mbb", "wbb"]  # the WBB fixture ranks nobody, so only the spy can see its level
     assert mbb_player_wowy(2025).equals(player_wowy(_rows("mbb"), player_dtype=pl.Utf8()))
     assert wbb_player_wowy(2025).equals(player_wowy(_rows("wbb"), player_dtype=pl.Utf8()))
     with pytest.raises(ValueError, match="league"):

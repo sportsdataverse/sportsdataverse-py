@@ -244,8 +244,18 @@ def test_league_averages_n_is_the_cohort(nba_2026: pl.DataFrame) -> None:
 
 
 def test_wnba_2025_parity(monkeypatch: pytest.MonkeyPatch) -> None:
+    adapter = importlib.import_module("sportsdataverse.nba.nba_team_season_rates")
     from sportsdataverse.wnba import wnba_loaders
     from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_season_rates
+
+    seen: list[object] = []
+    real = adapter.team_season_rates
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(kwargs["level"])
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(adapter, "team_season_rates", spy)
 
     monkeypatch.setattr(
         wnba_loaders, "load_wnba_stats_possessions", _fixture_loader("wnba_possessions_2025.parquet", [2025])
@@ -254,6 +264,7 @@ def test_wnba_2025_parity(monkeypatch: pytest.MonkeyPatch) -> None:
         wnba_loaders, "load_wnba_stats_schedules", _fixture_loader("wnba_schedule_2025.parquet", [2025])
     )
     rates = wnba_team_season_rates(2025)
+    assert seen == ["wnba"]  # the WNBA level: a stricter (NBA) gate would pass the null checks below
     assert rates.height == 13 * len(SPLITS)
     for m, gate in TEAM_MIN_N["wnba"].items():  # the WNBA adapter gates on the WNBA's own samples
         if f"{m}_rank" in rates.columns:

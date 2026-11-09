@@ -72,8 +72,18 @@ def test_refit_lands_on_the_frozen_gates(league: str) -> None:
 @pytest.mark.parametrize(("league", "kind"), sorted(HOLDOUT))
 def test_frozen_gates_hold_out(league: str, kind: str) -> None:
     fits = _fits(league).filter(kind=kind)
-    held = {r["rate"]: r["m"] for r in fits.filter(span="holdout").iter_rows(named=True)}
-    rel = [g / (g + held[m]) for m, g in FROZEN[kind][league].items() if math.isfinite(g) and math.isfinite(held[m])]
+    held = {}
+    for r in fits.filter(span="holdout").iter_rows(named=True):
+        # the holdout M is re-fit from its curve too, so a hand-edited m column cannot pass
+        m = fit.fit_m(fit.parse_curve(r["curve"]))
+        assert m == pytest.approx(r["m"], rel=1e-9) or (math.isinf(m) and math.isinf(r["m"])), f"{league} {r['rate']}"
+        held[r["rate"]] = m
+    # a ranked rate whose holdout curve never reaches half signal scores 0: it is not skipped
+    rel = [
+        g / (g + held[m]) if math.isfinite(held[m]) else 0.0
+        for m, g in FROZEN[kind][league].items()
+        if math.isfinite(g)
+    ]
     assert len(rel) >= 3
     median, worst = HOLDOUT[(league, kind)]
     assert float(np.median(rel)) >= median and min(rel) >= worst
