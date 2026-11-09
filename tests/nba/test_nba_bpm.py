@@ -205,8 +205,8 @@ def test_team_adjustment_invariant() -> None:
     player_logs, team_logs = _synth_logs()
     positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
     out = nba_bpm(player_logs, team_logs, positions, team_adjust=True)
-    # minute-weighted team BPM == team efficiency margin (plus_minus per 100), for ANY coeffs
-    # team 1 margin = 5 pm/game over its possessions; compute the same way nba_bpm does and compare
+    # BPM 2.0: the five %Min-weighted slots sum to the team's net rating per 100, i.e. the
+    # minute-weighted team MEAN is margin / 5, for ANY coeffs (it was the full margin, 5x too large)
     merged = out.join(
         player_logs.group_by("player_id").agg(pl.col("team_id").first(), pl.col("min").sum().alias("mins")),
         on="player_id",
@@ -218,7 +218,7 @@ def test_team_adjustment_invariant() -> None:
         tl = team_logs.filter(pl.col("team_id") == team)
         poss = (tl["fga"] - tl["oreb"] + tl["tov"] + 0.44 * tl["fta"]).sum()
         margin = tl["plus_minus"].sum() / poss * 100
-        assert abs(wbpm - margin) < 1e-6
+        assert abs(wbpm - margin / 5) < 1e-6
 
 
 def test_team_adjust_false_is_raw() -> None:
@@ -332,7 +332,7 @@ def test_nba_bpm_game_granularity_one_row_per_game_player():
 
 
 def test_nba_bpm_game_granularity_per_game_team_adjustment_invariant():
-    """Per game: minute-weighted team BPM == that game's own efficiency margin
+    """Per game: minute-weighted team BPM == that game's own efficiency margin / 5
     (same invariant test_team_adjustment_invariant checks at season grain)."""
     player_logs, team_logs = _synth_logs()
     positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
@@ -349,7 +349,7 @@ def test_nba_bpm_game_granularity_per_game_team_adjustment_invariant():
             tl = tlg.filter(pl.col("team_id") == team)
             poss = (tl["fga"] - tl["oreb"] + tl["tov"] + 0.44 * tl["fta"]).sum()
             margin = tl["plus_minus"].sum() / poss * 100
-            assert abs(wbpm - margin) < 1e-6, (gid, team)
+            assert abs(wbpm - margin / 5) < 1e-6, (gid, team)
 
 
 def test_nba_bpm_season_mode_unchanged_by_refactor():
@@ -392,3 +392,102 @@ def test_nba_bpm_live_season_smoke() -> None:
     pos = nba_player_positions("2023-24")
     out = nba_bpm(logs["player"], logs["team"], pos)
     assert out.height > 0 and set(out.columns) == {"player_id", "obpm", "dbpm", "bpm", "min", "gp"}
+
+
+# ---------------------------------------------------------------------------
+# Real season: the BPM 2.0 offense / defense split (tests/fixtures/nba_bpm/, README there)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def real_2025():
+    import pathlib
+
+    fx = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "nba_bpm"
+    player = pl.read_parquet(fx / "player_logs_2025.parquet")
+    team = pl.read_parquet(fx / "team_logs_2025.parquet")
+    pos = pl.read_parquet(fx / "positions_2025.parquet")
+    return player, team, pos, nba_bpm(player, team, pos)
+
+
+def _wmean(df: pl.DataFrame, col: str, by: str | None = None):
+    if by is None:
+        return float((df[col] * df["min"]).sum() / df["min"].sum())
+    return df.group_by(by).agg(((pl.col(col) * pl.col("min")).sum() / pl.col("min").sum()).alias(col))
+
+
+def test_real_season_obpm_and_dbpm_each_centre_on_the_league(real_2025) -> None:
+    """2024-25 NBA: minute-weighted obpm / dbpm / bpm read -0.00x each. The old adjustment put the whole
+    team constant into obpm: -2.94 / +2.90 there (2025-26), 97% of players with a positive dbpm."""
+    *_, out = real_2025
+    assert abs(_wmean(out, "obpm")) < 0.05 and abs(_wmean(out, "dbpm")) < 0.05 and abs(_wmean(out, "bpm")) < 0.05
+    assert (out["obpm"] + out["dbpm"] - out["bpm"]).abs().max() <= 1e-9
+    assert 0.3 < float((out["dbpm"] > 0).mean()) < 0.6
+
+
+def test_real_season_team_sums_hit_net_and_offensive_ratings(real_2025) -> None:
+    """Per team, minute-weighted bpm = net rating / 5 and obpm = (ORtg - league ORtg) / 5 (Myers' %Min sums)."""
+    player, team, _, out = real_2025
+    poss = pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")
+    t = team.group_by("team_id").agg(poss.sum().alias("poss"), pl.col("pts").sum(), pl.col("plus_minus").sum())
+    lg = float(t["pts"].sum() / t["poss"].sum() * 100)
+    t = t.select("team_id", (pl.col("plus_minus") / pl.col("poss") * 20).alias("net5"),
+                 ((pl.col("pts") / pl.col("poss") * 100 - lg) / 5).alias("o5"))  # fmt: skip
+    first_team = player.group_by("player_id").agg(pl.col("team_id").first())
+    j = out.join(first_team, on="player_id")
+    w = _wmean(j, "bpm", "team_id").join(_wmean(j, "obpm", "team_id"), on="team_id").join(t, on="team_id")
+    assert w.height == 30
+    assert (w["bpm"] - w["net5"]).abs().max() < 1e-9
+    assert (w["obpm"] - w["o5"]).abs().max() < 1e-9
+
+
+def test_real_season_tracks_basketball_reference(real_2025) -> None:
+    """Against Basketball-Reference's 2024-25 BPM (tests/fixtures/bb_player_war, 500+ minutes, matched by
+    name): corr 0.945 and MAE 0.649 observed 2026-11-09; the old adjustment read 0.708 / 3.83."""
+    import pathlib
+    import unicodedata
+
+    player, _, _, out = real_2025
+    bref = pl.read_parquet(
+        pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "bb_player_war" / "bref_nba_advanced_2025.parquet"
+    )
+    names = pl.read_parquet(pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "nba_bpm" / "names_2025.parquet")
+
+    def norm(s: str) -> str:
+        s = s.encode("latin-1", "ignore").decode("utf-8", "ignore")  # the capture's mojibake, as the README says
+        return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower().replace(".", "").strip()
+
+    bref = bref.with_columns(pl.col("player").map_elements(norm, return_dtype=pl.Utf8).alias("k"))
+    bref = bref.sort("mp", descending=True).unique("k", keep="first")
+    ours = out.join(names, on="player_id").with_columns(
+        pl.col("player_name").map_elements(norm, return_dtype=pl.Utf8).alias("k")
+    )
+    j = ours.join(bref.select("k", pl.col("bpm").cast(pl.Float64).alias("bref")), on="k").filter(pl.col("min") >= 500)
+    assert j.height >= 350
+    assert float(np.corrcoef(j["bpm"], j["bref"])[0, 1]) >= 0.93
+    assert float((j["bpm"] - j["bref"]).abs().mean()) <= 0.8
+
+
+def test_real_season_star_splits(real_2025) -> None:
+    """2024-25 (obpm / dbpm / bpm). Basketball-Reference has Jokic 9.0 / 4.3 / 13.3."""
+    *_, out = real_2025
+    got = {r["player_id"]: (r["obpm"], r["dbpm"], r["bpm"]) for r in out.iter_rows(named=True)}
+    want = {203999: (8.97, 4.40, 13.38), 2544: (4.52, 1.81, 6.34), 1629008: (1.14, -2.08, -0.94)}
+    for pid, vals in want.items():
+        assert np.allclose(got[pid], vals, atol=0.01), (pid, got[pid])
+
+
+def test_player_war_repair_is_a_no_op_on_the_fixed_bpm(real_2025) -> None:
+    """player_war's #1114 repair (minute-weighted team bpm -> net / 5) leaves the fixed bpm where it is,
+    given the same net rating, so the WAR built on a rebuilt release does not move under it."""
+    from sportsdataverse._common.player_war import repair_bpm_team_constant
+
+    player, team, _, out = real_2025
+    poss = pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")
+    net = team.group_by("team_id").agg((pl.col("plus_minus").sum() / poss.sum() * 100).alias("net"))
+    first_team = player.group_by("player_id").agg(pl.col("team_id").first())
+    ratings = out.join(first_team, on="player_id").with_columns(pl.lit(2025, dtype=pl.Int64).alias("season"))
+    net = net.with_columns(pl.lit(2025, dtype=pl.Int64).alias("season"))
+    repaired = repair_bpm_team_constant(ratings, net)
+    j = ratings.select("player_id", "bpm").join(repaired.select("player_id", pl.col("bpm").alias("r")), on="player_id")
+    assert (j["bpm"] - j["r"]).abs().max() < 1e-9

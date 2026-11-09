@@ -1403,6 +1403,18 @@ curve.filter(pl.col("age").is_between(24, 30))
 
 Faithful BPM 2.0 per player, at season or single-game granularity.
 
+Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
+team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
+`bpm` is its net rating per 100 / 5, and its minute-weighted `obpm` is (its offensive
+rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` lands on the defensive
+rating relative to the league, so league minute-weighted obpm and dbpm each sit near 0 (2025-26
+NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
+the schedule-adjusted ones Basketball-Reference uses. Before #BPMPR every player took
+`net - team mean` on both bpm and obpm: five times the published constant, all of it on
+offense (2025-26 league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
+Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
+Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
+
 **Parameters**
 
 | Parameter | Type | Default | Description |

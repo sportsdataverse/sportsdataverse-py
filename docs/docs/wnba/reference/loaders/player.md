@@ -228,9 +228,9 @@ The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boba
 | `spm` | Float64 | Statistical plus-minus: offensive plus defensive box-score estimate of the RAPM target, per 100 possessions. |
 | `min` | Float64 | Minutes played. |
 | `gp` | Int64 | Games played. |
-| `obpm` | Float64 | Offensive box plus-minus per 100 possessions for this season and season type only; bpm minus dbpm. |
-| `dbpm` | Float64 | Defensive box plus-minus per 100 possessions for this season and season type only; bpm minus obpm. |
-| `bpm` | Float64 | Box plus-minus (BPM 2.0) per 100 possessions for this season and season type only, not a career value: the box-score estimate of total impact, team-adjusted to the team's margin. |
+| `obpm` | Float64 | Offensive box plus-minus per 100 possessions for this season and season type only, team-adjusted on its own so a team's minute-weighted obpm is its offensive rating minus the league's, divided by 5 (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #BPMPR put the whole team constant here (league mean about -2.9). |
+| `dbpm` | Float64 | Defensive box plus-minus per 100 possessions for this season and season type only: bpm minus obpm, so it lands on the team's defensive rating relative to the league (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #BPMPR left it unadjusted (league mean about +2.9, nearly every player positive). |
+| `bpm` | Float64 | Box plus-minus (BPM 2.0) per 100 possessions for this season and season type only, not a career value: the box-score estimate of total impact. The team adjustment makes a team's minute-weighted bpm its net rating per 100 divided by 5 (the five %Min slots sum to the net rating). Releases fit before sportsdataverse-py #BPMPR used the full net rating, five times too large. |
 | `war` | Float64 | Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win. |
 | `boban_filtered_skill` | Float64 | BOBAN Kalman-filtered estimate of the player's current skill level. |
 | `boban_projected_rating` | Float64 | BOBAN projected forward rating, including the empirical aging-curve drift. |

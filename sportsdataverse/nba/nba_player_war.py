@@ -10,8 +10,8 @@ The ``nba_stats_possessions`` release gives each player's on-court possessions p
 team's margin; the ``nba_stats_schedules`` release picks the regular-season games (BB-D3's
 choice: NBA Cup group and knockout games count, the Cup final does not).
 
-Two producer issues are handled here rather than read through: the published ``bpm`` has its team
-constant five times too large (repaired by
+Two producer issues are handled here rather than read through: the ``bpm`` of releases fit before
+sportsdataverse-py #BPMPR has its team constant five times too large (repaired by
 :func:`~sportsdataverse._common.player_war.repair_bpm_team_constant`), and the ``o_adj_rapm`` /
 ``d_adj_rapm`` split of releases fit before sportsdataverse-py #1137 carries a +11 / -11 offset, which
 ``nba_adj_rapm`` no longer fits (only the net ``adj_rapm`` is read, and it is re-anchored). The release's own ``war`` column is not used.
