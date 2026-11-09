@@ -233,7 +233,10 @@ class AdjRapmModel:
 def _penalty(league: str, alpha: float | None, alphas: np.ndarray | None) -> float | None:
     """The ridge penalty of a fit: ``alpha``, else the league's; ``None`` (RidgeCV) when ``alphas`` is passed."""
     if alphas is None:
-        return ADJ_RAPM_PENALTY[league] if alpha is None else alpha
+        penalty = ADJ_RAPM_PENALTY[league] if alpha is None else alpha
+        if not penalty > 0:
+            raise ValueError(f"the ridge penalty must be positive, got {penalty!r}")
+        return penalty
     warn_deprecated(
         "nba_adj_rapm(alphas=...)",
         replacement="nba_adj_rapm(alpha=...) or the league penalty (league_id=...)",
@@ -293,7 +296,7 @@ def nba_adj_rapm(
             Players absent from ``prior`` receive a ``(0.0, 0.0)`` default.
         league_id: ``"00"``, ``"10"`` or ``"20"``: the league whose penalty and prior scale are
             used. ``None`` reads it from the ``game_id`` prefix (NBA without one).
-        alpha: A penalty instead of the league's.
+        alpha: A penalty instead of the league's (positive; ``ValueError`` otherwise).
         alphas: Deprecated: pick the penalty per fit by RidgeCV over this grid (the old rule,
             whose scale is not comparable across seasons).
         prior_scale: A multiplier on ``prior`` instead of the league's.

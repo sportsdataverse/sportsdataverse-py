@@ -1342,7 +1342,7 @@ seasons (2004: sd 0.64 against plain RAPM's 1.47) and held NBA 2025-26 at 0.77 o
 | `possessions` | `DataFrame` |  | A possession+lineup frame produced by the possession engine (`game_id`, `offense_team_id`, `points`, `off_player_1..5`, `def_player_1..5`). |
 | `prior` | `Dict[int, Tuple[float, float]]` |  | Per-player `{player_id: (o_prior, d_prior)}` in per-100 units. Players absent from `prior` receive a `(0.0, 0.0)` default. |
 | `league_id` | `str \| None` | `None` | `"00"`, `"10"` or `"20"`: the league whose penalty and prior scale are used. `None` reads it from the `game_id` prefix (NBA without one). |
-| `alpha` | `float \| None` | `None` | A penalty instead of the league's. |
+| `alpha` | `float \| None` | `None` | A penalty instead of the league's (positive; `ValueError` otherwise). |
 | `alphas` | `ndarray \| None` | `None` | Deprecated: pick the penalty per fit by RidgeCV over this grid (the old rule, whose scale is not comparable across seasons). |
 | `prior_scale` | `float \| None` | `None` | A multiplier on `prior` instead of the league's. |
 | `n_samples` | `int` | `200` | Number of RTO posterior samples (default 200). |

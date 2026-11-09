@@ -90,6 +90,7 @@ def _blend(rs: pl.DataFrame, po: pl.DataFrame | None) -> pl.DataFrame:
     """Minute-weighted RS + playoff SPM, the producers' carry; a player in one frame keeps its values."""
     if po is None or po.height == 0:
         return rs.select("player_id", "ospm", "dspm")
+    assert rs.schema["player_id"] == po.schema["player_id"], "player_id dtypes differ between RS and playoff SPM"
     j = rs.join(po, on="player_id", how="full", coalesce=True, suffix="_po")
     w, wp = pl.col("min").fill_null(0), pl.col("min_po").fill_null(0)
     tot = w + wp
@@ -103,6 +104,12 @@ def _blend(rs: pl.DataFrame, po: pl.DataFrame | None) -> pl.DataFrame:
             for c in ("ospm", "dspm")
         ],
     )
+
+
+def _in_order(frame: pl.DataFrame, col: str, pids: list) -> np.ndarray:
+    """``frame[col]`` in ``pids`` order (NaN for a player it lacks), by lookup: no join can reorder it."""
+    look = dict(zip(frame["player_id"].cast(pl.Int64).to_list(), frame[col].to_list()))
+    return np.array([np.nan if look.get(int(p)) is None else look[int(p)] for p in pids], dtype=np.float64)
 
 
 def _with_retry(fn, *args):
@@ -191,11 +198,20 @@ def curves(out: Path, raw: dict[str, str]) -> None:
             bf = box_features(logs["player"], logs["team"])
             coef_spm = train_spm(bf, rapm.select("player_id", "o_rapm", "d_rapm"))
             spm = nba_spm(bf, coef_spm)
-            try:
-                lpo = _logs(league, season, "Playoffs", raw[league])
-                spm_po = nba_spm(box_features(lpo["player"], lpo["team"]), coef_spm) if lpo["player"].height else None
-            except SystemExit:
-                spm_po = None
+            # a season with playoff games must have its playoff capture (the next season's prior blends it
+            # in): a miss raises, except in the last season, whose prior no fitted season reads
+            spm_po = None
+            if sched.filter(pl.col("season_type") == SEASON_TYPES["po"]).height:
+                try:
+                    lpo = _logs(league, season, "Playoffs", raw[league])
+                except SystemExit:
+                    if season != max(seasons):
+                        raise
+                    print(f"  {league} {season}: no playoff capture; its prior (unused) is regular season only")
+                else:
+                    spm_po = (
+                        nba_spm(box_features(lpo["player"], lpo["team"]), coef_spm) if lpo["player"].height else None
+                    )
             P = len(pids)
             pm = np.zeros(2 * P)
             if prior is not None:
@@ -207,15 +223,9 @@ def curves(out: Path, raw: dict[str, str]) -> None:
             Y = np.column_stack([y - k * Xp for k in PRIOR_SCALES])
             res = season_curves(X, Y, gid)
             counts = np.asarray(X.sum(axis=0)).ravel()
-            r = rapm.select("player_id", "rapm").join(
-                pl.DataFrame({"player_id": np.asarray(pids, dtype=np.int64)}), on="player_id", how="right"
-            )
-            s = spm.select("player_id", "spm").join(
-                pl.DataFrame({"player_id": np.asarray(pids, dtype=np.int64)}), on="player_id", how="right"
-            )
             np.savez_compressed(
                 f, pids=np.asarray(pids), counts=counts, prior=pm, has_prior=prior is not None,
-                rapm=r["rapm"].to_numpy(), spm=s["spm"].to_numpy(), **res,
+                rapm=_in_order(rapm, "rapm", pids), spm=_in_order(spm, "spm", pids), **res,
             )  # fmt: skip
             prior = _blend(spm, spm_po)
             prior.write_parquet(p_next)
@@ -262,6 +272,7 @@ def _forecast(frames: dict[int, pl.DataFrame], target: dict[int, pl.DataFrame], 
     pairs = {}
     for t, a in frames.items():
         if t + 1 in target:
+            assert a.schema["player_id"] == target[t + 1].schema["player_id"], "player_id dtypes differ across seasons"
             p = (
                 a.filter(pl.col("poss") >= floor)
                 .join(

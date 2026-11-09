@@ -223,3 +223,10 @@ def test_adj_rapm_o_and_d_are_centred_on_the_real_fit(real_possessions_and_prior
     assert abs(o) < 1.5 and abs(d) < 1.5, (o, d)
     assert (out["o_adj_rapm"] + out["d_adj_rapm"] - out["adj_rapm"]).abs().max() <= 1e-9
     print("ADJ_RAPM_CENTRED_OK", round(o, 3), round(d, 3))
+
+
+def test_a_non_positive_penalty_is_refused(real_possessions_and_prior) -> None:
+    poss, prior, _ = real_possessions_and_prior
+    for bad in (0.0, -1.0):
+        with pytest.raises(ValueError, match="positive"):
+            nba_adj_rapm(poss, prior, alpha=bad, n_samples=2)
