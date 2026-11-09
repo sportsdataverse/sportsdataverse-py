@@ -157,22 +157,35 @@ def _seconds_remaining(quarter: Optional[int], qsr: Optional[int]) -> tuple[Opti
     return half, game
 
 
-def _play_type(row: Dict[str, Any], shield_play_type: Optional[str]) -> Optional[str]:
+_KICK_PLAY_TYPES = {
+    "FIELD_GOAL": "field_goal",
+    "PUNT": "punt",
+    "KICK_OFF": "kickoff",
+    "FREE_KICK": "kickoff",
+    "XP_KICK": "extra_point",
+}
+
+
+def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optional[str] = None) -> Optional[str]:
     """nflverse-style play_type from the summed stat outcomes + the feed's playType.
 
-    qb_kneel / qb_spike are refined later from the description; this assigns the
+    Follows nflfastR's ``translate_play_type_nfl``: the feed's kick types win outright (a blocked-kick
+    recovery pass or a nullified kickoff keeps its kick class), and a ``PENALTY`` play is ``no_play``
+    unless the penalty was enforced between downs on a pass or run. Other feed types fall back to the
+    stat outcomes. qb_kneel / qb_spike are refined later from the description; this assigns the
     base class (pass/run/punt/field_goal/kickoff/extra_point/no_play).
     """
+    kick = _KICK_PLAY_TYPES.get(shield_play_type or "")
+    if kick is not None:
+        return kick
     has_pass = row.get("pass_attempt") == 1
     has_rush = row.get("rush_attempt") == 1
-    penalty_only = (
-        (shield_play_type == "PENALTY")
-        and not has_pass
-        and not has_rush
-        and row.get("field_goal_attempt") != 1
-        and row.get("punt_attempt") != 1
-    )
-    if penalty_only:
+    if shield_play_type == "PENALTY":
+        between_downs = "enforced between downs" in (desc or "").lower()
+        if has_pass and between_downs:
+            return "pass"
+        if has_rush and between_downs:
+            return "run"
         return "no_play"
     if has_pass:
         return "pass"
@@ -621,7 +634,7 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
             "quarter_seconds_remaining": qsr,
             "half_seconds_remaining": half_sr,
             "game_seconds_remaining": game_sr,
-            "play_type": _play_type(stat_row, p.get("playType")),
+            "play_type": _play_type(stat_row, p.get("playType"), p.get("playDescription")),
             "yards_gained": yards_gained,
             "desc": p.get("playDescription"),
             "shield_play_type": p.get("playType"),
