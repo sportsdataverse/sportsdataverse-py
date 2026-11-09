@@ -9,8 +9,8 @@ One row per ``(season, team_id)``:
   says it should have. The exponent ``x`` is :data:`PYTHAG_EXPONENT`, fitted per league.
 * **Close-game record** -- ``close_games`` / ``close_wins`` / ``close_losses``: the games that
   were close by BB-D3's definition (:mod:`sportsdataverse._common.team_season_rates`), i.e. with
-  at least one possession that started with 5:00 or less left in the last regulation period or
-  in an overtime, the score within 5. That is stats.nba.com's clutch window
+  at least one possession in play with 5:00 or less left (starting there, or the one live at the
+  5:00 mark) in the last regulation period or in an overtime, the score within 5 as it starts. That is stats.nba.com's clutch window
   (``ClutchTime="Last 5 Minutes"``, ``PointDiff=5``). A game is only classed when its
   possessions are published; ``pbp_games`` counts the team's games that are, so
   ``close_games`` covers ``pbp_games`` of ``games``.

@@ -183,9 +183,11 @@ def mbb_team_season_rates(
     """College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits.
 
     One row per team, season and split (``all``, ``home``, ``away``, ``close``, ``clutch``).
-    Clutch is a possession that starts with 5:00 or less left in the 2nd half (the 4th quarter
-    in women's basketball from 2016) or an overtime, the score within 5; a close game is one with
-    a clutch possession. The full definitions are in :mod:`sportsdataverse._common.team_season_rates`.
+    Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
+    5:00 mark: it starts before 5:00 and ends after it; one that ends exactly at 5:00 is out) in
+    the 2nd half (the 4th quarter in women's basketball from 2016) or an overtime, the score
+    within 5 as it starts; a close game is one with a clutch possession. The full definitions
+    are in :mod:`sportsdataverse._common.team_season_rates`.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
