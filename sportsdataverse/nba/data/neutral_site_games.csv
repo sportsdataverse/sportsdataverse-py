@@ -1,0 +1,51 @@
+league,season,game_id,game_date,season_type,home_team,away_team,arena,city,country,reason,source_url
+nba,1997,0029600047,1996-11-07,regular-season,NJN,ORL,Tokyo Dome,Tokyo,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games
+nba,1997,0029600055,1996-11-08,regular-season,ORL,NJN,Tokyo Dome,Tokyo,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games
+nba,1998,0029700255,1997-12-06,regular-season,DAL,HOU,Palacio de los Deportes,Mexico City,Mexico,international,https://en.wikipedia.org/wiki/NBA_Global_Games
+nba,2000,0029900034,1999-11-05,regular-season,SAC,MIN,Tokyo Dome,Tokyo,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games
+nba,2000,0029900041,1999-11-06,regular-season,MIN,SAC,Tokyo Dome,Tokyo,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games
+nba,2004,0020300015,2003-10-30,regular-season,SEA,LAC,Saitama Super Arena,Saitama,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games#List_of_regular_season_games
+nba,2004,0020300025,2003-10-31,regular-season,LAC,SEA,Saitama Super Arena,Saitama,Japan,international,https://en.wikipedia.org/wiki/NBA_Global_Games#List_of_regular_season_games
+nba,2011,0021000914,2011-03-04,regular-season,NJN,TOR,The O2 Arena,London,United Kingdom,international,https://en.wikipedia.org/wiki/NBA_London_Game
+nba,2011,0021000925,2011-03-05,regular-season,NJN,TOR,The O2 Arena,London,United Kingdom,international,https://en.wikipedia.org/wiki/NBA_London_Game
+nba,2013,0021200580,2013-01-17,regular-season,DET,NYK,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20130117/NYKDET/gameinfo.html
+nba,2014,0021300579,2014-01-16,regular-season,ATL,BKN,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20140116/BKNATL/gameinfo.html
+nba,2015,0021400117,2014-11-12,regular-season,MIN,HOU,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20141112/HOUMIN/gameinfo.html
+nba,2015,0021400585,2015-01-15,regular-season,MIL,NYK,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20150115/NYKMIL/gameinfo.html
+nba,2016,0021500282,2015-12-03,regular-season,SAC,BOS,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20151203/BOSSAC/gameinfo.html
+nba,2016,0021500588,2016-01-14,regular-season,ORL,TOR,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20160114/TORORL/gameinfo.html
+nba,2017,0021600589,2017-01-12,regular-season,DEN,IND,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20170112/INDDEN/gameinfo.html
+nba,2017,0021600591,2017-01-12,regular-season,PHX,DAL,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20170112/DALPHX/gameinfo.html
+nba,2017,0021600605,2017-01-14,regular-season,PHX,SAS,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20170114/SASPHX/gameinfo.html
+nba,2018,0021700365,2017-12-07,regular-season,BKN,OKC,Mexico City Arena,Mexico City,Mexico,international,https://en.wikipedia.org/wiki/2017%E2%80%9318_Brooklyn_Nets_season
+nba,2018,0021700376,2017-12-09,regular-season,BKN,MIA,Mexico City Arena,Mexico City,Mexico,international,https://en.wikipedia.org/wiki/2017%E2%80%9318_Brooklyn_Nets_season
+nba,2018,0021700614,2018-01-11,regular-season,PHI,BOS,The O2 Arena,London,United Kingdom,international,https://en.wikipedia.org/wiki/NBA_London_Game
+nba,2019,0021800418,2018-12-13,regular-season,ORL,CHI,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20181213/CHIORL/gameinfo.html
+nba,2019,0021800429,2018-12-15,regular-season,ORL,UTA,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20181215/UTAORL/gameinfo.html
+nba,2019,0021800665,2019-01-17,regular-season,WAS,NYK,The O2 Arena,London,United Kingdom,international,http://www.nba.com/games/20190117/NYKWAS/gameinfo.html
+nba,2020,0021900369,2019-12-12,regular-season,DET,DAL,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20191212/DALDET
+nba,2020,0021900380,2019-12-14,regular-season,PHX,SAS,Mexico City Arena,Mexico City,Mexico,international,http://www.nba.com/games/20191214/SASPHX/gameinfo.html
+nba,2020,0021900669,2020-01-24,regular-season,CHA,MIL,AccorHotels Arena,Paris,France,international,https://www.nba.com/games/20200124/MILCHA
+nba,2023,0022200439,2022-12-17,regular-season,SAS,MIA,Mexico City Arena,Mexico City,Mexico,international,https://www.nba.com/game/mia-vs-sas-0022200439/box-score
+nba,2023,0022200678,2023-01-19,regular-season,DET,CHI,Accor Arena,Paris,France,international,https://www.nba.com/game/chi-vs-det-0022200678/box-score
+nba,2024,0022300172,2023-11-09,regular-season,ORL,ATL,Mexico City Arena,Mexico City,Mexico,international,https://www.nba.com/game/atl-vs-orl-0022300172/box-score
+nba,2024,0022301229,2023-12-07,regular-season,MIL,IND,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/ind-vs-mil-0022301229
+nba,2024,0022301230,2023-12-07,regular-season,LAL,NOP,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/nop-vs-lal-0022301230
+nba,2024,0062300001,2023-12-09,nba-cup,LAL,IND,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/ind-vs-lal-0062300001
+nba,2024,0022300527,2024-01-11,regular-season,CLE,BKN,Accor Arena,Paris,France,international,https://www.nba.com/game/bkn-vs-cle-0022300527/box-score
+nba,2025,0022400147,2024-11-02,regular-season,WAS,MIA,Mexico City Arena,Mexico City,Mexico,international,https://www.nba.com/game/mia-vs-was-0022400147/box-score
+nba,2025,0022401229,2024-12-14,regular-season,MIL,ATL,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/atl-vs-mil-0022401229
+nba,2025,0022401230,2024-12-14,regular-season,OKC,HOU,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/hou-vs-okc-0022401230
+nba,2025,0062400001,2024-12-17,nba-cup,OKC,MIL,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/mil-vs-okc-0062400001
+nba,2025,0022400621,2025-01-23,regular-season,IND,SAS,Accor Arena,Paris,France,international,https://www.nba.com/game/sas-vs-ind-0022400621/box-score
+nba,2025,0022400633,2025-01-25,regular-season,SAS,IND,Accor Arena,Paris,France,international,https://www.nba.com/game/ind-vs-sas-0022400633/box-score
+nba,2026,0022500147,2025-11-01,regular-season,DET,DAL,Mexico City Arena,Mexico City,Mexico,international,https://www.nba.com/game/dal-vs-det-0022500147/box-score
+nba,2026,0022501229,2025-12-13,regular-season,ORL,NYK,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/nyk-vs-orl-0022501229
+nba,2026,0022501230,2025-12-13,regular-season,OKC,SAS,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/sas-vs-okc-0022501230
+nba,2026,0062500001,2025-12-16,nba-cup,NYK,SAS,T-Mobile Arena,Paradise (Las Vegas),USA,cup_knockout,https://www.nba.com/game/0062500001
+nba,2026,0022500578,2026-01-15,regular-season,ORL,MEM,Uber Arena,Berlin,Germany,international,https://www.nba.com/game/mem-vs-orl-0022500578/box-score
+nba,2026,0022500602,2026-01-18,regular-season,MEM,ORL,The O2 Arena,London,United Kingdom,international,https://www.nba.com/game/orl-vs-mem-0022500602/box-score
+nba,2027,0022600189,2026-11-07,regular-season,IND,DEN,Arena CDMX (Mexico City Arena),Mexico City,Mexico,international,https://pr.nba.com/nuggets-pacers-nba-mexico-city-game-2026/
+nba,2027,0022600075,2027-01-14,regular-season,SAS,NOP,Accor Arena,Paris,France,international,https://pr.nba.com/pelicans-spurs-paris-manchester/
+nba,2027,0022600076,2027-01-17,regular-season,NOP,SAS,Co-op Live,Manchester,United Kingdom,international,https://pr.nba.com/pelicans-spurs-paris-manchester/
+wnba,2025,1022500214,2025-08-15,regular-season,ATL,SEA,Rogers Arena,Vancouver,Canada,international,https://www.wnba.com/game/1022500214/SEA-vs-ATL

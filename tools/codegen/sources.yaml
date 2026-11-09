@@ -1010,6 +1010,7 @@ categories:
       - sportsdataverse.nba.nba_season_sim
       - sportsdataverse.nba.nba_rated_prior
       - sportsdataverse.nba.nba_cup
+      - sportsdataverse.nba.nba_neutral_site
       - sportsdataverse.wnba.wnba_season_sim
       - sportsdataverse.mbb.mbb_team_strength
       - sportsdataverse.wbb.wbb_team_strength

@@ -167,7 +167,7 @@ Release: [wnba_stats_possessions](https://github.com/sportsdataverse/sportsdatav
 | `end_order_index` | Int64 | order_index of the last event in the possession; joins to the wnba_stats_pbp table. |
 | `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession began. |
 | `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
-| `points` | Int64 | Points scored. |
+| `points` | Int64 | Points the offense scored in the possession (its score step), plus any score it made while on defense since its previous possession (a technical free throw, say), credited here with its shots. |
 | `is_second_chance` | Boolean | True when the possession continued after an offensive rebound (contains a second-chance segment). |
 | `number_in_period` | Int64 | Possession number within the period, resetting to 1 at each period start. |
 | `possession_start_type` | String | How the possession began: OffDeadball, OffTimeout, OffMadeShot, OffMissedShot, or OffLiveBallTurnover. |

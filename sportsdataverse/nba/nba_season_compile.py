@@ -33,7 +33,10 @@ _LOG = logging.getLogger(__name__)
 #: (wehoop-wnba-stats-data's impact builder), whose rotation lineups were also
 #: timed on 720 s quarters instead of the WNBA's 600 s. Other WNBA producers keep
 #: their own caches and must rebuild those themselves.
-PIPELINE_VERSION: int = 5
+#: v6: a score by the defense inside the other team's possession (a technical FT, say) is
+#: credited to the scorer's next possession (sportsdataverse-py #1131); it was dropped, so
+#: cached games' possession points miss their final score.
+PIPELINE_VERSION: int = 6
 
 #: stats ``LeagueID`` values the compile accepts: NBA, WNBA, G League.
 _LEAGUE_IDS = ("00", "10", "20")
