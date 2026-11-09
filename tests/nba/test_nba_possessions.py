@@ -20,6 +20,7 @@ from sportsdataverse.nba.nba_lineups import (
     parse_rotation_resultsets,
     players_on_court_from_rotation,
 )
+from sportsdataverse.nba.nba_possession_rules import SHOT_KEYS
 from sportsdataverse.nba.nba_possessions import (
     POSSESSION_SHOOTING_SCHEMA,
     POSSESSIONS_SCHEMA,
@@ -326,22 +327,10 @@ def test_possessions_reconcile_boxscore_points(game_id: str) -> None:
 
     for team_id, expected_pts in oracle.items():
         got_pts = eng.get(team_id, 0)
-        # Bounded, documented divergence (Task 4, real-fixture finding, 0022200001
-        # only, 1 point): pbpstats itself attributes stats per-EVENT (team_id on
-        # the event, independent of which team the enclosing possession's single
-        # offense_team_id resolves to -- see free_throw.py's event_stats, which
-        # emits an OPPONENT_POINTS stat keyed to the shooter's own team_id). Our
-        # possession row has exactly one offense_team_id, so a defense TECHNICAL
-        # FT that lands inside a possession whose real live-ball drive belongs to
-        # the OTHER team (verified: a challenge/overturn + technical-foul
-        # exchange sandwiched between a defensive rebound and the resuming
-        # team's own live-ball action, with no natural boundary between them)
-        # cannot be represented without either a second offense_team_id per row
-        # or per-event stat attribution -- both out of scope here. The technical
-        # FT's own make is still correctly reflected in the shooting companion
-        # frame's per-shooter/team_id row (see
-        # test_shooting_frame_matches_team_columns_offense_only's docstring).
-        assert abs(got_pts - expected_pts) <= 1, (
+        # Exact. 0022200001 used to be 1 short: a defense technical FT inside the other team's
+        # possession, which no row credited. credit_defense_scoring now credits it to the
+        # shooter's team's next possession (pbpstats credits it per event).
+        assert got_pts == expected_pts, (
             f"Game {game_id}, team {team_id}: possession points={got_pts} != boxscore={expected_pts}"
         )
 
@@ -630,12 +619,8 @@ def test_pbp_source_reconciles_boxscore_points(monkeypatch: pytest.MonkeyPatch, 
     }
     oracle = _box_team_points(_box(game_id))
     for team_id, expected in oracle.items():
-        # Same bounded, documented divergence as test_possessions_reconcile_boxscore_points
-        # (0022200001 only, 1 point — a defense technical FT inside a possession
-        # attributed to the other team's live-ball drive; see that test's docstring).
-        assert abs(got.get(team_id, 0) - expected) <= 1, (
-            f"{game_id} team {team_id}: {got.get(team_id, 0)} != {expected}"
-        )
+        # Exact, as test_possessions_reconcile_boxscore_points (the defense technical FT is credited).
+        assert got.get(team_id, 0) == expected, f"{game_id} team {team_id}: {got.get(team_id, 0)} != {expected}"
 
 
 def test_lineup_source_auto_falls_back_on_empty_stints(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -716,7 +701,7 @@ def test_nba_possessions_quarter_box(monkeypatch: pytest.MonkeyPatch) -> None:
     }
     oracle = _box_team_points(_box(game_id))
     for team_id, expected in oracle.items():
-        assert abs(got.get(team_id, 0) - expected) <= 1, f"{game_id} team {team_id}: {got.get(team_id, 0)} != expected"
+        assert got.get(team_id, 0) == expected, f"{game_id} team {team_id}: {got.get(team_id, 0)} != expected"
 
 
 def test_nba_possessions_auto_prefers_quarter_over_pbp(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -818,14 +803,9 @@ def test_event_detail_boxscore_reconciliation(game_id):
         assert row["fg2m"] == exp["fgm"] - exp["fg3m"]
         assert row["fg3a"] == exp["fg3a"]
         assert row["fg3m"] == exp["fg3m"]
-        # FTM: bounded, documented divergence (same root cause as the FTA one
-        # below, made-FT flavor — see test_possessions_reconcile_boxscore_points'
-        # docstring for the real-fixture case, 0022200001 only, off by 1 make).
-        assert exp["ftm"] - row["ftm"] <= 1, (row["ftm"], exp["ftm"])
-        # FTA: a MISSED technical FT in a dropped unattributable group can vanish
-        # from pbp-derived counts — bounded, documented divergence.
-        assert row["fta"] <= exp["fta"]
-        assert exp["fta"] - row["fta"] <= 4, (row["fta"], exp["fta"])
+        # FTM / FTA: exact, now that a defense FT is credited to its own team (credit_defense_scoring).
+        assert row["ftm"] == exp["ftm"], (row["ftm"], exp["ftm"])
+        assert row["fta"] == exp["fta"], (row["fta"], exp["fta"])
         # OREB/TOV: pbp counts include TEAM rebounds/turnovers, player sums don't.
         assert row["oreb"] >= exp["oreb"]
         assert row["tov"] >= exp["tov"]
@@ -879,22 +859,47 @@ def test_technical_fts_are_inline_not_isolated(game_id):
 
 @pytest.mark.parametrize("game_id", GAMES)
 def test_shooting_frame_matches_team_columns_offense_only(game_id):
-    """Offense-team shooter sums == team detail columns (a defense tech-FT shooter
-    is in the shooting frame but NOT in the team columns)."""
+    """Per team, the shooter sums == the team columns of its possessions.
+
+    A defense shooter (a technical FT) stays in its own possession of the shooting frame, while the
+    team columns credit it to that team's next counted possession in the same period
+    (``credit_defense_scoring``), so the two agree per team and game, and per possession on every
+    row but a carry's source and receiver.
+    """
     enh = _enh(game_id)
     poss = build_possessions(enh)
     sh = build_possession_shooting(enh)
     assert sh.schema["team_id"] == pl.Int64
-    j = sh.join(poss.select("possession_number", "offense_team_id"), on="possession_number", how="inner").filter(
-        pl.col("team_id") == pl.col("offense_team_id")
+    by_shooter = sh.group_by(pl.col("team_id")).agg([pl.col(c).sum() for c in _SHOOT_COLS]).sort("team_id")
+    by_team = poss.group_by(pl.col("offense_team_id").alias("team_id")).agg([pl.col(c).sum() for c in _SHOOT_COLS])
+    assert by_shooter.to_dicts() == by_team.sort("team_id").to_dicts()
+    # per possession: equal on every row except a carry's source (a defense shooter) and its receiver,
+    # the scorer's next counted possession in the same period
+    rows = poss.sort("possession_number").to_dicts()
+    defense_shots = sh.join(poss.select("possession_number", "offense_team_id"), on="possession_number").filter(
+        pl.col("team_id") != pl.col("offense_team_id")
     )
-    sums = j.group_by("possession_number").agg([pl.col(c).sum() for c in _SHOOT_COLS])
-    jj = poss.join(sums, on="possession_number", how="left", suffix="_sh").with_columns(
+    exempt = set()
+    for p, t in defense_shots.select("possession_number", "team_id").unique().iter_rows():
+        k = next(i for i, r in enumerate(rows) if r["possession_number"] == p)
+        later = [r for r in rows[k + 1 :] if r["offense_team_id"] == t]
+        earlier = [r for r in reversed(rows[:k]) if r["offense_team_id"] == t]
+        same = [r for r in later + earlier if r["period"] == rows[k]["period"] and r["count_as_possession"]]
+        exempt |= {p, (same or [r for r in later + earlier if r["count_as_possession"]])[0]["possession_number"]}
+    offense_sums = (
+        sh.join(poss.select("possession_number", "offense_team_id"), on="possession_number")
+        .filter(pl.col("team_id") == pl.col("offense_team_id"))
+        .group_by("possession_number")
+        .agg([pl.col(c).sum() for c in _SHOOT_COLS])
+    )
+    jj = poss.join(offense_sums, on="possession_number", how="left", suffix="_sh").with_columns(
         [pl.col(f"{c}_sh").fill_null(0) for c in _SHOOT_COLS]
     )
-    for c in _SHOOT_COLS:
-        bad = jj.filter(pl.col(c) != pl.col(f"{c}_sh"))
-        assert bad.height == 0, (c, bad.select("possession_number", c, f"{c}_sh").to_dicts()[:5])
+    bad = jj.filter(
+        ~pl.col("possession_number").is_in(list(exempt)),
+        pl.any_horizontal([pl.col(c) != pl.col(f"{c}_sh") for c in _SHOOT_COLS]),
+    )
+    assert bad.height == 0, bad.select("possession_number", *_SHOOT_COLS).to_dicts()[:5]
 
 
 @pytest.mark.parametrize("game_id", GAMES)
@@ -1010,3 +1015,218 @@ def test_forward_fill_still_tracks_modern_running_scores():
     ]
     _forward_fill_scores(rows)
     assert [(r["_home"], r["_away"]) for r in rows] == [(0, 0), (3, 0), (3, 2), (5, 2)]
+
+
+LEGACY = FXROOT / "legacy_dialect"
+
+
+@pytest.mark.parametrize("game_id", ["0020900009", "0020900017", "1021000022"])
+def test_legacy_dialect_missed_free_throws_are_misses(game_id: str) -> None:
+    """Pre-2017-18 pbp writes ``"0"`` on missed free throws; they must not count as makes.
+
+    Real release rows (``legacy_dialect/README.md``): two 2009-10 NBA games and a 2010 WNBA one.
+    The old score-string test read every free throw as made (the published release has
+    ``ftm == fta`` in all three), so made-shot points ran over the final score. Each team's
+    made-shot points now equal the schedule's final score.
+    """
+    from sportsdataverse.nba.nba_possession_rules import is_made_ft_row
+
+    pbp = pl.read_parquet(LEGACY / "pbp_2010.parquet").filter(pl.col("game_id") == game_id)
+    game = pl.read_parquet(LEGACY / "schedule_2010.parquet").filter(pl.col("game_id") == game_id).row(0, named=True)
+    misses = pbp.filter((pl.col("event_type") == "free_throw") & pl.col("description").str.starts_with("MISS"))
+    assert misses.height > 0
+    assert (misses["score_home"] == "0").all() and (misses["score_away"] == "0").all()  # the legacy dialect
+    assert not any(is_made_ft_row(r) for r in misses.to_dicts())
+    poss = build_possessions(pbp)
+    assert 0 < poss["ftm"].sum() < poss["fta"].sum()
+    # a missed last free throw no longer ends the possession (the release ends 2, 11 and 3 on one)
+    ends = poss.select(pl.col("end_order_index").cast(pl.Int64))
+    assert (
+        ends.join(
+            misses.select(pl.col("order_index").cast(pl.Int64).alias("end_order_index")), on="end_order_index"
+        ).height
+        == 0
+    )
+    points = poss.with_columns((2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms"))
+    home = pl.col("offense_team_id") == game["home_team_id"]
+    assert points.filter(home)["ms"].sum() == game["home_pts"]
+    assert points.filter(~home)["ms"].sum() == game["away_pts"]
+
+
+DEFENSE_SCORES = FXROOT / "defense_scores"
+
+
+@pytest.mark.parametrize("game_id", ["0022500003", "0022500102", "0022500706"])
+def test_defense_scores_are_credited_to_the_scoring_team(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
+    """A defense score inside the other team's possession is credited to the scorer's next possession.
+
+    Real 2025-26 release rows (``defense_scores/README.md``): a technical FT, two FTs after a
+    same-clock foul, and a basket after a shot the pbp logs past its team's shot-clock turnover.
+    Each team's made-shot points now equal the schedule's final; the possession rows themselves
+    (count, order, boundaries, ``count_as_possession``) are what they were without the credit.
+    """
+    pbp = pl.read_parquet(DEFENSE_SCORES / "pbp_2026.parquet").filter(pl.col("game_id") == game_id)
+    game = (
+        pl.read_parquet(DEFENSE_SCORES / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == game_id)
+        .row(0, named=True)
+    )
+    ms = (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+
+    def totals(poss: pl.DataFrame) -> tuple[int, int]:
+        x = poss.with_columns(ms)
+        return x.filter(home)["ms"].sum(), x.filter(~home)["ms"].sum()
+
+    poss = build_possessions(pbp)
+    assert totals(poss) == (game["home_pts"], game["away_pts"])
+    assert poss.filter(pl.col("points") != 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).height == 0
+    monkeypatch.setattr(npm, "credit_defense_scoring", lambda records, carries: None)
+    before = build_possessions(pbp)
+    assert totals(before) != (game["home_pts"], game["away_pts"])  # the published release's shortfall
+    keys = ["possession_number", "offense_team_id", "start_order_index", "end_order_index", "count_as_possession"]
+    assert before.select(keys).equals(poss.select(keys))
+    # the credit lands on the scorer's next counted possession after the one it scored in, and nowhere else
+    team = {"h": game["home_team_id"], "v": game["away_team_id"]}
+    shots = pbp.filter(pl.col("event_type").is_in(["made_shot", "free_throw"])).select(
+        pl.col("order_index").cast(pl.Int64), pl.col("location").replace_strict(team, default=0).alias("team")
+    )
+    rows = before.sort("possession_number").to_dicts()
+    want = set()
+    for k, r in enumerate(rows):
+        inside = shots.filter(pl.col("order_index").is_between(r["start_order_index"], r["end_order_index"]))
+        for t in set(inside.filter(pl.col("team") != r["offense_team_id"])["team"]):
+            want.add(
+                next(
+                    x["possession_number"]
+                    for x in rows[k + 1 :]
+                    if x["offense_team_id"] == t and x["count_as_possession"]
+                )
+            )
+    cols = [*SHOT_KEYS, "points"]
+    moved = poss.join(before, on="possession_number", suffix="_b").filter(
+        pl.any_horizontal([pl.col(c) != pl.col(f"{c}_b") for c in cols])
+    )
+    assert want and set(moved["possession_number"]) == want
+
+
+@pytest.mark.parametrize(
+    ("teams", "counted", "periods", "want"),
+    [
+        ([1, 2, 1, 1], [True, True, False, True], [1, 1, 1, 1], 3),  # the next counted row of the team
+        ([1, 2, 1, 1], [True, True, False, False], [1, 1, 1, 1], 0),  # none later: the last earlier counted
+        ([1, 2, 1, 1], [False, True, False, False], [1, 1, 1, 1], 2),  # none counted: the next row
+        ([1, 2, 2, 2], [False, True, True, True], [1, 1, 1, 1], 0),  # the only row is earlier and uncounted
+        ([1, 2, 1, 1], [True, True, True, True], [1, 1, 2, 2], 0),  # the same period beats a later period
+    ],
+)
+def test_credit_defense_scoring_picks_the_receiving_row(
+    teams: list[int], counted: list[bool], periods: list[int], want: int
+) -> None:
+    """Which row a carry lands on: the same period first, counted rows first, later rows first."""
+    from sportsdataverse.nba.nba_possession_rules import credit_defense_scoring
+
+    rows = [
+        {"offense_team_id": t, "count_as_possession": c, "period": p, "points": 0, **dict.fromkeys(SHOT_KEYS, 0)}
+        for t, c, p in zip(teams, counted, periods)
+    ]
+    credit_defense_scoring(rows, [(1, 1, 1, {**dict.fromkeys(SHOT_KEYS, 0), "fta": 1, "ftm": 1})])
+    assert [k for k, r in enumerate(rows) if r["points"]] == [want]
+    assert rows[want]["ftm"] == 1
+
+
+REBOUND_WITHOUT_A_MISS = FXROOT / "rebound_without_a_miss"
+
+
+@pytest.mark.parametrize(("game_id", "rebound"), [("0022500157", 467), ("0022500290", 235), ("0022501144", 54)])
+def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
+    monkeypatch: pytest.MonkeyPatch, game_id: str, rebound: int
+) -> None:
+    """A rebound row after a make, a turnover or a steal no longer decides who has the ball.
+
+    Real 2025-26 release rows (``rebound_without_a_miss/README.md``). Such a rebound opened a
+    possession for its own team, so the other team's next basket was lost. Now a putback's rebound
+    logged after it stays in the putback's possession, and any other one does not set the offense:
+    each team's made-shot points equal the final, with the same number of possessions. (Crediting
+    a defense score to the scorer would fix the totals too; this checks who has the ball.)
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == game_id)
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == game_id)
+        .row(0, named=True)
+    )
+    ms = (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+
+    def totals(poss: pl.DataFrame) -> tuple[int, int]:
+        x = poss.with_columns(ms)
+        return x.filter(home)["ms"].sum(), x.filter(~home)["ms"].sum()
+
+    poss = build_possessions(pbp)
+    assert totals(poss) == (game["home_pts"], game["away_pts"])
+    loc = pbp.filter(pl.col("order_index") == rebound)["location"].item()
+    reb_team = game["home_team_id"] if loc == "h" else game["away_team_id"]
+    holder = poss.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    assert holder.height == 1
+    if game_id == "0022500157":  # the putback's own possession, which now ends on the rebound
+        assert holder["offense_team_id"].item() == reb_team and holder["end_order_index"].item() == rebound
+        # and the next possession starts off the putback, a made shot
+        after = poss.filter(pl.col("possession_number") == holder["possession_number"].item() + 1)
+        assert after["possession_start_type"].item() == "OffMadeShot"
+    else:
+        assert holder["offense_team_id"].item() != reb_team
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    monkeypatch.setattr(npm, "is_rebound_logged_after_its_putback", lambda rows, i: False)
+    before = build_possessions(pbp)
+    assert before.height == poss.height
+    # without the fix, the possession holding the rebound is the rebounding team's (the release's error)
+    was = before.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    if game_id == "0022500157":
+        assert was["start_order_index"].item() == rebound  # a phantom possession opened on the rebound
+    else:
+        assert was["offense_team_id"].item() == reb_team
+
+
+def test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The last group of a game: a team field-goal attempt at 0.3 s, a team rebound, the period end.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``, game ``0022500119``). The rebound follows
+    no miss, but no other row of the group has a side, so it still names the offense (DAL, home) and
+    the possession is kept, as it was before.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500119")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500119")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    last = poss.filter(pl.col("start_order_index") == 486)
+    assert last.height == 1 and last["offense_team_id"].item() == game["home_team_id"]
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    assert build_possessions(pbp).height == poss.height
+
+
+def test_a_defense_violation_does_not_name_the_offense() -> None:
+    """The end of the 1st half of ``0022500108`` NYK @ MIA: a Knicks delay of game, a Heat heave, a team rebound.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``). The feed files an offensive violation
+    as a turnover, so the ``violation`` row is the defense's; the heave names the offense (MIA,
+    home), as in the four such NBA 2025-26 groups. Points and the possession count are unchanged.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500108")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500108")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    holder = poss.filter(pl.col("start_order_index") <= 255, pl.col("end_order_index") >= 255)
+    assert holder.height == 1 and holder["offense_team_id"].item() == game["home_team_id"]
+    ms = 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+    assert (poss.filter(home).select(ms.sum()).item(), poss.filter(~home).select(ms.sum()).item()) == (
+        game["home_pts"],
+        game["away_pts"],
+    )

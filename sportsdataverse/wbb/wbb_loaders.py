@@ -8,6 +8,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
+    _alias_columns,  # noqa: F401  (used only by loaders declaring column_aliases)
     _as_season_list,
     _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
@@ -280,7 +281,7 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2001).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -386,7 +387,7 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
         |in_officials              |Boolean                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2001.
 
     Example:
         Quick start::
@@ -395,8 +396,8 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2001:
+            raise SeasonNotFoundError("season cannot be less than 2001")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet"
         )
@@ -1255,7 +1256,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2014).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1284,7 +1285,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |match_method          |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2014.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1293,8 +1294,8 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2014:
-            raise SeasonNotFoundError("season cannot be less than 2014")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet"
         )

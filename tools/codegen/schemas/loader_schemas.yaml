@@ -14550,6 +14550,12 @@ load_nba_player_impact:
   type: Float64
 - name: war
   type: Float64
+- name: boban_filtered_skill
+  type: Float64
+- name: boban_projected_rating
+  type: Float64
+- name: boban_projected_sd
+  type: Float64
 - name: darko_filtered_skill
   type: Float64
 - name: darko_projected_rating
@@ -31410,6 +31416,12 @@ load_wnba_player_impact:
 - name: bpm
   type: Float64
 - name: war
+  type: Float64
+- name: boban_filtered_skill
+  type: Float64
+- name: boban_projected_rating
+  type: Float64
+- name: boban_projected_sd
   type: Float64
 - name: darko_filtered_skill
   type: Float64

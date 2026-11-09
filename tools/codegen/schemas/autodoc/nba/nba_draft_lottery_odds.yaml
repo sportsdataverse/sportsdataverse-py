@@ -1,0 +1,15 @@
+schema: nba_draft_lottery_odds
+kind: dataframe
+columns:
+- name: lottery_slot
+  type: integer
+  description: ''
+- name: chances
+  type: double
+  description: ''
+- name: pick
+  type: integer
+  description: ''
+- name: probability
+  type: double
+  description: ''

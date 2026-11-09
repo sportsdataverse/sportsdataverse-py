@@ -735,7 +735,7 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 
 ### adjust_efficiency {#adjust_efficiency}
 
-`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001, prior: 'pl.DataFrame | None' = None, prior_weight: 'float' = 0.0) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -759,10 +759,12 @@ sign); `avg` is the league mean efficiency and `hfa` comes from
 | `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
 | `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
 | `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+| `prior` | `DataFrame \| None` | `None` | Optional preseason prior in `PRIOR_SCHEMA` (`preseason_prior`): each listed team is shrunk toward its prior as if it had played `prior_weight` extra games at that rating. A listed team with no game yet comes back at its prior (`games` 0, raw rates null), and a season in `prior` with no game at all is rated from the prior alone. |
+| `prior_weight` | `float` | `0.0` | Pseudo-games of prior per team (0 turns the prior off). |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input (and no prior) returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -869,6 +871,8 @@ Canonical per-player-season counting frame from the boxscore release.
 
 Sums the per-game player boxscores into one row per (player_id, season,
 team_id) with the counting columns `player_per100_features` expects.
+Only rows with minutes are counted, and a row with minutes but no athlete
+(one per league in 2014) is dropped rather than kept as a null player_id.
 Shot-location splits come from the shots release (2025+): free throws
 (`MadeFreeThrow`) are excluded, layup/dunk/tip = rim, and jump shots
 split three vs mid by `score_value` (the release's `type_text` carries
@@ -885,7 +889,7 @@ all remaining attempts fold into `fga_mid`.
 
 **Returns**
 
-One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, minutes` + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
+One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, position, minutes, games, starter_share` (the share of his box rows marked starter) + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -908,9 +912,11 @@ One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8,
 | `turnovers` | Float64 | Total turnovers. |
 | `points` | Float64 | Points scored. |
 | `player_id` | String | Unique player identifier. |
-| `fga_rim` | Float64 |  |
-| `fga_mid` | Float64 |  |
-| `fga_three` | Float64 |  |
+| `fga_rim` | Float64 | Rim field-goal attempts (layups, dunks, tips), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; 0 in seasons without shots data. |
+| `fga_mid` | Float64 | Mid-range field-goal attempts (non-rim twos), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box two-point attempts. |
+| `fga_three` | Float64 | Three-point field-goal attempts, the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box three-point attempts. |
+| `games` | Int64 | Games played. |
+| `starter_share` | Float64 | Share of the player's positive-minute box-score rows for the team-season, among those with a known starter flag, that mark them a starter (0-1); null when the box release has no starter column. |
 
 **Example**
 

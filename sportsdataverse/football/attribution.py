@@ -30,6 +30,15 @@ __all__ = [
     "refine_play_types_post_attribution",
 ]
 
+# How far the possessing team's running margin moved from the previous row. On a non-scoring row a
+# move of 8 or more is a feed score glitch, which the pos_score_diff_end guards undo. (This was
+# pos_score_pts until sportsdataverse-py#1089 made that column the points scored on the play.)
+_RUNNING_MARGIN_MOVE = (
+    pl.when(pl.col("lag_pos_team") == pl.col("pos_team"))
+    .then(pl.col("pos_score_diff") - pl.col("lag_pos_score_diff"))
+    .otherwise(pl.col("pos_score_diff") + pl.col("lag_pos_score_diff"))
+)
+
 _PENALTY_NEGATING_FOUL = (
     r"(?i)false start|ineligible|delay of game|offside|encroachment|neutral zone"
     r"|holding|illegal (formation|shift|motion|substitution)|clipping|chop block"
@@ -948,13 +957,13 @@ def refine_play_types_post_attribution(play_df: pl.DataFrame, *, normalplay, end
         .otherwise(pl.col("pos_score_diff")),
     ).with_columns(
         pos_score_diff_end=pl.when(
-            (pl.col("pos_score_pts").abs() >= 8)
+            (_RUNNING_MARGIN_MOVE.abs() >= 8)
             .and_(pl.col("scoring_play") == False)
             .and_(pl.col("change_of_pos_team") == False),
         )
         .then(pl.col("pos_score_diff_start"))
         .when(
-            (pl.col("pos_score_pts").abs() >= 8)
+            (_RUNNING_MARGIN_MOVE.abs() >= 8)
             .and_(pl.col("scoring_play") == False)
             .and_(pl.col("change_of_pos_team") == True),
         )

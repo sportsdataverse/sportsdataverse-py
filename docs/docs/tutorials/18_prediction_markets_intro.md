@@ -39,11 +39,11 @@ it places no orders.
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse matplotlib
 ```
 
-The Kalshi and Polymarket helpers take their paging arguments (`limit`, `offset`) as strings, the way
-the APIs document them.
+matplotlib is only for the charts. The Kalshi and Polymarket helpers take their paging arguments
+(`limit`, `offset`) as strings, the way the APIs document them.
 
 
 ```python
@@ -128,22 +128,22 @@ series = safe("Kalshi sports series", lambda: odds.kalshi_series_list(category="
 
 
     shape: (10, 3)
-    ┌───────────────────┬──────────────────────────────────────────────────┬───────────┐
-    │ ticker            ┆ title                                            ┆ frequency │
-    │ ---               ┆ ---                                              ┆ ---       │
-    │ str               ┆ str                                              ┆ str       │
-    ╞═══════════════════╪══════════════════════════════════════════════════╪═══════════╡
-    │ KXNCAAMBMOP       ┆ Men's College Basketball Most Outstanding Player ┆ annual    │
-    │ KXNBA3QTOTAL      ┆ NBA 3rd Quarter Total                            ┆ custom    │
-    │ KXWNBADPOY        ┆ WNBA Defensive Player of the Year                ┆ annual    │
-    │ KXWNBASERIES      ┆ WNBA Playoff Series Winner                       ┆ custom    │
-    │ KXNHLWINS         ┆ NHL wins                                         ┆ annual    │
-    │ KXLEADERNBA3PT    ┆ NBA 3PG Leader                                   ┆ annual    │
-    │ KXLEADERWNBAAST   ┆ WNBA APG Leader                                  ┆ annual    │
-    │ KXNBAESCALATOR3PT ┆ NBA Player Threes Escalator                      ┆ custom    │
-    │ KXNFLWEEKHIGH     ┆ NFL Week Highest Scoring Game                    ┆ custom    │
-    │ KXNFLASSCOACH     ┆ NFL Assistant Coach of the Year                  ┆ annual    │
-    └───────────────────┴──────────────────────────────────────────────────┴───────────┘
+    ┌───────────────────────┬───────────────────────────────────────────────────────┬───────────┐
+    │ ticker                ┆ title                                                 ┆ frequency │
+    │ ---                   ┆ ---                                                   ┆ ---       │
+    │ str                   ┆ str                                                   ┆ str       │
+    ╞═══════════════════════╪═══════════════════════════════════════════════════════╪═══════════╡
+    │ KXNFLASSCOACH         ┆ NFL Assistant Coach of the Year                       ┆ annual    │
+    │ KXNBAFIRSTTIMECHAMP   ┆ NBA First Time Champion                               ┆ custom    │
+    │ KXNBAEUROPEANNOUNCE   ┆ NBA Europe Inaugural Season Being Announced           ┆ custom    │
+    │ KXNCAAFTEAMRSHYDS     ┆ College Football Team Rushing Yards                   ┆ custom    │
+    │ KXNCAAFEQBTTS         ┆ College Football Both Teams to Score in Every Quarter ┆ custom    │
+    │ KXNCAAMB2H            ┆ Men's College Basketball 2nd Half Winner              ┆ custom    │
+    │ KXNBAPLAYOFFWINS      ┆ NBA Playoff Wins by Team                              ┆ custom    │
+    │ KXNHLSERIESTOTALGOALS ┆ NHL Series Total Goals                                ┆ custom    │
+    │ KXNBALADDERPTS        ┆ NBA Player Points Ladder                              ┆ custom    │
+    │ KXNCAAWB2QSPREAD      ┆ Women's College Basketball 2nd Quarter Spread         ┆ custom    │
+    └───────────────────────┴───────────────────────────────────────────────────────┴───────────┘
 
 
 
@@ -164,24 +164,24 @@ mkts.select([c for c in cols if c in mkts.columns]) if mkts is not None and mkts
 ```
 
     ✅ Kalshi NFL events
-    ✅ markets KXNFLGAME-26OCT26DALPHI
+    ✅ markets KXNFLGAME-26NOV05JACBAL
 
 
 
 
 
     shape: (2, 6)
-    ┌─────────────────┬────────────────┬────────────────┬────────────────┬────────────────┬────────────┐
-    │ ticker          ┆ title          ┆ yes_bid_dollar ┆ yes_ask_dollar ┆ last_price_dol ┆ volume_fp  │
-    │ ---             ┆ ---            ┆ s              ┆ s              ┆ lars           ┆ ---        │
-    │ str             ┆ str            ┆ ---            ┆ ---            ┆ ---            ┆ str        │
-    │                 ┆                ┆ str            ┆ str            ┆ str            ┆            │
-    ╞═════════════════╪════════════════╪════════════════╪════════════════╪════════════════╪════════════╡
-    │ KXNFLGAME-26OCT ┆ Dallas wins    ┆ 0.6700         ┆ 0.6800         ┆ 0.6800         ┆ 1145368.08 │
-    │ 26DALPHI-DAL    ┆                ┆                ┆                ┆                ┆            │
-    │ KXNFLGAME-26OCT ┆ Philadelphia   ┆ 0.3300         ┆ 0.3400         ┆ 0.3400         ┆ 1451431.21 │
-    │ 26DALPHI-PHI    ┆ wins           ┆                ┆                ┆                ┆            │
-    └─────────────────┴────────────────┴────────────────┴────────────────┴────────────────┴────────────┘
+    ┌─────────────────┬─────────────────┬────────────────┬────────────────┬────────────────┬───────────┐
+    │ ticker          ┆ title           ┆ yes_bid_dollar ┆ yes_ask_dollar ┆ last_price_dol ┆ volume_fp │
+    │ ---             ┆ ---             ┆ s              ┆ s              ┆ lars           ┆ ---       │
+    │ str             ┆ str             ┆ ---            ┆ ---            ┆ ---            ┆ str       │
+    │                 ┆                 ┆ str            ┆ str            ┆ str            ┆           │
+    ╞═════════════════╪═════════════════╪════════════════╪════════════════╪════════════════╪═══════════╡
+    │ KXNFLGAME-26NOV ┆ Baltimore wins  ┆ 0.1800         ┆ 0.1900         ┆ 0.1900         ┆ 548137.68 │
+    │ 05JACBAL-BAL    ┆                 ┆                ┆                ┆                ┆           │
+    │ KXNFLGAME-26NOV ┆ Jacksonville    ┆ 0.8100         ┆ 0.8200         ┆ 0.8200         ┆ 381833.30 │
+    │ 05JACBAL-JAC    ┆ wins            ┆                ┆                ┆                ┆           │
+    └─────────────────┴─────────────────┴────────────────┴────────────────┴────────────────┴───────────┘
 
 
 
@@ -207,7 +207,7 @@ else:
     print("no order book to draw")
 ```
 
-    ✅ order book KXNFLGAME-26OCT26DALPHI-DAL
+    ✅ order book KXNFLGAME-26NOV05JACBAL-BAL
 
 
 
@@ -222,7 +222,7 @@ trades = safe(f"trades {ticker}", lambda: odds.kalshi_trades(limit="20", ticker=
 trades.head() if trades is not None and trades.height else "no recent trades"
 ```
 
-    ✅ trades KXNFLGAME-26OCT26DALPHI-DAL
+    ✅ trades KXNFLGAME-26NOV05JACBAL-BAL
 
 
 
@@ -235,26 +235,26 @@ trades.head() if trades is not None and trades.height else "no recent trades"
     │ str      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ str       ┆ str       ┆ ---       │
     │          ┆ str       ┆ bool      ┆ str       ┆   ┆ str       ┆           ┆           ┆ str       │
     ╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 57.53    ┆ 2026-10-2 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07249047- ┆ 0.6800    │
-    │          ┆ 6T19:09:3 ┆           ┆           ┆   ┆           ┆ -26OCT26D ┆ 2a39-a6f7 ┆           │
-    │          ┆ 1.148752Z ┆           ┆           ┆   ┆           ┆ ALPHI-DAL ┆ -fd61-f82 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ dd0265e6c ┆           │
-    │ 6.00     ┆ 2026-10-2 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07249047- ┆ 0.6800    │
-    │          ┆ 6T19:09:3 ┆           ┆           ┆   ┆           ┆ -26OCT26D ┆ 1599-a12b ┆           │
-    │          ┆ 0.12091Z  ┆           ┆           ┆   ┆           ┆ ALPHI-DAL ┆ -f3ab-f0b ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ c04ea2d30 ┆           │
-    │ 10.00    ┆ 2026-10-2 ┆ false     ┆ 0.3300    ┆ … ┆ no        ┆ KXNFLGAME ┆ 0724903f- ┆ 0.6700    │
-    │          ┆ 6T19:09:2 ┆           ┆           ┆   ┆           ┆ -26OCT26D ┆ a3d9-bfac ┆           │
-    │          ┆ 8.839542Z ┆           ┆           ┆   ┆           ┆ ALPHI-DAL ┆ -60c1-b37 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ ba6e2e01c ┆           │
-    │ 201.37   ┆ 2026-10-2 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07249047- ┆ 0.6800    │
-    │          ┆ 6T19:09:2 ┆           ┆           ┆   ┆           ┆ -26OCT26D ┆ d419-b97b ┆           │
-    │          ┆ 6.132958Z ┆           ┆           ┆   ┆           ┆ ALPHI-DAL ┆ -3cf0-a2a ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ b7b38d8b8 ┆           │
-    │ 28.00    ┆ 2026-10-2 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07249047- ┆ 0.6800    │
-    │          ┆ 6T19:09:2 ┆           ┆           ┆   ┆           ┆ -26OCT26D ┆ a739-b0ab ┆           │
-    │          ┆ 3.924201Z ┆           ┆           ┆   ┆           ┆ ALPHI-DAL ┆ -7f69-5a5 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ dd4bcc8f4 ┆           │
+    │ 47.76    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
+    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ cf89-a20d ┆           │
+    │          ┆ 4.17507Z  ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -664d-42a ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ ac8bd672d ┆           │
+    │ 99.61    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
+    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ a8c9-b2c9 ┆           │
+    │          ┆ 2.880027Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -57cc-eaa ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ c6ebf74f1 ┆           │
+    │ 14.94    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07273019- ┆ 0.1900    │
+    │          ┆ 4T05:47:3 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ 8909-b0c9 ┆           │
+    │          ┆ 0.973545Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -7f79-fa2 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 256174efd ┆           │
+    │ 24.90    ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0727301e- ┆ 0.1900    │
+    │          ┆ 4T05:47:2 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ f4e9-84d5 ┆           │
+    │          ┆ 1.609841Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -2f00-3dc ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 88786273d ┆           │
+    │ 9.96     ┆ 2026-11-0 ┆ false     ┆ 0.8100    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 0727301f- ┆ 0.1900    │
+    │          ┆ 4T05:47:0 ┆           ┆           ┆   ┆           ┆ -26NOV05J ┆ c389-9c0d ┆           │
+    │          ┆ 2.307212Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -daec-820 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 8be969681 ┆           │
     └──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
@@ -311,21 +311,21 @@ pmk.select("question", "outcomes", "outcome_prices", "volume") if pmk is not Non
 
 
     shape: (5, 4)
-    ┌──────────────────────────────────┬───────────────────┬────────────────────┬───────────────────┐
-    │ question                         ┆ outcomes          ┆ outcome_prices     ┆ volume            │
-    │ ---                              ┆ ---               ┆ ---                ┆ ---               │
-    │ str                              ┆ str               ┆ str                ┆ str               │
-    ╞══════════════════════════════════╪═══════════════════╪════════════════════╪═══════════════════╡
-    │ Will York City FC win on         ┆ ["Yes", "No"]     ┆ ["0.29", "0.71"]   ┆ 99.997143         │
-    │ 2026-10-03?                      ┆                   ┆                    ┆                   │
-    │ Sheffield Wednesday FC vs.       ┆ ["Over", "Under"] ┆ ["0.17", "0.83"]   ┆ 99.996667         │
-    │ Cambridge United FC: O/U 4.5     ┆                   ┆                    ┆                   │
-    │ Al Hilal Saudi Club vs. Al Fateh ┆ ["Over", "Under"] ┆ ["0.505", "0.495"] ┆ 9.999666          │
-    │ Saudi Club: Al Hilal Saudi …     ┆                   ┆                    ┆                   │
-    │ AIK vs. IF Elfsborg: IF Elfsborg ┆ ["Over", "Under"] ┆ ["0.205", "0.795"] ┆ 99.995715         │
-    │ O/U 2.5                          ┆                   ┆                    ┆                   │
-    │ Arsenal FC leading at halftime?  ┆ ["Yes", "No"]     ┆ ["0.71", "0.29"]   ┆ 99.99517300000001 │
-    └──────────────────────────────────┴───────────────────┴────────────────────┴───────────────────┘
+    ┌────────────────────────────────────────────┬───────────────────┬────────────────────┬────────────┐
+    │ question                                   ┆ outcomes          ┆ outcome_prices     ┆ volume     │
+    │ ---                                        ┆ ---               ┆ ---                ┆ ---        │
+    │ str                                        ┆ str               ┆ str                ┆ str        │
+    ╞════════════════════════════════════════════╪═══════════════════╪════════════════════╪════════════╡
+    │ Will the US birth rate in 2026 be 53.0 or  ┆ ["Yes", "No"]     ┆ ["0.235", "0.765"] ┆ 99.999426  │
+    │ higher?                                    ┆                   ┆                    ┆            │
+    │ CD Tarancón vs. Levante UD: Levante UD 1st ┆ ["Over", "Under"] ┆ ["0.48", "0.52"]   ┆ 99.999286  │
+    │ Half O/U 1.5                               ┆                   ┆                    ┆            │
+    │ Will Jordan Love have 3,299.5+ passing     ┆ ["Yes", "No"]     ┆ ["0.865", "0.135"] ┆ 999.983821 │
+    │ yards in the 2026-27 …                     ┆                   ┆                    ┆            │
+    │ SK Rapid vs. Wolfsberger AC: O/U 5.5       ┆ ["Over", "Under"] ┆ ["0.17", "0.83"]   ┆ 99.9975    │
+    │ Fenerbahçe SK vs. Liverpool FC: 1st Half   ┆ ["Over", "Under"] ┆ ["0.053", "0.947"] ┆ 999.96975  │
+    │ O/U 4.5                                    ┆                   ┆                    ┆            │
+    └────────────────────────────────────────────┴───────────────────┴────────────────────┴────────────┘
 
 
 
@@ -347,13 +347,13 @@ out
 
 
     shape: (1, 1)
-    ┌──────┐
-    │ mid  │
-    │ ---  │
-    │ str  │
-    ╞══════╡
-    │ 0.29 │
-    └──────┘
+    ┌───────┐
+    │ mid   │
+    │ ---   │
+    │ str   │
+    ╞═══════╡
+    │ 0.235 │
+    └───────┘
 
 
 

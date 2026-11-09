@@ -62,7 +62,7 @@ import polars as pl
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.basketball.basketball_runtime import SESSION
-from sportsdataverse.basketball.dbl.sportality_parsers import _scrub, parse_sportality_player_crosswalk
+from sportsdataverse.basketball.dbl.sportality_parsers import _scrub, _ssgts, parse_sportality_player_crosswalk
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -84,7 +84,7 @@ _ERROR_KEYS = frozenset({"error", "errors", "message", "code", "detail", "status
 # Route (path below /api, ids as [^/]+) -> pluck path of the rows that must be present.
 _ROWS: Dict[str, str] = {
     r"/sports-v2/season-series-game-types-filter": "season[]",
-    r"/statistics-v2/layout-info": "[].seasonSeriesGameTypeTeams[]",
+    r"/statistics-v2/layout-info": "[].originalSeasonSeriesGameTypeTeams[]",  # pluck has no "either key"
     r"/sports-v2/game-schedule": "gameInfo[]",
     r"/sports-v2/game-info/[^/]+": "gameInfo",
     r"/sports-v2/teams/[^/]+": "",
@@ -211,7 +211,7 @@ def _directory() -> Tuple[Dict[Tuple[int, str], Dict[str, Any]], str]:
     raw = _fetch(f"{BASE}/statistics-v2/layout-info")
     body = raw[0] if isinstance(raw, list) and raw and isinstance(raw[0], dict) else {}
     out: Dict[Tuple[int, str], Dict[str, Any]] = {}
-    for s in body.get("seasonSeriesGameTypeTeams") or []:
+    for s in _ssgts(body):
         if not isinstance(s, dict):
             continue
         code = str((s.get("season") or {}).get("code") or "")

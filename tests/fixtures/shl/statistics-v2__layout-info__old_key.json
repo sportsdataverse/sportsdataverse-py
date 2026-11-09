@@ -1,0 +1,91 @@
+[
+ {
+  "provider": "statnet",
+  "seasonSeriesGameTypeTeams": [
+   {
+    "state": "closed",
+    "ssgtUuid": "iuzqg7dqk9",
+    "gameType": {
+     "uuid": "qQ9-af37Ti40B",
+     "code": "regular",
+     "deleted": false,
+     "name": "Grundserie"
+    },
+    "season": {
+     "uuid": "xs4m9qupsi",
+     "code": "2025",
+     "deleted": false,
+     "name": "2025/2026"
+    },
+    "series": {
+     "uuid": "qQ9-bb0bzEWUk",
+     "code": "SHL",
+     "name": "SHL"
+    }
+   },
+   {
+    "state": "active",
+    "ssgtUuid": "qa98unlbd6",
+    "gameType": {
+     "uuid": "qQ9-af37Ti40B",
+     "code": "regular",
+     "deleted": false,
+     "name": "Grundserie"
+    },
+    "season": {
+     "uuid": "ndcf81nlb3",
+     "code": "2026",
+     "deleted": false,
+     "name": "2026/2027"
+    },
+    "series": {
+     "uuid": "qQ9-bb0bzEWUk",
+     "code": "SHL",
+     "name": "SHL"
+    }
+   },
+   {
+    "state": "closed",
+    "ssgtUuid": "zg0pa4po75",
+    "gameType": {
+     "uuid": "qQ9-7debq38kX",
+     "code": "playoff",
+     "deleted": false,
+     "name": "Slutspel"
+    },
+    "season": {
+     "uuid": "xs4m9qupsi",
+     "code": "2025",
+     "deleted": false,
+     "name": "2025/2026"
+    },
+    "series": {
+     "uuid": "qQ9-bb0bzEWUk",
+     "code": "SHL",
+     "name": "SHL"
+    }
+   }
+  ],
+  "ssgtDefaultValue": {
+   "state": "active",
+   "ssgtUuid": "qa98unlbd6",
+   "gameType": {
+    "uuid": "qQ9-af37Ti40B",
+    "code": "regular",
+    "deleted": false,
+    "name": "Grundserie"
+   },
+   "season": {
+    "uuid": "ndcf81nlb3",
+    "code": "2026",
+    "deleted": false,
+    "name": "2026/2027"
+   },
+   "series": {
+    "uuid": "qQ9-bb0bzEWUk",
+    "code": "SHL",
+    "name": "SHL"
+   }
+  }
+ }
+]

@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors"
-sidebar_label: "Models and calculators: AssistEvent–build_priors"
+title: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_o"
+sidebar_label: "Models and calculators: AssistEvent–build_o"
 sidebar_position: 10
-description: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_o — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_priors
+# Men's college basketball — additional Python functions — Models and calculators: AssistEvent–build_o
 
 ### AssistEvent {#AssistEvent}
 
@@ -396,6 +396,21 @@ The event string for the team NOT in possession, or `None`.
 
 `ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
 
+### PreseasonPrior {#PreseasonPrior}
+
+`PreseasonPrior(regression: ForwardRef('float'), new_team_quantile: ForwardRef('float'), weight: ForwardRef('float'), rating_sd: ForwardRef('float'))`
+
+The college preseason prior and the season sim's rating noise, per league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `regression` | `ForwardRef('float')` |  | Multiplies a team's prior-season final AdjO / AdjD deviation from the league average (1 carries it over in full, 0 starts everyone average). |
+| `new_team_quantile` | `ForwardRef('float')` |  | A program new to Division I starts at this quantile of last season's Division I AdjEM. |
+| `weight` | `ForwardRef('float')` |  | The prior's weight in pseudo-games: a team with `g` games so far is rated `g / (g + weight)` on this season and the rest on the prior. |
+| `rating_sd` | `ForwardRef('float')` |  | The season sim draws one AdjEM shift per team per simulated season, `N(0, rating_sd ** 2 / (g + weight))`. |
+
 ### RapmConfig {#RapmConfig}
 
 `RapmConfig(...)`
@@ -705,7 +720,7 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 
 ### adjust_efficiency {#adjust_efficiency}
 
-`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001, prior: 'pl.DataFrame | None' = None, prior_weight: 'float' = 0.0) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -729,10 +744,12 @@ sign); `avg` is the league mean efficiency and `hfa` comes from
 | `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
 | `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
 | `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+| `prior` | `DataFrame \| None` | `None` | Optional preseason prior in `PRIOR_SCHEMA` (`preseason_prior`): each listed team is shrunk toward its prior as if it had played `prior_weight` extra games at that rating. A listed team with no game yet comes back at its prior (`games` 0, raw rates null), and a season in `prior` with no game at all is rated from the prior alone. |
+| `prior_weight` | `float` | `0.0` | Pseudo-games of prior per team (0 turns the prior off). |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input (and no prior) returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -839,6 +856,8 @@ Canonical per-player-season counting frame from the boxscore release.
 
 Sums the per-game player boxscores into one row per (player_id, season,
 team_id) with the counting columns `player_per100_features` expects.
+Only rows with minutes are counted, and a row with minutes but no athlete
+(one per league in 2014) is dropped rather than kept as a null player_id.
 Shot-location splits come from the shots release (2025+): free throws
 (`MadeFreeThrow`) are excluded, layup/dunk/tip = rim, and jump shots
 split three vs mid by `score_value` (the release's `type_text` carries
@@ -855,7 +874,7 @@ all remaining attempts fold into `fga_mid`.
 
 **Returns**
 
-One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, minutes` + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
+One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, position, minutes, games, starter_share` (the share of his box rows marked starter) + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -878,9 +897,11 @@ One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8,
 | `turnovers` | Float64 | Total turnovers. |
 | `points` | Float64 | Points scored. |
 | `player_id` | String | Unique player identifier. |
-| `fga_rim` | Float64 |  |
-| `fga_mid` | Float64 |  |
-| `fga_three` | Float64 |  |
+| `fga_rim` | Float64 | Rim field-goal attempts (layups, dunks, tips), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; 0 in seasons without shots data. |
+| `fga_mid` | Float64 | Mid-range field-goal attempts (non-rim twos), the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box two-point attempts. |
+| `fga_three` | Float64 | Three-point field-goal attempts, the player's whole-season count from the shots release, so a player with rows for two teams carries the same count on each; in seasons without shots data, the row's box three-point attempts. |
+| `games` | Int64 | Games played. |
+| `starter_share` | Float64 | Share of the player's positive-minute box-score rows for the team-season, among those with a known starter flag, that mark them a starter (0-1); null when the box release has no starter column. |
 
 **Example**
 
@@ -1360,92 +1381,4 @@ o_rtg2, adj_o_rtg2, raw_o_rtg2, raw_adj_o_rtg2, _ = build_o_rtg(
     player, {}, {"total_off_to": {"value": 0}, "sum_total_off_to": {}},
     100.0, False, True,
 )
-```
-
-### build_player_context {#build_player_context}
-
-`build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'`
-
-Build the context object the RAPM matrix-solve layer consumes.
-
-Faithful port of `RapmUtils.buildPlayerContext` (`RapmUtils.ts:427-541`).
-Removes low-possession players (`config["removal_pct"]` of total
-on+off possessions), flags fully-removed lineups (mutating `lineups`
-in place -- see the module docstring's landmine 5), builds the
-player-to-column index, and folds `build_priors` into
-`prior_info`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players` | `list[PlayerOnOffStats]` |  | The per-player on/off splits (`PlayerOnOffStats`), e.g. `mbb_lineup_stats.lineup_to_team_report(...)["players"]`. |
-| `lineups` | `list[LineupStatSet]` |  | The per-lineup `LineupStatSet` docs feeding this team's aggregate (**mutated in place** -- see landmine 5). |
-| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- forwarded to `build_priors` unchanged. |
-| `stats_averages` | `PureStatSet` |  | League/context average stat set -- forwarded to `build_priors` unchanged. |
-| `avg_efficiency` | `float` |  | League/context average efficiency. |
-| `agg_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- forwarded to `build_priors` as its `value_key` (only affects prior calculations, not the lineup-filtering/aggregation above it). |
-| `config` | `RapmConfig` | `{'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}` | Removal-percent / prior-mode / regression config. Defaults to `DEFAULT_RAPM_CONFIG`; never mutated by this function (only `config["removal_pct"]`/`config["prior_mode"]` are read), matching the TS default parameter's own read-only usage. |
-
-**Returns**
-
-A `RapmPlayerContext`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ZeroDivisionError` | If `total_lineups` (derived from `players[0]`'s on/off possession totals) is exactly `0` -- see the module docstring's landmine 2. Not exercised by this task's oracle fixtures. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
-from sportsdataverse.mbb.mbb_rapm import build_player_context, DEFAULT_RAPM_CONFIG
-
-report = lineup_to_team_report({"lineups": buckets, "error_code": None})
-ctx = build_player_context(
-    report["players"], buckets, {}, {}, 100.0, "value", DEFAULT_RAPM_CONFIG
-)
-print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
-
-# Filtering lineups by side (the ``filtered_lineups`` closure)
-
-off_lineups = ctx["filtered_lineups"]("off")
-def_lineups = ctx["filtered_lineups"]("def")
-```
-
-### build_priors {#build_priors}
-
-`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
-
-Build strong/weak per-player RAPM priors for every column.
-
-Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
-See the module docstring's landmine list, item 1, for the critical
-Python-vs-JS `{}`-truthiness gotcha this function's implementation
-deliberately avoids.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
-| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
-| `avg_efficiency` | `float` |  | League/context average efficiency. |
-| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
-| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
-| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
-
-**Returns**
-
-A `RapmPriorInfo`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import build_priors
-
-priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
-print(priors["players_weak"][0])
 ```

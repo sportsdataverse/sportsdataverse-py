@@ -8608,3 +8608,2399 @@
   test: tests/nfl/shield_pbp/test_description.py -k "qb_dropback_truth_table"
   expected: kill
   note: A penalty-nullified pass (a no_play) counted as a dropback, ~1,270 rows a season.
+
+# --- BB-D2: basketball league context (ranks, percentiles, _n, league averages) ----------------
+# Killers: tests/nba/test_nba_league_context.py on the committed NBA/WNBA 2024 captures, the
+# stats.nba.com ratings oracle and the 2025 college player-seasons.
+- id: bb-league-context-team-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'ok = v.is_not_null() & (n >= min_cohort) & (distinct > 1)'
+  mutant: 'ok = v.is_not_null() & (distinct > 1)'
+  test: tests/nba/test_nba_league_context.py::test_team_floor_nulls_rank_and_pct
+  expected: kill
+  note: Four real teams would get ranks 1-4 and percentiles of four instead of null (floor 5).
+
+- id: bb-league-context-cohort-floor
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'pl.when(has & (n >= min_cohort))'
+  mutant: 'pl.when(has)'
+  test: tests/nba/test_nba_league_context.py::test_player_position_cohort_floor
+  expected: kill
+  note: The seven 2025 college PF player-seasons would get a _pos_pct under the ten-player floor.
+
+- id: bb-league-context-lower-is-better
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: 'r = v.rank(method="average", descending=m not in lower)'
+  mutant: 'r = v.rank(method="average", descending=True)'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The worst defense (highest DRtg) would rank 1 and read as the 97th percentile.
+
+- id: bb-league-context-average-row-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/_common/league_context.py
+  snippet: '        df = df.filter(qualifier)'
+  mutant: '        df = df'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_league_average_row
+  expected: kill
+  note: The league-average row would count the two All-Star teams (n 32, not the _pct denominator 30).
+
+- id: bb-team-ratings-qualifier
+  group: bb-league-context
+  finding: BB-D2
+  file: sportsdataverse/nba/nba_team_ratings.py
+  snippet: 'qualifier=_RATINGS_QUALIFIER,'
+  mutant: 'qualifier=None,'
+  test: tests/nba/test_nba_league_context.py::test_team_ratings_rank_lower_is_better_first
+  expected: kill
+  note: The one-game All-Star teams would be ranked and inflate every percentile's n.
+
+# --- BB-D3: season team rates from possessions (NBA / WNBA / MBB / WBB) ------------------------
+# Killers: tests/nba/test_nba_team_season_rates.py (NBA 2026 vs stats.nba.com team_stats_advanced,
+# NBA 2024 vs the stats.nba.com clutch dashboard) and tests/mbb/test_mbb_team_season_rates.py
+# (the 2024-25 Big Ten games), all committed real captures.
+- id: bb-tsr-points-from-counts
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).cast(pl.Int64).alias("points"),'
+  mutant: 'pl.col("points").cast(pl.Int64).alias("points"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_nba_2026_net_rating_parity
+  expected: kill
+  note: The score-delta points column carries forward-fill glitches; Denver's net would miss stats.nba.com by 1.1.
+
+- id: bb-tsr-possession-count
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'pl.col("n_poss").filter(pl.col("side") == "o").sum().alias("poss"),'
+  mutant: 'pl.col("n_poss").sum().alias("poss"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_nba_2026_possessions_pace_and_four_factors
+  expected: kill
+  note: Counting both sides' rows would double poss against stats.nba.com's possession count.
+
+- id: bb-tsr-for-against-swap
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'de = base.with_columns(pl.col("defense_team_id").alias("team_id"),'
+  mutant: 'de = base.with_columns(pl.col("offense_team_id").alias("team_id"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_for_and_against_balance
+  expected: kill
+  note: The defensive view would credit the offense, so opp_pts would be the team's own points, not its opponents' box score.
+
+- id: bb-tsr-home-away-swap
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")).alias("offense_is_home"),'
+  mutant: '(pl.col("offense_team_id").cast(pl.Int64) != pl.col("home_team_id")).alias("offense_is_home"),'
+  test: tests/nba/test_nba_team_season_rates.py::test_home_away_split_against_the_box_score
+  expected: kill
+  note: Home and away would swap; the league's home split would show the road deficit.
+
+- id: bb-tsr-neutral-site
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '    home = pl.col("offense_is_home") & ~pl.col("neutral_site").fill_null(False)'
+  mutant: '    home = pl.col("offense_is_home")'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_neutral_site_games_are_neither_home_nor_away
+  expected: kill
+  note: Big Ten tournament and other neutral-site games would count as the nominal home team's home games.
+
+- id: bb-tsr-clutch-clock
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'CLUTCH_SECONDS = 300.0'
+  mutant: 'CLUTCH_SECONDS = 360.0'
+  test: tests/nba/test_nba_team_season_rates.py::test_clutch_window_against_stats_nba_2024
+  expected: kill
+  note: A six-minute window would add ~20% clutch possessions over stats.nba.com's clutch dashboard.
+
+- id: bb-tsr-clutch-margin
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: 'CLUTCH_MARGIN = 5'
+  mutant: 'CLUTCH_MARGIN = 6'
+  test: tests/nba/test_nba_team_season_rates.py::test_clutch_window_against_stats_nba_2024
+  expected: kill
+  note: Within 6 instead of 5 drops the clutch net's correlation with stats.nba.com from 0.98 to 0.93.
+
+- id: bb-tsr-clutch-period
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/mbb/mbb_team_season_rates.py
+  snippet: 'return pl.when(pl.col("season") >= _WBB_FIRST_QUARTERS_SEASON).then(4).otherwise(2)'
+  mutant: 'return pl.when(pl.col("season") >= _WBB_FIRST_QUARTERS_SEASON).then(2).otherwise(2)'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_clutch_window_uses_the_final_period
+  expected: kill
+  note: Women's clutch would include the last five minutes of the 2nd and 3rd quarters.
+
+- id: bb-tsr-qualifier
+  group: bb-team-season-rates
+  finding: BB-D3
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '_QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over(["season", "split"])'
+  mutant: '_QUALIFIER = pl.lit(True)'
+  test: tests/mbb/test_mbb_team_season_rates.py::test_schema_and_cohort
+  expected: kill
+  note: The non-conference opponents (one to three games each) would be ranked beside the Big Ten teams.
+
+# --- BB-D19: team strength (possession ridge, SOS, SOV) ----------------------------------------
+# Killers: tests/nba/test_nba_team_strength.py and tests/mbb/test_mbb_team_strength.py, on BB-D3's
+# committed real captures plus tests/fixtures/bb_team_strength.
+- id: bb-ts-ridge-net-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '(pl.col("off_coef") - pl.col("def_coef")).alias("adj_net_rtg"),'
+  mutant: '(pl.col("off_coef") + pl.col("def_coef")).alias("adj_net_rtg"),'
+  test: tests/nba/test_nba_team_strength.py::test_adjusted_net_parity_with_stats_nba
+  expected: kill
+  note: Adding the defense coefficient rewards points allowed; adjusted net would stop tracking stats.nba.com's net.
+
+- id: bb-ts-ridge-def-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '(intercept + pl.col("def_coef")).alias("adj_def_rtg"),'
+  mutant: '(intercept - pl.col("def_coef")).alias("adj_def_rtg"),'
+  test: tests/nba/test_nba_team_strength.py::test_adjusted_net_parity_with_stats_nba
+  expected: kill
+  note: A flipped defense coefficient anti-correlates adj_def_rtg with stats.nba.com's def_rating.
+
+- id: bb-ts-home-sign
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '.then(1.0).otherwise(-1.0).alias("hfa"),'
+  mutant: '.then(-1.0).otherwise(1.0).alias("hfa"),'
+  test: tests/nba/test_nba_team_strength.py::test_home_court_term
+  expected: kill
+  note: Coding the away offense +1 fits a negative home edge (NBA 2026 would read -0.86 per 100).
+
+- id: bb-ts-home-dropped
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '.then(1.0).otherwise(-1.0).alias("hfa"),'
+  mutant: '.then(0.0).otherwise(0.0).alias("hfa"),'
+  test: tests/nba/test_nba_team_strength.py::test_home_court_term
+  expected: kill
+  note: With no home contrast the shared ridge fits the term at 0, and home edge leaks into the team coefficients.
+
+- id: bb-ts-sos-weighting
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").mean().alias("sos"),'
+  mutant: 'pl.col("_opp").unique().mean().alias("sos"),'
+  test: tests/nba/test_nba_team_strength.py::test_sos_and_sov_by_hand
+  expected: kill
+  note: One weight per distinct opponent instead of per game; an NBA division rival met four times would count once.
+
+- id: bb-ts-sov-definition
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").filter(won).mean().alias("sov"),'
+  mutant: 'pl.col("_opp").mean().alias("sov"),'
+  test: tests/nba/test_nba_team_strength.py::test_sos_and_sov_by_hand
+  expected: kill
+  note: SOV over every game is just SOS again.
+
+- id: bb-ts-sov-losses
+  group: bb-team-strength
+  finding: BB-D19
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'pl.col("_opp").filter(won).mean().alias("sov"),'
+  mutant: 'pl.col("_opp").filter(~won).mean().alias("sov"),'
+  test: tests/mbb/test_mbb_team_strength.py::test_sov_and_record_by_hand
+  expected: kill
+  note: Averaging the losses' opponents inverts the definition.
+
+- id: bb-ps-two-team-point-diff-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'two: list[Criterion] = [self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  mutant: 'two: list[Criterion] = [self._point_diff, self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  test: tests/nba/test_nba_season_sim.py::test_nba_2024_ties_break_as_the_league_did
+  expected: kill
+  note: Point differential before head-to-head seeds NOP (49-33, +362) over PHX, which won the season series.
+
+- id: bb-ps-multi-head-to-head-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'multi: list[Criterion] = [self._division_winner, self._head_to_head, self._division_pct, self._conference_pct]'
+  mutant: 'multi: list[Criterion] = [self._head_to_head, self._division_winner, self._division_pct, self._conference_pct]'
+  test: tests/nba/test_nba_season_sim.py::test_nba_2024_ties_break_as_the_league_did
+  expected: kill
+  note: A three-way tie goes to the division leader first (ORL over IND and PHI at 47-35 in 2023-24).
+
+- id: bb-ps-wnba-point-diff-first
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'wnba: list[Criterion] = [self._head_to_head, self._vs_winning, self._pair_point_diff, self._point_diff]'
+  mutant: 'wnba: list[Criterion] = [self._point_diff, self._head_to_head, self._vs_winning, self._pair_point_diff]'
+  test: tests/nba/test_nba_season_sim.py::test_wnba_standings_reproduce_the_real_first_round
+  expected: kill
+  note: ATL (+334) would pass LV (+128) at 30-14; the real 2025 first round paired LV as the 2 seed.
+
+- id: bb-ps-play-in-910-host
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'win910 = t9 if _play_game(model, net, float(noise[t9, t10]), t9, t10, rng) else t10'
+  mutant: 'win910 = t9 if not _play_game(model, net, float(noise[t10, t9]), t10, t9, rng) else t10'
+  test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
+  expected: kill
+  note: The 10 seed hosting the 9 moves both teams' play-in odds off the closed form.
+
+- id: bb-ps-play-in-last-host
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'last = _play_game(model, net, float(noise[loser78, win910]), loser78, win910, rng)'
+  mutant: 'last = not _play_game(model, net, float(noise[win910, loser78]), win910, loser78, rng)'
+  test: tests/nba/test_nba_season_sim.py::test_play_in_is_simulated_with_the_higher_seed_at_home
+  expected: kill
+  note: The last play-in game is at the 7-8 loser's home.
+
+- id: bb-ps-lottery-pre-2019-odds
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'NBA_LOTTERY_CHANCES: tuple[int, ...] = (140, 140, 140, 125, 105, 90, 75, 60, 45, 30, 20, 15, 10, 5)'
+  mutant: 'NBA_LOTTERY_CHANCES: tuple[int, ...] = (250, 199, 156, 119, 88, 63, 43, 28, 17, 11, 8, 7, 6, 5)'
+  test: tests/nba/test_nba_season_sim.py::test_nba_lottery_odds_are_the_2019_table
+  expected: kill
+  note: The 1994-2018 weights give the worst team 25% at the first pick, not 14%.
+
+- id: bb-ps-lottery-three-draws
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'NBA_LOTTERY_DRAWS = 4'
+  mutant: 'NBA_LOTTERY_DRAWS = 3'
+  test: tests/nba/test_nba_season_sim.py::test_nba_lottery_odds_are_the_2019_table
+  expected: kill
+  note: Three drawn picks (the pre-2019 rule) let the worst team fall to 4th, not 5th.
+
+- id: bb-ps-lottery-ties-not-split
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_rules.py
+  snippet: 'out[k : j + 1] = out[k : j + 1].mean()'
+  mutant: 'out[k : j + 1] = out[k : j + 1]'
+  test: tests/nba/test_nba_season_sim.py::test_tied_lottery_slots_share_their_chances
+  expected: kill
+  note: Tied teams split their slots' chances (CHA and POR 132.5 each in 2024), not keep the drawn order's.
+
+- id: bb-ps-wnba-lottery-one-season
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'comb = (prior_w[out_] + total_wins[s, out_]) / (prior_g[out_] + total_games[s, out_])'
+  mutant: 'comb = total_wins[s, out_] / total_games[s, out_]'
+  test: tests/nba/test_nba_season_sim.py::test_wnba_lottery_uses_two_season_records
+  expected: kill
+  note: The WNBA lottery order is the two-season record; 2025 alone ties DAL and CHI at 10-34 and moves CONN up.
+
+- id: bb-ps-home-term-dropped
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'return (net_home - net_away + 2.0 * self.hfa * (1.0 - np.asarray(neutral, dtype=float))) * self.poss / 100.0'
+  mutant: 'return (net_home - net_away) * self.poss / 100.0'
+  test: tests/nba/test_nba_season_sim.py::test_game_model_home_term
+  expected: kill
+  note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
+
+- id: bb-ps-neutral-site-ignored-in-sim
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'model.margin(net[h], net[a], neutral)'
+  mutant: 'model.margin(net[h], net[a])'
+  test: tests/nba/test_nba_neutral_site.py::test_the_sim_plays_neutral_games_without_the_home_term
+  expected: kill
+  note: A neutral game (abroad, a Las Vegas Cup semifinal) is simulated without the home term.
+
+- id: bb-d3-neutral-site-ignored-in-rates
+  group: bb-pro-season
+  finding: BB-D19
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: 'nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site")'
+  mutant: 'pl.lit(False).alias("neutral_site")'
+  test: tests/nba/test_nba_neutral_site.py::test_possession_rows_drop_the_home_term_for_neutral_games
+  expected: kill
+  note: The possession rows carry the neutral flag, so the ridge drops the home term for those games.
+
+- id: bb-ps-neutral-site-not-handed-to-sim
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False'
+  mutant: 'neutral = False'
+  test: tests/nba/test_nba_neutral_site.py::test_the_sim_hands_the_flag_to_the_simulator
+  expected: kill
+  note: simulate_pro_season passes the schedule's 5 neutral 2025-26 games through to the simulated games.
+
+- id: bb-d27-neutral-site-ignored-in-game-flow
+  group: bb-pro-season
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: 'nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site")'
+  mutant: 'pl.lit(False).alias("neutral_site")'
+  test: tests/nba/test_nba_neutral_site.py::test_game_flow_gives_the_cup_semifinal_the_neutral_prior
+  expected: kill
+  note: The listed Las Vegas Cup semifinal gets the neutral pregame prior in game flow.
+
+- id: bb-d25-rated-prior-keeps-espn-flag
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_rated_prior.py
+  snippet: '.then(nba_neutral_site._neutral_site(espn, league_id, "stats_game_id"))'
+  mutant: '.then(pl.lit(False))'
+  test: tests/nba/test_nba_neutral_site.py::test_rated_priors_take_our_flag_over_espns
+  expected: kill
+  note: A stats-matched game takes the curated flag over ESPN's, so a listed game loses its home term.
+
+- id: bb-ps-rating-shift-off
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'shift = rng.standard_normal((n_sims, n_t)) * sd if uncertain else np.zeros((n_sims, n_t))'
+  mutant: 'shift = np.zeros((n_sims, n_t))'
+  test: tests/nba/test_nba_season_sim.py::test_rating_shift_widens_the_season_spread
+  expected: kill
+  note: The per-season rating shift is what widens the win distribution; a silent no-op would leave it fixed.
+# --- BB-D17: college season products (RPI, quads, NET estimate, auto-bids, field, season sim) ---
+# Killers: tests/mbb/test_mbb_college_season.py on the real 2024 men's and women's seasons, against
+# WarrenNolan's 2024 RPI / quadrant records / NET mirror and the actual 2024 NCAA fields and seeds.
+- id: bb-cs-rpi-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'RPI_WEIGHTS = (0.25, 0.50, 0.25)'
+  mutant: 'RPI_WEIGHTS = (0.35, 0.40, 0.25)'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: The NCAA's 25/50/25 blend; shifting weight from OWP to WP reorders the RPI away from the oracle.
+
+- id: bb-cs-rpi-location-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'RPI_LOCATION_WEIGHTS = {"home_win": 0.6, "road_win": 1.4, "home_loss": 1.4, "road_loss": 0.6, "neutral": 1.0}'
+  mutant: 'RPI_LOCATION_WEIGHTS = {"home_win": 1.0, "road_win": 1.0, "home_loss": 1.0, "road_loss": 1.0, "neutral": 1.0}'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: Without the 0.6 / 1.4 home-road weighting WP is the plain winning percentage.
+
+- id: bb-cs-rpi-womens-weighted-from
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '_RPI_WEIGHTED_FROM = {"mens": 2005, "womens": 2012}'
+  mutant: '_RPI_WEIGHTED_FROM = {"mens": 2005, "womens": 2025}'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: The women's RPI is location-weighted from 2011-12; an unweighted 2024 women's RPI misses the oracle.
+
+- id: bb-cs-rpi-owp-excludes-team
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '.then((pl.col("tw") - pl.col("hw")) / (pl.col("tg") - pl.col("hg")))'
+  mutant: '.then(pl.col("tw") / pl.col("tg"))'
+  test: tests/mbb/test_mbb_college_season.py::test_rpi_matches_the_warrennolan_rpi
+  expected: kill
+  note: OWP drops each opponent's games against the team being rated; keeping them credits a team's own wins to its schedule.
+
+- id: bb-cs-quad-boundary
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_prediction_constants.py
+  snippet: '"home": {"q1": 30, "q2": 75, "q3": 160},'
+  mutant: '"home": {"q1": 40, "q2": 75, "q3": 160},'
+  test: tests/mbb/test_mbb_college_season.py::test_quads_reproduce_the_oracle_quadrant_records
+  expected: kill
+  note: Quad 1 at home is opponents ranked 1-30; 31-40 home games would move out of the oracle's Quad 2.
+
+- id: bb-cs-net-estimate-weights
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'NET_ESTIMATE_WEIGHTS = {"adj_em": 0.8, "wab": 0.2}'
+  mutant: 'NET_ESTIMATE_WEIGHTS = {"adj_em": 0.5, "wab": 0.5}'
+  test: tests/mbb/test_mbb_college_season.py::test_net_estimate_tracks_the_net
+  expected: kill
+  note: Equal weights track the 2024 NET at Spearman 0.991 (men), under the 0.994 gate.
+
+- id: bb-cs-auto-bid-champion
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'pl.coalesce("champion_id", "leader").alias("team_id"),'
+  mutant: 'pl.coalesce("leader", "champion_id").alias("team_id"),'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_are_the_conference_champions
+  expected: kill
+  note: The auto-bid is the conference-tournament champion, not the conference standings leader.
+
+- id: bb-cs-auto-bid-final-played
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'return pl.col("notes_headline").str.contains(r"(?i)-\s*final\s*$")'
+  mutant: 'return pl.col("notes_headline").str.contains(r"(?i)final")'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_mid_conference_tournaments
+  expected: kill
+  note: A quarterfinal or semifinal is not the final; matching any "final" crowns a champion mid-tournament.
+
+- id: bb-cs-ineligible-runner-up
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'pl.when(pl.col("_w").is_in(barred)).then(pl.col("_l")).otherwise(pl.col("_w")).alias("champion_id")'
+  mutant: 'pl.col("_w").alias("champion_id")'
+  test: tests/mbb/test_mbb_college_season.py::test_auto_bids_are_the_conference_champions
+  expected: kill
+  note: Southern Indiana won the 2024 women's OVC final while reclassifying; the runner-up UT Martin took the bid.
+
+- id: bb-cs-at-large-cut
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_bracketology.py
+  snippet: '((pl.col("auto_bid") == True) | (pl.col("at_large_rank") <= at_large_slots)).alias("bid")  # noqa: E712'
+  mutant: '((pl.col("auto_bid") == True) | (pl.col("at_large_rank") < at_large_slots)).alias("bid")  # noqa: E712'
+  test: tests/mbb/test_mbb_college_season.py::test_bracketology_against_selection_sunday
+  expected: kill
+  note: 68 minus the auto-bids is the at-large count; an off-by-one cut seeds a 67-team field.
+
+- id: bb-cs-sim-at-large-cut
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'at_large = (~auto) & eligible[None, :] & (al_rank < (FIELD_SIZE - n_auto)[:, None])'
+  mutant: 'at_large = (~auto) & eligible[None, :] & (al_rank <= (FIELD_SIZE - n_auto)[:, None])'
+  test: tests/mbb/test_mbb_college_season.py::test_season_sim_accounting
+  expected: kill
+  note: Each simulated field holds exactly 68; one extra at-large makes bid_prob sum to 69.
+
+- id: bb-cs-first-four
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'ff_al, ff_ab = al[-4:], ab[-4:]'
+  mutant: 'ff_al, ff_ab = al[:4], ab[-4:]'
+  test: tests/mbb/test_mbb_college_season.py::test_first_four_seed_structure_and_bubble
+  expected: kill
+  note: The First Four at-large pairs are the last four in, not the best four at-large teams.
+
+- id: bb-cs-sim-seeded
+  group: bb-college-season
+  finding: BB-D17
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: '    rng = np.random.default_rng(seed)'
+  mutant: '    rng = np.random.default_rng()'
+  test: tests/mbb/test_mbb_college_season.py::test_season_sim_is_seeded_and_reproducible
+  expected: kill
+  note: The Monte Carlo must reproduce from its seed.
+
+- id: bb-cup-point-diff-before-head-to-head
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: 'GROUP_TIEBREAKERS: tuple[str, ...] = ("head_to_head", "point_diff", "points", "prior_record")'
+  mutant: 'GROUP_TIEBREAKERS: tuple[str, ...] = ("point_diff", "head_to_head", "points", "prior_record")'
+  test: tests/nba/test_nba_cup.py::test_standings_reproduce_the_league
+  expected: kill
+  note: Twelve 2024-25 and 2025-26 group places were set by head-to-head before point differential.
+
+- id: bb-cup-wild-card-any-non-winner
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: 'for sel in (group_rank == 2, group_rank > 2)'
+  mutant: 'for sel in (group_rank >= 2, group_rank > 99)'
+  test: tests/nba/test_nba_cup.py::test_standings_reproduce_the_league
+  expected: kill
+  note: The wild-card race is the second-place teams; 2025-26 ranks ATL and BOS (2-2, second) over CLE and DET (2-2, third, better differential).
+
+- id: bb-cup-final-counts
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_cup.py
+  snippet: '"semifinal": True, "final": False}'
+  mutant: '"semifinal": True, "final": True}'
+  test: tests/nba/test_nba_cup.py::test_sim_adds_two_regular_season_games_per_team
+  expected: kill
+  note: The Cup final is not a regular-season game; counting it gives the finalists 83.
+
+- id: bb-cup-slots-added-twice
+  group: bb-nba-cup
+  finding: BB-D30
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'if kind in ("quarterfinal", "semifinal")'
+  mutant: 'if kind != "final"'
+  test: tests/nba/test_nba_cup.py::test_filled_slots_are_not_added_again
+  expected: kill
+  note: A replacement or quarterfinal-loser game the release already lists must not be added again.
+
+# --- Basketball preseason prior: tests/mbb/test_mbb_college_season.py and tests/nba/test_nba_season_sim.py
+# The 2025 college seasons rated with the committed 2024 season as their prior, and the NBA 2025-26 /
+# WNBA 2025 sims with the committed 2024-25 / 2024 possessions as theirs.
+- id: bb-prior-college-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'prior_weight=PRESEASON_PRIOR[league].weight,'
+  mutant: 'prior_weight=0.0,'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_improves_early_season_log_loss
+  expected: kill
+  note: With no pseudo-games of prior the as-of AdjEM is one game's noise again; the weeks 0-6 log loss gate fails.
+
+- id: bb-prior-college-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_team_ratings.py
+  snippet: '.then(pl.lit(new_em / 2.0))'
+  mutant: '.then(pl.lit(0.0))'
+  test: tests/mbb/test_mbb_college_season.py::test_preseason_prior_regresses_last_season_and_defaults_new_programs
+  expected: kill
+  note: A program new to Division I starts at last season's 0.23 quantile of D-I AdjEM, not at average.
+
+- id: bb-prior-college-rating-noise
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'tau = rating_shift_sd(games, league) if on else np.zeros(games.size)'
+  mutant: 'tau = np.zeros(games.size)'
+  test: tests/mbb/test_mbb_college_season.py::test_rating_noise_spreads_the_odds_and_keeps_the_marginals
+  expected: kill
+  note: Without the per-season AdjEM shift the bid odds pile up at 0 and 1 again.
+
+- id: bb-prior-pro-blend
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)'
+  mutant: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None)'
+  test: tests/nba/test_nba_season_sim.py::test_in_season_ridge_shrinks_toward_the_prior
+  expected: kill
+  note: Once a game is played the ridge must shrink toward the prior, not toward average.
+
+- id: bb-prior-pro-new-team
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'pl.when(pl.col("o").is_null()).then(pl.lit(new_net / 2.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  mutant: 'pl.when(pl.col("o").is_null()).then(pl.lit(0.0)).otherwise(reg * pl.col("o")).alias("off_dev"),'
+  test: tests/nba/test_nba_season_sim.py::test_preseason_model_is_the_regressed_prior
+  expected: kill
+  note: An expansion team starts at last season's bottom-quartile net rating (the 2025 Valkyries), not at average.
+
+- id: bb-prior-pro-public-path
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior'
+  mutant: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=None'
+  test: tests/nba/test_nba_season_sim.py::test_nba_season_sim_carries_the_prior_from_the_release_before
+  expected: kill
+  note: nba_season_sim must hand the loaded prior to the game model.
+
+- id: bb-prior-college-game-noise
+  group: bb-preseason-prior
+  finding: BB-preseason-prior
+  file: sportsdataverse/mbb/mbb_college_season.py
+  snippet: 'var = c.margin_sd**2 - c.em_scale**2 * (tau_home**2 + tau_away**2)'
+  mutant: 'var = c.margin_sd**2 + 0.0 * (tau_home**2 + tau_away**2)'
+  test: tests/mbb/test_mbb_college_season.py::test_game_noise_keeps_each_margin_at_margin_sd
+  expected: kill
+  note: The shift's variance comes out of each game's own noise, so a game's margin keeps margin_sd.
+
+- id: bb-ps-unscheduled-cup-fill
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'missing = np.zeros(n_t, dtype=np.int64) if season_games is None else np.maximum(season_games - known, 0)'
+  mutant: 'missing = np.zeros(n_t, dtype=np.int64)'
+  test: tests/nba/test_nba_season_sim.py::test_unscheduled_cup_games_fill_each_team_to_82
+  expected: kill
+  note: Before December each NBA team's TBD Cup slots are simulated, so its record sums to 82, not ~80.
+
+# --- BB-D7: garbage-time and transition flags on the NBA / WNBA possessions ----------------------
+# Killers: tests/nba/test_nba_possession_flags.py on the committed 2023-24 NBA, 2025 WNBA and
+# 1999-00 releases, plus stats.nba.com's 2023-24 Synergy transition play type.
+- id: bb-flags-ball-change-clock
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.then(pl.col("end_seconds_remaining").shift(1).over("game_id"))'
+  mutant: '.then(pl.col("start_seconds_remaining"))'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_tracks_synergy_2024
+  expected: kill
+  note: Timing from the possession's first row (often the shot itself) calls most possessions transition.
+
+- id: bb-flags-live-start-types
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'pl.col("possession_start_type").is_in(TRANSITION_START_TYPES)'
+  mutant: 'pl.lit(True)'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_definition_holds_row_by_row
+  expected: kill
+  note: After a timeout or a dead ball the defense is set; those starts are never transition.
+
+- id: bb-flags-garbage-sticky
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '(pl.col("_trigger").cast(pl.Int32).cum_sum().over("game_id") > 0)'
+  mutant: 'pl.col("_trigger")'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_is_sticky_and_late
+  expected: kill
+  note: bigballR keeps a game in garbage time once it triggers; per-possession flags flicker in and out.
+
+- id: bb-flags-garbage-starters
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'return in_band & (pl.col("_n_starters") <= GARBAGE_TIME_MAX_STARTERS)'
+  mutant: 'return in_band'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_matches_the_bigballr_loop
+  expected: kill
+  note: Without the starters clause a blowout with the starters still on is garbage time.
+
+- id: bb-flags-running-score-cummax
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'pl.col(col).cast(pl.Int64, strict=False).cum_max().over("game_id").forward_fill().over("game_id").fill_null(0)'
+  mutant: 'pl.col(col).cast(pl.Int64, strict=False).forward_fill().over("game_id").fill_null(0)'
+  test: tests/nba/test_nba_possession_flags.py::test_running_score_survives_the_old_zero_filled_feed
+  expected: kill
+  note: Before 2019-20 the feed writes "0" on non-scoring rows; a plain forward fill reads a 0-0 game.
+
+- id: bb-flags-garbage-overtime
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '| ((pl.col("period") > pl.col("_reg_periods")) & (m >= min(b[1] for b in GARBAGE_TIME_BANDS)))'
+  mutant: '| ((pl.col("period") > pl.col("_reg_periods")) & pl.lit(False))'
+  test: tests/nba/test_nba_possession_flags.py::test_overtime_and_halves_branches
+  expected: kill
+  note: 2020-21 0022000983 is the one game in the 1996-97 to 2026-27 NBA releases whose garbage time starts in overtime.
+
+- id: bb-flags-garbage-halves
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.then(2)'
+  mutant: '.then(4)'
+  test: tests/nba/test_nba_possession_flags.py::test_overtime_and_halves_branches
+  expected: kill
+  note: The WNBA played two 20-minute halves through 2005; read as quarters, no game of 1997-2005 has garbage time.
+
+- id: bb-flags-garbage-every-event
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: '.filter(pl.col("order_index") <= pl.col("end_order_index"))'
+  mutant: '.filter(pl.col("order_index") == pl.col("end_order_index"))'
+  test: tests/nba/test_nba_possession_flags.py::test_garbage_time_matches_the_bigballr_loop
+  expected: kill
+  note: bigballR tests every event; the last event alone misses 31 NBA 2023-24 possessions in 10 games.
+
+- id: bb-flags-transition-window
+  group: bb-possession-flags
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_possession_flags.py
+  snippet: 'TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'TRANSITION_SECONDS: Final[float] = 10.0'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_tracks_synergy_2024
+  expected: kill
+  note: 8 s tracks Synergy's Transition play type better than college's 10 s (r 0.892 vs 0.844, ratio 0.97 vs 1.29).
+
+# --- BB-D22: luck and close-game record (Pythagorean expected wins, close games) ----------------
+# Killers: tests/nba/test_nba_team_luck.py, tests/mbb/test_mbb_team_luck.py and
+# tests/tools/test_fit_team_luck_pythag.py, on committed real captures (tests/fixtures/bb_team_luck).
+- id: bb-tl-pythag-ratio
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'ratio = (pl.col("opp_pts") / pl.col("pts")) ** exponent'
+  mutant: 'ratio = (pl.col("pts") / pl.col("opp_pts")) ** exponent'
+  test: tests/nba/test_nba_team_luck.py::test_expected_wins_by_hand
+  expected: kill
+  note: An inverted ratio gives every team its opponents' expected wins.
+
+- id: bb-tl-close-wins
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '(is_close & _WON).sum().cast(pl.Int64).alias("close_wins"),'
+  mutant: 'is_close.sum().cast(pl.Int64).alias("close_wins"),'
+  test: tests/nba/test_nba_team_luck.py::test_close_games_are_bb_d3_close_split
+  expected: kill
+  note: Counting every close game as a win breaks close_wins + close_losses == close_games.
+
+- id: bb-tl-close-flag-game-level
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'return flagged.group_by("game_id").agg(pl.col("close").first())'
+  mutant: 'return flagged.group_by("game_id").agg(pl.col("clutch").first().alias("close"))'
+  test: tests/nba/test_nba_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: The first possession's clutch flag is almost never set; the ESPN recount would disagree on ~550 games.
+
+- id: bb-tl-espn-rekey
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/mbb/mbb_team_luck.py
+  snippet: '.select(pl.col("espn_game_id").alias("game_id"), "close")'
+  mutant: '.select(pl.col("game_id"), "close")'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: Left on the NCAA contest id, no close flag joins an ESPN result.
+
+- id: bb-tl-tie-drop
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '        res = res.filter(~tied)'
+  mutant: '        pass'
+  test: tests/nba/test_nba_team_luck.py::test_tied_rows_are_dropped_with_a_warning
+  expected: kill
+  note: A 0-0 never-played game would count as a loss for both sides.
+
+- id: bb-tl-fit-argmin
+  group: bb-team-luck
+  finding: BB-D22
+  file: tools/fit_team_luck_pythag.py
+  snippet: 'return float(GRID[int(np.argmin(sse))])'
+  mutant: 'return float(GRID[int(np.argmax(sse))])'
+  test: tests/tools/test_fit_team_luck_pythag.py
+  expected: kill
+  note: The refit would no longer land on the frozen PYTHAG_EXPONENT.
+
+- id: bb-tl-pbp-games
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: 'pl.col("close").is_not_null().sum().cast(pl.Int64).alias("pbp_games"),'
+  mutant: 'pl.len().cast(pl.Int64).alias("pbp_games"),'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_games_match_an_espn_pbp_recount
+  expected: kill
+  note: Counting every game as classed hides the college games with no NCAA possessions.
+
+- id: bb-tl-close-qualifier
+  group: bb-team-luck
+  finding: BB-D22
+  file: sportsdataverse/_common/team_luck.py
+  snippet: '.pipe(attach_ranks, ["close_win_pct"], min_cohort=MIN_COHORT_TEAMS, by=("season",), qualifier=_CLOSE_QUALIFIER)'
+  mutant: '.pipe(attach_ranks, ["close_win_pct"], min_cohort=MIN_COHORT_TEAMS, by=("season",), qualifier=QUALIFIER)'
+  test: tests/mbb/test_mbb_team_luck.py::test_close_win_pct_rank_needs_classed_close_games
+  expected: kill
+  note: A team with most games unclassed, or under five close games, would be ranked on close_win_pct.
+
+# --- BB-D6: game impact box and lineups used (NBA / WNBA / MBB / WBB) ------------------------------
+# Killers: tests/nba/test_nba_game_impact.py (16 NBA 2025-26 and 16 WNBA 2026 games against the
+# stats.nba.com box +/-) and tests/mbb/test_mbb_game_impact.py (12 + 12 college 2024-25 games
+# against the final margin), all committed real captures.
+- id: bb-gi-free-throw-foul-lineup
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'is_free_throw=pl.col("is_free_throw").eq(True),'
+  mutant: 'is_free_throw=pl.lit(False),'
+  test: tests/nba/test_nba_game_impact.py::test_plus_minus_matches_the_box_score
+  expected: kill
+  note: Free throws on the lineup at the free throw (not the foul) match the box +/- on 118 of the 331 NBA fixture player-games, not 305.
+
+- id: bb-gi-possession-side
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'home_off.cast(pl.Int64).alias("home_poss"),'
+  mutant: '(~home_off).cast(pl.Int64).alias("home_poss"),'
+  test: tests/nba/test_nba_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Crediting the home side's possessions to its defensive rows breaks poss == 5 x the team's possessions.
+
+- id: bb-gi-period-clock
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'pl.col("seconds_remaining").shift(1).over(["game_id", "period"]).fill_null(period_len)'
+  mutant: 'pl.col("seconds_remaining").shift(1).over(["game_id"]).fill_null(period_len)'
+  test: tests/nba/test_nba_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Without the period window each new period starts from the last clock of the previous one, so a team's minutes are not the game length.
+
+- id: bb-gi-lineup-dedupe
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'pl.concat_list(slots).list.drop_nulls().list.unique().list.sort().alias("players"),'
+  mutant: 'pl.concat_list(slots).list.drop_nulls().alias("players"),'
+  test: tests/nba/test_nba_game_impact.py::test_lineups_used_add_up_to_the_game
+  expected: kill
+  note: An unsorted unit list makes the same five players several lineup_ids, so units and their player order differ.
+
+- id: bb-gi-five-man-units
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'sides = _sides(rows).filter(pl.col("players").list.len() == 5)'
+  mutant: 'sides = _sides(rows).filter(pl.col("players").list.len() > 0)'
+  test: tests/mbb/test_mbb_game_impact.py::test_lineups_used_are_five_man_units_that_add_up
+  expected: kill
+  note: The stats.ncaa.org lineup gaps would publish four-man units in lineups_used.
+
+- id: bb-gi-ncaa-foul
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: 'is_foul=pl.col("foul_class").is_not_null()'
+  mutant: 'is_foul=pl.lit(False)'
+  test: tests/mbb/test_mbb_game_impact.py::test_free_throws_take_the_whole_lineup_at_the_foul
+  expected: kill
+  note: With no fouls the college free throws keep their own lineup and no player's +/- moves.
+
+- id: bb-gi-ncaa-period-tail
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: '+ pl.when(is_last).then(end - elapsed).otherwise(0.0)'
+  mutant: '+ 0.0'
+  test: tests/mbb/test_mbb_game_impact.py::test_team_sums_are_five_times_the_team_totals
+  expected: kill
+  note: Without the clock left after a period's last event, most college games come up seconds short of 40 minutes.
+
+- id: bb-gi-def-rtg-denominator
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/_common/game_impact.py
+  snippet: '_per100("opp_pts", "opp_poss").alias("def_rtg"),'
+  mutant: '_per100("opp_pts", "poss").alias("def_rtg"),'
+  test: tests/nba/test_nba_game_impact.py::test_ratings_and_sample_sizes
+  expected: kill
+  note: DRtg per offensive possession would drift from points allowed per 100 defensive possessions.
+
+- id: bb-gi-possession-needs-a-side
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'poss = poss.filter(home_off | (offense == pl.col("away_team_id")))'
+  mutant: 'poss = poss'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A possession whose offense is neither team would be credited to the away side.
+
+- id: bb-gi-possession-needs-pbp
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'played = games.join(parts[0].select("game_id").unique(), on="game_id", how="semi")'
+  mutant: 'played = games'
+  test: tests/nba/test_nba_game_impact.py::test_possessions_need_play_by_play_and_a_side
+  expected: kill
+  note: A game with possessions and no play-by-play would publish positive poss with zero points and minutes.
+
+- id: bb-gi-ncaa-possession-filter
+  group: bb-game-impact
+  finding: BB-D6
+  file: sportsdataverse/mbb/mbb_game_impact.py
+  snippet: 'kept = possessions.filter(has_events & (home_has | (pl.col("poss_team") == pl.col("away"))))'
+  mutant: 'kept = possessions'
+  test: tests/mbb/test_mbb_game_impact.py::test_possessions_need_events_and_a_side
+  expected: kill
+  note: College possessions without events, or with a poss_team that is neither side, would be published.
+
+# --- BB-D4: lineup seasons -------------------------------------------------------------------------
+- id: bb-ls-unit-subsets
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'for idx in combinations(range(5), k):'
+  mutant: 'for idx in combinations(range(1, 5), k):'
+  test: tests/nba/test_nba_lineup_seasons.py::test_two_and_three_man_units_are_ten_times_the_fives
+  expected: kill
+  note: Subsets drawn from four of the five players would give six pairs per five, not ten, and no five-man rows.
+
+- id: bb-ls-dreb-owner
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/nba/nba_lineup_seasons.py
+  snippet: 'c: on_ball[other] if c == "dreb" else on_ball[side]'
+  mutant: 'c: on_ball[side] if c == "dreb" else on_ball[side]'
+  test: tests/nba/test_nba_lineup_seasons.py::test_five_man_counts_add_up_to_the_possessions
+  expected: kill
+  note: A possession's defensive rebounds belong to the defense; on the offense they break the ORB% chances.
+
+- id: bb-ls-lower-is-better
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'lower = [m for m, (_, low) in rated.items() if low]'
+  mutant: 'lower = []'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Without the lower-is-better list the worst defensive rating ranks first.
+
+- id: bb-ls-rank-gate
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'return pl.col("poss") + pl.col("opp_poss") >= min_poss'
+  mutant: 'return pl.lit(True)'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Units under the possession gate would be ranked.
+
+- id: bb-ls-ncaa-free-throw-lineup
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/mbb/mbb_lineup_seasons.py
+  snippet: 'events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()'
+  mutant: 'events, is_free_throw=pl.lit(False), is_foul=pl.col("foul_class").is_not_null()'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_free_throws_count_on_the_foul_lineup
+  expected: kill
+  note: Free-throw attempts would sit on the lineup at the free throw while their points sit on the foul lineup.
+
+- id: bb-ls-ncaa-rim-made
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/mbb/mbb_lineup_seasons.py
+  snippet: '"rimm": rim & made,'
+  mutant: '"rimm": rim,'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_counts_equal_the_team_box
+  expected: kill
+  note: Rim makes would count every rim attempt, off the team box's rimm.
+
+- id: bb-ls-one-direction
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '"tov_pct": (pl.col("poss"), True),'
+  mutant: '"tov_pct": (pl.col("poss"), False),'
+  test: tests/nba/test_nba_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: One flipped direction flag would publish the most turnover-prone units as rank 1.
+
+- id: bb-ls-zone-direction
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '"opp_rim_pct": (pl.col("d_rima"), True),'
+  mutant: '"opp_rim_pct": (pl.col("d_rima"), False),'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: The rim percentage a unit allows ranks low first.
+
+- id: bb-ls-counts-reach-the-fives
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: '.filter(pl.col("team_id").is_not_null() & (pl.col("players").list.len() == 5))'
+  mutant: '.filter(pl.col("team_id").is_not_null() & (pl.col("players").list.len() == 4))'
+  test: tests/mbb/test_mbb_lineup_seasons.py::test_five_man_rows_hold_the_team_box
+  expected: kill
+  note: Counts that miss their five-man unit fall out of the left join as zeros; the season table would no longer hold the team box.
+
+- id: bb-ls-wnba-halves
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/nba/nba_game_impact.py
+  snippet: 'halves = pl.col("seconds_remaining").filter(pl.col("period") == 1).max().over("game_id") > quarter'
+  mutant: 'halves = pl.lit(False)'
+  test: tests/nba/test_nba_lineup_seasons.py::test_wnba_half_seasons_count_the_whole_game
+  expected: kill
+  note: A 1997-2005 WNBA half read as a 10-minute quarter gives each half about ten minutes of clock.
+
+- id: bb-ls-games-with-possessions
+  group: bb-lineup-seasons
+  finding: BB-D4
+  file: sportsdataverse/_common/lineup_seasons.py
+  snippet: 'rows = games_with_possessions(rows)'
+  mutant: 'rows = rows'
+  test: tests/nba/test_nba_lineup_seasons.py::test_a_game_needs_both_play_by_play_and_possessions
+  expected: kill
+  note: A game with play-by-play but no possessions would add points and minutes to units with no possessions.
+
+# --- BB-D8: coach seasons and careers (sportsdataverse/_common/coach_seasons.py + adapters) -------
+- id: bb-cs-espn-name-filter
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'spellings.join(rec.select("season", "team_id", "_name", "wins", "losses"), on=["season", "team_id", "_name"])'
+  mutant: 'spellings.join(rec.select("season", "team_id", "wins", "losses"), on=["season", "team_id"])'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Taking ESPN's count for any coach it lists under the team (its assistants too) puts the wrong runs on the stats candidates.
+- id: bb-cs-opener-shift
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'heads.with_columns(pl.col("season") + 1, pl.lit("first").alias("position")),'
+  mutant: 'heads.with_columns(pl.col("season") + 0, pl.lit("first").alias("position")),'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Reading the opener from the season's own file makes every closer look like he had the whole season.
+- id: bb-cs-gap-position
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: '"all" if last == 0 else "first" if j == 0 else "last" if j == last else "middle"'
+  mutant: '"all" if last == 0 else "last" if j == 0 else "first" if j == last else "middle"'
+  test: tests/nba/test_nba_coach_seasons.py::test_mid_season_change_is_split_by_game
+  expected: kill
+  note: A gap at the start filled by the closer credits Lue with Blatt's 41 games.
+- id: bb-cs-run-wins
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'elif sum(won[len(out) : len(out) + n]) == w:'
+  mutant: 'elif True:'
+  test: tests/nba/test_nba_coach_seasons.py::test_unplaceable_team_season_is_left_uncredited
+  expected: kill
+  note: Without the win check a count that fits no run of games is placed anyway.
+- id: bb-cs-career-sums
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'then(pl.col(c).sum()).alias(c)'
+  mutant: 'then(pl.col(c).mean()).alias(c)'
+  test: tests/nba/test_nba_coach_seasons.py::test_careers_pool_counts
+  expected: kill
+  note: A career is its summed counts; a mean of seasons halves a two-season career's games.
+- id: bb-cs-defense-key
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'pl.col("_defense_key").alias("defense_team_id")'
+  mutant: 'pl.col("_offense_key").alias("defense_team_id")'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_rates_add_up_to_the_team
+  expected: kill
+  note: Keying the defense by the offense's coach credits a team's own possessions as its defense.
+- id: bb-cs-card-first-season
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: 'first = pl.col("career_seasons") == 1'
+  mutant: 'first = pl.col("career_seasons") == 0'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_card_record_against_espn_final_scores
+  expected: kill
+  note: A first-year coach's career record is his season; dropping it leaves those seasons unchecked.
+- id: bb-cs-card-record
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: '"career_wins": int(record.group(1)) if record else None,'
+  mutant: '"career_wins": int(record.group(2)) if record else None,'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_parse_the_coach_card
+  expected: kill
+  note: The card reads W-L; swapping the groups reads losses as wins.
+- id: bb-cs-closer-never-fills
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'pl.col("position") != "last"'
+  mutant: 'pl.col("position") != "none"'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_season_counts_against_basketball_reference
+  expected: kill
+  note: A count-less closer filling the games after a counted opener gives John Beilein Larry Drew's 76 games of 2018-19.
+- id: bb-cs-positions-pinned
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'if _misplaced(order, last):'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_coach_seasons.py::test_unplaceable_team_season_is_left_uncredited
+  expected: kill
+  note: Without the position check a counted opener can be placed at the end of the season.
+- id: bb-cs-unique-placement
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/_common/coach_seasons.py
+  snippet: 'return list(found.pop()) if len(found) == 1 else None'
+  mutant: 'return list(found.pop()) if len(found) >= 1 else None'
+  test: tests/nba/test_nba_coach_seasons.py::test_coach_of_record_against_basketball_reference
+  expected: kill
+  note: Taking one of several fitting placements guesses which end of the season a coach had.
+- id: bb-cs-carry-final-game
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/nba/nba_coach_seasons.py
+  snippet: 'final = regular.sort("game_date", "game_id").group_by("season", "team_id").agg(pl.col("game_id").last())'
+  mutant: 'final = regular.sort("game_date", "game_id").group_by("season", "team_id").agg(pl.col("game_id").first())'
+  test: tests/nba/test_nba_coach_seasons.py::test_playoffs_go_to_the_last_regular_season_coach
+  expected: kill
+  note: Carrying an earlier game's coach gives Sacramento's 2024-25 postseason to Mike Brown, fired in December.
+- id: bb-cs-college-change-uncredited
+  group: bb-coach-seasons
+  finding: BB-D8
+  file: sportsdataverse/mbb/mbb_coach_seasons.py
+  snippet: 'joined.filter(~changed.fill_null(False))'
+  mutant: 'joined.filter(pl.lit(True))'
+  test: tests/mbb/test_mbb_coach_seasons.py::test_changed_season_card_figures_are_the_other_coachs
+  expected: kill
+  note: A changed season's card coach would be credited with his successor's or predecessor's games.
+# --- BB-D27: game flow and sequence stats (runs, droughts, kills, lead changes, game control) ---
+- id: bb-gf-scoring-events
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: '_SCORING_EVENTS = ("made_shot", "free_throw")'
+  mutant: '_SCORING_EVENTS = ("made_shot", "free_throw", "replay")'
+  test: tests/nba/test_nba_game_flow.py::test_stale_scores_on_period_and_replay_rows_are_not_read
+  expected: kill
+  note: Reading the replay rows' score takes 0022500109 from the official 7 lead changes to 9.
+
+- id: bb-gf-tie-is-not-a-lead
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'pl.when(pl.col("_m") != 0).then(pl.col("_m").sign()).forward_fill().shift(1).over(_G).alias("_prev_lead"),'
+  mutant: 'pl.col("_m").sign().shift(1).over(_G).alias("_prev_lead"),'
+  test: tests/nba/test_nba_game_flow.py::test_lead_changes_ties_largest_lead_and_time_leading_match_the_official_box
+  expected: kill
+  note: Counting a tie as a lead makes A ahead, tied, A ahead two lead changes, more than the official box counts.
+
+- id: bb-gf-times-tied
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '((m == 0) & (pl.col("_prev_m") != 0)).sum().cast(pl.Int64).alias("times_tied"),'
+  mutant: '(m == 0).sum().cast(pl.Int64).alias("times_tied"),'
+  test: tests/nba/test_nba_game_flow.py::test_lead_changes_ties_largest_lead_and_time_leading_match_the_official_box
+  expected: kill
+  note: Counting every tied row instead of each time the score became level overcounts times tied.
+
+- id: bb-gf-time-weighted-margin
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '((m * dur).sum() / pl.col("game_seconds").first()).alias("home_avg_margin"),'
+  mutant: 'm.mean().alias("home_avg_margin"),'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A per-row mean is not game control; the margin must be weighted by the clock it holds for.
+
+- id: bb-gf-run-corrections
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'scorer.forward_fill().over(_G).alias("side"),'
+  mutant: 'scorer.alias("side"),'
+  test: tests/nba/test_nba_game_flow.py::test_max_run_is_an_n0_run_inside_the_official_biggest_run
+  expected: kill
+  note: Dropping the score corrections from the run in progress overcounts runs (2025 WNBA 1022500008 reads 14 for the official 11).
+
+- id: bb-gf-run-threshold
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("_n") >= RUN_POINTS).sum().cast(pl.Int64).alias("runs_10"),'
+  mutant: '(pl.col("_n") > RUN_POINTS).sum().cast(pl.Int64).alias("runs_10"),'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A 10-0 run is a 10-point run.
+
+- id: bb-gf-kill-length
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("_stops") // KILL_STOPS).sum().cast(pl.Int64).alias("kills"),'
+  mutant: '(pl.col("_stops") // 2).sum().cast(pl.Int64).alias("kills"),'
+  test: tests/nba/test_nba_game_flow.py::test_stops_and_kills_recount
+  expected: kill
+  note: A kill is three straight stops.
+
+- id: bb-gf-stop-streak-per-defense
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '.with_columns((~pl.col("_stop")).cum_sum().over(_G, "defense_team_id").alias("_streak"))'
+  mutant: '.with_columns((~pl.col("_stop")).cum_sum().over(_G).alias("_streak"))'
+  test: tests/mbb/test_mbb_game_flow.py::test_stops_and_kills_recount
+  expected: kill
+  note: A streak counted over both teams' possessions lets the other side's scoring break it.
+
+- id: bb-gf-wp-side
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '(pl.col("home_avg_wp") if us == "home" else 1.0 - pl.col("home_avg_wp")).alias("avg_wp"),'
+  mutant: '(1.0 - pl.col("home_avg_wp") if us == "home" else pl.col("home_avg_wp")).alias("avg_wp"),'
+  test: tests/nba/test_nba_game_flow.py::test_game_control_tracks_the_margin
+  expected: kill
+  note: Giving each side the other's win probability makes game control run against the margin.
+
+- id: bb-gf-neutral-prior
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: 'prior, _ = home_prior(None, None, league=league, neutral_site=bool(neutral))'
+  mutant: 'prior, _ = home_prior(None, None, league=league, neutral_site=False)'
+  test: tests/mbb/test_mbb_game_flow.py::test_neutral_site_gets_the_even_prior
+  expected: kill
+  note: A neutral-site game has no home-court advantage in the prior.
+
+- id: bb-gf-wnba-halves
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: 'halves = clock.filter(period == 1).max().over("game_id") > _HALF_GAME_FIRST_PERIOD_SECONDS'
+  mutant: 'halves = clock.filter(period == 1).max().over("game_id") > 1e9'
+  test: tests/nba/test_nba_game_flow.py::test_wnba_halves_games
+  expected: kill
+  note: A 2002 WNBA game in quarters would be 5,400 seconds long, not 2,400.
+
+- id: bb-gf-both-scores-move
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '.then(pl.lit("both"))'
+  mutant: '.then(pl.lit("home"))'
+  test: tests/nba/test_nba_game_flow.py::test_runs_and_droughts_recount
+  expected: kill
+  note: A row where both scores move answers any run; crediting it to one side extends that side's run (0022500013, 0022500125).
+
+- id: bb-gf-season-qualifier
+  group: bb-game-flow
+  finding: BB-D27
+  file: sportsdataverse/_common/game_flow.py
+  snippet: '_QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over("season")'
+  mutant: '_QUALIFIER = pl.lit(True)'
+  test: tests/nba/test_nba_game_flow.py::test_season_table
+  expected: kill
+  note: Ranking every team lets a team with a handful of games (a college non-D1 opponent) into the cohort.
+
+# --- BB-D5: player on/off and WOWY pairs ------------------------------------------------------------
+- id: bb-oo-off-is-team-minus-on
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'out = out.with_columns((pl.col(f"{c}_team") - pl.col(f"{c}_on")).alias(f"{c}_off") for c in _TOTALS)'
+  mutant: 'out = out.with_columns((pl.col(f"{c}_team")).alias(f"{c}_off") for c in _TOTALS)'
+  test: tests/nba/test_nba_player_on_off.py::test_on_plus_off_is_the_team_season
+  expected: kill
+  note: An off side that kept the on-court stints would count every possession twice for the player.
+
+- id: bb-oo-gate-both-sides
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'gate = pl.min_horizontal(pl.col("poss_on") + pl.col("opp_poss_on"), pl.col("poss_off") + pl.col("opp_poss_off"))'
+  mutant: 'gate = pl.col("poss_on") + pl.col("opp_poss_on")'
+  test: tests/nba/test_nba_player_on_off.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: A player who almost never sat would be ranked on an off-court sample of a few possessions.
+
+- id: bb-oo-lower-is-better
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'lower_is_better=[m for m, low in _RANKED.items() if low],'
+  mutant: 'lower_is_better=[],'
+  test: tests/nba/test_nba_player_on_off.py::test_ranks_follow_the_gate_and_direction
+  expected: kill
+  note: Without the lower-is-better list the worst defensive on-off ranks first.
+
+- id: bb-oo-games-with-possessions
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'sides = _sides(games_with_possessions(rows))'
+  mutant: 'sides = _sides(rows)'
+  test: tests/nba/test_nba_player_on_off.py::test_a_game_without_possessions_adds_nothing
+  expected: kill
+  note: A game without possessions would add points and minutes with no possessions under them.
+
+- id: bb-wowy-neither
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '(pl.col(f"{c}_team") - pl.col(f"{c}_a") - pl.col(f"{c}_b") + pl.col(f"{c}_both")).alias(f"{c}_neither")'
+  mutant: '(pl.col(f"{c}_team") - pl.col(f"{c}_a") - pl.col(f"{c}_b")).alias(f"{c}_neither")'
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: Without adding back the time together it is taken off twice and the four splits fall short of the team.
+
+- id: bb-wowy-never-together
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'pairs = pairs.with_columns(pl.col(f"{c}_both").fill_null(0) for c in _TOTALS).with_columns('
+  mutant: 'pairs = pairs.with_columns(pl.col(f"{c}_both") for c in _TOTALS).with_columns('
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: Two teammates who never shared the floor would get null splits instead of their seasons apart.
+
+- id: bb-oo-null-not-nan
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '*[pl.when(e.is_finite()).then(e).alias(f"{m}_{side}") for m, e in per100.items()],'
+  mutant: '*[e.alias(f"{m}_{side}") for m, e in per100.items()],'
+  test: tests/nba/test_nba_player_on_off.py::test_wowy_splits_add_up_to_the_team
+  expected: kill
+  note: A pair that never shared the floor would publish NaN ratings together instead of nulls.
+
+# --- BB-D21: situational splits (clutch, period, half, garbage, score, venue, opponent, play type, chance) -------
+# Killers: tests/nba/test_nba_situational.py and tests/mbb/test_mbb_situational.py, on the 2023-24 NBA season,
+# 30 WNBA 2002 two-halves games and two teams' 2024-25 college seasons (tests/fixtures/bb_situational/README.md).
+- id: bb-sit-clutch-label
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '_flag("clutch", "clutch", "not_clutch").alias("clutch"),'
+  mutant: '_flag("clutch", "not_clutch", "clutch").alias("clutch"),'
+  test: tests/nba/test_nba_situational.py::test_clutch_and_venue_are_bb_d3s
+  expected: kill
+  note: The clutch split would hold every possession outside BB-D3's (and stats.nba.com's) clutch window.
+
+- id: bb-sit-defense-margin-sign
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: 'margin = pl.when(own_home).then(pl.col("start_margin")).otherwise(-pl.col("start_margin"))'
+  mutant: 'margin = pl.col("start_margin")'
+  test: tests/nba/test_nba_situational.py::test_score_family_is_the_two_sides
+  expected: kill
+  note: The away side would read the home margin, so a team "leads" when it trails.
+
+- id: bb-sit-defense-venue
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: 'own_home = pl.col("offense_is_home") if is_off else ~pl.col("offense_is_home")'
+  mutant: 'own_home = pl.col("offense_is_home")'
+  test: tests/nba/test_nba_situational.py::test_clutch_and_venue_are_bb_d3s
+  expected: kill
+  note: A team's defensive possessions would land in the opponent's venue split.
+
+- id: bb-sit-top-n-order
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '.filter(pl.col("adj_net_rtg").rank("ordinal", descending=True).over("season") <= top_n)'
+  mutant: '.filter(pl.col("adj_net_rtg").rank("ordinal", descending=False).over("season") <= top_n)'
+  test: tests/nba/test_nba_situational.py::test_vs_top_is_the_bb_d19_top_ten
+  expected: kill
+  note: vs_top would be the games against the ten worst teams.
+
+- id: bb-sit-half-of-quarters
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/_common/situational_splits.py
+  snippet: '.then(pl.format("h{}", pl.when(reg == 2).then(period).otherwise(1)))'
+  mutant: '.then(pl.format("h{}", period))'
+  test: tests/nba/test_nba_situational.py::test_halves_are_their_quarters
+  expected: kill
+  note: The 2nd quarter would be its own "h2" beside the 3rd and 4th, and the 1st half would lose it.
+
+- id: bb-sit-offense-slots
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: '*[pl.col(f"off_player_{i}").alias(s) for i, s in enumerate(OFF_SLOTS, 1)],'
+  mutant: '*[pl.col(f"def_player_{i}").alias(s) for i, s in enumerate(OFF_SLOTS, 1)],'
+  test: tests/nba/test_nba_situational.py::test_player_clutch_against_stats_nba
+  expected: kill
+  note: The offense's possessions would be credited to the defenders, under the offense's team id.
+
+- id: bb-sit-college-slots
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/mbb/mbb_situational.py
+  snippet: '*slots(OFF_SLOTS, ours=True),'
+  mutant: '*slots(OFF_SLOTS, ours=False),'
+  test: tests/mbb/test_mbb_situational.py::test_players_are_five_times_the_team
+  expected: kill
+  note: A college team's offensive possessions would be credited to the opponents' players.
+
+- id: bb-sit-wnba-halves
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: 'return pl.when(first > _HALF_GAME_FIRST_PERIOD_SECONDS).then(2).otherwise(4)'
+  mutant: 'return pl.when(first > _HALF_GAME_FIRST_PERIOD_SECONDS).then(4).otherwise(4)'
+  test: tests/nba/test_nba_situational.py::test_wnba_two_halves_2002
+  expected: kill
+  note: A 1997-2005 WNBA half would start at 10:00 (half the game clock lost) and its 3rd period read as a quarter.
+
+- id: bb-sit-late-period
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '(pl.col("period") >= n_reg).alias("late"),'
+  mutant: '(pl.col("period") >= 4).alias("late"),'
+  test: tests/nba/test_nba_situational.py::test_wnba_two_halves_2002
+  expected: kill
+  note: The WNBA's 2nd half (1997-2005) would never be clutch; only its 2nd overtime would.
+
+- id: bb-sit-college-qualifier
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/mbb/mbb_situational.py
+  snippet: 'keep = pl.col("games") >= 0.5 * pl.col("games").max().over("season")'
+  mutant: 'keep = pl.lit(True)'
+  test: tests/mbb/test_mbb_situational.py::test_vs_top_is_the_qualified_top_25
+  expected: kill
+  note: A non-D1 team rated on one or two games could rank in the top 25 its opponents are split against.
+
+- id: bb-sit-flag-requested-games
+  group: bb-situational
+  finding: BB-D21
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: 'poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8)).join(games, on="game_id", how="semi")'
+  mutant: 'poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))'
+  test: tests/nba/test_nba_situational.py::test_only_the_requested_season_type_is_flagged
+  expected: kill
+  note: A game of another season type with a gap in its play-by-play would fail the regular-season build.
+
+- id: bb-epv-booster-transition-window
+  group: bb-epv
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+
+- id: bb-ctg-alias-never-overwrites
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    if old in possessions.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_play_context.py::test_the_copies_never_overwrite_a_published_flag
+  expected: kill
+  note: The deprecated plain-name copy would overwrite BB-D7's published is_transition / is_garbage_time.
+
+- id: bb-ctg-legacy-frame-names
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    df = _ctg_names(possessions)'
+  mutant: '    df = possessions'
+  test: tests/nba/test_nba_play_context.py::test_a_frame_saved_before_the_rename_still_rolls_up
+  expected: kill
+  note: A possessions frame saved before the *_ctg rename would raise in the rollups.
+
+- id: bb-sit-reflag-a-flagged-release
+  group: bb-situational
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: 'flagged = add_possession_flags(poss.drop(*POSSESSION_FLAGS_SCHEMA, strict=False), events)'
+  mutant: 'flagged = add_possession_flags(poss, events)'
+  test: tests/nba/test_nba_situational.py::test_a_release_that_carries_the_flags_is_reflagged
+  expected: kill
+  note: Once the producers publish BB-D7's flags on the possessions release, the rows would raise on the clash.
+
+- id: bb-ps-season-relative-mean
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'mu = x.mean().over(by)'
+  mutant: 'mu = x.mean()'
+  test: tests/nba/test_nba_play_style.py::test_assignment_is_as_of_its_own_season
+  expected: kill
+  note: A pooled mean standardizes a season against the others, so a later season's rows would move an earlier one's archetypes.
+
+- id: bb-ps-z-clip
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: '.then(((x - mu) / sd).clip(-Z_CLIP, Z_CLIP))'
+  mutant: '.then((x - mu) / sd)'
+  test: tests/mbb/test_mbb_play_style.py::test_zscores_are_clipped
+  expected: kill
+  note: Unclipped, the one WBB dunker sits dozens of standard deviations from every center.
+
+- id: bb-ps-fit-train-only
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'train = season_zscores(features, cols).filter(pl.col("season").is_in(list(train_seasons)))'
+  mutant: 'train = season_zscores(features, cols)'
+  test: tests/nba/test_nba_play_style.py -k test_artifact_is_the_fit_of_the_committed_corpus
+  expected: kill
+  note: Fitting on every season would put the holdout seasons inside the centers they are scored against.
+
+- id: bb-ps-synergy-implied-total
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/nba/nba_play_style.py
+  snippet: 'pl.coalesce(implied.filter(pl.col("poss_pct") > 0).median(), pl.col("poss").sum()).alias("syn_poss")'
+  mutant: 'pl.col("poss").sum().alias("syn_poss")'
+  test: tests/nba/test_nba_play_style.py::test_synergy_mix_is_stats_nba_com_frequency
+  expected: kill
+  note: stats.nba.com hides a player's low-volume play types, so the published rows understate his possessions.
+
+- id: bb-ps-player-floor
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/nba/nba_play_style.py
+  snippet: 'return df.filter(pl.col("min") >= PLAYER_MIN_SHARE * pl.col("min").max().over("season"))'
+  mutant: 'return df'
+  test: tests/nba/test_nba_play_style.py::test_offense_player_builder_reproduces_the_corpus
+  expected: kill
+  note: Without the minutes floor, deep-bench players with a few possessions would be clustered and published.
+
+- id: bb-ps-college-games
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/mbb/mbb_player_value_constants.py
+  snippet: 'pl.len().alias("games"),'
+  mutant: 'pl.lit(30).alias("games"),'
+  test: tests/mbb/test_mbb_play_style.py::test_lineup_role_features_are_hand_counts
+  expected: kill
+  note: Minutes per game over a fixed season length would understate a player who missed games.
+
+- id: bb-ps-all-null-season
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features, cols)'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: Without the guard a feature a release stopped carrying becomes the season mean for every row.
+
+- id: bb-ps-all-null-fit
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # fit'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: A training season that lost a feature would be fit with that feature at the mean for every row.
+
+- id: bb-ps-all-null-selection
+  group: bb-play-style
+  finding: BB-D20
+  file: sportsdataverse/_common/play_style.py
+  snippet: 'check_features(features.filter(pl.col("season").is_in(list(train_seasons))), cols)  # selection'
+  mutant: 'None'
+  test: tests/nba/test_nba_play_style.py::test_a_season_missing_a_feature_is_refused
+  expected: kill
+  note: k would be chosen on a training season whose missing feature sits at the mean for every row.
+
+# --- BB-D26: our own WAR and VORP --------------------------------------------------------------
+# Killers: tests/nba/test_nba_player_war.py, tests/mbb/test_mbb_player_war.py and
+# tests/tools/test_fit_player_war.py, on committed real captures (tests/fixtures/bb_player_war,
+# the player-value and team-luck corpora).
+- id: bb-war-bpm-repair
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '.with_columns((pl.col("bpm") - _wmean("bpm", "min", keys) + pl.col("_net") / 5).alias("bpm"))'
+  mutant: '.with_columns(pl.col("bpm").alias("bpm"))'
+  test: tests/nba/test_nba_player_war.py::test_bpm_repair_restores_the_team_constant
+  expected: kill
+  note: Without the repair the release's BPM keeps a team constant five times too large.
+
+- id: bb-war-anchor-net-fifth
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '((pl.col(s) - _wmean(s, "poss", keys)).fill_null(0.0) + pl.col("net") / 5).alias(s) for s in sources'
+  mutant: '((pl.col(s) - _wmean(s, "poss", keys)).fill_null(0.0) + pl.col("net")).alias(s) for s in sources'
+  test: tests/nba/test_nba_player_war.py::test_anchor_makes_each_team_add_up_to_its_margin
+  expected: kill
+  note: The pro BPM bug itself -- each of five players carrying the whole team rating.
+
+- id: bb-war-league-centre
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'return out.with_columns((pl.col(s) - _wmean(s, "poss", ["season"])).alias(s) for s in sources)'
+  mutant: 'return out'
+  test: tests/mbb/test_mbb_player_war.py::test_league_war_and_vorp_totals
+  expected: kill
+  note: College adj_em is centred on the plain D1 mean; uncentred, 0 is not the average player and the total drifts.
+
+- id: bb-war-replacement
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'a = a.with_columns(((pl.col(s) - repl) * pl.col("poss")).alias(f"_par_{s}") for s in rated)'
+  mutant: 'a = a.with_columns((pl.col(s) * pl.col("poss")).alias(f"_par_{s}") for s in rated)'
+  test: tests/nba/test_nba_player_war.py::test_league_war_is_wins_minus_replacement_team_wins
+  expected: kill
+  note: Value above average, not replacement -- the league total would be zero wins.
+
+- id: bb-war-pts-per-win
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '*[(pl.col(f"_par_{s}") / 100 / ppw).alias("war" if s == "rating" else f"war_{s}") for s in rated],'
+  mutant: '*[(pl.col(f"_par_{s}") / 100).alias("war" if s == "rating" else f"war_{s}") for s in rated],'
+  test: tests/nba/test_nba_player_war.py::test_war_and_vorp_formulas
+  expected: kill
+  note: Points above replacement, not wins.
+
+- id: bb-war-vorp-scale
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '(pl.col("_par_rating") / pl.col("_lg_poss")).alias("vorp"),'
+  mutant: '(pl.col("_par_rating") / 100).alias("vorp"),'
+  test: tests/nba/test_nba_player_war.py::test_war_and_vorp_formulas
+  expected: kill
+  note: VORP in points, not per 100 team possessions of a season (Basketball-Reference's scale).
+
+- id: bb-war-pool-share
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'ranked.filter(pl.col("_cum") <= share)'
+  mutant: 'ranked.filter(pl.col("_cum") <= 1.0)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: The whole league as the pool puts replacement at the league average.
+
+- id: bb-war-poss-halved
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/nba/nba_player_war.py
+  snippet: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg((pl.len() / 2).alias("poss"))'
+  mutant: 'player_games = on_court.group_by("season", "team_id", "game_id", "player_id").agg(pl.len().cast(pl.Float64).alias("poss"))'
+  test: tests/nba/test_nba_player_war.py::test_possession_stints_count_regular_season_possessions_and_points
+  expected: kill
+  note: Offensive plus defensive possessions not halved -- the release war column's double count.
+
+- id: bb-war-regular-season
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/nba/nba_player_war.py
+  snippet: 'games = schedule.filter(pl.col("season_type") == "regular-season").select(pl.col("game_id").cast(pl.Utf8))'
+  mutant: 'games = schedule.select(pl.col("game_id").cast(pl.Utf8))'
+  test: tests/nba/test_nba_player_war.py::test_possession_stints_count_regular_season_possessions_and_points
+  expected: kill
+  note: Playoff possessions would count toward the regular season.
+
+- id: bb-war-college-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '(pl.col("min") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")'
+  mutant: '(pl.col("min") * pl.col("adj_tempo")).alias("poss")'
+  test: tests/mbb/test_mbb_player_war.py::test_stints_are_division_i_with_minutes_times_tempo
+  expected: kill
+  note: Tempo is possessions per 40 minutes.
+
+- id: bb-war-college-d1
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '_D1 = pl.col("games") >= _D1_MIN_GAMES'
+  mutant: '_D1 = pl.col("games") >= 0'
+  test: tests/mbb/test_mbb_player_war.py::test_stints_are_division_i_with_minutes_times_tempo
+  expected: kill
+  note: The non-D1 opponents (a game or two each) would join the league and its centring.
+
+- id: bb-war-fit-level
+  group: bb-player-war
+  finding: BB-D26
+  file: tools/fit_player_war.py
+  snippet: 'return round(float(replacement_level_by_season(player_seasons)["replacement_level"].mean()), 2)'
+  mutant: 'return round(float(replacement_level_by_season(player_seasons)["replacement_level"].max()), 2)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: The frozen level must be the train mean.
+
+- id: bb-war-fit-ppw
+  group: bb-player-war
+  finding: BB-D26
+  file: tools/fit_player_war.py
+  snippet: 'return round(1.0 / slope, 2)'
+  mutant: 'return round(slope, 2)'
+  test: tests/tools/test_fit_player_war.py
+  expected: kill
+  note: Wins per point, not points per win.
+
+- id: bb-war-unrated-team-average
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '.fill_null(0.0) + pl.col("net") / 5).alias(s)'
+  mutant: ' + pl.col("net") / 5).alias(s)'
+  test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
+  expected: kill
+  note: An unrated player would get a null WAR instead of his team's average rating.
+
+- id: bb-war-non-finite-missing
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'finite = stints.with_columns(pl.when(pl.col(s).is_finite()).then(pl.col(s)).alias(s) for s in sources)'
+  mutant: 'finite = stints'
+  test: tests/nba/test_nba_player_war.py::test_a_player_without_a_rating_is_his_team_average
+  expected: kill
+  note: One NaN rating would turn its team's and season's means, and so every WAR of the season, into NaN.
+
+- id: bb-war-draw-within-team
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'counts[:, idx] = rng.multinomial(len(idx), np.full(len(idx), 1 / len(idx)), size=n_boot)'
+  mutant: 'counts[:, idx] = 1.0'
+  test: tests/nba/test_nba_player_war.py
+  expected: kill
+  note: No resampling, so every replicate is the season and the interval collapses to the point.
+
+- id: bb-war-poss-move-together
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'poss = (occ @ counts.T).T  # replicate x stint'
+  mutant: 'poss = np.repeat(np.asarray(occ.sum(axis=1)).T, counts.shape[0], axis=0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A player's possessions held at the season total instead of moving with the drawn games.
+
+- id: bb-war-net-resampled
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'net = frames["net"] + (t_margin / t_poss - raw) * 100'
+  mutant: 'net = frames["net"] + 0 * t_poss'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: The team net rating held fixed -- the team side's sampling noise left out of the interval.
+
+- id: bb-war-interval-percentiles
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: '_INTERVAL = (5.0, 95.0)'
+  mutant: '_INTERVAL = (25.0, 75.0)'
+  test: tests/nba/test_nba_player_war.py::test_war_interval
+  expected: kill
+  note: A 50% interval published as the 90% one.
+
+- id: bb-war-college-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: '(pl.col("minutes") / _GAME_MINUTES * pl.col("adj_tempo")).alias("poss")'
+  mutant: '(pl.col("minutes") * pl.col("adj_tempo")).alias("poss")'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Game possessions off the box BPM minutes basis, so the interval would resample the wrong playing time.
+
+- id: bb-war-college-team-game-poss
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games = rows.group_by(keys).agg((pl.col("poss").sum() / 5).alias("poss"), pl.col("margin").first())'
+  mutant: 'team_games = rows.group_by(keys).agg(pl.col("poss").sum().alias("poss"), pl.col("margin").first())'
+  test: tests/mbb/test_mbb_player_war.py::test_game_rows_on_a_real_box_slice
+  expected: kill
+  note: Team possessions five times too many, so the replicate's raw net rating shrinks toward zero.
+
+# --- BB-D24: EPV and EPV added (sportsdataverse/nba/nba_epv.py) -----------------------------------
+# Killers: tests/nba/test_nba_epv.py on the committed 2024-25 NBA holdout games
+# (tests/fixtures/bb_epv), scored with the bundled booster.
+- id: bb-epv-start-margin-before-event
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(prev["_h"] - prev["_a"]).alias("_pre_home_margin")'
+  mutant: '(pl.col("_h") - pl.col("_a")).alias("_pre_home_margin")'
+  test: tests/nba/test_nba_epv.py::test_start_margin_is_the_lead_before_the_first_event
+  expected: kill
+  note: The margin after the start event counts a possession's own first basket in its starting state.
+
+- id: bb-epv-transition-as-of
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(seen & pl.col("is_transition"))'
+  mutant: 'pl.when(pl.col("is_transition"))'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: is_transition is known only once the first shot is taken; before it the flag leaks the future.
+
+- id: bb-epv-added-points-term
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(pl.col("points") + pl.col("epv_after") - pl.col("epv_before"))'
+  mutant: '(pl.col("epv_after") - pl.col("epv_before"))'
+  test: tests/nba/test_nba_epv.py::test_epv_added_telescopes_over_each_possession
+  expected: kill
+  note: Without the points on the play a made shot reads as a loss of EPV.
+
+- id: bb-epv-end-prices-next-start
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(float(mean) * scale - pl.col("_next_start"))'
+  mutant: '.then(0.0)'
+  test: tests/nba/test_nba_epv.py::test_a_possession_end_prices_the_next_start
+  expected: kill
+  note: A live-ball turnover and a dead-ball one would cost the offense the same.
+
+- id: bb-epv-offense-points-side
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(pl.col("_dh"))'
+  mutant: '.then(pl.col("_da"))'
+  test: tests/nba/test_nba_epv.py::test_labels_sum_to_the_engine_points
+  expected: kill
+  note: The label must be the offense's points, read from its own side of the score.
+
+- id: bb-epv-ft-foul-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=pl.lit(False),'
+  test: tests/nba/test_nba_epv.py::test_free_throws_land_on_the_foul_lineup
+  expected: kill
+  note: BB-D6's rule; a player subbed in between a foul and its free throws is not on for them.
+
+- id: bb-epv-action-lineup
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'slot = {k: pl.when(known).then(pl.col(f"_{k}")).otherwise(v) for k, v in slot.items()}'
+  mutant: 'known = known'
+  test: tests/nba/test_nba_epv.py::test_on_court_reads_the_action_lineup
+  expected: kill
+  note: Without the game lineups release a mid-possession substitute is credited with nothing.
+
+- id: bb-epv-steal-credit
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(-prev)'
+  mutant: '.then(None)'
+  test: tests/nba/test_nba_epv.py::test_own_actions_credit_the_actor
+  expected: kill
+  note: A steal or block credits the defender with the turnover or miss it ended.
+
+- id: bb-epv-nba-start-year
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'start = [x - 1 for x in _check_seasons(seasons)]'
+  mutant: 'start = _check_seasons(seasons)'
+  test: tests/nba/test_nba_epv.py::test_season_loaders_take_the_start_year
+  expected: kill
+  note: The NBA loaders take the start year; season 2025 is the 2024 asset.
+
+- id: bb-epv-window-closes-at-dead-ball
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '& ~stopped'
+  mutant: '& pl.lit(True)'
+  test: tests/nba/test_nba_epv.py::test_the_transition_window_closes_at_a_dead_ball
+  expected: kill
+  note: After a timeout or a foul the defense is set; the window must not stay open on the clock alone.
+
+- id: bb-epv-team-event-team-id
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(pl.col("team_id").fill_null(0) == 0)'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The feed files a team rebound under team_id 0; read raw, every one is the defense's.
+
+- id: bb-epv-rebound-between-free-throws
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(between_fts).then(None).otherwise(_last_event_code())'
+  mutant: '_last_event_code()'
+  test: tests/nba/test_nba_epv.py::test_team_rebounds_are_dead_balls_of_the_right_side
+  expected: kill
+  note: The dead-ball rebound after a missed first free throw leaves the trip going, not a live board.
+
+- id: bb-epv-shot-zone-three
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'pl.when(et.is_in(_SHOTS) & (pl.col("shot_value") == 3))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nba/test_nba_epv.py::test_shot_zones_are_coded_and_matter
+  expected: kill
+  note: Threes must be their own zone, not long twos by distance.
+
+- id: bb-epv-technical-keeps-trip
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'technical = et.is_in(["foul", "free_throw"]) & pl.col("sub_type").fill_null("").str.contains("Technical")'
+  mutant: 'technical = pl.lit(False)'
+  test: tests/nba/test_nba_epv.py::test_a_technical_inside_a_trip_leaves_it_pending
+  expected: kill
+  note: A technical between an ordinary trip's free throws does not end the trip.
+
+- id: bb-epv-ordinary-ft-skips-technical-foul
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'is_foul=(pl.col("event_type") == "foul") & ~technical,'
+  mutant: 'is_foul=(pl.col("event_type") == "foul"),'
+  test: tests/nba/test_nba_epv.py::test_an_ordinary_free_throw_after_a_technical_stays_on_its_foul_lineup
+  expected: kill
+  note: An ordinary free throw belongs to its shooting foul's ten, not to a later technical's.
+
+- id: bb-epv-lineup-five-distinct
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.filter(pl.col("_five").list.drop_nulls().list.n_unique() == 5)'
+  mutant: '.filter(pl.col("_five").list.drop_nulls().list.len() == 5)'
+  test: tests/nba/test_nba_epv.py::test_a_lineup_with_a_repeated_player_is_left_out
+  expected: kill
+  note: A slot glitch repeating one player must not publish a four-player unit.
+
+- id: bb-epv-bundled-booster-season-floor
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '_check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)'
+  mutant: 'pass'
+  test: tests/nba/test_nba_epv.py::test_inputs_are_checked
+  expected: kill
+  note: The bundled booster refuses a season before its first training one, whoever calls it.
+
+- id: bb-epv-college-split-other-sides-shots
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: 'shooter.forward_fill().over("game_id", "poss_num").fill_null(pl.col("_poss_side")).alias("_off_side")'
+  mutant: 'pl.col("_poss_side").alias("_off_side")'
+  test: tests/mbb/test_mbb_epv.py::test_no_possession_holds_the_other_sides_shots
+  expected: kill
+  note: The release stamps a few free throws on the other side's possession; unsplit, their points credit no one.
+
+- id: bb-epv-college-score-from-baskets
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '*[_running_score(side).alias(name) for side, name in ((_HOME, "score_home"), (_AWAY, "score_away"))],'
+  mutant: 'pl.col("home_score").cast(pl.Int64).alias("score_home"), pl.col("away_score").cast(pl.Int64).alias("score_away"),'
+  test: tests/mbb/test_mbb_epv.py::test_the_score_is_summed_from_the_baskets
+  expected: kill
+  note: About one game in ten has home_score on the away team, and some baskets score a row early.
+
+- id: bb-epv-college-trailing-rows-move
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '.then(pl.col("_seg") + 1)'
+  mutant: '.then(pl.col("_seg"))'
+  test: tests/mbb/test_mbb_epv.py::test_a_steal_opens_the_next_possession
+  expected: kill
+  note: The steal after a turnover would end the turnover's possession instead of starting the next one live.
+
+- id: bb-epv-college-steal-starts-live
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: '.then(pl.lit("OffLiveBallTurnover"))'
+  mutant: '.then(pl.lit("OffDeadball"))'
+  test: tests/mbb/test_mbb_epv.py::test_a_steal_opens_the_next_possession
+  expected: kill
+  note: A live-ball turnover start would read as a dead ball.
+
+- id: bb-epv-level-as-of
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '(pl.col("_p").cum_sum().over("season") - pl.col("_p")).alias("_p_before"),'
+  mutant: 'pl.col("_p").cum_sum().over("season").alias("_p_before"),'
+  test: tests/mbb/test_mbb_epv.py::test_the_level_is_as_of_each_game
+  expected: kill
+  note: A game's level would read its own day's points (its own possessions among them).
+
+- id: bb-epv-level-applied
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'scored = scored.with_columns(pl.col("epv") * pl.col("level_scale"))'
+  mutant: 'scored = scored.with_columns(pl.col("epv"))'
+  test: tests/mbb/test_mbb_epv.py::test_the_level_scales_every_value
+  expected: kill
+  note: The level would be fitted and gated but never served.
+
+# --- BB-D10: four-factor RAPM split ----------------------------------------------------------------
+- id: bb-frapm-ft-chances
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'ftr = pl.when(pl.col("fta") > 0).then((pl.col("points") - fg_pts) - v * chances.clip(lower_bound=0)).otherwise(0)'
+  mutant: 'ftr = pl.when(pl.col("fta") > 0).then(pl.col("points") - fg_pts).otherwise(0)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_part_on_real_possessions
+  expected: kill
+  note: Without the shot each free-throw chance replaced the sum still holds (the remainder absorbs it), but every trip is overvalued by v.
+
+- id: bb-frapm-one-penalty
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'coef, var, cov = _ridge(X, Y, alpha, games)'
+  mutant: 'coef, var, cov = _ridge(X, Y, alpha, games); coef[:, 1:] = _ridge(X, Y[:, 1:], 10 * alpha, games)[0]'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_components_add_up_to_the_totals
+  expected: kill
+  note: The components only add up to the total when every response is fit at the one penalty.
+
+- id: bb-frapm-defense-sign
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'cols[d] = -100 * coef[P:, k]'
+  mutant: 'cols[d] = (100 if k else -100) * coef[P:, k]'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_components_add_up_to_the_totals
+  expected: kill
+  note: A defensive component left unflipped reads lower-is-better and no longer adds up to d_rapm.
+
+- id: bb-frapm-centred-gram
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
+  mutant: 'gram = (X.T @ X).toarray()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_one_penalty_for_every_season_and_type
+  expected: kill
+  note: An uncentred Gram matrix fits a different ridge than nba_rapm's intercept-fitted one.
+
+- id: bb-frapm-season-apart
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'for (season,), part in possessions.partition_by("season", as_dict=True).items():'
+  mutant: 'for season, part in [(possessions["season"].max(), possessions)]:'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_seasons_are_fit_apart_and_repeat
+  expected: kill
+  note: A pooled fit would put one season's possessions into another season's ratings.
+
+- id: bb-frapm-season-type
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_player_factor_rapm.py
+  snippet: 'games = schedule.filter(pl.col("season_type") == season_type).select(pl.col("game_id").cast(pl.Utf8)).unique()'
+  mutant: 'games = schedule.select(pl.col("game_id").cast(pl.Utf8)).unique()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_totals_are_the_published_plain_rapm
+  expected: kill
+  note: The regular-season split would take in the playoff possessions.
+
+- id: bb-frapm-value-through-fit
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'Y = factor_targets(poss, v).to_numpy()'
+  mutant: 'Y = factor_targets(poss, 1.0).to_numpy()'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: A fit with a fixed shot value still adds up, but values every turnover and rebound at the wrong price.
+
+- id: bb-frapm-defense-labels
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '_DEF_NAME = {f: f"d_{''drb'' if f == ''orb'' else f}_rapm" for f in FACTORS}'
+  mutant: '_DEF_NAME = {f: f"d_{ {''orb'': ''drb'', ''tov'': ''ftr'', ''ftr'': ''tov''}.get(f, f)}_rapm" for f in FACTORS}'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: Two swapped defensive labels keep the sum but publish forced turnovers as opponent free throws.
+
+- id: bb-frapm-factor-order
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'FACTORS = ("efg", "tov", "orb", "ftr", "other")'
+  mutant: 'FACTORS = ("efg", "orb", "tov", "ftr", "other")'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_component_is_its_own_ridge
+  expected: kill
+  note: A factor list out of step with the response columns labels the turnover fit as rebounding.
+
+- id: bb-frapm-se-by-game
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: 'games = poss[GAME].cast(pl.Utf8).rank("dense").cast(pl.Int64).to_numpy() - 1'
+  mutant: 'games = np.arange(poss.height)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_standard_errors_are_clustered_by_game
+  expected: kill
+  note: Possession-level errors ignore that a game's possessions share players and conditions.
+
+- id: bb-frapm-value-moves
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '(-v * pl.col("tov")).cast(pl.Float64).alias("tov"),'
+  mutant: '(-v * pl.col("tov") - v * pl.col("oreb")).cast(pl.Float64).alias("tov"),'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_each_part_on_real_possessions
+  expected: kill
+  note: Value moved between parts (rebounds charged to turnovers) keeps every sum; only the per-possession parts show it.
+
+- id: bb-frapm-zero-match-warning
+  group: bb-factor-rapm
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_player_factor_rapm.py
+  snippet: '    if out.height == 0:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_public_builders
+  expected: kill
+  note: A season type with no game would return an empty table without a word.
+
+- id: bb-wp-rated-prior-ignored
+  group: bb-wp-cards
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_game_page.py
+  snippet: '    if rated_home_prob is not None and 0.0 <= float(rated_home_prob) <= 1.0:  # NaN and inf fall through'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_wp_model_cards.py::test_rated_prior_beats_the_home_court_fallback
+  expected: kill
+  note: A home_prior that drops the rating serves home court alone to every lineless game.
+
+- id: bb-wp-rated-prior-same-day
+  group: bb-wp-cards
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_rated_prior.py
+  snippet: 'rows.filter(pl.col("game_date") < day)'
+  mutant: 'rows.filter(pl.col("game_date") <= day)'
+  test: tests/nba/test_nba_wp_model_cards.py::test_rating_uses_only_games_before_the_tip
+  expected: kill
+  note: An inclusive boundary rates a game from possessions played the same day (as-of leakage).
+
+- id: bb-war-seed-per-team-season
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'rng = np.random.default_rng([_SEED, int(season), zlib.crc32(str(team).encode())])'
+  mutant: 'rng = np.random.default_rng([_SEED, int(season)])'
+  test: tests/nba/test_nba_player_war.py::test_a_team_s_draws_do_not_depend_on_the_other_teams
+  expected: kill
+  note: Without the team in the seed, every team in a season would draw the same counts.
+
+- id: bb-war-interval-consistency
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'if (bad := check.filter(gap)).height:'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_player_war.py::test_stints_without_their_game_rows_are_refused
+  expected: kill
+  note: Without the check a team missing its game rows turns its whole season's interval to NaN.
+
+- id: bb-war-college-passes-games
+  group: bb-player-war
+  finding: BB-D26
+  file: sportsdataverse/mbb/mbb_player_war.py
+  snippet: 'team_games=team_games, player_games=player_games'
+  mutant: 'team_games=None, player_games=None'
+  test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
+  expected: kill
+  note: The college public path would publish a null interval on every row.
+
+- id: bb-epv-college-wrong-basket-ends
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/mbb/mbb_epv.py
+  snippet: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("Wrong Basket")'
+  mutant: 'return pl.col("_nba_type").is_in(_LIVE_EVENTS) | pl.col("event_type").str.starts_with("No Such Event")'
+  test: tests/mbb/test_mbb_epv.py::test_a_wrong_basket_ends_its_possession
+  expected: kill
+  note: A wrong-basket two would trail into the next possession, crediting the side it was scored against.
+
+# --- BB-D10 follow-up: one plain-RAPM ridge penalty per league (tools/fit_rapm_penalty.py) ---------
+- id: bb-rapm-penalty-per-fit-pick
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '        penalty = rapm_penalty(possessions, league_id) if alpha is None else alpha'
+  mutant: '        penalty = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=DEFAULT_RAPM_ALPHAS).fit(X, y).alpha_) if alpha is None else alpha'
+  test: tests/nba/test_nba_rapm.py::test_penalty_does_not_follow_the_season
+  expected: kill
+  note: The old rule, RidgeCV's pick per fit, whose flips between grid points made the RAPM scale jump between seasons.
+
+- id: bb-rapm-penalty-league-from-ids
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '    league = league_id or (found.pop() if found else "00")'
+  mutant: '    league = league_id or "00"'
+  test: tests/nba/test_nba_rapm.py::test_penalty_league_comes_from_the_game_ids
+  expected: kill
+  note: The WNBA publisher calls nba_rapm(poss) without a league; without the game-id prefix it would get the NBA penalty.
+
+- id: bb-frapm-penalty-per-season-pick
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/_common/factor_rapm.py
+  snippet: '    alpha = rapm_penalty(poss, league_id)'
+  mutant: '    alpha = float(__import__("sklearn.linear_model", fromlist=["RidgeCV"]).RidgeCV(alphas=np.logspace(2, 5, 8)).fit(X, Y[:, 0]).alpha_)'
+  test: tests/nba/test_nba_player_factor_rapm.py::test_one_penalty_for_every_season_and_type
+  expected: kill
+  note: The split must fit at plain RAPM's fixed penalty; a per-season pick puts its components on a season-varying scale.
+
+- id: bb-rapm-penalty-centred-solve
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: '    gram = (X.T @ X).toarray() - n * np.outer(mean, mean)'
+  mutant: '    gram = (X.T @ X).toarray()'
+  test: tests/nba/test_nba_rapm.py::test_rapm_is_the_ridge_at_the_league_penalty
+  expected: kill
+  note: An uncentred Gram matrix penalizes the intercept direction, a different ridge from the intercept-fitted one.
+
+- id: bb-rapm-penalty-hand-moved
+  group: bb-rapm-penalty
+  finding: BB-D10
+  file: sportsdataverse/nba/nba_rapm.py
+  snippet: 'RAPM_PENALTY: dict[str, float] = {"00": 2682.6957952797247, "10": 1930.6977288832495}'
+  mutant: 'RAPM_PENALTY: dict[str, float] = {"00": 5179.474679231207, "10": 1930.6977288832495}'
+  test: tests/tools/test_fit_rapm_penalty.py::test_frozen_values_are_the_pooled_pick
+  expected: kill
+  note: A frozen value moved by hand (here back to the old rule's recent NBA pick) no longer matches the committed CV corpus.
+
+- id: bb-epv-accepted-exception-season
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'e["season"] == season'
+  mutant: 'True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted WNBA bucket would be excused in any season, not only its 2026 confirmation.
+
+- id: bb-epv-accepted-exception-value
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and abs(e["bias"] - bucket["bias"]) <= _EXCEPTION_TOL'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: The accepted bucket would stay excused however far its bias moved on a refit.
+
+- id: bb-epv-level-needs-dates
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'raise ValueError("a booster with a level needs game_order (each game''s date)")'
+  mutant: 'game_order = games.select("game_id", pl.col("game_id").alias("game_order"))'
+  test: tests/wnba/test_wnba_epv.py::test_the_level_reads_the_schedule_dates
+  expected: kill
+  note: Without dates the level would order games by game_id, so same-day games would see each other.
+
+- id: bb-epv-accepted-exception-n
+  group: bb-epv
+  finding: BB-D24
+  file: tools/models/nba_epv/train_epv.py
+  snippet: 'and e["n"] == bucket["n"]'
+  mutant: 'and True'
+  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  expected: kill
+  note: A different sample of the accepted bucket (another n) would stay excused.
+
+# --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
+- id: nba-engine-legacy-missed-ft
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))'
+  mutant: '    return any((row.get(k) or "").strip() for k in ("score_home", "score_away"))'
+  test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
+  expected: kill
+  note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.
+
+# --- NBA / WNBA possession engine: defense scores inside a possession ------------------------------
+- id: nba-engine-defense-scores
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '    credit_defense_scoring(records, carries)'
+  mutant: '    pass'
+  test: tests/nba/test_nba_possessions.py::test_defense_scores_are_credited_to_the_scoring_team
+  expected: kill
+  note: A defense technical FT (or a basket inside the other team's possession) would be dropped again; 255 of 1,230 NBA 2025-26 games miss the final score.
+
+# --- NBA / WNBA possession engine: rebounds that follow no miss ------------------------------------
+- id: nba-engine-rebound-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0'
+  mutant: '    return True'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: A placeholder rebound (a team rebound after a shot-clock turnover) or one after a steal would again open a possession for the team that just lost the ball.
+- id: nba-engine-putback-rebound-order
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)'
+  mutant: '        deferred = False'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: An offensive rebound the pbp logs after its own putback would again open a phantom possession (the largest pre-2017-18 drift cause, 65,454 points).
+- id: nba-engine-putback-start-type
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]'
+  mutant: '        ender = events[-1]'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: The possession after a putback whose rebound the pbp logs after it would start OffMissedShot instead of OffMadeShot (559 possessions in a 300-game 2016-17 sample).
+- id: bb-espn-live-summary-without-article
+  group: bb-sources
+  finding: BB-D12
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '"article": pbp_txt.get("article", []),  # a live game has no recap yet'
+  mutant: '"article": pbp_txt["article"],'
+  test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
+  expected: kill
+  note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
+- id: nba-engine-rebound-offense-fallback
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) and ev.get("event_type") != "violation")'
+  test: tests/nba/test_nba_possessions.py::test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can
+  expected: kill
+  note: A group whose only sided row is a rebound that follows no miss (a last-second team attempt, then a team rebound) would get no offense and be dropped; 1 group in NBA 2025-26.
+- id: nba-engine-violation-not-an-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) or not strict)'
+  test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
+  expected: kill
+  note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).

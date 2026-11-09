@@ -15,7 +15,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 325 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 347 | — |
 
 ## ESPN {#espn}
 
@@ -166,9 +166,10 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_bracket_sim`](reference/additional/models-and-calculators-2#wbb_bracket_sim)
 - [`wbb_in_game_win_prob`](reference/additional/models-and-calculators-2#wbb_in_game_win_prob)
 - [`wbb_predict_games`](reference/additional/models-and-calculators-2#wbb_predict_games)
+- [`wbb_season_projections`](reference/additional/models-and-calculators-2#wbb_season_projections)
 - [`wbb_season_sim`](reference/additional/models-and-calculators-2#wbb_season_sim)
-- [`wbb_team_ratings`](reference/additional/models-and-calculators-2#wbb_team_ratings)
-- [`win_prob_from_margin`](reference/additional/models-and-calculators-2#win_prob_from_margin)
+- [`wbb_team_ratings`](reference/additional/models-and-calculators-3#wbb_team_ratings)
+- [`win_prob_from_margin`](reference/additional/models-and-calculators-3#win_prob_from_margin)
 
 ### Analytics {#analytics}
 
@@ -213,8 +214,29 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`test_positional_aware_filter`](reference/additional/analytics#test_positional_aware_filter)
 - [`using_roster_pos`](reference/additional/analytics#using_roster_pos)
 - [`wbb_bracketology`](reference/additional/analytics-2#wbb_bracketology)
-- [`wbb_strength_of_schedule`](reference/additional/analytics-2#wbb_strength_of_schedule)
-- [`weighted_avg`](reference/additional/analytics-2#weighted_avg)
+- [`wbb_coach_careers`](reference/additional/analytics-2#wbb_coach_careers)
+- [`wbb_coach_seasons`](reference/additional/analytics-2#wbb_coach_seasons)
+- [`wbb_epv_lineup_games`](reference/additional/analytics-2#wbb_epv_lineup_games)
+- [`wbb_epv_player_games`](reference/additional/analytics-2#wbb_epv_player_games)
+- [`wbb_epv_plays`](reference/additional/analytics-2#wbb_epv_plays)
+- [`wbb_epv_team_games`](reference/additional/analytics-2#wbb_epv_team_games)
+- [`wbb_game_flow`](reference/additional/analytics-2#wbb_game_flow)
+- [`wbb_game_lineups_used`](reference/additional/analytics-2#wbb_game_lineups_used)
+- [`wbb_game_player_impact`](reference/additional/analytics-2#wbb_game_player_impact)
+- [`wbb_lineup_seasons`](reference/additional/analytics-3#wbb_lineup_seasons)
+- [`wbb_play_styles`](reference/additional/analytics-3#wbb_play_styles)
+- [`wbb_player_on_off`](reference/additional/analytics-3#wbb_player_on_off)
+- [`wbb_player_war`](reference/additional/analytics-3#wbb_player_war)
+- [`wbb_player_wowy`](reference/additional/analytics-3#wbb_player_wowy)
+- [`wbb_situational_lineup`](reference/additional/analytics-3#wbb_situational_lineup)
+- [`wbb_situational_player`](reference/additional/analytics-3#wbb_situational_player)
+- [`wbb_situational_team`](reference/additional/analytics-3#wbb_situational_team)
+- [`wbb_strength_of_schedule`](reference/additional/analytics-3#wbb_strength_of_schedule)
+- [`wbb_team_luck`](reference/additional/analytics-3#wbb_team_luck)
+- [`wbb_team_season_flow`](reference/additional/analytics-4#wbb_team_season_flow)
+- [`wbb_team_season_rates`](reference/additional/analytics-4#wbb_team_season_rates)
+- [`wbb_team_strength`](reference/additional/analytics-4#wbb_team_strength)
+- [`weighted_avg`](reference/additional/analytics-4#weighted_avg)
 
 ### Dates and seasons {#dates-and-seasons}
 

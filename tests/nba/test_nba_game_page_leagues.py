@@ -222,6 +222,45 @@ def test_wnba_2005_halves_overtime(monkeypatch: pytest.MonkeyPatch) -> None:
     assert gp.score_win_prob(pbp, league="wnba", regulation_periods=4)["wp_regime"].unique().to_list() == ["reg"]
 
 
+@pytest.mark.parametrize(
+    ("lg", "league", "name"),
+    [
+        ("mbb", "mens", "mbb_401830342.json.gz"),
+        ("mbb", "mens", "mbb_401812161.json.gz"),
+        ("wbb", "womens", "summary_wbb.json"),
+    ],
+)
+def test_release_enrichment_scores_each_play_as_the_game_page_does(
+    monkeypatch: pytest.MonkeyPatch, lg: str, league: str, name: str
+) -> None:
+    """``build_mbb_season_wp`` (the pbp release WP) equals ``score_win_prob`` on every unsettled play.
+
+    Both feed the bundled college booster the same plays, scores and clock (mbb_401830342 is a
+    double-overtime game; these converters already carry the period clock on overtime plays, which the
+    enrichment's ``ot_adjusted_seconds`` call keeps true for frames that do not). The enrichment's
+    prior is pinned to the one the game page used.
+    """
+    from sportsdataverse.mbb import mbb_win_prob
+
+    _, pbp, _, _ = _frames(monkeypatch, lg, name)
+    gid = str(pbp["game_id"][0])
+    page = gp.score_win_prob(pbp, league=lg, neutral_site=True)
+    prior = float(page["pregame_home_prob"][0])
+    monkeypatch.setattr(
+        mbb_win_prob,
+        "_pregame_probs",
+        lambda *a, **k: pl.DataFrame({"game_id": [gid], "pregame_home_prob": [prior]}),
+    )
+    release = mbb_win_prob._compile_season_wp(pbp, pl.DataFrame(), pl.DataFrame(), league=league)
+    keep = ~page["type_text"].is_in(["End Period", "End Game"]).fill_null(False)
+    order = page.select("game_play_number", "home_win_prob").filter(keep).sort("game_play_number")
+    got = release.select("game_play_number", "home_win_prob").filter(
+        pl.col("game_play_number").is_in(order["game_play_number"].implode())
+    )
+    assert got.height == order.height > 0
+    assert got.sort("game_play_number")["home_win_prob"].to_list() == order["home_win_prob"].to_list()
+
+
 def test_wbb_scores_with_the_womens_model(monkeypatch: pytest.MonkeyPatch) -> None:
     _, pbp, _, _ = _frames(monkeypatch, "wbb", "summary_wbb.json")
     wp = gp.score_win_prob(pbp, league="wbb", neutral_site=True)
@@ -398,6 +437,7 @@ def test_wbb_halves_box_without_regulation_reads_the_box_season(monkeypatch: pyt
 
 
 GOLDEN = json.loads((BB / "nba_game_page_golden.json").read_text(encoding="utf-8"))
+BASELINE_WP = Path(__file__).resolve().parents[1] / "fixtures" / "nba_prediction" / "baseline_in_game_wp"
 PBP_COLS = ["home_win_prob", "wp_delta", "wp_regime", "prior_source", "pregame_home_prob", "x_legacy", "y_legacy"]
 
 
@@ -414,7 +454,17 @@ PBP_COLS = ["home_win_prob", "wp_delta", "wp_regime", "prior_source", "pregame_h
 def test_nba_and_wnba_frames_are_byte_identical_to_the_shipped_module(
     monkeypatch: pytest.MonkeyPatch, lg: str, name: str, kwargs: dict
 ) -> None:
-    # the golden was written by the shipped (NBA-only) module at e4894f0817; never regenerate it from this one
+    # the golden was written by the shipped (NBA-only) module at e4894f0817; never regenerate it from this one.
+    # It pins the pipeline, so it scores with the booster that module shipped (the 3e967eb40d artifact, kept
+    # as a fixture); the refit booster's own gates live in test_nba_in_game_wp_late_game.py.
+    import xgboost as xgb
+
+    from sportsdataverse.nba import nba_game_predict
+
+    booster = xgb.Booster()
+    booster.load_model(bytearray((BASELINE_WP / f"{lg}_in_game_wp_3e967eb40d.ubj").read_bytes()))
+    art = {"kind": "xgboost", "booster": booster, "features": booster.feature_names}
+    monkeypatch.setattr(nba_game_predict, "_load_in_game_artifact", lambda league_id="00": art)
     fr = gp.game_page_frames(_final(monkeypatch, lg, name), **kwargs)
     want = GOLDEN[name]
     assert fr["pbp"].select(PBP_COLS).to_dict(as_series=False) == want["pbp"]
@@ -554,3 +604,45 @@ def test_a_format_that_is_not_an_object_falls_back_to_the_season_era(
     final = _final(monkeypatch, "wnba", "summary_wnba.json")
     final["format"] = fmt  # game-on-paper-app's route test sends a string here; it used to raise AttributeError
     assert gp.game_page_frames(final, league="wnba")["regulation_periods"] == 4  # WNBA 2024: quarters
+
+
+def test_live_mbb_game_recovers_team_and_player_stats(monkeypatch: pytest.MonkeyPatch) -> None:
+    name = "mbb_401920423_live.json.gz"
+    final, pbp, team_box, player_box = _frames(monkeypatch, "mbb", name)
+    assert team_box.shape == player_box.shape == (0, 0)  # release converters keep R parity
+
+    frames = gp.game_page_frames(final, league="mbb")
+    assert frames["pbp"].height == pbp.height == 245
+    assert frames["pbp"]["home_win_prob"].null_count() == 0
+    expected_scores = {int(c["id"]): int(c["score"]) for c in final["header"]["competitions"][0]["competitors"]}
+    assert dict(frames["team_box"].select("team_id", "team_score").iter_rows()) == expected_scores
+    assert frames["team_box"]["team_winner"].null_count() == 2
+
+    expected_points = {}
+    for team in final["boxscore"]["players"]:
+        stats = team["statistics"][0]
+        for athlete in stats["athletes"]:
+            if athlete["stats"]:
+                key = (int(team["team"]["id"]), int(athlete["athlete"]["id"]))
+                expected_points[key] = int(athlete["stats"][stats["keys"].index("points")])
+    assert len(expected_points) == 20
+    assert {
+        (team, player): points
+        for team, player, points in frames["player_box"].select("team_id", "athlete_id", "points").iter_rows()
+    } == expected_points
+    assert frames["team_game_rates"].height == 2
+    assert frames["player_game_rates"].height == 20
+
+
+def test_live_mbb_game_keeps_one_sided_boxes(monkeypatch: pytest.MonkeyPatch) -> None:
+    final = _final(monkeypatch, "mbb", "mbb_401920423_live.json.gz")
+    # Simulate an incomplete response by withholding the away box blocks from the real capture.
+    for kind in ("teams", "players"):
+        final["boxscore"][kind] = [b for b in final["boxscore"][kind] if b["team"]["id"] == "258"]
+
+    frames = gp.game_page_frames(final, league="mbb")
+    assert frames["pbp"].height == 245
+    assert frames["team_box"].select("team_id", "opponent_team_id").rows() == [(258, 111)]
+    assert frames["player_box"]["team_id"].to_list() == [258] * 11
+    assert frames["team_game_rates"].is_empty()
+    assert frames["player_game_rates"].is_empty()

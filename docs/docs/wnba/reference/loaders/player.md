@@ -198,6 +198,11 @@ load_wnba_player_core(seasons=2025)
 ## load_wnba_player_impact
 
 Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_player_impact) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_player_impact/wnba_player_impact_{season}.parquet`
+
+:::caution[Coverage]
+The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boban_projected_rating and boban_projected_sd were renamed from darko_*; the loader returns both names for one release, so move to boban_* now (darko_* is deprecated and will be removed).
+:::
+
 ### Returns {#load_wnba_player_impact-returns}
 
 | col_name | type | description |
@@ -210,9 +215,9 @@ Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse
 | `teams` | String | Nested list of member-team membership spans. |
 | `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `o_rapm` | Float64 | Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions. |
-| `d_rapm` | Float64 | Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions. |
-| `rapm` | Float64 | Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. |
+| `o_rapm` | Float64 | Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions, at the fixed WNBA penalty described under rapm. |
+| `d_rapm` | Float64 | Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions, at the fixed WNBA penalty described under rapm. |
+| `rapm` | Float64 | Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. The ridge penalty is one fixed WNBA value (1,931, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the scale compares across seasons (regular-season sd 1.47 to 2.13 per 100 over players with 200 possessions, 1997-2026; fewer possessions shrink harder, so part of a spread difference is sample size). Seasons published before November 2026 were fit at a per-season RidgeCV pick: 1,931 in 23 of 30 regular seasons, but 5,179 or 13,895 in 1999, 2001, 2002, 2004, 2011, 2014 and 2016 (sd 0.32 to 0.93 there) and 268 to 100,000 in the playoffs. Do not compare those seasons with others or with values fit at the fixed penalty. |
 | `off_poss` | Int64 | Offensive possessions the player was on the floor for in the RAPM sample. |
 | `def_poss` | Int64 | Defensive possessions the player was on the floor for in the RAPM sample. |
 | `o_adj_rapm` | Float64 | Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions. |
@@ -227,9 +232,12 @@ Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse
 | `dbpm` | Float64 | Defensive box plus/minus. |
 | `bpm` | Float64 | Career box plus/minus. |
 | `war` | Float64 | Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win. |
-| `darko_filtered_skill` | Float64 | DARKO-style Kalman-filtered estimate of the player's current skill level. |
-| `darko_projected_rating` | Float64 | DARKO-style projected forward rating, including the empirical aging-curve drift. |
-| `darko_projected_sd` | Float64 | Posterior standard deviation of the DARKO-style projected rating. |
+| `boban_filtered_skill` | Float64 | BOBAN Kalman-filtered estimate of the player's current skill level. |
+| `boban_projected_rating` | Float64 | BOBAN projected forward rating, including the empirical aging-curve drift. |
+| `boban_projected_sd` | Float64 | Posterior standard deviation of the BOBAN projected rating. |
+| `darko_filtered_skill` | Float64 | Deprecated alias of boban_filtered_skill, kept for one release; use that column. |
+| `darko_projected_rating` | Float64 | Deprecated alias of boban_projected_rating, kept for one release; use that column. |
+| `darko_projected_sd` | Float64 | Deprecated alias of boban_projected_sd, kept for one release; use that column. |
 
 ```python
 load_wnba_player_impact(seasons=2024)

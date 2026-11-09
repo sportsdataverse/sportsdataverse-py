@@ -9,7 +9,9 @@ teams by. League-specific quad thresholds and the bubble AdjEM live in
 
 from __future__ import annotations
 
-from typing import Literal, Union, overload
+import datetime
+from collections.abc import Iterable
+from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
@@ -177,7 +179,9 @@ def _norm_cdf(s: pl.Series) -> pl.Series:
 def mbb_strength_of_schedule(
     seasons: list[int],
     *,
+    as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -186,7 +190,9 @@ def mbb_strength_of_schedule(
 def mbb_strength_of_schedule(
     seasons: list[int],
     *,
+    as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -194,21 +200,35 @@ def mbb_strength_of_schedule(
 def mbb_strength_of_schedule(
     seasons: list[int],
     *,
+    as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Season-level SoS / Quad / WAB résumé from the released ESPN data.
+) -> pl.DataFrame | pd.DataFrame:
+    """The daily ``strength_of_schedule`` table: records, SoS, quad résumé, WAB, RPI and a NET estimate.
 
-    Loads the schedule + team boxscores, builds the opponent-adjusted ratings,
-    and applies :func:`strength_of_schedule` per season.
+    Loads the released ESPN schedule and team box per season and builds
+    :func:`~sportsdataverse.mbb.mbb_college_season.season_resume` from the games strictly
+    before ``as_of_date``: opponent-adjusted ratings, SoS (mean opponent AdjEM), WAB, the
+    NCAA Quad 1-4 record (opponents ranked by the NET estimate), the NCAA RPI
+    (25% WP / 50% OWP / 25% OOWP, location-weighted WP) and the NET-style estimate
+    (``0.8 * z(AdjEM) + 0.2 * z(WAB)``). Division I teams only; RPI, SoS, WAB and the quads
+    count Division I games only.
 
     Args:
         seasons: Seasons to compute (e.g. ``[2024]``).
+        as_of_date: Only use games strictly before this date; ``None`` uses every completed
+            game. Applies to every season in ``seasons``.
         league: ``"mens"`` or ``"womens"``.
+        ineligible: Team ids barred from the NCAA tournament (sets ``eligible``); ``None``
+            (default) reads the bundled list for each season.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per (season, team_id) -- see :func:`strength_of_schedule`.
+        One row per Division I (season, team_id), best ``net_estimate_rank`` first. The
+        ``_rank`` / ``_pct`` columns (1 is best, average ties, within the season) and
+        ``_n`` (the Division I games behind each number; all games for ``adj_em``) follow
+        BB-D2's league-context grammar.
 
     Example:
         Quick start::
@@ -218,28 +238,15 @@ def mbb_strength_of_schedule(
 
         Pipeline next step (one line)::
 
-            resume.sort("wab", descending=True).head(20)
+            resume.sort("rpi_rank").head(25)
 
     See Also:
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_team_ratings import (
-        _league_loaders,
-        _normalize_schedule,
-        adjust_efficiency,
-        raw_game_efficiency,
-    )
+    from sportsdataverse.mbb.mbb_college_season import load_season_inputs
 
-    # load schedule/boxscore ONCE and build the ratings inline (delegating to
-    # mbb_team_ratings would re-download the same releases a second time)
-    load_schedule, load_team_box = _league_loaders(league)
-    results = _normalize_schedule(load_schedule(seasons)).filter(
-        pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
+    out = pl.concat(
+        [load_season_inputs(s, as_of_date=as_of_date, league=league, ineligible=ineligible).resume for s in seasons]
     )
-    eff = raw_game_efficiency(results, load_team_box(seasons))
-    ratings = adjust_efficiency(eff, league=league).with_columns(
-        pl.col("adj_em").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank")
-    )
-    out = strength_of_schedule(results, ratings, league=league)
     return out.to_pandas() if return_as_pandas else out

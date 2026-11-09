@@ -225,6 +225,7 @@ from sportsdataverse.mbb import PossCalcFragment as PossCalcFragment  # noqa: F4
 from sportsdataverse.mbb import PossState as PossState  # noqa: F401
 from sportsdataverse.mbb import PossessionEvent as PossessionEvent  # noqa: F401
 from sportsdataverse.mbb import PossessionSplits as PossessionSplits  # noqa: F401
+from sportsdataverse.mbb import PreseasonPrior as PreseasonPrior  # noqa: F401
 from sportsdataverse.mbb import RapmConfig as RapmConfig  # noqa: F401
 from sportsdataverse.mbb import RapmPlayerContext as RapmPlayerContext  # noqa: F401
 from sportsdataverse.mbb import RapmPreProcDiagnostics as RapmPreProcDiagnostics  # noqa: F401
@@ -324,6 +325,7 @@ from sportsdataverse.mbb import classify_zone_geometry as classify_zone_geometry
 from sportsdataverse.mbb import classify_zone_type as classify_zone_type  # noqa: F401
 from sportsdataverse.mbb import clump_bad_lineups as clump_bad_lineups  # noqa: F401
 from sportsdataverse.mbb import code_from_box as code_from_box  # noqa: F401
+from sportsdataverse.mbb import college_play_style_features as college_play_style_features  # noqa: F401
 from sportsdataverse.mbb import combos as combos  # noqa: F401
 from sportsdataverse.mbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.mbb import compute_league_averages_from_per_game as compute_league_averages_from_per_game  # noqa: F401
@@ -489,28 +491,54 @@ from sportsdataverse.mbb import mbb_archetypes as mbb_archetypes  # noqa: F401
 from sportsdataverse.mbb import mbb_box_bpm as mbb_box_bpm  # noqa: F401
 from sportsdataverse.mbb import mbb_bracket_sim as mbb_bracket_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F401
+from sportsdataverse.mbb import mbb_coach_careers as mbb_coach_careers  # noqa: F401
+from sportsdataverse.mbb import mbb_coach_seasons as mbb_coach_seasons  # noqa: F401
 from sportsdataverse.mbb import mbb_draft_projection as mbb_draft_projection  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_lineup_games as mbb_epv_lineup_games  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_player_games as mbb_epv_player_games  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_plays as mbb_epv_plays  # noqa: F401
+from sportsdataverse.mbb import mbb_epv_team_games as mbb_epv_team_games  # noqa: F401
+from sportsdataverse.mbb import mbb_game_flow as mbb_game_flow  # noqa: F401
+from sportsdataverse.mbb import mbb_game_lineups_used as mbb_game_lineups_used  # noqa: F401
+from sportsdataverse.mbb import mbb_game_player_impact as mbb_game_player_impact  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
+from sportsdataverse.mbb import mbb_lineup_seasons as mbb_lineup_seasons  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
+from sportsdataverse.mbb import mbb_play_styles as mbb_play_styles  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_player_on_off as mbb_player_on_off  # noqa: F401
+from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
+from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
 from sportsdataverse.mbb import mbb_schedule_crosswalk as mbb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_season_projections as mbb_season_projections  # noqa: F401
 from sportsdataverse.mbb import mbb_season_sim as mbb_season_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_shooter_talent as mbb_shooter_talent  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_data as mbb_shot_data  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_quality as mbb_shot_quality  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_quality_model as mbb_shot_quality_model  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa: F401
+from sportsdataverse.mbb import mbb_situational_lineup as mbb_situational_lineup  # noqa: F401
+from sportsdataverse.mbb import mbb_situational_player as mbb_situational_player  # noqa: F401
+from sportsdataverse.mbb import mbb_situational_team as mbb_situational_team  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
+from sportsdataverse.mbb import mbb_team_season_flow as mbb_team_season_flow  # noqa: F401
+from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
+from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
+from sportsdataverse.mbb import mbb_tournament_ineligible as mbb_tournament_ineligible  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
 from sportsdataverse.mbb import name_in_v0_box_format as name_in_v0_box_format  # noqa: F401
 from sportsdataverse.mbb import name_is_initials as name_is_initials  # noqa: F401
+from sportsdataverse.mbb import ncaa_coach_stints as ncaa_coach_stints  # noqa: F401
 from sportsdataverse.mbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import ncaa_impact_rows as ncaa_impact_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_lineup_count_rows as ncaa_lineup_count_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_box_scores as ncaa_mbb_box_scores  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_date_games as ncaa_mbb_date_games  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_game_pbp as ncaa_mbb_game_pbp  # noqa: F401
@@ -527,6 +555,11 @@ from sportsdataverse.mbb import ncaa_mbb_team_ids as ncaa_mbb_team_ids  # noqa: 
 from sportsdataverse.mbb import ncaa_mbb_team_roster as ncaa_mbb_team_roster  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_schedule as ncaa_mbb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # noqa: F401
+from sportsdataverse.mbb import ncaa_possession_rate_rows as ncaa_possession_rate_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_score_rows as ncaa_score_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_situation_rows as ncaa_situation_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_team_coaches as ncaa_team_coaches  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import observed_pairs as observed_pairs  # noqa: F401
@@ -566,6 +599,7 @@ from sportsdataverse.mbb import parse_ncaa_bb_shots as parse_ncaa_bb_shots  # no
 from sportsdataverse.mbb import parse_ncaa_bb_team_roster as parse_ncaa_bb_team_roster  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_team_schedule as parse_ncaa_bb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_team_stats as parse_ncaa_bb_team_stats  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_team_coach as parse_ncaa_team_coach  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_deadball_rebound as parse_offensive_deadball_rebound  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_event as parse_offensive_event  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_foul as parse_offensive_foul  # noqa: F401
@@ -607,6 +641,7 @@ from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum
 from sportsdataverse.mbb import possession_deciles as possession_deciles  # noqa: F401
 from sportsdataverse.mbb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
+from sportsdataverse.mbb import preseason_prior as preseason_prior  # noqa: F401
 from sportsdataverse.mbb import project_bracket as project_bracket  # noqa: F401
 from sportsdataverse.mbb import rank_corr as rank_corr  # noqa: F401
 from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
@@ -697,6 +732,7 @@ __all__ = [
     "PossState",
     "PossessionEvent",
     "PossessionSplits",
+    "PreseasonPrior",
     "RapmConfig",
     "RapmPlayerContext",
     "RapmPreProcDiagnostics",
@@ -796,6 +832,7 @@ __all__ = [
     "classify_zone_type",
     "clump_bad_lineups",
     "code_from_box",
+    "college_play_style_features",
     "combos",
     "complete_weighted_avg",
     "compute_league_averages_from_per_game",
@@ -1123,28 +1160,54 @@ __all__ = [
     "mbb_box_bpm",
     "mbb_bracket_sim",
     "mbb_bracketology",
+    "mbb_coach_careers",
+    "mbb_coach_seasons",
     "mbb_draft_projection",
+    "mbb_epv_lineup_games",
+    "mbb_epv_player_games",
+    "mbb_epv_plays",
+    "mbb_epv_team_games",
+    "mbb_game_flow",
+    "mbb_game_lineups_used",
+    "mbb_game_player_impact",
     "mbb_in_game_win_prob",
+    "mbb_lineup_seasons",
     "mbb_pbp_disk",
+    "mbb_play_styles",
     "mbb_player_crosswalk",
+    "mbb_player_on_off",
+    "mbb_player_war",
+    "mbb_player_wowy",
     "mbb_predict_games",
     "mbb_recruiting_projection",
     "mbb_schedule_crosswalk",
+    "mbb_season_projections",
     "mbb_season_sim",
     "mbb_shooter_talent",
     "mbb_shot_data",
     "mbb_shot_quality",
     "mbb_shot_quality_model",
     "mbb_shot_selection",
+    "mbb_situational_lineup",
+    "mbb_situational_player",
+    "mbb_situational_team",
     "mbb_strength_of_schedule",
     "mbb_team_crosswalk",
+    "mbb_team_luck",
     "mbb_team_ratings",
+    "mbb_team_season_flow",
+    "mbb_team_season_rates",
+    "mbb_team_strength",
+    "mbb_tournament_ineligible",
     "mbb_transfer_projection",
     "misspellings",
     "most_recent_mbb_season",
     "name_in_v0_box_format",
     "name_is_initials",
+    "ncaa_coach_stints",
     "ncaa_espn_team_crosswalk",
+    "ncaa_impact_rows",
+    "ncaa_lineup_count_rows",
     "ncaa_mbb_box_scores",
     "ncaa_mbb_date_games",
     "ncaa_mbb_game_pbp",
@@ -1161,6 +1224,11 @@ __all__ = [
     "ncaa_mbb_team_roster",
     "ncaa_mbb_team_schedule",
     "ncaa_mbb_team_stats",
+    "ncaa_possession_rate_rows",
+    "ncaa_score_rows",
+    "ncaa_situation_rows",
+    "ncaa_team_box_count_rows",
+    "ncaa_team_coaches",
     "normalize_player_key",
     "normalize_team_roster_columns",
     "observed_pairs",
@@ -1200,6 +1268,7 @@ __all__ = [
     "parse_ncaa_bb_team_roster",
     "parse_ncaa_bb_team_schedule",
     "parse_ncaa_bb_team_stats",
+    "parse_ncaa_team_coach",
     "parse_offensive_deadball_rebound",
     "parse_offensive_event",
     "parse_offensive_foul",
@@ -1241,6 +1310,7 @@ __all__ = [
     "possession_deciles",
     "predict_margin",
     "predict_total",
+    "preseason_prior",
     "project_bracket",
     "rank_corr",
     "raw_game_efficiency",

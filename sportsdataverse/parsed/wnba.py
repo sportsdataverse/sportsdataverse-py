@@ -252,12 +252,23 @@ from sportsdataverse.wnba import underscore as underscore  # noqa: F401
 from sportsdataverse.wnba import wnba_aging_curve as wnba_aging_curve  # noqa: F401
 from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa: F401
 from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
+from sportsdataverse.wnba import wnba_coach_careers as wnba_coach_careers  # noqa: F401
+from sportsdataverse.wnba import wnba_coach_seasons as wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba import wnba_crosswalks_from_archive as wnba_crosswalks_from_archive  # noqa: F401
+from sportsdataverse.wnba import wnba_draft_lottery_odds as wnba_draft_lottery_odds  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_lineup_games as wnba_epv_lineup_games  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_player_games as wnba_epv_player_games  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_plays as wnba_epv_plays  # noqa: F401
+from sportsdataverse.wnba import wnba_epv_team_games as wnba_epv_team_games  # noqa: F401
 from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
 from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa: F401
+from sportsdataverse.wnba import wnba_game_flow as wnba_game_flow  # noqa: F401
+from sportsdataverse.wnba import wnba_game_lineups_used as wnba_game_lineups_used  # noqa: F401
+from sportsdataverse.wnba import wnba_game_player_impact as wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba import wnba_in_game_win_prob as wnba_in_game_win_prob  # noqa: F401
+from sportsdataverse.wnba import wnba_lineup_seasons as wnba_lineup_seasons  # noqa: F401
 from sportsdataverse.wnba import wnba_live_boxscore as wnba_live_boxscore  # noqa: F401
 from sportsdataverse.wnba import wnba_live_pbp as wnba_live_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noqa: F401
@@ -265,7 +276,11 @@ from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
+from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
+from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_games as wnba_predict_games  # noqa: F401
@@ -275,10 +290,19 @@ from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  #
 from sportsdataverse.wnba import wnba_referee_assignments as wnba_referee_assignments  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_schedule_crosswalk as wnba_schedule_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_season_sim as wnba_season_sim  # noqa: F401
+from sportsdataverse.wnba import wnba_season_standings as wnba_season_standings  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
+from sportsdataverse.wnba import wnba_situational_lineup as wnba_situational_lineup  # noqa: F401
+from sportsdataverse.wnba import wnba_situational_player as wnba_situational_player  # noqa: F401
+from sportsdataverse.wnba import wnba_situational_team as wnba_situational_team  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
+from sportsdataverse.wnba import wnba_team_season_flow as wnba_team_season_flow  # noqa: F401
+from sportsdataverse.wnba import wnba_team_season_rates as wnba_team_season_rates  # noqa: F401
+from sportsdataverse.wnba import wnba_team_strength as wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_reb_oe as wnba_tracking_reb_oe  # noqa: F401
@@ -518,12 +542,23 @@ __all__ = [
     "wnba_aging_curve",
     "wnba_availability",
     "wnba_career_trajectory",
+    "wnba_coach_careers",
+    "wnba_coach_seasons",
     "wnba_crosswalks_from_archive",
+    "wnba_draft_lottery_odds",
     "wnba_draft_model",
     "wnba_enhanced_pbp",
+    "wnba_epv_lineup_games",
+    "wnba_epv_player_games",
+    "wnba_epv_plays",
+    "wnba_epv_team_games",
     "wnba_expected_turnovers",
     "wnba_foul_drawing",
+    "wnba_game_flow",
+    "wnba_game_lineups_used",
+    "wnba_game_player_impact",
     "wnba_in_game_win_prob",
+    "wnba_lineup_seasons",
     "wnba_live_boxscore",
     "wnba_live_pbp",
     "wnba_matchup_drapm",
@@ -531,7 +566,11 @@ __all__ = [
     "wnba_pbp_disk",
     "wnba_play_context",
     "wnba_player_crosswalk",
+    "wnba_player_factor_rapm",
+    "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_war",
+    "wnba_player_wowy",
     "wnba_playtype_ratings",
     "wnba_possessions",
     "wnba_predict_games",
@@ -541,10 +580,19 @@ __all__ = [
     "wnba_referee_assignments",
     "wnba_rookie_projection",
     "wnba_schedule_crosswalk",
+    "wnba_season_sim",
+    "wnba_season_standings",
     "wnba_shot_value",
+    "wnba_situational_lineup",
+    "wnba_situational_player",
+    "wnba_situational_team",
     "wnba_team_clutch",
     "wnba_team_crosswalk",
+    "wnba_team_luck",
     "wnba_team_ratings",
+    "wnba_team_season_flow",
+    "wnba_team_season_rates",
+    "wnba_team_strength",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",
     "wnba_tracking_reb_oe",

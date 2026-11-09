@@ -164,10 +164,19 @@ def test_ssgt_helper_and_bad_season(served):
         rt.sportality_ssgt_uuid("twenty")
 
 
+def test_old_layout_key_still_resolves(served):
+    """layout-info renamed its directory key to ``originalSeasonSeriesGameTypeTeams`` (live 2026-11-04)."""
+    routes, _, _ = served
+    old = copy.deepcopy(LAYOUT)
+    old[0]["seasonSeriesGameTypeTeams"] = old[0].pop("originalSeasonSeriesGameTypeTeams")
+    routes["/statistics-v2/layout-info"] = _Resp(old)
+    assert rt.sportality_ssgt_uuid(2027) == "xs07bd3fmp"
+
+
 def test_a_short_layout_directory_is_refused(served):
     routes, _, _ = served
     short = copy.deepcopy(LAYOUT)
-    short[0]["seasonSeriesGameTypeTeams"] = short[0]["seasonSeriesGameTypeTeams"][:5]
+    short[0]["originalSeasonSeriesGameTypeTeams"] = short[0]["originalSeasonSeriesGameTypeTeams"][:5]
     routes["/statistics-v2/layout-info"] = _Resp(short)
     with pytest.raises(AssetFetchError, match="expected the 40"):
         rt.sportality_ssgt_uuid(2026)

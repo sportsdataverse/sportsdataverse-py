@@ -8,7 +8,7 @@
           "uuid": "qZn-4XuTzFdn0",
           "code": "finals",
           "deleted": false,
-          "name": "Slutspil"
+          "name": "Slutspel"
         },
         "season": {
           "uuid": "nodt319p9w",
@@ -106,7 +106,7 @@
           "uuid": "qZn-4XuTzFdn0",
           "code": "finals",
           "deleted": false,
-          "name": "Slutspil"
+          "name": "Slutspel"
         },
         "season": {
           "uuid": "ggp2aapun2",
@@ -204,303 +204,7 @@
           "uuid": "aprlbjgxlp",
           "code": "regular",
           "deleted": false,
-          "name": "Grundspil"
-        },
-        "season": {
-          "uuid": "zu0hdygywc",
-          "code": "2006",
-          "deleted": false,
-          "name": "2006/2007"
-        },
-        "series": {
-          "uuid": "m1ay3mpa4t",
-          "code": "DBL",
-          "createdAt": null,
-          "createdBy": "dbl1_dbl",
-          "deleted": false,
-          "lastModified": "2026-07-01T07:38:11.000Z",
-          "names": [
-            {
-              "language": "da",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "sv",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "display",
-              "translation": "Basketligaen"
-            }
-          ],
-          "name": "Basketligaen"
-        },
-        "teams": [
-          {
-            "uuid": "ktcu9aaala",
-            "instanceId": "bak1_bak",
-            "name": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "medium": "Bakken Bears"
-            },
-            "teamNames": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "long": "Bakken Bears",
-              "full": "Bakken Bears",
-              "codeSite": "BAK",
-              "shortSite": "Bakken Bears",
-              "fullSite": "Bakken Bears",
-              "longSite": "Bakken Bears"
-            }
-          },
-          {
-            "uuid": "sjbo8mmzi5",
-            "instanceId": "bka1_bka",
-            "name": {
-              "code": "BKA",
-              "short": "BK Amager",
-              "medium": "BK Amager"
-            },
-            "teamNames": {
-              "code": "BKA",
-              "short": "BK Amager",
-              "long": "BK Amager",
-              "full": "BK Amager",
-              "codeSite": "BKA",
-              "shortSite": "BK Amager",
-              "fullSite": "BK Amager",
-              "longSite": "BK Amager"
-            }
-          },
-          {
-            "uuid": "hip2m60a45",
-            "instanceId": "hic1_hic",
-            "name": {
-              "code": "HIC",
-              "short": "Horsens IC",
-              "medium": "Horsens IC"
-            },
-            "teamNames": {
-              "code": "HIC",
-              "short": "Horsens IC",
-              "long": "Horsens IC",
-              "full": "Horsens IC",
-              "codeSite": "HIC",
-              "shortSite": "Horsens IC",
-              "fullSite": "Horsens IC",
-              "longSite": "Horsens IC"
-            }
-          }
-        ]
-      }
-    ],
-    "seasonSeriesGameTypeTeams": [
-      {
-        "state": "closed",
-        "ssgtUuid": "a1sok8y8d8",
-        "gameType": {
-          "uuid": "qZn-4XuTzFdn0",
-          "code": "finals",
-          "deleted": false,
-          "name": "Slutspil"
-        },
-        "season": {
-          "uuid": "nodt319p9w",
-          "code": "2007",
-          "deleted": false,
-          "name": "2007/2008"
-        },
-        "series": {
-          "uuid": "m1ay3mpa4t",
-          "code": "DBL",
-          "createdAt": null,
-          "createdBy": "dbl1_dbl",
-          "deleted": false,
-          "lastModified": "2026-07-01T07:38:11.000Z",
-          "names": [
-            {
-              "language": "da",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "sv",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "display",
-              "translation": "Basketligaen"
-            }
-          ],
-          "name": "Basketligaen"
-        },
-        "teams": [
-          {
-            "uuid": "ktcu9aaala",
-            "instanceId": "bak1_bak",
-            "name": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "medium": "Bakken Bears"
-            },
-            "teamNames": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "long": "Bakken Bears",
-              "full": "Bakken Bears",
-              "codeSite": "BAK",
-              "shortSite": "Bakken Bears",
-              "fullSite": "Bakken Bears",
-              "longSite": "Bakken Bears"
-            }
-          },
-          {
-            "uuid": "sjbo8mmzi5",
-            "instanceId": "bka1_bka",
-            "name": {
-              "code": "BKA",
-              "short": "BK Amager",
-              "medium": "BK Amager"
-            },
-            "teamNames": {
-              "code": "BKA",
-              "short": "BK Amager",
-              "long": "BK Amager",
-              "full": "BK Amager",
-              "codeSite": "BKA",
-              "shortSite": "BK Amager",
-              "fullSite": "BK Amager",
-              "longSite": "BK Amager"
-            }
-          },
-          {
-            "uuid": "hip2m60a45",
-            "instanceId": "hic1_hic",
-            "name": {
-              "code": "HIC",
-              "short": "Horsens IC",
-              "medium": "Horsens IC"
-            },
-            "teamNames": {
-              "code": "HIC",
-              "short": "Horsens IC",
-              "long": "Horsens IC",
-              "full": "Horsens IC",
-              "codeSite": "HIC",
-              "shortSite": "Horsens IC",
-              "fullSite": "Horsens IC",
-              "longSite": "Horsens IC"
-            }
-          }
-        ]
-      },
-      {
-        "state": "closed",
-        "ssgtUuid": "al4a0u2go5",
-        "gameType": {
-          "uuid": "qZn-4XuTzFdn0",
-          "code": "finals",
-          "deleted": false,
-          "name": "Slutspil"
-        },
-        "season": {
-          "uuid": "ggp2aapun2",
-          "code": "2025",
-          "deleted": false,
-          "name": "2025/2026"
-        },
-        "series": {
-          "uuid": "m1ay3mpa4t",
-          "code": "DBL",
-          "createdAt": null,
-          "createdBy": "dbl1_dbl",
-          "deleted": false,
-          "lastModified": "2026-07-01T07:38:11.000Z",
-          "names": [
-            {
-              "language": "da",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "sv",
-              "translation": "Basketligaen"
-            },
-            {
-              "language": "display",
-              "translation": "Basketligaen"
-            }
-          ],
-          "name": "Basketligaen"
-        },
-        "teams": [
-          {
-            "uuid": "swr1d65lew",
-            "instanceId": "bac1_bac",
-            "name": {
-              "code": "BAC",
-              "short": "Bears Academy",
-              "medium": "Bears Academy"
-            },
-            "teamNames": {
-              "code": "BAC",
-              "short": "Bears Academy",
-              "long": "Bears Academy",
-              "full": "Bears Academy",
-              "codeSite": "BAC",
-              "shortSite": "Bears Academy",
-              "fullSite": "Bears Academy",
-              "longSite": "Bears Academy"
-            }
-          },
-          {
-            "uuid": "ktcu9aaala",
-            "instanceId": "bak1_bak",
-            "name": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "medium": "Bakken Bears"
-            },
-            "teamNames": {
-              "code": "BAK",
-              "short": "Bakken Bears",
-              "long": "Bakken Bears",
-              "full": "Bakken Bears",
-              "codeSite": "BAK",
-              "shortSite": "Bakken Bears",
-              "fullSite": "Bakken Bears",
-              "longSite": "Bakken Bears"
-            }
-          },
-          {
-            "uuid": "ka7lusvmtn",
-            "instanceId": "bcc1_bcc",
-            "name": {
-              "code": "BCC",
-              "short": "BC Copenhagen",
-              "medium": "BC Copenhagen"
-            },
-            "teamNames": {
-              "code": "BCC",
-              "short": "BC Copenhagen",
-              "long": "BC Copenhagen",
-              "full": "BC Copenhagen",
-              "codeSite": "BCC",
-              "shortSite": "BC Copenhagen",
-              "fullSite": "BC Copenhagen",
-              "longSite": "BC Copenhagen"
-            }
-          }
-        ]
-      },
-      {
-        "state": "closed",
-        "ssgtUuid": "apuw31u293",
-        "gameType": {
-          "uuid": "aprlbjgxlp",
-          "code": "regular",
-          "deleted": false,
-          "name": "Grundspil"
+          "name": "Seriematch"
         },
         "season": {
           "uuid": "zu0hdygywc",
@@ -599,7 +303,7 @@
         "uuid": "aprlbjgxlp",
         "code": "regular",
         "deleted": false,
-        "name": "Grundspil"
+        "name": "Seriematch"
       },
       "season": {
         "uuid": "fg7gxxmm0w",
@@ -697,7 +401,7 @@
         "uuid": "aprlbjgxlp",
         "code": "regular",
         "deleted": false,
-        "name": "Grundspil"
+        "name": "Seriematch"
       },
       "season": {
         "uuid": "fg7gxxmm0w",

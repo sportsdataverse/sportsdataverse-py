@@ -23,10 +23,15 @@ import polars as pl
 
 from sportsdataverse.errors import RawStoreMissError
 from sportsdataverse.nba.nba_possession_rules import (
+    SHOT_KEYS,
     build_event_context,
+    credit_defense_scoring,
+    is_made_ft_row,
     is_possession_ending_event,
     is_real_rebound,
+    is_rebound_logged_after_its_putback,
     is_technical_ft_row,
+    rebound_can_set_offense,
     resolve_event_team,
 )
 
@@ -139,29 +144,45 @@ def _offense_from_events(
     group's offense attribution any more than it may seed
     :func:`_build_possession_groups`'s ``current_offense`` (same rationale,
     same real-fixture case — see that function's docstring/comment).
+
+    A rebound that is a placeholder, or follows no missed shot or missed FT
+    (``row["_offense_cue"]`` False, set by :func:`_build_possession_groups`),
+    is skipped too: a team rebound after a shot-clock turnover or a made FT,
+    a rebound after a steal, or an offensive rebound the pbp logs after its own
+    putback. Its ``location`` is the team that just had the ball, and it opened
+    possessions for the wrong team (the other team's basket then fell in that
+    possession). Such a rebound decides the offense only when no other row of
+    the group with a side (``location`` ``h`` / ``v``) can, a last-second
+    heave, say: every other cue, a jump ball or a heave's ``other`` row
+    included, is tried first.
+
+    A ``violation`` row is skipped in the strict pass as well: the feed files
+    an offensive violation as a turnover, so a ``violation`` row is the
+    defense's (delay of game, kicked ball). Four NBA 2025-26 end-of-period
+    groups (a delay of game, then the other team's heave and team rebound)
+    gave the defense the possession.
     """
     scoring_types = frozenset(("made_shot", "missed_shot", "free_throw", "turnover", "rebound"))
     non_foul_types = frozenset(("foul", "period", "timeout", "substitution"))
-    for ev in events:
-        et = ev.get("event_type") or ""
-        loc = ev.get("location") or ""
-        if et == "free_throw" and is_technical_ft_row(ev):
-            continue
-        if et in scoring_types and loc:
-            return home_id if loc == "h" else (away_id if loc == "v" else 0)
-    for ev in events:
-        loc = ev.get("location") or ""
-        et = ev.get("event_type") or ""
-        if et == "free_throw" and is_technical_ft_row(ev):
-            continue
-        if loc and et not in non_foul_types:
-            return home_id if loc == "h" else (away_id if loc == "v" else 0)
+    for strict in (True, False):
+        for wanted in (scoring_types, None):
+            cues = [
+                ev
+                for ev in events
+                if not (ev.get("event_type") == "free_throw" and is_technical_ft_row(ev))
+                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)
+            ]
+            for ev in cues:
+                et = ev.get("event_type") or ""
+                loc = ev.get("location") or ""
+                if loc in ("h", "v") and (et in wanted if wanted else et not in non_foul_types):
+                    return home_id if loc == "h" else (away_id if loc == "v" else 0)
     return 0
 
 
 def _ft_made(ev: dict) -> bool:
-    """A made free throw carries a score string (same signal as boundary detection)."""
-    return bool((ev.get("score_home") or "").strip() or (ev.get("score_away") or "").strip())
+    """A made free throw carries a real score string (same signal as boundary detection)."""
+    return is_made_ft_row(ev)
 
 
 def _event_detail(
@@ -178,8 +199,10 @@ def _event_detail(
     ``offense``; ``tov`` only counts a turnover whose team == ``offense``.
     This keeps ``points == 2*fg2m + 3*fg3m + ftm`` exact now that technical
     FTs are ordinary inline events: a DEFENSE technical FT shooter is present
-    in the group but its team != offense, so it contributes to NEITHER
-    ``points`` NOR ``ftm``.  The one league where the identity does not hold
+    in the group but its team != offense, so it is not counted here;
+    :func:`_assemble` credits it, points and shots, to that team's next
+    possession (:func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`).
+    The one league where the identity does not hold
     is the G League from 2019-20 (``rules/nbagl.yaml``
     ``nbagl-2020-single-free-throw``): a single ``'Free Throw 2PT'`` /
     ``'3PT'`` attempt counts ``fta = ftm = 1`` but is worth 2 or 3 points.
@@ -567,6 +590,7 @@ def _build_possession_groups(
     is_sc = False
     current_offense = 0
     prev_period: Optional[int] = None
+    deferred = False  # the boundary waits one row (a rebound logged after its putback)
 
     def _flush() -> None:
         nonlocal current, is_sc, current_offense
@@ -594,6 +618,7 @@ def _build_possession_groups(
         # _event_detail's oreb/dreb attribution read the same computed value.
         if et == "rebound":
             row["_is_real_rebound"] = is_real_rebound(ctx, i)
+            row["_offense_cue"] = rebound_can_set_offense(ctx, i)
 
         current.append(row)
 
@@ -623,7 +648,12 @@ def _build_possession_groups(
             if current_offense != 0 and reb_team != 0 and reb_team == current_offense:
                 is_sc = True
 
-        if is_possession_ending_event(ctx, i, current_offense, home_id, away_id):
+        # A putback the pbp logs before its own offensive rebound (same team, same clock): the
+        # rebound belongs to the possession the putback ends, so the boundary moves past it.
+        row["_putback_rebound"] = deferred  # this row ends a putback's possession (for _assemble)
+        ends = deferred or is_possession_ending_event(ctx, i, current_offense, home_id, away_id)
+        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)
+        if ends and not deferred:
             _flush()
 
     _flush()  # remaining events
@@ -707,10 +737,15 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     # groups don't consume a slot in the per-period possession count).
     prev_record_period: Optional[int] = None
     number_in_period = 0
+    # (record index, defense team, defense score delta, defense shot counts): see credit_defense_scoring
+    carries: list[tuple[int, int, int, dict[str, int]]] = []
 
     for events, is_sc, offense in groups:
         end_home: int = events[-1]["_home"]
         end_away: int = events[-1]["_away"]
+        # the row that ended the possession, for the next one's start type: a putback, not the
+        # rebound the pbp logs after it
+        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]
         cur_period = int(events[0].get("period") or 0)
 
         if prev_group_period is not None and cur_period != prev_group_period:
@@ -730,7 +765,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             if home_delta <= 0 and away_delta <= 0:
                 prev_home = end_home
                 prev_away = end_away
-                prev_end_row = events[-1]
+                prev_end_row = ender
                 prev_group_rows = events
                 prev_group_period = cur_period
                 continue
@@ -786,15 +821,20 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             }
         )
         shooting.extend(_shooting_rows(events, game_id, poss_num, home_id, away_id))
+        def_pts = (end_home - prev_home) if defense == home_id else (end_away - prev_away)
+        def_shots = {k: v for k, v in _event_detail(events, defense, home_id, away_id).items() if k in SHOT_KEYS}
+        if def_pts != 0 or any(def_shots.values()):
+            carries.append((len(records) - 1, defense, def_pts, def_shots))
 
         prev_home = end_home
         prev_away = end_away
-        prev_end_row = end_ev
+        prev_end_row = ender
         prev_group_rows = events
         prev_group_period = cur_period
 
     if not records:
         return empty_poss, empty_shooting
+    credit_defense_scoring(records, carries)
 
     return (
         pl.DataFrame(records, schema=POSSESSIONS_SCHEMA),
@@ -816,7 +856,10 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
     by forward-filling ``score_home`` / ``score_away`` and differencing at
     possession boundaries.  The sum of ``points`` per offense team is
     reconciled against the boxscore oracle for the three canonical fixture
-    games.
+    games.  A score by the defense inside a possession (a technical or
+    flagrant free throw, or a basket a misplaced boundary puts there) is
+    credited to the scoring team's next counted possession, so each team's
+    possession points add up to its final score.
 
     Thin wrapper over :func:`_assemble`, which does the shared possession-group
     traversal once and also produces the per-shooter companion frame consumed
@@ -836,9 +879,14 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``dreb``, ``tov``)
         computed by :func:`_event_detail` from the possession's events, each
         filtered to the offense team (except ``dreb``, which counts the
-        defense's real rebounds); ``points == 2*fg2m + 3*fg3m + ftm`` holds
-        exactly on every NBA / WNBA possession (``points`` is a score delta,
-        and in the G League a single free throw can be worth 2 or 3 -- see
+        defense's real rebounds).  ``points`` is the offense's score step over
+        the possession plus any score the team made while on defense since
+        its previous possession (a technical FT), which
+        :func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`
+        credits to its next counted possession in the same period, shots and
+        all; ``points == 2*fg2m + 3*fg3m + ftm`` holds except where a
+        challenge posts points on a replay row with no made-shot row, and in
+        the G League, where a single free throw can be worth 2 or 3 (see
         :func:`_event_detail`).  Also includes three pbpstats-parity
         columns from :func:`_possession_start_type` / :func:`_count_as_possession`:
         ``number_in_period`` (Int64, the flat ``possession_number`` reset to 1

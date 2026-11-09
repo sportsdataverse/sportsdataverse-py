@@ -8,6 +8,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
+    _alias_columns,  # noqa: F401  (used only by loaders declaring column_aliases)
     _as_season_list,
     _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
@@ -908,7 +909,7 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -926,7 +927,7 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         |official_order        |Int32  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -935,8 +936,8 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet"
         )
@@ -961,7 +962,7 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -994,7 +995,7 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1003,8 +1004,8 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet"
         )
@@ -1167,7 +1168,7 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2008).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1192,7 +1193,7 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |match_confidence  |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2008.
 
     Example:
         Quick start::
@@ -1201,8 +1202,8 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2008:
+            raise SeasonNotFoundError("season cannot be less than 2008")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet"
         )

@@ -207,7 +207,7 @@ board = wnba_draft_model(2023)
 
 ### wnba_in_game_win_prob {#wnba_in_game_win_prob}
 
-`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
 
@@ -217,12 +217,12 @@ WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_
 |---|---|---|---|
 | `pbp` | `DataFrame` |  |  |
 | `pregame_home_prob` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
 
-One row per play: the five feature columns plus `home_win_prob`.
+One row per play: the `in_game_features` columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
@@ -231,11 +231,13 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 ### wnba_predict_games {#wnba_predict_games}
 
-`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
 
@@ -245,7 +247,7 @@ WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nb
 |---|---|---|---|
 | `games` | `DataFrame` |  |  |
 | `ratings` | `DataFrame` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
@@ -256,7 +258,7 @@ No returns table is published for this function: no capture: it needs one row pe
 
 ### wnba_predict_margin {#wnba_predict_margin}
 
-`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
+`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '10') -> 'float'`
 
 WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
 
@@ -269,7 +271,7 @@ WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.
 | `home_pace` | `float` |  |  |
 | `away_pace` | `float` |  |  |
 | `neutral` | `bool` | `False` |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 
@@ -277,7 +279,7 @@ Expected margin in points (positive favors the home team).
 
 ### wnba_predict_total {#wnba_predict_total}
 
-`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
+`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '10') -> 'float'`
 
 WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
 
@@ -291,7 +293,7 @@ WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.p
 | `away_def` | `float` |  |  |
 | `home_pace` | `float` |  |  |
 | `away_pace` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 
@@ -325,7 +327,7 @@ board = wnba_rookie_projection(2023)
 
 ### wnba_team_ratings {#wnba_team_ratings}
 
-`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
 
@@ -334,13 +336,13 @@ WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Union[int, list[int]]` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 | `as_of_date` | `Union[date, None]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`, then `<m>_rank`, `<m>_pct` and `<m>_n` for each of the seven ratings (BB-D2, the football F5/F6 grammar of `sportsdataverse._common.league_context`). `_rank` is 1 for the best team in the season: the highest offensive and net ratings, the lowest `*_def_rtg`, the fastest pace. `_pct` is the Weibull percentile. Both are null for a team under half the season's most games, and for every team when fewer than five qualifying teams have the rating or they all share one value. On a full season the half-games rule drops the All-Star teams; with `as_of_date` the most games is taken before the cut, so an early cut can also null regular teams. `_n` counts the sample: possessions (rounded) for the ratings, games for the paces. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -356,10 +358,31 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
 | `adj_net_z` | Float64 |  |
+| `adj_off_rtg_rank` | Float64 | Rank of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_def_rtg_rank` | Float64 | Rank of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `adj_net_rtg_rank` | Float64 | Rank of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_pace_rank` | Float64 | Rank of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `raw_off_rtg_rank` | Float64 | Rank of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `raw_def_rtg_rank` | Float64 | Rank of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `raw_pace_rank` | Float64 | Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `adj_off_rtg_pct` | Float64 | Percentile of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_def_rtg_pct` | Float64 | Percentile of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_net_rtg_pct` | Float64 | Percentile of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_pace_pct` | Float64 | Percentile of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_off_rtg_pct` | Float64 | Percentile of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_def_rtg_pct` | Float64 | Percentile of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_pace_pct` | Float64 | Percentile of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_off_rtg_n` | Int64 | Sample size of adj_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_def_rtg_n` | Int64 | Sample size of adj_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_net_rtg_n` | Int64 | Sample size of adj_net_rtg: the box-score possessions the rating is computed over on both ends (offense plus defense, twice the possession estimate), summed over the team's games and rounded. |
+| `adj_pace_n` | Int64 | Sample size of adj_pace: the games the pace is computed over (equal to games). |
+| `raw_off_rtg_n` | Int64 | Sample size of raw_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_def_rtg_n` | Int64 | Sample size of raw_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_pace_n` | Int64 | Sample size of raw_pace: the games the pace is computed over (equal to games). |
 
 ### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
 
-`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
+`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '10') -> 'float'`
 
 WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
 
@@ -368,7 +391,7 @@ WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_pre
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `exp_margin` | `float` |  |  |
-| `league_id` | `str` | `'00'` |  |
+| `league_id` | `str` | `'10'` |  |
 
 **Returns**
 

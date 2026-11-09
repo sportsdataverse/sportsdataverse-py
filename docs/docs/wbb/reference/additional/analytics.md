@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster"
 sidebar_label: "Analytics: ConcurrentClump–using_roster"
-sidebar_position: 10
+sidebar_position: 11
 description: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster
@@ -1488,13 +1488,13 @@ Select and seed a tournament field from a per-team résumé frame.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see `_conference_auto_bids`); always in the field. |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid teams (see `~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always in the field. |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
 | `field_size` | `int` | `68` | Tournament field size (68). |
 
 **Returns**
 
-One row per input team: `season, team_id, resume_score, projected_seed` (1-16, capped for the First Four; null outside the field), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `bid` (exactly `field_size` true).
+One row per input team: `season, team_id, resume_score, projected_seed` (1-16, null outside the field; in a 68-team field the last four at-large teams and the four worst auto-bids share First Four slots, so every line has four slots), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `at_large_rank` (1 = the best résumé without an auto-bid; null for auto-bids), `bid` (exactly `field_size` true).
 
 No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
 

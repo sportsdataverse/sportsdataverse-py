@@ -297,9 +297,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_bracket_sim](additional/models-and-calculators-2.md#wbb_bracket_sim) | Women's single-elimination bracket Monte Carlo. |
 | [wbb_in_game_win_prob](additional/models-and-calculators-2.md#wbb_in_game_win_prob) | Women's per-play in-game win probability (bundled `wbb_in_game_wp.ubj`). |
 | [wbb_predict_games](additional/models-and-calculators-2.md#wbb_predict_games) | Women's vectorized pregame predictions over a schedule. |
+| [wbb_season_projections](additional/models-and-calculators-2.md#wbb_season_projections) | Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
 | [wbb_season_sim](additional/models-and-calculators-2.md#wbb_season_sim) | Women's remaining-schedule Monte Carlo. |
-| [wbb_team_ratings](additional/models-and-calculators-2.md#wbb_team_ratings) | Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo). |
-| [win_prob_from_margin](additional/models-and-calculators-2.md#win_prob_from_margin) | Women's home win probability from an expected margin. |
+| [wbb_team_ratings](additional/models-and-calculators-3.md#wbb_team_ratings) | Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo). |
+| [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Women's home win probability from an expected margin. |
 
 ## Analytics
 
@@ -345,9 +346,30 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [strength_of_schedule](additional/analytics.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
 | [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's projected tournament field for a season. |
-| [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
-| [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's daily `bracketology` table: the projected field, seeds and bubble. |
+| [wbb_coach_careers](additional/analytics-2.md#wbb_coach_careers) | Women's college head-coach careers over `seasons`. |
+| [wbb_coach_seasons](additional/analytics-2.md#wbb_coach_seasons) | Women's college head-coach seasons: W-L, ratings and four factors of each coach's team-seasons. |
+| [wbb_epv_lineup_games](additional/analytics-2.md#wbb_epv_lineup_games) | Per women's college five-woman unit and game: the EPV added with the unit on the floor. |
+| [wbb_epv_player_games](additional/analytics-2.md#wbb_epv_player_games) | Per women's college player and game: EPV added on her own actions and on-court EPV +/-. |
+| [wbb_epv_plays](additional/analytics-2.md#wbb_epv_plays) | EPV and EPV added on every women's college play-by-play event inside a possession. |
+| [wbb_epv_team_games](additional/analytics-2.md#wbb_epv_team_games) | Per women's college team and game: EPV added on offense and allowed on defense. |
+| [wbb_game_flow](additional/analytics-2.md#wbb_game_flow) | Women's college game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
+| [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
+| [wbb_lineup_seasons](additional/analytics-3.md#wbb_lineup_seasons) | Women's college lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
+| [wbb_play_styles](additional/analytics-3.md#wbb_play_styles) | Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20). |
+| [wbb_player_on_off](additional/analytics-3.md#wbb_player_on_off) | Women's college player on/off: each player's team with her on the floor and without her. |
+| [wbb_player_war](additional/analytics-3.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
+| [wbb_player_wowy](additional/analytics-3.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
+| [wbb_situational_lineup](additional/analytics-3.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
+| [wbb_situational_player](additional/analytics-3.md#wbb_situational_player) | Women's college player on-floor splits by situation. |
+| [wbb_situational_team](additional/analytics-3.md#wbb_situational_team) | Women's college team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
+| [wbb_strength_of_schedule](additional/analytics-3.md#wbb_strength_of_schedule) | Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [wbb_team_luck](additional/analytics-3.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
+| [wbb_team_season_flow](additional/analytics-4.md#wbb_team_season_flow) | Women's college game flow per team and season, with ranks, percentiles and `_n`. |
+| [wbb_team_season_rates](additional/analytics-4.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
+| [wbb_team_strength](additional/analytics-4.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [weighted_avg](additional/analytics-4.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## Dates and seasons
 

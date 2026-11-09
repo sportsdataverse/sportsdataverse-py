@@ -1,0 +1,27 @@
+schema: wbb_epv_lineup_games
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: lineup_id
+  type: character
+  description: ''
+- name: off_epv
+  type: double
+  description: ''
+- name: def_epv
+  type: double
+  description: ''
+- name: net_epv
+  type: double
+  description: ''
+- name: plays
+  type: integer
+  description: ''

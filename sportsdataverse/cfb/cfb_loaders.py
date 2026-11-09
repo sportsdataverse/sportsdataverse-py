@@ -8,6 +8,7 @@ import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
+    _alias_columns,  # noqa: F401  (used only by loaders declaring column_aliases)
     _as_season_list,
     _cast_ids_int32,  # noqa: F401  (used only by loaders declaring id_int32)
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
@@ -829,7 +830,7 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production
 
     Args:
-        seasons: an int or iterable of seasons (>= 2005).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -849,7 +850,7 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
         |is_estimated      |Boolean |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2005.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -858,8 +859,8 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2005:
-            raise SeasonNotFoundError("season cannot be less than 2005")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_returning_production/cfb_returning_production_{season}.parquet"
         )
@@ -1490,7 +1491,7 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2013).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1512,7 +1513,7 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources    |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2013.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1521,8 +1522,8 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2013:
-            raise SeasonNotFoundError("season cannot be less than 2013")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet"
         )
@@ -1549,7 +1550,7 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2013).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1571,7 +1572,7 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources      |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2013.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1580,8 +1581,8 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2013:
-            raise SeasonNotFoundError("season cannot be less than 2013")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet"
         )
@@ -2319,7 +2320,7 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index
 
     Args:
-        seasons: an int or iterable of seasons (>= 2015).
+        seasons: an int or iterable of seasons (>= 2005).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2337,7 +2338,7 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
         |teamadjgamescore |Null    |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2015.
+        SeasonNotFoundError: if a requested season is below 2005.
 
     Example:
         Quick start::
@@ -2346,8 +2347,8 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2015:
-            raise SeasonNotFoundError("season cannot be less than 2015")
+        if int(season) < 2005:
+            raise SeasonNotFoundError("season cannot be less than 2005")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_power_index/power_index_{season}.parquet"
         )

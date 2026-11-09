@@ -1,10 +1,108 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_four–win_prob"
-sidebar_label: "Models and calculators: nba_four–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_draft–win_prob"
+sidebar_label: "Models and calculators: nba_draft–win_prob"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_four–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_draft–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_four–win_prob
+# NBA — additional Python functions — Models and calculators: nba_draft–win_prob
+
+### nba_draft_model {#nba_draft_model}
+
+`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Project prospect career value + draft probability from combine measurements.
+
+Loads the draft-combine wrappers for `draft_year` (or each year in the
+list), builds the shared combine-feature vector
+(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
+and applies the bundled ridge (`proj_career_value`) / logistic
+(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
+| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_draft_model
+board = nba_draft_model(2019)
+print(board.sort("proj_career_value", descending=True).head())
+
+# With a college-side prior
+
+board = nba_draft_model(2019, college_prior=mbb_prior_df)
+
+# Pipeline next step (one line)
+
+board.filter(pl.col("pro_tier") == "lottery")
+```
+
+### nba_expected_turnovers {#nba_expected_turnovers}
+
+`nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Expected TOV + residual ball-security skill from Synergy play-type mix.
+
+`lg_to_rate_t` = poss-weighted league mean of `turnover_freq` for play
+type `t`; `expected_tov = scale · Σ_t poss_t · lg_to_rate_t`;
+`ball_security_skill = 100·(expected_tov − tov)/poss` (fewer turnovers
+than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
+
+`scale = Σ actual tov / Σ raw type-mix estimate` is derived from the
+fetched season itself (covers players below Synergy's per-type
+classification threshold) so `Σ expected_tov ≡ Σ tov` holds exactly.
+Swapping each player's own `turnover_freq` in for the league rate
+reconstructs their real season TOV almost exactly (slope ~1.03, Spearman
+~0.97 on the 2023-24 oracle corpus) -- confirming the column semantics are
+correct. The *expected* (league-rate) version necessarily explains less
+variance than *actual* (turnover-avoidance is a more individual,
+less play-type-bound skill than foul-drawing), so its calibration slope
+runs lower than model (3)'s -- see the oracle gate for the observed floor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `tov`, `poss` (bypasses the live fetch). |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `turnover_freq`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player: `player_id` (Int64), `poss`/`tov`/ `expected_tov`/`ball_security_skill` (Float64). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_expected_turnovers
+t = nba_expected_turnovers("2023-24")
+print(t.sort("ball_security_skill", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
+
+# Pipeline next step
+
+t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
+```
 
 ### nba_four_factor_rapm {#nba_four_factor_rapm}
 
@@ -58,10 +156,15 @@ print(ff.sort("efg__off", descending=True).head())
 Per-play home win probability from the bundled in-game model.
 
 Scores `in_game_features` through the committed artifact
-(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA -- a shallow
-xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
-stays out-of-sample; escalated from a plain logistic that failed the
-per-bucket calibration gate).
+(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA, `wnba_in_game_wp.ubj`
+for WNBA): a shallow monotone-constrained xgboost booster fit by
+`tools/models/nba_prediction/train_in_game_wp.py` (NBA on 2022, 2023 and 2025,
+held out on 2026; WNBA on 2021-2024, held out on 2025). Within the final minute
+the clock reaches the model only through `margin_per_sqrt_sec`, so at a fixed
+lead the probability moves toward the leader as time runs out. This is the raw
+model output: it never applies the game result. `nba_game_page.score_win_prob` sets the
+last play of a finished game to the result, and that settle step is small now but
+not always zero (the WNBA booster saturates near 0.99 for a lead of 5 or more).
 
 Gate note: the plan's concurrent oracle (stats.nba.com
 `winprobabilitypbp` HOME_PCT) is a dead endpoint, so this model is
@@ -79,7 +182,7 @@ feed. See the fixtures README + SDD ledger.
 
 **Returns**
 
-One row per play: the five feature columns plus `home_win_prob`.
+One row per play: the `in_game_features` columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
@@ -88,6 +191,8 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 **Raises**
@@ -360,7 +465,7 @@ and adds a per-season dense `rank` (on `adj_net_rtg` descending) and
 
 **Returns**
 
-One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`. Empty input returns that schema with zero rows.
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`, then `<m>_rank`, `<m>_pct` and `<m>_n` for each of the seven ratings (BB-D2, the football F5/F6 grammar of `sportsdataverse._common.league_context`). `_rank` is 1 for the best team in the season: the highest offensive and net ratings, the lowest `*_def_rtg`, the fastest pace. `_pct` is the Weibull percentile. Both are null for a team under half the season's most games, and for every team when fewer than five qualifying teams have the rating or they all share one value. On a full season the half-games rule drops the All-Star teams; with `as_of_date` the most games is taken before the cut, so an early cut can also null regular teams. `_n` counts the sample: possessions (rounded) for the ratings, games for the paces. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -376,6 +481,27 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
 | `adj_net_z` | Float64 |  |
+| `adj_off_rtg_rank` | Float64 | Rank of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_def_rtg_rank` | Float64 | Rank of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `adj_net_rtg_rank` | Float64 | Rank of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_pace_rank` | Float64 | Rank of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `raw_off_rtg_rank` | Float64 | Rank of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `raw_def_rtg_rank` | Float64 | Rank of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `raw_pace_rank` | Float64 | Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `adj_off_rtg_pct` | Float64 | Percentile of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_def_rtg_pct` | Float64 | Percentile of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_net_rtg_pct` | Float64 | Percentile of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_pace_pct` | Float64 | Percentile of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_off_rtg_pct` | Float64 | Percentile of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_def_rtg_pct` | Float64 | Percentile of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_pace_pct` | Float64 | Percentile of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_off_rtg_n` | Int64 | Sample size of adj_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_def_rtg_n` | Int64 | Sample size of adj_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_net_rtg_n` | Int64 | Sample size of adj_net_rtg: the box-score possessions the rating is computed over on both ends (offense plus defense, twice the possession estimate), summed over the team's games and rounded. |
+| `adj_pace_n` | Int64 | Sample size of adj_pace: the games the pace is computed over (equal to games). |
+| `raw_off_rtg_n` | Int64 | Sample size of raw_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_def_rtg_n` | Int64 | Sample size of raw_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_pace_n` | Int64 | Sample size of raw_pace: the games the pace is computed over (equal to games). |
 
 **Example**
 
@@ -694,7 +820,7 @@ with open("validation_card.md", "w") as f:
 
 ### score_win_prob {#score_win_prob}
 
-`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False) -> 'pl.DataFrame'`
+`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'pl.DataFrame'`
 
 Per-play home win probability, its play-to-play delta, and the prior, for one game.
 
@@ -712,15 +838,16 @@ games with the men's / women's college booster
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 halves, 4 quarters); default from the frame's `season` via `game_regulation_periods`. |
 | `neutral_site` | `Optional[bool]` | `False` | Whether the game is at a neutral site: no home-court advantage in a lineless prior; see `home_prior`. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`), the prior when there is no line; see `home_prior`. |
 
 **Returns**
 
-The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
+The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"rated"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
 
 | col_name | type | description |
 |---|---|---|
-| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
-| `prior_source` | String | Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5). |
+| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else rated_home_prob when the caller passed one (nba_rated_priors), else home-court advantage alone (0.5 at a neutral site). |
+| `prior_source` | String | Where the prior came from: "spread" (a real line), "rated" (no line; the as-of team-ratings prior passed as rated_home_prob), "hfa" (no line and no rating; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line or rating at a neutral site; prior 0.5). |
 | `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
 | `home_win_prob` | Float64 | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
 | `wp_delta` | Float64 | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
@@ -750,6 +877,60 @@ wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").he
 from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
 one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 score_win_prob(one, league="mbb", neutral_site=True)
+```
+
+### season_game_excitement {#season_game_excitement}
+
+`season_game_excitement(pbp: 'pl.DataFrame', *, league_id: 'str | None' = None, league: 'str | None' = None, schedule: 'pl.DataFrame | None' = None) -> 'pl.DataFrame'`
+
+Every game's excitement index, lead changes and biggest swing, ranked within its season.
+
+Scores each game with `score_win_prob` and `game_excitement`, then ranks the
+completed games of each season by GEI. A game whose pbp stops before the end (a truncated
+release) keeps its GEI so far but is not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Plays of one league in the basketball pbp schema (a season's `load_<league>_pbp` release, or any set of games), the columns `score_win_prob` needs plus `game_id` and `season`. |
+| `league_id` | `str \| None` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `schedule` | `DataFrame \| None` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral). |
+
+**Returns**
+
+One row per game, sorted by `season` then `game_id`: `game_id`, `season`, `gei`, `lead_changes`, `max_swing_pts`, `completed`, `gei_rank` (1 = the season's most exciting completed game, ties share the best rank), `gei_pct` (the share of the season's completed games with a GEI at or below this one, so the top game is 1.0) and `gei_n` (the season's completed games). The three rank columns are null for a game that is not completed. An empty input returns an empty frame with these columns.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `season` | Int64 | Season year as the pbp release labels it (the year the season ends). |
+| `gei` | Float64 | Game excitement index: the league's mean plays per game (GEI_SCALE) / the game's plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football's Game on Paper formula with a per-league scale. |
+| `lead_changes` | Int64 | How often the scoring leader flipped; a tie is not a lead, so one side ahead, tied, then the other ahead counts once. |
+| `max_swing_pts` | Float64 | Largest single-play home win-probability change, in percentage points, with no team named. |
+| `completed` | Boolean | Whether the pbp reaches the end of the game (an End Game / End Period row from the last regulation period on with the score not tied), so the last play was taken to the result. |
+| `gei_rank` | Int64 | Rank of gei among the season's completed games, 1 = most exciting, ties share the best rank; null for a game that is not completed. |
+| `gei_pct` | Float64 | Share of the season's completed games with a gei at or below this one (the top game is 1.0); null for a game that is not completed. |
+| `gei_n` | Int64 | Number of completed games in the season the rank and percentile are taken over; null for a game that is not completed. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import season_game_excitement
+from sportsdataverse.wnba.wnba_loaders import load_wnba_pbp, load_wnba_schedule
+gei = season_game_excitement(load_wnba_pbp([2025]), league="wnba", schedule=load_wnba_schedule([2025]))
+
+# The season's best games
+
+gei.sort("gei_rank", nulls_last=True).head(10)
 ```
 
 ### shot_coordinates {#shot_coordinates}

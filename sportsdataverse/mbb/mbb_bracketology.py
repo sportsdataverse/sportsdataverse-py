@@ -10,10 +10,13 @@ and assigns NET-style projected seeds.
 from __future__ import annotations
 
 import datetime
-from typing import Literal, Union, overload
+from collections.abc import Iterable
+from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
+
+from sportsdataverse.mbb.mbb_college_season import _seed_field
 
 __all__ = [
     "mbb_bracketology",
@@ -36,6 +39,7 @@ _BRACKET_SCHEMA = {
     "projected_seed": pl.Int64,
     "at_large_prob": pl.Float64,
     "auto_bid": pl.Boolean,
+    "at_large_rank": pl.Int64,
     "bid": pl.Boolean,
 }
 
@@ -56,18 +60,22 @@ def project_bracket(
     Args:
         resume: One row per (season, team_id) with ``adj_em_z, sos, wab,
             quad1_w`` (the ratings + strength-of-schedule outputs joined).
-        auto_bids: ``team_id`` set of conference auto-bid winners (see
-            :func:`_conference_auto_bids`); always in the field.
+        auto_bids: ``team_id`` set of conference auto-bid teams (see
+            :func:`~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always
+            in the field.
         league: ``"mens"`` or ``"womens"`` (kept for shim parity; the blend is
             league-agnostic).
         field_size: Tournament field size (68).
 
     Returns:
         One row per input team: ``season, team_id, resume_score,
-        projected_seed`` (1-16, capped for the First Four; null outside the
-        field), ``at_large_prob`` (logistic in ``resume_score`` centred on the
-        selection cutoff -- every selected at-large clears 0.5), ``auto_bid``,
-        ``bid`` (exactly ``field_size`` true).
+        projected_seed`` (1-16, null outside the field; in a 68-team field the
+        last four at-large teams and the four worst auto-bids share First Four
+        slots, so every line has four slots), ``at_large_prob`` (logistic in
+        ``resume_score`` centred on the selection cutoff -- every selected
+        at-large clears 0.5), ``auto_bid``, ``at_large_rank`` (1 = the best
+        résumé without an auto-bid; null for auto-bids), ``bid`` (exactly
+        ``field_size`` true).
 
     Example:
         Quick start::
@@ -75,34 +83,35 @@ def project_bracket(
             from sportsdataverse.mbb.mbb_bracketology import project_bracket
             field = project_bracket(resume, auto_bids)
     """
+    if resume.height == 0:  # preseason: nobody has a résumé yet
+        return pl.DataFrame(schema=_BRACKET_SCHEMA)
+    if resume.get_column("season").n_unique() > 1:
+        return pl.concat(
+            [
+                project_bracket(sub, auto_bids, league=league, field_size=field_size)
+                for _k, sub in resume.group_by("season", maintain_order=True)
+            ]
+        ).sort("season", "resume_score", descending=[False, True])
     score = sum(_RESUME_WEIGHTS[c] * (pl.col(c) if c == "adj_em_z" else _z(c)) for c in _RESUME_WEIGHTS)
-    df = (
-        resume.with_columns(
-            score.cast(pl.Float64).alias("resume_score"),
-            pl.col("team_id").is_in(sorted(auto_bids)).alias("auto_bid")
-            if auto_bids
-            else pl.lit(False).alias("auto_bid"),
-        )
-        .sort("resume_score", descending=True)
-        .with_columns(pl.int_range(pl.len()).over("season").alias("_pos"))
-    )
+    df = resume.with_columns(
+        score.cast(pl.Float64).alias("resume_score"),
+        pl.col("team_id").is_in(sorted(auto_bids)).alias("auto_bid") if auto_bids else pl.lit(False).alias("auto_bid"),
+    ).sort("resume_score", descending=True)
 
     n_auto = df.filter(pl.col("auto_bid") == True).height  # noqa: E712
     at_large_slots = max(0, field_size - n_auto)
     df = df.with_columns(
-        (pl.col("auto_bid") == False).cast(pl.Int64).cum_sum().over("season").alias("_al_rank")  # noqa: E712
+        pl.when(pl.col("auto_bid") == False)  # noqa: E712
+        .then((pl.col("auto_bid") == False).cast(pl.Int64).cum_sum().over("season"))  # noqa: E712
+        .alias("at_large_rank")
     ).with_columns(
-        (
-            (pl.col("auto_bid") == True)  # noqa: E712
-            | ((pl.col("auto_bid") == False) & (pl.col("_al_rank") <= at_large_slots))  # noqa: E712
-        ).alias("bid")
+        ((pl.col("auto_bid") == True) | (pl.col("at_large_rank") <= at_large_slots)).alias("bid")  # noqa: E712
     )
 
     # at-large logistic: centred midway between the last at-large in and the
     # best at-large left out, scaled to a quarter of the score spread
-    non_auto = df.filter(pl.col("auto_bid") == False)  # noqa: E712
-    last_in = non_auto.filter(pl.col("_al_rank") == at_large_slots)
-    first_out = non_auto.filter(pl.col("_al_rank") == at_large_slots + 1)
+    last_in = df.filter(pl.col("at_large_rank") == at_large_slots)
+    first_out = df.filter(pl.col("at_large_rank") == at_large_slots + 1)
     if last_in.height and first_out.height:
         cutoff = 0.5 * (last_in["resume_score"][0] + first_out["resume_score"][0])
     else:
@@ -110,37 +119,18 @@ def project_bracket(
     scale = max(float(df["resume_score"].std() or 1.0) * 0.25, 1e-9)
     df = df.with_columns((1.0 / (1.0 + (-(pl.col("resume_score") - cutoff) / scale).exp())).alias("at_large_prob"))
 
-    field = (
-        df.filter(pl.col("bid") == True)  # noqa: E712
-        .with_columns(pl.int_range(pl.len()).over("season").alias("_fpos"))
-        .with_columns(
-            pl.min_horizontal((pl.col("_fpos") // 4) + 1, pl.lit(_SEED_CAP)).cast(pl.Int64).alias("projected_seed")
-        )
-        .select("team_id", "season", "projected_seed")
+    seeds = _seed_field(
+        df.get_column("resume_score").to_numpy(),
+        df.get_column("bid").to_numpy(),
+        df.get_column("auto_bid").to_numpy(),
     )
     out = (
-        df.join(field, on=["season", "team_id"], how="left")
+        df.with_columns(pl.Series("projected_seed", seeds, dtype=pl.Int64))
+        .with_columns(pl.when(pl.col("bid")).then(pl.col("projected_seed")).alias("projected_seed"))
         .select(*_BRACKET_SCHEMA)
         .sort("season", "resume_score", descending=[False, True])
     )
     return out
-
-
-def _conference_auto_bids(standings: pl.DataFrame) -> set[str]:
-    """Conference auto-bid winners from the long-form ``load_mbb_standings``.
-
-    Picks, per conference ``group_id``, the team with the best conference win
-    percentage (``vsConf_winPercent`` stat rows) -- the regular-season leader,
-    which is the best pre-tournament auto-bid proxy (replaced by the actual
-    champion once conference tournaments finish).
-    """
-    conf = standings.filter(pl.col("stat_name") == "vsConf_winPercent")
-    if conf.height == 0:
-        conf = standings.filter(pl.col("stat_name") == "winPercent")
-    leaders = (
-        conf.sort("value", descending=True).group_by("group_id", maintain_order=True).agg(pl.col("team_id").first())
-    )
-    return set(leaders.get_column("team_id").to_list())
 
 
 @overload
@@ -149,6 +139,7 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -159,6 +150,7 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -168,30 +160,40 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Projected tournament field for a season from the released ESPN data.
+) -> pl.DataFrame | pd.DataFrame:
+    """The daily ``bracketology`` table: the projected field, seeds and bubble as of a date.
 
-    Builds ratings + résumé (optionally as of a date -- games on or after
-    ``as_of_date`` are excluded), resolves conference auto-bids from the
-    standings, and selects/seeds the 68-team field via
-    :func:`project_bracket`.
+    Builds the season résumé (:func:`~sportsdataverse.mbb.mbb_college_season.season_resume`)
+    from the games strictly before ``as_of_date``, gives each conference's auto-bid to its
+    tournament champion (or, before the final, the conference leader still alive), and
+    selects and seeds the 68-team field with :func:`project_bracket`.
 
     Args:
         season: Season to project (e.g. ``2024``).
         as_of_date: Only use games strictly before this date (Selection-Sunday
             style snapshots); ``None`` uses every completed game.
         league: ``"mens"`` or ``"womens"``.
+        ineligible: Team ids barred from the NCAA tournament (reclassifying programs,
+            postseason bans): no at-large bid, and a barred conference champion passes the
+            auto-bid to the final's runner-up. ESPN does not flag them. ``None`` (default) reads the bundled list
+            (:func:`~sportsdataverse.mbb.mbb_tournament_eligibility.mbb_tournament_ineligible`); ``()`` bars no one.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per team -- see :func:`project_bracket`.
+        One row per Division I team, best ``resume_score`` first: record, NET-estimate and
+        RPI ranks, WAB and Quad-1 record, ``resume_score``, ``auto_bid`` /
+        ``conf_champion``, ``at_large_rank``, ``bid``, ``projected_seed``,
+        ``at_large_prob`` and the ``bubble`` label (``last_four_byes``, ``last_four_in``,
+        ``first_four_out``, ``next_four_out``).
 
     Example:
         Quick start::
 
+            import datetime
             from sportsdataverse.mbb import mbb_bracketology
-            field = mbb_bracketology(2024)
+            field = mbb_bracketology(2024, as_of_date=datetime.date(2024, 3, 18))
 
         Pipeline next step (one line)::
 
@@ -201,36 +203,8 @@ def mbb_bracketology(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
-    from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
-    from sportsdataverse.mbb.mbb_team_ratings import (
-        _league_loaders,
-        _normalize_schedule,
-        adjust_efficiency,
-        raw_game_efficiency,
-    )
+    from sportsdataverse.mbb.mbb_college_season import load_season_inputs, season_bracketology
 
-    load_schedule, load_team_box = _league_loaders(league)
-    if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_standings as load_standings
-    else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_standings as load_standings
-
-    results = _normalize_schedule(load_schedule([season])).filter(
-        pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
-    )
-    if as_of_date is not None:
-        results = as_of_ratings_split(results, as_of_date)
-    eff = raw_game_efficiency(results, load_team_box([season]))
-    ratings = adjust_efficiency(eff, league=league).with_columns(
-        pl.col("adj_em").rank(method="min", descending=True).over("season").cast(pl.Int64).alias("rank"),
-        ((pl.col("adj_em") - pl.col("adj_em").mean().over("season")) / pl.col("adj_em").std().over("season")).alias(
-            "adj_em_z"
-        ),
-    )
-    resume = strength_of_schedule(results, ratings, league=league).join(
-        ratings.select("season", "team_id", "adj_em_z"), on=["season", "team_id"], how="inner"
-    )
-    auto = _conference_auto_bids(load_standings([season]))
-    out = project_bracket(resume, auto, league=league)
+    inp = load_season_inputs(season, as_of_date=as_of_date, league=league, ineligible=ineligible)
+    out = season_bracketology(inp.resume, inp.auto_bids, league=league)
     return out.to_pandas() if return_as_pandas else out

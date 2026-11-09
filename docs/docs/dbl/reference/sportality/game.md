@@ -66,7 +66,7 @@ Game header: Genius match id (extId), arena, state, teams, scores.
 | `away_team_founded_on` | String | Year the club was founded ('' when unknown). |
 | `away_team_icon` | String | Away team logo URL. |
 | `away_team_score` | Int64 | Points scored by the away team. |
-| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); joins /statistics-v2/layout-info originalSeasonSeriesGameTypeTeams[].ssgtUuid and every route keyed by ssgt. |
 | `series_uuid` | String | Series uuid (platform key space; Basketligaen = m1ay3mpa4t, the only series on this host). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

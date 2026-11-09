@@ -384,10 +384,10 @@ def wnba_play_context(
 
             import polars as pl
             clean = poss.filter(
-                (pl.col("is_garbage_time") == False)  # noqa: E712
+                (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
                 & (pl.col("is_heave_possession") == False)  # noqa: E712
             )
-            print(clean["is_transition"].mean())
+            print(clean["is_transition_ctg"].mean())
 
         See Also:
             * `wehoop`_ — WNBA/WBB data in R
@@ -467,5 +467,5 @@ def wnba_rapm_from_games(
     if not frames:
         out = nba_rapm(pl.DataFrame())
         return out.to_pandas() if return_as_pandas else out
-    out = nba_rapm(pl.concat(frames, how="diagonal_relaxed"))
+    out = nba_rapm(pl.concat(frames, how="diagonal_relaxed"), league_id="10")
     return out.to_pandas() if return_as_pandas else out

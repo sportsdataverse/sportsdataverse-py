@@ -66,7 +66,7 @@ function surface is identical across all seven leagues below.
 ## 🔌 Setup
 
 ```sh
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 No API key required — all seven leagues hit ESPN's public endpoints.
@@ -74,6 +74,7 @@ No API key required — all seven leagues hit ESPN's public endpoints.
 
 ```python
 import polars as pl
+from IPython.display import display
 
 # Spring / pro football
 import sportsdataverse.football.ufl as ufl
@@ -127,7 +128,7 @@ def _keys(d):
 
 
 # Stable completed-season reference dates / ids for each league
-UFL_DATE   = 20240525   # UFL Championship Game, May 25 2024
+UFL_DATE   = 20250614   # UFL Championship Game, June 14 2025
 XFL_DATE   = 20230521   # XFL Championship Game, May 21 2023 (last full XFL season)
 CFL_DATE   = 20231119   # 111th Grey Cup, Nov 19 2023
 CBB_DATE   = 20240624   # NCAA Baseball CWS finals, June 24 2024
@@ -182,12 +183,23 @@ if board is not None and getattr(board, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board.select(keep).head() if keep else board.head()
+    display(board.select(keep).head() if keep else board.head())
 else:
-    'scoreboard unavailable for that date'
+    print('scoreboard unavailable for that date')
 ```
 
     ✅ UFL scoreboard (parsed)
+
+
+
+    shape: (1, 5)
+    ┌─────────────────────────────────┬────────────┬─────────────────────────┬────────────┬────────────┐
+    │ name                            ┆ short_name ┆ status_type_description ┆ home_score ┆ away_score │
+    │ ---                             ┆ ---        ┆ ---                     ┆ ---        ┆ ---        │
+    │ str                             ┆ str        ┆ str                     ┆ str        ┆ str        │
+    ╞═════════════════════════════════╪════════════╪═════════════════════════╪════════════╪════════════╡
+    │ D.C. Defenders at Michigan Pan… ┆ DC VS MIC  ┆ Final                   ┆ 34         ┆ 58         │
+    └─────────────────────────────────┴────────────┴─────────────────────────┴────────────┴────────────┘
 
 
 ### 🏫 UFL: teams
@@ -204,12 +216,48 @@ if teams_ufl is not None and teams_ufl.height:
     keep = [c for c in teams_ufl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location',
                      'color', 'alternate_color')]
-    teams_ufl.select(keep).head(10) if keep else teams_ufl.head(10)
+    display(teams_ufl.select(keep).head(10) if keep else teams_ufl.head(10))
 else:
-    'teams unavailable'
+    print('teams unavailable')
 ```
 
     ✅ UFL teams
+
+
+
+    shape: (8, 14)
+    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
+    │ team_abbr ┆ team_alte ┆ team_colo ┆ team_disp ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid │
+    │ eviation  ┆ rnate_col ┆ r         ┆ lay_name  ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---      │
+    │ ---       ┆ or        ┆ ---       ┆ ---       ┆   ┆ ---       ┆ _name     ┆ str       ┆ str      │
+    │ str       ┆ ---       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆           ┆          │
+    │           ┆ str       ┆           ┆           ┆   ┆           ┆ str       ┆           ┆          │
+    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
+    │ BHAM      ┆ c6b784    ┆ a32035    ┆ Birmingha ┆ … ┆ Stallions ┆ Stallions ┆ birmingha ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ m         ┆   ┆           ┆           ┆ m-stallio ┆ 7~t:1260 │
+    │           ┆           ┆           ┆ Stallions ┆   ┆           ┆           ┆ ns        ┆ 73       │
+    │ CLB       ┆ 69b3e7    ┆ 0c2340    ┆ Columbus  ┆ … ┆ Aviators  ┆ Aviators  ┆ columbus- ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Aviators  ┆   ┆           ┆           ┆ aviators  ┆ 7~t:1322 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 61       │
+    │ DC        ┆ ffffff    ┆ c8102e    ┆ DC        ┆ … ┆ Defenders ┆ DEFENDERS ┆ dc-defend ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ DEFENDERS ┆   ┆           ┆           ┆ ers       ┆ 7~t:1126 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 46       │
+    │ DAL       ┆ 000000    ┆ 69b3e7    ┆ Dallas    ┆ … ┆ Renegades ┆ Renegades ┆ dallas-re ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Renegades ┆   ┆           ┆           ┆ negades   ┆ 7~t:1126 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 47       │
+    │ HOU       ┆ e4002b    ┆ 000000    ┆ Houston   ┆ … ┆ Gamblers  ┆ Gamblers  ┆ houston-g ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Gamblers  ┆   ┆           ┆           ┆ amblers   ┆ 7~t:1260 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 75       │
+    │ LOU       ┆ 97d700    ┆ 06190a    ┆ Louisvill ┆ … ┆ Kings     ┆ Kings     ┆ louisvill ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ e Kings   ┆   ┆           ┆           ┆ e-kings   ┆ 7~t:1322 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 62       │
+    │ ORL       ┆ 252a36    ┆ fe5000    ┆ Orlando   ┆ … ┆ Storm     ┆ Storm     ┆ orlando-s ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Storm     ┆   ┆           ┆           ┆ torm      ┆ 7~t:1322 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 63       │
+    │ STL       ┆ a2aaad    ┆ 002677    ┆ St. Louis ┆ … ┆ Battlehaw ┆ Battlehaw ┆ st-louis- ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Battlehaw ┆   ┆ ks        ┆ ks        ┆ battlehaw ┆ 7~t:1126 │
+    │           ┆           ┆           ┆ ks        ┆   ┆           ┆           ┆ ks        ┆ 51       │
+    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
 ### 📊 UFL: standings
@@ -225,12 +273,31 @@ if standings_ufl is not None and standings_ufl.height:
     keep = [c for c in standings_ufl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
                      'wins', 'losses', 'win_percent', 'points_for', 'points_against')]
-    standings_ufl.select(keep).head(8) if keep else standings_ufl.head(8)
+    display(standings_ufl.select(keep).head(8) if keep else standings_ufl.head(8))
 else:
-    'standings unavailable'
+    print('standings unavailable')
 ```
 
     ✅ UFL standings
+
+
+
+    shape: (8, 8)
+    ┌─────────┬─────────────┬───────────────┬──────┬────────┬─────────────┬────────────┬───────────────┐
+    │ team_id ┆ team_name   ┆ team_abbrevia ┆ wins ┆ losses ┆ win_percent ┆ points_for ┆ points_agains │
+    │ ---     ┆ ---         ┆ tion          ┆ ---  ┆ ---    ┆ ---         ┆ ---        ┆ t             │
+    │ i64     ┆ str         ┆ ---           ┆ f64  ┆ f64    ┆ f64         ┆ f64        ┆ ---           │
+    │         ┆             ┆ str           ┆      ┆        ┆             ┆            ┆ f64           │
+    ╞═════════╪═════════════╪═══════════════╪══════╪════════╪═════════════╪════════════╪═══════════════╡
+    │ 132263  ┆ Storm       ┆ ORL           ┆ 8.0  ┆ 2.0    ┆ 0.8         ┆ 232.0      ┆ 186.0         │
+    │ 112651  ┆ Battlehawks ┆ STL           ┆ 6.0  ┆ 4.0    ┆ 0.6         ┆ 212.0      ┆ 197.0         │
+    │ 132262  ┆ Kings       ┆ LOU           ┆ 6.0  ┆ 4.0    ┆ 0.6         ┆ 265.0      ┆ 219.0         │
+    │ 112646  ┆ Defenders   ┆ DC            ┆ 5.0  ┆ 5.0    ┆ 0.5         ┆ 281.0      ┆ 224.0         │
+    │ 126075  ┆ Gamblers    ┆ HOU           ┆ 4.0  ┆ 6.0    ┆ 0.4         ┆ 189.0      ┆ 236.0         │
+    │ 126073  ┆ Stallions   ┆ BHAM          ┆ 4.0  ┆ 6.0    ┆ 0.4         ┆ 190.0      ┆ 229.0         │
+    │ 112647  ┆ Renegades   ┆ DAL           ┆ 4.0  ┆ 6.0    ┆ 0.4         ┆ 224.0      ┆ 259.0         │
+    │ 132261  ┆ Aviators    ┆ CLB           ┆ 3.0  ┆ 7.0    ┆ 0.3         ┆ 216.0      ┆ 259.0         │
+    └─────────┴─────────────┴───────────────┴──────┴────────┴─────────────┴────────────┴───────────────┘
 
 
 ### 📅 UFL: team schedule
@@ -252,12 +319,27 @@ if schedule_ufl is not None and schedule_ufl.height:
             if c in ('id', 'week', 'name', 'short_name',
                      'home_team_abbreviation', 'away_team_abbreviation',
                      'home_score', 'away_score', 'status_type_description')]
-    schedule_ufl.select(keep).head() if keep else schedule_ufl.head()
+    display(schedule_ufl.select(keep).head() if keep else schedule_ufl.head())
 else:
-    'schedule unavailable'
+    print('schedule unavailable')
 ```
 
     ✅ UFL team schedule
+
+
+
+    shape: (5, 3)
+    ┌───────────┬─────────────────────────────────┬────────────┐
+    │ id        ┆ name                            ┆ short_name │
+    │ ---       ┆ ---                             ┆ ---        │
+    │ i64       ┆ str                             ┆ str        │
+    ╞═══════════╪═════════════════════════════════╪════════════╡
+    │ 401638301 ┆ D.C. Defenders at San Antonio … ┆ DC @ SA    │
+    │ 401638306 ┆ Houston Roughnecks at D.C. Def… ┆ HOU @ DC   │
+    │ 401638307 ┆ D.C. Defenders at Arlington Re… ┆ DC @ ARL   │
+    │ 401638312 ┆ D.C. Defenders at Birmingham S… ┆ DC @ BIR   │
+    │ 401638317 ┆ St. Louis Battlehawks at D.C. … ┆ STL @ DC   │
+    └───────────┴─────────────────────────────────┴────────────┘
 
 
 ### 🏟️ UFL: game summary & play-by-play
@@ -269,13 +351,13 @@ from the raw dict, or use the `parse_summary` parser (see the architecture
 note at the end of this notebook).
 
 `espn_ufl_game_plays(event_id=)` returns a lightweight play list for the same
-game without the full summary overhead.
+game without the full summary overhead. ESPN publishes no plays for UFL games, so for this
+league both come back without play-by-play.
 
 
 ```python
-# 2024 UFL Championship game — find the event_id from the scoreboard above
-# or look it up via espn_ufl_scoreboard(dates=UFL_DATE)
-UFL_CHAMPIONSHIP_ID = 401671648
+# The championship's event_id comes from the scoreboard above, so it cannot go stale
+UFL_CHAMPIONSHIP_ID = int(board['game_id'][0]) if board is not None and board.height else None
 
 summary_ufl = safe(
     'UFL game summary (raw)',
@@ -284,28 +366,26 @@ summary_ufl = safe(
 _keys(summary_ufl)
 ```
 
-    ⏭️  UFL game summary (raw): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary?event=401671648
-
-      Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
-      (from `sportsdataverse import find_team, find_athlete, find_event`)
-    (no data)
+    ✅ UFL game summary (raw)
+    top-level keys: ['boxscore_player', 'boxscore_team', 'plays', 'winprobability', 'leaders', 'game_info', 'officials', 'header', 'season_series', 'against_the_spread', 'standings', 'broadcasts', 'format', 'pickcenter', 'odds']
 
 
 
 ```python
 # Quick play-by-play via the lightweight plays endpoint
 plays_ufl = safe(
-    'UFL game plays (raw)',
+    'UFL game plays',
     lambda: ufl.espn_ufl_game_plays(event_id=UFL_CHAMPIONSHIP_ID),
-)
-_keys(plays_ufl)
+) if UFL_CHAMPIONSHIP_ID else None
+if plays_ufl is not None and plays_ufl.height:
+    display(plays_ufl.head())
+else:
+    print('ESPN publishes no play-by-play for UFL games: the plays feed for this game is empty')
+
 ```
 
-    ⏭️  UFL game plays (raw): NoDataError: No data found for https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events/401671648/competitions/4016…
-
-      Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
-      (from `sportsdataverse import find_team, find_athlete, find_event`)
-    (no data)
+    ✅ UFL game plays
+    ESPN publishes no play-by-play for UFL games: the plays feed for this game is empty
 
 
 ---
@@ -323,12 +403,36 @@ teams_xfl = safe('XFL teams', lambda: xfl.espn_xfl_teams_site())
 if teams_xfl is not None and teams_xfl.height:
     keep = [c for c in teams_xfl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location')]
-    teams_xfl.select(keep).head(10) if keep else teams_xfl.head(10)
+    display(teams_xfl.select(keep).head(10) if keep else teams_xfl.head(10))
 else:
-    'XFL teams unavailable'
+    print('XFL teams unavailable')
 ```
 
     ✅ XFL teams
+
+
+
+    shape: (4, 14)
+    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
+    │ team_abbr ┆ team_alte ┆ team_colo ┆ team_disp ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid │
+    │ eviation  ┆ rnate_col ┆ r         ┆ lay_name  ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---      │
+    │ ---       ┆ or        ┆ ---       ┆ ---       ┆   ┆ ---       ┆ _name     ┆ str       ┆ str      │
+    │ str       ┆ ---       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆           ┆          │
+    │           ┆ str       ┆           ┆           ┆   ┆           ┆ str       ┆           ┆          │
+    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
+    │ HOU       ┆ ba0c2f    ┆ 0c2340    ┆ Houston   ┆ … ┆ Houston   ┆ Roughneck ┆ houston-r ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Roughneck ┆   ┆           ┆ s         ┆ oughnecks ┆ 6~t:1126 │
+    │           ┆           ┆           ┆ s         ┆   ┆           ┆           ┆           ┆ 48       │
+    │ ORL       ┆ a3a6ad    ┆ 1a2b1e    ┆ Orlando   ┆ … ┆ Orlando   ┆ Guardians ┆ orlando-g ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Guardians ┆   ┆           ┆           ┆ uardians  ┆ 6~t:1267 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 48       │
+    │ SEA       ┆ dc4405    ┆ 00843d    ┆ Seattle   ┆ … ┆ Seattle   ┆ Sea       ┆ seattle-s ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Sea       ┆   ┆           ┆ Dragons   ┆ ea-dragon ┆ 6~t:1126 │
+    │           ┆           ┆           ┆ Dragons   ┆   ┆           ┆           ┆ s         ┆ 52       │
+    │ VGS       ┆ 373a36    ┆ e10600    ┆ Vegas     ┆ … ┆ Vegas     ┆ Vipers    ┆ vegas-vip ┆ s:20~l:3 │
+    │           ┆           ┆           ┆ Vipers    ┆   ┆           ┆           ┆ ers       ┆ 6~t:1267 │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ 47       │
+    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
 
@@ -343,12 +447,13 @@ if board_xfl is not None and getattr(board_xfl, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_xfl.select(keep).head() if keep else board_xfl.head()
+    display(board_xfl.select(keep).head() if keep else board_xfl.head())
 else:
-    'XFL scoreboard unavailable'
+    print('XFL scoreboard unavailable')
 ```
 
     ✅ XFL scoreboard (parsed)
+    XFL scoreboard unavailable
 
 
 
@@ -359,12 +464,30 @@ if standings_xfl is not None and standings_xfl.height:
     keep = [c for c in standings_xfl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
                      'wins', 'losses', 'win_percent', 'points_for', 'points_against')]
-    standings_xfl.select(keep).head(8) if keep else standings_xfl.head(8)
+    display(standings_xfl.select(keep).head(8) if keep else standings_xfl.head(8))
 else:
-    'XFL standings unavailable'
+    print('XFL standings unavailable')
 ```
 
     ✅ XFL standings
+
+
+
+    shape: (7, 8)
+    ┌─────────┬─────────────┬───────────────┬────────┬───────────────┬────────────┬─────────────┬──────┐
+    │ team_id ┆ team_name   ┆ team_abbrevia ┆ losses ┆ points_agains ┆ points_for ┆ win_percent ┆ wins │
+    │ ---     ┆ ---         ┆ tion          ┆ ---    ┆ t             ┆ ---        ┆ ---         ┆ ---  │
+    │ i64     ┆ str         ┆ ---           ┆ f64    ┆ ---           ┆ f64        ┆ f64         ┆ f64  │
+    │         ┆             ┆ str           ┆        ┆ f64           ┆            ┆             ┆      │
+    ╞═════════╪═════════════╪═══════════════╪════════╪═══════════════╪════════════╪═════════════╪══════╡
+    │ 112652  ┆ Sea Dragons ┆ SEA           ┆ 3.0    ┆ 177.0         ┆ 243.0      ┆ 0.7         ┆ 7.0  │
+    │ 112651  ┆ Battlehawks ┆ STL           ┆ 3.0    ┆ 202.0         ┆ 249.0      ┆ 0.7         ┆ 7.0  │
+    │ 126747  ┆ Vipers      ┆ VGS           ┆ 8.0    ┆ 252.0         ┆ 184.0      ┆ 0.2         ┆ 2.0  │
+    │ 112646  ┆ Defenders   ┆ DC            ┆ 1.0    ┆ 240.0         ┆ 298.0      ┆ 0.9         ┆ 9.0  │
+    │ 126746  ┆ Brahmas     ┆ SA            ┆ 7.0    ┆ 183.0         ┆ 169.0      ┆ 0.3         ┆ 3.0  │
+    │ 126748  ┆ Guardians   ┆ ORL           ┆ 9.0    ┆ 310.0         ┆ 204.0      ┆ 0.1         ┆ 1.0  │
+    │ 112648  ┆ Roughnecks  ┆ HOU           ┆ 3.0    ┆ 182.0         ┆ 247.0      ┆ 0.7         ┆ 7.0  │
+    └─────────┴─────────────┴───────────────┴────────┴───────────────┴────────────┴─────────────┴──────┘
 
 
 ---
@@ -388,12 +511,13 @@ if board_cfl is not None and getattr(board_cfl, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_cfl.select(keep).head() if keep else board_cfl.head()
+    display(board_cfl.select(keep).head() if keep else board_cfl.head())
 else:
-    'CFL scoreboard unavailable'
+    print('CFL scoreboard unavailable')
 ```
 
     ✅ CFL scoreboard (parsed)
+    CFL scoreboard unavailable
 
 
 
@@ -403,12 +527,47 @@ teams_cfl = safe('CFL teams', lambda: cfl.espn_cfl_teams_site())
 if teams_cfl is not None and teams_cfl.height:
     keep = [c for c in teams_cfl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
-    teams_cfl.select(keep).head(10) if keep else teams_cfl.head(10)
+    display(teams_cfl.select(keep).head(10) if keep else teams_cfl.head(10))
 else:
-    'CFL teams unavailable'
+    print('CFL teams unavailable')
 ```
 
     ✅ CFL teams
+
+
+
+    shape: (9, 11)
+    ┌────────────┬───────────┬─────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ team_abbre ┆ team_disp ┆ team_id ┆ team_is_a ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid  │
+    │ viation    ┆ lay_name  ┆ ---     ┆ ctive     ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---       │
+    │ ---        ┆ ---       ┆ i64     ┆ ---       ┆   ┆ ---       ┆ _name     ┆ str       ┆ str       │
+    │ str        ┆ str       ┆         ┆ bool      ┆   ┆ str       ┆ ---       ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ str       ┆           ┆           │
+    ╞════════════╪═══════════╪═════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ BCL        ┆ BC Lions  ┆ 79      ┆ true      ┆ … ┆ BC        ┆ Lions     ┆ bc-lions  ┆ s:20~l:33 │
+    │            ┆           ┆         ┆           ┆   ┆           ┆           ┆           ┆ ~t:79     │
+    │ CSP        ┆ Calgary   ┆ 80      ┆ true      ┆ … ┆ Calgary   ┆ Stampeder ┆ calgary-s ┆ s:20~l:33 │
+    │            ┆ Stampeder ┆         ┆           ┆   ┆           ┆ s         ┆ tampeders ┆ ~t:80     │
+    │            ┆ s         ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ EES        ┆ Edmonton  ┆ 81      ┆ true      ┆ … ┆ Edmonton  ┆ Elks      ┆ edmonton- ┆ s:20~l:33 │
+    │            ┆ Elks      ┆         ┆           ┆   ┆           ┆           ┆ elks      ┆ ~t:81     │
+    │ HTC        ┆ Hamilton  ┆ 82      ┆ true      ┆ … ┆ Hamilton  ┆ Tiger-Cat ┆ hamilton- ┆ s:20~l:33 │
+    │            ┆ Tiger-Cat ┆         ┆           ┆   ┆           ┆ s         ┆ tiger-cat ┆ ~t:82     │
+    │            ┆ s         ┆         ┆           ┆   ┆           ┆           ┆ s         ┆           │
+    │ MTA        ┆ Montreal  ┆ 83      ┆ true      ┆ … ┆ Montreal  ┆ Alouettes ┆ montreal- ┆ s:20~l:33 │
+    │            ┆ Alouettes ┆         ┆           ┆   ┆           ┆           ┆ alouettes ┆ ~t:83     │
+    │ ORB        ┆ Ottawa    ┆ 87      ┆ true      ┆ … ┆ Ottawa    ┆ Red       ┆ ottawa-re ┆ s:20~l:33 │
+    │            ┆ Red       ┆         ┆           ┆   ┆           ┆ Blacks    ┆ d-blacks  ┆ ~t:87     │
+    │            ┆ Blacks    ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ SRR        ┆ Saskatche ┆ 84      ┆ true      ┆ … ┆ Saskatche ┆ Roughride ┆ saskatche ┆ s:20~l:33 │
+    │            ┆ wan Rough ┆         ┆           ┆   ┆ wan       ┆ rs        ┆ wan-rough ┆ ~t:84     │
+    │            ┆ riders    ┆         ┆           ┆   ┆           ┆           ┆ riders    ┆           │
+    │ TAT        ┆ Toronto   ┆ 85      ┆ true      ┆ … ┆ Toronto   ┆ Argonauts ┆ toronto-a ┆ s:20~l:33 │
+    │            ┆ Argonauts ┆         ┆           ┆   ┆           ┆           ┆ rgonauts  ┆ ~t:85     │
+    │ WBB        ┆ Winnipeg  ┆ 86      ┆ true      ┆ … ┆ Winnipeg  ┆ Blue      ┆ winnipeg- ┆ s:20~l:33 │
+    │            ┆ Blue      ┆         ┆           ┆   ┆           ┆ Bombers   ┆ blue-bomb ┆ ~t:86     │
+    │            ┆ Bombers   ┆         ┆           ┆   ┆           ┆           ┆ ers       ┆           │
+    └────────────┴───────────┴─────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 
@@ -419,12 +578,13 @@ if standings_cfl is not None and standings_cfl.height:
     keep = [c for c in standings_cfl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
                      'wins', 'losses', 'win_percent', 'points_for', 'points_against')]
-    standings_cfl.select(keep).head(9) if keep else standings_cfl.head(9)
+    display(standings_cfl.select(keep).head(9) if keep else standings_cfl.head(9))
 else:
-    'CFL standings unavailable'
+    print('CFL standings unavailable')
 ```
 
     ✅ CFL standings
+    CFL standings unavailable
 
 
 
@@ -439,12 +599,13 @@ if schedule_cfl is not None and schedule_cfl.height:
             if c in ('id', 'week', 'name', 'short_name',
                      'home_team_abbreviation', 'away_team_abbreviation',
                      'home_score', 'away_score', 'status_type_description')]
-    schedule_cfl.select(keep).head(8) if keep else schedule_cfl.head(8)
+    display(schedule_cfl.select(keep).head(8) if keep else schedule_cfl.head(8))
 else:
-    'CFL schedule unavailable'
+    print('CFL schedule unavailable')
 ```
 
     ✅ CFL team schedule
+    CFL schedule unavailable
 
 
 ---
@@ -476,12 +637,24 @@ if board_cbb is not None and getattr(board_cbb, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_cbb.select(keep).head() if keep else board_cbb.head()
+    display(board_cbb.select(keep).head() if keep else board_cbb.head())
 else:
-    'college baseball scoreboard unavailable'
+    print('college baseball scoreboard unavailable')
 ```
 
     ✅ college baseball scoreboard (parsed)
+
+
+
+    shape: (1, 5)
+    ┌────────────────────────────────┬─────────────┬─────────────────────────┬────────────┬────────────┐
+    │ name                           ┆ short_name  ┆ status_type_description ┆ home_score ┆ away_score │
+    │ ---                            ┆ ---         ┆ ---                     ┆ ---        ┆ ---        │
+    │ str                            ┆ str         ┆ str                     ┆ str        ┆ str        │
+    ╞════════════════════════════════╪═════════════╪═════════════════════════╪════════════╪════════════╡
+    │ Texas A&M Aggies at Tennessee  ┆ TA&M @ TENN ┆ Final                   ┆ 6          ┆ 5          │
+    │ …                              ┆             ┆                         ┆            ┆            │
+    └────────────────────────────────┴─────────────┴─────────────────────────┴────────────┴────────────┘
 
 
 
@@ -495,13 +668,52 @@ if teams_cbb is not None and teams_cbb.height:
     keep = [c for c in teams_cbb.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
     print('Total teams:', teams_cbb.height)
-    teams_cbb.select(keep).head(10) if keep else teams_cbb.head(10)
+    display(teams_cbb.select(keep).head(10) if keep else teams_cbb.head(10))
 else:
-    'teams unavailable'
+    print('teams unavailable')
 ```
 
     ✅ college baseball teams
     Total teams: 437
+
+
+
+    shape: (10, 13)
+    ┌────────────┬───────────┬───────────┬─────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ team_abbre ┆ team_colo ┆ team_disp ┆ team_id ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid  │
+    │ viation    ┆ r         ┆ lay_name  ┆ ---     ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---       │
+    │ ---        ┆ ---       ┆ ---       ┆ i64     ┆   ┆ ---       ┆ _name     ┆ str       ┆ str       │
+    │ str        ┆ str       ┆ str       ┆         ┆   ┆ str       ┆ ---       ┆           ┆           │
+    │            ┆           ┆           ┆         ┆   ┆           ┆ str       ┆           ┆           │
+    ╞════════════╪═══════════╪═══════════╪═════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ ACU        ┆ 000000    ┆ Abilene   ┆ 315     ┆ … ┆ Abilene   ┆ Abilene   ┆ abilene-c ┆ s:1~l:14~ │
+    │            ┆           ┆ Christian ┆         ┆   ┆ Chrstn    ┆ Chrstn    ┆ hristian- ┆ t:315     │
+    │            ┆           ┆ Wildcats  ┆         ┆   ┆           ┆           ┆ wildcats  ┆           │
+    │ AFA        ┆ 004A7B    ┆ Air Force ┆ 155     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:14~ │
+    │            ┆           ┆ Falcons   ┆         ┆   ┆           ┆           ┆ -falcons  ┆ t:155     │
+    │ AKR        ┆ 0A1E5B    ┆ Akron     ┆ 316     ┆ … ┆ Akron     ┆ Akron     ┆ akron-zip ┆ s:1~l:14~ │
+    │            ┆           ┆ Zips      ┆         ┆   ┆           ┆           ┆ s         ┆ t:316     │
+    │ AAMU       ┆ 790000    ┆ Alabama   ┆ 317     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-a ┆ s:1~l:14~ │
+    │            ┆           ┆ A&M       ┆         ┆   ┆ A&M       ┆ A&M       ┆ m-bulldog ┆ t:317     │
+    │            ┆           ┆ Bulldogs  ┆         ┆   ┆           ┆           ┆ s         ┆           │
+    │ ALA        ┆ A42D47    ┆ Alabama   ┆ 148     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-c ┆ s:1~l:14~ │
+    │            ┆           ┆ Crimson   ┆         ┆   ┆           ┆           ┆ rimson-ti ┆ t:148     │
+    │            ┆           ┆ Tide      ┆         ┆   ┆           ┆           ┆ de        ┆           │
+    │ ALST       ┆ 603913    ┆ Alabama   ┆ 318     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-s ┆ s:1~l:14~ │
+    │            ┆           ┆ State     ┆         ┆   ┆ St        ┆ St        ┆ tate-horn ┆ t:318     │
+    │            ┆           ┆ Hornets   ┆         ┆   ┆           ┆           ┆ ets       ┆           │
+    │ ALCN       ┆ C1B881    ┆ Alcorn    ┆ 260     ┆ … ┆ Alcorn St ┆ Alcorn St ┆ alcorn-st ┆ s:1~l:14~ │
+    │            ┆           ┆ State     ┆         ┆   ┆           ┆           ┆ ate-brave ┆ t:260     │
+    │            ┆           ┆ Braves    ┆         ┆   ┆           ┆           ┆ s         ┆           │
+    │ ALMA       ┆ null      ┆ Alma      ┆ 821     ┆ … ┆ Alma      ┆ Alma      ┆ alma-scot ┆ s:1~l:14~ │
+    │            ┆           ┆ Scots     ┆         ┆   ┆           ┆           ┆ s         ┆ t:821     │
+    │ AMER       ┆ c41130    ┆ American  ┆ 319     ┆ … ┆ American  ┆ American  ┆ american- ┆ s:1~l:14~ │
+    │            ┆           ┆ Universit ┆         ┆   ┆           ┆           ┆ universit ┆ t:319     │
+    │            ┆           ┆ y Eagles  ┆         ┆   ┆           ┆           ┆ y-eagles  ┆           │
+    │ ANDC       ┆ null      ┆ Anderson  ┆ 822     ┆ … ┆ Anderson  ┆ Anderson  ┆ anderson- ┆ s:1~l:14~ │
+    │            ┆           ┆ (IN)      ┆         ┆   ┆ IND       ┆ IND       ┆ in-ravens ┆ t:822     │
+    │            ┆           ┆ Ravens    ┆         ┆   ┆           ┆           ┆           ┆           │
+    └────────────┴───────────┴───────────┴─────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 ### 📊 College baseball: standings & rankings
@@ -522,12 +734,32 @@ if standings_cbb is not None and standings_cbb.height:
     keep = [c for c in standings_cbb.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
                      'wins', 'losses', 'win_percent')]
-    standings_cbb.select(keep).head(10) if keep else standings_cbb.head(10)
+    display(standings_cbb.select(keep).head(10) if keep else standings_cbb.head(10))
 else:
-    'standings unavailable'
+    print('standings unavailable')
 ```
 
     ✅ college baseball standings
+
+
+
+    shape: (10, 6)
+    ┌─────────┬──────────────┬───────────────────┬────────┬─────────────┬──────┐
+    │ team_id ┆ team_name    ┆ team_abbreviation ┆ losses ┆ win_percent ┆ wins │
+    │ ---     ┆ ---          ┆ ---               ┆ ---    ┆ ---         ┆ ---  │
+    │ i64     ┆ str          ┆ str               ┆ f64    ┆ f64         ┆ f64  │
+    ╞═════════╪══════════════╪═══════════════════╪════════╪═════════════╪══════╡
+    │ 146     ┆ Chanticleers ┆ CCU               ┆ 0.0    ┆ 1.0         ┆ 3.0  │
+    │ 58      ┆ Razorbacks   ┆ ARK               ┆ 13.0   ┆ 0.779661    ┆ 46.0 │
+    │ 96      ┆ Tar Heels    ┆ UNC               ┆ 13.0   ┆ 0.7758621   ┆ 45.0 │
+    │ 126     ┆ Longhorns    ┆ TEX               ┆ 14.0   ┆ 0.7586207   ┆ 44.0 │
+    │ 136     ┆ Mountaineers ┆ WVU               ┆ 14.0   ┆ 0.7586207   ┆ 44.0 │
+    │ 85      ┆ Tigers       ┆ LSU               ┆ 15.0   ┆ 0.754098    ┆ 46.0 │
+    │ 72      ┆ Seminoles    ┆ FSU               ┆ 14.0   ┆ 0.745455    ┆ 41.0 │
+    │ 66      ┆ Bruins       ┆ UCLA              ┆ 16.0   ┆ 0.737705    ┆ 45.0 │
+    │ 199     ┆ Volunteers   ┆ TENN              ┆ 17.0   ┆ 0.730159    ┆ 46.0 │
+    │ 273     ┆ Ducks        ┆ ORE               ┆ 16.0   ┆ 0.7241379   ┆ 42.0 │
+    └─────────┴──────────────┴───────────────────┴────────┴─────────────┴──────┘
 
 
 
@@ -541,12 +773,13 @@ if rankings_cbb is not None and rankings_cbb.height:
     keep = [c for c in rankings_cbb.columns
             if c in ('rank', 'team_id', 'team_name', 'points', 'first_place_votes',
                      'wins', 'losses')]
-    rankings_cbb.select(keep).head(10) if keep else rankings_cbb.head(10)
+    display(rankings_cbb.select(keep).head(10) if keep else rankings_cbb.head(10))
 else:
-    'rankings unavailable (only current during the season)'
+    print('rankings unavailable (only current during the season)')
 ```
 
     ⏭️  college baseball rankings: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-baseball/rankings
+    rankings unavailable (only current during the season)
 
 
 ### 📅 College baseball: team schedule
@@ -568,12 +801,30 @@ if schedule_cbb is not None and schedule_cbb.height:
             if c in ('id', 'name', 'short_name',
                      'home_team_abbreviation', 'away_team_abbreviation',
                      'home_score', 'away_score', 'status_type_description')]
-    schedule_cbb.select(keep).head(8) if keep else schedule_cbb.head(8)
+    display(schedule_cbb.select(keep).head(8) if keep else schedule_cbb.head(8))
 else:
-    'schedule unavailable'
+    print('schedule unavailable')
 ```
 
     ✅ college baseball team schedule
+
+
+
+    shape: (8, 3)
+    ┌───────────┬─────────────────────────────────┬────────────┐
+    │ id        ┆ name                            ┆ short_name │
+    │ ---       ┆ ---                             ┆ ---        │
+    │ i64       ┆ str                             ┆ str        │
+    ╞═══════════╪═════════════════════════════════╪════════════╡
+    │ 401631945 ┆ San Diego Toreros at Texas Lon… ┆ USD @ TEX  │
+    │ 401631946 ┆ San Diego Toreros at Texas Lon… ┆ USD @ TEX  │
+    │ 401631947 ┆ San Diego Toreros at Texas Lon… ┆ USD @ TEX  │
+    │ 401633177 ┆ Houston Christian Huskies at T… ┆ HCU @ TEX  │
+    │ 401633178 ┆ Cal Poly Mustangs at Texas Lon… ┆ CP @ TEX   │
+    │ 401633179 ┆ Cal Poly Mustangs at Texas Lon… ┆ CP @ TEX   │
+    │ 401633180 ┆ Cal Poly Mustangs at Texas Lon… ┆ CP @ TEX   │
+    │ 401633181 ┆ St. John's Red Storm at Texas … ┆ SJU @ TEX  │
+    └───────────┴─────────────────────────────────┴────────────┘
 
 
 ### 🥎 College softball: scoreboard & teams
@@ -594,12 +845,23 @@ if board_cbs is not None and getattr(board_cbs, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_cbs.select(keep).head() if keep else board_cbs.head()
+    display(board_cbs.select(keep).head() if keep else board_cbs.head())
 else:
-    'college softball scoreboard unavailable'
+    print('college softball scoreboard unavailable')
 ```
 
     ✅ college softball scoreboard (parsed)
+
+
+
+    shape: (1, 5)
+    ┌─────────────────────────────────┬────────────┬─────────────────────────┬────────────┬────────────┐
+    │ name                            ┆ short_name ┆ status_type_description ┆ home_score ┆ away_score │
+    │ ---                             ┆ ---        ┆ ---                     ┆ ---        ┆ ---        │
+    │ str                             ┆ str        ┆ str                     ┆ str        ┆ str        │
+    ╞═════════════════════════════════╪════════════╪═════════════════════════╪════════════╪════════════╡
+    │ Texas Longhorns at Oklahoma So… ┆ TEX @ OU   ┆ Final                   ┆ 8          ┆ 4          │
+    └─────────────────────────────────┴────────────┴─────────────────────────┴────────────┴────────────┘
 
 
 
@@ -613,13 +875,55 @@ if teams_cbs is not None and teams_cbs.height:
     keep = [c for c in teams_cbs.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
     print('Total teams:', teams_cbs.height)
-    teams_cbs.select(keep).head(10) if keep else teams_cbs.head(10)
+    display(teams_cbs.select(keep).head(10) if keep else teams_cbs.head(10))
 else:
-    'teams unavailable'
+    print('teams unavailable')
 ```
 
     ✅ college softball teams
     Total teams: 446
+
+
+
+    shape: (10, 13)
+    ┌────────────┬───────────┬───────────┬─────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ team_abbre ┆ team_colo ┆ team_disp ┆ team_id ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid  │
+    │ viation    ┆ r         ┆ lay_name  ┆ ---     ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---       │
+    │ ---        ┆ ---       ┆ ---       ┆ i64     ┆   ┆ ---       ┆ _name     ┆ str       ┆ str       │
+    │ str        ┆ str       ┆ str       ┆         ┆   ┆ str       ┆ ---       ┆           ┆           │
+    │            ┆           ┆           ┆         ┆   ┆           ┆ str       ┆           ┆           │
+    ╞════════════╪═══════════╪═══════════╪═════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ ACU        ┆ 000000    ┆ Abilene   ┆ 669     ┆ … ┆ Abilene   ┆ Abilene   ┆ abilene-c ┆ s:1~l:102 │
+    │            ┆           ┆ Christian ┆         ┆   ┆ Chrstn    ┆ Chrstn    ┆ hristian- ┆ ~t:669    │
+    │            ┆           ┆ Wildcats  ┆         ┆   ┆           ┆           ┆ wildcats  ┆           │
+    │ AF         ┆ 004A7B    ┆ Air Force ┆ 567     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:102 │
+    │            ┆           ┆ Falcons   ┆         ┆   ┆           ┆           ┆ -falcons  ┆ ~t:567    │
+    │ AKR        ┆ 0A1E5B    ┆ Akron     ┆ 670     ┆ … ┆ Akron     ┆ Akron     ┆ akron-zip ┆ s:1~l:102 │
+    │            ┆           ┆ Zips      ┆         ┆   ┆           ┆           ┆ s         ┆ ~t:670    │
+    │ AAMU       ┆ 790000    ┆ Alabama   ┆ 671     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-a ┆ s:1~l:102 │
+    │            ┆           ┆ A&M       ┆         ┆   ┆ A&M       ┆ A&M       ┆ m-bulldog ┆ ~t:671    │
+    │            ┆           ┆ Bulldogs  ┆         ┆   ┆           ┆           ┆ s         ┆           │
+    │ ALA        ┆ A42D47    ┆ Alabama   ┆ 560     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-c ┆ s:1~l:102 │
+    │            ┆           ┆ Crimson   ┆         ┆   ┆           ┆           ┆ rimson-ti ┆ ~t:560    │
+    │            ┆           ┆ Tide      ┆         ┆   ┆           ┆           ┆ de        ┆           │
+    │ AH         ┆ null      ┆ Alabama   ┆ 860     ┆ … ┆ UA-Huntsv ┆ UA-Huntsv ┆ alabama-h ┆ s:1~l:102 │
+    │            ┆           ┆ Huntsvill ┆         ┆   ┆ ille      ┆ ille      ┆ untsville ┆ ~t:860    │
+    │            ┆           ┆ e         ┆         ┆   ┆           ┆           ┆ -chargers ┆           │
+    │            ┆           ┆ Chargers  ┆         ┆   ┆           ┆           ┆           ┆           │
+    │ ALST       ┆ 603913    ┆ Alabama   ┆ 672     ┆ … ┆ Alabama   ┆ Alabama   ┆ alabama-s ┆ s:1~l:102 │
+    │            ┆           ┆ State     ┆         ┆   ┆ St        ┆ St        ┆ tate-horn ┆ ~t:672    │
+    │            ┆           ┆ Hornets   ┆         ┆   ┆           ┆           ┆ ets       ┆           │
+    │ ALBS       ┆ null      ┆ Albany    ┆ 861     ┆ … ┆ Albany St ┆ Albany St ┆ albany-st ┆ s:1~l:102 │
+    │            ┆           ┆ State     ┆         ┆   ┆           ┆           ┆ ate-golde ┆ ~t:861    │
+    │            ┆           ┆ Golden    ┆         ┆   ┆           ┆           ┆ n-rams    ┆           │
+    │            ┆           ┆ Rams      ┆         ┆   ┆           ┆           ┆           ┆           │
+    │ ALCN       ┆ C1B881    ┆ Alcorn    ┆ 623     ┆ … ┆ Alcorn St ┆ Alcorn St ┆ alcorn-st ┆ s:1~l:102 │
+    │            ┆           ┆ State     ┆         ┆   ┆           ┆           ┆ ate-brave ┆ ~t:623    │
+    │            ┆           ┆ Braves    ┆         ┆   ┆           ┆           ┆ s         ┆           │
+    │ AMER       ┆ c41130    ┆ American  ┆ 673     ┆ … ┆ American  ┆ American  ┆ american- ┆ s:1~l:102 │
+    │            ┆           ┆ Universit ┆         ┆   ┆           ┆           ┆ universit ┆ ~t:673    │
+    │            ┆           ┆ y Eagles  ┆         ┆   ┆           ┆           ┆ y-eagles  ┆           │
+    └────────────┴───────────┴───────────┴─────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 
@@ -633,12 +937,13 @@ if rankings_cbs is not None and rankings_cbs.height:
     keep = [c for c in rankings_cbs.columns
             if c in ('rank', 'team_id', 'team_name', 'points',
                      'first_place_votes', 'wins', 'losses')]
-    rankings_cbs.select(keep).head(10) if keep else rankings_cbs.head(10)
+    display(rankings_cbs.select(keep).head(10) if keep else rankings_cbs.head(10))
 else:
-    'rankings unavailable (only current during the season)'
+    print('rankings unavailable (only current during the season)')
 ```
 
     ⏭️  college softball rankings: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/rankings
+    rankings unavailable (only current during the season)
 
 
 ### 🥎 College softball: game summary
@@ -650,8 +955,8 @@ from the shared `parse_summary` dispatcher.
 
 
 ```python
-# 2024 WCWS Championship Game 2 — Oklahoma vs Texas
-CBS_CHAMPIONSHIP_ID = 401581278
+# 2024 WCWS Championship Game 2 — Oklahoma vs Texas, its event_id taken from the scoreboard above
+CBS_CHAMPIONSHIP_ID = int(board_cbs['game_id'][0]) if board_cbs is not None and board_cbs.height else None
 
 summary_cbs = safe(
     'college softball game summary (raw)',
@@ -660,11 +965,8 @@ summary_cbs = safe(
 _keys(summary_cbs)
 ```
 
-    ⏭️  college softball game summary (raw): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/summary?eve…
-
-      Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
-      (from `sportsdataverse import find_team, find_athlete, find_event`)
-    (no data)
+    ✅ college softball game summary (raw)
+    top-level keys: ['boxscore_player', 'boxscore_team', 'plays', 'winprobability', 'leaders', 'game_info', 'officials', 'header', 'season_series', 'against_the_spread', 'standings', 'broadcasts', 'format', 'pickcenter', 'odds']
 
 
 ---
@@ -693,12 +995,23 @@ if board_mch is not None and getattr(board_mch, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_mch.select(keep).head() if keep else board_mch.head()
+    display(board_mch.select(keep).head() if keep else board_mch.head())
 else:
-    'men\'s college hockey scoreboard unavailable'
+    print('men\'s college hockey scoreboard unavailable')
 ```
 
     ✅ men's college hockey scoreboard (parsed)
+
+
+
+    shape: (1, 5)
+    ┌─────────────────────────────────┬────────────┬─────────────────────────┬────────────┬────────────┐
+    │ name                            ┆ short_name ┆ status_type_description ┆ home_score ┆ away_score │
+    │ ---                             ┆ ---        ┆ ---                     ┆ ---        ┆ ---        │
+    │ str                             ┆ str        ┆ str                     ┆ str        ┆ str        │
+    ╞═════════════════════════════════╪════════════╪═════════════════════════╪════════════╪════════════╡
+    │ Denver Pioneers at Boston Coll… ┆ DEN @ BC   ┆ Final                   ┆ 0          ┆ 2          │
+    └─────────────────────────────────┴────────────┴─────────────────────────┴────────────┴────────────┘
 
 
 
@@ -712,13 +1025,62 @@ if teams_mch is not None and teams_mch.height:
     keep = [c for c in teams_mch.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
     print('Total D-I men\'s programs:', teams_mch.height)
-    teams_mch.select(keep).head(10) if keep else teams_mch.head(10)
+    display(teams_mch.select(keep).head(10) if keep else teams_mch.head(10))
 else:
-    'teams unavailable'
+    print('teams unavailable')
 ```
 
     ✅ men's college hockey teams
     Total D-I men's programs: 116
+
+
+
+    shape: (10, 14)
+    ┌────────────┬───────────┬─────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ team_abbre ┆ team_disp ┆ team_id ┆ team_is_a ┆ … ┆ team_uid  ┆ team_logo ┆ team_alte ┆ team_colo │
+    │ viation    ┆ lay_name  ┆ ---     ┆ ctive     ┆   ┆ ---       ┆ s         ┆ rnate_col ┆ r         │
+    │ ---        ┆ ---       ┆ i64     ┆ ---       ┆   ┆ str       ┆ ---       ┆ or        ┆ ---       │
+    │ str        ┆ str       ┆         ┆ bool      ┆   ┆           ┆ str       ┆ ---       ┆ str       │
+    │            ┆           ┆         ┆           ┆   ┆           ┆           ┆ str       ┆           │
+    ╞════════════╪═══════════╪═════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ ADR        ┆ Adrian    ┆ 110134  ┆ true      ┆ … ┆ s:70~l:91 ┆ null      ┆ null      ┆ null      │
+    │            ┆ Bulldogs  ┆         ┆           ┆   ┆ ~t:110134 ┆           ┆           ┆           │
+    │ AF         ┆ Air Force ┆ 2005    ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ Falcons   ┆         ┆           ┆   ┆ ~t:2005   ┆ '',       ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    │ AH         ┆ Alabama   ┆ 2008    ┆ true      ┆ … ┆ s:70~l:91 ┆ null      ┆ null      ┆ null      │
+    │            ┆ Huntsvill ┆         ┆           ┆   ┆ ~t:2008   ┆           ┆           ┆           │
+    │            ┆ e         ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │            ┆ Chargers  ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ UAA        ┆ Alaska    ┆ 1       ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ Anchorage ┆         ┆           ┆   ┆ ~t:1      ┆ '',       ┆           ┆           │
+    │            ┆ Seawolves ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    │ AKFB       ┆ Alaska    ┆ 298     ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ Nanooks   ┆         ┆           ┆   ┆ ~t:298    ┆ '',       ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    │ ABCA       ┆ Alberta   ┆ 14196   ┆ true      ┆ … ┆ s:70~l:91 ┆ null      ┆ null      ┆ null      │
+    │            ┆ Golden    ┆         ┆           ┆   ┆ ~t:14196  ┆           ┆           ┆           │
+    │            ┆ Bears &   ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │            ┆ Pandas    ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ AIC        ┆ American  ┆ 2022    ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ Internati ┆         ┆           ┆   ┆ ~t:2022   ┆ '',       ┆           ┆           │
+    │            ┆ onal      ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆ Yellow …  ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    │ ANMR       ┆ Anna      ┆ 126807  ┆ true      ┆ … ┆ s:70~l:91 ┆ null      ┆ null      ┆ null      │
+    │            ┆ Maria     ┆         ┆           ┆   ┆ ~t:126807 ┆           ┆           ┆           │
+    │            ┆ Amcats    ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ ASU        ┆ Arizona   ┆ 9       ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ State Sun ┆         ┆           ┆   ┆ ~t:9      ┆ '',       ┆           ┆           │
+    │            ┆ Devils    ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    │ ARIZ       ┆ Arizona   ┆ 12      ┆ true      ┆ … ┆ s:70~l:91 ┆ [{'alt':  ┆ null      ┆ null      │
+    │            ┆ Wildcats  ┆         ┆           ┆   ┆ ~t:12     ┆ '',       ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 'height': ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ 500, 'h…  ┆           ┆           │
+    └────────────┴───────────┴─────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 ### 📊 Men's college hockey: standings & rankings
@@ -738,12 +1100,32 @@ if standings_mch is not None and standings_mch.height:
     keep = [c for c in standings_mch.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
                      'wins', 'losses', 'ties', 'win_percent')]
-    standings_mch.select(keep).head(10) if keep else standings_mch.head(10)
+    display(standings_mch.select(keep).head(10) if keep else standings_mch.head(10))
 else:
-    'standings unavailable'
+    print('standings unavailable')
 ```
 
     ✅ men's college hockey standings
+
+
+
+    shape: (10, 6)
+    ┌─────────┬─────────────────┬───────────────────┬────────┬─────────────┬──────┐
+    │ team_id ┆ team_name       ┆ team_abbreviation ┆ losses ┆ win_percent ┆ wins │
+    │ ---     ┆ ---             ┆ ---               ┆ ---    ┆ ---         ┆ ---  │
+    │ i64     ┆ str             ┆ str               ┆ f64    ┆ f64         ┆ f64  │
+    ╞═════════╪═════════════════╪═══════════════════╪════════╪═════════════╪══════╡
+    │ 349     ┆ Black Knights   ┆ ARMY              ┆ 1.0    ┆ 0.8333333   ┆ 5.0  │
+    │ 2005    ┆ Falcons         ┆ AFA               ┆ 5.0    ┆ 0.375       ┆ 3.0  │
+    │ 2060    ┆ Falcons         ┆ BENT              ┆ 4.0    ┆ 0.5         ┆ 4.0  │
+    │ 2099    ┆ Golden Griffins ┆ CAN               ┆ 4.0    ┆ 0.428571    ┆ 3.0  │
+    │ 2529    ┆ Pioneers        ┆ SHU               ┆ 4.0    ┆ 0.5         ┆ 4.0  │
+    │ 178     ┆ Tigers          ┆ RIT               ┆ 6.0    ┆ 0.25        ┆ 2.0  │
+    │ 2523    ┆ Colonials       ┆ RMU               ┆ 7.0    ┆ 0.222222    ┆ 2.0  │
+    │ 107     ┆ Crusaders       ┆ HC                ┆ 6.0    ┆ 0.4         ┆ 4.0  │
+    │ 315     ┆ Purple Eagles   ┆ NIA               ┆ 4.0    ┆ 0.5555556   ┆ 5.0  │
+    │ 127     ┆ Spartans        ┆ MSU               ┆ 1.0    ┆ 0.8333333   ┆ 5.0  │
+    └─────────┴─────────────────┴───────────────────┴────────┴─────────────┴──────┘
 
 
 
@@ -757,12 +1139,32 @@ if rankings_mch is not None and rankings_mch.height:
     keep = [c for c in rankings_mch.columns
             if c in ('rank', 'team_id', 'team_name', 'points',
                      'first_place_votes', 'wins', 'losses', 'ties')]
-    rankings_mch.select(keep).head(10) if keep else rankings_mch.head(10)
+    display(rankings_mch.select(keep).head(10) if keep else rankings_mch.head(10))
 else:
-    'rankings unavailable (only current during the season)'
+    print('rankings unavailable (only current during the season)')
 ```
 
     ✅ men's college hockey rankings
+
+
+
+    shape: (10, 5)
+    ┌─────────┬──────┬────────┬───────────────────┬────────────────┐
+    │ team_id ┆ rank ┆ points ┆ first_place_votes ┆ team_name      │
+    │ ---     ┆ ---  ┆ ---    ┆ ---               ┆ ---            │
+    │ i64     ┆ i64  ┆ f64    ┆ i64               ┆ str            │
+    ╞═════════╪══════╪════════╪═══════════════════╪════════════════╡
+    │ 275     ┆ 1    ┆ 0.0    ┆ null              ┆ Badgers        │
+    │ 130     ┆ 2    ┆ 0.0    ┆ null              ┆ Wolverines     │
+    │ 127     ┆ 3    ┆ 0.0    ┆ null              ┆ Spartans       │
+    │ 2172    ┆ 4    ┆ 0.0    ┆ null              ┆ Pioneers       │
+    │ 2711    ┆ 5    ┆ 0.0    ┆ null              ┆ Broncos        │
+    │ 134     ┆ 6    ┆ 0.0    ┆ null              ┆ Bulldogs       │
+    │ 2514    ┆ 6    ┆ 0.0    ┆ null              ┆ Bobcats        │
+    │ 2043    ┆ 8    ┆ 0.0    ┆ null              ┆ Vikings        │
+    │ 2507    ┆ 9    ┆ 0.0    ┆ null              ┆ Friars         │
+    │ 155     ┆ 10   ┆ 0.0    ┆ null              ┆ Fighting Hawks │
+    └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
 ### 📅 Men's college hockey: team schedule & roster
@@ -787,12 +1189,30 @@ if schedule_mch is not None and schedule_mch.height:
             if c in ('id', 'name', 'short_name',
                      'home_team_abbreviation', 'away_team_abbreviation',
                      'home_score', 'away_score', 'status_type_description')]
-    schedule_mch.select(keep).head(8) if keep else schedule_mch.head(8)
+    display(schedule_mch.select(keep).head(8) if keep else schedule_mch.head(8))
 else:
-    'schedule unavailable'
+    print('schedule unavailable')
 ```
 
     ✅ men's college hockey team schedule
+
+
+
+    shape: (8, 3)
+    ┌───────────┬─────────────────────────────────┬────────────┐
+    │ id        ┆ name                            ┆ short_name │
+    │ ---       ┆ ---                             ┆ ---        │
+    │ i64       ┆ str                             ┆ str        │
+    ╞═══════════╪═════════════════════════════════╪════════════╡
+    │ 401596244 ┆ Boston University Terriers at … ┆ BU @ BENT  │
+    │ 401596384 ┆ Boston University Terriers at … ┆ BU @ UNH   │
+    │ 401596385 ┆ Boston University Terriers at … ┆ BU @ ND    │
+    │ 401596386 ┆ Boston University Terriers at … ┆ BU @ ND    │
+    │ 401596387 ┆ Massachusetts Minutemen at Bos… ┆ MASS @ BU  │
+    │ 401596388 ┆ Boston University Terriers at … ┆ BU @ MASS  │
+    │ 401596389 ┆ North Dakota Fighting Hawks at… ┆ UND @ BU   │
+    │ 401596390 ┆ North Dakota Fighting Hawks at… ┆ UND @ BU   │
+    └───────────┴─────────────────────────────────┴────────────┘
 
 
 
@@ -806,12 +1226,32 @@ if roster_mch is not None and roster_mch.height:
     keep = [c for c in roster_mch.columns
             if c in ('id', 'first_name', 'last_name', 'display_name',
                      'position_abbreviation', 'jersey', 'birth_country')]
-    roster_mch.select(keep).head(10) if keep else roster_mch.head(10)
+    display(roster_mch.select(keep).head(10) if keep else roster_mch.head(10))
 else:
-    'roster unavailable'
+    print('roster unavailable')
 ```
 
     ✅ men's college hockey roster
+
+
+
+    shape: (10, 6)
+    ┌─────────┬────────────┬───────────┬─────────────────┬────────┬───────────────────────┐
+    │ id      ┆ first_name ┆ last_name ┆ display_name    ┆ jersey ┆ position_abbreviation │
+    │ ---     ┆ ---        ┆ ---       ┆ ---             ┆ ---    ┆ ---                   │
+    │ i64     ┆ str        ┆ str       ┆ str             ┆ str    ┆ str                   │
+    ╞═════════╪════════════╪═══════════╪═════════════════╪════════╪═══════════════════════╡
+    │ 5136656 ┆ Tristan    ┆ Amonte    ┆ Tristan Amonte  ┆ 3      ┆ F                     │
+    │ 5216936 ┆ Kamil      ┆ Bednarik  ┆ Kamil Bednarik  ┆ 11     ┆ F                     │
+    │ 5206627 ┆ Mathieu    ┆ Caron     ┆ Mathieu Caron   ┆ 62     ┆ G                     │
+    │ 5188559 ┆ Aiden      ┆ Celebrini ┆ Aiden Celebrini ┆ 22     ┆ D                     │
+    │ 4997117 ┆ Brehdan    ┆ Engum     ┆ Brehdan Engum   ┆ 10     ┆ D                     │
+    │ 5206622 ┆ Mick       ┆ Frechette ┆ Mick Frechette  ┆ 14     ┆ D                     │
+    │ 5275393 ┆ Billy      ┆ Girard IV ┆ Billy Girard IV ┆ 1      ┆ G                     │
+    │ 5206624 ┆ Jack       ┆ Gorton    ┆ Jack Gorton     ┆ 26     ┆ F                     │
+    │ 5206623 ┆ Doug       ┆ Grimes    ┆ Doug Grimes     ┆ 23     ┆ F                     │
+    │ 5188526 ┆ Jack       ┆ Harvey    ┆ Jack Harvey     ┆ 12     ┆ F                     │
+    └─────────┴────────────┴───────────┴─────────────────┴────────┴───────────────────────┘
 
 
 ---
@@ -833,12 +1273,24 @@ if board_wch is not None and getattr(board_wch, 'height', 0):
             if c in ('id', 'name', 'short_name', 'status_type_description',
                      'home_team_abbreviation', 'home_score',
                      'away_team_abbreviation', 'away_score')]
-    board_wch.select(keep).head() if keep else board_wch.head()
+    display(board_wch.select(keep).head() if keep else board_wch.head())
 else:
-    "women's college hockey scoreboard unavailable"
+    print("women's college hockey scoreboard unavailable")
 ```
 
     ✅ women's college hockey scoreboard (parsed)
+
+
+
+    shape: (2, 5)
+    ┌─────────────────────────────────┬────────────┬─────────────────────────┬────────────┬────────────┐
+    │ name                            ┆ short_name ┆ status_type_description ┆ home_score ┆ away_score │
+    │ ---                             ┆ ---        ┆ ---                     ┆ ---        ┆ ---        │
+    │ str                             ┆ str        ┆ str                     ┆ str        ┆ str        │
+    ╞═════════════════════════════════╪════════════╪═════════════════════════╪════════════╪════════════╡
+    │ Clarkson Golden Knights at Ohi… ┆ CLAR @ OSU ┆ Final                   ┆ 4          ┆ 1          │
+    │ Colgate Raiders at Wisconsin B… ┆ COLG @ WIS ┆ Final                   ┆ 3          ┆ 1          │
+    └─────────────────────────────────┴────────────┴─────────────────────────┴────────────┴────────────┘
 
 
 
@@ -852,13 +1304,53 @@ if teams_wch is not None and teams_wch.height:
     keep = [c for c in teams_wch.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
     print("Total women's D-I programs:", teams_wch.height)
-    teams_wch.select(keep).head(10) if keep else teams_wch.head(10)
+    display(teams_wch.select(keep).head(10) if keep else teams_wch.head(10))
 else:
-    'teams unavailable'
+    print('teams unavailable')
 ```
 
     ✅ women's college hockey teams
     Total women's D-I programs: 47
+
+
+
+    shape: (10, 12)
+    ┌────────────┬───────────┬─────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ team_abbre ┆ team_disp ┆ team_id ┆ team_is_a ┆ … ┆ team_nick ┆ team_shor ┆ team_slug ┆ team_uid  │
+    │ viation    ┆ lay_name  ┆ ---     ┆ ctive     ┆   ┆ name      ┆ t_display ┆ ---       ┆ ---       │
+    │ ---        ┆ ---       ┆ i64     ┆ ---       ┆   ┆ ---       ┆ _name     ┆ str       ┆ str       │
+    │ str        ┆ str       ┆         ┆ bool      ┆   ┆ str       ┆ ---       ┆           ┆           │
+    │            ┆           ┆         ┆           ┆   ┆           ┆ str       ┆           ┆           │
+    ╞════════════╪═══════════╪═════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ ASP        ┆ Assumptio ┆ 127962  ┆ true      ┆ … ┆ Assumptio ┆ Assumptio ┆ assumptio ┆ s:70~l:92 │
+    │            ┆ n Greyhou ┆         ┆           ┆   ┆ n         ┆ n         ┆ n-greyhou ┆ ~t:127962 │
+    │            ┆ nds       ┆         ┆           ┆   ┆           ┆           ┆ nds       ┆           │
+    │ BST        ┆ Bemidji   ┆ 132     ┆ true      ┆ … ┆ Bemidji   ┆ Bemidji   ┆ bemidji-s ┆ s:70~l:92 │
+    │            ┆ State     ┆         ┆           ┆   ┆ State     ┆ State     ┆ tate-beav ┆ ~t:132    │
+    │            ┆ Beavers   ┆         ┆           ┆   ┆           ┆           ┆ ers       ┆           │
+    │ BC         ┆ Boston    ┆ 103     ┆ true      ┆ … ┆ Boston    ┆ Boston    ┆ boston-co ┆ s:70~l:92 │
+    │            ┆ College   ┆         ┆           ┆   ┆ College   ┆ College   ┆ llege-eag ┆ ~t:103    │
+    │            ┆ Eagles    ┆         ┆           ┆   ┆           ┆           ┆ les       ┆           │
+    │ BU         ┆ Boston    ┆ 104     ┆ true      ┆ … ┆ Boston    ┆ Boston    ┆ boston-un ┆ s:70~l:92 │
+    │            ┆ Universit ┆         ┆           ┆   ┆ Universit ┆ Universit ┆ iversity- ┆ ~t:104    │
+    │            ┆ y         ┆         ┆           ┆   ┆ y         ┆ y         ┆ terriers  ┆           │
+    │            ┆ Terriers  ┆         ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ BRWN       ┆ Brown     ┆ 225     ┆ true      ┆ … ┆ Brown     ┆ Brown     ┆ brown-bea ┆ s:70~l:92 │
+    │            ┆ Bears     ┆         ┆           ┆   ┆           ┆           ┆ rs        ┆ ~t:225    │
+    │ CLAR       ┆ Clarkson  ┆ 2137    ┆ true      ┆ … ┆ Clarkson  ┆ Clarkson  ┆ clarkson- ┆ s:70~l:92 │
+    │            ┆ Golden    ┆         ┆           ┆   ┆           ┆           ┆ golden-kn ┆ ~t:2137   │
+    │            ┆ Knights   ┆         ┆           ┆   ┆           ┆           ┆ ights     ┆           │
+    │ COLG       ┆ Colgate   ┆ 2142    ┆ true      ┆ … ┆ Colgate   ┆ Colgate   ┆ colgate-r ┆ s:70~l:92 │
+    │            ┆ Raiders   ┆         ┆           ┆   ┆           ┆           ┆ aiders    ┆ ~t:2142   │
+    │ COR        ┆ Cornell   ┆ 172     ┆ true      ┆ … ┆ Cornell   ┆ Cornell   ┆ cornell-b ┆ s:70~l:92 │
+    │            ┆ Big Red   ┆         ┆           ┆   ┆           ┆           ┆ ig-red    ┆ ~t:172    │
+    │ DART       ┆ Dartmouth ┆ 159     ┆ true      ┆ … ┆ Dartmouth ┆ Dartmouth ┆ dartmouth ┆ s:70~l:92 │
+    │            ┆ Big Green ┆         ┆           ┆   ┆           ┆           ┆ -big-gree ┆ ~t:159    │
+    │            ┆           ┆         ┆           ┆   ┆           ┆           ┆ n         ┆           │
+    │ FP         ┆ Franklin  ┆ 121934  ┆ true      ┆ … ┆ Franklin  ┆ Franklin  ┆ franklin- ┆ s:70~l:92 │
+    │            ┆ Pierce    ┆         ┆           ┆   ┆ Pierce    ┆ Pierce    ┆ pierce-ra ┆ ~t:121934 │
+    │            ┆ Ravens    ┆         ┆           ┆   ┆           ┆           ┆ vens      ┆           │
+    └────────────┴───────────┴─────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 
@@ -874,12 +1366,25 @@ if schedule_wch is not None and schedule_wch.height:
             if c in ('id', 'name', 'short_name',
                      'home_team_abbreviation', 'away_team_abbreviation',
                      'home_score', 'away_score', 'status_type_description')]
-    schedule_wch.select(keep).head(8) if keep else schedule_wch.head(8)
+    display(schedule_wch.select(keep).head(8) if keep else schedule_wch.head(8))
 else:
-    'schedule unavailable'
+    print('schedule unavailable')
 ```
 
     ✅ women's college hockey team schedule
+
+
+
+    shape: (3, 3)
+    ┌───────────┬─────────────────────────────────┬────────────┐
+    │ id        ┆ name                            ┆ short_name │
+    │ ---       ┆ ---                             ┆ ---        │
+    │ i64       ┆ str                             ┆ str        │
+    ╞═══════════╪═════════════════════════════════╪════════════╡
+    │ 401647743 ┆ St. Lawrence Saints at Wiscons… ┆ USL @ WIS  │
+    │ 401647740 ┆ Colgate Raiders at Wisconsin B… ┆ COLG @ WIS │
+    │ 401647741 ┆ Wisconsin Badgers at Ohio Stat… ┆ WIS @ OSU  │
+    └───────────┴─────────────────────────────────┴────────────┘
 
 
 
@@ -893,12 +1398,32 @@ if rankings_wch is not None and rankings_wch.height:
     keep = [c for c in rankings_wch.columns
             if c in ('rank', 'team_id', 'team_name', 'points',
                      'first_place_votes', 'wins', 'losses', 'ties')]
-    rankings_wch.select(keep).head(10) if keep else rankings_wch.head(10)
+    display(rankings_wch.select(keep).head(10) if keep else rankings_wch.head(10))
 else:
-    "rankings unavailable (only current during the season)"
+    print("rankings unavailable (only current during the season)")
 ```
 
     ✅ women's college hockey rankings
+
+
+
+    shape: (10, 5)
+    ┌─────────┬──────┬────────┬───────────────────┬────────────────┐
+    │ team_id ┆ rank ┆ points ┆ first_place_votes ┆ team_name      │
+    │ ---     ┆ ---  ┆ ---    ┆ ---               ┆ ---            │
+    │ i64     ┆ i64  ┆ f64    ┆ i64               ┆ str            │
+    ╞═════════╪══════╪════════╪═══════════════════╪════════════════╡
+    │ 194     ┆ 1    ┆ 0.0    ┆ null              ┆ Buckeyes       │
+    │ 135     ┆ 2    ┆ 0.0    ┆ null              ┆ Golden Gophers │
+    │ 275     ┆ 3    ┆ 0.0    ┆ null              ┆ Badgers        │
+    │ 111     ┆ 4    ┆ 0.0    ┆ null              ┆ Huskies        │
+    │ 163     ┆ 5    ┆ 0.0    ┆ null              ┆ Tigers         │
+    │ 2514    ┆ 6    ┆ 0.0    ┆ null              ┆ Bobcats        │
+    │ 213     ┆ 7    ┆ 0.0    ┆ null              ┆ Nittany Lions  │
+    │ 2142    ┆ 8    ┆ 0.0    ┆ null              ┆ Raiders        │
+    │ 2137    ┆ 9    ┆ 0.0    ┆ null              ┆ Golden Knights │
+    │ 2594    ┆ 10   ┆ 0.0    ┆ null              ┆ Huskies        │
+    └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
 ---
@@ -943,15 +1468,15 @@ for league_name, mod, fn_name in LEAGUE_MODULES:
 if frames:
     all_teams = pl.concat(frames, how='diagonal_relaxed')
     print('Total teams across all 7 leagues:', all_teams.height)
-    all_teams.group_by('league').len().sort('len', descending=True)
+    display(all_teams.group_by('league').len().sort('len', descending=True))
 else:
-    'no team data available right now'
+    print('no team data available right now')
 ```
 
     ✅ ufl teams
-
-
     ✅ xfl teams
+
+
     ✅ cfl teams
 
 
@@ -962,6 +1487,23 @@ else:
     ✅ mch teams
     ✅ wch teams
     Total teams across all 7 leagues: 1067
+
+
+
+    shape: (7, 2)
+    ┌──────────────────┬─────┐
+    │ league           ┆ len │
+    │ ---              ┆ --- │
+    │ str              ┆ u32 │
+    ╞══════════════════╪═════╡
+    │ college_softball ┆ 446 │
+    │ college_baseball ┆ 437 │
+    │ mch              ┆ 116 │
+    │ wch              ┆ 47  │
+    │ cfl              ┆ 9   │
+    │ ufl              ┆ 8   │
+    │ xfl              ┆ 4   │
+    └──────────────────┴─────┘
 
 
 ### Recipe 2 — Today's slate for any league 📅
@@ -983,45 +1525,66 @@ todays_cfl = safe(
 )
 if todays_cfl is not None and getattr(todays_cfl, 'height', 0):
     print(f"{todays_cfl.height} game(s) today")
-    todays_cfl.head()
+    display(todays_cfl.head())
 else:
-    'no CFL games today (or offseason)'
+    print('no CFL games today (or offseason)')
 ```
 
-    ✅ today's CFL slate (20261026)
+    ✅ today's CFL slate (20261104)
+    no CFL games today (or offseason)
 
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
 
 Every league exposes `espn_{prefix}_player_info(athlete_id=)`. Find an
 `athlete_id` via the roster endpoint, then pull richer bio / career-stats
-detail with `espn_{prefix}_player_career_stats(athlete_id=)`.
+detail with `espn_{prefix}_player_career_stats(athlete_id=)`. When the site page is missing,
+as it is for many college players, `espn_{prefix}_player_core(athlete_id=)` has the core record.
 
 
 ```python
-# Look up a player from the men's college hockey roster we pulled earlier
-# This uses the first athlete_id in the roster frame if it's available
-if (
-    'roster_mch' in dir()
-    and roster_mch is not None
-    and roster_mch.height
-    and 'id' in roster_mch.columns
-):
-    first_athlete_id = roster_mch['id'][0]
-    player_info = safe(
-        f'MCH player info (id={first_athlete_id})',
-        lambda: mch.espn_mch_player_info(athlete_id=first_athlete_id),
-    )
-    _keys(player_info)
-else:
+# ESPN's site v2 athlete page is missing for many college players, so try a few roster ids
+roster_ids = (roster_mch['id'].head(5).to_list()
+              if roster_mch is not None and 'id' in roster_mch.columns else [])
+player_info = None
+for athlete_id in roster_ids:
+    try:
+        player_info = mch.espn_mch_player_info(athlete_id=athlete_id)
+        print(f'✅ MCH player info (id={athlete_id})')
+        break
+    except NoDataError:
+        continue
+if roster_ids and player_info is None:
+    print(f'No site v2 athlete page for the first {len(roster_ids)} roster players; showing the core v2 record')
+    player_info = safe(f'MCH player core (id={roster_ids[0]})',
+                       lambda: mch.espn_mch_player_core(athlete_id=roster_ids[0]))
+elif not roster_ids:
     print('roster not loaded — skipping player info example')
+player_info
+
 ```
 
-    ⏭️  MCH player info (id=5136656): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/5136656
+    No site v2 athlete page for the first 5 roster players; showing the core v2 record
+    ✅ MCH player core (id=5136656)
 
-      Suggestion: Try `find_athlete(name, league='<league>', team=<team>)` to look up a valid athlete_id.
-      (from `sportsdataverse import find_team, find_athlete, find_event`)
-    (no data)
+
+
+
+
+    shape: (1, 39)
+    ┌────────────┬─────────┬────────────┬────────┬───┬────────────┬────────────┬───────────┬───────────┐
+    │ $ref       ┆ id      ┆ uid        ┆ type   ┆ … ┆ status_nam ┆ status_typ ┆ status_ab ┆ statistic │
+    │ ---        ┆ ---     ┆ ---        ┆ ---    ┆   ┆ e          ┆ e          ┆ breviatio ┆ slog_$ref │
+    │ str        ┆ i64     ┆ str        ┆ str    ┆   ┆ ---        ┆ ---        ┆ n         ┆ ---       │
+    │            ┆         ┆            ┆        ┆   ┆ str        ┆ str        ┆ ---       ┆ str       │
+    │            ┆         ┆            ┆        ┆   ┆            ┆            ┆ str       ┆           │
+    ╞════════════╪═════════╪════════════╪════════╪═══╪════════════╪════════════╪═══════════╪═══════════╡
+    │ http://spo ┆ 5136656 ┆ s:70~l:91~ ┆ hockey ┆ … ┆ Active     ┆ active     ┆ Active    ┆ http://sp │
+    │ rts.core.a ┆         ┆ a:5136656  ┆        ┆   ┆            ┆            ┆           ┆ orts.core │
+    │ pi.espn.co ┆         ┆            ┆        ┆   ┆            ┆            ┆           ┆ .api.espn │
+    │ …          ┆         ┆            ┆        ┆   ┆            ┆            ┆           ┆ .co…      │
+    └────────────┴─────────┴────────────┴────────┴───┴────────────┴────────────┴───────────┴───────────┘
+
 
 
 ### Recipe 4 — News & injuries for any league 📰
@@ -1044,8 +1607,6 @@ _keys(injuries_cfl)
 
     ✅ UFL news
     <class 'polars.dataframe.frame.DataFrame'>
-
-
     ✅ CFL injuries
     <class 'polars.dataframe.frame.DataFrame'>
 

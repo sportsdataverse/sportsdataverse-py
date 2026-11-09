@@ -225,14 +225,57 @@ def _rebound_missed_shot_index(ctx: EventContext, i: int) -> int:
         if et == "missed_shot":
             return j
         if et == "free_throw":
-            sh = (rows[j].get("score_home") or "").strip()
-            sa = (rows[j].get("score_away") or "").strip()
-            if not (sh or sa):  # missed FT (no score string -- same signal as _ft_made)
+            if not is_made_ft_row(rows[j]):  # missed FT (same signal as _ft_made)
                 return j
             return -1
         if et in ("made_shot", "turnover", "rebound", "jump_ball", "period"):
             return -1
     return -1
+
+
+def rebound_can_set_offense(ctx: EventContext, i: int) -> bool:
+    """True when rebound row ``i`` is real and follows a missed shot or missed FT.
+
+    Any other rebound row (a placeholder, or one after a make, a turnover or a steal) names the
+    team that just had the ball, so it must not decide a possession's offense.
+
+    Args:
+        ctx: The game's event context (:func:`build_event_context`).
+        i: The index of a rebound row in ``ctx.rows``.
+
+    Returns:
+        Whether the row may decide its possession group's offense.
+    """
+    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0
+
+
+def is_rebound_logged_after_its_putback(rows: "list[dict]", i: int) -> bool:
+    """True when row ``i`` is a rebound the pbp logs right after its own team's made putback.
+
+    The made shot ``i - 1`` and the rebound share a side (``location``), a period and a clock, and a
+    rebound cannot follow a make, so the pbp has the two rows in the wrong order: it is the
+    offensive rebound the putback came from.
+
+    Args:
+        rows: Pbp rows in ``order_index`` order (row dicts).
+        i: The index of the candidate rebound row; out-of-range indexes return False.
+
+    Returns:
+        Whether rows ``i - 1`` and ``i`` are a made shot and its own rebound, logged out of order.
+    """
+    if i <= 0 or i >= len(rows):
+        return False
+    reb, shot = rows[i], rows[i - 1]
+    clock = reb.get("seconds_remaining")
+    return (
+        (reb.get("event_type") or "") == "rebound"
+        and (shot.get("event_type") or "") == "made_shot"
+        and reb.get("location") in ("h", "v")
+        and reb.get("location") == shot.get("location")
+        and reb.get("period") == shot.get("period")
+        and clock is not None
+        and clock == shot.get("seconds_remaining")
+    )
 
 
 _TURNOVER_COINCIDENT_SUBTYPES = frozenset(("shot clock turnover", "kicked ball violation"))
@@ -472,6 +515,19 @@ def _ft_trip_shape(row: dict) -> "tuple[int, int] | None":
         n = int(m.group(1))
         return (n, n)
     return None
+
+
+def is_made_ft_row(row: dict) -> bool:
+    """A free-throw row is a make when it carries a score string that is not the legacy ``"0"``.
+
+    Made free throws stamp the running score; misses carry none. Pre-2017-18 payloads (the NBA
+    through 2016-17, the WNBA through 2016) instead write the literal ``"0"`` on EVERY non-scoring
+    row, misses included, so a bare non-empty test read every missed free throw as made: about
+    6,000 phantom points an NBA season in ``ftm``, and a possession boundary after every missed
+    last free throw. A make always leaves one side at 1 or more, so ``"0"`` on both sides is a
+    miss in either dialect.
+    """
+    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))
 
 
 def is_technical_ft_row(row: dict) -> bool:
@@ -773,8 +829,7 @@ def ft_ends_possession(ctx: EventContext, i: int) -> bool:
     row = rows[i]
     if (row.get("event_type") or "") != "free_throw":
         return False
-    made = bool((row.get("score_home") or "").strip() or (row.get("score_away") or "").strip())
-    if not made:
+    if not is_made_ft_row(row):
         return False
     if not is_last_ft_of_trip(row):
         return False
@@ -896,3 +951,48 @@ def is_possession_ending_event(ctx: EventContext, i: int, offense_team_id: int, 
     if et == "jump_ball":
         return jump_ball_ends_possession(ctx, i)
     return False
+
+
+#: The team-level shot / free-throw counts of a possession row.
+SHOT_KEYS = ("fg2a", "fg2m", "fg3a", "fg3m", "fta", "ftm")
+
+
+def credit_defense_scoring(records: "list[dict]", carries: "list[tuple[int, int, int, dict[str, int]]]") -> None:
+    """Credit the defense's points and shots inside a possession to that team's next possession, in place.
+
+    A possession row has one offense, so a defense score inside it (a technical or flagrant free
+    throw, or a basket a misplaced boundary puts there) used to vanish: neither ``points`` nor the
+    shot counts kept it, and a game's possession points missed its final score. The possession
+    count is unchanged. ``points`` stays a score step and the shot counts stay event counts, as on
+    the offense side, so ``points == 2*fg2m + 3*fg3m + ftm`` holds on a receiving row exactly when
+    it holds for the carried part. It does not for a challenge award posted on a replay row with no
+    made-shot row (the step moves, no shot does), or for a G League single free throw worth 2 or 3
+    (one ``ftm``). pbpstats credits these per event; this is the per-row form.
+
+    Args:
+        records: The game's possession rows (dicts with ``offense_team_id``,
+            ``count_as_possession``, ``points`` and the :data:`SHOT_KEYS` counts), in order.
+        carries: ``(row, team, points, shots)``: the index of the row the defense scored in, the
+            defense team, its score step there and its shot counts there. Each is added to the
+            team's next counted row in the same period; else its last earlier counted row in the
+            same period; else its next counted row; else its last earlier counted row; else its
+            next row; else its last earlier row. Keeping the period keeps the period splits
+            right: in NBA 2025-26, of 382 carries none crosses a period, 6 land on an earlier
+            row and 4 cross the 4th quarter's 5:00 line. A team with no row at all keeps
+            nothing (it cannot happen in a real game).
+
+    Returns:
+        None. ``records`` is updated in place.
+    """
+    for at, team, pts, shots in carries:
+        later = [r for r in records[at + 1 :] if r["offense_team_id"] == team]
+        earlier = [r for r in reversed(records[:at]) if r["offense_team_id"] == team]
+        rows = later + earlier  # nearest first on each side
+        same = [r for r in rows if r["period"] == records[at]["period"]]
+        pools = ([r for r in same if r["count_as_possession"]], [r for r in rows if r["count_as_possession"]], rows)
+        target = next((p[0] for p in pools if p), None)
+        if target is None:  # ponytail: a team with no possession row at all; nothing to credit
+            continue
+        target["points"] += pts
+        for k, v in shots.items():
+            target[k] += v

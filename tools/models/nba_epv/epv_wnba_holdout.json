@@ -1,0 +1,374 @@
+{
+  "league_id": "10",
+  "splits": {
+    "2022": "train",
+    "2023": "train",
+    "2024": "train",
+    "2025": "holdout",
+    "2026": "confirmation"
+  },
+  "n_train_states": 392365,
+  "rounds": 50,
+  "start_epv_mean": 1.0312073230743408,
+  "level": {
+    "tau2": 0.0005544767376864484,
+    "sigma2": 1.341131924313557,
+    "level_k": 2418.7343366457962,
+    "n_gaps": 12,
+    "level_ppp": 1.0324495770982434
+  },
+  "params": {
+    "objective": "reg:squarederror",
+    "eval_metric": "rmse",
+    "max_depth": 6,
+    "eta": 0.1,
+    "min_child_weight": 50,
+    "subsample": 0.8,
+    "tree_method": "hist",
+    "seed": 42
+  },
+  "features": [
+    "start_type",
+    "period",
+    "seconds_remaining",
+    "start_margin",
+    "transition",
+    "last_event",
+    "ft_pending",
+    "shot_zone"
+  ],
+  "gates": {
+    "max_large_bias": 0.0334940987285743,
+    "max_large_bias_rule": {
+      "max_large_bias": 0.0334940987285743,
+      "rule": "GATE2_BASE + sd(year-over-year points per possession)",
+      "base": 0.01,
+      "drift_sd": 0.0234940987285743,
+      "drift_seasons": [
+        2011,
+        2025
+      ],
+      "season_ppp": {
+        "2010": 1.0063773140981982,
+        "2011": 0.989040144025773,
+        "2012": 0.9865047657994904,
+        "2013": 0.971205186880244,
+        "2014": 0.9875776397515528,
+        "2015": 0.9799723089802621,
+        "2016": 1.0301318851823118,
+        "2017": 1.0287146905851943,
+        "2018": 1.0444166796813994,
+        "2019": 1.00009384090838,
+        "2020": 1.0351623422657026,
+        "2021": 1.0160961158657011,
+        "2022": 1.0300609933197793,
+        "2023": 1.037882556221693,
+        "2024": 1.0291558219628256,
+        "2025": 1.0469174011527507
+      }
+    },
+    "max_bucket_bias": 0.06,
+    "min_bucket": 500,
+    "min_gated_share": 0.99,
+    "slope_band": [
+      0.9,
+      1.1
+    ]
+  },
+  "seasons": {
+    "2025": {
+      "split": "holdout",
+      "states": 160259,
+      "possessions": 44589,
+      "mse": 0.745230917981452,
+      "mse_constant": 0.9850026348161783,
+      "mse_cell_mean": 0.7506410049811959,
+      "skill_vs_constant": 0.24342241163595735,
+      "paired_vs_cell_mean": {
+        "games": 286,
+        "mean": -0.005366971811842909,
+        "ci_lo": -0.006384638469956206,
+        "ci_hi": -0.004349305153729612
+      },
+      "mse_start": 1.3524699063314307,
+      "mse_start_constant": 1.3608554144317495,
+      "mean_epv": 0.6352694270319512,
+      "mean_label": 0.636407315657779,
+      "large_bias": -0.0011378886258277543,
+      "large_bias_without_level": -0.002884825148854464,
+      "large_bias_game_se": 0.003982550808558774,
+      "calibration_slope": 1.0084039046617688,
+      "buckets": 31,
+      "gated_buckets": 22,
+      "gated_state_share": 0.9934730654752619,
+      "max_bucket_bias": 0.08716490541948885,
+      "bucket_failures": 0,
+      "failing_buckets": [],
+      "worst_bucket": {
+        "last_event": 13,
+        "transition": 2,
+        "n": 779,
+        "bias": 0.08716490541948885,
+        "allowed": 0.12015790593551404,
+        "bias_without_level": 0.08466720397420352
+      },
+      "ungated_max_bias": 1.2393274726165893,
+      "by_month": [
+        {
+          "month": "2025-05",
+          "games": 40,
+          "bias": 0.00283970275803121,
+          "bias_without_level": 0.007148771721909774
+        },
+        {
+          "month": "2025-06",
+          "games": 68,
+          "bias": -0.009316905792448387,
+          "bias_without_level": -0.007177879335536107
+        },
+        {
+          "month": "2025-07",
+          "games": 65,
+          "bias": 0.006474587838333629,
+          "bias_without_level": 0.004615047580305593
+        },
+        {
+          "month": "2025-08",
+          "games": 84,
+          "bias": -0.007319813070723128,
+          "bias_without_level": -0.013030901157352583
+        },
+        {
+          "month": "2025-09",
+          "games": 29,
+          "bias": 0.013461134835950966,
+          "bias_without_level": 0.00510377009054891
+        }
+      ],
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 16025,
+          "mean_epv": 0.0022043152170502273,
+          "mean_y": 0.0004992199687987519
+        },
+        {
+          "decile": 1,
+          "n": 16026,
+          "mean_epv": 0.013542469161987192,
+          "mean_y": 0.004055909147635093
+        },
+        {
+          "decile": 2,
+          "n": 16026,
+          "mean_epv": 0.09183678017419145,
+          "mean_y": 0.08348932983901161
+        },
+        {
+          "decile": 3,
+          "n": 16026,
+          "mean_epv": 0.27973191302416084,
+          "mean_y": 0.28260326968675903
+        },
+        {
+          "decile": 4,
+          "n": 16026,
+          "mean_epv": 0.5809531586316268,
+          "mean_y": 0.5966554349182578
+        },
+        {
+          "decile": 5,
+          "n": 16026,
+          "mean_epv": 0.9355025360630661,
+          "mean_y": 0.9297391738425059
+        },
+        {
+          "decile": 6,
+          "n": 16026,
+          "mean_epv": 1.0003445814177656,
+          "mean_y": 1.0009359790340697
+        },
+        {
+          "decile": 7,
+          "n": 16026,
+          "mean_epv": 1.0352734148215978,
+          "mean_y": 1.030887308124298
+        },
+        {
+          "decile": 8,
+          "n": 16026,
+          "mean_epv": 1.0970451937433574,
+          "mean_y": 1.1014601272931486
+        },
+        {
+          "decile": 9,
+          "n": 16026,
+          "mean_epv": 1.3162204056865854,
+          "mean_y": 1.333707724946961
+        }
+      ]
+    },
+    "2026": {
+      "split": "confirmation",
+      "states": 192646,
+      "possessions": 52756,
+      "mse": 0.7607032925749192,
+      "mse_constant": 1.0170778382792365,
+      "mse_cell_mean": 0.7657507127187124,
+      "skill_vs_constant": 0.25206973945875144,
+      "paired_vs_cell_mean": {
+        "games": 330,
+        "mean": -0.0050325668702955965,
+        "ci_lo": -0.006001225506671799,
+        "ci_hi": -0.004063908233919394
+      },
+      "mse_start": 1.3716478427809016,
+      "mse_start_constant": 1.3834906086558791,
+      "mean_epv": 0.6642814020299533,
+      "mean_label": 0.6687084081683502,
+      "large_bias": -0.004427006138396861,
+      "large_bias_without_level": -0.029753669429346097,
+      "large_bias_game_se": 0.004104742337034796,
+      "calibration_slope": 1.0040092004753667,
+      "buckets": 31,
+      "gated_buckets": 23,
+      "gated_state_share": 0.9962106661960279,
+      "max_bucket_bias": 0.11679148706735776,
+      "bucket_failures": 1,
+      "failing_buckets": [
+        {
+          "last_event": 13,
+          "transition": 2,
+          "n": 1041,
+          "bias": 0.11679148706735776,
+          "allowed": 0.11022140622240101
+        }
+      ],
+      "worst_bucket": {
+        "last_event": 13,
+        "transition": 2,
+        "n": 1041,
+        "bias": 0.11679148706735776,
+        "allowed": 0.11022140622240101,
+        "bias_without_level": 0.07560046342104015
+      },
+      "ungated_max_bias": 1.168703475139505,
+      "by_month": [
+        {
+          "month": "2026-05",
+          "games": 63,
+          "bias": -0.014110773516962868,
+          "bias_without_level": -0.02716202986338189
+        },
+        {
+          "month": "2026-06",
+          "games": 81,
+          "bias": -0.008142307066937809,
+          "bias_without_level": -0.02925162242938768
+        },
+        {
+          "month": "2026-07",
+          "games": 71,
+          "bias": -0.018189997005394948,
+          "bias_without_level": -0.046009254982626084
+        },
+        {
+          "month": "2026-08",
+          "games": 85,
+          "bias": 0.009511452558865588,
+          "bias_without_level": -0.024588065520270354
+        },
+        {
+          "month": "2026-09",
+          "games": 30,
+          "bias": 0.019722567766354247,
+          "bias_without_level": -0.012935289492630802
+        }
+      ],
+      "deciles": [
+        {
+          "decile": 0,
+          "n": 19264,
+          "mean_epv": 0.00250998842963918,
+          "mean_y": 0.0006748338870431893
+        },
+        {
+          "decile": 1,
+          "n": 19265,
+          "mean_epv": 0.01739730361599438,
+          "mean_y": 0.007111341811575396
+        },
+        {
+          "decile": 2,
+          "n": 19265,
+          "mean_epv": 0.09957692135302841,
+          "mean_y": 0.09763820399688554
+        },
+        {
+          "decile": 3,
+          "n": 19264,
+          "mean_epv": 0.2938657006770517,
+          "mean_y": 0.31468023255813954
+        },
+        {
+          "decile": 4,
+          "n": 19265,
+          "mean_epv": 0.640990251196396,
+          "mean_y": 0.6440176485855178
+        },
+        {
+          "decile": 5,
+          "n": 19265,
+          "mean_epv": 0.9700602364932542,
+          "mean_y": 0.9898261095250455
+        },
+        {
+          "decile": 6,
+          "n": 19264,
+          "mean_epv": 1.0365918532427303,
+          "mean_y": 1.0476536544850499
+        },
+        {
+          "decile": 7,
+          "n": 19265,
+          "mean_epv": 1.073139626747189,
+          "mean_y": 1.0802491565014274
+        },
+        {
+          "decile": 8,
+          "n": 19265,
+          "mean_epv": 1.1376505512102235,
+          "mean_y": 1.1408772385154424
+        },
+        {
+          "decile": 9,
+          "n": 19264,
+          "mean_epv": 1.3710340205525453,
+          "mean_y": 1.364358388704319
+        }
+      ]
+    }
+  },
+  "holdout_identity_max_residual": 6.661338147750939e-16,
+  "accepted_bucket_exceptions": [
+    {
+      "season": 2026,
+      "last_event": 13,
+      "transition": 2,
+      "n": 1041,
+      "bias": 0.11679,
+      "allowed": 0.11022,
+      "accepted": "2026-11-06",
+      "by": "owner",
+      "note": "a shooting foul in a transition possession is over-priced by about 0.12 points on the 2026 confirmation (+0.087 of 0.120 allowed on the 2025 holdout; +0.076 without the level)",
+      "observed": {
+        "last_event": 13,
+        "transition": 2,
+        "n": 1041,
+        "bias": 0.11679148706735776,
+        "allowed": 0.11022140622240101
+      }
+    }
+  ],
+  "failed_gates": []
+}

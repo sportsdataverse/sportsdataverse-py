@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob"
-sidebar_label: "Models and calculators: build_wbb–win_prob"
+title: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season"
+sidebar_label: "Models and calculators: build_wbb–wbb_season"
 sidebar_position: 9
-description: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob
+# Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season
 
 ### build_wbb_season_wp {#build_wbb_season_wp}
 
@@ -626,7 +626,7 @@ Per-play in-game win-probability features from a `load_mbb_pbp` frame.
 
 **Returns**
 
-One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left; the game page gives overtime plays the period clock first), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0), `margin_per_sqrt_sec` (`score_diff / sqrt(sec_left + 1)`) and `sqrt_sec_left_60` (`sqrt(max(sec_left, 60))`). The same features as the NBA / WNBA model (`sportsdataverse.nba.nba_game_predict.in_game_features`).
 
 | col_name | type | description |
 |---|---|---|
@@ -635,6 +635,8 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 
 **Example**
 
@@ -1440,7 +1442,7 @@ moves = transfer_cohort(bpm.select("player_id", "team_id", "season"))
 
 ### wbb_bracket_sim {#wbb_bracket_sim}
 
-`wbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's single-elimination bracket Monte Carlo.
 
@@ -1496,6 +1498,8 @@ One row per play: the five feature columns plus `home_win_prob` -- see the mbb c
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 **Example**
@@ -1534,9 +1538,82 @@ from sportsdataverse.wbb import wbb_predict_games, wbb_team_ratings
 preds = wbb_predict_games(games, wbb_team_ratings(2024))
 ```
 
+### wbb_season_projections {#wbb_season_projections}
+
+`wbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds.
+
+Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with `league="womens"` (WBB loaders, women's constants and quad ranges).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `n_sims` | `int` | `10000` | Simulated seasons. |
+| `seed` | `int` | `0` | RNG seed (deterministic output). |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament; `None` (default) reads the bundled list. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per Division I team -- see the mbb core for the full contract.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by its end year (2024 is 2023-24). |
+| `as_of_date` | Date | The as-of date: only games strictly before it count as played. Null when every completed game is used. |
+| `team_id` | String | ESPN team id (Utf8). |
+| `team` | String | Team (ESPN location name). |
+| `conference_id` | String | ESPN conference id, read off the schedule (Utf8). |
+| `conference` | String | Conference short name. Null for independents, which get no auto-bid. |
+| `wins` | Int64 | Wins as of the date (every opponent). |
+| `losses` | Int64 | Losses as of the date. |
+| `conf_wins` | Int64 | Regular-season conference wins as of the date. |
+| `conf_losses` | Int64 | Regular-season conference losses as of the date. |
+| `proj_wins` | Float64 | Projected wins: played wins plus the mean simulated wins in the remaining regular-season games (conference tournaments not counted). |
+| `proj_losses` | Float64 | Projected losses, on the same games. |
+| `proj_conf_wins` | Float64 | Projected regular-season conference wins. |
+| `proj_conf_losses` | Float64 | Projected regular-season conference losses. |
+| `proj_conf_win_pct` | Float64 | proj_conf_wins / (proj_conf_wins + proj_conf_losses). |
+| `proj_conf_win_pct_rank` | Float64 | Projected conference standing: rank of proj_conf_win_pct within the conference, 1 is best, average ties. Null for independents. |
+| `proj_conf_win_pct_pct` | Float64 | Percentile of proj_conf_win_pct within the conference. |
+| `reg_season_title_prob` | Float64 | Share of sims with the conference's best regular-season conference winning percentage; co-champions all count, so a conference can sum past 1. |
+| `conf_tourney_title_prob` | Float64 | Share of sims winning the conference tournament (a played final is certain). Ineligible teams play it too, so this can differ from auto_bid_prob. |
+| `auto_bid_prob` | Float64 | Share of sims holding the conference's auto-bid: the tournament champion, or the runner-up when the champion is ineligible. |
+| `at_large_prob` | Float64 | Share of sims with an at-large bid. |
+| `bid_prob` | Float64 | Share of sims in the 68-team field (auto_bid_prob + at_large_prob). |
+| `seed_mean` | Float64 | Mean seed line over the sims with a bid; null when never in the field. |
+| `seed_1_prob` | Float64 | Share of all sims with a 1 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_2_prob` | Float64 | Share of all sims with a 2 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_3_prob` | Float64 | Share of all sims with a 3 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_4_prob` | Float64 | Share of all sims with a 4 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_5_prob` | Float64 | Share of all sims with a 5 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_6_prob` | Float64 | Share of all sims with a 6 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_7_prob` | Float64 | Share of all sims with a 7 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_8_prob` | Float64 | Share of all sims with a 8 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_9_prob` | Float64 | Share of all sims with a 9 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_10_prob` | Float64 | Share of all sims with a 10 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_11_prob` | Float64 | Share of all sims with a 11 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_12_prob` | Float64 | Share of all sims with a 12 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_13_prob` | Float64 | Share of all sims with a 13 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_14_prob` | Float64 | Share of all sims with a 14 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_15_prob` | Float64 | Share of all sims with a 15 seed (unconditional; the 16 lines sum to bid_prob). |
+| `seed_16_prob` | Float64 | Share of all sims with a 16 seed (unconditional; the 16 lines sum to bid_prob). |
+| `n_sims` | Int64 | Simulated seasons. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_season_projections
+odds = wbb_season_projections(2024, n_sims=2000)
+```
+
 ### wbb_season_sim {#wbb_season_sim}
 
-`wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's remaining-schedule Monte Carlo.
 
@@ -1563,70 +1640,4 @@ No returns table is published for this function: no capture: it raises KeyError 
 ```python
 from sportsdataverse.wbb import wbb_season_sim
 odds = wbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
-```
-
-### wbb_team_ratings {#wbb_team_ratings}
-
-`wbb_team_ratings(seasons: 'Union[int, list[int]]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo).
-
-Delegates to `sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`
-with `league="womens"` (WBB loaders + women's fitted constants).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season (e.g. `2024`) or list of seasons. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per (season, team_id) -- see the mbb core for the schema.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | String | Unique team identifier. |
-| `adj_o` | Float64 | Adj o. |
-| `adj_d` | Float64 | Adj d. |
-| `adj_em` | Float64 | Adj em. |
-| `adj_tempo` | Float64 |  |
-| `raw_o` | Float64 | Raw o. |
-| `raw_d` | Float64 | Raw d. |
-| `games` | Int64 | Games played. |
-| `rank` | Int64 | Rank. |
-| `adj_em_z` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_team_ratings
-wbb_team_ratings(2024).sort("rank").head()
-```
-
-### win_prob_from_margin {#win_prob_from_margin}
-
-`win_prob_from_margin(exp_margin: 'float') -> 'float'`
-
-Women's home win probability from an expected margin.
-
-Delegates to `sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with `league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
-
-**Returns**
-
-Probability the home team wins, in `(0, 1)`.
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_game_predict import win_prob_from_margin
-win_prob_from_margin(5.0)
 ```
