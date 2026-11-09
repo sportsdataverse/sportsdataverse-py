@@ -1,10 +1,71 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_draft–render_report"
-sidebar_label: "Models and calculators: nba_draft–render_report"
+title: "NBA — additional Python functions — Models and calculators: nba_decay–predict_total"
+sidebar_label: "Models and calculators: nba_decay–predict_total"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_draft–render_report — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_decay–predict_total — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_draft–render_report
+# NBA — additional Python functions — Models and calculators: nba_decay–predict_total
+
+### nba_decay_rapm {#nba_decay_rapm}
+
+`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
+
+`asof=None` disables decay: every possession is weighted `1.0` and the
+fit uses **exactly** plain `~sportsdataverse.nba.nba_rapm.nba_rapm`'s
+own penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`, the league's
+fixed value) so the two agree byte-for-byte (see
+`test_decay_rapm_asof_none_equals_plain_rapm`). When `asof` is set,
+possessions dated after `asof` are dropped, the remainder is
+exponentially down-weighted by age, and the fit switches to the
+**oracle** regularization schedule (`oracle_rapm_alphas` evaluated
+at the post-filter possession count, `cv=` `ORACLE_RAPM_CV`) per
+the binding WP2 ridge-schedule ruling documented in the module docstring.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
+| `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
+| `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects plain RAPM's league penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose plain-RAPM penalty the `asof=None` branch fits at; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every possession, -> zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `o_decay_rapm` | Float64 |  |
+| `d_decay_rapm` | Float64 |  |
+| `decay_rapm` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `asof` is not `None` but *possessions* lacks a `game_date` column. |
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_rapm_variants import nba_decay_rapm
+
+df = nba_decay_rapm(season_poss, asof=datetime.date(2024, 3, 1), half_life_days=120.0)
+print(df.sort("decay_rapm", descending=True).head())
+
+# Plain-RAPM-equivalent (no decay)
+
+df = nba_decay_rapm(season_poss)  # asof=None
+```
 
 ### nba_draft_model {#nba_draft_model}
 
@@ -362,9 +423,9 @@ it on its own output gives the same frame.
 | `spm` | Float64 | Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm. |
 | `min` | Float64 | Minutes played. |
 | `gp` | Int64 | Games played. |
-| `obpm` | Float64 | Offensive box plus-minus per 100 possessions for this season and season type only, team-adjusted on its own so a team's minute-weighted obpm is its offensive rating minus the league's, divided by 5 (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 put the whole team constant here (league mean about -2.9). |
-| `dbpm` | Float64 | Defensive box plus-minus per 100 possessions for this season and season type only: bpm minus obpm, so it lands on the team's defensive rating relative to the league (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 left it unadjusted (league mean about +2.9, nearly every player positive). |
-| `bpm` | Float64 | Box plus-minus (BPM 2.0) per 100 possessions for this season and season type only, not a career value: the box-score estimate of total impact. The team adjustment makes a team's minute-weighted bpm its net rating per 100 divided by 5 (the five %Min slots sum to the net rating). Releases fit before sportsdataverse-py #1148 used the full net rating, five times too large. |
+| `obpm` | Float64 | Offensive box plus-minus per 100 possessions for this season and season type only, team-adjusted on its own so a team's minute-weighted obpm is its offensive rating minus the league's, divided by 5 (a traded player counted with his first team; league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 put the whole team adjustment here (regular-season league minute-weighted mean about -2.9). |
+| `dbpm` | Float64 | Defensive box plus-minus per 100 possessions for this season and season type only: bpm minus obpm, so a team's minute-weighted dbpm is (the league's offensive rating minus its defensive rating) / 5, positive for a good defense (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 left it unadjusted (regular-season league minute-weighted mean about +2.9, mostly positive). |
+| `bpm` | Float64 | Box plus-minus (BPM 2.0) per 100 possessions for this season and season type only, not a career value: the box-score estimate of total impact. The team adjustment makes a team's minute-weighted bpm its net rating per 100 divided by 5 (the five %Min slots sum to the net rating; a traded player's minutes count with the first team he appears for in the logs). Releases fit before sportsdataverse-py #1148 targeted the full net rating, five times BPM 2.0's team mean. |
 | `war` | Float64 | Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin. |
 | `boban_filtered_skill` | Float64 | BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel, i.e. his current-form rating after aging drift and possession-weighted observation noise. |
 | `boban_projected_rating` | Float64 | One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the player's last observed age; both season_type rows of a player-season carry the same value because the projection is not playoff-specific. |
@@ -912,75 +973,4 @@ Expected combined points scored by both teams.
 ```python
 from sportsdataverse.nba.nba_game_predict import predict_total
 predict_total(118.0, 108.0, 110.0, 112.0, 100.0, 98.0)
-```
-
-### raw_game_efficiency {#raw_game_efficiency}
-
-`raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Per-team, per-game possessions + raw offensive/defensive rating.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids cast to `Utf8` here). |
-| `team_box` | `DataFrame` |  | Per-team box score with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. |
-
-**Returns**
-
-One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_rtg, def_rtg`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | String | Unique game identifier. |
-| `season` | Int64 | Season year. |
-| `date` | String | Date in YYYY-MM-DD format. |
-| `team_id` | String | Unique team identifier. |
-| `opp_team_id` | String |  |
-| `is_home` | Boolean | Whether the team was home. |
-| `neutral_site` | Boolean | Neutral site. |
-| `poss` | Float64 | Poss. |
-| `off_rtg` | Float64 |  |
-| `def_rtg` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
-from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
-eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
-```
-
-### render_report {#render_report}
-
-`render_report(report: 'ValidationReport') -> 'str'`
-
-Render a `ValidationReport` as a human-readable markdown validation card.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `report` | `ValidationReport` |  | A populated `ValidationReport` from `validate_model`. |
-
-**Returns**
-
-A multi-section markdown string with one `##` heading per oracle. Sections whose oracle result is `None` (either skipped or not applicable for a point-estimate model) are rendered as `- n/a`.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_model_validation import (
-    RidgeRapmModel, validate_model, render_report,
-)
-
-rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
-md = render_report(rep)
-print(md)
-
-# Capture the markdown string for downstream use
-
-with open("validation_card.md", "w") as f:
-    f.write(render_report(rep))
 ```

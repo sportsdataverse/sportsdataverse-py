@@ -349,10 +349,21 @@ def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame
     )
 
 
+_ORTG_COLS = ("pts", "fga", "oreb", "tov", "fta")
+
+
 def _league_ortg(team_logs: pl.DataFrame) -> float:
-    """League points per 100 possessions over ``team_logs`` (the box possession estimate)."""
-    poss = team_logs["fga"].sum() - team_logs["oreb"].sum() + team_logs["tov"].sum() + 0.44 * team_logs["fta"].sum()
-    return float(team_logs["pts"].sum() / poss * 100) if poss else 0.0
+    """League points per 100 possessions over ``team_logs`` (the box possession estimate).
+
+    Raises:
+        ValueError: If a team row is missing one of its totals: dropping its points but keeping its
+            possessions (or the reverse) would shift every other team's OBPM.
+    """
+    tl = team_logs.select(_ORTG_COLS)
+    if tl.null_count().sum_horizontal().item():
+        raise ValueError(f"team_logs has null {list(_ORTG_COLS)} totals; the league offensive rating needs them all")
+    poss = tl["fga"].sum() - tl["oreb"].sum() + tl["tov"].sum() + 0.44 * tl["fta"].sum()
+    return float(tl["pts"].sum() / poss * 100) if poss else 0.0
 
 
 def _nba_bpm_one(
@@ -438,12 +449,15 @@ def nba_bpm(
     Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
     team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
     ``bpm`` is its net rating per 100 / 5, and its minute-weighted ``obpm`` is (its offensive
-    rating - the league's) / 5, a separate constant. ``dbpm = bpm - obpm`` lands on the defensive
-    rating relative to the league, so league minute-weighted obpm and dbpm each sit near 0 (2025-26
+    rating - the league's) / 5, a separate constant. ``dbpm = bpm - obpm`` then averages (the
+    league's offensive rating - the team's defensive rating) / 5, positive for a good defense, so
+    league minute-weighted obpm and dbpm each sit near 0 (2025-26
     NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
-    the schedule-adjusted ones Basketball-Reference uses. Before #1148 every player took
-    ``net - team mean`` on both bpm and obpm: five times the published constant, all of it on
-    offense (2025-26 league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
+    the schedule-adjusted ones Basketball-Reference uses. A traded player's minutes count with
+    the first team he appears for in the logs. Before #1148 every player took ``net - team mean``
+    on both bpm and obpm: a team-mean target of the full net rating, five times BPM 2.0's, and
+    all of the adjustment on offense, so dbpm stayed raw (2025-26 regular season, minute-weighted:
+    league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
     Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
     Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
 
@@ -514,13 +528,20 @@ def nba_bpm(
 
     game_ids = player_logs["game_id"].unique().to_list()
     frames: list[pl.DataFrame] = []
-    lg_ortg = _league_ortg(team_logs)  # one game's two teams are not the league
+    # one game's two teams are not the league: each game takes its season's league rating
+    by_season = "season_id" in team_logs.columns
+    lg_ortg = (
+        {s: _league_ortg(g) for (s,), g in team_logs.group_by("season_id")}
+        if by_season
+        else {None: _league_ortg(team_logs)}
+    )
     for gid in game_ids:
         pl_g = player_logs.filter(pl.col("game_id") == gid)
         tl_g = team_logs.filter(pl.col("game_id") == gid)
         if pl_g.is_empty() or tl_g.is_empty():
             continue
-        scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust, league_ortg=lg_ortg)
+        lg = lg_ortg[tl_g["season_id"][0] if by_season else None]
+        scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust, league_ortg=lg)
         frames.append(scored.with_columns(pl.lit(gid).cast(pl.Utf8).alias("game_id")))
 
     if not frames:

@@ -491,3 +491,30 @@ def test_player_war_repair_is_a_no_op_on_the_fixed_bpm(real_2025) -> None:
     repaired = repair_bpm_team_constant(ratings, net)
     j = ratings.select("player_id", "bpm").join(repaired.select("player_id", pl.col("bpm").alias("r")), on="player_id")
     assert (j["bpm"] - j["r"]).abs().max() < 1e-9
+
+
+def test_game_mode_takes_each_seasons_own_league_rating() -> None:
+    """Scoring two seasons' games in one call gives each game the obpm it gets from its own season."""
+    p1, t1 = _synth_logs(0)
+    p2, t2 = _synth_logs(1)
+    t2 = t2.with_columns(pl.col("pts") + 10.0)  # a higher-scoring league
+
+    def tag(df: pl.DataFrame, season: str, prefix: str) -> pl.DataFrame:
+        return df.with_columns(pl.lit(season).alias("season_id"), (pl.lit(prefix) + pl.col("game_id")).alias("game_id"))
+
+    p1, t1, p2, t2 = tag(p1, "22024", "A"), tag(t1, "22024", "A"), tag(p2, "22025", "B"), tag(t2, "22025", "B")
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    both = nba_bpm(pl.concat([p1, p2]), pl.concat([t1, t2]), positions, granularity="game")
+    alone = nba_bpm(p1, t1, positions, granularity="game")
+    j = alone.join(both, on=["game_id", "player_id"], suffix="_both")
+    assert j.height == alone.height and (j["obpm"] - j["obpm_both"]).abs().max() < 1e-9
+
+
+def test_league_rating_refuses_incomplete_team_totals() -> None:
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    broken = team_logs.with_columns(
+        pl.when(pl.int_range(pl.len()) == 0).then(None).otherwise(pl.col("pts")).alias("pts")
+    )
+    with pytest.raises(ValueError, match="null"):
+        nba_bpm(player_logs, broken, positions)

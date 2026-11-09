@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_decay"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_darko"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_decay
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -1406,12 +1406,15 @@ Faithful BPM 2.0 per player, at season or single-game granularity.
 Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
 team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
 `bpm` is its net rating per 100 / 5, and its minute-weighted `obpm` is (its offensive
-rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` lands on the defensive
-rating relative to the league, so league minute-weighted obpm and dbpm each sit near 0 (2025-26
+rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` then averages (the
+league's offensive rating - the team's defensive rating) / 5, positive for a good defense, so
+league minute-weighted obpm and dbpm each sit near 0 (2025-26
 NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
-the schedule-adjusted ones Basketball-Reference uses. Before #1148 every player took
-`net - team mean` on both bpm and obpm: five times the published constant, all of it on
-offense (2025-26 league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
+the schedule-adjusted ones Basketball-Reference uses. A traded player's minutes count with
+the first team he appears for in the logs. Before #1148 every player took `net - team mean`
+on both bpm and obpm: a team-mean target of the full net rating, five times BPM 2.0's, and
+all of the adjustment on offense, so dbpm stayed raw (2025-26 regular season, minute-weighted:
+league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
 Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
 Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
 
@@ -1518,65 +1521,4 @@ No returns table is published for this function: no capture: its input is a mult
 from sportsdataverse.nba import nba_darko, nba_player_ages
 proj = nba_darko(rating_panel, ages_panel)
 print(proj.sort("projected_rating", descending=True).head())
-```
-
-### nba_decay_rapm {#nba_decay_rapm}
-
-`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
-
-`asof=None` disables decay: every possession is weighted `1.0` and the
-fit uses **exactly** plain `~sportsdataverse.nba.nba_rapm.nba_rapm`'s
-own penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`, the league's
-fixed value) so the two agree byte-for-byte (see
-`test_decay_rapm_asof_none_equals_plain_rapm`). When `asof` is set,
-possessions dated after `asof` are dropped, the remainder is
-exponentially down-weighted by age, and the fit switches to the
-**oracle** regularization schedule (`oracle_rapm_alphas` evaluated
-at the post-filter possession count, `cv=` `ORACLE_RAPM_CV`) per
-the binding WP2 ridge-schedule ruling documented in the module docstring.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
-| `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
-| `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects plain RAPM's league penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
-| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose plain-RAPM penalty the `asof=None` branch fits at; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every possession, -> zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | Unique player identifier. |
-| `o_decay_rapm` | Float64 |  |
-| `d_decay_rapm` | Float64 |  |
-| `decay_rapm` | Float64 |  |
-| `off_poss` | Int64 |  |
-| `def_poss` | Int64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | `asof` is not `None` but *possessions* lacks a `game_date` column. |
-
-**Example**
-
-```python
-import datetime
-from sportsdataverse.nba.nba_rapm_variants import nba_decay_rapm
-
-df = nba_decay_rapm(season_poss, asof=datetime.date(2024, 3, 1), half_life_days=120.0)
-print(df.sort("decay_rapm", descending=True).head())
-
-# Plain-RAPM-equivalent (no decay)
-
-df = nba_decay_rapm(season_poss)  # asof=None
 ```
