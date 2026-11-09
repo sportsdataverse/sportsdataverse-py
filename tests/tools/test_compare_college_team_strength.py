@@ -96,6 +96,8 @@ def test_paired_difference_is_ridge_minus_fixed() -> None:
     [
         (["2016"], ["2016", "2025"], "train and holdout seasons must be disjoint"),
         (["2024"], ["2023", "2025"], "penalty's fit seasons"),
+        (["2024", "2024"], ["2025"], "--train repeats a season"),
+        (["2024"], ["2025", "2025"], "--holdout repeats a season"),
     ],
 )
 def test_holdout_must_be_unseen(
@@ -112,3 +114,10 @@ def test_holdout_must_be_unseen(
         cmp.main(["--league", "mbb", "--train", *train, "--holdout", *holdout])
     assert exc.value.code == 2
     assert message in capsys.readouterr().err
+
+
+def test_undefined_spearman_is_null() -> None:
+    # one shared team (or a constant rating) has no rank correlation: null, so the phase means skip it
+    assert cmp._spearman({"a": 1.0}, {"a": 2.0}, {"a"}) is None
+    assert cmp._spearman({"a": 1.0, "b": 1.0}, {"a": 2.0, "b": 3.0}, {"a", "b"}) is None
+    assert cmp._spearman({"a": 1.0, "b": 2.0}, {"a": 2.0, "b": 3.0}, {"a", "b"}) == pytest.approx(1.0)

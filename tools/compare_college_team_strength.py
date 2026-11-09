@@ -108,10 +108,14 @@ def _ratings(lg: str, eff: pl.DataFrame, rows: pl.DataFrame, lam: float) -> dict
     }
 
 
-def _spearman(a: dict[str, float], b: dict[str, float], teams: set[str]) -> float:
+def _spearman(a: dict[str, float], b: dict[str, float], teams: set[str]) -> float | None:
+    """Spearman over the teams both rate; None (skipped by the phase means) when it is undefined."""
     keys = sorted(teams & a.keys() & b.keys())
-    frame = pl.DataFrame({"a": [a[k] for k in keys], "b": [b[k] for k in keys]})
-    return float(frame.select(pl.corr("a", "b", method="spearman")).item())
+    frame = pl.DataFrame(
+        {"a": [a[k] for k in keys], "b": [b[k] for k in keys]}, schema={"a": pl.Float64, "b": pl.Float64}
+    )
+    r = frame.select(pl.corr("a", "b", method="spearman")).item() if len(keys) >= 2 else None
+    return float(r) if r is not None and np.isfinite(r) else None
 
 
 def _ranks(r: dict[str, float], teams: set[str]) -> dict[str, float]:
@@ -133,6 +137,8 @@ def season_frames(lg: str, season: int, cache: Path, lam: float) -> tuple[pl.Dat
         & pl.col("home_team_id").is_in(sorted(d1))
         & pl.col("away_team_id").is_in(sorted(d1))
     )
+    if games.height == 0 or eff["date"].min() is None:
+        raise ValueError(f"{lg} {season}: no completed Division I regular-season game to cut the season on")
     final = _ratings(lg, eff, rows, lam)
     scored, cuts, prev = [], [], None
     for week, cut in cutoffs(eff["date"].min(), games["date"].max()):  # type: ignore[arg-type]
@@ -190,6 +196,8 @@ def fit_maps(train: pl.DataFrame) -> dict[tuple[str, str], tuple[float, float, f
             x = np.column_stack([sub[f"d_{m}"].to_numpy(), sub["home"].to_numpy()])
             (a, b), *_ = np.linalg.lstsq(x, y, rcond=None)
             sigma = float(np.sqrt(np.mean((y - x @ np.array([a, b])) ** 2)))
+            if not (np.isfinite(sigma) and sigma > 0):
+                raise ValueError(f"{m} phase {phase}: the margin fit has sigma {sigma}; too few train games")
             out[(m, str(phase))] = (float(a), float(b), sigma)
     return out
 
@@ -301,6 +309,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cache", type=Path, default=Path(".cache/preseason_prior"))
     ap.add_argument("--out", type=Path, default=None, help="write the result json here")
     args = ap.parse_args(argv)
+    for name, seasons in (("--train", args.train), ("--holdout", args.holdout)):
+        if len(set(seasons)) != len(seasons):
+            ap.error(f"{name} repeats a season: its games would count twice")
     if set(args.train) & set(args.holdout):
         ap.error("train and holdout seasons must be disjoint")
     if set(args.holdout) & set(COLLEGE_RIDGE_FIT_SEASONS):
