@@ -231,6 +231,18 @@ def test_bad_season_type_raises_before_loading(monkeypatch: pytest.MonkeyPatch) 
         mod.nba_team_strength(2026, season_type="regular")
 
 
+def test_ridge_design_rejects_null_points() -> None:
+    rows = _rows("wnba", 2025)
+    first = (
+        (pl.int_range(pl.len()) == 0)
+        & pl.col("offense_team_id").is_not_null()
+        & pl.col("defense_team_id").is_not_null()
+    )
+    broken = rows.with_columns(pl.when(first).then(None).otherwise(pl.col("points")).alias("points"))
+    with pytest.raises(ValueError, match="null points"):
+        ridge_design(broken)
+
+
 def test_ridge_design_rejects_a_null_home_flag() -> None:
     rows = _rows("wnba", 2025)
     assert ridge_design(rows).height > 0

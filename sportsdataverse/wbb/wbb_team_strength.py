@@ -1,7 +1,9 @@
 """Women's college team strength (BB-D19): ``wbb.team_strength``.
 
 Thin shim over :mod:`sportsdataverse.mbb.mbb_team_strength`: ``league="womens"`` switches to the
-``wbb_ratings`` release, the ``ncaa_wbb_*`` releases and the WBB schedule.
+``wbb_ratings`` release, the ``ncaa_wbb_*`` releases and the WBB schedule. Both rating methods
+are published: the ``wbb_ratings`` fixed point (``adj_*_rtg``) and the possession ridge
+(``adj_*_rtg_ridge``).
 
 Example:
     Quick start::
@@ -28,7 +30,8 @@ def wbb_team_strength(
     """Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_team_strength.mbb_team_strength` with
-    ``league="womens"``. The adjusted ratings are the published ``wbb_ratings``.
+    ``league="womens"``. ``adj_*_rtg`` are the published ``wbb_ratings``; ``adj_*_rtg_ridge``
+    the possession ridge on the ``ncaa_wbb_possessions`` release.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
@@ -36,7 +39,7 @@ def wbb_team_strength(
 
     Returns:
         One row per ``(season, team_id)``: ``games``, ``wins``, ``losses``, ``poss``,
-        ``opp_poss``, ``pts``, ``opp_pts``, the adjusted ratings, ``sos``, ``sov``, the BB-D3
+        ``opp_poss``, ``pts``, ``opp_pts``, both sets of adjusted ratings, ``sos``, ``sov``, the BB-D3
         rates and their ``_rank`` / ``_pct`` / ``_n``. See the mbb core for the definitions.
 
     Example:

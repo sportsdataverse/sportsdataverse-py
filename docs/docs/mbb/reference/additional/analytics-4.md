@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score"
-sidebar_label: "Analytics: mbb_team–ncaa_score"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession"
+sidebar_label: "Analytics: mbb_team–ncaa_possession"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -108,9 +108,13 @@ rates.filter(split="all").sort("net_rtg_rank").head()
 
 College team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
-One row per team and season. The adjusted ratings are the published college ratings
-(`load_mbb_ratings` / `load_wbb_ratings`). SOS is the mean opponent `adj_net_rtg` over
-the team's completed ESPN games (unrated opponents left out), SOV the same over its wins.
+One row per team and season, with two adjusted-rating methods. `adj_*_rtg` are the
+published college ratings (`load_mbb_ratings` / `load_wbb_ratings`, a fixed point on ESPN
+box scores). `adj_*_rtg_ridge` are the NBA / WNBA possession ridge on the stats.ncaa.org
+possessions (points per 100 against an average Division I opponent on a neutral court; home
+court fitted, neutral sites from ESPN, non-Division I opponents left out). SOS is the mean
+opponent `adj_net_rtg` over the team's completed ESPN games (unrated opponents left out),
+SOV the same over its wins. Bracketology and the season sims keep the fixed point.
 
 **Parameters**
 
@@ -122,7 +126,7 @@ the team's completed ESPN games (unrated opponents left out), SOV the same over 
 
 **Returns**
 
-One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, the clock in regulation games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), the BB-D3 rates' also behind their `~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov`, `adj_off_rtg_ridge`, `adj_def_rtg_ridge`, `adj_net_rtg_ridge` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `adj_def_rtg_ridge`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, the clock in regulation games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), the BB-D3 rates' also behind their `~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null under five teams. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -203,6 +207,18 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the season, 0 when the rate is null. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the season, 0 when the rate is null. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the season, 0 when the rate is null. |
+| `adj_off_rtg_ridge` | Float64 | Adjusted offensive rating, possession-ridge method: points per 100 possessions against an average Division I defense on a neutral court. The NBA / WNBA ridge (possession_ridge_ratings) on the ncaa_mbb_possessions release, penalty COLLEGE_RIDGE_LAMBDA, home court fitted and ESPN neutral sites; possessions against a non-Division I opponent left out. Published beside the fixed-point adj_off_rtg, which it does not replace. |
+| `adj_def_rtg_ridge` | Float64 | Adjusted defensive rating, possession-ridge method: points allowed per 100 possessions against an average Division I offense on a neutral court; lower is better. |
+| `adj_net_rtg_ridge` | Float64 | Adjusted net rating, possession-ridge method: adj_off_rtg_ridge minus adj_def_rtg_ridge. |
+| `adj_off_rtg_ridge_rank` | Float64 | Rank of adj_off_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_def_rtg_ridge_rank` | Float64 | Rank of adj_def_rtg_ridge within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_net_rtg_ridge_rank` | Float64 | Rank of adj_net_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_off_rtg_ridge_pct` | Float64 | Percentile of adj_off_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_def_rtg_ridge_pct` | Float64 | Percentile of adj_def_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_net_rtg_ridge_pct` | Float64 | Percentile of adj_net_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_off_rtg_ridge_n` | Int64 | Sample size of adj_off_rtg_ridge: the team's offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_def_rtg_ridge_n` | Int64 | Sample size of adj_def_rtg_ridge: the team's defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_net_rtg_ridge_n` | Int64 | Sample size of adj_net_rtg_ridge: the team's offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
 
 **Raises**
 
@@ -216,6 +232,10 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 from sportsdataverse.mbb.mbb_team_strength import mbb_team_strength
 strength = mbb_team_strength(2025)
 strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
+
+# The two methods side by side
+
+strength.select("team_id", "adj_net_rtg_rank", "adj_net_rtg_ridge_rank").head()
 ```
 
 ### mbb_tournament_ineligible {#mbb_tournament_ineligible}
@@ -996,51 +1016,4 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
 from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
 rows = ncaa_possession_rate_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
-```
-
-### ncaa_score_rows {#ncaa_score_rows}
-
-`ncaa_score_rows(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Map the stats.ncaa.org play-by-play onto the game-flow score rows.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order (`contest_id`, `season`, `period`, `game_seconds`, `home_score`, `away_score`, `event_team_espn_team_id`, `home_espn_team_id`, `away_espn_team_id`, `espn_game_id`). |
-| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`), joined on `espn_game_id`; a contest it lacks is not neutral. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-
-**Returns**
-
-Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `game_id` | String | stats.ncaa.org contest id. |
-| `order` | Int64 | The play's position in its game (the pbp order_index, or the release row order for college). |
-| `home_team_id` | Int64 | The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host). |
-| `away_team_id` | Int64 | The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor). |
-| `neutral_site` | Boolean | True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries no venue. |
-| `elapsed` | Float64 | Game-clock seconds run when the play happens, counted from the tip. |
-| `sec_left` | Float64 | The win-probability clock: seconds left in regulation, or in the overtime period. |
-| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
-| `event_team_id` | Int64 | The play's team (the model's ball side); 0 or null for a team-less play. |
-| `home_score` | Int64 | Home running score after the play. |
-| `away_score` | Int64 | Away running score after the play. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_pbp
-from sportsdataverse.mbb.mbb_game_flow import ncaa_score_rows
-rows = ncaa_score_rows(load_ncaa_mbb_pbp(2026), load_mbb_schedule(2026))
 ```

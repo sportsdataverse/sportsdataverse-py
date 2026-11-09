@@ -4,6 +4,7 @@ import importlib.util
 import math
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
@@ -62,3 +63,40 @@ def test_season_without_possessions_is_rejected(
         fit.main(["--league", "wnba", "--seasons", "2024", "2025"])
     assert exc.value.code == 2
     assert "season 2024: no possessions" in capsys.readouterr().err
+
+
+def test_grouped_weighted_cv_matches_the_ungrouped_fit() -> None:
+    # season_cv fits identical training possessions as one row weighted by their count. That must
+    # give the same held-out error as fitting every possession on its own; drop the weight and the
+    # collapsed means count once each, so the error moves.
+    rows = nba_possession_rate_rows(
+        pl.read_parquet(RATES / "wnba_possessions_2025.parquet"),
+        pl.read_parquet(RATES / "wnba_schedule_2025.parquet"),
+        league_id="10",
+    )
+    grid = [100.0, 800.0]
+    got = fit.season_cv(rows, grid)
+    design = fit.ridge_design(rows).with_columns((pl.col("game_id").cast(pl.Int64) % fit._FOLDS).alias("_fold"))
+    for lam in grid:
+        sse = 0.0
+        for k in range(fit._FOLDS):
+            train, test = design.filter(pl.col("_fold") != k), design.filter(pl.col("_fold") == k)
+            coef, b0, hfa = fit.opponent_adjusted_ridge(
+                train,
+                off_col="offense_id",
+                def_col="defense_id",
+                home_col="offense_id",
+                resp_col="y",
+                lam=lam,
+                hfa_col="hfa",
+            )
+            off = dict(zip(coef["team_id"], coef["off_coef"]))
+            de = dict(zip(coef["team_id"], coef["def_coef"]))
+            pred = (
+                b0
+                + np.array([off.get(t, 0.0) for t in test["offense_id"]])
+                + np.array([de.get(t, 0.0) for t in test["defense_id"]])
+                + hfa * test["hfa"].to_numpy()
+            )
+            sse += float(((test["y"].to_numpy() - pred) ** 2).sum())
+        assert got[lam][0] == pytest.approx(sse, rel=1e-9)
