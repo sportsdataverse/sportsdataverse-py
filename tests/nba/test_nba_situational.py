@@ -105,8 +105,9 @@ def test_schemas_and_families(tables: dict[str, pl.DataFrame]) -> None:
     assert dict(lineup.schema) == situational_lineup_schema(pl.Int64())
     got = team.group_by("family").agg(pl.col("split").unique().sort())
     want = {f: sorted(s) for f, s in FAMILIES.items()}
-    # the stats schedule has no neutral-site column; no 2023-24 regular-season game reached a 2nd overtime
-    want["venue"] = ["away", "home"]
+    # 2023-24's neutral games (Mexico City, Paris, the two Cup semifinals in Las Vegas) make the
+    # neutral split; no 2023-24 regular-season game reached a 2nd overtime
+    want["venue"] = ["away", "home", "neutral"]
     assert {r["family"]: r["split"] for r in got.iter_rows(named=True)} == want
     assert team.filter(family="all").height == 30
     assert (team.filter(family="all")["games"] == 82).all()

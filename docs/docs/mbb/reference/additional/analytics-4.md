@@ -1,10 +1,107 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional"
-sidebar_label: "Analytics: mbb_team–test_positional"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score"
+sidebar_label: "Analytics: mbb_team–ncaa_score"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–test_positional
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_score
+
+### mbb_team_season_rates {#mbb_team_season_rates}
+
+`mbb_team_season_rates(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits.
+
+One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
+Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
+5:00 mark) in the 2nd half (the 4th quarter in women's basketball from 2016) or an overtime, the
+score within 5 as it starts; a close game is one with a clutch possession. The full definitions
+are in `sportsdataverse._common.team_season_rates`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_season_rates.wbb_team_season_rates`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss` (offensive / defensive possessions) and `pts` / `opp_pts` are the split's totals. The twelve rates are `off_rtg`, `def_rtg`, `net_rtg` (per 100 possessions), `pace` (possessions per 40 minutes), the four factors `efg_pct`, `tov_pct`, `orb_pct`, `ft_rate` and the same four against (`opp_*`), all fractions. The four factors are game-level (the NCAA team box) and null in the `clutch` split. Each rate has `<m>_rank` (1 = best; `def_rtg`, `tov_pct`, `opp_efg_pct`, `opp_orb_pct` and `opp_ft_rate` rank low first; pace ranks high first), `<m>_pct` (the Weibull percentile) and `<m>_n` (the sample: possessions for the ratings, the clock in regulation games for pace, field-goal attempts for eFG% and FT rate, the box possessions for turnover rate, rebound chances for ORB%). Ranks are within the season and split, among teams with at least half the most games (which leaves out the non-D1 opponents) whose `<m>_n` reaches the league's `~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null under five teams. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 2nd half (the 4th quarter for league='womens' from 2016) or an overtime, the score within 5 as it starts). |
+| `games` | Int64 | Games with at least one possession in the split. |
+| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
+| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
+| `pts` | Int64 | Points scored on the team's offensive possessions in the split. |
+| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
+| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
+| `pace` | Float64 | Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
+| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
+| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
+| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split. |
+| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
+| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box; null in the clutch split. |
+| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction (one minus the team's defensive rebound rate). Game-level, from the NCAA team box; null in the clutch split. |
+| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split. |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose off_rtg_n is at least 270 offensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose def_rtg_n is at least 460 defensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose net_rtg_n is at least 430 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `pace_rank` | Float64 | Rank of pace within the season and split (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the split, whose pace_n is at least 4 games (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose efg_pct_n is at least 500 field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose tov_pct_n is at least 450 offensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose orb_pct_n is at least 160 offensive-rebound chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose ft_rate_n is at least 530 field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose opp_efg_pct_n is at least 630 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season and split (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose opp_tov_pct_n is at least 340 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose opp_orb_pct_n is at least 330 opponent offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season and split (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the split, whose opp_ft_rate_n is at least 450 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `pace_pct` | Float64 | Percentile of pace within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: the team's offensive possessions in the split. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: the team's defensive possessions in the split. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: the team's offensive plus defensive possessions in the split. |
+| `pace_n` | Int64 | Sample size of pace: the game clock the split's possessions used, in regulation games (48 minutes, 40 in the WNBA and college), rounded: a full game counts 1, a clutch split's five-minute windows about 0.1 each. |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: the team's field-goal attempts in the split, 0 when the rate is null. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: the NCAA team box's possessions (o_poss) in the split, 0 when the rate is null. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: the team's offensive-rebound chances in the split, 0 when the rate is null. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: the team's field-goal attempts in the split, 0 when the rate is null. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponents' field-goal attempts in the split, 0 when the rate is null. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the split, 0 when the rate is null. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the split, 0 when the rate is null. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the split, 0 when the rate is null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_season_rates
+rates = mbb_team_season_rates(2025)
+rates.filter(split="all").sort("net_rtg_rank").head()
+```
 
 ### mbb_team_strength {#mbb_team_strength}
 
@@ -26,7 +123,7 @@ the team's completed ESPN games (unrated opponents left out), SOV the same over 
 
 **Returns**
 
-One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), and null under five teams. Empty input returns that schema with zero rows.
+One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`, `poss` / `opp_poss`, `pts` / `opp_pts` are the season totals from the NCAA possessions; `wins` / `losses` come from ESPN's completed games. The rated metrics are `adj_off_rtg`, `adj_def_rtg`, `adj_net_rtg`, `sos`, `sov` and the BB-D3 rates (`off_rtg`, `def_rtg`, `net_rtg`, `pace`, the four factors and the four against). Each has `<m>_rank` (1 = best; `adj_def_rtg`, `def_rtg`, `tov_pct` and the opponent shooting, rebounding and free-throw rates rank low first; `sos` ranks the hardest schedule first), `<m>_pct` (the Weibull percentile) and `<m>_n` (possessions for the ratings, rated games for SOS, the clock in regulation games for pace, wins over rated opponents for SOV). Ranks are within the season, among teams with at least half the most games (which leaves out the non-D1 opponents), the BB-D3 rates' also behind their `~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate, and null under five teams. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -61,18 +158,18 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 | `adj_net_rtg_rank` | Float64 | Rank of adj_net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
 | `sos_rank` | Float64 | Rank of sos within the season (the highest value ranks 1; the hardest schedule ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
 | `sov_rank` | Float64 | Rank of sov within the season (the highest value ranks 1; the strongest wins rank 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
-| `off_rtg_rank` | Float64 | Rank of off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `def_rtg_rank` | Float64 | Rank of def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `net_rtg_rank` | Float64 | Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `pace_rank` | Float64 | Rank of pace within the season (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `efg_pct_rank` | Float64 | Rank of efg_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `tov_pct_rank` | Float64 | Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `orb_pct_rank` | Float64 | Rank of orb_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `ft_rate_rank` | Float64 | Rank of ft_rate within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
-| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null rate, or fewer than five qualifiers. |
+| `off_rtg_rank` | Float64 | Rank of off_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose off_rtg_n is at least 270 offensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `def_rtg_rank` | Float64 | Rank of def_rtg within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose def_rtg_n is at least 460 defensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `net_rtg_rank` | Float64 | Rank of net_rtg within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose net_rtg_n is at least 430 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `pace_rank` | Float64 | Rank of pace within the season (the highest value ranks 1; pace has no better direction; ties average), among teams that played at least half the most games any team played in the season, whose pace_n is at least 4 games (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `efg_pct_rank` | Float64 | Rank of efg_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose efg_pct_n is at least 500 field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `tov_pct_rank` | Float64 | Rank of tov_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose tov_pct_n is at least 450 offensive possessions (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `orb_pct_rank` | Float64 | Rank of orb_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose orb_pct_n is at least 160 offensive-rebound chances (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `ft_rate_rank` | Float64 | Rank of ft_rate within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose ft_rate_n is at least 530 field-goal attempts (the sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose opp_efg_pct_n is at least 630 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose opp_tov_pct_n is at least 340 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose opp_orb_pct_n is at least 330 opponent offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, whose opp_ft_rate_n is at least 450 opponent field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer than five qualifiers. |
 | `adj_off_rtg_pct` | Float64 | Percentile of adj_off_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
 | `adj_def_rtg_pct` | Float64 | Percentile of adj_def_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
 | `adj_net_rtg_pct` | Float64 | Percentile of adj_net_rtg within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
@@ -98,7 +195,7 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 | `off_rtg_n` | Int64 | Sample size of off_rtg: the team's offensive possessions in the season. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: the team's defensive possessions in the season. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: the team's offensive plus defensive possessions in the season. |
-| `pace_n` | Int64 | Sample size of pace: games in the season. |
+| `pace_n` | Int64 | Sample size of pace: the game clock the season's possessions used, in regulation games (48 minutes, 40 in the WNBA and college), rounded: about the games played, overtime adding a little. |
 | `efg_pct_n` | Int64 | Sample size of efg_pct: the team's field-goal attempts in the season, 0 when the rate is null. |
 | `tov_pct_n` | Int64 | Sample size of tov_pct: the NCAA team box's possessions (o_poss) in the season, 0 when the rate is null. |
 | `orb_pct_n` | Int64 | Sample size of orb_pct: the team's offensive-rebound chances in the season, 0 when the rate is null. |
@@ -120,6 +217,58 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 from sportsdataverse.mbb.mbb_team_strength import mbb_team_strength
 strength = mbb_team_strength(2025)
 strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov").head()
+```
+
+### mbb_tournament_ineligible {#mbb_tournament_ineligible}
+
+`mbb_tournament_ineligible(seasons: 'list[int] | None' = None, *, league: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Division I basketball programs that could not play in the NCAA tournament, per season.
+
+A bundled, hand-curated list (2010-2027): programs reclassifying to Division I (four seasons
+from Division II until 2025, three since the NCAA's January 2025 rule; St. Thomas came from
+Division III), and APR, NCAA-infractions and self-imposed postseason bans. Every row cites
+its source. The college season products (bracketology, season sim, strength of schedule) use
+it by default to set `eligible`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int] \| None` | `None` | Seasons to keep, as the end year (`2024` is 2023-24). `None` keeps all. |
+| `league` | `str \| None` | `None` | `"mens"`, `"womens"`, or `None` for both. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per ineligible `(season, league, team_id)`: `season, league, team_id` (ESPN team id, Utf8), `team`, `reason` (`reclassifying`, `apr_ban`, `infractions_ban`, `self_imposed_ban` or `other`), `detail`, `source_url` and `confidence` (`high` / `medium`).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, as the end year (2024 is 2023-24). |
+| `league` | String | mens or womens. |
+| `team_id` | String | ESPN team id (Utf8). |
+| `team` | String | School name. |
+| `reason` | String | Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other. |
+| `detail` | String | Short note on the row, such as the reclassification year or the case behind the ban. |
+| `source_url` | String | The source that documents the row. |
+| `confidence` | String | How well the source documents the row: high (the NCAA, the school or the conference says so) or medium (a secondary source). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"`, `"womens"` or `None`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_tournament_ineligible
+barred = mbb_tournament_ineligible([2023], league="mens")
+
+# Pipeline next step (one line)
+
+barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
 ```
 
 ### ncaa_coach_stints {#ncaa_coach_stints}
@@ -895,374 +1044,4 @@ Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_pbp
 from sportsdataverse.mbb.mbb_game_flow import ncaa_score_rows
 rows = ncaa_score_rows(load_ncaa_mbb_pbp(2026), load_mbb_schedule(2026))
-```
-
-### ncaa_situation_rows {#ncaa_situation_rows}
-
-`ncaa_situation_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Map `ncaa_{mbb,wbb}_possessions` rows onto the situational-splits possession frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
-| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-
-**Returns**
-
-One row per possession in `~sportsdataverse._common.situational_splits.situation_row_schema` (String player ids, null `is_second_chance`).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
-| `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the clutch window can fall in. |
-| `start_clock` | Float64 | Seconds left in the period when the possession starts: its length plus the lengths of the later possessions in the period. |
-| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
-| `offense_team_id` | Int64 | ESPN id of the team with the ball; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of the team on defense; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
-| `neutral_site` | Boolean | True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the home nor the away split. |
-| `points` | Int64 | Points the offense scored on the possession. |
-| `fga` | Float64 | Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `ff_poss` | Float64 | Always null: the turnover rate's denominator comes from the team box. |
-| `reg_periods` | Int64 | Regulation periods of the game: 4 quarters, or 2 halves. |
-| `is_transition` | Boolean | The possession is transition (BB-D7's flag for the pros, the release's own for college). |
-| `is_garbage_time` | Boolean | The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college). |
-| `is_second_chance` | Boolean | The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts). |
-| `off_1` | String | Offense player 1 on the floor as the possession starts. |
-| `off_2` | String | Offense player 2 on the floor as the possession starts. |
-| `off_3` | String | Offense player 3 on the floor as the possession starts. |
-| `off_4` | String | Offense player 4 on the floor as the possession starts. |
-| `off_5` | String | Offense player 5 on the floor as the possession starts. |
-| `def_1` | String | Defense player 1 on the floor as the possession starts. |
-| `def_2` | String | Defense player 2 on the floor as the possession starts. |
-| `def_3` | String | Defense player 3 on the floor as the possession starts. |
-| `def_4` | String | Defense player 4 on the floor as the possession starts. |
-| `def_5` | String | Defense player 5 on the floor as the possession starts. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
-from sportsdataverse.mbb.mbb_situational import ncaa_situation_rows
-rows = ncaa_situation_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
-```
-
-### ncaa_team_box_count_rows {#ncaa_team_box_count_rows}
-
-`ncaa_team_box_count_rows(team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame.
-
-Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, offensive rebounds and
-turnovers, the opponent's defensive rebounds (`d_drb`) and its own possessions (`o_poss`).
-`offense_is_home` is the box's own home designation (`team == home`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_box` | `DataFrame` |  | `load_ncaa_mbb_team_box` / `load_ncaa_wbb_team_box` rows. |
-
-**Returns**
-
-One row per (game, team) in `~sportsdataverse._common.team_season_rates.COUNT_ROWS_SCHEMA`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `offense_team_id` | Int64 | ESPN id of the team whose offense the row counts; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of its opponent; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the team is the game's (nominal) home team in the NCAA team box; a neutral-site game is in neither split. |
-| `fga` | Float64 | Field-goal attempts in the game. |
-| `fgm` | Float64 | Field goals made in the game. |
-| `fg3m` | Float64 | Three-pointers made in the game. |
-| `fta` | Float64 | Free-throw attempts in the game. |
-| `oreb` | Float64 | Offensive rebounds in the game. |
-| `dreb` | Float64 | The opponent's defensive rebounds in the game (the other half of the offensive-rebound chances). |
-| `tov` | Float64 | Turnovers in the game. |
-| `ff_poss` | Float64 | The team box's offensive possessions in the game, the turnover-rate denominator. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_team_box
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_team_box_count_rows
-counts = ncaa_team_box_count_rows(load_ncaa_mbb_team_box(2025))
-```
-
-### ncaa_team_coaches {#ncaa_team_coaches}
-
-`ncaa_team_coaches(root: 'str | Path', seasons: 'int | list[int]', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `root` | `str \| Path` |  | The `ncaa-mbb-hoops-raw` / `ncaa-wbb-hoops-raw` checkout. |
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-
-**Returns**
-
-One row per page with a coach card, in `NCAA_COACHES_SCHEMA`; `team_id` is the ESPN team id from the season's `teams/json` crosswalk (null when it has none). A season with no crosswalk file is skipped with a warning.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `ncaa_team_id` | Int64 | stats.ncaa.org team-season id (the roster page's file name, teams/{id}). |
-| `team_id` | Int64 | ESPN team id of the school, from the season's teams/json crosswalk; null when the crosswalk has none. |
-| `team` | String | School name as stats.ncaa.org's crosswalk gives it. |
-| `coach_id` | Int64 | NCAA person id of the head coach (stats.ncaa.org /people/{id}). |
-| `coach` | String | Head coach's name on the page's Coach card. |
-| `career_seasons` | Int64 | The coach's seasons as a head coach through this one, every school and division (the card's Seasons). |
-| `career_wins` | Int64 | The coach's career wins through this season (the card's Record; the NCAA drops vacated wins). |
-| `career_losses` | Int64 | The coach's career losses through this season (the card's Record). |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-### order_lineup {#order_lineup}
-
-`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
-
-Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
-
-Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
-Greedily fits each player (in input order) to their best-scoring slot via
-`_fit_player` (dominated by `pos_class_to_score` on the
-player's `posClass`, tie-broken by their raw `posConfidences`),
-evicting and recursively re-fitting any player displaced along the way,
-then applies `apply_relative_positional_overrides` (keyed on
-`team_season`) as a final hand-tuned correction pass.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
-| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
-| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
-
-**Returns**
-
-A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import order_lineup
-players_by_id = {
-    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
-    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
-}
-order_lineup(
-    [{"code": "AnCowan", "id": "Cowan, Anthony"},
-     {"code": "ErAyala", "id": "Ayala, Eric"}],
-    players_by_id, "",
-)
-```
-
-### pos_class_to_score {#pos_class_to_score}
-
-`pos_class_to_score(pos_class: 'str') -> 'int'`
-
-Ordinal "positional weight" for a position class, PG=1000..C=8000.
-
-Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
-a literal `switch`). Unmapped classes default to `4000` (the TS
-default-case comment notes "won't happen").
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
-
-**Returns**
-
-The class's ordinal score.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import pos_class_to_score
-pos_class_to_score("WF")
-```
-
-### project_bracket {#project_bracket}
-
-`project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'`
-
-Select and seed a tournament field from a per-team résumé frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid teams (see `~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always in the field. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
-| `field_size` | `int` | `68` | Tournament field size (68). |
-
-**Returns**
-
-One row per input team: `season, team_id, resume_score, projected_seed` (1-16, null outside the field; in a 68-team field the last four at-large teams and the four worst auto-bids share First Four slots, so every line has four slots), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `at_large_rank` (1 = the best résumé without an auto-bid; null for auto-bids), `bid` (exactly `field_size` true).
-
-No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_bracketology import project_bracket
-field = project_bracket(resume, auto_bids)
-```
-
-### regress_shot_quality {#regress_shot_quality}
-
-`regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'`
-
-Shrink a small-sample shot-quality stat toward its positional average.
-
-Faithful port of `PositionUtils.regressShotQuality`
-(`PositionUtils.ts:216-258`). Only the three relative shot-quality
-features (`calc_three_relative` / `calc_rim_relative` /
-`calc_mid_relative`) are regressed; any other `feat` passes `stat`
-through unchanged. A player is regressed toward the positional average
-whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
-(i.e. under 25% of their attempts come from that zone, floored at 15
-attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
-left at `0` to avoid widespread changes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stat` | `float` |  | The raw (unregressed) feature value. |
-| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
-| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
-| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
-
-**Returns**
-
-The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_positions import regress_shot_quality
-player = {"total_off_fga": {"value": 25},
-          "total_off_3p_attempts": {"value": 1}}
-regress_shot_quality(-15.5, 2, "misc_feature", player)
-
-# Low-volume shrink toward the positional average
-
-regress_shot_quality(100, 3, "calc_rim_relative",
-    {"total_off_fga": {"value": 25},
-     "total_off_2prim_attempts": {"value": 8}})
-```
-
-### strength_of_schedule {#strength_of_schedule}
-
-`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
-| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
-
-No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
-resume = strength_of_schedule(results, ratings)
-```
-
-### test_positional_aware_filter {#test_positional_aware_filter}
-
-`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
-
-Check a positional-aware filter (from `build_positional_aware_filter`)
-
-against a sorted (`order_lineup`-ordered) lineup array.
-
-Faithful port of `PositionUtils.testPositionalAwareFilter`
-(`PositionUtils.ts:831-858`). A fragment matches if any of its
-position-restricted slots (or, when `pos` is empty, any slot at all)
-has a `code`/`id` containing the fragment's filter text
-(case-insensitive substring match). Every positive fragment must match
-(vacuously true if there are none); no negative fragment may match
-(vacuously true if there are none).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
-| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
-| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
-
-**Returns**
-
-Whether the lineup satisfies both the positive and negative filters.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
-lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
-test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
 ```

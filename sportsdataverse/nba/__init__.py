@@ -178,6 +178,7 @@ from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_sea
 from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401
 from sportsdataverse.nba.nba_rated_prior import nba_rated_priors  # noqa: F401
 from sportsdataverse.nba.nba_cup import nba_cup_sim, nba_cup_standings  # noqa: F401
+from sportsdataverse.nba.nba_neutral_site import nba_neutral_site_games  # noqa: F401
 from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
     expected_possessions,
     in_game_features,

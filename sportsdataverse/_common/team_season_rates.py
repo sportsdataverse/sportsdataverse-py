@@ -28,10 +28,12 @@ rows, never estimated from minutes or box totals:
 
 **League context** (BB-D2, :mod:`sportsdataverse._common.league_context`): each rated metric gets
 ``<m>_rank`` (1 = best, the lower-is-better metrics ranked ascending), the Weibull ``<m>_pct`` and
-``<m>_n`` (its sample size). Ranks are computed within ``(season, split)`` among teams that played at
-least half the most games any team played in that split, with a floor of
-:data:`~sportsdataverse._common.league_context.MIN_COHORT_TEAMS` teams. :func:`team_season_rates_league_averages`
-produces the league-average rows, whose ``n`` is the cohort count.
+``<m>_n`` (its sample size: the rate's own denominator). Ranks are computed within ``(season, split)``
+among teams that played at least half the most games any team played in that split and, given a
+``level``, whose ``<m>_n`` reaches the league's gate in :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N`
+(the sample at which the rate is half signal; a clutch split's few hundred possessions rank nothing),
+with a floor of :data:`~sportsdataverse._common.league_context.MIN_COHORT_TEAMS` teams.
+:func:`team_season_rates_league_averages` produces the league-average rows, whose ``n`` is the cohort count.
 
 The league adapters (``sportsdataverse.nba.nba_team_season_rates``,
 ``sportsdataverse.mbb.mbb_team_season_rates``) turn each source's possession frame into
@@ -51,6 +53,7 @@ from sportsdataverse._common.league_context import (
     attach_sample_sizes,
     league_averages,
 )
+from sportsdataverse._common.rate_gates import team_gates
 
 __all__ = [
     "CLUTCH_MARGIN",
@@ -125,6 +128,15 @@ _RATED: dict[str, tuple[pl.Expr, bool]] = {
     "opp_ft_rate": (pl.col("d_fga"), True),
 }
 _LOWER_IS_BETTER = tuple(m for m, (_, low) in _RATED.items() if low)
+
+
+def _sizes(minutes_per_game: int) -> dict[str, pl.Expr]:
+    """Each rate's ``_n``. Pace's is the clock its possessions used, in regulation games: a full game
+    counts 1 (an overtime a little more), a clutch split's five minutes about 0.1, so a split's
+    sample is never its games' count."""
+    return {**{m: e for m, (e, _) in _RATED.items()}, "pace": pl.col("seconds") / (60 * minutes_per_game)}
+
+
 #: Who is ranked: at least half the most games any team played in the season's split. It keeps
 #: the college non-D1 opponents (a game or two each) out of the cohort.
 # ponytail: a share of the max, as nba_team_ratings; an explicit D1 / franchise list if a real
@@ -218,6 +230,7 @@ def team_season_rates(
     *,
     minutes_per_game: int,
     counts: pl.DataFrame | None = None,
+    level: str | None = None,
 ) -> pl.DataFrame:
     """Season team rates with home/away/close/clutch splits, ranks, percentiles and ``_n``.
 
@@ -230,6 +243,9 @@ def team_season_rates(
             possessions carry none (college). They replace the possession counts for the
             ``all`` / ``home`` / ``away`` / ``close`` splits; ``clutch`` keeps null four factors.
             Only games present in ``rows`` are used.
+        level: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``: rank a rate only when its ``<m>_n``
+            reaches that league's :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N` gate.
+            ``None`` applies no sample gate (the league adapters always pass one).
 
     Returns:
         One row per ``(season, team_id, split)`` in :data:`TEAM_SEASON_RATES_SCHEMA`, sorted by
@@ -237,7 +253,7 @@ def team_season_rates(
         input returns that schema with zero rows.
 
     Raises:
-        KeyError: If ``rows`` or ``counts`` is missing a schema column.
+        KeyError: If ``rows`` or ``counts`` is missing a schema column, or ``level`` is unknown.
 
     Example:
         Quick start::
@@ -250,20 +266,22 @@ def team_season_rates(
         missing = [] if frame is None else sorted(set(schema) - set(frame.columns))
         if missing:  # checked before the empty-input return, so a bad counts frame always raises
             raise KeyError(f"{name} missing columns: {missing}")
+    gates = team_gates(level, _RATED)
     if rows.height == 0:
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     rates = rates_from_counts(season_counts(rows, counts=counts), minutes_per_game=minutes_per_game)
     order = pl.col("split").replace_strict({s: i for i, s in enumerate(SPLITS)}, return_dtype=pl.Int64)
     return (
-        rates.pipe(
+        rates.pipe(attach_sample_sizes, _sizes(minutes_per_game))
+        .pipe(
             attach_ranks,
             list(_RATED),
             min_cohort=MIN_COHORT_TEAMS,
             by=("season", "split"),
             lower_is_better=_LOWER_IS_BETTER,
             qualifier=_QUALIFIER,
+            min_n=gates,
         )
-        .pipe(attach_sample_sizes, {m: e for m, (e, _) in _RATED.items()})
         .sort([pl.col("season"), order, pl.col("team_id")])
         .select(list(TEAM_SEASON_RATES_SCHEMA))
         .cast(TEAM_SEASON_RATES_SCHEMA)
@@ -341,16 +359,18 @@ def team_season_rates_league_averages(rates: pl.DataFrame, *, level: str) -> pl.
     """The league-average rows of a team-season-rates table, one block per split.
 
     The football F1 rows of :func:`~sportsdataverse._common.league_context.league_averages`, over
-    the same qualified teams the ranks use, so each row's ``n`` is the cohort count: the number of
-    qualifying teams with a finite value, which is the ``n`` of the ``_pct`` formula (its
-    denominator is ``n + 1``) and not a rate's ``<m>_n`` sample size. It ignores the cohort floor,
-    so a split below the floor still reports ``n`` beside null ranks. ``category`` is
-    ``team_season_rates_<split>``. ``qualifier_min`` is null: the
-    gate is relative (half the split's most games), not a fixed threshold.
+    the same qualified teams the ranks use (half the split's most games, and each rate's
+    ``level`` sample gate), so each row's ``n`` is the cohort count: the number of qualifying
+    teams with a finite value, which is the ``n`` of the ``_pct`` formula (its denominator is
+    ``n + 1``) and not a rate's ``<m>_n`` sample size. It ignores the cohort floor, so a split
+    below the floor still reports ``n`` beside null ranks; a rate no team's sample reaches (the
+    clutch split's) has no row. ``category`` is ``team_season_rates_<split>``. ``qualifier_min``
+    is null: the games gate is relative (half the split's most games), not a fixed threshold.
 
     Args:
         rates: Output of a ``*_team_season_rates`` function.
-        level: The population label (``"nba"``, ``"wnba"``, ``"mbb"``, ``"wbb"``).
+        level: The population label (``"nba"``, ``"wnba"``, ``"mbb"``, ``"wbb"``), which also
+            picks the sample gates of :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N`.
 
     Returns:
         One row per ``(season, split, metric)`` in
@@ -364,6 +384,7 @@ def team_season_rates_league_averages(rates: pl.DataFrame, *, level: str) -> pl.
             from sportsdataverse.nba.nba_team_season_rates import nba_team_season_rates
             team_season_rates_league_averages(nba_team_season_rates(2026), level="nba")
     """
+    gates = team_gates(level, _RATED)
     frames = [
         league_averages(
             rates.filter(pl.col("split") == s),
@@ -372,6 +393,7 @@ def team_season_rates_league_averages(rates: pl.DataFrame, *, level: str) -> pl.
             entity="team",
             category=f"team_season_rates_{s}",
             qualifier=_QUALIFIER,
+            min_n=gates,
         )
         for s in SPLITS
     ]
