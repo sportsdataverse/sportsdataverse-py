@@ -15,8 +15,11 @@ the assets `load_nba_player_impact(2025)` and `load_wnba_player_impact(2025)` re
 
 | File | Rows | Kept columns |
 |---|---:|---|
-| `nba_player_impact_2025.parquet` | 788 (569 Regular Season, 219 Playoffs) | `season, season_type, player_id, player_name, team_id, off_poss, def_poss`, the 13 ranked metrics (`o_rapm, d_rapm, rapm, o_adj_rapm, d_adj_rapm, adj_rapm, ospm, dspm, spm, obpm, dbpm, bpm, war`), `min, gp` |
+| `nba_player_impact_2025.parquet` | 788 (569 Regular Season, 219 Playoffs) | `season, season_type, player_id, player_name, team_id, off_poss, def_poss`, the 16 ranked metrics (`o_rapm, d_rapm, rapm, o_adj_rapm, d_adj_rapm, adj_rapm, ospm, dspm, spm, obpm, dbpm, bpm, war, boban_filtered_skill, boban_projected_rating, boban_projected_sd`), `min, gp` |
 | `wnba_player_impact_2025.parquet` | 272 (181 Regular Season, 91 Playoffs) | the same |
+
+The 2025 assets still carry the BOBAN columns under their old `darko_*` names; they are renamed to
+`boban_*` here, as `load_nba_player_impact` / `load_wnba_player_impact` alias them (BB-D11).
 
 Id dtypes: `player_id` / `team_id` / `season` / `off_poss` / `def_poss` Int64. `season` is the END
 year as the releases stamp it.

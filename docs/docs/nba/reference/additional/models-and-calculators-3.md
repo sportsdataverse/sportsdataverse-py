@@ -1,10 +1,43 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: score_win–win_prob"
-sidebar_label: "Models and calculators: score_win–win_prob"
+title: "NBA — additional Python functions — Models and calculators: render_report–win_prob"
+sidebar_label: "Models and calculators: render_report–win_prob"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: score_win–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: render_report–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: score_win–win_prob
+# NBA — additional Python functions — Models and calculators: render_report–win_prob
+
+### render_report {#render_report}
+
+`render_report(report: 'ValidationReport') -> 'str'`
+
+Render a `ValidationReport` as a human-readable markdown validation card.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `report` | `ValidationReport` |  | A populated `ValidationReport` from `validate_model`. |
+
+**Returns**
+
+A multi-section markdown string with one `##` heading per oracle. Sections whose oracle result is `None` (either skipped or not applicable for a point-estimate model) are rendered as `- n/a`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import (
+    RidgeRapmModel, validate_model, render_report,
+)
+
+rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+md = render_report(rep)
+print(md)
+
+# Capture the markdown string for downstream use
+
+with open("validation_card.md", "w") as f:
+    f.write(render_report(rep))
+```
 
 ### score_win_prob {#score_win_prob}
 

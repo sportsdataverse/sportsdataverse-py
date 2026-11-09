@@ -212,7 +212,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
-| [render_report](additional/models-and-calculators-2.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
+| [render_report](additional/models-and-calculators-3.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
 | [score_win_prob](additional/models-and-calculators-3.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
 | [season_game_excitement](additional/models-and-calculators-3.md#season_game_excitement) | Every game's excitement index, lead changes and biggest swing, ranked within its season. |
 | [shot_coordinates](additional/models-and-calculators-3.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |

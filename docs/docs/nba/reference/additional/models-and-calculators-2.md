@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_draft–render_report"
-sidebar_label: "Models and calculators: nba_draft–render_report"
+title: "NBA — additional Python functions — Models and calculators: nba_draft–raw_game"
+sidebar_label: "Models and calculators: nba_draft–raw_game"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_draft–render_report — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_draft–raw_game — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_draft–render_report
+# NBA — additional Python functions — Models and calculators: nba_draft–raw_game
 
 ### nba_draft_model {#nba_draft_model}
 
@@ -331,7 +331,7 @@ it on its own output gives the same frame.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `impact` | `DataFrame` |  | A `player_impact` table: `season`, `season_type`, `off_poss`, `def_poss` and the 13 metrics of `IMPACT_RANKED`, one row per player, season and season type. |
+| `impact` | `DataFrame` |  | A `player_impact` table: `season`, `season_type`, `off_poss`, `def_poss` and the 16 metrics of `IMPACT_RANKED`, one row per player, season and season type. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA, which picks the sample gates. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
@@ -385,6 +385,9 @@ it on its own output gives the same frame.
 | `dbpm_n` | Int64 | Possessions dbpm is measured over: def_poss, his defensive possessions. dbpm_rank and dbpm_pct are set only when it reaches the league's gate (1,600 NBA, 1,200 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
 | `bpm_n` | Int64 | Possessions bpm is measured over: off_poss + def_poss, his possessions at both ends. bpm_rank and bpm_pct are set only when it reaches the league's gate (3,200 NBA, 1,600 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
 | `war_n` | Int64 | Possessions behind war: off_poss + def_poss. war is a count, not a rate, so its rank has no sample gate. |
+| `boban_filtered_skill_n` | Int64 | Possessions behind boban_filtered_skill: off_poss + def_poss, this season's possessions at both ends. The boban filtered skill is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_filtered_skill_rank and boban_filtered_skill_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
+| `boban_projected_rating_n` | Int64 | Possessions behind boban_projected_rating: off_poss + def_poss, this season's possessions at both ends. The boban next-season projection is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_projected_rating_rank and boban_projected_rating_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
+| `boban_projected_sd_n` | Int64 | Possessions behind boban_projected_sd: off_poss + def_poss, this season's possessions at both ends. The boban projection's standard deviation is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_projected_sd_rank and boban_projected_sd_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
 | `o_rapm_rank` | Float64 | Rank of o_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when o_rapm_n is under the league's gate (1,700 NBA, 610 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
 | `d_rapm_rank` | Float64 | Rank of d_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when d_rapm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
 | `rapm_rank` | Float64 | Rank of rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when rapm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
@@ -398,6 +401,9 @@ it on its own output gives the same frame.
 | `dbpm_rank` | Float64 | Rank of dbpm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when dbpm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
 | `bpm_rank` | Float64 | Rank of bpm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when bpm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
 | `war_rank` | Float64 | Rank of war among the season and season type's ranked players, 1 = best (higher is better), ties averaged; ungated (every player with a finite war qualifies), null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. |
+| `boban_filtered_skill_rank` | Float64 | Rank of boban_filtered_skill among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when boban_filtered_skill_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
+| `boban_projected_rating_rank` | Float64 | Rank of boban_projected_rating among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when boban_projected_rating_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
+| `boban_projected_sd_rank` | Float64 | Rank of boban_projected_sd among the season and season type's ranked players, ASCENDING: 1 = the smallest sd, the most certain projection; ties averaged; null when boban_projected_sd_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
 | `o_rapm_pct` | Float64 | Percentile of o_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
 | `d_rapm_pct` | Float64 | Percentile of d_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
 | `rapm_pct` | Float64 | Percentile of rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
@@ -411,6 +417,9 @@ it on its own output gives the same frame.
 | `dbpm_pct` | Float64 | Percentile of dbpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
 | `bpm_pct` | Float64 | Percentile of bpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
 | `war_pct` | Float64 | Percentile of war_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
+| `boban_filtered_skill_pct` | Float64 | Percentile of boban_filtered_skill_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
+| `boban_projected_rating_pct` | Float64 | Percentile of boban_projected_rating_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
+| `boban_projected_sd_pct` | Float64 | Percentile of boban_projected_sd_rank, 100 * (n + 1 - rank) / (n + 1): high means a more certain projection (a smaller sd), not a larger one; null where the rank is. |
 
 **Raises**
 
@@ -950,37 +959,4 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
 eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
-```
-
-### render_report {#render_report}
-
-`render_report(report: 'ValidationReport') -> 'str'`
-
-Render a `ValidationReport` as a human-readable markdown validation card.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `report` | `ValidationReport` |  | A populated `ValidationReport` from `validate_model`. |
-
-**Returns**
-
-A multi-section markdown string with one `##` heading per oracle. Sections whose oracle result is `None` (either skipped or not applicable for a point-estimate model) are rendered as `- n/a`.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_model_validation import (
-    RidgeRapmModel, validate_model, render_report,
-)
-
-rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
-md = render_report(rep)
-print(md)
-
-# Capture the markdown string for downstream use
-
-with open("validation_card.md", "w") as f:
-    f.write(render_report(rep))
 ```

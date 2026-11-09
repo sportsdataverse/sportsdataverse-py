@@ -9,8 +9,7 @@ follows the season-table suffix grammar of :mod:`sportsdataverse._common.league_
 * ``<m>_n`` -- the possessions the metric is measured over: ``off_poss`` for an offensive
   rating (``o_rapm``, ``o_adj_rapm``, ``ospm``, ``obpm``), ``def_poss`` for a defensive one, and
   ``off_poss + def_poss`` for a net rating and for ``war``.
-* ``<m>_rank`` / ``<m>_pct`` -- 1 is best (every ranked metric is higher-is-better: a defensive
-  rating is positive for a good defender), within ``(season, season_type)``, at least
+* ``<m>_rank`` / ``<m>_pct`` -- 1 is best, within ``(season, season_type)``, at least
   :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` ranked players. A rating
   is ranked only when its ``<m>_n`` reaches the on-court gate of the same side in
   :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N` (the possessions at which a player's
@@ -18,8 +17,12 @@ follows the season-table suffix grammar of :mod:`sportsdataverse._common.league_
   1,200 / 1,600). A regularized or box rating is less noisy than the raw on-court rating at the
   same sample, so the gate is conservative. ``war`` is a count, not a rate: it has no sample gate.
 
-The BOBAN columns are not ranked: ``boban_projected_rating`` forecasts the next season and
-``boban_projected_sd`` has no better direction.
+Every metric is higher-is-better (a defensive rating is positive for a good defender) except
+``boban_projected_sd``, which ranks ascending: 1 is the most certain projection. The three BOBAN
+columns are multi-season estimates with no single-side sample, so their ``<m>_n`` is the season's
+``off_poss + def_poss`` and they take the net on-court gate, the closest existing one (NBA 3,200,
+WNBA 1,600): conservative again, since the Kalman filter also carries earlier seasons.
+``boban_projected_rating`` forecasts the next season; it is ranked within the season it was made.
 """
 
 from __future__ import annotations
@@ -36,10 +39,10 @@ from sportsdataverse._common.league_context import (
 )
 from sportsdataverse._common.rate_gates import NBA_LEVEL, ON_OFF_MIN_N
 
-__all__ = ["IMPACT_RANKED", "nba_player_impact_context", "nba_player_impact_league_averages"]
+__all__ = ["IMPACT_LOWER_IS_BETTER", "IMPACT_RANKED", "nba_player_impact_context", "nba_player_impact_league_averages"]
 
 #: Ranked impact metric -> the side its ``<m>_n`` counts: ``"o"`` offensive possessions,
-#: ``"d"`` defensive, ``"net"`` both. All are higher-is-better.
+#: ``"d"`` defensive, ``"net"`` both. Higher is better except :data:`IMPACT_LOWER_IS_BETTER`.
 IMPACT_RANKED: dict[str, str] = {
     "o_rapm": "o",
     "d_rapm": "d",
@@ -54,7 +57,12 @@ IMPACT_RANKED: dict[str, str] = {
     "dbpm": "d",
     "bpm": "net",
     "war": "net",
+    "boban_filtered_skill": "net",
+    "boban_projected_rating": "net",
+    "boban_projected_sd": "net",
 }
+#: Ranked metrics where lower is better (1 = the lowest).
+IMPACT_LOWER_IS_BETTER: tuple[str, ...] = ("boban_projected_sd",)
 _N = {"o": pl.col("off_poss"), "d": pl.col("def_poss"), "net": pl.col("off_poss") + pl.col("def_poss")}
 _GATE = {"o": "off_rtg_on", "d": "def_rtg_on", "net": "net_rtg_on"}
 _UNGATED = ("war",)  # a count, not a rate
@@ -85,7 +93,7 @@ def nba_player_impact_context(
 
     Args:
         impact: A ``player_impact`` table: ``season``, ``season_type``, ``off_poss``, ``def_poss``
-            and the 13 metrics of :data:`IMPACT_RANKED`, one row per player, season and season type.
+            and the 16 metrics of :data:`IMPACT_RANKED`, one row per player, season and season type.
         league_id: ``"00"`` NBA or ``"10"`` WNBA, which picks the sample gates.
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
@@ -111,6 +119,7 @@ def nba_player_impact_context(
         list(IMPACT_RANKED),
         min_cohort=MIN_COHORT_PLAYERS,
         by=("season", "season_type"),
+        lower_is_better=IMPACT_LOWER_IS_BETTER,
         min_n=_gates(level),
     )
     return out.to_pandas() if return_as_pandas else out

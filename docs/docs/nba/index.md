@@ -143,7 +143,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`predict_margin`](reference/additional/models-and-calculators-2#predict_margin)
 - [`predict_total`](reference/additional/models-and-calculators-2#predict_total)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
-- [`render_report`](reference/additional/models-and-calculators-2#render_report)
+- [`render_report`](reference/additional/models-and-calculators-3#render_report)
 - [`score_win_prob`](reference/additional/models-and-calculators-3#score_win_prob)
 - [`season_game_excitement`](reference/additional/models-and-calculators-3#season_game_excitement)
 - [`shot_coordinates`](reference/additional/models-and-calculators-3#shot_coordinates)
