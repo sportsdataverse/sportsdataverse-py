@@ -1,10 +1,57 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg"
-sidebar_label: "Analytics: ncaa_situation–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: ncaa_score–weighted_avg"
+sidebar_label: "Analytics: ncaa_score–weighted_avg"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ncaa_score–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: ncaa_situation–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: ncaa_score–weighted_avg
+
+### ncaa_score_rows {#ncaa_score_rows}
+
+`ncaa_score_rows(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Map the stats.ncaa.org play-by-play onto the game-flow score rows.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order (`contest_id`, `season`, `period`, `game_seconds`, `home_score`, `away_score`, `event_team_espn_team_id`, `home_espn_team_id`, `away_espn_team_id`, `espn_game_id`). |
+| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`), joined on `espn_game_id`; a contest it lacks is not neutral. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `order` | Int64 | The play's position in its game (the pbp order_index, or the release row order for college). |
+| `home_team_id` | Int64 | The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host). |
+| `away_team_id` | Int64 | The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor). |
+| `neutral_site` | Boolean | True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries no venue. |
+| `elapsed` | Float64 | Game-clock seconds run when the play happens, counted from the tip. |
+| `sec_left` | Float64 | The win-probability clock: seconds left in regulation, or in the overtime period. |
+| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
+| `event_team_id` | Int64 | The play's team (the model's ball side); 0 or null for a team-less play. |
+| `home_score` | Int64 | Home running score after the play. |
+| `away_score` | Int64 | Away running score after the play. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_pbp
+from sportsdataverse.mbb.mbb_game_flow import ncaa_score_rows
+rows = ncaa_score_rows(load_ncaa_mbb_pbp(2026), load_mbb_schedule(2026))
+```
 
 ### ncaa_situation_rows {#ncaa_situation_rows}
 
