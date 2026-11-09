@@ -246,7 +246,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`ncaa_mbb_on_off`](reference/additional/analytics-4#ncaa_mbb_on_off)
 - [`ncaa_mbb_player_combos`](reference/additional/analytics-4#ncaa_mbb_player_combos)
 - [`ncaa_mbb_player_lineups`](reference/additional/analytics-4#ncaa_mbb_player_lineups)
-- [`ncaa_possession_rate_rows`](reference/additional/analytics-4#ncaa_possession_rate_rows)
+- [`ncaa_possession_rate_rows`](reference/additional/analytics-5#ncaa_possession_rate_rows)
 - [`ncaa_score_rows`](reference/additional/analytics-5#ncaa_score_rows)
 - [`ncaa_situation_rows`](reference/additional/analytics-5#ncaa_situation_rows)
 - [`ncaa_team_box_count_rows`](reference/additional/analytics-5#ncaa_team_box_count_rows)

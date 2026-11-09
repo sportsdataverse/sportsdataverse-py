@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession"
-sidebar_label: "Analytics: mbb_team–ncaa_possession"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb"
+sidebar_label: "Analytics: mbb_team–ncaa_mbb"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -963,59 +963,4 @@ df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER
 # Pipeline next step (one line)
 
 on.select(pl.col("mins").sum())
-```
-
-### ncaa_possession_rate_rows {#ncaa_possession_rate_rows}
-
-`ncaa_possession_rate_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
-| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`), joined on `espn_game_id`. |
-| `league` | `str` | `'mens'` | `"mens"` (two 20-minute halves) or `"womens"` (10-minute quarters from 2016, halves before). |
-
-**Returns**
-
-One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`, with null four-factor counts.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
-| `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the clutch window can fall in. |
-| `start_clock` | Float64 | Seconds left in the period when the possession starts: its length plus the lengths of the later possessions in the period. |
-| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
-| `offense_team_id` | Int64 | ESPN id of the team with the ball; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of the team on defense; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
-| `neutral_site` | Boolean | True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the home nor the away split. |
-| `points` | Int64 | Points the offense scored on the possession. |
-| `fga` | Float64 | Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `ff_poss` | Float64 | Always null: the turnover rate's denominator comes from the team box. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
-rows = ncaa_possession_rate_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
 ```
