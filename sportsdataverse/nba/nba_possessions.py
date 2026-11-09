@@ -728,6 +728,9 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     for events, is_sc, offense in groups:
         end_home: int = events[-1]["_home"]
         end_away: int = events[-1]["_away"]
+        # the row that ended the possession, for the next one's start type: a putback, not the
+        # rebound the pbp logs after it
+        ender = events[-2] if is_rebound_logged_after_its_putback(events, len(events) - 1) else events[-1]
         cur_period = int(events[0].get("period") or 0)
 
         if prev_group_period is not None and cur_period != prev_group_period:
@@ -747,7 +750,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             if home_delta <= 0 and away_delta <= 0:
                 prev_home = end_home
                 prev_away = end_away
-                prev_end_row = events[-1]
+                prev_end_row = ender
                 prev_group_rows = events
                 prev_group_period = cur_period
                 continue
@@ -806,7 +809,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
 
         prev_home = end_home
         prev_away = end_away
-        prev_end_row = end_ev
+        prev_end_row = ender
         prev_group_rows = events
         prev_group_period = cur_period
 

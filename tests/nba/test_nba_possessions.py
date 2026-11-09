@@ -1084,6 +1084,9 @@ def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
     assert holder.height == 1
     if game_id == "0022500157":  # the putback's own possession, which now ends on the rebound
         assert holder["offense_team_id"].item() == reb_team and holder["end_order_index"].item() == rebound
+        # and the next possession starts off the putback, a made shot
+        after = poss.filter(pl.col("possession_number") == holder["possession_number"].item() + 1)
+        assert after["possession_start_type"].item() == "OffMadeShot"
     else:
         assert holder["offense_team_id"].item() != reb_team
     monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
