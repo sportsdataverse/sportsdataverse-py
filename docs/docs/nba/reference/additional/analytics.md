@@ -138,12 +138,12 @@ The possession frame (`POSSESSIONS_SCHEMA`) plus every column in `PLAY_CONTEXT_P
 | `possession_start_type_ctg` | String |  |
 | `seconds_to_first_play` | Float64 |  |
 | `is_transition_ctg` | Boolean | Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the chosen variant; never on a period's first possession or after a timeout. Not the possessions table's is_transition (add_possession_flags), which uses an 8-second first-shot window. |
-| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (this copy will be removed). Not the possessions table's is_transition (add_possession_flags). |
+| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in 0.4.0). Not the possessions table's is_transition (add_possession_flags). |
 | `transition_source` | String |  |
 | `possession_context` | String |  |
 | `is_heave_possession` | Boolean |  |
 | `is_garbage_time_ctg` | Boolean | Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time (add_possession_flags, bigballR's rule). |
-| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (this copy will be removed). Not the possessions table's is_garbage_time (add_possession_flags). |
+| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in 0.4.0). Not the possessions table's is_garbage_time (add_possession_flags). |
 | `garbage_time_basis` | String |  |
 
 **Example**
@@ -394,7 +394,7 @@ variant.
 | `possession_start_type_ctg` | String |  |
 | `seconds_to_first_play` | Float64 |  |
 | `is_transition_ctg` | Boolean | Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the chosen variant; never on a period's first possession or after a timeout. Not the possessions table's is_transition (add_possession_flags), which uses an 8-second first-shot window. |
-| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (this copy will be removed). Not the possessions table's is_transition (add_possession_flags). |
+| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in 0.4.0). Not the possessions table's is_transition (add_possession_flags). |
 | `transition_source` | String |  |
 | `possession_context` | String |  |
 
@@ -664,7 +664,7 @@ CTG-exact.
 | `dreb` | Int64 | Defensive rebounds. |
 | `tov` | Int64 | Turnovers. |
 | `is_garbage_time_ctg` | Boolean | Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time (add_possession_flags, bigballR's rule). |
-| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (this copy will be removed). Not the possessions table's is_garbage_time (add_possession_flags). |
+| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in 0.4.0). Not the possessions table's is_garbage_time (add_possession_flags). |
 | `garbage_time_basis` | String |  |
 
 **Example**

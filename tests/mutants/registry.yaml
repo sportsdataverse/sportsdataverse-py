@@ -10038,6 +10038,26 @@
   expected: kill
   note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
 
+- id: bb-ctg-alias-never-overwrites
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    if old in possessions.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_play_context.py::test_the_copies_never_overwrite_a_published_flag
+  expected: kill
+  note: The deprecated plain-name copy would overwrite BB-D7's published is_transition / is_garbage_time.
+
+- id: bb-ctg-legacy-frame-names
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    df = _ctg_names(possessions)'
+  mutant: '    df = possessions'
+  test: tests/nba/test_nba_play_context.py::test_a_frame_saved_before_the_rename_still_rolls_up
+  expected: kill
+  note: A possessions frame saved before the *_ctg rename would raise in the rollups.
+
 - id: bb-sit-reflag-a-flagged-release
   group: bb-situational
   finding: BB-D7

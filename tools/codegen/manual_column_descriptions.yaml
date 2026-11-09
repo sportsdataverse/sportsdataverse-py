@@ -1264,10 +1264,10 @@ _global:
   yards_covered: Net yards the offense gained over the course of the drive.
   yards_to_endzone: Distance from the current ball spot to the opponent's goal line, in yards.
 add_play_context:
-  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (this copy
-    will be removed). Not the possessions table's is_garbage_time (add_possession_flags).
-  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (this copy will be
-    removed). Not the possessions table's is_transition (add_possession_flags).
+  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in
+    0.4.0). Not the possessions table's is_garbage_time (add_possession_flags).
+  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in
+    0.4.0). Not the possessions table's is_transition (add_possession_flags).
   is_garbage_time_ctg: Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the
     possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or
     fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time
@@ -1277,15 +1277,15 @@ add_play_context:
     chosen variant; never on a period's first possession or after a timeout. Not the possessions table's
     is_transition (add_possession_flags), which uses an 8-second first-shot window.
 add_transition:
-  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (this copy will be
-    removed). Not the possessions table's is_transition (add_possession_flags).
+  is_transition: Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in
+    0.4.0). Not the possessions table's is_transition (add_possession_flags).
   is_transition_ctg: Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play
     (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the
     chosen variant; never on a period's first possession or after a timeout. Not the possessions table's
     is_transition (add_possession_flags), which uses an 8-second first-shot window.
 flag_garbage_time:
-  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (this copy
-    will be removed). Not the possessions table's is_garbage_time (add_possession_flags).
+  is_garbage_time: Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in
+    0.4.0). Not the possessions table's is_garbage_time (add_possession_flags).
   is_garbage_time_ctg: Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the
     possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or
     fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time

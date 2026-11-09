@@ -386,6 +386,26 @@ def test_the_old_flag_names_are_deprecated_copies(frames, game_id):
     assert poss["is_transition_ctg"].any()
 
 
+def test_the_copies_never_overwrite_a_published_flag(frames):
+    """A frame that already has BB-D7's plain-name flags keeps them; only the ``*_ctg`` columns are added."""
+    from sportsdataverse.nba.nba_play_context import add_start_type_detail, add_transition, flag_garbage_time
+    from sportsdataverse.nba.nba_possessions import build_possessions
+
+    pbp = frames[GAMES[0]]
+    poss = add_start_type_detail(build_possessions(pbp), pbp)
+    mine = poss.with_columns(pl.lit(True).alias("is_transition"), pl.lit(True).alias("is_garbage_time"))
+    out = flag_garbage_time(add_transition(mine, pbp), pbp)
+    assert out["is_transition"].all() and out["is_garbage_time"].all()
+    assert not out["is_transition_ctg"].all() and not out["is_garbage_time_ctg"].all()
+
+
+def test_a_frame_saved_before_the_rename_still_rolls_up(frames):
+    """A possessions frame with only the old plain names gets its ``*_ctg`` columns derived from them."""
+    poss = add_play_context(frames[GAMES[0]])
+    legacy = poss.drop("is_transition_ctg", "is_garbage_time_ctg")
+    assert team_play_context(legacy).equals(team_play_context(poss))
+
+
 def test_add_play_context_does_not_change_possession_count(frames):
     """Strictly additive — enrichment must not add or drop a possession."""
     enh = frames["0022200001"]

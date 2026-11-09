@@ -29,7 +29,7 @@ The two flags here are ``is_transition_ctg`` and ``is_garbage_time_ctg``. The pl
 ``is_transition`` / ``is_garbage_time`` belong to the possessions table
 (:func:`~sportsdataverse.nba.nba_possession_flags.add_possession_flags`), whose rules differ.
 The frames here still carry the plain names as deprecated copies of the ``*_ctg`` columns, so
-old reads keep working for now; move to ``*_ctg``, since the copies will be removed.
+old reads keep working; move to ``*_ctg``, since the copies are removed in 0.4.0.
 
 CTG precedence rule reproduced here: a **transition putback stays transition**
 ("if a team comes down in transition and misses a shot but gets a putback, that
@@ -81,8 +81,33 @@ PLAY_CONTEXT_POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
 }
 
 #: The CTG flags' old plain names, ``{new: old}``. Each is emitted as a copy beside its ``*_ctg`` column
-#: for a deprecation window, then removed; the plain names belong to BB-D7's possessions flags.
+#: until 0.4.0, then removed; the plain names belong to BB-D7's possessions flags.
 _CTG_ALIASES: dict[str, str] = {"is_transition_ctg": "is_transition", "is_garbage_time_ctg": "is_garbage_time"}
+
+
+def _ctg_alias(
+    possessions: pl.DataFrame, new: str, values: Union[pl.Series, pl.Expr]
+) -> list[Union[pl.Series, pl.Expr]]:
+    """The deprecated plain-name copy of ``new``, unless the input already has that column.
+
+    A frame that already carries the plain name (BB-D7's possessions flag) keeps it: the copy never
+    overwrites a published flag. Like the ``darko_*`` loader aliases (#1100) it does not warn: a
+    column cannot warn on read, and a per-call warning would also fire for callers already on
+    ``*_ctg``. The removal release is stated in the docs and the changelog instead.
+    """
+    old = _CTG_ALIASES[new]
+    if old in possessions.columns:
+        return []
+    return [values.alias(old)]
+
+
+def _ctg_names(possessions: pl.DataFrame) -> pl.DataFrame:
+    """A frame saved before the ``*_ctg`` rename, with the ``*_ctg`` columns derived from the old names."""
+    adds = [
+        pl.col(o).alias(n) for n, o in _CTG_ALIASES.items() if n not in possessions.columns and o in possessions.columns
+    ]
+    return possessions.with_columns(adds) if adds else possessions
+
 
 #: The Play-Context metric columns every rollup emits (team / lineup / player-on-off).
 #: Kept in one place so the three tables cannot drift apart.
@@ -511,7 +536,7 @@ def add_transition(
     empty_cols = (
         pl.lit(None, dtype=pl.Float64).alias("seconds_to_first_play"),
         pl.lit(None, dtype=pl.Boolean).alias("is_transition_ctg"),
-        pl.lit(None, dtype=pl.Boolean).alias("is_transition"),
+        *_ctg_alias(possessions, "is_transition_ctg", pl.lit(None, dtype=pl.Boolean)),
         pl.lit(None, dtype=pl.Utf8).alias("transition_source"),
         pl.lit(None, dtype=pl.Utf8).alias("possession_context"),
     )
@@ -594,7 +619,7 @@ def add_transition(
     return possessions.sort("possession_number").with_columns(
         pl.Series("seconds_to_first_play", secs, dtype=pl.Float64),
         pl.Series("is_transition_ctg", trans, dtype=pl.Boolean),
-        pl.Series("is_transition", trans, dtype=pl.Boolean),
+        *_ctg_alias(possessions, "is_transition_ctg", pl.Series(trans, dtype=pl.Boolean)),
         pl.Series("transition_source", source, dtype=pl.Utf8),
         pl.Series("possession_context", context, dtype=pl.Utf8),
     )
@@ -695,7 +720,7 @@ def flag_garbage_time(
     if possessions.is_empty():
         return possessions.with_columns(
             pl.lit(None, dtype=pl.Boolean).alias("is_garbage_time_ctg"),
-            pl.lit(None, dtype=pl.Boolean).alias("is_garbage_time"),
+            *_ctg_alias(possessions, "is_garbage_time_ctg", pl.lit(None, dtype=pl.Boolean)),
             pl.lit(basis, dtype=pl.Utf8).alias("garbage_time_basis"),
         )
 
@@ -730,7 +755,7 @@ def flag_garbage_time(
 
     return possessions.sort("possession_number").with_columns(
         pl.Series("is_garbage_time_ctg", flags, dtype=pl.Boolean),
-        pl.Series("is_garbage_time", flags, dtype=pl.Boolean),
+        *_ctg_alias(possessions, "is_garbage_time_ctg", pl.Series(flags, dtype=pl.Boolean)),
         pl.lit(basis, dtype=pl.Utf8).alias("garbage_time_basis"),
     )
 
@@ -780,6 +805,7 @@ def build_play_context_shots(
     """
     if possessions.is_empty() or enhanced_pbp.is_empty():
         return pl.DataFrame(schema=PLAY_CONTEXT_SHOTS_SCHEMA)
+    possessions = _ctg_names(possessions)
 
     pbp_rows = add_ctg_shot_zones(enhanced_pbp.sort("order_index")).to_dicts()
     trans_by_poss = {
@@ -984,7 +1010,7 @@ def team_play_context(
 
             ctx = team_play_context(season_poss, league_non_transition_ppp=104.8)
     """
-    df = possessions
+    df = _ctg_names(possessions)
     if df.is_empty():
         out = pl.DataFrame(schema={"offense_team_id": pl.Int64, **_CONTEXT_METRIC_SCHEMA})
         return out.to_pandas() if return_as_pandas else out
@@ -1224,6 +1250,7 @@ def lineup_play_context(
         out = pl.DataFrame(schema=LINEUP_PLAY_CONTEXT_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
+    possessions = _ctg_names(possessions)
     df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
     league_non_transition_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
 
@@ -1303,6 +1330,7 @@ def player_play_context(
         out = pl.DataFrame(schema=PLAYER_PLAY_CONTEXT_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
+    possessions = _ctg_names(possessions)
     df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
     league_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
 
