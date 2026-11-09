@@ -1133,3 +1133,100 @@ def test_credit_defense_scoring_picks_the_receiving_row(
     credit_defense_scoring(rows, [(1, 1, 1, {**dict.fromkeys(SHOT_KEYS, 0), "fta": 1, "ftm": 1})])
     assert [k for k, r in enumerate(rows) if r["points"]] == [want]
     assert rows[want]["ftm"] == 1
+
+
+REBOUND_WITHOUT_A_MISS = FXROOT / "rebound_without_a_miss"
+
+
+@pytest.mark.parametrize(("game_id", "rebound"), [("0022500157", 467), ("0022500290", 235), ("0022501144", 54)])
+def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
+    monkeypatch: pytest.MonkeyPatch, game_id: str, rebound: int
+) -> None:
+    """A rebound row after a make, a turnover or a steal no longer decides who has the ball.
+
+    Real 2025-26 release rows (``rebound_without_a_miss/README.md``). Such a rebound opened a
+    possession for its own team, so the other team's next basket was lost. Now a putback's rebound
+    logged after it stays in the putback's possession, and any other one does not set the offense:
+    each team's made-shot points equal the final, with the same number of possessions. (Crediting
+    a defense score to the scorer would fix the totals too; this checks who has the ball.)
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == game_id)
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == game_id)
+        .row(0, named=True)
+    )
+    ms = (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+
+    def totals(poss: pl.DataFrame) -> tuple[int, int]:
+        x = poss.with_columns(ms)
+        return x.filter(home)["ms"].sum(), x.filter(~home)["ms"].sum()
+
+    poss = build_possessions(pbp)
+    assert totals(poss) == (game["home_pts"], game["away_pts"])
+    loc = pbp.filter(pl.col("order_index") == rebound)["location"].item()
+    reb_team = game["home_team_id"] if loc == "h" else game["away_team_id"]
+    holder = poss.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    assert holder.height == 1
+    if game_id == "0022500157":  # the putback's own possession, which now ends on the rebound
+        assert holder["offense_team_id"].item() == reb_team and holder["end_order_index"].item() == rebound
+        # and the next possession starts off the putback, a made shot
+        after = poss.filter(pl.col("possession_number") == holder["possession_number"].item() + 1)
+        assert after["possession_start_type"].item() == "OffMadeShot"
+    else:
+        assert holder["offense_team_id"].item() != reb_team
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    monkeypatch.setattr(npm, "is_rebound_logged_after_its_putback", lambda rows, i: False)
+    before = build_possessions(pbp)
+    assert before.height == poss.height
+    # without the fix, the possession holding the rebound is the rebounding team's (the release's error)
+    was = before.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    if game_id == "0022500157":
+        assert was["start_order_index"].item() == rebound  # a phantom possession opened on the rebound
+    else:
+        assert was["offense_team_id"].item() == reb_team
+
+
+def test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The last group of a game: a team field-goal attempt at 0.3 s, a team rebound, the period end.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``, game ``0022500119``). The rebound follows
+    no miss, but no other row of the group has a side, so it still names the offense (DAL, home) and
+    the possession is kept, as it was before.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500119")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500119")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    last = poss.filter(pl.col("start_order_index") == 486)
+    assert last.height == 1 and last["offense_team_id"].item() == game["home_team_id"]
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    assert build_possessions(pbp).height == poss.height
+
+
+def test_a_defense_violation_does_not_name_the_offense() -> None:
+    """The end of the 1st half of ``0022500108`` NYK @ MIA: a Knicks delay of game, a Heat heave, a team rebound.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``). The feed files an offensive violation
+    as a turnover, so the ``violation`` row is the defense's; the heave names the offense (MIA,
+    home), as in the four such NBA 2025-26 groups. Points and the possession count are unchanged.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500108")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500108")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    holder = poss.filter(pl.col("start_order_index") <= 255, pl.col("end_order_index") >= 255)
+    assert holder.height == 1 and holder["offense_team_id"].item() == game["home_team_id"]
+    ms = 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+    assert (poss.filter(home).select(ms.sum()).item(), poss.filter(~home).select(ms.sum()).item()) == (
+        game["home_pts"],
+        game["away_pts"],
+    )
