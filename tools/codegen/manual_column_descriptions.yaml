@@ -40645,7 +40645,7 @@ nba_neutral_site_games:
   game_date: Game date (US Eastern), as in the stats schedule release.
   game_id: stats.nba.com game id (Utf8).
   home_team: Designated home team (stats.nba.com abbreviation).
-  league: nba or wnba.
+  league: "League the game belongs to: `nba` or `wnba`."
   reason: 'Why the game is neutral: international (played abroad) or cup_knockout (an NBA Cup knockout game in Las Vegas).'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   season_type: 'Schedule season type: regular-season, or nba-cup for an NBA Cup final (which does not count in the standings).'
@@ -41025,7 +41025,7 @@ mbb_tournament_ineligible:
   reason: 'Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other.'
   season: Season, as the end year (2024 is 2023-24).
   source_url: The source that documents the row.
-  team: School name.
+  team: School name of the barred program, as ESPN spells it.
   team_id: ESPN team id (Utf8).
 wbb_bracketology:
   as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'

@@ -6,8 +6,8 @@ https://nflseedr.com. Architecture mirrors nflseedR's
 ``R/standings_init.R``, ``R/conference_tiebreaker.R``) with the CFB
 adaptations from the shared seedr-port spec.
 
-CFB simplifications (documented deliberately — the R ``cfbseedR`` port uses
-the SAME semantics so outputs cross-validate):
+CFB simplifications (documented deliberately — the R ``cfbseedR`` port takes the
+same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
 
 * **Conferences instead of divisions.** Standings group by ``conference``;
   there is no division layer and no draft order.
@@ -41,7 +41,9 @@ the SAME semantics so outputs cross-validate):
   American, Conference USA, Mountain West and Sun Belt (cfbseedR 0.2.0
   parity) as season-scoped epochs of plain rung-dict lists; any conference not
   in the registry (e.g. the re-formed Pac-12, which has not published one)
-  uses the generic cascade above, completely unchanged. Registry cascades
+  uses the generic cascade above. Every cascade — generic included — restarts
+  at its first rung after a partial elimination (see ``_pick_winner``).
+  Registry cascades
   always run in full (``tiebreaker_depth`` gates only the generic fallback).
   An epoch applies from its ``from`` season: games keyed by ``season`` (or an
   explicit ``season=``) resolve per season, plain ``sim`` ids use the current
@@ -64,10 +66,18 @@ the SAME semantics so outputs cross-validate):
   ``ponytail:`` the symmetric lost-to-all elimination is NOT separately
   modeled — its poor within-group record already surfaces at
   ``record_vs_common``/``opp_conf_win_pct`` in practice, a documented
-  first-cut simplification, see ``_apply_h2h``); after each team is seeded
-  the procedure RESTARTS from rung 1 with the remaining set, and a
-  reduction to two switches to the 2-team walk. The SEC capped scoring
-  margin is per-game
+  first-cut simplification, see ``_apply_h2h``). After each team is seeded
+  or eliminated the procedure RESTARTS from rung 1 with the remaining set,
+  and a reduction to two switches to the 2-team walk. The Big 12's
+  published policy: "After one team has an advantage and is 'seeded,' all
+  remaining teams in the multiple-team tiebreaker will repeat the
+  tie-breaking procedure. If at any point the multiple-team tie is reduced
+  to two teams, the two-team tie-breaking procedure will be applied." The
+  SEC's procedure restarts the same way (a team that beats every other
+  tied team it played, or loses to all of them, sends the survivors back
+  to rung 1), so a rung that KEEPS every candidate just advances.
+  Descending the rung list on the survivors instead applies comparisons
+  the policy never reaches. The SEC capped scoring margin is per-game
   (42 scored / 48 allowed), summed across conference games. Under registry
   conferences ``conf_rank`` 1-2 are the championship-game participants.
   Rungs whose optional inputs are absent (per-game points, an FBS/FCS
@@ -750,15 +760,25 @@ def _pick_winner(
     by ``tiebreaker_depth`` exactly as before; registry rungs have no
     ``min_depth`` key and therefore always run (official procedures run in
     full — see the module docstring).
+
+    An elimination restarts the procedure at rung 1: termination is safe
+    because every rung returns a subset, so a restart requires a strict size
+    decrease (bounded by tie size - 1) and a rung that keeps every candidate
+    advances.
     """
     cands = sorted(tied)
-    for rung in rungs:
-        if len(cands) <= 1:
-            break
+    i = 0
+    while i < len(rungs) and len(cands) > 1:
+        rung = rungs[i]
         min_depth = rung.get("min_depth")
         if isinstance(min_depth, int) and depth < min_depth:
+            i += 1
             continue
+        before = len(cands)
         cands = _apply_rung(cands, rung, metrics, rec_sim, ctx, rng)
+        # An elimination restarts the procedure on the survivors: their
+        # head-to-heads and common opponents are not the ones just tested.
+        i = 0 if len(cands) < before else i + 1
     if len(cands) > 1:
         return str(rng.choice(sorted(cands)))
     return cands[0]
@@ -775,8 +795,10 @@ def _order_tied(
 ) -> list[str]:
     """Peel one winner at a time from the tied set, restarting the full rung
     list on the shrinking remainder each time — this loop IS the "restart from
-    rung 1 with the remaining set" rule for registry conferences (and is
-    exactly the pre-registry generic behavior, unchanged).
+    rung 1 with the remaining set" rule for registry conferences, and the peel
+    is unchanged from the pre-registry generic behavior. ``_pick_winner`` adds
+    the second half of the rule: a rung that eliminates teams restarts within
+    the pick.
     """
     ordered: list[str] = []
     remaining = sorted(tied)
