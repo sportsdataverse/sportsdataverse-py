@@ -40,8 +40,9 @@ from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 FIX = "tests/fixtures"
 SELECTION = datetime.date(2024, 3, 18)  # Selection Sunday was 2024-03-17: every game before the 18th
 FEB1 = datetime.date(2024, 2, 1)
-# Southern Indiana (ESPN 88) was reclassifying to Division I in 2023-24 and ineligible.
-INELIGIBLE = {"88"}
+# The bundled list (mbb_tournament_ineligible): 11 programs reclassifying to Division I in 2023-24,
+# Southern Indiana (ESPN 88) among them. ``None`` is the season_inputs default that reads it.
+INELIGIBLE = None
 LEAGUE = {"mbb": "mens", "wbb": "womens"}
 # One 2024 men's game (401600077) ships a box score with 0 turnovers; the ratings engine drops it
 # and says so. The women's 2024 box has none.
@@ -60,7 +61,7 @@ GATES = {
         "exact_seeds": 31,  # observed 34
         "seed_mae": 0.85,  # observed 0.750
         "paymon": 270,  # observed 278 / 340
-        "bid_brier_feb1": 0.090,  # observed 0.0801 with the rating noise, 0.0810 without (baseline 0.1526)
+        "bid_brier_feb1": 0.090,  # observed 0.0797 (0.0801 with Southern Indiana alone barred, 0.0810 without the noise)
     },
     "wbb": {
         "rpi_spearman": 0.998,  # observed 0.9996
@@ -73,7 +74,7 @@ GATES = {
         "exact_seeds": 31,  # observed 34
         "seed_mae": 0.80,  # observed 0.672
         "paymon": 270,  # observed 280 / 340
-        "bid_brier_feb1": 0.075,  # observed 0.0652 with the rating noise, 0.0653 without (baseline 0.1532)
+        "bid_brier_feb1": 0.075,  # observed 0.0645 (0.0652 with Southern Indiana alone barred, 0.0653 without the noise)
     },
 }
 
@@ -260,6 +261,13 @@ def test_first_four_seed_structure_and_bubble(corpus):
 
 
 def test_ineligible_team_gets_no_bid(corpus):
+    from sportsdataverse.mbb.mbb_tournament_eligibility import mbb_tournament_ineligible
+
+    barred = set(mbb_tournament_ineligible([2024], league=corpus["league"])["team_id"])
+    teams = corpus["full"].teams
+    # the default reads the bundled list: exactly those programs are barred, and all are Division I
+    assert set(teams.filter(pl.col("eligible") == False)["team_id"]) == barred  # noqa: E712
+    assert len(barred) == 11
     sel = corpus["selection"]
     br = season_bracketology(sel.resume, sel.auto_bids, league=corpus["league"])
     usi = br.filter(pl.col("team_id") == "88").row(0, named=True)
@@ -329,6 +337,9 @@ def test_season_sim_accounting(corpus, feb_sim):
     assert (per_conf["reg_season_title_prob"] >= 1.0 - 1e-9).all()
     usi = sim.filter(pl.col("team_id") == "88").row(0, named=True)
     assert usi["bid_prob"] == 0.0 and usi["auto_bid_prob"] == 0.0
+    # no barred team ever holds a bid, even where both finalists can be barred (the 2024 NEC
+    # had Stonehill and Le Moyne; the auto-bid total above was 31.995 before that fallback)
+    assert sim.join(inp.teams.filter(pl.col("eligible") == False), on="team_id")["bid_prob"].max() == 0.0  # noqa: E712
     # every unfinished tournament crowns one champion per sim, ineligible winners included
     titles = (
         sim.filter(pl.col("conference").is_not_null())
@@ -416,10 +427,11 @@ def test_auto_bids_mid_conference_tournaments(corpus):
 
 GATES_2025 = {
     "mbb": {"field": 64, "at_large": 33, "exact_seeds": 36, "seed_mae": 0.75, "paymon": 283, "bid_brier_feb1": 0.072},
-    # observed: field 65 / 68, at-large 34 / 37, exact 40, seed MAE 0.585, paymon 292, Brier 0.0626 (base 0.1519);
+    # observed: field 65 / 68, at-large 34 / 37, exact 40, seed MAE 0.585, paymon 292, Brier 0.0626 (base 0.1519;
+    # the same with nobody barred);
     # without the prior and the rating noise (BB-D17): exact 39, seed MAE 0.646, paymon 291, Brier 0.0644
     "wbb": {"bid_brier_feb1": 0.060},
-    # observed Brier 0.0533 (base 0.1526; 0.0532 before); the field is not gated, see the women's test below
+    # observed Brier 0.0526 (base 0.1526; 0.0533 with nobody barred); the field is not gated, see the women's test below
 }
 
 

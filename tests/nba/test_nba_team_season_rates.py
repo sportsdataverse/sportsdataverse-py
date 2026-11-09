@@ -24,6 +24,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse._common.league_context import LEAGUE_AVERAGES_SCHEMA
+from sportsdataverse._common.rate_gates import TEAM_MIN_N
 from sportsdataverse._common.team_season_rates import (
     SPLITS,
     TEAM_SEASON_RATES_SCHEMA,
@@ -139,17 +140,35 @@ def test_for_and_against_balance(nba_2026: pl.DataFrame) -> None:
 
 
 def test_home_away_split_against_the_box_score(nba_2026: pl.DataFrame) -> None:
+    from sportsdataverse.nba.nba_neutral_site import nba_neutral_site_games
+
+    # 2025-26's neutral games (Mexico City, Berlin, London, the Cup semifinals) are in neither split
+    neutral = nba_neutral_site_games([2026])["game_id"].to_list()
     sched = pl.read_parquet(RATES / "nba_schedule_2026.parquet").filter(season_type="regular-season")
-    home_box = sched.group_by(pl.col("home_team_id").alias("team_id")).agg(pl.len().alias("home_games"))
+    is_neutral = pl.col("game_id").cast(pl.Utf8).is_in(neutral)
+    home_box = (
+        sched.filter(~is_neutral).group_by(pl.col("home_team_id").alias("team_id")).agg(pl.len().alias("home_games"))
+    )
+    n_neutral = (
+        pl.concat([sched.filter(is_neutral).select(pl.col(f"{s}_team_id").alias("team_id")) for s in ("home", "away")])
+        .group_by("team_id")
+        .agg(pl.len().alias("neutral_games"))
+    )
+    assert n_neutral["neutral_games"].sum() == 2 * 5  # 3 games abroad and the 2 semifinals, both sides
     wide = (
         nba_2026.filter(pl.col("split").is_in(["all", "home", "away"]))
         .pivot(on="split", index="team_id", values=["games", "poss", "pts"])
         .join(home_box, on="team_id", validate="1:1")
+        .join(n_neutral, on="team_id", how="left", validate="1:1")
+        .with_columns(pl.col("neutral_games").fill_null(0))
     )
     assert (wide["games_home"] == wide["home_games"]).all()
-    assert (wide["games_home"] + wide["games_away"] == wide["games_all"]).all()
-    assert (wide["poss_home"] + wide["poss_away"] == wide["poss_all"]).all()
-    assert (wide["pts_home"] + wide["pts_away"] == wide["pts_all"]).all()
+    assert (wide["games_home"] + wide["games_away"] + wide["neutral_games"] == wide["games_all"]).all()
+    plain = wide.filter(pl.col("neutral_games") == 0)
+    assert (plain["poss_home"] + plain["poss_away"] == plain["poss_all"]).all()
+    assert (plain["pts_home"] + plain["pts_away"] == plain["pts_all"]).all()
+    played = wide.filter(pl.col("neutral_games") > 0)  # DET DAL ORL MEM NYK OKC SAS: neutral poss in `all` only
+    assert played.height == 7 and (played["poss_home"] + played["poss_away"] < played["poss_all"]).all()
     # Home-court advantage is real in 2025-26: the league's home split outscores its away split.
     home = nba_2026.filter(split="home")
     away = nba_2026.filter(split="away")
@@ -197,25 +216,64 @@ def test_ranks_percentiles_and_sample_sizes(nba_2026: pl.DataFrame) -> None:
     assert (all_["off_rtg_n"] == all_["poss"]).all()
     assert (all_["def_rtg_n"] == all_["opp_poss"]).all()
     assert (all_["net_rtg_n"] == all_["poss"] + all_["opp_poss"]).all()
-    assert (all_["pace_n"] == all_["games"]).all()
+    # pace's sample is the clock its possessions used, in 48-minute games: the games plus overtime
+    assert ((all_["pace_n"] - all_["games"]).abs() <= 1).all()
+    clutch = nba_2026.filter(split="clutch")
+    assert (clutch["pace_n"] < clutch["games"] / 4).all()  # five-minute windows, not games
     # eFG% and FT rate share the FGA denominator; ORB% counts chances, not possessions.
     assert (all_["efg_pct_n"] == all_["ft_rate_n"]).all()
     assert (all_["efg_pct_n"] > all_["poss"] * 0.8).all()
     assert (all_["orb_pct_n"] < all_["poss"]).all()
 
 
+def test_sample_gates_rank_only_half_signal_rates(nba_2026: pl.DataFrame) -> None:
+    """``level`` gates: a rate is ranked only where its ``<m>_n`` reaches the fitted r = 0.5 sample."""
+    gates = TEAM_MIN_N["nba"]
+    rated = [c.removesuffix("_rank") for c in TEAM_SEASON_RATES_SCHEMA if c.endswith("_rank")]
+    assert set(rated) <= set(gates)
+    for m in rated:
+        under = nba_2026.filter(pl.col(f"{m}_n") < gates[m])
+        assert under[f"{m}_rank"].null_count() == under.height, m
+        assert under[f"{m}_pct"].null_count() == under.height, m
+    # A full season clears every gate; the clutch split (a few hundred possessions) clears none.
+    assert nba_2026.filter(split="all").select(pl.col("^.*_rank$").null_count()).sum_horizontal().item() == 0
+    clutch = nba_2026.filter(split="clutch")
+    assert clutch.select(pl.col("^.*_rank$").is_not_null().sum()).sum_horizontal().item() == 0
+    # ungated, the clutch split ranks its ratings: the adapter's gate is what nulls them
+    ungated = team_season_rates(
+        mod.nba_possession_rate_rows(
+            pl.read_parquet(RATES / "nba_possessions_2026.parquet"),
+            pl.read_parquet(RATES / "nba_schedule_2026.parquet"),
+        ),
+        minutes_per_game=48,
+    )
+    ungated_clutch = ungated.filter(split="clutch")
+    assert ungated_clutch["net_rtg_rank"].null_count() < ungated_clutch.height
+
+
 def test_league_averages_n_is_the_cohort(nba_2026: pl.DataFrame) -> None:
     avg = team_season_rates_league_averages(nba_2026, level="nba")
     assert dict(avg.schema) == LEAGUE_AVERAGES_SCHEMA
-    assert sorted(avg["category"].unique()) == sorted(f"team_season_rates_{s}" for s in SPLITS)
+    # the clutch split's rates clear no sample gate, so it has no league-average row at all
+    assert sorted(avg["category"].unique()) == sorted(f"team_season_rates_{s}" for s in SPLITS if s != "clutch")
     assert (avg["n"] == 30).all()
     net = avg.filter(category="team_season_rates_all", metric="net_rtg")
     assert net["mean"].item() == pytest.approx(nba_2026.filter(split="all")["net_rtg"].mean())
 
 
 def test_wnba_2025_parity(monkeypatch: pytest.MonkeyPatch) -> None:
+    adapter = importlib.import_module("sportsdataverse.nba.nba_team_season_rates")
     from sportsdataverse.wnba import wnba_loaders
     from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_season_rates
+
+    seen: list[object] = []
+    real = adapter.team_season_rates
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(kwargs["level"])
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(adapter, "team_season_rates", spy)
 
     monkeypatch.setattr(
         wnba_loaders, "load_wnba_stats_possessions", _fixture_loader("wnba_possessions_2025.parquet", [2025])
@@ -224,7 +282,13 @@ def test_wnba_2025_parity(monkeypatch: pytest.MonkeyPatch) -> None:
         wnba_loaders, "load_wnba_stats_schedules", _fixture_loader("wnba_schedule_2025.parquet", [2025])
     )
     rates = wnba_team_season_rates(2025)
+    assert seen == ["wnba"]  # the WNBA level: a stricter (NBA) gate would pass the null checks below
     assert rates.height == 13 * len(SPLITS)
+    for m, gate in TEAM_MIN_N["wnba"].items():  # the WNBA adapter gates on the WNBA's own samples
+        if f"{m}_rank" in rates.columns:
+            under = rates.filter(pl.col(f"{m}_n") < gate)
+            assert under[f"{m}_rank"].null_count() == under.height, m
+    assert rates.filter(split="clutch")["net_rtg_rank"].null_count() == 13
     j = _join_oracle(rates, _oracle("wnba_team_stats_advanced_2025.parquet"))
     assert (j["games"] == j["gp"]).all()
     assert (j["net_rtg"] - j["net_rating"]).abs().max() <= 1.0

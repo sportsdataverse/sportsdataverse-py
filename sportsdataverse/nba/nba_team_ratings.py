@@ -332,16 +332,17 @@ _RATINGS_SCHEMA = {
 }
 
 #: Ranked rating -> the sample its ``_n`` counts (BB-D2): the per-100 ratings are rates over
-#: possessions, the paces are per game. Pace has no good direction; like football's pass
-#: rate it ranks high-first.
+#: possessions (the box estimate is one count for both ends, so a net rating, over both ends,
+#: counts it twice, as ``net_rtg_n`` counts ``poss + opp_poss`` everywhere else), the paces are
+#: per game. Pace has no good direction; like football's pass rate it ranks high-first.
 _RANKED_SAMPLES = {
-    "adj_off_rtg": "poss",
-    "adj_def_rtg": "poss",
-    "adj_net_rtg": "poss",
-    "adj_pace": "games",
-    "raw_off_rtg": "poss",
-    "raw_def_rtg": "poss",
-    "raw_pace": "games",
+    "adj_off_rtg": pl.col("poss"),
+    "adj_def_rtg": pl.col("poss"),
+    "adj_net_rtg": 2 * pl.col("poss"),
+    "adj_pace": pl.col("games"),
+    "raw_off_rtg": pl.col("poss"),
+    "raw_def_rtg": pl.col("poss"),
+    "raw_pace": pl.col("games"),
 }
 _LOWER_IS_BETTER = ("adj_def_rtg", "raw_def_rtg")
 #: Who is ranked: a team with at least half the season's most games. It keeps the ESPN All-Star
@@ -496,7 +497,7 @@ def nba_team_ratings(
                 lower_is_better=_LOWER_IS_BETTER,
                 qualifier=_RATINGS_QUALIFIER,
             )
-            .pipe(attach_sample_sizes, {m: pl.col(s) for m, s in _RANKED_SAMPLES.items()})
+            .pipe(attach_sample_sizes, _RANKED_SAMPLES)
             .with_columns(
                 pl.col("adj_net_rtg").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank"),
                 (

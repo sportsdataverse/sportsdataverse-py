@@ -101,8 +101,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_playtype_ratings`](reference/additional/analytics-2#wnba_playtype_ratings)
 - [`wnba_referee_assignments`](reference/additional/analytics-2#wnba_referee_assignments)
 - [`wnba_season_sim`](reference/additional/analytics-2#wnba_season_sim)
-- [`wnba_season_standings`](reference/additional/analytics-2#wnba_season_standings)
-- [`wnba_shot_value`](reference/additional/analytics-2#wnba_shot_value)
+- [`wnba_season_standings`](reference/additional/analytics-3#wnba_season_standings)
+- [`wnba_shot_value`](reference/additional/analytics-3#wnba_shot_value)
 - [`wnba_situational_lineup`](reference/additional/analytics-3#wnba_situational_lineup)
 - [`wnba_situational_player`](reference/additional/analytics-3#wnba_situational_player)
 - [`wnba_situational_team`](reference/additional/analytics-3#wnba_situational_team)
@@ -116,8 +116,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_tracking_reb_oe`](reference/additional/analytics-3#wnba_tracking_reb_oe)
 - [`wnba_tracking_rim_protect_value`](reference/additional/analytics-3#wnba_tracking_rim_protect_value)
 - [`wnba_tracking_shot_diet_value`](reference/additional/analytics-3#wnba_tracking_shot_diet_value)
-- [`wnba_tracking_touch_value`](reference/additional/analytics-3#wnba_tracking_touch_value)
-- [`zone_value_map`](reference/additional/analytics-3#zone_value_map)
+- [`wnba_tracking_touch_value`](reference/additional/analytics-4#wnba_tracking_touch_value)
+- [`zone_value_map`](reference/additional/analytics-4#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 

@@ -213,3 +213,18 @@ def test_ridge_is_centred_and_consistent(college: tuple[str, pl.DataFrame]) -> N
 def test_bad_league_raises() -> None:
     with pytest.raises(ValueError, match="league"):
         mod.mbb_team_strength(2025, league="coed")
+
+
+def test_adapters_pass_their_level(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The carried BB-D3 ranks are gated by the adapter's own league (``rate_gates.TEAM_MIN_N``)."""
+    seen: list[str] = []
+    real = mod.team_season_rates
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(str(kwargs["level"]))
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(mod, "team_season_rates", spy)
+    for lg in ("mbb", "wbb"):
+        _strength(lg)
+    assert seen == ["mbb", "wbb"]
