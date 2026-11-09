@@ -997,8 +997,8 @@ Scores `in_game_features` through the committed artifact
 (`sportsdataverse/mbb/models/mbb_in_game_wp.ubj` men's,
 `wbb_in_game_wp.ubj` women's): a shallow monotone-constrained xgboost
 booster fit by `tools/models/mbb_prediction/train_in_game_wp.py` on
-2022, 2023 and 2025, held out on 2026 (2024, the pregame and decile gate
-season, is in neither). It is the NBA / WNBA model's contract: within the
+2022, 2023 and 2025, held out on 2026 (2024, the pregame constants' fit
+season and the confirmation season, is in neither). It is the NBA / WNBA model's contract: within the
 final minute the clock reaches the model only through
 `margin_per_sqrt_sec`, so at a fixed lead the probability moves toward
 the leader as time runs out. This is the raw model output: it never

@@ -85,6 +85,16 @@ HOLDOUT_GAMES = {"mbb": 6275, "wbb": 6011}
 # (+0.0042, [+0.0014, +0.0055]). Brier is significantly better in every MBB block. Any other failing block, or one
 # of these passing, fails the test: change this only with the owner's call.
 KNOWN_FAILURES = {("mbb", "hfa"): {"abs_citl:2"}, ("mbb", "rated"): {"abs_citl:1"}}
+# The accepted size: each exception's paired 95% upper bound may only shrink on a refit (observed 2026-11-06).
+ACCEPTED_UPPER = {("mbb", "hfa", "abs_citl:2"): 0.00109, ("mbb", "rated", "abs_citl:1"): 0.00552}
+# observed 2026-11-06: games with an overtime row and with a final-minute row, the same under both priors; the
+# overtime block is the gate's least powered one
+BLOCK_GAMES = {"mbb": {"ot": 326, "final_minute": 6275}, "wbb": {"ot": 257, "final_minute": 6011}}
+# the replaced booster the gate compares against: git show eb4207476e:sportsdataverse/mbb/models/<lg>_in_game_wp.ubj
+REPLACED_SHA256 = {
+    "mbb": "c0d54f4acad96d4744a553a5446d0d98d30d2ada66922c72e33dd723b414b171",
+    "wbb": "3fc6e8c848fc8e7c6dbdb4cac4a7e6a2425168a87b35c3b7a32e134d50bc218b",
+}
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
@@ -100,6 +110,15 @@ def test_holdout_gate(cards: Any, lg: str, prior: str) -> None:
     # a partial evaluate (fewer games) would widen every interval: pin what was scored
     assert live["game_id"].n_unique() == HOLDOUT_GAMES[lg] == card["holdout_metrics"][prior]["games"]
     assert int(live["n"].sum()) == card["holdout_metrics"][prior]["live"]["n"]
+    partition = pl.read_parquet(ROOT / "tools" / "models" / "mbb_prediction" / f"in_game_wp_{lg}_partition.parquet")
+    assert set(live["game_id"]) == set(partition.filter(split="holdout")["game_id"])  # the committed holdout split
+    shipped = mine.filter(pl.col("model") == "shipped")
+    for block, n_games in BLOCK_GAMES[lg].items():
+        assert shipped.filter(block=block)["game_id"].n_unique() == n_games, block
+    baseline = (
+        ROOT / "tests" / "fixtures" / f"{lg}_prediction" / "baseline_in_game_wp" / f"{lg}_in_game_wp_eb4207476e.ubj"
+    )
+    assert hashlib.sha256(baseline.read_bytes()).hexdigest() == REPLACED_SHA256[lg]  # the fixed bar did not move
     periods = ("1", "2") if lg == "mbb" else ("1", "2", "3", "4")
     blocks = ("live", *periods, "ot", "final_minute")
     assert set(gate) == {f"{m}:{b}" for m in ("brier", "abs_citl") for b in blocks} | {"max_decile_gap:live"}
@@ -110,7 +129,7 @@ def test_holdout_gate(cards: Any, lg: str, prior: str) -> None:
     accepted = card["holdout_gate"]["owner_accepted_exceptions"]
     assert set((accepted or {}).get("blocks", {}).get(prior, [])) == failed  # every failure is an accepted exception
     for key in failed:
-        assert not gate[key]["pass"], key  # recorded as a failure, never flipped to a pass
+        assert gate[key]["ci95"][1] <= ACCEPTED_UPPER[(lg, prior, key)], (key, gate[key])  # never a bigger miss
 
 
 def test_decile_blocks_match_calibration_table(cards: Any) -> None:

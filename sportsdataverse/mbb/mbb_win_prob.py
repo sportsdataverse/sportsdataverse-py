@@ -22,7 +22,7 @@ Two pure cores + a loader wrapper (mirrors ``mbb_team_ratings`` /
   Because ``home_win_prob`` is ``mbb_in_game_win_prob``'s output unchanged,
   scored on the same clock as the game page, the enrichment inherits the
   model's holdout gates (``tests/mbb/test_mbb_in_game_wp_late_game.py``, the
-  rated-prior cells) and decile gates (``test_*_prediction_backtest``).
+  rated-prior cells, and the paired 2026 gate in ``test_mbb_wp_model_cards.py``).
 * :func:`build_mbb_season_wp` -- loads pbp/schedule/team-box for a season and
   runs the two cores. WBB is the ``league="womens"`` shim in ``wbb_win_prob``.
 """

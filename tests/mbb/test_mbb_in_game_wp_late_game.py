@@ -1,8 +1,8 @@
 """Holdout gates for the men's / women's college in-game WP booster (BB-D25).
 
 The refit (``tools/models/mbb_prediction/train_in_game_wp.py``) is the NBA / WNBA refit's contract
-(#1075) on college: train 2022, 2023, 2025; holdout 2026; confirmation season 2024 (the pregame and
-decile gate season, in neither). Each gate is checked on the shipped booster and, where the pre-refit
+(#1075) on college: train 2022, 2023, 2025; holdout 2026; confirmation season 2024 (the pregame
+constants' fit season, in neither). Each gate is checked on the shipped booster and, where the pre-refit
 booster (``baseline_in_game_wp/*_eb4207476e.ubj``, the bundled models at eb4207476e) failed it, shown to
 fail there too, so the test can go red. The holdout is the ``espn_<lg>_pbp`` releases scored through
 ``score_win_prob`` with two priors: the game page's (HFA only, 0.5 at a neutral site: the college
