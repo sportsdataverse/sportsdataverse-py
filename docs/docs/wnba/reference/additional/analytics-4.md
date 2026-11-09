@@ -1,0 +1,77 @@
+---
+title: "WNBA — additional Python functions — Analytics: wnba_tracking–zone_value"
+sidebar_label: "Analytics: wnba_tracking–zone_value"
+sidebar_position: 10
+description: "WNBA — additional Python functions — Analytics: wnba_tracking–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+---
+# WNBA — additional Python functions — Analytics: wnba_tracking–zone_value
+
+### wnba_tracking_touch_value {#wnba_tracking_touch_value}
+
+`wnba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+WNBA touch / possession-time value (`league_id="10"` by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_touch_value`
+for the full recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_touch_value
+df = wnba_tracking_touch_value(2024)
+print(df.sort("pts_per_touch_oe", descending=True).head())
+```
+
+### zone_value_map {#zone_value_map}
+
+`zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Per-player per-zone value map: points and expected points per shot.
+
+Collapses `shot_zone_basic` to a canonical zone via `ZONE_COLLAPSE`
+(the two corner-3 zones merge) and aggregates realized vs expected points
+per shot in each zone.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_zone_basic`, `shot_made_flag`, `actual_points`, `xpoints`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `(player_id, zone)`: `player_id:Int64, zone:Utf8, att:Int64, makes:Int64, pts:Float64, pps:Float64, xpps:Float64, pps_above_expected:Float64` (`pps` = points per shot, `xpps` = expected). Empty input returns the zero-row schema.
+
+No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, zone_value_map
+zmap = zone_value_map(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+zmap.filter(pl.col("zone") == "corner_3").sort("pps_above_expected", descending=True)
+```

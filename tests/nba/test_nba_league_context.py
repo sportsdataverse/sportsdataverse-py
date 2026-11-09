@@ -70,6 +70,8 @@ def test_team_ratings_sample_sizes(monkeypatch) -> None:
     assert out["adj_pace_n"].to_list() == out["games"].to_list()
     assert out["raw_pace_n"].to_list() == out["games"].to_list()
     assert (out["adj_off_rtg_n"] == out["adj_def_rtg_n"]).all()
+    # a net rating spans both ends: twice the one-count possession estimate (BB-D2 poss + opp_poss)
+    assert ((out["adj_net_rtg_n"] - 2 * out["adj_off_rtg_n"]).abs() <= 1).all()
     # ~96-100 possessions a game for the 30 ranked 2023-24 teams (All-Star games run faster)
     ranked = out.filter(pl.col("adj_off_rtg_rank").is_not_null())
     per_game = (ranked["adj_off_rtg_n"] / ranked["games"]).to_list()
@@ -167,3 +169,26 @@ def test_league_averages_drop_a_null_season_row() -> None:
     avg = league_averages(oracle, ["net_rating"], level="nba", entity="team", category="t")
     assert avg["season"].to_list() == [2024]
     assert avg["n"][0] == oracle.filter(pl.col("season").is_not_null())["net_rating"].is_finite().sum()
+
+
+def test_min_n_gates_each_metric_on_its_own_sample(monkeypatch) -> None:
+    """A metric is ranked only where its ``<m>_n`` reaches its gate, and the cohort shrinks to match."""
+    out = _ratings(monkeypatch).select(
+        "season", "team_id", "games", "adj_off_rtg", "adj_off_rtg_n", "adj_pace", "adj_pace_n"
+    )
+    full = out.filter(pl.col("games") >= 41)  # the 30 real teams; the two All-Star teams played once
+    gate = float(full["adj_off_rtg_n"].median())  # an observed sample: half the teams sit under it
+    ranked = attach_ranks(full, ["adj_off_rtg", "adj_pace"], min_cohort=MIN_COHORT_TEAMS, min_n={"adj_off_rtg": gate})
+    under = ranked.filter(pl.col("adj_off_rtg_n") < gate)
+    assert under.height > 0 and under["adj_off_rtg_rank"].null_count() == under.height
+    kept = ranked.filter(pl.col("adj_off_rtg_n") >= gate)
+    assert kept["adj_off_rtg_rank"].null_count() == 0
+    assert sorted(kept["adj_off_rtg_rank"].to_list()) == pytest.approx(list(range(1, kept.height + 1)))
+    assert kept["adj_off_rtg_pct"].max() == pytest.approx(100 * kept.height / (kept.height + 1))
+    assert ranked["adj_pace_rank"].null_count() == 0  # an ungated metric keeps every team
+    avg = league_averages(full, ["adj_off_rtg"], level="nba", entity="team", category="t", min_n={"adj_off_rtg": gate})
+    assert avg["n"].item() == kept.height
+    with pytest.raises(ValueError, match="min_n"):
+        attach_ranks(full, ["adj_pace"], min_cohort=MIN_COHORT_TEAMS, min_n={"adj_off_rtg": gate})
+    with pytest.raises(KeyError, match="sample sizes"):
+        attach_ranks(full.drop("adj_off_rtg_n"), ["adj_off_rtg"], min_cohort=MIN_COHORT_TEAMS, min_n={"adj_off_rtg": 1})

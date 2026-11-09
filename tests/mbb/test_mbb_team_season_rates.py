@@ -15,6 +15,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse._common.rate_gates import TEAM_MIN_N
 from sportsdataverse._common.team_season_rates import SPLITS, TEAM_SEASON_RATES_SCHEMA
 
 RATES = Path(__file__).resolve().parents[1] / "fixtures" / "bb_team_season_rates"
@@ -135,3 +136,26 @@ def test_for_and_against_balance(college: tuple[str, pl.DataFrame]) -> None:
 def test_bad_league_raises() -> None:
     with pytest.raises(ValueError, match="league"):
         mod.mbb_team_season_rates(2025, league="coed")
+
+
+def test_sample_gates_and_level_wiring(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Each adapter passes its own level, and a rate under that level's gate gets no rank."""
+    seen: list[str] = []
+    real = mod.team_season_rates
+
+    def spy(*args: object, **kwargs: object) -> pl.DataFrame:
+        seen.append(str(kwargs["level"]))
+        return real(*args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(mod, "team_season_rates", spy)
+    rated = [c.removesuffix("_rank") for c in TEAM_SEASON_RATES_SCHEMA if c.endswith("_rank")]
+    for lg in ("mbb", "wbb"):
+        rates = _rates(lg)
+        for m in rated:
+            under = rates.filter(pl.col(f"{m}_n") < TEAM_MIN_N[lg][m])
+            assert under[f"{m}_rank"].null_count() == under.height, (lg, m)
+        # the Big Ten's clutch possessions (dozens a team) clear no rating gate
+        clutch = rates.filter(split="clutch")
+        assert clutch["off_rtg_rank"].null_count() == clutch.height
+        assert rates.filter(split="all")["off_rtg_rank"].is_not_null().sum() == 18
+    assert seen == ["mbb", "wbb"]
