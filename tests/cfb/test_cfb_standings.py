@@ -292,6 +292,18 @@ class TestCommonOpponentDescent:
         # seeded first and Georgia second (Alabama hosted the title game).
         assert self._top2("SEC") == ("Alabama", "Georgia")
 
+    def test_2026_big12_descent_skips_opponents_not_all_tied_teams_played(self) -> None:
+        # Real 2026 Big 12 games through week 10 (cfb_2026_big12_partial/README.md):
+        # under the loose reading an opponent tier not all tied teams played seeds
+        # TCU first of Cincinnati / Iowa State / TCU / West Virginia and Kansas
+        # first of Colorado / Kansas / Kansas State; common-only leaves both ties
+        # level through the descent and opponents' conference win % orders them.
+        fixture = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_2026_big12_partial"
+        st = cfb_standings(pl.read_csv(fixture / "games.csv"), pl.read_csv(fixture / "teams.csv"))
+        ranks = dict(zip(st["team"].to_list(), st["conf_rank"].to_list()))
+        assert [ranks[t] for t in ("Iowa State", "West Virginia", "Cincinnati", "TCU")] == [10, 11, 12, 13]
+        assert [ranks[t] for t in ("Colorado", "Kansas State", "Kansas")] == [14, 15, 16]
+
 
 class TestPlayoffSeeds:
     @staticmethod

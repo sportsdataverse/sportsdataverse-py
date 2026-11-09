@@ -1,0 +1,49 @@
+season,week,game_type,home_team,away_team,home_points,away_points,result,neutral
+2026,2,REG,BYU,Arizona,28,17,11,0
+2026,3,REG,Kansas,Arizona State,17,24,-7,1
+2026,3,REG,Texas Tech,Houston,28,26,2,0
+2026,4,REG,Baylor,Colorado,23,13,10,0
+2026,4,REG,Cincinnati,Kansas State,31,26,5,0
+2026,4,REG,Iowa State,Utah,17,31,-14,0
+2026,4,REG,UCF,TCU,21,13,8,0
+2026,4,REG,West Virginia,Oklahoma State,24,41,-17,0
+2026,5,REG,Arizona,Cincinnati,34,7,27,0
+2026,5,REG,Arizona State,Baylor,19,55,-36,0
+2026,5,REG,Colorado,Texas Tech,7,29,-22,0
+2026,5,REG,Houston,UCF,27,17,10,0
+2026,5,REG,Iowa State,West Virginia,45,42,3,0
+2026,5,REG,TCU,BYU,10,17,-7,0
+2026,6,REG,BYU,Iowa State,24,10,14,0
+2026,6,REG,Kansas State,Houston,16,35,-19,0
+2026,6,REG,Oklahoma State,UCF,42,28,14,0
+2026,6,REG,Utah,Kansas,41,24,17,0
+2026,6,REG,West Virginia,Arizona,31,52,-21,0
+2026,7,REG,Baylor,TCU,6,17,-11,0
+2026,7,REG,Colorado,Utah,24,27,-3,0
+2026,7,REG,Houston,Oklahoma State,35,32,3,0
+2026,7,REG,Kansas State,Kansas,35,24,11,0
+2026,7,REG,Texas Tech,Arizona State,53,25,28,0
+2026,7,REG,West Virginia,Cincinnati,45,42,3,0
+2026,8,REG,Arizona,Iowa State,39,3,36,0
+2026,8,REG,Arizona State,Kansas State,28,17,11,0
+2026,8,REG,Cincinnati,Texas Tech,37,24,13,0
+2026,8,REG,Kansas,Baylor,25,24,1,0
+2026,8,REG,Oklahoma State,Colorado,57,24,33,0
+2026,8,REG,TCU,West Virginia,20,24,-4,0
+2026,8,REG,UCF,BYU,39,31,8,0
+2026,8,REG,Utah,Houston,21,13,8,0
+2026,9,REG,BYU,Arizona State,27,20,7,0
+2026,9,REG,Cincinnati,Utah,25,49,-24,0
+2026,9,REG,Colorado,Kansas State,27,24,3,0
+2026,9,REG,Iowa State,Oklahoma State,51,49,2,0
+2026,9,REG,TCU,Kansas,22,16,6,0
+2026,9,REG,Texas Tech,Arizona,34,26,8,0
+2026,9,REG,UCF,Baylor,9,41,-32,0
+2026,10,REG,Arizona,TCU,29,28,1,0
+2026,10,REG,Arizona State,Colorado,20,10,10,0
+2026,10,REG,Baylor,Iowa State,42,31,11,0
+2026,10,REG,Houston,Cincinnati,31,24,7,0
+2026,10,REG,Kansas,UCF,32,33,-1,0
+2026,10,REG,Kansas State,Oklahoma State,28,66,-38,0
+2026,10,REG,Texas Tech,West Virginia,53,48,5,0
+2026,10,REG,Utah,BYU,28,20,8,0
