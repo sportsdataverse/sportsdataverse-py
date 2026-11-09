@@ -152,13 +152,20 @@ def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     assert window.height > 0
     assert window["possession_start_type"].is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"]).all()
     assert (window["number_in_period"] > 1).all()
-    assert ((window["_ball_clock"] - window["seconds_remaining"]) <= BOOSTER_WINDOW).all()
+    open_for = window["_ball_clock"] - window["seconds_remaining"]
+    assert (open_for <= BOOSTER_WINDOW).all()
+    assert (open_for > TRANSITION_SECONDS).any()  # open past the published 8 s, to the boosters' 10
     shut = before.filter(
         pl.col("possession_start_type").is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"])
         & (pl.col("number_in_period") > 1)
         & ((pl.col("_ball_clock") - pl.col("seconds_remaining")) > BOOSTER_WINDOW)
     )
     assert shut.height > 0 and (shut["transition"] == 0).all()  # the window closes after 10 s
+    # state 2 is a strict superset of the published (8 s) flag
+    published = add_possession_flags(poss, pbp).filter(pl.col("is_transition")).select(KEY)
+    state2 = s.filter(pl.col("transition") == 2).select(KEY).unique()
+    assert published.join(state2, on=KEY, how="anti").is_empty()
+    assert state2.join(published, on=KEY, how="anti").height > 0
 
 
 def test_features_do_not_see_later_events() -> None:

@@ -14,8 +14,9 @@ possession leaks in):
   time on its own basket (see :mod:`sportsdataverse.nba.nba_possession_flags`).
 * ``transition`` -- 0 half court, 1 the transition window is open (a live-ball start that is not
   its period's first, no shot and no dead ball yet, within :data:`EPV_TRANSITION_SECONDS` of the
-  change of possession), 2 a transition possession whose first shot has been taken (the
-  possession's ``is_transition`` flag, known once that shot happens).
+  change of possession), 2 a transition possession whose first shot has been taken (BB-D7's
+  ``is_transition`` rule at :data:`EPV_TRANSITION_SECONDS`, known once that shot happens). The
+  boosters were fitted at 10 s, so this is a superset of the published 8-second ``is_transition``.
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
   substitutions, replays and the dead-ball rebound between two free throws carry the previous one.
 * ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1); a technical

@@ -251,9 +251,11 @@ and why the triggering possession can qualify on its own basket.
 
 ```python
 from sportsdataverse.nba import load_nba_stats_pbp, load_nba_stats_possessions
-from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+from sportsdataverse.nba.nba_possession_flags import POSSESSION_FLAGS_SCHEMA, add_possession_flags
 
-poss = add_possession_flags(load_nba_stats_possessions(2023), load_nba_stats_pbp(2023))
+# a release that already carries the flags: drop them to re-flag
+raw = load_nba_stats_possessions(2023).drop(*POSSESSION_FLAGS_SCHEMA, strict=False)
+poss = add_possession_flags(raw, load_nba_stats_pbp(2023))
 print(poss.group_by("is_transition").len())
 ```
 

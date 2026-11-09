@@ -12,8 +12,8 @@ every existing column, value, row and row order is kept.
 within :data:`TRANSITION_SECONDS` (8). hoop-math and bigballR use 10 seconds for college
 transition (bigballR also counts a steal or a drawn foul as the first play; this counts
 field-goal attempts only); the pros' window is 8 because, of 6, 8 and 10 seconds, it lands
-closest to the level of Synergy's ``Transition`` play type and orders the teams better than 10
-in every season Synergy covers (see :data:`TRANSITION_SECONDS`). The WNBA, which Synergy does
+closest to the level of Synergy's ``Transition`` play type and correlates with it better than 10
+(Pearson) in every season Synergy covers (see :data:`TRANSITION_SECONDS`). The WNBA, which Synergy does
 not cover here, uses the same 8 seconds. The EPV boosters' ``transition`` state keeps the
 10 seconds they were fitted on (:data:`~sportsdataverse.nba.nba_epv.EPV_TRANSITION_SECONDS`).
 
@@ -71,9 +71,9 @@ _HALF_GAME_FIRST_PERIOD_SECONDS: Final[float] = 900.0
 #: The transition window: the first shot comes within 8 seconds of the change of possession.
 #: Chosen on a 6 / 8 / 10 grid against Synergy's ``Transition`` play type (regular season,
 #: 2015-16 to 2025-26; ``tools/models/nba_transition_window.py``, its output beside it in
-#: ``nba_transition_window.csv``) as the window closest to Synergy's level: 8 s flags 1.03 of
-#: Synergy's possessions on average, 6 s 0.68 and 10 s 1.40 (college's hoop-math / bigballR
-#: window). 8 s also beats 10 s on Pearson over the 30 teams in every season (mean 0.884 against
+#: ``nba_transition_window.csv``) as the window closest to Synergy's level: in every season 8 s
+#: flags 0.96-1.22 of Synergy's league share of possessions, 6 s 0.57-0.83 and 10 s 1.34-1.62
+#: (college's hoop-math / bigballR window). 8 s also beats 10 s on Pearson over the 30 teams in every season (mean 0.884 against
 #: 0.825) and on Spearman in all but 2020-21; 6 s orders the teams slightly better (0.897) but
 #: misses the level. On the team-level 2023-24 capture: 8 s gives Pearson 0.892 / Spearman 0.860
 #: and 0.97 of Synergy's possessions a game, 10 s 0.844 / 0.788 and 1.29. The other seasons use
@@ -163,9 +163,11 @@ def add_possession_flags(
         Flag one season::
 
             from sportsdataverse.nba import load_nba_stats_pbp, load_nba_stats_possessions
-            from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+            from sportsdataverse.nba.nba_possession_flags import POSSESSION_FLAGS_SCHEMA, add_possession_flags
 
-            poss = add_possession_flags(load_nba_stats_possessions(2023), load_nba_stats_pbp(2023))
+            # a release that already carries the flags: drop them to re-flag
+            raw = load_nba_stats_possessions(2023).drop(*POSSESSION_FLAGS_SCHEMA, strict=False)
+            poss = add_possession_flags(raw, load_nba_stats_pbp(2023))
             print(poss.group_by("is_transition").len())
 
         See Also:
