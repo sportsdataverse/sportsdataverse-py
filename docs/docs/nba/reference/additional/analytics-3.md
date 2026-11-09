@@ -130,7 +130,7 @@ One row per game: `league`, `season`, `game_id` (the stats.nba.com id, Utf8), `g
 | `league` | String | nba or wnba. |
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
 | `game_id` | String | stats.nba.com game id (Utf8). |
-| `game_date` | String | Game date (US Eastern), as in the stats schedule release. |
+| `game_date` | Date | Game date (US Eastern), as in the stats schedule release. |
 | `season_type` | String | Schedule season type: regular-season, or nba-cup for an NBA Cup final (which does not count in the standings). |
 | `home_team` | String | Designated home team (stats.nba.com abbreviation). |
 | `away_team` | String | Away team (stats.nba.com abbreviation). |

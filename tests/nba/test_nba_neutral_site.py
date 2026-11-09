@@ -22,6 +22,8 @@ ROOT = Path(__file__).resolve().parents[1] / "fixtures"
 RATES, PRO = ROOT / "bb_team_season_rates", ROOT / "bb_pro_season"
 tsr = importlib.import_module("sportsdataverse.nba.nba_team_season_rates")
 sim_mod = importlib.import_module("sportsdataverse.nba.nba_season_sim")
+#: 2025-26's neutral regular-season games: Mexico City, the two Las Vegas semifinals, Berlin, London.
+REGULAR_2026 = ["0022500147", "0022500578", "0022500602", "0022501229", "0022501230"]
 
 
 def test_the_list_is_well_formed():
@@ -71,7 +73,7 @@ def test_possession_rows_drop_the_home_term_for_neutral_games():
     rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), sched)
     listed = set(nba_neutral_site_games([2026])["game_id"])
     in_rows = set(rows.filter(pl.col("neutral_site") == True)["game_id"])  # noqa: E712
-    assert in_rows and in_rows <= listed  # the Cup final is not regular season
+    assert in_rows == listed - {"0062500001"}  # exactly the listed games; the Cup final is not regular season
     from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings
 
     fit = possession_ridge_ratings(rows, lam=RIDGE_LAMBDA["00"])["hfa"][0]
@@ -94,7 +96,8 @@ def test_the_sim_plays_neutral_games_without_the_home_term():
     zero = np.zeros((len(teams), len(teams)), dtype=np.int16)
     played = (zero, np.zeros(len(teams)), np.zeros((len(teams), len(teams))))
     neutral = games["neutral_site"].to_numpy()
-    assert neutral.sum() == 5  # Mexico City, Berlin, London and the two Las Vegas semifinals
+    # exactly Mexico City, Berlin, London and the two Las Vegas semifinals
+    assert sorted(games.filter(pl.col("neutral_site"))["game_id"]) == REGULAR_2026
 
     def margins(flag: np.ndarray | bool) -> np.ndarray:
         rng = np.random.default_rng(0)
@@ -122,7 +125,8 @@ def test_the_sim_hands_the_flag_to_the_simulator(monkeypatch: pytest.MonkeyPatch
 
     monkeypatch.setattr(sim_mod, "_simulate_games", spy)
     sim_mod.simulate_pro_season(games, sim_mod.as_of_game_model(rows), n_sims=8, as_of_date=dt.date(2025, 10, 1))
-    assert len(seen) == 1 and seen[0].sum() == 5  # Mexico City, Berlin, London, the two Las Vegas semifinals
+    future = games.filter(pl.col("home_pts").is_null() | pl.col("away_pts").is_null())
+    assert len(seen) == 1 and sorted(future.filter(pl.Series(seen[0]))["game_id"]) == REGULAR_2026
 
 
 def test_game_flow_gives_the_cup_semifinal_the_neutral_prior():

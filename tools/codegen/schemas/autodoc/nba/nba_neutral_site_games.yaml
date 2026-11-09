@@ -11,7 +11,7 @@ columns:
   type: character
   description: ''
 - name: game_date
-  type: character
+  type: date
   description: ''
 - name: season_type
   type: character

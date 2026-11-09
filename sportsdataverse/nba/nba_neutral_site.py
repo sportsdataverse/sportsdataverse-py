@@ -116,6 +116,7 @@ def nba_neutral_site_games(
             nba_neutral_site_games(league_id="10")
 
     See Also:
+        * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
