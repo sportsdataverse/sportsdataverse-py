@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_coach–nba_lineup"
 sidebar_label: "Analytics: nba_coach–nba_lineup"
-sidebar_position: 14
+sidebar_position: 15
 description: "NBA — additional Python functions — Analytics: nba_coach–nba_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_coach–nba_lineup

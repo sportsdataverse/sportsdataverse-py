@@ -8,9 +8,8 @@ from typing import Any, Dict, Tuple, Union
 import numpy as np
 import pandas as pd
 import polars as pl
+from scipy.linalg import cho_factor, cho_solve
 from scipy.sparse import csr_matrix
-from scipy.sparse import eye as sp_eye
-from scipy.sparse.linalg import factorized
 from sklearn.linear_model import RidgeCV
 
 from sportsdataverse.nba.nba_model_validation import FitResult
@@ -26,23 +25,26 @@ def _fit_prior_ridge(
     n_samples: int = 200,
     seed: int = 0,
 ) -> FitResult:
-    """Residualized ridge toward ``prior_mean`` + RTO Gaussian posterior.
+    """Residualized ridge toward ``prior_mean`` with an unpenalized intercept + RTO Gaussian posterior.
 
-    Residualizes the response ``y' = y - X @ prior_mean``, fits a
-    :class:`~sklearn.linear_model.RidgeCV` (no intercept) over ``alphas`` to
-    obtain ``δ̂`` and the selected regularisation strength ``λ``, then derives
-    the point estimate ``β̂ = prior_mean + δ̂``.
+    Residualizes the response ``y' = y - X @ prior_mean``, picks the regularisation strength
+    ``λ`` with an intercept-fitted :class:`~sklearn.linear_model.RidgeCV` over ``alphas``, and
+    solves the intercept-fitted ridge exactly for ``δ̂`` (the same centred-Gram solve as
+    :func:`~sportsdataverse.nba.nba_rapm.ridge_rapm_coef`). The point estimate is
+    ``β̂ = prior_mean + δ̂``. The intercept carries the league's points per possession; without it
+    the penalty splits that ~1.1 points between every offensive and defensive coefficient (the
+    o/d ratings then sat near +11 / -11 per 100, and a thinly-used player kept less of the offset).
 
     The randomize-then-optimize (RTO) posterior draws ``S`` samples from the
-    Gaussian posterior whose covariance is ``σ̂²(XᵀX + λI)⁻¹``:
+    Gaussian posterior whose covariance is ``σ̂²(XcᵀXc + λI)⁻¹``, ``Xc`` the column-centred design:
 
     * ``ey ~ N(0, σ̂²·Iₙ)``
     * ``ep ~ N(0, λσ̂²·I₂ₚ)``
-    * Each sample solves ``(XᵀX + λI)δ = Xᵀ(y' + ey) + ep``,
+    * Each sample solves ``(XcᵀXc + λI)δ = Xcᵀ(y' + ey) + ep``,
       then maps back via ``β_s = prior_mean + δ``.
 
-    ``A = XᵀX + λI`` is factorized once via :func:`scipy.sparse.linalg.factorized`
-    and back-solved ``S`` times, keeping the loop cheap.
+    ``A = XcᵀXc + λI`` (dense ``2P x 2P``) is Cholesky-factorized once and back-solved ``S``
+    times, keeping the loop cheap.
 
     Args:
         X: Sparse design ``(n, 2P)`` from :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`.
@@ -54,7 +56,8 @@ def _fit_prior_ridge(
 
     Returns:
         :class:`~sportsdataverse.nba.nba_model_validation.FitResult` with
-        ``coef=β̂``, ``intercept=0.0``, and ``posterior`` of shape ``(S, 2P)``.
+        ``coef=β̂``, the fitted ``intercept`` (points per possession at the prior), and
+        ``posterior`` of shape ``(S, 2P)``.
 
     Example:
         Quick start::
@@ -77,34 +80,37 @@ def _fit_prior_ridge(
     # Residualize: y' = y - X @ prior_mean
     yprime = np.asarray(y, dtype=np.float64) - X @ prior_mean
 
-    # Ridge on residualized problem; select λ via cross-validation
-    ridge = RidgeCV(alphas=alphas, fit_intercept=False).fit(X, yprime)
-    lam = float(ridge.alpha_)
-    delta_hat = np.asarray(ridge.coef_, dtype=np.float64)
+    # λ by cross-validation, with the intercept fitted (unpenalized), as nba_rapm picks it
+    lam = float(RidgeCV(alphas=alphas, fit_intercept=True).fit(X, yprime).alpha_)
+
+    # Intercept-fitted ridge: centre the design through its Gram matrix, A = XcᵀXc + λI
+    mean = np.asarray(X.mean(axis=0), dtype=np.float64).ravel()
+    A = (X.T @ X).toarray() - n * np.outer(mean, mean)
+    A[np.diag_indices_from(A)] += lam
+    chol = cho_factor(A)
+
+    def xct(v: np.ndarray) -> np.ndarray:  # Xcᵀ v without densifying X
+        return np.asarray(X.T @ v, dtype=np.float64).ravel() - n * mean * float(v.mean())
+
+    Xct_yprime = xct(yprime)  # the deterministic part of the RHS
+    delta_hat = cho_solve(chol, Xct_yprime)
+    intercept = float(yprime.mean() - mean @ delta_hat)
     beta_hat = prior_mean + delta_hat
 
-    # Residual variance estimate
-    resid = yprime - X @ delta_hat
-    dof = max(n - two_p, 1)
+    # Residual variance estimate (the intercept is one more fitted parameter)
+    resid = yprime - X @ delta_hat - intercept
+    dof = max(n - two_p - 1, 1)
     sigma2 = float(resid @ resid) / dof
     sigma = float(np.sqrt(sigma2))
-
-    # Factorize A = XᵀX + λI once; back-solve S times
-    A = (X.T @ X + lam * sp_eye(two_p, format="csc")).tocsc()
-    solve = factorized(A)
-
-    # Xᵀy' is the deterministic part of the RHS
-    Xt_yprime = np.asarray(X.T @ yprime, dtype=np.float64).ravel()
 
     rng = np.random.default_rng(seed)
     samples = np.empty((n_samples, two_p), dtype=np.float64)
     for s in range(n_samples):
         ey = rng.normal(0.0, sigma, size=n)
         ep = rng.normal(0.0, np.sqrt(lam) * sigma, size=two_p)
-        rhs = Xt_yprime + np.asarray(X.T @ ey, dtype=np.float64).ravel() + ep
-        samples[s] = prior_mean + solve(rhs)
+        samples[s] = prior_mean + cho_solve(chol, Xct_yprime + xct(ey) + ep)
 
-    return FitResult(coef=beta_hat, intercept=0.0, posterior=samples)
+    return FitResult(coef=beta_hat, intercept=intercept, posterior=samples)
 
 
 @dataclass
@@ -213,7 +219,16 @@ def nba_adj_rapm(
 
     Sign convention (matches :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`):
     ``d_adj_rapm`` is positive for a good defender (lowers opponent points);
-    ``adj_rapm = o_adj_rapm + d_adj_rapm``.
+    ``adj_rapm = o_adj_rapm + d_adj_rapm`` exactly.
+
+    Centring: the ridge fits an unpenalized intercept (the league's points per possession), as
+    :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` does, so ``o_adj_rapm`` and ``d_adj_rapm`` are
+    each relative to an average player: their possession-weighted means sit near 0 (2025-26 NBA
+    +0.32 / +0.06, 2025 WNBA +0.45 / +0.11, against o_rapm's +0.41 / +0.11). Fit without one,
+    as every release fit before #1137 was, the penalty split that level between every offensive and defensive
+    coefficient: o / d read about +12 / -11 (2025-26 NBA +12.03 / -10.84), a thinly-used
+    player kept less of the offset (-8.9 on offense under 200 possessions), and so ``adj_rapm``
+    itself leaned toward heavy-minute players.
 
     Args:
         possessions: A possession+lineup frame produced by the possession engine

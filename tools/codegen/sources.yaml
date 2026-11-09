@@ -844,6 +844,7 @@ categories:
       - sportsdataverse.wbb.wbb_team_ratings
       - sportsdataverse.mbb.mbb_rapm
       - sportsdataverse.nba.nba_adj_rapm
+      - sportsdataverse.nba.nba_player_impact
       - sportsdataverse.nhl.nhl_rapm
       - sportsdataverse.nhl.nhl_xg
       - sportsdataverse.nba.nba_war

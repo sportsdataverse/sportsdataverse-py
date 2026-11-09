@@ -38,7 +38,8 @@ pick, whose scale jumped between seasons, and values fit then are not comparable
 Every component is per 100 possessions, sign-flipped on defense (``d_* = -100 * coef``) so higher
 is better throughout: a positive ``d_tov_rapm`` forces turnovers, a positive ``d_drb_rapm`` keeps
 the opponent off the offensive glass. Shrinkage is toward zero (no box prior), so the split does
-not carry the prior offset of the adjusted RAPM (``o_adj_rapm`` / ``d_adj_rapm``).
+never carried the offset of the adjusted RAPM releases fit before sportsdataverse-py #1137 (``o_adj_rapm`` /
+``d_adj_rapm`` about +11 / -11, fit without an intercept).
 
 Each value carries ``<m>_se``, a standard error clustered by game: the ridge sandwich
 ``(G + aI)^-1 M (G + aI)^-1`` with ``G`` the centred Gram matrix and ``M`` the sum over games of the
