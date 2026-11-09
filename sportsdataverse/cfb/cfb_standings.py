@@ -49,7 +49,11 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   explicit ``season=``) resolve per season, plain ``sim`` ids use the current
   rules — so the ACC's 2026 policy (head-to-head, SportSource Team Success
   Ranking, draw, plus the alternate-game-count candidate pool) applies from
-  2026 while earlier ACC seasons keep the 2024 cascade. Optional ``teams``
+  2026 while earlier ACC seasons keep the 2024 cascade. Likewise the MAC's
+  2025 order (SportSource right after common opponents, then order of finish,
+  then opponents' win pct) and Conference USA's 2025 policy (common opponents,
+  their top-down descent, average computer ranking, opponents' win pct) apply
+  from 2025, with their 2024 procedures before that. Optional ``teams``
   columns ``conf_division`` (division format: each division's best eligible
   team takes a top rank, as in the 2026 Sun Belt) and ``postseason_eligible`` (an
   explicit ``False`` team cannot hold a championship-game berth; its games
@@ -60,7 +64,7 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   played) — the same quantity as the ``sos`` column; the Big 12
   grouped-ties descent rule (compare records vs a tied group of common
   opponents collectively, prior to that group's own tiebreak) applies to ALL
-  registry descent rungs, and the SEC, Big Ten, ACC and Big 12 rungs
+  registry descent rungs, and the SEC, Big Ten, ACC, Big 12, MAC and CUSA rungs
   (``common_only``) descend only over opponents every tied team played, as
   their policies say "common conference opponents played by all other teams
   involved in the tie" (the Sun Belt's "next highest position" rung does not;
@@ -145,7 +149,7 @@ _GENERIC_CASCADE: list[_Rung] = [
     {"kind": "coin_toss", "min_depth": 0},
 ]
 
-# Big Ten / ACC / MAC share one official template (h2h, common opponents,
+# Big Ten / ACC / MAC (2024) share one official template (h2h, common opponents,
 # order-of-finish descent, pooled opponents' conference win pct, SportSource
 # analytics rating, draw).
 _P5_TEMPLATE: list[_Rung] = [
@@ -163,12 +167,17 @@ _P5_TEMPLATE: list[_Rung] = [
 # the leaders' win OR loss count.
 _ACC_2026: list[_Rung] = [{"kind": "h2h"}, {"kind": "analytics_rating"}, {"kind": "coin_toss"}]
 
-# MAC published procedure: head-to-head / defeated-all, record vs common
-# conference opponents, SportSource Analytics Team Rating Score.
-_MAC_OFFICIAL: list[_Rung] = [
+# MAC 2024 (getsomemaction.com/news/2024/9/18/mac-announces-new-football-tiebreaker-policies.aspx;
+# the linked full PDF, now gone, is quoted step for step by ESPN on 2024-11-06):
+# the shared template, with SportSource after order of finish and opponents' win pct.
+# MAC 2025 (getsomemaction.com/sports/2025/11/12/FB_1112255434.aspx) moves the
+# SportSource Analytics Team Rating Score up to follow record vs common opponents.
+_MAC_2025: list[_Rung] = [
     {"kind": "h2h"},
     {"kind": "record_vs_common"},
     {"kind": "analytics_rating"},
+    {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True, "common_only": True},
+    {"kind": "opp_conf_win_pct"},
     {"kind": "coin_toss"},
 ]
 
@@ -183,13 +192,33 @@ _AMERICAN_OFFICIAL: list[_Rung] = [
     {"kind": "coin_toss"},
 ]
 
-# Conference USA: head-to-head, CFP-ranked final-week clause, metric composite,
-# multi-year Academic Progress Rate (``tiebreaker_data["apr"]``), draw.
-_CUSA_OFFICIAL: list[_Rung] = [
+# Conference USA 2024 (the policy PDF as first posted on 2024-09-19, archived
+# 2024-11-11): head-to-head, CFP-ranked final-week clause, metric composite,
+# multi-year Academic Progress Rate (``tiebreaker_data["apr"]``), draw. Its
+# SportSource+KPI-only composite step is folded into the composite you supply.
+_CUSA_2024: list[_Rung] = [
     {"kind": "h2h"},
     {"kind": "cfp_ranked_final_week"},
     {"kind": "analytics_rating"},
     {"kind": "apr"},
+    {"kind": "coin_toss"},
+]
+
+# Conference USA 2025 (the handbook text that replaced the PDF at the same URL,
+# created 2025-08-28): head-to-head, record vs common conference opponents,
+# record vs common opponents from the top of the standings down (a tied group of
+# opponents taken collectively), average computer ranking (supply it as
+# ``tiebreaker_data["analytics_ratings"]``), opponents' combined conference win
+# pct, coin toss. ``ponytail:`` its "unequal number of games against the tied
+# group -> advance" clause is not separate code: with ``common_only`` every tied
+# team played every team in the group, so counts differ only for an opponent met
+# twice in the regular season.
+_CUSA_2025: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "record_vs_common"},
+    {"kind": "record_vs_common_desc", "mode": "order_of_finish", "grouped_ties": True, "common_only": True},
+    {"kind": "analytics_rating"},
+    {"kind": "opp_conf_win_pct"},
     {"kind": "coin_toss"},
 ]
 
@@ -237,8 +266,8 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
     ],
     "Big Ten": [_epoch(_P5_TEMPLATE)],
     "ACC": [_epoch(_P5_TEMPLATE), _epoch(_ACC_2026, 2026, pool="wins_or_losses")],
-    "MAC": [_epoch(_MAC_OFFICIAL)],
-    "Mid-American": [_epoch(_MAC_OFFICIAL)],  # cfbfastR schedule naming for the MAC
+    "MAC": [_epoch(_P5_TEMPLATE), _epoch(_MAC_2025, 2025)],
+    "Mid-American": [_epoch(_P5_TEMPLATE), _epoch(_MAC_2025, 2025)],  # cfbfastR schedule naming for the MAC
     "Big 12": [
         _epoch(
             [
@@ -254,7 +283,7 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
     ],
     "American Athletic": [_epoch(_AMERICAN_OFFICIAL)],
     "American": [_epoch(_AMERICAN_OFFICIAL)],
-    "Conference USA": [_epoch(_CUSA_OFFICIAL)],
+    "Conference USA": [_epoch(_CUSA_2024), _epoch(_CUSA_2025, 2025)],
     "Mountain West": [_epoch(_MW_OFFICIAL)],
     "Sun Belt": [_epoch(_SUNBELT_OFFICIAL)],
 }
@@ -667,7 +696,7 @@ def _apply_record_vs_common_desc(
     opponent (or tied GROUP of opponents, compared collectively — the Big 12
     grouped-ties rule, adopted for all registry descent rungs per ambiguity 2).
 
-    ``common_only`` (the SEC, Big Ten, ACC and Big 12 rungs) descends only over
+    ``common_only`` (the SEC, Big Ten, ACC, Big 12, MAC and CUSA rungs) descends only over
     opponents that EVERY tied team played: the Big Ten and Big 12 policies say
     "common conference opponents played by all other teams involved in the
     tie", and the SEC and ACC steps compare "common" opponents the same way.

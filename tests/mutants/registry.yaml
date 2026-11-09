@@ -11146,3 +11146,49 @@
   note: >-
     The Big 12 rung alone back on the loose reading: a tier not every tied team played seeds TCU (10th, not 13th)
     and Kansas (14th, not 16th) in the real 2026 Big 12 through week 10.
+
+# --- #1145 / #1146: dated MAC and Conference USA epochs --------------------------------------------
+- id: cfb-standings-mac-2025-epoch
+  group: cfb-standings
+  finding: '#1145'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '    "MAC": [_epoch(_P5_TEMPLATE), _epoch(_MAC_2025, 2025)],'
+  mutant: '    "MAC": [_epoch(_P5_TEMPLATE)],'
+  test: tests/cfb/test_cfb_standings.py::TestRegistry2026Parity::test_matches_cfbseedr_standings
+  expected: kill
+  note: >-
+    Without the 2025 epoch every MAC season reads opponents' win pct before SportSource, so the cfbseedR
+    oracle's 2026 MAC case ranks A first instead of B.
+- id: cfb-standings-mac-2025-order-of-finish
+  group: cfb-standings
+  finding: '#1145'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: "    {\"kind\": \"analytics_rating\"},\n    {\"kind\": \"record_vs_common_desc\", \"mode\": \"order_of_finish\", \"grouped_ties\": True, \"common_only\": True},\n"
+  mutant: "    {\"kind\": \"analytics_rating\"},\n"
+  test: tests/cfb/test_cfb_standings.py::TestMacCusaEpochs::test_2023_mac_order_of_finish_under_both_epochs
+  expected: kill
+  note: >-
+    The MAC 2025 cascade without its order-of-finish step: the real 2023 MAC games keyed as 2025 hand
+    Bowling Green 4th on opponents' win pct instead of Northern Illinois on the order of finish.
+- id: cfb-standings-cusa-2025-epoch
+  group: cfb-standings
+  finding: '#1146'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '    "Conference USA": [_epoch(_CUSA_2024), _epoch(_CUSA_2025, 2025)],'
+  mutant: '    "Conference USA": [_epoch(_CUSA_2024)],'
+  test: tests/cfb/test_cfb_standings.py::TestMacCusaEpochs
+  expected: kill
+  note: >-
+    Conference USA back on its 2024 cascade for every season: with no CFP ranks, composite or APR the real
+    2025 and 2026 ties go to a coin toss.
+- id: cfb-standings-cusa-2025-descent
+  group: cfb-standings
+  finding: '#1146'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: "    {\"kind\": \"record_vs_common\"},\n    {\"kind\": \"record_vs_common_desc\", \"mode\": \"order_of_finish\", \"grouped_ties\": True, \"common_only\": True},\n    {\"kind\": \"analytics_rating\"},\n"
+  mutant: "    {\"kind\": \"record_vs_common\"},\n    {\"kind\": \"analytics_rating\"},\n"
+  test: tests/cfb/test_cfb_standings.py::TestMacCusaEpochs::test_2026_cusa_win_pct_then_descent
+  expected: kill
+  note: >-
+    The CUSA 2025 cascade without its common-opponent descent: the real 2026 FIU/Kennesaw State pair left by
+    opponents' win pct goes to the draw instead of Kennesaw State.

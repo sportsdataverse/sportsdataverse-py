@@ -1,0 +1,208 @@
+season,week,game_type,home_team,away_team,home_points,away_points,result,neutral
+2023,4,REG,Bowling Green,Ohio,7,38,-31,0
+2023,4,REG,Toledo,Western Michigan,49,31,18,0
+2023,5,REG,Western Michigan,Ball State,42,24,18,0
+2023,5,REG,Central Michigan,Eastern Michigan,26,23,3,0
+2023,5,REG,Toledo,Northern Illinois,35,33,2,0
+2023,5,REG,Akron,Buffalo,10,13,-3,0
+2023,5,REG,Kent State,Miami (OH),3,23,-20,0
+2023,6,REG,Eastern Michigan,Ball State,24,10,14,0
+2023,6,REG,Buffalo,Central Michigan,37,13,24,0
+2023,6,REG,Miami (OH),Bowling Green,27,0,27,0
+2023,6,REG,Ohio,Kent State,42,17,25,0
+2023,6,REG,Akron,Northern Illinois,14,55,-41,0
+2023,7,REG,Ball State,Toledo,6,13,-7,0
+2023,7,REG,Central Michigan,Akron,17,10,7,0
+2023,7,REG,Buffalo,Bowling Green,14,24,-10,0
+2023,7,REG,Eastern Michigan,Kent State,28,14,14,0
+2023,7,REG,Western Michigan,Miami (OH),21,34,-13,0
+2023,7,REG,Northern Illinois,Ohio,23,13,10,0
+2023,8,REG,Ball State,Central Michigan,24,17,7,0
+2023,8,REG,Northern Illinois,Eastern Michigan,20,13,7,0
+2023,8,REG,Miami (OH),Toledo,17,21,-4,0
+2023,8,REG,Ohio,Western Michigan,20,17,3,0
+2023,8,REG,Bowling Green,Akron,41,14,27,0
+2023,8,REG,Kent State,Buffalo,6,24,-18,0
+2023,9,REG,Eastern Michigan,Western Michigan,21,45,-24,0
+2023,9,REG,Ohio,Miami (OH),16,30,-14,0
+2023,10,REG,Central Michigan,Northern Illinois,37,31,6,0
+2023,10,REG,Toledo,Buffalo,31,13,18,0
+2023,10,REG,Bowling Green,Ball State,24,21,3,0
+2023,10,REG,Akron,Kent State,31,27,4,0
+2023,11,REG,Northern Illinois,Ball State,17,20,-3,0
+2023,11,REG,Western Michigan,Central Michigan,38,28,10,0
+2023,11,REG,Buffalo,Ohio,10,20,-10,0
+2023,11,REG,Toledo,Eastern Michigan,49,23,26,0
+2023,11,REG,Miami (OH),Akron,19,0,19,0
+2023,11,REG,Kent State,Bowling Green,19,49,-30,0
+2023,12,REG,Bowling Green,Toledo,31,32,-1,0
+2023,12,REG,Northern Illinois,Western Michigan,24,0,24,0
+2023,12,REG,Eastern Michigan,Akron,30,27,3,0
+2023,12,REG,Ohio,Central Michigan,34,20,14,0
+2023,12,REG,Miami (OH),Buffalo,23,10,13,0
+2023,12,REG,Ball State,Kent State,34,3,31,0
+2023,13,REG,Buffalo,Eastern Michigan,11,24,-13,0
+2023,13,REG,Western Michigan,Bowling Green,10,34,-24,0
+2023,13,REG,Central Michigan,Toledo,17,32,-15,0
+2023,13,REG,Akron,Ohio,14,25,-11,0
+2023,13,REG,Kent State,Northern Illinois,27,37,-10,0
+2023,13,REG,Ball State,Miami (OH),15,17,-2,0
+2025,1,REG,Western Kentucky,Sam Houston,41,24,17,0
+2025,2,REG,Jacksonville State,Liberty,34,24,10,0
+2025,3,REG,Louisiana Tech,New Mexico State,49,14,35,0
+2025,4,REG,Florida International,Delaware,16,38,-22,0
+2025,5,REG,Kennesaw State,Middle Tennessee,24,16,8,0
+2025,5,REG,UTEP,Louisiana Tech,11,30,-19,0
+2025,5,REG,Missouri State,Western Kentucky,22,27,-5,0
+2025,6,REG,New Mexico State,Sam Houston,37,10,27,0
+2025,6,REG,Delaware,Western Kentucky,24,27,-3,0
+2025,7,REG,UTEP,Liberty,8,19,-11,0
+2025,7,REG,Middle Tennessee,Missouri State,20,22,-2,0
+2025,7,REG,Sam Houston,Jacksonville State,27,29,-2,1
+2025,7,REG,Kennesaw State,Louisiana Tech,35,7,28,0
+2025,8,REG,Western Kentucky,Florida International,6,25,-19,0
+2025,8,REG,Liberty,New Mexico State,30,27,3,0
+2025,8,REG,Jacksonville State,Delaware,38,25,13,0
+2025,8,REG,Sam Houston,UTEP,17,35,-18,1
+2025,9,REG,Florida International,Kennesaw State,26,45,-19,0
+2025,9,REG,Louisiana Tech,Western Kentucky,27,28,-1,0
+2025,9,REG,Delaware,Middle Tennessee,31,28,3,0
+2025,9,REG,New Mexico State,Missouri State,17,24,-7,0
+2025,10,REG,Kennesaw State,UTEP,33,20,13,0
+2025,10,REG,Louisiana Tech,Sam Houston,55,14,41,0
+2025,10,REG,Missouri State,Florida International,28,21,7,0
+2025,10,REG,Middle Tennessee,Jacksonville State,21,24,-3,0
+2025,10,REG,Liberty,Delaware,59,30,29,0
+2025,10,REG,Western Kentucky,New Mexico State,35,16,19,0
+2025,11,REG,Delaware,Louisiana Tech,25,24,1,0
+2025,11,REG,Middle Tennessee,Florida International,30,56,-26,0
+2025,11,REG,UTEP,Jacksonville State,27,30,-3,0
+2025,11,REG,New Mexico State,Kennesaw State,21,24,-3,0
+2025,11,REG,Liberty,Missouri State,17,21,-4,0
+2025,12,REG,Sam Houston,Delaware,26,23,3,1
+2025,12,REG,Florida International,Liberty,34,27,7,0
+2025,12,REG,Jacksonville State,Kennesaw State,35,26,9,0
+2025,12,REG,Western Kentucky,Middle Tennessee,42,26,16,0
+2025,12,REG,Missouri State,UTEP,38,24,14,0
+2025,13,REG,Florida International,Jacksonville State,27,21,6,0
+2025,13,REG,Kennesaw State,Missouri State,41,34,7,0
+2025,13,REG,Louisiana Tech,Liberty,34,28,6,0
+2025,13,REG,Middle Tennessee,Sam Houston,31,17,14,0
+2025,13,REG,UTEP,New Mexico State,31,34,-3,0
+2025,14,REG,Delaware,UTEP,61,31,30,0
+2025,14,REG,Sam Houston,Florida International,16,56,-40,1
+2025,14,REG,Jacksonville State,Western Kentucky,37,34,3,0
+2025,14,REG,Liberty,Kennesaw State,42,48,-6,0
+2025,14,REG,Missouri State,Louisiana Tech,30,42,-12,0
+2025,14,REG,New Mexico State,Middle Tennessee,24,31,-7,0
+2025,3,REG,Kent State,Buffalo,28,31,-3,0
+2025,4,REG,Western Michigan,Toledo,14,13,1,0
+2025,5,REG,Toledo,Akron,45,3,42,0
+2025,5,REG,Ohio,Bowling Green,35,20,15,0
+2025,5,REG,Central Michigan,Eastern Michigan,24,13,11,0
+2025,6,REG,Akron,Central Michigan,28,22,6,0
+2025,6,REG,Ball State,Ohio,20,14,6,0
+2025,6,REG,Buffalo,Eastern Michigan,31,30,1,0
+2025,6,REG,Massachusetts,Western Michigan,3,21,-18,0
+2025,7,REG,Akron,Miami (OH),7,20,-13,0
+2025,7,REG,Western Michigan,Ball State,42,0,42,0
+2025,7,REG,Bowling Green,Toledo,28,23,5,0
+2025,7,REG,Eastern Michigan,Northern Illinois,16,10,6,0
+2025,7,REG,Kent State,Massachusetts,42,6,36,0
+2025,8,REG,Ball State,Akron,42,28,14,0
+2025,8,REG,Bowling Green,Central Michigan,6,27,-21,0
+2025,8,REG,Massachusetts,Buffalo,21,28,-7,0
+2025,8,REG,Miami (OH),Eastern Michigan,44,30,14,0
+2025,8,REG,Toledo,Kent State,45,10,35,0
+2025,8,REG,Ohio,Northern Illinois,48,21,27,0
+2025,9,REG,Buffalo,Akron,16,24,-8,0
+2025,9,REG,Northern Illinois,Ball State,21,7,14,0
+2025,9,REG,Kent State,Bowling Green,24,21,3,0
+2025,9,REG,Central Michigan,Massachusetts,38,13,25,0
+2025,9,REG,Eastern Michigan,Ohio,21,28,-7,0
+2025,10,REG,Bowling Green,Buffalo,3,28,-25,0
+2025,10,REG,Western Michigan,Central Michigan,24,21,3,0
+2025,11,REG,Akron,Massachusetts,44,10,34,0
+2025,11,REG,Ohio,Miami (OH),24,20,4,0
+2025,11,REG,Ball State,Kent State,17,13,4,0
+2025,11,REG,Toledo,Northern Illinois,42,3,39,0
+2025,11,REG,Eastern Michigan,Bowling Green,27,21,6,0
+2025,12,REG,Akron,Kent State,35,42,-7,0
+2025,12,REG,Western Michigan,Ohio,17,13,4,0
+2025,12,REG,Central Michigan,Buffalo,38,19,19,0
+2025,12,REG,Massachusetts,Northern Illinois,3,45,-42,0
+2025,12,REG,Miami (OH),Toledo,3,24,-21,0
+2025,12,REG,Ball State,Eastern Michigan,9,24,-15,0
+2025,13,REG,Bowling Green,Akron,16,19,-3,0
+2025,13,REG,Ohio,Massachusetts,42,14,28,0
+2025,13,REG,Northern Illinois,Western Michigan,19,35,-16,0
+2025,13,REG,Buffalo,Miami (OH),20,37,-17,0
+2025,13,REG,Kent State,Central Michigan,16,28,-12,0
+2025,13,REG,Toledo,Ball State,38,9,29,0
+2025,14,REG,Massachusetts,Bowling Green,14,45,-31,0
+2025,14,REG,Eastern Michigan,Western Michigan,21,31,-10,0
+2025,14,REG,Buffalo,Ohio,26,31,-5,0
+2025,14,REG,Northern Illinois,Kent State,31,35,-4,0
+2025,14,REG,Central Michigan,Toledo,3,21,-18,0
+2025,6,REG,Northern Illinois,Miami (OH),14,25,-11,0
+2025,9,REG,Miami (OH),Western Michigan,26,17,9,0
+2025,14,REG,Miami (OH),Ball State,45,24,21,0
+2026,1,REG,Eastern Michigan,Sacramento State,28,17,11,0
+2026,4,REG,Kent State,Ball State,26,13,13,0
+2026,4,REG,Sacramento State,Massachusetts,6,35,-29,0
+2026,5,REG,Central Michigan,Akron,41,17,24,0
+2026,5,REG,Ball State,Toledo,24,39,-15,0
+2026,5,REG,Buffalo,Western Michigan,17,20,-3,0
+2026,5,REG,Massachusetts,Eastern Michigan,14,38,-24,0
+2026,5,REG,Kent State,Ohio,10,13,-3,0
+2026,6,REG,Akron,Eastern Michigan,23,25,-2,0
+2026,6,REG,Bowling Green,Sacramento State,38,10,28,0
+2026,6,REG,Toledo,Buffalo,8,23,-15,0
+2026,6,REG,Ohio,Central Michigan,31,14,17,0
+2026,6,REG,Western Michigan,Kent State,38,7,31,0
+2026,6,REG,Massachusetts,Miami (OH),19,20,-1,0
+2026,7,REG,Bowling Green,Ball State,31,32,-1,0
+2026,7,REG,Buffalo,Massachusetts,25,18,7,0
+2026,7,REG,Central Michigan,Western Michigan,14,21,-7,0
+2026,7,REG,Eastern Michigan,Toledo,14,34,-20,0
+2026,7,REG,Sacramento State,Ohio,7,48,-41,0
+2026,8,REG,Kent State,Akron,35,20,15,0
+2026,8,REG,Ball State,Sacramento State,34,17,17,0
+2026,8,REG,Buffalo,Bowling Green,31,24,7,0
+2026,8,REG,Ohio,Eastern Michigan,24,20,4,0
+2026,8,REG,Toledo,Western Michigan,45,38,7,0
+2026,9,REG,Sacramento State,Kent State,31,10,21,0
+2026,9,REG,Western Michigan,Bowling Green,23,10,13,0
+2026,10,REG,Akron,Ohio,20,28,-8,0
+2026,10,REG,Miami (OH),Buffalo,31,34,-3,0
+2026,10,REG,Massachusetts,Ball State,31,30,1,0
+2026,10,REG,Eastern Michigan,Central Michigan,7,35,-28,1
+2026,10,REG,Sacramento State,Toledo,17,20,-3,0
+2026,8,REG,Central Michigan,Miami (OH),27,28,-1,0
+2026,5,REG,Miami (OH),Bowling Green,20,24,-4,0
+2026,7,REG,Miami (OH),Akron,34,14,20,0
+2026,6,REG,Liberty,Sam Houston,35,3,32,0
+2026,10,REG,New Mexico State,Liberty,14,30,-16,0
+2026,4,REG,Jacksonville State,Middle Tennessee,23,13,10,0
+2026,5,REG,New Mexico State,Western Kentucky,34,13,21,0
+2026,5,REG,Delaware,Liberty,14,30,-16,0
+2026,6,REG,Kennesaw State,Jacksonville State,26,27,-1,0
+2026,6,REG,Western Kentucky,Missouri State,34,13,21,0
+2026,7,REG,Jacksonville State,Florida International,27,24,3,0
+2026,7,REG,Missouri State,Kennesaw State,24,21,3,0
+2026,8,REG,Florida International,Middle Tennessee,23,26,-3,0
+2026,8,REG,Kennesaw State,Liberty,6,34,-28,0
+2026,9,REG,New Mexico State,Jacksonville State,0,24,-24,0
+2026,9,REG,Middle Tennessee,Kennesaw State,28,44,-16,0
+2026,9,REG,Liberty,Florida International,49,10,39,0
+2026,6,REG,Florida International,New Mexico State,22,3,19,0
+2026,7,REG,Middle Tennessee,Delaware,33,30,3,0
+2026,7,REG,Sam Houston,Western Kentucky,3,16,-13,0
+2026,8,REG,Delaware,Missouri State,61,38,23,0
+2026,8,REG,Sam Houston,New Mexico State,24,30,-6,0
+2026,9,REG,Western Kentucky,Delaware,21,35,-14,0
+2026,9,REG,Missouri State,Sam Houston,24,3,21,0
+2026,10,REG,Kennesaw State,Delaware,42,40,2,0
+2026,10,REG,Florida International,Missouri State,23,20,3,0
+2026,10,REG,Jacksonville State,Sam Houston,47,14,33,0
+2026,10,REG,Middle Tennessee,Western Kentucky,51,42,9,0

@@ -305,6 +305,68 @@ class TestCommonOpponentDescent:
         assert [ranks[t] for t in ("Colorado", "Kansas State", "Kansas")] == [14, 15, 16]
 
 
+MAC_CUSA_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_mac_cusa_ties"
+
+
+class TestMacCusaEpochs:
+    """Real 2025 and 2026 MAC / Conference USA games (cfb_mac_cusa_ties/README.md)
+    under the dated epochs of #1145 / #1146. No ratings are supplied, so every
+    tie below is settled by a games-based rung; each assertion holds for several
+    RNG seeds because the replaced cascades left these ties to a coin toss."""
+
+    @staticmethod
+    def _ranks(season: int, seed: int, as_season: int | None = None) -> tuple[dict[str, int], list[str]]:
+        games = pl.read_csv(MAC_CUSA_DIR / "games.csv").filter(pl.col("season") == season)
+        teams = pl.read_csv(MAC_CUSA_DIR / "teams.csv").filter(pl.col("season") == season).drop("season")
+        if as_season is not None:
+            games = games.with_columns(pl.lit(as_season).alias("season"))
+        st = cfb_standings(games, teams, rng=np.random.default_rng(seed))
+        return dict(zip(st["team"].to_list(), st["conf_rank"].to_list())), st.tiebreak_notes
+
+    @pytest.mark.parametrize("seed", range(5))
+    def test_2025_mac_order_of_finish_puts_toledo_over_ohio(self, seed: int) -> None:
+        # Ohio and Toledo (6-2, no meeting) stay level on common opponents;
+        # the 2025 order-of-finish step does
+        ranks, _ = self._ranks(2025, seed)
+        assert (ranks["Toledo"], ranks["Ohio"]) == (3, 4)
+
+    @pytest.mark.parametrize("as_season", [None, 2025])
+    def test_2023_mac_order_of_finish_under_both_epochs(self, as_season: int | None) -> None:
+        # Northern Illinois and Bowling Green: the order-of-finish step puts NIU
+        # ahead, where opponents' win pct would pick Bowling Green. Without
+        # ratings the 2024 cascade (2023 games) and the 2025 order agree.
+        for seed in range(3):
+            ranks, _ = self._ranks(2023, seed, as_season=as_season)
+            assert (ranks["Northern Illinois"], ranks["Bowling Green"]) == (4, 5)
+
+    @pytest.mark.parametrize("seed", range(5))
+    def test_2026_mac_opponents_win_pct_seeds_buffalo(self, seed: int) -> None:
+        ranks, _ = self._ranks(2026, seed)
+        assert [ranks[t] for t in ("Buffalo", "Toledo", "Western Michigan")] == [2, 3, 4]
+        assert [ranks[t] for t in ("Central Michigan", "Massachusetts", "Kent State", "Ball State")] == [7, 9, 10, 11]
+
+    @pytest.mark.parametrize("seed", range(5))
+    def test_2025_cusa_common_opponents_order_fiu_louisiana_tech_missouri_state(self, seed: int) -> None:
+        ranks, _ = self._ranks(2025, seed)
+        assert [ranks[t] for t in ("Florida International", "Louisiana Tech", "Missouri State")] == [4, 5, 6]
+
+    @pytest.mark.parametrize("seed", range(5))
+    def test_2026_cusa_win_pct_then_descent(self, seed: int) -> None:
+        # six teams level on record: opponents' conference win pct leaves FIU and Kennesaw
+        # State, and the common-opponent descent puts Kennesaw State first
+        ranks, _ = self._ranks(2026, seed)
+        assert [ranks[t] for t in ("Kennesaw State", "Florida International")] == [4, 5]
+        assert [ranks[t] for t in ("Western Kentucky", "Missouri State")] == [8, 9]
+
+    def test_cusa_epoch_switch_by_season(self) -> None:
+        # the same 2025 games keyed as 2024 take the 2024 cascade (CFP clause, APR)
+        _, notes_2025 = self._ranks(2025, 0)
+        _, notes_2024 = self._ranks(2025, 0, as_season=2024)
+        assert not any(n.startswith("Conference USA: apr skipped") for n in notes_2025)
+        assert any(n.startswith("Conference USA: apr skipped") for n in notes_2024)
+        assert any(n.startswith("Conference USA: cfp_ranked_final_week skipped") for n in notes_2024)
+
+
 class TestPlayoffSeeds:
     @staticmethod
     def _standings_14() -> pl.DataFrame:

@@ -25,6 +25,9 @@ matches.
 
 - Captured: 2026-11-02, R 4.5.3, cfbseedR 0.2.0 (`pkgload::load_all()` of the
   sibling `sdv-dev/cfbseedR` checkout at `28322e3`).
+- Re-captured: 2026-11-09, R 4.5.3, cfbseedR 0.3.0 with the dated MAC and
+  Conference USA epochs (sportsdataverse/cfbseedR#20): `cusa_apr` moved to
+  season 2024 and `mac_2024` added; every other row is unchanged.
 - Command, from the sdv-py repo root:
 
 ```sh
@@ -47,9 +50,9 @@ it that way (the Python and R RNGs differ).
 | `sunbelt_div_pct` | Sun Belt | East's three 1-1 teams (E2-E3 never met) are split by `div_pct`: E2 is East champion, behind the 2-0 West champion W1. |
 | `american_final_win` / `american_final_loss` | American Athletic | `cfp_ranked_final_week`: the ranked tied team advances after winning its final conference game, falls through to the composite after losing it. |
 | `american_final_loss_nonconf` | American Athletic | As `american_final_loss` plus a later non-conference win: the clause reads the final *conference* game. |
-| `cusa_apr` | Conference USA | Equal composite -> the `apr` rung decides. |
+| `cusa_apr` | Conference USA | 2024 cascade (season 2024): equal composite -> the `apr` rung decides. |
 | `mw_composite` | Mountain West | The composite comes before head-to-head (B first although A beat B). |
-| `mac_official` | MAC | MAC's three-step procedure: record vs common opponents ties, analytics decides (the old shared template would have ranked A first). |
+| `mac_2024` / `mac_official` | MAC | Same games, season-keyed: 2024 uses the shared template (opponents' win pct before SportSource, A first); `mac_official` (2026) the 2025 order, where record vs common opponents ties and analytics decides (B first). |
 | `ineligible` | Big Ten | `postseason_eligible = FALSE`: the 2-0 team drops behind every eligible team. |
 
 ## Files
