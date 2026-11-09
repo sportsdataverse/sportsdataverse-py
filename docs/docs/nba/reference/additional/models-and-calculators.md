@@ -1399,7 +1399,7 @@ curve.filter(pl.col("age").is_between(24, 30))
 
 ### nba_bpm {#nba_bpm}
 
-`nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+`nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', league_ortg: 'float | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Faithful BPM 2.0 per player, at season or single-game granularity.
 
@@ -1427,6 +1427,7 @@ Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minu
 | `positions` | `DataFrame` |  | listed positions (`nba_player_positions`): player_id, position_num. |
 | `team_adjust` | `bool` | `True` | apply the team adjustment (True) or return raw box-BPM (False). |
 | `granularity` | `str` | `'season'` | `"season"` (default) aggregates every row in `player_logs`/ `team_logs` into one row per player. `"game"` runs the exact same pipeline independently per `game_id` (position/role are estimated game-native, mirroring `NbaBpmModel`'s existing fold-native design) and returns one row per (game_id, player_id) with a leading `game_id` column; `gp` is always 1 in this mode. |
+| `league_ortg` | `float \| None` | `None` | The league offensive rating (points per 100) the OBPM adjustment is relative to. `None` (default) takes it from `team_logs`: per `season_id` when that column is there (stats.nba.com's season_id also encodes the season type, so regular season and playoffs stay apart), else over all of `team_logs`, which must then be one season and season type. Pass it when `team_logs` is not a whole league, for example one game scored on its own. |
 | `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
 
 **Returns**

@@ -518,3 +518,32 @@ def test_league_rating_refuses_incomplete_team_totals() -> None:
     )
     with pytest.raises(ValueError, match="null"):
         nba_bpm(player_logs, broken, positions)
+
+
+def test_league_rating_refuses_non_finite_team_totals() -> None:
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    broken = team_logs.with_columns(
+        pl.when(pl.int_range(pl.len()) == 0).then(float("nan")).otherwise(pl.col("pts")).alias("pts")
+    )
+    with pytest.raises(ValueError, match="non-finite"):
+        nba_bpm(player_logs, broken, positions)
+
+
+def test_one_game_scored_alone_matches_the_season_with_the_league_rating(real_2025) -> None:
+    """A single game's logs carry no league: passing the season's league_ortg reproduces its game-mode values."""
+    from sportsdataverse.nba.nba_bpm import _league_ortg
+
+    player, team, pos, _ = real_2025
+    gid = team["game_id"].sort()[0]
+    season = nba_bpm(player, team, pos, granularity="game").filter(pl.col("game_id") == gid)
+    lg = _league_ortg(team)
+    one = nba_bpm(
+        player.filter(pl.col("game_id") == gid),
+        team.filter(pl.col("game_id") == gid),
+        pos,
+        granularity="game",
+        league_ortg=lg,
+    )
+    j = season.join(one, on=["game_id", "player_id"], suffix="_one")
+    assert j.height == season.height > 0 and (j["obpm"] - j["obpm_one"]).abs().max() < 1e-9
