@@ -40619,7 +40619,7 @@ nba_neutral_site_games:
   game_date: Game date (US Eastern), as in the stats schedule release.
   game_id: stats.nba.com game id (Utf8).
   home_team: Designated home team (stats.nba.com abbreviation).
-  league: nba or wnba.
+  league: League the neutral-site game belongs to, nba or wnba.
   reason: 'Why the game is neutral: international (played abroad) or cup_knockout (an NBA Cup knockout game in Las Vegas).'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   season_type: 'Schedule season type: regular-season, or nba-cup for an NBA Cup final (which does not count in the standings).'
@@ -40999,7 +40999,7 @@ mbb_tournament_ineligible:
   reason: 'Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other.'
   season: Season, as the end year (2024 is 2023-24).
   source_url: The source that documents the row.
-  team: School name.
+  team: School name of the barred program, as the source spells it; join on team_id.
   team_id: ESPN team id (Utf8).
 wbb_bracketology:
   as_of_date: 'The as-of date: only games strictly before it count as played. Null when every completed game is used.'
@@ -41734,8 +41734,6 @@ load_nba_player_crosswalk:
   nba_player_name: Player name as listed by the NBA Stats API.
   nba_position: Player's position as listed by the NBA Stats API.
 load_nba_player_impact:
-  adj_rapm: Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm.
-  d_adj_rapm: Defensive regularized adjusted plus/minus after the ridge opponent adjustment.
   d_rapm: Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so
     a positive value marks a defender who suppresses opponent scoring; fit at the fixed NBA penalty described under rapm.
   boban_filtered_skill: BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
@@ -41753,7 +41751,6 @@ load_nba_player_impact:
     almost exactly because substitutions rarely split an offense-defense pair.
   dspm: Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients
     trained on the d_rapm target.
-  o_adj_rapm: Offensive regularized adjusted plus/minus after the ridge opponent adjustment.
   o_rapm: Offensive regularized adjusted plus-minus per 100 possessions from the single-season ridge fit over possession-level
     lineup indicators, at the fixed NBA penalty described under rapm; positive means the player raised his team's scoring
     rate while on offense.
@@ -41771,6 +41768,136 @@ load_nba_player_impact:
   spm: Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm.
   war: Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided
     by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin.
+  adj_rapm: 'Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases built from November 2026 fit the ridge with an unpenalized intercept; earlier releases fit none, which leaned this total toward heavy-minute players.'
+  o_adj_rapm: 'Offensive prior-informed RAPM per 100 possessions: the ridge fit shrunk toward the player''s box-score (SPM) prior, relative to an average player (possession-weighted league mean near 0: 2025-26 +0.32). Releases built before November 2026 fit no intercept, so the league''s points per possession leaked into every coefficient: o_adj_rapm averaged about +12.03 and d_adj_rapm -10.84 (2025-26), a thinly-used player kept less of that offset, and only their sum, adj_rapm, read on a common scale.'
+  d_adj_rapm: 'Defensive prior-informed RAPM per 100 possessions, positive for a defender who lowers opponent scoring, relative to an average player (possession-weighted league mean near 0: 2025-26 +0.06). Releases built before November 2026 averaged about -10.84 here (see o_adj_rapm).'
+  o_rapm_n: 'Possessions o_rapm is measured over: off_poss, his offensive possessions. o_rapm_rank and o_rapm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_rapm_rank: 'Rank of o_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_rapm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_rapm_pct: 'Percentile of o_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_rapm_n: 'Possessions d_rapm is measured over: def_poss, his defensive possessions. d_rapm_rank and d_rapm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_rapm_rank: 'Rank of d_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_rapm_pct: 'Percentile of d_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  rapm_n: 'Possessions rapm is measured over: off_poss + def_poss, his possessions at both ends. rapm_rank and rapm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  rapm_rank: 'Rank of rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when rapm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  rapm_pct: 'Percentile of rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  o_adj_rapm_n: 'Possessions o_adj_rapm is measured over: off_poss, his offensive possessions. o_adj_rapm_rank and o_adj_rapm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_adj_rapm_rank: 'Rank of o_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_adj_rapm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_adj_rapm_pct: 'Percentile of o_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_adj_rapm_n: 'Possessions d_adj_rapm is measured over: def_poss, his defensive possessions. d_adj_rapm_rank and d_adj_rapm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_adj_rapm_rank: 'Rank of d_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_adj_rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_adj_rapm_pct: 'Percentile of d_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  adj_rapm_n: 'Possessions adj_rapm is measured over: off_poss + def_poss, his possessions at both ends. adj_rapm_rank and adj_rapm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  adj_rapm_rank: 'Rank of adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when adj_rapm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  adj_rapm_pct: 'Percentile of adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  ospm_n: 'Possessions ospm is measured over: off_poss, his offensive possessions. ospm_rank and ospm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  ospm_rank: 'Rank of ospm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when ospm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  ospm_pct: 'Percentile of ospm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dspm_n: 'Possessions dspm is measured over: def_poss, his defensive possessions. dspm_rank and dspm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dspm_rank: 'Rank of dspm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dspm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dspm_pct: 'Percentile of dspm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  spm_n: 'Possessions spm is measured over: off_poss + def_poss, his possessions at both ends. spm_rank and spm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  spm_rank: 'Rank of spm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when spm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  spm_pct: 'Percentile of spm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  obpm_n: 'Possessions obpm is measured over: off_poss, his offensive possessions. obpm_rank and obpm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  obpm_rank: 'Rank of obpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when obpm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  obpm_pct: 'Percentile of obpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dbpm_n: 'Possessions dbpm is measured over: def_poss, his defensive possessions. dbpm_rank and dbpm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dbpm_rank: 'Rank of dbpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dbpm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dbpm_pct: 'Percentile of dbpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  bpm_n: 'Possessions bpm is measured over: off_poss + def_poss, his possessions at both ends. bpm_rank and bpm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  bpm_rank: 'Rank of bpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when bpm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  bpm_pct: 'Percentile of bpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  war_n: 'Possessions behind war: off_poss + def_poss. war is a count, not a rate, so its rank has no sample gate.'
+  war_rank: 'Rank of war among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; every player with a finite war is ranked, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  war_pct: 'Percentile of war_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+nba_player_impact_context:
+  d_rapm: Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so
+    a positive value marks a defender who suppresses opponent scoring; fit at the fixed NBA penalty described under rapm.
+  boban_filtered_skill: BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel,
+    i.e. his current-form rating after aging drift and possession-weighted observation noise.
+  boban_projected_rating: One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the
+    player's last observed age; both season_type rows of a player-season carry the same value because the projection is not
+    playoff-specific.
+  boban_projected_sd: Standard deviation of the one-season-ahead BOBAN forecast, the square root of the filtered state variance
+    plus the Kalman process variance; it sits at roughly 10.19 for a player with only one season in the panel, whose diffuse
+    prior variance was never updated.
+  darko_filtered_skill: Deprecated alias of boban_filtered_skill, kept for one release; use that column.
+  darko_projected_rating: Deprecated alias of boban_projected_rating, kept for one release; use that column.
+  darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
+  def_poss: Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss
+    almost exactly because substitutions rarely split an offense-defense pair.
+  dspm: Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients
+    trained on the d_rapm target.
+  o_rapm: Offensive regularized adjusted plus-minus per 100 possessions from the single-season ridge fit over possession-level
+    lineup indicators, at the fixed NBA penalty described under rapm; positive means the player raised his team's scoring
+    rate while on offense.
+  off_poss: Number of possessions the player was on the floor on offense, the count of design-matrix rows carrying his offensive
+    indicator and therefore the offensive-side sample size behind o_rapm.
+  ospm: 'Offensive statistical plus-minus per 100 possessions: the player''s per-100 box-score feature vector scored through
+    ridge coefficients trained on that season''s o_rapm target.'
+  rapm: 'Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. The ridge penalty
+    is one fixed NBA value (2,683, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the scale
+    compares across seasons (regular-season sd 1.53 to 1.99 per 100 over players with 400 possessions, 1997-2026; a shorter
+    season, such as the 1999 lockout (1.53), shrinks harder, so part of a spread difference is sample size). Seasons
+    published before November 2026 were fit at a per-season RidgeCV pick (1,931 or 5,179 in the regular season, up to 37,276
+    in the playoffs), and their spread jumps with it (sd 1.15 to 2.34): do not compare those values across seasons or with
+    values fit at the fixed penalty.'
+  spm: Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm.
+  war: Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided
+    by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin.
+  adj_rapm: 'Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases built from November 2026 fit the ridge with an unpenalized intercept; earlier releases fit none, which leaned this total toward heavy-minute players.'
+  o_adj_rapm: 'Offensive prior-informed RAPM per 100 possessions: the ridge fit shrunk toward the player''s box-score (SPM) prior, relative to an average player (possession-weighted league mean near 0: 2025-26 +0.32). Releases built before November 2026 fit no intercept, so the league''s points per possession leaked into every coefficient: o_adj_rapm averaged about +12.03 and d_adj_rapm -10.84 (2025-26), a thinly-used player kept less of that offset, and only their sum, adj_rapm, read on a common scale.'
+  d_adj_rapm: 'Defensive prior-informed RAPM per 100 possessions, positive for a defender who lowers opponent scoring, relative to an average player (possession-weighted league mean near 0: 2025-26 +0.06). Releases built before November 2026 averaged about -10.84 here (see o_adj_rapm).'
+  o_rapm_n: 'Possessions o_rapm is measured over: off_poss, his offensive possessions. o_rapm_rank and o_rapm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_rapm_rank: 'Rank of o_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_rapm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_rapm_pct: 'Percentile of o_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_rapm_n: 'Possessions d_rapm is measured over: def_poss, his defensive possessions. d_rapm_rank and d_rapm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_rapm_rank: 'Rank of d_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_rapm_pct: 'Percentile of d_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  rapm_n: 'Possessions rapm is measured over: off_poss + def_poss, his possessions at both ends. rapm_rank and rapm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  rapm_rank: 'Rank of rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when rapm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  rapm_pct: 'Percentile of rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  o_adj_rapm_n: 'Possessions o_adj_rapm is measured over: off_poss, his offensive possessions. o_adj_rapm_rank and o_adj_rapm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_adj_rapm_rank: 'Rank of o_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_adj_rapm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_adj_rapm_pct: 'Percentile of o_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_adj_rapm_n: 'Possessions d_adj_rapm is measured over: def_poss, his defensive possessions. d_adj_rapm_rank and d_adj_rapm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_adj_rapm_rank: 'Rank of d_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_adj_rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_adj_rapm_pct: 'Percentile of d_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  adj_rapm_n: 'Possessions adj_rapm is measured over: off_poss + def_poss, his possessions at both ends. adj_rapm_rank and adj_rapm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  adj_rapm_rank: 'Rank of adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when adj_rapm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  adj_rapm_pct: 'Percentile of adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  ospm_n: 'Possessions ospm is measured over: off_poss, his offensive possessions. ospm_rank and ospm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  ospm_rank: 'Rank of ospm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when ospm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  ospm_pct: 'Percentile of ospm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dspm_n: 'Possessions dspm is measured over: def_poss, his defensive possessions. dspm_rank and dspm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dspm_rank: 'Rank of dspm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dspm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dspm_pct: 'Percentile of dspm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  spm_n: 'Possessions spm is measured over: off_poss + def_poss, his possessions at both ends. spm_rank and spm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  spm_rank: 'Rank of spm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when spm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  spm_pct: 'Percentile of spm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  obpm_n: 'Possessions obpm is measured over: off_poss, his offensive possessions. obpm_rank and obpm_pct are set only when it reaches 1,700, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  obpm_rank: 'Rank of obpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when obpm_n is under 1,700, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  obpm_pct: 'Percentile of obpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dbpm_n: 'Possessions dbpm is measured over: def_poss, his defensive possessions. dbpm_rank and dbpm_pct are set only when it reaches 1,600, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dbpm_rank: 'Rank of dbpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dbpm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dbpm_pct: 'Percentile of dbpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  bpm_n: 'Possessions bpm is measured over: off_poss + def_poss, his possessions at both ends. bpm_rank and bpm_pct are set only when it reaches 3,200, the NBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  bpm_rank: 'Rank of bpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when bpm_n is under 3,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  bpm_pct: 'Percentile of bpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  war_n: 'Possessions behind war: off_poss + def_poss. war is a count, not a rate, so its rank has no sample gate.'
+  war_rank: 'Rank of war among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; every player with a finite war is ranked, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  war_pct: 'Percentile of war_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+nba_player_impact_league_averages:
+  season: 'Season of the league-average row, as the END year the player_impact table stamps (2026 = 2025-26).'
+  level: 'Population the row describes: nba or wnba (the league_id passed).'
+  entity: 'Kind of row summarized: always player for the impact table.'
+  category: 'Table and season type the row summarizes: player_impact_regular_season or player_impact_playoffs.'
+  metric: 'Impact metric the row summarizes, one of the 13 ranked columns (o_rapm through war).'
+  mean: 'Unweighted mean of the metric over the season type''s ranked players, those whose <metric>_n reaches its sample gate.'
+  median: 'Median of the metric over the same ranked players as mean.'
+  sd: 'Sample standard deviation (ddof 1) of the metric over the same ranked players; null with one player.'
+  n: 'Number of ranked players with a finite value: the n of the <metric>_pct formula, not the possession count <metric>_n.'
+  qualifier_min: 'Always null here: each metric has its own possession gate rather than one table-wide threshold.'
 load_nba_player_season_stats:
   stat_description: ESPN's prose definition of the statistic on this row, for example the ratio of field goals made to field
     goals attempted; for the paired Made-Attempted stats it is the two definitions joined with a hyphen.
@@ -49352,8 +49479,6 @@ load_wnba_player_crosswalk:
   wnba_player_name: Player display name on the stats.wnba.com side of the crosswalk.
   wnba_position: Position listed on the stats.wnba.com side of the crosswalk.
 load_wnba_player_impact:
-  adj_rapm: Total prior-informed RAPM (offense plus defense), in points per 100 possessions.
-  d_adj_rapm: 'Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
   d_rapm: 'Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions, at the fixed
     WNBA penalty described under rapm.'
   boban_filtered_skill: BOBAN Kalman-filtered estimate of the player's current skill level.
@@ -49364,7 +49489,6 @@ load_wnba_player_impact:
   darko_projected_sd: Deprecated alias of boban_projected_sd, kept for one release; use that column.
   def_poss: Defensive possessions the player was on the floor for in the RAPM sample.
   dspm: 'Defensive statistical plus-minus: box-score features regressed onto the defensive RAPM target, per 100 possessions.'
-  o_adj_rapm: 'Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
   o_rapm: 'Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions, at the fixed
     WNBA penalty described under rapm.'
   off_poss: Offensive possessions the player was on the floor for in the RAPM sample.
@@ -49379,6 +49503,48 @@ load_wnba_player_impact:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   spm: 'Statistical plus-minus: offensive plus defensive box-score estimate of the RAPM target, per 100 possessions.'
   war: Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win.
+  adj_rapm: 'Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases built from November 2026 fit the ridge with an unpenalized intercept; earlier releases fit none, which leaned this total toward heavy-minute players.'
+  o_adj_rapm: 'Offensive prior-informed RAPM per 100 possessions: the ridge fit shrunk toward the player''s box-score (SPM) prior, relative to an average player (possession-weighted league mean near 0: 2025 +0.45). Releases built before November 2026 fit no intercept, so the league''s points per possession leaked into every coefficient: o_adj_rapm averaged about +10.97 and d_adj_rapm -9.60 (2025), a thinly-used player kept less of that offset, and only their sum, adj_rapm, read on a common scale.'
+  d_adj_rapm: 'Defensive prior-informed RAPM per 100 possessions, positive for a defender who lowers opponent scoring, relative to an average player (possession-weighted league mean near 0: 2025 +0.11). Releases built before November 2026 averaged about -9.60 here (see o_adj_rapm).'
+  o_rapm_n: 'Possessions o_rapm is measured over: off_poss, his offensive possessions. o_rapm_rank and o_rapm_pct are set only when it reaches 610, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_rapm_rank: 'Rank of o_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_rapm_n is under 610, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_rapm_pct: 'Percentile of o_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_rapm_n: 'Possessions d_rapm is measured over: def_poss, his defensive possessions. d_rapm_rank and d_rapm_pct are set only when it reaches 1,200, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_rapm_rank: 'Rank of d_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_rapm_n is under 1,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_rapm_pct: 'Percentile of d_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  rapm_n: 'Possessions rapm is measured over: off_poss + def_poss, his possessions at both ends. rapm_rank and rapm_pct are set only when it reaches 1,600, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  rapm_rank: 'Rank of rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  rapm_pct: 'Percentile of rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  o_adj_rapm_n: 'Possessions o_adj_rapm is measured over: off_poss, his offensive possessions. o_adj_rapm_rank and o_adj_rapm_pct are set only when it reaches 610, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  o_adj_rapm_rank: 'Rank of o_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when o_adj_rapm_n is under 610, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  o_adj_rapm_pct: 'Percentile of o_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  d_adj_rapm_n: 'Possessions d_adj_rapm is measured over: def_poss, his defensive possessions. d_adj_rapm_rank and d_adj_rapm_pct are set only when it reaches 1,200, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  d_adj_rapm_rank: 'Rank of d_adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when d_adj_rapm_n is under 1,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  d_adj_rapm_pct: 'Percentile of d_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  adj_rapm_n: 'Possessions adj_rapm is measured over: off_poss + def_poss, his possessions at both ends. adj_rapm_rank and adj_rapm_pct are set only when it reaches 1,600, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  adj_rapm_rank: 'Rank of adj_rapm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when adj_rapm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  adj_rapm_pct: 'Percentile of adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  ospm_n: 'Possessions ospm is measured over: off_poss, his offensive possessions. ospm_rank and ospm_pct are set only when it reaches 610, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  ospm_rank: 'Rank of ospm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when ospm_n is under 610, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  ospm_pct: 'Percentile of ospm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dspm_n: 'Possessions dspm is measured over: def_poss, his defensive possessions. dspm_rank and dspm_pct are set only when it reaches 1,200, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dspm_rank: 'Rank of dspm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dspm_n is under 1,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dspm_pct: 'Percentile of dspm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  spm_n: 'Possessions spm is measured over: off_poss + def_poss, his possessions at both ends. spm_rank and spm_pct are set only when it reaches 1,600, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  spm_rank: 'Rank of spm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when spm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  spm_pct: 'Percentile of spm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  obpm_n: 'Possessions obpm is measured over: off_poss, his offensive possessions. obpm_rank and obpm_pct are set only when it reaches 610, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  obpm_rank: 'Rank of obpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when obpm_n is under 610, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  obpm_pct: 'Percentile of obpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  dbpm_n: 'Possessions dbpm is measured over: def_poss, his defensive possessions. dbpm_rank and dbpm_pct are set only when it reaches 1,200, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  dbpm_rank: 'Rank of dbpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when dbpm_n is under 1,200, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  dbpm_pct: 'Percentile of dbpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  bpm_n: 'Possessions bpm is measured over: off_poss + def_poss, his possessions at both ends. bpm_rank and bpm_pct are set only when it reaches 1,600, the WNBA sample at which a player''s on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative.'
+  bpm_rank: 'Rank of bpm among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; null when bpm_n is under 1,600, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  bpm_pct: 'Percentile of bpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
+  war_n: 'Possessions behind war: off_poss + def_poss. war is a count, not a rate, so its rank has no sample gate.'
+  war_rank: 'Rank of war among the season and season type''s ranked players, 1 = best (higher is better), ties averaged; every player with a finite war is ranked, and null in a group of fewer than 10 ranked players. Regular-season gates: a playoff run rarely reaches one.'
+  war_pct: 'Percentile of war_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is.'
 load_wnba_player_season_stats:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   stat_description: ESPN's prose definition of the statistic on this row, for example The average number of points scored

@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 248 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 250 | — |
 
 ## ESPN {#espn}
 
@@ -131,6 +131,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators-2#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators-2#nba_la_rapm)
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
+- [`nba_player_impact_context`](reference/additional/models-and-calculators-2#nba_player_impact_context)
+- [`nba_player_impact_league_averages`](reference/additional/models-and-calculators-2#nba_player_impact_league_averages)
 - [`nba_predict_games`](reference/additional/models-and-calculators-2#nba_predict_games)
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-2#nba_rookie_projection)
 - [`nba_spm`](reference/additional/models-and-calculators-2#nba_spm)
@@ -143,13 +145,13 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
 - [`render_report`](reference/additional/models-and-calculators-2#render_report)
 - [`score_win_prob`](reference/additional/models-and-calculators-2#score_win_prob)
-- [`season_game_excitement`](reference/additional/models-and-calculators-2#season_game_excitement)
-- [`shot_coordinates`](reference/additional/models-and-calculators-2#shot_coordinates)
-- [`team_game_rates`](reference/additional/models-and-calculators-2#team_game_rates)
-- [`train_spm`](reference/additional/models-and-calculators-2#train_spm)
-- [`validate_model`](reference/additional/models-and-calculators-2#validate_model)
-- [`walk_forward`](reference/additional/models-and-calculators-2#walk_forward)
-- [`win_prob_from_margin`](reference/additional/models-and-calculators-2#win_prob_from_margin)
+- [`season_game_excitement`](reference/additional/models-and-calculators-3#season_game_excitement)
+- [`shot_coordinates`](reference/additional/models-and-calculators-3#shot_coordinates)
+- [`team_game_rates`](reference/additional/models-and-calculators-3#team_game_rates)
+- [`train_spm`](reference/additional/models-and-calculators-3#train_spm)
+- [`validate_model`](reference/additional/models-and-calculators-3#validate_model)
+- [`walk_forward`](reference/additional/models-and-calculators-3#walk_forward)
+- [`win_prob_from_margin`](reference/additional/models-and-calculators-3#win_prob_from_margin)
 
 ### Analytics {#analytics}
 

@@ -1318,7 +1318,16 @@ possession counts.
 
 Sign convention (matches `~sportsdataverse.nba.nba_rapm.nba_rapm`):
 `d_adj_rapm` is positive for a good defender (lowers opponent points);
-`adj_rapm = o_adj_rapm + d_adj_rapm`.
+`adj_rapm = o_adj_rapm + d_adj_rapm` exactly.
+
+Centring: the ridge fits an unpenalized intercept (the league's points per possession), as
+`~sportsdataverse.nba.nba_rapm.nba_rapm` does, so `o_adj_rapm` and `d_adj_rapm` are
+each relative to an average player: their possession-weighted means sit near 0 (2025-26 NBA
++0.32 / +0.06, 2025 WNBA +0.45 / +0.11, against o_rapm's +0.41 / +0.11). Fit without one,
+as before November 2026, the penalty split that level between every offensive and defensive
+coefficient: o / d read about +12 / -11 (2025-26 NBA +12.03 / -10.84), a thinly-used
+player kept less of the offset (-8.9 on offense under 200 possessions), and so `adj_rapm`
+itself leaned toward heavy-minute players.
 
 **Parameters**
 

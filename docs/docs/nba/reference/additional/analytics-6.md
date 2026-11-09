@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value"
 sidebar_label: "Analytics: nbadraft_mock–zone_value"
-sidebar_position: 18
+sidebar_position: 19
 description: "NBA — additional Python functions — Analytics: nbadraft_mock–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nbadraft_mock–zone_value

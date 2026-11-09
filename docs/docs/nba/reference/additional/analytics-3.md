@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_lineup–nba_player"
 sidebar_label: "Analytics: nba_lineup–nba_player"
-sidebar_position: 15
+sidebar_position: 16
 description: "NBA — additional Python functions — Analytics: nba_lineup–nba_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_lineup–nba_player
@@ -127,7 +127,7 @@ One row per game: `league`, `season`, `game_id` (the stats.nba.com id, Utf8), `g
 
 | col_name | type | description |
 |---|---|---|
-| `league` | String | nba or wnba. |
+| `league` | String | League the neutral-site game belongs to, nba or wnba. |
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
 | `game_id` | String | stats.nba.com game id (Utf8). |
 | `game_date` | Date | Game date (US Eastern), as in the stats schedule release. |
