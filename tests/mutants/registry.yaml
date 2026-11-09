@@ -10862,8 +10862,8 @@
   group: nba-engine
   finding: BB-D21 margin drift
   file: sportsdataverse/nba/nba_possessions.py
-  snippet: '            deferred = is_rebound_logged_after_its_putback(rows, i + 1)'
-  mutant: '            deferred = False'
+  snippet: '        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)'
+  mutant: '        deferred = False'
   test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
   expected: kill
   note: An offensive rebound the pbp logs after its own putback would again open a phantom possession (the largest pre-2017-18 drift cause, 65,454 points).

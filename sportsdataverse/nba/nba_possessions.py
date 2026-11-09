@@ -638,13 +638,10 @@ def _build_possession_groups(
 
         # A putback the pbp logs before its own offensive rebound (same team, same clock): the
         # rebound belongs to the possession the putback ends, so the boundary moves past it.
-        if deferred:
-            deferred = False
+        ends = deferred or is_possession_ending_event(ctx, i, current_offense, home_id, away_id)
+        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)
+        if ends and not deferred:
             _flush()
-        elif is_possession_ending_event(ctx, i, current_offense, home_id, away_id):
-            deferred = is_rebound_logged_after_its_putback(rows, i + 1)
-            if not deferred:
-                _flush()
 
     _flush()  # remaining events
     return groups
