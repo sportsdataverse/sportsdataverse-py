@@ -1,0 +1,33 @@
+schema: nba_player_impact_league_averages
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: level
+  type: character
+  description: ''
+- name: entity
+  type: character
+  description: ''
+- name: category
+  type: character
+  description: ''
+- name: metric
+  type: character
+  description: ''
+- name: mean
+  type: double
+  description: ''
+- name: median
+  type: double
+  description: ''
+- name: sd
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''
+- name: qualifier_min
+  type: double
+  description: ''

@@ -11121,3 +11121,28 @@
   test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
   expected: kill
   note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).
+
+# --- #1140: the order-of-finish descent compares only opponents every tied team played --------------
+- id: cfb-standings-descent-common-opponents-only
+  group: cfb-standings
+  finding: '#1140'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '    if common_only:'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_standings.py::TestCommonOpponentDescent
+  expected: kill
+  note: >-
+    A tier counts once each tied team played any one of its teams, so the real 2025 ACC five-way tie is
+    cut to Duke/Georgia Tech and Georgia Tech takes the berth on head-to-head (the real pairing was
+    Virginia/Duke), and the 2025 SEC sends Ole Miss instead of Alabama.
+- id: cfb-standings-descent-common-opponents-big12
+  group: cfb-standings
+  finding: '#1140'
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '{"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},'
+  mutant: '{"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True},'
+  test: tests/cfb/test_cfb_standings.py::TestCommonOpponentDescent::test_2026_big12_descent_skips_opponents_not_all_tied_teams_played
+  expected: kill
+  note: >-
+    The Big 12 rung alone back on the loose reading: a tier not every tied team played seeds TCU (10th, not 13th)
+    and Kansas (14th, not 16th) in the real 2026 Big 12 through week 10.

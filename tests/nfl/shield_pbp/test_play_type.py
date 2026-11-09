@@ -3,7 +3,7 @@
 nflfastR (helper_add_nflscrapr_mutations.R, translate_play_type_nfl) lets the feed's kick play types win
 outright, labels a PENALTY play no_play unless it was enforced between downs, and turns only pass/run
 plays into qb_spike / qb_kneel. The two real-game cases are 2025 plays the GridironMatrix oracle check
-(ClaudeCowork notes/2026-11-09-gridironmatrix-intake.md) found misclassified against nflverse.
+found misclassified against nflverse.
 """
 
 from __future__ import annotations
