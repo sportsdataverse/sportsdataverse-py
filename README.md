@@ -32,7 +32,7 @@ Free, tidy, analysis-ready sports data in Python: the Python member of the [Spor
 
 <!-- badges: start -->
 [![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
-[![Python](https://img.shields.io/pypi/pyversions/sportsdataverse?logo=python&logoColor=white&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
+[![Python](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2Fsportsdataverse-py%2Fmain%2Fpyproject.toml&query=%24.project%5B%27requires-python%27%5D&label=python&logo=python&logoColor=white&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/pyproject.toml)
 [![Downloads](https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge)](https://pypistats.org/packages/sportsdataverse)
 [![Total downloads](https://img.shields.io/pepy/dt/sportsdataverse?style=for-the-badge)](https://pepy.tech/projects/sportsdataverse)
 [![Dev version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsportsdataverse%2Fsportsdataverse-py%2Fmain%2Fpyproject.toml&query=%24.project.version&label=dev&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/)
