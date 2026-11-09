@@ -213,3 +213,21 @@ def test_unknown_league_and_non_dict() -> None:
     with pytest.raises(ValueError, match="league must be one of"):
         _validate_summary({}, "nfl")
     assert _validate_summary([], "nba").missing == ["<summary is not a dict>"]
+
+
+_LIVE_ABSENT = ("article", "predictor", "espnWP")
+
+
+@pytest.mark.parametrize("lg", LEAGUES)
+def test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted(lg: str) -> None:
+    """ESPN's live summary has no ``article`` / ``predictor`` / ``espnWP`` (mbb_401920423_live.json.gz);
+    the parser treats them as ``espn_<lg>_pbp(raw=True)``'s empty defaults and the contract passes."""
+    path = next(p for p in CAPTURES if _league(p) == lg and "_live" not in p.name)
+    summary = _load(path)
+    live = {k: v for k, v in copy.deepcopy(summary).items() if k not in _LIVE_ABSENT}
+    defaulted = {**copy.deepcopy(live), "article": [], "predictor": [], "espnWP": {}}
+    report = _validate_summary(live, lg)
+    assert report.ok, report.summary()
+    _, parse = league_pbp_functions(lg)
+    got, want = parse(_game_id(summary), live), parse(_game_id(summary), defaulted)
+    assert json.dumps(got, sort_keys=True, default=str) == json.dumps(want, sort_keys=True, default=str)
