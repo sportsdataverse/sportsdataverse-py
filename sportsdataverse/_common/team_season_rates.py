@@ -19,7 +19,8 @@ rows, never estimated from minutes or box totals:
   regulation period (the 4th quarter; the 2nd half in men's college and in the WNBA through 2005) or
   in any overtime, with the score within :data:`CLUTCH_MARGIN` (5) points as it starts. That is a
   possession that starts with 5:00 or less left, or the one live at the 5:00 mark (it starts before
-  the mark and ends after it; one that ends exactly at 5:00 is out). This is stats.nba.com's clutch window
+  the mark and ends after it). One that starts before the mark and ends exactly at 5:00 is out; one
+  that starts at 5:00 is in, even if it also ends there. This is stats.nba.com's clutch window
   (``ClutchTime="Last 5 Minutes"``, ``PointDiff=5``, the definition ``nba_clutch`` reads), applied to
   possessions. A possession starts when the previous one in the period ends (when the ball changes
   hands), and the score is the running total of every earlier possession in the game.

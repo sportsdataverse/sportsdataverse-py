@@ -375,7 +375,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 |---|---|---|
 | `season` | Int64 | WNBA season (its calendar year). |
 | `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games as the stats.nba.com schedule lists them: it has no neutral-site flag, so a neutral-site game counts for its listed home team); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half through 2005, when the WNBA played two 20-minute halves) or an overtime, the score within 5 as it starts). |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games, from the curated nba_neutral_site_games list, are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half through 2005, when the WNBA played two 20-minute halves) or an overtime, the score within 5 as it starts). |
 | `games` | Int64 | Games with at least one possession in the split. |
 | `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
 | `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
