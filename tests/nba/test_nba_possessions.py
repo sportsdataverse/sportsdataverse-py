@@ -1080,3 +1080,25 @@ def test_defense_scores_are_credited_to_the_scoring_team(monkeypatch: pytest.Mon
         pl.any_horizontal([pl.col(c) != pl.col(f"{c}_b") for c in cols])
     )
     assert want and set(moved["possession_number"]) == want
+
+
+@pytest.mark.parametrize(
+    ("teams", "counted", "want"),
+    [
+        ([1, 2, 1, 1], [True, True, False, True], 3),  # the next counted row of the team
+        ([1, 2, 1, 1], [True, True, False, False], 0),  # none later: the last earlier counted row
+        ([1, 2, 1, 1], [False, True, False, False], 2),  # none counted: the next row of the team
+        ([1, 2, 2, 2], [False, True, True, True], 0),  # the team's only row is earlier and uncounted
+    ],
+)
+def test_credit_defense_scoring_picks_the_receiving_row(teams: list[int], counted: list[bool], want: int) -> None:
+    """Which row a carry lands on: next counted, else last earlier counted, else next, else last earlier."""
+    from sportsdataverse.nba.nba_possession_rules import credit_defense_scoring
+
+    rows = [
+        {"offense_team_id": t, "count_as_possession": c, "points": 0, **dict.fromkeys(SHOT_KEYS, 0)}
+        for t, c in zip(teams, counted)
+    ]
+    credit_defense_scoring(rows, [(1, 1, 1, {**dict.fromkeys(SHOT_KEYS, 0), "fta": 1, "ftm": 1})])
+    assert [k for k, r in enumerate(rows) if r["points"]] == [want]
+    assert rows[want]["ftm"] == 1
