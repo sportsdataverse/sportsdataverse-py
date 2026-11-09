@@ -8736,6 +8736,16 @@
   expected: kill
   note: Within 6 instead of 5 drops the clutch net's correlation with stats.nba.com from 0.98 to 0.93.
 
+- id: bb-tsr-clutch-live-at-five
+  group: bb-team-season-rates
+  finding: BB-D21
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '& ((pl.col("start_clock") <= CLUTCH_SECONDS) | (pl.col("end_clock") < CLUTCH_SECONDS).fill_null(False))'
+  mutant: '& (pl.col("start_clock") <= CLUTCH_SECONDS)'
+  test: tests/nba/test_nba_situational.py::test_possession_live_at_five_minutes_is_clutch
+  expected: kill
+  note: The possession in play at 5:00 would fall outside the window again (328 clutch possessions in 2023-24).
+
 - id: bb-tsr-clutch-period
   group: bb-team-season-rates
   finding: BB-D3

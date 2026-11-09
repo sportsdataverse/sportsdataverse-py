@@ -93,8 +93,10 @@ def nba_team_luck(
     final scores, ``games * pts^x / (pts^x + opp_pts^x)``, with the exponent ``x`` fitted per
     league on past seasons (:data:`~sportsdataverse._common.team_luck.PYTHAG_EXPONENT`).
     ``luck_wins`` is ``wins - exp_wins``. A close game is one within 5 points at the start of a
-    possession in the last 5:00 of the 4th quarter or in overtime (stats.nba.com's clutch
-    window; BB-D3's ``close`` split).
+    possession in play in the last 5:00 of the 4th quarter or in overtime: one that starts there,
+    or starts before 5:00 and ends after it (stats.nba.com's clutch window; BB-D3's ``close`` split).
+    For the WNBA (``league_id="10"``) through 2005, two 20-minute halves, the regulation window is
+    the last 5:00 of the 2nd half; overtime counts as above.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
