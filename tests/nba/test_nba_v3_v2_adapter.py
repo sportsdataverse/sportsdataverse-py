@@ -916,3 +916,20 @@ def test_nba_v3_to_v2_pbp_live_smoke() -> None:
     assert df.height == len(actions) - sum(1 for action in actions if _is_dropped_block_steal(action))
     for column in _V2_REPRESENTATIVE_COLUMNS:
         assert column in df.columns, f"missing v2 column: {column}"
+
+
+@pytest.mark.parametrize("game_id", ["0022100001", "0022200001", "0022300001"])
+def test_legacy_zero_score_strings_keep_the_running_score(game_id: str) -> None:
+    """Pre-2017-18 v3 feeds write ``"0"`` on non-scoring rows; the v2 score must not fall to 0-0.
+
+    Rewrites a real modern fixture's blank ``scoreHome`` / ``scoreAway`` into the legacy ``"0"``
+    dialect (#1124). ``score`` / ``score_margin`` / ``team_leading`` must equal the modern read.
+    """
+    import copy
+
+    legacy = copy.deepcopy(_pbp(game_id))
+    for action in legacy["game"]["actions"]:
+        if action.get("scoreHome") in ("", None):
+            action["scoreHome"] = action["scoreAway"] = "0"
+    cols = ["score", "score_margin", "team_leading"]
+    assert nba_v3_to_v2_pbp(legacy, _box(game_id)).select(cols).equals(_v2_frame(game_id).select(cols))

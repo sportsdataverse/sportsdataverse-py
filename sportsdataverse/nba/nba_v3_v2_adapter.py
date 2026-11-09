@@ -964,10 +964,12 @@ def nba_v3_to_v2_pbp(
 
     # Score columns (R 639-662): cast raw string scores to nullable Int64,
     # forward-fill (polars .forward_fill()) with an initial 0 before the
-    # first score, then derive score / score_margin / team_leading.
+    # first score, then derive score / score_margin / team_leading. Before 2017-18
+    # (WNBA: 2017) the feed writes "0" on every non-scoring row instead of a blank; a
+    # score never falls, so the running maximum is the score in both dialects.
     df = df.with_columns(
-        pl.col("score_home").cast(pl.Int64, strict=False).alias("_home_num"),
-        pl.col("score_away").cast(pl.Int64, strict=False).alias("_away_num"),
+        pl.col("score_home").cast(pl.Int64, strict=False).cum_max().alias("_home_num"),
+        pl.col("score_away").cast(pl.Int64, strict=False).cum_max().alias("_away_num"),
     )
     df = df.with_columns(
         pl.col("_home_num").forward_fill().fill_null(0).alias("home_score"),
