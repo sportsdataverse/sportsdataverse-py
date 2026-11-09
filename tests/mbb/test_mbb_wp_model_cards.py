@@ -181,3 +181,20 @@ def test_pregame_prior_gate_is_recomputed(cards: Any, lg: str) -> None:
     # observed (2026-11-06): MBB -0.0784 +- 0.0056 over 12,408 games, WBB -0.1649 +- 0.0062 over 11,483
     assert rated["diff"] + 2 * rated["se"] < 0
     assert all(card["gate"]["pass"].values())
+
+
+def test_preregistered_confirmation_season() -> None:
+    """2027 is the pre-registered confirmation season (owner, 2026-11-09): a season nothing was fit or tuned on."""
+    cells = 0
+    for lg in LEAGUES:
+        card = _card(lg)
+        pre = card["holdout_gate"]["preregistered_confirmation"]
+        assert pre["season"] == 2027
+        assert pre["season"] not in {*card["training_seasons"], *card["holdout_seasons"], card["confirmation_season"]}
+        assert pre["season"] > max(card["training_seasons"] + card["holdout_seasons"])
+        cells += sum(len(gate) for gate in card["holdout_gate"]["by_prior"].values())
+        # the absolute-value form stays (owner: as is): the gate compares |calibration in the large|
+        assert any(key.startswith("abs_citl:") for key in card["holdout_gate"]["by_prior"]["hfa"])
+    # the reason on the card: 52 cells at a one-sided 2.5% false-failure rate expect about 1.3 per refit
+    assert cells == 52 and round(cells * 0.025, 1) == 1.3
+    assert BLOCK_GAMES["mbb"]["ot"] == 326 and BLOCK_GAMES["wbb"]["ot"] == 257  # the overtime block's games
