@@ -114,8 +114,8 @@ def test_full_rule_is_a_subset_of_margin_only(parts, game_id: str) -> None:
     assert margin_only["garbage_time_basis"].unique().to_list() == ["margin_only"]
     assert full["garbage_time_basis"].unique().to_list() == ["margin_and_starters"]
 
-    m = set(margin_only.filter(pl.col("is_garbage_time"))["possession_number"].to_list())
-    f = set(full.filter(pl.col("is_garbage_time"))["possession_number"].to_list())
+    m = set(margin_only.filter(pl.col("is_garbage_time_ctg"))["possession_number"].to_list())
+    f = set(full.filter(pl.col("is_garbage_time_ctg"))["possession_number"].to_list())
     assert f <= m, f"{game_id}: full rule flagged possessions margin-only did not: {sorted(f - m)}"
 
 
@@ -125,7 +125,7 @@ def test_full_rule_never_flags_a_possession_with_three_plus_starters(parts, game
     enh, poss, starters = parts[game_id]
     counts = starters_on_court_counts(poss, starters)
     full = flag_garbage_time(poss, enh, starters_on_court=counts)
-    for pn in full.filter(pl.col("is_garbage_time"))["possession_number"].to_list():
+    for pn in full.filter(pl.col("is_garbage_time_ctg"))["possession_number"].to_list():
         assert counts[pn] <= 2, f"possession {pn} flagged garbage with {counts[pn]} starters on floor"
 
 
@@ -139,7 +139,7 @@ def test_add_play_context_threads_the_starters_clause(parts) -> None:
 
     assert default["garbage_time_basis"].unique().to_list() == ["margin_only"]
     assert exact["garbage_time_basis"].unique().to_list() == ["margin_and_starters"]
-    assert int(exact["is_garbage_time"].sum()) <= int(default["is_garbage_time"].sum())
+    assert int(exact["is_garbage_time_ctg"].sum()) <= int(default["is_garbage_time_ctg"].sum())
 
 
 def test_missing_lineup_columns_raises(parts) -> None:

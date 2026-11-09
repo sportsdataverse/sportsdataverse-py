@@ -197,10 +197,10 @@ print(poss["possession_start_type_ctg"].value_counts())
 
 import polars as pl
 clean = poss.filter(
-    (pl.col("is_garbage_time") == False)  # noqa: E712
+    (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
     & (pl.col("is_heave_possession") == False)  # noqa: E712
 )
-print(clean["is_transition"].mean())
+print(clean["is_transition_ctg"].mean())
 ```
 
 ### wnba_possessions {#wnba_possessions}
