@@ -356,12 +356,14 @@ def _league_ortg(team_logs: pl.DataFrame) -> float:
     """League points per 100 possessions over ``team_logs`` (the box possession estimate).
 
     Raises:
-        ValueError: If a team row is missing one of its totals: dropping its points but keeping its
-            possessions (or the reverse) would shift every other team's OBPM.
+        ValueError: If a team row has a null or non-finite total: dropping its points but keeping its
+            possessions (or a NaN reference) would shift every other team's OBPM.
     """
-    tl = team_logs.select(_ORTG_COLS)
-    if tl.null_count().sum_horizontal().item():
-        raise ValueError(f"team_logs has null {list(_ORTG_COLS)} totals; the league offensive rating needs them all")
+    tl = team_logs.select(pl.col(c).cast(pl.Float64) for c in _ORTG_COLS)
+    if not tl.select(pl.all_horizontal(pl.col(c).is_finite().fill_null(False) for c in _ORTG_COLS).all()).item():
+        raise ValueError(
+            f"team_logs has null or non-finite {list(_ORTG_COLS)} totals; the league offensive rating needs them all"
+        )
     poss = tl["fga"].sum() - tl["oreb"].sum() + tl["tov"].sum() + 0.44 * tl["fta"].sum()
     return float(tl["pts"].sum() / poss * 100) if poss else 0.0
 
@@ -404,7 +406,8 @@ def _nba_bpm_one(
             (pl.col("pm") / pl.col("poss") * 100).alias("margin"),
         )
     )
-    lg_ortg = _league_ortg(team_logs) if league_ortg is None else league_ortg
+    # season mode with no season_id groups: the logs are one season and season type by contract
+    lg_ortg = (_league_ortg(team_logs) if league_ortg is None else league_ortg) if team_adjust else 0.0
     # offense relative to the league; margin - o_margin is the defense's, so DBPM follows it
     tl = tl.with_columns((pl.col("tp") / pl.col("poss") * 100 - lg_ortg).alias("o_margin"))
     feats_adj = (
@@ -442,6 +445,7 @@ def nba_bpm(
     *,
     team_adjust: bool = True,
     granularity: str = "season",
+    league_ortg: float | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame:
     """Faithful BPM 2.0 per player, at season or single-game granularity.
@@ -474,6 +478,12 @@ def nba_bpm(
             game-native, mirroring ``NbaBpmModel``'s existing fold-native design)
             and returns one row per (game_id, player_id) with a leading ``game_id``
             column; ``gp`` is always 1 in this mode.
+        league_ortg: The league offensive rating (points per 100) the OBPM adjustment is relative
+            to. ``None`` (default) takes it from ``team_logs``: per ``season_id`` when that
+            column is there (stats.nba.com's season_id also encodes the season type, so regular
+            season and playoffs stay apart), else over all of ``team_logs``, which must then be
+            one season and season type. Pass it when ``team_logs`` is not a whole league, for
+            example one game scored on its own.
         return_as_pandas: return pandas instead of polars.
 
     Returns:
@@ -520,7 +530,7 @@ def nba_bpm(
         raise ValueError(f"granularity must be one of {_VALID_BPM_GRANULARITY}, got {granularity!r}")
 
     if granularity == "season":
-        out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust)
+        out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust, league_ortg=league_ortg)
         return out.to_pandas() if return_as_pandas else out
 
     if "game_id" not in player_logs.columns:
@@ -529,18 +539,19 @@ def nba_bpm(
     game_ids = player_logs["game_id"].unique().to_list()
     frames: list[pl.DataFrame] = []
     # one game's two teams are not the league: each game takes its season's league rating
-    by_season = "season_id" in team_logs.columns
-    lg_ortg = (
-        {s: _league_ortg(g) for (s,), g in team_logs.group_by("season_id")}
-        if by_season
-        else {None: _league_ortg(team_logs)}
-    )
+    by_season = league_ortg is None and "season_id" in team_logs.columns
+    if not team_adjust:
+        lg_ortg: dict = {None: 0.0}  # unused: raw BPM has no team reference
+    elif by_season:
+        lg_ortg = {s: _league_ortg(g) for (s,), g in team_logs.group_by("season_id")}
+    else:
+        lg_ortg = {None: _league_ortg(team_logs) if league_ortg is None else league_ortg}
     for gid in game_ids:
         pl_g = player_logs.filter(pl.col("game_id") == gid)
         tl_g = team_logs.filter(pl.col("game_id") == gid)
         if pl_g.is_empty() or tl_g.is_empty():
             continue
-        lg = lg_ortg[tl_g["season_id"][0] if by_season else None]
+        lg = lg_ortg[tl_g["season_id"][0] if by_season and team_adjust else None]
         scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust, league_ortg=lg)
         frames.append(scored.with_columns(pl.lit(gid).cast(pl.Utf8).alias("game_id")))
 
