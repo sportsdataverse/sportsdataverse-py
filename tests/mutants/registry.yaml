@@ -10871,7 +10871,7 @@
   group: nba-engine
   finding: BB-D21 margin drift
   file: sportsdataverse/nba/nba_possessions.py
-  snippet: '        ender = events[-2] if is_rebound_logged_after_its_putback(events, len(events) - 1) else events[-1]'
+  snippet: '        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]'
   mutant: '        ender = events[-1]'
   test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
   expected: kill

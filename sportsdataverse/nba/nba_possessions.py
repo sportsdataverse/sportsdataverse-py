@@ -638,6 +638,7 @@ def _build_possession_groups(
 
         # A putback the pbp logs before its own offensive rebound (same team, same clock): the
         # rebound belongs to the possession the putback ends, so the boundary moves past it.
+        row["_putback_rebound"] = deferred  # this row ends a putback's possession (for _assemble)
         ends = deferred or is_possession_ending_event(ctx, i, current_offense, home_id, away_id)
         deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)
         if ends and not deferred:
@@ -730,7 +731,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
         end_away: int = events[-1]["_away"]
         # the row that ended the possession, for the next one's start type: a putback, not the
         # rebound the pbp logs after it
-        ender = events[-2] if is_rebound_logged_after_its_putback(events, len(events) - 1) else events[-1]
+        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]
         cur_period = int(events[0].get("period") or 0)
 
         if prev_group_period is not None and cur_period != prev_group_period:
