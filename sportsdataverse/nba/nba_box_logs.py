@@ -50,10 +50,21 @@ def box_features(
     if "fg3_m" in player_logs.columns and "fg3m" not in player_logs.columns:
         player_logs = player_logs.rename({"fg3_m": "fg3m"})
     # Step 1: per-team-game possession frame
-    team_poss = team_logs.with_columns(
-        (pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"),
-        pl.col("min").alias("team_min"),
-    ).select("game_id", "team_id", "team_poss", "team_min")
+    # stats.wnba.com's 1997-2004 leaguegamelog gives many team-games a ``min`` of 0 or 12 (2003: every
+    # one). The team's players' minutes sum to the same five-slot total (to their rounding), so they
+    # replace a team ``min`` under 90% of it.
+    slot_min = player_logs.group_by("game_id", "team_id").agg(pl.col("min").sum().alias("_slot_min"))
+    team_poss = (
+        team_logs.join(slot_min, on=["game_id", "team_id"], how="left")
+        .with_columns(
+            (pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"),
+            pl.when(pl.col("min") >= 0.9 * pl.col("_slot_min").fill_null(0))
+            .then(pl.col("min"))
+            .otherwise(pl.col("_slot_min"))
+            .alias("team_min"),
+        )
+        .select("game_id", "team_id", "team_poss", "team_min")
+    )
     # Step 2: join each player-game to its team-game; compute per-game player possessions
     # A team's ``min`` is the sum over its five on-court slots (240 for regulation,
     # 265/290 with overtimes), NOT the game's elapsed minutes. A player's share of
