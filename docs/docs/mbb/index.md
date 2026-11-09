@@ -161,7 +161,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_shot_quality_model`](reference/additional/models-and-calculators-2#mbb_shot_quality_model)
 - [`mbb_team_ratings`](reference/additional/models-and-calculators-2#mbb_team_ratings)
 - [`mbb_transfer_projection`](reference/additional/models-and-calculators-2#mbb_transfer_projection)
-- [`pick_ridge_regression`](reference/additional/models-and-calculators-2#pick_ridge_regression)
+- [`pick_ridge_regression`](reference/additional/models-and-calculators-3#pick_ridge_regression)
 - [`player_per100_features`](reference/additional/models-and-calculators-3#player_per100_features)
 - [`poss_calc_fragment_sum`](reference/additional/models-and-calculators-3#poss_calc_fragment_sum)
 - [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)

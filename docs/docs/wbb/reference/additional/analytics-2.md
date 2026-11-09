@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup"
 sidebar_label: "Analytics: wbb_bracketology–wbb_lineup"
-sidebar_position: 11
+sidebar_position: 12
 description: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_bracketology–wbb_lineup

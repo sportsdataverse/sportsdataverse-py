@@ -87,7 +87,8 @@ def test_real_season_slice_compiles_and_scores_against_real_outcomes(monkeypatch
     """supp-013: build_wbb_season_wp compiles the committed real 2023-24 corpus
     (tests/fixtures/wbb_prediction/: the first 400 games of pbp_sample_2024, every 25th play, with the
     full results_2024 + team_box_2024), scored against each game's real result. Observed 2026-10-11:
-    Brier in-game 0.11951, pregame 0.17037, base rate 0.24472; floors rounded to the safe side."""
+    Brier in-game 0.11951, pregame 0.17037, base rate 0.24472; floors rounded to the safe side.
+    The 2026-11 refit booster: in-game 0.11885."""
     from pathlib import Path
 
     fix = Path(__file__).resolve().parents[1] / "fixtures" / "wbb_prediction"
