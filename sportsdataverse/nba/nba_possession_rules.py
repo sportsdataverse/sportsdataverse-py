@@ -918,8 +918,11 @@ def credit_defense_scoring(records: "list[dict]", carries: "list[tuple[int, int,
     A possession row has one offense, so a defense score inside it (a technical or flagrant free
     throw, or a basket a misplaced boundary puts there) used to vanish: neither ``points`` nor the
     shot counts kept it, and a game's possession points missed its final score. The possession
-    count is unchanged and every row keeps ``points == 2*fg2m + 3*fg3m + ftm``. pbpstats credits
-    these per event; this is the per-row form.
+    count is unchanged. ``points`` stays a score step and the shot counts stay event counts, as on
+    the offense side, so ``points == 2*fg2m + 3*fg3m + ftm`` holds on a receiving row exactly when
+    it holds for the carried part. It does not for a challenge award posted on a replay row with no
+    made-shot row (the step moves, no shot does), or for a G League single free throw worth 2 or 3
+    (one ``ftm``). pbpstats credits these per event; this is the per-row form.
 
     Args:
         records: The game's possession rows (dicts with ``offense_team_id``,
