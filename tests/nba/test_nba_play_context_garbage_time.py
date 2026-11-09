@@ -160,3 +160,22 @@ def test_empty_starters_map_yields_zero_counts(parts) -> None:
     _enh, poss, _starters = parts[GAMES[0]]
     counts = starters_on_court_counts(poss, {})
     assert set(counts.values()) == {0}
+
+
+@pytest.mark.parametrize("game_id", ["0020900009", "0020900017", "1021000022"])
+def test_legacy_zero_score_strings_do_not_reset_the_garbage_time_margin(game_id: str) -> None:
+    """Pre-2017-18 pbp writes ``"0"`` on non-scoring rows; the CTG margin must not read 0-0 there.
+
+    Real legacy release rows (``tests/fixtures/nba_engine/legacy_dialect``). The flags must match
+    the same game with those ``"0"`` strings blanked, the modern dialect (#1124). Before the fix
+    the legacy read flagged 12 / 5 / 0 possessions against 39 / 20 / 1.
+    """
+    pbp = pl.read_parquet(FXROOT / "legacy_dialect" / "pbp_2010.parquet").filter(pl.col("game_id") == game_id)
+    blank = pbp.with_columns(
+        [pl.when(pl.col(c) == "0").then(None).otherwise(pl.col(c)).alias(c) for c in ("score_home", "score_away")]
+    )
+    poss = build_possessions(pbp)
+    legacy = flag_garbage_time(poss, pbp)["is_garbage_time_ctg"]
+    modern = flag_garbage_time(poss, blank)["is_garbage_time_ctg"]
+    assert modern.sum() > 0
+    assert legacy.equals(modern)
