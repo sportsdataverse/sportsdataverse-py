@@ -662,6 +662,35 @@ def flag_heave_possessions(possessions: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _margin_by_order_index(enhanced_pbp: pl.DataFrame) -> dict[Any, int]:
+    """Absolute score margin at each ``order_index`` (the running score).
+
+    The v3 feed ships score_home / score_away as Utf8 and populates them only on
+    scoring rows, so cast to Int64 at the boundary (never diff the raw strings) and
+    forward-fill the gaps. Before 2017-18 (WNBA: 2017) the feed writes "0" / "0" on
+    every non-scoring row instead of a blank; a scoring row is never 0-0, so that
+    pair is read as a blank.
+    """
+    legacy_blank = (pl.col("score_home").cast(pl.Utf8) == "0") & (pl.col("score_away").cast(pl.Utf8) == "0")
+    score = (
+        enhanced_pbp.sort("order_index")
+        .with_columns(
+            *(
+                pl.when(legacy_blank)
+                .then(None)
+                .otherwise(pl.col(c))
+                .cast(pl.Int64, strict=False)
+                .forward_fill()
+                .fill_null(0)
+                .alias(a)
+                for c, a in (("score_home", "_sh"), ("score_away", "_sa"))
+            )
+        )
+        .select("order_index", "_sh", "_sa")
+    )
+    return {r["order_index"]: abs((r["_sh"] or 0) - (r["_sa"] or 0)) for r in score.to_dicts()}
+
+
 def flag_garbage_time(
     possessions: pl.DataFrame,
     enhanced_pbp: pl.DataFrame,
@@ -724,29 +753,7 @@ def flag_garbage_time(
             pl.lit(basis, dtype=pl.Utf8).alias("garbage_time_basis"),
         )
 
-    # Running score at each possession's start. The v3 feed ships score_home /
-    # score_away as Utf8 and populates them only on scoring rows, so cast to Int64
-    # at the boundary (never diff the raw strings) and forward-fill the gaps. Before
-    # 2017-18 (WNBA: 2017) the feed writes "0" / "0" on every non-scoring row instead
-    # of a blank; a scoring row is never 0-0, so that pair is read as a blank.
-    legacy_blank = (pl.col("score_home").cast(pl.Utf8) == "0") & (pl.col("score_away").cast(pl.Utf8) == "0")
-    score = (
-        enhanced_pbp.sort("order_index")
-        .with_columns(
-            *(
-                pl.when(legacy_blank)
-                .then(None)
-                .otherwise(pl.col(c))
-                .cast(pl.Int64, strict=False)
-                .forward_fill()
-                .fill_null(0)
-                .alias(a)
-                for c, a in (("score_home", "_sh"), ("score_away", "_sa"))
-            )
-        )
-        .select("order_index", "_sh", "_sa")
-    )
-    margin_by_order = {r["order_index"]: abs((r["_sh"] or 0) - (r["_sa"] or 0)) for r in score.to_dicts()}
+    margin_by_order = _margin_by_order_index(enhanced_pbp)
 
     flags: list[bool] = []
     for r in possessions.sort("possession_number").to_dicts():

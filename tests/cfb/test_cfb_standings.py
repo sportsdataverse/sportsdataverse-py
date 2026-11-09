@@ -265,6 +265,46 @@ class TestRestartOnElimination:
         assert ranks["A"] == 4
 
 
+TITLE_TIES_2025_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_2025_title_ties"
+
+
+class TestCommonOpponentDescent:
+    """Real 2025 conference games (see the fixture README): the order-of-finish
+    descent compares only opponents every tied team played (#1140)."""
+
+    @staticmethod
+    def _top2(conference: str) -> tuple[str, str]:
+        games = pl.read_csv(TITLE_TIES_2025_DIR / "games.csv")
+        teams = pl.read_csv(TITLE_TIES_2025_DIR / "teams.csv")
+        st = cfb_standings(games, teams).filter(pl.col("conference") == conference)
+        by_rank = dict(zip(st["conf_rank"].to_list(), st["team"].to_list()))
+        return by_rank[1], by_rank[2]
+
+    def test_2025_acc_five_way_tie_goes_to_duke(self) -> None:
+        # Duke, Georgia Tech, Miami, Pitt and SMU tied at 6-2; Syracuse is the
+        # only opponent all five played and all five beat it, so the descent
+        # cannot separate them and opponents' conference win % sends Duke (the
+        # real title-game pairing).
+        assert self._top2("ACC") == ("Virginia", "Duke")
+
+    def test_2025_sec_four_way_tie_seeds_alabama_then_georgia(self) -> None:
+        # Alabama, Georgia, Ole Miss and Texas A&M tied at 7-1; Alabama was
+        # seeded first and Georgia second (Alabama hosted the title game).
+        assert self._top2("SEC") == ("Alabama", "Georgia")
+
+    def test_2026_big12_descent_skips_opponents_not_all_tied_teams_played(self) -> None:
+        # Real 2026 Big 12 games through week 10 (cfb_2026_big12_partial/README.md):
+        # under the loose reading an opponent tier not all tied teams played seeds
+        # TCU first of Cincinnati / Iowa State / TCU / West Virginia and Kansas
+        # first of Colorado / Kansas / Kansas State; common-only leaves both ties
+        # level through the descent and opponents' conference win % orders them.
+        fixture = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_2026_big12_partial"
+        st = cfb_standings(pl.read_csv(fixture / "games.csv"), pl.read_csv(fixture / "teams.csv"))
+        ranks = dict(zip(st["team"].to_list(), st["conf_rank"].to_list()))
+        assert [ranks[t] for t in ("Iowa State", "West Virginia", "Cincinnati", "TCU")] == [10, 11, 12, 13]
+        assert [ranks[t] for t in ("Colorado", "Kansas State", "Kansas")] == [14, 15, 16]
+
+
 class TestPlayoffSeeds:
     @staticmethod
     def _standings_14() -> pl.DataFrame:
