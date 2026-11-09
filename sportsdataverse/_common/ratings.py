@@ -128,16 +128,15 @@ def opponent_adjusted_ridge(
     lam: float,
     penalize_home: bool = False,
     hfa_col: str | None = None,
+    weight_col: str | None = None,
 ) -> tuple[pl.DataFrame, float, float]:
     """Ridge-regress ``resp_col`` on offense + defense team indicators + HFA.
 
-    League-agnostic (column names are arguments): builds the full
-    offense/defense-indicator + intercept + home design and solves the
-    ridge normal equations ``beta = (X'X + lam*R)^-1 X'y``. Only team
-    coefficients are penalised; the intercept (and, unless
-    ``penalize_home``, the home term) is free. Moved (T7.2) from
-    ``sportsdataverse.nfl.nfl_ratings``. Callers: NFL ratings, and CFB
-    adjusted EPA (``cfb_adjusted_epa._fit_team_strengths``, via ``hfa_col``);
+    League-agnostic (column names are arguments): builds the full offense/defense-indicator +
+    intercept + home design and solves the ridge normal equations ``beta = (X'WX + lam*R)^-1
+    X'Wy``. Only team coefficients are penalised; the intercept (and, unless ``penalize_home``,
+    the home term) is free. Moved (T7.2) from ``sportsdataverse.nfl.nfl_ratings``. Callers: NFL
+    ratings, CFB adjusted EPA (via ``hfa_col``) and basketball team strength (via ``weight_col``);
     ``cfb_ratings`` uses the different :func:`dropped_level_ridge`.
 
     Args:
@@ -155,6 +154,9 @@ def opponent_adjusted_ridge(
             ``+1`` home offense / ``0`` neutral site / ``-1`` away), in place
             of the ``off_col == home_col`` indicator, which then goes unused.
             Must not contain nulls (raises ``ValueError``).
+        weight_col: Optional per-row weight ``W`` (each finite and > 0, else ``ValueError``): a
+            row standing for that many identical rows, with ``resp_col`` their mean, gives the
+            uncollapsed fit's coefficients.
 
     Returns:
         A ``(frame, intercept, home_coef)`` tuple: ``frame`` has one row per
@@ -204,7 +206,10 @@ def opponent_adjusted_ridge(
         # identified and an unpenalised zero column makes X'X singular. Fit it at 0.
         X[:, 2 * n_t + 1] = 0.0
         R[2 * n_t + 1, 2 * n_t + 1] = 1.0
-    beta = np.linalg.solve(X.T @ X + lam * R, X.T @ y)
+    w = np.ones(n) if weight_col is None else plays[weight_col].cast(pl.Float64).fill_null(-1.0).to_numpy()
+    if (~np.isfinite(w) | (w <= 0)).any():
+        raise ValueError(f"opponent_adjusted_ridge: {weight_col!r} has nulls, NaNs or non-positive weights")
+    beta = np.linalg.solve(X.T @ (X * w[:, None]) + lam * R, X.T @ (w * y))
     frame = pl.DataFrame(
         {
             "team_id": teams,

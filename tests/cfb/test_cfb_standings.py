@@ -10,11 +10,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_standings import (
     CONFERENCE_TIEBREAKERS,
+    _pick_winner,
+    _TieCtx,
     cfb_games_from_schedule,
     cfb_playoff_seeds,
     cfb_standings,
@@ -43,6 +46,22 @@ def _reg_games(rows: list[tuple[str, str, float]], sim: int = 2024) -> pl.DataFr
             "neutral": [0] * len(rows),
         }
     )
+
+
+def _h2h_rec(pairs: list[tuple[str, str]]) -> dict[str, dict[str, list[float]]]:
+    """(winner, loser) pairs -> the engine's conference-REC map: team -> opp -> [pts, n]."""
+    rec: dict[str, dict[str, list[float]]] = {}
+    for winner, loser in pairs:
+        won = rec.setdefault(winner, {}).setdefault(loser, [0.0, 0.0])
+        won[0] += 1.0
+        won[1] += 1.0
+        rec.setdefault(loser, {}).setdefault(winner, [0.0, 0.0])[1] += 1.0
+    return rec
+
+
+# h2h -> common opponents -> SOV: the shortest cascade where descending past an
+# elimination reads a comparison the published procedure never reaches.
+_RESTART_RUNGS = [{"kind": "h2h"}, {"kind": "record_vs_common"}, {"kind": "sov"}]
 
 
 class TestToyFixture:
@@ -179,6 +198,71 @@ class TestTiebreakerEdges:
         games, teams = _toy()
         with pytest.raises(ValueError, match="game_type"):
             cfb_standings(games.with_columns(pl.lit("SB").alias("game_type")), teams)
+
+
+class TestRestartOnElimination:
+    """A rung that ELIMINATES teams restarts the procedure at rung 1 (Big 12 rule)."""
+
+    @staticmethod
+    def _pick(tied: list[str], rec: dict[str, dict[str, list[float]]], sov: dict[str, float]) -> str:
+        metrics: dict[str, dict[str, float | None]] = {team: {"sov": value} for team, value in sov.items()}
+        ctx = _TieCtx("Delta", {}, False, [])
+        return _pick_winner(tied, metrics, rec, _RESTART_RUNGS, 3, np.random.default_rng(0), ctx)
+
+    def test_elimination_restarts_at_rung_one(self) -> None:
+        # A, B, C are level head-to-head (A beat B, B beat C, C beat A), and
+        # against the common opponent D only B and C won, cutting the tie to
+        # {B, C}. The procedure repeats from rung 1 on the survivors, which IS
+        # the two-team rule: B beat C, so B. Descending instead reads SOV next,
+        # where C is better.
+        rec = _h2h_rec([("A", "B"), ("B", "C"), ("C", "A"), ("B", "D"), ("C", "D"), ("D", "A")])
+        assert self._pick(["A", "B", "C"], rec, {"A": 0.5, "B": 0.5, "C": 0.9, "D": 0.1}) == "B"
+
+    def test_four_team_tie_cut_to_three_retests_survivors(self) -> None:
+        # A, B, C, D are tied and head-to-head seeds nobody (A beat B and C but
+        # lost to D; B, C, D never met each other). Common opponent E drops D
+        # (A, B, C beat E, D lost), leaving {A, B, C} where A's wins over B and
+        # C are now a defeated-all head-to-head, so the restarted rung 1 seeds
+        # A. Descending instead reaches SOV, where C is better.
+        rec = _h2h_rec([("A", "B"), ("A", "C"), ("D", "A"), ("A", "E"), ("B", "E"), ("C", "E"), ("E", "D")])
+        assert self._pick(["A", "B", "C", "D"], rec, {"A": 0.5, "B": 0.5, "C": 0.9, "D": 0.5}) == "A"
+
+    def test_generic_cascade_restarts_an_eliminated_tie_at_the_2_team_rule(self) -> None:
+        # Unregistered conference (generic cascade). F is clear at 4-1; A, B and
+        # C are 3-2 and level head-to-head (A beat B, B beat C, C beat A).
+        # Records vs the common opponent H (the only team all three played) put
+        # A out (A lost to H, B and C beat it), leaving {B, C}: the two-team
+        # rule gives it to B, which beat C. Descending would read SOV (level)
+        # and then SOS, where C is stronger, so the pre-fix engine ranks C 2nd.
+        rows = [
+            ("A", "B", 7.0),
+            ("C", "A", 7.0),
+            ("A", "F", 7.0),
+            ("A", "G", 7.0),
+            ("H", "A", 7.0),
+            ("B", "C", 7.0),
+            ("B", "D", 7.0),
+            ("E", "B", 7.0),
+            ("B", "H", 7.0),
+            ("C", "E", 7.0),
+            ("F", "C", 7.0),
+            ("C", "H", 7.0),
+            ("D", "E", 7.0),
+            ("F", "D", 7.0),
+            ("D", "G", 7.0),
+            ("H", "D", 7.0),
+            ("F", "E", 7.0),
+            ("E", "G", 7.0),
+            ("F", "G", 7.0),
+            ("G", "H", 7.0),
+        ]
+        teams = pl.DataFrame({"team": list("ABCDEFGH"), "conference": ["Zeta"] * 8})
+        st = cfb_standings(_reg_games(rows), teams, tiebreaker_depth="POINTS")
+        ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
+        assert ranks["F"] == 1
+        assert ranks["B"] == 2  # beat C head-to-head once the tie was cut to two
+        assert ranks["C"] == 3
+        assert ranks["A"] == 4
 
 
 class TestPlayoffSeeds:

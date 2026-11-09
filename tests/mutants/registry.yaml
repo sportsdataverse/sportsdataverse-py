@@ -8839,6 +8839,96 @@
   expected: kill
   note: Averaging the losses' opponents inverts the definition.
 
+- id: bb-ts-ridge-weight-dropped
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'weight_col="_n",'
+  mutant: 'weight_col=None,'
+  test: tests/common/test_ratings_ridge.py::test_weighted_collapsed_rows_give_the_uncollapsed_fit
+  expected: kill
+  note: Fitting the collapsed rows unweighted counts a 300-possession matchup like a 1-possession one.
+
+- id: bb-ts-ridge-weighted-response
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: sportsdataverse/_common/ratings.py
+  snippet: 'X.T @ (w * y)'
+  mutant: 'X.T @ y'
+  test: tests/common/test_ratings_ridge.py::test_weighted_collapsed_rows_give_the_uncollapsed_fit
+  expected: kill
+  note: Weighting X'X but not X'y fits the wrong normal equations.
+
+- id: bb-ts-ridge-league-lambda
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: 'lam=COLLEGE_RIDGE_LAMBDA[league]'
+  mutant: 'lam=COLLEGE_RIDGE_LAMBDA["mens"]'
+  test: tests/mbb/test_mbb_team_strength.py::test_ridge_ratings_are_the_possession_ridge
+  expected: kill
+  note: The women's ridge would run at the men's penalty (200, not 50).
+
+- id: bb-ts-ridge-def-rank-direction
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '{f"{m}_ridge": _NEW[m] for m in'
+  mutant: '{f"{m}_ridge": (_NEW[m][0], False) for m in'
+  test: tests/mbb/test_mbb_team_strength.py::test_ridge_ranks_and_sample_sizes
+  expected: kill
+  note: adj_def_rtg_ridge would rank the most points allowed first.
+
+- id: bb-ts-compare-fixed-asof
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/compare_college_team_strength.py
+  snippet: 'eff.filter(pl.col("date") < cut)'
+  mutant: 'eff.filter(pl.col("date") <= cut)'
+  test: tests/tools/test_compare_college_team_strength.py::test_ratings_never_see_the_games_they_score
+  expected: kill
+  note: The fixed point would be fit on the cutoff day's games, which it then scores.
+
+- id: bb-ts-compare-ridge-asof
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/compare_college_team_strength.py
+  snippet: 'rows.filter(pl.col("date") < cut)'
+  mutant: 'rows.filter(pl.col("date") <= cut)'
+  test: tests/tools/test_compare_college_team_strength.py::test_ratings_never_see_the_games_they_score
+  expected: kill
+  note: The ridge would be fit on the cutoff day's games, which it then scores.
+
+- id: bb-ts-compare-window
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/compare_college_team_strength.py
+  snippet: '(pl.col("date") >= cut)'
+  mutant: '(pl.col("date") > cut)'
+  test: tests/tools/test_compare_college_team_strength.py::test_ratings_never_see_the_games_they_score
+  expected: kill
+  note: The cutoff day's games would never be scored.
+
+- id: bb-ts-fit-tool-weight
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/fit_team_strength_ridge.py
+  snippet: '                weight_col="n",'
+  mutant: '                weight_col=None,'
+  test: tests/tools/test_fit_team_strength_ridge.py::test_grouped_weighted_cv_matches_the_ungrouped_fit
+  expected: kill
+  note: Collapsed possessions would count once each, so the CV that picks COLLEGE_RIDGE_LAMBDA scores a different fit.
+
+- id: bb-ts-compare-fit-seasons
+  group: bb-team-strength
+  finding: BB-D19 college ridge
+  file: tools/compare_college_team_strength.py
+  snippet: '    if set(args.holdout) & set(COLLEGE_RIDGE_FIT_SEASONS):'
+  mutant: '    if False:'
+  test: tests/tools/test_compare_college_team_strength.py::test_holdout_must_be_unseen
+  expected: kill
+  note: A holdout could score the penalty on the seasons it was fit on.
+
 - id: bb-ps-two-team-point-diff-first
   group: bb-pro-season
   finding: BB-D18
@@ -10936,6 +11026,23 @@
   test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: A different sample of the accepted bucket (another n) would stay excused.
+
+# --- PR1130: a partial elimination restarts the tiebreak cascade ------------------------------------
+# Killer: the three restart tests. The mutant is the pre-fix one-pass loop: an elimination advances
+# to the next rung instead of restarting, so a Big 12 tie cut to two is decided by opponents'
+# conference win % instead of the two-team head-to-head.
+- id: cfb-standings-tiebreak-restarts-on-elimination
+  group: cfb-standings
+  finding: PR1130
+  file: sportsdataverse/cfb/cfb_standings.py
+  snippet: '        i = 0 if len(cands) < before else i + 1'
+  mutant: '        i = i + 1'
+  test: tests/cfb/test_cfb_standings.py::TestRestartOnElimination
+  expected: kill
+  note: >-
+    One-pass cascade (the pre-fix behaviour): an elimination advances instead of re-testing the
+    survivors from rung 1, so BYU/Arizona after Texas Tech is dropped is decided by SOV rather than
+    the head-to-head BYU won.
 
 # --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
 - id: nba-engine-legacy-missed-ft

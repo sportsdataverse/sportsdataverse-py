@@ -188,7 +188,8 @@ wbb_team_season_rates(2025).filter(split="all").sort("net_rtg_rank").head()
 Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
 Delegates to `sportsdataverse.mbb.mbb_team_strength.mbb_team_strength` with
-`league="womens"`. The adjusted ratings are the published `wbb_ratings`.
+`league="womens"`. `adj_*_rtg` are the published `wbb_ratings`; `adj_*_rtg_ridge`
+the possession ridge on the `ncaa_wbb_possessions` release.
 
 **Parameters**
 
@@ -199,7 +200,7 @@ Delegates to `sportsdataverse.mbb.mbb_team_strength.mbb_team_strength` with
 
 **Returns**
 
-One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, `pts`, `opp_pts`, the adjusted ratings, `sos`, `sov`, the BB-D3 rates and their `_rank` / `_pct` / `_n`. See the mbb core for the definitions.
+One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, `pts`, `opp_pts`, both sets of adjusted ratings, `sos`, `sov`, the BB-D3 rates and their `_rank` / `_pct` / `_n`. See the mbb core for the definitions.
 
 | col_name | type | description |
 |---|---|---|
@@ -280,6 +281,18 @@ One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, 
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the season, 0 when the rate is null. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the season, 0 when the rate is null. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the season, 0 when the rate is null. |
+| `adj_off_rtg_ridge` | Float64 | Adjusted offensive rating, possession-ridge method: points per 100 possessions against an average Division I defense on a neutral court. The NBA / WNBA ridge (possession_ridge_ratings) on the ncaa_wbb_possessions release, penalty COLLEGE_RIDGE_LAMBDA, home court fitted and ESPN neutral sites; possessions against a non-Division I opponent left out. Published beside the fixed-point adj_off_rtg, which it does not replace. |
+| `adj_def_rtg_ridge` | Float64 | Adjusted defensive rating, possession-ridge method: points allowed per 100 possessions against an average Division I offense on a neutral court; lower is better. |
+| `adj_net_rtg_ridge` | Float64 | Adjusted net rating, possession-ridge method: adj_off_rtg_ridge minus adj_def_rtg_ridge. |
+| `adj_off_rtg_ridge_rank` | Float64 | Rank of adj_off_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_def_rtg_ridge_rank` | Float64 | Rank of adj_def_rtg_ridge within the season (the lowest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_net_rtg_ridge_rank` | Float64 | Rank of adj_net_rtg_ridge within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `adj_off_rtg_ridge_pct` | Float64 | Percentile of adj_off_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_def_rtg_ridge_pct` | Float64 | Percentile of adj_def_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_net_rtg_ridge_pct` | Float64 | Percentile of adj_net_rtg_ridge within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
+| `adj_off_rtg_ridge_n` | Int64 | Sample size of adj_off_rtg_ridge: the team's offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_def_rtg_ridge_n` | Int64 | Sample size of adj_def_rtg_ridge: the team's defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+| `adj_net_rtg_ridge_n` | Int64 | Sample size of adj_net_rtg_ridge: the team's offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
 
 **Example**
 
