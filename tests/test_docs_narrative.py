@@ -356,7 +356,7 @@ _README_STALE = [
     "docs/parsers/index",
     "internal-refs",  # the private reference repo, under any prefix
     "/master/sdv-py-logo.png",
-    "lifecycle-experimental",
+    "lifecycle-beta",  # README standard: lifecycle experimental below 1.0
     "img.shields.io/twitter/follow/sportsdataverse?",
 ]
 
@@ -383,7 +383,7 @@ _README_CURRENT = [
     "Kalshi, Polymarket",
     "(NHL + PWHL)",
     "year = {2021}",
-    "lifecycle-beta",
+    "lifecycle-experimental",
     "/main/docs/static/img/sdv-py-logo.png",
 ]
 
