@@ -166,6 +166,8 @@ def test_home_away_split_against_the_box_score(nba_2026: pl.DataFrame) -> None:
     plain = wide.filter(pl.col("neutral_games") == 0)
     assert (plain["poss_home"] + plain["poss_away"] == plain["poss_all"]).all()
     assert (plain["pts_home"] + plain["pts_away"] == plain["pts_all"]).all()
+    played = wide.filter(pl.col("neutral_games") > 0)  # DET DAL ORL MEM NYK OKC SAS: neutral poss in `all` only
+    assert played.height == 7 and (played["poss_home"] + played["poss_away"] < played["poss_all"]).all()
     # Home-court advantage is real in 2025-26: the league's home split outscores its away split.
     home = nba_2026.filter(split="home")
     away = nba_2026.filter(split="away")

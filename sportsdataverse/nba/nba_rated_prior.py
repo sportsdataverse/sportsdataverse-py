@@ -20,8 +20,8 @@ holdout that shows this prior beats the home-court fallback is
 
 **ESPN games.** The ratings use the stats.nba.com / stats.wnba.com possessions; the game pages use
 ESPN ids. Games are matched on (date, home team name, away team name), which the two sources
-share; the neutral-site flag is ESPN's (it marks the 2023-24 NBA Cup semifinals as home games, so
-those two carry a home term). An ESPN game with no stats match gets a null probability and the game
+share. A matched game takes :mod:`sportsdataverse.nba.nba_neutral_site`'s flag, not ESPN's, which
+misses the 2020 bubble and the 2023-24 Cup semifinals; an unmatched game keeps ESPN's. An ESPN game with no stats match gets a null probability and the game
 page falls back to home-court advantage: the All-Star games, and the WNBA Commissioner's Cup final,
 which the stats schedule does not list. The holdout's match counts are pinned in
 ``tests/nba/test_nba_wp_model_cards.py``.

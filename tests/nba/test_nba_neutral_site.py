@@ -108,6 +108,39 @@ def test_the_sim_plays_neutral_games_without_the_home_term():
     assert np.allclose(gap[:, ~neutral], 0.0)
 
 
+def test_the_sim_hands_the_flag_to_the_simulator(monkeypatch: pytest.MonkeyPatch) -> None:
+    """BB-D18: ``simulate_pro_season`` passes the schedule's neutral games through to the simulated games."""
+    sched = pl.read_parquet(PRO / "nba_schedule_2026.parquet")
+    games = sim_mod._regular_games(sched, dt.date(2025, 10, 1))
+    rows = tsr.nba_possession_rate_rows(pl.read_parquet(RATES / "nba_possessions_2026.parquet"), sched)
+    seen: list[np.ndarray] = []
+    real = sim_mod._simulate_games
+
+    def spy(*args, neutral, **kwargs):  # noqa: ANN002, ANN003, ANN202
+        seen.append(np.asarray(neutral))
+        return real(*args, neutral=neutral, **kwargs)
+
+    monkeypatch.setattr(sim_mod, "_simulate_games", spy)
+    sim_mod.simulate_pro_season(games, sim_mod.as_of_game_model(rows), n_sims=8, as_of_date=dt.date(2025, 10, 1))
+    assert len(seen) == 1 and seen[0].sum() == 5  # Mexico City, Berlin, London, the two Las Vegas semifinals
+
+
+def test_game_flow_gives_the_cup_semifinal_the_neutral_prior():
+    """BB-D27: the listed Las Vegas semifinal in the game-flow fixture gets the neutral pregame prior."""
+    from sportsdataverse._common.game_flow import attach_home_wp
+    from sportsdataverse.nba.nba_game_flow import nba_score_rows
+
+    flow = ROOT / "bb_game_flow"
+    rows = nba_score_rows(
+        pl.read_parquet(flow / "nba_pbp_2026.parquet"), pl.read_parquet(flow / "nba_schedule_2026.parquet")
+    )
+    assert rows.filter(pl.col("neutral_site") == True)["game_id"].unique().to_list() == ["0022501229"]  # noqa: E712
+    semi = rows.filter(pl.col("game_id") == "0022501229")
+    neutral = attach_home_wp(semi, league="nba")["home_wp"][0]
+    home = attach_home_wp(semi.with_columns(pl.lit(False).alias("neutral_site")), league="nba")["home_wp"][0]
+    assert neutral < home  # Orlando, the listed home team, loses its home-court edge
+
+
 def test_rated_priors_take_our_flag_over_espns(monkeypatch: pytest.MonkeyPatch) -> None:
     """ESPN's flag is wrong both ways: a stats-matched game takes the list's flag; an unmatched one keeps ESPN's."""
     from sportsdataverse.errors import SeasonNotFoundError
@@ -123,22 +156,46 @@ def test_rated_priors_take_our_flag_over_espns(monkeypatch: pytest.MonkeyPatch) 
         "game_date",
         pl.int_range(pl.len()).alias("home_id"),
         pl.int_range(pl.len()).alias("away_id"),
-        pl.lit(True).alias("neutral_site"),  # ESPN marks every game neutral, as it marks the All-Star games
+        (pl.int_range(pl.len()) < pl.len() - 1).alias("neutral_site"),  # ESPN: the last game home, the rest neutral
         pl.col("_h").alias("home_display_name"),
         pl.col("_a").alias("away_display_name"),
     )
     all_star = espn.head(1).with_columns(
-        pl.lit(10_000, dtype=espn.schema["game_id"]).alias("game_id"), pl.lit("team clark").alias("home_display_name")
+        pl.lit(10_000, dtype=espn.schema["game_id"]).alias("game_id"),
+        pl.lit(True).alias("neutral_site"),
+        pl.lit("team clark").alias("home_display_name"),
     )  # no stats game: nothing of ours to replace ESPN's flag with
     monkeypatch.setattr(wnba_loaders, "load_wnba_schedule", lambda seasons: pl.concat([espn, all_star]))
 
-    def fake(league_id: str, season: int) -> tuple[pl.DataFrame, pl.DataFrame]:
-        if season != 2025:
-            raise SeasonNotFoundError(f"no {season} in the fixture")
-        return rows, games
+    def run(stats_games: pl.DataFrame) -> pl.DataFrame:
+        def fake(league_id: str, season: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+            if season != 2025:
+                raise SeasonNotFoundError(f"no {season} in the fixture")
+            return rows, stats_games
 
-    monkeypatch.setattr(nba_rated_prior, "_possession_rows", fake)
-    out = nba_rated_prior.nba_rated_priors(2025, league_id="10")
-    matched = out.filter(pl.col("game_id") != 10_000)
-    assert matched.height == games.height and not matched["neutral_site"].any()  # none of these is on the list
-    assert out.filter(pl.col("game_id") == 10_000)["neutral_site"].to_list() == [True]
+        monkeypatch.setattr(nba_rated_prior, "_possession_rows", fake)
+        return nba_rated_prior.nba_rated_priors(2025, league_id="10")
+
+    base = run(games)
+    last = games.height - 1
+    # the last game (the most rated) carries the listed Vancouver game's id: ours says neutral, ESPN home
+    listed = run(
+        games.with_columns(
+            pl.when(pl.int_range(pl.len()) == pl.len() - 1)
+            .then(pl.lit("1022500214"))
+            .otherwise("stats_game_id")
+            .alias("stats_game_id")
+        )
+    )
+    matched = pl.col("game_id") != 10_000
+    assert base.filter(matched).height == games.height and not base.filter(matched)["neutral_site"].any()
+    assert listed.filter(pl.col("game_id") == last)["neutral_site"].to_list() == [True]
+    assert listed.filter(matched & (pl.col("game_id") != last))["neutral_site"].sum() == 0
+    a, b = (
+        base.filter(pl.col("game_id") == last).row(0, named=True),
+        listed.filter(pl.col("game_id") == last).row(0, named=True),
+    )
+    # the neutral game loses exactly the home term, 2 * hfa per 100 over the game's possessions
+    assert b["exp_home_margin"] < a["exp_home_margin"]
+    assert b["home_adj_net_rtg"] == a["home_adj_net_rtg"] and b["away_adj_net_rtg"] == a["away_adj_net_rtg"]
+    assert base.filter(pl.col("game_id") == 10_000)["neutral_site"].to_list() == [True]

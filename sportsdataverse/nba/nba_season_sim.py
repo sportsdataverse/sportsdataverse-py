@@ -889,7 +889,7 @@ def _cup_inputs(
             stacklevel=4,
         )
         return None
-    last = _regular_games(last_schedule, None) if last_schedule.height else None
+    last = _regular_games(last_schedule, None, "00") if last_schedule.height else None
     return cup_inputs(sched, games=games, possessions=possessions, last_games=last, as_of_date=as_of_date)
 
 
