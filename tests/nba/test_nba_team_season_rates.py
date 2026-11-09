@@ -191,8 +191,9 @@ def test_clutch_window_against_stats_nba_2024(monkeypatch: pytest.MonkeyPatch) -
     j = rates.join(oracle, on="team_id", validate="1:1")
     assert j.height == 30
     assert j.select(pl.corr("poss", "clutch_poss")).item() >= 0.99
-    assert abs((j["poss"] - j["clutch_poss"]).mean()) <= 30
-    assert j.select(pl.corr("net_rtg", "clutch_net_rating")).item() >= 0.97
+    # observed: stats.nba.com counts 12 more a team (23 before the possession live at 5:00 counted)
+    assert 10.0 <= (j["clutch_poss"] - j["poss"]).mean() <= 14.0
+    assert j.select(pl.corr("net_rtg", "clutch_net_rating")).item() >= 0.99  # observed 0.992
 
 
 def test_close_games_are_the_clutch_games(nba_2026: pl.DataFrame) -> None:

@@ -28,8 +28,10 @@ def wbb_team_season_rates(
     """Women's college season team rates from possessions, with home/away/close/clutch splits.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_team_season_rates.mbb_team_season_rates` with
-    ``league="womens"``. Clutch is the last 5:00 of the 4th quarter (the 2nd half before 2016)
-    or an overtime, the score within 5 as the possession starts.
+    ``league="womens"``. Clutch is a possession in play in the last 5:00 of the 4th quarter (the
+    2nd half before 2016) or an overtime, the score within 5 as it starts. That is one starting
+    with 5:00 or less left, or the one live at the mark: a possession from 5:10 to 4:50 counts in
+    full, one that ends exactly at 5:00 does not.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).

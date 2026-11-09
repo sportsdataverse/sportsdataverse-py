@@ -401,7 +401,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_mbb_on_off](additional/analytics-4.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-4.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-4.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
-| [ncaa_possession_rate_rows](additional/analytics-4.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |
+| [ncaa_possession_rate_rows](additional/analytics-5.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |
 | [ncaa_score_rows](additional/analytics-5.md#ncaa_score_rows) | Map the stats.ncaa.org play-by-play onto the game-flow score rows. |
 | [ncaa_situation_rows](additional/analytics-5.md#ncaa_situation_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the situational-splits possession frame. |
 | [ncaa_team_box_count_rows](additional/analytics-5.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |

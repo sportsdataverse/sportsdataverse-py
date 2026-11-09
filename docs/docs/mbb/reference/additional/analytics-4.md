@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession"
-sidebar_label: "Analytics: mbb_team–ncaa_possession"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb"
+sidebar_label: "Analytics: mbb_team–ncaa_mbb"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_possession
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -13,9 +13,11 @@ description: "Men's college basketball — additional Python functions — Analy
 College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits.
 
 One row per team, season and split (`all`, `home`, `away`, `close`, `clutch`).
-Clutch is a possession that starts with 5:00 or less left in the 2nd half (the 4th quarter
-in women's basketball from 2016) or an overtime, the score within 5; a close game is one with
-a clutch possession. The full definitions are in `sportsdataverse._common.team_season_rates`.
+Clutch is a possession in play with 5:00 or less left (starting there, or the one live at the
+5:00 mark: it starts before 5:00 and ends after it; one that ends exactly at 5:00 is out) in
+the 2nd half (the 4th quarter in women's basketball from 2016) or an overtime, the score
+within 5 as it starts; a close game is one with a clutch possession. The full definitions
+are in `sportsdataverse._common.team_season_rates`.
 
 **Parameters**
 
@@ -33,7 +35,7 @@ One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left in the 2nd half or an overtime, the score within 5 as it starts). |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 2nd half (the 4th quarter for league='womens' from 2016) or an overtime, the score within 5 as it starts). |
 | `games` | Int64 | Games with at least one possession in the split. |
 | `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
 | `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
@@ -267,7 +269,7 @@ One row per ineligible `(season, league, team_id)`: `season, league, team_id` (E
 | `season` | Int64 | Season, as the end year (2024 is 2023-24). |
 | `league` | String | mens or womens. |
 | `team_id` | String | ESPN team id (Utf8). |
-| `team` | String | School name of the barred program, as the source spells it; join on team_id. |
+| `team` | String | School name of the barred program, as ESPN spells it. |
 | `reason` | String | Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other. |
 | `detail` | String | Short note on the row, such as the reclassification year or the case behind the ban. |
 | `source_url` | String | The source that documents the row. |
@@ -961,59 +963,4 @@ df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER
 # Pipeline next step (one line)
 
 on.select(pl.col("mins").sum())
-```
-
-### ncaa_possession_rate_rows {#ncaa_possession_rate_rows}
-
-`ncaa_possession_rate_rows(possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows. |
-| `schedule` | `DataFrame` |  | `load_mbb_schedule` / `load_wbb_schedule` rows (`game_id`, `neutral_site`), joined on `espn_game_id`. |
-| `league` | `str` | `'mens'` | `"mens"` (two 20-minute halves) or `"womens"` (10-minute quarters from 2016, halves before). |
-
-**Returns**
-
-One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`, with null four-factor counts.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | The stats.ncaa.org contest id. |
-| `period` | Int64 | Period of the possession; overtimes follow the last regulation period. |
-| `possession_number` | Int64 | Order of the possession in the game. |
-| `late` | Boolean | True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the clutch window can fall in. |
-| `start_clock` | Float64 | Seconds left in the period when the possession starts: its length plus the lengths of the later possessions in the period. |
-| `end_clock` | Float64 | Seconds left in the period when the possession ends. |
-| `offense_team_id` | Int64 | ESPN id of the team with the ball; null for a non-D1 team. |
-| `defense_team_id` | Int64 | ESPN id of the team on defense; null for a non-D1 team. |
-| `offense_is_home` | Boolean | True when the offense is the (nominal) home team; it signs the running score for the clutch margin. |
-| `neutral_site` | Boolean | True for an ESPN neutral-site game (False when ESPN does not carry the game); such a game is in neither the home nor the away split. |
-| `points` | Int64 | Points the offense scored on the possession. |
-| `fga` | Float64 | Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
-| `ff_poss` | Float64 | Always null: the turnover rate's denominator comes from the team box. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
-rows = ncaa_possession_rate_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
 ```

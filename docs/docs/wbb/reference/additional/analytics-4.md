@@ -99,8 +99,10 @@ wbb_team_season_flow(2026).sort("kills_pg_rank").head()
 Women's college season team rates from possessions, with home/away/close/clutch splits.
 
 Delegates to `sportsdataverse.mbb.mbb_team_season_rates.mbb_team_season_rates` with
-`league="womens"`. Clutch is the last 5:00 of the 4th quarter (the 2nd half before 2016)
-or an overtime, the score within 5 as the possession starts.
+`league="womens"`. Clutch is a possession in play in the last 5:00 of the 4th quarter (the
+2nd half before 2016) or an overtime, the score within 5 as it starts. That is one starting
+with 5:00 or less left, or the one live at the mark: a possession from 5:10 to 4:50 counts in
+full, one that ends exactly at 5:00 does not.
 
 **Parameters**
 
@@ -117,7 +119,7 @@ One row per `(season, team_id, split)`: `games`, `poss`, `opp_poss`, `pts`, `opp
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
-| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession that starts with 5:00 or less left in the 4th quarter (the 2nd half before 2016) or an overtime, the score within 5 as it starts). |
+| `split` | String | Which possessions the row covers: all; home or away (the team's home or road games; neutral-site games are in neither); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half before 2016) or an overtime, the score within 5 as it starts). |
 | `games` | Int64 | Games with at least one possession in the split. |
 | `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
 | `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
