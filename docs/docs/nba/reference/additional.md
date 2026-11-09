@@ -193,7 +193,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_bpm](additional/models-and-calculators.md#nba_bpm) | Faithful BPM 2.0 per player, at season or single-game granularity. |
 | [nba_career_trajectory](additional/models-and-calculators.md#nba_career_trajectory) | Age-adjust player-season values with the bundled aging curve. |
 | [nba_darko](additional/models-and-calculators.md#nba_darko) | Project each player's next-season rating via a per-player Kalman filter + aging curve. |
-| [nba_decay_rapm](additional/models-and-calculators.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
+| [nba_decay_rapm](additional/models-and-calculators-2.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
 | [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
 | [nba_expected_turnovers](additional/models-and-calculators-2.md#nba_expected_turnovers) | Expected TOV + residual ball-security skill from Synergy play-type mix. |
 | [nba_four_factor_rapm](additional/models-and-calculators-2.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
@@ -209,9 +209,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_war](additional/models-and-calculators-2.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-2.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-2.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
-| [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
-| [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted ratings and paces. |
-| [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
+| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
+| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted ratings and paces. |
+| [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
 | [render_report](additional/models-and-calculators-3.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
 | [score_win_prob](additional/models-and-calculators-3.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
 | [season_game_excitement](additional/models-and-calculators-3.md#season_game_excitement) | Every game's excitement index, lead changes and biggest swing, ranked within its season. |

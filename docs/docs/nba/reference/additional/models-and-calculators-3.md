@@ -1,10 +1,113 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: render_report–win_prob"
-sidebar_label: "Models and calculators: render_report–win_prob"
+title: "NBA — additional Python functions — Models and calculators: predict_margin–win_prob"
+sidebar_label: "Models and calculators: predict_margin–win_prob"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: render_report–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: predict_margin–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: render_report–win_prob
+# NBA — additional Python functions — Models and calculators: predict_margin–win_prob
+
+### predict_margin {#predict_margin}
+
+`predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
+
+Expected home-minus-away margin from two adjusted net ratings.
+
+The AdjNet difference (points/100 possessions) is scaled by the
+matchup's `expected_possessions` before the home-court advantage
+is added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  | Home team's adjusted net rating (`adj_net_rtg`). |
+| `away_net` | `float` |  | Away team's adjusted net rating. |
+| `home_pace` | `float` |  | Home team's adjusted pace. |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the fitted HFA. |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import predict_margin
+predict_margin(10.0, -2.0, home_pace=100.0, away_pace=98.0, neutral=False)
+```
+
+### predict_total {#predict_total}
+
+`predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
+
+Expected total points from adjusted ratings and paces.
+
+Expected possessions come from `expected_possessions`; each side's
+expected points per 100 possessions blend its offense with the
+opponent's defense (`0.5 * (off + opp_def)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off` | `float` |  | Home adjusted offensive rating (points/100 poss). |
+| `home_def` | `float` |  | Home adjusted defensive rating. |
+| `away_off` | `float` |  | Away adjusted offensive rating. |
+| `away_def` | `float` |  | Away adjusted defensive rating. |
+| `home_pace` | `float` |  | Home team's adjusted pace. |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the pace anchor. |
+
+**Returns**
+
+Expected combined points scored by both teams.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import predict_total
+predict_total(118.0, 108.0, 110.0, 112.0, 100.0, 98.0)
+```
+
+### raw_game_efficiency {#raw_game_efficiency}
+
+`raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Per-team, per-game possessions + raw offensive/defensive rating.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids cast to `Utf8` here). |
+| `team_box` | `DataFrame` |  | Per-team box score with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. |
+
+**Returns**
+
+One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_rtg, def_rtg`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_rtg` | Float64 |  |
+| `def_rtg` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
+from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
+eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
+```
 
 ### render_report {#render_report}
 
