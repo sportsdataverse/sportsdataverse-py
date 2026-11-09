@@ -1099,3 +1099,23 @@ def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
         assert was["start_order_index"].item() == rebound  # a phantom possession opened on the rebound
     else:
         assert was["offense_team_id"].item() == reb_team
+
+
+def test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The last group of a game: a team field-goal attempt at 0.3 s, a team rebound, the period end.
+
+    Real 2025-26 rows (``rebound_without_a_miss/README.md``, game ``0022500119``). The rebound follows
+    no miss, but no other row of the group has a side, so it still names the offense (DAL, home) and
+    the possession is kept, as it was before.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == "0022500119")
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == "0022500119")
+        .row(0, named=True)
+    )
+    poss = build_possessions(pbp)
+    last = poss.filter(pl.col("start_order_index") == 486)
+    assert last.height == 1 and last["offense_team_id"].item() == game["home_team_id"]
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    assert build_possessions(pbp).height == poss.height

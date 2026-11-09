@@ -10885,3 +10885,12 @@
   test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
   expected: kill
   note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
+- id: nba-engine-rebound-offense-fallback
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and (ev.get("_offense_cue", True) or not strict)'
+  mutant: '                and ev.get("_offense_cue", True)'
+  test: tests/nba/test_nba_possessions.py::test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can
+  expected: kill
+  note: A group whose only sided row is a rebound that follows no miss (a last-second team attempt, then a team rebound) would get no offense and be dropped; 1 group in NBA 2025-26.

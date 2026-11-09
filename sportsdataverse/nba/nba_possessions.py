@@ -149,13 +149,15 @@ def _offense_from_events(
     a rebound after a steal, or an offensive rebound the pbp logs after its own
     putback. Its ``location`` is the team that just had the ball, and it opened
     possessions for the wrong team (the other team's basket then fell in that
-    possession). Such a rebound decides the offense only when nothing else in
-    the group can (a last-second heave, say).
+    possession). Such a rebound decides the offense only when no other row of
+    the group with a side (``location`` ``h`` / ``v``) can, a last-second
+    heave, say: every other cue, a jump ball or violation included, is tried
+    first.
     """
     scoring_types = frozenset(("made_shot", "missed_shot", "free_throw", "turnover", "rebound"))
     non_foul_types = frozenset(("foul", "period", "timeout", "substitution"))
-    for wanted in (scoring_types, None):
-        for strict in (True, False):
+    for strict in (True, False):
+        for wanted in (scoring_types, None):
             cues = [
                 ev
                 for ev in events
@@ -165,7 +167,7 @@ def _offense_from_events(
             for ev in cues:
                 et = ev.get("event_type") or ""
                 loc = ev.get("location") or ""
-                if loc and (et in wanted if wanted else et not in non_foul_types):
+                if loc in ("h", "v") and (et in wanted if wanted else et not in non_foul_types):
                     return home_id if loc == "h" else (away_id if loc == "v" else 0)
     return 0
 
