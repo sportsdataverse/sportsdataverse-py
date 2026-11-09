@@ -166,11 +166,11 @@ def test_transition_frequency_matches_ctg_synergy_band(frames):
         poss = add_play_context(enh)
         clean = poss.filter(
             (pl.col("count_as_possession") == True)  # noqa: E712
-            & (pl.col("is_garbage_time") == False)  # noqa: E712
+            & (pl.col("is_garbage_time_ctg") == False)  # noqa: E712
             & (pl.col("is_heave_possession") == False)  # noqa: E712
         )
         assert clean.height >= 150, "fixture shrank — gate would pass vacuously"
-        freqs.append(clean["is_transition"].mean())
+        freqs.append(clean["is_transition_ctg"].mean())
 
     mean = sum(freqs) / len(freqs)
     lo, hi = TRANSITION_FREQ_GATE
@@ -184,7 +184,7 @@ def test_transition_seconds_is_monotonic(frames):
     prev = -1.0
     for secs in (4.0, 6.0, 8.0, 10.0):
         poss = add_play_context(enh, transition_seconds=secs)
-        freq = poss["is_transition"].mean()
+        freq = poss["is_transition_ctg"].mean()
         assert freq >= prev
         prev = freq
 
@@ -196,8 +196,8 @@ def test_hoop_math_10s_college_default_overshoots_nba(frames):
     possessions it roughly doubles CTG's published transition rate.
     """
     enh = frames["0022200001"]
-    at_6 = add_play_context(enh, transition_seconds=6.0)["is_transition"].mean()
-    at_10 = add_play_context(enh, transition_seconds=10.0)["is_transition"].mean()
+    at_6 = add_play_context(enh, transition_seconds=6.0)["is_transition_ctg"].mean()
+    at_10 = add_play_context(enh, transition_seconds=10.0)["is_transition_ctg"].mean()
     assert at_10 > 2 * TRANSITION_FREQ_GATE[1] * 0.75  # ~0.35 observed
     assert at_6 < at_10
 
@@ -205,7 +205,7 @@ def test_hoop_math_10s_college_default_overshoots_nba(frames):
 def test_period_opener_never_transition(frames):
     poss = add_play_context(frames["0022200001"])
     openers = poss.filter(pl.col("number_in_period") == 1)
-    assert not openers["is_transition"].any()
+    assert not openers["is_transition_ctg"].any()
 
 
 def test_timeout_start_never_transition(frames):
@@ -213,20 +213,20 @@ def test_timeout_start_never_transition(frames):
     for variant in C.TRANSITION_VARIANTS:
         poss = add_play_context(frames["0022200001"], transition_variant=variant)
         ato = poss.filter(pl.col("possession_start_type_ctg") == "off_timeout")
-        assert not ato["is_transition"].any(), variant
+        assert not ato["is_transition_ctg"].any(), variant
 
 
 def test_haslametrics_variant_is_steal_only(frames):
     enh = frames["0022200001"]
     poss = add_play_context(enh, transition_variant="haslametrics")
-    trans = poss.filter(pl.col("is_transition") == True)  # noqa: E712
+    trans = poss.filter(pl.col("is_transition_ctg") == True)  # noqa: E712
     assert trans.height > 0
     assert set(trans["possession_start_type_ctg"].unique()) == {"off_steal"}
 
 
 def test_bigballr_variant_excludes_deadball_starts(frames):
     poss = add_play_context(frames["0022200001"], transition_variant="bigballr")
-    trans = poss.filter(pl.col("is_transition") == True)  # noqa: E712
+    trans = poss.filter(pl.col("is_transition_ctg") == True)  # noqa: E712
     assert "off_deadball" not in set(trans["possession_start_type_ctg"].unique())
 
 
@@ -278,7 +278,7 @@ def test_transition_wins_over_putback(frames):
     trans_putbacks = shots.filter((pl.col("is_putback") == True))  # noqa: E712
     # any putback inside a transition possession must be labelled transition, not putback
     for r in trans_putbacks.to_dicts():
-        if poss.filter(pl.col("possession_number") == r["possession_number"])["is_transition"][0]:
+        if poss.filter(pl.col("possession_number") == r["possession_number"])["is_transition_ctg"][0]:
             assert r["shot_context"] == "transition"
         else:
             assert r["shot_context"] == "putback"
@@ -293,7 +293,7 @@ def test_shots_schema_and_contexts(frames):
 
 
 def test_shots_empty_input_returns_schema():
-    empty_poss = pl.DataFrame(schema={"possession_number": pl.Int64, "is_transition": pl.Boolean})
+    empty_poss = pl.DataFrame(schema={"possession_number": pl.Int64, "is_transition_ctg": pl.Boolean})
     out = build_play_context_shots(empty_poss, pl.DataFrame())
     assert out.schema == PLAY_CONTEXT_SHOTS_SCHEMA
     assert out.height == 0
@@ -318,7 +318,7 @@ def test_garbage_time_is_fourth_quarter_only_and_declares_its_basis(frames):
     enh = frames["0022100001"]  # a blowout (24 garbage-time possessions observed)
     poss = flag_garbage_time(build_possessions(enh), enh)
 
-    gt = poss.filter(pl.col("is_garbage_time") == True)  # noqa: E712
+    gt = poss.filter(pl.col("is_garbage_time_ctg") == True)  # noqa: E712
     assert gt.height > 0
     assert set(gt["period"].unique()) == {C.GARBAGE_TIME_PERIOD}
     # honesty gate: without starter data the flag MUST declare itself margin-only
@@ -339,7 +339,7 @@ def test_garbage_time_respects_margin_bands(frames):
     )
     margin = {r["order_index"]: abs(r["h"] - r["a"]) for r in score.to_dicts()}
 
-    for r in poss.filter(pl.col("is_garbage_time") == True).to_dicts():  # noqa: E712
+    for r in poss.filter(pl.col("is_garbage_time_ctg") == True).to_dicts():  # noqa: E712
         clock = r["start_seconds_remaining"]
         m = margin[r["start_order_index"]]
         band = next(b for b in C.GARBAGE_TIME_BANDS if b[1] < clock <= b[0])
@@ -350,12 +350,12 @@ def test_starters_clause_tightens_garbage_time(frames):
     """Supplying starter counts can only REMOVE possessions from garbage time."""
     enh = frames["0022100001"]
     base = flag_garbage_time(build_possessions(enh), enh)
-    n_margin_only = base.filter(pl.col("is_garbage_time") == True).height  # noqa: E712
+    n_margin_only = base.filter(pl.col("is_garbage_time_ctg") == True).height  # noqa: E712
 
     # pretend the starters never left: every possession has 10 starters on the floor
     all_starters = {n: 10 for n in base["possession_number"].to_list()}
     strict = flag_garbage_time(build_possessions(enh), enh, starters_on_court=all_starters)
-    assert strict.filter(pl.col("is_garbage_time") == True).height == 0  # noqa: E712
+    assert strict.filter(pl.col("is_garbage_time_ctg") == True).height == 0  # noqa: E712
     assert set(strict["garbage_time_basis"].unique()) == {"margin_and_starters"}
     assert n_margin_only > 0  # the margin-only flag really is a superset
 
@@ -375,6 +375,35 @@ def test_add_play_context_appends_every_column(frames, game_id):
         assert poss.schema[col] == dtype, col
     # additive: the possession engine's own columns survive untouched
     assert {"points", "offense_team_id", "count_as_possession"}.issubset(set(poss.columns))
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_the_old_flag_names_are_deprecated_copies(frames, game_id):
+    """``is_transition`` / ``is_garbage_time`` still come out, as copies of the renamed ``*_ctg`` flags."""
+    poss = add_play_context(frames[game_id])
+    for new, old in (("is_transition_ctg", "is_transition"), ("is_garbage_time_ctg", "is_garbage_time")):
+        assert poss[old].equals(poss[new]), old
+    assert poss["is_transition_ctg"].any()
+
+
+def test_the_copies_never_overwrite_a_published_flag(frames):
+    """A frame that already has BB-D7's plain-name flags keeps them; only the ``*_ctg`` columns are added."""
+    from sportsdataverse.nba.nba_play_context import add_start_type_detail, add_transition, flag_garbage_time
+    from sportsdataverse.nba.nba_possessions import build_possessions
+
+    pbp = frames[GAMES[0]]
+    poss = add_start_type_detail(build_possessions(pbp), pbp)
+    mine = poss.with_columns(pl.lit(True).alias("is_transition"), pl.lit(True).alias("is_garbage_time"))
+    out = flag_garbage_time(add_transition(mine, pbp), pbp)
+    assert out["is_transition"].all() and out["is_garbage_time"].all()
+    assert not out["is_transition_ctg"].all() and not out["is_garbage_time_ctg"].all()
+
+
+def test_a_frame_saved_before_the_rename_still_rolls_up(frames):
+    """A possessions frame with only the old plain names gets its ``*_ctg`` columns derived from them."""
+    poss = add_play_context(frames[GAMES[0]])
+    legacy = poss.drop("is_transition_ctg", "is_garbage_time_ctg")
+    assert team_play_context(legacy).equals(team_play_context(poss))
 
 
 def test_add_play_context_does_not_change_possession_count(frames):

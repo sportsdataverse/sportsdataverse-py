@@ -101,7 +101,7 @@ The CTG filter columns are **flags, not filters** — nothing is dropped. Apply
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `enhanced_pbp` | `DataFrame` |  | Frame from `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. |
-| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 6.0). |
 | `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
 | `starters_on_court` | `Optional[dict[int, int]]` | `None` | Optional starters-on-floor counts; see `flag_garbage_time`. |
 
@@ -137,11 +137,13 @@ The possession frame (`POSSESSIONS_SCHEMA`) plus every column in `PLAY_CONTEXT_P
 | `possession_start_type_detail` | String |  |
 | `possession_start_type_ctg` | String |  |
 | `seconds_to_first_play` | Float64 |  |
-| `is_transition` | Boolean |  |
+| `is_transition_ctg` | Boolean | Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the chosen variant; never on a period's first possession or after a timeout. Not the possessions table's is_transition (add_possession_flags), which uses an 8-second first-shot window. |
+| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in 0.4.0). Not the possessions table's is_transition (add_possession_flags). |
 | `transition_source` | String |  |
 | `possession_context` | String |  |
 | `is_heave_possession` | Boolean |  |
-| `is_garbage_time` | Boolean |  |
+| `is_garbage_time_ctg` | Boolean | Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time (add_possession_flags, bigballR's rule). |
+| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in 0.4.0). Not the possessions table's is_garbage_time (add_possession_flags). |
 | `garbage_time_basis` | String |  |
 
 **Example**
@@ -155,7 +157,7 @@ print(poss["possession_start_type_ctg"].value_counts())
 
 ### add_possession_flags {#add_possession_flags}
 
-`add_possession_flags(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 10.0) -> 'pl.DataFrame'`
+`add_possession_flags(possessions: 'pl.DataFrame', pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 8.0) -> 'pl.DataFrame'`
 
 Append `seconds_to_first_shot`, `is_transition` and `is_garbage_time` to possessions.
 
@@ -175,8 +177,8 @@ reset inside the possession (a kicked ball, a foul).
 
 **is_transition** (Boolean, never null): `possession_start_type` is `OffMadeShot`,
 `OffMissedShot` or `OffLiveBallTurnover`, the possession is not its period's first,
-and `seconds_to_first_shot <= transition_seconds` (10 by default: hoop-math's and
-bigballR's college window).
+and `seconds_to_first_shot <= transition_seconds` (8 by default, the window that
+tracks Synergy's `Transition` play type; college's is 10).
 
 **is_garbage_time** (Boolean, never null): bigballR's rule, the one behind the college
 flag. A possession triggers it when any of its events has an absolute score margin of
@@ -192,7 +194,7 @@ and why the triggering possession can qualify on its own basket.
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Every possession of each game it holds (the previous possession's clock and the first possession's starters are read from it, so do not filter it to `count_as_possession` or to one team first). Needs `game_id`, `period`, `possession_number`, `number_in_period`, `start_order_index`, `end_order_index`, `start_seconds_remaining`, `end_seconds_remaining`, `possession_start_type` and `off_player_1..5` / `def_player_1..5`. |
 | `pbp` | `DataFrame` |  | The play-by-play of those games. Needs `game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home` and `score_away` (Utf8 or integer; the margin is the running score after each event). |
-| `transition_seconds` | `float` | `10.0` | The transition window in seconds. Default 10.0. |
+| `transition_seconds` | `float` | `8.0` | The transition window in seconds. Default 8.0 (`TRANSITION_SECONDS`). |
 
 **Returns**
 
@@ -236,7 +238,7 @@ and why the triggering possession can qualify on its own basket.
 | `lineup_source` | String | Provenance of the on-court lineup identification for the row (how the five-man units were resolved). |
 | `season` | Int64 | Season year. |
 | `seconds_to_first_shot` | Float64 | Seconds from the change of possession (the clock at the previous possession's last event) to the possession's first field-goal attempt; null when it has no field-goal attempt. |
-| `is_transition` | Boolean | True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is not its period's first, and seconds_to_first_shot is at most transition_seconds (default 10, hoop-math's and bigballR's window). Never null. |
+| `is_transition` | Boolean | True when possession_start_type is OffMadeShot, OffMissedShot or OffLiveBallTurnover, the possession is not its period's first, and seconds_to_first_shot is at most transition_seconds (default 8, the window that tracks Synergy's Transition play type; college's is 10). Never null. |
 | `is_garbage_time` | Boolean | True from the possession that first meets bigballR's garbage-time rule (the college ncaa_*_possessions rule) to the end of the game. At some event of the possession the absolute margin is 25+ with 10:00 or less left in regulation, 20+ with 5:00 or less, 15+ with 2:00 or less, or 15+ in overtime, and at most 3 of the game's 10 starters (the first possession's players) are on the floor. The triggering possession can qualify on its own basket. Never null. |
 
 **Raises**
@@ -249,9 +251,11 @@ and why the triggering possession can qualify on its own basket.
 
 ```python
 from sportsdataverse.nba import load_nba_stats_pbp, load_nba_stats_possessions
-from sportsdataverse.nba.nba_possession_flags import add_possession_flags
+from sportsdataverse.nba.nba_possession_flags import POSSESSION_FLAGS_SCHEMA, add_possession_flags
 
-poss = add_possession_flags(load_nba_stats_possessions(2023), load_nba_stats_pbp(2023))
+# a release that already carries the flags: drop them to re-flag
+raw = load_nba_stats_possessions(2023).drop(*POSSESSION_FLAGS_SCHEMA, strict=False)
+poss = add_possession_flags(raw, load_nba_stats_pbp(2023))
 print(poss.group_by("is_transition").len())
 ```
 
@@ -354,12 +358,12 @@ variant.
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Frame carrying `possession_start_type_ctg` (i.e. the output of `add_start_type_detail`). |
 | `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame the possessions were built from. |
-| `transition_seconds` | `float` | `6.0` | Initial-play cutoff. Default 10.0 (hoop-math). Calibrate against Synergy transition frequency (league mean ~15-16%). |
+| `transition_seconds` | `float` | `6.0` | Initial-play cutoff. Default 6.0 (`~nba_play_context_constants.DEFAULT_TRANSITION_SECONDS`, calibrated to CTG's published rates; hoop-math's college rule is 10.0). |
 | `variant` | `str` | `'hoop_math'` | One of `~nba_play_context_constants.TRANSITION_VARIANTS`. |
 
 **Returns**
 
-`possessions` with `seconds_to_first_play` (Float64, null when the possession had no play), `is_transition` (Boolean), `transition_source` (Utf8: `steal` / `live_rebound` / `made` / `deadball`; null when not transition) and `possession_context` (Utf8: `transition` / `halfcourt` / `misc`) appended.
+`possessions` with `seconds_to_first_play` (Float64, null when the possession had no play), `is_transition_ctg` (Boolean; also as the deprecated `is_transition`), `transition_source` (Utf8: `steal` / `live_rebound` / `made` / `deadball`; null when not transition) and `possession_context` (Utf8: `transition` / `halfcourt` / `misc`) appended.
 
 | col_name | type | description |
 |---|---|---|
@@ -389,7 +393,8 @@ variant.
 | `possession_start_type_detail` | String |  |
 | `possession_start_type_ctg` | String |  |
 | `seconds_to_first_play` | Float64 |  |
-| `is_transition` | Boolean |  |
+| `is_transition_ctg` | Boolean | Cleaning the Glass-style transition (renamed from is_transition), true when the possession's initial play (first shot, free-throw trip or turnover) lands within transition_seconds (default 6) of its start, under the chosen variant; never on a period's first possession or after a timeout. Not the possessions table's is_transition (add_possession_flags), which uses an 8-second first-shot window. |
+| `is_transition` | Boolean | Deprecated copy of is_transition_ctg under its old name; read is_transition_ctg (removed in 0.4.0). Not the possessions table's is_transition (add_possession_flags). |
 | `transition_source` | String |  |
 | `possession_context` | String |  |
 
@@ -403,7 +408,7 @@ variant.
 
 ```python
 poss = add_transition(add_start_type_detail(poss, pbp), pbp)
-print(poss["is_transition"].mean())          # transition frequency
+print(poss["is_transition_ctg"].mean())          # transition frequency
 
 # Tune the knob against the Synergy oracle
 
@@ -474,7 +479,7 @@ play-level view — one row per field-goal attempt.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `possessions` | `DataFrame` |  | Frame from `add_transition` (needs `is_transition`). |
+| `possessions` | `DataFrame` |  | Frame from `add_transition` (needs `is_transition_ctg`). |
 | `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame the possessions were built from. |
 | `putback_seconds` | `float` | `2.0` | Rebound-to-shot window. Default 2.0 (pbpstats). |
 
@@ -631,7 +636,7 @@ CTG-exact.
 
 **Returns**
 
-`possessions` with Boolean `is_garbage_time` and Utf8 `garbage_time_basis` (`"margin_and_starters"` or `"margin_only"`) appended.
+`possessions` with Boolean `is_garbage_time_ctg` (also as the deprecated `is_garbage_time`) and Utf8 `garbage_time_basis` (`"margin_and_starters"` or `"margin_only"`) appended.
 
 | col_name | type | description |
 |---|---|---|
@@ -658,14 +663,15 @@ CTG-exact.
 | `oreb` | Int64 | Offensive rebounds. |
 | `dreb` | Int64 | Defensive rebounds. |
 | `tov` | Int64 | Turnovers. |
-| `is_garbage_time` | Boolean |  |
+| `is_garbage_time_ctg` | Boolean | Cleaning the Glass garbage time (renamed from is_garbage_time), true in the 4th quarter with a margin at the possession's start of 25+ in minutes 12-9, 20+ in 9-6 or 10+ after, and, when starters_on_court is given, two or fewer starters on the floor (garbage_time_basis says which). Not the possessions table's is_garbage_time (add_possession_flags, bigballR's rule). |
+| `is_garbage_time` | Boolean | Deprecated copy of is_garbage_time_ctg under its old name; read is_garbage_time_ctg (removed in 0.4.0). Not the possessions table's is_garbage_time (add_possession_flags). |
 | `garbage_time_basis` | String |  |
 
 **Example**
 
 ```python
 poss = flag_garbage_time(poss, pbp)
-print(poss.filter(pl.col("is_garbage_time") == True).height)
+print(poss.filter(pl.col("is_garbage_time_ctg") == True).height)
 
 # CTG-exact, with the starters clause
 

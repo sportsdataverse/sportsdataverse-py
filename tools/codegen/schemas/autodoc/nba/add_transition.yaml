@@ -79,6 +79,9 @@ columns:
 - name: seconds_to_first_play
   type: double
   description: ''
+- name: is_transition_ctg
+  type: logical
+  description: ''
 - name: is_transition
   type: logical
   description: ''

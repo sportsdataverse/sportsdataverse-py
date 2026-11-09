@@ -47,10 +47,11 @@ def _read(lg: str, name: str) -> pl.DataFrame:
 
 
 @cache
-def _built(lg: str) -> pl.DataFrame:
+def _built(lg: str, level: str | None = None) -> pl.DataFrame:
     pbp = _read(lg, "pbp")
     rows = ncaa_impact_rows(pbp, _read(lg, "possessions"), league=LEAGUES[lg])
-    return lineup_seasons(rows, ncaa_lineup_count_rows(pbp), player_dtype=pl.Utf8(), min_poss=20, zones=True)
+    counts = ncaa_lineup_count_rows(pbp)
+    return lineup_seasons(rows, counts, player_dtype=pl.Utf8(), min_poss=20, zones=True, level=level)
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
@@ -167,8 +168,10 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
     for module, lg in ((mbb_loaders, "mbb"), (wbb_loaders, "wbb")):
         monkeypatch.setattr(module, f"load_ncaa_{lg}_pbp", lambda seasons, lg=lg: _read(lg, "pbp"))
         monkeypatch.setattr(module, f"load_ncaa_{lg}_possessions", lambda seasons, lg=lg: _read(lg, "possessions"))
-    assert mbb_lineup_seasons(2025, min_poss=20).equals(_built("mbb"))
-    assert wbb_lineup_seasons(2025, min_poss=20).equals(_built("wbb"))
+    assert mbb_lineup_seasons(2025, min_poss=20).equals(_built("mbb", level="mbb"))
+    assert wbb_lineup_seasons(2025, min_poss=20).equals(_built("wbb", level="wbb"))
+    assert not _built("mbb", level="mbb").equals(_built("mbb"))  # the adapter's level gate changes ranks
+    assert not _built("wbb", level="wbb").equals(_built("wbb"))
     default = mbb_lineup_seasons(2025)  # the 200-possession gate leaves 13 games' units below the cohort floor
     assert (
         default.filter(pl.col("n_players") == 5)["net_rtg_rank"].null_count()

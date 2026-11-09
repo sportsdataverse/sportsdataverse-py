@@ -134,8 +134,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_playtype_ratings](additional/analytics-2.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
 | [wnba_referee_assignments](additional/analytics-2.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |
 | [wnba_season_sim](additional/analytics-2.md#wnba_season_sim) | WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim. |
-| [wnba_season_standings](additional/analytics-2.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
-| [wnba_shot_value](additional/analytics-2.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
+| [wnba_season_standings](additional/analytics-3.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
+| [wnba_shot_value](additional/analytics-3.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
 | [wnba_situational_lineup](additional/analytics-3.md#wnba_situational_lineup) | WNBA five-man unit splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_lineup. |
 | [wnba_situational_player](additional/analytics-3.md#wnba_situational_player) | WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player. |
 | [wnba_situational_team](additional/analytics-3.md#wnba_situational_team) | WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team. |
@@ -149,8 +149,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_tracking_reb_oe](additional/analytics-3.md#wnba_tracking_reb_oe) | WNBA rebounding-over-expected (`league_id="10"` by-reference shim). |
 | [wnba_tracking_rim_protect_value](additional/analytics-3.md#wnba_tracking_rim_protect_value) | WNBA rim-protection / shot-defend points-saved (`league_id="10"` |
 | [wnba_tracking_shot_diet_value](additional/analytics-3.md#wnba_tracking_shot_diet_value) | WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"` |
-| [wnba_tracking_touch_value](additional/analytics-3.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
-| [zone_value_map](additional/analytics-3.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
+| [wnba_tracking_touch_value](additional/analytics-4.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
+| [zone_value_map](additional/analytics-4.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
 ## Dates and seasons
 

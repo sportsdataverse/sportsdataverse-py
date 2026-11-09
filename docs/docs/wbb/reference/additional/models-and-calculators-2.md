@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob"
-sidebar_label: "Models and calculators: build_wbb–win_prob"
+title: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season"
+sidebar_label: "Models and calculators: build_wbb–wbb_season"
 sidebar_position: 9
-description: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob
+# Women's college basketball — additional Python functions — Models and calculators: build_wbb–wbb_season
 
 ### build_wbb_season_wp {#build_wbb_season_wp}
 
@@ -626,7 +626,7 @@ Per-play in-game win-probability features from a `load_mbb_pbp` frame.
 
 **Returns**
 
-One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left; the game page gives overtime plays the period clock first), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0), `margin_per_sqrt_sec` (`score_diff / sqrt(sec_left + 1)`) and `sqrt_sec_left_60` (`sqrt(max(sec_left, 60))`). The same features as the NBA / WNBA model (`sportsdataverse.nba.nba_game_predict.in_game_features`).
 
 | col_name | type | description |
 |---|---|---|
@@ -635,6 +635,8 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 
 **Example**
 
@@ -1496,6 +1498,8 @@ One row per play: the five feature columns plus `home_win_prob` -- see the mbb c
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 | `home_win_prob` | Float64 |  |
 
 **Example**
@@ -1536,7 +1540,7 @@ preds = wbb_predict_games(games, wbb_team_ratings(2024))
 
 ### wbb_season_projections {#wbb_season_projections}
 
-`wbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str]' = (), return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wbb_season_projections(season: 'int', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, seed: 'int' = 0, ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's daily `season_sim` table: projected W-L, conference standings, title and bid odds.
 
@@ -1550,7 +1554,7 @@ Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_projections` with `l
 | `as_of_date` | `date \| None` | `None` | Only use games strictly before this date; `None` uses every completed game. |
 | `n_sims` | `int` | `10000` | Simulated seasons. |
 | `seed` | `int` | `0` | RNG seed (deterministic output). |
-| `ineligible` | `Iterable[str]` | `()` | Team ids barred from the NCAA tournament. |
+| `ineligible` | `Iterable[str] \| None` | `None` | Team ids barred from the NCAA tournament; `None` (default) reads the bundled list. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -1636,70 +1640,4 @@ No returns table is published for this function: no capture: it raises KeyError 
 ```python
 from sportsdataverse.wbb import wbb_season_sim
 odds = wbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
-```
-
-### wbb_team_ratings {#wbb_team_ratings}
-
-`wbb_team_ratings(seasons: 'Union[int, list[int]]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Women's opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo).
-
-Delegates to `sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`
-with `league="womens"` (WBB loaders + women's fitted constants).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season (e.g. `2024`) or list of seasons. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per (season, team_id) -- see the mbb core for the schema.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | String | Unique team identifier. |
-| `adj_o` | Float64 | Adj o. |
-| `adj_d` | Float64 | Adj d. |
-| `adj_em` | Float64 | Adj em. |
-| `adj_tempo` | Float64 |  |
-| `raw_o` | Float64 | Raw o. |
-| `raw_d` | Float64 | Raw d. |
-| `games` | Int64 | Games played. |
-| `rank` | Int64 | Rank. |
-| `adj_em_z` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_team_ratings
-wbb_team_ratings(2024).sort("rank").head()
-```
-
-### win_prob_from_margin {#win_prob_from_margin}
-
-`win_prob_from_margin(exp_margin: 'float') -> 'float'`
-
-Women's home win probability from an expected margin.
-
-Delegates to `sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with `league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
-
-**Returns**
-
-Probability the home team wins, in `(0, 1)`.
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_game_predict import win_prob_from_margin
-win_prob_from_margin(5.0)
 ```

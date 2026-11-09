@@ -910,7 +910,7 @@ the warehouse's copies of the same frames.
 
 **Returns**
 
-`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Missing boxes retain empty identifier columns. Team rates need both team rows, and player rates also need player rows. Unavailable rates are empty frames with their documented columns.
 
 **Raises**
 
@@ -1165,8 +1165,8 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 | `sqrt_sec_left` | Float64 |  |
 | `pregame_logit` | Float64 |  |
 | `home_has_ball` | Int64 |  |
-| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The NBA / WNBA booster reads the final minute only through this column. |
-| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the NBA / WNBA booster reads outside the final minute. |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
 
 **Example**
 

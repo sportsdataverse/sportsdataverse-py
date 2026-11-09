@@ -20,6 +20,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.player_on_off import player_on_off, player_wowy
 from sportsdataverse.nba.nba_game_impact import _check_league, _load_releases, nba_impact_rows
 from sportsdataverse.nba.nba_lineup_seasons import _MIN_POSS, _SEASON_TYPES
@@ -84,7 +85,7 @@ def nba_player_on_off(
     """
     rows = _rows(seasons, league_id, season_type)
     gate = _MIN_POSS[league_id] if min_poss is None else min_poss
-    out = player_on_off(rows, player_dtype=_PLAYER, min_poss=gate)
+    out = player_on_off(rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id])
     return out.to_pandas() if return_as_pandas else out
 
 

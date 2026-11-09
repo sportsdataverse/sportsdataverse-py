@@ -144,7 +144,15 @@ def _pbp() -> pl.DataFrame:
 
 def test_in_game_features_columns_and_values():
     feats = in_game_features(_pbp(), 0.75)
-    assert feats.columns == ["score_diff", "sec_left", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
+    assert feats.columns == [
+        "score_diff",
+        "sec_left",
+        "sqrt_sec_left",
+        "pregame_logit",
+        "home_has_ball",
+        "margin_per_sqrt_sec",
+        "sqrt_sec_left_60",
+    ]
     assert feats["score_diff"].to_list() == [0.0, 5.0, 2.0]
     assert feats["sec_left"].to_list() == [2400.0, 1200.0, 30.0]
     assert feats["sqrt_sec_left"].to_list() == pytest.approx([math.sqrt(2400), math.sqrt(1200), math.sqrt(30)])
@@ -152,6 +160,8 @@ def test_in_game_features_columns_and_values():
     # home had it, away had it, dead ball -> 0
     assert feats["home_has_ball"].to_list() == [1, 0, 0]
     assert feats.schema["home_has_ball"] == pl.Int8
+    assert feats["margin_per_sqrt_sec"].to_list() == pytest.approx([0.0, 5.0 / math.sqrt(1201), 2.0 / math.sqrt(31)])
+    assert feats["sqrt_sec_left_60"].to_list() == pytest.approx([math.sqrt(2400), math.sqrt(1200), math.sqrt(60)])
 
 
 def test_in_game_features_boundary_pregame_prob_is_finite():

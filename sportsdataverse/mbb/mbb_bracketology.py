@@ -139,7 +139,7 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -150,7 +150,7 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -160,7 +160,7 @@ def mbb_bracketology(
     *,
     as_of_date: datetime.date | None = None,
     league: str = "mens",
-    ineligible: Iterable[str] = (),
+    ineligible: Iterable[str] | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """The daily ``bracketology`` table: the projected field, seeds and bubble as of a date.
@@ -177,7 +177,8 @@ def mbb_bracketology(
         league: ``"mens"`` or ``"womens"``.
         ineligible: Team ids barred from the NCAA tournament (reclassifying programs,
             postseason bans): no at-large bid, and a barred conference champion passes the
-            auto-bid to the final's runner-up. ESPN does not flag them.
+            auto-bid to the final's runner-up. ESPN does not flag them. ``None`` (default) reads the bundled list
+            (:func:`~sportsdataverse.mbb.mbb_tournament_eligibility.mbb_tournament_ineligible`); ``()`` bars no one.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:

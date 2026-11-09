@@ -22,6 +22,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS
 from sportsdataverse._common.lineup_seasons import COUNTS, lineup_count_schema, lineup_seasons
 from sportsdataverse.nba.nba_game_impact import _check_league, _load_releases, _possession_rows, nba_impact_rows
@@ -149,5 +150,6 @@ def nba_lineup_seasons(
         nba_lineup_count_rows(possessions, schedule),
         player_dtype=_PLAYER,
         min_poss=_MIN_POSS[league_id] if min_poss is None else min_poss,
+        level=NBA_LEVEL[league_id],
     )
     return out.to_pandas() if return_as_pandas else out

@@ -8923,11 +8923,61 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'return (net_home - net_away + 2.0 * self.hfa) * self.poss / 100.0'
+  snippet: 'return (net_home - net_away + 2.0 * self.hfa * (1.0 - np.asarray(neutral, dtype=float))) * self.poss / 100.0'
   mutant: 'return (net_home - net_away) * self.poss / 100.0'
   test: tests/nba/test_nba_season_sim.py::test_game_model_home_term
   expected: kill
   note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
+
+- id: bb-ps-neutral-site-ignored-in-sim
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'model.margin(net[h], net[a], neutral)'
+  mutant: 'model.margin(net[h], net[a])'
+  test: tests/nba/test_nba_neutral_site.py::test_the_sim_plays_neutral_games_without_the_home_term
+  expected: kill
+  note: A neutral game (abroad, a Las Vegas Cup semifinal) is simulated without the home term.
+
+- id: bb-d3-neutral-site-ignored-in-rates
+  group: bb-pro-season
+  finding: BB-D19
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: 'nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site")'
+  mutant: 'pl.lit(False).alias("neutral_site")'
+  test: tests/nba/test_nba_neutral_site.py::test_possession_rows_drop_the_home_term_for_neutral_games
+  expected: kill
+  note: The possession rows carry the neutral flag, so the ridge drops the home term for those games.
+
+- id: bb-ps-neutral-site-not-handed-to-sim
+  group: bb-pro-season
+  finding: BB-D18
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False'
+  mutant: 'neutral = False'
+  test: tests/nba/test_nba_neutral_site.py::test_the_sim_hands_the_flag_to_the_simulator
+  expected: kill
+  note: simulate_pro_season passes the schedule's 5 neutral 2025-26 games through to the simulated games.
+
+- id: bb-d27-neutral-site-ignored-in-game-flow
+  group: bb-pro-season
+  finding: BB-D27
+  file: sportsdataverse/nba/nba_game_flow.py
+  snippet: 'nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site")'
+  mutant: 'pl.lit(False).alias("neutral_site")'
+  test: tests/nba/test_nba_neutral_site.py::test_game_flow_gives_the_cup_semifinal_the_neutral_prior
+  expected: kill
+  note: The listed Las Vegas Cup semifinal gets the neutral pregame prior in game flow.
+
+- id: bb-d25-rated-prior-keeps-espn-flag
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_rated_prior.py
+  snippet: '.then(nba_neutral_site._neutral_site(espn, league_id, "stats_game_id"))'
+  mutant: '.then(pl.lit(False))'
+  test: tests/nba/test_nba_neutral_site.py::test_rated_priors_take_our_flag_over_espns
+  expected: kill
+  note: A stats-matched game takes the curated flag over ESPN's, so a listed game loses its home term.
 
 - id: bb-ps-rating-shift-off
   group: bb-pro-season
@@ -9281,11 +9331,11 @@
   group: bb-possession-flags
   finding: BB-D7
   file: sportsdataverse/nba/nba_possession_flags.py
-  snippet: 'TRANSITION_SECONDS: Final[float] = 10.0'
-  mutant: 'TRANSITION_SECONDS: Final[float] = 8.0'
-  test: tests/nba/test_nba_possession_flags.py::test_observed_counts
+  snippet: 'TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'TRANSITION_SECONDS: Final[float] = 10.0'
+  test: tests/nba/test_nba_possession_flags.py::test_transition_tracks_synergy_2024
   expected: kill
-  note: The published 10-second window is the default; 8 s fits Synergy's level better but is not a published rule.
+  note: 8 s tracks Synergy's Transition play type better than college's 10 s (r 0.892 vs 0.844, ratio 0.97 vs 1.29).
 
 # --- BB-D22: luck and close-game record (Pythagorean expected wins, close games) ----------------
 # Killers: tests/nba/test_nba_team_luck.py, tests/mbb/test_mbb_team_luck.py and
@@ -10027,6 +10077,46 @@
   test: tests/nba/test_nba_situational.py::test_only_the_requested_season_type_is_flagged
   expected: kill
   note: A game of another season type with a gap in its play-by-play would fail the regular-season build.
+
+- id: bb-epv-booster-transition-window
+  group: bb-epv
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
+  expected: kill
+  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+
+- id: bb-ctg-alias-never-overwrites
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    if old in possessions.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_play_context.py::test_the_copies_never_overwrite_a_published_flag
+  expected: kill
+  note: The deprecated plain-name copy would overwrite BB-D7's published is_transition / is_garbage_time.
+
+- id: bb-ctg-legacy-frame-names
+  group: bb-ctg-aliases
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_play_context.py
+  snippet: '    df = _ctg_names(possessions)'
+  mutant: '    df = possessions'
+  test: tests/nba/test_nba_play_context.py::test_a_frame_saved_before_the_rename_still_rolls_up
+  expected: kill
+  note: A possessions frame saved before the *_ctg rename would raise in the rollups.
+
+- id: bb-sit-reflag-a-flagged-release
+  group: bb-situational
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_situational.py
+  snippet: 'flagged = add_possession_flags(poss.drop(*POSSESSION_FLAGS_SCHEMA, strict=False), events)'
+  mutant: 'flagged = add_possession_flags(poss, events)'
+  test: tests/nba/test_nba_situational.py::test_a_release_that_carries_the_flags_is_reflagged
+  expected: kill
+  note: Once the producers publish BB-D7's flags on the possessions release, the rows would raise on the clash.
 
 - id: bb-ps-season-relative-mean
   group: bb-play-style
@@ -10853,3 +10943,81 @@
     One-pass cascade (the pre-fix behaviour): an elimination advances instead of re-testing the
     survivors from rung 1, so BYU/Arizona after Texas Tech is dropped is decided by SOV rather than
     the head-to-head BYU won.
+
+# --- NBA / WNBA possession engine: the legacy "0" score-string dialect ---------------------------
+- id: nba-engine-legacy-missed-ft
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return any((row.get(k) or "").strip() not in ("", "0") for k in ("score_home", "score_away"))'
+  mutant: '    return any((row.get(k) or "").strip() for k in ("score_home", "score_away"))'
+  test: tests/nba/test_nba_possessions.py::test_legacy_dialect_missed_free_throws_are_misses
+  expected: kill
+  note: Every pre-2017-18 missed free throw ("0" score strings) would count as made, about 6,000 phantom points an NBA season.
+
+# --- NBA / WNBA possession engine: defense scores inside a possession ------------------------------
+- id: nba-engine-defense-scores
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '    credit_defense_scoring(records, carries)'
+  mutant: '    pass'
+  test: tests/nba/test_nba_possessions.py::test_defense_scores_are_credited_to_the_scoring_team
+  expected: kill
+  note: A defense technical FT (or a basket inside the other team's possession) would be dropped again; 255 of 1,230 NBA 2025-26 games miss the final score.
+
+# --- NBA / WNBA possession engine: rebounds that follow no miss ------------------------------------
+- id: nba-engine-rebound-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possession_rules.py
+  snippet: '    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0'
+  mutant: '    return True'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: A placeholder rebound (a team rebound after a shot-clock turnover) or one after a steal would again open a possession for the team that just lost the ball.
+- id: nba-engine-putback-rebound-order
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        deferred = ends and not deferred and is_rebound_logged_after_its_putback(rows, i + 1)'
+  mutant: '        deferred = False'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: An offensive rebound the pbp logs after its own putback would again open a phantom possession (the largest pre-2017-18 drift cause, 65,454 points).
+- id: nba-engine-putback-start-type
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '        ender = events[-2] if events[-1].get("_putback_rebound") else events[-1]'
+  mutant: '        ender = events[-1]'
+  test: tests/nba/test_nba_possessions.py::test_rebounds_that_follow_no_miss_do_not_open_a_possession
+  expected: kill
+  note: The possession after a putback whose rebound the pbp logs after it would start OffMissedShot instead of OffMadeShot (559 possessions in a 300-game 2016-17 sample).
+- id: bb-espn-live-summary-without-article
+  group: bb-sources
+  finding: BB-D12
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '"article": pbp_txt.get("article", []),  # a live game has no recap yet'
+  mutant: '"article": pbp_txt["article"],'
+  test: tests/basketball/test_sources.py::test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted
+  expected: kill
+  note: ESPN's live summary has no article; the parser raised KeyError on mbb_401920423_live.json.gz.
+- id: nba-engine-rebound-offense-fallback
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) and ev.get("event_type") != "violation")'
+  test: tests/nba/test_nba_possessions.py::test_a_rebound_that_follows_no_miss_sets_the_offense_when_nothing_else_can
+  expected: kill
+  note: A group whose only sided row is a rebound that follows no miss (a last-second team attempt, then a team rebound) would get no offense and be dropped; 1 group in NBA 2025-26.
+- id: nba-engine-violation-not-an-offense-cue
+  group: nba-engine
+  finding: BB-D21 margin drift
+  file: sportsdataverse/nba/nba_possessions.py
+  snippet: '                and ((ev.get("_offense_cue", True) and ev.get("event_type") != "violation") or not strict)'
+  mutant: '                and (ev.get("_offense_cue", True) or not strict)'
+  test: tests/nba/test_nba_possessions.py::test_a_defense_violation_does_not_name_the_offense
+  expected: kill
+  note: A defense delay of game before the other team's end-of-period heave would again give the defense the possession (4 NBA 2025-26 groups).

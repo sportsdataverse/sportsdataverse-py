@@ -24,7 +24,9 @@ from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
+from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA, team_season_rates
+from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
 
 if TYPE_CHECKING:
@@ -76,11 +78,10 @@ def nba_possession_rate_rows(
     whose first period runs past 15 minutes is played in two 20-minute halves (the WNBA through
     2005): its periods are 20 minutes, ``late`` starts with the 2nd half and period 3 is overtime.
 
-    ``neutral_site`` is always False: the stats schedule has no neutral-site or venue column, so
-    a neutral-site game (an NBA Cup semifinal in Las Vegas, a Mexico City or Paris game) counts
-    as a home game for the listed home team: at most five regular-season games a season.
-    ESPN's schedule ``neutral_site`` is not a usable substitute: it marks the 2023-24 Cup
-    semifinals False, and the ESPN-to-stats game id crosswalk starts at 2025-26.
+    ``neutral_site`` comes from :mod:`sportsdataverse.nba.nba_neutral_site`: the 2020 bubbles and
+    the curated games abroad and NBA Cup knockout games in Las Vegas, by stats ``game_id``. The
+    stats schedule has no neutral-site or venue column, and ESPN's ``neutral_site`` misses most of
+    them (it marks the 2023-24 Cup semifinals False).
 
     Args:
         possessions: ``load_nba_stats_possessions`` / ``load_wnba_stats_possessions`` rows.
@@ -111,7 +112,9 @@ def nba_possession_rate_rows(
     if possessions.height == 0 or schedule.height == 0:
         return pl.DataFrame(schema=RATE_ROWS_SCHEMA)
     games = schedule.filter(pl.col("season_type") == season_type).select(
-        pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64)
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("home_team_id").cast(pl.Int64),
+        nba_neutral_site._neutral_site(schedule, league_id).alias("neutral_site"),
     )
     poss = possessions.with_columns(pl.col("game_id").cast(pl.Utf8))
     assert poss.schema["game_id"] == games.schema["game_id"], "game_id dtype differs between possessions and schedule"
@@ -140,8 +143,7 @@ def nba_possession_rate_rows(
             pl.col("offense_team_id").cast(pl.Int64),
             pl.col("defense_team_id").cast(pl.Int64),
             (pl.col("offense_team_id").cast(pl.Int64) == pl.col("home_team_id")).alias("offense_is_home"),
-            # No neutral-site source keyed on the stats game id; see the docstring.
-            pl.lit(False).alias("neutral_site"),
+            "neutral_site",
             (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).cast(pl.Int64).alias("points"),
             (pl.col("fg2a") + pl.col("fg3a")).alias("fga"),
             (pl.col("fg2m") + pl.col("fg3m")).alias("fgm"),
@@ -219,10 +221,12 @@ def nba_team_season_rates(
         the same four against (``opp_*``), all fractions. Each rate has ``<m>_rank`` (1 = best;
         ``def_rtg``, ``tov_pct``, ``opp_efg_pct``, ``opp_orb_pct`` and ``opp_ft_rate`` rank low
         first; pace ranks high first), ``<m>_pct`` (the Weibull percentile) and ``<m>_n`` (the
-        sample: possessions for the ratings, games for pace, field-goal attempts for eFG% and
-        FT rate, possessions for turnover rate, rebound chances for ORB%). Ranks are within the
-        season and split, among teams with at least half the most games, and null under five
-        teams. Empty input returns that schema with zero rows.
+        sample: possessions for the ratings, the clock in regulation games for pace, field-goal
+        attempts for eFG% and FT rate, possessions for turnover rate, rebound chances for ORB%).
+        Ranks are within the season and split, among teams with at least half the most games
+        whose ``<m>_n`` reaches the league's :data:`~sportsdataverse._common.rate_gates.TEAM_MIN_N`
+        gate (a clutch split reaches none), and null under five teams. Empty input returns that
+        schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
@@ -247,7 +251,7 @@ def nba_team_season_rates(
         load_possessions(loader_seasons), load_schedule(loader_seasons), league_id=league_id, season_type=season_type
     )
     out = (
-        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1])
+        team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1], level=NBA_LEVEL[league_id])
         if rows.height
         else pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     )
