@@ -170,8 +170,8 @@ def test_weighted_collapsed_rows_give_the_uncollapsed_fit() -> None:
     assert max(abs(flat[t] - want[t]) for t in want) > 0.1
 
 
-@pytest.mark.parametrize("bad", [None, -1.0])
-def test_a_null_or_negative_weight_is_refused(bad: float | None) -> None:
+@pytest.mark.parametrize("bad", [None, -1.0, 0.0, float("nan")])
+def test_a_null_or_non_positive_weight_is_refused(bad: float | None) -> None:
     plays = pl.DataFrame({"o": ["A", "B"], "d": ["B", "A"], "y": [1.0, 0.0], "w": [2.0, bad]})
-    with pytest.raises(ValueError, match="negative weights"):
+    with pytest.raises(ValueError, match="non-positive weights"):
         opponent_adjusted_ridge(plays, off_col="o", def_col="d", home_col="o", resp_col="y", lam=1.0, weight_col="w")

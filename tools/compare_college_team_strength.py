@@ -146,7 +146,8 @@ def season_frames(lg: str, season: int, cache: Path, lam: float) -> tuple[pl.Dat
             rec[f"{m}_vs_final"] = _spearman(now[m], final[m], d1)
             if prev is not None:
                 common = ranks[m].keys() & prev[m].keys()
-                rec[f"{m}_rank_move"] = float(np.mean([abs(ranks[m][t] - prev[m][t]) for t in common]))
+                moves = [abs(ranks[m][t] - prev[m][t]) for t in common]
+                rec[f"{m}_rank_move"] = float(np.mean(moves)) if moves else None  # no team ranked at both cutoffs
         prev = ranks
         cuts.append(rec)
         h, a = wk["home_team_id"].to_list(), wk["away_team_id"].to_list()
@@ -168,6 +169,8 @@ def season_frames(lg: str, season: int, cache: Path, lam: float) -> tuple[pl.Dat
                 }
             )
         )
+    if not scored:
+        raise ValueError(f"{lg} {season}: no Division I game was scored in any week after a cutoff")
     return pl.concat(scored), pl.DataFrame(cuts)
 
 

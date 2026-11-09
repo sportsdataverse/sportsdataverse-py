@@ -195,7 +195,7 @@ ratings, CFB adjusted EPA (via `hfa_col`) and basketball team strength (via `wei
 | `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
 | `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. Must not contain nulls (raises `ValueError`). |
-| `weight_col` | `str \| None` | `None` | Optional per-row weight `W` (no nulls or negatives, else `ValueError`): a row standing for that many identical rows, with `resp_col` their mean, gives the uncollapsed fit's coefficients. |
+| `weight_col` | `str \| None` | `None` | Optional per-row weight `W` (each finite and > 0, else `ValueError`): a row standing for that many identical rows, with `resp_col` their mean, gives the uncollapsed fit's coefficients. |
 
 **Returns**
 

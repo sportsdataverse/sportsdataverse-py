@@ -99,8 +99,15 @@ def test_paired_difference_is_ridge_minus_fixed() -> None:
     ],
 )
 def test_holdout_must_be_unseen(
-    train: list[str], holdout: list[str], message: str, capsys: pytest.CaptureFixture[str]
+    train: list[str],
+    holdout: list[str],
+    message: str,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    # pinned here, so a later refit's fit seasons cannot send the second case on to compare() (and the network)
+    monkeypatch.setattr(cmp, "COLLEGE_RIDGE_FIT_SEASONS", (2016, 2023))
+    monkeypatch.setattr(cmp, "compare", lambda *a, **k: pytest.fail("the season guards did not fire"))
     with pytest.raises(SystemExit) as exc:
         cmp.main(["--league", "mbb", "--train", *train, "--holdout", *holdout])
     assert exc.value.code == 2

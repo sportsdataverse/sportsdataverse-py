@@ -154,7 +154,7 @@ def opponent_adjusted_ridge(
             ``+1`` home offense / ``0`` neutral site / ``-1`` away), in place
             of the ``off_col == home_col`` indicator, which then goes unused.
             Must not contain nulls (raises ``ValueError``).
-        weight_col: Optional per-row weight ``W`` (no nulls or negatives, else ``ValueError``): a
+        weight_col: Optional per-row weight ``W`` (each finite and > 0, else ``ValueError``): a
             row standing for that many identical rows, with ``resp_col`` their mean, gives the
             uncollapsed fit's coefficients.
 
@@ -207,8 +207,9 @@ def opponent_adjusted_ridge(
         X[:, 2 * n_t + 1] = 0.0
         R[2 * n_t + 1, 2 * n_t + 1] = 1.0
     w = np.ones(n) if weight_col is None else plays[weight_col].cast(pl.Float64).fill_null(-1.0).to_numpy()
-    if (~np.isfinite(w) | (w < 0)).any():
-        raise ValueError(f"opponent_adjusted_ridge: {weight_col!r} has nulls, NaNs or negative weights")
+    # ponytail: weights must be > 0, so a zero-weight row can never be the only home contrast
+    if (~np.isfinite(w) | (w <= 0)).any():
+        raise ValueError(f"opponent_adjusted_ridge: {weight_col!r} has nulls, NaNs or non-positive weights")
     beta = np.linalg.solve(X.T @ (X * w[:, None]) + lam * R, X.T @ (w * y))
     frame = pl.DataFrame(
         {
