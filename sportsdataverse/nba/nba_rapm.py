@@ -196,6 +196,24 @@ def rapm_penalty(possessions: pl.DataFrame | None = None, league_id: str | None 
             from sportsdataverse.nba.nba_rapm import rapm_penalty
             rapm_penalty(league_id="10")  # 1930.70, the same in every season
     """
+    return RAPM_PENALTY[_possessions_league(possessions, league_id)]
+
+
+def _possessions_league(possessions: pl.DataFrame | None = None, league_id: str | None = None) -> str:
+    """The league id of a possession frame: ``league_id``, else the ``game_id`` prefix, else ``"00"``.
+
+    Args:
+        possessions: Possession rows; the first two digits of the ten-digit ``game_id`` name the
+            league (an integer id is zero-padded first). A frame without a ``game_id`` is taken as NBA.
+        league_id: ``"00"``, ``"10"`` or ``"20"``; overrides the inference.
+
+    Returns:
+        ``"00"``, ``"10"`` or ``"20"``.
+
+    Raises:
+        ValueError: If ``league_id`` is not one of them, the ``game_id`` prefixes name more than one
+            league, or they name another league than ``league_id``.
+    """
     found: set[str] = set()
     if possessions is not None and "game_id" in possessions.columns:
         ids = possessions["game_id"].cast(pl.Utf8).str.zfill(10)
@@ -205,7 +223,7 @@ def rapm_penalty(possessions: pl.DataFrame | None = None, league_id: str | None 
     league = league_id or (found.pop() if found else "00")
     if league not in RAPM_PENALTY:
         raise ValueError(f"league_id must be one of {sorted(RAPM_PENALTY)}, got {league!r}")
-    return RAPM_PENALTY[league]
+    return league
 
 
 def ridge_rapm_coef(X: csr_matrix, y: np.ndarray, alpha: float) -> np.ndarray:
