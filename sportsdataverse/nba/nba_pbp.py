@@ -317,15 +317,15 @@ def helper_nba_pbp(game_id, pbp_txt):
         "videos": np.array(pbp_txt["videos"]).tolist(),
         "playByPlaySource": pbp_txt["playByPlaySource"],
         "standings": pbp_txt["standings"],
-        "article": pbp_txt.get("article", []),  # a live game has no recap yet
+        "article": pbp_txt.get("article", {}),  # a live game has no recap yet
         "leaders": np.array(pbp_txt["leaders"]).tolist(),
         "seasonseries": np.array(pbp_txt["seasonseries"]).tolist(),
         "timeouts": pbp_txt["timeouts"],
         "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
         "againstTheSpread": np.array(pbp_txt["againstTheSpread"]).tolist(),
         "odds": np.array(pbp_txt["odds"]).tolist(),
-        "predictor": pbp_txt.get("predictor", []),
-        "espnWP": np.array(pbp_txt.get("espnWP", {})).tolist(),
+        "predictor": pbp_txt.get("predictor", {}),
+        "espnWP": np.array(pbp_txt.get("espnWP", [])).tolist(),
         "gameInfo": pbp_txt["gameInfo"],
         "teamInfo": np.array(pbp_txt["teamInfo"]).tolist(),
         "season": np.array(pbp_txt["season"]).tolist(),

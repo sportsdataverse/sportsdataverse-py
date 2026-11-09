@@ -219,15 +219,27 @@ _LIVE_ABSENT = ("article", "predictor", "espnWP")
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
-def test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted(lg: str) -> None:
-    """ESPN's live summary has no ``article`` / ``predictor`` / ``espnWP`` (mbb_401920423_live.json.gz);
-    the parser treats them as ``espn_<lg>_pbp(raw=True)``'s empty defaults and the contract passes."""
-    path = next(p for p in CAPTURES if _league(p) == lg and "_live" not in p.name)
-    summary = _load(path)
+def test_a_summary_without_the_live_absent_keys_parses_as_if_defaulted(
+    monkeypatch: pytest.MonkeyPatch, lg: str
+) -> None:
+    """ESPN's live summary has no ``article`` / ``predictor`` / ``espnWP`` (mbb_401920423_live.json.gz).
+
+    The parser fills them with the league's own ``espn_<lg>_pbp(raw=True)`` defaults (NBA / WNBA and the
+    college leagues default them to different types), the contract passes, and a summary that has them
+    keeps its values.
+    """
+    summary = next(s for p in CAPTURES if _league(p) == lg and (s := _load(p)).get("article"))  # a real recap
     live = {k: v for k, v in copy.deepcopy(summary).items() if k not in _LIVE_ABSENT}
-    defaulted = {**copy.deepcopy(live), "article": [], "predictor": [], "espnWP": {}}
     report = _validate_summary(live, lg)
     assert report.ok, report.summary()
-    _, parse = league_pbp_functions(lg)
-    got, want = parse(_game_id(summary), live), parse(_game_id(summary), defaulted)
+
+    mod = importlib.import_module(f"sportsdataverse.{lg}.{lg}_pbp")
+    monkeypatch.setattr(mod, "download", lambda *_a, **_k: _Resp(copy.deepcopy(live)))
+    fetch, parse = league_pbp_functions(lg)
+    defaulted = fetch(_game_id(summary), raw=True)
+    got = parse(_game_id(summary), copy.deepcopy(live))
+    want = parse(_game_id(summary), defaulted)
     assert json.dumps(got, sort_keys=True, default=str) == json.dumps(want, sort_keys=True, default=str)
+    for key in _LIVE_ABSENT:
+        assert got[key] == defaulted[key] and not got[key], key
+    assert parse(_game_id(summary), copy.deepcopy(summary))["article"] == summary["article"]
