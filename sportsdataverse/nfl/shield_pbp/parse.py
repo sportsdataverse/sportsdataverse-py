@@ -164,6 +164,15 @@ _KICK_PLAY_TYPES = {
     "FREE_KICK": "kickoff",
     "XP_KICK": "extra_point",
 }
+# Stat-outcome fallback for every other feed type, first match wins.
+_STAT_PLAY_TYPES = (
+    ("pass_attempt", "pass"),
+    ("rush_attempt", "run"),
+    ("field_goal_attempt", "field_goal"),
+    ("extra_point_attempt", "extra_point"),
+    ("punt_attempt", "punt"),
+    ("kickoff_attempt", "kickoff"),
+)
 
 
 def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optional[str] = None) -> Optional[str]:
@@ -187,19 +196,7 @@ def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optio
         if has_rush and between_downs:
             return "run"
         return "no_play"
-    if has_pass:
-        return "pass"
-    if has_rush:
-        return "run"
-    if row.get("field_goal_attempt") == 1:
-        return "field_goal"
-    if row.get("extra_point_attempt") == 1:
-        return "extra_point"
-    if row.get("punt_attempt") == 1:
-        return "punt"
-    if row.get("kickoff_attempt") == 1:
-        return "kickoff"
-    return None
+    return next((label for col, label in _STAT_PLAY_TYPES if row.get(col) == 1), None)
 
 
 def _drive_ranges(drives: List[Dict[str, Any]]) -> List[tuple[float, float, Optional[str]]]:
