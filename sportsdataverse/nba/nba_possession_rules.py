@@ -233,6 +233,34 @@ def _rebound_missed_shot_index(ctx: EventContext, i: int) -> int:
     return -1
 
 
+def rebound_can_set_offense(ctx: EventContext, i: int) -> bool:
+    """True when rebound row ``i`` is real and follows a missed shot or missed FT.
+
+    Any other rebound row (a placeholder, or one after a make, a turnover or a steal) names the
+    team that just had the ball, so it must not decide a possession's offense.
+    """
+    return is_real_rebound(ctx, i) and _rebound_missed_shot_index(ctx, i) >= 0
+
+
+def is_rebound_logged_after_its_putback(rows: "list[dict]", i: int) -> bool:
+    """True when row ``i`` is a rebound the pbp logs right after its own team's made putback.
+
+    The made shot ``i - 1`` and the rebound share a team and a clock, and a rebound cannot follow
+    a make, so the pbp has the two rows in the wrong order: it is the offensive rebound the
+    putback came from.
+    """
+    if i <= 0 or i >= len(rows):
+        return False
+    reb, shot = rows[i], rows[i - 1]
+    return (
+        (reb.get("event_type") or "") == "rebound"
+        and (shot.get("event_type") or "") == "made_shot"
+        and int(reb.get("team_id") or 0) != 0
+        and reb.get("team_id") == shot.get("team_id")
+        and reb.get("seconds_remaining") == shot.get("seconds_remaining")
+    )
+
+
 _TURNOVER_COINCIDENT_SUBTYPES = frozenset(("shot clock turnover", "kicked ball violation"))
 
 

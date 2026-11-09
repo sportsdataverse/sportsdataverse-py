@@ -1046,3 +1046,47 @@ def test_legacy_dialect_missed_free_throws_are_misses(game_id: str) -> None:
     home = pl.col("offense_team_id") == game["home_team_id"]
     assert points.filter(home)["ms"].sum() == game["home_pts"]
     assert points.filter(~home)["ms"].sum() == game["away_pts"]
+
+
+REBOUND_WITHOUT_A_MISS = FXROOT / "rebound_without_a_miss"
+
+
+@pytest.mark.parametrize(("game_id", "rebound"), [("0022500157", 467), ("0022500290", 235), ("0022501144", 54)])
+def test_rebounds_that_follow_no_miss_do_not_open_a_possession(
+    monkeypatch: pytest.MonkeyPatch, game_id: str, rebound: int
+) -> None:
+    """A rebound row after a make, a turnover or a steal no longer decides who has the ball.
+
+    Real 2025-26 release rows (``rebound_without_a_miss/README.md``). Such a rebound opened a
+    possession for its own team, so the other team's next basket was lost. Now a putback's rebound
+    logged after it stays in the putback's possession, and any other one does not set the offense:
+    each team's made-shot points equal the final, with the same number of possessions.
+    """
+    pbp = pl.read_parquet(REBOUND_WITHOUT_A_MISS / "pbp_2026.parquet").filter(pl.col("game_id") == game_id)
+    game = (
+        pl.read_parquet(REBOUND_WITHOUT_A_MISS / "schedule_2026.parquet")
+        .filter(pl.col("game_id") == game_id)
+        .row(0, named=True)
+    )
+    ms = (2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("ms")
+    home = pl.col("offense_team_id") == game["home_team_id"]
+
+    def totals(poss: pl.DataFrame) -> tuple[int, int]:
+        x = poss.with_columns(ms)
+        return x.filter(home)["ms"].sum(), x.filter(~home)["ms"].sum()
+
+    poss = build_possessions(pbp)
+    assert totals(poss) == (game["home_pts"], game["away_pts"])
+    loc = pbp.filter(pl.col("order_index") == rebound)["location"].item()
+    reb_team = game["home_team_id"] if loc == "h" else game["away_team_id"]
+    holder = poss.filter(pl.col("start_order_index") <= rebound, pl.col("end_order_index") >= rebound)
+    assert holder.height == 1
+    if game_id == "0022500157":  # the putback's own possession, which now ends on the rebound
+        assert holder["offense_team_id"].item() == reb_team and holder["end_order_index"].item() == rebound
+    else:
+        assert holder["offense_team_id"].item() != reb_team
+    monkeypatch.setattr(npm, "rebound_can_set_offense", lambda ctx, i: True)
+    monkeypatch.setattr(npm, "is_rebound_logged_after_its_putback", lambda rows, i: False)
+    before = build_possessions(pbp)
+    assert totals(before) != (game["home_pts"], game["away_pts"])  # the published release's shortfall
+    assert before.height == poss.height
