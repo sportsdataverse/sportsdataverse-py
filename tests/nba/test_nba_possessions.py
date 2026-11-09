@@ -20,6 +20,7 @@ from sportsdataverse.nba.nba_lineups import (
     parse_rotation_resultsets,
     players_on_court_from_rotation,
 )
+from sportsdataverse.nba.nba_possession_rules import SHOT_KEYS
 from sportsdataverse.nba.nba_possessions import (
     POSSESSION_SHOOTING_SCHEMA,
     POSSESSIONS_SCHEMA,
@@ -1057,3 +1058,25 @@ def test_defense_scores_are_credited_to_the_scoring_team(monkeypatch: pytest.Mon
     assert totals(before) != (game["home_pts"], game["away_pts"])  # the published release's shortfall
     keys = ["possession_number", "offense_team_id", "start_order_index", "end_order_index", "count_as_possession"]
     assert before.select(keys).equals(poss.select(keys))
+    # the credit lands on the scorer's next counted possession after the one it scored in, and nowhere else
+    team = {"h": game["home_team_id"], "v": game["away_team_id"]}
+    shots = pbp.filter(pl.col("event_type").is_in(["made_shot", "free_throw"])).select(
+        pl.col("order_index").cast(pl.Int64), pl.col("location").replace_strict(team, default=0).alias("team")
+    )
+    rows = before.sort("possession_number").to_dicts()
+    want = set()
+    for k, r in enumerate(rows):
+        inside = shots.filter(pl.col("order_index").is_between(r["start_order_index"], r["end_order_index"]))
+        for t in set(inside.filter(pl.col("team") != r["offense_team_id"])["team"]):
+            want.add(
+                next(
+                    x["possession_number"]
+                    for x in rows[k + 1 :]
+                    if x["offense_team_id"] == t and x["count_as_possession"]
+                )
+            )
+    cols = [*SHOT_KEYS, "points"]
+    moved = poss.join(before, on="possession_number", suffix="_b").filter(
+        pl.any_horizontal([pl.col(c) != pl.col(f"{c}_b") for c in cols])
+    )
+    assert want and set(moved["possession_number"]) == want

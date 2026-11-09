@@ -917,19 +917,27 @@ def credit_defense_scoring(records: "list[dict]", carries: "list[tuple[int, int,
 
     A possession row has one offense, so a defense score inside it (a technical or flagrant free
     throw, or a basket a misplaced boundary puts there) used to vanish: neither ``points`` nor the
-    shot counts kept it, and a game's possession points missed its final score. Each carry
-    ``(row, team, points, shots)`` is added to ``team``'s next row with ``count_as_possession``
-    (else its last earlier one), so every row keeps ``points == 2*fg2m + 3*fg3m + ftm`` and the
-    possession count is unchanged. pbpstats credits these per event; this is the per-row form.
+    shot counts kept it, and a game's possession points missed its final score. The possession
+    count is unchanged and every row keeps ``points == 2*fg2m + 3*fg3m + ftm``. pbpstats credits
+    these per event; this is the per-row form.
+
+    Args:
+        records: The game's possession rows (dicts with ``offense_team_id``,
+            ``count_as_possession``, ``points`` and the :data:`SHOT_KEYS` counts), in order.
+        carries: ``(row, team, points, shots)``: the index of the row the defense scored in, the
+            defense team, its score step there and its shot counts there. Each is added to the
+            team's next counted row; else its last earlier counted row; else its next row; else
+            its last earlier row. A team with no row at all keeps nothing (it cannot happen in a
+            real game).
+
+    Returns:
+        None. ``records`` is updated in place.
     """
-
-    def nearest(rows: "list[dict]") -> "dict | None":
-        return next((r for r in rows if r["count_as_possession"]), rows[0] if rows else None)
-
     for at, team, pts, shots in carries:
         later = [r for r in records[at + 1 :] if r["offense_team_id"] == team]
         earlier = [r for r in reversed(records[:at]) if r["offense_team_id"] == team]
-        target = nearest(later) or nearest(earlier)
+        counted = [r for r in later + earlier if r["count_as_possession"]]
+        target = next(iter(counted or later + earlier), None)
         if target is None:  # ponytail: a team with no possession row at all; nothing to credit
             continue
         target["points"] += pts
