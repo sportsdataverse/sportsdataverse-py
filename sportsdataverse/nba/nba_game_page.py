@@ -1064,6 +1064,7 @@ def game_page_tables(
     regulation_periods: Optional[int] = None,
     neutral_site: Optional[bool] = False,
     rated_home_prob: Optional[float] = None,
+    shot_cells: Optional[pl.DataFrame] = None,
 ) -> dict[str, object]:
     """Every game-page table for one game, from its basketball pbp / team box / player box frames.
 
@@ -1072,8 +1073,9 @@ def game_page_tables(
     ``neutral_site``) and calls this. :func:`game_page_frames` builds the same frames live from ESPN
     and calls this too, so a game renders identically from either source. Runs
     :func:`score_win_prob`, :func:`shot_coordinates`, :func:`team_game_rates`,
-    :func:`player_game_rates`, :func:`~sportsdataverse.nba.nba_game_splits.team_game_splits` and
-    :func:`~sportsdataverse.nba.nba_game_splits.player_game_splits` on the game's own regulation.
+    :func:`player_game_rates`, :func:`~sportsdataverse.nba.nba_game_splits.team_game_splits`,
+    :func:`~sportsdataverse.nba.nba_game_splits.player_game_splits` and
+    :func:`~sportsdataverse.nba.nba_game_expected.team_game_expected` on the game's own regulation.
 
     Args:
         pbp: One game's plays in the basketball pbp schema, in play order (empty before tip-off).
@@ -1088,13 +1090,17 @@ def game_page_tables(
             prior); ``None``, NaN or ``pd.NA`` counts as false.
         rated_home_prob: The game's rated pregame home win probability, the prior when there is no
             line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
+        shot_cells: The league's shot counts as of the game date
+            (:func:`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of
+            ``team_game_expected``; ``None`` leaves its expected columns null.
 
     Returns:
         ``{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits",
-        "periods", "regulation_periods", "period_kind", "prior"}``: the scored plays with shot
-        coordinates, the two rate frames (empty with their documented columns without two team
-        rows), the two split frames (counted from the plays so far; the team frame is empty before
-        tip-off, the player frame then holds the boxed players with zero counts), the highest period played
+        "team_game_expected", "periods", "regulation_periods", "period_kind", "prior"}``: the scored
+        plays with shot coordinates, the two rate frames (empty with their documented columns without
+        two team rows), the two split frames (counted from the plays so far; the team frame is empty
+        before tip-off, the player frame then holds the boxed players with zero counts), the expected
+        points by zone and situation (empty before tip-off), the highest period played
         (the regulation count before tip-off), the regulation periods, ``"half"`` or ``"quarter"``,
         and ``{"home_win_prob", "source", "home_team_spread", "game_spread_available"}``.
 
@@ -1145,7 +1151,8 @@ def game_page_tables(
             False,
         )
     two_teams = team_box.height == 2
-    from sportsdataverse.nba.nba_game_splits import player_game_splits, team_game_splits  # it imports this module
+    from sportsdataverse.nba.nba_game_expected import team_game_expected  # these import this module
+    from sportsdataverse.nba.nba_game_splits import player_game_splits, team_game_splits
 
     if season is not None and "season" not in team_box.columns:  # D12: _tov reads the season from the box
         team_box = team_box.with_columns(pl.lit(season).alias("season"))
@@ -1159,6 +1166,7 @@ def game_page_tables(
         else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
         "team_game_splits": team_game_splits(pbp, player_box, league=lg, regulation_periods=reg),
         "player_game_splits": player_game_splits(pbp, player_box, league=lg, regulation_periods=reg),
+        "team_game_expected": team_game_expected(pbp, league=lg, regulation_periods=reg, cells=shot_cells),
         "periods": periods,
         "regulation_periods": reg,
         "period_kind": "half" if reg == 2 else "quarter",
@@ -1233,6 +1241,7 @@ def game_page_frames(
     league_id: Optional[str] = None,
     league: Optional[str] = None,
     rated_home_prob: Optional[float] = None,
+    shot_cells: Optional[pl.DataFrame] = None,
 ) -> dict[str, object]:
     """Everything the Game on Paper basketball game page needs, from one ``espn_<league>_pbp`` payload.
 
@@ -1250,11 +1259,14 @@ def game_page_frames(
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
         rated_home_prob: The game's rated pregame home win probability, the prior when there is no
             line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
+        shot_cells: The league's shot counts as of the game date
+            (:func:`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of
+            ``team_game_expected``; ``None`` leaves its expected columns null.
 
     Returns:
         ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates",
-        "team_game_splits", "player_game_splits", "periods", "prior", "league", "regulation_periods",
-        "period_kind", "neutral_site"}``; see
+        "team_game_splits", "player_game_splits", "team_game_expected", "periods", "prior", "league",
+        "regulation_periods", "period_kind", "neutral_site"}``; see
         :func:`game_page_tables` for the shared keys. Missing boxes retain empty identifier columns.
         Team rates need both team rows, and player rates also need player rows. Unavailable rates
         are empty frames with their documented columns.
@@ -1300,6 +1312,7 @@ def game_page_frames(
         regulation_periods=reg,
         neutral_site=neutral,
         rated_home_prob=rated_home_prob,
+        shot_cells=shot_cells,
     )
     return {
         "pbp": tables["pbp"],
@@ -1313,6 +1326,7 @@ def game_page_frames(
         "player_game_rates": tables["player_game_rates"],
         "team_game_splits": tables["team_game_splits"],
         "player_game_splits": tables["player_game_splits"],
+        "team_game_expected": tables["team_game_expected"],
         "periods": tables["periods"],
         "prior": tables["prior"],
         "league": lg,

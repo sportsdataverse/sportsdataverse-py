@@ -888,7 +888,7 @@ game_minutes(4, league="mbb")  # 50
 
 ### game_page_frames {#game_page_frames}
 
-`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, rated_home_prob: 'Optional[float]' = None) -> 'dict[str, object]'`
+`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, rated_home_prob: 'Optional[float]' = None, shot_cells: 'Optional[pl.DataFrame]' = None) -> 'dict[str, object]'`
 
 Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload.
 
@@ -907,10 +907,11 @@ the warehouse's copies of the same frames.
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 | `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
+| `shot_cells` | `Optional[DataFrame]` | `None` | The league's shot counts as of the game date (`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of `team_game_expected`; `None` leaves its expected columns null. |
 
 **Returns**
 
-`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "team_game_splits", "player_game_splits", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Missing boxes retain empty identifier columns. Team rates need both team rows, and player rates also need player rows. Unavailable rates are empty frames with their documented columns.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "team_game_splits", "player_game_splits", "team_game_expected", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Missing boxes retain empty identifier columns. Team rates need both team rows, and player rates also need player rows. Unavailable rates are empty frames with their documented columns.
 
 **Raises**
 
@@ -937,7 +938,7 @@ frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'h
 
 ### game_page_tables {#game_page_tables}
 
-`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'dict[str, object]'`
+`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None, shot_cells: 'Optional[pl.DataFrame]' = None) -> 'dict[str, object]'`
 
 Every game-page table for one game, from its basketball pbp / team box / player box frames.
 
@@ -946,8 +947,9 @@ The warehouse path: the sdv-db nightly stage reads one game's rows from `<league
 `neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
 and calls this too, so a game renders identically from either source. Runs
 `score_win_prob`, `shot_coordinates`, `team_game_rates`,
-`player_game_rates`, `~sportsdataverse.nba.nba_game_splits.team_game_splits` and
-`~sportsdataverse.nba.nba_game_splits.player_game_splits` on the game's own regulation.
+`player_game_rates`, `~sportsdataverse.nba.nba_game_splits.team_game_splits`,
+`~sportsdataverse.nba.nba_game_splits.player_game_splits` and
+`~sportsdataverse.nba.nba_game_expected.team_game_expected` on the game's own regulation.
 
 **Parameters**
 
@@ -961,10 +963,11 @@ and calls this too, so a game renders identically from either source. Runs
 | `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default `game_regulation_periods` from the frame's `season`. Pass the schedule's `format_regulation_periods` through `game_regulation_periods` when you have it. |
 | `neutral_site` | `Optional[bool]` | `False` | Whether the game was at a neutral site (no home-court advantage in a lineless prior); `None`, NaN or `pd.NA` counts as false. |
 | `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
+| `shot_cells` | `Optional[DataFrame]` | `None` | The league's shot counts as of the game date (`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of `team_game_expected`; `None` leaves its expected columns null. |
 
 **Returns**
 
-`{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the two split frames (counted from the plays so far; the team frame is empty before tip-off, the player frame then holds the boxed players with zero counts), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+`{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits", "team_game_expected", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the two split frames (counted from the plays so far; the team frame is empty before tip-off, the player frame then holds the boxed players with zero counts), the expected points by zone and situation (empty before tip-off), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
 
 **Raises**
 

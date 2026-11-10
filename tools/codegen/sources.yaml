@@ -831,6 +831,7 @@ categories:
       - sportsdataverse.nba.nba_game_predict
       - sportsdataverse.nba.nba_game_page
       - sportsdataverse.nba.nba_game_splits
+      - sportsdataverse.nba.nba_game_expected
       - sportsdataverse.wbb.wbb_game_predict
       - sportsdataverse.cfb.cfb_ratings
       - sportsdataverse.hockey.mch.mch_ratings
