@@ -32,9 +32,9 @@ __all__ = [
     "GAME_ROWS_SCHEMA",
     "OFFICIALS_SCHEMA",
     "OFFICIAL_SEASONS_SCHEMA",
+    "league_official_seasons",
     "official_game_rows",
     "official_seasons",
-    "league_official_seasons",
     "officials_rows",
 ]
 
