@@ -1,0 +1,119 @@
+{
+ "6615603": {
+  "contest_id": "6615603",
+  "linescore": [
+   {
+    "contest_id": "6615603",
+    "team": "Saint Peter's",
+    "home_away": "away",
+    "period": "1",
+    "points": 18,
+    "final": 52,
+    "game_date": "11/08/2026 04:00 PM",
+    "venue": "Joel & Diane Bloom Wellness & Events Center (Newark, NJ)",
+    "attendance": 752,
+    "team_ncaa_team_id": "627432",
+    "team_espn_team_id": "2612",
+    "espn_game_id": null
+   }
+  ],
+  "teams": [
+   {
+    "team": "NJIT",
+    "ncaa_team_id": "627497",
+    "espn_team_id": "2885",
+    "espn_display_name": "NJIT Highlanders",
+    "espn_mascot": "Highlanders",
+    "conference": "America East",
+    "division": "I",
+    "side": "home",
+    "espn_game_id": null
+   },
+   {
+    "team": "Saint Peter's",
+    "ncaa_team_id": "627432",
+    "espn_team_id": "2612",
+    "espn_display_name": "Saint Peter's Peacocks",
+    "espn_mascot": "Peacocks",
+    "conference": "MAAC",
+    "division": "I",
+    "side": "away",
+    "espn_game_id": null
+   }
+  ]
+ },
+ "6626395": {
+  "contest_id": "6626395",
+  "linescore": [
+   {
+    "contest_id": "6626395",
+    "team": "Harvard",
+    "home_away": "away",
+    "period": "1",
+    "points": 35,
+    "final": 63,
+    "game_date": "11/08/2026 02:00 PM",
+    "venue": "Gerald Ratner Athletics Center (Chicago, IL)",
+    "attendance": 1496,
+    "team_ncaa_team_id": "627399",
+    "team_espn_team_id": "108",
+    "espn_game_id": null
+   }
+  ],
+  "teams": [
+   {
+    "side": "home",
+    "team": "UChicago",
+    "espn_game_id": null
+   },
+   {
+    "team": "Harvard",
+    "ncaa_team_id": "627399",
+    "espn_team_id": "108",
+    "espn_display_name": "Harvard Crimson",
+    "espn_mascot": "Crimson",
+    "conference": "Ivy League",
+    "division": "I",
+    "side": "away",
+    "espn_game_id": null
+   }
+  ]
+ },
+ "6640165": {
+  "contest_id": "6640165",
+  "linescore": [
+   {
+    "contest_id": "6640165",
+    "team": "Wayne St. (MI)",
+    "home_away": "away",
+    "period": "1",
+    "points": 43,
+    "final": 82,
+    "game_date": "11/02/2026 07:00 PM",
+    "venue": "Calihan Hall (Detroit, MI)",
+    "attendance": 889,
+    "team_ncaa_team_id": null,
+    "team_espn_team_id": null,
+    "espn_game_id": null
+   }
+  ],
+  "teams": [
+   {
+    "team": "Detroit Mercy",
+    "ncaa_team_id": "627509",
+    "espn_team_id": "2174",
+    "espn_display_name": "Detroit Mercy Titans",
+    "espn_mascot": "Titans",
+    "conference": "Horizon",
+    "division": "I",
+    "side": "home",
+    "espn_game_id": null
+   },
+   {
+    "side": "away",
+    "team": "Wayne St. (MI)",
+    "espn_game_id": null
+   }
+  ]
+ }
+}

@@ -21,7 +21,8 @@ What is checked against the real world:
   0.0829 (0.1029), 4.214 (4.714); WNBA 2025 0.0638 (0.0838), 3.501 (4.001). Each also beats the
   pace baseline's wins MAE (3.364 / 4.458 / 4.015). With the preseason prior (2025-26 and WNBA
   2025 carry it from the committed season before; 2023-24 has none): 2025-26 0.0880 / 4.271,
-  WNBA 2025 0.0602 / 3.469.
+  WNBA 2025 0.0602 / 3.469. With rest and travel (BB-D23, NBA only; measured 2026-11-10 without ->
+  with): 2023-24 0.0583 / 3.075 -> 0.0583 / 3.090, 2025-26 0.0879 / 4.263 -> 0.0882 / 4.246.
 * **Preseason prior:** weeks 0-6 game log loss with and without it (NBA 2025-26, WNBA 2025), the
   regressed prior and the expansion default (the 2025 Valkyries), and the in-season ridge toward
   the prior.

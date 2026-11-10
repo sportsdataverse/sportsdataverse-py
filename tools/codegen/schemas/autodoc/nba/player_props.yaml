@@ -1,0 +1,37 @@
+schema: player_props
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: Int32
+  description: ''
+- name: season
+  type: Int32
+  description: ''
+- name: athlete_id
+  type: Int32
+  description: ''
+- name: team_id
+  type: Int32
+  description: ''
+- name: player_name
+  type: String
+  description: ''
+- name: stat
+  type: String
+  description: ''
+- name: line
+  type: Float64
+  description: ''
+- name: n_books
+  type: UInt32
+  description: ''
+- name: over_price
+  type: Float64
+  description: ''
+- name: under_price
+  type: Float64
+  description: ''
+- name: over_prob
+  type: Float64
+  description: ''

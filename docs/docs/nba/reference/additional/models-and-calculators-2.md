@@ -1,10 +1,82 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: luck_adjusted–nba_predict"
-sidebar_label: "Models and calculators: luck_adjusted–nba_predict"
+title: "NBA — additional Python functions — Models and calculators: in_game–nba_predict"
+sidebar_label: "Models and calculators: in_game–nba_predict"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: luck_adjusted–nba_predict — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: in_game–nba_predict — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: luck_adjusted–nba_predict
+# NBA — additional Python functions — Models and calculators: in_game–nba_predict
+
+### in_game_features {#in_game_features}
+
+`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
+
+Per-play in-game win-probability features from a `load_nba_pbp` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame with `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id` (event team) and `home_team_id` (the `load_nba_pbp` schema). |
+| `pregame_home_prob` | `float` |  | The pregame home win probability (e.g. from `win_prob_from_margin`), encoded as a constant logit column. Clipped to `[1e-6, 1 - 1e-6]` so a saturated CDF (exact 0/1) cannot crash the logit. |
+
+**Returns**
+
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0), `margin_per_sqrt_sec` (`score_diff / sqrt(sec_left + 1)`: the lead measured against the time left, so a fixed lead grows as the clock runs down) and `sqrt_sec_left_60` (`sqrt(max(sec_left, 60))`: the clock with the final minute folded into `margin_per_sqrt_sec`).
+
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
+| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
+| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import in_game_features
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+feats = in_game_features(pbp, 0.62)
+```
+
+### league_pbp_functions {#league_pbp_functions}
+
+`league_pbp_functions(league: 'str') -> 'tuple[Callable[..., dict], Callable[[Any, dict], dict]]'`
+
+The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`.
+
+A live processor fetches once (`fetch(game_id, raw=True)`, the summary with its keys
+defaulted and nothing parsed), checks the payload has plays, then parses (`parse(game_id,
+summary)`) and hands the result to `game_page_frames`. Splitting the two keeps an
+upstream failure (fetch) apart from a parsing bug (parse).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
+
+**Returns**
+
+`(fetch, parse)`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not one of the four. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_functions
+fetch, parse = league_pbp_functions("wnba")
+summary = fetch(401726992, raw=True)
+frames = game_page_frames(parse(401726992, summary), league="wnba")
+```
 
 ### luck_adjusted_response {#luck_adjusted_response}
 

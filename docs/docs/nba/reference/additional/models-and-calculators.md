@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–league_pbp"
-sidebar_label: "Models and calculators: AdjRapmModel–league_pbp"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior"
+sidebar_label: "Models and calculators: AdjRapmModel–home_prior"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–league_pbp — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–league_pbp
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -1115,6 +1115,73 @@ one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 game_excitement(score_win_prob(one, league="mbb"), league="mbb")
 ```
 
+### game_lines {#game_lines}
+
+`game_lines(lines_checkpoints: 'pl.DataFrame', crosswalk: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str | None' = None) -> 'pl.DataFrame'`
+
+Per ESPN game: opening and closing spread, total and moneylines, the no-vig market WP, and the result.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lines_checkpoints` | `DataFrame` |  | The odds store's `lines_checkpoints` rows (any sports and years: rows of other sports are ignored). Needs `event_id`, `sport_key`, `home_team`, `away_team`, `bookmaker_key`, `market_key`, `outcome_name`, `open_price` / `open_point`, `close_price` / `close_point` and `close_mins_before`. |
+| `crosswalk` | `DataFrame` |  | The odds store's `espn_crosswalk` (`sport_key`, `event_id`, `espn_game_id`, `match_method`). |
+| `schedule` | `DataFrame` |  | The league's ESPN schedule (`load_<league>_schedule`): `game_id`, `season`, `home_score`, `away_score`, `status_type_completed`. Only its games are returned, with its `season`. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+
+**Returns**
+
+One row per game with a line, `GAME_LINES_SCHEMA`: `game_id`, `season`, the odds `event_id` (the one with the most quotes when the crosswalk maps two events to a game), `n_books` (books with a closing quote), `spread_home_open` / `_close` (betting convention, negative when home is favoured), `total_open` / `_close`, `ml_home` / `ml_away` `_open` / `_close` (American), `market_home_wp` / `market_away_wp` `_open` / `_close` (no vig, the pair sums to 1), and for completed games `home_margin`, `ats_result` (`"home"` / `"away"` / `"push"`: who covered the closing spread) and `total_result` (`"over"` / `"under"` / `"push"` against the closing total). A column the books did not quote is null; an empty frame with those columns when nothing matches.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int32 | ESPN game id, the join key to the schedule, play-by-play and box-score frames. |
+| `season` | Int32 | ESPN season of the game, from the schedule. |
+| `event_id` | String | Odds-store event id the lines come from (the one with the most quotes when two map to the game). |
+| `n_books` | UInt32 | Sportsbooks with a closing (pre-tip) quote on the game. |
+| `spread_home_open` | Float64 | Median opening spread on ESPN's home team, betting convention (negative when home is favoured). |
+| `spread_home_close` | Float64 | Median closing spread on ESPN's home team, betting convention (negative when home is favoured). |
+| `total_open` | Float64 | Median opening game total (over/under points). |
+| `total_close` | Float64 | Median closing game total (over/under points). |
+| `ml_home_open` | Float64 | Median opening moneyline on the home team, American odds (median taken on the decimal price). |
+| `ml_away_open` | Float64 | Median opening moneyline on the away team, American odds. |
+| `ml_home_close` | Float64 | Median closing moneyline on the home team, American odds. |
+| `ml_away_close` | Float64 | Median closing moneyline on the away team, American odds. |
+| `market_home_wp_open` | Float64 | No-vig home win probability from the opening moneylines, median over books. |
+| `market_away_wp_open` | Float64 | No-vig away win probability from the opening moneylines (1 - market_home_wp_open). |
+| `market_home_wp_close` | Float64 | No-vig home win probability from the closing moneylines, median over books. |
+| `market_away_wp_close` | Float64 | No-vig away win probability from the closing moneylines (1 - market_home_wp_close). |
+| `home_margin` | Int32 | Final home score minus away score; null until the game is completed. |
+| `ats_result` | String | Who covered the closing spread (home, away or push); null until completed. |
+| `total_result` | String | The final total against the closing total (over, under or push); null until completed. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown. |
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_lines import game_lines
+from sportsdataverse.nba.nba_loaders import load_nba_schedule
+odds = "odds-data/odds"  # a local checkout of the odds store
+lines = game_lines(
+    pl.read_parquet(f"{odds}/lines_checkpoints_202[45].parquet"),
+    pl.read_parquet(f"{odds}/espn_crosswalk.parquet"),
+    load_nba_schedule([2025]),
+    league="nba",
+)
+
+# Against the spread
+
+lines.group_by("ats_result").len()
+```
+
 ### game_minutes {#game_minutes}
 
 `game_minutes(periods: 'int', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'int'`
@@ -1413,76 +1480,4 @@ home_prior(None, False, rated_home_prob=0.71)  # (0.71, 'rated')
 # A lineless college tournament game
 
 home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
-```
-
-### in_game_features {#in_game_features}
-
-`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
-
-Per-play in-game win-probability features from a `load_nba_pbp` frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame with `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id` (event team) and `home_team_id` (the `load_nba_pbp` schema). |
-| `pregame_home_prob` | `float` |  | The pregame home win probability (e.g. from `win_prob_from_margin`), encoded as a constant logit column. Clipped to `[1e-6, 1 - 1e-6]` so a saturated CDF (exact 0/1) cannot crash the logit. |
-
-**Returns**
-
-One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0), `margin_per_sqrt_sec` (`score_diff / sqrt(sec_left + 1)`: the lead measured against the time left, so a fixed lead grows as the clock runs down) and `sqrt_sec_left_60` (`sqrt(max(sec_left, 60))`: the clock with the final minute folded into `margin_per_sqrt_sec`).
-
-| col_name | type | description |
-|---|---|---|
-| `score_diff` | Float64 |  |
-| `sec_left` | Float64 |  |
-| `sqrt_sec_left` | Float64 |  |
-| `pregame_logit` | Float64 |  |
-| `home_has_ball` | Int64 |  |
-| `margin_per_sqrt_sec` | Float64 | Score margin over the time left, score_diff / sqrt(sec_left + 1): a fixed lead grows as the clock runs down. The basketball in-game boosters read the final minute only through this column. |
-| `sqrt_sec_left_60` | Float64 | Square root of the seconds left, floored at one minute (sqrt(max(sec_left, 60))): the clock the basketball in-game boosters read outside the final minute. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import in_game_features
-from sportsdataverse.nba.nba_loaders import load_nba_pbp
-pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
-feats = in_game_features(pbp, 0.62)
-```
-
-### league_pbp_functions {#league_pbp_functions}
-
-`league_pbp_functions(league: 'str') -> 'tuple[Callable[..., dict], Callable[[Any, dict], dict]]'`
-
-The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`.
-
-A live processor fetches once (`fetch(game_id, raw=True)`, the summary with its keys
-defaulted and nothing parsed), checks the payload has plays, then parses (`parse(game_id,
-summary)`) and hands the result to `game_page_frames`. Splitting the two keeps an
-upstream failure (fetch) apart from a parsing bug (parse).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
-
-**Returns**
-
-`(fetch, parse)`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not one of the four. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_functions
-fetch, parse = league_pbp_functions("wnba")
-summary = fetch(401726992, raw=True)
-frames = game_page_frames(parse(401726992, summary), league="wnba")
 ```

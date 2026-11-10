@@ -186,6 +186,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [fit_aging_curve](additional/models-and-calculators.md#fit_aging_curve) | Fit the aging curve by the delta method: avg YoY rating change grouped by starting age. |
 | [fit_reml_prior_ridge](additional/models-and-calculators.md#fit_reml_prior_ridge) | Ridge toward `prior_mean` with one penalty for offense and one for defense, chosen by REML. |
 | [game_excitement](additional/models-and-calculators.md#game_excitement) | How exciting one game was, with no direction: the game excitement index, lead changes and the biggest swing. |
+| [game_lines](additional/models-and-calculators.md#game_lines) | Per ESPN game: opening and closing spread, total and moneylines, the no-vig market WP, and the result. |
 | [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime. |
 | [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload. |
 | [game_page_tables](additional/models-and-calculators.md#game_page_tables) | Every game-page table for one game, from its basketball pbp / team box / player box frames. |
@@ -193,8 +194,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [get_constants](additional/models-and-calculators.md#get_constants) | Return the `LeagueConstants` for a `league_id`. |
 | [get_shrinkage_k](additional/models-and-calculators.md#get_shrinkage_k) | Shooter-talent shrinkage `k` for a league. |
 | [home_prior](additional/models-and-calculators.md#home_prior) | Pregame home win probability for the in-game model, and where it came from. |
-| [in_game_features](additional/models-and-calculators.md#in_game_features) | Per-play in-game win-probability features from a `load_nba_pbp` frame. |
-| [league_pbp_functions](additional/models-and-calculators.md#league_pbp_functions) | The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`. |
+| [in_game_features](additional/models-and-calculators-2.md#in_game_features) | Per-play in-game win-probability features from a `load_nba_pbp` frame. |
+| [league_pbp_functions](additional/models-and-calculators-2.md#league_pbp_functions) | The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`. |
 | [luck_adjusted_response](additional/models-and-calculators-2.md#luck_adjusted_response) | Attach a per-possession `la_points` expected-points response. |
 | [nba_adj_rapm](additional/models-and-calculators-2.md#nba_adj_rapm) | One-shot prior-informed RAPM over a possession frame -> per-player ratings. |
 | [nba_aging_curve](additional/models-and-calculators-2.md#nba_aging_curve) | Load the bundled per-age value-multiplier curve. |
@@ -218,6 +219,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_war](additional/models-and-calculators-3.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-3.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-3.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
+| [player_props](additional/models-and-calculators-3.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
 | [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
@@ -232,6 +234,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [validate_model](additional/models-and-calculators-3.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-3.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |
 | [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |
+| [wp_variants](additional/models-and-calculators-3.md#wp_variants) | Two extra per-play home WP columns for one game: naive (prior 0.5) and market-anchored. |
 
 ## Analytics
 
