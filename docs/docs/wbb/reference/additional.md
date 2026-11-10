@@ -360,6 +360,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_game_stints](additional/analytics-2.md#wbb_game_stints) | Women's college game stints: per player and game, every stretch on the floor. |
 | [wbb_game_units](additional/analytics-2.md#wbb_game_units) | Women's college in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |
 | [wbb_lineup_seasons](additional/analytics-3.md#wbb_lineup_seasons) | Women's college lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
+| [wbb_official_seasons](additional/analytics-3.md#wbb_official_seasons) | Women's college official season profiles: games, fouls and FTA per game, pace and home splits. |
 | [wbb_play_styles](additional/analytics-3.md#wbb_play_styles) | Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [wbb_player_on_off](additional/analytics-3.md#wbb_player_on_off) | Women's college player on/off: each player's team with her on the floor and without her. |
 | [wbb_player_shot_zones](additional/analytics-3.md#wbb_player_shot_zones) | Women's college season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |

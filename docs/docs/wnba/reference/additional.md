@@ -129,11 +129,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_units](additional/analytics-2.md#wnba_game_units) | WNBA in-game units (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_units. |
 | [wnba_lineup_seasons](additional/analytics-2.md#wnba_lineup_seasons) | WNBA lineup seasons (league_id='10'). See sportsdataverse.nba.nba_lineup_seasons.nba_lineup_seasons. |
 | [wnba_matchup_drapm](additional/analytics-2.md#wnba_matchup_drapm) | WNBA matchup defensive RAPM (`league_id="10"`). |
+| [wnba_official_seasons](additional/analytics-2.md#wnba_official_seasons) | WNBA official season profiles: games, fouls and FTA per game, pace and home splits. |
 | [wnba_player_factor_rapm](additional/analytics-2.md#wnba_player_factor_rapm) | WNBA four-factor RAPM split (league_id='10'). See sportsdataverse.nba.nba_player_factor_rapm.nba_player_factor_rapm. |
 | [wnba_player_on_off](additional/analytics-2.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
 | [wnba_player_props](additional/analytics-2.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
 | [wnba_player_shot_zones](additional/analytics-2.md#wnba_player_shot_zones) | WNBA season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3 (league_id='10'). See … |
-| [wnba_player_war](additional/analytics-2.md#wnba_player_war) | WNBA WAR and VORP per player-season from our BPM, RAPM and BOBAN (league_id='10'). See sportsdataverse.nba.nba_player_war.nba_player_war. |
+| [wnba_player_war](additional/analytics-3.md#wnba_player_war) | WNBA WAR and VORP per player-season from our BPM, RAPM and BOBAN (league_id='10'). See sportsdataverse.nba.nba_player_war.nba_player_war. |
 | [wnba_player_wowy](additional/analytics-3.md#wnba_player_wowy) | WNBA WOWY pairs (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_wowy. |
 | [wnba_playtype_ratings](additional/analytics-3.md#wnba_playtype_ratings) | WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`). |
 | [wnba_referee_assignments](additional/analytics-3.md#wnba_referee_assignments) | Fetch and parse WNBA referee assignments for a given date from official.nba.com. |

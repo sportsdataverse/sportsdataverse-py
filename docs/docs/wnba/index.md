@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 118 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 119 | — |
 
 ## ESPN {#espn}
 
@@ -96,11 +96,12 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_game_units`](reference/additional/analytics-2#wnba_game_units)
 - [`wnba_lineup_seasons`](reference/additional/analytics-2#wnba_lineup_seasons)
 - [`wnba_matchup_drapm`](reference/additional/analytics-2#wnba_matchup_drapm)
+- [`wnba_official_seasons`](reference/additional/analytics-2#wnba_official_seasons)
 - [`wnba_player_factor_rapm`](reference/additional/analytics-2#wnba_player_factor_rapm)
 - [`wnba_player_on_off`](reference/additional/analytics-2#wnba_player_on_off)
 - [`wnba_player_props`](reference/additional/analytics-2#wnba_player_props)
 - [`wnba_player_shot_zones`](reference/additional/analytics-2#wnba_player_shot_zones)
-- [`wnba_player_war`](reference/additional/analytics-2#wnba_player_war)
+- [`wnba_player_war`](reference/additional/analytics-3#wnba_player_war)
 - [`wnba_player_wowy`](reference/additional/analytics-3#wnba_player_wowy)
 - [`wnba_playtype_ratings`](reference/additional/analytics-3#wnba_playtype_ratings)
 - [`wnba_referee_assignments`](reference/additional/analytics-3#wnba_referee_assignments)

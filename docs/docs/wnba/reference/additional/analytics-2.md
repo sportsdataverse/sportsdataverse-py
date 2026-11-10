@@ -206,6 +206,57 @@ d = wnba_matchup_drapm("2024")
 print(d.sort("matchup_drapm", descending=True).head())
 ```
 
+### wnba_official_seasons {#wnba_official_seasons}
+
+`wnba_official_seasons(seasons: 'int | list[int]', *, season_type: 'int | None' = 2, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA official season profiles: games, fouls and FTA per game, pace and home splits.
+
+One row per official and season over the completed games of `season_type` the official
+worked. `fouls_per_game` and `fta_per_game` are both teams' totals from ESPN's team box;
+`pace` is possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per 40
+minutes, over the games' minutes including overtime; `home_win_pct` and
+`home_minus_away_fouls` (home fouls less away fouls, per game) leave out neutral-site
+games. Every rate has `<m>_n`, the games it is computed over. The release keys officials by
+ESPN's `official_id`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (the WNBA season is its calendar year). |
+| `season_type` | `int \| None` | `2` | ESPN's season type: `2` regular season (default), `3` postseason; `None` keeps every type. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, official)`: `season`, `official_id` (Int64), `official_name`, `games`, `fouls_per_game`, `fta_per_game`, `pace`, `home_win_pct` and `home_minus_away_fouls`, each rate with its `_n`. A season without an officials release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `official_id` | Int64 | ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB). |
+| `official_name` | String | Official's name, whitespace-normalised; the key when official_id is null. |
+| `games` | Int64 | Completed games of the season type the officials table lists the official on. |
+| `fouls_per_game` | Float64 | Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games. |
+| `fouls_per_game_n` | Int64 | Games with a two-team box behind fouls_per_game. |
+| `fta_per_game` | Float64 | Both teams' free-throw attempts per game, over fta_per_game_n games. |
+| `fta_per_game_n` | Int64 | Games with a two-team box behind fta_per_game. |
+| `pace` | Float64 | Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime. |
+| `pace_n` | Int64 | Games with a box possession estimate and a known last period behind pace. |
+| `home_win_pct` | Float64 | Share of the official's non-neutral-site games the home team won. |
+| `home_win_pct_n` | Int64 | Non-neutral-site games behind home_win_pct. |
+| `home_minus_away_fouls` | Float64 | Home team's fouls minus the away team's, per non-neutral-site game. |
+| `home_minus_away_fouls_n` | Int64 | Non-neutral-site games with a two-team box behind home_minus_away_fouls. |
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_official_seasons import wnba_official_seasons
+refs = wnba_official_seasons(2025)
+refs.sort("fouls_per_game", descending=True).select("official_name", "games", "fouls_per_game").head()
+```
+
 ### wnba_player_factor_rapm {#wnba_player_factor_rapm}
 
 `wnba_player_factor_rapm(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', min_poss: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -490,48 +541,3 @@ One row per `(season, team_id, player_id)` (stats.nba.com ids, Int64) with `play
 | `above_break_3_fg_pct_pct` | Float64 | Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `above_break_3_freq_pct` | Float64 | Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
 | `above_break_3_ast_pct_pct` | Float64 | Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
-
-### wnba_player_war {#wnba_player_war}
-
-`wnba_player_war(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA WAR and VORP per player-season from our BPM, RAPM and BOBAN (league_id='10'). See sportsdataverse.nba.nba_player_war.nba_player_war.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `team_id` (the team he played most possessions for), `teams` (how many he played for), `min`, `poss` (on-court possessions, offensive plus defensive over 2), `rating` and `rating_bpm` / `rating_rapm` / `rating_boban` (anchored, per 100), `vorp`, `war` with `war_lo` / `war_hi` (a nominal 90% interval from a bootstrap over each team-season's games: the sampling uncertainty of the team side and the playing time) and `war_bpm` / `war_rapm` / `war_boban` (the source spread), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year). |
-| `player_id` | Int64 | stats.nba.com player id. |
-| `player_name` | String | Player name, from the player impact release. |
-| `team_id` | Int64 | stats.nba.com team id of the team he played the most possessions for. |
-| `teams` | Int64 | How many teams he played for in the regular season. |
-| `min` | Float64 | Regular-season minutes (the player impact release's). |
-| `poss` | Float64 | On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's convention). The minutes basis of vorp and war. |
-| `rating` | Float64 | Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban. |
-| `rating_bpm` | Float64 | Our BPM per 100, team-anchored and centred: the release's bpm with its team constant repaired (minute-weighted team mean = net rating / 5, BPM 2.0's), minus the player's team mean, plus the team's net rating / 5, centred so the league's possession-weighted mean is 0. |
-| `rating_rapm` | Float64 | Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read: the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset. |
-| `rating_boban` | Float64 | Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm. |
-| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference's VORP scale: a season of possessions at R + 1 is 1. |
-| `war` | Float64 | Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement level; a season's war adds up to the league's wins minus a team of replacement players' (.189 NBA 2024-25, .104 WNBA 2025). |
-| `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread is the source uncertainty. |
-| `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |
-| `war_bpm` | Float64 | war from rating_bpm alone. Every source shares the league's replacement level, so war_bpm, war_rapm and war_boban add up to the same league total. |
-| `war_rapm` | Float64 | war from rating_rapm alone. |
-| `war_boban` | Float64 | war from rating_boban alone. BOBAN shrinks low-minute players toward average, so the replacement pool carries more war_boban than war_bpm (the replacement level is a box-score level). |
-| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
-| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
-| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
-| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
-| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
-| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |

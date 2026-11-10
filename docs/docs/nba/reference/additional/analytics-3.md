@@ -372,6 +372,57 @@ games = nba_neutral_site_games([2026])
 nba_neutral_site_games(league_id="10")
 ```
 
+### nba_official_seasons {#nba_official_seasons}
+
+`nba_official_seasons(seasons: 'int | list[int]', *, season_type: 'int | None' = 2, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+NBA official season profiles: games, fouls and FTA per game, pace and home splits.
+
+One row per official and season over the completed games of `season_type` the official
+worked. `fouls_per_game` and `fta_per_game` are both teams' totals from ESPN's team box;
+`pace` is possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per 48
+minutes, over the games' minutes including overtime; `home_win_pct` and
+`home_minus_away_fouls` (home fouls less away fouls, per game) leave out neutral-site
+games. Every rate has `<m>_n`, the games it is computed over. The release keys officials by
+names only, so `official_id` is null.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `season_type` | `int \| None` | `2` | ESPN's season type: `2` regular season (default), `3` postseason; `None` keeps every type. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, official)`: `season`, `official_id` (Int64), `official_name`, `games`, `fouls_per_game`, `fta_per_game`, `pace`, `home_win_pct` and `home_minus_away_fouls`, each rate with its `_n`. A season without an officials release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `official_id` | Int64 | ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB). |
+| `official_name` | String | Official's name, whitespace-normalised; the key when official_id is null. |
+| `games` | Int64 | Completed games of the season type the officials table lists the official on. |
+| `fouls_per_game` | Float64 | Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games. |
+| `fouls_per_game_n` | Int64 | Games with a two-team box behind fouls_per_game. |
+| `fta_per_game` | Float64 | Both teams' free-throw attempts per game, over fta_per_game_n games. |
+| `fta_per_game_n` | Int64 | Games with a two-team box behind fta_per_game. |
+| `pace` | Float64 | Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime. |
+| `pace_n` | Int64 | Games with a box possession estimate and a known last period behind pace. |
+| `home_win_pct` | Float64 | Share of the official's non-neutral-site games the home team won. |
+| `home_win_pct_n` | Int64 | Non-neutral-site games behind home_win_pct. |
+| `home_minus_away_fouls` | Float64 | Home team's fouls minus the away team's, per non-neutral-site game. |
+| `home_minus_away_fouls_n` | Int64 | Non-neutral-site games with a two-team box behind home_minus_away_fouls. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_official_seasons import nba_official_seasons
+refs = nba_official_seasons(2025)
+refs.sort("fouls_per_game", descending=True).select("official_name", "games", "fouls_per_game").head()
+```
+
 ### nba_play_context {#nba_play_context}
 
 `nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`

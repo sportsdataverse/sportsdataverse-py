@@ -81,6 +81,7 @@ from sportsdataverse.wbb.wbb_team_luck import *
 from sportsdataverse.wbb.wbb_shot_zone_profiles import *
 from sportsdataverse.wbb.wbb_player_war import *
 from sportsdataverse.wbb.wbb_coach_seasons import *
+from sportsdataverse.wbb.wbb_official_seasons import wbb_official_seasons  # noqa: F401
 from sportsdataverse.wbb.wbb_team_roster import *
 from sportsdataverse.wbb.wbb_team_stats import *
 from sportsdataverse.wbb.wbb_teams import *

@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_situational"
-sidebar_label: "Analytics: mbb_lineup–mbb_situational"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot"
+sidebar_label: "Analytics: mbb_lineup–mbb_shot"
 sidebar_position: 15
-description: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_situational — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_situational
+# Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot
 
 ### mbb_lineup_seasons {#mbb_lineup_seasons}
 
@@ -149,6 +149,57 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 from sportsdataverse.mbb.mbb_lineup_seasons import mbb_lineup_seasons
 units = mbb_lineup_seasons(2025)
 units.filter(n_players=2).sort("net_rtg_rank").head()
+```
+
+### mbb_official_seasons {#mbb_official_seasons}
+
+`mbb_official_seasons(seasons: 'int | list[int]', *, season_type: 'int | None' = 2, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Men's college official season profiles: games, fouls and FTA per game, pace and home splits.
+
+One row per official and season over the completed games of `season_type` the official
+worked. `fouls_per_game` and `fta_per_game` are both teams' totals from ESPN's team box;
+`pace` is possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per 40
+minutes, over the games' minutes including overtime; `home_win_pct` and
+`home_minus_away_fouls` (home fouls less away fouls, per game) leave out neutral-site
+games. Every rate has `<m>_n`, the games it is computed over. The release keys officials by
+names only, so `official_id` is null.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `season_type` | `int \| None` | `2` | ESPN's season type: `2` regular season (default), `3` postseason; `None` keeps every type. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, official)`: `season`, `official_id` (Int64), `official_name`, `games`, `fouls_per_game`, `fta_per_game`, `pace`, `home_win_pct` and `home_minus_away_fouls`, each rate with its `_n`. A season without an officials release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `official_id` | Int64 | ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB). |
+| `official_name` | String | Official's name, whitespace-normalised; the key when official_id is null. |
+| `games` | Int64 | Completed games of the season type the officials table lists the official on. |
+| `fouls_per_game` | Float64 | Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games. |
+| `fouls_per_game_n` | Int64 | Games with a two-team box behind fouls_per_game. |
+| `fta_per_game` | Float64 | Both teams' free-throw attempts per game, over fta_per_game_n games. |
+| `fta_per_game_n` | Int64 | Games with a two-team box behind fta_per_game. |
+| `pace` | Float64 | Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime. |
+| `pace_n` | Int64 | Games with a box possession estimate and a known last period behind pace. |
+| `home_win_pct` | Float64 | Share of the official's non-neutral-site games the home team won. |
+| `home_win_pct_n` | Int64 | Non-neutral-site games behind home_win_pct. |
+| `home_minus_away_fouls` | Float64 | Home team's fouls minus the away team's, per non-neutral-site game. |
+| `home_minus_away_fouls_n` | Int64 | Non-neutral-site games with a two-team box behind home_minus_away_fouls. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_official_seasons import mbb_official_seasons
+refs = mbb_official_seasons(2026)
+refs.sort("fouls_per_game", descending=True).select("official_name", "games", "fouls_per_game").head()
 ```
 
 ### mbb_play_styles {#mbb_play_styles}
@@ -567,63 +618,4 @@ sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
 # Pipeline next step (one line)
 
 sel.sort("selection_value", descending=True).head(10)
-```
-
-### mbb_situational_lineup {#mbb_situational_lineup}
-
-`mbb_situational_lineup(seasons: 'int | list[int]', *, league: 'str' = 'mens', top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-College five-man unit splits by situation: the team splits over the possessions each unit started.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-| `top_n` | `int` | `25` | As `mbb_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
-| `player_1` | String | Player 1 of the unit, in lineup_id order. |
-| `player_2` | String | Player 2 of the unit, in lineup_id order. |
-| `player_3` | String | Player 3 of the unit, in lineup_id order. |
-| `player_4` | String | Player 4 of the unit, in lineup_id order. |
-| `player_5` | String | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `top_n` is below 1. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup
-mbb_situational_lineup(2026).filter(split="not_garbage_time").sort("poss", descending=True).head()
 ```
