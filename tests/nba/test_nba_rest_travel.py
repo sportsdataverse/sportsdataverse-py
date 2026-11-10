@@ -77,6 +77,18 @@ def test_games_abroad_are_placed_abroad(nba_2026: pl.DataFrame) -> None:
     assert nba_2026.null_count().sum_horizontal().item() == 0
 
 
+@pytest.mark.parametrize("league_id", ["00", "10"])
+def test_every_neutral_city_has_a_site(league_id: str) -> None:
+    """A neutral game added to neutral_site_games.csv without a site row would switch the margin off."""
+    from sportsdataverse.nba.nba_neutral_site import nba_neutral_site_games
+
+    lg = {"00": "nba", "10": "wnba"}[league_id]
+    sites = rt.game_sites().filter((pl.col("league") == lg) & (pl.col("kind") == "neutral"))
+    cities = set(nba_neutral_site_games(league_id=league_id)["city"].to_list())
+    assert cities <= set(sites["place"].to_list()), cities - set(sites["place"].to_list())
+    assert sites["place"].n_unique() == sites.height
+
+
 def test_utc_offsets_follow_each_city_and_date() -> None:
     winter, summer = dt.date(2026, 1, 10), dt.date(2025, 7, 10)
     assert rt._utc_offset_hours("America/Phoenix", winter) - rt._utc_offset_hours("America/Los_Angeles", winter) == 1
