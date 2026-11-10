@@ -420,14 +420,14 @@ def report(out: Path, oracle: str | None, impact_dir: str | None) -> None:
             if m in ("season", "adj"):
                 continue
             d = (per["adj"] - per[m]).to_numpy() * 1e4
-            r[f"adj_minus_{m}_bp"] = _summ(d) + [int((d > 0).sum())]
+            r[f"adj_minus_{m}_bp"] = [*_summ(d), int((d > 0).sum())]
             wf = per.filter(pl.col("season") >= 2006)
             dw = (wf["adj"] - wf[m]).to_numpy() * 1e4
-            r[f"adj_minus_{m}_bp_2006plus"] = _summ(dw) + [int((dw > 0).sum())]
+            r[f"adj_minus_{m}_bp_2006plus"] = [*_summ(dw), int((dw > 0).sum())]
         # the penalty rule itself: positive = the fixed adjusted-RAPM penalty beats the REML pick
         for lab, frame in (("", per), ("_2006plus", per.filter(pl.col("season") >= 2006))):
             d = (frame["v2"] - frame["v2_fixed"]).to_numpy() * 1e4
-            r[f"v2_minus_v2_fixed_bp{lab}"] = _summ(d) + [int((d > 0).sum())]
+            r[f"v2_minus_v2_fixed_bp{lab}"] = [*_summ(d), int((d > 0).sum())]
         res[kind] = r
     lam = (
         g.filter((pl.col("method") == "v2") & pl.col("split").str.starts_with("fold"))

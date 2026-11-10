@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -19,10 +18,10 @@ from sportsdataverse.nba.nba_rapm import build_rapm_design
 #: offense penalty reaches the upper bound in 3 of the NBA seasons 1998-2026 (2018, 2019, 2023;
 #: ``tools/fit_box_prior_v2.py``): the likelihood is flat there and offense is all prior (weight above
 #: 0.999), so a higher bound changes no rating. The lower bound keeps the search finite on tiny inputs.
-REML_PENALTY_BOUNDS: Tuple[float, float] = (10.0, 1e7)
+REML_PENALTY_BOUNDS: tuple[float, float] = (10.0, 1e7)
 
 #: Output columns of :func:`nba_reml_rapm`, in order.
-REML_RAPM_SCHEMA: Dict[str, type[pl.DataType]] = {
+REML_RAPM_SCHEMA: dict[str, type[pl.DataType]] = {
     "player_id": pl.Int64,
     "o_reml_rapm": pl.Float64,
     "d_reml_rapm": pl.Float64,
@@ -70,7 +69,7 @@ class RemlFit:
     converged: bool
 
 
-def _centred(X: csr_matrix, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray, float, np.ndarray]:
+def _centred(X: csr_matrix, y: np.ndarray) -> tuple[np.ndarray, np.ndarray, float, np.ndarray]:
     """``(Xc'Xc, Xc'yc, yc'yc, column means)`` with ``Xc`` / ``yc`` centred, without densifying ``X``."""
     n = X.shape[0]
     mean = np.asarray(X.mean(axis=0), dtype=np.float64).ravel()
@@ -80,13 +79,29 @@ def _centred(X: csr_matrix, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray, floa
     return gram, rhs, float(yc @ yc), mean
 
 
+def _reml_solve(
+    gram: np.ndarray, rhs: np.ndarray, yy: float, n: int, is_o: np.ndarray, log_lam: np.ndarray
+) -> tuple[float, np.ndarray, tuple[np.ndarray, bool], np.ndarray, float]:
+    """``(-2 restricted log likelihood, delta, Cholesky of M, lambda per column, RSS)`` at ``log_lam``."""
+    P = int(is_o.sum())
+    lam = np.where(is_o, np.exp(log_lam[0]), np.exp(log_lam[1]))
+    M = gram.copy()
+    M[np.diag_indices_from(M)] += lam
+    chol = cho_factor(M)
+    delta = cho_solve(chol, rhs)
+    rss = max(yy - float(rhs @ delta), 1e-12)
+    logdet = 2.0 * float(np.log(np.diag(chol[0])).sum())
+    obj = (n - 1) * np.log(rss) + logdet - P * (log_lam[0] + log_lam[1])
+    return obj, delta, chol, lam, rss
+
+
 def fit_reml_prior_ridge(
     X: csr_matrix,
     y: np.ndarray,
     prior_mean: np.ndarray,
     *,
-    lambdas: Optional[Tuple[float, float]] = None,
-    bounds: Tuple[float, float] = REML_PENALTY_BOUNDS,
+    lambdas: tuple[float, float] | None = None,
+    bounds: tuple[float, float] = REML_PENALTY_BOUNDS,
 ) -> RemlFit:
     """Ridge toward ``prior_mean`` with one penalty for offense and one for defense, chosen by REML.
 
@@ -135,18 +150,10 @@ def fit_reml_prior_ridge(
     gram, rhs, yy, mean = _centred(X, yprime)
     is_o = np.arange(two_p) < P
 
-    def solve(log_lam: np.ndarray) -> Tuple[float, np.ndarray, Tuple[np.ndarray, bool], np.ndarray, float]:
-        lam = np.where(is_o, np.exp(log_lam[0]), np.exp(log_lam[1]))
-        M = gram.copy()
-        M[np.diag_indices_from(M)] += lam
-        chol = cho_factor(M)
-        delta = cho_solve(chol, rhs)
-        rss = max(yy - float(rhs @ delta), 1e-12)
-        logdet = 2.0 * float(np.log(np.diag(chol[0])).sum())
-        obj = (n - 1) * np.log(rss) + logdet - P * (log_lam[0] + log_lam[1])
-        return obj, delta, chol, lam, rss
+    def solve(log_lam: np.ndarray) -> tuple[float, np.ndarray, tuple[np.ndarray, bool], np.ndarray, float]:
+        return _reml_solve(gram, rhs, yy, n, is_o, log_lam)
 
-    def objective(log_lam: np.ndarray) -> Tuple[float, np.ndarray]:
+    def objective(log_lam: np.ndarray) -> tuple[float, np.ndarray]:
         obj, delta, chol, lam, rss = solve(log_lam)
         minv_diag = np.diag(cho_solve(chol, np.eye(two_p)))
         g = lam * ((n - 1) * delta**2 / rss + minv_diag)
@@ -191,11 +198,11 @@ def _empty_reml_frame() -> pl.DataFrame:
 
 def nba_reml_rapm(
     possessions: pl.DataFrame,
-    prior: Dict[int, Tuple[float, float]],
+    prior: dict[int, tuple[float, float]],
     *,
-    lambdas: Optional[Tuple[float, float]] = None,
+    lambdas: tuple[float, float] | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Season impact rating: RAPM shrunk toward a box prior, offense and defense penalties chosen by REML.
 
     The posterior mean of a prior-informed RAPM (the same design and sign convention as

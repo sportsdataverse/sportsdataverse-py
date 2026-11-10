@@ -116,7 +116,7 @@ Aging drift for a player of (rounded) `age`; 0.0 outside the fitted range.
 
 ### BoxPriorModel {#BoxPriorModel}
 
-`BoxPriorModel(feature_names: 'List[str]', o_coef: 'np.ndarray', o_intercept: 'np.ndarray', d_coef: 'np.ndarray', d_intercept: 'np.ndarray', season: 'int', train_seasons: 'List[int]') -> None`
+`BoxPriorModel(feature_names: 'list[str]', o_coef: 'np.ndarray', o_intercept: 'np.ndarray', d_coef: 'np.ndarray', d_intercept: 'np.ndarray', season: 'int', train_seasons: 'list[int]') -> None`
 
 A cross-fitted box prior: one offense and one defense linear rule per player fold.
 
@@ -124,13 +124,13 @@ A cross-fitted box prior: one offense and one defense linear rule per player fol
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `feature_names` | `List[str]` |  | Ordered feature columns (`BOX_PRIOR_FEATURES`). |
+| `feature_names` | `list[str]` |  | Ordered feature columns (`BOX_PRIOR_FEATURES`). |
 | `o_coef` | `ndarray` |  | `(folds, F)` offense coefficients on the raw features. |
 | `o_intercept` | `ndarray` |  | `(folds,)`. |
 | `d_coef` | `ndarray` |  | `(folds, F)` defense coefficients (`d` positive = good defense). |
 | `d_intercept` | `ndarray` |  | `(folds,)`. |
 | `season` | `int` |  | The season the prior is for. |
-| `train_seasons` | `List[int]` |  | The seasons it learned from. |
+| `train_seasons` | `list[int]` |  | The seasons it learned from. |
 
 ### ExternalValidityResult {#ExternalValidityResult}
 
@@ -544,7 +544,7 @@ pace = adjust_pace(raw_game_efficiency(sched, box))
 
 ### apply_box_prior {#apply_box_prior}
 
-`apply_box_prior(features: 'pl.DataFrame', model: 'BoxPriorModel', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`apply_box_prior(features: 'pl.DataFrame', model: 'BoxPriorModel', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Score box-prior features with each player's out-of-fold rule.
 
@@ -614,7 +614,7 @@ as_of_ratings_split(results, dt.date(2023, 9, 8))
 
 ### box_prior_features {#box_prior_features}
 
-`box_prior_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', possessions: 'pl.DataFrame', bio: 'pl.DataFrame', *, game_ids: 'Optional[Sequence[str]]' = None, pad_poss: 'float' = 1000.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`box_prior_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', possessions: 'pl.DataFrame', bio: 'pl.DataFrame', *, game_ids: 'Sequence[str] | None' = None, pad_poss: 'float' = 1000.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 One season's box-prior features: league-relative, padded box rates plus player and lineup context.
 
@@ -633,7 +633,7 @@ teammates' and five opponents' padded points, assists and rebounds per 100.
 | `team_logs` | `DataFrame` |  | Per-team-game lines (`leaguegamelog` `T`). |
 | `possessions` | `DataFrame` |  | The season's possession+lineup rows. |
 | `bio` | `DataFrame` |  | `player_id` (Int64), `age`, `height_in`, `position_num` (Float64; nulls allowed). |
-| `game_ids` | `Optional[Sequence[str]]` | `None` | Restrict logs and possessions to these games (a fold's training games: the leakage guard of the held-out and chronological tests). |
+| `game_ids` | `Sequence[str] \| None` | `None` | Restrict logs and possessions to these games (a fold's training games: the leakage guard of the held-out and chronological tests). |
 | `pad_poss` | `float` | `1000.0` | Padding possessions. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
@@ -678,7 +678,7 @@ feats = box_prior_features(logs["player"], logs["team"], possessions, bio)
 
 ### box_prior_training_seasons {#box_prior_training_seasons}
 
-`box_prior_training_seasons(season: 'int', available: 'Iterable[int]') -> 'List[int]'`
+`box_prior_training_seasons(season: 'int', available: 'Iterable[int]') -> 'list[int]'`
 
 The seasons a prior for `season` may learn from: earlier ones, or every other one through 2005.
 
@@ -776,7 +776,7 @@ repl = calibrate_replacement_level(
 
 ### career_rapm_target {#career_rapm_target}
 
-`career_rapm_target(grams: 'Mapping[int, SeasonGram]', ages: 'pl.DataFrame', *, seasons: 'Sequence[int]', center: 'int', half_life: 'float' = 4.0, penalty: 'Optional[float]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`career_rapm_target(grams: 'Mapping[int, SeasonGram]', ages: 'pl.DataFrame', *, seasons: 'Sequence[int]', center: 'int', half_life: 'float' = 4.0, penalty: 'float | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Age-adjusted, time-weighted career RAPM over `seasons`: the box prior's training target.
 
@@ -797,7 +797,7 @@ re-read) and solved by one Cholesky factorization.
 | `seasons` | `Sequence[int]` |  | The seasons to fit over. |
 | `center` | `int` |  | The season the time weight is centred on (the season the prior is for). |
 | `half_life` | `float` | `4.0` | Half-life of the time weight, in seasons. |
-| `penalty` | `Optional[float]` | `None` | Ridge penalty on the career coefficients; default the NBA plain-RAPM penalty. |
+| `penalty` | `float \| None` | `None` | Ridge penalty on the career coefficients; default the NBA plain-RAPM penalty. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**
@@ -1016,7 +1016,7 @@ print(curve.delta(24))  # ~1.0
 
 ### fit_reml_prior_ridge {#fit_reml_prior_ridge}
 
-`fit_reml_prior_ridge(X: 'csr_matrix', y: 'np.ndarray', prior_mean: 'np.ndarray', *, lambdas: 'Optional[Tuple[float, float]]' = None, bounds: 'Tuple[float, float]' = (10.0, 10000000.0)) -> 'RemlFit'`
+`fit_reml_prior_ridge(X: 'csr_matrix', y: 'np.ndarray', prior_mean: 'np.ndarray', *, lambdas: 'tuple[float, float] | None' = None, bounds: 'tuple[float, float]' = (10.0, 10000000.0)) -> 'RemlFit'`
 
 Ridge toward `prior_mean` with one penalty for offense and one for defense, chosen by REML.
 
@@ -1041,8 +1041,8 @@ so a bounded quasi-Newton search finds the pair in a few dozen `2P x 2P` Cholesk
 | `X` | `csr_matrix` |  | Sparse design `(n, 2P)` from `~sportsdataverse.nba.nba_rapm.build_rapm_design`. |
 | `y` | `ndarray` |  | Possession points `(n,)`. |
 | `prior_mean` | `ndarray` |  | Prior mean per possession `(2P,)` (offense `o / 100`, defense `-d / 100`). |
-| `lambdas` | `Optional[Tuple[float, float]]` | `None` | `(lambda_o, lambda_d)` to fit at instead of the REML choice. |
-| `bounds` | `Tuple[float, float]` | `(10.0, 10000000.0)` | Search bounds on each penalty. |
+| `lambdas` | `tuple[float, float] \| None` | `None` | `(lambda_o, lambda_d)` to fit at instead of the REML choice. |
+| `bounds` | `tuple[float, float]` | `(10.0, 10000000.0)` | Search bounds on each penalty. |
 
 **Returns**
 

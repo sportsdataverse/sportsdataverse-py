@@ -19,7 +19,7 @@ Three pieces, chained by ``tools/fit_box_prior_v2.py`` and consumed by
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Union
+from collections.abc import Iterable, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -48,10 +48,10 @@ BOX_PRIOR_RIDGE_ALPHA: float = 1.0
 #: Age the aging curve is centred at.
 BOX_PRIOR_AGE_CENTER: float = 27.0
 
-_RATES: List[str] = ["pts", "fg3m", "fga", "fta", "ast", "oreb", "dreb", "stl", "blk", "tov", "pf"]
-_CONTEXT_STATS: List[str] = ["pts", "ast", "reb"]
+_RATES: list[str] = ["pts", "fg3m", "fga", "fta", "ast", "oreb", "dreb", "stl", "blk", "tov", "pf"]
+_CONTEXT_STATS: list[str] = ["pts", "ast", "reb"]
 #: The prior's feature columns, in order.
-BOX_PRIOR_FEATURES: List[str] = (
+BOX_PRIOR_FEATURES: list[str] = (
     [f"{s}_rel" for s in _RATES]
     + ["mpg_rel", "age_c", "age_c2", "height_rel", "position_c"]
     + [f"tm_{s}" for s in _CONTEXT_STATS]
@@ -61,12 +61,12 @@ _OFF = [f"off_player_{i}" for i in range(1, 6)]
 _DEF = [f"def_player_{i}" for i in range(1, 6)]
 
 
-def player_fold(player_id: Union[int, pl.Expr]) -> Union[int, pl.Expr]:
+def player_fold(player_id: int | pl.Expr) -> int | pl.Expr:
     """The cross-fit fold of a player id: ``player_id % BOX_PRIOR_FOLDS`` (an int or a polars expression)."""
     return player_id % BOX_PRIOR_FOLDS
 
 
-def box_prior_training_seasons(season: int, available: Iterable[int]) -> List[int]:
+def box_prior_training_seasons(season: int, available: Iterable[int]) -> list[int]:
     """The seasons a prior for ``season`` may learn from: earlier ones, or every other one through 2005.
 
     Args:
@@ -76,13 +76,13 @@ def box_prior_training_seasons(season: int, available: Iterable[int]) -> List[in
     Returns:
         Sorted season list, never containing ``season``.
     """
-    avail = sorted(set(int(s) for s in available))
+    avail = sorted({int(s) for s in available})
     if season <= BOX_PRIOR_LEAVE_SEASON_OUT_THROUGH:
         return [s for s in avail if s != season]
     return [s for s in avail if s < season]
 
 
-def _time_weight(season: Union[int, np.ndarray], center: int, half_life: float) -> Union[float, np.ndarray]:
+def _time_weight(season: int | np.ndarray, center: int, half_life: float) -> float | np.ndarray:
     return 0.5 ** (np.abs(np.asarray(season, dtype=np.float64) - center) / half_life)
 
 
@@ -130,7 +130,7 @@ def season_gram(possessions: pl.DataFrame) -> SeasonGram:
 def _age_lookup(ages: pl.DataFrame, season: int, pids: np.ndarray) -> np.ndarray:
     """Centred, /10 ages of ``pids`` in ``season`` (a missing age is the centre: no aging term)."""
     a = ages.filter(pl.col("season") == season)
-    look = dict(zip(a["player_id"].cast(pl.Int64).to_list(), a["age"].to_list()))
+    look = dict(zip(a["player_id"].cast(pl.Int64).to_list(), a["age"].to_list(), strict=True))
     vals = [look.get(int(p)) for p in pids]
     return np.array([0.0 if v is None else (float(v) - BOX_PRIOR_AGE_CENTER) / 10.0 for v in vals])
 
@@ -142,9 +142,9 @@ def career_rapm_target(
     seasons: Sequence[int],
     center: int,
     half_life: float = BOX_PRIOR_HALF_LIFE,
-    penalty: Optional[float] = None,
+    penalty: float | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Age-adjusted, time-weighted career RAPM over ``seasons``: the box prior's training target.
 
     One ridge fit over every possession of ``seasons``. Each player has one offensive and one defensive
@@ -190,7 +190,7 @@ def career_rapm_target(
     A = np.zeros((q, q))
     b = np.zeros(q)
     age_cols = np.arange(2 * N, 2 * N + 4)
-    basis: Dict[int, np.ndarray] = {}
+    basis: dict[int, np.ndarray] = {}
     for ti, t in enumerate(seasons):
         g = grams[t]
         w = float(_time_weight(t, center, half_life))
@@ -219,29 +219,24 @@ def career_rapm_target(
     diag[: 2 * N] = lam
     A[np.diag_indices_from(A)] += diag
     coef = cho_solve(cho_factor(A), b)
-    age_coef = coef[age_cols]
-    frames = []
-    for t in seasons:
-        g = grams[t]
-        P = g.pids.size
-        loc = np.searchsorted(all_p, g.pids)
-        aging = basis[t] @ age_coef  # (2P,) the aging term of each local column
-        o = 100.0 * (coef[loc] + aging[:P])
-        d = -100.0 * (coef[N + loc] + aging[P:])
-        frames.append(
-            pl.DataFrame(
-                {
-                    "player_id": pl.Series(g.pids, dtype=pl.Int64),
-                    "season": pl.Series(np.full(P, t), dtype=pl.Int64),
-                    "o_target": o,
-                    "d_target": d,
-                    "off_poss": g.counts[:P],
-                    "def_poss": g.counts[P:],
-                }
-            )
-        )
-    out = pl.concat(frames)
+    out = pl.concat([_target_rows(grams[t], t, all_p, coef, basis[t] @ coef[age_cols]) for t in seasons])
     return out.to_pandas() if return_as_pandas else out
+
+
+def _target_rows(g: SeasonGram, t: int, all_p: np.ndarray, coef: np.ndarray, aging: np.ndarray) -> pl.DataFrame:
+    """Season ``t``'s target rows: career coefficient plus the aging term (``aging``, per local column)."""
+    P, N = g.pids.size, all_p.size
+    loc = np.searchsorted(all_p, g.pids)
+    return pl.DataFrame(
+        {
+            "player_id": pl.Series(g.pids, dtype=pl.Int64),
+            "season": pl.Series(np.full(P, t), dtype=pl.Int64),
+            "o_target": 100.0 * (coef[loc] + aging[:P]),
+            "d_target": -100.0 * (coef[N + loc] + aging[P:]),
+            "off_poss": g.counts[:P],
+            "def_poss": g.counts[P:],
+        }
+    )
 
 
 def _on_court_poss(possessions: pl.DataFrame) -> pl.DataFrame:
@@ -259,7 +254,7 @@ def _context(possessions: pl.DataFrame, padded: pl.DataFrame) -> pl.DataFrame:
     full = possessions.drop_nulls(_OFF + _DEF).with_row_index("_r")
     stats = padded.select("player_id", *[pl.col(f"{s}_pad").alias(s) for s in _CONTEXT_STATS])
 
-    def side(cols: List[str]) -> pl.DataFrame:
+    def side(cols: list[str]) -> pl.DataFrame:
         long = full.select("_r", pl.concat_list(cols).alias("player_id")).explode("player_id")
         long = long.with_columns(pl.col("player_id").cast(pl.Int64)).join(stats, on="player_id", how="left")
         return long.with_columns(pl.col(_CONTEXT_STATS).fill_null(0.0))
@@ -280,10 +275,10 @@ def box_prior_features(
     possessions: pl.DataFrame,
     bio: pl.DataFrame,
     *,
-    game_ids: Optional[Sequence[str]] = None,
+    game_ids: Sequence[str] | None = None,
     pad_poss: float = BOX_PRIOR_PAD_POSS,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """One season's box-prior features: league-relative, padded box rates plus player and lineup context.
 
     Per-100 rates come from :func:`~sportsdataverse.nba.nba_box_logs.box_features`. Each rate (and
@@ -367,13 +362,13 @@ class BoxPriorModel:
         train_seasons: The seasons it learned from.
     """
 
-    feature_names: List[str]
+    feature_names: list[str]
     o_coef: np.ndarray
     o_intercept: np.ndarray
     d_coef: np.ndarray
     d_intercept: np.ndarray
     season: int
-    train_seasons: List[int]
+    train_seasons: list[int]
 
 
 def train_box_prior(
@@ -445,7 +440,7 @@ def train_box_prior(
 
 def apply_box_prior(
     features: pl.DataFrame, model: BoxPriorModel, *, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Score box-prior features with each player's out-of-fold rule.
 
     Args:

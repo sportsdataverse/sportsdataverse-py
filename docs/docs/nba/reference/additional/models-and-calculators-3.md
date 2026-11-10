@@ -8,7 +8,7 @@ description: "NBA — additional Python functions — Models and calculators: nb
 
 ### nba_reml_rapm {#nba_reml_rapm}
 
-`nba_reml_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, lambdas: 'Optional[Tuple[float, float]]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_reml_rapm(possessions: 'pl.DataFrame', prior: 'dict[int, tuple[float, float]]', *, lambdas: 'tuple[float, float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season impact rating: RAPM shrunk toward a box prior, offense and defense penalties chosen by REML.
 
@@ -35,8 +35,8 @@ Built for the box prior of `sportsdataverse.nba.nba_box_prior` (`o_prior` / `d_p
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | A possession+lineup frame (`points`, `off_player_1..5`, `def_player_1..5`). |
-| `prior` | `Dict[int, Tuple[float, float]]` |  | `{player_id: (o_prior, d_prior)}` per 100 possessions (`d` positive = good defense). A player absent from it gets `(0, 0)`: a league-average prior. |
-| `lambdas` | `Optional[Tuple[float, float]]` | `None` | `(lambda_o, lambda_d)` to fit at instead of the REML choice. |
+| `prior` | `dict[int, tuple[float, float]]` |  | `{player_id: (o_prior, d_prior)}` per 100 possessions (`d` positive = good defense). A player absent from it gets `(0, 0)`: a league-average prior. |
+| `lambdas` | `tuple[float, float] \| None` | `None` | `(lambda_o, lambda_d)` to fit at instead of the REML choice. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**

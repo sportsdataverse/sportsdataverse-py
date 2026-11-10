@@ -106,7 +106,7 @@ def test_walk_forward_and_leave_season_out() -> None:
     assert box_prior_training_seasons(2005, avail) == [s for s in avail if s != 2005]
     assert box_prior_training_seasons(2006, avail) == list(range(1997, 2006))
     assert box_prior_training_seasons(2026, avail) == list(range(1997, 2026))
-    assert 2027 not in box_prior_training_seasons(2027, list(avail) + [2027])
+    assert 2027 not in box_prior_training_seasons(2027, [*avail, 2027])
 
 
 def test_features_are_padded_league_relative_and_follow_game_ids(poss) -> None:
