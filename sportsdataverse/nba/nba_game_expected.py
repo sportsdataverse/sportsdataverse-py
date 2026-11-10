@@ -118,10 +118,9 @@ _COUNTS = ("fga", "fgm", "fg3a", "fg3m", "fta", "ftm", "points", "possessions", 
 TEAM_EXPECTED_SCHEMA: dict[str, pl.DataType] = {
     "game_id": pl.Int32,
     "team_id": pl.Int32,
-    **{c: pl.Int64 for c in _COUNTS},
-    **{
-        c: pl.Float64
-        for c in (
+    **dict.fromkeys(_COUNTS, pl.Int64),
+    **dict.fromkeys(
+        (
             "xfg_pts",
             "poe",
             "poe_per_shot",
@@ -133,8 +132,9 @@ TEAM_EXPECTED_SCHEMA: dict[str, pl.DataType] = {
             "xortg",
             "drtg",
             "xdrtg",
-        )
-    },
+        ),
+        pl.Float64,
+    ),
     **{
         f"{s}_{m}": dt_
         for s in SITUATIONS
