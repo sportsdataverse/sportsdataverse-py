@@ -1,4 +1,4 @@
-"""BB-D31: team_game_splits / player_game_splits on real ESPN captures of all four leagues.
+"""BB-D31: nba_game_splits on real ESPN captures of all four leagues.
 
 Fixtures: tests/fixtures/espn/summary_*.json and tests/fixtures/espn/basketball_pbp/*.json.gz
 (provenance in tests/fixtures/espn/basketball_pbp/README.md). The box score of each capture is
@@ -18,6 +18,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nba import nba_game_page as gp
+from sportsdataverse.nba import nba_game_splits as gs
 
 ESPN = Path(__file__).resolve().parents[1] / "fixtures" / "espn"
 BB = ESPN / "basketball_pbp"
@@ -182,18 +183,18 @@ def test_a_live_game_counts_the_plays_so_far(monkeypatch: pytest.MonkeyPatch) ->
 
 def test_before_tip_off_the_frames_are_empty_with_their_schema() -> None:
     empty = pl.DataFrame()
-    assert gp.team_game_splits(empty).schema == pl.Schema(gp._TEAM_SPLITS_SCHEMA)
-    assert gp.player_game_splits(empty).schema == pl.Schema(gp._PLAYER_SPLITS_SCHEMA)
+    assert gs.team_game_splits(empty).schema == pl.Schema(gs._TEAM_SPLITS_SCHEMA)
+    assert gs.player_game_splits(empty).schema == pl.Schema(gs._PLAYER_SPLITS_SCHEMA)
 
 
 def test_transition_needs_a_live_start_and_a_quick_first_shot(monkeypatch: pytest.MonkeyPatch) -> None:
     f = _frames(monkeypatch, "nba", "summary_nba.json")
-    rows = gp._split_events(f["pbp"])
-    poss = gp._possessions(rows, "nba", 4)
+    rows = gs._split_events(f["pbp"])
+    poss = gs._possessions(rows, "nba", 4)
     trans = poss.filter(pl.col("transition"))
     assert trans.height > 0
-    assert trans["start_type"].is_in(gp._LIVE_STARTS).all()
-    assert ((trans["_start_clk"] - trans["_shot_clk"]) <= gp.TRANSITION_WINDOW_SECONDS["nba"]).all()
+    assert trans["start_type"].is_in(gs._LIVE_STARTS).all()
+    assert ((trans["_start_clk"] - trans["_shot_clk"]) <= gs.TRANSITION_WINDOW_SECONDS["nba"]).all()
     assert poss.filter(pl.col("start_type") == "period_start")["transition"].not_().all()
     # 4 periods, so 4 period starts; the counted possessions partition every team row
     assert poss.filter(pl.col("start_type") == "period_start").height == 4

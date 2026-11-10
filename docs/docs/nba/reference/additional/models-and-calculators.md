@@ -946,8 +946,8 @@ The warehouse path: the sdv-db nightly stage reads one game's rows from `<league
 `neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
 and calls this too, so a game renders identically from either source. Runs
 `score_win_prob`, `shot_coordinates`, `team_game_rates`,
-`player_game_rates`, `team_game_splits` and `player_game_splits` on the
-game's own regulation.
+`player_game_rates`, `~sportsdataverse.nba.nba_game_splits.team_game_splits` and
+`~sportsdataverse.nba.nba_game_splits.player_game_splits` on the game's own regulation.
 
 **Parameters**
 

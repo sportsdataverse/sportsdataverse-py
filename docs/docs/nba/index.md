@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 252 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 250 | — |
 
 ## ESPN {#espn}
 
@@ -140,7 +140,6 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_war`](reference/additional/models-and-calculators-2#nba_war)
 - [`ot_adjusted_seconds`](reference/additional/models-and-calculators-2#ot_adjusted_seconds)
 - [`player_game_rates`](reference/additional/models-and-calculators-3#player_game_rates)
-- [`player_game_splits`](reference/additional/models-and-calculators-3#player_game_splits)
 - [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
 - [`predict_total`](reference/additional/models-and-calculators-3#predict_total)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-3#raw_game_efficiency)
@@ -149,7 +148,6 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`season_game_excitement`](reference/additional/models-and-calculators-3#season_game_excitement)
 - [`shot_coordinates`](reference/additional/models-and-calculators-3#shot_coordinates)
 - [`team_game_rates`](reference/additional/models-and-calculators-3#team_game_rates)
-- [`team_game_splits`](reference/additional/models-and-calculators-3#team_game_splits)
 - [`train_spm`](reference/additional/models-and-calculators-3#train_spm)
 - [`validate_model`](reference/additional/models-and-calculators-3#validate_model)
 - [`walk_forward`](reference/additional/models-and-calculators-3#walk_forward)

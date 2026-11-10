@@ -423,7 +423,6 @@ from sportsdataverse.nba import parse_nba_live_pbp as parse_nba_live_pbp  # noqa
 from sportsdataverse.nba import parse_nba_referee_assignments as parse_nba_referee_assignments  # noqa: F401
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
 from sportsdataverse.nba import player_game_rates as player_game_rates  # noqa: F401
-from sportsdataverse.nba import player_game_splits as player_game_splits  # noqa: F401
 from sportsdataverse.nba import player_play_context as player_play_context  # noqa: F401
 from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
@@ -467,7 +466,6 @@ from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
 from sportsdataverse.nba import spotrac_team_cap as spotrac_team_cap  # noqa: F401
 from sportsdataverse.nba import starters_on_court_counts as starters_on_court_counts  # noqa: F401
 from sportsdataverse.nba import team_game_rates as team_game_rates  # noqa: F401
-from sportsdataverse.nba import team_game_splits as team_game_splits  # noqa: F401
 from sportsdataverse.nba import team_pace_projection as team_pace_projection  # noqa: F401
 from sportsdataverse.nba import team_play_context as team_play_context  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
@@ -878,7 +876,6 @@ __all__ = [
     "parse_nba_referee_assignments",
     "parse_nba_stats_result_sets",
     "player_game_rates",
-    "player_game_splits",
     "player_play_context",
     "player_rates",
     "players_on_court_from_pbp",
@@ -922,7 +919,6 @@ __all__ = [
     "spotrac_team_cap",
     "starters_on_court_counts",
     "team_game_rates",
-    "team_game_splits",
     "team_pace_projection",
     "team_play_context",
     "train_spm",
