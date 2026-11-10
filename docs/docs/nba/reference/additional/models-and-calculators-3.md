@@ -1,10 +1,117 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: player_game–win_prob"
-sidebar_label: "Models and calculators: player_game–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants"
+sidebar_label: "Models and calculators: nba_war–wp_variants"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: player_game–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: player_game–win_prob
+# NBA — additional Python functions — Models and calculators: nba_war–wp_variants
+
+### nba_war {#nba_war}
+
+`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Points-above-replacement -> wins for each player.
+
+`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
+| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
+| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
+| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `war` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If both inputs are non-empty but share no `player_id` (a probable id-source or dtype mismatch, not a normal empty case). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import nba_war
+war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
+               replacement_level=-2.0, pts_per_win=250.0)
+print(war.sort("war", descending=True).head())
+
+# Derive both required kwargs from real data first
+
+from sportsdataverse.nba.nba_war import (
+    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
+)
+pts_per_win = calibrate_pts_per_win(team_standings)
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
+)
+war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
+```
+
+### ot_adjusted_seconds {#ot_adjusted_seconds}
+
+`ot_adjusted_seconds(pbp: 'pl.DataFrame', *, regulation_periods: 'int' = 4) -> 'pl.DataFrame'`
+
+Tag overtime rows and give them the overtime period clock as their seconds remaining.
+
+The in-game models clip `start_game_seconds_remaining` at zero, so every overtime play
+(negative in the NBA frame) would score as "game over at the current margin". Each overtime is
+scored as its own five-minute endgame instead: on rows with `period_number > regulation_periods`
+`start_game_seconds_remaining` becomes the period clock, `start_quarter_seconds_remaining` or
+(men's college frames) `start_period_seconds_remaining`, whichever is present and not null.
+In a halves game (`regulation_periods=2`) period 3 is the first overtime.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema. |
+| `regulation_periods` | `int` | `4` | The game's regulation periods (4 quarters, 2 halves); see `game_regulation_periods`. |
+
+**Returns**
+
+The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
+
+| col_name | type | description |
+|---|---|---|
+| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | Float64 | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If `period_number` or `start_game_seconds_remaining` is missing, or neither period clock column is present. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+tagged = ot_adjusted_seconds(pbp)
+tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
+
+# A men's college game (two halves)
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+ot_adjusted_seconds(one, regulation_periods=2)
+```
 
 ### player_game_rates {#player_game_rates}
 
@@ -59,6 +166,71 @@ from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_t
 team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
 player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
 player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+```
+
+### player_props {#player_props}
+
+`player_props(props_checkpoints: 'pl.DataFrame', crosswalk: 'pl.DataFrame', player_xwalk: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str | None' = None) -> 'pl.DataFrame'`
+
+Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability.
+
+The line is the one most books closed on (the lower line on a tie); the prices and the over
+probability are the medians over the books at that line. Only the five main markets are read
+(`PROP_MARKETS`), not the alternates.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `props_checkpoints` | `DataFrame` |  | The odds store's `props_checkpoints` rows (`event_id`, `sport_key`, `bookmaker_key`, `market_key`, `outcome_name` `Over` / `Under`, `outcome_description` (the player), `close_price`, `close_point`, `close_mins_before`). |
+| `crosswalk` | `DataFrame` |  | The odds store's `espn_crosswalk`. |
+| `player_xwalk` | `DataFrame` |  | The league's `props_player_xwalk` (`season`, `team`: ESPN team id, `player_name`, `espn_athlete_id`), keyed by ESPN season. |
+| `schedule` | `DataFrame` |  | The league's ESPN schedule: `game_id`, `season`, `home_id`, `away_id`. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+
+**Returns**
+
+`PLAYER_PROPS_SCHEMA`: `game_id`, `season`, `athlete_id` / `team_id` (null when the name is not in the crosswalk for either team in the game), `player_name` (as the books list it), `stat` (`points`, `rebounds`, `assists`, `threes`, `pra`), `line`, `n_books` (books at that line), `over_price` / `under_price` (American) and `over_prob`; an empty frame with those columns when nothing matches.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int32 | ESPN game id, the join key to the schedule and box-score frames. |
+| `season` | Int32 | ESPN season of the game. |
+| `athlete_id` | Int32 | ESPN athlete id from the props player crosswalk; null when the name is not matched for either team. |
+| `team_id` | Int32 | ESPN team id of the athlete in this game. |
+| `player_name` | String | Player name as the books list it. |
+| `stat` | String | Prop stat (points, rebounds, assists, threes, pra = points + rebounds + assists). |
+| `line` | Float64 | Closing line most books closed on (the lower line on a tie). |
+| `n_books` | UInt32 | Sportsbooks with both sides quoted at that line. |
+| `over_price` | Float64 | Median closing over price at the line, American odds. |
+| `under_price` | Float64 | Median closing under price at the line, American odds. |
+| `over_prob` | Float64 | No-vig probability of the over at the line, median over books. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown. |
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_lines import player_props
+from sportsdataverse.nba.nba_loaders import load_nba_schedule
+odds = "odds-data/odds"  # a local checkout of the odds store
+props = player_props(
+    pl.read_parquet(f"{odds}/checkpoints/props_2025_0[1-4]_nba.parquet"),
+    pl.read_parquet(f"{odds}/espn_crosswalk.parquet"),
+    pl.read_parquet(f"{odds}/nba/props_player_xwalk_2025.parquet"),
+    load_nba_schedule([2025]),
+    league="nba",
+)
+
+# One player's points lines
+
+props.filter(pl.col("stat") == "points", pl.col("athlete_id") == 3112335)
 ```
 
 ### predict_margin {#predict_margin}
@@ -594,4 +766,57 @@ Probability the home team wins, in `(0, 1)`.
 ```python
 from sportsdataverse.nba.nba_game_predict import win_prob_from_margin
 win_prob_from_margin(5.0)
+```
+
+### wp_variants {#wp_variants}
+
+`wp_variants(pbp: 'pl.DataFrame', market_home_prob: 'float | None' = None, *, league: 'str | None' = None, regulation_periods: 'int | None' = None, neutral_site: 'bool | None' = False) -> 'pl.DataFrame'`
+
+Two extra per-play home WP columns for one game: naive (prior 0.5) and market-anchored.
+
+Both rescore the plays with `~sportsdataverse.nba.nba_game_page.score_win_prob`, the same
+in-game model as `home_win_prob`, with only the pregame prior swapped: 0.5 for
+`home_win_prob_naive` (the game state alone: score, clock and possession), `market_home_prob` for
+`home_win_prob_market`. End-of-game rows settle to 1 / 0 as in `score_win_prob`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema, as `score_win_prob` takes it. |
+| `market_home_prob` | `float \| None` | `None` | The game's pregame no-vig market home WP (`game_lines` `market_home_wp_close`); `None` or NaN leaves `home_win_prob_market` null. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `int \| None` | `None` | The game's regulation periods; see `score_win_prob`. |
+| `neutral_site` | `bool \| None` | `False` | Passed to `score_win_prob` (it does not change a given prior). |
+
+**Returns**
+
+`game_id` (when present), `game_play_number` (when present), `home_win_prob_naive` and `home_win_prob_market`, one row per play in play order; empty with those columns for an empty `pbp`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int32 / Int64 | ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries). |
+| `game_play_number` | Int32 / Int64 | Play order within the game, as in the play-by-play (the dtype the pbp carries). |
+| `home_win_prob_naive` | Float64 | Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior. |
+| `home_win_prob_market` | Float64 | Home win probability with the closing no-vig market WP as the prior; null without a line. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown, `market_home_prob` is outside [0, 1], or `pbp` holds more than one game. |
+| `polars.exceptions.ColumnNotFoundError` | If a column `score_win_prob` needs is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_lines import wp_variants
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+one = load_nba_pbp([2025]).filter(pl.col("game_id") == 401704638)
+wp = wp_variants(one, 0.31, league="nba")
+
+# Where the market prior moved the curve most
+
+wp.with_columns((pl.col("home_win_prob_market") - pl.col("home_win_prob_naive")).alias("d")).sort("d")
 ```

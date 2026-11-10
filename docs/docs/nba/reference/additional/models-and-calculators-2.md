@@ -1,10 +1,137 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted"
-sidebar_label: "Models and calculators: nba_decay–ot_adjusted"
+title: "NBA — additional Python functions — Models and calculators: nba_bpm–nba_team"
+sidebar_label: "Models and calculators: nba_bpm–nba_team"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_bpm–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_decay–ot_adjusted
+# NBA — additional Python functions — Models and calculators: nba_bpm–nba_team
+
+### nba_bpm {#nba_bpm}
+
+`nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', league_ortg: 'float | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+
+Faithful BPM 2.0 per player, at season or single-game granularity.
+
+Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
+team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
+`bpm` is its net rating per 100 / 5, and its minute-weighted `obpm` is (its offensive
+rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` then averages (the
+league's offensive rating - the team's defensive rating) / 5, positive for a good defense, so
+league minute-weighted obpm and dbpm each sit near 0 (2025-26
+NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
+the schedule-adjusted ones Basketball-Reference uses. A traded player's minutes count with
+the first team he appears for in the logs. Before #1148 every player took `net - team mean`
+on both bpm and obpm: a team-mean target of the full net rating, five times BPM 2.0's, and
+all of the adjustment on offense, so dbpm stayed raw (2025-26 regular season, minute-weighted:
+league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
+Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
+Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`); must carry `game_id` when `granularity="game"`. |
+| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`); must carry `game_id` when `granularity="game"`. |
+| `positions` | `DataFrame` |  | listed positions (`nba_player_positions`): player_id, position_num. |
+| `team_adjust` | `bool` | `True` | apply the team adjustment (True) or return raw box-BPM (False). |
+| `granularity` | `str` | `'season'` | `"season"` (default) aggregates every row in `player_logs`/ `team_logs` into one row per player. `"game"` runs the exact same pipeline independently per `game_id` (position/role are estimated game-native, mirroring `NbaBpmModel`'s existing fold-native design) and returns one row per (game_id, player_id) with a leading `game_id` column; `gp` is always 1 in this mode. |
+| `league_ortg` | `float \| None` | `None` | The league offensive rating (points per 100) the OBPM adjustment is relative to. `None` (default) takes it from `team_logs`: per `season_id` when that column is there (stats.nba.com's season_id also encodes the season type, so regular season and playoffs stay apart), else over all of `team_logs`, which must then be one season and season type. Pass it when `team_logs` is not a whole league, for example one game scored on its own. |
+| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+
+**Returns**
+
+`"season"`: frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
+
+No returns table is published for this function: no capture: its positions input is nba_player_positions output, which reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `granularity` is not `"season"`/`"game"`, or if `granularity="game"` is requested but `player_logs` has no `game_id` column. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
+logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
+bpm = nba_bpm(logs["player"], logs["team"], pos)
+print(bpm.sort("bpm", descending=True).head())
+
+# Per-game BPM
+
+bpm_game = nba_bpm(logs["player"], logs["team"], pos, granularity="game")
+print(bpm_game.filter(pl.col("game_id") == "0022300001").sort("bpm", descending=True))
+
+# Raw (no team adjustment)
+
+bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
+
+# Pandas output
+
+bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
+```
+
+### nba_career_trajectory {#nba_career_trajectory}
+
+`nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+Age-adjust player-season values with the bundled aging curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` (`value / rel_value(age)`, peak-centered) and `proj_next_value` (`value * rel_value(age+1) / rel_value(age)`). Ages outside the bundled curve's range fall back to `rel_value = 1.0` (no adjustment). Empty input returns the zero-row schema.
+
+No returns table is published for this function: no capture: its input is a user-built player-age panel (player_id, age, value) that no package function produces.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
+nba_career_trajectory(player_values)
+```
+
+### nba_darko {#nba_darko}
+
+`nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Project each player's next-season rating via a per-player Kalman filter + aging curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `panel` | `DataFrame` |  | `player_id, season, rating` (+ optional `weight`) — a multi-season rating panel. |
+| `ages` | `DataFrame` |  | `player_id, season, age` (from `nba_player_ages`). |
+| `aging_curve` | `AgingCurve \| None` | `None` | an `AgingCurve`; fitted from `panel` if None. |
+| `process_var` | `float \| None` | `None` | Kalman process variance `q`; MLE-fit from `panel` if None. |
+| `obs_base` | `float \| None` | `None` | Kalman base observation variance; MLE-fit from `panel` if None. |
+| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+
+**Returns**
+
+`player_id, last_season, forecast_season, filtered_skill, projected_rating, projected_sd`.
+
+No returns table is published for this function: no capture: its input is a multi-season player rating panel with ages per season that no package function produces.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_darko, nba_player_ages
+proj = nba_darko(rating_panel, ages_panel)
+print(proj.sort("projected_rating", descending=True).head())
+```
 
 ### nba_decay_rapm {#nba_decay_rapm}
 
@@ -755,111 +882,4 @@ ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
 # WNBA / G-League via ``league_id``
 
 wnba_ratings = nba_team_ratings(2024, league_id="10")
-```
-
-### nba_war {#nba_war}
-
-`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Points-above-replacement -> wins for each player.
-
-`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
-| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
-| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
-| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
-| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
-| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
-| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-
-**Returns**
-
-Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | Unique player identifier. |
-| `war` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If both inputs are non-empty but share no `player_id` (a probable id-source or dtype mismatch, not a normal empty case). |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_war import nba_war
-war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
-               replacement_level=-2.0, pts_per_win=250.0)
-print(war.sort("war", descending=True).head())
-
-# Derive both required kwargs from real data first
-
-from sportsdataverse.nba.nba_war import (
-    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
-)
-pts_per_win = calibrate_pts_per_win(team_standings)
-repl = calibrate_replacement_level(
-    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
-)
-war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
-```
-
-### ot_adjusted_seconds {#ot_adjusted_seconds}
-
-`ot_adjusted_seconds(pbp: 'pl.DataFrame', *, regulation_periods: 'int' = 4) -> 'pl.DataFrame'`
-
-Tag overtime rows and give them the overtime period clock as their seconds remaining.
-
-The in-game models clip `start_game_seconds_remaining` at zero, so every overtime play
-(negative in the NBA frame) would score as "game over at the current margin". Each overtime is
-scored as its own five-minute endgame instead: on rows with `period_number > regulation_periods`
-`start_game_seconds_remaining` becomes the period clock, `start_quarter_seconds_remaining` or
-(men's college frames) `start_period_seconds_remaining`, whichever is present and not null.
-In a halves game (`regulation_periods=2`) period 3 is the first overtime.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | One game in the basketball pbp schema. |
-| `regulation_periods` | `int` | `4` | The game's regulation periods (4 quarters, 2 halves); see `game_regulation_periods`. |
-
-**Returns**
-
-The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
-
-| col_name | type | description |
-|---|---|---|
-| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
-| `start_game_seconds_remaining` | Float64 | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `polars.exceptions.ColumnNotFoundError` | If `period_number` or `start_game_seconds_remaining` is missing, or neither period clock column is present. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
-from sportsdataverse.nba.nba_loaders import load_nba_pbp
-pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
-tagged = ot_adjusted_seconds(pbp)
-tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
-
-# A men's college game (two halves)
-
-from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
-one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
-ot_adjusted_seconds(one, regulation_periods=2)
 ```

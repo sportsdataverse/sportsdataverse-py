@@ -80440,3 +80440,40 @@ wbb_official_seasons:
   home_win_pct_n: Non-neutral-site games with a recorded home winner behind home_win_pct.
   home_minus_away_fouls: Home team's fouls minus the away team's, per non-neutral-site game.
   home_minus_away_fouls_n: Non-neutral-site games with a two-team box behind home_minus_away_fouls.
+game_lines:
+  game_id: ESPN game id, the join key to the schedule, play-by-play and box-score frames.
+  season: ESPN season of the game, from the schedule.
+  event_id: Odds-store event id the lines come from (the one with the most quotes when two map to the game).
+  n_books: Sportsbooks with a closing (pre-tip) quote on the game.
+  spread_home_open: Median opening spread on ESPN's home team, betting convention (negative when home is favoured).
+  spread_home_close: Median closing spread on ESPN's home team, betting convention (negative when home is favoured).
+  total_open: Median opening game total (over/under points).
+  total_close: Median closing game total (over/under points).
+  ml_home_open: Median opening moneyline on the home team, American odds (median taken on the decimal price).
+  ml_away_open: Median opening moneyline on the away team, American odds.
+  ml_home_close: Median closing moneyline on the home team, American odds.
+  ml_away_close: Median closing moneyline on the away team, American odds.
+  market_home_wp_open: No-vig home win probability from the opening moneylines, median over books.
+  market_away_wp_open: No-vig away win probability from the opening moneylines (1 - market_home_wp_open).
+  market_home_wp_close: No-vig home win probability from the closing moneylines, median over books.
+  market_away_wp_close: No-vig away win probability from the closing moneylines (1 - market_home_wp_close).
+  home_margin: Final home score minus away score; null until the game is completed.
+  ats_result: Who covered the closing spread (home, away or push); null until completed.
+  total_result: The final total against the closing total (over, under or push); null until completed.
+player_props:
+  game_id: ESPN game id, the join key to the schedule and box-score frames.
+  season: ESPN season of the game.
+  athlete_id: ESPN athlete id from the props player crosswalk; null when the name is not matched for either team.
+  team_id: ESPN team id of the athlete in this game.
+  player_name: Player name as the books list it.
+  stat: Prop stat (points, rebounds, assists, threes, pra = points + rebounds + assists).
+  line: Closing line most books closed on (the lower line on a tie).
+  n_books: Sportsbooks with both sides quoted at that line.
+  over_price: Median closing over price at the line, American odds.
+  under_price: Median closing under price at the line, American odds.
+  over_prob: No-vig probability of the over at the line, median over books.
+wp_variants:
+  game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
+  game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
+  home_win_prob_naive: Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior.
+  home_win_prob_market: Home win probability with the closing no-vig market WP as the prior; null without a line.

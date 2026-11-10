@@ -11268,6 +11268,58 @@
   expected: kill
   note: One team's fouls per game no longer reconciles with the two-team box total.
 
+# --- BB-D33: basketball odds join -----------------------------------------------------------------
+# Killers: tests/nba/test_nba_game_lines.py, on committed odds-store slices (tests/fixtures/bb_game_lines).
+- id: bb-lines-flipped-match
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: 'pl.when(pl.col("flipped")).then(swap).otherwise(listed).alias("side"),'
+  mutant: 'listed.alias("side"),'
+  test: tests/nba/test_nba_game_lines.py::test_game_lines_turns_a_flipped_match_round
+  expected: kill
+  note: A crosswalk match with the teams swapped would put the odds' home prices on ESPN's away team.
+
+- id: bb-lines-close-after-tip
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: '    closed = pl.col("close_mins_before") >= 0'
+  mutant: '    closed = pl.col("close_mins_before") > -100000'
+  test: tests/nba/test_nba_game_lines.py::test_game_lines_leaves_out_a_close_taken_after_tip
+  expected: kill
+  note: An in-game last quote would enter the closing medians.
+
+- id: bb-lines-devig
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: '    return pl.when((over >= 1) & (over <= MAX_OVERROUND)).then(pa / over)'
+  mutant: '    return pl.when((over >= 1) & (over <= MAX_OVERROUND)).then(pa)'
+  test: tests/nba/test_nba_game_lines.py::test_game_lines_gate
+  expected: kill
+  note: Raw implied probabilities keep the vig, so home + away no longer sums to 1.
+
+- id: bb-wp-variants-lineless
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: '    lineless = pbp.with_columns(pl.lit(False).alias("game_spread_available"))'
+  mutant: '    lineless = pbp'
+  test: tests/nba/test_nba_game_lines.py::test_wp_variants_ignore_the_pbp_line
+  expected: kill
+  note: With the ESPN line left on, score_win_prob would use it and ignore the naive / market prior.
+
+- id: bb-props-one-event
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: '    out = _prop_lines(_one_event(rows))'
+  mutant: '    out = _prop_lines(rows)'
+  test: tests/nba/test_nba_game_lines.py::test_player_props_reads_one_event_per_game_and_needs_the_teams
+  expected: kill
+  note: A second event mapped to the game would mix its quotes into the closing lines.
+
 # Killers: tests/nba/test_nba_rest_travel.py, on committed real captures (tests/fixtures/bb_pro_season).
 - id: bb-rt-b2b-sign
   group: bb-rest-travel

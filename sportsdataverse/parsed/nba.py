@@ -223,6 +223,7 @@ from sportsdataverse.nba import fox_nba_scores_segment as fox_nba_scores_segment
 from sportsdataverse.nba import fox_nba_team_header as fox_nba_team_header  # noqa: F401
 from sportsdataverse.nba import fox_nba_teamnav as fox_nba_teamnav  # noqa: F401
 from sportsdataverse.nba import game_excitement as game_excitement  # noqa: F401
+from sportsdataverse.nba import game_lines as game_lines  # noqa: F401
 from sportsdataverse.nba import game_minutes as game_minutes  # noqa: F401
 from sportsdataverse.nba import game_page_frames as game_page_frames  # noqa: F401
 from sportsdataverse.nba import game_page_tables as game_page_tables  # noqa: F401
@@ -431,6 +432,7 @@ from sportsdataverse.nba import parse_nba_referee_assignments as parse_nba_refer
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
 from sportsdataverse.nba import player_game_rates as player_game_rates  # noqa: F401
 from sportsdataverse.nba import player_play_context as player_play_context  # noqa: F401
+from sportsdataverse.nba import player_props as player_props  # noqa: F401
 from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
@@ -480,6 +482,7 @@ from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import validate_model as validate_model  # noqa: F401
 from sportsdataverse.nba import walk_forward as walk_forward  # noqa: F401
 from sportsdataverse.nba import win_prob_from_margin as win_prob_from_margin  # noqa: F401
+from sportsdataverse.nba import wp_variants as wp_variants  # noqa: F401
 from sportsdataverse.nba import xpoints_baseline as xpoints_baseline  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
 from sportsdataverse.nba import zone_value_map as zone_value_map  # noqa: F401
@@ -684,6 +687,7 @@ __all__ = [
     "fox_nba_teamnav",
     "fox_nba_teams",
     "game_excitement",
+    "game_lines",
     "game_minutes",
     "game_page_frames",
     "game_page_tables",
@@ -891,6 +895,7 @@ __all__ = [
     "parse_nba_stats_result_sets",
     "player_game_rates",
     "player_play_context",
+    "player_props",
     "player_rates",
     "players_on_court_from_pbp",
     "players_on_court_from_quarter_boxscores",
@@ -940,6 +945,7 @@ __all__ = [
     "validate_model",
     "walk_forward",
     "win_prob_from_margin",
+    "wp_variants",
     "xpoints_baseline",
     "year_to_season",
     "zone_value_map",
