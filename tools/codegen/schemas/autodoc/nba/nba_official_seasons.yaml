@@ -1,0 +1,45 @@
+schema: nba_official_seasons
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: official_id
+  type: integer
+  description: ''
+- name: official_name
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: fouls_per_game
+  type: double
+  description: ''
+- name: fouls_per_game_n
+  type: integer
+  description: ''
+- name: fta_per_game
+  type: double
+  description: ''
+- name: fta_per_game_n
+  type: integer
+  description: ''
+- name: pace
+  type: double
+  description: ''
+- name: pace_n
+  type: integer
+  description: ''
+- name: home_win_pct
+  type: double
+  description: ''
+- name: home_win_pct_n
+  type: integer
+  description: ''
+- name: home_minus_away_fouls
+  type: double
+  description: ''
+- name: home_minus_away_fouls_n
+  type: integer
+  description: ''

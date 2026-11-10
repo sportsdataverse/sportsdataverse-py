@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 256 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 257 | — |
 
 ## ESPN {#espn}
 
@@ -194,6 +194,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_lineup_count_rows`](reference/additional/analytics-3#nba_lineup_count_rows)
 - [`nba_lineup_seasons`](reference/additional/analytics-3#nba_lineup_seasons)
 - [`nba_neutral_site_games`](reference/additional/analytics-3#nba_neutral_site_games)
+- [`nba_official_seasons`](reference/additional/analytics-3#nba_official_seasons)
 - [`nba_play_context`](reference/additional/analytics-3#nba_play_context)
 - [`nba_play_style_features`](reference/additional/analytics-3#nba_play_style_features)
 - [`nba_player_ages`](reference/additional/analytics-3#nba_player_ages)

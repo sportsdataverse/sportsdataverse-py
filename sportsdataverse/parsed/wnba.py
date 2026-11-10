@@ -275,6 +275,7 @@ from sportsdataverse.wnba import wnba_lineup_seasons as wnba_lineup_seasons  # n
 from sportsdataverse.wnba import wnba_live_boxscore as wnba_live_boxscore  # noqa: F401
 from sportsdataverse.wnba import wnba_live_pbp as wnba_live_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noqa: F401
+from sportsdataverse.wnba import wnba_official_seasons as wnba_official_seasons  # noqa: F401
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
@@ -570,6 +571,7 @@ __all__ = [
     "wnba_live_boxscore",
     "wnba_live_pbp",
     "wnba_matchup_drapm",
+    "wnba_official_seasons",
     "wnba_on_court",
     "wnba_pbp_disk",
     "wnba_play_context",

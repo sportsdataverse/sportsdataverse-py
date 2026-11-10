@@ -80380,3 +80380,63 @@ ncaa_stint_rows:
   period: Period of the action.
   season: Season of the action.
   seconds: Game clock that ran into this action (from the previous action of the period).
+nba_official_seasons:
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  official_id: ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB).
+  official_name: Official's name, whitespace-normalised; the key when official_id is null.
+  games: Completed games of the season type the officials table lists the official on.
+  fouls_per_game: Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games.
+  fouls_per_game_n: Games with a two-team box behind fouls_per_game.
+  fta_per_game: Both teams' free-throw attempts per game, over fta_per_game_n games.
+  fta_per_game_n: Games with a two-team box behind fta_per_game.
+  pace: Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime.
+  pace_n: Games with a box possession estimate and a known last period behind pace.
+  home_win_pct: Share of the official's non-neutral-site games with a recorded winner that the home team won.
+  home_win_pct_n: Non-neutral-site games with a recorded home winner behind home_win_pct.
+  home_minus_away_fouls: Home team's fouls minus the away team's, per non-neutral-site game.
+  home_minus_away_fouls_n: Non-neutral-site games with a two-team box behind home_minus_away_fouls.
+wnba_official_seasons:
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  official_id: ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB).
+  official_name: Official's name, whitespace-normalised; the key when official_id is null.
+  games: Completed games of the season type the officials table lists the official on.
+  fouls_per_game: Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games.
+  fouls_per_game_n: Games with a two-team box behind fouls_per_game.
+  fta_per_game: Both teams' free-throw attempts per game, over fta_per_game_n games.
+  fta_per_game_n: Games with a two-team box behind fta_per_game.
+  pace: Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime.
+  pace_n: Games with a box possession estimate and a known last period behind pace.
+  home_win_pct: Share of the official's non-neutral-site games with a recorded winner that the home team won.
+  home_win_pct_n: Non-neutral-site games with a recorded home winner behind home_win_pct.
+  home_minus_away_fouls: Home team's fouls minus the away team's, per non-neutral-site game.
+  home_minus_away_fouls_n: Non-neutral-site games with a two-team box behind home_minus_away_fouls.
+mbb_official_seasons:
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  official_id: ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB).
+  official_name: Official's name, whitespace-normalised; the key when official_id is null.
+  games: Completed games of the season type the officials table lists the official on.
+  fouls_per_game: Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games.
+  fouls_per_game_n: Games with a two-team box behind fouls_per_game.
+  fta_per_game: Both teams' free-throw attempts per game, over fta_per_game_n games.
+  fta_per_game_n: Games with a two-team box behind fta_per_game.
+  pace: Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime.
+  pace_n: Games with a box possession estimate and a known last period behind pace.
+  home_win_pct: Share of the official's non-neutral-site games with a recorded winner that the home team won.
+  home_win_pct_n: Non-neutral-site games with a recorded home winner behind home_win_pct.
+  home_minus_away_fouls: Home team's fouls minus the away team's, per non-neutral-site game.
+  home_minus_away_fouls_n: Non-neutral-site games with a two-team box behind home_minus_away_fouls.
+wbb_official_seasons:
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  official_id: ESPN official id where the officials release carries one (WNBA, WBB); null where it has names only (NBA, MBB).
+  official_name: Official's name, whitespace-normalised; the key when official_id is null.
+  games: Completed games of the season type the officials table lists the official on.
+  fouls_per_game: Both teams' fouls per game (ESPN team box fouls), over fouls_per_game_n games.
+  fouls_per_game_n: Games with a two-team box behind fouls_per_game.
+  fta_per_game: Both teams' free-throw attempts per game, over fta_per_game_n games.
+  fta_per_game_n: Games with a two-team box behind fta_per_game.
+  pace: Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime.
+  pace_n: Games with a box possession estimate and a known last period behind pace.
+  home_win_pct: Share of the official's non-neutral-site games with a recorded winner that the home team won.
+  home_win_pct_n: Non-neutral-site games with a recorded home winner behind home_win_pct.
+  home_minus_away_fouls: Home team's fouls minus the away team's, per non-neutral-site game.
+  home_minus_away_fouls_n: Non-neutral-site games with a two-team box behind home_minus_away_fouls.

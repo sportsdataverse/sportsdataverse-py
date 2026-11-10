@@ -265,6 +265,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_lineup_count_rows](additional/analytics-3.md#nba_lineup_count_rows) | Map `nba_stats_possessions` rows onto the lineup-seasons count frame. |
 | [nba_lineup_seasons](additional/analytics-3.md#nba_lineup_seasons) | Lineup seasons: 2-, 3- and 5-man units with possessions, minutes, ratings and four factors. |
 | [nba_neutral_site_games](additional/analytics-3.md#nba_neutral_site_games) | The curated NBA / WNBA neutral-site games: played abroad, or NBA Cup knockout games in Las Vegas. |
+| [nba_official_seasons](additional/analytics-3.md#nba_official_seasons) | NBA official season profiles: games, fouls and FTA per game, pace and home splits. |
 | [nba_play_context](additional/analytics-3.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
 | [nba_play_style_features](additional/analytics-3.md#nba_play_style_features) | The play-style clustering features, one row per qualifying player- or team-season. |
 | [nba_player_ages](additional/analytics-3.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |

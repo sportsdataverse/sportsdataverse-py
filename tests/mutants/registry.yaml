@@ -11245,3 +11245,25 @@
   test: tests/mbb/test_mbb_shot_zone_profiles.py::test_a_shifted_pbp_is_not_linked
   expected: kill
   note: Unchecked, a shifted play-by-play would credit its neighbours' assists to the wrong attempts.
+
+# --- BB-D34: official season profiles ---------------------------------------------------------------
+# Killers: tests/nba/test_nba_official_seasons.py, on committed real captures (tests/fixtures/bb_official_seasons).
+- id: bb-off-home-neutral
+  group: bb-official-seasons
+  finding: BB-D34
+  file: sportsdataverse/_common/official_seasons.py
+  snippet: '    home_won = ~pl.col("neutral") & pl.col("home_win").is_not_null()'
+  mutant: '    home_won = pl.col("home_win").is_not_null()'
+  test: tests/nba/test_nba_official_seasons.py::test_home_rates_skip_neutral_sites
+  expected: kill
+  note: Counting neutral-site games in home_win_pct gives its _n more games than the official's non-neutral ones.
+
+- id: bb-off-both-teams-fouls
+  group: bb-official-seasons
+  finding: BB-D34
+  file: sportsdataverse/_common/official_seasons.py
+  snippet: '(pl.col("home_fouls") + pl.col("away_fouls")).alias("_fouls"),'
+  mutant: 'pl.col("home_fouls").alias("_fouls"),'
+  test: tests/nba/test_nba_official_seasons.py::test_fouls_and_fta_reconcile_with_team_box
+  expected: kill
+  note: One team's fouls per game no longer reconciles with the two-team box total.

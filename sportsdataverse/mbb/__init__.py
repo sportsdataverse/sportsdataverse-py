@@ -94,5 +94,6 @@ from sportsdataverse.mbb.mbb_team_luck import *
 from sportsdataverse.mbb.mbb_shot_zone_profiles import *
 from sportsdataverse.mbb.mbb_player_war import *
 from sportsdataverse.mbb.mbb_coach_seasons import *
+from sportsdataverse.mbb.mbb_official_seasons import mbb_official_seasons  # noqa: F401
 from sportsdataverse.mbb.mbb_teams import *
 from sportsdataverse.mbb.mbb_win_prob import *
