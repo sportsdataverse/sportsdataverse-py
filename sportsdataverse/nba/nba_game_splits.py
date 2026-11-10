@@ -249,7 +249,7 @@ def _split_events(pbp: pl.DataFrame) -> pl.DataFrame:
         ).alias("_oreb"),
     )
     tagged = rows.join_asof(ev.select("_i", "_poss"), on="_i", strategy="backward")
-    return tagged.join(ev.select("_i", "_new", "_oreb"), on="_i", how="left").with_columns(
+    return tagged.join(ev.select("_i", "_new", "_oreb"), on="_i", how="left", maintain_order="left").with_columns(
         pl.col("_new", "_oreb").fill_null(False), pl.lit(home).alias("_home"), pl.lit(away).alias("_away")
     )
 
@@ -316,7 +316,7 @@ def _possessions(rows: pl.DataFrame, lg: str, reg: int) -> pl.DataFrame:
     quick = ((pl.col("_start_clk") - pl.col("_shot_clk")) <= window).fill_null(False)
     return (
         poss.with_columns(pl.Series("_stopped", stopped, dtype=pl.Boolean))
-        .join(pts, on="_poss", how="left")
+        .join(pts, on="_poss", how="left", maintain_order="left")
         .with_columns(
             (pl.col("start_type").is_in(_LIVE_STARTS) & quick & ~pl.col("_stopped")).alias("transition"),
             (pl.col("_start_clk") - pl.col("_end_clk")).clip(lower_bound=0.0).alias("seconds"),
@@ -423,7 +423,9 @@ def _team_rows(rows: pl.DataFrame, poss: pl.DataFrame, player_box: pl.DataFrame 
         )
     out = pl.DataFrame({"team_id": [home, away]}, schema={"team_id": pl.Int32})
     for part in parts:
-        out = out.join(part.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left")
+        out = out.join(
+            part.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left", maintain_order="left"
+        )
     counts = [c for c, dt in _TEAM_SPLITS_SCHEMA.items() if dt == pl.Int64 and c in out.columns and c != "bench_points"]
     score = _score_rows(rows, home, away)
     return out.with_columns(
@@ -576,7 +578,8 @@ def player_game_splits(
     (``athlete_id_2`` on a make whose text names an assist). ``est_possessions`` is an estimate, not an
     on-court count (that needs the lineup on each play): the team's counted possessions times the
     player's share of the team's minutes (``minutes`` over the team's minutes / 5), so a mid-game box
-    gives the share so far. The per-100 rates divide by it and are null without minutes.
+    gives the share so far. The per-100 rates divide by it and are null without minutes or before the
+    team has a counted possession.
 
     Args:
         pbp: One game's plays, as :func:`team_game_splits` takes them (plus ``athlete_id_1`` /
@@ -636,10 +639,12 @@ def player_game_splits(
         players = box.select(
             pl.col("athlete_id").cast(pl.Int32), pl.col("team_id").cast(pl.Int32), minutes.alias("minutes")
         )
-        counted = players.join(counted, on=key, how="left")  # the box's players only
+        counted = players.join(counted, on=key, how="left", maintain_order="left")  # the box's players only
     else:
         counted = counted.with_columns(pl.lit(None, dtype=pl.Float64).alias("minutes"))
-    out = counted.join(team.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left")
+    out = counted.join(
+        team.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left", maintain_order="left"
+    )
     counts = [c for c, dt in _PLAYER_SPLITS_SCHEMA.items() if dt == pl.Int64]
     out = out.with_columns(
         [(pl.col(c) if c in out.columns else pl.lit(None, dtype=pl.Int64)).fill_null(0).alias(c) for c in counts]

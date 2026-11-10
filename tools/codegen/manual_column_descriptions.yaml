@@ -50472,10 +50472,10 @@ player_game_splits:
   rebounds: 'Rebounds credited to the player on the plays (team rebounds excluded).'
   tov: 'Turnovers credited to the player.'
   live_tov: 'The player''s turnovers with a steal credited.'
-  pts_per100: 'Points per 100 estimated possessions; null without minutes.'
-  ast_per100: 'Assists per 100 estimated possessions; null without minutes.'
-  reb_per100: 'Rebounds per 100 estimated possessions; null without minutes.'
-  tov_per100: 'Turnovers per 100 estimated possessions; null without minutes.'
+  pts_per100: 'Points per 100 estimated possessions; null without minutes or with no counted team possessions yet.'
+  ast_per100: 'Assists per 100 estimated possessions; null without minutes or with no counted team possessions yet.'
+  reb_per100: 'Rebounds per 100 estimated possessions; null without minutes or with no counted team possessions yet.'
+  tov_per100: 'Turnovers per 100 estimated possessions; null without minutes or with no counted team possessions yet.'
 nba_l2m_games:
   game_id: 10-digit NBA game id (zero-padded), parsed from the season listing page's report link.
   label: Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)".
