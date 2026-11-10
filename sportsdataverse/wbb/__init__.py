@@ -78,6 +78,7 @@ from sportsdataverse.wbb.wbb_situational import *
 from sportsdataverse.wbb.wbb_team_season_rates import *
 from sportsdataverse.wbb.wbb_team_strength import *
 from sportsdataverse.wbb.wbb_team_luck import *
+from sportsdataverse.wbb.wbb_shot_zone_profiles import *
 from sportsdataverse.wbb.wbb_player_war import *
 from sportsdataverse.wbb.wbb_coach_seasons import *
 from sportsdataverse.wbb.wbb_team_roster import *

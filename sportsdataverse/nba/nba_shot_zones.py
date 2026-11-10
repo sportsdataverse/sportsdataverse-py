@@ -16,7 +16,7 @@ SHOT_ZONES: list[str] = [
 ]
 
 
-def add_shot_zones(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
+def add_shot_zones(enhanced_pbp: pl.DataFrame, *, corner_min_abs_x: float = 220) -> pl.DataFrame:
     """Add shot-zone classification to enhanced PBP.
 
     Classifies field-goal attempts into NBA zones per pbpstats-core rules:
@@ -31,6 +31,9 @@ def add_shot_zones(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         enhanced_pbp: Enhanced PBP frame from :func:`enhanced_pbp_from_payload`,
             with columns ``is_field_goal``, ``shot_value``, ``shot_distance``,
             ``x_legacy``, ``y_legacy``.
+        corner_min_abs_x: The ``|x_legacy|`` a corner three must reach (``220``, the NBA's
+            22 ft corner). ``0`` keeps the band test alone (``y_legacy <= 87.5``), for a line
+            whose corner sits nearer than 22 ft (the WNBA's, 19 ft 9 in to 22 ft).
 
     Returns:
         Frame with appended ``shot_zone`` column (Utf8, null on non-FG events).
@@ -60,7 +63,7 @@ def add_shot_zones(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
     zone = (
         pl.when(~is_fg)
         .then(None)
-        .when(is_three & (x >= 220) & (pl.col("y_legacy") <= 87.5))
+        .when(is_three & (x >= corner_min_abs_x) & (pl.col("y_legacy") <= 87.5))
         .then(pl.lit("corner_3"))
         .when(is_three)
         .then(pl.lit("above_the_break_3"))

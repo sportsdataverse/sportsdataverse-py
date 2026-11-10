@@ -385,22 +385,24 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_lineup_seasons](additional/analytics-3.md#mbb_lineup_seasons) | College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
 | [mbb_play_styles](additional/analytics-3.md#mbb_play_styles) | College player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [mbb_player_on_off](additional/analytics-3.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
+| [mbb_player_shot_zones](additional/analytics-3.md#mbb_player_shot_zones) | College season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_player_war](additional/analytics-3.md#mbb_player_war) | WAR and VORP per player-season, from our box BPM. |
 | [mbb_player_wowy](additional/analytics-3.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [mbb_shot_selection](additional/analytics-3.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_situational_lineup](additional/analytics-3.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
-| [mbb_situational_player](additional/analytics-3.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
-| [mbb_situational_team](additional/analytics-3.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
-| [mbb_strength_of_schedule](additional/analytics-3.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_situational_player](additional/analytics-4.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
+| [mbb_situational_team](additional/analytics-4.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
+| [mbb_strength_of_schedule](additional/analytics-4.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
 | [mbb_team_luck](additional/analytics-4.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_flow](additional/analytics-4.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
 | [mbb_team_season_rates](additional/analytics-4.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
-| [mbb_team_strength](additional/analytics-4.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
-| [mbb_tournament_ineligible](additional/analytics-4.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
-| [ncaa_coach_stints](additional/analytics-4.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
-| [ncaa_impact_rows](additional/analytics-4.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
-| [ncaa_lineup_count_rows](additional/analytics-4.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
-| [ncaa_mbb_lineups](additional/analytics-4.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
+| [mbb_team_shot_zones](additional/analytics-4.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
+| [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
+| [mbb_tournament_ineligible](additional/analytics-5.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
+| [ncaa_coach_stints](additional/analytics-5.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
+| [ncaa_impact_rows](additional/analytics-5.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
+| [ncaa_lineup_count_rows](additional/analytics-5.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
+| [ncaa_mbb_lineups](additional/analytics-5.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/analytics-5.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-5.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-5.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
@@ -410,14 +412,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_stint_rows](additional/analytics-5.md#ncaa_stint_rows) | Map the stats.ncaa.org pbp and possessions onto the stint-row frame. |
 | [ncaa_team_box_count_rows](additional/analytics-5.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |
 | [ncaa_team_coaches](additional/analytics-5.md#ncaa_team_coaches) | Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages. |
-| [order_lineup](additional/analytics-5.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
-| [pos_class_to_score](additional/analytics-5.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
-| [project_bracket](additional/analytics-5.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
-| [regress_shot_quality](additional/analytics-5.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
-| [strength_of_schedule](additional/analytics-5.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-5.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
-| [using_roster_pos](additional/analytics-5.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [order_lineup](additional/analytics-6.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
+| [pos_class_to_score](additional/analytics-6.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
+| [project_bracket](additional/analytics-6.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
+| [regress_shot_quality](additional/analytics-6.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
+| [strength_of_schedule](additional/analytics-6.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
+| [test_positional_aware_filter](additional/analytics-6.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [using_roster_pos](additional/analytics-6.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
+| [weighted_avg](additional/analytics-6.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## IDs and crosswalks
 

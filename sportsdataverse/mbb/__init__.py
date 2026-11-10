@@ -91,6 +91,7 @@ from sportsdataverse.mbb.mbb_situational import *
 from sportsdataverse.mbb.mbb_team_season_rates import *
 from sportsdataverse.mbb.mbb_team_strength import *
 from sportsdataverse.mbb.mbb_team_luck import *
+from sportsdataverse.mbb.mbb_shot_zone_profiles import *
 from sportsdataverse.mbb.mbb_player_war import *
 from sportsdataverse.mbb.mbb_coach_seasons import *
 from sportsdataverse.mbb.mbb_teams import *

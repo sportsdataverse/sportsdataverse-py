@@ -377,6 +377,7 @@ from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: 
 from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_player_shot_zones as nba_player_shot_zones  # noqa: F401
 from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
@@ -406,6 +407,7 @@ from sportsdataverse.nba import nba_team_play_styles as nba_team_play_styles  # 
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
 from sportsdataverse.nba import nba_team_season_flow as nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba import nba_team_season_rates as nba_team_season_rates  # noqa: F401
+from sportsdataverse.nba import nba_team_shot_zones as nba_team_shot_zones  # noqa: F401
 from sportsdataverse.nba import nba_team_strength as nba_team_strength  # noqa: F401
 from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
@@ -833,6 +835,7 @@ __all__ = [
     "nba_player_play_styles",
     "nba_player_positions",
     "nba_player_props",
+    "nba_player_shot_zones",
     "nba_player_war",
     "nba_player_wowy",
     "nba_playtype_ratings",
@@ -863,6 +866,7 @@ __all__ = [
     "nba_team_ratings",
     "nba_team_season_flow",
     "nba_team_season_rates",
+    "nba_team_shot_zones",
     "nba_team_strength",
     "nba_tracking_drive_value",
     "nba_tracking_pass_value",

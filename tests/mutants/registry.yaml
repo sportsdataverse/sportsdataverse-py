@@ -11192,3 +11192,56 @@
   note: >-
     The CUSA 2025 cascade without its common-opponent descent: the real 2026 FIU/Kennesaw State pair left by
     opponents' win pct goes to the draw instead of Kennesaw State.
+
+# --- BB-D35: season shot profile by zone (rim / mid / corner 3 / above the break, for and against) ---------
+# Killers: tests/nba/test_nba_shot_zone_profiles.py and tests/mbb/test_mbb_shot_zone_profiles.py, on
+# committed real captures (tests/fixtures/bb_shot_zones).
+- id: bb-sz-unlocated-count
+  group: bb-shot-zones
+  finding: BB-D35
+  file: sportsdataverse/_common/shot_zone_profiles.py
+  snippet: 'pl.col("zone").is_null().sum().cast(pl.Int64).alias(f"{prefix}unlocated_fga"),'
+  mutant: 'pl.lit(0, dtype=pl.Int64).alias(f"{prefix}unlocated_fga"),'
+  test: tests/nba/test_nba_shot_zone_profiles.py::test_zone_attempts_add_up_to_fga
+  expected: kill
+  note: Dropping the unlocated count breaks zones + unlocated == fga on the WNBA 2010 placeholders.
+
+- id: bb-sz-allowed-fg-direction
+  group: bb-shot-zones
+  finding: BB-D35
+  file: sportsdataverse/_common/shot_zone_profiles.py
+  snippet: 'lower_is_better=[f"opp_{z}_fg_pct" for z in ZONES],'
+  mutant: 'lower_is_better=[],'
+  test: tests/nba/test_nba_shot_zone_profiles.py::test_allowed_fg_pct_ranks_lowest_first
+  expected: kill
+  note: The worst defense would rank 1 on every allowed field-goal percentage.
+
+- id: bb-sz-wnba-placeholders
+  group: bb-shot-zones
+  finding: BB-D35
+  file: sportsdataverse/nba/nba_shot_zone_profiles.py
+  snippet: '        located = located & ~((pl.col("season") <= WNBA_PLACEHOLDER_THROUGH) & (x == 0) & (y == 0))'
+  mutant: '        located = located'
+  test: tests/nba/test_nba_shot_zone_profiles.py::test_wnba_placeholders_are_unlocated
+  expected: kill
+  note: The 944 hoop-centre placeholders of the WNBA 2010 fixture would all count as rim attempts.
+
+- id: bb-sz-wnba-corner-band
+  group: bb-shot-zones
+  finding: BB-D35
+  file: sportsdataverse/nba/nba_shot_zone_profiles.py
+  snippet: '_CORNER_MIN_ABS_X = {"00": 220.0, "10": 0.0}'
+  mutant: '_CORNER_MIN_ABS_X = {"00": 220.0, "10": 220.0}'
+  test: tests/nba/test_nba_shot_zone_profiles.py::test_corner_three_geometry_wnba
+  expected: kill
+  note: The NBA's 22 ft corner test would call most 2010 WNBA corner threes (about 20.5 ft) above the break.
+
+- id: bb-sz-ncaa-link-check
+  group: bb-shot-zones
+  finding: BB-D35
+  file: sportsdataverse/mbb/mbb_shot_zone_profiles.py
+  snippet: '        linked = (pl.col("made") == pl.col("_p_made")) & (pl.col("point_value") == pl.col("_p_value")) & shooter_ok'
+  mutant: '        linked = pl.lit(True)'
+  test: tests/mbb/test_mbb_shot_zone_profiles.py::test_a_shifted_pbp_is_not_linked
+  expected: kill
+  note: Unchecked, a shifted play-by-play would credit its neighbours' assists to the wrong attempts.

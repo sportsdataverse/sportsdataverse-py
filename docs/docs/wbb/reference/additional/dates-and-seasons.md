@@ -1,7 +1,7 @@
 ---
 title: "Women's college basketball — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 15
+sidebar_position: 16
 description: "Women's college basketball — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Women's college basketball — additional Python functions — Dates and seasons
