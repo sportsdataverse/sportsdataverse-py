@@ -145,7 +145,7 @@ def ncaa_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.D
     )
 
 
-def _parsed_game_date(parsed: dict) -> "str | None":
+def _parsed_game_date(parsed: dict) -> str | None:
     """``mm/dd/yyyy`` off the first family row that carries ``game_date``."""
     for family in ("linescore", "pbp", "player_box", "team_box"):
         for row in parsed.get(family) or []:
@@ -155,7 +155,7 @@ def _parsed_game_date(parsed: dict) -> "str | None":
     return None
 
 
-def parsed_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.DataFrame:
+def parsed_schedule_side(root: str | Path, league: str, season: int) -> pl.DataFrame:
     """One row per PARSED contest of *season*: ``contest_id``, ``game_date``, both ESPN team ids.
 
     In season the schedule pages are captured once, before tip-off, so
@@ -222,7 +222,7 @@ def parsed_schedule_side(root: Union[str, Path], league: str, season: int) -> pl
     )
 
 
-def _ncaa_side(root: Union[str, Path], league: str, season: int) -> pl.DataFrame:
+def _ncaa_side(root: str | Path, league: str, season: int) -> pl.DataFrame:
     """Schedule-page rows, plus parsed-contest rows for contests the pages miss.
 
     Per contest the most complete row wins; on a tie the schedule page does,
@@ -427,7 +427,7 @@ def load_espn_game_index(root: str, league: str, season: int) -> Dict[str, str]:
     return {str(r["contest_id"]): str(r["espn_game_id"]) for r in rows if r.get("contest_id") and r.get("espn_game_id")}
 
 
-def stamp_parsed(root: Union[str, Path], league: str, season: int) -> int:
+def stamp_parsed(root: str | Path, league: str, season: int) -> int:
     """Write the crosswalk's ``espn_game_id`` into each parsed contest of *season* that lacks it.
 
     Parse stamps the id from the crosswalk on disk at parse time, and skips a
