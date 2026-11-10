@@ -59,6 +59,18 @@ from sportsdataverse.nba.nba_spm import (  # noqa: F401
 from sportsdataverse.nba.nba_player_positions import nba_player_positions  # noqa: F401
 from sportsdataverse.nba.nba_bpm import BPM2_COEFFICIENTS, NbaBpmModel, nba_bpm  # noqa: F401
 from sportsdataverse.nba.nba_adj_rapm import AdjRapmModel, nba_adj_rapm  # noqa: F401
+from sportsdataverse.nba.nba_box_prior import (  # noqa: F401
+    BOX_PRIOR_FEATURES,
+    BoxPriorModel,
+    SeasonGram,
+    apply_box_prior,
+    box_prior_features,
+    box_prior_training_seasons,
+    career_rapm_target,
+    season_gram,
+    train_box_prior,
+)
+from sportsdataverse.nba.nba_reml_rapm import RemlFit, fit_reml_prior_ridge, nba_reml_rapm  # noqa: F401
 from sportsdataverse.nba.nba_player_ages import nba_player_ages  # noqa: F401
 from sportsdataverse.nba.nba_darko import (  # noqa: F401
     AgingCurve,

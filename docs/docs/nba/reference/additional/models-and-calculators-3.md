@@ -1,10 +1,254 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants"
-sidebar_label: "Models and calculators: nba_war–wp_variants"
+title: "NBA — additional Python functions — Models and calculators: nba_reml–wp_variants"
+sidebar_label: "Models and calculators: nba_reml–wp_variants"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_reml–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_war–wp_variants
+# NBA — additional Python functions — Models and calculators: nba_reml–wp_variants
+
+### nba_reml_rapm {#nba_reml_rapm}
+
+`nba_reml_rapm(possessions: 'pl.DataFrame', prior: 'dict[int, tuple[float, float]]', *, penalty: 'str' = 'fixed', lambdas: 'tuple[float, float] | None' = None, league_id: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML.
+
+The posterior mean of a prior-informed RAPM (the same design and sign convention as
+`~sportsdataverse.nba.nba_rapm.nba_rapm` and `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm`).
+The prior is used as given (no scale multiplier). Two penalty rules:
+
+* `penalty="fixed"` (the default): the league's adjusted-RAPM penalty,
+  `~sportsdataverse.nba.nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728), on offense and defense.
+* `penalty="reml"`: one offense and one defense penalty chosen per call by restricted maximum
+  likelihood (`fit_reml_prior_ridge`). REML's penalty is the ratio of the per-possession noise to
+  how far players sit from their prior; with the v2 box prior it puts 90% of the weight on the prior on
+  offense and 81% on defense (possession-weighted), and offense reaches the upper bound in 2018, 2019
+  and 2023.
+
+Why fixed is the default: measured by `tools/fit_box_prior_v2.py` on NBA regular seasons 1998-2026
+with the v2 box prior, against today's `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm` on the
+same held-out possessions, the fixed rule lowers the error by 1.64 bp of MSE (SE 0.10, better in all 29
+seasons) and by 1.43 bp after a mid-season cut date (2006-2026, SE 0.29, 17 of 21); REML by 0.73
+(SE 0.17, 22 of 29) and 1.03 (SE 0.49, 14 of 21). Head to head the fixed rule beats the REML pick by
+0.91 bp on held-out games (SE 0.14, 27 of 29 seasons). The 3,728 was cross-validated on these seasons for
+the previous-season SPM prior, so refitting it for the v2 prior is open. The cut-date test counts 2006+
+only (1998-2005 priors learn from later seasons); height and position come from one later index.
+
+Built for the box prior of `sportsdataverse.nba.nba_box_prior` (`o_prior` / `d_prior` of
+`~sportsdataverse.nba.nba_box_prior.apply_box_prior`), but any per-100 `(o, d)` prior works.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | A possession+lineup frame (`points`, `off_player_1..5`, `def_player_1..5`). |
+| `prior` | `dict[int, tuple[float, float]]` |  | `{player_id: (o_prior, d_prior)}` per 100 possessions (`d` positive = good defense). A player absent from it gets `(0, 0)`: a league-average prior. |
+| `penalty` | `str` | `'fixed'` | `"fixed"` (the league's adjusted-RAPM penalty) or `"reml"` (chosen per call). |
+| `lambdas` | `tuple[float, float] \| None` | `None` | `(lambda_o, lambda_d)` to fit at; overrides `penalty`. |
+| `league_id` | `str \| None` | `None` | `"00"`, `"10"` or `"20"`: the league whose fixed penalty is used. `None` reads it from the `game_id` prefix (NBA without one). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per player, columns `REML_RAPM_SCHEMA`: `o_reml_rapm` / `d_reml_rapm` / `reml_rapm` (per 100, `d` positive = good defense, `reml_rapm = o + d`), the prior used (`o_box_prior` / `d_box_prior`: whatever `prior` held, the box prior or another), the weight of a player's own prior in his posterior mean (`o_prior_weight` / `d_prior_weight`, 0 to 1; see `RemlFit`), possession counts, and the chosen penalties (`lambda_o` / `lambda_d`, the same on every row). Zero rows with that schema when no possession has a full lineup.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `o_reml_rapm` | Float64 | Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given). |
+| `d_reml_rapm` | Float64 | Defensive season impact per 100 (positive = good defense) at lambda_d (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given). |
+| `reml_rapm` | Float64 | o_reml_rapm + d_reml_rapm. |
+| `o_box_prior` | Float64 | The offensive prior the rating shrank toward (per 100; the box prior v2 when built by tools/fit_box_prior_v2.py). |
+| `d_box_prior` | Float64 | The defensive prior the rating shrank toward (per 100, positive = good defense). |
+| `o_prior_weight` | Float64 | Weight of the player's own offensive prior in his posterior mean, 0 to 1 (diagonal of M^-1 diag(lambda)). |
+| `d_prior_weight` | Float64 | Weight of the player's own defensive prior in his posterior mean, 0 to 1. |
+| `off_poss` | Int64 | Offensive possessions in the fit. |
+| `def_poss` | Int64 | Defensive possessions in the fit. |
+| `lambda_o` | Float64 | Offense penalty the fit used (points-per-possession scale; ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row). |
+| `lambda_d` | Float64 | Defense penalty the fit used (ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `penalty` is not `"fixed"` or `"reml"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_reml_rapm
+prior = {r["player_id"]: (r["o_prior"], r["d_prior"]) for r in priors.iter_rows(named=True)}
+rating = nba_reml_rapm(possessions, prior)  # fixed penalty
+by_reml = nba_reml_rapm(possessions, prior, penalty="reml")
+print(rating.sort("reml_rapm", descending=True).head())
+```
+
+### nba_rookie_projection {#nba_rookie_projection}
+
+`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+Project rookie/sophomore value by composing draft x aging x availability.
+
+Composition (no re-derived features -- each term is the verbatim public
+output of ①②③):
+
+- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
+  (`rookie_fraction` from the bundled residual artifact -- the share of
+  career value realized in a single rookie season).
+- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
+  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
+- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
+  at rookie age -- reported separately, **never** multiplied into the
+  value columns (availability is availability, not skill).
+- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_rookie_projection
+board = nba_rookie_projection(2019)
+print(board.sort("proj_rookie_value", descending=True).head())
+```
+
+### nba_spm {#nba_spm}
+
+`nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM.
+
+Applies a linear scoring rule:
+
+.. code-block:: text
+
+    ospm = X @ o_coef + o_intercept
+    dspm = X @ d_coef + d_intercept
+    spm  = ospm + dspm
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_features` | `DataFrame` |  | Per-player per-100 features. Must contain `player_id`, every column in `coefficients.feature_names`, `min`, and `gp`. |
+| `coefficients` | `SpmCoefficients` |  | A `SpmCoefficients` instance from `train_spm`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
+
+**Returns**
+
+Per-player frame with columns `player_id` (Int64), `ospm` (Float64), `dspm` (Float64), `spm` (Float64), `min` (Float64), `gp` (Int64).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `ospm` | Float64 |  |
+| `dspm` | Float64 |  |
+| `spm` | Float64 |  |
+| `min` | Float64 | Minutes played. |
+| `gp` | Int64 | Games played. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_spm
+ratings = nba_spm(box_feats, coef)
+print(ratings.sort("spm", descending=True).head())
+
+# Pipeline next step
+
+ratings.filter(pl.col("min") >= 500).sort("spm", descending=True)
+```
+
+### nba_team_ratings {#nba_team_ratings}
+
+`nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware.
+
+Loads schedule + team box score for `seasons`, optionally filters to
+games strictly before `as_of_date` (the leakage boundary, via
+`~sportsdataverse.nba.nba_prediction_constants.as_of_ratings_split`),
+computes per-game efficiency, runs the opponent-adjustment fixed points,
+and adds a per-season dense `rank` (on `adj_net_rtg` descending) and
+`adj_net_z` (z-score of `adj_net_rtg`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | A season (e.g. `2024`) or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `as_of_date` | `Union[date, None]` | `None` | If given, only games with `date < as_of_date` are used (predictive/backtest usage); `None` computes full-season descriptive ratings. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`, then `<m>_rank`, `<m>_pct` and `<m>_n` for each of the seven ratings (BB-D2, the football F5/F6 grammar of `sportsdataverse._common.league_context`). `_rank` is 1 for the best team in the season: the highest offensive and net ratings, the lowest `*_def_rtg`, the fastest pace. `_pct` is the Weibull percentile. Both are null for a team under half the season's most games, and for every team when fewer than five qualifying teams have the rating or they all share one value. On a full season the half-games rule drops the All-Star teams; with `as_of_date` the most games is taken before the cut, so an early cut can also null regular teams. `_n` counts the sample: possessions (rounded) for the ratings, games for the paces. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `adj_off_rtg` | Float64 |  |
+| `adj_def_rtg` | Float64 |  |
+| `adj_net_rtg` | Float64 |  |
+| `adj_pace` | Float64 |  |
+| `raw_off_rtg` | Float64 |  |
+| `raw_def_rtg` | Float64 |  |
+| `raw_pace` | Float64 |  |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_net_z` | Float64 |  |
+| `adj_off_rtg_rank` | Float64 | Rank of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_def_rtg_rank` | Float64 | Rank of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `adj_net_rtg_rank` | Float64 | Rank of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `adj_pace_rank` | Float64 | Rank of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `raw_off_rtg_rank` | Float64 | Rank of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the highest value ranks 1, average ties. |
+| `raw_def_rtg_rank` | Float64 | Rank of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the lowest value ranks 1 (fewer points allowed is better), average ties. |
+| `raw_pace_rank` | Float64 | Rank of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties. |
+| `adj_off_rtg_pct` | Float64 | Percentile of adj_off_rtg, the opponent-adjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_def_rtg_pct` | Float64 | Percentile of adj_def_rtg, the opponent-adjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_net_rtg_pct` | Float64 | Percentile of adj_net_rtg, the opponent-adjusted net rating (adj_off_rtg minus adj_def_rtg), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_pace_pct` | Float64 | Percentile of adj_pace, the opponent-adjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_off_rtg_pct` | Float64 | Percentile of raw_off_rtg, the unadjusted offensive rating (points scored per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_def_rtg_pct` | Float64 | Percentile of raw_def_rtg, the unadjusted defensive rating (points allowed per 100 possessions), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `raw_pace_pct` | Float64 | Percentile of raw_pace, the unadjusted pace (possessions per game), among the season's qualified teams (at least half the most games any team played, which leaves out the one-game All-Star teams); null for a non-qualifier or when fewer than five teams qualify: 100 * (n + 1 - rank) / (n + 1) with n the ranked teams, so the best team sits near 100 and none is exactly 0 or 100. |
+| `adj_off_rtg_n` | Int64 | Sample size of adj_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_def_rtg_n` | Int64 | Sample size of adj_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `adj_net_rtg_n` | Int64 | Sample size of adj_net_rtg: the box-score possessions the rating is computed over on both ends (offense plus defense, twice the possession estimate), summed over the team's games and rounded. |
+| `adj_pace_n` | Int64 | Sample size of adj_pace: the games the pace is computed over (equal to games). |
+| `raw_off_rtg_n` | Int64 | Sample size of raw_off_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_def_rtg_n` | Int64 | Sample size of raw_def_rtg: the box-score possessions the rating is computed over, summed over the team's games and rounded. |
+| `raw_pace_n` | Int64 | Sample size of raw_pace: the games the pace is computed over (equal to games). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
+ratings = nba_team_ratings(2024)
+ratings.sort("rank").head()
+
+# As-of-date (leakage-safe) ratings for a backtest
+
+import datetime as dt
+ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
+
+# WNBA / G-League via ``league_id``
+
+wnba_ratings = nba_team_ratings(2024, league_id="10")
+```
 
 ### nba_war {#nba_war}
 
@@ -484,6 +728,22 @@ gei = season_game_excitement(load_wnba_pbp([2025]), league="wnba", schedule=load
 gei.sort("gei_rank", nulls_last=True).head(10)
 ```
 
+### season_gram {#season_gram}
+
+`season_gram(possessions: 'pl.DataFrame') -> 'SeasonGram'`
+
+The `SeasonGram` of a possession frame (rows with a full lineup).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup rows (`points`, `off_player_1..5`, `def_player_1..5`). |
+
+**Returns**
+
+The season's `SeasonGram`.
+
 ### shot_coordinates {#shot_coordinates}
 
 `shot_coordinates(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
@@ -608,6 +868,44 @@ team_game_rates(box, league_id="10")
 from sportsdataverse.wbb.wbb_loaders import load_wbb_team_boxscore
 box = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == 293170052)
 team_game_rates(box, league="wbb", regulation_periods=2)
+```
+
+### train_box_prior {#train_box_prior}
+
+`train_box_prior(panel: 'pl.DataFrame', *, season: 'int', half_life: 'float' = 4.0, alpha: 'float' = 1.0, folds: 'int' = 5) -> 'BoxPriorModel'`
+
+Possession-weighted ridge of the career target on the box-prior features, cross-fit by player.
+
+Fold `k`'s rule is fit on every row whose player is NOT in fold `k` (`player_id % folds`) and
+is applied only to fold `k`'s players, so no player's prior saw his own target. Each row is
+weighted by its possessions times the time weight of its season relative to `season`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `panel` | `DataFrame` |  | Training rows: `player_id`, `season`, `poss`, `def_poss`, `o_target`, `d_target` and `BOX_PRIOR_FEATURES`; seasons from `box_prior_training_seasons` (a row of `season` itself raises). |
+| `season` | `int` |  | The season the prior is for. |
+| `half_life` | `float` | `4.0` | Half-life of the row time weight, in seasons. |
+| `alpha` | `float` | `1.0` | Ridge penalty on the standardized features. |
+| `folds` | `int` | `5` | Player folds. |
+
+**Returns**
+
+A `BoxPriorModel`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `panel` holds a row of `season` or a fold has no training rows. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_box_prior import apply_box_prior, train_box_prior
+model = train_box_prior(panel, season=2015)
+prior = apply_box_prior(features_2015, model)
 ```
 
 ### train_spm {#train_spm}

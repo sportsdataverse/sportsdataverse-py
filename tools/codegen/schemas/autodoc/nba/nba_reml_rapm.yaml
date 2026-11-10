@@ -1,0 +1,40 @@
+schema: nba_reml_rapm
+kind: dataframe
+hand_authored: true
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: o_reml_rapm
+  type: double
+  description: ''
+- name: d_reml_rapm
+  type: double
+  description: ''
+- name: reml_rapm
+  type: double
+  description: ''
+- name: o_box_prior
+  type: double
+  description: ''
+- name: d_box_prior
+  type: double
+  description: ''
+- name: o_prior_weight
+  type: double
+  description: ''
+- name: d_prior_weight
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''
+- name: lambda_o
+  type: double
+  description: ''
+- name: lambda_d
+  type: double
+  description: ''
