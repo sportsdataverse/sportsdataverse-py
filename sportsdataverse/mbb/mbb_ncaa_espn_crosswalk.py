@@ -151,4 +151,154 @@ def ncaa_espn_team_crosswalk(
     return _pandas_ids(df) if return_as_pandas else df
 
 
-__all__ = ["ncaa_espn_team_crosswalk"]
+#: One dtype per id: NCAA team ids Int64 (as in the team crosswalk), NCAA player ids Utf8 (as in
+#: every ``load_ncaa_{mbb,wbb}_*`` release), ESPN ids Int64 (as everywhere in sdv-py).
+_PLAYER_SCHEMA: Dict[str, pl.DataType] = {
+    "season": pl.Int32,
+    "ncaa_team_id": pl.Int64,
+    "ncaa_player_id": pl.Utf8,
+    "ncaa_player_name": pl.Utf8,
+    "ncaa_jersey": pl.Utf8,
+    "espn_team_id": pl.Int64,
+    "espn_athlete_id": pl.Int64,
+    "espn_athlete_name": pl.Utf8,
+    "espn_jersey": pl.Utf8,
+    "match_method": pl.Utf8,
+    "match_confidence": pl.Float64,
+    "unmatched_reason": pl.Utf8,
+}
+
+
+def _ncaa_rosters(league: str, season: int) -> pl.DataFrame:
+    """The ``ncaa_{league}_team_rosters`` release for one season (the NCAA side)."""
+    if league == "mbb":
+        from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_team_rosters as load
+    else:
+        from sportsdataverse.wbb.wbb_loaders import load_ncaa_wbb_team_rosters as load
+    return load(seasons=season)
+
+
+def _join(left: pl.DataFrame, right: pl.DataFrame, on: list) -> pl.DataFrame:
+    """Left join that refuses mismatched key dtypes instead of matching nothing."""
+    for key in on:
+        assert left.schema[key] == right.schema[key], f"join key {key}: {left.schema[key]} != {right.schema[key]}"
+    return left.join(right, on=on, how="left", maintain_order="left")
+
+
+def ncaa_espn_player_crosswalk(
+    season: int, league: str = "mbb", *, return_as_pandas: bool = False
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id.
+
+    One row per NCAA roster player per team for one season, built from published
+    releases only: the ``ncaa_{league}_team_rosters`` roster, resolved to an ESPN
+    team through :func:`ncaa_espn_team_crosswalk`, matched against the ESPN
+    athletes of that team in ``load_{league}_player_boxscore`` (each athlete's
+    most-worn jersey). Players are compared only inside one ESPN team, in four
+    tiers -- normalized name + jersey, name, last name + jersey, then a
+    Jaro-Winkler score of at least 0.92 -- and a tier only takes a pair that is
+    unique on both sides, so a tie is left unmatched rather than guessed
+    (:mod:`sportsdataverse.scrape.ncaa.espn_player_xwalk`). Unmatched players
+    are kept, with the reason.
+
+    stats.ncaa.org issues new team and player ids every season, so a player has
+    a different ``ncaa_player_id`` on each season's row. The multi-season history
+    of the same pairs is published as ``load_{mbb,wbb}_player_aliases`` (rows with
+    ``source == "ncaa"``), with the same tier names and confidences.
+
+    Args:
+        season: Ending year of the season (``2024`` = 2023-24).
+        league: ``"mbb"`` (men's) or ``"wbb"`` (women's).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        DataFrame with ``season`` (Int32), ``ncaa_team_id`` (Int64),
+        ``ncaa_player_id`` / ``ncaa_player_name`` / ``ncaa_jersey`` (str),
+        ``espn_team_id`` / ``espn_athlete_id`` (Int64, nullable),
+        ``espn_athlete_name`` / ``espn_jersey`` (str, nullable),
+        ``match_method`` (``"name_jersey"``, ``"name"``, ``"last_jersey"``,
+        ``"jaro_winkler"``, or null when unmatched), ``match_confidence``
+        (Float64: 1.0 / 0.95 / 0.9 / 0.85 by tier, null when unmatched) and
+        ``unmatched_reason`` (``"no_espn_team"``, ``"no_espn_players"``,
+        ``"ambiguous"``, ``"no_candidate"``, or null when matched). A season
+        with no published roster returns these columns with zero rows.
+
+    Raises:
+        ValueError: If *league* is not ``"mbb"`` or ``"wbb"``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import ncaa_espn_player_crosswalk
+            df = ncaa_espn_player_crosswalk(2024)
+            print(df["match_method"].value_counts())
+
+        Women's crosswalk as pandas::
+
+            wdf = ncaa_espn_player_crosswalk(2024, league="wbb", return_as_pandas=True)
+
+        Pipeline next step (one line)::
+
+            df.filter(pl.col("match_confidence") >= 0.95).select("ncaa_player_id", "espn_athlete_id")
+
+    See Also:
+        * `hoopR`_ -- men's college basketball in R
+        * `wehoop`_ -- women's college basketball in R
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    if league not in _LEAGUE_PKG:
+        raise ValueError(f"league must be one of {sorted(_LEAGUE_PKG)}, got {league!r}")
+    from sportsdataverse.scrape.ncaa import espn_player_xwalk as px
+
+    season = int(season)
+    roster = _ncaa_rosters(league, season)
+    if roster.height == 0:
+        out = pl.DataFrame(schema=_PLAYER_SCHEMA)
+        return _pandas_ids(out) if return_as_pandas else out
+    label = f"{season - 1}-{season % 100:02d}"
+    teams = (
+        ncaa_espn_team_crosswalk(league)
+        .filter(pl.col("season") == label)
+        .select("ncaa_team_id", "espn_team_id")
+        .unique("ncaa_team_id", keep="first")
+    )
+    ncaa = (
+        roster.select(
+            pl.col("team_id").cast(pl.Int64).alias("ncaa_team_id"),
+            px._id(pl.col("player_id")).alias("id"),
+            pl.col("clean_name").cast(pl.Utf8).alias("name"),
+            px._jersey(pl.col("jersey")).alias("jersey"),
+        )
+        .drop_nulls("id")
+        .unique(["ncaa_team_id", "id"], keep="first", maintain_order=True)
+    )
+    ncaa = _join(ncaa, teams, ["ncaa_team_id"])
+    espn = px.espn_athlete_side(league, season)
+    pairs = px.match_players(ncaa.with_columns(pl.col("ncaa_team_id", "espn_team_id").cast(pl.Utf8)), espn)
+    names_ncaa = ncaa.select(
+        "ncaa_team_id",
+        pl.col("id").alias("ncaa_player_id"),
+        pl.col("name").alias("ncaa_player_name"),
+        pl.col("jersey").alias("ncaa_jersey"),
+    )
+    names_espn = espn.select(
+        pl.col("espn_team_id").cast(pl.Int64),
+        pl.col("id").cast(pl.Int64).alias("espn_athlete_id"),
+        pl.col("name").alias("espn_athlete_name"),
+        pl.col("jersey").alias("espn_jersey"),
+    )
+    out = pairs.with_columns(pl.col("ncaa_team_id", "espn_team_id", "espn_athlete_id").cast(pl.Int64))
+    out = _join(out, names_ncaa, ["ncaa_team_id", "ncaa_player_id"])
+    out = _join(out, names_espn, ["espn_team_id", "espn_athlete_id"])
+    out = out.with_columns(
+        pl.lit(season, dtype=pl.Int32).alias("season"),
+        pl.col("match_method")
+        .replace_strict(px.MATCH_CONFIDENCE, default=None, return_dtype=pl.Float64)
+        .alias("match_confidence"),
+    ).select([pl.col(c).cast(t) for c, t in _PLAYER_SCHEMA.items()])
+    return _pandas_ids(out) if return_as_pandas else out
+
+
+__all__ = ["ncaa_espn_player_crosswalk", "ncaa_espn_team_crosswalk"]

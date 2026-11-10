@@ -1,13 +1,13 @@
-"""Women's-basketball re-export of the NCAA <-> ESPN team-id crosswalk.
+"""Women's-basketball re-export of the NCAA <-> ESPN team- and player-id crosswalks.
 
-The loader is league-parameterized and lives in
-:mod:`sportsdataverse.mbb.mbb_ncaa_espn_crosswalk`; importing it from
+The loaders are league-parameterized and live in
+:mod:`sportsdataverse.mbb.mbb_ncaa_espn_crosswalk`; importing them from
 ``sportsdataverse.wbb`` is purely a namespace convenience. Pass
-``league="wbb"`` to read the women's table.
+``league="wbb"`` to read the women's tables.
 """
 
 from __future__ import annotations
 
-from sportsdataverse.mbb.mbb_ncaa_espn_crosswalk import ncaa_espn_team_crosswalk
+from sportsdataverse.mbb.mbb_ncaa_espn_crosswalk import ncaa_espn_player_crosswalk, ncaa_espn_team_crosswalk
 
-__all__ = ["ncaa_espn_team_crosswalk"]
+__all__ = ["ncaa_espn_player_crosswalk", "ncaa_espn_team_crosswalk"]

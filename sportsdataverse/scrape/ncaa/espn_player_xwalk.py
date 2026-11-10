@@ -62,6 +62,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "JW_FLOOR",
+    "MATCH_CONFIDENCE",
     "MATCH_METHODS",
     "UNMATCHED_REASONS",
     "build_season_xwalk",
@@ -75,6 +76,9 @@ __all__ = [
 
 #: Tier labels, in the order they are attempted.
 MATCH_METHODS = ("name_jersey", "name", "last_jersey", "jaro_winkler")
+#: ``match_confidence`` per tier: the scores the published ``load_{mbb,wbb}_player_aliases``
+#: table gives the same tiers (``source == "ncaa"``), so the two agree row for row.
+MATCH_CONFIDENCE = {"name_jersey": 1.0, "name": 0.95, "last_jersey": 0.9, "jaro_winkler": 0.85}
 #: Why a row stayed unmatched.
 UNMATCHED_REASONS = ("no_espn_team", "no_espn_players", "ambiguous", "no_candidate")
 #: Jaro-Winkler floor (the R crosswalk engine's default).

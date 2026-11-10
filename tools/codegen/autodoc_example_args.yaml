@@ -355,6 +355,7 @@ mbb:
   fox_mbb_team_stats: {team_id: 27}  # 29 rows x 6 cols
   mbb_team_crosswalk: {season: 2007}  # 362 rows x 21 cols
   mbb_player_crosswalk: {season: 2007}  # 5261 rows x 17 cols
+  ncaa_espn_player_crosswalk: {season: 2024}  # 5670 rows x 12 cols
   ncaa_mbb_game_pbp: {game_id: "6470186"}  # 529 rows x 35 cols
   ncaa_mbb_play_by_play: {game_ids: ["6470186"]}  # 529 rows x 35 cols
   ncaa_mbb_box_scores: {game_ids: ["6470186"]}  # 22 rows x 28 cols
@@ -443,6 +444,7 @@ wbb:
   # ncaa_espn_team_crosswalk is shared with mbb and defaults to league="mbb": without this the
   # wbb schema was captured from the MEN'S table (6006 rows vs the women's 5972).
   ncaa_espn_team_crosswalk: {league: wbb}
+  ncaa_espn_player_crosswalk: {season: 2024, league: wbb}  # 5055 rows x 12 cols
   espn_wbb_game_officials: {game_id: 401724075}
   espn_wbb_game_rosters: {game_id: 401724075}
   espn_wbb_player_stats: {athlete_id: 4706689, season: 2024}

@@ -543,6 +543,77 @@ reject initials-only roster rows).
 
 `(p1, p2)` -- `p1` is the leading initial in a `"A B"`-style string, or the trailing initial in a `"B, A"`-style string; `None` if `name` doesn't fit either 3- or 4-character shape.
 
+### ncaa_espn_player_crosswalk {#ncaa_espn_player_crosswalk}
+
+`ncaa_espn_player_crosswalk(season: 'int', league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id.
+
+One row per NCAA roster player per team for one season, built from published
+releases only: the `ncaa_{league}_team_rosters` roster, resolved to an ESPN
+team through `ncaa_espn_team_crosswalk`, matched against the ESPN
+athletes of that team in `load_{league}_player_boxscore` (each athlete's
+most-worn jersey). Players are compared only inside one ESPN team, in four
+tiers -- normalized name + jersey, name, last name + jersey, then a
+Jaro-Winkler score of at least 0.92 -- and a tier only takes a pair that is
+unique on both sides, so a tie is left unmatched rather than guessed
+(`sportsdataverse.scrape.ncaa.espn_player_xwalk`). Unmatched players
+are kept, with the reason.
+
+stats.ncaa.org issues new team and player ids every season, so a player has
+a different `ncaa_player_id` on each season's row. The multi-season history
+of the same pairs is published as `load_{mbb,wbb}_player_aliases` (rows with
+`source == "ncaa"`), with the same tier names and confidences.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Ending year of the season (`2024` = 2023-24). |
+| `league` | `str` | `'mbb'` | `"mbb"` (men's) or `"wbb"` (women's). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with `season` (Int32), `ncaa_team_id` (Int64), `ncaa_player_id` / `ncaa_player_name` / `ncaa_jersey` (str), `espn_team_id` / `espn_athlete_id` (Int64, nullable), `espn_athlete_name` / `espn_jersey` (str, nullable), `match_method` (`"name_jersey"`, `"name"`, `"last_jersey"`, `"jaro_winkler"`, or null when unmatched), `match_confidence` (Float64: 1.0 / 0.95 / 0.9 / 0.85 by tier, null when unmatched) and `unmatched_reason` (`"no_espn_team"`, `"no_espn_players"`, `"ambiguous"`, `"no_candidate"`, or null when matched). A season with no published roster returns these columns with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Ending year of the season (2024 = 2023-24). |
+| `ncaa_team_id` | Int64 | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
+| `ncaa_player_id` | String | stats.ncaa.org player id (String, as in every ncaa_{mbb,wbb} release); stats.ncaa.org issues new player ids every season, so the same player has a different id on each season's row. |
+| `ncaa_player_name` | String | Player name from the stats.ncaa.org roster (clean_name, "First Last"). |
+| `ncaa_jersey` | String | Jersey as the stats.ncaa.org roster writes it ("0" and "00" differ); null when blank. |
+| `espn_team_id` | Int64 | ESPN team id (Int64) the NCAA team resolves to through ncaa_espn_team_crosswalk for that season; null when the team has no ESPN mapping (unmatched_reason "no_espn_team"). |
+| `espn_athlete_id` | Int64 | ESPN athlete id (Int64) the NCAA player was matched to, among the ESPN athletes of the same team that season; null when unmatched. |
+| `espn_athlete_name` | String | The athlete's display name in the ESPN player box score (the last one seen that season); null when unmatched. |
+| `espn_jersey` | String | The jersey the athlete wore most often for that team that season in the ESPN player box score; null when unmatched or never recorded. |
+| `match_method` | String | Tier that made the match, tried in order inside one ESPN team: "name_jersey" (normalized full name + jersey), "name" (full name alone), "last_jersey" (last name + jersey), "jaro_winkler" (the one ESPN athlete scoring at least 0.92 against the NCAA name); a tier only takes a pair unique on both sides. Null when unmatched. |
+| `match_confidence` | Float64 | Confidence of the tier that made the match: 1.0 name_jersey, 0.95 name, 0.9 last_jersey, 0.85 jaro_winkler (the same scores as the ncaa rows of load_{mbb,wbb}_player_aliases); null when unmatched. |
+| `unmatched_reason` | String | Why the player has no ESPN athlete: "no_espn_team" (the team has no ESPN mapping), "no_espn_players" (no ESPN box-score rows for the team), "ambiguous" (two or more candidates tied, or one athlete claimed by two players), "no_candidate" (no ESPN athlete close enough). Null when matched. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not `"mbb"` or `"wbb"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import ncaa_espn_player_crosswalk
+df = ncaa_espn_player_crosswalk(2024)
+print(df["match_method"].value_counts())
+
+# Women's crosswalk as pandas
+
+wdf = ncaa_espn_player_crosswalk(2024, league="wbb", return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_confidence") >= 0.95).select("ncaa_player_id", "espn_athlete_id")
+```
+
 ### ncaa_espn_team_crosswalk {#ncaa_espn_team_crosswalk}
 
 `ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
