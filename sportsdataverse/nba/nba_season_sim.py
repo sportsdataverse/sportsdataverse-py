@@ -41,8 +41,14 @@ A slot the release already fills is not added again. Any game a team still lacks
 :data:`NBA_SEASON_GAMES` (the Cup schedule unavailable, or a state the Cup does not cover) is
 played against a league-average opponent at a neutral site, counting in its record only.
 
-**Not modelled:** rest, travel, injuries and roster moves (BB-D23); the playoffs past the play-in;
-offseason roster moves beyond what last season's rating and the regression factor carry.
+**Rest and travel** (BB-D23, :mod:`sportsdataverse.nba.nba_rest_travel`). Each scheduled game's
+expected margin gets the fitted effect of the two teams' rest, back-to-backs, three-in-fours,
+travel and time zones crossed, read off the schedule (``margin_adj``). NBA only: the WNBA fit did
+not pass its held-out gate, so WNBA games get none. The play-in, the Cup knockout and the
+league-average fill games are not on the schedule and get none.
+
+**Not modelled:** injuries and roster moves; the playoffs past the play-in; offseason roster
+moves beyond what last season's rating and the regression factor carry.
 """
 
 from __future__ import annotations
@@ -59,6 +65,7 @@ from sportsdataverse._common.team_strength import possession_ridge_ratings
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_cup import CUP_FIRST_SEASON, CupDraws, CupInputs, simulate_cup_draws
+from sportsdataverse.nba.nba_rest_travel import REST_TRAVEL_CONSTANTS, game_rest_travel, rest_travel_margin
 from sportsdataverse.nba.nba_season_rules import (
     NBA_LOTTERY_DRAWS,
     WNBA_LOTTERY_DRAWS,
@@ -159,6 +166,8 @@ SIM_SCHEMA: dict[str, pl.DataType] = {
 }
 
 _GAME_COLS = ("season", "game_id", "home_team_id", "away_team_id", "home_pts", "away_pts", "neutral_site")
+#: :data:`_GAME_COLS` plus the rest-and-travel margin (:func:`_with_rest_travel`), what the sims read.
+_SIM_COLS = (*_GAME_COLS, "margin_adj")
 
 
 @dataclass(frozen=True)
@@ -363,18 +372,23 @@ def _simulate_games(
     played: tuple[np.ndarray, np.ndarray, np.ndarray],
     *,
     neutral: np.ndarray | bool = False,
+    adj: np.ndarray | float = 0.0,
     n_sims: int,
     wnba: bool,
     uncertain: bool,
     rng: np.random.Generator,
 ) -> tuple[np.ndarray, np.ndarray | None, np.ndarray, np.ndarray, np.ndarray]:
-    """``(wins, pair_diff, point_diff, shift, margins)`` per simulated season, the played games included."""
+    """``(wins, pair_diff, point_diff, shift, margins)`` per simulated season, the played games included.
+
+    ``adj`` (points, per game) is added to each game's expected home margin: rest and travel.
+    """
     w0, pd0, pair0 = played
     n_t = net.size
     shift = rng.standard_normal((n_sims, n_t)) * sd if uncertain else np.zeros((n_sims, n_t))
     scale = model.poss / 100.0
     margins = (
         model.margin(net[h], net[a], neutral)
+        + adj
         + (shift[:, h] - shift[:, a]) * scale
         + _noise_sd(model, sd[h], sd[a], uncertain) * rng.standard_normal((n_sims, h.size))
     )
@@ -627,7 +641,9 @@ def simulate_pro_season(
     Args:
         games: One season's regular-season games: ``season``, ``game_id``, ``home_team_id``,
             ``away_team_id`` (Int64), ``home_pts`` / ``away_pts`` (null for a game to simulate), and
-            optionally ``neutral_site`` (no home term; :mod:`sportsdataverse.nba.nba_neutral_site`).
+            optionally ``neutral_site`` (no home term; :mod:`sportsdataverse.nba.nba_neutral_site`)
+            and ``margin_adj`` (points added to the game's expected home margin: rest and travel,
+            :func:`_with_rest_travel`).
         model: The game model (:func:`as_of_game_model`).
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         n_sims: Simulated seasons.
@@ -728,6 +744,7 @@ def _simulate_season(
     h = np.array([index[t] for t in future["home_team_id"].to_list()], dtype=np.int64)
     a = np.array([index[t] for t in future["away_team_id"].to_list()], dtype=np.int64)
     neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False
+    adj = future["margin_adj"].fill_null(0.0).to_numpy() if "margin_adj" in future.columns else 0.0
     wins, pair, point_diff, shift, margins = _simulate_games(
         model,
         net,
@@ -736,6 +753,7 @@ def _simulate_season(
         a,
         played,
         neutral=neutral,
+        adj=adj,
         n_sims=n_sims,
         wnba=league_id == "10",
         uncertain=rating_uncertainty,
@@ -813,6 +831,37 @@ def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None, league_id
     return reg
 
 
+def _with_rest_travel(games: pl.DataFrame, schedule: pl.DataFrame, league_id: str) -> pl.DataFrame:
+    """``games`` with ``margin_adj``: the rest-and-travel points of each game (:mod:`~sportsdataverse.nba.nba_rest_travel`).
+
+    The rest sequence is the schedule's regular-season and Cup games with both teams known, played
+    or not: it uses the dates and sites only, which the schedule fixes before the tip. Zero for a
+    league with no fitted effect, and (with a warning) when a game cannot be placed.
+    """
+    zero = games.with_columns(pl.lit(0.0).alias("margin_adj"))
+    if league_id not in REST_TRAVEL_CONSTANTS or games.height == 0:
+        return zero
+    seq = (
+        schedule.filter(pl.col("season_type").is_in(["regular-season", "nba-cup"]))
+        .select(
+            pl.col("season").cast(pl.Int64),
+            pl.col("game_id").cast(pl.Utf8),
+            pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date(),
+            pl.col("home_team_id").cast(pl.Int64),
+            pl.col("away_team_id").cast(pl.Int64),
+        )
+        .filter((pl.col("home_team_id") > 0) & (pl.col("away_team_id") > 0))
+    )
+    try:
+        diffs = game_rest_travel(seq, league_id)
+    except ValueError as exc:  # a team or site missing from game_sites.csv: no adjustment
+        warnings.warn(f"no rest-and-travel adjustment: {exc}", stacklevel=3)
+        return zero
+    adj = diffs.select("game_id", pl.Series("margin_adj", rest_travel_margin(diffs, league_id), dtype=pl.Float64))
+    assert adj.schema["game_id"] == games.schema["game_id"], "game_id dtype differs across the join"
+    return games.join(adj, on="game_id", how="left", validate="1:1").with_columns(pl.col("margin_adj").fill_null(0.0))
+
+
 def _load_inputs(
     season: int,
     as_of_date: dt.date | None,
@@ -829,7 +878,7 @@ def _load_inputs(
     """
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     schedule = load_schedule([season - offset])
-    games = _regular_games(schedule, as_of_date, league_id)
+    games = _with_rest_travel(_regular_games(schedule, as_of_date, league_id), schedule, league_id)
     done = games.filter(pl.col("home_pts").is_not_null() & pl.col("away_pts").is_not_null())
     possessions = load_possessions([season - offset])
     rows = nba_possession_rate_rows(possessions, schedule, league_id=league_id)
@@ -998,7 +1047,7 @@ def nba_season_sim(
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
     games, model, prior, season_games, cup = _load_inputs(season, as_of_date, league_id, cup_schedule=cup_schedule)
     out = simulate_pro_season(
-        games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
+        games.select(*_SIM_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season")),
         model,
         league_id=league_id,
         n_sims=n_sims,

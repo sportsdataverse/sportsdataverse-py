@@ -1,0 +1,65 @@
+league,kind,team_id,team,first_season,last_season,place,arena,lat,lon,tz,source_url
+nba,home,1610612737,ATL,2018,,Atlanta,State Farm Arena,33.76,-84.40,America/New_York,https://en.wikipedia.org/wiki/State_Farm_Arena
+nba,home,1610612738,BOS,2018,,Boston,TD Garden,42.37,-71.06,America/New_York,https://en.wikipedia.org/wiki/TD_Garden
+nba,home,1610612739,CLE,2018,,Cleveland,Rocket Mortgage FieldHouse,41.50,-81.69,America/New_York,https://en.wikipedia.org/wiki/Rocket_Mortgage_FieldHouse
+nba,home,1610612740,NOP,2018,,New Orleans,Smoothie King Center,29.95,-90.08,America/Chicago,https://en.wikipedia.org/wiki/Smoothie_King_Center
+nba,home,1610612741,CHI,2018,,Chicago,United Center,41.88,-87.67,America/Chicago,https://en.wikipedia.org/wiki/United_Center
+nba,home,1610612742,DAL,2018,,Dallas,American Airlines Center,32.79,-96.81,America/Chicago,https://en.wikipedia.org/wiki/American_Airlines_Center
+nba,home,1610612743,DEN,2018,,Denver,Ball Arena,39.75,-105.01,America/Denver,https://en.wikipedia.org/wiki/Ball_Arena
+nba,home,1610612744,GSW,2018,2019,Oakland,Oracle Arena,37.75,-122.20,America/Los_Angeles,https://en.wikipedia.org/wiki/Oakland_Arena
+nba,home,1610612744,GSW,2020,,San Francisco,Chase Center,37.77,-122.39,America/Los_Angeles,https://en.wikipedia.org/wiki/Chase_Center
+nba,home,1610612745,HOU,2018,,Houston,Toyota Center,29.75,-95.36,America/Chicago,https://en.wikipedia.org/wiki/Toyota_Center
+nba,home,1610612746,LAC,2018,2024,Los Angeles,Crypto.com Arena,34.04,-118.27,America/Los_Angeles,https://en.wikipedia.org/wiki/Crypto.com_Arena
+nba,home,1610612746,LAC,2025,,Inglewood,Intuit Dome,33.94,-118.34,America/Los_Angeles,https://en.wikipedia.org/wiki/Intuit_Dome
+nba,home,1610612747,LAL,2018,,Los Angeles,Crypto.com Arena,34.04,-118.27,America/Los_Angeles,https://en.wikipedia.org/wiki/Crypto.com_Arena
+nba,home,1610612748,MIA,2018,,Miami,Kaseya Center,25.78,-80.19,America/New_York,https://en.wikipedia.org/wiki/Kaseya_Center
+nba,home,1610612749,MIL,2018,2018,Milwaukee,BMO Harris Bradley Center,43.04,-87.92,America/Chicago,https://en.wikipedia.org/wiki/BMO_Harris_Bradley_Center
+nba,home,1610612749,MIL,2019,,Milwaukee,Fiserv Forum,43.05,-87.92,America/Chicago,https://en.wikipedia.org/wiki/Fiserv_Forum
+nba,home,1610612750,MIN,2018,,Minneapolis,Target Center,44.98,-93.28,America/Chicago,https://en.wikipedia.org/wiki/Target_Center
+nba,home,1610612751,BKN,2018,,Brooklyn,Barclays Center,40.68,-73.98,America/New_York,https://en.wikipedia.org/wiki/Barclays_Center
+nba,home,1610612752,NYK,2018,,New York,Madison Square Garden,40.75,-73.99,America/New_York,https://en.wikipedia.org/wiki/Madison_Square_Garden
+nba,home,1610612753,ORL,2018,,Orlando,Kia Center,28.54,-81.38,America/New_York,https://en.wikipedia.org/wiki/Kia_Center
+nba,home,1610612754,IND,2018,,Indianapolis,Gainbridge Fieldhouse,39.76,-86.16,America/Indiana/Indianapolis,https://en.wikipedia.org/wiki/Gainbridge_Fieldhouse
+nba,home,1610612755,PHI,2018,,Philadelphia,Wells Fargo Center,39.90,-75.17,America/New_York,https://en.wikipedia.org/wiki/Wells_Fargo_Center_(Philadelphia)
+nba,home,1610612756,PHX,2018,,Phoenix,Footprint Center,33.45,-112.07,America/Phoenix,https://en.wikipedia.org/wiki/Footprint_Center
+nba,home,1610612757,POR,2018,,Portland,Moda Center,45.53,-122.67,America/Los_Angeles,https://en.wikipedia.org/wiki/Moda_Center
+nba,home,1610612758,SAC,2018,,Sacramento,Golden 1 Center,38.58,-121.50,America/Los_Angeles,https://en.wikipedia.org/wiki/Golden_1_Center
+nba,home,1610612759,SAS,2018,,San Antonio,Frost Bank Center,29.43,-98.44,America/Chicago,https://en.wikipedia.org/wiki/Frost_Bank_Center
+nba,home,1610612760,OKC,2018,,Oklahoma City,Paycom Center,35.46,-97.52,America/Chicago,https://en.wikipedia.org/wiki/Paycom_Center
+nba,home,1610612761,TOR,2018,2020,Toronto,Scotiabank Arena,43.64,-79.38,America/Toronto,https://en.wikipedia.org/wiki/Scotiabank_Arena
+nba,home,1610612761,TOR,2021,2021,Tampa,Amalie Arena,27.94,-82.45,America/New_York,https://en.wikipedia.org/wiki/2020%E2%80%9321_Toronto_Raptors_season
+nba,home,1610612761,TOR,2022,,Toronto,Scotiabank Arena,43.64,-79.38,America/Toronto,https://en.wikipedia.org/wiki/Scotiabank_Arena
+nba,home,1610612762,UTA,2018,,Salt Lake City,Delta Center,40.77,-111.90,America/Denver,https://en.wikipedia.org/wiki/Delta_Center
+nba,home,1610612763,MEM,2018,,Memphis,FedExForum,35.14,-90.05,America/Chicago,https://en.wikipedia.org/wiki/FedExForum
+nba,home,1610612764,WAS,2018,,Washington,Capital One Arena,38.90,-77.02,America/New_York,https://en.wikipedia.org/wiki/Capital_One_Arena
+nba,home,1610612765,DET,2018,,Detroit,Little Caesars Arena,42.34,-83.06,America/Detroit,https://en.wikipedia.org/wiki/Little_Caesars_Arena
+nba,home,1610612766,CHA,2018,,Charlotte,Spectrum Center,35.23,-80.84,America/New_York,https://en.wikipedia.org/wiki/Spectrum_Center_(arena)
+nba,neutral,,,,,Paris,Accor Arena,48.84,2.38,Europe/Paris,https://en.wikipedia.org/wiki/Accor_Arena
+nba,neutral,,,,,Mexico City,Mexico City Arena,19.49,-99.18,America/Mexico_City,https://en.wikipedia.org/wiki/Mexico_City_Arena
+nba,neutral,,,,,Manchester,Co-op Live,53.48,-2.20,Europe/London,https://en.wikipedia.org/wiki/Co-op_Live
+nba,neutral,,,,,Saitama,Saitama Super Arena,35.89,139.63,Asia/Tokyo,https://en.wikipedia.org/wiki/Saitama_Super_Arena
+nba,neutral,,,,,Tokyo,Tokyo Dome,35.71,139.75,Asia/Tokyo,https://en.wikipedia.org/wiki/Tokyo_Dome
+nba,neutral,,,,,Paradise (Las Vegas),T-Mobile Arena,36.10,-115.18,America/Los_Angeles,https://en.wikipedia.org/wiki/T-Mobile_Arena
+nba,neutral,,,,,London,The O2 Arena,51.50,0.00,Europe/London,https://en.wikipedia.org/wiki/The_O2_Arena
+nba,neutral,,,,,Berlin,Uber Arena,52.51,13.44,Europe/Berlin,https://en.wikipedia.org/wiki/Uber_Arena
+nba,bubble,,,2020,2020,Bay Lake,ESPN Wide World of Sports Complex,28.34,-81.56,America/New_York,https://en.wikipedia.org/wiki/2020_NBA_Bubble
+wnba,home,1611661313,NYL,2018,2019,White Plains,Westchester County Center,41.03,-73.77,America/New_York,https://en.wikipedia.org/wiki/Westchester_County_Center
+wnba,home,1611661313,NYL,2020,,Brooklyn,Barclays Center,40.68,-73.98,America/New_York,https://en.wikipedia.org/wiki/Barclays_Center
+wnba,home,1611661317,PHX,2018,,Phoenix,Footprint Center,33.45,-112.07,America/Phoenix,https://en.wikipedia.org/wiki/Footprint_Center
+wnba,home,1611661319,LVA,2018,,Paradise (Las Vegas),Michelob Ultra Arena,36.09,-115.18,America/Los_Angeles,https://en.wikipedia.org/wiki/Michelob_Ultra_Arena
+wnba,home,1611661320,LAS,2018,,Los Angeles,Crypto.com Arena,34.04,-118.27,America/Los_Angeles,https://en.wikipedia.org/wiki/Crypto.com_Arena
+wnba,home,1611661321,DAL,2018,,Arlington,College Park Center,32.73,-97.11,America/Chicago,https://en.wikipedia.org/wiki/College_Park_Center
+wnba,home,1611661322,WAS,2018,2018,Washington,Capital One Arena,38.90,-77.02,America/New_York,https://en.wikipedia.org/wiki/Capital_One_Arena
+wnba,home,1611661322,WAS,2019,,Washington,CareFirst Arena,38.84,-76.99,America/New_York,https://en.wikipedia.org/wiki/CareFirst_Arena
+wnba,home,1611661323,CON,2018,,Uncasville,Mohegan Sun Arena,41.49,-72.09,America/New_York,https://en.wikipedia.org/wiki/Mohegan_Sun_Arena
+wnba,home,1611661324,MIN,2018,,Minneapolis,Target Center,44.98,-93.28,America/Chicago,https://en.wikipedia.org/wiki/Target_Center
+wnba,home,1611661325,IND,2018,,Indianapolis,Gainbridge Fieldhouse,39.76,-86.16,America/Indiana/Indianapolis,https://en.wikipedia.org/wiki/Gainbridge_Fieldhouse
+wnba,home,1611661327,PDX,2026,,Portland,Moda Center,45.53,-122.67,America/Los_Angeles,https://en.wikipedia.org/wiki/Moda_Center
+wnba,home,1611661328,SEA,2018,,Seattle,Climate Pledge Arena,47.62,-122.35,America/Los_Angeles,https://en.wikipedia.org/wiki/Climate_Pledge_Arena
+wnba,home,1611661329,CHI,2018,,Chicago,Wintrust Arena,41.85,-87.62,America/Chicago,https://en.wikipedia.org/wiki/Wintrust_Arena
+wnba,home,1611661330,ATL,2018,2019,Atlanta,McCamish Pavilion,33.78,-84.39,America/New_York,https://en.wikipedia.org/wiki/McCamish_Pavilion
+wnba,home,1611661330,ATL,2020,,College Park,Gateway Center Arena,33.65,-84.45,America/New_York,https://en.wikipedia.org/wiki/Gateway_Center_Arena
+wnba,home,1611661331,GSV,2025,,San Francisco,Chase Center,37.77,-122.39,America/Los_Angeles,https://en.wikipedia.org/wiki/Chase_Center
+wnba,home,1611661332,TOR,2026,,Toronto,Coca-Cola Coliseum,43.64,-79.42,America/Toronto,https://en.wikipedia.org/wiki/Coca-Cola_Coliseum
+wnba,neutral,,,,,Vancouver,Rogers Arena,49.28,-123.11,America/Vancouver,https://en.wikipedia.org/wiki/Rogers_Arena
+wnba,bubble,,,2020,2020,Bradenton,IMG Academy,27.46,-82.58,America/New_York,https://en.wikipedia.org/wiki/2020_WNBA_season

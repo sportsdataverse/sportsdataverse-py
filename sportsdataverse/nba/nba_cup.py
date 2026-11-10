@@ -936,12 +936,12 @@ def nba_cup_sim(
         * :func:`sportsdataverse.nba.nba_season_sim.nba_season_sim` -- the season sim
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
     """
-    from sportsdataverse.nba.nba_season_sim import _GAME_COLS, _load_inputs
+    from sportsdataverse.nba.nba_season_sim import _SIM_COLS, _load_inputs
 
     if season < CUP_FIRST_SEASON:
         raise ValueError(f"the first NBA Cup is season {CUP_FIRST_SEASON} (2023-24), got {season}")
     games, model, _, _, cup = _load_inputs(season, as_of_date, "00", cup_schedule=cup_schedule, cup="always")
     assert cup is not None
-    games = games.select(*_GAME_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
+    games = games.select(*_SIM_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
     out = simulate_cup(games, cup, model, n_sims=n_sims, seed=seed, as_of_date=as_of_date)
     return out.to_pandas() if return_as_pandas else out
