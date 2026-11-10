@@ -53,7 +53,7 @@ FEATURES = ("b2b", "three_in_four", "rest_days", "travel", "tz_shift")
 
 #: league_id -> one coefficient per :data:`FEATURES`, in points of home margin per unit of
 #: home-minus-away difference (``travel`` per 1000 km). Fit by ``tools/fit_rest_travel.py``
-#: (2026-11-10; result JSON in ClaudeCowork ``data/2026-11-10-bb-d23-rest-travel/``): OLS with no
+#: (2026-11-10; its result JSON is kept with the roadmap notes): OLS with no
 #: intercept of the residual of the season sim's game model (the as-of ridge with the preseason
 #: prior, weekly cutoffs), one row per game at its latest cutoff. Walk-forward: each holdout season
 #: is scored with the fit on the seasons before it only, on every (cutoff, game) pair. The gate,

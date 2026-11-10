@@ -59,7 +59,7 @@ from __future__ import annotations
 import datetime as dt
 import warnings
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, overload
+from typing import TYPE_CHECKING, Literal, TypedDict, overload
 
 import numpy as np
 import polars as pl
@@ -705,6 +705,20 @@ def _cup_columns(cup: CupInputs, future: pl.DataFrame, teams: list[int], h: np.n
     return cols
 
 
+class _GameTerms(TypedDict):
+    neutral: np.ndarray | bool
+    adj: np.ndarray | float
+
+
+def _game_terms(future: pl.DataFrame) -> _GameTerms:
+    """``neutral`` (no home term) and ``adj`` (rest-and-travel points) of the games to simulate."""
+    cols = future.columns
+    return _GameTerms(
+        neutral=future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in cols else False,
+        adj=future["margin_adj"].fill_null(0.0).to_numpy() if "margin_adj" in cols else 0.0,
+    )
+
+
 def _simulate_season(
     games: pl.DataFrame,
     model: GameModel,
@@ -746,8 +760,6 @@ def _simulate_season(
     sd = np.minimum(sd, np.sqrt(0.375) * model.margin_sd / (model.poss / 100.0))
     h = np.array([index[t] for t in future["home_team_id"].to_list()], dtype=np.int64)
     a = np.array([index[t] for t in future["away_team_id"].to_list()], dtype=np.int64)
-    neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False
-    adj = future["margin_adj"].fill_null(0.0).to_numpy() if "margin_adj" in future.columns else 0.0
     wins, pair, point_diff, shift, margins = _simulate_games(
         model,
         net,
@@ -755,8 +767,7 @@ def _simulate_season(
         h,
         a,
         played,
-        neutral=neutral,
-        adj=adj,
+        **_game_terms(future),
         n_sims=n_sims,
         wnba=league_id == "10",
         uncertain=rating_uncertainty,
