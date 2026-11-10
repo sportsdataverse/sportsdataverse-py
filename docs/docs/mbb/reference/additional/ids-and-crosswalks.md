@@ -545,7 +545,7 @@ reject initials-only roster rows).
 
 ### ncaa_espn_player_crosswalk {#ncaa_espn_player_crosswalk}
 
-`ncaa_espn_player_crosswalk(season: 'int', league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_espn_player_crosswalk(season: 'int', league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id.
 

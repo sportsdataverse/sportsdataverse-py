@@ -153,7 +153,7 @@ def ncaa_espn_team_crosswalk(
 
 #: One dtype per id: NCAA team ids Int64 (as in the team crosswalk), NCAA player ids Utf8 (as in
 #: every ``load_ncaa_{mbb,wbb}_*`` release), ESPN ids Int64 (as everywhere in sdv-py).
-_PLAYER_SCHEMA: Dict[str, pl.DataType] = {
+_PLAYER_SCHEMA: dict[str, pl.DataType] = {
     "season": pl.Int32,
     "ncaa_team_id": pl.Int64,
     "ncaa_player_id": pl.Utf8,
@@ -178,7 +178,7 @@ def _ncaa_rosters(league: str, season: int) -> pl.DataFrame:
     return load(seasons=season)
 
 
-def _join(left: pl.DataFrame, right: pl.DataFrame, on: list) -> pl.DataFrame:
+def _join(left: pl.DataFrame, right: pl.DataFrame, on: list[str]) -> pl.DataFrame:
     """Left join that refuses mismatched key dtypes instead of matching nothing."""
     for key in on:
         assert left.schema[key] == right.schema[key], f"join key {key}: {left.schema[key]} != {right.schema[key]}"
@@ -187,7 +187,7 @@ def _join(left: pl.DataFrame, right: pl.DataFrame, on: list) -> pl.DataFrame:
 
 def ncaa_espn_player_crosswalk(
     season: int, league: str = "mbb", *, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+) -> pl.DataFrame | pd.DataFrame:
     """Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id.
 
     One row per NCAA roster player per team for one season, built from published
@@ -250,13 +250,17 @@ def ncaa_espn_player_crosswalk(
     """
     if league not in _LEAGUE_PKG:
         raise ValueError(f"league must be one of {sorted(_LEAGUE_PKG)}, got {league!r}")
+    out = _build_player_crosswalk(league, int(season))
+    return _pandas_ids(out) if return_as_pandas else out
+
+
+def _build_player_crosswalk(league: str, season: int) -> pl.DataFrame:
+    """The :func:`ncaa_espn_player_crosswalk` frame (polars) for one validated league-season."""
     from sportsdataverse.scrape.ncaa import espn_player_xwalk as px
 
-    season = int(season)
     roster = _ncaa_rosters(league, season)
     if roster.height == 0:
-        out = pl.DataFrame(schema=_PLAYER_SCHEMA)
-        return _pandas_ids(out) if return_as_pandas else out
+        return pl.DataFrame(schema=_PLAYER_SCHEMA)
     label = f"{season - 1}-{season % 100:02d}"
     teams = (
         ncaa_espn_team_crosswalk(league)
@@ -292,13 +296,12 @@ def ncaa_espn_player_crosswalk(
     out = pairs.with_columns(pl.col("ncaa_team_id", "espn_team_id", "espn_athlete_id").cast(pl.Int64))
     out = _join(out, names_ncaa, ["ncaa_team_id", "ncaa_player_id"])
     out = _join(out, names_espn, ["espn_team_id", "espn_athlete_id"])
-    out = out.with_columns(
+    return out.with_columns(
         pl.lit(season, dtype=pl.Int32).alias("season"),
         pl.col("match_method")
         .replace_strict(px.MATCH_CONFIDENCE, default=None, return_dtype=pl.Float64)
         .alias("match_confidence"),
     ).select([pl.col(c).cast(t) for c, t in _PLAYER_SCHEMA.items()])
-    return _pandas_ids(out) if return_as_pandas else out
 
 
 __all__ = ["ncaa_espn_player_crosswalk", "ncaa_espn_team_crosswalk"]
