@@ -221,10 +221,11 @@ def ncaa_espn_player_crosswalk(
         (Float64: 1.0 / 0.95 / 0.9 / 0.85 by tier, null when unmatched) and
         ``unmatched_reason`` (``"no_espn_team"``, ``"no_espn_players"``,
         ``"ambiguous"``, ``"no_candidate"``, or null when matched). A season
-        with no published roster returns these columns with zero rows.
+        with no published roster (2010 onward) returns these columns with zero rows.
 
     Raises:
         ValueError: If *league* is not ``"mbb"`` or ``"wbb"``.
+        SeasonNotFoundError: If *season* is before 2010 (the first NCAA roster release).
 
     Example:
         Quick start::

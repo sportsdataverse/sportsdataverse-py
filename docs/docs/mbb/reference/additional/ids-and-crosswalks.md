@@ -575,7 +575,7 @@ of the same pairs is published as `load_{mbb,wbb}_player_aliases` (rows with
 
 **Returns**
 
-DataFrame with `season` (Int32), `ncaa_team_id` (Int64), `ncaa_player_id` / `ncaa_player_name` / `ncaa_jersey` (str), `espn_team_id` / `espn_athlete_id` (Int64, nullable), `espn_athlete_name` / `espn_jersey` (str, nullable), `match_method` (`"name_jersey"`, `"name"`, `"last_jersey"`, `"jaro_winkler"`, or null when unmatched), `match_confidence` (Float64: 1.0 / 0.95 / 0.9 / 0.85 by tier, null when unmatched) and `unmatched_reason` (`"no_espn_team"`, `"no_espn_players"`, `"ambiguous"`, `"no_candidate"`, or null when matched). A season with no published roster returns these columns with zero rows.
+DataFrame with `season` (Int32), `ncaa_team_id` (Int64), `ncaa_player_id` / `ncaa_player_name` / `ncaa_jersey` (str), `espn_team_id` / `espn_athlete_id` (Int64, nullable), `espn_athlete_name` / `espn_jersey` (str, nullable), `match_method` (`"name_jersey"`, `"name"`, `"last_jersey"`, `"jaro_winkler"`, or null when unmatched), `match_confidence` (Float64: 1.0 / 0.95 / 0.9 / 0.85 by tier, null when unmatched) and `unmatched_reason` (`"no_espn_team"`, `"no_espn_players"`, `"ambiguous"`, `"no_candidate"`, or null when matched). A season with no published roster (2010 onward) returns these columns with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -590,13 +590,14 @@ DataFrame with `season` (Int32), `ncaa_team_id` (Int64), `ncaa_player_id` / `nca
 | `espn_jersey` | String | The jersey the athlete wore most often for that team that season in the ESPN player box score; null when unmatched or never recorded. |
 | `match_method` | String | Tier that made the match, tried in order inside one ESPN team: "name_jersey" (normalized full name + jersey), "name" (full name alone), "last_jersey" (last name + jersey), "jaro_winkler" (the one ESPN athlete scoring at least 0.92 against the NCAA name); a tier only takes a pair unique on both sides. Null when unmatched. |
 | `match_confidence` | Float64 | Confidence of the tier that made the match: 1.0 name_jersey, 0.95 name, 0.9 last_jersey, 0.85 jaro_winkler (the same scores as the ncaa rows of load_{mbb,wbb}_player_aliases); null when unmatched. |
-| `unmatched_reason` | String | Why the player has no ESPN athlete: "no_espn_team" (the team has no ESPN mapping), "no_espn_players" (no ESPN box-score rows for the team), "ambiguous" (two or more candidates tied, or one athlete claimed by two players), "no_candidate" (no ESPN athlete close enough). Null when matched. |
+| `unmatched_reason` | String | Why the player has no ESPN athlete: "no_espn_team" (the team has no ESPN mapping), "no_espn_players" (no ESPN box-score rows for the team), "ambiguous" (two or more eligible candidates: a shared tier key, or more than one Jaro-Winkler score at or above 0.92 even when the scores differ; or one athlete claimed by two players), "no_candidate" (no ESPN athlete close enough). Null when matched. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
 | `ValueError` | If *league* is not `"mbb"` or `"wbb"`. |
+| `SeasonNotFoundError` | If *season* is before 2010 (the first NCAA roster release). |
 
 **Example**
 

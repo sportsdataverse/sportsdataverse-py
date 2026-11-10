@@ -86,7 +86,7 @@ def test_agrees_with_published_player_aliases(offline):
 
 def test_missing_season_returns_documented_empty_frame(monkeypatch):
     monkeypatch.setattr(xw, "_ncaa_rosters", lambda lg, season: pl.DataFrame())
-    df = ncaa_espn_player_crosswalk(2009, "wbb")
+    df = ncaa_espn_player_crosswalk(2011, "wbb")
     assert df.height == 0 and dict(df.schema) == xw._PLAYER_SCHEMA
 
 

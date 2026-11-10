@@ -50505,7 +50505,8 @@ ncaa_espn_player_crosswalk:
     has a different id on each season row.
   season: Ending year of the season (2024 = 2023-24).
   unmatched_reason: 'Why the player has no ESPN athlete: "no_espn_team" (the team has no ESPN mapping), "no_espn_players" (no
-    ESPN box-score rows for the team), "ambiguous" (two or more candidates tied, or one athlete claimed by two players), "no_candidate"
+    ESPN box-score rows for the team), "ambiguous" (two or more eligible candidates: a shared tier key, or more than one
+    Jaro-Winkler score at or above 0.92 even when the scores differ; or one athlete claimed by two players), "no_candidate"
     (no ESPN athlete close enough). Null when matched.'
 ncaa_espn_team_crosswalk:
   conference_id: SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the
