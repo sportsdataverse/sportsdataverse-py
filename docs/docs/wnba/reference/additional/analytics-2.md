@@ -244,8 +244,8 @@ One row per `(season, official)`: `season`, `official_id` (Int64), `official_nam
 | `fta_per_game_n` | Int64 | Games with a two-team box behind fta_per_game. |
 | `pace` | Float64 | Possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per regulation length (48 minutes NBA, 40 otherwise), over the games' minutes including overtime. |
 | `pace_n` | Int64 | Games with a box possession estimate and a known last period behind pace. |
-| `home_win_pct` | Float64 | Share of the official's non-neutral-site games the home team won. |
-| `home_win_pct_n` | Int64 | Non-neutral-site games behind home_win_pct. |
+| `home_win_pct` | Float64 | Share of the official's non-neutral-site games with a recorded winner that the home team won. |
+| `home_win_pct_n` | Int64 | Non-neutral-site games with a recorded home winner behind home_win_pct. |
 | `home_minus_away_fouls` | Float64 | Home team's fouls minus the away team's, per non-neutral-site game. |
 | `home_minus_away_fouls_n` | Int64 | Non-neutral-site games with a two-team box behind home_minus_away_fouls. |
 
