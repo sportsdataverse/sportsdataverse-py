@@ -37,7 +37,7 @@ or in the short midrange.
 
 **Zones** reuse the season profile's classifiers (BB-D35) on the play coordinates. The pros use
 :func:`~sportsdataverse.nba.nba_shot_zones.add_shot_zones`: ``rim`` the restricted area (under 4
-ft), ``short_mid`` the rest of the paint (under 8 ft, within 8 ft of the rim's line),
+ft), ``short_mid`` 4 to under 8 ft and within 8 ft of the hoop to either side,
 ``midrange`` any other two, ``corner3`` a three in the band below the break (also 22 ft out for
 the NBA) and ``above_break3`` any other three. College uses the NCAA shot chart's geometry
 (:func:`~sportsdataverse.mbb.mbb_shot_quality_constants.get_constants`): ``rim`` within 4 ft,
@@ -160,6 +160,10 @@ TEAM_EXPECTED_SCHEMA: dict[str, pl.DataType] = {
     "unlocated_fga": pl.Int64,
     "unlocated_fgm": pl.Int64,
 }
+#: The columns that need the league's cells (null without them).
+_EXPECTED_COLS: tuple[str, ...] = tuple(
+    c for c in TEAM_EXPECTED_SCHEMA if c.startswith("x") or c.endswith(("_poe", "_xppp", "poe_per_shot")) or c == "poe"
+)
 
 
 def _cell_keys(shots: pl.DataFrame) -> pl.DataFrame:
@@ -456,4 +460,6 @@ def team_game_expected(
     )
     # each row's opponent is the other row: a two-row reverse
     out = out.with_columns(pl.col("ortg").reverse().alias("drtg"), pl.col("xortg").reverse().alias("xdrtg"))
+    if cells is None:  # an empty zone or situation would otherwise read 0 - 0.0 = 0.0 over expected
+        out = out.with_columns(pl.lit(None, pl.Float64).alias(c) for c in _EXPECTED_COLS)
     return out.select([pl.col(c).cast(t) for c, t in TEAM_EXPECTED_SCHEMA.items()])

@@ -167,7 +167,8 @@ def test_zones_and_situations_add_up(monkeypatch: pytest.MonkeyPatch, lg: str, p
     for sit in ge.SITUATIONS:
         assert (e[f"{sit}_poss"] <= e["possessions"]).all()
     # without the league's cells every expected column is null, the counts are not
-    assert e["xfg_pts"].is_null().all() and e["rim_xppp"].is_null().all() and e["xdrtg"].is_null().all()
+    for c in ge._EXPECTED_COLS:
+        assert e[c].is_null().all(), c
     assert e["efg_pct"].is_not_null().all() and e["ortg"].is_not_null().all()
     if (e["unlocated_fga"] < e["fga"]).any():  # captures with play coordinates
         assert e["rim_fga"].sum() > 0 and e["above_break3_fga"].sum() > 0 and e["midrange_fga"].sum() > 0

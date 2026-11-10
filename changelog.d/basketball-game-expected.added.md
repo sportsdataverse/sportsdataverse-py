@@ -1,5 +1,4 @@
-- **NBA / WNBA / MBB / WBB:** `team_game_expected` (BB-D40) puts the shot-quality model's expected points
-  on every ESPN field-goal attempt and adds them up by situation (second chance, off turnover, fast
-  break, paint) and zone (rim, short midrange, midrange, corner and above-the-break threes), with xTS%
-  and the expected offensive and defensive ratings; `shot_cells` / `shot_xfg` port the per-shot
-  expectation, and `game_page_frames(..., shot_cells=)` serves it live.
+- **NBA / WNBA / MBB / WBB:** `team_game_expected` (BB-D40) adds up the shot-quality model's expected points over the
+  ESPN plays by situation (second chance, off turnover, fast break, paint) and zone, with xTS% and expected ratings;
+  `game_page_frames(..., shot_cells=)` serves it live. (#1161)
+- **NBA / WNBA / MBB / WBB:** `shot_cells` / `shot_xfg` port BB-D9's per-shot expectation, as of the game date. (#1161)

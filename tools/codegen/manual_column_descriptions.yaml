@@ -50524,7 +50524,7 @@ team_game_expected:
   rim_efg_pct: 'Effective field-goal percentage at the rim: points / (2 * attempts).'
   rim_xppp: 'Expected points per attempt at the rim.'
   rim_poe: 'Field-goal points over expected at the rim.'
-  short_mid_fga: 'Field-goal attempts in the short midrange (pros: the rest of the paint; college: 4 to 15 ft).'
+  short_mid_fga: 'Field-goal attempts in the short midrange (pros: 4 to under 8 ft and within 8 ft of the hoop to either side; college: 4 to 15 ft).'
   short_mid_fgm: 'Field goals made in the short midrange.'
   short_mid_efg_pct: 'Effective field-goal percentage in the short midrange: points / (2 * attempts).'
   short_mid_xppp: 'Expected points per attempt in the short midrange.'
