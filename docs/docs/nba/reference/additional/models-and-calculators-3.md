@@ -8,24 +8,29 @@ description: "NBA — additional Python functions — Models and calculators: nb
 
 ### nba_reml_rapm {#nba_reml_rapm}
 
-`nba_reml_rapm(possessions: 'pl.DataFrame', prior: 'dict[int, tuple[float, float]]', *, lambdas: 'tuple[float, float] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_reml_rapm(possessions: 'pl.DataFrame', prior: 'dict[int, tuple[float, float]]', *, penalty: 'str' = 'fixed', lambdas: 'tuple[float, float] | None' = None, league_id: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Season impact rating: RAPM shrunk toward a box prior, offense and defense penalties chosen by REML.
+Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML.
 
 The posterior mean of a prior-informed RAPM (the same design and sign convention as
-`~sportsdataverse.nba.nba_rapm.nba_rapm` and `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm`)
-whose two ridge penalties, one for offense and one for defense, are chosen per call by restricted
-maximum likelihood (`fit_reml_prior_ridge`) instead of a frozen league constant. The prior is
-used as given (no scale multiplier): REML's penalty is the ratio of the per-possession noise to how far
-players sit from their prior, so a weak prior earns a small penalty and a sharp one a large one.
+`~sportsdataverse.nba.nba_rapm.nba_rapm` and `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm`).
+The prior is used as given (no scale multiplier). Two penalty rules:
 
-Measured by `tools/fit_box_prior_v2.py` on NBA regular seasons 1998-2026 with the v2 box prior, it
-beats today's `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm` on held-out games (0.73 bp of
-MSE, SE 0.17, 22 of 29 seasons) and after a mid-season cut date (2006-2026: 1.03 bp, SE 0.49). REML
-puts 90% of the weight on the prior on offense and 81% on defense (possession-weighted; offense reaches
-the upper penalty bound in 2018, 2019 and 2023). The same prior at `nba_adj_rapm`'s frozen penalty,
-`lambdas=(ADJ_RAPM_PENALTY["00"],) * 2`, scored better still on held-out games (0.91 bp over the REML
-pick, SE 0.14, 27 of 29 seasons), so REML is the requested rule here, not the best-scoring one.
+* `penalty="fixed"` (the default): the league's adjusted-RAPM penalty,
+  `~sportsdataverse.nba.nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728), on offense and defense.
+* `penalty="reml"`: one offense and one defense penalty chosen per call by restricted maximum
+  likelihood (`fit_reml_prior_ridge`). REML's penalty is the ratio of the per-possession noise to
+  how far players sit from their prior; with the v2 box prior it puts 90% of the weight on the prior on
+  offense and 81% on defense (possession-weighted), and offense reaches the upper bound in 2018, 2019
+  and 2023.
+
+Why fixed is the default: measured by `tools/fit_box_prior_v2.py` on NBA regular seasons 1998-2026
+with the v2 box prior, against today's `~sportsdataverse.nba.nba_adj_rapm.nba_adj_rapm` on the
+same held-out possessions, the fixed rule lowers the error by 1.64 bp of MSE (SE 0.10, better in all 29
+seasons) and by 1.43 bp after a mid-season cut date (2006-2026, SE 0.29, 17 of 21); REML by 0.73
+(SE 0.17, 22 of 29) and 1.03 (SE 0.49, 14 of 21). Head to head the fixed rule beats the REML pick by
+0.91 bp on held-out games (SE 0.14, 27 of 29 seasons). The 3,728 was cross-validated on these seasons for
+the previous-season SPM prior, not this one, so refitting it for the v2 prior is open.
 
 Built for the box prior of `sportsdataverse.nba.nba_box_prior` (`o_prior` / `d_prior` of
 `~sportsdataverse.nba.nba_box_prior.apply_box_prior`), but any per-100 `(o, d)` prior works.
@@ -36,7 +41,9 @@ Built for the box prior of `sportsdataverse.nba.nba_box_prior` (`o_prior` / `d_p
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | A possession+lineup frame (`points`, `off_player_1..5`, `def_player_1..5`). |
 | `prior` | `dict[int, tuple[float, float]]` |  | `{player_id: (o_prior, d_prior)}` per 100 possessions (`d` positive = good defense). A player absent from it gets `(0, 0)`: a league-average prior. |
-| `lambdas` | `tuple[float, float] \| None` | `None` | `(lambda_o, lambda_d)` to fit at instead of the REML choice. |
+| `penalty` | `str` | `'fixed'` | `"fixed"` (the league's adjusted-RAPM penalty) or `"reml"` (chosen per call). |
+| `lambdas` | `tuple[float, float] \| None` | `None` | `(lambda_o, lambda_d)` to fit at; overrides `penalty`. |
+| `league_id` | `str \| None` | `None` | `"00"`, `"10"` or `"20"`: the league whose fixed penalty is used. `None` reads it from the `game_id` prefix (NBA without one). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**
@@ -46,8 +53,8 @@ One row per player, columns `REML_RAPM_SCHEMA`: `o_reml_rapm` / `d_reml_rapm` / 
 | col_name | type | description |
 |---|---|---|
 | `player_id` | Int64 | NBA stats person id. |
-| `o_reml_rapm` | Float64 | Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (chosen by REML unless lambdas= was passed). |
-| `d_reml_rapm` | Float64 | Defensive season impact per 100 (positive = good defense) at lambda_d (chosen by REML unless lambdas= was passed). |
+| `o_reml_rapm` | Float64 | Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given). |
+| `d_reml_rapm` | Float64 | Defensive season impact per 100 (positive = good defense) at lambda_d (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given). |
 | `reml_rapm` | Float64 | o_reml_rapm + d_reml_rapm. |
 | `o_box_prior` | Float64 | The offensive prior the rating shrank toward (per 100; the box prior v2 when built by tools/fit_box_prior_v2.py). |
 | `d_box_prior` | Float64 | The defensive prior the rating shrank toward (per 100, positive = good defense). |
@@ -55,15 +62,22 @@ One row per player, columns `REML_RAPM_SCHEMA`: `o_reml_rapm` / `d_reml_rapm` / 
 | `d_prior_weight` | Float64 | Weight of the player's own defensive prior in his posterior mean, 0 to 1. |
 | `off_poss` | Int64 | Offensive possessions in the fit. |
 | `def_poss` | Int64 | Defensive possessions in the fit. |
-| `lambda_o` | Float64 | Offense penalty the fit used (points-per-possession scale; chosen by REML unless lambdas= was passed; the same on every row). |
-| `lambda_d` | Float64 | Defense penalty the fit used (chosen by REML unless lambdas= was passed; the same on every row). |
+| `lambda_o` | Float64 | Offense penalty the fit used (points-per-possession scale; ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row). |
+| `lambda_d` | Float64 | Defense penalty the fit used (ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `penalty` is not `"fixed"` or `"reml"`. |
 
 **Example**
 
 ```python
 from sportsdataverse.nba import nba_reml_rapm
 prior = {r["player_id"]: (r["o_prior"], r["d_prior"]) for r in priors.iter_rows(named=True)}
-rating = nba_reml_rapm(possessions, prior)
+rating = nba_reml_rapm(possessions, prior)  # fixed penalty
+by_reml = nba_reml_rapm(possessions, prior, penalty="reml")
 print(rating.sort("reml_rapm", descending=True).head())
 ```
 

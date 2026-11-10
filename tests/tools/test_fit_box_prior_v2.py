@@ -54,6 +54,15 @@ def test_the_gate_covers_every_season_split_and_method(gate) -> None:
     assert gate.group_by("season", "split").agg(pl.col("n").n_unique())["n"].max() == 1
 
 
+def test_the_default_fixed_penalty_beats_todays_adjusted_rapm(gate) -> None:
+    """The shipped default (v2 prior at the fixed penalty). Observed: held-out +1.638 bp (SE 0.104), all 29
+    seasons; chronological 2006-2026 +1.428 (SE 0.287), 17 of 21."""
+    d = _paired(gate, pl.col("split").str.starts_with("fold"), "v2_fixed")
+    assert d.size == 29 and d.mean() > 1.2 and d.mean() / (d.std(ddof=1) / np.sqrt(d.size)) > 8 and (d > 0).sum() >= 27
+    c = _paired(gate.filter(pl.col("season") >= 2006), pl.col("split") == "chrono", "v2_fixed")
+    assert c.size == 21 and c.mean() > 1.0 and c.mean() / (c.std(ddof=1) / np.sqrt(c.size)) > 3 and (c > 0).sum() >= 15
+
+
 def test_v2_beats_todays_adjusted_rapm_on_held_out_games(gate) -> None:
     """Observed: +0.728 bp (SE 0.165, t 4.4), better in 22 of 29 seasons."""
     d = _paired(gate, pl.col("split").str.starts_with("fold"), "v2")
@@ -103,12 +112,12 @@ def test_reml_weights_the_prior_heavily_and_offense_more(report) -> None:
 
 
 def test_the_fixed_penalty_beats_the_reml_pick(gate, report) -> None:
-    """The gate's own evidence against REML as the penalty rule (kept: the owner's spec; see the changelog).
+    """Why ``nba_reml_rapm`` defaults to the fixed penalty (owner decision 2026-11-10); REML is ``penalty="reml"``.
 
     v2 at nba_adj_rapm's frozen penalty minus v2 at the REML pick, held-out games: +0.911 bp (SE 0.136),
     fixed better in 27 of 29 seasons; chronological +0.623 (SE 0.285), 17 of 29. The frozen penalty was
-    cross-validated on these seasons for another prior, so its edge is somewhat optimistic. If a refit
-    flips this, update the docs that cite it.
+    cross-validated on these seasons for another prior, so its edge is somewhat optimistic; refitting it for
+    the v2 prior is a follow-up. If a refit flips this, revisit the default and the docs that cite it.
     """
     d = -_paired(gate, pl.col("split").str.starts_with("fold"), "v2") + _paired(
         gate, pl.col("split").str.starts_with("fold"), "v2_fixed"

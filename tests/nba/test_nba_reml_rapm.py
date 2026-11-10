@@ -12,7 +12,7 @@ import numpy as np
 import polars as pl
 import pytest
 
-from sportsdataverse.nba.nba_adj_rapm import nba_adj_rapm
+from sportsdataverse.nba.nba_adj_rapm import ADJ_RAPM_PENALTY, nba_adj_rapm
 from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design
 from sportsdataverse.nba.nba_reml_rapm import (
     REML_PENALTY_BOUNDS,
@@ -46,13 +46,25 @@ def test_fixed_penalties_are_nba_adj_rapm(poss, prior) -> None:
     assert (j["d_adj_rapm"] - j["d_reml_rapm"]).abs().max() < 1e-9
 
 
+def test_the_default_is_the_fixed_league_penalty(poss, prior) -> None:
+    """Fixed is the default (owner decision 2026-11-10, from the gate: tests/tools/test_fit_box_prior_v2.py)."""
+    d = nba_reml_rapm(poss, prior)
+    f = nba_reml_rapm(poss, prior, lambdas=(ADJ_RAPM_PENALTY["00"],) * 2)
+    r = nba_reml_rapm(poss, prior, penalty="reml")
+    assert d.equals(f)
+    assert d["lambda_o"][0] == pytest.approx(ADJ_RAPM_PENALTY["00"]) == d["lambda_d"][0]
+    assert not d.equals(r) and r["lambda_o"][0] != ADJ_RAPM_PENALTY["00"]
+    with pytest.raises(ValueError, match="penalty"):
+        nba_reml_rapm(poss, prior, penalty="cv")
+
+
 def test_zero_prior_reml_lands_near_the_cv_frozen_penalty(poss) -> None:
     """With no prior, REML's offense penalty is the order of the game-grouped CV one (#1121).
 
     Observed: 2,343 on this 100-game slice (2,793 on the full 2023-24 season) against
     RAPM_PENALTY["00"] = 2,683. Never widen the band to make it pass.
     """
-    r = nba_reml_rapm(poss, {})
+    r = nba_reml_rapm(poss, {}, penalty="reml")
     assert 0.6 * RAPM_PENALTY["00"] < r["lambda_o"][0] < 1.5 * RAPM_PENALTY["00"]
 
 

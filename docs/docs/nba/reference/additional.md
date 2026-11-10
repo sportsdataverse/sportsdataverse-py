@@ -211,7 +211,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_impact_context](additional/models-and-calculators-2.md#nba_player_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `player_impact` table. |
 | [nba_player_impact_league_averages](additional/models-and-calculators-2.md#nba_player_impact_league_averages) | The league-average rows of a `player_impact` table, one block per season type. |
 | [nba_predict_games](additional/models-and-calculators-2.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
-| [nba_reml_rapm](additional/models-and-calculators-3.md#nba_reml_rapm) | Season impact rating: RAPM shrunk toward a box prior, offense and defense penalties chosen by REML. |
+| [nba_reml_rapm](additional/models-and-calculators-3.md#nba_reml_rapm) | Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML. |
 | [nba_rookie_projection](additional/models-and-calculators-3.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
 | [nba_spm](additional/models-and-calculators-3.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
 | [nba_team_ratings](additional/models-and-calculators-3.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |

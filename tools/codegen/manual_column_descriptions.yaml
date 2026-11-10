@@ -80480,8 +80480,8 @@ apply_box_prior:
   box_prior: 'o_prior + d_prior.'
 nba_reml_rapm:
   player_id: 'NBA stats person id.'
-  o_reml_rapm: 'Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (chosen by REML unless lambdas= was passed).'
-  d_reml_rapm: 'Defensive season impact per 100 (positive = good defense) at lambda_d (chosen by REML unless lambdas= was passed).'
+  o_reml_rapm: 'Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given).'
+  d_reml_rapm: 'Defensive season impact per 100 (positive = good defense) at lambda_d (the league fixed penalty by default, REML with penalty="reml", or the lambdas= given).'
   reml_rapm: 'o_reml_rapm + d_reml_rapm.'
   o_box_prior: 'The offensive prior the rating shrank toward (per 100; the box prior v2 when built by tools/fit_box_prior_v2.py).'
   d_box_prior: 'The defensive prior the rating shrank toward (per 100, positive = good defense).'
@@ -80489,5 +80489,5 @@ nba_reml_rapm:
   d_prior_weight: 'Weight of the player''s own defensive prior in his posterior mean, 0 to 1.'
   off_poss: 'Offensive possessions in the fit.'
   def_poss: 'Defensive possessions in the fit.'
-  lambda_o: 'Offense penalty the fit used (points-per-possession scale; chosen by REML unless lambdas= was passed; the same on every row).'
-  lambda_d: 'Defense penalty the fit used (chosen by REML unless lambdas= was passed; the same on every row).'
+  lambda_o: 'Offense penalty the fit used (points-per-possession scale; ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row).'
+  lambda_d: 'Defense penalty the fit used (ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row).'

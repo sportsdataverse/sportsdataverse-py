@@ -336,7 +336,9 @@ def gate(out: Path, poss_dir: str | None, raw: str, adj_dir: str) -> None:
         model = _load_model(out / f"model_{s}.npz")
         adj_prior = _prior_dict(pl.read_parquet(f"{adj_dir}/nba_{s - 1}_prior_next.parquet"))
         full_prior = _prior_dict(pl.read_parquet(out / f"prior_{s}.parquet"))
-        nba_reml_rapm(poss, full_prior).with_columns(pl.lit(s, pl.Int64).alias("season")).write_parquet(f_r)
+        nba_reml_rapm(poss, full_prior, penalty="reml").with_columns(pl.lit(s, pl.Int64).alias("season")).write_parquet(
+            f_r
+        )
         games = poss["game_id"].unique().sort()
         gid = poss["game_id"].to_numpy()
         splits = [
