@@ -11319,3 +11319,74 @@
   test: tests/nba/test_nba_game_lines.py::test_player_props_reads_one_event_per_game_and_needs_the_teams
   expected: kill
   note: A second event mapped to the game would mix its quotes into the closing lines.
+
+# Killers: tests/nba/test_nba_rest_travel.py, on committed real captures (tests/fixtures/bb_pro_season).
+- id: bb-rt-b2b-sign
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: '"b2b": -1.9391,'
+  mutant: '"b2b": 1.9391,'
+  test: tests/nba/test_nba_rest_travel.py::test_rest_and_travel_improve_the_game_model
+  expected: kill
+  note: A back-to-back helping the tired team makes the rest margin hurt log loss on 2023-24 and 2025-26.
+
+- id: bb-rt-b2b-definition
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: '(rest == 0).cast(pl.Int64).alias("b2b"),'
+  mutant: '(rest == 1).cast(pl.Int64).alias("b2b"),'
+  test: tests/nba/test_nba_rest_travel.py::test_back_to_backs_are_consecutive_dates
+  expected: kill
+  note: One day off counted as a back-to-back no longer matches the schedule's consecutive dates.
+
+- id: bb-rt-neutral-site-ignored
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: '.otherwise(pl.coalesce(c, f"h_{c}"))'
+  mutant: '.otherwise(pl.coalesce(f"h_{c}", c))'
+  test: tests/nba/test_nba_rest_travel.py::test_games_abroad_are_placed_abroad
+  expected: kill
+  note: The Berlin and London games placed at Orlando and Memphis lose their transatlantic trips.
+
+- id: bb-rt-previous-site
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: 'pl.col("lat").shift(1).over(over).fill_null(pl.col("h_lat")).alias("p_lat"),'
+  mutant: 'pl.col("h_lat").alias("p_lat"),'
+  test: tests/nba/test_nba_rest_travel.py::test_games_abroad_are_placed_abroad
+  expected: kill
+  note: Measuring every trip from home misses Berlin to London (930 km becomes the full Atlantic).
+
+- id: bb-rt-sim-drops-margin
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: "        model.margin(net[h], net[a], neutral)\n        + adj\n"
+  mutant: "        model.margin(net[h], net[a], neutral)\n        + 0.0 * adj\n"
+  test: tests/nba/test_nba_rest_travel.py::test_the_season_sim_applies_it
+  expected: kill
+  note: The sim receiving the margin but not adding it leaves the projected wins unchanged.
+
+- id: bb-rt-three-in-four-window
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: '((pl.col("game_date") - pl.col("d2")).dt.total_days() <= 3)'
+  mutant: '((pl.col("game_date") - pl.col("d2")).dt.total_days() <= 4)'
+  test: tests/nba/test_nba_rest_travel.py::test_back_to_backs_are_consecutive_dates
+  expected: kill
+  note: Three games in five nights counts more than the 2025-26 schedule's 662 three-in-fours.
+
+- id: bb-rt-home-away-swapped
+  group: bb-rest-travel
+  finding: BB-D23
+  file: sportsdataverse/nba/nba_rest_travel.py
+  snippet: '*((pl.col(f"home_{f}") - pl.col(f"away_{f}")).cast(pl.Float64).alias(f"d_{f}") for f in FEATURES),'
+  mutant: '*((pl.col(f"away_{f}") - pl.col(f"home_{f}")).cast(pl.Float64).alias(f"d_{f}") for f in FEATURES),'
+  test: tests/nba/test_nba_rest_travel.py::test_rest_and_travel_improve_the_game_model
+  expected: kill
+  note: The tired side's penalty given to its opponent makes the margin worse on 2023-24 and 2025-26.
