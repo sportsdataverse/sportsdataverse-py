@@ -346,7 +346,10 @@ from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F4
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_game_flow as nba_game_flow  # noqa: F401
 from sportsdataverse.nba import nba_game_lineups_used as nba_game_lineups_used  # noqa: F401
+from sportsdataverse.nba import nba_game_on_off as nba_game_on_off  # noqa: F401
 from sportsdataverse.nba import nba_game_player_impact as nba_game_player_impact  # noqa: F401
+from sportsdataverse.nba import nba_game_stints as nba_game_stints  # noqa: F401
+from sportsdataverse.nba import nba_game_units as nba_game_units  # noqa: F401
 from sportsdataverse.nba import nba_impact_rows as nba_impact_rows  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
 from sportsdataverse.nba import nba_injury_report as nba_injury_report  # noqa: F401
@@ -395,6 +398,7 @@ from sportsdataverse.nba import nba_situational_lineup as nba_situational_lineup
 from sportsdataverse.nba import nba_situational_player as nba_situational_player  # noqa: F401
 from sportsdataverse.nba import nba_situational_team as nba_situational_team  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
+from sportsdataverse.nba import nba_stint_rows as nba_stint_rows  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_luck as nba_team_luck  # noqa: F401
@@ -798,7 +802,10 @@ __all__ = [
     "nba_four_factor_rapm",
     "nba_game_flow",
     "nba_game_lineups_used",
+    "nba_game_on_off",
     "nba_game_player_impact",
+    "nba_game_stints",
+    "nba_game_units",
     "nba_impact_rows",
     "nba_in_game_win_prob",
     "nba_injury_report",
@@ -848,6 +855,7 @@ __all__ = [
     "nba_situational_team",
     "nba_spm",
     "nba_stats_leaguedashptstats",
+    "nba_stint_rows",
     "nba_team_clutch",
     "nba_team_crosswalk",
     "nba_team_luck",

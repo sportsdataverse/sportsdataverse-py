@@ -1,10 +1,391 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: ncaa_possession–weighted_avg"
-sidebar_label: "Analytics: ncaa_possession–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg"
+sidebar_label: "Analytics: ncaa_mbb–weighted_avg"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: ncaa_possession–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: ncaa_possession–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: ncaa_mbb–weighted_avg
+
+### ncaa_mbb_on_off {#ncaa_mbb_on_off}
+
+`ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Team stats for every on/off combination of the given players.
+
+Port of bigballR `on_off_generator` (`all_functions.R:2555-2749`,
+`include_transition=F` path). For k players, all `2^k` on/off
+assignments are enumerated in R's `expand.grid` order (first player
+varies fastest; first row all-On, last all-Off); each combination sums
+the lineups whose membership matches exactly, re-derives the full ratio
+block (including `e_poss`), rounds to 3 decimals, and zeroes NA/Inf.
+Combinations matching zero lineups produce an all-zero row.
+
+Faithful R quirk (kept, flagged): when `included`/`excluded` is
+passed, the base lineup set comes from the membership filter ONLY — the
+inferred-team filter is skipped (`all_functions.R:2584-2589`), so an
+included player on another team would leak that team's lineups in.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `Union[str, Sequence[str]]` |  | Player name(s) to split on (the `Status` axis). |
+| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
+| `included` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
+| `excluded` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with `2^k` rows — `status` (e.g. `"A.PLAYER On | B.PLAYER Off"`) + the 69 stat columns (`ON_OFF_COLUMNS`).
+
+| col_name | type | description |
+|---|---|---|
+| `status` | String | Status label. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the players' team cannot be uniquely inferred from the lineups (R's `"ERROR- Player team not found"`). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_on_off
+split = ncaa_mbb_on_off("KEATON.WAGLER", lineups)
+print(split.shape)
+
+# Two-player interaction
+
+duo = ncaa_mbb_on_off(["A.PLAYER", "B.PLAYER"], lineups)
+
+# Pipeline next step (one line)
+
+split.select("status", "netrtg")
+```
+
+### ncaa_mbb_player_combos {#ncaa_mbb_player_combos}
+
+`ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Team stats for every n-player combination on the court together.
+
+Port of bigballR `get_player_combos` + `team_comb`
+(`get_player_combos.R:19-38` + `:42-191`). Combos are enumerated per
+team over the byte-sorted unique player pool (lexicographic
+`gtools::combinations` order), filtered to combos whose lineups total
+strictly more than `min_mins` minutes, then each combo's lineup rows
+are summed and the ratio block re-derived. **Rounding is 2 decimals**
+here (R rounds 3 in `get_lineups` / `on_off_generator`) and `e_poss`
+is the SUM of the per-lineup estimates, not a recompute — both faithful.
+
+R's `include_transition` switch is dead code (an exact-match guard at
+`get_player_combos.R:28-30` always forces it back to `FALSE`); the
+port implements the suffix-match intent but keeps the `False` default,
+which is the only R-reachable behavior.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
+| `n` | `int` | `2` | Combination size, 1-5. |
+| `min_mins` | `float` | `0` | Keep combos with total on-court minutes strictly greater than this (summed over the rounded per-lineup `mins`). |
+| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be on the court in every lineup considered. |
+| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be off the court in every lineup considered. |
+| `include_transition` | `bool` | `False` | Re-derive the `_trans`/`_half` ratio surface (requires a transition lineups frame; forced `False` otherwise). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with one row per combo: `team, p1..pn` + the stat surface of the input frame. Teams appear in byte-sorted order.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | String | Team-side label or team identifier. |
+| `p1` | String |  |
+| `p2` | String |  |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `n` is not an integer from 1 to 5. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_combos
+duos = ncaa_mbb_player_combos(lineups, n=2, min_mins=5)
+print(duos.shape)
+
+# Anchored on one player
+
+trios = ncaa_mbb_player_combos(lineups, n=3, included="KEATON.WAGLER")
+
+# Pipeline next step (one line)
+
+duos.sort("netrtg", descending=True).head()
+```
+
+### ncaa_mbb_player_lineups {#ncaa_mbb_player_lineups}
+
+`ncaa_mbb_player_lineups(lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Filter a lineups frame by on-court player membership.
+
+Port of bigballR `get_player_lineups` (`all_functions.R:2761-2792`):
+keep rows where every `included` player is on the court (in `p1..p5`)
+and no `excluded` player is. With both filters `None` the input is
+returned unchanged (R's `Included = NA, Excluded = NA` passthrough).
+Membership is tested by name against `p1..p5` (R tests the positional
+first five columns); row order is preserved.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups` (any frame with `p1..p5` works). |
+| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must ALL be on the court. |
+| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must NONE be on the court. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Row-subset of `lineups`; schema unchanged.
+
+| col_name | type | description |
+|---|---|---|
+| `p1` | String |  |
+| `p2` | String |  |
+| `p3` | String |  |
+| `p4` | String |  |
+| `p5` | String |  |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_lineups
+on = ncaa_mbb_player_lineups(lineups, included="KEATON.WAGLER")
+print(on.shape)
+
+# Included + excluded combination
+
+df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER"])
+
+# Pipeline next step (one line)
+
+on.select(pl.col("mins").sum())
+```
 
 ### ncaa_possession_rate_rows {#ncaa_possession_rate_rows}
 
@@ -175,6 +556,67 @@ One row per possession in `~sportsdataverse._common.situational_splits.situation
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions
 from sportsdataverse.mbb.mbb_situational import ncaa_situation_rows
 rows = ncaa_situation_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(2025))
+```
+
+### ncaa_stint_rows {#ncaa_stint_rows}
+
+`ncaa_stint_rows(pbp: 'pl.DataFrame', possessions: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Map the stats.ncaa.org pbp and possessions onto the stint-row frame.
+
+One row per event in game order, on the event's lineup: its clock, its points (a free throw's
+on the row of the game's last foul) and the possessions that start at it. A possession starts
+at the first event of its `poss_num`; one whose `poss_team` is neither side is dropped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order, with `period`, `game_seconds` and `poss_num`. |
+| `possessions` | `DataFrame` |  | `load_ncaa_mbb_possessions` / `load_ncaa_wbb_possessions` rows (`contest_id`, `poss_num`, `poss_team`, `home`, `away`). |
+| `league` | `str` | `'mens'` | `"mens"` (20-minute halves) or `"womens"` (10-minute quarters from 2016, halves before); overtimes are 5 minutes. |
+
+**Returns**
+
+Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String player ids: `period`, `clock` (seconds left in the period after the event) and `order` (the event's row in the release).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season of the action. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `home_team_id` | Int64 | Home ESPN team id (null for a non-D1 team). |
+| `away_team_id` | Int64 | Away ESPN team id (null for a non-D1 team). |
+| `home_1` | String | Home player 1 on the floor. |
+| `home_2` | String | Home player 2 on the floor. |
+| `home_3` | String | Home player 3 on the floor. |
+| `home_4` | String | Home player 4 on the floor. |
+| `home_5` | String | Home player 5 on the floor. |
+| `away_1` | String | Away player 1 on the floor. |
+| `away_2` | String | Away player 2 on the floor. |
+| `away_3` | String | Away player 3 on the floor. |
+| `away_4` | String | Away player 4 on the floor. |
+| `away_5` | String | Away player 5 on the floor. |
+| `seconds` | Float64 | Game clock that ran into this action (from the previous action of the period). |
+| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of the game's last foul. |
+| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of the game's last foul. |
+| `home_poss` | Int64 | Possessions of the home team that start at this action. |
+| `away_poss` | Int64 | Possessions of the away team that start at this action. |
+| `period` | Int64 | Period of the action. |
+| `clock` | Float64 | Period clock (seconds left) after the event; 0 on the period's last event, which takes the period's tail. |
+| `order` | Int64 | The event's row in the pbp release (its place in the game). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp, load_ncaa_mbb_possessions
+from sportsdataverse.mbb.mbb_game_stints import ncaa_stint_rows
+rows = ncaa_stint_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025))
 ```
 
 ### ncaa_team_box_count_rows {#ncaa_team_box_count_rows}

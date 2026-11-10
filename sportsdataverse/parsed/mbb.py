@@ -500,7 +500,10 @@ from sportsdataverse.mbb import mbb_epv_plays as mbb_epv_plays  # noqa: F401
 from sportsdataverse.mbb import mbb_epv_team_games as mbb_epv_team_games  # noqa: F401
 from sportsdataverse.mbb import mbb_game_flow as mbb_game_flow  # noqa: F401
 from sportsdataverse.mbb import mbb_game_lineups_used as mbb_game_lineups_used  # noqa: F401
+from sportsdataverse.mbb import mbb_game_on_off as mbb_game_on_off  # noqa: F401
 from sportsdataverse.mbb import mbb_game_player_impact as mbb_game_player_impact  # noqa: F401
+from sportsdataverse.mbb import mbb_game_stints as mbb_game_stints  # noqa: F401
+from sportsdataverse.mbb import mbb_game_units as mbb_game_units  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_lineup_seasons as mbb_lineup_seasons  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
@@ -558,6 +561,7 @@ from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # no
 from sportsdataverse.mbb import ncaa_possession_rate_rows as ncaa_possession_rate_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_score_rows as ncaa_score_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_situation_rows as ncaa_situation_rows  # noqa: F401
+from sportsdataverse.mbb import ncaa_stint_rows as ncaa_stint_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_coaches as ncaa_team_coaches  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
@@ -1169,7 +1173,10 @@ __all__ = [
     "mbb_epv_team_games",
     "mbb_game_flow",
     "mbb_game_lineups_used",
+    "mbb_game_on_off",
     "mbb_game_player_impact",
+    "mbb_game_stints",
+    "mbb_game_units",
     "mbb_in_game_win_prob",
     "mbb_lineup_seasons",
     "mbb_pbp_disk",
@@ -1227,6 +1234,7 @@ __all__ = [
     "ncaa_possession_rate_rows",
     "ncaa_score_rows",
     "ncaa_situation_rows",
+    "ncaa_stint_rows",
     "ncaa_team_box_count_rows",
     "ncaa_team_coaches",
     "normalize_player_key",

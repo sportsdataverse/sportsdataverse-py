@@ -614,6 +614,70 @@ from sportsdataverse.wbb import wbb_game_lineups_used
 wbb_game_lineups_used(2025).head()
 ```
 
+### wbb_game_on_off {#wbb_game_on_off}
+
+`wbb_game_on_off(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college in-game on/off: per player and game, the team with her on the floor and without her.
+
+Delegates to `sportsdataverse.mbb.mbb_game_stints.mbb_game_on_off` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id)`: the `_on` and `_off` totals and ratings, `<rating>_diff` and their `_n`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
+| `player_id` | String | stats.ncaa.org player id. |
+| `minutes_on` | Float64 | Game-clock minutes of the team's game with the player on the floor. |
+| `poss_on` | Int64 | The team's offensive possessions with the player on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_on` | Int64 | The team's defensive possessions with the player on the floor. |
+| `pts_on` | Int64 | The team's points with the player on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_on` | Int64 | The opponent's points with the player on the floor, credited as pts_on is. |
+| `plus_minus_on` | Int64 | pts_on - opp_pts_on. |
+| `off_rtg_on` | Float64 | Offensive rating with the player on the floor: pts_on per 100 poss_on; null with no possessions. |
+| `def_rtg_on` | Float64 | Defensive rating with the player on the floor: opp_pts_on per 100 opp_poss_on; null with no possessions. |
+| `net_rtg_on` | Float64 | Net rating with the player on the floor: off_rtg_on - def_rtg_on; null when either is null. |
+| `minutes_off` | Float64 | Game-clock minutes of the team's game with the player off the floor (the rest of the team's game). |
+| `poss_off` | Int64 | The team's offensive possessions with the player off the floor (the rest of the team's game) (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_off` | Int64 | The team's defensive possessions with the player off the floor (the rest of the team's game). |
+| `pts_off` | Int64 | The team's points with the player off the floor (the rest of the team's game), each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_off` | Int64 | The opponent's points with the player off the floor (the rest of the team's game), credited as pts_off is. |
+| `plus_minus_off` | Int64 | pts_off - opp_pts_off. |
+| `off_rtg_off` | Float64 | Offensive rating with the player off the floor (the rest of the team's game): pts_off per 100 poss_off; null with no possessions. |
+| `def_rtg_off` | Float64 | Defensive rating with the player off the floor (the rest of the team's game): opp_pts_off per 100 opp_poss_off; null with no possessions. |
+| `net_rtg_off` | Float64 | Net rating with the player off the floor (the rest of the team's game): off_rtg_off - def_rtg_off; null when either is null. |
+| `off_rtg_diff` | Float64 | On-off offensive rating: off_rtg_on - off_rtg_off; null when either is null. |
+| `def_rtg_diff` | Float64 | On-off defensive rating: def_rtg_on - def_rtg_off; null when either is null. |
+| `net_rtg_diff` | Float64 | On-off net rating: net_rtg_on - net_rtg_off; null when either is null. |
+| `off_rtg_on_n` | Int64 | Sample size of off_rtg_on: poss_on. |
+| `def_rtg_on_n` | Int64 | Sample size of def_rtg_on: opp_poss_on. |
+| `net_rtg_on_n` | Int64 | Sample size of net_rtg_on: poss_on + opp_poss_on. |
+| `off_rtg_off_n` | Int64 | Sample size of off_rtg_off: poss_off. |
+| `def_rtg_off_n` | Int64 | Sample size of def_rtg_off: opp_poss_off. |
+| `net_rtg_off_n` | Int64 | Sample size of net_rtg_off: poss_off + opp_poss_off. |
+| `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
+| `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
+| `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_on_off
+wbb_game_on_off(2025).head()
+```
+
 ### wbb_game_player_impact {#wbb_game_player_impact}
 
 `wbb_game_player_impact(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -660,4 +724,142 @@ One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes`, `
 ```python
 from sportsdataverse.wbb import wbb_game_player_impact
 wbb_game_player_impact(2025).sort("plus_minus").tail()
+```
+
+### wbb_game_stints {#wbb_game_stints}
+
+`wbb_game_stints(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college game stints: per player and game, every stretch on the floor.
+
+Delegates to `sportsdataverse.mbb.mbb_game_stints.mbb_game_stints` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `period`, `clock_in`, `clock_out`, `seconds`, `minutes`, `poss`, `opp_poss`, `pts`, `opp_pts` and `plus_minus`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
+| `player_id` | String | stats.ncaa.org player id. |
+| `stint_number` | Int64 | The stint's place among the player's stints in the game, from 1 in game order. A stint is a run of consecutive actions of one period with him on the floor. |
+| `period` | Int64 | Period of the stint (a stint never spans a period end). |
+| `clock_in` | Float64 | Period clock (seconds left) when the stint began: the clock at the action before his first. |
+| `clock_out` | Float64 | Period clock (seconds left) when the stint ended: the clock at his last action. |
+| `seconds` | Float64 | Game-clock seconds of the stint: the clock that ran into each of its actions. |
+| `minutes` | Float64 | Game-clock minutes of the stint (seconds / 60). |
+| `poss` | Int64 | Offensive possessions that started during the stint (each counted on the lineup at the action that starts it). |
+| `opp_poss` | Int64 | Defensive possessions that started during the stint, counted as poss is. |
+| `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
+| `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_stints
+wbb_game_stints(2025).head()
+```
+
+### wbb_game_units {#wbb_game_units}
+
+`wbb_game_units(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones.
+
+Delegates to `sportsdataverse.mbb.mbb_game_stints.mbb_game_units` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, n_players, lineup_id)`: `player_1..5`, the totals, ratings, four factors, shot zones and `<m>_n`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `opp_team_id` | Int64 | The opponent's ESPN team id (null for a non-D1 opponent). |
+| `n_players` | Int64 | Unit size: 1 to 5 players. |
+| `lineup_id` | String | The unit's player ids, sorted and joined with '-'. |
+| `player_1` | String | Player 1 of the unit, in lineup_id order; null past n_players. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order; null past n_players. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order; null past n_players. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order; null past n_players. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order; null past n_players. |
+| `minutes` | Float64 | Game-clock minutes the unit's players were all on the floor together (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds the unit's players were all on the floor together. |
+| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
+| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
+| `plus_minus` | Int64 | The unit's +/- in the game: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. |
+| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. |
+| `orb_pct` | Float64 | Offensive-rebound rate: own offensive rebounds over own offensive rebounds plus the opponent's defensive rebounds. Null with a zero denominator. |
+| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. |
+| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. |
+| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession, as a fraction. Null with a zero denominator. |
+| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate with the unit on the floor. Null with a zero denominator. |
+| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. |
+| `rim_rate` | Float64 | Share of the unit's field-goal attempts at the rim (dunk, layup, hook, tip-in). Null with a zero denominator. |
+| `mid_rate` | Float64 | Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator. |
+| `fg3_rate` | Float64 | Share of the unit's field-goal attempts that are threes. Null with a zero denominator. |
+| `rim_pct` | Float64 | Field-goal percentage at the rim, as a fraction. Null with a zero denominator. |
+| `mid_pct` | Float64 | Mid-range field-goal percentage, as a fraction. Null with a zero denominator. |
+| `fg3_pct` | Float64 | Three-point percentage, as a fraction. Null with a zero denominator. |
+| `opp_rim_rate` | Float64 | Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator. |
+| `opp_mid_rate` | Float64 | Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator. |
+| `opp_fg3_rate` | Float64 | Share of the opponent's field-goal attempts that are threes. Null with a zero denominator. |
+| `opp_rim_pct` | Float64 | The opponent's field-goal percentage at the rim. Null with a zero denominator. |
+| `opp_mid_pct` | Float64 | The opponent's mid-range field-goal percentage with the unit on the floor. Null with a zero denominator. |
+| `opp_fg3_pct` | Float64 | The opponent's three-point percentage with the unit on the floor. Null with a zero denominator. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
+| `rim_rate_n` | Int64 | Sample size of rim_rate: the unit's field-goal attempts. |
+| `mid_rate_n` | Int64 | Sample size of mid_rate: the unit's field-goal attempts. |
+| `fg3_rate_n` | Int64 | Sample size of fg3_rate: the unit's field-goal attempts. |
+| `rim_pct_n` | Int64 | Sample size of rim_pct: the unit's rim attempts. |
+| `mid_pct_n` | Int64 | Sample size of mid_pct: the unit's mid-range attempts. |
+| `fg3_pct_n` | Int64 | Sample size of fg3_pct: the unit's three-point attempts. |
+| `opp_rim_rate_n` | Int64 | Sample size of opp_rim_rate: the opponent's field-goal attempts. |
+| `opp_mid_rate_n` | Int64 | Sample size of opp_mid_rate: the opponent's field-goal attempts. |
+| `opp_fg3_rate_n` | Int64 | Sample size of opp_fg3_rate: the opponent's field-goal attempts. |
+| `opp_rim_pct_n` | Int64 | Sample size of opp_rim_pct: the opponent's rim attempts. |
+| `opp_mid_pct_n` | Int64 | Sample size of opp_mid_pct: the opponent's mid-range attempts. |
+| `opp_fg3_pct_n` | Int64 | Sample size of opp_fg3_pct: the opponent's three-point attempts. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_units
+wbb_game_units(2025).filter(n_players=2).head()
 ```
