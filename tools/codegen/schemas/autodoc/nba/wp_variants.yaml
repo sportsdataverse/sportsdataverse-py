@@ -3,14 +3,14 @@ kind: dataframe
 hand_authored: true
 columns:
 - name: game_id
-  type: integer
+  type: Int32 / Int64
   description: ''
 - name: game_play_number
-  type: integer
+  type: Int32 / Int64
   description: ''
 - name: home_win_prob_naive
-  type: double
+  type: Float64
   description: ''
 - name: home_win_prob_market
-  type: double
+  type: Float64
   description: ''

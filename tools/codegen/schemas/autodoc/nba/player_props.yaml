@@ -3,35 +3,35 @@ kind: dataframe
 hand_authored: true
 columns:
 - name: game_id
-  type: integer
+  type: Int32
   description: ''
 - name: season
-  type: integer
+  type: Int32
   description: ''
 - name: athlete_id
-  type: integer
+  type: Int32
   description: ''
 - name: team_id
-  type: integer
+  type: Int32
   description: ''
 - name: player_name
-  type: character
+  type: String
   description: ''
 - name: stat
-  type: character
+  type: String
   description: ''
 - name: line
-  type: double
+  type: Float64
   description: ''
 - name: n_books
-  type: integer
+  type: UInt32
   description: ''
 - name: over_price
-  type: double
+  type: Float64
   description: ''
 - name: under_price
-  type: double
+  type: Float64
   description: ''
 - name: over_prob
-  type: double
+  type: Float64
   description: ''

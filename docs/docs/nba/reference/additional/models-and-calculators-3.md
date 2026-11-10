@@ -194,14 +194,14 @@ probability are the medians over the books at that line. Only the five main mark
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int64 | ESPN game id, the join key to the schedule and box-score frames. |
-| `season` | Int64 | ESPN season of the game. |
-| `athlete_id` | Int64 | ESPN athlete id from the props player crosswalk; null when the name is not matched for either team. |
-| `team_id` | Int64 | ESPN team id of the athlete in this game. |
+| `game_id` | Int32 | ESPN game id, the join key to the schedule and box-score frames. |
+| `season` | Int32 | ESPN season of the game. |
+| `athlete_id` | Int32 | ESPN athlete id from the props player crosswalk; null when the name is not matched for either team. |
+| `team_id` | Int32 | ESPN team id of the athlete in this game. |
 | `player_name` | String | Player name as the books list it. |
 | `stat` | String | Prop stat (points, rebounds, assists, threes, pra = points + rebounds + assists). |
 | `line` | Float64 | Closing line most books closed on (the lower line on a tie). |
-| `n_books` | Int64 | Sportsbooks with both sides quoted at that line. |
+| `n_books` | UInt32 | Sportsbooks with both sides quoted at that line. |
 | `over_price` | Float64 | Median closing over price at the line, American odds. |
 | `under_price` | Float64 | Median closing under price at the line, American odds. |
 | `over_prob` | Float64 | No-vig probability of the over at the line, median over books. |
@@ -795,8 +795,8 @@ in-game model as `home_win_prob`, with only the pregame prior swapped: 0.5 for
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and the play_wp table. |
-| `game_play_number` | Int64 | Play order within the game, as in the play-by-play. |
+| `game_id` | Int32 / Int64 | ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries). |
+| `game_play_number` | Int32 / Int64 | Play order within the game, as in the play-by-play (the dtype the pbp carries). |
 | `home_win_prob_naive` | Float64 | Home win probability from score and clock alone (the in-game model with a 0.5 prior). |
 | `home_win_prob_market` | Float64 | Home win probability with the closing no-vig market WP as the prior; null without a line. |
 

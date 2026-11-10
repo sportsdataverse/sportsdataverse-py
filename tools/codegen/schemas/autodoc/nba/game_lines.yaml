@@ -3,59 +3,59 @@ kind: dataframe
 hand_authored: true
 columns:
 - name: game_id
-  type: integer
+  type: Int32
   description: ''
 - name: season
-  type: integer
+  type: Int32
   description: ''
 - name: event_id
-  type: character
+  type: String
   description: ''
 - name: n_books
-  type: integer
+  type: UInt32
   description: ''
 - name: spread_home_open
-  type: double
+  type: Float64
   description: ''
 - name: spread_home_close
-  type: double
+  type: Float64
   description: ''
 - name: total_open
-  type: double
+  type: Float64
   description: ''
 - name: total_close
-  type: double
+  type: Float64
   description: ''
 - name: ml_home_open
-  type: double
+  type: Float64
   description: ''
 - name: ml_away_open
-  type: double
+  type: Float64
   description: ''
 - name: ml_home_close
-  type: double
+  type: Float64
   description: ''
 - name: ml_away_close
-  type: double
+  type: Float64
   description: ''
 - name: market_home_wp_open
-  type: double
+  type: Float64
   description: ''
 - name: market_away_wp_open
-  type: double
+  type: Float64
   description: ''
 - name: market_home_wp_close
-  type: double
+  type: Float64
   description: ''
 - name: market_away_wp_close
-  type: double
+  type: Float64
   description: ''
 - name: home_margin
-  type: integer
+  type: Int32
   description: ''
 - name: ats_result
-  type: character
+  type: String
   description: ''
 - name: total_result
-  type: character
+  type: String
   description: ''

@@ -866,10 +866,10 @@ One row per game with a line, `GAME_LINES_SCHEMA`: `game_id`, `season`, the odds
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int64 | ESPN game id, the join key to the schedule, play-by-play and box-score frames. |
-| `season` | Int64 | ESPN season of the game, from the schedule. |
+| `game_id` | Int32 | ESPN game id, the join key to the schedule, play-by-play and box-score frames. |
+| `season` | Int32 | ESPN season of the game, from the schedule. |
 | `event_id` | String | Odds-store event id the lines come from (the one with the most quotes when two map to the game). |
-| `n_books` | Int64 | Sportsbooks with a closing (pre-tip) quote on the game. |
+| `n_books` | UInt32 | Sportsbooks with a closing (pre-tip) quote on the game. |
 | `spread_home_open` | Float64 | Median opening spread on ESPN's home team, betting convention (negative when home is favoured). |
 | `spread_home_close` | Float64 | Median closing spread on ESPN's home team, betting convention (negative when home is favoured). |
 | `total_open` | Float64 | Median opening game total (over/under points). |
@@ -882,7 +882,7 @@ One row per game with a line, `GAME_LINES_SCHEMA`: `game_id`, `season`, the odds
 | `market_away_wp_open` | Float64 | No-vig away win probability from the opening moneylines (1 - market_home_wp_open). |
 | `market_home_wp_close` | Float64 | No-vig home win probability from the closing moneylines, median over books. |
 | `market_away_wp_close` | Float64 | No-vig away win probability from the closing moneylines (1 - market_home_wp_close). |
-| `home_margin` | Int64 | Final home score minus away score; null until the game is completed. |
+| `home_margin` | Int32 | Final home score minus away score; null until the game is completed. |
 | `ats_result` | String | Who covered the closing spread (home, away or push); null until completed. |
 | `total_result` | String | The final total against the closing total (over, under or push); null until completed. |
 
