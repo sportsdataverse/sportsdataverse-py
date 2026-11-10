@@ -52,6 +52,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Union
@@ -145,13 +146,21 @@ def ncaa_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.D
     )
 
 
+_MDY = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})")
+
+
 def _parsed_game_date(parsed: dict) -> str | None:
-    """``mm/dd/yyyy`` off the first family row that carries ``game_date``."""
+    """Zero-padded ``mm/dd/yyyy`` off the first family row whose ``game_date`` holds one.
+
+    The box parser accepts unpadded dates (``1/5/2026 7:00 PM``), so the date is
+    matched rather than sliced.
+    """
     for family in ("linescore", "pbp", "player_box", "team_box"):
         for row in parsed.get(family) or []:
-            value = row.get("game_date") if isinstance(row, dict) else None
-            if value:
-                return str(value)[:10]
+            hit = _MDY.search(str(row.get("game_date") or "")) if isinstance(row, dict) else None
+            if hit:
+                month, day, year = hit.groups()
+                return f"{int(month):02d}/{int(day):02d}/{year}"
     return None
 
 
@@ -428,14 +437,17 @@ def load_espn_game_index(root: str, league: str, season: int) -> Dict[str, str]:
 
 
 def stamp_parsed(root: str | Path, league: str, season: int) -> int:
-    """Write the crosswalk's ``espn_game_id`` into each parsed contest of *season* that lacks it.
+    """Reconcile each parsed contest of *season* with the crosswalk's ``espn_game_id``.
 
     Parse stamps the id from the crosswalk on disk at parse time, and skips a
     contest already parsed. So a game parsed before its crosswalk row existed,
     which in season is every game parsed the night it was played, kept a null
     id for good. This pass is offline: it rewrites only the parsed JSON whose
     id differs from the crosswalk's, on every per-game family row and on
-    ``teams``, the same keys parse writes.
+    ``teams``, the same keys parse writes. A contest the crosswalk lists as
+    unmatched (no match, or a voided collision) is reset to null, so a rebuild
+    that rejects an earlier match does not leave the old id behind. A contest
+    absent from the crosswalk is left alone.
 
     Args:
         root: Root of the raw data tree.
@@ -448,13 +460,23 @@ def stamp_parsed(root: str | Path, league: str, season: int) -> int:
     from .identity import _ESPN_GAME_ID_KEY, _PER_GAME_FAMILIES
     from .parse import write_parsed
 
+    path = xwalk_path(root, league, season)
+    try:
+        xwalk = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+    except (OSError, ValueError):
+        logger.warning("ncaa_espn_game_xwalk: unreadable crosswalk %s; nothing stamped", path, exc_info=True)
+        return 0
     stamped = 0
-    for contest_id, espn_game_id in load_espn_game_index(str(root), league, season).items():
-        path = Path(root) / league / "json" / f"{contest_id}.json"
-        if not path.is_file():
+    for entry in xwalk:
+        contest_id = entry.get("contest_id")
+        if not contest_id:
+            continue
+        espn_game_id = str(entry["espn_game_id"]) if entry.get("espn_game_id") else None
+        parsed_path = Path(root) / league / "json" / f"{contest_id}.json"
+        if not parsed_path.is_file():
             continue
         try:
-            parsed = json.loads(path.read_text(encoding="utf-8"))
+            parsed = json.loads(parsed_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             continue
         rows = [r for f in _PER_GAME_FAMILIES for r in parsed.get(f) or [] if isinstance(r, dict)]
