@@ -1,0 +1,16 @@
+schema: apply_box_prior
+kind: dataframe
+hand_authored: true
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: o_prior
+  type: double
+  description: ''
+- name: d_prior
+  type: double
+  description: ''
+- name: box_prior
+  type: double
+  description: ''

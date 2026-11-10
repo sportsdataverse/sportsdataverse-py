@@ -1,0 +1,22 @@
+schema: career_rapm_target
+kind: dataframe
+hand_authored: true
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: o_target
+  type: double
+  description: ''
+- name: d_target
+  type: double
+  description: ''
+- name: off_poss
+  type: double
+  description: ''
+- name: def_poss
+  type: double
+  description: ''
