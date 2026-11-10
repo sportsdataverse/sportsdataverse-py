@@ -226,7 +226,8 @@ def nba_reml_rapm(
     seasons) and by 1.43 bp after a mid-season cut date (2006-2026, SE 0.29, 17 of 21); REML by 0.73
     (SE 0.17, 22 of 29) and 1.03 (SE 0.49, 14 of 21). Head to head the fixed rule beats the REML pick by
     0.91 bp on held-out games (SE 0.14, 27 of 29 seasons). The 3,728 was cross-validated on these seasons for
-    the previous-season SPM prior, not this one, so refitting it for the v2 prior is open.
+    the previous-season SPM prior, so refitting it for the v2 prior is open. The cut-date test counts 2006+
+    only (1998-2005 priors learn from later seasons); height and position come from one later index.
 
     Built for the box prior of :mod:`sportsdataverse.nba.nba_box_prior` (``o_prior`` / ``d_prior`` of
     :func:`~sportsdataverse.nba.nba_box_prior.apply_box_prior`), but any per-100 ``(o, d)`` prior works.
