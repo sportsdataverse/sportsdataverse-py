@@ -47,6 +47,7 @@ LEAGUES = ("nba", "wnba", "mbb", "wbb")
 
 
 def _fits(league: str) -> pl.DataFrame:
+    """A league's committed fits table."""
     return pl.read_csv(GATES / f"{league}_fits.csv")
 
 
@@ -67,6 +68,7 @@ def test_frozen_gates_refit_from_the_curves(league: str) -> None:
 
 @pytest.mark.parametrize("league", LEAGUES)
 def test_holdout_reliability_at_the_frozen_gate(league: str) -> None:
+    """The frozen gates hold their observed holdout reliability, never under a third."""
     hold = _fits(league).filter(pl.col("span") == "holdout")
     for kind, table in FROZEN.items():
         rel = []
@@ -80,4 +82,5 @@ def test_holdout_reliability_at_the_frozen_gate(league: str) -> None:
 
 
 def test_gate_rounds_up() -> None:
+    """A gate is M rounded up to two significant figures."""
     assert fit.gate(69.96) == 70 and fit.gate(1222.3) == 1300

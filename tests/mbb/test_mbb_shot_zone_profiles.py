@@ -24,17 +24,20 @@ LEAGUES = [("mbb", "mens"), ("wbb", "womens")]
 
 
 def _inputs(lg: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """The committed shot-chart and play-by-play captures of a league."""
     return pl.read_parquet(FIX / f"ncaa_{lg}_shots_2025.parquet"), pl.read_parquet(
         FIX / f"ncaa_{lg}_pbp_fg_2025.parquet"
     )
 
 
 def _zone_sum(prefix: str = "") -> pl.Expr:
+    """The four zone attempt counts plus the unlocated ones."""
     return sum((pl.col(f"{prefix}{z}_fga") for z in ZONES), pl.col(f"{prefix}unlocated_fga"))
 
 
 @pytest.mark.parametrize(("lg", "league"), LEAGUES)
 def test_zone_attempts_add_up_to_fga(lg: str, league: str) -> None:
+    """Every attempt lands in one zone or is unlocated; non-D1 attempts count against the D1 side."""
     shots, pbp = _inputs(lg)
     rows = msz.ncaa_shot_zone_rows(shots, pbp)
     assert rows.schema == pl.Schema(msz.SCHEMA)
@@ -98,6 +101,7 @@ def test_a_shifted_pbp_is_not_linked() -> None:
 
 
 def test_bad_league_raises_before_loading(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An unknown league raises before the releases are read."""
     import sportsdataverse.mbb.mbb_loaders as L
 
     monkeypatch.setattr(L, "load_ncaa_mbb_shots", lambda *a, **k: pytest.fail("loaded"))
@@ -106,6 +110,7 @@ def test_bad_league_raises_before_loading(monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_producers_read_the_league_releases(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Each producer reads its own league's shot and play-by-play releases."""
     import sportsdataverse.mbb.mbb_loaders as L
     import sportsdataverse.wbb.wbb_loaders as W
 

@@ -36,19 +36,23 @@ CASES = [
 
 
 def _shots(name: str) -> pl.DataFrame:
+    """A committed shots capture."""
     return pl.read_parquet(FIX / f"{name}.parquet")
 
 
 def _rows(name: str, league_id: str) -> pl.DataFrame:
+    """A committed shots capture mapped onto the shot rows."""
     return nsz.nba_shot_zone_rows(_shots(name), league_id=league_id)
 
 
 def _zone_sum(prefix: str = "") -> pl.Expr:
+    """The four zone attempt counts plus the unlocated ones."""
     return sum((pl.col(f"{prefix}{z}_fga") for z in ZONES), pl.col(f"{prefix}unlocated_fga"))
 
 
 @pytest.mark.parametrize(("name", "league_id", "level"), CASES)
 def test_zone_attempts_add_up_to_fga(name: str, league_id: str, level: str) -> None:
+    """Every attempt lands in one zone or is unlocated, for players, teams and opponents."""
     rows = _rows(name, league_id)
     assert rows.schema == pl.Schema(SHOT_ROWS_SCHEMA)
     assert rows.height == _shots(name).height  # every fixture row is a regular-season FGA
@@ -114,6 +118,7 @@ def test_wnba_placeholders_are_unlocated() -> None:
 
 
 def test_assisted_reads_the_description() -> None:
+    """A make is assisted exactly when its description credits an assist."""
     s = _shots("nba_stats_shots_2025")
     r = _rows("nba_stats_shots_2025", "00")
     made = s["shot_result"] == "Made"
@@ -159,6 +164,7 @@ def test_allowed_fg_pct_ranks_lowest_first(monkeypatch: pytest.MonkeyPatch) -> N
 
 
 def test_empty_input_keeps_the_schema() -> None:
+    """No attempts: zero rows with every column."""
     empty = nsz.nba_shot_zone_rows(_shots("nba_stats_shots_2025").head(0), league_id="00")
     assert empty.schema == pl.Schema(SHOT_ROWS_SCHEMA)
     players, teams = player_shot_zones(empty, level="nba"), team_shot_zones(empty, level="nba")
@@ -167,6 +173,7 @@ def test_empty_input_keeps_the_schema() -> None:
 
 
 def test_bad_league_id_raises_before_loading(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An unknown league_id raises before the release is read."""
     import sportsdataverse.nba.nba_loaders as L
 
     monkeypatch.setattr(L, "load_nba_stats_shots", lambda *a, **k: pytest.fail("loaded"))

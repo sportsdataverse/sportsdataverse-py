@@ -28,6 +28,7 @@ from __future__ import annotations
 import math
 
 import polars as pl
+import polars.selectors as cs
 
 from sportsdataverse._common.league_context import (
     MIN_COHORT_PLAYERS,
@@ -232,6 +233,7 @@ def _counts(prefix: str = "") -> list[pl.Expr]:
 
 
 def _ratio(num: str, den: str) -> pl.Expr:
+    """``num / den`` as Float64; null where ``den`` is 0."""
     return pl.when(pl.col(den) > 0).then(pl.col(num) / pl.col(den)).cast(pl.Float64)
 
 
@@ -283,7 +285,7 @@ def player_shot_zones(rows: pl.DataFrame, *, level: str) -> pl.DataFrame:
     exprs, dens = _rates()
     g = attach_sample_sizes(g.with_columns(exprs), dens)
     g = attach_ranks(g, metrics, min_cohort=MIN_COHORT_PLAYERS, min_n=_gates(PLAYER_MIN_N, level, metrics))
-    return g.drop(pl.selectors.starts_with("_")).sort("season", "team_id", "player_id")
+    return g.drop(cs.starts_with("_")).sort("season", "team_id", "player_id")
 
 
 def team_shot_zones(rows: pl.DataFrame, *, level: str) -> pl.DataFrame:
@@ -329,4 +331,4 @@ def team_shot_zones(rows: pl.DataFrame, *, level: str) -> pl.DataFrame:
         min_n=_gates(TEAM_MIN_N, level, metrics),
     )
     lead = ["season", "team_id", "games"]
-    return g.select(*lead, pl.exclude(lead)).drop(pl.selectors.starts_with("_")).sort("season", "team_id")
+    return g.select(*lead, pl.exclude(lead)).drop(cs.starts_with("_")).sort("season", "team_id")

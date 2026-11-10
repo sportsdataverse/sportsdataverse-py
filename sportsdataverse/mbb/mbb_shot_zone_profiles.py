@@ -40,6 +40,7 @@ SCHEMA = shot_rows_schema(pl.Utf8())
 
 
 def _check(league: str) -> None:
+    """Raise ValueError for an unknown ``league`` (before any data is loaded)."""
     if league not in _LEVEL:
         raise ValueError(f"league must be one of {sorted(_LEVEL)}, got {league!r}")
 
@@ -116,6 +117,7 @@ def ncaa_shot_zone_rows(shots: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
 
 
 def _rows(seasons: int | list[int], league: str) -> pl.DataFrame:
+    """The shot rows of ``seasons`` from the league's shot-chart and play-by-play releases."""
     _check(league)
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     if league == "womens":

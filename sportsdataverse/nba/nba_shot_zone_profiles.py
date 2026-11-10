@@ -49,6 +49,7 @@ _ZONE = {
 
 
 def _check(league_id: str) -> None:
+    """Raise ValueError for an unknown ``league_id`` (before any data is loaded)."""
     if league_id not in _LEVEL:
         raise ValueError(f"league_id must be one of {sorted(_LEVEL)}, got {league_id!r}")
 
@@ -111,6 +112,7 @@ def nba_shot_zone_rows(shots: pl.DataFrame, *, league_id: str = "00") -> pl.Data
 
 
 def _rows(seasons: int | list[int], league_id: str) -> pl.DataFrame:
+    """The shot rows of ``seasons`` (END years) from the league's shots release."""
     _check(league_id)
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     if league_id == "10":

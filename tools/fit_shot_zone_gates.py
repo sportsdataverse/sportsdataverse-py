@@ -54,6 +54,7 @@ FIXTURES = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "bb_shot
 
 
 def _rows(league: str, season: int) -> pl.DataFrame:
+    """One league-season's shot rows, through the producers' own adapters."""
     if league in ("nba", "wnba"):
         from sportsdataverse.nba.nba_shot_zone_profiles import _rows as rows
 
@@ -149,6 +150,7 @@ def player_curve(h: pl.DataFrame, num: str, den: str, *, bins: int, min_bin: int
 
 
 def _row(kind: str, league: str, rate: str, span: str, seasons: range, pts: list) -> dict:
+    """One fits-table row: the curve, its ``M`` and the span it was measured on."""
     m = fit_m(pts)
     print(f"{league} {kind} {rate} {span}: M={m:.1f} ({len(pts)} points)", flush=True)
     return {
@@ -202,6 +204,7 @@ def frozen_gates(fits: pl.DataFrame, kind: str) -> dict[str, int]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI: fit a league, print each gate and its holdout reliability, optionally write the curves."""
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--league", choices=sorted(SPANS), required=True)
     ap.add_argument("--data", type=Path, default=None, help="cache the shot rows here")
