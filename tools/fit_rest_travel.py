@@ -11,17 +11,28 @@ from the first game (``tools/fit_preseason_prior.py``'s ``pro_season``): the rat
 games strictly before the cutoff and project every later regular-season game. Win probability
 is ``Phi(margin / sd)`` with the shipped sd.
 
-**The effect.** OLS of the residual ``actual margin - base margin`` on an intercept and the
+**The effect.** OLS, with no intercept, of the residual ``actual margin - base margin`` on the
 home-minus-away rest and travel differences (:data:`~sportsdataverse.nba.nba_rest_travel.FEATURES`),
-one row per game: its projection at the latest cutoff before it. The features are read off the
-schedule (dates and sites of the teams' earlier games and of this one), so they are known before
-the tip.
+one row per game: its projection at the latest cutoff before it. No intercept, so the effect is
+zero for two teams in the same state and the home term stays the game model's. The first run had
+one (``--intercept`` reproduces it): it came out -0.34 points, alone it scored no better than the
+base, and dropping it was decided after seeing that run's holdout (both pass the gate on 3 of 3
+NBA holdout seasons). The features are read off the schedule (dates and sites of the teams'
+earlier games and of this one), so they are known before the tip.
+
+**Look-ahead in scoring.** The schedule is the final one: rescheduled dates, the December games
+added after Cup group play and who played in the Cup knockout are as played, not as known at an
+early cutoff. That is right for the fit (it measures real rest); for scoring it is a small
+optimistic look-ahead, which as-of schedules (not kept) would remove. The base also gives the home
+term to the few neutral-site games (``pro_season`` predates the neutral list), about three a season.
 
 **Walk-forward.** Each HOLDOUT season is scored with coefficients fit on the TRAIN seasons and the
 holdout seasons before it only, on every (cutoff, game) pair, against the base projection: log
-loss, Brier and margin MAE, with paired differences (SE clustered by game). The gate: all three
-improve on at least two holdout seasons. The shipped coefficients are the fit on every season
-(train and holdout), the next walk-forward step.
+loss, Brier and margin MAE, with paired differences (SE clustered by game), also pooled over the
+holdout seasons, plus calibration (the slope of the outcome on the logit, and observed vs predicted
+by back-to-back difference). The gate, set in the build brief before any fit: all three improve
+on at least two holdout seasons. The shipped coefficients are the fit on every season (train and
+holdout), the next walk-forward step, so they are never scored out of sample themselves.
 
 Inputs: the ``{nba,wnba}_stats_possessions`` / ``_schedules`` releases (network), cached as
 parquet under ``--cache`` (``pro_season/`` is the fit_pro_season_ratings cache).
@@ -103,15 +114,15 @@ def latest(frame: pl.DataFrame) -> pl.DataFrame:
     return frame.sort("week").group_by("season", "game_id").last()
 
 
-def fit(frame: pl.DataFrame) -> dict[str, float]:
-    """OLS of the residual on an intercept and the differences, one row per game; coefficients and SEs."""
+def fit(frame: pl.DataFrame, intercept: bool = False) -> dict[str, float]:
+    """OLS of the residual on the differences, one row per game; coefficients and SEs."""
     one = latest(frame)
-    x = np.column_stack([np.ones(one.height), *(one[c].to_numpy() for c in _D)])
+    x = np.column_stack([*([np.ones(one.height)] if intercept else []), *(one[c].to_numpy() for c in _D)])
     r = (one["margin"] - one["base"]).to_numpy()
     beta, *_ = np.linalg.lstsq(x, r, rcond=None)
     resid = r - x @ beta
     cov = np.linalg.inv(x.T @ x) * (resid @ resid) / (x.shape[0] - x.shape[1])
-    names = ["intercept", *FEATURES]
+    names = [*(["intercept"] if intercept else []), *FEATURES]
     out = {n: round(float(b), 4) for n, b in zip(names, beta, strict=True)}
     out.update({f"{n}_se": round(float(s), 4) for n, s in zip(names, np.sqrt(np.diag(cov)), strict=True)})
     out["games"] = one.height
@@ -130,13 +141,29 @@ def _paired(game_id: pl.Series, d: np.ndarray) -> dict[str, float]:
     return {"diff": round(mean, 5), "se": round(se, 5)}
 
 
+def _calibration(y: np.ndarray, p: np.ndarray) -> float:
+    """Slope of the logistic regression of ``y`` on ``logit(p)`` (1 is calibrated), by Newton's method."""
+    z = np.log(np.clip(p, 1e-12, 1 - 1e-12) / np.clip(1 - p, 1e-12, 1))
+    x = np.column_stack([np.ones_like(z), z])
+    b = np.array([0.0, 1.0])
+    for _ in range(25):
+        q = 1 / (1 + np.exp(-x @ b))
+        b = b + np.linalg.solve(x.T @ (x * (q * (1 - q))[:, None]), x.T @ (y - q))
+    return round(float(b[1]), 4)
+
+
+def _margin(sub: pl.DataFrame, coefs: dict[str, float]) -> np.ndarray:
+    """Base margin plus the rest and travel points (and the intercept of an ``--intercept`` fit)."""
+    return sub["base"].to_numpy() + rest_travel_margin(sub, coefs=coefs) + coefs.get("intercept", 0.0)
+
+
 def score(frame: pl.DataFrame, coefs: dict[str, float], sd: float) -> dict[str, object]:
     """Base vs base + rest/travel on every (cutoff, game) pair, and on each game's latest cutoff."""
 
     def block(sub: pl.DataFrame) -> dict[str, object]:
         y, m = sub["y"].to_numpy(), sub["margin"].to_numpy()
         mb = sub["base"].to_numpy()
-        ma = mb + rest_travel_margin(sub, coefs=coefs)
+        ma = _margin(sub, coefs)
         pb, pa = norm.cdf(mb / sd), norm.cdf(ma / sd)
         res: dict[str, object] = {"n": sub.height, "games": sub["game_id"].n_unique()}
         for name, (b, a) in {
@@ -146,28 +173,54 @@ def score(frame: pl.DataFrame, coefs: dict[str, float], sd: float) -> dict[str, 
         }.items():
             res[name] = {"base": round(b, 5), "rest_travel": round(a, 5), "improved": bool(a < b)}
         res["paired_log_loss"] = _paired(sub["game_id"], _ll(y, pa) - _ll(y, pb))
+        res["paired_brier"] = _paired(sub["game_id"], (y - pa) ** 2 - (y - pb) ** 2)
         res["paired_abs_error"] = _paired(sub["game_id"], np.abs(m - ma) - np.abs(m - mb))
+        res["calibration_slope"] = {"base": _calibration(y, pb), "rest_travel": _calibration(y, pa)}
+        d = sub["d_b2b"].to_numpy()
+        res["by_d_b2b"] = {
+            f"{k:+d}": {
+                "n": int((d == k).sum()),
+                "y": round(float(y[d == k].mean()), 4),
+                "p_base": round(float(pb[d == k].mean()), 4),
+                "p_rest_travel": round(float(pa[d == k].mean()), 4),
+            }
+            for k in (-1, 0, 1)
+            if (d == k).any()
+        }
         return res
 
     return {"all_cutoffs": block(frame), "latest_cutoff": block(latest(frame))}
 
 
-def run(lg: str, train: list[int], holdout: list[int], cache: Path) -> dict[str, object]:
+def run(lg: str, train: list[int], holdout: list[int], cache: Path, intercept: bool = False) -> dict[str, object]:
     league_id = _PRO[lg]
     _, sd = nba_season_sim.SIM_CONSTANTS[league_id]
     frames = {s: season_frame(league_id, s, cache) for s in [*train, *holdout]}
     walk: dict[str, object] = {}
     passed = 0
+    scored = []
     for i, s in enumerate(holdout):
         seen = [*train, *holdout[:i]]
-        coefs = fit(pl.concat([frames[t] for t in seen]))
+        coefs = fit(pl.concat([frames[t] for t in seen]), intercept)
         sc = score(frames[s], coefs, sd)
+        scored.append(frames[s].with_columns(pl.Series("adjusted", _margin(frames[s], coefs))))
         allc = sc["all_cutoffs"]
         ok = all(allc[k]["improved"] for k in ("log_loss", "brier", "margin_mae"))  # type: ignore[index]
         passed += ok
         walk[str(s)] = {"fit_on": seen, "coefs": coefs, "all_three_improved": ok, **sc}
-    final = fit(pl.concat(list(frames.values())))
+    final = fit(pl.concat(list(frames.values())), intercept)
+    pooled = pl.concat(scored)
+    y, m = pooled["y"].to_numpy(), pooled["margin"].to_numpy()
+    mb, ma = pooled["base"].to_numpy(), pooled["adjusted"].to_numpy()
+    pb, pa = norm.cdf(mb / sd), norm.cdf(ma / sd)
+    gid = pooled["season"].cast(pl.Utf8) + pooled["game_id"]
     return {
+        "intercept": intercept,
+        "holdout_pooled_all_cutoffs": {
+            "paired_log_loss": _paired(gid, _ll(y, pa) - _ll(y, pb)),
+            "paired_brier": _paired(gid, (y - pa) ** 2 - (y - pb) ** 2),
+            "paired_abs_error": _paired(gid, np.abs(m - ma) - np.abs(m - mb)),
+        },
         "league": lg,
         "train": train,
         "holdout": holdout,
@@ -185,12 +238,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--holdout", type=int, nargs="+", required=True, help="seasons by END year, in order")
     ap.add_argument("--cache", type=Path, default=Path(".cache"))
     ap.add_argument("--out", type=Path, default=None, help="write the result json here")
+    ap.add_argument("--intercept", action="store_true", help="fit an intercept too (the first, unshipped run)")
     args = ap.parse_args(argv)
     if set(args.train) & set(args.holdout):
         ap.error("train and holdout seasons must be disjoint")
     if args.holdout != sorted(args.holdout) or min(args.holdout) <= max(args.train):
         ap.error("holdout seasons must be in order and after every train season (walk-forward)")
-    result = run(args.league, args.train, args.holdout, args.cache)
+    result = run(args.league, args.train, args.holdout, args.cache, args.intercept)
     text = json.dumps(result, indent=2, default=str)
     print(text)
     if args.out:

@@ -48,7 +48,10 @@ not pass its held-out gate, so WNBA games get none. The play-in, the Cup knockou
 league-average fill games are not on the schedule and get none.
 
 **Not modelled:** injuries and roster moves; the playoffs past the play-in; offseason roster
-moves beyond what last season's rating and the regression factor carry.
+moves beyond what last season's rating and the regression factor carry. The league's injury report
+(``load_nba_stats_injury_report``) covers about the next day's games, so it would touch only the
+start of a projection that runs weeks; long absences need a model of how long players stay out and
+player ratings to turn them into team margin. If it is added, its as-of key is the report's time.
 """
 
 from __future__ import annotations

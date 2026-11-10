@@ -21,10 +21,10 @@ Vancouver) are placed at its home arena. Coordinates are rounded to 0.01 degree 
 * ``b2b``: ``rest_days == 0``.
 * ``three_in_four``: the third game in four nights (two games back was at most three days ago).
 * ``travel_km``: great-circle distance from the previous game's site (a season opener: from home).
-* ``tz_shift``: hours between the UTC offsets of the previous and this game's sites, each on its
-  own date (so Phoenix in the summer is Pacific time).
+* ``tz_shift``: hours between the UTC offsets of the previous and this game's sites, both on this
+  game's date (so Phoenix in the summer is Pacific time, and a daylight-saving switch is no shift).
 
-**The effect** (:data:`REST_TRAVEL_CONSTANTS`): ``intercept + sum(coef * (home - away))``, points
+**The effect** (:data:`REST_TRAVEL_CONSTANTS`): ``sum(coef * (home - away))``, points
 of home margin, ``travel`` in thousands of km. Fit by ``tools/fit_rest_travel.py`` on the
 residual of the season sim's own game model, walk-forward by season; see that constant for the
 held-out numbers. A league with no entry gets no adjustment.
@@ -51,34 +51,35 @@ REST_CAP = 2
 #: The home-minus-away differences the effect is fit on, in :data:`REST_TRAVEL_CONSTANTS` order.
 FEATURES = ("b2b", "three_in_four", "rest_days", "travel", "tz_shift")
 
-#: league_id -> {"intercept": ..., one coefficient per :data:`FEATURES`} in points of home margin
-#: per unit of home-minus-away difference (``travel`` per 1000 km). Fit by
-#: ``tools/fit_rest_travel.py`` (2026-11-10): OLS of the residual of the season sim's game model
-#: (the as-of ridge with the preseason prior, weekly cutoffs), one row per game at its latest
-#: cutoff. Walk-forward: each holdout season is scored with the fit on the seasons before it only,
-#: on every (cutoff, game) pair; the gate is log loss, Brier and margin MAE all better than the
-#: game model alone on at least two holdout seasons.
+#: league_id -> one coefficient per :data:`FEATURES`, in points of home margin per unit of
+#: home-minus-away difference (``travel`` per 1000 km). Fit by ``tools/fit_rest_travel.py``
+#: (2026-11-10; result JSON in ClaudeCowork ``data/2026-11-10-bb-d23-rest-travel/``): OLS with no
+#: intercept of the residual of the season sim's game model (the as-of ridge with the preseason
+#: prior, weekly cutoffs), one row per game at its latest cutoff. Walk-forward: each holdout season
+#: is scored with the fit on the seasons before it only, on every (cutoff, game) pair. The gate,
+#: set before any fit and never lowered: log loss, Brier and margin MAE all better than the game
+#: model alone on at least two holdout seasons. Frozen; refit when a season is added to the train
+#: set, and check 2026-27 out of sample at its end (no clean NBA holdout is left).
 #:
-#: * NBA, train 2018 2019 2022 2023, holdout 2024 2025 2026 (passes, 3 of 3). Log loss / Brier /
-#:   margin MAE, base -> with rest and travel: 2024 0.63048 / 0.22088 / 11.616 -> 0.62586 / 0.21844
-#:   / 11.531 (paired log loss -0.00461 +- 0.00227, SE clustered by game); 2025 0.62338 / 0.21777
-#:   / 11.673 -> 0.61950 / 0.21631 / 11.630 (-0.00388 +- 0.00238); 2026 0.60855 / 0.21006 /
-#:   12.273 -> 0.60693 / 0.20959 / 12.227 (-0.00161 +- 0.00239). The shipped values are the fit on
-#:   all seven seasons (8,610 games; SE: b2b 0.48, three_in_four 0.30, rest_days 0.30, travel
-#:   0.22, tz_shift 0.25, intercept 0.17). Nearly all of it is the back-to-back: an intercept alone
-#:   does not help, and travel and time zones are within one SE of zero.
+#: * NBA, train 2018 2019 2022 2023, holdout 2024 2025 2026: passes, 3 of 3. Paired differences
+#:   (with rest and travel minus without, SE clustered by game), log loss / Brier / margin MAE:
+#:   2024 -0.00349 +- 0.00218 / -0.00189 +- 0.00096 / -0.072 +- 0.035 (b2b fit -1.84);
+#:   2025 -0.00351 +- 0.00226 / -0.00136 +- 0.00101 / -0.048 +- 0.037 (b2b -1.79);
+#:   2026 -0.00185 +- 0.00230 / -0.00064 +- 0.00103 / -0.053 +- 0.039 (b2b -2.07; on its own not
+#:   distinguishable from zero); pooled -0.00295 +- 0.00130 / -0.00130 +- 0.00058 / -0.058 +- 0.021.
+#:   Calibration slopes stay within 0.03 of the base's (0.98-1.03); by back-to-back difference the
+#:   base overrates the tired team by about 6 points of probability and the adjusted model by 1-2.
+#:   The shipped values are the fit on all seven seasons (8,610 games; SE b2b 0.48, three_in_four
+#:   0.30, rest_days 0.30, travel 0.20, tz_shift 0.26), never scored out of sample themselves. The
+#:   back-to-back (4 SE) and three-in-four (2 SE) carry it; rest_days is noise, and travel and
+#:   time zones lean on each other (1.4 and 1.8 SE, opposite signs). A first run with an intercept
+#:   (-0.32 +- 0.17, a home-term change) passed the same way; it was dropped after seeing its
+#:   holdout, since alone it did nothing (``--intercept`` reproduces it).
 #: * WNBA, train 2018 2019 2021, holdout 2024 2025 (2022, 2023 and 2026 stay reserved by the
-#:   2026-11-02 sim-vs-market spec): fails, 1 of 2 (2025 log loss 0.64596 -> 0.65800, MAE 11.167
-#:   -> 11.433). Few WNBA back-to-backs, 1,126 games; no entry, so no adjustment.
+#:   2026-11-02 sim-vs-market spec): fails, 1 of 2 (2025 paired log loss +0.0113 +- 0.0062, MAE
+#:   +0.26 +- 0.09). Few WNBA back-to-backs, 1,126 games; no entry, so no adjustment.
 REST_TRAVEL_CONSTANTS: dict[str, dict[str, float]] = {
-    "00": {
-        "intercept": -0.3379,
-        "b2b": -1.9826,
-        "three_in_four": -0.6075,
-        "rest_days": 0.1289,
-        "travel": 0.0226,
-        "tz_shift": -0.2452,
-    },
+    "00": {"b2b": -1.9391, "three_in_four": -0.6171, "rest_days": 0.1004, "travel": 0.2893, "tz_shift": -0.4702},
 }
 
 _SITE_SCHEMA: dict[str, pl.DataType] = {
@@ -222,12 +223,10 @@ def team_game_rest_travel(games: pl.DataFrame, league_id: str = "00") -> pl.Data
         pl.col("lon").shift(1).over(over).fill_null(pl.col("h_lon")).alias("p_lon"),
         pl.col("tz").shift(1).over(over).fill_null(pl.col("h_tz")).alias("p_tz"),
     )
-    days = [
-        (r["game_date"], r["tz"], r["p_tz"], r["d1"])
-        for r in team.select("game_date", "tz", "p_tz", "d1").iter_rows(named=True)
-    ]
+    # both sites' clocks on this game's date: a team that stays put across a DST switch crosses none
     shift = [
-        abs(_utc_offset_hours(tz, d) - _utc_offset_hours(ptz, d0 if d0 is not None else d)) for d, tz, ptz, d0 in days
+        abs(_utc_offset_hours(tz, d) - _utc_offset_hours(ptz, d))
+        for d, tz, ptz in team.select("game_date", "tz", "p_tz").iter_rows()
     ]
     rest = ((pl.col("game_date") - pl.col("d1")).dt.total_days() - 1).clip(0, REST_CAP).fill_null(REST_CAP)
     return team.select(
@@ -286,7 +285,7 @@ def rest_travel_margin(diffs: pl.DataFrame, league_id: str = "00", coefs: dict[s
     c = REST_TRAVEL_CONSTANTS.get(league_id) if coefs is None else coefs
     if not c:
         return np.zeros(diffs.height)
-    out = np.full(diffs.height, c["intercept"])
+    out = np.zeros(diffs.height)
     for f in FEATURES:
         out = out + c[f] * diffs.get_column(f"d_{f}").fill_null(0.0).to_numpy()
     return out
