@@ -149,6 +149,143 @@ def _sided(odds: pl.DataFrame, games: pl.DataFrame) -> pl.DataFrame:
     ).filter(pl.col("side").is_not_null())
 
 
+def _line_medians(rows: pl.DataFrame) -> pl.DataFrame:
+    """Per game: one event, then the medians over its books of each line, price and no-vig WP."""
+    # one game per event; a game two events map to keeps the one with the most quotes
+    event = (
+        rows.group_by("game_id", "event_id")
+        .len()
+        .sort(["game_id", "len", "event_id"], descending=[False, True, False])
+        .unique("game_id", keep="first", maintain_order=True)
+        .select("game_id", "event_id")
+    )
+    rows = rows.join(event, on=["game_id", "event_id"], how="semi")
+    book = ["game_id", "event_id", "season", "bookmaker_key"]
+    per_book = (
+        rows.group_by(book)
+        .agg(
+            *[
+                pl.col(f"{t}_{v}").filter(pl.col("market_key") == m, pl.col("side") == s).first().alias(f"{m}_{s}_{t}")
+                for m, sides in (("h2h", ("home", "away")), ("spreads", ("home",)), ("totals", ("over", "under")))
+                for s in sides
+                for t in ("open", "close")
+                for v in (("price",) if m == "h2h" else ("point",))
+            ],
+        )
+        .with_columns(
+            *[_devig(pl.col(f"h2h_home_{t}"), pl.col(f"h2h_away_{t}")).alias(f"wp_{t}") for t in ("open", "close")],
+            pl.any_horizontal(pl.col("^(h2h|spreads|totals)_.*_close$").is_not_null()).alias("closed"),
+        )
+    )
+    return per_book.group_by("game_id", "event_id", "season").agg(
+        pl.col("closed").sum().alias("n_books"),
+        *[pl.col(f"spreads_home_{t}").median().alias(f"spread_home_{t}") for t in ("open", "close")],
+        *[pl.col(f"totals_over_{t}").median().alias(f"total_{t}") for t in ("open", "close")],
+        *[
+            _american(_decimal(pl.col(f"h2h_{s}_{t}")).median()).round(1).alias(f"ml_{s}_{t}")
+            for t in ("open", "close")
+            for s in ("home", "away")
+        ],
+        *[pl.col(f"wp_{t}").median().alias(f"market_home_wp_{t}") for t in ("open", "close")],
+        *[(1 - pl.col(f"wp_{t}")).median().alias(f"market_away_wp_{t}") for t in ("open", "close")],
+    )
+
+
+def _with_result(out: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
+    """The completed games' margin and the result against the closing spread and total, in the D33 schema."""
+    done = pl.col("status_type_completed").fill_null(False)
+    result = schedule.select(
+        pl.col("game_id").cast(pl.Int32),
+        pl.when(done)
+        .then(pl.col("home_score").cast(pl.Int32) - pl.col("away_score").cast(pl.Int32))
+        .alias("home_margin"),
+        pl.when(done)
+        .then(pl.col("home_score").cast(pl.Float64) + pl.col("away_score").cast(pl.Float64))
+        .alias("_points"),
+    ).unique("game_id")
+    ats = pl.col("home_margin") + pl.col("spread_home_close")
+    tot = pl.col("_points") - pl.col("total_close")
+    return (
+        out.join(result, on="game_id", how="left")
+        .with_columns(
+            pl.when(ats > 0)
+            .then(pl.lit("home"))
+            .when(ats < 0)
+            .then(pl.lit("away"))
+            .when(ats == 0)
+            .then(pl.lit("push"))
+            .alias("ats_result"),
+            pl.when(tot > 0)
+            .then(pl.lit("over"))
+            .when(tot < 0)
+            .then(pl.lit("under"))
+            .when(tot == 0)
+            .then(pl.lit("push"))
+            .alias("total_result"),
+        )
+        .select(pl.col(c).cast(t) for c, t in GAME_LINES_SCHEMA.items())
+        .sort("game_id")
+    )
+
+
+def _prop_lines(rows: pl.DataFrame) -> pl.DataFrame:
+    """Per game x market x player: the modal closing line and the median prices / no-vig over probability at it."""
+    key = ["game_id", "market_key", "player_name"]
+    per_book = (
+        rows.group_by([*key, "bookmaker_key", "close_point"])
+        .agg(
+            pl.col("close_price").filter(pl.col("outcome_name") == "Over").first().alias("over"),
+            pl.col("close_price").filter(pl.col("outcome_name") == "Under").first().alias("under"),
+        )
+        .filter(pl.col("over").is_not_null() & pl.col("under").is_not_null())
+        .with_columns(_devig(pl.col("over"), pl.col("under")).alias("p_over"))
+    )
+    line = (
+        per_book.group_by([*key, "close_point"])
+        .len()
+        .sort([*key, "len", "close_point"], descending=[False, False, False, True, False])
+        .unique(key, keep="first", maintain_order=True)
+        .select(*key, "close_point")
+    )
+    return (
+        per_book.join(line, on=[*key, "close_point"], how="semi")
+        .group_by([*key, "close_point"])
+        .agg(
+            pl.len().cast(pl.UInt32).alias("n_books"),
+            _american(_decimal(pl.col("over")).median()).round(1).alias("over_price"),
+            _american(_decimal(pl.col("under")).median()).round(1).alias("under_price"),
+            pl.col("p_over").median().alias("over_prob"),
+        )
+        .rename({"close_point": "line"})
+        .with_columns(pl.col("market_key").replace_strict(PROP_MARKETS).alias("stat"))
+    )
+
+
+def _prop_athletes(out: pl.DataFrame, games: pl.DataFrame, player_xwalk: pl.DataFrame) -> pl.DataFrame:
+    """The athlete per (game, name): the name in the crosswalk for one of the game's two teams that season."""
+    sides = (
+        games.unique("game_id")
+        .select("game_id", "season", pl.concat_list("home_id", "away_id").alias("team_id"))
+        .explode("team_id")
+    )
+    xw = player_xwalk.select(
+        pl.col("season").cast(pl.Int32),
+        pl.col("team").cast(pl.Int64).cast(pl.Int32).alias("team_id"),
+        "player_name",
+        pl.col("espn_athlete_id").cast(pl.Int64).cast(pl.Int32).alias("athlete_id"),
+    ).filter(pl.col("athlete_id").is_not_null())
+    for k in ("season", "team_id"):
+        assert sides.schema[k] == xw.schema[k]
+    return (
+        out.select("game_id", "player_name")
+        .unique()
+        .join(sides, on="game_id", how="inner")
+        .join(xw, on=["season", "team_id", "player_name"], how="inner")
+        .unique(["game_id", "player_name"], keep="first", maintain_order=True)
+        .select("game_id", "player_name", "athlete_id", "team_id")
+    )
+
+
 def game_lines(
     lines_checkpoints: pl.DataFrame,
     crosswalk: pl.DataFrame,
@@ -215,77 +352,7 @@ def game_lines(
     rows = _sided(lines_checkpoints.filter(pl.col("sport_key") == ODDS_SPORT_KEYS[lg]), games)
     if rows.is_empty():
         return pl.DataFrame(schema=GAME_LINES_SCHEMA)
-    # one game per event; a game two events map to keeps the one with the most quotes
-    event = (
-        rows.group_by("game_id", "event_id")
-        .len()
-        .sort(["game_id", "len", "event_id"], descending=[False, True, False])
-        .unique("game_id", keep="first", maintain_order=True)
-        .select("game_id", "event_id")
-    )
-    rows = rows.join(event, on=["game_id", "event_id"], how="semi")
-    book = ["game_id", "event_id", "season", "bookmaker_key"]
-    per_book = (
-        rows.group_by(book)
-        .agg(
-            *[
-                pl.col(f"{t}_{v}").filter(pl.col("market_key") == m, pl.col("side") == s).first().alias(f"{m}_{s}_{t}")
-                for m, sides in (("h2h", ("home", "away")), ("spreads", ("home",)), ("totals", ("over", "under")))
-                for s in sides
-                for t in ("open", "close")
-                for v in (("price",) if m == "h2h" else ("point",))
-            ],
-        )
-        .with_columns(
-            *[_devig(pl.col(f"h2h_home_{t}"), pl.col(f"h2h_away_{t}")).alias(f"wp_{t}") for t in ("open", "close")],
-            pl.any_horizontal(pl.col("^(h2h|spreads|totals)_.*_close$").is_not_null()).alias("closed"),
-        )
-    )
-    out = per_book.group_by("game_id", "event_id", "season").agg(
-        pl.col("closed").sum().alias("n_books"),
-        *[pl.col(f"spreads_home_{t}").median().alias(f"spread_home_{t}") for t in ("open", "close")],
-        *[pl.col(f"totals_over_{t}").median().alias(f"total_{t}") for t in ("open", "close")],
-        *[
-            _american(_decimal(pl.col(f"h2h_{s}_{t}")).median()).round(1).alias(f"ml_{s}_{t}")
-            for t in ("open", "close")
-            for s in ("home", "away")
-        ],
-        *[pl.col(f"wp_{t}").median().alias(f"market_home_wp_{t}") for t in ("open", "close")],
-        *[(1 - pl.col(f"wp_{t}")).median().alias(f"market_away_wp_{t}") for t in ("open", "close")],
-    )
-    done = pl.col("status_type_completed").fill_null(False)
-    result = schedule.select(
-        pl.col("game_id").cast(pl.Int32),
-        pl.when(done)
-        .then(pl.col("home_score").cast(pl.Int32) - pl.col("away_score").cast(pl.Int32))
-        .alias("home_margin"),
-        pl.when(done)
-        .then(pl.col("home_score").cast(pl.Float64) + pl.col("away_score").cast(pl.Float64))
-        .alias("_points"),
-    ).unique("game_id")
-    ats = pl.col("home_margin") + pl.col("spread_home_close")
-    tot = pl.col("_points") - pl.col("total_close")
-    return (
-        out.join(result, on="game_id", how="left")
-        .with_columns(
-            pl.when(ats > 0)
-            .then(pl.lit("home"))
-            .when(ats < 0)
-            .then(pl.lit("away"))
-            .when(ats == 0)
-            .then(pl.lit("push"))
-            .alias("ats_result"),
-            pl.when(tot > 0)
-            .then(pl.lit("over"))
-            .when(tot < 0)
-            .then(pl.lit("under"))
-            .when(tot == 0)
-            .then(pl.lit("push"))
-            .alias("total_result"),
-        )
-        .select(pl.col(c).cast(t) for c, t in GAME_LINES_SCHEMA.items())
-        .sort("game_id")
-    )
+    return _with_result(_line_medians(rows), schedule)
 
 
 def player_props(
@@ -366,57 +433,8 @@ def player_props(
     )
     if rows.is_empty() or not {"home_id", "away_id"} <= set(games.columns):
         return pl.DataFrame(schema=PLAYER_PROPS_SCHEMA)
-    key = ["game_id", "market_key", "player_name"]
-    per_book = (
-        rows.group_by([*key, "bookmaker_key", "close_point"])
-        .agg(
-            pl.col("close_price").filter(pl.col("outcome_name") == "Over").first().alias("over"),
-            pl.col("close_price").filter(pl.col("outcome_name") == "Under").first().alias("under"),
-        )
-        .filter(pl.col("over").is_not_null() & pl.col("under").is_not_null())
-        .with_columns(_devig(pl.col("over"), pl.col("under")).alias("p_over"))
-    )
-    line = (
-        per_book.group_by([*key, "close_point"])
-        .len()
-        .sort([*key, "len", "close_point"], descending=[False, False, False, True, False])
-        .unique(key, keep="first", maintain_order=True)
-        .select(*key, "close_point")
-    )
-    out = (
-        per_book.join(line, on=[*key, "close_point"], how="semi")
-        .group_by([*key, "close_point"])
-        .agg(
-            pl.len().cast(pl.UInt32).alias("n_books"),
-            _american(_decimal(pl.col("over")).median()).round(1).alias("over_price"),
-            _american(_decimal(pl.col("under")).median()).round(1).alias("under_price"),
-            pl.col("p_over").median().alias("over_prob"),
-        )
-        .rename({"close_point": "line"})
-        .with_columns(pl.col("market_key").replace_strict(PROP_MARKETS).alias("stat"))
-    )
-    # the athlete: the name in the crosswalk for one of the game's two teams that season
-    sides = (
-        games.unique("game_id")
-        .select("game_id", "season", pl.concat_list("home_id", "away_id").alias("team_id"))
-        .explode("team_id")
-    )
-    xw = player_xwalk.select(
-        pl.col("season").cast(pl.Int32),
-        pl.col("team").cast(pl.Int64).cast(pl.Int32).alias("team_id"),
-        "player_name",
-        pl.col("espn_athlete_id").cast(pl.Int64).cast(pl.Int32).alias("athlete_id"),
-    ).filter(pl.col("athlete_id").is_not_null())
-    for k in ("season", "team_id"):
-        assert sides.schema[k] == xw.schema[k]
-    who = (
-        out.select("game_id", "player_name")
-        .unique()
-        .join(sides, on="game_id", how="inner")
-        .join(xw, on=["season", "team_id", "player_name"], how="inner")
-        .unique(["game_id", "player_name"], keep="first", maintain_order=True)
-        .select("game_id", "player_name", "athlete_id", "team_id")
-    )
+    out = _prop_lines(rows)
+    who = _prop_athletes(out, games, player_xwalk)
     season = games.unique("game_id").select("game_id", "season")
     return (
         out.join(season, on="game_id", how="left")
