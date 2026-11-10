@@ -81,6 +81,7 @@ from sportsdataverse.mbb.mbb_shot_selection import *
 from sportsdataverse.mbb.mbb_shots_adapter import *
 from sportsdataverse.mbb.mbb_team_ratings import *
 from sportsdataverse.mbb.mbb_game_impact import *
+from sportsdataverse.mbb.mbb_game_stints import *
 from sportsdataverse.mbb.mbb_lineup_seasons import *
 from sportsdataverse.mbb.mbb_player_on_off import *
 from sportsdataverse.mbb.mbb_play_style import *

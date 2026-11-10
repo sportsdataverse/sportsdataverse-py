@@ -70,8 +70,8 @@ def _check_league(league_id: str) -> None:
         raise ValueError(f"league_id must be one of {sorted(_QUARTER)}, got {league_id!r}")
 
 
-def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, quarter: float) -> pl.DataFrame:
-    """One impact row per play-by-play action, free throws on the lineup of the last foul."""
+def _actions(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, quarter: float) -> pl.DataFrame:
+    """One row per play-by-play action in game order: its clock, points and the lineup at the action."""
     on_floor = lineups.select(
         pl.col("game_id").cast(pl.Utf8),
         pl.col("action_number").cast(pl.Int64),
@@ -88,7 +88,7 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         .otherwise(pl.lit(_OT_SECONDS))
     )
     score = {side: _running_score(side) for side in ("home", "away")}
-    actions = (
+    return (
         pbp.select(_PBP_COLUMNS)
         .with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("action_number").cast(pl.Int64))
         .join(games, on="game_id", how="inner", validate="m:1")
@@ -109,8 +109,12 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         .join(on_floor, on=["game_id", "action_number"], how="left")
         .sort(["game_id", "order_index"])  # a join need not keep order; the foul fill reads it
     )
+
+
+def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, quarter: float) -> pl.DataFrame:
+    """One impact row per play-by-play action, free throws on the lineup of the last foul."""
     actions = credit_free_throws_to_foul_lineup(
-        actions,
+        _actions(pbp, lineups, games, quarter),
         is_free_throw=pl.col("is_free_throw").eq(True),
         is_foul=pl.col("is_foul").eq(True),
     )

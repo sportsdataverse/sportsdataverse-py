@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 115 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 118 | — |
 
 ## ESPN {#espn}
 
@@ -90,7 +90,10 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_foul_drawing`](reference/additional/analytics#wnba_foul_drawing)
 - [`wnba_game_flow`](reference/additional/analytics#wnba_game_flow)
 - [`wnba_game_lineups_used`](reference/additional/analytics#wnba_game_lineups_used)
+- [`wnba_game_on_off`](reference/additional/analytics#wnba_game_on_off)
 - [`wnba_game_player_impact`](reference/additional/analytics#wnba_game_player_impact)
+- [`wnba_game_stints`](reference/additional/analytics#wnba_game_stints)
+- [`wnba_game_units`](reference/additional/analytics-2#wnba_game_units)
 - [`wnba_lineup_seasons`](reference/additional/analytics-2#wnba_lineup_seasons)
 - [`wnba_matchup_drapm`](reference/additional/analytics-2#wnba_matchup_drapm)
 - [`wnba_player_factor_rapm`](reference/additional/analytics-2#wnba_player_factor_rapm)
@@ -98,8 +101,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_player_props`](reference/additional/analytics-2#wnba_player_props)
 - [`wnba_player_shot_zones`](reference/additional/analytics-2#wnba_player_shot_zones)
 - [`wnba_player_war`](reference/additional/analytics-2#wnba_player_war)
-- [`wnba_player_wowy`](reference/additional/analytics-2#wnba_player_wowy)
-- [`wnba_playtype_ratings`](reference/additional/analytics-2#wnba_playtype_ratings)
+- [`wnba_player_wowy`](reference/additional/analytics-3#wnba_player_wowy)
+- [`wnba_playtype_ratings`](reference/additional/analytics-3#wnba_playtype_ratings)
 - [`wnba_referee_assignments`](reference/additional/analytics-3#wnba_referee_assignments)
 - [`wnba_season_sim`](reference/additional/analytics-3#wnba_season_sim)
 - [`wnba_season_standings`](reference/additional/analytics-3#wnba_season_standings)

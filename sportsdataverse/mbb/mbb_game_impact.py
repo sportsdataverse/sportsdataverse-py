@@ -109,12 +109,30 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
     _check_league(league)
     if pbp.height == 0:
         return pl.DataFrame(schema=_ROWS)
+    events = credit_free_throws_to_foul_lineup(
+        _events(pbp, league).drop("period", "clock", "order"),
+        is_free_throw=pl.col("event_type") == "Free Throw",
+        is_foul=pl.col("foul_class").is_not_null(),
+    )
+    parts = [events.select(list(_ROWS))]
+    if possessions.height:
+        parts.append(_possession_rows(possessions, events["game_id"].unique()))
+    return pl.concat([p.cast(_ROWS) for p in parts])
+
+
+def _events(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
+    """One row per pbp event in game order: clock, points, lineup, ``period``, ``order`` and ``clock``.
+
+    ``seconds`` is the clock since the previous event in the period (the last event also takes the
+    period's tail), ``clock`` the period clock left after the event (0 on the period's last event),
+    ``order`` the event's position in the release.
+    """
     game = pl.col("contest_id")
     in_period = ["contest_id", "period"]
     elapsed = pl.col("game_seconds").cast(pl.Float64)
     start, end = _period_bounds(league)
     is_last = pl.int_range(pl.len()).over(in_period) == pl.len().over(in_period) - 1
-    events = (
+    return (
         pbp.select(
             "season",
             "contest_id",
@@ -155,15 +173,11 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
             "away_poss",
             "event_type",
             "foul_class",
+            "period",
+            pl.when(is_last).then(0.0).otherwise(end - elapsed).alias("clock"),
+            pl.col("_order").cast(pl.Int64).alias("order"),
         )
     )
-    events = credit_free_throws_to_foul_lineup(
-        events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()
-    )
-    parts = [events.select(list(_ROWS))]
-    if possessions.height:
-        parts.append(_possession_rows(possessions, events["game_id"].unique()))
-    return pl.concat([p.cast(_ROWS) for p in parts])
 
 
 def _possession_rows(possessions: pl.DataFrame, played: pl.Series) -> pl.DataFrame:
