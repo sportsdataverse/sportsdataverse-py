@@ -1,0 +1,39 @@
+schema: ncaa_espn_player_crosswalk
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: ncaa_team_id
+  type: integer
+  description: ''
+- name: ncaa_player_id
+  type: character
+  description: ''
+- name: ncaa_player_name
+  type: character
+  description: ''
+- name: ncaa_jersey
+  type: character
+  description: ''
+- name: espn_team_id
+  type: integer
+  description: ''
+- name: espn_athlete_id
+  type: integer
+  description: ''
+- name: espn_athlete_name
+  type: character
+  description: ''
+- name: espn_jersey
+  type: character
+  description: ''
+- name: match_method
+  type: character
+  description: ''
+- name: match_confidence
+  type: double
+  description: ''
+- name: unmatched_reason
+  type: character
+  description: ''

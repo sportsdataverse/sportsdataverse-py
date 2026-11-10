@@ -539,6 +539,7 @@ from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season
 from sportsdataverse.mbb import name_in_v0_box_format as name_in_v0_box_format  # noqa: F401
 from sportsdataverse.mbb import name_is_initials as name_is_initials  # noqa: F401
 from sportsdataverse.mbb import ncaa_coach_stints as ncaa_coach_stints  # noqa: F401
+from sportsdataverse.mbb import ncaa_espn_player_crosswalk as ncaa_espn_player_crosswalk  # noqa: F401
 from sportsdataverse.mbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import ncaa_impact_rows as ncaa_impact_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_lineup_count_rows as ncaa_lineup_count_rows  # noqa: F401
@@ -1212,6 +1213,7 @@ __all__ = [
     "name_in_v0_box_format",
     "name_is_initials",
     "ncaa_coach_stints",
+    "ncaa_espn_player_crosswalk",
     "ncaa_espn_team_crosswalk",
     "ncaa_impact_rows",
     "ncaa_lineup_count_rows",

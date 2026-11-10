@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 382 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 383 | — |
 
 ## ESPN {#espn}
 
@@ -286,6 +286,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#mbb_schedule_crosswalk)
 - [`mbb_team_crosswalk`](reference/additional/ids-and-crosswalks#mbb_team_crosswalk)
 - [`name_is_initials`](reference/additional/ids-and-crosswalks#name_is_initials)
+- [`ncaa_espn_player_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_player_crosswalk)
 - [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk)
 - [`ncaa_mbb_team_ids`](reference/additional/ids-and-crosswalks#ncaa_mbb_team_ids)
 - [`refresh_ncaa_team_ids`](reference/additional/ids-and-crosswalks#refresh_ncaa_team_ids)

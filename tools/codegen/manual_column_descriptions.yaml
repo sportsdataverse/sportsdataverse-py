@@ -50574,6 +50574,30 @@ nba_team_crosswalk:
     null when no Stats team matched the ESPN team.
   nba_team_slug: URL slug for the team (team_slug) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN
     team.
+ncaa_espn_player_crosswalk:
+  espn_athlete_id: ESPN athlete id (Int64) the NCAA player was matched to, among the ESPN athletes of the same team that season;
+    null when unmatched.
+  espn_athlete_name: The athlete's display name in the ESPN player box score (the last one seen that season); null when unmatched.
+  espn_jersey: The jersey the athlete wore most often for that team that season in the ESPN player box score; null when unmatched
+    or never recorded.
+  espn_team_id: ESPN team id (Int64) the NCAA team resolves to through ncaa_espn_team_crosswalk for that season; null when
+    the team has no ESPN mapping (unmatched_reason "no_espn_team").
+  match_confidence: 'Confidence of the tier that made the match: 1.0 name_jersey, 0.95 name, 0.9 last_jersey, 0.85 jaro_winkler
+    (the same scores as the ncaa rows of load_{mbb,wbb}_player_aliases); null when unmatched.'
+  match_method: 'Tier that made the match, tried in order inside one ESPN team: "name_jersey" (normalized full name + jersey),
+    "name" (full name alone), "last_jersey" (last name + jersey), "jaro_winkler" (the one ESPN athlete scoring at least 0.92
+    against the NCAA name); a tier only takes a pair unique on both sides. Null when unmatched.'
+  ncaa_jersey: Jersey as the stats.ncaa.org roster writes it ("0" and "00" differ); null when blank.
+  ncaa_player_id: stats.ncaa.org player id (String, as in every ncaa_{mbb,wbb} release); stats.ncaa.org issues new player
+    ids every season, so the same player has a different id on each season's row.
+  ncaa_player_name: Player name from the stats.ncaa.org roster (clean_name, "First Last").
+  ncaa_team_id: stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school
+    has a different id on each season row.
+  season: Ending year of the season (2024 = 2023-24).
+  unmatched_reason: 'Why the player has no ESPN athlete: "no_espn_team" (the team has no ESPN mapping), "no_espn_players" (no
+    ESPN box-score rows for the team), "ambiguous" (two or more eligible candidates: a shared tier key, or more than one
+    Jaro-Winkler score at or above 0.92 even when the scores differ; or one athlete claimed by two players), "no_candidate"
+    (no ESPN athlete close enough). Null when matched.'
 ncaa_espn_team_crosswalk:
   conference_id: SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the
     {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and
