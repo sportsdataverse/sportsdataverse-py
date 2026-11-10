@@ -80475,5 +80475,5 @@ player_props:
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
-  home_win_prob_naive: Home win probability from score and clock alone (the in-game model with a 0.5 prior).
+  home_win_prob_naive: Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior.
   home_win_prob_market: Home win probability with the closing no-vig market WP as the prior; null without a line.

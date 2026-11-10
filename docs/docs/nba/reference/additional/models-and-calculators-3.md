@@ -776,7 +776,7 @@ Two extra per-play home WP columns for one game: naive (prior 0.5) and market-an
 
 Both rescore the plays with `~sportsdataverse.nba.nba_game_page.score_win_prob`, the same
 in-game model as `home_win_prob`, with only the pregame prior swapped: 0.5 for
-`home_win_prob_naive` (score and clock alone), `market_home_prob` for
+`home_win_prob_naive` (the game state alone: score, clock and possession), `market_home_prob` for
 `home_win_prob_market`. End-of-game rows settle to 1 / 0 as in `score_win_prob`.
 
 **Parameters**
@@ -797,7 +797,7 @@ in-game model as `home_win_prob`, with only the pregame prior swapped: 0.5 for
 |---|---|---|
 | `game_id` | Int32 / Int64 | ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries). |
 | `game_play_number` | Int32 / Int64 | Play order within the game, as in the play-by-play (the dtype the pbp carries). |
-| `home_win_prob_naive` | Float64 | Home win probability from score and clock alone (the in-game model with a 0.5 prior). |
+| `home_win_prob_naive` | Float64 | Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior. |
 | `home_win_prob_market` | Float64 | Home win probability with the closing no-vig market WP as the prior; null without a line. |
 
 **Raises**

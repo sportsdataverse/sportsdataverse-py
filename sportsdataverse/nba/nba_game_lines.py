@@ -11,8 +11,8 @@ quote. These functions join them to ESPN games; they read nothing themselves.
 * :func:`player_props` -- per ESPN game x athlete x stat: the closing line, prices and no-vig over
   probability.
 * :func:`wp_variants` -- two extra per-play home WP columns from
-  :func:`~sportsdataverse.nba.nba_game_page.score_win_prob` with a different prior: naive (0.5, score
-  and clock only) and market (the closing no-vig market WP).
+  :func:`~sportsdataverse.nba.nba_game_page.score_win_prob` with a different prior: naive (0.5: score,
+  clock and possession only) and market (the closing no-vig market WP).
 
 Consensus across books is the median: of the line (spread, total), of the decimal price (moneylines,
 reported back in American odds) and of each book's no-vig probability. A book's no-vig probability
@@ -465,7 +465,7 @@ def wp_variants(
 
     Both rescore the plays with :func:`~sportsdataverse.nba.nba_game_page.score_win_prob`, the same
     in-game model as ``home_win_prob``, with only the pregame prior swapped: 0.5 for
-    ``home_win_prob_naive`` (score and clock alone), ``market_home_prob`` for
+    ``home_win_prob_naive`` (the game state alone: score, clock and possession), ``market_home_prob`` for
     ``home_win_prob_market``. End-of-game rows settle to 1 / 0 as in ``score_win_prob``.
 
     Args:
