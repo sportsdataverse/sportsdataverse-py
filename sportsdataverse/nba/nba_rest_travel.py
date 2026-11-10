@@ -120,6 +120,7 @@ def game_sites() -> pl.DataFrame:
 
 @lru_cache(maxsize=4096)
 def _utc_offset_hours(tz: str, day: dt.date) -> float:
+    """Hours from UTC of ``tz`` at noon on ``day`` (daylight saving included)."""
     off = dt.datetime(day.year, day.month, day.day, 12, tzinfo=ZoneInfo(tz)).utcoffset()
     return 0.0 if off is None else off.total_seconds() / 3600.0
 
@@ -182,6 +183,7 @@ def _place_games(games: pl.DataFrame, league_id: str) -> pl.DataFrame:
 
 
 def _haversine_km(lat1: pl.Expr, lon1: pl.Expr, lat2: pl.Expr, lon2: pl.Expr) -> pl.Expr:
+    """Great-circle distance in km between two latitude / longitude points (degrees)."""
     p1, p2 = lat1.radians(), lat2.radians()
     a = ((p2 - p1) / 2).sin() ** 2 + p1.cos() * p2.cos() * ((lon2.radians() - lon1.radians()) / 2).sin() ** 2
     return 2 * _EARTH_KM * a.sqrt().arcsin()

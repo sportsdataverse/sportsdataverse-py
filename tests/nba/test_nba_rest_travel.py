@@ -44,10 +44,12 @@ BERLIN, LONDON = "0022500578", "0022500602"
 
 
 def _schedule(lg: str, season: int) -> pl.DataFrame:
+    """A committed ``bb_pro_season`` schedule, named by its end year."""
     return pl.read_parquet(PRO / f"{lg}_schedule_{season}.parquet")
 
 
 def _seq(schedule: pl.DataFrame) -> pl.DataFrame:
+    """The rest sequence: regular-season and Cup games, typed as the module takes them."""
     return schedule.filter(pl.col("season_type").is_in(["regular-season", "nba-cup"])).select(
         pl.col("season").cast(pl.Int64),
         pl.col("game_id").cast(pl.Utf8),
@@ -59,11 +61,13 @@ def _seq(schedule: pl.DataFrame) -> pl.DataFrame:
 
 @pytest.fixture(scope="module")
 def nba_2026() -> pl.DataFrame:
+    """2025-26 rest and travel per team and game, with the game date."""
     seq = _seq(_schedule("nba", 2026))
     return rt.team_game_rest_travel(seq, "00").join(seq.select("game_id", "game_date"), on="game_id", validate="m:1")
 
 
 def test_games_abroad_are_placed_abroad(nba_2026: pl.DataFrame) -> None:
+    """The 2026 Berlin and London games are placed abroad, and the trips between them measured."""
     trip = nba_2026.filter(pl.col("team_id").is_in([ORL, MEM])).sort("team_id", "game_date")
     berlin = trip.filter(pl.col("game_id") == BERLIN)
     assert berlin["travel_km"].min() > 7_500 and berlin["travel_km"].max() < 8_100
@@ -90,12 +94,14 @@ def test_every_neutral_city_has_a_site(league_id: str) -> None:
 
 
 def test_utc_offsets_follow_each_city_and_date() -> None:
+    """Phoenix keeps standard time: an hour off Los Angeles in winter, level in summer."""
     winter, summer = dt.date(2026, 1, 10), dt.date(2025, 7, 10)
     assert rt._utc_offset_hours("America/Phoenix", winter) - rt._utc_offset_hours("America/Los_Angeles", winter) == 1
     assert rt._utc_offset_hours("America/Phoenix", summer) == rt._utc_offset_hours("America/Los_Angeles", summer)
 
 
 def test_back_to_backs_are_consecutive_dates(nba_2026: pl.DataFrame) -> None:
+    """Back-to-backs and three-in-fours match the 2025-26 schedule's dates and counts."""
     gap = nba_2026.sort("team_id", "game_date").with_columns(
         (pl.col("game_date") - pl.col("game_date").shift(1).over("team_id")).dt.total_days().alias("gap")
     )
@@ -113,6 +119,7 @@ def test_back_to_backs_are_consecutive_dates(nba_2026: pl.DataFrame) -> None:
 
 
 def _rows(lg: str, year: int) -> pl.DataFrame:
+    """Regular-season possession rows of a committed season (end-year named)."""
     name = f"{lg}_possessions_{year}.parquet"
     path = next(d / name for d in (PRO, RATES) if (d / name).exists())
     return tsr.nba_possession_rate_rows(pl.read_parquet(path), _schedule(lg, year), league_id="00")
@@ -151,6 +158,7 @@ def _season_scores(season: int) -> dict[str, float]:
     assert yy.size > 4_400  # observed 4,487 (2023-24) and 4,490: each game at every cutoff before it
 
     def ll(m: np.ndarray) -> float:
+        """Mean log loss of the probit win probability at the shipped sd."""
         p = np.clip(norm.cdf(m / sim_mod.SIM_CONSTANTS["00"][1]), 1e-15, 1 - 1e-15)
         return float(-(yy * np.log(p) + (~yy) * np.log(1 - p)).mean())
 
@@ -171,6 +179,7 @@ EFFECT_GATES = {2024: (0.6402, 0.0018), 2026: (0.6134, 0.0011)}
 
 @pytest.mark.parametrize("season", list(EFFECT_GATES))
 def test_rest_and_travel_improve_the_game_model(season: int) -> None:
+    """Log loss and margin MAE improve with the rest margin (in-sample; see the module doc)."""
     s = _season_scores(season)
     gate, gain = EFFECT_GATES[season]
     assert s["ll_adj"] <= gate, s
@@ -179,16 +188,19 @@ def test_rest_and_travel_improve_the_game_model(season: int) -> None:
 
 
 def _sim(lg: str, season: int, **kwargs):  # type: ignore[no-untyped-def]
+    """``nba_season_sim`` over the fixtures (test_nba_season_sim's helper)."""
     from tests.nba.test_nba_season_sim import _sim as sim  # the release loaders patched to the fixtures
 
     return sim(lg, season, **kwargs)
 
 
 def test_the_season_sim_applies_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The sim adds the margin to NBA games, none to WNBA games, and it moves projected wins."""
     seen: dict[str, np.ndarray] = {}
     real = sim_mod._simulate_games
 
     def spy(*args, **kwargs):  # type: ignore[no-untyped-def]
+        """Record the ``adj`` the sim passes, then simulate."""
         seen[kwargs.get("wnba") and "wnba" or "nba"] = np.asarray(kwargs["adj"], dtype=float)
         return real(*args, **kwargs)
 
@@ -217,9 +229,10 @@ def test_the_live_season_places_every_game() -> None:
 
 
 def test_a_missing_site_warns_and_adjusts_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
-    sites = rt.game_sites().filter(pl.col("team") != "ORL")
+    """A team with no arena row turns the margin off with a warning instead of failing the sim."""
+    sites = rt.game_sites().filter((pl.col("team") != "ORL").fill_null(True))  # keep the neutral rows
     monkeypatch.setattr(rt, "game_sites", lambda: sites)
     sched = _schedule("nba", 2026)
-    with pytest.warns(UserWarning, match="no rest-and-travel adjustment"):
+    with pytest.warns(UserWarning, match="no rest-and-travel adjustment: teams with no game_sites.csv home row"):
         games = sim_mod._with_rest_travel(sim_mod._regular_games(sched, None), sched, "00")
     assert games.height == 1230 and (games["margin_adj"] == 0.0).all()

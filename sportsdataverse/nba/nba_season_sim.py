@@ -706,6 +706,8 @@ def _cup_columns(cup: CupInputs, future: pl.DataFrame, teams: list[int], h: np.n
 
 
 class _GameTerms(TypedDict):
+    """Per-game terms of :func:`_simulate_games` read off the games frame."""
+
     neutral: np.ndarray | bool
     adj: np.ndarray | float
 
