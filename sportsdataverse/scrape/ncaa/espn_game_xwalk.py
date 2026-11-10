@@ -67,6 +67,8 @@ __all__ = [
     "MATCH_METHODS",
     "build_season_xwalk",
     "load_espn_game_index",
+    "parsed_schedule_side",
+    "stamp_parsed",
     "write_season_xwalk",
     "xwalk_path",
 ]
@@ -143,6 +145,101 @@ def ncaa_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.D
     )
 
 
+def _parsed_game_date(parsed: dict) -> "str | None":
+    """``mm/dd/yyyy`` off the first family row that carries ``game_date``."""
+    for family in ("linescore", "pbp", "player_box", "team_box"):
+        for row in parsed.get(family) or []:
+            value = row.get("game_date") if isinstance(row, dict) else None
+            if value:
+                return str(value)[:10]
+    return None
+
+
+def parsed_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.DataFrame:
+    """One row per PARSED contest of *season*: ``contest_id``, ``game_date``, both ESPN team ids.
+
+    In season the schedule pages are captured once, before tip-off, so
+    ``schedules/parquet/{season}.parquet`` has no ``contest_id`` or ESPN team id
+    for the games played since. The daily run reads scoreboards instead, and
+    2026-27 built a crosswalk of 0 contests, so every published 2027 row had a
+    null ``espn_game_id``. A parsed contest
+    (``{root}/{league}/json/{contest_id}.json``) carries the same keys: ``teams``
+    holds each side's ESPN id and every family row holds the date. Season
+    membership comes from ``schedule_master.parquet``.
+
+    Args:
+        root: Root of the raw data tree.
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year.
+
+    Returns:
+        ``pl.DataFrame`` with the :func:`ncaa_schedule_side` schema. Empty when
+        the master index is absent or no contest of the season is parsed yet.
+    """
+    schema = {
+        "contest_id": pl.Utf8,
+        "game_date": pl.Date,
+        "home_espn_team_id": pl.Utf8,
+        "away_espn_team_id": pl.Utf8,
+    }
+    master = Path(root) / league / "schedule_master.parquet"
+    if not master.is_file():
+        return pl.DataFrame(schema=schema)
+    ids = (
+        pl.read_parquet(master, columns=["contest_id", "season"])
+        .filter(pl.col("season").cast(pl.Utf8) == str(season))
+        .get_column("contest_id")
+        .cast(pl.Utf8)
+        .drop_nulls()
+        .unique()
+        .sort()
+        .to_list()
+    )
+    rows = []
+    for contest_id in ids:
+        path = Path(root) / league / "json" / f"{contest_id}.json"
+        if not path.is_file():
+            continue
+        try:
+            parsed = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        sides = {t.get("side"): t.get("espn_team_id") for t in parsed.get("teams") or [] if isinstance(t, dict)}
+        rows.append(
+            {
+                "contest_id": contest_id,
+                "game_date": _parsed_game_date(parsed),
+                "home_espn_team_id": sides.get("home"),
+                "away_espn_team_id": sides.get("away"),
+            }
+        )
+    if not rows:
+        return pl.DataFrame(schema=schema)
+    return pl.DataFrame(rows, schema={**schema, "game_date": pl.Utf8}).with_columns(
+        pl.col("game_date").str.to_date("%m/%d/%Y", strict=False),
+        _utf8_id("home_espn_team_id"),
+        _utf8_id("away_espn_team_id"),
+    )
+
+
+def _ncaa_side(root: Union[str, Path], league: str, season: int) -> pl.DataFrame:
+    """Schedule-page rows, plus parsed-contest rows for contests the pages miss.
+
+    Per contest the most complete row wins; on a tie the schedule page does,
+    so a season whose pages are complete builds exactly as before.
+    """
+    both = pl.concat([ncaa_schedule_side(root, league, season), parsed_schedule_side(root, league, season)])
+    incomplete = (
+        pl.col("game_date").is_null() | pl.col("home_espn_team_id").is_null() | pl.col("away_espn_team_id").is_null()
+    )
+    return (
+        both.filter(pl.col("contest_id").is_not_null())
+        .sort(incomplete, maintain_order=True)
+        .unique(subset=["contest_id"], keep="first", maintain_order=True)
+        .sort("contest_id")
+    )
+
+
 def espn_schedule_side(league: str, season: int) -> pl.DataFrame:
     """ESPN's own season schedule via the sdv-py release loaders (the one network call)."""
     if league == "wbb":
@@ -197,7 +294,7 @@ def build_season_xwalk(root: Union[str, Path], league: str, season: int) -> pl.D
         ``match_method`` (Utf8, one of :data:`MATCH_METHODS`, null when
         unmatched) -- one row per NCAA contest, none ever dropped.
     """
-    ncaa = ncaa_schedule_side(root, league, season)
+    ncaa = _ncaa_side(root, league, season)
     out_schema = {
         "contest_id": pl.Utf8,
         "espn_game_id": pl.Utf8,
@@ -205,7 +302,7 @@ def build_season_xwalk(root: Union[str, Path], league: str, season: int) -> pl.D
     }
     if ncaa.height == 0:
         logger.info(
-            "ncaa_espn_game_xwalk: %s %s -- no schedules parquet; empty crosswalk",
+            "ncaa_espn_game_xwalk: %s %s -- no NCAA contests (schedules or parsed); empty crosswalk",
             league,
             season,
         )
@@ -330,6 +427,47 @@ def load_espn_game_index(root: str, league: str, season: int) -> Dict[str, str]:
     return {str(r["contest_id"]): str(r["espn_game_id"]) for r in rows if r.get("contest_id") and r.get("espn_game_id")}
 
 
+def stamp_parsed(root: Union[str, Path], league: str, season: int) -> int:
+    """Write the crosswalk's ``espn_game_id`` into each parsed contest of *season* that lacks it.
+
+    Parse stamps the id from the crosswalk on disk at parse time, and skips a
+    contest already parsed. So a game parsed before its crosswalk row existed,
+    which in season is every game parsed the night it was played, kept a null
+    id for good. This pass is offline: it rewrites only the parsed JSON whose
+    id differs from the crosswalk's, on every per-game family row and on
+    ``teams``, the same keys parse writes.
+
+    Args:
+        root: Root of the raw data tree.
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year.
+
+    Returns:
+        Number of parsed contest files rewritten.
+    """
+    from .identity import _ESPN_GAME_ID_KEY, _PER_GAME_FAMILIES
+    from .parse import write_parsed
+
+    stamped = 0
+    for contest_id, espn_game_id in load_espn_game_index(str(root), league, season).items():
+        path = Path(root) / league / "json" / f"{contest_id}.json"
+        if not path.is_file():
+            continue
+        try:
+            parsed = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        rows = [r for f in _PER_GAME_FAMILIES for r in parsed.get(f) or [] if isinstance(r, dict)]
+        rows += [t for t in parsed.get("teams") or [] if isinstance(t, dict)]
+        if all(r.get(_ESPN_GAME_ID_KEY) == espn_game_id for r in rows):
+            continue
+        for row in rows:
+            row[_ESPN_GAME_ID_KEY] = espn_game_id
+        write_parsed(root, league, contest_id, parsed)
+        stamped += 1
+    return stamped
+
+
 def summarize(frame: pl.DataFrame) -> Dict[str, int]:
     """Per-tier hit counts + the unmatched residue, for the build log."""
     counts = {m: 0 for m in MATCH_METHODS}
@@ -375,11 +513,13 @@ def _main(default_league: str, default_root: str) -> None:
         stats = summarize(frame)
         matched = stats["contests"] - stats["unmatched"]
         pct = round(100 * matched / stats["contests"], 2) if stats["contests"] else 0.0
+        stamped = 0
         if not args.dry_run and stats["contests"]:
             write_season_xwalk(args.root, args.league, season, frame)
+            stamped = stamp_parsed(args.root, args.league, season)
         print(
             f"{args.league} {season}: contests={stats['contests']} matched={matched} ({pct}%) "
             + " ".join(f"{m}={stats[m]}" for m in MATCH_METHODS)
-            + f" unmatched={stats['unmatched']}",
+            + f" unmatched={stats['unmatched']} parsed_stamped={stamped}",
             flush=True,
         )
