@@ -146,21 +146,21 @@ def ncaa_schedule_side(root: Union[str, Path], league: str, season: int) -> pl.D
     )
 
 
-_MDY = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})")
+_MDY = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4}|\d{2})(?!\d)")
 
 
 def _parsed_game_date(parsed: dict) -> str | None:
     """Zero-padded ``mm/dd/yyyy`` off the first family row whose ``game_date`` holds one.
 
-    The box parser accepts unpadded dates (``1/5/2026 7:00 PM``), so the date is
-    matched rather than sliced.
+    The box parser accepts unpadded dates and two-digit years (``1/5/26 7:00 PM``),
+    so the date is matched rather than sliced; a two-digit year is 20xx.
     """
     for family in ("linescore", "pbp", "player_box", "team_box"):
         for row in parsed.get(family) or []:
             hit = _MDY.search(str(row.get("game_date") or "")) if isinstance(row, dict) else None
             if hit:
                 month, day, year = hit.groups()
-                return f"{int(month):02d}/{int(day):02d}/{year}"
+                return f"{int(month):02d}/{int(day):02d}/{year if len(year) == 4 else '20' + year}"
     return None
 
 

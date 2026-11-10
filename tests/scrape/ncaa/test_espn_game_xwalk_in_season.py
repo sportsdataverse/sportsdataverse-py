@@ -152,3 +152,13 @@ def test_real_2027_stamp_backfills_and_clears_stale_ids(tmp_path, monkeypatch):
     for cid, (espn_game_id, _) in _REAL_EXPECTED.items():
         assert _ids(root, cid) == {espn_game_id}, cid
     assert xwalk.stamp_parsed(root, "mbb", 2027) == 0
+
+
+def test_parsed_game_date_normalizes_box_date_forms():
+    def date(value):
+        return xwalk._parsed_game_date({"linescore": [{"game_date": value}]})
+
+    assert date("11/08/2026 04:00 PM") == "11/08/2026"
+    assert date("1/5/2026 7:00 PM") == "01/05/2026"
+    assert date("1/5/26 7:00 PM") == "01/05/2026"
+    assert date("TBA") is None
