@@ -355,7 +355,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_epv_team_games](additional/analytics-2.md#wbb_epv_team_games) | Per women's college team and game: EPV added on offense and allowed on defense. |
 | [wbb_game_flow](additional/analytics-2.md#wbb_game_flow) | Women's college game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
+| [wbb_game_on_off](additional/analytics-2.md#wbb_game_on_off) | Women's college in-game on/off: per player and game, the team with her on the floor and without her. |
 | [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
+| [wbb_game_stints](additional/analytics-2.md#wbb_game_stints) | Women's college game stints: per player and game, every stretch on the floor. |
+| [wbb_game_units](additional/analytics-2.md#wbb_game_units) | Women's college in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |
 | [wbb_lineup_seasons](additional/analytics-3.md#wbb_lineup_seasons) | Women's college lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
 | [wbb_play_styles](additional/analytics-3.md#wbb_play_styles) | Women's college player play-style archetypes: box, shot and lineup-role features (BB-D20). |
 | [wbb_player_on_off](additional/analytics-3.md#wbb_player_on_off) | Women's college player on/off: each player's team with her on the floor and without her. |
