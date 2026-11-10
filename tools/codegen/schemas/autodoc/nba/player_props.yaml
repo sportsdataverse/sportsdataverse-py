@@ -1,0 +1,37 @@
+schema: player_props
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: athlete_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: line
+  type: double
+  description: ''
+- name: n_books
+  type: integer
+  description: ''
+- name: over_price
+  type: double
+  description: ''
+- name: under_price
+  type: double
+  description: ''
+- name: over_prob
+  type: double
+  description: ''

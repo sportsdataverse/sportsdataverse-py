@@ -1,0 +1,16 @@
+schema: wp_variants
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: game_play_number
+  type: integer
+  description: ''
+- name: home_win_prob_naive
+  type: double
+  description: ''
+- name: home_win_prob_market
+  type: double
+  description: ''
