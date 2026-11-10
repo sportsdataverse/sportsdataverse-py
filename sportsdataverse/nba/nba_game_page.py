@@ -16,7 +16,10 @@ from typing import Any, Callable, Optional
 
 import polars as pl
 
+from sportsdataverse._common.game_flow import _runs, _states
 from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob, win_prob_from_margin
+from sportsdataverse.nba.nba_play_context_constants import CORNER_THREE_MAX_Y, RIM_DISTANCE_FT
+from sportsdataverse.nba.nba_possession_flags import TRANSITION_SECONDS
 from sportsdataverse.nba.nba_prediction_constants import get_constants
 
 __all__ = [
@@ -28,6 +31,9 @@ __all__ = [
     "game_minutes",
     "team_game_rates",
     "player_game_rates",
+    "TRANSITION_WINDOW_SECONDS",
+    "team_game_splits",
+    "player_game_splits",
     "home_prior",
     "ot_adjusted_seconds",
     "score_win_prob",
@@ -1054,6 +1060,629 @@ def player_game_rates(
     )
 
 
+#: The first-shot window of a transition possession: BB-D7's 8 seconds for the pros, the college
+#: possession release's (bigballR's) 10 seconds for men's and women's college basketball.
+TRANSITION_WINDOW_SECONDS: dict[str, float] = {
+    "nba": TRANSITION_SECONDS,
+    "wnba": TRANSITION_SECONDS,
+    "mbb": 10.0,
+    "wbb": 10.0,
+}
+#: How a possession started (:func:`team_game_splits`): the ball changed hands live after a
+#: ``made_shot``, a ``def_rebound`` or a ``live_turnover`` (a steal), dead after a ``dead_turnover``,
+#: at a ``period_start``, or ``other`` (a jump ball, a foul, an unlogged change). The first three can be transition.
+_LIVE_STARTS: tuple[str, ...] = ("made_shot", "def_rebound", "live_turnover")
+
+_TEAM_SPLITS_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Int32,
+    "team_id": pl.Int32,
+    "points": pl.Int64,
+    "possessions": pl.Int64,
+    "ppp": pl.Float64,
+    "non_possession_points": pl.Int64,
+    "avg_possession_seconds": pl.Float64,
+    **{
+        f"{family}_{m}": dt
+        for family in ("transition", "half_court", "second_chance", "first_chance")
+        for m, dt in (("poss", pl.Int64), ("pts", pl.Int64), ("ppp", pl.Float64))
+    },
+    "tov": pl.Int64,
+    "live_tov": pl.Int64,
+    "dead_tov": pl.Int64,
+    "tov_pct": pl.Float64,
+    "pts_off_live_tov": pl.Int64,
+    "pts_off_dead_tov": pl.Int64,
+    "fga": pl.Int64,
+    "fgm": pl.Int64,
+    **{
+        f"{zone}_{m}": dt
+        for zone in ("rim", "mid", "fg2_unlocated", "fg3", "corner3", "above_break3", "fg3_unlocated", "layup_dunk")
+        for m, dt in (("fga", pl.Int64), ("fgm", pl.Int64), ("fg_pct", pl.Float64))
+    },
+    "rim_rate": pl.Float64,
+    "fg3a_rate": pl.Float64,
+    "avg_fg2_distance": pl.Float64,
+    "assisted_fgm": pl.Int64,
+    "assisted_share": pl.Float64,
+    "fta": pl.Int64,
+    "ftm": pl.Int64,
+    "ft_rate": pl.Float64,
+    "bench_points": pl.Int64,
+    "largest_lead": pl.Int64,
+    "max_run": pl.Int64,
+}
+_PLAYER_SPLITS_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Int32,
+    "athlete_id": pl.Int32,
+    "team_id": pl.Int32,
+    "minutes": pl.Float64,
+    "est_possessions": pl.Float64,
+    "points": pl.Int64,
+    "fga": pl.Int64,
+    "fgm": pl.Int64,
+    "assisted_fgm": pl.Int64,
+    "assisted_share": pl.Float64,
+    "rim_fga": pl.Int64,
+    "rim_fgm": pl.Int64,
+    "rim_assisted_fgm": pl.Int64,
+    "rim_assisted_share": pl.Float64,
+    "fg3a": pl.Int64,
+    "fg3m": pl.Int64,
+    "fg3_assisted_fgm": pl.Int64,
+    "fg3_assisted_share": pl.Float64,
+    "assists": pl.Int64,
+    "rebounds": pl.Int64,
+    "tov": pl.Int64,
+    "live_tov": pl.Int64,
+    **{f"{m}_per100": pl.Float64 for m in ("pts", "ast", "reb", "tov")},
+}
+
+
+#: A college steal logged up to this many seconds from its turnover still marks the turnover live.
+_STEAL_GAP_SECONDS = 3.0
+
+
+def _shot_kind() -> pl.Expr:
+    """``"fga"``, ``"ft"``, ``"tech"`` (a technical free throw) or null for a play, from the ``_split_events`` flags."""
+    return (
+        pl.when(pl.col("_fga"))
+        .then(pl.lit("fga"))
+        .when(pl.col("_tech"))
+        .then(pl.lit("tech"))
+        .when(pl.col("_ft"))
+        .then(pl.lit("ft"))
+    )
+
+
+def _split_events(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Every play with its event flags, its score change per side, and the possession it belongs to.
+
+    A possession is a run of the same offense: a field-goal attempt, a free throw (not a technical),
+    a turnover or a rebound names the offense (a defensive rebound is the new offense's first
+    event), and a possession ends when the next such event is the other team's or the period ends.
+    Every other play (fouls, substitutions, timeouts, steals) belongs to the possession in progress.
+    """
+    home, away = int(pbp["home_team_id"][0]), int(pbp["away_team_id"][0])
+    tt, txt = pl.col("type_text").fill_null(""), pl.col("text").fill_null("")
+    shoot = pl.col("shooting_play").fill_null(False)
+    is_ft = shoot & tt.str.contains("(?i)free ?throw")
+    clk, per = pl.col("_clk"), pl.col("period_number")
+    # college logs the steal as its own play next to the turnover, by the other team, at the same
+    # clock (2013-14 WBB: one to two seconds later)
+    steal, team = tt == "Steal", pl.col("team_id")
+
+    def beside(n: int) -> pl.Expr:
+        near = (clk.shift(n) - clk).abs() <= _STEAL_GAP_SECONDS
+        return steal.shift(n) & near & (per.shift(n) == per) & (team.shift(n) != team)
+
+    hs, as_ = (pl.col(c).forward_fill().fill_null(0).cast(pl.Int64) for c in ("home_score", "away_score"))
+    rows = pbp.with_row_index("_i").with_columns(
+        _period_clock(pbp).alias("_clk"),
+        pl.col("team_id").cast(pl.Int32).alias("_team"),
+        hs.alias("_hs"),
+        as_.alias("_as"),
+    )
+    # a three: points_attempted 3 where the frame has it; otherwise the text says "three point", or
+    # (older NBA misses read "misses 25-foot", or nothing) the text gives 24 feet or more or the
+    # play sits 22 feet or more to the side or 23.75 feet or more out, past every league's arc
+    x, y = pl.col("x_legacy").cast(pl.Float64), pl.col("y_legacy").cast(pl.Float64)
+    beyond = ((x.abs() >= 220.0) | ((x**2 + y**2).sqrt() >= 237.5)).fill_null(False)
+    three = txt.str.contains("(?i)three point") | (
+        (txt.str.contains(r"\b(2[4-9]|[3-9]\d)-foot") | beyond) & ~txt.str.contains("(?i)two point")
+    )
+    if "points_attempted" in pbp.columns:
+        three = (pl.col("points_attempted") == 3).fill_null(False) | txt.str.contains("(?i)three point")
+    rows = rows.with_columns(
+        (shoot & ~is_ft).alias("_fga"),
+        (shoot & ~is_ft & three).alias("_three"),
+        is_ft.alias("_ft"),
+        (is_ft & (tt.str.contains("(?i)technical") | txt.str.contains("(?i)technical"))).alias("_tech"),
+        pl.col("scoring_play").fill_null(False).alias("_made"),
+        (tt.str.contains("(?i)turnover") | (tt == "Traveling")).alias("_tov"),
+        tt.str.contains("(?i)rebound").alias("_reb"),
+        (txt.str.contains("(?i)steal") | (beside(1) | beside(-1)).fill_null(False)).alias("_stolen"),
+        tt.str.contains("(?i)time ?out").alias("_timeout"),
+        (pl.col("_hs") - pl.col("_hs").shift(1, fill_value=0)).alias("_dh"),
+        (pl.col("_as") - pl.col("_as").shift(1, fill_value=0)).alias("_da"),
+    ).with_columns(
+        (
+            (pl.col("_fga") | (pl.col("_ft") & ~pl.col("_tech")) | pl.col("_tov") | pl.col("_reb"))
+            & pl.col("_team").is_in([home, away])
+        ).alias("_off"),
+        pl.col("_timeout").cast(pl.Int64).cum_sum().alias("_timeouts"),
+        # the most recent shot before the play, and the next shot after it, with its clock
+        _shot_kind().forward_fill().shift(1).alias("_prev_shot"),
+        _shot_kind().backward_fill().shift(-1).alias("_next_shot"),
+        pl.when(_shot_kind().is_not_null()).then(clk).backward_fill().shift(-1).alias("_next_shot_clk"),
+    )
+    ev = rows.filter(pl.col("_off")).with_columns(
+        ((pl.col("_team") != pl.col("_team").shift(1)) | (per != per.shift(1))).fill_null(True).alias("_new")
+    )
+    ev = ev.with_columns(
+        pl.col("_new").cast(pl.Int64).cum_sum().alias("_poss"),
+        # not a chance: the dead-ball rebound between two free throws of a trip, the one after a
+        # technical free throw, and one with no time left in the period
+        (
+            pl.col("_reb")
+            & ~pl.col("_new")
+            & (clk > 0)
+            & (pl.col("_prev_shot") != "tech").fill_null(True)
+            & ~(
+                (pl.col("_prev_shot") == "ft")
+                & pl.col("_next_shot").is_in(["ft", "tech"])
+                & (pl.col("_next_shot_clk") == clk)
+            ).fill_null(False)
+        ).alias("_oreb"),
+    )
+    tagged = rows.join_asof(ev.select("_i", "_poss"), on="_i", strategy="backward")
+    return tagged.join(ev.select("_i", "_new", "_oreb"), on="_i", how="left").with_columns(
+        pl.col("_new", "_oreb").fill_null(False), pl.lit(home).alias("_home"), pl.lit(away).alias("_away")
+    )
+
+
+def _possessions(rows: pl.DataFrame, lg: str, reg: int) -> pl.DataFrame:
+    """One row per possession: offense, start type, transition, second chance, points, length."""
+    ev = rows.filter(pl.col("_off"))
+    poss = (
+        ev.group_by("_poss", maintain_order=True)
+        .agg(
+            pl.col("period_number").first().alias("period"),
+            pl.col("_team").first().alias("offense"),
+            pl.col("_reb").first().alias("_starts_on_reb"),
+            pl.col("_i").last().alias("_last_i"),
+            pl.col("_clk").last().alias("_end_clk"),
+            (pl.col("_made") & (pl.col("_fga") | pl.col("_ft"))).last().alias("_ends_made"),
+            pl.col("_tov").last().alias("_ends_tov"),
+            (pl.col("_tov") & pl.col("_stolen")).last().alias("_ends_live_tov"),
+            pl.col("_i").filter(pl.col("_fga")).first().alias("_shot_i"),
+            pl.col("_clk").filter(pl.col("_fga")).first().alias("_shot_clk"),
+            pl.col("_oreb").any().alias("second_chance"),
+        )
+        .sort("_poss")
+    )
+    period_secs = 60.0 * _REGULATION_MINUTES[lg] / reg
+    same = pl.col("period") == pl.col("period").shift(1)
+    prev_kind = (
+        pl.when(~same.fill_null(False))
+        .then(pl.lit("period_start"))
+        .when(pl.col("_starts_on_reb"))
+        .then(pl.lit("def_rebound"))
+        .when(pl.col("_ends_made").shift(1))
+        .then(pl.lit("made_shot"))
+        .when(pl.col("_ends_live_tov").shift(1))
+        .then(pl.lit("live_turnover"))
+        .when(pl.col("_ends_tov").shift(1))
+        .then(pl.lit("dead_turnover"))
+        .otherwise(pl.lit("other"))
+    )
+    start_clk = (
+        pl.when(same.fill_null(False))
+        .then(pl.col("_end_clk").shift(1))
+        .otherwise(pl.when(pl.col("period") <= reg).then(pl.lit(period_secs)).otherwise(pl.lit(300.0)))
+    )
+    timeouts = rows["_timeouts"]
+    poss = poss.with_columns(
+        prev_kind.alias("start_type"), start_clk.alias("_start_clk"), pl.col("_last_i").shift(1).alias("_prev_i")
+    )
+    # a timeout between the change of possession and the first shot is a set play, not transition
+    stopped = [
+        s is not None and p is not None and timeouts[s] > timeouts[p]
+        for s, p in zip(poss["_shot_i"].to_list(), poss["_prev_i"].to_list())
+    ]
+    pts = (
+        rows.filter(pl.col("_poss").is_not_null())
+        .join(poss.select("_poss", "offense"), on="_poss")
+        .group_by("_poss")
+        .agg(
+            pl.when(pl.col("offense") == pl.col("_home"))
+            .then(pl.col("_dh"))
+            .otherwise(pl.col("_da"))
+            .sum()
+            .alias("pts"),
+            pl.when(pl.col("offense") == pl.col("_home"))
+            .then(pl.col("_da"))
+            .otherwise(pl.col("_dh"))
+            .sum()
+            .alias("_def_pts"),
+        )
+    )
+    window = TRANSITION_WINDOW_SECONDS[lg]
+    return (
+        poss.with_columns(pl.Series("_stopped", stopped, dtype=pl.Boolean))
+        .join(pts, on="_poss", how="left")
+        .with_columns(
+            (
+                pl.col("start_type").is_in(_LIVE_STARTS)
+                & ((pl.col("_start_clk") - pl.col("_shot_clk")) <= window).fill_null(False)
+                & ~pl.col("_stopped")
+            ).alias("transition"),
+            (pl.col("_start_clk") - pl.col("_end_clk")).clip(lower_bound=0.0).alias("seconds"),
+            pl.col("pts", "_def_pts").fill_null(0),
+        )
+    )
+
+
+def _zone_counts(shots: pl.DataFrame, by: list[str]) -> pl.DataFrame:
+    """FGA / FGM by zone (``rim`` under :data:`RIM_DISTANCE_FT`, ``mid``, threes split corner / above the break)."""
+    dist = (pl.col("x_legacy") ** 2 + pl.col("y_legacy") ** 2).sqrt() / 10.0
+    three = pl.col("_three")
+    located = pl.col("x_legacy").is_not_null() & pl.col("y_legacy").is_not_null()
+    zones = {
+        "rim": ~three & located & (dist < RIM_DISTANCE_FT),
+        "mid": ~three & located & (dist >= RIM_DISTANCE_FT),
+        "fg2_unlocated": ~three & ~located,
+        "fg3": three,
+        "corner3": three & located & (pl.col("y_legacy") <= CORNER_THREE_MAX_Y),
+        "above_break3": three & located & (pl.col("y_legacy") > CORNER_THREE_MAX_Y),
+        "fg3_unlocated": three & ~located,
+        "layup_dunk": pl.col("type_text").fill_null("").str.contains("(?i)lay ?up|dunk"),
+    }
+    made = pl.col("_made")
+    return shots.group_by(by).agg(
+        pl.len().cast(pl.Int64).alias("fga"),
+        made.sum().cast(pl.Int64).alias("fgm"),
+        *[
+            x
+            for z, m in zones.items()
+            for x in (m.sum().cast(pl.Int64).alias(f"{z}_fga"), (m & made).sum().cast(pl.Int64).alias(f"{z}_fgm"))
+        ],
+        (made & pl.col("text").fill_null("").str.contains("(?i)assist")).sum().cast(pl.Int64).alias("assisted_fgm"),
+        dist.filter(~three & located).mean().alias("avg_fg2_distance"),
+        *[
+            (made & m & pl.col("text").fill_null("").str.contains("(?i)assist"))
+            .sum()
+            .cast(pl.Int64)
+            .alias(f"{z}_assisted_fgm")
+            for z, m in (("rim", zones["rim"]), ("fg3", three))
+        ],
+    )
+
+
+def team_game_splits(
+    pbp: pl.DataFrame,
+    player_box: Optional[pl.DataFrame] = None,
+    *,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+) -> pl.DataFrame:
+    """Situational splits for both teams of one game, counted from its play-by-play (works mid-game).
+
+    Possessions are counted, not estimated: a field-goal attempt, a free throw, a turnover or a
+    rebound names the offense (a defensive rebound is the new offense's first event), and a
+    possession runs until the next such play is the other team's or the period ends. On the
+    fixtures the count runs 0.95-1.01 of the box estimate (FGA - ORB + TOV + 0.44 FTA) in the pros
+    and 0.99-1.05 in college. A technical free throw neither starts nor ends a possession, and its
+    points land in ``non_possession_points`` when the shooting team was on defense. ``points`` is every point the
+    team scored (the play-by-play's running score), ``ppp`` is ``points / possessions``, and each
+    split pair partitions the possessions and their points: ``transition`` + ``half_court`` and
+    ``second_chance`` + ``first_chance`` both add up to ``possessions`` and to ``points -
+    non_possession_points``. A **transition** possession started live (after a made shot, a defensive
+    rebound or a steal; not a period's first) and took its first field-goal attempt within
+    :data:`TRANSITION_WINDOW_SECONDS` of the change of possession, with no timeout in between. A
+    **second-chance** possession had an offensive rebound, team rebounds included (not the dead-ball
+    one between two free throws of a trip, one after a technical free throw, or one with no time
+    left). A turnover is **live** when a steal is credited on it, otherwise **dead**;
+    ``pts_off_live_tov`` / ``pts_off_dead_tov`` are the points the team scored on the possessions
+    that started from the opponent's live / dead turnovers. Shot zones read the play coordinates of
+    :func:`shot_coordinates`: ``rim`` is a two under 4 feet, ``mid`` any other located two,
+    ``corner3`` a three at or below 8.75 feet above the rim's line (``y_legacy`` 87.5), ``above_break3``
+    any other located three; plays without a location count in ``fg2_unlocated`` / ``fg3_unlocated``,
+    so ``rim + mid + fg2_unlocated + fg3 = fga`` and ``corner3 + above_break3 + fg3_unlocated = fg3``.
+    A three is ``points_attempted`` 3; a frame without that column (older captures) reads the
+    text ("three point", or 24 feet or more) and the location (22 feet or more to the side, or
+    23.75 out). ``layup_dunk`` is any shot whose play type names a layup or a dunk. ``assisted_fgm`` is the makes
+    whose text credits an assist. ``largest_lead`` is the team's biggest lead and ``max_run`` its
+    biggest unanswered run (:mod:`sportsdataverse._common.game_flow`'s rule). ``bench_points`` needs
+    the player box's ``starter`` flag (null without it). ESPN's college feed has no technical-foul
+    marker on its free throws, so a college technical is counted as a possession of the shooting team.
+
+    Args:
+        pbp: One game's plays in the basketball pbp schema, after :func:`shot_coordinates` (needs
+            ``type_text``, ``text``, ``shooting_play``, ``scoring_play``, ``points_attempted`` if present,
+            ``team_id``, ``home_team_id``, ``away_team_id``, ``home_score``, ``away_score``,
+            ``period_number``, a period clock and ``x_legacy`` / ``y_legacy``), in play order.
+        player_box: The game's player box, for ``bench_points`` (``team_id``, ``points``, ``starter``).
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods (2 or 4), for the first possession's clock;
+            default :func:`game_regulation_periods` from the frame's ``season``.
+
+    Returns:
+        One row per team (``game_id``, ``team_id``, the totals, the four split families as
+        ``<family>_poss`` / ``_pts`` / ``_ppp``, the turnover, zone, assist and free-throw columns,
+        ``bench_points``, ``largest_lead``, ``max_run``); an empty frame with those columns before
+        tip-off.
+
+    Raises:
+        ValueError: If the league is unknown or ``pbp`` holds more than one game.
+        polars.exceptions.ColumnNotFoundError: If a required column is missing.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import game_page_frames
+            from sportsdataverse.nba.nba_pbp import espn_nba_pbp
+            frames = game_page_frames(espn_nba_pbp(401766458, return_parsed=False))
+            frames["team_game_splits"].select("team_id", "possessions", "ppp", "transition_ppp")
+
+        From warehouse frames::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_game_page import shot_coordinates, team_game_splits
+            from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp, load_wbb_player_boxscore
+            pbp = load_wbb_pbp([2024]).filter(pl.col("game_id") == 401638645)
+            box = load_wbb_player_boxscore([2024]).filter(pl.col("game_id") == 401638645)
+            team_game_splits(shot_coordinates(pbp), box, league="wbb")
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lg = _resolve_league(league, None)
+    if pbp.height == 0:
+        return pl.DataFrame(schema=_TEAM_SPLITS_SCHEMA)
+    if pbp["game_id"].n_unique() > 1:
+        raise ValueError(f"team_game_splits reads one game; got {pbp['game_id'].n_unique()} game_id values")
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=_box_season(pbp))
+    rows = _split_events(pbp)
+    poss = _possessions(rows, lg, reg)
+    home, away = int(rows["_home"][0]), int(rows["_away"][0])
+    teams = pl.DataFrame(
+        {"team_id": [home, away], "_opp": [away, home]}, schema={"team_id": pl.Int32, "_opp": pl.Int32}
+    )
+    total = rows.select(pl.col("_dh").sum().alias("h"), pl.col("_da").sum().alias("a")).row(0)
+    margin = rows.select((pl.col("_hs") - pl.col("_as")).alias("m"))["m"]
+    lead = {home: max(int(margin.max() or 0), 0), away: max(int(-(margin.min() or 0)), 0)}
+
+    def fam(name: str, mask: pl.Expr) -> list[pl.Expr]:
+        return [
+            mask.sum().cast(pl.Int64).alias(f"{name}_poss"),
+            pl.col("pts").filter(mask).sum().cast(pl.Int64).alias(f"{name}_pts"),
+        ]
+
+    off = poss.group_by(pl.col("offense").alias("team_id")).agg(
+        pl.len().cast(pl.Int64).alias("possessions"),
+        pl.col("pts").sum().cast(pl.Int64).alias("_poss_pts"),
+        pl.col("seconds").mean().alias("avg_possession_seconds"),
+        *fam("transition", pl.col("transition")),
+        *fam("half_court", ~pl.col("transition")),
+        *fam("second_chance", pl.col("second_chance")),
+        *fam("first_chance", ~pl.col("second_chance")),
+        pl.col("pts").filter(pl.col("start_type") == "live_turnover").sum().cast(pl.Int64).alias("pts_off_live_tov"),
+        pl.col("pts").filter(pl.col("start_type") == "dead_turnover").sum().cast(pl.Int64).alias("pts_off_dead_tov"),
+    )
+    ev = rows.filter(pl.col("_team").is_in([home, away]))
+    tov = (
+        ev.filter(pl.col("_tov"))
+        .group_by(pl.col("_team").alias("team_id"))
+        .agg(pl.len().cast(pl.Int64).alias("tov"), pl.col("_stolen").sum().cast(pl.Int64).alias("live_tov"))
+    )
+    fts = (
+        ev.filter(pl.col("_ft"))
+        .group_by(pl.col("_team").alias("team_id"))
+        .agg(pl.len().cast(pl.Int64).alias("fta"), pl.col("_made").sum().cast(pl.Int64).alias("ftm"))
+    )
+    shots = _zone_counts(ev.filter(pl.col("_fga")).with_columns(pl.col("_team").alias("team_id")), ["team_id"])
+    bench = None
+    if player_box is not None and {"starter", "points", "team_id"} <= set(player_box.columns) and player_box.height:
+        bench = (
+            player_box.filter(pl.col("starter").fill_null(False) == False)
+            .group_by(pl.col("team_id").cast(pl.Int32))
+            .agg(pl.col("points").sum().cast(pl.Int64).alias("bench_points"))
+        )
+    out = teams
+    for part in (off, tov, fts, shots) + ((bench,) if bench is not None else ()):
+        out = out.join(part.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left")
+    counts = [c for c, dt in _TEAM_SPLITS_SCHEMA.items() if dt == pl.Int64 and c in out.columns and c != "bench_points"]
+    out = out.with_columns(pl.col(counts).fill_null(0))
+    runs = _runs(
+        _states(
+            rows.select(
+                pl.lit("g").alias("game_id"),
+                pl.lit(0.0).alias("elapsed"),
+                pl.lit(0.0).alias("game_seconds"),
+                pl.col("_hs").alias("home_score"),
+                pl.col("_as").alias("away_score"),
+            )
+        )
+    )
+    run_of = {(home if side == "home" else away): int(n) for side, n in zip(runs["side"], runs["max_run"])}
+    pct = {
+        f"{z}_fg_pct": _ratio(pl.col(f"{z}_fgm"), pl.col(f"{z}_fga"))
+        for z in ("rim", "mid", "fg2_unlocated", "fg3", "corner3", "above_break3", "fg3_unlocated", "layup_dunk")
+    }
+    out = out.with_columns(
+        pl.lit(int(rows["game_id"][0]), dtype=pl.Int32).alias("game_id"),
+        pl.col("team_id").replace_strict({home: total[0], away: total[1]}, return_dtype=pl.Int64).alias("points"),
+        pl.col("team_id").replace_strict(lead, return_dtype=pl.Int64).alias("largest_lead"),
+        pl.col("team_id").replace_strict(run_of, default=0, return_dtype=pl.Int64).alias("max_run"),
+        (pl.col("tov") - pl.col("live_tov")).alias("dead_tov"),
+        **pct,
+    ).with_columns(
+        _ratio(pl.col("points"), pl.col("possessions")).alias("ppp"),
+        (pl.col("points") - pl.col("_poss_pts")).alias("non_possession_points"),
+        *[
+            _ratio(pl.col(f"{f}_pts"), pl.col(f"{f}_poss")).alias(f"{f}_ppp")
+            for f in ("transition", "half_court", "second_chance", "first_chance")
+        ],
+        _ratio(pl.col("tov"), pl.col("possessions")).alias("tov_pct"),
+        _ratio(pl.col("rim_fga"), pl.col("fga")).alias("rim_rate"),
+        _ratio(pl.col("fg3_fga"), pl.col("fga")).alias("fg3a_rate"),
+        _ratio(pl.col("assisted_fgm"), pl.col("fgm")).alias("assisted_share"),
+        _ratio(pl.col("fta"), pl.col("fga")).alias("ft_rate"),
+        *([] if bench is not None else [pl.lit(None, dtype=pl.Int64).alias("bench_points")]),
+    )
+    return out.select([pl.col(c).cast(dt) for c, dt in _TEAM_SPLITS_SCHEMA.items()])
+
+
+def player_game_splits(
+    pbp: pl.DataFrame,
+    player_box: Optional[pl.DataFrame] = None,
+    *,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+) -> pl.DataFrame:
+    """Per-player shot, assist and turnover splits of one game, counted from its play-by-play (works mid-game).
+
+    Counted from the plays the player is the first athlete on (``athlete_id_1``): field goals (rim,
+    three and their assisted makes, as in :func:`team_game_splits`), turnovers (``live_tov`` with a
+    steal credited), rebounds and points (made shots and free throws); ``assists`` are the made
+    shots crediting the player as the passer (``athlete_id_2`` on a make whose text names an assist).
+    ``est_possessions`` is an estimate, not an on-court count (that needs the lineup on each play):
+    the team's counted possessions times the player's share of the team's minutes (the box's
+    ``minutes`` over the team's minutes / 5), so a mid-game box gives the share so far. The per-100
+    rates (``pts``, ``ast``, ``reb``, ``tov``) divide by it; they are null without minutes.
+
+    Args:
+        pbp: One game's plays, as :func:`team_game_splits` takes them (plus ``athlete_id_1`` /
+            ``athlete_id_2``).
+        player_box: The game's player box (``athlete_id``, ``team_id``, ``minutes``); every boxed
+            player gets one row (a play crediting a player to the other team is left out); without a
+            box, every player on the plays gets one, with null minutes.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods; see :func:`team_game_splits`.
+
+    Returns:
+        One row per player (``game_id``, ``athlete_id``, ``team_id``, ``minutes``,
+        ``est_possessions``, the shot, assist, rebound and turnover counts and shares, and the four
+        ``<m>_per100`` rates); an empty frame with those columns when there are no plays and no box.
+
+    Raises:
+        ValueError: If the league is unknown or ``pbp`` holds more than one game.
+        polars.exceptions.ColumnNotFoundError: If a required column is missing.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import game_page_frames
+            from sportsdataverse.wnba.wnba_pbp import espn_wnba_pbp
+            frames = game_page_frames(espn_wnba_pbp(401726992, return_parsed=False), league="wnba")
+            frames["player_game_splits"].sort("est_possessions", descending=True).head()
+
+        Who scored at the rim off passes::
+
+            frames["player_game_splits"].select("athlete_id", "rim_fgm", "rim_assisted_share")
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lg = _resolve_league(league, None)
+    box = player_box if player_box is not None and player_box.height and "athlete_id" in player_box.columns else None
+    if pbp.height == 0 and box is None:
+        return pl.DataFrame(schema=_PLAYER_SPLITS_SCHEMA)
+    if pbp.height and pbp["game_id"].n_unique() > 1:
+        raise ValueError(f"player_game_splits reads one game; got {pbp['game_id'].n_unique()} game_id values")
+    key = ["athlete_id", "team_id"]
+    if pbp.height:
+        team = team_game_splits(pbp, league=lg, regulation_periods=regulation_periods).select("team_id", "possessions")
+        rows = _split_events(pbp).filter(pl.col("_team").is_in(team["team_id"].to_list()))
+        game_id = int(rows["game_id"][0]) if rows.height else int(pbp["game_id"][0])
+        # only the counted plays: a foul's team_id can be the other side's (WNBA 2017). ESPN's older
+        # plays can also name the stealer first on a turnover ("A bad pass (B steals)", athlete_id_1
+        # B): with a box, a turnover whose first athlete plays for the other team goes to the second.
+        a1, a2 = pl.col("athlete_id_1").cast(pl.Int32), pl.col("athlete_id_2").cast(pl.Int32)
+        actor = a1
+        if box is not None:
+            roster = dict(box.select(pl.col("athlete_id").cast(pl.Int32), pl.col("team_id").cast(pl.Int32)).iter_rows())
+            other_side = (a1.replace_strict(roster, default=None) != pl.col("_team")).fill_null(False)
+            actor = pl.when(pl.col("_tov") & other_side & a2.is_not_null()).then(a2).otherwise(a1)
+        mine = rows.filter(pl.col("athlete_id_1").is_not_null() & (pl.col("_off") | pl.col("_ft"))).with_columns(
+            actor.alias("athlete_id"), pl.col("_team").alias("team_id")
+        )
+        shots = _zone_counts(mine.filter(pl.col("_fga")), key).rename({"fg3_fga": "fg3a", "fg3_fgm": "fg3m"})
+        other = mine.group_by(key).agg(
+            # not score_value: 2015-16 NBA free throws all ship scoreValue 0
+            pl.when(pl.col("_made") & pl.col("_ft"))
+            .then(1)
+            .when(pl.col("_made") & pl.col("_fga"))
+            .then(2 + pl.col("_three").cast(pl.Int64))
+            .otherwise(0)
+            .sum()
+            .cast(pl.Int64)
+            .alias("points"),
+            pl.col("_reb").sum().cast(pl.Int64).alias("rebounds"),
+            pl.col("_tov").sum().cast(pl.Int64).alias("tov"),
+            (pl.col("_tov") & pl.col("_stolen")).sum().cast(pl.Int64).alias("live_tov"),
+        )
+        ast = (
+            rows.filter(
+                pl.col("_fga")
+                & pl.col("_made")
+                & pl.col("text").fill_null("").str.contains("(?i)assist")
+                & pl.col("athlete_id_2").is_not_null()
+            )
+            .group_by(pl.col("athlete_id_2").cast(pl.Int32).alias("athlete_id"), pl.col("_team").alias("team_id"))
+            .agg(pl.len().cast(pl.Int64).alias("assists"))
+        )
+        counted = other.join(shots, on=key, how="full", coalesce=True).join(ast, on=key, how="full", coalesce=True)
+    else:
+        assert box is not None  # the no-plays, no-box case returned above
+        team = pl.DataFrame(schema={"team_id": pl.Int32, "possessions": pl.Int64})
+        game_id = int(box["game_id"][0])
+        counted = pl.DataFrame(schema={"athlete_id": pl.Int32, "team_id": pl.Int32})
+    if box is not None:
+        minutes = box.select(
+            pl.col("athlete_id").cast(pl.Int32),
+            pl.col("team_id").cast(pl.Int32),
+            (pl.col("minutes").cast(pl.Float64) if "minutes" in box.columns else pl.lit(None, dtype=pl.Float64)).alias(
+                "minutes"
+            ),
+        )
+        # the box's players only: ESPN's older plays can name the stealer first on a turnover (WNBA 2017)
+        counted = minutes.join(counted, on=key, how="left")
+    else:
+        counted = counted.with_columns(pl.lit(None, dtype=pl.Float64).alias("minutes"))
+    out = counted.join(team.with_columns(pl.col("team_id").cast(pl.Int32)), on="team_id", how="left")
+    counts = [c for c, dt in _PLAYER_SPLITS_SCHEMA.items() if dt == pl.Int64]
+    out = out.with_columns(
+        [(pl.col(c) if c in out.columns else pl.lit(None, dtype=pl.Int64)).fill_null(0).alias(c) for c in counts]
+    )
+    share = pl.col("minutes") / (pl.col("minutes").sum().over("team_id") / 5.0)
+    est = pl.col("possessions").cast(pl.Float64) * share
+    return (
+        out.with_columns(
+            pl.lit(game_id, dtype=pl.Int32).alias("game_id"),
+            pl.when(pl.col("minutes") > 0).then(est).alias("est_possessions"),
+        )
+        .with_columns(
+            _ratio(pl.col("assisted_fgm"), pl.col("fgm")).alias("assisted_share"),
+            _ratio(pl.col("rim_assisted_fgm"), pl.col("rim_fgm")).alias("rim_assisted_share"),
+            _ratio(pl.col("fg3_assisted_fgm"), pl.col("fg3m")).alias("fg3_assisted_share"),
+            *[
+                _ratio(100.0 * pl.col(src), pl.col("est_possessions")).alias(f"{m}_per100")
+                for m, src in (("pts", "points"), ("ast", "assists"), ("reb", "rebounds"), ("tov", "tov"))
+            ],
+        )
+        .select([pl.col(c).cast(dt) for c, dt in _PLAYER_SPLITS_SCHEMA.items()])
+    )
+
+
 def game_page_tables(
     pbp: pl.DataFrame,
     team_box: pl.DataFrame,
@@ -1071,8 +1700,9 @@ def game_page_tables(
     ``team_box`` / ``player_box`` and its schedule row (``season``, ``format_regulation_periods``,
     ``neutral_site``) and calls this. :func:`game_page_frames` builds the same frames live from ESPN
     and calls this too, so a game renders identically from either source. Runs
-    :func:`score_win_prob`, :func:`shot_coordinates`, :func:`team_game_rates` and
-    :func:`player_game_rates` on the game's own regulation.
+    :func:`score_win_prob`, :func:`shot_coordinates`, :func:`team_game_rates`,
+    :func:`player_game_rates`, :func:`team_game_splits` and :func:`player_game_splits` on the
+    game's own regulation.
 
     Args:
         pbp: One game's plays in the basketball pbp schema, in play order (empty before tip-off).
@@ -1089,9 +1719,11 @@ def game_page_tables(
             line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
 
     Returns:
-        ``{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods",
-        "period_kind", "prior"}``: the scored plays with shot coordinates, the two rate frames
-        (empty with their documented columns without two team rows), the highest period played
+        ``{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits",
+        "periods", "regulation_periods", "period_kind", "prior"}``: the scored plays with shot
+        coordinates, the two rate frames (empty with their documented columns without two team
+        rows), the two split frames (counted from the plays so far; the team frame is empty before
+        tip-off, the player frame then holds the boxed players with zero counts), the highest period played
         (the regulation count before tip-off), the regulation periods, ``"half"`` or ``"quarter"``,
         and ``{"home_win_prob", "source", "home_team_spread", "game_spread_available"}``.
 
@@ -1152,6 +1784,8 @@ def game_page_tables(
         "player_game_rates": player_game_rates(player_box, team_box, periods=periods, league=lg, regulation_periods=reg)
         if two_teams and not player_box.is_empty()
         else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
+        "team_game_splits": team_game_splits(pbp, player_box, league=lg, regulation_periods=reg),
+        "player_game_splits": player_game_splits(pbp, player_box, league=lg, regulation_periods=reg),
         "periods": periods,
         "regulation_periods": reg,
         "period_kind": "half" if reg == 2 else "quarter",
@@ -1245,8 +1879,8 @@ def game_page_frames(
             line (NBA / WNBA: :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`).
 
     Returns:
-        ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods",
-        "prior", "league", "regulation_periods", "period_kind", "neutral_site"}``; see
+        ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates",
+        "team_game_splits", "player_game_splits", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}``; see
         :func:`game_page_tables` for the shared keys. Missing boxes retain empty identifier columns.
         Team rates need both team rows, and player rates also need player rows. Unavailable rates
         are empty frames with their documented columns.
@@ -1303,6 +1937,8 @@ def game_page_frames(
         if player_box.width
         else pl.DataFrame(schema={"team_id": pl.Int32, "athlete_id": pl.Int32}),
         "player_game_rates": tables["player_game_rates"],
+        "team_game_splits": tables["team_game_splits"],
+        "player_game_splits": tables["player_game_splits"],
         "periods": tables["periods"],
         "prior": tables["prior"],
         "league": lg,

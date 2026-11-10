@@ -910,7 +910,7 @@ the warehouse's copies of the same frames.
 
 **Returns**
 
-`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Missing boxes retain empty identifier columns. Team rates need both team rows, and player rates also need player rows. Unavailable rates are empty frames with their documented columns.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "team_game_splits", "player_game_splits", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Missing boxes retain empty identifier columns. Team rates need both team rows, and player rates also need player rows. Unavailable rates are empty frames with their documented columns.
 
 **Raises**
 
@@ -945,8 +945,9 @@ The warehouse path: the sdv-db nightly stage reads one game's rows from `<league
 `team_box` / `player_box` and its schedule row (`season`, `format_regulation_periods`,
 `neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
 and calls this too, so a game renders identically from either source. Runs
-`score_win_prob`, `shot_coordinates`, `team_game_rates` and
-`player_game_rates` on the game's own regulation.
+`score_win_prob`, `shot_coordinates`, `team_game_rates`,
+`player_game_rates`, `team_game_splits` and `player_game_splits` on the
+game's own regulation.
 
 **Parameters**
 
@@ -963,7 +964,7 @@ and calls this too, so a game renders identically from either source. Runs
 
 **Returns**
 
-`{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+`{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the two split frames (counted from the plays so far; the team frame is empty before tip-off, the player frame then holds the boxed players with zero counts), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
 
 **Raises**
 
