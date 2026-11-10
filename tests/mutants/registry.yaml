@@ -11309,3 +11309,13 @@
   test: tests/nba/test_nba_game_lines.py::test_wp_variants_ignore_the_pbp_line
   expected: kill
   note: With the ESPN line left on, score_win_prob would use it and ignore the naive / market prior.
+
+- id: bb-props-one-event
+  group: bb-game-lines
+  finding: BB-D33
+  file: sportsdataverse/nba/nba_game_lines.py
+  snippet: '    out = _prop_lines(_one_event(rows))'
+  mutant: '    out = _prop_lines(rows)'
+  test: tests/nba/test_nba_game_lines.py::test_player_props_reads_one_event_per_game_and_needs_the_teams
+  expected: kill
+  note: A second event mapped to the game would mix its quotes into the closing lines.

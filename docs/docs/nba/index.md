@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 257 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 260 | — |
 
 ## ESPN {#espn}
 
@@ -109,6 +109,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`external_validity`](reference/additional/models-and-calculators#external_validity)
 - [`fit_aging_curve`](reference/additional/models-and-calculators#fit_aging_curve)
 - [`game_excitement`](reference/additional/models-and-calculators#game_excitement)
+- [`game_lines`](reference/additional/models-and-calculators#game_lines)
 - [`game_minutes`](reference/additional/models-and-calculators#game_minutes)
 - [`game_page_frames`](reference/additional/models-and-calculators#game_page_frames)
 - [`game_page_tables`](reference/additional/models-and-calculators#game_page_tables)
@@ -121,9 +122,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`luck_adjusted_response`](reference/additional/models-and-calculators#luck_adjusted_response)
 - [`nba_adj_rapm`](reference/additional/models-and-calculators#nba_adj_rapm)
 - [`nba_aging_curve`](reference/additional/models-and-calculators#nba_aging_curve)
-- [`nba_bpm`](reference/additional/models-and-calculators#nba_bpm)
-- [`nba_career_trajectory`](reference/additional/models-and-calculators#nba_career_trajectory)
-- [`nba_darko`](reference/additional/models-and-calculators#nba_darko)
+- [`nba_bpm`](reference/additional/models-and-calculators-2#nba_bpm)
+- [`nba_career_trajectory`](reference/additional/models-and-calculators-2#nba_career_trajectory)
+- [`nba_darko`](reference/additional/models-and-calculators-2#nba_darko)
 - [`nba_decay_rapm`](reference/additional/models-and-calculators-2#nba_decay_rapm)
 - [`nba_draft_model`](reference/additional/models-and-calculators-2#nba_draft_model)
 - [`nba_expected_turnovers`](reference/additional/models-and-calculators-2#nba_expected_turnovers)
@@ -137,9 +138,10 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-2#nba_rookie_projection)
 - [`nba_spm`](reference/additional/models-and-calculators-2#nba_spm)
 - [`nba_team_ratings`](reference/additional/models-and-calculators-2#nba_team_ratings)
-- [`nba_war`](reference/additional/models-and-calculators-2#nba_war)
-- [`ot_adjusted_seconds`](reference/additional/models-and-calculators-2#ot_adjusted_seconds)
+- [`nba_war`](reference/additional/models-and-calculators-3#nba_war)
+- [`ot_adjusted_seconds`](reference/additional/models-and-calculators-3#ot_adjusted_seconds)
 - [`player_game_rates`](reference/additional/models-and-calculators-3#player_game_rates)
+- [`player_props`](reference/additional/models-and-calculators-3#player_props)
 - [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
 - [`predict_total`](reference/additional/models-and-calculators-3#predict_total)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-3#raw_game_efficiency)
@@ -152,6 +154,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`validate_model`](reference/additional/models-and-calculators-3#validate_model)
 - [`walk_forward`](reference/additional/models-and-calculators-3#walk_forward)
 - [`win_prob_from_margin`](reference/additional/models-and-calculators-3#win_prob_from_margin)
+- [`wp_variants`](reference/additional/models-and-calculators-3#wp_variants)
 
 ### Analytics {#analytics}
 

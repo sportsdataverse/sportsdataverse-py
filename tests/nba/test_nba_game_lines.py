@@ -211,3 +211,24 @@ def test_wp_variants_ignore_the_pbp_line(game_401704638: pl.DataFrame) -> None:
     )
     assert gp.score_win_prob(lined, league="nba")["prior_source"][0] == "spread"
     assert gl.wp_variants(lined, 0.29, league="nba").equals(gl.wp_variants(game_401704638, 0.29, league="nba"))
+
+
+def test_player_props_reads_one_event_per_game_and_needs_the_teams() -> None:
+    """A second, thinner event mapped to the same game is ignored; a schedule without the teams raises."""
+    pc, xw, px, sched = (
+        _read("nba", n) for n in ("props_checkpoints", "espn_crosswalk", "props_player_xwalk", "schedule")
+    )
+    base = gl.player_props(pc, xw, px, sched)
+    ev = xw.filter(pl.col("espn_game_id") == "401704638").row(0, named=True)
+    one = pc.filter(pl.col("event_id") == ev["event_id"])
+    # the same books on three of the players, a point lower: a tie the lower line would win if both events counted
+    names = one["outcome_description"].unique().sort().head(3).implode()
+    ghost = one.filter(pl.col("outcome_description").is_in(names)).with_columns(
+        pl.lit("ghost").alias("event_id"), (pl.col("close_point") - 1).alias("close_point")
+    )
+    xw2 = pl.concat(
+        [xw, xw.filter(pl.col("event_id") == ev["event_id"]).with_columns(pl.lit("ghost").alias("event_id"))]
+    )
+    assert gl.player_props(pl.concat([pc, ghost]), xw2, px, sched).equals(base)
+    with pytest.raises(pl.exceptions.ColumnNotFoundError, match="away_id"):
+        gl.player_props(pc, xw, px, sched.drop("away_id"))

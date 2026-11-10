@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_darko"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_aging"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_aging"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_aging — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_darko
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_aging
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -845,6 +845,73 @@ one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 game_excitement(score_win_prob(one, league="mbb"), league="mbb")
 ```
 
+### game_lines {#game_lines}
+
+`game_lines(lines_checkpoints: 'pl.DataFrame', crosswalk: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league: 'str | None' = None) -> 'pl.DataFrame'`
+
+Per ESPN game: opening and closing spread, total and moneylines, the no-vig market WP, and the result.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lines_checkpoints` | `DataFrame` |  | The odds store's `lines_checkpoints` rows (any sports and years: rows of other sports are ignored). Needs `event_id`, `sport_key`, `home_team`, `away_team`, `bookmaker_key`, `market_key`, `outcome_name`, `open_price` / `open_point`, `close_price` / `close_point` and `close_mins_before`. |
+| `crosswalk` | `DataFrame` |  | The odds store's `espn_crosswalk` (`sport_key`, `event_id`, `espn_game_id`, `match_method`). |
+| `schedule` | `DataFrame` |  | The league's ESPN schedule (`load_<league>_schedule`): `game_id`, `season`, `home_score`, `away_score`, `status_type_completed`. Only its games are returned, with its `season`. |
+| `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+
+**Returns**
+
+One row per game with a line, `GAME_LINES_SCHEMA`: `game_id`, `season`, the odds `event_id` (the one with the most quotes when the crosswalk maps two events to a game), `n_books` (books with a closing quote), `spread_home_open` / `_close` (betting convention, negative when home is favoured), `total_open` / `_close`, `ml_home` / `ml_away` `_open` / `_close` (American), `market_home_wp` / `market_away_wp` `_open` / `_close` (no vig, the pair sums to 1), and for completed games `home_margin`, `ats_result` (`"home"` / `"away"` / `"push"`: who covered the closing spread) and `total_result` (`"over"` / `"under"` / `"push"` against the closing total). A column the books did not quote is null; an empty frame with those columns when nothing matches.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game id, the join key to the schedule, play-by-play and box-score frames. |
+| `season` | Int64 | ESPN season of the game, from the schedule. |
+| `event_id` | String | Odds-store event id the lines come from (the one with the most quotes when two map to the game). |
+| `n_books` | Int64 | Sportsbooks with a closing (pre-tip) quote on the game. |
+| `spread_home_open` | Float64 | Median opening spread on ESPN's home team, betting convention (negative when home is favoured). |
+| `spread_home_close` | Float64 | Median closing spread on ESPN's home team, betting convention (negative when home is favoured). |
+| `total_open` | Float64 | Median opening game total (over/under points). |
+| `total_close` | Float64 | Median closing game total (over/under points). |
+| `ml_home_open` | Float64 | Median opening moneyline on the home team, American odds (median taken on the decimal price). |
+| `ml_away_open` | Float64 | Median opening moneyline on the away team, American odds. |
+| `ml_home_close` | Float64 | Median closing moneyline on the home team, American odds. |
+| `ml_away_close` | Float64 | Median closing moneyline on the away team, American odds. |
+| `market_home_wp_open` | Float64 | No-vig home win probability from the opening moneylines, median over books. |
+| `market_away_wp_open` | Float64 | No-vig away win probability from the opening moneylines (1 - market_home_wp_open). |
+| `market_home_wp_close` | Float64 | No-vig home win probability from the closing moneylines, median over books. |
+| `market_away_wp_close` | Float64 | No-vig away win probability from the closing moneylines (1 - market_home_wp_close). |
+| `home_margin` | Int64 | Final home score minus away score; null until the game is completed. |
+| `ats_result` | String | Who covered the closing spread (home, away or push); null until completed. |
+| `total_result` | String | The final total against the closing total (over, under or push); null until completed. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown. |
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_lines import game_lines
+from sportsdataverse.nba.nba_loaders import load_nba_schedule
+odds = "odds-data/odds"  # a local checkout of the odds store
+lines = game_lines(
+    pl.read_parquet(f"{odds}/lines_checkpoints_202[45].parquet"),
+    pl.read_parquet(f"{odds}/espn_crosswalk.parquet"),
+    load_nba_schedule([2025]),
+    league="nba",
+)
+
+# Against the spread
+
+lines.group_by("ats_result").len()
+```
+
 ### game_minutes {#game_minutes}
 
 `game_minutes(periods: 'int', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'int'`
@@ -1407,131 +1474,4 @@ print(curve.sort("rel_value", descending=True).head(1))
 # Pipeline next step (one line)
 
 curve.filter(pl.col("age").is_between(24, 30))
-```
-
-### nba_bpm {#nba_bpm}
-
-`nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', league_ortg: 'float | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Faithful BPM 2.0 per player, at season or single-game granularity.
-
-Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
-team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
-`bpm` is its net rating per 100 / 5, and its minute-weighted `obpm` is (its offensive
-rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` then averages (the
-league's offensive rating - the team's defensive rating) / 5, positive for a good defense, so
-league minute-weighted obpm and dbpm each sit near 0 (2025-26
-NBA -0.001 / -0.006, 2025 WNBA +0.005 / +0.013). Team ratings are raw per-100 box margins, not
-the schedule-adjusted ones Basketball-Reference uses. A traded player's minutes count with
-the first team he appears for in the logs. Before #1148 every player took `net - team mean`
-on both bpm and obpm: a team-mean target of the full net rating, five times BPM 2.0's, and
-all of the adjustment on offense, so dbpm stayed raw (2025-26 regular season, minute-weighted:
-league obpm -2.94 / dbpm +2.90, 97% of players with dbpm > 0; Michael Porter
-Jr. -8.97 / +2.26, now +2.22 / -0.95). On 2024-25 the fix lifts agreement with
-Basketball-Reference's BPM from corr 0.708 / MAE 3.83 to 0.945 / 0.65 (500+ minutes).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`); must carry `game_id` when `granularity="game"`. |
-| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`); must carry `game_id` when `granularity="game"`. |
-| `positions` | `DataFrame` |  | listed positions (`nba_player_positions`): player_id, position_num. |
-| `team_adjust` | `bool` | `True` | apply the team adjustment (True) or return raw box-BPM (False). |
-| `granularity` | `str` | `'season'` | `"season"` (default) aggregates every row in `player_logs`/ `team_logs` into one row per player. `"game"` runs the exact same pipeline independently per `game_id` (position/role are estimated game-native, mirroring `NbaBpmModel`'s existing fold-native design) and returns one row per (game_id, player_id) with a leading `game_id` column; `gp` is always 1 in this mode. |
-| `league_ortg` | `float \| None` | `None` | The league offensive rating (points per 100) the OBPM adjustment is relative to. `None` (default) takes it from `team_logs`: per `season_id` when that column is there (stats.nba.com's season_id also encodes the season type, so regular season and playoffs stay apart), else over all of `team_logs`, which must then be one season and season type. Pass it when `team_logs` is not a whole league, for example one game scored on its own. |
-| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
-
-**Returns**
-
-`"season"`: frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
-
-No returns table is published for this function: no capture: its positions input is nba_player_positions output, which reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `granularity` is not `"season"`/`"game"`, or if `granularity="game"` is requested but `player_logs` has no `game_id` column. |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
-logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
-bpm = nba_bpm(logs["player"], logs["team"], pos)
-print(bpm.sort("bpm", descending=True).head())
-
-# Per-game BPM
-
-bpm_game = nba_bpm(logs["player"], logs["team"], pos, granularity="game")
-print(bpm_game.filter(pl.col("game_id") == "0022300001").sort("bpm", descending=True))
-
-# Raw (no team adjustment)
-
-bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
-
-# Pandas output
-
-bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
-```
-
-### nba_career_trajectory {#nba_career_trajectory}
-
-`nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
-
-Age-adjust player-season values with the bundled aging curve.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
-| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`player_values` plus `age_adjusted_value` (`value / rel_value(age)`, peak-centered) and `proj_next_value` (`value * rel_value(age+1) / rel_value(age)`). Ages outside the bundled curve's range fall back to `rel_value = 1.0` (no adjustment). Empty input returns the zero-row schema.
-
-No returns table is published for this function: no capture: its input is a user-built player-age panel (player_id, age, value) that no package function produces.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba import nba_career_trajectory
-player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
-nba_career_trajectory(player_values)
-```
-
-### nba_darko {#nba_darko}
-
-`nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Project each player's next-season rating via a per-player Kalman filter + aging curve.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `panel` | `DataFrame` |  | `player_id, season, rating` (+ optional `weight`) — a multi-season rating panel. |
-| `ages` | `DataFrame` |  | `player_id, season, age` (from `nba_player_ages`). |
-| `aging_curve` | `AgingCurve \| None` | `None` | an `AgingCurve`; fitted from `panel` if None. |
-| `process_var` | `float \| None` | `None` | Kalman process variance `q`; MLE-fit from `panel` if None. |
-| `obs_base` | `float \| None` | `None` | Kalman base observation variance; MLE-fit from `panel` if None. |
-| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
-
-**Returns**
-
-`player_id, last_season, forecast_season, filtered_skill, projected_rating, projected_sd`.
-
-No returns table is published for this function: no capture: its input is a multi-season player rating panel with ages per season that no package function produces.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_darko, nba_player_ages
-proj = nba_darko(rating_panel, ages_panel)
-print(proj.sort("projected_rating", descending=True).head())
 ```

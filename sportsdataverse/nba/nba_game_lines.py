@@ -58,6 +58,8 @@ PROP_MARKETS: dict[str, str] = {
 }
 _FLIPPED = ("flipped", "contains_flip")
 
+__all__ = ["game_lines", "player_props", "wp_variants"]
+
 GAME_LINES_SCHEMA: dict[str, pl.DataType] = {
     "game_id": pl.Int32(),
     "season": pl.Int32(),
@@ -149,9 +151,8 @@ def _sided(odds: pl.DataFrame, games: pl.DataFrame) -> pl.DataFrame:
     ).filter(pl.col("side").is_not_null())
 
 
-def _line_medians(rows: pl.DataFrame) -> pl.DataFrame:
-    """Per game: one event, then the medians over its books of each line, price and no-vig WP."""
-    # one game per event; a game two events map to keeps the one with the most quotes
+def _one_event(rows: pl.DataFrame) -> pl.DataFrame:
+    """The rows of one odds event per game: a game two events map to keeps the one with the most quotes."""
     event = (
         rows.group_by("game_id", "event_id")
         .len()
@@ -159,7 +160,12 @@ def _line_medians(rows: pl.DataFrame) -> pl.DataFrame:
         .unique("game_id", keep="first", maintain_order=True)
         .select("game_id", "event_id")
     )
-    rows = rows.join(event, on=["game_id", "event_id"], how="semi")
+    return rows.join(event, on=["game_id", "event_id"], how="semi")
+
+
+def _line_medians(rows: pl.DataFrame) -> pl.DataFrame:
+    """Per game: one event, then the medians over its books of each line, price and no-vig WP."""
+    rows = _one_event(rows)
     book = ["game_id", "event_id", "season", "bookmaker_key"]
     per_book = (
         rows.group_by(book)
@@ -418,6 +424,9 @@ def player_props(
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
     lg = _resolve_league(league, None)
+    missing = [c for c in ("home_id", "away_id") if c not in schedule.columns]
+    if missing:
+        raise pl.exceptions.ColumnNotFoundError(f"player_props needs schedule columns {missing}")
     games = _games(crosswalk, schedule, ODDS_SPORT_KEYS[lg])
     rows = (
         props_checkpoints.filter(
@@ -431,9 +440,9 @@ def player_props(
         .join(games.select("event_id", "game_id"), on="event_id", how="inner")
         .rename({"outcome_description": "player_name"})
     )
-    if rows.is_empty() or not {"home_id", "away_id"} <= set(games.columns):
+    if rows.is_empty():
         return pl.DataFrame(schema=PLAYER_PROPS_SCHEMA)
-    out = _prop_lines(rows)
+    out = _prop_lines(_one_event(rows))
     who = _prop_athletes(out, games, player_xwalk)
     season = games.unique("game_id").select("game_id", "season")
     return (
