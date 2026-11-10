@@ -24,13 +24,13 @@ import polars as pl
 
 from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS
-from sportsdataverse._common.lineup_seasons import COUNTS, lineup_count_schema, lineup_seasons
+from sportsdataverse._common.lineup_seasons import COUNTS, ZONE_COUNTS, lineup_count_schema, lineup_seasons
+from sportsdataverse.nba.nba_epv import _RIM_FEET
 from sportsdataverse.nba.nba_game_impact import _check_league, _load_releases, _possession_rows, nba_impact_rows
 
 __all__ = ["nba_lineup_count_rows", "nba_lineup_seasons"]
 
 _PLAYER = pl.Int64()
-_COUNT_ROWS = lineup_count_schema(_PLAYER)
 #: The schedule ``season_type`` values a season table is built for.
 _SEASON_TYPES = ("regular-season", "preseason", "playoffs", "play-in")
 #: league_id -> the default rank gate (offensive plus defensive possessions): 400 is about 200
@@ -39,7 +39,54 @@ _SEASON_TYPES = ("regular-season", "preseason", "playoffs", "play-in")
 _MIN_POSS = {"00": 400, "10": 200}
 
 
-def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
+def _zone_counts(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
+    """Add each possession's rim and mid-range attempts and makes (``ZONE_COUNTS``) from the pbp shots.
+
+    A shot belongs to the possession whose ``start_order_index`` is the last at or before its
+    ``order_index``; only the offense's twos count. A rim attempt is a two under ``_RIM_FEET`` feet.
+    """
+    shots = (
+        pbp.filter((pl.col("is_field_goal") == True) & (pl.col("shot_value") == 2))  # noqa: E712
+        .select(
+            pl.col("game_id").cast(pl.Utf8),
+            pl.col("order_index").cast(pl.Int64),
+            pl.col("team_id").cast(pl.Int64).alias("_shooter"),
+            (pl.col("shot_distance") < _RIM_FEET).fill_null(False).alias("_rim"),
+            (pl.col("is_made_shot") == True).fill_null(False).alias("_made"),  # noqa: E712
+        )
+        .sort("game_id", "order_index")
+    )
+    starts = (
+        possessions.select(
+            pl.col("game_id").cast(pl.Utf8),
+            pl.col("start_order_index").cast(pl.Int64),
+            pl.col("offense_team_id").cast(pl.Int64).alias("_offense"),
+        )
+        .unique(["game_id", "start_order_index"])
+        .sort("game_id", "start_order_index")
+    )
+    own = (
+        shots.join_asof(
+            starts, left_on="order_index", right_on="start_order_index", by="game_id", check_sortedness=False
+        )
+        .filter(pl.col("_shooter") == pl.col("_offense"))
+        .group_by("game_id", "start_order_index")
+        .agg(
+            pl.col("_rim").sum().alias("rima"),
+            (pl.col("_rim") & pl.col("_made")).sum().alias("rimm"),
+            (~pl.col("_rim")).sum().alias("mida"),
+            (~pl.col("_rim") & pl.col("_made")).sum().alias("midm"),
+        )
+    )
+    keyed = possessions.with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("start_order_index").cast(pl.Int64))
+    return keyed.join(own, on=["game_id", "start_order_index"], how="left").with_columns(
+        pl.col(ZONE_COUNTS).fill_null(0).cast(pl.Int64)
+    )
+
+
+def nba_lineup_count_rows(
+    possessions: pl.DataFrame, schedule: pl.DataFrame, *, pbp: pl.DataFrame | None = None
+) -> pl.DataFrame:
     """Map ``nba_stats_possessions`` rows onto the lineup-seasons count frame.
 
     Each possession's counts go to the side that had the ball, its ``dreb`` (the defense's
@@ -48,12 +95,18 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
 
     Args:
         possessions: ``load_nba_stats_possessions`` / ``load_wnba_stats_possessions`` rows
-            (``fg2a``, ``fg2m``, ``fg3a``, ``fg3m``, ``fta``, ``oreb``, ``dreb``, ``tov``).
+            (``fg2a``, ``fg2m``, ``fg3a``, ``fg3m``, ``fta``, ``oreb``, ``dreb``, ``tov``; with
+            ``pbp``, also ``start_order_index``).
         schedule: The games to keep (``game_id``, ``home_team_id``, ``away_team_id``).
+        pbp: ``load_nba_stats_pbp`` / ``load_wnba_stats_pbp`` rows (``game_id``, ``order_index``,
+            ``team_id``, ``is_field_goal``, ``is_made_shot``, ``shot_value``, ``shot_distance``).
+            When given, the rows also carry the shot-zone counts (``rima``, ``rimm``, ``mida``,
+            ``midm``): each two the offense took in the possession, at the rim when it was under
+            4 feet, mid-range otherwise.
 
     Returns:
         One row per possession in :func:`sportsdataverse._common.lineup_seasons.lineup_count_schema`
-        with Int64 player ids.
+        (with the shot zones when ``pbp`` is given) with Int64 player ids.
 
     Raises:
         ValueError: If a count column holds a null in a possession of a ``schedule`` game.
@@ -65,8 +118,10 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
             from sportsdataverse.nba.nba_lineup_seasons import nba_lineup_count_rows
             rows = nba_lineup_count_rows(L.load_nba_stats_possessions(2024), L.load_nba_stats_schedules(2024))
     """
+    names = COUNTS + (ZONE_COUNTS if pbp is not None else ())
+    schema = lineup_count_schema(_PLAYER, zones=pbp is not None)
     if possessions.height == 0 or schedule.height == 0:
-        return pl.DataFrame(schema=_COUNT_ROWS)
+        return pl.DataFrame(schema=schema)
     games = schedule.select(
         pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64), pl.col("away_team_id").cast(pl.Int64)
     ).unique("game_id")
@@ -79,10 +134,12 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
     poss = possessions.with_columns(
         (pl.col("fg2a") + pl.col("fg3a")).alias("fga"), (pl.col("fg2m") + pl.col("fg3m")).alias("fgm")
     )
-    rows = _possession_rows(poss, games, keep=COUNTS)
+    if pbp is not None:
+        poss = _zone_counts(poss, pbp)
+    rows = _possession_rows(poss, games, keep=names)
     on_ball = {"home": pl.col("home_poss") == 1, "away": pl.col("away_poss") == 1}
     # Every count is the offense's except dreb, which the defense grabbed.
-    owner = {side: {c: on_ball[other] if c == "dreb" else on_ball[side] for c in COUNTS} for side, other in
+    owner = {side: {c: on_ball[other] if c == "dreb" else on_ball[side] for c in names} for side, other in
              (("home", "away"), ("away", "home"))}  # fmt: skip
     keys = ("season", "game_id", "home_team_id", "away_team_id", *HOME_SLOTS, *AWAY_SLOTS)
     return rows.select(
@@ -90,9 +147,9 @@ def nba_lineup_count_rows(possessions: pl.DataFrame, schedule: pl.DataFrame) -> 
         *[
             pl.when(owner[side][c]).then(pl.col(c)).otherwise(0).fill_null(0).alias(f"{side}_{c}")
             for side in ("home", "away")
-            for c in COUNTS
+            for c in names
         ],
-    ).cast(_COUNT_ROWS)
+    ).cast(schema)
 
 
 def nba_lineup_seasons(

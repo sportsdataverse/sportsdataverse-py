@@ -68,6 +68,7 @@ from sportsdataverse.wbb.wbb_strength_of_schedule import *
 from sportsdataverse.wbb.wbb_team_box import *
 from sportsdataverse.wbb.wbb_team_ratings import *
 from sportsdataverse.wbb.wbb_game_impact import *
+from sportsdataverse.wbb.wbb_game_stints import *
 from sportsdataverse.wbb.wbb_lineup_seasons import *
 from sportsdataverse.wbb.wbb_player_on_off import *
 from sportsdataverse.wbb.wbb_play_style import *

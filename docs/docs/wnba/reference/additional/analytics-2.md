@@ -1,10 +1,95 @@
 ---
-title: "WNBA — additional Python functions — Analytics: wnba_lineup–wnba_season"
-sidebar_label: "Analytics: wnba_lineup–wnba_season"
+title: "WNBA — additional Python functions — Analytics: wnba_game–wnba_referee"
+sidebar_label: "Analytics: wnba_game–wnba_referee"
 sidebar_position: 8
-description: "WNBA — additional Python functions — Analytics: wnba_lineup–wnba_season — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: wnba_game–wnba_referee — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: wnba_lineup–wnba_season
+# WNBA — additional Python functions — Analytics: wnba_game–wnba_referee
+
+### wnba_game_units {#wnba_game_units}
+
+`wnba_game_units(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA in-game units (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_units.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, game_id, team_id, n_players, lineup_id)`: `opp_team_id`, `n_players` (1 to 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes` / `seconds`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`), the shot zones for and against (`rim_rate`, `mid_rate`, `fg3_rate` shares of field-goal attempts, `rim_pct`, `mid_pct`, `fg3_pct` make rates, `opp_*`) as fractions, and every rate's `<m>_n`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `n_players` | Int64 | Unit size: 1 to 5 players. |
+| `lineup_id` | String | The unit's player ids, sorted and joined with '-'. |
+| `player_1` | Int64 | Player 1 of the unit, in lineup_id order; null past n_players. |
+| `player_2` | Int64 | Player 2 of the unit, in lineup_id order; null past n_players. |
+| `player_3` | Int64 | Player 3 of the unit, in lineup_id order; null past n_players. |
+| `player_4` | Int64 | Player 4 of the unit, in lineup_id order; null past n_players. |
+| `player_5` | Int64 | Player 5 of the unit, in lineup_id order; null past n_players. |
+| `minutes` | Float64 | Game-clock minutes the unit's players were all on the floor together (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds the unit's players were all on the floor together. |
+| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts). |
+| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
+| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
+| `plus_minus` | Int64 | The unit's +/- in the game: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. |
+| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. |
+| `orb_pct` | Float64 | Offensive-rebound rate: own offensive rebounds over own offensive rebounds plus the opponent's defensive rebounds. Null with a zero denominator. |
+| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. |
+| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. |
+| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession, as a fraction. Null with a zero denominator. |
+| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate with the unit on the floor. Null with a zero denominator. |
+| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. |
+| `rim_rate` | Float64 | Share of the unit's field-goal attempts at the rim (a two under 4 feet). Null with a zero denominator. |
+| `mid_rate` | Float64 | Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator. |
+| `fg3_rate` | Float64 | Share of the unit's field-goal attempts that are threes. Null with a zero denominator. |
+| `rim_pct` | Float64 | Field-goal percentage at the rim, as a fraction. Null with a zero denominator. |
+| `mid_pct` | Float64 | Mid-range field-goal percentage, as a fraction. Null with a zero denominator. |
+| `fg3_pct` | Float64 | Three-point percentage, as a fraction. Null with a zero denominator. |
+| `opp_rim_rate` | Float64 | Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator. |
+| `opp_mid_rate` | Float64 | Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator. |
+| `opp_fg3_rate` | Float64 | Share of the opponent's field-goal attempts that are threes. Null with a zero denominator. |
+| `opp_rim_pct` | Float64 | The opponent's field-goal percentage at the rim. Null with a zero denominator. |
+| `opp_mid_pct` | Float64 | The opponent's mid-range field-goal percentage with the unit on the floor. Null with a zero denominator. |
+| `opp_fg3_pct` | Float64 | The opponent's three-point percentage with the unit on the floor. Null with a zero denominator. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
+| `rim_rate_n` | Int64 | Sample size of rim_rate: the unit's field-goal attempts. |
+| `mid_rate_n` | Int64 | Sample size of mid_rate: the unit's field-goal attempts. |
+| `fg3_rate_n` | Int64 | Sample size of fg3_rate: the unit's field-goal attempts. |
+| `rim_pct_n` | Int64 | Sample size of rim_pct: the unit's rim attempts. |
+| `mid_pct_n` | Int64 | Sample size of mid_pct: the unit's mid-range attempts. |
+| `fg3_pct_n` | Int64 | Sample size of fg3_pct: the unit's three-point attempts. |
+| `opp_rim_rate_n` | Int64 | Sample size of opp_rim_rate: the opponent's field-goal attempts. |
+| `opp_mid_rate_n` | Int64 | Sample size of opp_mid_rate: the opponent's field-goal attempts. |
+| `opp_fg3_rate_n` | Int64 | Sample size of opp_fg3_rate: the opponent's field-goal attempts. |
+| `opp_rim_pct_n` | Int64 | Sample size of opp_rim_pct: the opponent's rim attempts. |
+| `opp_mid_pct_n` | Int64 | Sample size of opp_mid_pct: the opponent's mid-range attempts. |
+| `opp_fg3_pct_n` | Int64 | Sample size of opp_fg3_pct: the opponent's three-point attempts. |
 
 ### wnba_lineup_seasons {#wnba_lineup_seasons}
 
@@ -522,72 +607,3 @@ result = wnba_referee_assignments("2026-06-13")
 officials = result["officials"]
 print(f"Found {officials.height} official slots")
 ```
-
-### wnba_season_sim {#wnba_season_sim}
-
-`wnba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '10', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, cup_schedule: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA season sim: projected W-L, seed, playoff and lottery odds (league_id='10'). See sportsdataverse.nba.nba_season_sim.nba_season_sim.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  |  |
-| `as_of_date` | `date \| None` | `None` |  |
-| `league_id` | `str` | `'10'` |  |
-| `n_sims` | `int` | `10000` |  |
-| `seed` | `int` | `20261103` |  |
-| `chances` | `list[float] \| None` | `None` |  |
-| `cup_schedule` | `DataFrame \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean seed: * `wins` / `losses` so far, `games_remaining`, and the as-of `adj_net_rtg` with its posterior sd `adj_net_rtg_sd` (capped so two teams' shift carries at most 3/4 of a game's variance; it binds only near the prior, before many games are played). * `proj_wins` / `proj_losses` (means), `proj_wins_sd`, the 10th and 90th percentiles, and `proj_wins_se` (the Monte Carlo error of the mean). * `p_division` (NBA), `p_seed_1` .. `p_seed_15` (the regular-season finish in the conference, NBA, or the league, WNBA) and `mean_seed`. * `p_top4` (first-round home court), `p_top6` (NBA, straight to the playoffs), `p_play_in` (NBA, seeds 7-10), `p_playoffs` (NBA: top 6 or through the play-in; WNBA: top 8) and its Monte Carlo `p_playoffs_se`. * `p_lottery`, `p_pick_1`, `p_drawn_pick` (a pick from the drawing: the NBA's top four, the WNBA's top two) and `mean_pick` (given a lottery finish). The pick columns are null when the league has no published chances for that many lottery teams. * `n_sims`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
-| `as_of_date` | Date | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
-| `team_id` | Int64 | stats.nba.com team id (Int64). |
-| `conference` | String | NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table). |
-| `division` | String | NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team. |
-| `wins` | Int64 | Regular-season wins in the games already played. |
-| `losses` | Int64 | Regular-season losses in the games already played. |
-| `games_remaining` | Int64 | Regular-season games on the schedule still to play (simulated). |
-| `adj_net_rtg` | Float64 | As-of adjusted net rating from the possession ridge at the sim's penalty: points per 100 over an average opponent on a neutral court. |
-| `adj_net_rtg_sd` | Float64 | Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most 3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws. |
-| `proj_wins` | Float64 | Mean final regular-season wins over the simulated seasons (played wins plus simulated ones). |
-| `proj_losses` | Float64 | Mean final regular-season losses over the simulated seasons. |
-| `proj_wins_sd` | Float64 | Standard deviation of the final wins over the simulated seasons. |
-| `proj_wins_p10` | Float64 | 10th percentile of the final wins over the simulated seasons. |
-| `proj_wins_p90` | Float64 | 90th percentile of the final wins over the simulated seasons. |
-| `proj_wins_se` | Float64 | Monte Carlo standard error of proj_wins: proj_wins_sd / sqrt(n_sims). |
-| `p_division` | Float64 | Share of simulated seasons in which the team wins its division under the NBA tiebreakers; null for the WNBA. |
-| `p_seed_1` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 1: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_2` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 2: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_3` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 3: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_4` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 4: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_5` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 5: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_6` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 6: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_7` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 7: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_8` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 8: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_9` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 9: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_10` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 10: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_11` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 11: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_12` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 12: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_13` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 13: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_14` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 14: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_15` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 15: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `mean_seed` | Float64 | Mean regular-season seed over the simulated seasons (1 = best). |
-| `p_top4` | Float64 | Share of simulated seasons with a top-4 seed: first-round home court. |
-| `p_top6` | Float64 | NBA: share of simulated seasons with a top-6 conference seed, straight to the playoffs; null for the WNBA. |
-| `p_play_in` | Float64 | NBA: share of simulated seasons with a conference seed of 7 to 10, the play-in; null for the WNBA. |
-| `p_playoffs` | Float64 | Share of simulated seasons in which the team makes the playoffs: NBA top 6 or through the simulated play-in; WNBA top 8. |
-| `p_playoffs_se` | Float64 | Monte Carlo standard error of p_playoffs: sqrt(p (1 - p) / n_sims). |
-| `p_lottery` | Float64 | Share of simulated seasons in which the team misses the playoffs and enters the draft lottery. |
-| `p_pick_1` | Float64 | Share of simulated seasons in which the team's own lottery slot draws the first pick; null when the league has no published chances for that many lottery teams. |
-| `p_drawn_pick` | Float64 | Share of simulated seasons in which the team's slot gets a drawn pick (NBA top 4, WNBA top 2); null as p_pick_1. |
-| `mean_pick` | Float64 | Mean draft pick over the simulated seasons in which the team is in the lottery; null when it never is, or as p_pick_1. |
-| `n_sims` | Int64 | Number of simulated seasons behind every share on the row. |
