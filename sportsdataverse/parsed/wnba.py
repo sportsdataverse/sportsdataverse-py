@@ -279,6 +279,7 @@ from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk 
 from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
 from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_shot_zones as wnba_player_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
@@ -302,6 +303,7 @@ from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_team_season_flow as wnba_team_season_flow  # noqa: F401
 from sportsdataverse.wnba import wnba_team_season_rates as wnba_team_season_rates  # noqa: F401
+from sportsdataverse.wnba import wnba_team_shot_zones as wnba_team_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_team_strength as wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
@@ -569,6 +571,7 @@ __all__ = [
     "wnba_player_factor_rapm",
     "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_shot_zones",
     "wnba_player_war",
     "wnba_player_wowy",
     "wnba_playtype_ratings",
@@ -592,6 +595,7 @@ __all__ = [
     "wnba_team_ratings",
     "wnba_team_season_flow",
     "wnba_team_season_rates",
+    "wnba_team_shot_zones",
     "wnba_team_strength",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",

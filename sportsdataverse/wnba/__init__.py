@@ -60,6 +60,7 @@ from sportsdataverse.wnba.wnba_situational import (  # noqa: F401
 )
 from sportsdataverse.wnba.wnba_team_strength import wnba_team_strength  # noqa: F401
 from sportsdataverse.wnba.wnba_team_luck import wnba_team_luck  # noqa: F401
+from sportsdataverse.wnba.wnba_shot_zone_profiles import wnba_player_shot_zones, wnba_team_shot_zones  # noqa: F401
 from sportsdataverse.wnba.wnba_player_war import wnba_player_war  # noqa: F401
 from sportsdataverse.wnba.wnba_coach_seasons import wnba_coach_careers, wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba.wnba_season_sim import (  # noqa: F401

@@ -91,6 +91,112 @@ on_off = mbb_player_on_off(2025)
 on_off.sort("net_rtg_diff_rank").head()
 ```
 
+### mbb_player_shot_zones {#mbb_player_shot_zones}
+
+`mbb_player_shot_zones(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3.
+
+One row per player, team and season over every game of the season. Zones, ids and the assist
+link are as in the module docstring.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id)` (ESPN team id Int64, stats.ncaa.org player id text) with `player_name`, `games`, `fga`, `fgm`, `unlocated_fga` and, for each zone `z` (`rim`, `mid`, `corner_3`, `above_break_3`), `{z}_fga`, `{z}_fgm`, `{z}_ast` (assisted makes), `{z}_fg_pct`, `{z}_freq` (share of the located attempts) and `{z}_ast_pct` (share of the linked makes assisted). The four `{z}_fga` plus `unlocated_fga` add up to `fga`. Every rate has `<m>_n`, `<m>_rank` (1 = highest) and `<m>_pct`, ranked within the season among players whose `<m>_n` reaches the rate's gate and null under ten players. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | The team's ESPN team id (Int64). |
+| `player_id` | String | stats.ncaa.org player id (text). |
+| `player_name` | String | Player name as the shots release spells it. |
+| `games` | Int64 | The player's games with at least one field-goal attempt for this team. |
+| `fga` | Int64 | Field-goal attempts by the player (games). |
+| `fgm` | Int64 | Field goals made by the player. |
+| `unlocated_fga` | Int64 | Attempts by the player with no real location (the WNBA's 1997-2010 hoop-centre placeholders; 0 elsewhere): counted in fga, in no zone. |
+| `rim_fga` | Int64 | Attempts by the player at the rim (within 4 ft, the shot chart's rim zone). |
+| `rim_fgm` | Int64 | Makes by the player at the rim (within 4 ft, the shot chart's rim zone). |
+| `rim_ast` | Int64 | Assisted makes by the player at the rim (within 4 ft, the shot chart's rim zone). |
+| `mid_fga` | Int64 | Attempts by the player in the mid zone (every other two: the chart's paint and mid-range). |
+| `mid_fgm` | Int64 | Makes by the player in the mid zone (every other two: the chart's paint and mid-range). |
+| `mid_ast` | Int64 | Assisted makes by the player in the mid zone (every other two: the chart's paint and mid-range). |
+| `corner_3_fga` | Int64 | Attempts by the player from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `corner_3_fgm` | Int64 | Makes by the player from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `corner_3_ast` | Int64 | Assisted makes by the player from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `above_break_3_fga` | Int64 | Attempts by the player from above the break (every other three). |
+| `above_break_3_fgm` | Int64 | Makes by the player from above the break (every other three). |
+| `above_break_3_ast` | Int64 | Assisted makes by the player from above the break (every other three). |
+| `rim_fg_pct` | Float64 | rim_fgm / rim_fga; null with no attempt. |
+| `rim_freq` | Float64 | rim_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `rim_ast_pct` | Float64 | Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `mid_fg_pct` | Float64 | mid_fgm / mid_fga; null with no attempt. |
+| `mid_freq` | Float64 | mid_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `mid_ast_pct` | Float64 | Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `corner_3_fg_pct` | Float64 | corner_3_fgm / corner_3_fga; null with no attempt. |
+| `corner_3_freq` | Float64 | corner_3_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `corner_3_ast_pct` | Float64 | Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `above_break_3_fg_pct` | Float64 | above_break_3_fgm / above_break_3_fga; null with no attempt. |
+| `above_break_3_freq` | Float64 | above_break_3_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `above_break_3_ast_pct` | Float64 | Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `rim_fg_pct_n` | Int64 | Sample size of rim_fg_pct: rim_fga. |
+| `rim_freq_n` | Int64 | Sample size of rim_freq: located attempts (fga - unlocated_fga). |
+| `rim_ast_pct_n` | Int64 | Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone. |
+| `mid_fg_pct_n` | Int64 | Sample size of mid_fg_pct: mid_fga. |
+| `mid_freq_n` | Int64 | Sample size of mid_freq: located attempts (fga - unlocated_fga). |
+| `mid_ast_pct_n` | Int64 | Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone. |
+| `corner_3_fg_pct_n` | Int64 | Sample size of corner_3_fg_pct: corner_3_fga. |
+| `corner_3_freq_n` | Int64 | Sample size of corner_3_freq: located attempts (fga - unlocated_fga). |
+| `corner_3_ast_pct_n` | Int64 | Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `above_break_3_fg_pct_n` | Int64 | Sample size of above_break_3_fg_pct: above_break_3_fga. |
+| `above_break_3_freq_n` | Int64 | Sample size of above_break_3_freq: located attempts (fga - unlocated_fga). |
+| `above_break_3_ast_pct_n` | Int64 | Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `rim_fg_pct_rank` | Float64 | Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among players whose rim_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `rim_freq_rank` | Float64 | Rank of rim_freq within the season (the highest ranks 1; ties average), among players whose rim_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `rim_ast_pct_rank` | Float64 | Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among players whose rim_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `mid_fg_pct_rank` | Float64 | Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among players whose mid_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `mid_freq_rank` | Float64 | Rank of mid_freq within the season (the highest ranks 1; ties average), among players whose mid_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `mid_ast_pct_rank` | Float64 | Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among players whose mid_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `corner_3_fg_pct_rank` | Float64 | Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among players whose corner_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `corner_3_freq_rank` | Float64 | Rank of corner_3_freq within the season (the highest ranks 1; ties average), among players whose corner_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `corner_3_ast_pct_rank` | Float64 | Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among players whose corner_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `above_break_3_fg_pct_rank` | Float64 | Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among players whose above_break_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `above_break_3_freq_rank` | Float64 | Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among players whose above_break_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `above_break_3_ast_pct_rank` | Float64 | Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among players whose above_break_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than ten players ranked. |
+| `rim_fg_pct_pct` | Float64 | Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_freq_pct` | Float64 | Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_ast_pct_pct` | Float64 | Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_fg_pct_pct` | Float64 | Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_freq_pct` | Float64 | Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_ast_pct_pct` | Float64 | Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_fg_pct_pct` | Float64 | Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_freq_pct` | Float64 | Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_ast_pct_pct` | Float64 | Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_fg_pct_pct` | Float64 | Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_freq_pct` | Float64 | Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_ast_pct_pct` | Float64 | Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"` (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shot_zone_profiles import mbb_player_shot_zones
+zones = mbb_player_shot_zones(2025)
+zones.sort("rim_fga", descending=True).select("player_name", "rim_fga", "rim_fg_pct").head()
+```
+
 ### mbb_player_war {#mbb_player_war}
 
 `mbb_player_war(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb"
-sidebar_label: "Analytics: mbb_team–ncaa_mbb"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_impact"
+sidebar_label: "Analytics: mbb_team–ncaa_impact"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_impact — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_mbb
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_impact
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -102,6 +102,173 @@ One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `
 from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_season_rates
 rates = mbb_team_season_rates(2025)
 rates.filter(split="all").sort("net_rtg_rank").head()
+```
+
+### mbb_team_shot_zones {#mbb_team_shot_zones}
+
+`mbb_team_shot_zones(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3.
+
+One row per team and season over every game: the team's own attempts and, with an `opp_`
+prefix, its opponents' attempts against it (a non-D1 opponent's attempts included).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)` (the ESPN team id, Int64) with `games` and the columns of `mbb_player_shot_zones` for the team and again with an `opp_` prefix for its opponents, each rate with `<m>_n`, `<m>_rank` and `<m>_pct`, ranked within the season among teams whose `<m>_n` reaches the gate and null under five teams. `<m>_rank` is 1 = highest, except the allowed `opp_{z}_fg_pct`, where 1 is the lowest. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | The team's ESPN team id (Int64). |
+| `games` | Int64 | The team's games with a field-goal attempt by or against it. |
+| `fga` | Int64 | Field-goal attempts by the team (games). |
+| `fgm` | Int64 | Field goals made by the team. |
+| `unlocated_fga` | Int64 | Attempts by the team with no real location (the WNBA's 1997-2010 hoop-centre placeholders; 0 elsewhere): counted in fga, in no zone. |
+| `rim_fga` | Int64 | Attempts by the team at the rim (within 4 ft, the shot chart's rim zone). |
+| `rim_fgm` | Int64 | Makes by the team at the rim (within 4 ft, the shot chart's rim zone). |
+| `rim_ast` | Int64 | Assisted makes by the team at the rim (within 4 ft, the shot chart's rim zone). |
+| `mid_fga` | Int64 | Attempts by the team in the mid zone (every other two: the chart's paint and mid-range). |
+| `mid_fgm` | Int64 | Makes by the team in the mid zone (every other two: the chart's paint and mid-range). |
+| `mid_ast` | Int64 | Assisted makes by the team in the mid zone (every other two: the chart's paint and mid-range). |
+| `corner_3_fga` | Int64 | Attempts by the team from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `corner_3_fgm` | Int64 | Makes by the team from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `corner_3_ast` | Int64 | Assisted makes by the team from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `above_break_3_fga` | Int64 | Attempts by the team from above the break (every other three). |
+| `above_break_3_fgm` | Int64 | Makes by the team from above the break (every other three). |
+| `above_break_3_ast` | Int64 | Assisted makes by the team from above the break (every other three). |
+| `opp_fga` | Int64 | Allowed: Field-goal attempts by the team's opponents (games). |
+| `opp_fgm` | Int64 | Allowed: Field goals made by the team's opponents. |
+| `opp_unlocated_fga` | Int64 | Allowed: Attempts by the team's opponents with no real location (the WNBA's 1997-2010 hoop-centre placeholders; 0 elsewhere): counted in opp_fga, in no zone. |
+| `opp_rim_fga` | Int64 | Allowed: Attempts by the team's opponents at the rim (within 4 ft, the shot chart's rim zone). |
+| `opp_rim_fgm` | Int64 | Allowed: Makes by the team's opponents at the rim (within 4 ft, the shot chart's rim zone). |
+| `opp_rim_ast` | Int64 | Allowed: Assisted makes by the team's opponents at the rim (within 4 ft, the shot chart's rim zone). |
+| `opp_mid_fga` | Int64 | Allowed: Attempts by the team's opponents in the mid zone (every other two: the chart's paint and mid-range). |
+| `opp_mid_fgm` | Int64 | Allowed: Makes by the team's opponents in the mid zone (every other two: the chart's paint and mid-range). |
+| `opp_mid_ast` | Int64 | Allowed: Assisted makes by the team's opponents in the mid zone (every other two: the chart's paint and mid-range). |
+| `opp_corner_3_fga` | Int64 | Allowed: Attempts by the team's opponents from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `opp_corner_3_fgm` | Int64 | Allowed: Makes by the team's opponents from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `opp_corner_3_ast` | Int64 | Allowed: Assisted makes by the team's opponents from the corner (a three with \|x\| >= 21 ft and \|y\| <= 9 ft, the baseline band). |
+| `opp_above_break_3_fga` | Int64 | Allowed: Attempts by the team's opponents from above the break (every other three). |
+| `opp_above_break_3_fgm` | Int64 | Allowed: Makes by the team's opponents from above the break (every other three). |
+| `opp_above_break_3_ast` | Int64 | Allowed: Assisted makes by the team's opponents from above the break (every other three). |
+| `rim_fg_pct` | Float64 | rim_fgm / rim_fga; null with no attempt. |
+| `rim_freq` | Float64 | rim_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `rim_ast_pct` | Float64 | Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `mid_fg_pct` | Float64 | mid_fgm / mid_fga; null with no attempt. |
+| `mid_freq` | Float64 | mid_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `mid_ast_pct` | Float64 | Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `corner_3_fg_pct` | Float64 | corner_3_fgm / corner_3_fga; null with no attempt. |
+| `corner_3_freq` | Float64 | corner_3_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `corner_3_ast_pct` | Float64 | Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `above_break_3_fg_pct` | Float64 | above_break_3_fgm / above_break_3_fga; null with no attempt. |
+| `above_break_3_freq` | Float64 | above_break_3_fga / (fga - unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `above_break_3_ast_pct` | Float64 | Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `opp_rim_fg_pct` | Float64 | Allowed: opp_rim_fgm / opp_rim_fga; null with no attempt. |
+| `opp_rim_freq` | Float64 | Allowed: opp_rim_fga / (opp_fga - opp_unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `opp_rim_ast_pct` | Float64 | Allowed: Share of opp_rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `opp_mid_fg_pct` | Float64 | Allowed: opp_mid_fgm / opp_mid_fga; null with no attempt. |
+| `opp_mid_freq` | Float64 | Allowed: opp_mid_fga / (opp_fga - opp_unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `opp_mid_ast_pct` | Float64 | Allowed: Share of opp_mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `opp_corner_3_fg_pct` | Float64 | Allowed: opp_corner_3_fgm / opp_corner_3_fga; null with no attempt. |
+| `opp_corner_3_freq` | Float64 | Allowed: opp_corner_3_fga / (opp_fga - opp_unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `opp_corner_3_ast_pct` | Float64 | Allowed: Share of opp_corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `opp_above_break_3_fg_pct` | Float64 | Allowed: opp_above_break_3_fgm / opp_above_break_3_fga; null with no attempt. |
+| `opp_above_break_3_freq` | Float64 | Allowed: opp_above_break_3_fga / (opp_fga - opp_unlocated_fga): the zone's share of the located attempts (the four zones add up to 1); null with none. |
+| `opp_above_break_3_ast_pct` | Float64 | Allowed: Share of opp_above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null with none. |
+| `rim_fg_pct_n` | Int64 | Sample size of rim_fg_pct: rim_fga. |
+| `rim_freq_n` | Int64 | Sample size of rim_freq: located attempts (fga - unlocated_fga). |
+| `rim_ast_pct_n` | Int64 | Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone. |
+| `mid_fg_pct_n` | Int64 | Sample size of mid_fg_pct: mid_fga. |
+| `mid_freq_n` | Int64 | Sample size of mid_freq: located attempts (fga - unlocated_fga). |
+| `mid_ast_pct_n` | Int64 | Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone. |
+| `corner_3_fg_pct_n` | Int64 | Sample size of corner_3_fg_pct: corner_3_fga. |
+| `corner_3_freq_n` | Int64 | Sample size of corner_3_freq: located attempts (fga - unlocated_fga). |
+| `corner_3_ast_pct_n` | Int64 | Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `above_break_3_fg_pct_n` | Int64 | Sample size of above_break_3_fg_pct: above_break_3_fga. |
+| `above_break_3_freq_n` | Int64 | Sample size of above_break_3_freq: located attempts (fga - unlocated_fga). |
+| `above_break_3_ast_pct_n` | Int64 | Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `opp_rim_fg_pct_n` | Int64 | Sample size of opp_rim_fg_pct: opp_rim_fga. |
+| `opp_rim_freq_n` | Int64 | Sample size of opp_rim_freq: located attempts (opp_fga - opp_unlocated_fga). |
+| `opp_rim_ast_pct_n` | Int64 | Sample size of opp_rim_ast_pct: makes linked to a play-by-play row in the zone. |
+| `opp_mid_fg_pct_n` | Int64 | Sample size of opp_mid_fg_pct: opp_mid_fga. |
+| `opp_mid_freq_n` | Int64 | Sample size of opp_mid_freq: located attempts (opp_fga - opp_unlocated_fga). |
+| `opp_mid_ast_pct_n` | Int64 | Sample size of opp_mid_ast_pct: makes linked to a play-by-play row in the zone. |
+| `opp_corner_3_fg_pct_n` | Int64 | Sample size of opp_corner_3_fg_pct: opp_corner_3_fga. |
+| `opp_corner_3_freq_n` | Int64 | Sample size of opp_corner_3_freq: located attempts (opp_fga - opp_unlocated_fga). |
+| `opp_corner_3_ast_pct_n` | Int64 | Sample size of opp_corner_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `opp_above_break_3_fg_pct_n` | Int64 | Sample size of opp_above_break_3_fg_pct: opp_above_break_3_fga. |
+| `opp_above_break_3_freq_n` | Int64 | Sample size of opp_above_break_3_freq: located attempts (opp_fga - opp_unlocated_fga). |
+| `opp_above_break_3_ast_pct_n` | Int64 | Sample size of opp_above_break_3_ast_pct: makes linked to a play-by-play row in the zone. |
+| `rim_fg_pct_rank` | Float64 | Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among teams whose rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `rim_freq_rank` | Float64 | Rank of rim_freq within the season (the highest ranks 1; ties average), among teams whose rim_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `rim_ast_pct_rank` | Float64 | Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose rim_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `mid_fg_pct_rank` | Float64 | Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among teams whose mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `mid_freq_rank` | Float64 | Rank of mid_freq within the season (the highest ranks 1; ties average), among teams whose mid_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `mid_ast_pct_rank` | Float64 | Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose mid_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `corner_3_fg_pct_rank` | Float64 | Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `corner_3_freq_rank` | Float64 | Rank of corner_3_freq within the season (the highest ranks 1; ties average), among teams whose corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `corner_3_ast_pct_rank` | Float64 | Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `above_break_3_fg_pct_rank` | Float64 | Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `above_break_3_freq_rank` | Float64 | Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `above_break_3_ast_pct_rank` | Float64 | Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_rim_fg_pct_rank` | Float64 | Rank of opp_rim_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average), among teams whose opp_rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_rim_freq_rank` | Float64 | Rank of opp_rim_freq within the season (the highest ranks 1; ties average), among teams whose opp_rim_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_rim_ast_pct_rank` | Float64 | Rank of opp_rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_rim_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_mid_fg_pct_rank` | Float64 | Rank of opp_mid_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average), among teams whose opp_mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_mid_freq_rank` | Float64 | Rank of opp_mid_freq within the season (the highest ranks 1; ties average), among teams whose opp_mid_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_mid_ast_pct_rank` | Float64 | Rank of opp_mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_mid_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_corner_3_fg_pct_rank` | Float64 | Rank of opp_corner_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average), among teams whose opp_corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_corner_3_freq_rank` | Float64 | Rank of opp_corner_3_freq within the season (the highest ranks 1; ties average), among teams whose opp_corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_corner_3_ast_pct_rank` | Float64 | Rank of opp_corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_above_break_3_fg_pct_rank` | Float64 | Rank of opp_above_break_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average), among teams whose opp_above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_above_break_3_freq_rank` | Float64 | Rank of opp_above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose opp_above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `opp_above_break_3_ast_pct_rank` | Float64 | Rank of opp_above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked. |
+| `rim_fg_pct_pct` | Float64 | Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_freq_pct` | Float64 | Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `rim_ast_pct_pct` | Float64 | Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_fg_pct_pct` | Float64 | Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_freq_pct` | Float64 | Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `mid_ast_pct_pct` | Float64 | Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_fg_pct_pct` | Float64 | Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_freq_pct` | Float64 | Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `corner_3_ast_pct_pct` | Float64 | Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_fg_pct_pct` | Float64 | Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_freq_pct` | Float64 | Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `above_break_3_ast_pct_pct` | Float64 | Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_rim_fg_pct_pct` | Float64 | Percentile of opp_rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_rim_freq_pct` | Float64 | Percentile of opp_rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_rim_ast_pct_pct` | Float64 | Percentile of opp_rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_mid_fg_pct_pct` | Float64 | Percentile of opp_mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_mid_freq_pct` | Float64 | Percentile of opp_mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_mid_ast_pct_pct` | Float64 | Percentile of opp_mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_corner_3_fg_pct_pct` | Float64 | Percentile of opp_corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_corner_3_freq_pct` | Float64 | Percentile of opp_corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_corner_3_ast_pct_pct` | Float64 | Percentile of opp_corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_above_break_3_fg_pct_pct` | Float64 | Percentile of opp_above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_above_break_3_freq_pct` | Float64 | Percentile of opp_above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_above_break_3_ast_pct_pct` | Float64 | Percentile of opp_above_break_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"` (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shot_zone_profiles import mbb_team_shot_zones
+teams = mbb_team_shot_zones(2025)
+teams.sort("opp_corner_3_freq").select("team_id", "opp_corner_3_freq").head()
 ```
 
 ### mbb_team_strength {#mbb_team_strength}
@@ -392,575 +559,4 @@ Rows in `sportsdataverse._common.game_impact.impact_row_schema` with String play
 from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp, load_ncaa_mbb_possessions
 from sportsdataverse.mbb.mbb_game_impact import ncaa_impact_rows
 rows = ncaa_impact_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025))
-```
-
-### ncaa_lineup_count_rows {#ncaa_lineup_count_rows}
-
-`ncaa_lineup_count_rows(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Map the stats.ncaa.org pbp onto the lineup-seasons count frame.
-
-Each shot, free throw, rebound and turnover counts for the side whose `event_team` it is,
-on the lineup at the event; a free throw on the lineup at the most recent foul
-(`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`). Events with
-no count are dropped.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order. |
-
-**Returns**
-
-One row per counted event in `sportsdataverse._common.lineup_seasons.lineup_count_schema` (with the shot zones) and String player ids.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends. |
-| `game_id` | String | stats.ncaa.org contest id. |
-| `home_team_id` | Int64 | ESPN team id of the home side. |
-| `away_team_id` | Int64 | ESPN team id of the away side. |
-| `home_1` | String | stats.ncaa.org id of home player 1 on the floor at the event (a free throw: at the last foul). |
-| `home_2` | String | stats.ncaa.org id of home player 2 on the floor at the event (a free throw: at the last foul). |
-| `home_3` | String | stats.ncaa.org id of home player 3 on the floor at the event (a free throw: at the last foul). |
-| `home_4` | String | stats.ncaa.org id of home player 4 on the floor at the event (a free throw: at the last foul). |
-| `home_5` | String | stats.ncaa.org id of home player 5 on the floor at the event (a free throw: at the last foul). |
-| `away_1` | String | stats.ncaa.org id of away player 1 on the floor at the event (a free throw: at the last foul). |
-| `away_2` | String | stats.ncaa.org id of away player 2 on the floor at the event (a free throw: at the last foul). |
-| `away_3` | String | stats.ncaa.org id of away player 3 on the floor at the event (a free throw: at the last foul). |
-| `away_4` | String | stats.ncaa.org id of away player 4 on the floor at the event (a free throw: at the last foul). |
-| `away_5` | String | stats.ncaa.org id of away player 5 on the floor at the event (a free throw: at the last foul). |
-| `home_fga` | Int64 | The home side's field-goal attempts on the event (0 or 1). |
-| `home_fgm` | Int64 | The home side's field goals made on the event (0 or 1). |
-| `home_fg3a` | Int64 | The home side's three-point attempts on the event (0 or 1). |
-| `home_fg3m` | Int64 | The home side's threes made on the event (0 or 1). |
-| `home_fta` | Int64 | The home side's free-throw attempts on the event (0 or 1). |
-| `home_oreb` | Int64 | The home side's offensive rebounds on the event (0 or 1). |
-| `home_dreb` | Int64 | The home side's defensive rebounds on the event (0 or 1). |
-| `home_tov` | Int64 | The home side's turnovers on the event (0 or 1). |
-| `home_rima` | Int64 | The home side's rim attempts on the event (0 or 1). |
-| `home_rimm` | Int64 | The home side's rim makes on the event (0 or 1). |
-| `home_mida` | Int64 | The home side's mid-range attempts on the event (0 or 1). |
-| `home_midm` | Int64 | The home side's mid-range makes on the event (0 or 1). |
-| `away_fga` | Int64 | The away side's field-goal attempts on the event (0 or 1). |
-| `away_fgm` | Int64 | The away side's field goals made on the event (0 or 1). |
-| `away_fg3a` | Int64 | The away side's three-point attempts on the event (0 or 1). |
-| `away_fg3m` | Int64 | The away side's threes made on the event (0 or 1). |
-| `away_fta` | Int64 | The away side's free-throw attempts on the event (0 or 1). |
-| `away_oreb` | Int64 | The away side's offensive rebounds on the event (0 or 1). |
-| `away_dreb` | Int64 | The away side's defensive rebounds on the event (0 or 1). |
-| `away_tov` | Int64 | The away side's turnovers on the event (0 or 1). |
-| `away_rima` | Int64 | The away side's rim attempts on the event (0 or 1). |
-| `away_rimm` | Int64 | The away side's rim makes on the event (0 or 1). |
-| `away_mida` | Int64 | The away side's mid-range attempts on the event (0 or 1). |
-| `away_midm` | Int64 | The away side's mid-range makes on the event (0 or 1). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
-from sportsdataverse.mbb.mbb_lineup_seasons import ncaa_lineup_count_rows
-rows = ncaa_lineup_count_rows(load_ncaa_mbb_pbp(2025))
-```
-
-### ncaa_mbb_lineups {#ncaa_mbb_lineups}
-
-`ncaa_mbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Aggregate bigballR-contract play-by-play into per-lineup stats.
-
-Port of bigballR `get_lineups` (`all_functions.R:1945-2521`). Rows
-with any missing on-court player and substitution rows are dropped, each
-row's home/away five are byte-sorted so a lineup always occupies the same
-columns, and the home + away passes are combined per `(p1..p5, team)`.
-Ratios are derived from the summed counters, rounded to 3 decimals, and
-NA/Inf are zeroed exactly where R does it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games. |
-| `include_transition` | `bool` | `False` | When True, append the `_trans`/`_half` split surface plus `o_trans_pct`/`d_trans_pct` (213 columns total). |
-| `fix_tip_in` | `bool` | `True` | When True (default), rim stats count the scrape engine's real `"Tip In"` vocabulary. When False, reproduce R's literal `"Tip-In"` test (`all_functions.R:2012`) — tip-ins silently excluded — for oracle parity. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per lineup+team — 75 columns (`LINEUPS_COLUMNS`) or 213 with `include_transition=True` (`LINEUPS_TRANSITION_COLUMNS`), rows sorted by `p1..p5, team`. Empty input yields an empty frame with the documented schema.
-
-| col_name | type | description |
-|---|---|---|
-| `p1` | String |  |
-| `p2` | String |  |
-| `p3` | String |  |
-| `p4` | String |  |
-| `p5` | String |  |
-| `team` | String | Team-side label or team identifier. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_lineups
-lineups = ncaa_mbb_lineups(pbp)
-print(lineups.shape)
-
-# Transition/half-court splits, pandas out
-
-df_pd = ncaa_mbb_lineups(pbp, include_transition=True, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-lineups.filter(pl.col("mins") > 10).sort("netrtg", descending=True).head()
-```
-
-### ncaa_mbb_on_off {#ncaa_mbb_on_off}
-
-`ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Team stats for every on/off combination of the given players.
-
-Port of bigballR `on_off_generator` (`all_functions.R:2555-2749`,
-`include_transition=F` path). For k players, all `2^k` on/off
-assignments are enumerated in R's `expand.grid` order (first player
-varies fastest; first row all-On, last all-Off); each combination sums
-the lineups whose membership matches exactly, re-derives the full ratio
-block (including `e_poss`), rounds to 3 decimals, and zeroes NA/Inf.
-Combinations matching zero lineups produce an all-zero row.
-
-Faithful R quirk (kept, flagged): when `included`/`excluded` is
-passed, the base lineup set comes from the membership filter ONLY — the
-inferred-team filter is skipped (`all_functions.R:2584-2589`), so an
-included player on another team would leak that team's lineups in.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players` | `Union[str, Sequence[str]]` |  | Player name(s) to split on (the `Status` axis). |
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Optional membership filter forwarded to `ncaa_mbb_player_lineups` (replaces the team filter). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with `2^k` rows — `status` (e.g. `"A.PLAYER On | B.PLAYER Off"`) + the 69 stat columns (`ON_OFF_COLUMNS`).
-
-| col_name | type | description |
-|---|---|---|
-| `status` | String | Status label. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the players' team cannot be uniquely inferred from the lineups (R's `"ERROR- Player team not found"`). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_on_off
-split = ncaa_mbb_on_off("KEATON.WAGLER", lineups)
-print(split.shape)
-
-# Two-player interaction
-
-duo = ncaa_mbb_on_off(["A.PLAYER", "B.PLAYER"], lineups)
-
-# Pipeline next step (one line)
-
-split.select("status", "netrtg")
-```
-
-### ncaa_mbb_player_combos {#ncaa_mbb_player_combos}
-
-`ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Team stats for every n-player combination on the court together.
-
-Port of bigballR `get_player_combos` + `team_comb`
-(`get_player_combos.R:19-38` + `:42-191`). Combos are enumerated per
-team over the byte-sorted unique player pool (lexicographic
-`gtools::combinations` order), filtered to combos whose lineups total
-strictly more than `min_mins` minutes, then each combo's lineup rows
-are summed and the ratio block re-derived. **Rounding is 2 decimals**
-here (R rounds 3 in `get_lineups` / `on_off_generator`) and `e_poss`
-is the SUM of the per-lineup estimates, not a recompute — both faithful.
-
-R's `include_transition` switch is dead code (an exact-match guard at
-`get_player_combos.R:28-30` always forces it back to `FALSE`); the
-port implements the suffix-match intent but keeps the `False` default,
-which is the only R-reachable behavior.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups`. |
-| `n` | `int` | `2` | Combination size, 1-5. |
-| `min_mins` | `float` | `0` | Keep combos with total on-court minutes strictly greater than this (summed over the rounded per-lineup `mins`). |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be on the court in every lineup considered. |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be off the court in every lineup considered. |
-| `include_transition` | `bool` | `False` | Re-derive the `_trans`/`_half` ratio surface (requires a transition lineups frame; forced `False` otherwise). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per combo: `team, p1..pn` + the stat surface of the input frame. Teams appear in byte-sorted order.
-
-| col_name | type | description |
-|---|---|---|
-| `team` | String | Team-side label or team identifier. |
-| `p1` | String |  |
-| `p2` | String |  |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `n` is not an integer from 1 to 5. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_combos
-duos = ncaa_mbb_player_combos(lineups, n=2, min_mins=5)
-print(duos.shape)
-
-# Anchored on one player
-
-trios = ncaa_mbb_player_combos(lineups, n=3, included="KEATON.WAGLER")
-
-# Pipeline next step (one line)
-
-duos.sort("netrtg", descending=True).head()
-```
-
-### ncaa_mbb_player_lineups {#ncaa_mbb_player_lineups}
-
-`ncaa_mbb_player_lineups(lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Filter a lineups frame by on-court player membership.
-
-Port of bigballR `get_player_lineups` (`all_functions.R:2761-2792`):
-keep rows where every `included` player is on the court (in `p1..p5`)
-and no `excluded` player is. With both filters `None` the input is
-returned unchanged (R's `Included = NA, Excluded = NA` passthrough).
-Membership is tested by name against `p1..p5` (R tests the positional
-first five columns); row order is preserved.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineups` | `DataFrame` |  | Lineups frame from `ncaa_mbb_lineups` (any frame with `p1..p5` works). |
-| `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must ALL be on the court. |
-| `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must NONE be on the court. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-Row-subset of `lineups`; schema unchanged.
-
-| col_name | type | description |
-|---|---|---|
-| `p1` | String |  |
-| `p2` | String |  |
-| `p3` | String |  |
-| `p4` | String |  |
-| `p5` | String |  |
-| `team` | String | Team-side label or team identifier. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
-| `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
-| `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
-| `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
-| `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
-| `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
-| `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
-| `to` | Float64 | To. |
-| `d_to` | Float64 |  |
-| `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
-| `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
-| `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
-| `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
-| `orb_pct` | Float64 | Offensive rebound percentage. |
-| `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_player_lineups
-on = ncaa_mbb_player_lineups(lineups, included="KEATON.WAGLER")
-print(on.shape)
-
-# Included + excluded combination
-
-df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER"])
-
-# Pipeline next step (one line)
-
-on.select(pl.col("mins").sum())
 ```

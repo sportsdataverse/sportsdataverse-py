@@ -588,6 +588,7 @@ from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import wbb_play_styles as wbb_play_styles  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_shot_zones as wbb_player_shot_zones  # noqa: F401
 from sportsdataverse.wbb import wbb_player_war as wbb_player_war  # noqa: F401
 from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
 from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: F401
@@ -603,6 +604,7 @@ from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
 from sportsdataverse.wbb import wbb_team_season_flow as wbb_team_season_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_team_season_rates as wbb_team_season_rates  # noqa: F401
+from sportsdataverse.wbb import wbb_team_shot_zones as wbb_team_shot_zones  # noqa: F401
 from sportsdataverse.wbb import wbb_team_strength as wbb_team_strength  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 from sportsdataverse.wbb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
@@ -1173,6 +1175,7 @@ __all__ = [
     "wbb_play_styles",
     "wbb_player_crosswalk",
     "wbb_player_on_off",
+    "wbb_player_shot_zones",
     "wbb_player_war",
     "wbb_player_wowy",
     "wbb_predict_games",
@@ -1188,6 +1191,7 @@ __all__ = [
     "wbb_team_ratings",
     "wbb_team_season_flow",
     "wbb_team_season_rates",
+    "wbb_team_shot_zones",
     "wbb_team_strength",
     "weighted_avg",
     "win_prob_from_margin",

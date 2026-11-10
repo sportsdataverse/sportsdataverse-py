@@ -78276,3 +78276,1361 @@ wnba_epv_team_games:
   poss: The team's possessions with at least one event.
   season: 'Season: the WNBA season is its calendar year.'
   team_id: stats.wnba.com team id.
+mbb_player_shot_zones:
+  above_break_3_ast: Assisted makes by the player from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose
+    assist is known); null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fga: Attempts by the player from above the break (every other three).
+  above_break_3_fgm: Makes by the player from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  corner_3_ast: Assisted makes by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is
+    known); null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fga: Attempts by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_fgm: Makes by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among players whose corner_3_freq_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  fga: Field-goal attempts by the player (games).
+  fgm: Field goals made by the player.
+  games: The player's games with at least one field-goal attempt for this team.
+  mid_ast: 'Assisted makes by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among players whose mid_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among players whose mid_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fga: 'Attempts by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_fgm: 'Makes by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among players whose mid_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  player_id: stats.ncaa.org player id (text).
+  player_name: Player name as the shots release spells it.
+  rim_ast: Assisted makes by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among players whose rim_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among players whose rim_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fga: Attempts by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_fgm: Makes by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among players whose rim_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: The team's ESPN team id (Int64).
+  unlocated_fga: 'Attempts by the player with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+mbb_team_shot_zones:
+  above_break_3_ast: Assisted makes by the team from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose
+    assist is known); null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fga: Attempts by the team from above the break (every other three).
+  above_break_3_fgm: Makes by the team from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_ast: Assisted makes by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is
+    known); null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  corner_3_fga: Attempts by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_fgm: Makes by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among teams whose corner_3_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  fga: Field-goal attempts by the team (games).
+  fgm: Field goals made by the team.
+  games: The team's games with a field-goal attempt by or against it.
+  mid_ast: 'Assisted makes by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among teams whose mid_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fga: 'Attempts by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_fgm: 'Makes by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among teams whose mid_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  opp_above_break_3_ast: 'Allowed: Assisted makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_ast_pct: 'Allowed: Share of opp_above_break_3_fgm that were assisted, over the makes linked to a play-by-play
+    row (whose assist is known); null with none.'
+  opp_above_break_3_ast_pct_n: 'Sample size of opp_above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_above_break_3_ast_pct_pct: 'Percentile of opp_above_break_3_ast_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_ast_pct_rank: Rank of opp_above_break_3_ast_pct within the season (the highest ranks 1; ties average),
+    among teams whose opp_above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for
+    a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fg_pct: 'Allowed: opp_above_break_3_fgm / opp_above_break_3_fga; null with no attempt.'
+  opp_above_break_3_fg_pct_n: 'Sample size of opp_above_break_3_fg_pct: opp_above_break_3_fga.'
+  opp_above_break_3_fg_pct_pct: 'Percentile of opp_above_break_3_fg_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_fg_pct_rank: Rank of opp_above_break_3_fg_pct within the season (the lowest ranks 1, the stingiest defense;
+    ties average), among teams whose opp_above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under
+    the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fga: 'Allowed: Attempts by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_fgm: 'Allowed: Makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_freq: 'Allowed: opp_above_break_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located
+    attempts (the four zones add up to 1); null with none.'
+  opp_above_break_3_freq_n: 'Sample size of opp_above_break_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_above_break_3_freq_pct: 'Percentile of opp_above_break_3_freq within the season among the same ranked rows: 100 * (n
+    + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_freq_rank: Rank of opp_above_break_3_freq within the season (the highest ranks 1; ties average), among
+    teams whose opp_above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate
+    with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_ast: 'Allowed: Assisted makes by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <=
+    9 ft, the baseline band).'
+  opp_corner_3_ast_pct: 'Allowed: Share of opp_corner_3_fgm that were assisted, over the makes linked to a play-by-play row
+    (whose assist is known); null with none.'
+  opp_corner_3_ast_pct_n: 'Sample size of opp_corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_corner_3_ast_pct_pct: 'Percentile of opp_corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_ast_pct_rank: Rank of opp_corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose opp_corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fg_pct: 'Allowed: opp_corner_3_fgm / opp_corner_3_fga; null with no attempt.'
+  opp_corner_3_fg_pct_n: 'Sample size of opp_corner_3_fg_pct: opp_corner_3_fga.'
+  opp_corner_3_fg_pct_pct: 'Percentile of opp_corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 -
+    rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_fg_pct_rank: Rank of opp_corner_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties
+    average), among teams whose opp_corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate,
+    for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fga: 'Allowed: Attempts by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <= 9 ft,
+    the baseline band).'
+  opp_corner_3_fgm: 'Allowed: Makes by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the
+    baseline band).'
+  opp_corner_3_freq: 'Allowed: opp_corner_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts
+    (the four zones add up to 1); null with none.'
+  opp_corner_3_freq_n: 'Sample size of opp_corner_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_corner_3_freq_pct: 'Percentile of opp_corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_freq_rank: Rank of opp_corner_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    opp_corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  opp_fga: 'Allowed: Field-goal attempts by the team''s opponents (games).'
+  opp_fgm: 'Allowed: Field goals made by the team''s opponents.'
+  opp_mid_ast: 'Allowed: Assisted makes by the team''s opponents in the mid zone (every other two: the chart''s paint and
+    mid-range).'
+  opp_mid_ast_pct: 'Allowed: Share of opp_mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist
+    is known); null with none.'
+  opp_mid_ast_pct_n: 'Sample size of opp_mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_mid_ast_pct_pct: 'Percentile of opp_mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_mid_ast_pct_rank: Rank of opp_mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_mid_fg_pct: 'Allowed: opp_mid_fgm / opp_mid_fga; null with no attempt.'
+  opp_mid_fg_pct_n: 'Sample size of opp_mid_fg_pct: opp_mid_fga.'
+  opp_mid_fg_pct_pct: 'Percentile of opp_mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_mid_fg_pct_rank: Rank of opp_mid_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_mid_fga: 'Allowed: Attempts by the team''s opponents in the mid zone (every other two: the chart''s paint and mid-range).'
+  opp_mid_fgm: 'Allowed: Makes by the team''s opponents in the mid zone (every other two: the chart''s paint and mid-range).'
+  opp_mid_freq: 'Allowed: opp_mid_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_mid_freq_n: 'Sample size of opp_mid_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_mid_freq_pct: 'Percentile of opp_mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_mid_freq_rank: Rank of opp_mid_freq within the season (the highest ranks 1; ties average), among teams whose opp_mid_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_ast: 'Allowed: Assisted makes by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_ast_pct: 'Allowed: Share of opp_rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist
+    is known); null with none.'
+  opp_rim_ast_pct_n: 'Sample size of opp_rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_rim_ast_pct_pct: 'Percentile of opp_rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_rim_ast_pct_rank: Rank of opp_rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_fg_pct: 'Allowed: opp_rim_fgm / opp_rim_fga; null with no attempt.'
+  opp_rim_fg_pct_n: 'Sample size of opp_rim_fg_pct: opp_rim_fga.'
+  opp_rim_fg_pct_pct: 'Percentile of opp_rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_rim_fg_pct_rank: Rank of opp_rim_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_rim_fga: 'Allowed: Attempts by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_fgm: 'Allowed: Makes by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_freq: 'Allowed: opp_rim_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_rim_freq_n: 'Sample size of opp_rim_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_rim_freq_pct: 'Percentile of opp_rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_rim_freq_rank: Rank of opp_rim_freq within the season (the highest ranks 1; ties average), among teams whose opp_rim_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_unlocated_fga: 'Allowed: Attempts by the team''s opponents with no real location (the WNBA''s 1997-2010 hoop-centre
+    placeholders; 0 elsewhere): counted in opp_fga, in no zone.'
+  rim_ast: Assisted makes by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among teams whose rim_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fga: Attempts by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_fgm: Makes by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among teams whose rim_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: The team's ESPN team id (Int64).
+  unlocated_fga: 'Attempts by the team with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+nba_player_shot_zones:
+  above_break_3_ast: Assisted makes by the player from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fga: Attempts by the player from above the break (every other three).
+  above_break_3_fgm: Makes by the player from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  corner_3_ast: Assisted makes by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the
+    break).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fga: Attempts by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_fgm: Makes by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among players whose corner_3_freq_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  fga: Field-goal attempts by the player (regular-season games).
+  fgm: Field goals made by the player.
+  games: The player's regular-season games with at least one field-goal attempt for this team.
+  mid_ast: 'Assisted makes by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among players whose mid_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among players whose mid_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fga: 'Attempts by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_fgm: 'Makes by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among players whose mid_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  player_id: stats.nba.com player (person) id.
+  player_name: Player name as the shots release spells it.
+  rim_ast: 'Assisted makes by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among players whose rim_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among players whose rim_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fga: 'Attempts by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_fgm: 'Makes by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among players whose rim_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  team_id: stats.nba.com team id.
+  unlocated_fga: 'Attempts by the player with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+nba_team_shot_zones:
+  above_break_3_ast: Assisted makes by the team from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fga: Attempts by the team from above the break (every other three).
+  above_break_3_fgm: Makes by the team from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_ast: Assisted makes by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  corner_3_fga: Attempts by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_fgm: Makes by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among teams whose corner_3_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  fga: Field-goal attempts by the team (regular-season games).
+  fgm: Field goals made by the team.
+  games: The team's regular-season games with a field-goal attempt by or against it.
+  mid_ast: 'Assisted makes by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among teams whose mid_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fga: 'Attempts by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_fgm: 'Makes by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among teams whose mid_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  opp_above_break_3_ast: 'Allowed: Assisted makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_ast_pct: 'Allowed: Share of opp_above_break_3_fgm that were assisted, over the makes (every make''s assist
+    is in its description); null with none.'
+  opp_above_break_3_ast_pct_n: 'Sample size of opp_above_break_3_ast_pct: makes in the zone.'
+  opp_above_break_3_ast_pct_pct: 'Percentile of opp_above_break_3_ast_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_ast_pct_rank: Rank of opp_above_break_3_ast_pct within the season (the highest ranks 1; ties average),
+    among teams whose opp_above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for
+    a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fg_pct: 'Allowed: opp_above_break_3_fgm / opp_above_break_3_fga; null with no attempt.'
+  opp_above_break_3_fg_pct_n: 'Sample size of opp_above_break_3_fg_pct: opp_above_break_3_fga.'
+  opp_above_break_3_fg_pct_pct: 'Percentile of opp_above_break_3_fg_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_fg_pct_rank: Rank of opp_above_break_3_fg_pct within the season (the lowest ranks 1, the stingiest defense;
+    ties average), among teams whose opp_above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under
+    the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fga: 'Allowed: Attempts by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_fgm: 'Allowed: Makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_freq: 'Allowed: opp_above_break_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located
+    attempts (the four zones add up to 1); null with none.'
+  opp_above_break_3_freq_n: 'Sample size of opp_above_break_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_above_break_3_freq_pct: 'Percentile of opp_above_break_3_freq within the season among the same ranked rows: 100 * (n
+    + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_freq_rank: Rank of opp_above_break_3_freq within the season (the highest ranks 1; ties average), among
+    teams whose opp_above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate
+    with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_ast: 'Allowed: Assisted makes by the team''s opponents from the corner (a three from the baseline band, y_legacy
+    <= 87.5, below the break).'
+  opp_corner_3_ast_pct: 'Allowed: Share of opp_corner_3_fgm that were assisted, over the makes (every make''s assist is in
+    its description); null with none.'
+  opp_corner_3_ast_pct_n: 'Sample size of opp_corner_3_ast_pct: makes in the zone.'
+  opp_corner_3_ast_pct_pct: 'Percentile of opp_corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_ast_pct_rank: Rank of opp_corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose opp_corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fg_pct: 'Allowed: opp_corner_3_fgm / opp_corner_3_fga; null with no attempt.'
+  opp_corner_3_fg_pct_n: 'Sample size of opp_corner_3_fg_pct: opp_corner_3_fga.'
+  opp_corner_3_fg_pct_pct: 'Percentile of opp_corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 -
+    rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_fg_pct_rank: Rank of opp_corner_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties
+    average), among teams whose opp_corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate,
+    for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fga: 'Allowed: Attempts by the team''s opponents from the corner (a three from the baseline band, y_legacy
+    <= 87.5, below the break).'
+  opp_corner_3_fgm: 'Allowed: Makes by the team''s opponents from the corner (a three from the baseline band, y_legacy <=
+    87.5, below the break).'
+  opp_corner_3_freq: 'Allowed: opp_corner_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts
+    (the four zones add up to 1); null with none.'
+  opp_corner_3_freq_n: 'Sample size of opp_corner_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_corner_3_freq_pct: 'Percentile of opp_corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_freq_rank: Rank of opp_corner_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    opp_corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  opp_fga: 'Allowed: Field-goal attempts by the team''s opponents (regular-season games).'
+  opp_fgm: 'Allowed: Field goals made by the team''s opponents.'
+  opp_mid_ast: 'Allowed: Assisted makes by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_ast_pct: 'Allowed: Share of opp_mid_fgm that were assisted, over the makes (every make''s assist is in its description);
+    null with none.'
+  opp_mid_ast_pct_n: 'Sample size of opp_mid_ast_pct: makes in the zone.'
+  opp_mid_ast_pct_pct: 'Percentile of opp_mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_mid_ast_pct_rank: Rank of opp_mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_mid_fg_pct: 'Allowed: opp_mid_fgm / opp_mid_fga; null with no attempt.'
+  opp_mid_fg_pct_n: 'Sample size of opp_mid_fg_pct: opp_mid_fga.'
+  opp_mid_fg_pct_pct: 'Percentile of opp_mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_mid_fg_pct_rank: Rank of opp_mid_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_mid_fga: 'Allowed: Attempts by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_fgm: 'Allowed: Makes by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_freq: 'Allowed: opp_mid_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_mid_freq_n: 'Sample size of opp_mid_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_mid_freq_pct: 'Percentile of opp_mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_mid_freq_rank: Rank of opp_mid_freq within the season (the highest ranks 1; ties average), among teams whose opp_mid_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_ast: 'Allowed: Assisted makes by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_ast_pct: 'Allowed: Share of opp_rim_fgm that were assisted, over the makes (every make''s assist is in its description);
+    null with none.'
+  opp_rim_ast_pct_n: 'Sample size of opp_rim_ast_pct: makes in the zone.'
+  opp_rim_ast_pct_pct: 'Percentile of opp_rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_rim_ast_pct_rank: Rank of opp_rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_fg_pct: 'Allowed: opp_rim_fgm / opp_rim_fga; null with no attempt.'
+  opp_rim_fg_pct_n: 'Sample size of opp_rim_fg_pct: opp_rim_fga.'
+  opp_rim_fg_pct_pct: 'Percentile of opp_rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_rim_fg_pct_rank: Rank of opp_rim_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_rim_fga: 'Allowed: Attempts by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_fgm: 'Allowed: Makes by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_freq: 'Allowed: opp_rim_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_rim_freq_n: 'Sample size of opp_rim_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_rim_freq_pct: 'Percentile of opp_rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_rim_freq_rank: Rank of opp_rim_freq within the season (the highest ranks 1; ties average), among teams whose opp_rim_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_unlocated_fga: 'Allowed: Attempts by the team''s opponents with no real location (the WNBA''s 1997-2010 hoop-centre
+    placeholders; 0 elsewhere): counted in opp_fga, in no zone.'
+  rim_ast: 'Assisted makes by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among teams whose rim_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fga: 'Attempts by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_fgm: 'Makes by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among teams whose rim_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  team_id: stats.nba.com team id.
+  unlocated_fga: 'Attempts by the team with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+wbb_player_shot_zones:
+  above_break_3_ast: Assisted makes by the player from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose
+    assist is known); null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fga: Attempts by the player from above the break (every other three).
+  above_break_3_fgm: Makes by the player from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  corner_3_ast: Assisted makes by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is
+    known); null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fga: Attempts by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_fgm: Makes by the player from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among players whose corner_3_freq_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  fga: Field-goal attempts by the player (games).
+  fgm: Field goals made by the player.
+  games: The player's games with at least one field-goal attempt for this team.
+  mid_ast: 'Assisted makes by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among players whose mid_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among players whose mid_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fga: 'Attempts by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_fgm: 'Makes by the player in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among players whose mid_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  player_id: stats.ncaa.org player id (text).
+  player_name: Player name as the shots release spells it.
+  rim_ast: Assisted makes by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among players whose rim_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among players whose rim_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fga: Attempts by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_fgm: Makes by the player at the rim (within 4 ft, the shot chart's rim zone).
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among players whose rim_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: The team's ESPN team id (Int64).
+  unlocated_fga: 'Attempts by the player with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+wbb_team_shot_zones:
+  above_break_3_ast: Assisted makes by the team from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes linked to a play-by-play row (whose
+    assist is known); null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fga: Attempts by the team from above the break (every other three).
+  above_break_3_fgm: Makes by the team from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_ast: Assisted makes by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is
+    known); null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  corner_3_fga: Attempts by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_fgm: Makes by the team from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the baseline band).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among teams whose corner_3_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  fga: Field-goal attempts by the team (games).
+  fgm: Field goals made by the team.
+  games: The team's games with a field-goal attempt by or against it.
+  mid_ast: 'Assisted makes by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among teams whose mid_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fga: 'Attempts by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_fgm: 'Makes by the team in the mid zone (every other two: the chart''s paint and mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among teams whose mid_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  opp_above_break_3_ast: 'Allowed: Assisted makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_ast_pct: 'Allowed: Share of opp_above_break_3_fgm that were assisted, over the makes linked to a play-by-play
+    row (whose assist is known); null with none.'
+  opp_above_break_3_ast_pct_n: 'Sample size of opp_above_break_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_above_break_3_ast_pct_pct: 'Percentile of opp_above_break_3_ast_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_ast_pct_rank: Rank of opp_above_break_3_ast_pct within the season (the highest ranks 1; ties average),
+    among teams whose opp_above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for
+    a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fg_pct: 'Allowed: opp_above_break_3_fgm / opp_above_break_3_fga; null with no attempt.'
+  opp_above_break_3_fg_pct_n: 'Sample size of opp_above_break_3_fg_pct: opp_above_break_3_fga.'
+  opp_above_break_3_fg_pct_pct: 'Percentile of opp_above_break_3_fg_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_fg_pct_rank: Rank of opp_above_break_3_fg_pct within the season (the lowest ranks 1, the stingiest defense;
+    ties average), among teams whose opp_above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under
+    the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fga: 'Allowed: Attempts by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_fgm: 'Allowed: Makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_freq: 'Allowed: opp_above_break_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located
+    attempts (the four zones add up to 1); null with none.'
+  opp_above_break_3_freq_n: 'Sample size of opp_above_break_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_above_break_3_freq_pct: 'Percentile of opp_above_break_3_freq within the season among the same ranked rows: 100 * (n
+    + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_freq_rank: Rank of opp_above_break_3_freq within the season (the highest ranks 1; ties average), among
+    teams whose opp_above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate
+    with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_ast: 'Allowed: Assisted makes by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <=
+    9 ft, the baseline band).'
+  opp_corner_3_ast_pct: 'Allowed: Share of opp_corner_3_fgm that were assisted, over the makes linked to a play-by-play row
+    (whose assist is known); null with none.'
+  opp_corner_3_ast_pct_n: 'Sample size of opp_corner_3_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_corner_3_ast_pct_pct: 'Percentile of opp_corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_ast_pct_rank: Rank of opp_corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose opp_corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fg_pct: 'Allowed: opp_corner_3_fgm / opp_corner_3_fga; null with no attempt.'
+  opp_corner_3_fg_pct_n: 'Sample size of opp_corner_3_fg_pct: opp_corner_3_fga.'
+  opp_corner_3_fg_pct_pct: 'Percentile of opp_corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 -
+    rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_fg_pct_rank: Rank of opp_corner_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties
+    average), among teams whose opp_corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate,
+    for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fga: 'Allowed: Attempts by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <= 9 ft,
+    the baseline band).'
+  opp_corner_3_fgm: 'Allowed: Makes by the team''s opponents from the corner (a three with |x| >= 21 ft and |y| <= 9 ft, the
+    baseline band).'
+  opp_corner_3_freq: 'Allowed: opp_corner_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts
+    (the four zones add up to 1); null with none.'
+  opp_corner_3_freq_n: 'Sample size of opp_corner_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_corner_3_freq_pct: 'Percentile of opp_corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_freq_rank: Rank of opp_corner_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    opp_corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  opp_fga: 'Allowed: Field-goal attempts by the team''s opponents (games).'
+  opp_fgm: 'Allowed: Field goals made by the team''s opponents.'
+  opp_mid_ast: 'Allowed: Assisted makes by the team''s opponents in the mid zone (every other two: the chart''s paint and
+    mid-range).'
+  opp_mid_ast_pct: 'Allowed: Share of opp_mid_fgm that were assisted, over the makes linked to a play-by-play row (whose assist
+    is known); null with none.'
+  opp_mid_ast_pct_n: 'Sample size of opp_mid_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_mid_ast_pct_pct: 'Percentile of opp_mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_mid_ast_pct_rank: Rank of opp_mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_mid_fg_pct: 'Allowed: opp_mid_fgm / opp_mid_fga; null with no attempt.'
+  opp_mid_fg_pct_n: 'Sample size of opp_mid_fg_pct: opp_mid_fga.'
+  opp_mid_fg_pct_pct: 'Percentile of opp_mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_mid_fg_pct_rank: Rank of opp_mid_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_mid_fga: 'Allowed: Attempts by the team''s opponents in the mid zone (every other two: the chart''s paint and mid-range).'
+  opp_mid_fgm: 'Allowed: Makes by the team''s opponents in the mid zone (every other two: the chart''s paint and mid-range).'
+  opp_mid_freq: 'Allowed: opp_mid_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_mid_freq_n: 'Sample size of opp_mid_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_mid_freq_pct: 'Percentile of opp_mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_mid_freq_rank: Rank of opp_mid_freq within the season (the highest ranks 1; ties average), among teams whose opp_mid_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_ast: 'Allowed: Assisted makes by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_ast_pct: 'Allowed: Share of opp_rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist
+    is known); null with none.'
+  opp_rim_ast_pct_n: 'Sample size of opp_rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  opp_rim_ast_pct_pct: 'Percentile of opp_rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_rim_ast_pct_rank: Rank of opp_rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_fg_pct: 'Allowed: opp_rim_fgm / opp_rim_fga; null with no attempt.'
+  opp_rim_fg_pct_n: 'Sample size of opp_rim_fg_pct: opp_rim_fga.'
+  opp_rim_fg_pct_pct: 'Percentile of opp_rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_rim_fg_pct_rank: Rank of opp_rim_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_rim_fga: 'Allowed: Attempts by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_fgm: 'Allowed: Makes by the team''s opponents at the rim (within 4 ft, the shot chart''s rim zone).'
+  opp_rim_freq: 'Allowed: opp_rim_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_rim_freq_n: 'Sample size of opp_rim_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_rim_freq_pct: 'Percentile of opp_rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_rim_freq_rank: Rank of opp_rim_freq within the season (the highest ranks 1; ties average), among teams whose opp_rim_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_unlocated_fga: 'Allowed: Attempts by the team''s opponents with no real location (the WNBA''s 1997-2010 hoop-centre
+    placeholders; 0 elsewhere): counted in opp_fga, in no zone.'
+  rim_ast: Assisted makes by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes linked to a play-by-play row (whose assist is known); null
+    with none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes linked to a play-by-play row in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among teams whose rim_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fga: Attempts by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_fgm: Makes by the team at the rim (within 4 ft, the shot chart's rim zone).
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among teams whose rim_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  team_id: The team's ESPN team id (Int64).
+  unlocated_fga: 'Attempts by the team with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+wnba_player_shot_zones:
+  above_break_3_ast: Assisted makes by the player from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  above_break_3_fga: Attempts by the player from above the break (every other three).
+  above_break_3_fgm: Makes by the player from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among players
+    whose above_break_3_freq_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than ten players ranked.
+  corner_3_ast: Assisted makes by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the
+    break).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among players whose
+    corner_3_fg_pct_n reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than ten players ranked.
+  corner_3_fga: Attempts by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_fgm: Makes by the player from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among players whose corner_3_freq_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  fga: Field-goal attempts by the player (regular-season games).
+  fgm: Field goals made by the player.
+  games: The player's regular-season games with at least one field-goal attempt for this team.
+  mid_ast: 'Assisted makes by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among players whose mid_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among players whose mid_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  mid_fga: 'Attempts by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_fgm: 'Makes by the player in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among players whose mid_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  player_id: stats.wnba.com player (person) id.
+  player_name: Player name as the shots release spells it.
+  rim_ast: 'Assisted makes by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among players whose rim_ast_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among players whose rim_fg_pct_n
+    reaches the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than ten players ranked.
+  rim_fga: 'Attempts by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_fgm: 'Makes by the player at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among players whose rim_freq_n reaches
+    the rate's split-half gate (PLAYER_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than ten players ranked.
+  season: 'Season: the WNBA season is its calendar year.'
+  team_id: stats.wnba.com team id.
+  unlocated_fga: 'Attempts by the player with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'
+wnba_team_shot_zones:
+  above_break_3_ast: Assisted makes by the team from above the break (every other three).
+  above_break_3_ast_pct: Share of above_break_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  above_break_3_ast_pct_n: 'Sample size of above_break_3_ast_pct: makes in the zone.'
+  above_break_3_ast_pct_pct: 'Percentile of above_break_3_ast_pct within the season among the same ranked rows: 100 * (n +
+    1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_ast_pct_rank: Rank of above_break_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fg_pct: above_break_3_fgm / above_break_3_fga; null with no attempt.
+  above_break_3_fg_pct_n: 'Sample size of above_break_3_fg_pct: above_break_3_fga.'
+  above_break_3_fg_pct_pct: 'Percentile of above_break_3_fg_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_fg_pct_rank: Rank of above_break_3_fg_pct within the season (the highest ranks 1; ties average), among teams
+    whose above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  above_break_3_fga: Attempts by the team from above the break (every other three).
+  above_break_3_fgm: Makes by the team from above the break (every other three).
+  above_break_3_freq: 'above_break_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones
+    add up to 1); null with none.'
+  above_break_3_freq_n: 'Sample size of above_break_3_freq: located attempts (fga - unlocated_fga).'
+  above_break_3_freq_pct: 'Percentile of above_break_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  above_break_3_freq_rank: Rank of above_break_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_ast: Assisted makes by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_ast_pct: Share of corner_3_fgm that were assisted, over the makes (every make's assist is in its description);
+    null with none.
+  corner_3_ast_pct_n: 'Sample size of corner_3_ast_pct: makes in the zone.'
+  corner_3_ast_pct_pct: 'Percentile of corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_ast_pct_rank: Rank of corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams whose
+    corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  corner_3_fg_pct: corner_3_fgm / corner_3_fga; null with no attempt.
+  corner_3_fg_pct_n: 'Sample size of corner_3_fg_pct: corner_3_fga.'
+  corner_3_fg_pct_pct: 'Percentile of corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  corner_3_fg_pct_rank: Rank of corner_3_fg_pct within the season (the highest ranks 1; ties average), among teams whose corner_3_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  corner_3_fga: Attempts by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_fgm: Makes by the team from the corner (a three from the baseline band, y_legacy <= 87.5, below the break).
+  corner_3_freq: 'corner_3_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to
+    1); null with none.'
+  corner_3_freq_n: 'Sample size of corner_3_freq: located attempts (fga - unlocated_fga).'
+  corner_3_freq_pct: 'Percentile of corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  corner_3_freq_rank: Rank of corner_3_freq within the season (the highest ranks 1; ties average), among teams whose corner_3_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  fga: Field-goal attempts by the team (regular-season games).
+  fgm: Field goals made by the team.
+  games: The team's regular-season games with a field-goal attempt by or against it.
+  mid_ast: 'Assisted makes by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_ast_pct: Share of mid_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  mid_ast_pct_n: 'Sample size of mid_ast_pct: makes in the zone.'
+  mid_ast_pct_pct: 'Percentile of mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_ast_pct_rank: Rank of mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fg_pct: mid_fgm / mid_fga; null with no attempt.
+  mid_fg_pct_n: 'Sample size of mid_fg_pct: mid_fga.'
+  mid_fg_pct_pct: 'Percentile of mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  mid_fg_pct_rank: Rank of mid_fg_pct within the season (the highest ranks 1; ties average), among teams whose mid_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  mid_fga: 'Attempts by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_fgm: 'Makes by the team in the mid zone (every other two: the paint outside the restricted area and the mid-range).'
+  mid_freq: 'mid_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  mid_freq_n: 'Sample size of mid_freq: located attempts (fga - unlocated_fga).'
+  mid_freq_pct: 'Percentile of mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  mid_freq_rank: Rank of mid_freq within the season (the highest ranks 1; ties average), among teams whose mid_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  opp_above_break_3_ast: 'Allowed: Assisted makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_ast_pct: 'Allowed: Share of opp_above_break_3_fgm that were assisted, over the makes (every make''s assist
+    is in its description); null with none.'
+  opp_above_break_3_ast_pct_n: 'Sample size of opp_above_break_3_ast_pct: makes in the zone.'
+  opp_above_break_3_ast_pct_pct: 'Percentile of opp_above_break_3_ast_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_ast_pct_rank: Rank of opp_above_break_3_ast_pct within the season (the highest ranks 1; ties average),
+    among teams whose opp_above_break_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for
+    a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fg_pct: 'Allowed: opp_above_break_3_fgm / opp_above_break_3_fga; null with no attempt.'
+  opp_above_break_3_fg_pct_n: 'Sample size of opp_above_break_3_fg_pct: opp_above_break_3_fga.'
+  opp_above_break_3_fg_pct_pct: 'Percentile of opp_above_break_3_fg_pct within the season among the same ranked rows: 100
+    * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_fg_pct_rank: Rank of opp_above_break_3_fg_pct within the season (the lowest ranks 1, the stingiest defense;
+    ties average), among teams whose opp_above_break_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under
+    the gate, for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_above_break_3_fga: 'Allowed: Attempts by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_fgm: 'Allowed: Makes by the team''s opponents from above the break (every other three).'
+  opp_above_break_3_freq: 'Allowed: opp_above_break_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located
+    attempts (the four zones add up to 1); null with none.'
+  opp_above_break_3_freq_n: 'Sample size of opp_above_break_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_above_break_3_freq_pct: 'Percentile of opp_above_break_3_freq within the season among the same ranked rows: 100 * (n
+    + 1 - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_above_break_3_freq_rank: Rank of opp_above_break_3_freq within the season (the highest ranks 1; ties average), among
+    teams whose opp_above_break_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate
+    with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_ast: 'Allowed: Assisted makes by the team''s opponents from the corner (a three from the baseline band, y_legacy
+    <= 87.5, below the break).'
+  opp_corner_3_ast_pct: 'Allowed: Share of opp_corner_3_fgm that were assisted, over the makes (every make''s assist is in
+    its description); null with none.'
+  opp_corner_3_ast_pct_n: 'Sample size of opp_corner_3_ast_pct: makes in the zone.'
+  opp_corner_3_ast_pct_pct: 'Percentile of opp_corner_3_ast_pct within the season among the same ranked rows: 100 * (n + 1
+    - rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_ast_pct_rank: Rank of opp_corner_3_ast_pct within the season (the highest ranks 1; ties average), among teams
+    whose opp_corner_3_ast_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no
+    gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fg_pct: 'Allowed: opp_corner_3_fgm / opp_corner_3_fga; null with no attempt.'
+  opp_corner_3_fg_pct_n: 'Sample size of opp_corner_3_fg_pct: opp_corner_3_fga.'
+  opp_corner_3_fg_pct_pct: 'Percentile of opp_corner_3_fg_pct within the season among the same ranked rows: 100 * (n + 1 -
+    rank) / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_fg_pct_rank: Rank of opp_corner_3_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties
+    average), among teams whose opp_corner_3_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate,
+    for a rate with no gate (never half signal), or with fewer than five teams ranked.
+  opp_corner_3_fga: 'Allowed: Attempts by the team''s opponents from the corner (a three from the baseline band, y_legacy
+    <= 87.5, below the break).'
+  opp_corner_3_fgm: 'Allowed: Makes by the team''s opponents from the corner (a three from the baseline band, y_legacy <=
+    87.5, below the break).'
+  opp_corner_3_freq: 'Allowed: opp_corner_3_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts
+    (the four zones add up to 1); null with none.'
+  opp_corner_3_freq_n: 'Sample size of opp_corner_3_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_corner_3_freq_pct: 'Percentile of opp_corner_3_freq within the season among the same ranked rows: 100 * (n + 1 - rank)
+    / (n + 1), n the number ranked; null when the rank is null.'
+  opp_corner_3_freq_rank: Rank of opp_corner_3_freq within the season (the highest ranks 1; ties average), among teams whose
+    opp_corner_3_freq_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never
+    half signal), or with fewer than five teams ranked.
+  opp_fga: 'Allowed: Field-goal attempts by the team''s opponents (regular-season games).'
+  opp_fgm: 'Allowed: Field goals made by the team''s opponents.'
+  opp_mid_ast: 'Allowed: Assisted makes by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_ast_pct: 'Allowed: Share of opp_mid_fgm that were assisted, over the makes (every make''s assist is in its description);
+    null with none.'
+  opp_mid_ast_pct_n: 'Sample size of opp_mid_ast_pct: makes in the zone.'
+  opp_mid_ast_pct_pct: 'Percentile of opp_mid_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_mid_ast_pct_rank: Rank of opp_mid_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_mid_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_mid_fg_pct: 'Allowed: opp_mid_fgm / opp_mid_fga; null with no attempt.'
+  opp_mid_fg_pct_n: 'Sample size of opp_mid_fg_pct: opp_mid_fga.'
+  opp_mid_fg_pct_pct: 'Percentile of opp_mid_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_mid_fg_pct_rank: Rank of opp_mid_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_mid_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_mid_fga: 'Allowed: Attempts by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_fgm: 'Allowed: Makes by the team''s opponents in the mid zone (every other two: the paint outside the restricted
+    area and the mid-range).'
+  opp_mid_freq: 'Allowed: opp_mid_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_mid_freq_n: 'Sample size of opp_mid_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_mid_freq_pct: 'Percentile of opp_mid_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_mid_freq_rank: Rank of opp_mid_freq within the season (the highest ranks 1; ties average), among teams whose opp_mid_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_ast: 'Allowed: Assisted makes by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_ast_pct: 'Allowed: Share of opp_rim_fgm that were assisted, over the makes (every make''s assist is in its description);
+    null with none.'
+  opp_rim_ast_pct_n: 'Sample size of opp_rim_ast_pct: makes in the zone.'
+  opp_rim_ast_pct_pct: 'Percentile of opp_rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) /
+    (n + 1), n the number ranked; null when the rank is null.'
+  opp_rim_ast_pct_rank: Rank of opp_rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose opp_rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_rim_fg_pct: 'Allowed: opp_rim_fgm / opp_rim_fga; null with no attempt.'
+  opp_rim_fg_pct_n: 'Sample size of opp_rim_fg_pct: opp_rim_fga.'
+  opp_rim_fg_pct_pct: 'Percentile of opp_rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n
+    + 1), n the number ranked; null when the rank is null.'
+  opp_rim_fg_pct_rank: Rank of opp_rim_fg_pct within the season (the lowest ranks 1, the stingiest defense; ties average),
+    among teams whose opp_rim_fg_pct_n reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with
+    no gate (never half signal), or with fewer than five teams ranked.
+  opp_rim_fga: 'Allowed: Attempts by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_fgm: 'Allowed: Makes by the team''s opponents at the rim (the restricted area: shot_distance under 4 ft).'
+  opp_rim_freq: 'Allowed: opp_rim_fga / (opp_fga - opp_unlocated_fga): the zone''s share of the located attempts (the four
+    zones add up to 1); null with none.'
+  opp_rim_freq_n: 'Sample size of opp_rim_freq: located attempts (opp_fga - opp_unlocated_fga).'
+  opp_rim_freq_pct: 'Percentile of opp_rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n +
+    1), n the number ranked; null when the rank is null.'
+  opp_rim_freq_rank: Rank of opp_rim_freq within the season (the highest ranks 1; ties average), among teams whose opp_rim_freq_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  opp_unlocated_fga: 'Allowed: Attempts by the team''s opponents with no real location (the WNBA''s 1997-2010 hoop-centre
+    placeholders; 0 elsewhere): counted in opp_fga, in no zone.'
+  rim_ast: 'Assisted makes by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_ast_pct: Share of rim_fgm that were assisted, over the makes (every make's assist is in its description); null with
+    none.
+  rim_ast_pct_n: 'Sample size of rim_ast_pct: makes in the zone.'
+  rim_ast_pct_pct: 'Percentile of rim_ast_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_ast_pct_rank: Rank of rim_ast_pct within the season (the highest ranks 1; ties average), among teams whose rim_ast_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fg_pct: rim_fgm / rim_fga; null with no attempt.
+  rim_fg_pct_n: 'Sample size of rim_fg_pct: rim_fga.'
+  rim_fg_pct_pct: 'Percentile of rim_fg_pct within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1),
+    n the number ranked; null when the rank is null.'
+  rim_fg_pct_rank: Rank of rim_fg_pct within the season (the highest ranks 1; ties average), among teams whose rim_fg_pct_n
+    reaches the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or
+    with fewer than five teams ranked.
+  rim_fga: 'Attempts by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_fgm: 'Makes by the team at the rim (the restricted area: shot_distance under 4 ft).'
+  rim_freq: 'rim_fga / (fga - unlocated_fga): the zone''s share of the located attempts (the four zones add up to 1); null
+    with none.'
+  rim_freq_n: 'Sample size of rim_freq: located attempts (fga - unlocated_fga).'
+  rim_freq_pct: 'Percentile of rim_freq within the season among the same ranked rows: 100 * (n + 1 - rank) / (n + 1), n the
+    number ranked; null when the rank is null.'
+  rim_freq_rank: Rank of rim_freq within the season (the highest ranks 1; ties average), among teams whose rim_freq_n reaches
+    the rate's split-half gate (TEAM_MIN_N); null under the gate, for a rate with no gate (never half signal), or with fewer
+    than five teams ranked.
+  season: 'Season: the WNBA season is its calendar year.'
+  team_id: stats.wnba.com team id.
+  unlocated_fga: 'Attempts by the team with no real location (the WNBA''s 1997-2010 hoop-centre placeholders; 0 elsewhere):
+    counted in fga, in no zone.'

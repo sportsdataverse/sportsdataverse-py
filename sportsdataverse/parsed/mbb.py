@@ -507,6 +507,7 @@ from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_play_styles as mbb_play_styles  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_player_on_off as mbb_player_on_off  # noqa: F401
+from sportsdataverse.mbb import mbb_player_shot_zones as mbb_player_shot_zones  # noqa: F401
 from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
 from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
@@ -528,6 +529,7 @@ from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_flow as mbb_team_season_flow  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  # noqa: F401
+from sportsdataverse.mbb import mbb_team_shot_zones as mbb_team_shot_zones  # noqa: F401
 from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
 from sportsdataverse.mbb import mbb_tournament_ineligible as mbb_tournament_ineligible  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
@@ -1176,6 +1178,7 @@ __all__ = [
     "mbb_play_styles",
     "mbb_player_crosswalk",
     "mbb_player_on_off",
+    "mbb_player_shot_zones",
     "mbb_player_war",
     "mbb_player_wowy",
     "mbb_predict_games",
@@ -1197,6 +1200,7 @@ __all__ = [
     "mbb_team_ratings",
     "mbb_team_season_flow",
     "mbb_team_season_rates",
+    "mbb_team_shot_zones",
     "mbb_team_strength",
     "mbb_tournament_ineligible",
     "mbb_transfer_projection",
