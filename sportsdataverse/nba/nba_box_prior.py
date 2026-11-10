@@ -411,6 +411,10 @@ def train_box_prior(
         raise ValueError(f"the training panel holds rows of the prior's own season {season}")
     p = panel.filter((pl.col("poss") + pl.col("def_poss")) > 0)
     X = p.select(BOX_PRIOR_FEATURES).to_numpy().astype(np.float64)
+    bad = [c for c, ok in zip(BOX_PRIOR_FEATURES, np.isfinite(X).all(0), strict=True) if not ok]
+    bad += [c for c in ("o_target", "d_target") if not np.isfinite(p[c].to_numpy()).all()]
+    if bad:  # one NaN row would turn every fold's rule into NaN without an error
+        raise ValueError(f"non-finite values in the training panel columns {bad}")
     w = ((p["poss"] + p["def_poss"]).to_numpy() / 2.0) * _time_weight(p["season"].to_numpy(), season, half_life)
     fold = (p["player_id"].to_numpy().astype(np.int64)) % folds
     F = len(BOX_PRIOR_FEATURES)

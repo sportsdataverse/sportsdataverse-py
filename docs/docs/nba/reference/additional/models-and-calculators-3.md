@@ -46,8 +46,8 @@ One row per player, columns `REML_RAPM_SCHEMA`: `o_reml_rapm` / `d_reml_rapm` / 
 | col_name | type | description |
 |---|---|---|
 | `player_id` | Int64 | NBA stats person id. |
-| `o_reml_rapm` | Float64 | Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at the REML offense penalty. |
-| `d_reml_rapm` | Float64 | Defensive season impact per 100 (positive = good defense) at the REML defense penalty. |
+| `o_reml_rapm` | Float64 | Offensive season impact per 100: the posterior mean of RAPM shrunk toward the prior at lambda_o (chosen by REML unless lambdas= was passed). |
+| `d_reml_rapm` | Float64 | Defensive season impact per 100 (positive = good defense) at lambda_d (chosen by REML unless lambdas= was passed). |
 | `reml_rapm` | Float64 | o_reml_rapm + d_reml_rapm. |
 | `o_box_prior` | Float64 | The offensive prior the rating shrank toward (per 100; the box prior v2 when built by tools/fit_box_prior_v2.py). |
 | `d_box_prior` | Float64 | The defensive prior the rating shrank toward (per 100, positive = good defense). |
@@ -55,8 +55,8 @@ One row per player, columns `REML_RAPM_SCHEMA`: `o_reml_rapm` / `d_reml_rapm` / 
 | `d_prior_weight` | Float64 | Weight of the player's own defensive prior in his posterior mean, 0 to 1. |
 | `off_poss` | Int64 | Offensive possessions in the fit. |
 | `def_poss` | Int64 | Defensive possessions in the fit. |
-| `lambda_o` | Float64 | REML offense penalty of the fit (points-per-possession scale; the same on every row). |
-| `lambda_d` | Float64 | REML defense penalty of the fit (the same on every row). |
+| `lambda_o` | Float64 | Offense penalty the fit used (points-per-possession scale; chosen by REML unless lambdas= was passed; the same on every row). |
+| `lambda_d` | Float64 | Defense penalty the fit used (chosen by REML unless lambdas= was passed; the same on every row). |
 
 **Example**
 

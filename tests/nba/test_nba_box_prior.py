@@ -160,6 +160,9 @@ def test_the_cross_fit_never_trains_a_player_on_himself() -> None:
     assert moved.filter(~same_fold).min() > 0  # every other fold's rule saw the change
     with pytest.raises(ValueError, match="own season"):
         train_box_prior(pan, season=2023)
+    nan = pan.with_columns(pl.when(pl.col("player_id") == pid).then(float("nan")).otherwise(pl.col("height_rel")).alias("height_rel"))  # fmt: skip
+    with pytest.raises(ValueError, match="height_rel"):
+        train_box_prior(nan, season=2024)
 
 
 def test_the_prior_tracks_its_target_out_of_fold() -> None:

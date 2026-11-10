@@ -646,17 +646,17 @@ One row per player on court in `possessions`: `player_id` (Int64), `poss` / `def
 | `player_id` | Int64 | NBA stats person id. |
 | `poss` | Float64 | Offensive on-court possessions in the games used. |
 | `def_poss` | Float64 | Defensive on-court possessions in the games used. |
-| `pts_rel` | Float64 | pts per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `fg3m_rel` | Float64 | fg3m per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `fga_rel` | Float64 | fga per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `fta_rel` | Float64 | fta per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `ast_rel` | Float64 | ast per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `oreb_rel` | Float64 | oreb per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `dreb_rel` | Float64 | dreb per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `stl_rel` | Float64 | stl per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `blk_rel` | Float64 | blk per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `tov_rel` | Float64 | tov per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
-| `pf_rel` | Float64 | pf per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + 1000). |
+| `pts_rel` | Float64 | pts per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `fg3m_rel` | Float64 | fg3m per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `fga_rel` | Float64 | fga per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `fta_rel` | Float64 | fta per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `ast_rel` | Float64 | ast per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `oreb_rel` | Float64 | oreb per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `dreb_rel` | Float64 | dreb per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `stl_rel` | Float64 | stl per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `blk_rel` | Float64 | blk per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `tov_rel` | Float64 | tov per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
+| `pf_rel` | Float64 | pf per 100 possessions minus the season's on-court-possession-weighted league mean, padded toward it: (x - league) * poss / (poss + pad_poss), pad_poss 1,000 by default. |
 | `mpg_rel` | Float64 | Minutes per game minus the league mean, padded as the rates are. |
 | `age_c` | Float64 | (Age - 27) / 10, age from leaguedashplayerbiostats; 0 when unknown. |
 | `age_c2` | Float64 | Square of age_c: the quadratic term of the aging curve. |

@@ -112,19 +112,23 @@ def _height(h: str | None) -> float | None:
 
 def _bio(raw: str) -> tuple[pl.DataFrame, pl.DataFrame]:
     """``(ages: player_id, season, age)`` over :data:`SEASONS` and ``(static: player_id, height_in, position_num)``."""
-    rows = []
+    rows, missing = [], []
     for s in SEASONS:
         b = nba_raw_store_season_frame("leaguedashplayerbiostats", s, "regular-season_totals", raw_store_dir=raw)
-        if b is not None:
-            rows.append(
-                b.select(
-                    pl.col("player_id").cast(pl.Int64),
-                    pl.lit(s, pl.Int64).alias("season"),
-                    pl.col("age").cast(pl.Float64),
-                )
+        if b is None:  # absent or a failed fetch: never fill a whole season's ages silently
+            missing.append(s)
+            continue
+        rows.append(
+            b.select(
+                pl.col("player_id").cast(pl.Int64), pl.lit(s, pl.Int64).alias("season"), pl.col("age").cast(pl.Float64)
             )
+        )
+    if missing:
+        raise SystemExit(f"leaguedashplayerbiostats is missing for seasons {missing} in the raw store {raw}")
     ages = pl.concat(rows).unique(["player_id", "season"])
     idx = nba_raw_store_season_frame("playerindex", max(SEASONS), None, raw_store_dir=raw)
+    if idx is None:
+        raise SystemExit(f"playerindex/{max(SEASONS)} is not in the raw store {raw}")
     static = idx.select(
         pl.col("person_id").cast(pl.Int64).alias("player_id"),
         pl.col("height").map_elements(_height, return_dtype=pl.Float64).alias("height_in"),
