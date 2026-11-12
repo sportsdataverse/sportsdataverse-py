@@ -83,6 +83,7 @@ _FIELD_GOALS = {
     "Hook": "JumpShot",
     "Layup": "LayUpShot",
     "Dunk": "DunkShot",
+    "Tip In": "TipShot",
 }
 
 #: Rows ESPN does not carry: the fouled player's own row, and the held-ball (possession arrow) jump balls.
@@ -93,8 +94,14 @@ _NO_COORDINATE = {"x": -214748340, "y": -214748365}
 #: ESPN's coordinate on every play that is not a field goal.
 _NOT_A_SHOT = {"x": 25, "y": 0}
 
-#: ``(league) -> (regulation periods, period minutes, period word)``; WBB plays quarters from 2015-16 on.
-_REGULATION = {"mbb": (2, 20, "half"), "wbb": (4, 10, "Quarter")}
+_HALVES = (2, 20, "half")
+_QUARTERS = (4, 10, "Quarter")
+
+
+def _regulation(league: str, season: Any) -> tuple[int, int, str]:
+    """``(regulation periods, period minutes, period word)``: WBB plays quarters from 2015-16 (season 2016)."""
+    return _QUARTERS if league == "wbb" and int(season or 0) >= 2016 else _HALVES
+
 
 _ORDINAL = {1: "1st", 2: "2nd", 3: "3rd"}
 
@@ -206,6 +213,7 @@ _SECOND_RANK = {
     "Hook": 1,
     "Layup": 1,
     "Dunk": 1,
+    "Tip In": 1,
     "Blocked Shot": 2,
     "Turnover": 3,
     "Steal": 4,
@@ -280,7 +288,8 @@ def _pkey(pid: Any, name: Any) -> str | None:
     if pid not in (None, ""):
         return str(pid)
     text = str(name or "").strip()
-    return None if text.upper() in ("", "TEAM") else f"name:{text}"
+    # "TEAM", "TEAM.TEAM", "TEAM.TEAM 30": the parser's team placeholders (mbb_ncaa_game_pbp)
+    return None if text.upper() in ("", "TEAM") or text.upper().startswith("TEAM.TEAM") else f"name:{text}"
 
 
 def _is_team_actor(row: Mapping[str, Any]) -> bool:
@@ -616,7 +625,7 @@ def _ncaa_to_espn_summary(
     pbp = [r for r in bundle.get("pbp") or [] if isinstance(r, Mapping)]
     if not pbp:
         raise ValueError("the contest has no play-by-play rows")
-    regulation = _REGULATION[league][0]
+    regulation = _regulation(league, pbp[0].get("season"))[0]
     team_obj = _team_objects(pbp[0], teams)
     xwalk = {
         str(x["ncaa_player_id"]): x["espn_athlete_id"]
@@ -735,7 +744,7 @@ def _plays(
     rows: Sequence[Mapping[str, Any]], eid: str, league: str, team_obj: dict, ids: _Ids, shots: dict[tuple, list]
 ) -> tuple[list[dict], int]:
     """ESPN ``plays[]`` in game order, with ESPN's start / end rows; ``(plays, unlocated field goals)``."""
-    regulation, minutes, word = _REGULATION[league]
+    regulation, minutes, word = _regulation(league, rows[0].get("season") if rows else None)
     plays: list[dict] = []
     unlocated = 0
 

@@ -109,8 +109,9 @@ NCAA_GATES: dict[str, tuple[float | None, float | None]] = {
     "play_id_share": (0.91, None),
     # worst 0.8806 (MBB 401917515): one second's rows in another order; margin 0.0006
     "score_row_agreement": (0.88, None),
-    # worst 0.9918 (MBB 401920769); margin 0.0018
-    "clock_row_agreement": (0.99, None),
+    # only plays one feed re-timed pair across clocks (_align_play_ids pass 3): worst 0.9979 (WBB 401906979);
+    # margin 0.0009
+    "clock_row_agreement": (0.997, None),
     # worst 0.7308 (MBB 401917515): one second's rows in another order; margin 0.0008
     "ft_tech_order_agreement": (0.73, None),
     # worst 0.9145 (MBB 401917515: the roster-less player's shots carry no athlete id, so they do not pair);
@@ -129,6 +130,8 @@ NCAA_GATES: dict[str, tuple[float | None, float | None]] = {
 HARD_GATES: dict[str, tuple[float | None, float | None]] = {
     "period_score_mismatches": (None, 0),
     "team_box_mismatches": (None, 0),
+    # minutes and points are compared on paired players only, so every ESPN player must pair
+    "player_paired_share": (1.0, None),
     "player_minutes_agreement": (1.0, None),
     "player_points_agreement": (1.0, None),
     "ft_tech_order_agreement": (1.0, None),
@@ -316,41 +319,55 @@ def _equal_prior(espn_frames: dict, source_frames: dict, league: str) -> pl.Data
 #: with ESPN's by :func:`_align_play_ids` before any play-level metric is measured.
 OWN_PLAY_IDS = frozenset({"ncaa"})
 
-#: What two feeds' plays must share to align: period, team, ESPN type and first athlete. Score is left out, so
-#: ``score_row_agreement`` still measures it; the clock only enters the second pass of :func:`_align_play_ids`.
+#: What two feeds' plays must share to align: period, team, ESPN type and first athlete (and, in the first two
+#: passes of :func:`_align_play_ids`, the clock). Score is left out, so ``score_row_agreement`` still measures it.
 _ALIGN_KEY = ("period_number", "team_id", "type_text", "athlete_id_1")
 
 
 def _align_play_ids(espn_pbp: pl.DataFrame, source_pbp: pl.DataFrame) -> pl.DataFrame:
     """The source's plays with each one that aligns to an ESPN play renamed to that play's ``id``.
 
-    Two passes. First a longest-matching-block alignment (:class:`difflib.SequenceMatcher`) of the two feeds'
-    play sequences on :data:`_ALIGN_KEY`, which respects order. Then each play still unpaired is paired with
-    the first unpaired ESPN play of the same key **at the same clock**: a feed that logs one game second's rows
-    in another order (stats.ncaa.org) still pairs them, and those pairs agree on the clock by construction. A
-    play left unaligned keeps its own id, which never collides with an ESPN id.
+    Three passes, exact first, so a repeated key can never claim the wrong ESPN play while its exact twin exists:
+
+    1. a longest-matching-block alignment (:class:`difflib.SequenceMatcher`) of the two play sequences on
+       :data:`_ALIGN_KEY` **plus the clock**, which respects order;
+    2. each play still unpaired, with the first unpaired ESPN play of the same key at the same clock (a feed
+       that logs one game second's rows in another order, as stats.ncaa.org does);
+    3. the plays left on both sides, aligned in order on the key alone (a play one feed re-timed), so only
+       these pairs can disagree on the clock.
+
+    A play left unaligned keeps its own id, which never collides with an ESPN id.
     """
 
     def keys(frame: pl.DataFrame) -> list[tuple]:
-        return frame.select(pl.col(c).cast(pl.Utf8) for c in _ALIGN_KEY).rows()
+        return frame.select(pl.col(c).cast(pl.Utf8) for c in (*_ALIGN_KEY, "clock_display_value")).rows()
 
     ekeys, skeys = keys(espn_pbp), keys(source_pbp)
-    renamed = source_pbp["id"].to_list()
-    espn_ids = espn_pbp["id"].to_list()
-    paired_e, paired_s = set(), set()
-    for block in SequenceMatcher(None, ekeys, skeys, autojunk=False).get_matching_blocks():
-        for k in range(block.size):
-            renamed[block.b + k] = espn_ids[block.a + k]
-            paired_e.add(block.a + k)
-            paired_s.add(block.b + k)
-    eclock, sclock = espn_pbp["clock_display_value"].to_list(), source_pbp["clock_display_value"].to_list()
+    renamed, espn_ids = source_pbp["id"].to_list(), espn_pbp["id"].to_list()
+    free_e, free_s = list(range(len(ekeys))), list(range(len(skeys)))
+
+    def pair(e: list[int], s: list[int], width: int) -> None:
+        a, b = [ekeys[i][:width] for i in e], [skeys[j][:width] for j in s]
+        for block in SequenceMatcher(None, a, b, autojunk=False).get_matching_blocks():
+            for k in range(block.size):
+                renamed[s[block.b + k]] = espn_ids[e[block.a + k]]
+                done_e.add(e[block.a + k])
+                done_s.add(s[block.b + k])
+
+    done_e: set[int] = set()
+    done_s: set[int] = set()
+    pair(free_e, free_s, len(_ALIGN_KEY) + 1)
     waiting: dict[tuple, list[int]] = {}
-    for i, key in enumerate(ekeys):
-        if i not in paired_e:
-            waiting.setdefault((*key, eclock[i]), []).append(i)
-    for j, key in enumerate(skeys):
-        if j not in paired_s and (queue := waiting.get((*key, sclock[j]))):
-            renamed[j] = espn_ids[queue.pop(0)]
+    for i in free_e:
+        if i not in done_e:
+            waiting.setdefault(ekeys[i], []).append(i)
+    for j in free_s:
+        if j not in done_s and (queue := waiting.get(skeys[j])):
+            i = queue.pop(0)
+            renamed[j] = espn_ids[i]
+            done_e.add(i)
+            done_s.add(j)
+    pair([i for i in free_e if i not in done_e], [j for j in free_s if j not in done_s], len(_ALIGN_KEY))
     return source_pbp.with_columns(pl.Series("id", renamed, dtype=source_pbp.schema["id"]))
 
 

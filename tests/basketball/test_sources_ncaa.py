@@ -140,7 +140,13 @@ def test_ncaa_is_not_selectable_until_the_hard_gates_are_exact() -> None:
         for fail in _report(i).check(parity.HARD_GATES):
             if (name := fail.split()[0]) in parity.HARD_GATES:
                 breached.setdefault(name, set()).add(IDS[i])
-    assert set(breached) == {"team_box_mismatches", "player_minutes_agreement", "ft_tech_order_agreement"}
+    assert set(breached) == {
+        "team_box_mismatches",
+        "player_paired_share",
+        "player_minutes_agreement",
+        "ft_tech_order_agreement",
+    }
+    assert breached["player_paired_share"] == {"mbb_401917515"}  # the roster-less player
     assert breached["team_box_mismatches"] == {"mbb_401920769", "wbb_401926100"}
     assert len(breached["player_minutes_agreement"]) == 16  # stint minutes, not the official box's
     for lg in ("mbb", "wbb"):
@@ -320,3 +326,39 @@ def test_ncaa_through_dispatch_once_it_is_selectable(monkeypatch: pytest.MonkeyP
     assert prov["served"] == "ncaa" and prov["fallback"] is False and out.health == {"ncaa": "ok"}
     assert prov["lossy_columns"] == list(KNOWN_LOSSY[(lg, "ncaa")]) and prov["contract"]["ok"]
     assert out.frames["pbp"].height > 350 and out.frames["player_box"].height >= 15
+
+
+# --------------------------------------------------------------------------- review cases
+
+
+def test_alignment_prefers_the_exact_clock_when_a_key_repeats() -> None:
+    """ESPN logs two same-key plays at different clocks; the source lacks the first. The source's play must
+    take the second's id (the same clock), not the earlier one an order-only alignment would hand it."""
+    cols = {"period_number": [1, 1, 1], "team_id": [5, 5, 5], "type_text": ["JumpShot", "Steal", "JumpShot"]}
+    espn = pl.DataFrame(
+        {"id": [11, 12, 13], **cols, "athlete_id_1": [7, 8, 7], "clock_display_value": ["9:00", "8:30", "8:00"]}
+    )
+    source = pl.DataFrame(
+        {
+            "id": [21, 22],
+            "period_number": [1, 1],
+            "team_id": [5, 5],
+            "type_text": ["Steal", "JumpShot"],
+            "athlete_id_1": [8, 7],
+            "clock_display_value": ["8:30", "8:00"],
+        }
+    )
+    assert parity._align_play_ids(espn, source)["id"].to_list() == [12, 13]
+
+
+@pytest.mark.parametrize("placeholder", ["TEAM", "TEAM.TEAM", "TEAM.TEAM 30", " TEAM.TEAM "])
+def test_team_placeholders_are_the_team(placeholder: str) -> None:
+    assert ncaa._pkey(None, placeholder) is None
+    assert ncaa._pkey(None, "TJ.COPE") == "name:TJ.COPE" and ncaa._pkey("123", "TEAM") == "123"
+
+
+def test_wbb_halves_before_2015_16_and_a_tip_in_type() -> None:
+    assert ncaa._regulation("wbb", 2015) == (2, 20, "half") and ncaa._regulation("wbb", 2016) == (4, 10, "Quarter")
+    assert ncaa._regulation("mbb", 2027) == (2, 20, "half")
+    row = {"event_type": "Tip In", "event_result": "made", "shot_value": 2, "event_description": "X, tip in made"}
+    assert ncaa._espn_kind(row) == "TipShot" and ncaa._row_counts(row, "1")[0]["pts"] == 2
