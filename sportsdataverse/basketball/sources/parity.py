@@ -113,7 +113,8 @@ NCAA_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
     "clock_row_agreement": (0.99, None),
     # worst 0.7308 (MBB 401917515): one second's rows in another order; margin 0.0008
     "ft_tech_order_agreement": (0.73, None),
-    # worst 0.9145 (MBB 401917515: ten ESPN-located shots with no ncaa_shots match); margin 0.0045
+    # worst 0.9145 (MBB 401917515: the roster-less player's shots carry no athlete id, so they do not pair);
+    # margin 0.0045
     "shot_located_share": (0.91, None),
     # worst median 0.5815 ft and p95 0.8735 ft (WBB 401918712 / 401919679): ESPN rounds to whole feet;
     # margin 0.0185 / 0.0265 ft
