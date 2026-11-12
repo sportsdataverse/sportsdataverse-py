@@ -153,6 +153,8 @@ from sportsdataverse.nba import nba_stats_leaguedashptstats as _raw_nba_stats_le
 from sportsdataverse.nba import AdjRapmModel as AdjRapmModel  # noqa: F401
 from sportsdataverse.nba import AgingCurve as AgingCurve  # noqa: F401
 from sportsdataverse.nba import BoxPriorModel as BoxPriorModel  # noqa: F401
+from sportsdataverse.nba import CurrentImpactFilter as CurrentImpactFilter  # noqa: F401
+from sportsdataverse.nba import CurrentImpactParams as CurrentImpactParams  # noqa: F401
 from sportsdataverse.nba import ExternalValidityResult as ExternalValidityResult  # noqa: F401
 from sportsdataverse.nba import ForecastResult as ForecastResult  # noqa: F401
 from sportsdataverse.nba import LeagueConstants as LeagueConstants  # noqa: F401
@@ -195,6 +197,7 @@ from sportsdataverse.nba import calibrate_replacement_level as calibrate_replace
 from sportsdataverse.nba import career_rapm_target as career_rapm_target  # noqa: F401
 from sportsdataverse.nba import clutch_delta as clutch_delta  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
+from sportsdataverse.nba import current_impact_prior as current_impact_prior  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
@@ -342,6 +345,7 @@ from sportsdataverse.nba import nba_coach_seasons as nba_coach_seasons  # noqa: 
 from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_from_archive  # noqa: F401
 from sportsdataverse.nba import nba_cup_sim as nba_cup_sim  # noqa: F401
 from sportsdataverse.nba import nba_cup_standings as nba_cup_standings  # noqa: F401
+from sportsdataverse.nba import nba_current_impact as nba_current_impact  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
@@ -473,6 +477,7 @@ from sportsdataverse.nba import realgm_teams as realgm_teams  # noqa: F401
 from sportsdataverse.nba import realgm_transactions as realgm_transactions  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
 from sportsdataverse.nba import rotowire_injuries as rotowire_injuries  # noqa: F401
+from sportsdataverse.nba import run_current_impact as run_current_impact  # noqa: F401
 from sportsdataverse.nba import score_shot_xpoints as score_shot_xpoints  # noqa: F401
 from sportsdataverse.nba import score_win_prob as score_win_prob  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -502,6 +507,8 @@ __all__ = [
     "AdjRapmModel",
     "AgingCurve",
     "BoxPriorModel",
+    "CurrentImpactFilter",
+    "CurrentImpactParams",
     "ExternalValidityResult",
     "ForecastResult",
     "LeagueConstants",
@@ -544,6 +551,7 @@ __all__ = [
     "career_rapm_target",
     "clutch_delta",
     "compile_nba_season",
+    "current_impact_prior",
     "darko_forecast_accuracy",
     "decay_weights",
     "download",
@@ -815,6 +823,7 @@ __all__ = [
     "nba_crosswalks_from_archive",
     "nba_cup_sim",
     "nba_cup_standings",
+    "nba_current_impact",
     "nba_darko",
     "nba_decay_rapm",
     "nba_draft_lottery_odds",
@@ -947,6 +956,7 @@ __all__ = [
     "realgm_transactions",
     "render_report",
     "rotowire_injuries",
+    "run_current_impact",
     "score_shot_xpoints",
     "score_win_prob",
     "scoreboard_event_parsing",

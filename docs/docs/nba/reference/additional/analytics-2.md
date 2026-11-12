@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_coach–nba_impact"
 sidebar_label: "Analytics: nba_coach–nba_impact"
-sidebar_position: 15
+sidebar_position: 16
 description: "NBA — additional Python functions — Analytics: nba_coach–nba_impact — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_coach–nba_impact

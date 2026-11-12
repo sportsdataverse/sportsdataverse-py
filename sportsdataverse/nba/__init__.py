@@ -71,6 +71,13 @@ from sportsdataverse.nba.nba_box_prior import (  # noqa: F401
     train_box_prior,
 )
 from sportsdataverse.nba.nba_reml_rapm import RemlFit, fit_reml_prior_ridge, nba_reml_rapm  # noqa: F401
+from sportsdataverse.nba.nba_current_impact import (  # noqa: F401
+    CurrentImpactFilter,
+    CurrentImpactParams,
+    current_impact_prior,
+    nba_current_impact,
+    run_current_impact,
+)
 from sportsdataverse.nba.nba_player_ages import nba_player_ages  # noqa: F401
 from sportsdataverse.nba.nba_darko import (  # noqa: F401
     AgingCurve,

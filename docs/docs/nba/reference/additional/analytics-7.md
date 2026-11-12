@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: nba_tracking–zone_value"
 sidebar_label: "Analytics: nba_tracking–zone_value"
-sidebar_position: 20
+sidebar_position: 21
 description: "NBA — additional Python functions — Analytics: nba_tracking–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: nba_tracking–zone_value

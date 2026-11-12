@@ -80473,6 +80473,23 @@ career_rapm_target:
   d_target: 'Career defensive RAPM per 100 (positive = good defense) plus the defensive aging curve at his age that season.'
   off_poss: 'Offensive possessions that season.'
   def_poss: 'Defensive possessions that season.'
+current_impact_prior:
+  player_id: 'NBA stats person id.'
+  prior_date: 'The date the prior is for: it reads only box lines of games dated before it (and within the window before it).'
+  o_prior: 'Box prior v2 offense per 100, scored on the window''s box lines with the season''s out-of-fold rule.'
+  d_prior: 'Box prior v2 defense per 100 (positive = good defense), scored the same way.'
+nba_current_impact:
+  player_id: 'NBA stats person id.'
+  as_of: 'The rating date: only games dated strictly before it are used.'
+  season: 'Season (end year) of the last game before as_of.'
+  o_current_impact: 'Expected offensive impact per 100 on as_of: o_prior plus the Kalman-filtered offensive deviation from it.'
+  d_current_impact: 'Expected defensive impact per 100 on as_of (positive = good defense): d_prior plus the filtered defensive deviation.'
+  current_impact: 'o_current_impact + d_current_impact.'
+  o_prior: 'The offensive box prior in force on as_of (the latest prior_date on or before it), per 100.'
+  d_prior: 'The defensive box prior in force on as_of, per 100 (positive = good defense).'
+  off_poss: 'Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one).'
+  def_poss: 'Defensive possessions this season before as_of.'
+  last_game_date: 'Date of the player''s last game before as_of in the input.'
 apply_box_prior:
   player_id: 'NBA stats person id.'
   o_prior: 'Box prior v2 offense per 100, from the player''s out-of-fold rule.'
