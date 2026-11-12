@@ -167,7 +167,73 @@ _LIVE_LOSSY: tuple[str, ...] = (
     "flagrant_fouls",
     "lead_percentage",
 )
-KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {("nba", "live"): _LIVE_LOSSY, ("wnba", "live"): _LIVE_LOSSY}
+#: stats.ncaa.org (BB-D16), measured on the 16-game corpus by ``tests/basketball/test_sources_ncaa.py`` the same
+#: way, after its plays are aligned to ESPN's (:func:`~sportsdataverse.basketball.sources.parity._align_play_ids`).
+_NCAA_LOSSY: tuple[str, ...] = (
+    # no line: the prior is home court, never ESPN's spread
+    "game_spread",
+    "game_spread_available",
+    "home_favorite",
+    "home_team_spread",
+    "prior",
+    "prior_source",
+    "pregame_home_prob",
+    "home_win_prob",
+    "wp_delta",
+    # no neutral-site flag, no tip-off time
+    "neutral_site",
+    "game_date",
+    "game_date_time",
+    "wallclock",
+    # the pipeline's stint minutes, not the official box's
+    "minutes",
+    # one game second's rows in another order (no event index), ESPN's media timeouts, held-ball and
+    # overtime tips: the running score between same-second rows and every row-position column
+    "home_score",
+    "away_score",
+    "scoring_play",
+    "score_source",
+    "clock_*",
+    "time",
+    "game_play_number",
+    "sequence_number",
+    "lag_*",
+    "start_*_seconds_remaining",
+    "end_*_seconds_remaining",
+    # stats.ncaa.org play-by-play defects ESPN's feed does not have (a basket, four free throws and a team
+    # turnover on two corpus games) and its from-turnover tags
+    "free_throw*",
+    "*turnovers",
+    "turnover_points",
+    # team-box totals the adapter does not compute
+    "fast_break_points",
+    "points_in_paint",
+    "largest_lead",
+    "lead_changes",
+    "lead_percentage",
+    "flagrant_fouls",
+    # wording and presentation; an assist stats.ncaa.org credits and ESPN does not
+    "text",
+    "short_description",
+    "athlete_id_2",
+    "active",
+    "athlete_display_name",
+    "athlete_short_name",
+    "athlete_headshot_href",
+    "athlete_jersey",
+    "athlete_position_*",
+    "*team_short_display_name",
+    "*_color",
+    "*_logo",
+    "*_slug",
+    "*_uid",
+)
+KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {
+    ("nba", "live"): _LIVE_LOSSY,
+    ("wnba", "live"): _LIVE_LOSSY,
+    ("mbb", "ncaa"): _NCAA_LOSSY,
+    ("wbb", "ncaa"): _NCAA_LOSSY,
+}
 
 #: ``MM:SS`` with optional tenths, or ESPN's bare ``SS.t`` under a minute (the parser prefixes ``0:``).
 _CLOCK = re.compile(r"^\d{1,2}(:[0-5]\d)?(\.\d+)?$")

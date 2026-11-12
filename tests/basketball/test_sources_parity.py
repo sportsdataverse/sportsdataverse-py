@@ -142,7 +142,9 @@ def test_no_gate_is_looser_than_the_corpus_needs() -> None:
     """
     observed = [_report(i).metrics() for i in range(len(CASES))]
     for (lg, src), gates in parity.GATES.items():
-        assert src == "live" and lg in ("nba", "wnba")
+        if src != "live":
+            continue  # stats.ncaa.org's gates are held to their own corpus in test_sources_ncaa.py
+        assert lg in ("nba", "wnba")
         for name, (lo, hi) in gates.items():
             values = [m[name] for m in observed]
             slack = 0.05 if name.endswith("_ft") else 0.01
