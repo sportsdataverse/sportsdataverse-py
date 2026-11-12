@@ -58,7 +58,7 @@ from typing import Any, Callable, Optional, Union
 import polars as pl
 
 from .capture import _parse_shard  # B-L46: one body, the capture CLI's
-from .identity import enrich_parsed
+from .identity import _rosters_dir, enrich_parsed
 from sportsdataverse.mbb.mbb_ncaa_box_tabs import (
     parse_ncaa_bb_linescore,
     parse_ncaa_bb_officials,
@@ -523,6 +523,59 @@ def parse_and_write(bundle: "dict[str, Any]", root: "Union[str, Path]", *, leagu
     return write_parsed(root, league, parsed["contest_id"], parsed)
 
 
+def _rosters_mtime(root: Path, league: str, season: int) -> float:
+    """Newest roster file of *season*, 0.0 when none: a parsed contest older than it was enriched without it."""
+    return max((p.stat().st_mtime for p in _rosters_dir(root, league, season).glob("*.json")), default=0.0)
+
+
+def _reenrich(root: Path, league: str, bundle_path: Path, rosters_mtime: float) -> bool:
+    """Re-run the identity join on a parsed contest that predates its season's rosters.
+
+    Parse skips a contest it has already parsed, and stage 03 runs before stage 04 captures
+    the season's rosters, so a game parsed before its rosters landed kept null shooter (and
+    player) ids for good: 6,837 shots of Nov 1-2 2026. This heals it on the next run.
+
+    Cheap by construction: only a contest whose JSON is older than the newest roster file and
+    holds a null ``shooter_player_id`` is loaded, and only the offline identity join is re-run
+    on it, never the parse. The file is rewritten only if that changed it, and touched
+    otherwise, so a contest whose nulls are real (a non-D-I opponent) is checked once per
+    roster update rather than every night.
+
+    Returns:
+        Whether the parsed JSON was rewritten.
+    """
+    contest_id = bundle_path.name[: -len(".json.gz")]
+    path = root / league / "json" / f"{contest_id}.json"
+    if path.stat().st_mtime >= rosters_mtime:
+        return False
+    text = path.read_text(encoding="utf-8")
+    # write_parsed's json.dumps default separators, so a text match is exact.
+    if '"shooter_player_id": null' in text:
+        parsed = json.loads(text)
+        enrich_parsed(parsed, root=root, league=league, season=_ending_year(bundle_path.parent.name))
+        if json.dumps(parsed) != text:
+            write_parsed(root, league, contest_id, parsed)
+            return True
+    os.utime(path)
+    return False
+
+
+def _reenrich_stale(root: Path, league: str, bundle_paths: list[str]) -> int:
+    """:func:`_reenrich` each already-parsed contest; returns how many were rewritten."""
+    rosters_mtime: dict[str, float] = {}
+    reenriched = 0
+    for path_str in bundle_paths:
+        path = Path(path_str)
+        season_dir = path.parent.name
+        if season_dir not in rosters_mtime:
+            rosters_mtime[season_dir] = _rosters_mtime(root, league, _ending_year(season_dir))
+        try:
+            reenriched += _reenrich(root, league, path, rosters_mtime[season_dir])
+        except Exception:  # noqa: BLE001 -- a stale contest stays stale; it must not fail the parse
+            logger.warning("ncaa_parse CLI: failed to re-enrich %s", path_str, exc_info=True)
+    return reenriched
+
+
 def _main(default_league: str, default_root: str) -> None:
     import argparse
 
@@ -571,15 +624,6 @@ def _main(default_league: str, default_root: str) -> None:
     else:
         bundle_paths = sorted(raw_dir.glob("**/*.json.gz"))
 
-    pending = []
-    for p in bundle_paths:
-        contest_id = p.name[: -len(".json.gz")]
-        # --force makes the stage genuinely re-runnable: identity enrichment and
-        # parser fixes land AFTER a season is parsed, and skip-if-exists means
-        # those games keep their stale output forever otherwise.
-        if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
-            pending.append(p)
-
     if not bundle_paths:
         scope_msg = ",".join(sorted(args.season)) if args.season else "all seasons"
         print(
@@ -589,15 +633,30 @@ def _main(default_league: str, default_root: str) -> None:
         )
         raise SystemExit(2)
 
-    my_paths = shard([str(p) for p in pending], i, n)
+    # Split the BUNDLES across shards, then classify each shard's own share. The raw tree is
+    # the same for every shard, but the json tree changes as the other shards write, so
+    # splitting a pending list each shard built from its own snapshot could hand a contest to
+    # two shards or to none.
+    mine = shard([str(p) for p in bundle_paths], i, n)
+    pending: list[str] = []
+    stale: list[str] = []
+    for path_str in mine:
+        contest_id = Path(path_str).name[: -len(".json.gz")]
+        # --force makes the stage genuinely re-runnable: identity enrichment and
+        # parser fixes land AFTER a season is parsed, and skip-if-exists means
+        # those games keep their stale output forever otherwise.
+        if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
+            pending.append(path_str)
+        else:
+            stale.append(path_str)
     scope = ",".join(sorted(args.season)) if args.season else "all"
     print(
         f"seasons={scope} bundles={len(bundle_paths)} pending={len(pending)} "
-        f"force={args.force} shard={i}/{n} assigned={len(my_paths)}"
+        f"force={args.force} shard={i}/{n} assigned={len(mine)}"
     )
 
     counts = {"parsed": 0, "failed": 0, "with_parse_errors": 0}
-    for path_str in my_paths:
+    for path_str in pending:
         try:
             bundle = read_bundle(path_str)
             parsed = parse_bundle(bundle, league=args.league, root=root)
@@ -609,7 +668,9 @@ def _main(default_league: str, default_root: str) -> None:
             logger.warning("ncaa_parse CLI: failed to parse %s", path_str, exc_info=True)
             counts["failed"] += 1
 
-    print(f"parsed={counts['parsed']} failed={counts['failed']} with_parse_errors={counts['with_parse_errors']}")
+    # Self-heal the contests the skip above never revisits (see _reenrich); --force re-parsed them all.
+    counts["reenriched"] = _reenrich_stale(root, args.league, stale)
+    print(" ".join(f"{k}={v}" for k, v in counts.items()))
     if counts["failed"] or counts["with_parse_errors"]:
         # Every game was still written (a crashed family carries its parse_errors
         # marker); the exit code is what lets a producer job notice.
