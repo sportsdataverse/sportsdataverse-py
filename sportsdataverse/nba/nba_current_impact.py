@@ -22,6 +22,7 @@ of :func:`~sportsdataverse.nba.nba_reml_rapm.fit_reml_prior_ridge` at the penalt
 from __future__ import annotations
 
 import datetime as dt
+import itertools
 from collections.abc import Sequence
 from dataclasses import dataclass
 
@@ -379,7 +380,7 @@ def run_current_impact(
     days = games["game_date"].to_list()
     gid = games["game_id"].to_numpy()
     starts = (np.flatnonzero(np.r_[True, gid[1:] != gid[:-1]]).tolist() if games.height else []) + [games.height]
-    for a, b in zip(starts[:-1], starts[1:], strict=True):
+    for a, b in itertools.pairwise(starts):
         day, s = days[a], int(seasons[a])
         if day != last_day:
             if last_day is not None:

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import importlib.util
+import itertools
 import json
 from pathlib import Path
 
@@ -149,5 +150,5 @@ def test_data_slices_reference_and_test_by_date(tmp_path) -> None:
 
 def test_eval_dates_weekly_from_opening_night() -> None:
     d = fit.eval_dates(pl.Series([dt.date(2014, 10, 28), dt.date(2015, 4, 15)]))
-    assert d[0] == dt.date(2014, 10, 28) and all((b - a).days == 7 for a, b in zip(d, d[1:], strict=False))
+    assert d[0] == dt.date(2014, 10, 28) and all((b - a).days == 7 for a, b in itertools.pairwise(d))
     assert d[-1] <= dt.date(2015, 4, 15) < d[-1] + dt.timedelta(days=7)
