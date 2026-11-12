@@ -624,15 +624,6 @@ def _main(default_league: str, default_root: str) -> None:
     else:
         bundle_paths = sorted(raw_dir.glob("**/*.json.gz"))
 
-    pending = []
-    for p in bundle_paths:
-        contest_id = p.name[: -len(".json.gz")]
-        # --force makes the stage genuinely re-runnable: identity enrichment and
-        # parser fixes land AFTER a season is parsed, and skip-if-exists means
-        # those games keep their stale output forever otherwise.
-        if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
-            pending.append(p)
-
     if not bundle_paths:
         scope_msg = ",".join(sorted(args.season)) if args.season else "all seasons"
         print(
@@ -642,15 +633,30 @@ def _main(default_league: str, default_root: str) -> None:
         )
         raise SystemExit(2)
 
-    my_paths = shard([str(p) for p in pending], i, n)
+    # Split the BUNDLES across shards, then classify each shard's own share. The raw tree is
+    # the same for every shard, but the json tree changes as the other shards write, so
+    # splitting a pending list each shard built from its own snapshot could hand a contest to
+    # two shards or to none.
+    mine = shard([str(p) for p in bundle_paths], i, n)
+    pending: list[str] = []
+    stale: list[str] = []
+    for path_str in mine:
+        contest_id = Path(path_str).name[: -len(".json.gz")]
+        # --force makes the stage genuinely re-runnable: identity enrichment and
+        # parser fixes land AFTER a season is parsed, and skip-if-exists means
+        # those games keep their stale output forever otherwise.
+        if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
+            pending.append(path_str)
+        else:
+            stale.append(path_str)
     scope = ",".join(sorted(args.season)) if args.season else "all"
     print(
         f"seasons={scope} bundles={len(bundle_paths)} pending={len(pending)} "
-        f"force={args.force} shard={i}/{n} assigned={len(my_paths)}"
+        f"force={args.force} shard={i}/{n} assigned={len(mine)}"
     )
 
     counts = {"parsed": 0, "failed": 0, "with_parse_errors": 0}
-    for path_str in my_paths:
+    for path_str in pending:
         try:
             bundle = read_bundle(path_str)
             parsed = parse_bundle(bundle, league=args.league, root=root)
@@ -663,8 +669,7 @@ def _main(default_league: str, default_root: str) -> None:
             counts["failed"] += 1
 
     # Self-heal the contests the skip above never revisits (see _reenrich); --force re-parsed them all.
-    stale = [] if args.force else sorted(set(map(str, bundle_paths)) - set(map(str, pending)))
-    counts["reenriched"] = _reenrich_stale(root, args.league, shard(stale, i, n))
+    counts["reenriched"] = _reenrich_stale(root, args.league, stale)
     print(" ".join(f"{k}={v}" for k, v in counts.items()))
     if counts["failed"] or counts["with_parse_errors"]:
         # Every game was still written (a crashed family carries its parse_errors

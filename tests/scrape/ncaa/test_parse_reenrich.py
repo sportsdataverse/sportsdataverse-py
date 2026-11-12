@@ -55,6 +55,8 @@ def test_shots_parsed_before_rosters_get_shooter_ids_once_rosters_land(tmp_path,
 
     # Stage 04 lands the rosters; night 2's stage 03 has nothing new to parse.
     shutil.copytree(FIX / "rosters", tmp_path / "mbb" / "rosters")
+    for roster in (tmp_path / "mbb" / "rosters").rglob("*.json"):
+        os.utime(roster)  # copytree keeps the checkout mtime; stage 04 writes them now
     out = _stage03(tmp_path, monkeypatch, capsys)
     after = _shooter_ids(tmp_path)
     assert len(after) == 124 and all(after)
@@ -69,3 +71,27 @@ def test_shots_parsed_before_rosters_get_shooter_ids_once_rosters_land(tmp_path,
     out = _stage03(tmp_path, monkeypatch, capsys)
     assert "reenriched=0" in out
     assert _parsed(tmp_path).stat().st_mtime_ns == healed_at
+
+
+def test_shards_started_one_after_another_still_cover_every_bundle(tmp_path, monkeypatch, capsys):
+    """Each shard owns a fixed share of the bundles, whatever the others have written by then.
+
+    run_03_parse.sh starts its shards together, but they read the json tree at different
+    moments. Splitting a pending list each shard built from its own snapshot let a contest that
+    one shard had just written drop out of another shard's list and shift the split, so a
+    contest went to no shard at all. The second bundle is the real one under the next contest id.
+    """
+    import gzip
+
+    shutil.copytree(FIX, tmp_path / "mbb")
+    raw = tmp_path / "mbb" / "raw" / "2027"
+    twin = dict(read_bundle(raw / f"{CID}.json.gz"), contest_id="6607593")
+    with gzip.open(raw / "6607593.json.gz", "wt", encoding="utf-8") as fh:
+        json.dump(twin, fh)
+
+    for shard_arg in ("0/2", "1/2"):
+        identity.load_roster_index.cache_clear()
+        identity.load_team_index.cache_clear()
+        monkeypatch.setattr(sys, "argv", ["ncaa_mbb_03_games_parse.py", "--season", "2027", "--shard", shard_arg])
+        _main("mbb", str(tmp_path))
+    assert sorted(p.name for p in (tmp_path / "mbb" / "json").glob("*.json")) == ["6607592.json", "6607593.json"]
