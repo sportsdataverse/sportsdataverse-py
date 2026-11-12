@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior"
-sidebar_label: "Models and calculators: AdjRapmModel–home_prior"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–game_page"
+sidebar_label: "Models and calculators: AdjRapmModel–game_page"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–game_page — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–home_prior
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–game_page
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -131,6 +131,116 @@ A cross-fitted box prior: one offense and one defense linear rule per player fol
 | `d_intercept` | `ndarray` |  | `(folds,)`. |
 | `season` | `int` |  | The season the prior is for. |
 | `train_seasons` | `list[int]` |  | The seasons it learned from. |
+
+### CurrentImpactFilter {#CurrentImpactFilter}
+
+`CurrentImpactFilter(params: 'CurrentImpactParams | None' = None) -> 'None'`
+
+The joint Kalman filter of `nba_current_impact`, fed one season and one game at a time.
+
+State, per possession and in the RAPM design's sign: each player's offense deviation, defense
+deviation (negative = good defense) and the league level. Within a season the covariance is joint
+over the season's players; across seasons each player's mean and variance carry (the cross terms do
+not: ponytail, carry the block if a gate ever wants it).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `params` | `CurrentImpactParams \| None` | `None` | The shock and decay SDs. |
+
+**Methods**
+
+#### CurrentImpactFilter.drift
+
+`CurrentImpactFilter.drift(days: 'float') -> 'None'`
+
+Add `days` of drift variance to every player's deviation (the time decay).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `days` | `float` |  |  |
+
+#### CurrentImpactFilter.end_season
+
+`CurrentImpactFilter.end_season() -> 'None'`
+
+Store each seen player's mean and variance for later seasons.
+
+#### CurrentImpactFilter.ratings
+
+`CurrentImpactFilter.ratings() -> 'dict[int, tuple[float, float, float, float, int, int, dt.date | None]]'`
+
+Every seen player's `(o, d, o_prior, d_prior, off_poss, def_poss, last_game)`.
+
+Ratings and priors per 100 (`d` positive = good defense): the prior in force plus the deviation.
+A player carried from an earlier season who is not in this one's matrix gets his carried deviation
+plus the prior in force for him (0 when he has none). Possessions count this season's games.
+
+#### CurrentImpactFilter.set_prior
+
+`CurrentImpactFilter.set_prior(prior: 'dict[int, tuple[float, float]]') -> 'None'`
+
+Set the expectation `{pid: (o_prior, d_prior)}` per 100; absent players get 0 (league average).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `prior` | `dict[int, tuple[float, float]]` |  |  |
+
+#### CurrentImpactFilter.start_season
+
+`CurrentImpactFilter.start_season(pids: 'Sequence[int]', noise_var: 'float | None' = None) -> 'None'`
+
+Open a season for `pids`: carried players get `season_sd^2` more variance, the level resets.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pids` | `Sequence[int]` |  |  |
+| `noise_var` | `float \| None` | `None` |  |
+
+#### CurrentImpactFilter.symmetrize
+
+`CurrentImpactFilter.symmetrize() -> 'None'`
+
+Average the covariance with its transpose (rounding drift; `run_current_impact` calls it daily).
+
+#### CurrentImpactFilter.update_game
+
+`CurrentImpactFilter.update_game(off: 'np.ndarray', de: 'np.ndarray', points: 'np.ndarray', teams: 'dict[int, int]', day: 'dt.date') -> 'None'`
+
+Update on one game's possessions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `off` | `ndarray` |  | `(n, 5)` offensive player ids. |
+| `de` | `ndarray` |  | `(n, 5)` defensive player ids. |
+| `points` | `ndarray` |  | `(n,)` possession points. |
+| `teams` | `dict[int, int]` |  | `{pid: team_id}` for every player in the game (for the team-change shock). |
+| `day` | `date` |  | The game date. |
+
+### CurrentImpactParams {#CurrentImpactParams}
+
+`CurrentImpactParams(entry_sd: 'float' = 0.983, season_sd: 'float' = 0.417, team_sd: 'float' = 0.026, drift_sd: 'float' = 0.0115, level_sd: 'float' = 0.05) -> None`
+
+The filter's shock and decay SDs, per 100 possessions (`level_sd` per possession).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `entry_sd` | `float` | `0.983` | SD of a new player's deviation. |
+| `season_sd` | `float` | `0.417` | SD added at each new season. |
+| `team_sd` | `float` | `0.026` | SD added at a team change. |
+| `drift_sd` | `float` | `0.0115` | SD of the daily drift, per square-root day. |
+| `level_sd` | `float` | `0.05` | SD of the league level at a season start. |
 
 ### ExternalValidityResult {#ExternalValidityResult}
 
@@ -827,6 +937,52 @@ train = box_prior_training_seasons(2015, grams)
 target = career_rapm_target(grams, ages, seasons=train, center=2015)
 ```
 
+### current_impact_prior {#current_impact_prior}
+
+`current_impact_prior(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', possessions: 'pl.DataFrame', bio: 'pl.DataFrame', model: 'BoxPriorModel', as_of: 'dt.date | str', *, window_days: 'int' = 365, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+The box prior v2 as of a date: features from the box lines of the `window_days` before it.
+
+Only games dated before `as_of` (and on or after `as_of - window_days`) are read, so the prior holds
+nothing from the date itself or later. The logs and possessions may span two seasons.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_logs` | `DataFrame` |  | Per-player-game box lines (`leaguegamelog` `P`) with `game_id` and `game_date`. |
+| `team_logs` | `DataFrame` |  | Per-team-game lines (`leaguegamelog` `T`). |
+| `possessions` | `DataFrame` |  | Possession+lineup rows of the same games (`game_id`, `points`, the lineups). |
+| `bio` | `DataFrame` |  | `player_id`, `age`, `height_in`, `position_num` for the season of `as_of`. |
+| `model` | `BoxPriorModel` |  | The `~sportsdataverse.nba.nba_box_prior.BoxPriorModel` for that season (one that did not learn from it: `~sportsdataverse.nba.nba_box_prior.box_prior_training_seasons`). |
+| `as_of` | `date \| str` |  | The date the prior is for. |
+| `window_days` | `int` | `365` | Days of box lines to score. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`CURRENT_IMPACT_PRIOR_SCHEMA`: one row per player on court in the window, `prior_date` = `as_of`, `o_prior` / `d_prior` per 100 (`d` positive = good defense). Zero rows when the window has no games.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `prior_date` | Date | The date the prior is for: it reads only box lines of games dated before it (and within the window before it). |
+| `o_prior` | Float64 | Box prior v2 offense per 100, scored on the window's box lines with the season's out-of-fold rule. |
+| `d_prior` | Float64 | Box prior v2 defense per 100 (positive = good defense), scored the same way. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `game_id` has a different dtype in the logs and the possessions, or the window has games but none of their possessions (a silent empty prior otherwise). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_current_impact import current_impact_prior
+prior = current_impact_prior(logs_p, logs_t, possessions, bio, model_2025, "2024-10-22")
+```
+
 ### darko_forecast_accuracy {#darko_forecast_accuracy}
 
 `darko_forecast_accuracy(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, min_history: 'int' = 1) -> 'ForecastResult'`
@@ -1271,213 +1427,4 @@ frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
 from sportsdataverse.mbb.mbb_pbp import espn_mbb_pbp
 frames = game_page_frames(espn_mbb_pbp(401830342, return_parsed=False), league="mbb")
 frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'half', 4)
-```
-
-### game_page_tables {#game_page_tables}
-
-`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None, shot_cells: 'Optional[pl.DataFrame]' = None) -> 'dict[str, object]'`
-
-Every game-page table for one game, from its basketball pbp / team box / player box frames.
-
-The warehouse path: the sdv-db nightly stage reads one game's rows from `<league>.pbp` /
-`team_box` / `player_box` and its schedule row (`season`, `format_regulation_periods`,
-`neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
-and calls this too, so a game renders identically from either source. Runs
-`score_win_prob`, `shot_coordinates`, `team_game_rates`,
-`player_game_rates`, `~sportsdataverse.nba.nba_game_splits.team_game_splits`,
-`~sportsdataverse.nba.nba_game_splits.player_game_splits` and
-`~sportsdataverse.nba.nba_game_expected.team_game_expected` on the game's own regulation.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | One game's plays in the basketball pbp schema, in play order (empty before tip-off). |
-| `team_box` | `DataFrame` |  | The game's team box rows (rates need exactly two). |
-| `player_box` | `DataFrame` |  | The game's player box rows. |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default `game_regulation_periods` from the frame's `season`. Pass the schedule's `format_regulation_periods` through `game_regulation_periods` when you have it. |
-| `neutral_site` | `Optional[bool]` | `False` | Whether the game was at a neutral site (no home-court advantage in a lineless prior); `None`, NaN or `pd.NA` counts as false. |
-| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
-| `shot_cells` | `Optional[DataFrame]` | `None` | The league's shot counts as of the game date (`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of `team_game_expected`; `None` leaves its expected columns null. |
-
-**Returns**
-
-`{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits", "team_game_expected", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the two split frames (counted from the plays so far; the team frame is empty before tip-off, the player frame then holds the boxed players with zero counts), the expected points by zone and situation (empty before tip-off), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `pbp` holds more than one game. |
-| `polars.exceptions.ColumnNotFoundError` | If a frame lacks a column the derivations need. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_game_page import game_page_tables, game_regulation_periods
-from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp, load_wbb_player_boxscore, load_wbb_team_boxscore
-gid = 293170052
-pbp = load_wbb_pbp([2010]).filter(pl.col("game_id") == gid)
-tb = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == gid)
-pb = load_wbb_player_boxscore([2010]).filter(pl.col("game_id") == gid)
-tables = game_page_tables(pbp, tb, pb, league="wbb", regulation_periods=game_regulation_periods("wbb", season=2010))
-
-# The win-probability chart
-
-tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime")
-```
-
-### game_regulation_periods {#game_regulation_periods}
-
-`game_regulation_periods(league: 'str', *, season: 'int | None' = None, format_regulation_periods: 'float | None' = None) -> 'int'`
-
-Regulation periods of one game: 2 (halves) or 4 (quarters).
-
-The game's own value wins: ESPN's summary `format.regulation.periods` on the live path, the
-schedule's `format_regulation_periods` in the warehouse. Without it (null, NaN, or anything
-other than 2 or 4) the season decides: the NBA always plays quarters, men's college basketball
-always halves, the WNBA halves before 2006 and women's college basketball halves before the
-2015-16 season (`season` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
-| `season` | `int \| None` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
-| `format_regulation_periods` | `float \| None` | `None` | The game's own regulation period count, if known. |
-
-**Returns**
-
-`2` or `4`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is a string other than the four. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_page import game_regulation_periods
-game_regulation_periods("wbb", season=2015)  # 2: halves before 2015-16
-game_regulation_periods("wnba", season=2024, format_regulation_periods=4.0)  # 4
-
-# A warehouse schedule row
-
-game_regulation_periods("mbb", season=2024, format_regulation_periods=2.0)  # 2
-```
-
-### get_constants {#get_constants}
-
-`get_constants(league_id: 'str') -> 'LeagueConstants'`
-
-Return the `LeagueConstants` for a `league_id`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league_id` | `str` |  | stats.nba.com league id -- `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-
-**Returns**
-
-The league's `LeagueConstants`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not a known key of `LEAGUE_CONSTANTS`. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_prediction_constants import get_constants
-get_constants("00").hfa
-```
-
-### get_shrinkage_k {#get_shrinkage_k}
-
-`get_shrinkage_k(league_id: 'str') -> 'float'`
-
-Shooter-talent shrinkage `k` for a league.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league_id` | `str` |  | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-
-**Returns**
-
-The pseudo-attempt shrinkage constant. `"00"` / `"20"` are fitted split-half (`tools/fit_nba_shot_shrinkage_k.py`); `"10"` is a seeded placeholder, not a fit.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Unknown `league_id`. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
-get_shrinkage_k("00")
-```
-
-### home_prior {#home_prior}
-
-`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'tuple[float, str]'`
-
-Pregame home win probability for the in-game model, and where it came from.
-
-`home_team_spread` is the signed expected home margin the basketball pbp frames carry
-(positive when the home side is favoured). With no line, every basketball pickcenter helper leaves
-it `None` (older releases carry an invented `+2.5`), so the value is only trusted when
-`game_spread_available` is true. A line
-already prices the venue. Without one the prior is `rated_home_prob` when given (the NBA / WNBA
-as-of team-ratings prior, `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, which prices
-the venue itself), else home-court advantage alone, and at a neutral site (common in college
-tournaments) there is none: the prior is 0.5. NBA and WNBA use
-`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted `hfa`;
-MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
-`league="mens"` / `"womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
-| `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None`, NaN or `pd.NA` counts as false. |
-| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, used when there is no line; `None`, NaN or a value outside [0, 1] falls through to home-court advantage. |
-
-**Returns**
-
-`(probability, source)` with `source` `"spread"`, `"rated"`, `"neutral"` or `"hfa"`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_page import home_prior
-home_prior(3.0, True)      # (0.58, 'spread')
-home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
-home_prior(None, False, rated_home_prob=0.71)  # (0.71, 'rated')
-
-# A lineless college tournament game
-
-home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
 ```

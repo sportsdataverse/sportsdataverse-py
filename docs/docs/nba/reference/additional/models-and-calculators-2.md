@@ -1,10 +1,219 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: in_game–nba_predict"
-sidebar_label: "Models and calculators: in_game–nba_predict"
+title: "NBA — additional Python functions — Models and calculators: game_page–nba_matchup"
+sidebar_label: "Models and calculators: game_page–nba_matchup"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: in_game–nba_predict — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: game_page–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: in_game–nba_predict
+# NBA — additional Python functions — Models and calculators: game_page–nba_matchup
+
+### game_page_tables {#game_page_tables}
+
+`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None, shot_cells: 'Optional[pl.DataFrame]' = None) -> 'dict[str, object]'`
+
+Every game-page table for one game, from its basketball pbp / team box / player box frames.
+
+The warehouse path: the sdv-db nightly stage reads one game's rows from `<league>.pbp` /
+`team_box` / `player_box` and its schedule row (`season`, `format_regulation_periods`,
+`neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
+and calls this too, so a game renders identically from either source. Runs
+`score_win_prob`, `shot_coordinates`, `team_game_rates`,
+`player_game_rates`, `~sportsdataverse.nba.nba_game_splits.team_game_splits`,
+`~sportsdataverse.nba.nba_game_splits.player_game_splits` and
+`~sportsdataverse.nba.nba_game_expected.team_game_expected` on the game's own regulation.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game's plays in the basketball pbp schema, in play order (empty before tip-off). |
+| `team_box` | `DataFrame` |  | The game's team box rows (rates need exactly two). |
+| `player_box` | `DataFrame` |  | The game's player box rows. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default `game_regulation_periods` from the frame's `season`. Pass the schedule's `format_regulation_periods` through `game_regulation_periods` when you have it. |
+| `neutral_site` | `Optional[bool]` | `False` | Whether the game was at a neutral site (no home-court advantage in a lineless prior); `None`, NaN or `pd.NA` counts as false. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, the prior when there is no line (NBA / WNBA: `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`). |
+| `shot_cells` | `Optional[DataFrame]` | `None` | The league's shot counts as of the game date (`~sportsdataverse.nba.nba_game_expected.shot_cells`), for the expected points of `team_game_expected`; `None` leaves its expected columns null. |
+
+**Returns**
+
+`{"pbp", "team_game_rates", "player_game_rates", "team_game_splits", "player_game_splits", "team_game_expected", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the two split frames (counted from the plays so far; the team frame is empty before tip-off, the player frame then holds the boxed players with zero counts), the expected points by zone and situation (empty before tip-off), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `pbp` holds more than one game. |
+| `polars.exceptions.ColumnNotFoundError` | If a frame lacks a column the derivations need. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import game_page_tables, game_regulation_periods
+from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp, load_wbb_player_boxscore, load_wbb_team_boxscore
+gid = 293170052
+pbp = load_wbb_pbp([2010]).filter(pl.col("game_id") == gid)
+tb = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == gid)
+pb = load_wbb_player_boxscore([2010]).filter(pl.col("game_id") == gid)
+tables = game_page_tables(pbp, tb, pb, league="wbb", regulation_periods=game_regulation_periods("wbb", season=2010))
+
+# The win-probability chart
+
+tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime")
+```
+
+### game_regulation_periods {#game_regulation_periods}
+
+`game_regulation_periods(league: 'str', *, season: 'int | None' = None, format_regulation_periods: 'float | None' = None) -> 'int'`
+
+Regulation periods of one game: 2 (halves) or 4 (quarters).
+
+The game's own value wins: ESPN's summary `format.regulation.periods` on the live path, the
+schedule's `format_regulation_periods` in the warehouse. Without it (null, NaN, or anything
+other than 2 or 4) the season decides: the NBA always plays quarters, men's college basketball
+always halves, the WNBA halves before 2006 and women's college basketball halves before the
+2015-16 season (`season` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
+| `season` | `int \| None` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
+| `format_regulation_periods` | `float \| None` | `None` | The game's own regulation period count, if known. |
+
+**Returns**
+
+`2` or `4`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is a string other than the four. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_regulation_periods
+game_regulation_periods("wbb", season=2015)  # 2: halves before 2015-16
+game_regulation_periods("wnba", season=2024, format_regulation_periods=4.0)  # 4
+
+# A warehouse schedule row
+
+game_regulation_periods("mbb", season=2024, format_regulation_periods=2.0)  # 2
+```
+
+### get_constants {#get_constants}
+
+`get_constants(league_id: 'str') -> 'LeagueConstants'`
+
+Return the `LeagueConstants` for a `league_id`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` |  | stats.nba.com league id -- `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+
+**Returns**
+
+The league's `LeagueConstants`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not a known key of `LEAGUE_CONSTANTS`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_prediction_constants import get_constants
+get_constants("00").hfa
+```
+
+### get_shrinkage_k {#get_shrinkage_k}
+
+`get_shrinkage_k(league_id: 'str') -> 'float'`
+
+Shooter-talent shrinkage `k` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` |  | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+
+**Returns**
+
+The pseudo-attempt shrinkage constant. `"00"` / `"20"` are fitted split-half (`tools/fit_nba_shot_shrinkage_k.py`); `"10"` is a seeded placeholder, not a fit.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown `league_id`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
+get_shrinkage_k("00")
+```
+
+### home_prior {#home_prior}
+
+`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False, rated_home_prob: 'Optional[float]' = None) -> 'tuple[float, str]'`
+
+Pregame home win probability for the in-game model, and where it came from.
+
+`home_team_spread` is the signed expected home margin the basketball pbp frames carry
+(positive when the home side is favoured). With no line, every basketball pickcenter helper leaves
+it `None` (older releases carry an invented `+2.5`), so the value is only trusted when
+`game_spread_available` is true. A line
+already prices the venue. Without one the prior is `rated_home_prob` when given (the NBA / WNBA
+as-of team-ratings prior, `~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, which prices
+the venue itself), else home-court advantage alone, and at a neutral site (common in college
+tournaments) there is none: the prior is 0.5. NBA and WNBA use
+`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted `hfa`;
+MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
+`league="mens"` / `"womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
+| `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None`, NaN or `pd.NA` counts as false. |
+| `rated_home_prob` | `Optional[float]` | `None` | The game's rated pregame home win probability, used when there is no line; `None`, NaN or a value outside [0, 1] falls through to home-court advantage. |
+
+**Returns**
+
+`(probability, source)` with `source` `"spread"`, `"rated"`, `"neutral"` or `"hfa"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import home_prior
+home_prior(3.0, True)      # (0.58, 'spread')
+home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+home_prior(None, False, rated_home_prob=0.71)  # (0.71, 'rated')
+
+# A lineless college tournament game
+
+home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
+```
 
 ### in_game_features {#in_game_features}
 
@@ -364,6 +573,62 @@ import polars as pl
 from sportsdataverse.nba import nba_career_trajectory
 player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
 nba_career_trajectory(player_values)
+```
+
+### nba_current_impact {#nba_current_impact}
+
+`nba_current_impact(possessions: 'pl.DataFrame', priors: 'pl.DataFrame', as_of: 'dt.date | str | Sequence[dt.date | str]', *, params: 'CurrentImpactParams | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Current impact: each player's expected offense / defense impact per 100 as of a date.
+
+The box prior in force on the date plus the Kalman-filtered deviation from it (see the module
+docstring), from games dated strictly before the date only: possessions and priors dated on or after
+the latest `as_of` are dropped before the filter runs.
+
+Measured by `tools/fit_current_impact.py` on NBA regular seasons 2014-2026 (the SDs fitted on
+2007-2013), weekly dates, each scored on the possessions of the next 28 days: it beats the season-to-date
+rating (`~sportsdataverse.nba.nba_reml_rapm.nba_reml_rapm`, fixed penalty, on the season's games
+before the date at the BB-D38 in-season box prior) by 5.53 bp of MSE (season-cluster bootstrap SE 0.35),
+in all 13 seasons: 13.2 bp in a season's first four weeks, 3.3 bp from its thirteenth. Against the
+strongest season-to-date variant (the window prior, penalty tuned on 2007-2013) it is still 1.91 bp better
+(SE 0.20, 13 of 13), so the carried deviation adds beyond the prior. The window prior alone is 5.10 bp
+worse than the filter. The fitted team-change SD and drift barely move the ratings
+(without either the gate error changes by under 0.03 bp; without drift it is 0.03 bp lower).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup rows with `game_id`, `game_date`, `season`, `points`, `offense_team_id`, `defense_team_id`, `off_player_1..5`, `def_player_1..5`, from the first season the filter should learn from (regular season: the fit used `002` games). |
+| `priors` | `DataFrame` |  | `CURRENT_IMPACT_PRIOR_SCHEMA` rows, e.g. one `current_impact_prior` per week; a game uses the latest `prior_date` on or before its date. |
+| `as_of` | `date \| str \| Sequence[date \| str]` |  | One date or several (one pass of the filter serves all of them). |
+| `params` | `CurrentImpactParams \| None` | `None` | The shock and decay SDs (default the fitted constants). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`CURRENT_IMPACT_SCHEMA`, one row per date and player seen before it: `o_current_impact` / `d_current_impact` / `current_impact` (per 100, `d` positive = good defense, `current_impact = o + d`), the prior in force (`o_prior` / `d_prior`), the season-to-date possessions (`off_poss` / `def_poss`, 0 for a player who has not played this season) and the player's last game date. `season` is that of the last game before the date.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `as_of` | Date | The rating date: only games dated strictly before it are used. |
+| `season` | Int64 | Season (end year) of the last game before as_of. |
+| `o_current_impact` | Float64 | Expected offensive impact per 100 on as_of: o_prior plus the Kalman-filtered offensive deviation from it. |
+| `d_current_impact` | Float64 | Expected defensive impact per 100 on as_of (positive = good defense): d_prior plus the filtered defensive deviation. |
+| `current_impact` | Float64 | o_current_impact + d_current_impact. |
+| `o_prior` | Float64 | The offensive box prior in force on as_of (the latest prior_date on or before it), per 100. |
+| `d_prior` | Float64 | The defensive box prior in force on as_of, per 100 (positive = good defense). |
+| `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
+| `def_poss` | Int64 | Defensive possessions this season before as_of. |
+| `last_game_date` | Date | Date of the player's last game before as_of in the input. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_current_impact
+cur = nba_current_impact(possessions, priors, ["2025-01-15", "2025-03-01"])
+print(cur.filter(pl.col("as_of") == pl.date(2025, 3, 1)).sort("current_impact", descending=True).head())
 ```
 
 ### nba_darko {#nba_darko}
@@ -763,219 +1028,4 @@ d = nba_matchup_drapm("2023-24", matchups=matchups_df)
 # Pipeline next step
 
 d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
-```
-
-### nba_player_impact_context {#nba_player_impact_context}
-
-`nba_player_impact_context(impact: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `player_impact` table.
-
-Ranks are computed within `(season, season_type)` over the players whose `<m>_n` reaches
-the metric's gate (module docstring); a playoff run rarely reaches the regular-season gates,
-so most playoff ranks are null. A row's rank and percentile are also null when its metric is
-null or non-finite, when its `season` or `season_type` is null, when fewer than
-`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` players qualify in the
-group, or when every qualifying value in the group is equal. Nothing is dropped, and running
-it on its own output gives the same frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `impact` | `DataFrame` |  | A `player_impact` table: `season`, `season_type`, `off_poss`, `def_poss` and the 16 metrics of `IMPACT_RANKED`, one row per player, season and season type. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA, which picks the sample gates. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`impact` with `<m>_n` (Int64), then `<m>_rank` and `<m>_pct` (Float64) appended for every metric of `IMPACT_RANKED`, in that order.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | Unique player identifier. |
-| `player_name` | String | Player name. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `teams` | String | Nested list of member-team membership spans. |
-| `season` | Int64 | Season year. |
-| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `o_rapm` | Float64 | Offensive regularized adjusted plus-minus per 100 possessions from the single-season ridge fit over possession-level lineup indicators, at the fixed NBA penalty described under rapm; positive means the player raised his team's scoring rate while on offense. |
-| `d_rapm` | Float64 | Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so a positive value marks a defender who suppresses opponent scoring; fit at the fixed NBA penalty described under rapm. |
-| `rapm` | Float64 | Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. The ridge penalty is one fixed NBA value (2,683, sportsdataverse.nba.nba_rapm.RAPM_PENALTY) in every season and season type, so the scale compares across seasons (regular-season sd 1.53 to 1.99 per 100 over players with 400 possessions, 1997-2026; a shorter season, such as the 1999 lockout (1.53), shrinks harder, so part of a spread difference is sample size). Seasons published before November 2026 were fit at a per-season RidgeCV pick (1,931 or 5,179 in the regular season, up to 37,276 in the playoffs), and their spread jumps with it (sd 1.15 to 2.34): do not compare those values across seasons or with values fit at the fixed penalty. |
-| `off_poss` | Int64 | Number of possessions the player was on the floor on offense, the count of design-matrix rows carrying his offensive indicator and therefore the offensive-side sample size behind o_rapm. |
-| `def_poss` | Int64 | Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss almost exactly because substitutions rarely split an offense-defense pair. |
-| `o_adj_rapm` | Float64 | Offensive prior-informed RAPM per 100 possessions: the ridge fit shrunk toward the player's box-score (SPM) prior. In releases fit with sportsdataverse-py #1137 or later it is relative to an average player, up to any offset the SPM prior carries (possession-weighted league mean near 0: 2025-26 +0.32). A player with no prior (a rookie, or no previous-season SPM) is shrunk toward 0 instead. Releases fit before #1137, whatever their build date, fit no intercept, so the league's points per possession leaked into every coefficient: o_adj_rapm averaged about +12.03 and d_adj_rapm -10.84 (2025-26), a thinly-used player kept less of that offset, and only their sum, adj_rapm, read on a common scale. |
-| `d_adj_rapm` | Float64 | Defensive prior-informed RAPM per 100 possessions, positive for a defender who lowers opponent scoring. In releases fit with sportsdataverse-py #1137 or later it is relative to an average player, up to any offset the SPM prior carries (possession-weighted league mean near 0: 2025-26 +0.06). Releases fit before #1137, whatever their build date, averaged about -10.84 here (see o_adj_rapm). |
-| `adj_rapm` | Float64 | Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. Releases fit with sportsdataverse-py #1137 or later fit the ridge with an unpenalized intercept; releases fit before it (whatever their build date) fit none, which leaned this total toward heavy-minute players. Releases fit with #1150 or later also use one ridge penalty per league (NBA 3,728, WNBA 2,683) and the SPM prior doubled (nba_adj_rapm.ADJ_RAPM_PENALTY / ADJ_RAPM_PRIOR_SCALE); earlier ones took a per-season RidgeCV pick, whose spread collapsed in some seasons (WNBA 2004 sd 0.64 against plain RAPM's 1.47). |
-| `ospm` | Float64 | Offensive statistical plus-minus per 100 possessions: the player's per-100 box-score feature vector scored through ridge coefficients trained on that season's o_rapm target. |
-| `dspm` | Float64 | Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients trained on the d_rapm target. |
-| `spm` | Float64 | Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm. |
-| `min` | Float64 | Minutes played. |
-| `gp` | Int64 | Games played. |
-| `obpm` | Float64 | Offensive box plus-minus per 100 possessions for this season and season type only, team-adjusted on its own so a team's minute-weighted obpm is its offensive rating minus the league's, divided by 5 (a traded player counted with his first team; league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 put the whole team adjustment here (regular-season league minute-weighted mean about -2.9). |
-| `dbpm` | Float64 | Defensive box plus-minus per 100 possessions for this season and season type only: bpm minus obpm, so a team's minute-weighted dbpm is (the league's offensive rating minus its defensive rating) / 5, positive for a good defense (league minute-weighted mean near 0). Releases fit before sportsdataverse-py #1148 left it unadjusted (regular-season league minute-weighted mean about +2.9, mostly positive). |
-| `bpm` | Float64 | Box plus-minus (BPM 2.0) per 100 possessions for this season and season type only, not a career value: the box-score estimate of total impact. The team adjustment makes a team's minute-weighted bpm its net rating per 100 divided by 5 (the five %Min slots sum to the net rating; a traded player's minutes count with the first team he appears for in the logs). Releases fit before sportsdataverse-py #1148 targeted the full net rating, five times BPM 2.0's team mean. |
-| `war` | Float64 | Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin. |
-| `boban_filtered_skill` | Float64 | BOBAN Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel, i.e. his current-form rating after aging drift and possession-weighted observation noise. |
-| `boban_projected_rating` | Float64 | One-season-ahead BOBAN forecast, the filtered skill plus the empirical aging-curve drift at the player's last observed age; both season_type rows of a player-season carry the same value because the projection is not playoff-specific. |
-| `boban_projected_sd` | Float64 | Standard deviation of the one-season-ahead BOBAN forecast, the square root of the filtered state variance plus the Kalman process variance; it sits at roughly 10.19 for a player with only one season in the panel, whose diffuse prior variance was never updated. |
-| `darko_filtered_skill` | Float64 | Deprecated alias of boban_filtered_skill, kept for one release; use that column. |
-| `darko_projected_rating` | Float64 | Deprecated alias of boban_projected_rating, kept for one release; use that column. |
-| `darko_projected_sd` | Float64 | Deprecated alias of boban_projected_sd, kept for one release; use that column. |
-| `o_rapm_n` | Int64 | Possessions o_rapm is measured over: off_poss, his offensive possessions. o_rapm_rank and o_rapm_pct are set only when it reaches the league's gate (1,700 NBA, 610 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `d_rapm_n` | Int64 | Possessions d_rapm is measured over: def_poss, his defensive possessions. d_rapm_rank and d_rapm_pct are set only when it reaches the league's gate (1,600 NBA, 1,200 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `rapm_n` | Int64 | Possessions rapm is measured over: off_poss + def_poss, his possessions at both ends. rapm_rank and rapm_pct are set only when it reaches the league's gate (3,200 NBA, 1,600 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `o_adj_rapm_n` | Int64 | Possessions o_adj_rapm is measured over: off_poss, his offensive possessions. o_adj_rapm_rank and o_adj_rapm_pct are set only when it reaches the league's gate (1,700 NBA, 610 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `d_adj_rapm_n` | Int64 | Possessions d_adj_rapm is measured over: def_poss, his defensive possessions. d_adj_rapm_rank and d_adj_rapm_pct are set only when it reaches the league's gate (1,600 NBA, 1,200 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `adj_rapm_n` | Int64 | Possessions adj_rapm is measured over: off_poss + def_poss, his possessions at both ends. adj_rapm_rank and adj_rapm_pct are set only when it reaches the league's gate (3,200 NBA, 1,600 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `ospm_n` | Int64 | Possessions ospm is measured over: off_poss, his offensive possessions. ospm_rank and ospm_pct are set only when it reaches the league's gate (1,700 NBA, 610 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `dspm_n` | Int64 | Possessions dspm is measured over: def_poss, his defensive possessions. dspm_rank and dspm_pct are set only when it reaches the league's gate (1,600 NBA, 1,200 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `spm_n` | Int64 | Possessions spm is measured over: off_poss + def_poss, his possessions at both ends. spm_rank and spm_pct are set only when it reaches the league's gate (3,200 NBA, 1,600 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `obpm_n` | Int64 | Possessions obpm is measured over: off_poss, his offensive possessions. obpm_rank and obpm_pct are set only when it reaches the league's gate (1,700 NBA, 610 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `dbpm_n` | Int64 | Possessions dbpm is measured over: def_poss, his defensive possessions. dbpm_rank and dbpm_pct are set only when it reaches the league's gate (1,600 NBA, 1,200 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `bpm_n` | Int64 | Possessions bpm is measured over: off_poss + def_poss, his possessions at both ends. bpm_rank and bpm_pct are set only when it reaches the league's gate (3,200 NBA, 1,600 WNBA), the sample at which a player's on-court rating of the same side is half signal (sportsdataverse._common.rate_gates.ON_OFF_MIN_N); a regularized or box rating is less noisy, so the gate is conservative. |
-| `war_n` | Int64 | Possessions behind war: off_poss + def_poss. war is a count, not a rate, so its rank has no sample gate. |
-| `boban_filtered_skill_n` | Int64 | Possessions behind boban_filtered_skill: off_poss + def_poss, this season's possessions at both ends. The boban filtered skill is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_filtered_skill_rank and boban_filtered_skill_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
-| `boban_projected_rating_n` | Int64 | Possessions behind boban_projected_rating: off_poss + def_poss, this season's possessions at both ends. The boban next-season projection is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_projected_rating_rank and boban_projected_rating_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
-| `boban_projected_sd_n` | Int64 | Possessions behind boban_projected_sd: off_poss + def_poss, this season's possessions at both ends. The boban projection's standard deviation is a multi-season Kalman estimate with no single-side sample, so it takes the net on-court gate, the closest existing one: boban_projected_sd_rank and boban_projected_sd_pct are set only when this reaches the league's gate (3,200 NBA, 1,600 WNBA). Conservative, since the filter also carries earlier seasons. |
-| `o_rapm_rank` | Float64 | Rank of o_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when o_rapm_n is under the league's gate (1,700 NBA, 610 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `d_rapm_rank` | Float64 | Rank of d_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when d_rapm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `rapm_rank` | Float64 | Rank of rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when rapm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `o_adj_rapm_rank` | Float64 | Rank of o_adj_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when o_adj_rapm_n is under the league's gate (1,700 NBA, 610 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `d_adj_rapm_rank` | Float64 | Rank of d_adj_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when d_adj_rapm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `adj_rapm_rank` | Float64 | Rank of adj_rapm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when adj_rapm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `ospm_rank` | Float64 | Rank of ospm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when ospm_n is under the league's gate (1,700 NBA, 610 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `dspm_rank` | Float64 | Rank of dspm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when dspm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `spm_rank` | Float64 | Rank of spm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when spm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `obpm_rank` | Float64 | Rank of obpm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when obpm_n is under the league's gate (1,700 NBA, 610 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `dbpm_rank` | Float64 | Rank of dbpm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when dbpm_n is under the league's gate (1,600 NBA, 1,200 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `bpm_rank` | Float64 | Rank of bpm among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when bpm_n is under the league's gate (3,200 NBA, 1,600 WNBA), and null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. Regular-season gates: a playoff run rarely reaches one. |
-| `war_rank` | Float64 | Rank of war among the season and season type's ranked players, 1 = best (higher is better), ties averaged; ungated (every player with a finite war qualifies), null when its season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value in the group is equal. |
-| `boban_filtered_skill_rank` | Float64 | Rank of boban_filtered_skill among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when boban_filtered_skill_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
-| `boban_projected_rating_rank` | Float64 | Rank of boban_projected_rating among the season and season type's ranked players, 1 = best (higher is better), ties averaged; null when boban_projected_rating_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
-| `boban_projected_sd_rank` | Float64 | Rank of boban_projected_sd among the season and season type's ranked players, ASCENDING: 1 = the smallest sd, the most certain projection; ties averaged; null when boban_projected_sd_n is under the league's gate (3,200 NBA, 1,600 WNBA), when season or season_type is null, in a group of fewer than 10 ranked players, or when every ranked value is equal. |
-| `o_rapm_pct` | Float64 | Percentile of o_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `d_rapm_pct` | Float64 | Percentile of d_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `rapm_pct` | Float64 | Percentile of rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `o_adj_rapm_pct` | Float64 | Percentile of o_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `d_adj_rapm_pct` | Float64 | Percentile of d_adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `adj_rapm_pct` | Float64 | Percentile of adj_rapm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `ospm_pct` | Float64 | Percentile of ospm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `dspm_pct` | Float64 | Percentile of dspm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `spm_pct` | Float64 | Percentile of spm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `obpm_pct` | Float64 | Percentile of obpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `dbpm_pct` | Float64 | Percentile of dbpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `bpm_pct` | Float64 | Percentile of bpm_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `war_pct` | Float64 | Percentile of war_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `boban_filtered_skill_pct` | Float64 | Percentile of boban_filtered_skill_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `boban_projected_rating_pct` | Float64 | Percentile of boban_projected_rating_rank, 100 * (n + 1 - rank) / (n + 1) over the n ranked players of the season and season type; null where the rank is. |
-| `boban_projected_sd_pct` | Float64 | Percentile of boban_projected_sd_rank, 100 * (n + 1 - rank) / (n + 1): high means a more certain projection (a smaller sd), not a larger one; null where the rank is. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
-| `KeyError` | If a metric, `season`, `season_type`, `off_poss` or `def_poss` is missing. |
-
-**Example**
-
-```python
-from sportsdataverse.nba import load_nba_player_impact, nba_player_impact_context
-ranked = nba_player_impact_context(load_nba_player_impact(2026))
-ranked.sort("adj_rapm_rank").select("player_name", "adj_rapm", "adj_rapm_rank", "adj_rapm_pct").head()
-```
-
-### nba_player_impact_league_averages {#nba_player_impact_league_averages}
-
-`nba_player_impact_league_averages(impact: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-The league-average rows of a `player_impact` table, one block per season type.
-
-The football F1 rows of `~sportsdataverse._common.league_context.league_averages` over
-the players who pass each metric's sample gate, so `n` is that metric's qualified cohort:
-the players with a finite value and enough possessions. It is reported even where
-`nba_player_impact_context` leaves the ranks null (fewer than 10 qualifiers, or all
-equal). `category` is `player_impact_` plus the `season_type` lowercased with spaces as
-underscores: `player_impact_regular_season` and `player_impact_playoffs` for the releases'
-two season types. `qualifier_min` is null (the gates differ by metric).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `impact` | `DataFrame` |  | A `player_impact` table, as `nba_player_impact_context` takes. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA: the `level` label and the sample gates. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-One row per `(season, season type, metric)` in `~sportsdataverse._common.league_context.LEAGUE_AVERAGES_SCHEMA`; an empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season of the league-average row, as the END year the player_impact table stamps (2026 = 2025-26). |
-| `level` | String | Population the row describes: nba or wnba (the league_id passed). |
-| `entity` | String | Kind of row summarized: always player for the impact table. |
-| `category` | String | Table and season type the row summarizes: player_impact_regular_season or player_impact_playoffs. |
-| `metric` | String | Impact metric the row summarizes, one of the 13 ranked columns (o_rapm through war). |
-| `mean` | Float64 | Unweighted mean of the metric over the season type's ranked players, those whose <metric>_n reaches its sample gate. |
-| `median` | Float64 | Median of the metric over the same ranked players as mean. |
-| `sd` | Float64 | Sample standard deviation (ddof 1) of the metric over the same ranked players; null with one player. |
-| `n` | Int64 | Number of ranked players with a finite value: the n of the <metric>_pct formula, not the possession count <metric>_n. |
-| `qualifier_min` | Float64 | Always null here: each metric has its own possession gate rather than one table-wide threshold. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
-| `KeyError` | If a metric, `season`, `off_poss` or `def_poss` is missing. |
-
-**Example**
-
-```python
-from sportsdataverse.nba import load_nba_player_impact, nba_player_impact_league_averages
-nba_player_impact_league_averages(load_nba_player_impact(2026))
-```
-
-### nba_predict_games {#nba_predict_games}
-
-`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Vectorized pregame predictions for a schedule of games.
-
-Joins the ratings frame twice (home/away) and applies the closed-form
-`predict_margin` / `win_prob_from_margin` / `predict_total`
-math column-wise.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
-| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
-| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
-
-No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If a join-key dtype mismatches `ratings['team_id']`, or if `ratings` has duplicate `team_id` rows (e.g. multiple seasons passed at once). |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import nba_predict_games
-from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
-preds = nba_predict_games(games, nba_team_ratings(2024))
 ```

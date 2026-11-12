@@ -1,0 +1,37 @@
+schema: nba_current_impact
+kind: dataframe
+hand_authored: true
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: as_of
+  type: date
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: o_current_impact
+  type: double
+  description: ''
+- name: d_current_impact
+  type: double
+  description: ''
+- name: current_impact
+  type: double
+  description: ''
+- name: o_prior
+  type: double
+  description: ''
+- name: d_prior
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''
+- name: last_game_date
+  type: date
+  description: ''
