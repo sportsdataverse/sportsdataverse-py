@@ -187,7 +187,7 @@ class CurrentImpactFilter:
         self._last: dict[int, dt.date] = {}
         self._prior: dict[int, tuple[float, float]] = {}
         self._level = 1.0
-        self.pids = np.zeros(0, dtype=np.int64)
+        self.pids: np.ndarray = np.zeros(0, dtype=np.int64)
         self._P = self._L = 0
         self.mu = np.zeros(0)
         self._noise = CURRENT_IMPACT_NOISE_VAR_FALLBACK
@@ -201,9 +201,9 @@ class CurrentImpactFilter:
         self._P, self._L = n, 2 * n
         self.m = np.zeros(2 * n + 1)
         self.cov = np.zeros((2 * n + 1, 2 * n + 1))
-        self.seen = np.zeros(n, dtype=bool)
-        self.off_poss = np.zeros(n, dtype=np.int64)
-        self.def_poss = np.zeros(n, dtype=np.int64)
+        self.seen: np.ndarray = np.zeros(n, dtype=bool)
+        self.off_poss: np.ndarray = np.zeros(n, dtype=np.int64)
+        self.def_poss: np.ndarray = np.zeros(n, dtype=np.int64)
         for i, p in enumerate(self.pids.tolist()):
             if p in self._carry:
                 mo, md, vo, vd = self._carry[p]
@@ -268,9 +268,9 @@ class CurrentImpactFilter:
             self._last[p] = day
         np.add.at(self.off_poss, oi.ravel(), 1)
         np.add.at(self.def_poss, di.ravel(), 1)
-        rows = np.repeat(np.arange(points.size), 5)
+        rows: np.ndarray = np.repeat(np.arange(points.size), 5)
         cols = np.unique(np.concatenate([oi.ravel(), n + di.ravel()]))
-        J = np.append(cols, self._L)
+        J: np.ndarray = np.append(cols, self._L)
         H = np.zeros((points.size, J.size))
         np.add.at(H, (rows, np.searchsorted(cols, oi.ravel())), 1.0)  # add, as the RAPM design does for a
         np.add.at(H, (rows, np.searchsorted(cols, n + di.ravel())), 1.0)  # (rare) repeated id in a lineup
