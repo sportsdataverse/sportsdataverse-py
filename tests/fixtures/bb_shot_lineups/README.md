@@ -23,7 +23,7 @@ filtered (whole games) and columns only dropped.
 
 ## Coverage on the full releases (measured 2026-11-12)
 
-`eligible` means both teams carry an id and the game has lineups. It's the gate's denominator (see `shot_lineup_coverage`).
+`eligible` means both teams carry an id and at least one of the game's shots matched. That match stands in for "the game has lineups". It's the gate's denominator (see `shot_lineup_coverage`).
 
 | Season | Shots | Matched | Eligible full five a side | Shooter in his five |
 |---|---:|---:|---:|---:|

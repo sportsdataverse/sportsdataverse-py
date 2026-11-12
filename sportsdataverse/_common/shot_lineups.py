@@ -202,8 +202,9 @@ def shot_lineup_coverage(df: pl.DataFrame) -> pl.DataFrame:
     """Per season: shots, the share matched, and the share with a full five a side.
 
     The gate's denominator is the ``eligible`` shots: both teams carry an id (college: both sides
-    D-I) and the game has lineups at all (at least one of its shots matched; a pro game missing
-    from the possessions release, or a college season whose chart has no clock, has none).
+    D-I) and at least one of the game's shots matched, the stand-in for "the game has lineups" (a
+    pro game missing from the possessions release, or a college season whose chart has no clock,
+    has no matched shot). A matched shot can still lack an id, so it is not always full.
     ``shooter_in_five_share`` is the share of eligible matched shots whose shooter is one of his
     side's five.
 
