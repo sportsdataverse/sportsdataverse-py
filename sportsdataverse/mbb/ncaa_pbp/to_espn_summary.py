@@ -49,7 +49,7 @@ import math
 import os
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from typing import Any, Optional
+from typing import Any
 
 #: ESPN college ``type.text`` -> ``type.id``, read off the BB-D16 corpus' ESPN captures (MBB and WBB share them).
 ESPN_TYPE_IDS: dict[str, str] = {
@@ -118,7 +118,7 @@ def _end_text(period: int, regulation: int, word: str) -> str:
     return f"End of {_ordinal(period - regulation)} OT"
 
 
-def _clock(value: Any) -> Optional[str]:
+def _clock(value: Any) -> str | None:
     """stats.ncaa.org ``MM:SS`` -> ESPN's ``M:SS`` (``09:31`` -> ``9:31``, ``00:45`` -> ``0:45``)."""
     text = str(value or "")
     if ":" not in text:
@@ -130,7 +130,7 @@ def _clock(value: Any) -> Optional[str]:
         return None
 
 
-def _seconds_left(clock: Any) -> Optional[int]:
+def _seconds_left(clock: Any) -> int | None:
     text = _clock(clock)
     if text is None:
         return None
@@ -186,7 +186,7 @@ class _Ids:
         self.players = players
         self.unmapped: set[str] = set()
 
-    def player(self, ncaa_id: Any) -> Optional[str]:
+    def player(self, ncaa_id: Any) -> str | None:
         if ncaa_id in (None, ""):
             return None
         key = str(ncaa_id)
@@ -263,7 +263,7 @@ def _total(row: Mapping[str, Any]) -> int:
     return int(row.get("home_score") or 0) + int(row.get("away_score") or 0)
 
 
-def _side(row: Mapping[str, Any]) -> Optional[str]:
+def _side(row: Mapping[str, Any]) -> str | None:
     team = row.get("event_team_espn_team_id")
     if team is None:
         return None
@@ -274,7 +274,7 @@ def _side(row: Mapping[str, Any]) -> Optional[str]:
     return None
 
 
-def _pkey(pid: Any, name: Any) -> Optional[str]:
+def _pkey(pid: Any, name: Any) -> str | None:
     """A player's key: the stats.ncaa.org id, else ``name:<NAME>`` for a player the season's roster lacks (a
     walk-on the pipeline could not identify still has a box line); None for the team itself."""
     if pid not in (None, ""):
@@ -287,45 +287,44 @@ def _is_team_actor(row: Mapping[str, Any]) -> bool:
     return _pkey(row.get("player_1_id"), row.get("player_1")) is None
 
 
+#: ESPN's wording for the kinds whose text is one template (``{name}`` the player, ``{team}`` the side).
+_TEXT = {
+    "Dead Ball Rebound": "{team} Deadball Team Rebound.",
+    "Technical Foul": "Technical Foul on {name}.",
+    "PersonalFoul": "Foul on {name}.",
+    "Lost Ball Turnover": "{name} turnover",
+    "Steal": "{name} Steal.",
+    "Block Shot": "{name} Block.",
+    "ShortTimeOut": "{team} Timeout",
+    "RegularTimeOut": "{team} Timeout",
+    "Coach's Challenge (Stands)": "{team} Coach's Challenge (Stands)",
+    "Coach's Challenge (Overturned)": "{team} Coach's Challenge (Overturned)",
+}
+
+
 def _text(row: Mapping[str, Any], kind: str, team_name: str) -> str:
-    """ESPN-style wording for one row (presentation only)."""
+    """ESPN-style wording for one row (presentation only; KNOWN_LOSSY carries ``text``)."""
     name = row.get("player_1_clean_name") or team_name
     etype = row["event_type"]
+    verb = "makes" if row.get("event_result") == "made" else "misses"
     if etype in _FIELD_GOALS:
-        verb = "makes" if row.get("event_result") == "made" else "misses"
         words = "three point jumper" if row.get("shot_value") == 3 else _SHOT_WORDS.get(_subtype(row), "shot")
-        assist = (
-            f" ({row['player_2_clean_name']} assists)" if verb == "makes" and row.get("player_2_clean_name") else ""
-        )
-        return f"{name} {verb} {words}{assist}"
+        helper = row.get("player_2_clean_name") if verb == "makes" else None
+        return f"{name} {verb} {words}" + (f" ({helper} assists)" if helper else "")
     if etype == "Free Throw":
-        verb = "makes" if row.get("event_result") == "made" else "misses"
         n, of = row.get("ft_number"), row.get("ft_attempts")
         return f"{name} {verb} free throw" + (f" {n} of {of}" if n and of else "")
     if kind in ("Offensive Rebound", "Defensive Rebound"):
         return f"{team_name} {kind.split()[0]} Team Rebound." if _is_team_actor(row) else f"{name} {kind}."
-    if kind == "Dead Ball Rebound":
-        return f"{team_name} Deadball Team Rebound."
-    if kind == "Technical Foul":
-        return f"Technical Foul on {name}."
-    if kind == "PersonalFoul":
-        return f"Foul on {name}."
-    if kind == "Lost Ball Turnover":
-        return f"{name} turnover"
-    if kind in ("Steal", "Block Shot"):
-        return f"{name} {'Steal' if kind == 'Steal' else 'Block'}."
     if kind == "Substitution":
         return f"{name} subbing {'in' if etype == 'Enters Game' else 'out'} for {team_name}"
-    if kind in ("ShortTimeOut", "RegularTimeOut"):
-        return f"{team_name} Timeout"
-    if kind.startswith("Coach's Challenge"):
-        return f"{team_name} {kind}"
     if kind == "Jumpball":
         return f"Jump Ball {'won' if etype.startswith('won') else 'lost'} by {team_name}"
-    return str(row.get("event_description") or "")
+    template = _TEXT.get(kind)
+    return template.format(name=name, team=team_name) if template else str(row.get("event_description") or "")
 
 
-def _espn_kind(row: Mapping[str, Any]) -> Optional[str]:
+def _espn_kind(row: Mapping[str, Any]) -> str | None:
     """ESPN ``type.text`` for one stats.ncaa.org row, or None for a row ESPN does not carry."""
     etype = row.get("event_type") or ""
     if etype in _DROPPED:
@@ -373,7 +372,7 @@ def _shot_index(shots: Sequence[Mapping[str, Any]]) -> dict[tuple, list[Mapping[
     return index
 
 
-def _claim_shot(index: dict[tuple, list], row: Mapping[str, Any], seconds_left: Optional[int]) -> Optional[Mapping]:
+def _claim_shot(index: dict[tuple, list], row: Mapping[str, Any], seconds_left: int | None) -> Mapping | None:
     """The ``ncaa_shots`` row of one field-goal play: same key, the same shooter first, else the first left."""
     key = (
         int(row.get("period") or 0),
@@ -420,62 +419,57 @@ _PLAYER_KEYS = [
 _COUNTS = ("pts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "orb", "drb", "ast", "tov", "stl", "blk", "pf")
 
 
+def _row_counts(row: Mapping[str, Any], pid: str | None) -> tuple[dict[str, int], dict[str, int]]:
+    """One row's box counts: ``(the actor's, the side's on top of them)``."""
+    etype, made = row.get("event_type") or "", row.get("event_result") == "made"
+    if etype in _FIELD_GOALS:
+        three = row.get("shot_value") == 3
+        return {
+            "fga": 1,
+            "fgm": int(made),
+            "tpa": int(three),
+            "tpm": int(three and made),
+            "pts": (2 + three) * made,
+        }, {}
+    if etype == "Free Throw":
+        return {"fta": 1, "ftm": int(made), "pts": int(made)}, {}
+    if etype in ("Offensive Rebound", "Defensive Rebound"):
+        key = "orb" if etype.startswith("Off") else "drb"
+        # a team rebound counts in the side's offensive / defensive totals (ESPN's team box)
+        return ({key: 1}, {}) if pid else ({}, {key: 1, "team_reb": 1})
+    if etype == "Turnover":
+        return ({"tov": 1}, {}) if pid else ({}, {"tov": 1, "team_tov": 1})
+    if etype == "Commits Foul":
+        # a bench / administrative technical charged to the team is no player's foul (ESPN's team fouls)
+        return ({"pf": 1} if pid else {}), ({"tech": 1} if row.get("foul_tech_class") else {})
+    return {"Steal": {"stl": 1}, "Blocked Shot": {"blk": 1}}.get(etype, {}), {}
+
+
 def _tally(rows: Sequence[Mapping[str, Any]]) -> tuple[dict[str, dict[str, int]], dict[str, dict[str, int]]]:
-    """Box counts from the plays: ``(per NCAA player id, per side)``; the side totals include team rows."""
+    """Box counts from the plays: ``(per player key, per side)``; the side totals include team rows."""
     players: dict[str, dict[str, int]] = defaultdict(lambda: dict.fromkeys(_COUNTS, 0))
     sides: dict[str, dict[str, int]] = {
         s: dict.fromkeys((*_COUNTS, "team_reb", "team_tov", "tech", "to_pts"), 0) for s in ("home", "away")
     }
     for r in rows:
-        side, etype = _side(r), r.get("event_type") or ""
+        side = _side(r)
         if side is None:
             continue
         pid = _pkey(r.get("player_1_id"), r.get("player_1"))
-        bump: dict[str, int] = {}
-        made = r.get("event_result") == "made"
-        if etype in _FIELD_GOALS:
-            three = r.get("shot_value") == 3
-            bump = {
-                "fga": 1,
-                "fgm": int(made),
-                "tpa": int(three),
-                "tpm": int(three and made),
-                "pts": (3 if three else 2) * made,
-            }
-            assister = _pkey(r.get("player_2_id"), r.get("player_2"))
-            if made and assister:
-                players[assister]["ast"] += 1
-                sides[side]["ast"] += 1
-        elif etype == "Free Throw":
-            bump = {"fta": 1, "ftm": int(made), "pts": int(made)}
-        elif etype in ("Offensive Rebound", "Defensive Rebound"):
-            key = "orb" if etype.startswith("Off") else "drb"
-            if pid:
-                bump = {key: 1}
-            else:
-                # a team rebound counts in the side's offensive / defensive totals (ESPN's team box)
-                sides[side]["team_reb"] += 1
-                sides[side][key] += 1
-        elif etype == "Turnover":
-            bump = {"tov": 1}
-            if not pid:
-                sides[side]["team_tov"] += 1
-        elif etype == "Steal":
-            bump = {"stl": 1}
-        elif etype == "Blocked Shot":
-            bump = {"blk": 1}
-        elif etype == "Commits Foul":
-            # a bench / administrative technical charged to the team is no player's foul (ESPN's team fouls)
-            bump = {"pf": 1} if pid else {}
-            if r.get("foul_tech_class"):
-                sides[side]["tech"] += 1
-        if made and r.get("is_from_turnover") and etype in (*_FIELD_GOALS, "Free Throw"):
-            # points scored off the other side's turnovers (ESPN's turnoverPoints)
-            sides[side]["to_pts"] += bump.get("pts", 0)
-        for k, v in bump.items():
+        own, extra = _row_counts(r, pid)
+        for k, v in own.items():
             sides[side][k] += v
             if pid:
                 players[pid][k] += v
+        for k, v in extra.items():
+            sides[side][k] += v
+        assister = _pkey(r.get("player_2_id"), r.get("player_2"))
+        if own.get("fgm") and assister:
+            players[assister]["ast"] += 1
+            sides[side]["ast"] += 1
+        if own.get("pts") and r.get("is_from_turnover"):
+            # points scored off the other side's turnovers (ESPN's turnoverPoints)
+            sides[side]["to_pts"] += own["pts"]
     return dict(players), sides
 
 
@@ -553,6 +547,47 @@ def _roster(rows: Sequence[Mapping[str, Any]], player_box: Sequence[Mapping[str,
     return out
 
 
+def _team_objects(row: Mapping[str, Any], teams: Mapping[str, Mapping[str, Any]]) -> dict[str, dict[str, Any]]:
+    """``side -> ESPN team object`` from the ESPN ids the pipeline stamps; raises on a team either lacks."""
+    out = {}
+    for side in ("home", "away"):
+        tid = row.get(f"{side}_espn_team_id")
+        if not tid:
+            raise ValueError(f"the {side} team has no ESPN id")
+        t = teams.get(str(tid))
+        if not t:
+            raise ValueError(f"ESPN team {tid} is not in the team crosswalk")
+        out[side] = {
+            "id": str(tid),
+            "location": t.get("espn_location"),
+            "name": t.get("espn_mascot"),
+            "abbreviation": t.get("espn_abbreviation"),
+            "displayName": t.get("espn_display_name"),
+            "shortDisplayName": t.get("espn_location"),
+        }
+    return out
+
+
+def _box_players(roster: Mapping[str, Mapping[str, Any]], counts: Mapping, ids: _Ids, team_obj: dict) -> list[dict]:
+    """ESPN's ``boxscore.players``: away then home, one athlete per player the roster found."""
+    out = []
+    for side in ("away", "home"):
+        athletes = [
+            {
+                "active": False,
+                "athlete": {"id": ids.player(pid), "displayName": p["name"], "shortName": p["name"]},
+                "starter": p["starter"],
+                "didNotPlay": False,
+                "ejected": False,
+                "stats": _player_stats(counts.get(pid, dict.fromkeys(_COUNTS, 0)), p["minutes"]),
+            }
+            for pid, p in roster.items()
+            if p["side"] == side
+        ]
+        out.append({"team": team_obj[side], "statistics": [{"keys": list(_PLAYER_KEYS), "athletes": athletes}]})
+    return out
+
+
 def _ncaa_to_espn_summary(
     bundle: Mapping[str, Any],
     *,
@@ -576,29 +611,13 @@ def _ncaa_to_espn_summary(
         and the adapter's degradations (unmapped players, unlocated shots).
 
     Raises:
-        ValueError: No plays, a team without an ESPN id, a team missing from ``teams``, or a final score in
-            the plays that the plays' own box does not reproduce.
+        ValueError: No plays, a team without an ESPN id, or a team missing from ``teams``.
     """
     pbp = [r for r in bundle.get("pbp") or [] if isinstance(r, Mapping)]
     if not pbp:
         raise ValueError("the contest has no play-by-play rows")
-    regulation, _, word = _REGULATION[league]
-    home_id, away_id = pbp[0].get("home_espn_team_id"), pbp[0].get("away_espn_team_id")
-    if not home_id or not away_id:
-        raise ValueError(f"a team has no ESPN id (home {home_id!r}, away {away_id!r})")
-    team_obj = {}
-    for side, tid in (("home", str(home_id)), ("away", str(away_id))):
-        t = teams.get(tid)
-        if not t:
-            raise ValueError(f"ESPN team {tid} is not in the team crosswalk")
-        team_obj[side] = {
-            "id": tid,
-            "location": t.get("espn_location"),
-            "name": t.get("espn_mascot"),
-            "abbreviation": t.get("espn_abbreviation"),
-            "displayName": t.get("espn_display_name"),
-            "shortDisplayName": t.get("espn_location"),
-        }
+    regulation = _REGULATION[league][0]
+    team_obj = _team_objects(pbp[0], teams)
     xwalk = {
         str(x["ncaa_player_id"]): x["espn_athlete_id"]
         for x in bundle.get("player_crosswalk") or []
@@ -612,32 +631,11 @@ def _ncaa_to_espn_summary(
     counts, sides = _tally(rows)
     final = (int(rows[-1].get("home_score") or 0), int(rows[-1].get("away_score") or 0))
     if (sides["home"]["pts"], sides["away"]["pts"]) != final:
-        notes.append(
-            f"the plays end at {final} but their box adds up to {(sides['home']['pts'], sides['away']['pts'])}"
-        )
-
-    roster = _roster(rows, list(bundle.get("player_box") or []))
-    box_players = []
-    for side in ("away", "home"):
-        athletes = []
-        for pid, p in roster.items():
-            if p["side"] != side:
-                continue
-            athletes.append(
-                {
-                    "active": False,
-                    "athlete": {"id": ids.player(pid), "displayName": p["name"], "shortName": p["name"]},
-                    "starter": p["starter"],
-                    "didNotPlay": False,
-                    "ejected": False,
-                    "stats": _player_stats(counts.get(pid, dict.fromkeys(_COUNTS, 0)), p["minutes"]),
-                }
-            )
-        box_players.append({"team": team_obj[side], "statistics": [{"keys": list(_PLAYER_KEYS), "athletes": athletes}]})
-
+        notes.append(f"the plays end at {final} but add up to {(sides['home']['pts'], sides['away']['pts'])}")
+    box_players = _box_players(_roster(rows, list(bundle.get("player_box") or [])), counts, ids, team_obj)
     if ids.unmapped:
         notes.append(
-            f"{len(ids.unmapped)} stats.ncaa.org players not in ncaa_player_crosswalk (null athlete ids): {sorted(ids.unmapped)}"
+            f"{len(ids.unmapped)} players not in ncaa_player_crosswalk (null athlete ids): {sorted(ids.unmapped)}"
         )
     if unlocated:
         notes.append(f"{unlocated} field goals ncaa_shots does not locate (ESPN's missing-coordinate sentinel)")
@@ -651,7 +649,7 @@ def _ncaa_to_espn_summary(
             "players": box_players,
         },
         "format": {"regulation": {"periods": regulation}},
-        "header": _header(rows, eid, league, team_obj, final, regulation),
+        "header": _header(rows, eid, team_obj, final),
         "plays": plays,
     }
     for key in ("gameInfo", "predictor", "article", "standings", "season"):
@@ -661,9 +659,7 @@ def _ncaa_to_espn_summary(
     return summary, notes
 
 
-def _header(
-    rows: Sequence[Mapping[str, Any]], eid: str, league: str, team_obj: dict, final: tuple, regulation: int
-) -> dict:
+def _header(rows: Sequence[Mapping[str, Any]], eid: str, team_obj: dict, final: tuple) -> dict:
     """ESPN's ``header``: season, date, status and both competitors (home first, as ESPN orders them)."""
     by_period: dict[int, tuple[int, int]] = {}
     for r in rows:
@@ -687,7 +683,7 @@ def _header(
         }
         for s in ("home", "away")
     ]
-    month, day, year = (str(rows[0].get("game_date") or "//").split("/") + ["", "", ""])[:3]
+    month, day, year = [*str(rows[0].get("game_date") or "//").split("/"), "", "", ""][:3]
     return {
         "id": eid,
         # stats.ncaa.org does not say whether a game is postseason (KNOWN_LOSSY: season_type)
@@ -707,6 +703,32 @@ def _header(
             }
         ],
     }
+
+
+def _shot_fields(row: dict, r: Mapping[str, Any], ids: _Ids, shots: dict[tuple, list]) -> int:
+    """Participants, and the shot fields of a field goal or free throw; 1 when a field goal goes unlocated."""
+    etype, made = r.get("event_type"), r.get("event_result") == "made"
+    fg, ft = etype in _FIELD_GOALS, etype == "Free Throw"
+    actor, assister = _pkey(r.get("player_1_id"), r.get("player_1")), _pkey(r.get("player_2_id"), r.get("player_2"))
+    parts = [ids.player(actor)] if actor else []
+    if fg and made and assister:
+        parts.append(ids.player(assister))
+    if parts:
+        row["participants"] = [{"athlete": {"id": p}} for p in parts]
+    if not (fg or ft):
+        return 0
+    value = int(r.get("shot_value") or (1 if ft else 2))
+    # ESPN's college scoreValue is the attempt's value, made or missed
+    row.update(scoringPlay=made, scoreValue=value, shootingPlay=True, pointsAttempted=value)
+    if ft:
+        return 0
+    shot = _claim_shot(shots, r, _seconds_left(r.get("clock")))
+    if shot is None or shot.get("shot_x") is None or shot.get("shot_y") is None:
+        row["coordinate"] = dict(_NO_COORDINATE)
+        return 1
+    # feet from the rim, ESPN's frame (module docstring)
+    row["coordinate"] = {"x": 25 + float(shot["shot_x"]), "y": float(shot["shot_y"])}
+    return 0
 
 
 def _plays(
@@ -745,33 +767,10 @@ def _plays(
             side = _side(r)
             team_name = team_obj[side]["location"] if side else ""
             clock = _clock(r.get("clock")) or "0:00"
-            made = r.get("event_result") == "made"
-            fg = r.get("event_type") in _FIELD_GOALS
-            ft = r.get("event_type") == "Free Throw"
             row = emit(kind, _text(r, kind, team_name), period, clock, home, away)
             if side:
                 row["team"] = {"id": team_obj[side]["id"]}
-            if fg or ft:
-                value = int(r.get("shot_value") or (1 if ft else 2))
-                # ESPN's college scoreValue is the attempt's value, made or missed
-                row.update(scoringPlay=made, scoreValue=value, shootingPlay=True, pointsAttempted=value)
-            actor, assister = (
-                _pkey(r.get("player_1_id"), r.get("player_1")),
-                _pkey(r.get("player_2_id"), r.get("player_2")),
-            )
-            parts = [ids.player(actor)] if actor else []
-            if fg and made and assister:
-                parts.append(ids.player(assister))
-            if parts:
-                row["participants"] = [{"athlete": {"id": p}} for p in parts]
-            if fg:
-                shot = _claim_shot(shots, r, _seconds_left(r.get("clock")))
-                if shot is not None and shot.get("shot_x") is not None and shot.get("shot_y") is not None:
-                    # feet from the rim, ESPN's frame (module docstring)
-                    row["coordinate"] = {"x": 25 + float(shot["shot_x"]), "y": float(shot["shot_y"])}
-                else:
-                    row["coordinate"] = dict(_NO_COORDINATE)
-                    unlocated += 1
+            unlocated += _shot_fields(row, r, ids, shots)
         last_of_period = i + 1 == len(rows) or int(rows[i + 1].get("period") or 0) != period
         if last_of_period:
             emit("End Period", _end_text(period, regulation, word), period, "0:00", home, away)

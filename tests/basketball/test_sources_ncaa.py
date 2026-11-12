@@ -15,7 +15,7 @@ import fnmatch
 import gzip
 import json
 from collections.abc import Callable
-from functools import lru_cache
+from functools import lru_cache, cache
 from pathlib import Path
 from typing import Any
 
@@ -63,7 +63,7 @@ def _payloads(i: int) -> dict[str, Any]:
     }
 
 
-@lru_cache(maxsize=None)
+@cache
 def _legs(i: int) -> dict[str, tuple[dict, dict]]:
     lg, eid, _ = CASES[i]
     pay = _payloads(i)
@@ -74,7 +74,7 @@ def _legs(i: int) -> dict[str, tuple[dict, dict]]:
     return out
 
 
-@lru_cache(maxsize=None)
+@cache
 def _report(i: int) -> parity.ParityReport:
     legs = _legs(i)
     return parity._compare_frames(CASES[i][0], CASES[i][1], "ncaa", legs["espn"], legs["ncaa"])

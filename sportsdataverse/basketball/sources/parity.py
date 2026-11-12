@@ -32,7 +32,7 @@ from __future__ import annotations
 import math
 from dataclasses import asdict, dataclass, field
 from difflib import SequenceMatcher
-from typing import Any, Optional
+from typing import Any
 
 import polars as pl
 
@@ -51,7 +51,7 @@ _FT_OR_TECH = "(?i)free ?throw|technical"
 #: observed worst case plus the margin stated beside it, at most 0.01 on a share or correlation and 0.05 ft on
 #: a distance. Never loosened; tightened when the corpus improves. ``test_sources_parity.py`` fails if a game
 #: breaches one, or if a bound drifts further than that margin from the corpus worst case.
-LIVE_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
+LIVE_GATES: dict[str, tuple[float | None, float | None]] = {
     # exact on all 27 games: every period's closing score and the final
     "period_score_mismatches": (None, 0),
     # exact on all 27 games (after the half-up percentage fix; 42.5% is 43 on ESPN, round() gave 42)
@@ -91,7 +91,7 @@ LIVE_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
 #: stays out of :data:`~sportsdataverse.basketball.sources.dispatch.SOURCE_ORDER` until the four hard gates are
 #: exact on every game (period scores and team box 0, player minutes / points and free-throw order 1.0), which
 #: ``test_sources_ncaa.py`` asserts they are not yet.
-NCAA_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
+NCAA_GATES: dict[str, tuple[float | None, float | None]] = {
     # exact on all 16 games: the score columns, put back on the right sides where stats.ncaa.org lists away first
     "period_score_mismatches": (None, 0),
     # worst 4 cells: MBB 401920769 (a basket missing from the plays, an extra team turnover) and WBB 401926100
@@ -126,14 +126,14 @@ NCAA_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
     "wp_corr_equal_prior": (0.996, None),
 }
 #: The gates an alternate must meet exactly, on every corpus game, before it joins ``SOURCE_ORDER``.
-HARD_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
+HARD_GATES: dict[str, tuple[float | None, float | None]] = {
     "period_score_mismatches": (None, 0),
     "team_box_mismatches": (None, 0),
     "player_minutes_agreement": (1.0, None),
     "player_points_agreement": (1.0, None),
     "ft_tech_order_agreement": (1.0, None),
 }
-GATES: dict[tuple[str, str], dict[str, tuple[Optional[float], Optional[float]]]] = {
+GATES: dict[tuple[str, str], dict[str, tuple[float | None, float | None]]] = {
     ("nba", "live"): LIVE_GATES,
     ("wnba", "live"): LIVE_GATES,
     ("mbb", "ncaa"): NCAA_GATES,
@@ -208,7 +208,7 @@ class ParityReport:
         out["team_box_mismatches"] = float(len(self.team_box_mismatches))
         return out
 
-    def check(self, gates: Optional[dict[str, tuple[Optional[float], Optional[float]]]] = None) -> list[str]:
+    def check(self, gates: dict[str, tuple[float | None, float | None]] | None = None) -> list[str]:
         """Every gate this game breaches: a value outside its ``(lower, upper)``, or not a finite number.
 
         Args:
@@ -410,12 +410,9 @@ def _compare_frames(
     if shots.height:
         err = shots.select(
             (
-                (
-                    (pl.col("x_legacy") - pl.col("x_legacy_src")) ** 2
-                    + (pl.col("y_legacy") - pl.col("y_legacy_src")) ** 2
-                ).sqrt()
-                / 10.0
-            )
+                (pl.col("x_legacy") - pl.col("x_legacy_src")) ** 2 + (pl.col("y_legacy") - pl.col("y_legacy_src")) ** 2
+            ).sqrt()
+            / 10.0
         ).to_series()
         rep.shot_error_median_ft = float(err.median())
         rep.shot_error_p95_ft = float(err.quantile(0.95, interpolation="linear"))
