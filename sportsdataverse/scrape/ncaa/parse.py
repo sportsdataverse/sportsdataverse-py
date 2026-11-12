@@ -560,6 +560,22 @@ def _reenrich(root: Path, league: str, bundle_path: Path, rosters_mtime: float) 
     return False
 
 
+def _reenrich_stale(root: Path, league: str, bundle_paths: list[str]) -> int:
+    """:func:`_reenrich` each already-parsed contest; returns how many were rewritten."""
+    rosters_mtime: dict[str, float] = {}
+    reenriched = 0
+    for path_str in bundle_paths:
+        path = Path(path_str)
+        season_dir = path.parent.name
+        if season_dir not in rosters_mtime:
+            rosters_mtime[season_dir] = _rosters_mtime(root, league, _ending_year(season_dir))
+        try:
+            reenriched += _reenrich(root, league, path, rosters_mtime[season_dir])
+        except Exception:  # noqa: BLE001 -- a stale contest stays stale; it must not fail the parse
+            logger.warning("ncaa_parse CLI: failed to re-enrich %s", path_str, exc_info=True)
+    return reenriched
+
+
 def _main(default_league: str, default_root: str) -> None:
     import argparse
 
@@ -647,24 +663,9 @@ def _main(default_league: str, default_root: str) -> None:
             counts["failed"] += 1
 
     # Self-heal the contests the skip above never revisits (see _reenrich); --force re-parsed them all.
-    pending_set = set(pending)
-    stale = [] if args.force else [str(p) for p in bundle_paths if p not in pending_set]
-    rosters_mtime: dict[str, float] = {}
-    reenriched = 0
-    for path_str in shard(stale, i, n):
-        p = Path(path_str)
-        season_dir = p.parent.name
-        if season_dir not in rosters_mtime:
-            rosters_mtime[season_dir] = _rosters_mtime(root, args.league, _ending_year(season_dir))
-        try:
-            reenriched += _reenrich(root, args.league, p, rosters_mtime[season_dir])
-        except Exception:  # noqa: BLE001 -- a stale contest stays stale; it must not fail the parse
-            logger.warning("ncaa_parse CLI: failed to re-enrich %s", path_str, exc_info=True)
-
-    print(
-        f"parsed={counts['parsed']} failed={counts['failed']} with_parse_errors={counts['with_parse_errors']} "
-        f"reenriched={reenriched}"
-    )
+    stale = [] if args.force else sorted(set(map(str, bundle_paths)) - set(map(str, pending)))
+    counts["reenriched"] = _reenrich_stale(root, args.league, shard(stale, i, n))
+    print(" ".join(f"{k}={v}" for k, v in counts.items()))
     if counts["failed"] or counts["with_parse_errors"]:
         # Every game was still written (a crashed family carries its parse_errors
         # marker); the exit code is what lets a producer job notice.
