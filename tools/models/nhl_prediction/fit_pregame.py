@@ -1,4 +1,4 @@
-"""Fit HFA / margin_sd / total_scale for LEAGUE_CONSTANTS["nhl"] by walking the
+"""Fit HFA / margin_sd / total_scale / avg_total_goals for LEAGUE_CONSTANTS["nhl"] by walking the
 2023 backtest with strict as-of-date ratings (Task 2.3).
 
 Run once (downloads the full-season pbp + schedule; no live-API gate needed):
@@ -23,9 +23,9 @@ from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent, team_game
 SEASON = 2023
 
 
-def build_game_rates() -> tuple[pl.DataFrame, pl.DataFrame]:
-    pbp = load_nhl_pbp_full([SEASON])
-    schedule = load_nhl_schedules([SEASON])
+def build_game_rates(season: int = SEASON) -> tuple[pl.DataFrame, pl.DataFrame]:
+    pbp = load_nhl_pbp_full([season])
+    schedule = load_nhl_schedules([season])
     sched = schedule.filter(pl.col("game_type") == "R").select(
         pl.col("game_id"),
         pl.col("season"),
@@ -134,6 +134,13 @@ def main() -> None:
         f"margin_sd (Brier-minimizing, exp_margin's own scale) = {margin_sd:.4f}  <- write this into LEAGUE_CONSTANTS"
     )
     print(f"total_scale (OLS slope)         = {slope:.4f}  <- write this into LEAGUE_CONSTANTS")
+    # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
+    # avg_total_goals, so that pair is the OLS intercept: the mean realized total belongs in
+    # avg_total_goals, and the mean raw total should sit on 2 * avg_xgf.
+    print(f"avg_total_goals (mean realized) = {float(y.mean()):.4f}  <- write this into LEAGUE_CONSTANTS")
+    print(
+        f"mean raw total                  = {float(x.mean()):.4f}  (should be ~2 * avg_xgf = {2 * const.avg_xgf:.2f})"
+    )
     print(f"naive baseline Brier (p=0.5)    = {brier_score(df['home_win'].to_numpy(), np.full(df.height, 0.5)):.4f}")
     print(f"fitted-model Brier              = {brier_for_sd(margin_sd):.4f}")
 

@@ -86,7 +86,8 @@ def test_documented_empty_oracles_have_expected_schema(oracle_corpus):
 #   pregame WP calibration max |mean_pred-mean_actual|,
 #       adequately-sampled buckets (n>=30)                  = 0.0882
 #   favorite-side agreement vs ESPN puck line, n=12         = 10/12 (0.833)
-#   MAE(exp_total, closing total), n=12 matched games       = 1.3591
+#   MAE(exp_total, closing total), n=12 matched games       = 0.4873
+#       (1.3591 before the 2026-11-11 total-centring fix; see TOTAL_BIAS_FLOOR)
 # Floors below are these values rounded to the safe side; never loosen without
 # a fresh observed run + a comment explaining why (binding gate rule).
 #
@@ -105,7 +106,12 @@ PREGAME_WP_CALIBRATION_FLOOR = 0.10  # observed 0.0882 on n>=30 buckets
 MIN_CALIBRATION_BUCKET_N = 30
 FAVORITE_AGREEMENT_FLOOR = 0.80  # observed 10/12 = 0.833
 MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must fail
-TOTAL_MAE_FLOOR = 1.45
+TOTAL_MAE_FLOOR = 0.55
+# Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
+# avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11). The rest is the
+# 6.05 avg_total_goals seed against 2022-23's 6.47 goals a game: left unfitted because
+# 2023-24..2025-26 average 6.26, no closer to 6.47 than to 6.05.
+TOTAL_BIAS_FLOOR = 0.50
 
 
 @pytest.fixture(scope="module")
@@ -143,6 +149,7 @@ def pregame_backtest(oracle_corpus) -> pl.DataFrame:
                     "home_win_prob": win_prob_from_margin(exp_margin, league="nhl"),
                     "exp_total": predict_total(h[0], h[1], a[0], a[1], False, league="nhl"),
                     "home_win": 1 if row["home_goals"] > row["away_goals"] else 0,
+                    "actual_total": row["home_goals"] + row["away_goals"],
                 }
             )
     return pl.DataFrame(records)
@@ -172,6 +179,13 @@ def test_pregame_win_prob_calibration(pregame_backtest):
     assert dev.max() <= PREGAME_WP_CALIBRATION_FLOOR, (
         f"pregame WP max per-bucket deviation {dev.max():.4f} above floor {PREGAME_WP_CALIBRATION_FLOOR}"
     )
+
+
+def test_pregame_total_is_unbiased_against_realized_goals(pregame_backtest):
+    # The 12-game closing-total MAE gate below could not see a level shift: it was set
+    # while every total ran ~1.8 goals low. Check the mean against all 1174 real finals.
+    bias = float((pregame_backtest["exp_total"] - pregame_backtest["actual_total"]).mean())
+    assert abs(bias) <= TOTAL_BIAS_FLOOR, f"mean exp_total - actual_total {bias:+.4f} beyond {TOTAL_BIAS_FLOOR}"
 
 
 def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest, oracle_corpus):

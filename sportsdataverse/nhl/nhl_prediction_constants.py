@@ -129,7 +129,10 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #   total_scale = 1.9105, the OLS slope of realized total goals on exp_total
     #     (shrinkage compresses exp_total's spread well below the real variance);
     #     applied in nhl_market.predict_total as
-    #     avg_total_goals + total_scale * (raw_total - avg_total_goals).
+    #     avg_total_goals + total_scale * (raw_total - 2 * avg_xgf).
+    #     The raw total is even-strength xG, so its mean is 2 * avg_xgf (5.099 observed);
+    #     centring on avg_total_goals until 2026-11-11 put every total ~2 goals low
+    #     (holdout bias -2.07 / -1.88 / -2.13 for 2024-2026, now -0.25 / -0.07 / -0.31).
     # avg_xgf/avg_total_goals remain published-reference seeds (not walked/fit).
     #
     # prop_kappa/pos_priors fitted 2026-07-08 by tools/models/nhl_prediction/fit_props.py

@@ -38,14 +38,14 @@ import json
 import math
 from functools import lru_cache
 from importlib.resources import files as _resource_files
-from typing import Literal, Optional, Union, overload
+from typing import Literal, Optional, TypeVar, Union, overload
 
 import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.stats import norm
 
-from sportsdataverse.nhl.nhl_prediction_constants import get_constants
+from sportsdataverse.nhl.nhl_prediction_constants import LeagueConstants, get_constants
 
 _PREDICT_SCHEMA: dict[str, pl.PolarsDataType] = {
     # Int64, the dtype the NHL / ESPN schedule parsers give game_id since task 5.2: an empty slate stacks with a
@@ -148,6 +148,18 @@ def win_prob_from_margin(exp_margin: float, *, league: str = "nhl") -> float:
     return float(norm.cdf(exp_margin / margin_sd))
 
 
+_Total = TypeVar("_Total", float, pl.Expr)
+
+
+def _scale_total(raw_total: _Total, const: LeagueConstants) -> _Total:
+    """Stretch an even-strength raw total around its league mean onto the all-goals scale.
+
+    Shared by :func:`predict_total` (floats) and :func:`nhl_predict_games` (polars
+    expressions) so the two cannot drift apart.
+    """
+    return const.avg_total_goals + const.total_scale * (raw_total - 2.0 * const.avg_xgf)
+
+
 def predict_total(
     adj_xgf_home: float,
     adj_xga_home: float,
@@ -163,8 +175,11 @@ def predict_total(
     **shrunk** ratings, which systematically compress the total's spread
     below the real-world variance (confirmed at fitting time: the OLS slope
     of realized total on the raw sum is ~1.91, not 1.0). ``total_scale``
-    corrects for that: the raw total's deviation from the league-average
-    total is stretched by ``total_scale`` before adding back the league mean.
+    corrects for that: the raw total's deviation from its own league mean is
+    stretched by ``total_scale`` before adding back the league-average total.
+    The ratings are even-strength xG, so that mean is ``2 * avg_xgf``, not
+    ``avg_total_goals``: the gap between the two is the power-play,
+    short-handed and empty-net scoring the ratings leave out.
 
     Args:
         adj_xgf_home: home team's opponent-adjusted xG-for rate.
@@ -186,7 +201,7 @@ def predict_total(
     eg_home, eg_away = expected_goals(adj_xgf_home, adj_xga_home, adj_xgf_away, adj_xga_away, neutral, league=league)
     const = get_constants(league)
     raw_total = eg_home + eg_away
-    return const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
+    return _scale_total(raw_total, const)
 
 
 @overload
@@ -282,7 +297,7 @@ def nhl_predict_games(
     exp_margin = eg_home - eg_away
     raw_total = eg_home + eg_away
     # total_scale variance-corrects the shrinkage-compressed raw sum -- see predict_total.
-    exp_total = const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
+    exp_total = _scale_total(raw_total, const)
 
     out = joined.with_columns(exp_margin.alias("exp_margin"), exp_total.alias("exp_total"))
     # Vectorized win prob: win_prob_from_margin is just norm.cdf(m/sigma), which

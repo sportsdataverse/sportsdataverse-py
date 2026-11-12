@@ -499,8 +499,11 @@ The raw `eg_home + eg_away` sum is built from opponent-adjusted,
 **shrunk** ratings, which systematically compress the total's spread
 below the real-world variance (confirmed at fitting time: the OLS slope
 of realized total on the raw sum is ~1.91, not 1.0). `total_scale`
-corrects for that: the raw total's deviation from the league-average
-total is stretched by `total_scale` before adding back the league mean.
+corrects for that: the raw total's deviation from its own league mean is
+stretched by `total_scale` before adding back the league-average total.
+The ratings are even-strength xG, so that mean is `2 * avg_xgf`, not
+`avg_total_goals`: the gap between the two is the power-play,
+short-handed and empty-net scoring the ratings leave out.
 
 **Parameters**
 
