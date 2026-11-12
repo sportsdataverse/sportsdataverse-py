@@ -205,3 +205,34 @@ def test_window_prior_rejects_mismatched_game_ids() -> None:
         current_impact_prior(lp, lt, pos.with_columns(pl.col("game_id").cast(pl.Int64)), bio, _d38_model(), d)
     with pytest.raises(ValueError, match="no possession matches"):
         current_impact_prior(lp, lt, pos.with_columns(pl.lit("x").alias("game_id")), bio, _d38_model(), d)
+
+
+def test_degenerate_previous_season_noise_falls_back(poss, priors, monkeypatch) -> None:
+    """A previous season of constant points (zero variance) hands the next season the fallback, not 0."""
+    seen: list[float | None] = []
+    orig = CurrentImpactFilter.start_season
+
+    def spy(self, pids, noise_var=None):
+        seen.append(noise_var)
+        return orig(self, pids, noise_var)
+
+    monkeypatch.setattr(CurrentImpactFilter, "start_season", spy)
+    flat = poss.with_columns(pl.when(pl.col("season") == 2014).then(1.0).otherwise(pl.col("points")).alias("points"))
+    out = nba_current_impact(flat, priors, dt.date(2014, 11, 7))
+    assert seen == [None, None] and out["current_impact"].is_finite().all()
+
+
+def test_window_prior_drops_a_window_game_without_possessions() -> None:
+    """Box lines and on-court counts come from the same games: a log-only game changes nothing."""
+    lp = pl.read_parquet(_D38 / "nba_player_logs_2024_slice.parquet")
+    lt = pl.read_parquet(_D38 / "nba_team_logs_2024_slice.parquet")
+    pos = pl.read_parquet(_D38 / "nba_possessions_2024_slice.parquet")
+    bio = pl.read_parquet(_D38 / "nba_bio_2023_2024.parquet").filter(pl.col("season") == 2024)
+    d = dt.date.fromisoformat(lp["game_date"].max())
+    model = _d38_model()
+    base = current_impact_prior(lp, lt, pos, bio, model, d).sort("player_id")
+    g0 = pos["game_id"].unique().sort()[0]
+    part = current_impact_prior(lp, lt, pos.filter(pl.col("game_id") != g0), bio, model, d).sort("player_id")
+    by_hand = current_impact_prior(lp.filter(pl.col("game_id") != g0), lt.filter(pl.col("game_id") != g0), pos.filter(pl.col("game_id") != g0), bio, model, d).sort("player_id")  # fmt: skip
+    assert not part.equals(base)
+    assert part["player_id"].equals(by_hand["player_id"]) and (part["o_prior"] - by_hand["o_prior"]).abs().max() < 1e-9

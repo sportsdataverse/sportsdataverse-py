@@ -261,11 +261,33 @@ def _tuned_penalty(data: _Data, kind: str) -> dict:
     return {"penalty": min(mse, key=mse.get), "mse_by_penalty": {str(k): v for k, v in mse.items()}}
 
 
+#: Which filter SDs each filter method runs at, as overrides of the fitted ones.
+_FILTER_METHODS = {
+    "current": {}, "current_no_drift": {"drift_sd": 0.0}, "current_no_team": {"team_sd": 0.0},
+    "current_no_season": {"season_sd": 0.0},
+}  # fmt: skip
+
+
+def fingerprints(out: Path) -> dict[str, str]:
+    """What each scored method depends on: its filter SDs (from ``fit.json``) or its tuned penalty.
+
+    ``gate.parquet`` stores it per row; ``gate`` re-scores a method whose stored fingerprint differs, and
+    ``report`` refuses rows that do not match, so a refit can never be reported against stale scores.
+    """
+    best = json.loads((out / "fit.json").read_text())["params"]
+    f_b = out / "baseline_fit.json"
+    tuned = json.loads(f_b.read_text()) if f_b.exists() else {}
+    fp = {m: json.dumps({**best, **o}, sort_keys=True) for m, o in _FILTER_METHODS.items()}
+    fp |= {"window_prior": "", "season_to_date": "", "season_to_date_window_prior": ""}
+    for m, kind in (("season_to_date_tuned", "season"), ("season_to_date_window_prior_tuned", "window")):
+        fp[m] = f"penalty={tuned[kind]['penalty']}" if kind in tuned else "untuned"
+    return fp
+
+
 def gate(out: Path) -> None:
-    """Score every method missing from ``gate.parquet`` (so a new comparator is added without re-running the rest)."""
+    """Score every method missing from ``gate.parquet`` or stored under another fingerprint."""
     f_g, f_b = out / "gate.parquet", out / "baseline_fit.json"
     done = pl.read_parquet(f_g) if f_g.exists() else None
-    have = set() if done is None else set(done["method"].unique())
     best = CurrentImpactParams(**json.loads((out / "fit.json").read_text())["params"])
     data = _Data(out, SEASONS)
     scored = range(START + 1, max(SEASONS) + 1)
@@ -277,27 +299,28 @@ def gate(out: Path) -> None:
             f_b.write_text(json.dumps(tuned, indent=1))
         return _season_to_date(data, kind, scored, tuned[kind]["penalty"])
 
-    methods = {
-        "current": lambda: _filter_scores(data, best, scored),
-        "current_no_drift": lambda: _filter_scores(data, CurrentImpactParams(**{**best.__dict__, "drift_sd": 0.0}), scored),
-        "current_no_team": lambda: _filter_scores(data, CurrentImpactParams(**{**best.__dict__, "team_sd": 0.0}), scored),
-        "current_no_season": lambda: _filter_scores(data, CurrentImpactParams(**{**best.__dict__, "season_sd": 0.0}), scored),
+    methods = {m: (lambda o=o: _filter_scores(data, CurrentImpactParams(**{**best.__dict__, **o}), scored))
+               for m, o in _FILTER_METHODS.items()}  # fmt: skip
+    methods |= {
         "window_prior": lambda: _prior_only(data, scored),
         "season_to_date": lambda: _season_to_date(data, "season", scored),
         "season_to_date_window_prior": lambda: _season_to_date(data, "window", scored),
         "season_to_date_tuned": lambda: tuned_run("season"),
         "season_to_date_window_prior_tuned": lambda: tuned_run("window"),
-    }  # fmt: skip
-    rows = []
+    }
+    keep = []
     for m, run in methods.items():
-        if m in have:
+        fp = fingerprints(out)[m]
+        if done is not None and done.filter((pl.col("method") == m) & (pl.col("fingerprint") == fp)).height:
+            keep.append(done.filter(pl.col("method") == m))
             continue
         t0 = time.time()
-        rows += [{"season": s, "as_of": d, "method": m, "sse": e, "n": n} for s, d, e, n in run()]
+        rows = run()
+        fp = fingerprints(out)[m]  # a tuned baseline's penalty is known only after its run
+        keep.append(pl.DataFrame([{"season": s, "as_of": d, "method": m, "sse": e, "n": n, "fingerprint": fp}
+                                  for s, d, e, n in rows]))  # fmt: skip
         print(f"gate {m} {time.time() - t0:.0f}s", flush=True)
-    if rows:
-        new = pl.DataFrame(rows)
-        (new if done is None else pl.concat([done, new])).write_parquet(f_g)
+    pl.concat(keep).write_parquet(f_g)
 
 
 def _per_season(g: pl.DataFrame, base: str, m: str) -> pl.DataFrame:
@@ -373,6 +396,10 @@ def gate_result(g: pl.DataFrame) -> dict:
 
 def report(out: Path) -> None:
     g = pl.read_parquet(out / "gate.parquet")
+    fp = fingerprints(out)
+    stale = g.filter(pl.col("fingerprint") != pl.col("method").replace_strict(fp, default=None))["method"].unique()
+    if stale.len():
+        raise SystemExit(f"gate.parquet rows of {stale.to_list()} were scored under other parameters: re-run gate")
     res: dict = {"fit": {k: v for k, v in json.loads((out / "fit.json").read_text()).items() if k != "trace"}}
     if (out / "baseline_fit.json").exists():
         res["baseline_fit"] = json.loads((out / "baseline_fit.json").read_text())

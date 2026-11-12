@@ -137,7 +137,8 @@ def current_impact_prior(
 
     Raises:
         ValueError: If ``game_id`` has a different dtype in the logs and the possessions, or the window has
-            games but none of their possessions (a silent empty prior otherwise).
+            games but none of their possessions (a silent empty prior otherwise). A window game without
+            possessions is left out of the box lines too, so both come from the same games.
 
     Example:
         Opening night's prior is last season's box lines::
@@ -158,8 +159,9 @@ def current_impact_prior(
         raise ValueError(f"{len(gids)} games in the window before {day} but no possession matches their game_id")
     if poss.height == 0:
         out = pl.DataFrame({c: pl.Series([], dtype=t) for c, t in CURRENT_IMPACT_PRIOR_SCHEMA.items()})
-    else:
-        feats = box_prior_features(player_logs, team_logs, poss, bio, game_ids=gids)
+    else:  # box lines and on-court counts from the same games: drop a window game with no possessions
+        matched = poss["game_id"].unique().to_list()
+        feats = box_prior_features(player_logs, team_logs, poss, bio, game_ids=matched)
         out = apply_box_prior(feats, model).select(
             "player_id", pl.lit(day, pl.Date).alias("prior_date"), "o_prior", "d_prior"
         )
@@ -389,7 +391,8 @@ def run_current_impact(
             if s != season:
                 in_s = seasons == s
                 filt.start_season(np.unique(np.concatenate([off[in_s].ravel(), de[in_s].ravel()])), prev_noise)
-                prev_noise = float(pts[in_s].var(ddof=1))
+                v = float(pts[in_s].var(ddof=1)) if in_s.sum() > 1 else float("nan")
+                prev_noise = v if np.isfinite(v) and v > 0 else None  # None: the fallback
                 season, prior_in_force, last_day = s, None, day
             filt.drift((day - last_day).days)
             last_day = day
@@ -413,8 +416,9 @@ def nba_current_impact(
     """Current impact: each player's expected offense / defense impact per 100 as of a date.
 
     The box prior in force on the date plus the Kalman-filtered deviation from it (see the module
-    docstring), from games dated strictly before the date only: possessions and priors dated on or after
-    the latest ``as_of`` are dropped before the filter runs.
+    docstring), from games dated strictly before the date only: possessions dated on or after the latest
+    ``as_of`` are dropped before the filter runs, and so are priors dated after it (a prior dated on a date
+    is built from games before it and is in force on it).
 
     Measured by ``tools/fit_current_impact.py`` on NBA regular seasons 2014-2026 (the SDs fitted on
     2007-2013), weekly dates, each scored on the possessions of the next 28 days: it beats the season-to-date

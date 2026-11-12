@@ -152,3 +152,16 @@ def test_eval_dates_weekly_from_opening_night() -> None:
     d = fit.eval_dates(pl.Series([dt.date(2014, 10, 28), dt.date(2015, 4, 15)]))
     assert d[0] == dt.date(2014, 10, 28) and all((b - a).days == 7 for a, b in itertools.pairwise(d))
     assert d[-1] <= dt.date(2015, 4, 15) < d[-1] + dt.timedelta(days=7)
+
+
+def test_gate_rows_carry_the_fit_they_were_scored_with(gate, tmp_path) -> None:
+    """Every gate row's fingerprint matches fit.json / baseline_fit.json; a refit makes report refuse them."""
+    fp = fit.fingerprints(_FX)
+    assert gate.filter(pl.col("fingerprint") != pl.col("method").replace_strict(fp)).height == 0
+    for name in ("gate.parquet", "fit.json", "baseline_fit.json"):
+        (tmp_path / name).write_bytes((_FX / name).read_bytes())
+    f = json.loads((tmp_path / "fit.json").read_text())
+    f["params"]["season_sd"] *= 2
+    (tmp_path / "fit.json").write_text(json.dumps(f))
+    with pytest.raises(SystemExit, match="other parameters"):
+        fit.report(tmp_path)

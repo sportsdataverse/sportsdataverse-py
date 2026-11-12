@@ -974,7 +974,7 @@ nothing from the date itself or later. The logs and possessions may span two sea
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `game_id` has a different dtype in the logs and the possessions, or the window has games but none of their possessions (a silent empty prior otherwise). |
+| `ValueError` | If `game_id` has a different dtype in the logs and the possessions, or the window has games but none of their possessions (a silent empty prior otherwise). A window game without possessions is left out of the box lines too, so both come from the same games. |
 
 **Example**
 

@@ -582,8 +582,9 @@ nba_career_trajectory(player_values)
 Current impact: each player's expected offense / defense impact per 100 as of a date.
 
 The box prior in force on the date plus the Kalman-filtered deviation from it (see the module
-docstring), from games dated strictly before the date only: possessions and priors dated on or after
-the latest `as_of` are dropped before the filter runs.
+docstring), from games dated strictly before the date only: possessions dated on or after the latest
+`as_of` are dropped before the filter runs, and so are priors dated after it (a prior dated on a date
+is built from games before it and is in force on it).
 
 Measured by `tools/fit_current_impact.py` on NBA regular seasons 2014-2026 (the SDs fitted on
 2007-2013), weekly dates, each scored on the possessions of the next 28 days: it beats the season-to-date
