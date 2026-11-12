@@ -14,7 +14,10 @@ cross-source parity gates (BB-D15, :mod:`~sportsdataverse.basketball.sources.par
 cdn.nba.com / cdn.wnba.com live adapter (BB-D13, ``source="live"``,
 :mod:`sportsdataverse.nba.live_pbp.to_espn_summary`) passed them on 27 games and follows ESPN for
 NBA and WNBA, so it is selectable there and is also the failover when ESPN cannot serve a game
-(``source="espn"`` falls through to it). MBB and WBB list ESPN alone.
+(``source="espn"`` falls through to it). MBB and WBB list ESPN alone: the stats.ncaa.org adapter (BB-D16,
+``source="ncaa"``, :mod:`sportsdataverse.mbb.ncaa_pbp.to_espn_summary`) is registered and measured against
+its gates, but its player minutes and two games' team boxes are not ESPN's yet
+(:data:`~sportsdataverse.basketball.sources.parity.HARD_GATES`), so it is not selectable.
 """
 
 from __future__ import annotations
@@ -104,6 +107,8 @@ _ADAPTERS: dict[tuple[str, str], Adapter] = {}
 _ADAPTER_MODULES: dict[tuple[str, str], str] = {
     ("nba", "live"): "sportsdataverse.nba.live_pbp.to_espn_summary",
     ("wnba", "live"): "sportsdataverse.nba.live_pbp.to_espn_summary",
+    ("mbb", "ncaa"): "sportsdataverse.mbb.ncaa_pbp.to_espn_summary",
+    ("wbb", "ncaa"): "sportsdataverse.mbb.ncaa_pbp.to_espn_summary",
 }
 
 #: Why an adapter module failed to import, so a broken adapter falls through with its real cause

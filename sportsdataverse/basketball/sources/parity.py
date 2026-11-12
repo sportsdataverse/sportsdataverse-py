@@ -19,6 +19,9 @@ selectable in Game on Paper, only once every game of a real captured corpus pass
   and with the prior equalised (the alternate re-scored with ESPN's line and neutral-site flag, through
   :func:`~sportsdataverse.nba.nba_game_page.score_win_prob`).
 
+A source with its own play ids (:data:`OWN_PLAY_IDS`: stats.ncaa.org, BB-D16) has its plays paired with ESPN's by
+:func:`_align_play_ids` first, so every play-level metric compares the same plays.
+
 Gates are **derived from observed values and never lowered** (the football harness's rule,
 :mod:`sportsdataverse.football.sources.parity`): :data:`GATES` records each bound with the corpus worst
 case it came from, :meth:`ParityReport.check` names every breach.
@@ -40,7 +43,8 @@ from sportsdataverse.nba.nba_game_page import score_win_prob
 #: ``*rebounds`` / ``*assists`` / ``*turnovers`` column both sides carry).
 _TEAM_BOX_EXTRA = ("team_score", "steals", "blocks", "fouls", "technical_fouls", "turnover_points")
 _TEAM_BOX_SUFFIXES = ("_made", "_attempted", "_pct", "rebounds", "assists", "turnovers")
-_FT_OR_TECH = "(?i)free throw|technical"
+#: ESPN's NBA / WNBA "Free Throw - 1 of 2" and its college "MadeFreeThrow" (no space), and every technical.
+_FT_OR_TECH = "(?i)free ?throw|technical"
 
 #: ``metric -> (lower, upper)``; None is unbounded. Derived 2026-11-03 from the BB-D15 corpus (27 real games:
 #: 18 NBA 2025-26, 9 WNBA 2026; provenance ``tests/basketball/fixtures/parity/README.md``): each bound is the
@@ -81,9 +85,58 @@ LIVE_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
     # ESPN's line and neutral site given to both: worst 0.999705 (NBA 401809837); margin 0.000205
     "wp_corr_equal_prior": (0.9995, None),
 }
+#: stats.ncaa.org (BB-D16), derived 2026-11-12 from its 16-game corpus (8 MBB + 8 WBB 2026-27 finals; provenance
+#: ``tests/basketball/fixtures/ncaa_parity/README.md``) by the same rule: the observed worst case plus the stated
+#: margin, never loosened. These pin the adapter against regression; they are NOT the bar for selection. "ncaa"
+#: stays out of :data:`~sportsdataverse.basketball.sources.dispatch.SOURCE_ORDER` until the four hard gates are
+#: exact on every game (period scores and team box 0, player minutes / points and free-throw order 1.0), which
+#: ``test_sources_ncaa.py`` asserts they are not yet.
+NCAA_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
+    # exact on all 16 games: the score columns, put back on the right sides where stats.ncaa.org lists away first
+    "period_score_mismatches": (None, 0),
+    # worst 4 cells: MBB 401920769 (a basket missing from the plays, an extra team turnover) and WBB 401926100
+    # (four free throws missing); 14 of 16 games are exact
+    "team_box_mismatches": (None, 4),
+    # worst 0.9524 (MBB 401917515: a player the season's roster lacks, so no crosswalk row); margin 0.0024
+    "player_paired_share": (0.95, None),
+    # worst 0.3333 (WBB 401906979): the pipeline's stint minutes, not the official box's; margin 0.0033
+    "player_minutes_agreement": (0.33, None),
+    # exact on all 16 games
+    "player_points_agreement": (1.0, None),
+    # worst 0.9783 (MBB 401909514: rows ESPN carries and stats.ncaa.org does not); margin 0.0033. Upper: worst 0.998; margin 0.007
+    "play_count_ratio": (0.975, 1.005),
+    # worst 0.9160 (MBB 401917515: the roster-less player's rows carry no athlete id); margin 0.006
+    "play_id_share": (0.91, None),
+    # worst 0.8806 (MBB 401917515): one second's rows in another order; margin 0.0006
+    "score_row_agreement": (0.88, None),
+    # worst 0.9918 (MBB 401920769); margin 0.0018
+    "clock_row_agreement": (0.99, None),
+    # worst 0.7308 (MBB 401917515): one second's rows in another order; margin 0.0008
+    "ft_tech_order_agreement": (0.73, None),
+    # worst 0.9145 (MBB 401917515: ten ESPN-located shots with no ncaa_shots match); margin 0.0045
+    "shot_located_share": (0.91, None),
+    # worst median 0.5815 ft and p95 0.8735 ft (WBB 401918712 / 401919679): ESPN rounds to whole feet;
+    # margin 0.0185 / 0.0265 ft
+    "shot_error_median_ft": (None, 0.6),
+    "shot_error_p95_ft": (None, 0.9),
+    # each source's own prior (no line on stats.ncaa.org): worst 0.9409 (MBB 401909514); margin 0.0009
+    "wp_corr": (0.94, None),
+    # ESPN's line and neutral site given to both: worst 0.9966 (MBB 401917515); margin 0.0006
+    "wp_corr_equal_prior": (0.996, None),
+}
+#: The gates an alternate must meet exactly, on every corpus game, before it joins ``SOURCE_ORDER``.
+HARD_GATES: dict[str, tuple[Optional[float], Optional[float]]] = {
+    "period_score_mismatches": (None, 0),
+    "team_box_mismatches": (None, 0),
+    "player_minutes_agreement": (1.0, None),
+    "player_points_agreement": (1.0, None),
+    "ft_tech_order_agreement": (1.0, None),
+}
 GATES: dict[tuple[str, str], dict[str, tuple[Optional[float], Optional[float]]]] = {
     ("nba", "live"): LIVE_GATES,
     ("wnba", "live"): LIVE_GATES,
+    ("mbb", "ncaa"): NCAA_GATES,
+    ("wbb", "ncaa"): NCAA_GATES,
 }
 
 
@@ -96,7 +149,7 @@ class ParityReport:
 
         | field | type | description |
         |---|---|---|
-        | league | str | ``"nba"`` or ``"wnba"`` |
+        | league | str | ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` |
         | espn_id | int | the ESPN event id |
         | source | str | the alternate source compared against ESPN |
         | n_plays_espn | int | rows of ESPN's game-page ``pbp`` |
@@ -176,9 +229,11 @@ class ParityReport:
                 fails.append(f"{name} is {got} (not measured)")
             elif (lo is not None and got < lo) or (hi is not None and got > hi):
                 fails.append(f"{name} {got:.4f} outside [{lo}, {hi}]")
-        if self.period_score_mismatches and "period_score_mismatches" in gates:
+        # the cells behind a breached count (a count within its bound, as NCAA_GATES allows, is no breach)
+        breached = {f.split()[0] for f in fails}
+        if self.period_score_mismatches and "period_score_mismatches" in breached:
             fails.append(f"periods: {self.period_score_mismatches}")
-        if self.team_box_mismatches and "team_box_mismatches" in gates:
+        if self.team_box_mismatches and "team_box_mismatches" in breached:
             fails.append(f"team box: {self.team_box_mismatches[:5]}")
         return fails
 
@@ -256,13 +311,55 @@ def _equal_prior(espn_frames: dict, source_frames: dict, league: str) -> pl.Data
     )
 
 
+#: Sources whose play ids are their own, not ESPN's (stats.ncaa.org has no event number): their plays are paired
+#: with ESPN's by :func:`_align_play_ids` before any play-level metric is measured.
+OWN_PLAY_IDS = frozenset({"ncaa"})
+
+#: What two feeds' plays must share to align: period, team, ESPN type and first athlete. Score is left out, so
+#: ``score_row_agreement`` still measures it; the clock only enters the second pass of :func:`_align_play_ids`.
+_ALIGN_KEY = ("period_number", "team_id", "type_text", "athlete_id_1")
+
+
+def _align_play_ids(espn_pbp: pl.DataFrame, source_pbp: pl.DataFrame) -> pl.DataFrame:
+    """The source's plays with each one that aligns to an ESPN play renamed to that play's ``id``.
+
+    Two passes. First a longest-matching-block alignment (:class:`difflib.SequenceMatcher`) of the two feeds'
+    play sequences on :data:`_ALIGN_KEY`, which respects order. Then each play still unpaired is paired with
+    the first unpaired ESPN play of the same key **at the same clock**: a feed that logs one game second's rows
+    in another order (stats.ncaa.org) still pairs them, and those pairs agree on the clock by construction. A
+    play left unaligned keeps its own id, which never collides with an ESPN id.
+    """
+
+    def keys(frame: pl.DataFrame) -> list[tuple]:
+        return frame.select(pl.col(c).cast(pl.Utf8) for c in _ALIGN_KEY).rows()
+
+    ekeys, skeys = keys(espn_pbp), keys(source_pbp)
+    renamed = source_pbp["id"].to_list()
+    espn_ids = espn_pbp["id"].to_list()
+    paired_e, paired_s = set(), set()
+    for block in SequenceMatcher(None, ekeys, skeys, autojunk=False).get_matching_blocks():
+        for k in range(block.size):
+            renamed[block.b + k] = espn_ids[block.a + k]
+            paired_e.add(block.a + k)
+            paired_s.add(block.b + k)
+    eclock, sclock = espn_pbp["clock_display_value"].to_list(), source_pbp["clock_display_value"].to_list()
+    waiting: dict[tuple, list[int]] = {}
+    for i, key in enumerate(ekeys):
+        if i not in paired_e:
+            waiting.setdefault((*key, eclock[i]), []).append(i)
+    for j, key in enumerate(skeys):
+        if j not in paired_s and (queue := waiting.get((*key, sclock[j]))):
+            renamed[j] = espn_ids[queue.pop(0)]
+    return source_pbp.with_columns(pl.Series("id", renamed, dtype=source_pbp.schema["id"]))
+
+
 def _compare_frames(
     league: str, espn_id: int, source: str, espn: tuple[dict, dict], alternate: tuple[dict, dict]
 ) -> ParityReport:
     """Measure one game from both sides' ``(helper_<lg>_pbp final, game_page_frames)`` pairs.
 
     Args:
-        league: ``"nba"`` or ``"wnba"``.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
         espn_id: the ESPN event id.
         source: the alternate source's name (selects its :data:`GATES`).
         espn: ESPN's ``(final, frames)``.
@@ -276,6 +373,8 @@ def _compare_frames(
     """
     ef, efr = espn
     sf, sfr = alternate
+    if source in OWN_PLAY_IDS:
+        sfr = {**sfr, "pbp": _align_play_ids(efr["pbp"], sfr["pbp"])}
     epbp, spbp = efr["pbp"], sfr["pbp"]
     rep = ParityReport(league, espn_id, source, n_plays_espn=epbp.height, n_plays_source=spbp.height)
     rep.play_count_ratio = spbp.height / epbp.height if epbp.height else math.nan
@@ -339,10 +438,11 @@ def _compare_game(league: str, espn_id: int, payloads: dict[str, Any], *, source
     :func:`~sportsdataverse.basketball.sources.dispatch._run_source`, the leg a served game takes.
 
     Args:
-        league: ``"nba"`` or ``"wnba"``.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
         espn_id: the ESPN event id.
         payloads: native payloads by source, ``{"espn": raw_summary, source: ...}``; a missing entry fetches.
-        source: the alternate source (default ``"live"``, the cdn.nba.com / cdn.wnba.com adapter).
+        source: the alternate source (default ``"live"``, the cdn.nba.com / cdn.wnba.com adapter; ``"ncaa"``
+            for stats.ncaa.org on MBB / WBB).
 
     Returns:
         :class:`ParityReport`; ``.check()`` lists the gates it breaches.
