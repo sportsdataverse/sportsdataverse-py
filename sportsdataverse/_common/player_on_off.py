@@ -191,16 +191,18 @@ def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
         pl.col("game_date").max().alias("_last"),
         *[pl.col(c).sum().alias(f"{c}_in") for c in _TOTALS],
     )
-    # His other teams that season bound the span: the last game of an earlier one, the first of a later one.
-    other = stints.select("season", "player_id", pl.col("team_id").alias("_t"), "_first", "_last")
+    # His games for other teams that season bound the span: the last one before his first game here,
+    # the first one after his last. Game by game, so a return to an earlier team still bounds both
+    # (A, then B, then A again: B's span closes before the return; A's keeps the B weeks inside it).
+    other = player_games.select("season", "player_id", pl.col("team_id").alias("_t"), pl.col("game_date").alias("_d"))
     pairs = (
         stints.select(*keys, "player_id", "_first", "_last")
-        .join(other, on=["season", "player_id"], suffix="_o")
+        .join(other, on=["season", "player_id"])
         .filter(pl.col("_t") != pl.col("team_id"))
     )
     bounds = pairs.group_by([*keys, "player_id"]).agg(
-        pl.col("_last_o").filter(pl.col("_last_o") < pl.col("_first")).max().alias("_prev"),
-        pl.col("_first_o").filter(pl.col("_first_o") > pl.col("_last")).min().alias("_next"),
+        pl.col("_d").filter(pl.col("_d") < pl.col("_first")).max().alias("_prev"),
+        pl.col("_d").filter(pl.col("_d") > pl.col("_last")).min().alias("_next"),
     )
     window = stints.join(bounds, on=[*keys, "player_id"], how="left", validate="1:1").select(
         *keys,
