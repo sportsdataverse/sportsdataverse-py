@@ -193,6 +193,7 @@ nba:
   load_rapm_ryan_davis: {path: tests/fixtures/nba_oracle/rapm_ryan_davis_sample.csv}  # 3 rows x 9 cols
   nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
+  nba_team_game_possessions: {seasons: 2026}
   nba_game_player_impact: {seasons: 2026}  # 30817 rows x 18 cols
   nba_epv_plays: {seasons: 2026}
   nba_epv_player_games: {seasons: 2026}
@@ -223,6 +224,7 @@ nba:
   nba_game_flow: {seasons: 2026}
   nba_team_season_flow: {seasons: 2026}
   nba_situational_team: {seasons: 2026}
+  nba_situational_team_games: {seasons: 2026}
   nba_situational_player: {seasons: 2026}
   nba_situational_lineup: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
@@ -319,6 +321,7 @@ wnba:
   load_wnba_stats_team_season_stats: {seasons: 2025}  # 126 rows x 179 cols
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
+  wnba_team_game_possessions: {seasons: 2025}
   wnba_game_player_impact: {seasons: 2026}  # 7008 rows x 18 cols
   wnba_game_lineups_used: {seasons: 2026}  # 10481 rows x 23 cols
   wnba_game_stints: {seasons: 2026}
@@ -343,6 +346,7 @@ wnba:
   wnba_epv_team_games: {seasons: 2026}
   wnba_team_season_flow: {seasons: 2025}
   wnba_situational_team: {seasons: 2025}
+  wnba_situational_team_games: {seasons: 2025}
   wnba_situational_player: {seasons: 2025}
   wnba_situational_lineup: {seasons: 2025}
   wnba_season_sim: {season: 2025, as_of_date: 2025-07-16}  # 13 rows x 43 cols
@@ -388,6 +392,7 @@ mbb:
   mbb_in_game_win_prob: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 8 cols
   mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
   mbb_team_season_rates: {seasons: 2025}
+  mbb_team_game_possessions: {seasons: 2025}
   mbb_game_player_impact: {seasons: 2025}
   mbb_game_lineups_used: {seasons: 2025}
   mbb_game_stints: {seasons: 2025}
@@ -411,6 +416,7 @@ mbb:
   mbb_epv_team_games: {seasons: 2026}
   mbb_team_season_flow: {seasons: 2026}
   mbb_situational_team: {seasons: 2026}
+  mbb_situational_team_games: {seasons: 2026}
   mbb_situational_player: {seasons: 2026}
   mbb_situational_lineup: {seasons: 2026}
   mbb_strength_of_schedule: {seasons: [2025]}  # 364 rows x 48 cols
@@ -475,6 +481,7 @@ wbb:
   as_of_season_split: {df: {$call: wbb.wbb_team_ratings, args: {seasons: 2024}}, target_season: 2025}  # 621 rows x 11 cols
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
   wbb_team_season_rates: {seasons: 2025}
+  wbb_team_game_possessions: {seasons: 2025}
   wbb_game_player_impact: {seasons: 2025}
   wbb_game_lineups_used: {seasons: 2025}
   wbb_game_stints: {seasons: 2025}
@@ -497,6 +504,7 @@ wbb:
   wbb_epv_team_games: {seasons: 2026}
   wbb_team_season_flow: {seasons: 2026}
   wbb_situational_team: {seasons: 2026}
+  wbb_situational_team_games: {seasons: 2026}
   wbb_situational_player: {seasons: 2026}
   wbb_situational_lineup: {seasons: 2026}
   wbb_strength_of_schedule: {seasons: [2025]}  # 362 rows x 48 cols

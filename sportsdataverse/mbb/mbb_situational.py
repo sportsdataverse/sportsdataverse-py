@@ -32,6 +32,7 @@ from sportsdataverse._common.situational_splits import (
     situational_lineup,
     situational_player,
     situational_team,
+    situational_team_games,
 )
 from sportsdataverse.mbb.mbb_team_season_rates import (
     _check_league,
@@ -44,7 +45,13 @@ from sportsdataverse.mbb.mbb_team_strength import _load_ratings, _ratings
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["mbb_situational_lineup", "mbb_situational_player", "mbb_situational_team", "ncaa_situation_rows"]
+__all__ = [
+    "mbb_situational_lineup",
+    "mbb_situational_player",
+    "mbb_situational_team",
+    "mbb_situational_team_games",
+    "ncaa_situation_rows",
+]
 
 _PLAYER = pl.Utf8()
 _ROWS = situation_row_schema(_PLAYER)
@@ -156,6 +163,43 @@ def mbb_situational_team(
     _check(league, top_n)
     rows, ratings = _load(seasons, league)
     out = situational_team(rows, ratings, top_n=top_n)
+    return out.to_pandas() if return_as_pandas else out
+
+
+def mbb_situational_team_games(
+    seasons: int | list[int], *, league: str = "mens", top_n: int = _TOP_N, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """College team splits by situation, one game at a time: :func:`mbb_situational_team` per game.
+
+    The same possessions and labels, grouped by game too, so a team-season's rows of a split add
+    up to its :func:`mbb_situational_team` row (``games``, ``seconds``, ``poss``, ``opp_poss``,
+    ``pts``, ``opp_pts``). The ``opponent`` family keeps the season's top ``top_n``.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+        league: ``"mens"`` or ``"womens"``
+            (:func:`sportsdataverse.wbb.wbb_situational.wbb_situational_team_games`).
+        top_n: As :func:`mbb_situational_team`.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, family, split)``, the columns of
+        :func:`mbb_situational_team` plus ``game_id`` (the stats.ncaa.org contest id); ``games`` is
+        1. A split the team did not play in the game has no row. Empty input returns that schema
+        with zero rows.
+
+    Raises:
+        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``, or ``top_n`` is below 1.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_situational import mbb_situational_team_games
+            mbb_situational_team_games(2026).filter(family="score").head()
+    """
+    _check(league, top_n)
+    rows, ratings = _load(seasons, league)
+    out = situational_team_games(rows, ratings, top_n=top_n)
     return out.to_pandas() if return_as_pandas else out
 
 

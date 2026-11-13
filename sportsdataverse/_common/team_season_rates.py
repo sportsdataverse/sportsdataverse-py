@@ -71,9 +71,11 @@ __all__ = [
     "RATE_ROWS_SCHEMA",
     "SIDE_COUNTS",
     "SPLITS",
+    "TEAM_GAME_POSSESSIONS_SCHEMA",
     "TEAM_SEASON_RATES_SCHEMA",
     "rates_from_counts",
     "season_counts",
+    "team_game_possessions",
     "team_season_rates",
     "team_season_rates_league_averages",
 ]
@@ -199,6 +201,20 @@ def _with_bases(rates: pl.DataFrame, gates: dict[str, float]) -> pl.DataFrame:
         min_n={m: gates[rating] for m, (_, rating) in _PER_GAME.items() if rating in gates},
     )
     return attach_per75(ranked, _PER_75)
+
+
+#: The per-game grain of the season table's possession counts (:func:`team_game_possessions`).
+TEAM_GAME_POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "team_id": pl.Int64(),
+    "game_id": pl.Utf8(),
+    "split": pl.Utf8(),
+    "poss": pl.Int64(),
+    "opp_poss": pl.Int64(),
+    "pts": pl.Int64(),
+    "opp_pts": pl.Int64(),
+    "seconds": pl.Float64(),
+}
 
 
 def _with_clutch(rows: pl.DataFrame) -> pl.DataFrame:
@@ -335,7 +351,7 @@ def team_season_rates(
 SIDE_COUNTS: tuple[str, ...] = tuple(f"{s}_{c}" for c in _COUNTS for s in ("o", "d"))
 
 
-def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> pl.DataFrame:
+def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None, by_game: bool = False) -> pl.DataFrame:
     """The summed counts behind :func:`team_season_rates`, one row per ``(season, team_id, split)``.
 
     ``games``, ``poss``, ``opp_poss``, ``pts``, ``opp_pts`` (possession points), ``seconds`` (the
@@ -346,16 +362,17 @@ def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> 
     Args:
         rows: The possessions, in :data:`RATE_ROWS_SCHEMA` (already validated by the caller).
         counts: Game-level counts in :data:`COUNT_ROWS_SCHEMA`, as :func:`team_season_rates`.
+        by_game: Group by ``game_id`` as well: one row per ``(season, team_id, game_id, split)``.
 
     Returns:
-        The counts, unsorted, one row per ``(season, team_id, split)``.
+        The counts, unsorted, one row per ``(season, team_id, split)`` (``by_game``: per game too).
     """
     rows = _with_clutch(rows.select(list(RATE_ROWS_SCHEMA)).cast(RATE_ROWS_SCHEMA))
     rows = rows.with_columns((pl.col("start_clock") - pl.col("end_clock")).alias("duration"))
     sides = _sides(rows, n_poss=1) if counts is None else _with_box_sides(rows, counts)
     return (
         _split_rows(sides)
-        .group_by(["season", "team_id", "split"])
+        .group_by(["season", "team_id", *(["game_id"] if by_game else []), "split"])
         .agg(
             pl.col("game_id").filter(pl.col("n_poss") > 0).n_unique().cast(pl.Int64).alias("games"),
             pl.col("n_poss").filter(pl.col("side") == "o").sum().alias("poss"),
@@ -366,6 +383,50 @@ def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> 
             pl.col("duration").filter(pl.col("n_poss") > 0).sum().alias("seconds"),
             *[_side_sum(c, s) for c in _COUNTS for s in ("o", "d")],
         )
+    )
+
+
+def team_game_possessions(rows: pl.DataFrame) -> pl.DataFrame:
+    """The possession counts of :func:`team_season_rates`, one row per team, game and split.
+
+    The per-game grain of the season table's ``poss`` / ``opp_poss`` / ``pts`` / ``opp_pts``: a
+    game has a row in each split it belongs to (``all`` always; ``home`` or ``away`` unless it is
+    at a neutral site; ``close`` and ``clutch`` when it has clutch possessions). So the rows of a
+    team-season's split add up to its season row: their count is ``games`` and their sums are its
+    counts, and the season's ``pace`` is ``minutes_per_game * 60 * (poss + opp_poss) / 2 /
+    seconds`` over the summed rows. A set of games (wins, losses, the last ten) is rated the same
+    way: sum the rows, divide once.
+
+    Args:
+        rows: The possessions, in :data:`RATE_ROWS_SCHEMA` (extra columns are ignored); a side
+            with a null team id gets no row, its points still count in the clutch margin.
+
+    Returns:
+        One row per ``(season, team_id, game_id, split)`` in :data:`TEAM_GAME_POSSESSIONS_SCHEMA`,
+        sorted by season, team, game and split (``all``, ``home``, ``away``, ``close``,
+        ``clutch``). ``seconds`` is the game clock the team's possessions used. An empty input
+        returns that schema with zero rows.
+
+    Raises:
+        KeyError: If ``rows`` is missing a schema column.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_team_season_rates import nba_team_game_possessions
+            games = nba_team_game_possessions(2026).filter(split="all")
+    """
+    missing = sorted(set(RATE_ROWS_SCHEMA) - set(rows.columns))
+    if missing:
+        raise KeyError(f"rows missing columns: {missing}")
+    if rows.height == 0:
+        return pl.DataFrame(schema=TEAM_GAME_POSSESSIONS_SCHEMA)
+    order = pl.col("split").replace_strict({s: i for i, s in enumerate(SPLITS)}, return_dtype=pl.Int64)
+    return (
+        season_counts(rows, by_game=True)
+        .sort([pl.col("season"), pl.col("team_id"), pl.col("game_id"), order])
+        .select(list(TEAM_GAME_POSSESSIONS_SCHEMA))
+        .cast(TEAM_GAME_POSSESSIONS_SCHEMA)
     )
 
 

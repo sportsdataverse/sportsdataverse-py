@@ -27,6 +27,7 @@ from sportsdataverse._common.league_context import LEAGUE_AVERAGES_SCHEMA
 from sportsdataverse._common.rate_gates import TEAM_MIN_N
 from sportsdataverse._common.team_season_rates import (
     SPLITS,
+    TEAM_GAME_POSSESSIONS_SCHEMA,
     TEAM_SEASON_RATES_SCHEMA,
     team_season_rates,
     team_season_rates_league_averages,
@@ -372,3 +373,67 @@ def test_bad_league_id_raises() -> None:
         mod.nba_team_season_rates(2026, league_id="20")
     with pytest.raises(ValueError, match="season_type"):
         mod.nba_team_season_rates(2026, season_type="regular_season")
+
+
+_GAME_SUMS = ("poss", "opp_poss", "pts", "opp_pts")
+
+
+def assert_games_add_up(games: pl.DataFrame, rates: pl.DataFrame, minutes_per_game: int) -> None:
+    """Per-game rows summed over a team-season's split reproduce the season row exactly."""
+    assert dict(games.schema) == TEAM_GAME_POSSESSIONS_SCHEMA
+    assert games.select("season", "team_id", "game_id", "split").is_duplicated().sum() == 0
+    summed = games.group_by("season", "team_id", "split").agg(
+        pl.len().cast(pl.Int64).alias("games"), *[pl.col(c).sum() for c in (*_GAME_SUMS, "seconds")]
+    )
+    j = rates.join(summed, on=["season", "team_id", "split"], how="full", coalesce=True, suffix="_g", validate="1:1")
+    assert j.height == rates.height == summed.height  # no split row on one side only
+    for c in ("games", *_GAME_SUMS):
+        assert (j[c] == j[f"{c}_g"]).all(), c
+    pace = minutes_per_game * 60 * (j["poss"] + j["opp_poss"]) / 2 / j["seconds"]
+    assert ((pace - j["pace"]).abs() < 1e-9).all()
+
+
+def _nba_games(mp: pytest.MonkeyPatch, season: int, **kwargs: object) -> pl.DataFrame:
+    mp.setattr(mod, "load_nba_stats_possessions", _fixture_loader(f"nba_possessions_{season}.parquet", [season - 1]))
+    mp.setattr(mod, "load_nba_stats_schedules", _fixture_loader(f"nba_schedule_{season}.parquet", [season - 1]))
+    return mod.nba_team_game_possessions(season, **kwargs)  # type: ignore[arg-type]
+
+
+def test_nba_2026_games_add_up_to_the_season(monkeypatch: pytest.MonkeyPatch, nba_2026: pl.DataFrame) -> None:
+    """Q21: the per-game possession rows are the season table's, one game at a time (every split)."""
+    games = _nba_games(monkeypatch, 2026)
+    assert_games_add_up(games, nba_2026, 48)
+    sched = pl.read_parquet(RATES / "nba_schedule_2026.parquet").filter(season_type="regular-season")
+    played = games.filter(split="all")
+    # every scheduled game with possessions, both teams; home or away unless neutral
+    assert played.height == 2 * played["game_id"].n_unique()
+    assert set(played["game_id"]) <= set(sched["game_id"].cast(pl.Utf8))
+    sides = games.filter(pl.col("split").is_in(["home", "away"])).group_by("game_id", "team_id").len()
+    assert sides["len"].max() == 1
+    # the two teams of a game see each other's possessions: one's poss is the other's opp_poss
+    pair = played.join(played, on="game_id", suffix="_o").filter(pl.col("team_id") != pl.col("team_id_o"))
+    assert (pair["poss"] == pair["opp_poss_o"]).all() and (pair["pts"] == pair["opp_pts_o"]).all()
+    playoffs = _nba_games(monkeypatch, 2026, season_type="playoffs")
+    assert dict(playoffs.schema) == TEAM_GAME_POSSESSIONS_SCHEMA
+
+
+def test_wnba_2025_games_add_up_to_the_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.wnba import wnba_loaders
+    from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_game_possessions, wnba_team_season_rates
+
+    monkeypatch.setattr(
+        wnba_loaders, "load_wnba_stats_possessions", _fixture_loader("wnba_possessions_2025.parquet", [2025])
+    )
+    monkeypatch.setattr(
+        wnba_loaders, "load_wnba_stats_schedules", _fixture_loader("wnba_schedule_2025.parquet", [2025])
+    )
+    assert_games_add_up(wnba_team_game_possessions(2025), wnba_team_season_rates(2025), 40)
+
+
+def test_team_game_possessions_empty_and_missing() -> None:
+    from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, team_game_possessions
+
+    empty = team_game_possessions(pl.DataFrame(schema=RATE_ROWS_SCHEMA))
+    assert dict(empty.schema) == TEAM_GAME_POSSESSIONS_SCHEMA and empty.height == 0
+    with pytest.raises(KeyError, match="points"):
+        team_game_possessions(pl.DataFrame(schema=RATE_ROWS_SCHEMA).drop("points"))

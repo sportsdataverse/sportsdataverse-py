@@ -21,11 +21,12 @@ from sportsdataverse.mbb.mbb_situational import (
     mbb_situational_lineup,
     mbb_situational_player,
     mbb_situational_team,
+    mbb_situational_team_games,
     ncaa_situation_rows,
 )
 from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
 from sportsdataverse.wbb import wbb_loaders
-from sportsdataverse.wbb.wbb_situational import wbb_situational_team
+from sportsdataverse.wbb.wbb_situational import wbb_situational_team, wbb_situational_team_games
 
 # The package re-exports the functions under the modules' names, so import the modules themselves.
 mbb_team_season_rates = importlib.import_module("sportsdataverse.mbb.mbb_team_season_rates")
@@ -177,3 +178,23 @@ def test_errors() -> None:
         mbb_situational_team(2025, league="coed")
     with pytest.raises(ValueError, match="top_n"):
         mbb_situational_player(2025, top_n=0)
+
+
+def test_team_games_add_up_to_the_season(mens: dict[str, pl.DataFrame], womens: pl.DataFrame) -> None:
+    """Q27 on college: the per-game situational rows summed over a split are the season row."""
+    from tests.nba.test_nba_situational import assert_situational_games_add_up
+
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, "mens")
+        men = mbb_situational_team_games(2025)
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, "womens")
+        women = wbb_situational_team_games(2025)
+    assert_situational_games_add_up(men, mens["team"])
+    assert_situational_games_add_up(women, womens)
+    # every game of the two fixture teams has an all row for them
+    for league, frame in (("mens", men), ("womens", women)):
+        for team in TEAMS[league]:
+            season_games = _ours(mens["team"] if league == "mens" else womens, league)
+            n = season_games.filter(team_id=team, family="all")["games"].item()
+            assert frame.filter(team_id=team, family="all").height == n

@@ -54,6 +54,56 @@ from sportsdataverse.wbb import wbb_situational_team
 wbb_situational_team(2026).filter(split="clutch").sort("net_rtg", descending=True).head()
 ```
 
+### wbb_situational_team_games {#wbb_situational_team_games}
+
+`wbb_situational_team_games(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college team splits by situation, one game at a time.
+
+Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_team_games` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `top_n` | `int` | `25` | How many of the season's best teams by the published `adj_em` are `vs_top`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, game_id, family, split)` with the columns of `sportsdataverse.mbb.mbb_situational.mbb_situational_team_games`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | 1: the row is one game (summed over a team-season's rows it is the season row's games). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_situational_team_games
+wbb_situational_team_games(2026).filter(split="clutch").head()
+```
+
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
 `wbb_strength_of_schedule(seasons: 'list[int]', *, as_of_date: 'datetime.date | None' = None, ineligible: 'Iterable[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -131,6 +181,45 @@ One row per Division I (season, team_id) -- see the mbb core for the full contra
 ```python
 from sportsdataverse.wbb import wbb_strength_of_schedule
 wbb_strength_of_schedule([2024]).sort("rpi_rank").head(20)
+```
+
+### wbb_team_game_possessions {#wbb_team_game_possessions}
+
+`wbb_team_game_possessions(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college per team and game: the possession counts behind `wbb_team_season_rates`.
+
+Delegates to `sportsdataverse.mbb.mbb_team_season_rates.mbb_team_game_possessions` with
+`league="womens"`. A team-season's rows of a split add up to its season row.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, game_id, split)`: `poss`, `opp_poss`, `pts`, `opp_pts` and `seconds`. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id. Non-D1 opponents have none and get no row. |
+| `game_id` | String | stats.ncaa.org contest id. The game this row's possessions are from. |
+| `split` | String | The season table's split this game is in: all (every game); home or away (neither at a neutral site); close and clutch when the game has clutch possessions. A team-season's rows of a split add up to its wbb_team_season_rates row. |
+| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
+| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
+| `pts` | Int64 | Points scored on the team's offensive possessions in the split. |
+| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
+| `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_team_game_possessions
+wbb_team_game_possessions(2025).filter(split="all").head()
 ```
 
 ### wbb_team_luck {#wbb_team_luck}

@@ -38471,6 +38471,18 @@ mbb_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 450 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+mbb_team_game_possessions:
+  game_id: stats.ncaa.org contest id. The game this row's possessions are from.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60
+    x (poss + opp_poss) / 2 / summed seconds.
+  split: 'The season table''s split this game is in: all (every game); home or away (neither at a neutral site); close and
+    clutch when the game has clutch possessions. A team-season''s rows of a split add up to its mbb_team_season_rates row.'
+  team_id: ESPN team id. Non-D1 opponents have none and get no row.
 nba_possession_rate_rows:
   defense_team_id: stats.nba.com id of the team on defense.
   dreb: Defense defensive rebounds on the possession (the other half of the offensive-rebound chances).
@@ -38639,6 +38651,19 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,400 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+nba_team_game_possessions:
+  game_id: stats.nba.com game id. The game this row's possessions are from.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
+    throws.
+  season: Season, named by the year it ends (2026 is 2025-26).
+  seconds: Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60
+    x (poss + opp_poss) / 2 / summed seconds.
+  split: 'The season table''s split this game is in: all (every game); home or away (neither at a neutral site); close and
+    clutch when the game has clutch possessions. A team-season''s rows of a split add up to its nba_team_season_rates row.'
+  team_id: stats.nba.com team id (the 10-digit franchise id).
 ncaa_possession_rate_rows:
   defense_team_id: ESPN id of the team on defense; null for a non-D1 team.
   dreb: 'Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows).'
@@ -38825,6 +38850,18 @@ wbb_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 210 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+wbb_team_game_possessions:
+  game_id: stats.ncaa.org contest id. The game this row's possessions are from.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split.
+  season: Season, named by the year it ends (2025 is 2024-25).
+  seconds: Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60
+    x (poss + opp_poss) / 2 / summed seconds.
+  split: 'The season table''s split this game is in: all (every game); home or away (neither at a neutral site); close and
+    clutch when the game has clutch possessions. A team-season''s rows of a split add up to its wbb_team_season_rates row.'
+  team_id: ESPN team id. Non-D1 opponents have none and get no row.
 wnba_team_season_rates:
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
@@ -38973,6 +39010,19 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,100 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+wnba_team_game_possessions:
+  game_id: stats.wnba.com game id. The game this row's possessions are from.
+  opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
+  opp_pts: Points allowed on the team's defensive possessions in the split.
+  poss: Offensive possessions in the split, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
+    throws.
+  season: WNBA season (its calendar year).
+  seconds: Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60
+    x (poss + opp_poss) / 2 / summed seconds.
+  split: 'The season table''s split this game is in: all (every game); home or away (neither at a neutral site); close and
+    clutch when the game has clutch possessions. A team-season''s rows of a split add up to its wnba_team_season_rates row.'
+  team_id: stats.nba.com team id (the 10-digit franchise id).
 nba_game_player_impact:
   def_rtg: 'On-court defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
@@ -77488,6 +77538,28 @@ nba_situational_team:
   split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
     / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
   team_id: stats.nba.com team id.
+nba_situational_team_games:
+  def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
+    the splits add up to the all row.'
+  game_id: stats.nba.com game id.
+  games: '1: the row is one game (summed over a team-season''s rows it is the season row''s games).'
+  minutes: Game-clock minutes of the split's possessions (seconds / 60).
+  net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'Offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions in the split.
+  opp_pts: Points allowed on the defensive possessions.
+  plus_minus: 'Plus-minus over the split: pts - opp_pts.'
+  poss: Offensive possessions in the split.
+  pts: Points scored on the offensive possessions.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
+    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  team_id: stats.nba.com team id.
 nba_situational_player:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
@@ -77543,6 +77615,28 @@ wnba_situational_team:
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
     the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
+  minutes: Game-clock minutes of the split's possessions (seconds / 60).
+  net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'Offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions in the split.
+  opp_pts: Points allowed on the defensive possessions.
+  plus_minus: 'Plus-minus over the split: pts - opp_pts.'
+  poss: Offensive possessions in the split.
+  pts: Points scored on the offensive possessions.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied
+    / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance.'
+  team_id: stats.nba.com team id.
+wnba_situational_team_games:
+  def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family
+    the splits add up to the all row.'
+  game_id: stats.wnba.com game id.
+  games: '1: the row is one game (summed over a team-season''s rows it is the season row''s games).'
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
   net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
@@ -77628,6 +77722,28 @@ mbb_situational_team:
   split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
     leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
+mbb_situational_team_games:
+  def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
+  game_id: stats.ncaa.org contest id.
+  games: '1: the row is one game (summed over a team-season''s rows it is the season row''s games).'
+  minutes: Game-clock minutes of the split's possessions (seconds / 60).
+  net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'Offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions in the split.
+  opp_pts: Points allowed on the defensive possessions.
+  plus_minus: 'Plus-minus over the split: pts - opp_pts.'
+  poss: Offensive possessions in the split.
+  pts: Points scored on the offensive possessions.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
+  team_id: ESPN team id of the team (Int64).
 mbb_situational_player:
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
@@ -77684,6 +77800,28 @@ wbb_situational_team:
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
     flag, so no chance family); within a family the splits add up to the all row.'
   games: Games with at least one possession in the split (does not add up across a family).
+  minutes: Game-clock minutes of the split's possessions (seconds / 60).
+  net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
+  net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'
+  off_rtg: 'Offensive rating: pts per 100 poss; null with no offensive possessions.'
+  off_rtg_n: 'Sample size of off_rtg: poss.'
+  opp_poss: Defensive possessions in the split.
+  opp_pts: Points allowed on the defensive possessions.
+  plus_minus: 'Plus-minus over the split: pts - opp_pts.'
+  poss: Offensive possessions in the split.
+  pts: Points scored on the offensive possessions.
+  season: Season, named by the year it ends (the WNBA season is its calendar year).
+  seconds: 'Game-clock seconds of the split''s possessions: each possession''s start clock minus its end clock.'
+  split: 'The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time;
+    leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
+  team_id: ESPN team id of the team (Int64).
+wbb_situational_team_games:
+  def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
+  def_rtg_n: 'Sample size of def_rtg: opp_poss.'
+  family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
+    flag, so no chance family); within a family the splits add up to the all row.'
+  game_id: stats.ncaa.org contest id.
+  games: '1: the row is one game (summed over a team-season''s rows it is the season row''s games).'
   minutes: Game-clock minutes of the split's possessions (seconds / 60).
   net_rtg: 'Net rating: off_rtg - def_rtg; null when either is null.'
   net_rtg_n: 'Sample size of net_rtg: poss + opp_poss.'

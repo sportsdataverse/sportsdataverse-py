@@ -187,3 +187,28 @@ def test_scoring_bases_on_the_box_count_path(lg: str) -> None:
     ranked = rates.filter(pl.col("split") == "all", pl.col("opp_pts_pg_rank").is_not_null())
     assert ranked.height == 18  # the fixture's Big Ten, every one past the def_rtg gate
     assert ranked.filter(pl.col("opp_pts_pg_rank") == 1)["opp_pts_pg"].item() == ranked["opp_pts_pg"].min()
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_games_add_up_to_the_season(lg: str) -> None:
+    """Q21 on college: the per-game possession rows summed over a split are the season row."""
+    from tests.nba.test_nba_team_season_rates import assert_games_add_up
+
+    with pytest.MonkeyPatch.context() as mp:
+        if lg == "mbb":
+            mp.setattr(mod, "load_ncaa_mbb_possessions", _loader("ncaa_mbb_possessions_2025.parquet"))
+            mp.setattr(mod, "load_mbb_schedule", _loader("mbb_schedule_2025.parquet"))
+            games = mod.mbb_team_game_possessions(2025)
+        else:
+            from sportsdataverse.wbb import wbb_loaders
+            from sportsdataverse.wbb.wbb_team_season_rates import wbb_team_game_possessions
+
+            mp.setattr(wbb_loaders, "load_ncaa_wbb_possessions", _loader("ncaa_wbb_possessions_2025.parquet"))
+            mp.setattr(wbb_loaders, "load_wbb_schedule", _loader("wbb_schedule_2025.parquet"))
+            games = wbb_team_game_possessions(2025)
+    assert_games_add_up(games, _rates(lg), 40)
+    # a Big Ten team's every game is in the fixture: its all rows are its season games
+    team = _big_ten(lg)[0]
+    assert (
+        games.filter(team_id=team, split="all").height == _rates(lg).filter(team_id=team, split="all")["games"].item()
+    )

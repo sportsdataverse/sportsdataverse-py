@@ -76,6 +76,8 @@ __all__ = [
     "situational_player",
     "situational_player_schema",
     "situational_team",
+    "situational_team_game_schema",
+    "situational_team_games",
     "situational_team_schema",
 ]
 
@@ -125,6 +127,11 @@ def situation_row_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
 def situational_team_schema() -> dict[str, pl.DataType]:
     """Columns of :func:`situational_team`."""
     return {"season": pl.Int64(), "team_id": pl.Int64(), **_SPLIT_KEYS, **_STATS}
+
+
+def situational_team_game_schema() -> dict[str, pl.DataType]:
+    """Columns of :func:`situational_team_games`: :func:`situational_team_schema` plus ``game_id``."""
+    return {"season": pl.Int64(), "team_id": pl.Int64(), "game_id": pl.Utf8(), **_SPLIT_KEYS, **_STATS}
 
 
 def situational_player_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
@@ -279,6 +286,39 @@ def situational_team(rows: pl.DataFrame, ratings: pl.DataFrame, *, top_n: int) -
         return pl.DataFrame(schema=schema)
     out = _totals(sides.drop("players"), ["season", "team_id"])
     return out.sort("season", "team_id", "_order").select(list(schema)).cast(schema)
+
+
+def situational_team_games(rows: pl.DataFrame, ratings: pl.DataFrame, *, top_n: int) -> pl.DataFrame:
+    """Per team, game and split: :func:`situational_team` one game at a time.
+
+    The same possessions, labels and sums as :func:`situational_team`, grouped by ``game_id`` too,
+    so a team-season's rows of a split add up to its :func:`situational_team` row: ``games``,
+    ``seconds``, ``poss``, ``opp_poss``, ``pts`` and ``opp_pts`` sum to the season's, and the
+    ratings are the season's from those sums. ``games`` is 1 on every row. The ``opponent`` family
+    keeps the season's ranking, so a game's ``vs_top`` row says the opponent is a season top team.
+
+    Args:
+        rows: As :func:`situational_team`.
+        ratings: As :func:`situational_team`.
+        top_n: As :func:`situational_team`.
+
+    Returns:
+        One row per ``(season, team_id, game_id, family, split)`` in
+        :func:`situational_team_game_schema`, sorted by season, team, game and split. A split the
+        team did not play in that game has no row. An empty input returns that schema with zero
+        rows.
+
+    Raises:
+        KeyError: If ``rows`` is missing a schema column.
+        ValueError: If ``top_n`` is below 1.
+    """
+    schema = situational_team_game_schema()
+    dtype = rows.schema.get("off_1", pl.Int64())
+    sides = _sides(rows, ratings, top_n, dtype)
+    if sides.height == 0:
+        return pl.DataFrame(schema=schema)
+    out = _totals(sides.drop("players"), ["season", "team_id", "game_id"])
+    return out.sort("season", "team_id", "game_id", "_order").select(list(schema)).cast(schema)
 
 
 def situational_player(

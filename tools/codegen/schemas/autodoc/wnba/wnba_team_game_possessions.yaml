@@ -1,0 +1,30 @@
+schema: wnba_team_game_possessions
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: split
+  type: character
+  description: ''
+- name: poss
+  type: integer
+  description: ''
+- name: opp_poss
+  type: integer
+  description: ''
+- name: pts
+  type: integer
+  description: ''
+- name: opp_pts
+  type: integer
+  description: ''
+- name: seconds
+  type: double
+  description: ''

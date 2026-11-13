@@ -369,7 +369,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_situational_lineup](additional/analytics-3.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
 | [wbb_situational_player](additional/analytics-3.md#wbb_situational_player) | Women's college player on-floor splits by situation. |
 | [wbb_situational_team](additional/analytics-4.md#wbb_situational_team) | Women's college team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
+| [wbb_situational_team_games](additional/analytics-4.md#wbb_situational_team_games) | Women's college team splits by situation, one game at a time. |
 | [wbb_strength_of_schedule](additional/analytics-4.md#wbb_strength_of_schedule) | Women's daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [wbb_team_game_possessions](additional/analytics-4.md#wbb_team_game_possessions) | Women's college per team and game: the possession counts behind `wbb_team_season_rates`. |
 | [wbb_team_luck](additional/analytics-4.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
 | [wbb_team_season_flow](additional/analytics-4.md#wbb_team_season_flow) | Women's college game flow per team and season, with ranks, percentiles and `_n`. |
 | [wbb_team_season_rates](additional/analytics-4.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |

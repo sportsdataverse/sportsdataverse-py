@@ -527,8 +527,10 @@ from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa
 from sportsdataverse.mbb import mbb_situational_lineup as mbb_situational_lineup  # noqa: F401
 from sportsdataverse.mbb import mbb_situational_player as mbb_situational_player  # noqa: F401
 from sportsdataverse.mbb import mbb_situational_team as mbb_situational_team  # noqa: F401
+from sportsdataverse.mbb import mbb_situational_team_games as mbb_situational_team_games  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_team_game_possessions as mbb_team_game_possessions  # noqa: F401
 from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_team_season_flow as mbb_team_season_flow  # noqa: F401
@@ -1204,8 +1206,10 @@ __all__ = [
     "mbb_situational_lineup",
     "mbb_situational_player",
     "mbb_situational_team",
+    "mbb_situational_team_games",
     "mbb_strength_of_schedule",
     "mbb_team_crosswalk",
+    "mbb_team_game_possessions",
     "mbb_team_luck",
     "mbb_team_ratings",
     "mbb_team_season_flow",

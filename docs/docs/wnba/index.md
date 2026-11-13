@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 41 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 119 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 121 | — |
 
 ## ESPN {#espn}
 
@@ -111,7 +111,9 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_situational_lineup`](reference/additional/analytics-3#wnba_situational_lineup)
 - [`wnba_situational_player`](reference/additional/analytics-3#wnba_situational_player)
 - [`wnba_situational_team`](reference/additional/analytics-3#wnba_situational_team)
+- [`wnba_situational_team_games`](reference/additional/analytics-3#wnba_situational_team_games)
 - [`wnba_team_clutch`](reference/additional/analytics-3#wnba_team_clutch)
+- [`wnba_team_game_possessions`](reference/additional/analytics-3#wnba_team_game_possessions)
 - [`wnba_team_luck`](reference/additional/analytics-3#wnba_team_luck)
 - [`wnba_team_season_flow`](reference/additional/analytics-3#wnba_team_season_flow)
 - [`wnba_team_season_rates`](reference/additional/analytics-4#wnba_team_season_rates)

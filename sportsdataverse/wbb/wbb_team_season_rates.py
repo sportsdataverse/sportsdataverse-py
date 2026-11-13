@@ -15,9 +15,9 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_season_rates
+from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_game_possessions, mbb_team_season_rates
 
-__all__ = ["wbb_team_season_rates"]
+__all__ = ["wbb_team_game_possessions", "wbb_team_season_rates"]
 
 
 def wbb_team_season_rates(
@@ -50,3 +50,30 @@ def wbb_team_season_rates(
             wbb_team_season_rates(2025).filter(split="all").sort("net_rtg_rank").head()
     """
     return mbb_team_season_rates(seasons, league="womens", return_as_pandas=return_as_pandas)
+
+
+def wbb_team_game_possessions(
+    seasons: int | list[int],
+    *,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Women's college per team and game: the possession counts behind :func:`wbb_team_season_rates`.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_team_season_rates.mbb_team_game_possessions` with
+    ``league="womens"``. A team-season's rows of a split add up to its season row.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, split)``: ``poss``, ``opp_poss``, ``pts``,
+        ``opp_pts`` and ``seconds``. See the mbb core for the definitions.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import wbb_team_game_possessions
+            wbb_team_game_possessions(2025).filter(split="all").head()
+    """
+    return mbb_team_game_possessions(seasons, league="womens", return_as_pandas=return_as_pandas)
