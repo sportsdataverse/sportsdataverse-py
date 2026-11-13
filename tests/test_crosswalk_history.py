@@ -219,3 +219,43 @@ def test_yahoo_cfb_season_page_with_the_day_is_still_rejected(tmp_path: Path, mo
     assert not xh._yahoo_answers_date(
         {"data": {"leagues": [{"games": [capped] * xh._YAHOO_ROW_CAP}]}}, date(2024, 8, 31)
     )
+
+
+def test_a_game_that_fails_on_two_runs_is_recorded_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # Yahoo CFB 2020-10-24: every game answers HTTP 500, so each re-run stopped at the same games.
+    def getter(provider: str, league: str, endpoint: str, gid: str) -> Any:
+        def fetch() -> Any:
+            if gid.startswith("bad"):
+                raise AssetFetchError("graphite-secure.sports.yahoo.com answered HTTP 500")
+            return {"ok": gid}
+
+        return fetch
+
+    monkeypatch.setattr(xh, "_getter", getter)
+    monkeypatch.setattr(xh, "_payload_problem", lambda *a: None)
+    monkeypatch.setattr(xh, "box_players", lambda *a: 1)
+    monkeypatch.setattr(xh, "_MAX_CONSECUTIVE_FAILURES", 3)
+    bad = [{"id": f"bad{i}", "final": True} for i in range(3)]
+
+    def run(games: List[Dict[str, Any]]) -> Dict[str, Any]:
+        store = xh.Store(tmp_path, "yahoo", "cfb")
+        return xh._fetch_games(store, xh.Pacer("yahoo"), "yahoo", "cfb", 2020, games, None)
+
+    with pytest.raises(xh.HarvestBlocked):  # first run: three new failures in a row still stop it
+        run(bad + [{"id": "good0", "final": True}])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    assert store.failed("playbook_boxscore", 2020) == {"bad0", "bad1", "bad2"}
+    assert store.missing("playbook_boxscore", 2020) == {}
+
+    # The host is down too: repeat failures neither stop the run nor become missing.
+    monkeypatch.setattr(xh, "_MAX_CONSECUTIVE_FAILURES", 10)
+    run(bad)
+    assert xh.Store(tmp_path, "yahoo", "cfb").missing("playbook_boxscore", 2020) == {}
+
+    monkeypatch.setattr(xh, "_MAX_CONSECUTIVE_FAILURES", 3)
+    tally = run(bad + [{"id": "good0", "final": True}, {"id": "bad3", "final": True}])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    assert tally["written"] == 1
+    assert set(store.missing("playbook_boxscore", 2020)) == {"bad0", "bad1", "bad2"}
+    assert "bad3" in store.failed("playbook_boxscore", 2020)
+    assert run(bad)["skipped"] == 3  # the next run fetches nothing for them
