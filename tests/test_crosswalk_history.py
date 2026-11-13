@@ -255,7 +255,30 @@ def test_a_game_that_fails_on_two_runs_is_recorded_missing(tmp_path: Path, monke
     monkeypatch.setattr(xh, "_MAX_CONSECUTIVE_FAILURES", 3)
     tally = run(bad + [{"id": "good0", "final": True}, {"id": "bad3", "final": True}])
     store = xh.Store(tmp_path, "yahoo", "cfb")
-    assert tally["written"] == 1
+    assert tally["written"] == 1 and tally["missing"] == 3
     assert set(store.missing("playbook_boxscore", 2020)) == {"bad0", "bad1", "bad2"}
     assert "bad3" in store.failed("playbook_boxscore", 2020)
     assert run(bad)["skipped"] == 3  # the next run fetches nothing for them
+
+
+def test_a_repeat_failure_after_the_last_answer_stays_retryable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # An answer before the failure says nothing about the host after it (an outage mid-run).
+    def getter(provider: str, league: str, endpoint: str, gid: str) -> Any:
+        def fetch() -> Any:
+            if gid.startswith("bad"):
+                raise AssetFetchError("graphite-secure.sports.yahoo.com answered HTTP 503")
+            return {"ok": gid}
+
+        return fetch
+
+    monkeypatch.setattr(xh, "_getter", getter)
+    monkeypatch.setattr(xh, "_payload_problem", lambda *a: None)
+    monkeypatch.setattr(xh, "box_players", lambda *a: 1)
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    store.strike("playbook_boxscore", 2020, "bad0", "fetch failed")
+    games = [{"id": "good0", "final": True}, {"id": "bad0", "final": True}]
+    tally = xh._fetch_games(store, xh.Pacer("yahoo"), "yahoo", "cfb", 2020, games, None)
+    assert tally["written"] == 1 and tally["missing"] == 0
+    assert xh.Store(tmp_path, "yahoo", "cfb").missing("playbook_boxscore", 2020) == {}

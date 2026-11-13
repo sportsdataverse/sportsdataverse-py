@@ -17,8 +17,8 @@ Layout under ``root`` (one ``*-alt-raw`` repo checkout)::
   Listings of a season that is still in progress are always re-fetched, so a re-run picks
   up newly completed games.
 * **A game that fails twice is missing.** A failed per-game fetch (a 5xx after retries,
-  a 400) is noted in ``_failed.tsv``. When it fails again on a later run while the host
-  answers other games, it is recorded in ``_missing.tsv``; that repeat failure does not
+  a 400) is noted in ``_failed.tsv``. When it fails again on a later run and a game after
+  it in that run answers, it is recorded in ``_missing.tsv``; that repeat failure does not
   count toward the consecutive-failure stop, so a run of broken games (Yahoo CFB
   2020-10-24 answers HTTP 500 for every game) cannot stop every re-run at the same spot.
 * **Atomic, never empty.** Files are written to a temp name and renamed. An empty body,
@@ -594,8 +594,9 @@ def _fetch_one(
     """One per-game fetch, with its failure strikes; ``run`` is this run's state, updated in place.
 
     A first failure is a strike in ``_failed.tsv``. A failure of a key struck on an earlier
-    run is missing once the host has answered a game in this run (``run["host_up"]``); until
-    then it waits in ``run["repeat"]``, so a host outage marks nothing missing.
+    run waits in ``run["repeat"]`` and becomes missing only when a LATER game in this run
+    answers: an answer before the failure says nothing about the host after it, so an
+    outage that outlasts the run marks nothing missing. ``run["missing"]`` counts the writes.
     """
     endpoint, season, key = where
     failed_before = key in store.failed(endpoint, season)
@@ -608,14 +609,13 @@ def _fetch_one(
     if status == "fail":
         if not failed_before:
             store.strike(endpoint, season, key, "fetch failed")
-        elif run["host_up"]:
-            store.miss(endpoint, season, key, "fetch failed twice")
         else:
             run["repeat"].append((endpoint, key))
-    elif not run["host_up"]:
-        run["host_up"] = True
+    elif run["repeat"]:
         for ep, k in run["repeat"]:
             store.miss(ep, season, k, "fetch failed twice")
+        run["missing"] += len(run["repeat"])
+        run["repeat"].clear()
     return status, payload
 
 
@@ -642,7 +642,7 @@ def _fetch_games(
         if season >= _CBS_PLAYS_FLOOR:
             jobs += [("game_scoring_plays", g) for g in games if g.get("enhanced")]
     fetched = 0
-    run: Dict[str, Any] = {"host_up": False, "repeat": []}
+    run: Dict[str, Any] = {"repeat": [], "missing": 0}
     for endpoint, g in jobs:
         if not g.get("final"):
             continue
@@ -688,6 +688,7 @@ def _fetch_games(
             )
         if endpoint in ("event_data", "playbook_boxscore", "game_boxscore"):
             tally["players"].append(box_players(provider, payload))
+    tally["missing"] += run["missing"]
     return tally
 
 
