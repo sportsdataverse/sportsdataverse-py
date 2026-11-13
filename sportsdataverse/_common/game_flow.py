@@ -43,6 +43,9 @@ Per team and season (:func:`team_season_flow`) the totals are summed, the time-b
 game clock, and the rated metrics get BB-D2's ``<m>_rank`` / ``<m>_pct`` / ``<m>_n``
 (:mod:`sportsdataverse._common.league_context`), within the season, among teams with at least half
 the most games, with a floor of five teams. One game is not a cohort, so the game table has no ranks.
+``kills_per75`` (BB-G8's per-75 basis) is 0.75 times ``kills_per_100`` with its rank, percentile and
+``_n`` copied. Kills are the one count with a per-possession rate: runs and double kills ship per game
+and as totals only.
 
 **Internal** -- not re-exported at the top-level ``sportsdataverse`` package.
 """
@@ -53,7 +56,7 @@ from typing import Final
 
 import polars as pl
 
-from sportsdataverse._common.league_context import MIN_COHORT_TEAMS, attach_ranks, attach_sample_sizes
+from sportsdataverse._common.league_context import MIN_COHORT_TEAMS, attach_per75, attach_ranks, attach_sample_sizes
 
 __all__ = [
     "GAME_FLOW_SCHEMA",
@@ -162,6 +165,11 @@ TEAM_SEASON_FLOW_SCHEMA: dict[str, pl.DataType] = {
     **{f"{m}_rank": pl.Float64() for m in _RATED},
     **{f"{m}_pct": pl.Float64() for m in _RATED},
     **{f"{m}_n": pl.Int64() for m in _RATED},
+    # BB-G8's per-75 basis: 0.75 * kills_per_100, its rank, percentile and sample copied
+    "kills_per75": pl.Float64(),
+    "kills_per75_rank": pl.Float64(),
+    "kills_per75_pct": pl.Float64(),
+    "kills_per75_n": pl.Int64(),
 }
 
 _G = "game_id"
@@ -415,7 +423,7 @@ def team_season_flow(games: pl.DataFrame) -> pl.DataFrame:
         team. ``lead_pct`` / ``trail_pct`` / ``tied_pct`` and ``avg_margin`` / ``avg_wp`` are
         weighted by game clock; the ``_pg`` columns are per game; ``stop_pct`` is ``stops /
         def_poss`` and ``kills_per_100`` kills per 100 defensive possessions (both null with no
-        possessions). ``opp_runs_10`` counts the opponents' 10-point runs. An empty input returns
+        possessions); ``kills_per75`` is 0.75 times it, with its rank, percentile and ``_n``. ``opp_runs_10`` counts the opponents' 10-point runs. An empty input returns
         that schema with zero rows.
     """
     if games.height == 0:
@@ -461,6 +469,7 @@ def team_season_flow(games: pl.DataFrame) -> pl.DataFrame:
             qualifier=_QUALIFIER,
         )
         .pipe(attach_sample_sizes, {m: e for m, (e, _) in _RATED.items()})
+        .pipe(attach_per75, {"kills_per75": "kills_per_100"})
         .sort("season", "team_id")
         .select(list(TEAM_SEASON_FLOW_SCHEMA))
         .cast(TEAM_SEASON_FLOW_SCHEMA)

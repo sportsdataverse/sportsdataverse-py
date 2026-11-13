@@ -114,7 +114,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_team_clutch`](reference/additional/analytics-3#wnba_team_clutch)
 - [`wnba_team_luck`](reference/additional/analytics-3#wnba_team_luck)
 - [`wnba_team_season_flow`](reference/additional/analytics-3#wnba_team_season_flow)
-- [`wnba_team_season_rates`](reference/additional/analytics-3#wnba_team_season_rates)
+- [`wnba_team_season_rates`](reference/additional/analytics-4#wnba_team_season_rates)
 - [`wnba_team_shot_zones`](reference/additional/analytics-4#wnba_team_shot_zones)
 - [`wnba_team_strength`](reference/additional/analytics-4#wnba_team_strength)
 - [`wnba_tracking_drive_value`](reference/additional/analytics-4#wnba_tracking_drive_value)
@@ -122,8 +122,8 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_tracking_reb_oe`](reference/additional/analytics-4#wnba_tracking_reb_oe)
 - [`wnba_tracking_rim_protect_value`](reference/additional/analytics-4#wnba_tracking_rim_protect_value)
 - [`wnba_tracking_shot_diet_value`](reference/additional/analytics-4#wnba_tracking_shot_diet_value)
-- [`wnba_tracking_touch_value`](reference/additional/analytics-4#wnba_tracking_touch_value)
-- [`zone_value_map`](reference/additional/analytics-4#zone_value_map)
+- [`wnba_tracking_touch_value`](reference/additional/analytics-5#wnba_tracking_touch_value)
+- [`zone_value_map`](reference/additional/analytics-5#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 

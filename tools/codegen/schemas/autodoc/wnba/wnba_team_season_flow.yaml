@@ -172,3 +172,15 @@ columns:
 - name: kills_per_100_n
   type: integer
   description: ''
+- name: kills_per75
+  type: double
+  description: ''
+- name: kills_per75_rank
+  type: double
+  description: ''
+- name: kills_per75_pct
+  type: double
+  description: ''
+- name: kills_per75_n
+  type: integer
+  description: ''

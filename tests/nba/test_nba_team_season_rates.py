@@ -229,7 +229,8 @@ def test_ranks_percentiles_and_sample_sizes(nba_2026: pl.DataFrame) -> None:
 
 def test_sample_gates_rank_only_half_signal_rates(nba_2026: pl.DataFrame) -> None:
     """``level`` gates: a rate is ranked only where its ``<m>_n`` reaches the fitted r = 0.5 sample."""
-    gates = TEAM_MIN_N["nba"]
+    # a scoring basis is gated where its rating is (BB-G8)
+    gates = {**TEAM_MIN_N["nba"], **{m: TEAM_MIN_N["nba"][r] for m, r in _BASIS_RATING.items()}}
     rated = [c.removesuffix("_rank") for c in TEAM_SEASON_RATES_SCHEMA if c.endswith("_rank")]
     assert set(rated) <= set(gates)
     for m in rated:
@@ -250,6 +251,62 @@ def test_sample_gates_rank_only_half_signal_rates(nba_2026: pl.DataFrame) -> Non
     )
     ungated_clutch = ungated.filter(split="clutch")
     assert ungated_clutch["net_rtg_rank"].null_count() < ungated_clutch.height
+
+
+#: BB-G8's scoring bases -> the rating whose sample and gate rank them.
+_BASIS_RATING = {
+    "pts_pg": "off_rtg",
+    "opp_pts_pg": "def_rtg",
+    "plus_minus_pg": "net_rtg",
+    "pts_per75": "off_rtg",
+    "opp_pts_per75": "def_rtg",
+    "plus_minus_per75": "net_rtg",
+}
+
+
+def test_scoring_bases_per_game_and_per_75(nba_2026: pl.DataFrame) -> None:
+    """BB-G8: per game against the final scores, per 75 = 0.75 x per 100 with the rating's rank."""
+    sched = pl.read_parquet(RATES / "nba_schedule_2026.parquet").filter(season_type="regular-season")
+    sides = [("home", "away"), ("away", "home")]
+    box = (
+        pl.concat(
+            [
+                sched.select(
+                    pl.col(f"{us}_team_id").alias("team_id"),
+                    pl.col(f"{us}_pts").alias("p"),
+                    pl.col(f"{them}_pts").alias("o"),
+                )
+                for us, them in sides
+            ]
+        )
+        .group_by("team_id")
+        .agg(pl.col("p").mean(), pl.col("o").mean())
+    )
+    all_ = nba_2026.filter(split="all")
+    assert all_.schema["team_id"] == box.schema["team_id"]
+    j = all_.join(box, on="team_id", how="inner", validate="1:1")
+    assert j.height == 30
+    assert (j["plus_minus"] == j["pts"] - j["opp_pts"]).all()
+    # possession points against the final score: within a third of a point a game (scoring corrections)
+    assert (j["pts_pg"] - j["p"]).abs().max() < 0.35
+    assert (j["opp_pts_pg"] - j["o"]).abs().max() < 0.35
+    assert (j["plus_minus_pg"] - (j["p"] - j["o"])).abs().max() < 0.35
+    for split in SPLITS:
+        t = nba_2026.filter(split=split)
+        assert (t["pts_pg"] - t["pts"] / t["games"]).abs().max() < 1e-9, split
+        for m, r in (("pts_per75", "off_rtg"), ("opp_pts_per75", "def_rtg"), ("plus_minus_per75", "net_rtg")):
+            assert (t[m] - 0.75 * t[r]).abs().max() < 1e-9, (split, m)
+            for s in ("rank", "pct", "n"):
+                assert t[f"{m}_{s}"].equals(t[f"{r}_{s}"]), (split, m, s)
+        for m, r in _BASIS_RATING.items():
+            assert t[f"{m}_n"].equals(t[f"{r}_n"]), (split, m)
+    # the per-game ranks: direction, contiguity (1..30, ties averaged) and the cohort percentile
+    for m, best in (("pts_pg", "max"), ("opp_pts_pg", "min"), ("plus_minus_pg", "max")):
+        assert all_.filter(pl.col(f"{m}_rank") == 1)[m].item() == getattr(all_[m], best)(), m
+        assert all_[f"{m}_rank"].sum() == 30 * 31 / 2, m
+        assert all_[f"{m}_pct"].max() == pytest.approx(100 * 30 / 31), m
+    # per game is not per possession: pace reorders them
+    assert not all_["pts_pg_rank"].equals(all_["off_rtg_rank"])
 
 
 def test_league_averages_n_is_the_cohort(nba_2026: pl.DataFrame) -> None:
