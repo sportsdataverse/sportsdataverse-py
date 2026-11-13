@@ -240,7 +240,7 @@ class Loader:
     # ``<producer repo>/<dataset>``: the producer's dataset page, rendered as
     # https://github.com/sportsdataverse/<repo>/blob/main/docs/datasets/<dataset>.md in the
     # docstring and on the loaders page. Set only where the producer publishes that page.
-    dataset_page: Optional[str] = None
+    dataset_page: str | None = None
     stub: bool = False
     stub_message: Optional[str] = None
     # Name of the loader that supersedes this one. When set, the generated body is
