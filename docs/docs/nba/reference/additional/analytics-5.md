@@ -666,6 +666,7 @@ One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `hom
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.nba_team_season_rates import nba_team_game_possessions
 games = nba_team_game_possessions(2026).filter(split="all")
 games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
