@@ -196,9 +196,12 @@ TEAM_SEASON_RATES_SCHEMA: dict[str, pl.DataType] = {
 
 
 def _league_ft_pct() -> pl.Expr:
-    """The league's free-throw percentage: every team's FTM over every team's FTA (null with none)."""
-    fta = pl.col("o_fta").sum()
-    return pl.when(fta > 0).then(pl.col("o_ftm").sum() / fta)
+    """The league's free-throw percentage: every team's FTM over every team's FTA (null with none).
+
+    Only rows that carry both counts are pooled, so a missing FTM is never read as a miss."""
+    both = pl.col("o_fta").is_not_null() & pl.col("o_ftm").is_not_null()
+    fta = pl.col("o_fta").filter(both).sum()
+    return pl.when(fta > 0).then(pl.col("o_ftm").filter(both).sum() / fta)
 
 
 def _with_bases(rates: pl.DataFrame, gates: dict[str, float]) -> pl.DataFrame:
@@ -495,18 +498,22 @@ _SUMMED = ("pts", "poss", "fga", "fgm", "fg3m", "fta", "ftm", "oreb", "rc", "tov
 def _league_values(games: pl.DataFrame) -> pl.DataFrame:
     """The season's league values, pooled over the priced team-games (one row per season)."""
     lg = {c: pl.col(f"_lg_{c}") for c in _SUMMED}
+
+    def ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:  # a zero denominator is undefined: null, never NaN
+        return pl.when(den > 0).then(num / den)
+
     return (
         games.group_by("season")
         .agg(pl.col(c).sum().alias(f"_lg_{c}") for c in _SUMMED)
         .select(
             "season",
-            (lg["pts"] / lg["poss"]).alias("lg_ppp"),
-            ((lg["fgm"] + 0.5 * lg["fg3m"]) / lg["fga"]).alias("lg_efg_pct"),
-            (lg["tov"] / lg["poss"]).alias("lg_tov_pct"),
-            (lg["oreb"] / lg["rc"]).alias("lg_orb_pct"),
-            (lg["fta"] / lg["fga"]).alias("lg_ft_rate"),
-            (lg["ftm"] / lg["fta"]).alias("lg_ft_pct"),
-            (lg["rc"] / lg["fga"]).alias("_lg_rc_per_fga"),
+            ratio(lg["pts"], lg["poss"]).alias("lg_ppp"),
+            ratio(lg["fgm"] + 0.5 * lg["fg3m"], lg["fga"]).alias("lg_efg_pct"),
+            ratio(lg["tov"], lg["poss"]).alias("lg_tov_pct"),
+            ratio(lg["oreb"], lg["rc"]).alias("lg_orb_pct"),
+            ratio(lg["fta"], lg["fga"]).alias("lg_ft_rate"),
+            ratio(lg["ftm"], lg["fta"]).alias("lg_ft_pct"),
+            ratio(lg["rc"], lg["fga"]).alias("_lg_rc_per_fga"),
         )
         .with_columns((pl.col("lg_ppp") / (1 - pl.col("lg_tov_pct"))).alias("chance_pts"))
     )
@@ -537,9 +544,10 @@ def team_game_four_factors(rows: pl.DataFrame, *, counts: pl.DataFrame | None = 
 
     The prices are linear, the Game on Paper game page's, with a league free-throw percentage. A
     chance (a possession that does not end in a turnover) is worth ``chance_pts`` =
-    ``lg_ppp / (1 - lg_tov_pct)``. Every league value is the season's, pooled over every team-game
-    with all its counts: ``lg_tov_pct`` is turnovers per counted possession and ``lg_ft_pct`` all
-    FTM over all FTA.
+    ``lg_ppp / (1 - lg_tov_pct)``. Every league value is the season's, pooled over the priced
+    team-games (those with all their counts and at least one counted possession): ``lg_tov_pct`` is
+    turnovers per counted possession and ``lg_ft_pct`` all FTM over all FTA. A league value with a
+    zero denominator is null, and so are the factors priced with it.
 
     * ``shooting_pts`` = ``2 * (eFG% - lg eFG%) * FGA``, the points the same shots were worth above
       a league-average shooter's, plus ``chance_pts * lg ORB% * (RC - lg RC/FGA * FGA)``: the

@@ -91,7 +91,8 @@ def wbb_team_game_four_factors(
     """Women's college per team and game: the four factors in points against the season's league average.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_team_season_rates.mbb_team_game_four_factors` with
-    ``league="womens"``. The five ``*_pts`` columns add up to ``pts_vs_exp`` exactly.
+    ``league="womens"``. The five ``*_pts`` columns add up to ``pts_vs_exp`` exactly; a game with
+    no team-box row has ``exp_pts`` but null factors.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).

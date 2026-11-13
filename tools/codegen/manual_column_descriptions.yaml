@@ -38544,12 +38544,12 @@ mbb_team_game_four_factors:
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
   free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
   game_id: The stats.ncaa.org contest id.
-  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game.
-  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over every team-game.
-  lg_ft_rate: League free-throw rate in the season, FTA / FGA over every team-game.
-  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game.
-  lg_ppp: League points per counted possession in the season.
-  lg_tov_pct: League turnovers per counted possession in the season.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
   pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
@@ -38746,12 +38746,12 @@ nba_team_game_four_factors:
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
   free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
   game_id: stats.nba.com game id.
-  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game.
-  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over every team-game.
-  lg_ft_rate: League free-throw rate in the season, FTA / FGA over every team-game.
-  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game.
-  lg_ppp: League points per counted possession in the season.
-  lg_tov_pct: League turnovers per counted possession in the season.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game.
   pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
@@ -38968,12 +38968,12 @@ wbb_team_game_four_factors:
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
   free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
   game_id: The stats.ncaa.org contest id.
-  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game.
-  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over every team-game.
-  lg_ft_rate: League free-throw rate in the season, FTA / FGA over every team-game.
-  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game.
-  lg_ppp: League points per counted possession in the season.
-  lg_tov_pct: League turnovers per counted possession in the season.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
   pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
@@ -39149,12 +39149,12 @@ wnba_team_game_four_factors:
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
   free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
   game_id: stats.wnba.com game id.
-  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game.
-  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over every team-game.
-  lg_ft_rate: League free-throw rate in the season, FTA / FGA over every team-game.
-  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game.
-  lg_ppp: League points per counted possession in the season.
-  lg_tov_pct: League turnovers per counted possession in the season.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game.
   pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'

@@ -233,3 +233,13 @@ def test_empty_and_missing() -> None:
     assert dict(empty.schema) == TEAM_GAME_FOUR_FACTORS_SCHEMA and empty.height == 0
     with pytest.raises(KeyError, match="ftm"):
         team_game_four_factors(pl.DataFrame(schema=RATE_ROWS_SCHEMA).drop("ftm"))
+
+
+def test_a_league_without_free_throws_is_null_never_nan() -> None:
+    """A zero league denominator (the WNBA capture with its free throws zeroed) gives null prices."""
+    rows, _ = _inputs("wnba")
+    books = team_game_four_factors(rows.with_columns(pl.lit(0.0).alias("fta"), pl.lit(0.0).alias("ftm")))
+    assert books["lg_ft_pct"].null_count() == books.height
+    assert books["free_throw_pts"].null_count() == books["residual_pts"].null_count() == books.height
+    assert not books.select(pl.col(pl.Float64).is_nan().any()).row(0, named=False).count(True)
+    assert books["shooting_pts"].null_count() == 0  # the other factors are still priced

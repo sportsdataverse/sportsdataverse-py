@@ -576,12 +576,12 @@ One row per `(season, team_id, game_id)`. `team_id` is the stats.nba.com team id
 | `rebounding_pts` | Float64 | Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team's own rebound chances, each a new chance. |
 | `free_throw_pts` | Float64 | Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%. |
 | `residual_pts` | Float64 | The remainder, exactly chance_pts x (box_poss - poss - FGA x the league's box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions' distance from the box estimate beyond the league's. Sums to zero over the league. |
-| `lg_ppp` | Float64 | League points per counted possession in the season. |
-| `lg_efg_pct` | Float64 | League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game. |
-| `lg_tov_pct` | Float64 | League turnovers per counted possession in the season. |
-| `lg_orb_pct` | Float64 | League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game. |
-| `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over every team-game. |
-| `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over every team-game. |
+| `lg_ppp` | Float64 | League points per counted possession in the season, over the priced team-games (those with all their counts). |
+| `lg_efg_pct` | Float64 | League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts). |
+| `lg_tov_pct` | Float64 | League turnovers per counted possession in the season, over the priced team-games (those with all their counts). |
+| `lg_orb_pct` | Float64 | League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts). |
+| `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts). |
+| `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts). |
 | `chance_pts` | Float64 | Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound. |
 
 ### wnba_team_game_possessions {#wnba_team_game_possessions}
