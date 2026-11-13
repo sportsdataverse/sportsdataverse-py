@@ -109,6 +109,11 @@ load_nba_team_season_stats(seasons=2025)
 ## load_nba_team_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet`
+
+:::caution[Coverage]
+nba_team_id is Int64, as NBA Stats ships team_id, so the bridge joins without a cast.
+:::
+
 ### Returns {#load_nba_team_crosswalk-returns}
 
 | col_name | type | description |
@@ -120,7 +125,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_short_name` | String | ESPN short name. |
 | `espn_location` | String | ESPN school/location only. |
 | `espn_mascot` | String | ESPN mascot/nickname. |
-| `nba_team_id` | String | NBA Stats team id side of the ESPN-to-NBA team crosswalk. |
+| `nba_team_id` | Int64 | NBA Stats team id side of the ESPN-to-NBA team crosswalk. |
 | `nba_team_abbreviation` | String | Team abbreviation as listed by the NBA Stats API. |
 | `nba_team_name` | String | Full NBA team name from the NBA Stats API, city followed by nickname (e.g. 'Boston Celtics'). |
 | `nba_team_city` | String | Team city as listed by the NBA Stats API. |

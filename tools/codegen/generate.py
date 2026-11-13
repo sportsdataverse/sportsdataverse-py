@@ -5124,8 +5124,10 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     and genuinely new ones append. A committed type survives when the fresh
     column is entirely null (a dtype inferred from no values is noise) or when
     committed says ``list`` -- :func:`_pl_to_doc_type` folds ``List(Int64)`` to
-    ``integer``, so that "change" is the mapper, not the data. Any other dtype
-    change is real and wins.
+    ``integer``, so that "change" is the mapper, not the data. A committed polars
+    dtype (``Int32``) survives a capture the mapper folds to the same family
+    (``integer``), so a pinned width is not widened back to ``Int64`` on render.
+    Any other dtype change is real and wins.
 
     Returns ``(columns, new, retained, types_preserved)``; the counts make a thin
     capture visible in the summary line."""
@@ -5143,7 +5145,13 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
             out.append(c)
             retained += 1
             continue
-        keep = f["type"] == c["type"] or c["type"] == "list" or all_null(c["name"])
+        keep = (
+            # The committed type in its polars form (``double`` -> ``Float64``, ``Int32`` as is), then folded the way
+            # the fresh capture was: ``Int32`` matches ``integer``, but ``double`` never matches ``character``.
+            f["type"] in (c["type"], _pl_to_doc_type(_doc_dtype(c["type"])))
+            or c["type"] == "list"
+            or all_null(c["name"])
+        )
         if keep and f["type"] != c["type"]:
             types_kept += 1
         out.append(c if keep else {**c, "type": f["type"]})

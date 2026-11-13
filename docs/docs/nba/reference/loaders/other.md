@@ -395,6 +395,11 @@ load_nba_rosters(seasons=2025)
 ## load_nba_schedule_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet`
+
+:::caution[Coverage]
+nba_game_id stays String, the zero-padded NBA Stats game id (0022300001); the nba_*_team_id bridge ids are Int64, as NBA Stats ships team_id.
+:::
+
 ### Returns {#load_nba_schedule_crosswalk-returns}
 
 | col_name | type | description |
@@ -407,8 +412,8 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 | `nba_game_id` | String | NBA Stats 10-character game id matched to the ESPN game in the crosswalk. |
 | `nba_game_code` | String | NBA game code (date and matchup string) from the NBA Stats API. |
-| `nba_home_team_id` | String | NBA Stats team id of the home team. |
-| `nba_away_team_id` | String | NBA Stats team id of the away team. |
+| `nba_home_team_id` | Int64 | NBA Stats team id of the home team. |
+| `nba_away_team_id` | Int64 | NBA Stats team id of the away team. |
 | `fox_game_id` | String | Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game. |
 | `fox_home_team_id` | String | Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is. |
 | `fox_away_team_id` | String | Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is. |

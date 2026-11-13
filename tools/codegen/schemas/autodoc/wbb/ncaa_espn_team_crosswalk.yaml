@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: espn_team_id
-  type: integer
+  type: Int32
   description: ''
 - name: espn_display_name
   type: character
