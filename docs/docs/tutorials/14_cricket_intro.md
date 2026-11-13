@@ -309,7 +309,7 @@ if isinstance(summary_raw, dict):
 ```
 
     ✅ match summary 1535465
-    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'leaders', 'article', 'videos', 'news', 'header', 'wallclockAvailable', 'meta', 'standings']
+    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'article', 'videos', 'news', 'header', 'wallclockAvailable', 'meta', 'leaders', 'standings']
 
 
 ### Parsing all 8 sections at once
@@ -556,11 +556,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Glenn Maxwell; superhuman one … ┆ 2026-11-04T01:01:31Z ┆ HeadlineNews │
-    │ Barrett-Wild appointed Sussex … ┆ 2026-11-03T22:14:51Z ┆ HeadlineNews │
-    │ Daryl Mitchell - an unlikely b… ┆ 2026-11-03T15:57:37Z ┆ Story        │
-    │ Deitz steps down as WI head co… ┆ 2026-11-03T15:18:33Z ┆ HeadlineNews │
-    │ NCL round-up: Chattogram win a… ┆ 2026-11-03T14:49:57Z ┆ HeadlineNews │
+    │ Cricket Scotland announces red… ┆ 2026-11-09T22:56:58Z ┆ HeadlineNews │
+    │ Laurie Evans: 'My world was tu… ┆ 2026-11-09T18:59:20Z ┆ HeadlineNews │
+    │ Dale Benkenstein appointed Ban… ┆ 2026-11-09T17:46:49Z ┆ HeadlineNews │
+    │ Stats - Two 40-plus centurions… ┆ 2026-11-09T17:15:44Z ┆ Story        │
+    │ Shanto: Bangladesh failed to m… ┆ 2026-11-09T16:41:24Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 

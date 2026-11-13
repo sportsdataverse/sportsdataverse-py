@@ -1115,16 +1115,16 @@ else:
     │ ---     ┆ ---             ┆ ---               ┆ ---    ┆ ---         ┆ ---  │
     │ i64     ┆ str             ┆ str               ┆ f64    ┆ f64         ┆ f64  │
     ╞═════════╪═════════════════╪═══════════════════╪════════╪═════════════╪══════╡
-    │ 349     ┆ Black Knights   ┆ ARMY              ┆ 1.0    ┆ 0.8333333   ┆ 5.0  │
-    │ 2005    ┆ Falcons         ┆ AFA               ┆ 5.0    ┆ 0.375       ┆ 3.0  │
-    │ 2060    ┆ Falcons         ┆ BENT              ┆ 4.0    ┆ 0.5         ┆ 4.0  │
-    │ 2099    ┆ Golden Griffins ┆ CAN               ┆ 4.0    ┆ 0.428571    ┆ 3.0  │
-    │ 2529    ┆ Pioneers        ┆ SHU               ┆ 4.0    ┆ 0.5         ┆ 4.0  │
-    │ 178     ┆ Tigers          ┆ RIT               ┆ 6.0    ┆ 0.25        ┆ 2.0  │
-    │ 2523    ┆ Colonials       ┆ RMU               ┆ 7.0    ┆ 0.222222    ┆ 2.0  │
-    │ 107     ┆ Crusaders       ┆ HC                ┆ 6.0    ┆ 0.4         ┆ 4.0  │
+    │ 349     ┆ Black Knights   ┆ ARMY              ┆ 2.0    ┆ 0.75        ┆ 6.0  │
     │ 315     ┆ Purple Eagles   ┆ NIA               ┆ 4.0    ┆ 0.5555556   ┆ 5.0  │
-    │ 127     ┆ Spartans        ┆ MSU               ┆ 1.0    ┆ 0.8333333   ┆ 5.0  │
+    │ 2005    ┆ Falcons         ┆ AFA               ┆ 6.0    ┆ 0.4         ┆ 4.0  │
+    │ 2060    ┆ Falcons         ┆ BENT              ┆ 5.0    ┆ 0.5         ┆ 5.0  │
+    │ 2099    ┆ Golden Griffins ┆ CAN               ┆ 6.0    ┆ 0.333333    ┆ 3.0  │
+    │ 2529    ┆ Pioneers        ┆ SHU               ┆ 4.0    ┆ 0.6         ┆ 6.0  │
+    │ 178     ┆ Tigers          ┆ RIT               ┆ 7.0    ┆ 0.3         ┆ 3.0  │
+    │ 2523    ┆ Colonials       ┆ RMU               ┆ 7.0    ┆ 0.363636    ┆ 4.0  │
+    │ 107     ┆ Crusaders       ┆ HC                ┆ 8.0    ┆ 0.333333    ┆ 4.0  │
+    │ 127     ┆ Spartans        ┆ MSU               ┆ 2.0    ┆ 0.75        ┆ 6.0  │
     └─────────┴─────────────────┴───────────────────┴────────┴─────────────┴──────┘
 
 
@@ -1156,14 +1156,14 @@ else:
     ╞═════════╪══════╪════════╪═══════════════════╪════════════════╡
     │ 275     ┆ 1    ┆ 0.0    ┆ null              ┆ Badgers        │
     │ 130     ┆ 2    ┆ 0.0    ┆ null              ┆ Wolverines     │
-    │ 127     ┆ 3    ┆ 0.0    ┆ null              ┆ Spartans       │
-    │ 2172    ┆ 4    ┆ 0.0    ┆ null              ┆ Pioneers       │
-    │ 2711    ┆ 5    ┆ 0.0    ┆ null              ┆ Broncos        │
-    │ 134     ┆ 6    ┆ 0.0    ┆ null              ┆ Bulldogs       │
-    │ 2514    ┆ 6    ┆ 0.0    ┆ null              ┆ Bobcats        │
-    │ 2043    ┆ 8    ┆ 0.0    ┆ null              ┆ Vikings        │
-    │ 2507    ┆ 9    ┆ 0.0    ┆ null              ┆ Friars         │
-    │ 155     ┆ 10   ┆ 0.0    ┆ null              ┆ Fighting Hawks │
+    │ 2172    ┆ 3    ┆ 0.0    ┆ null              ┆ Pioneers       │
+    │ 127     ┆ 4    ┆ 0.0    ┆ null              ┆ Spartans       │
+    │ 2514    ┆ 5    ┆ 0.0    ┆ null              ┆ Bobcats        │
+    │ 2711    ┆ 6    ┆ 0.0    ┆ null              ┆ Broncos        │
+    │ 134     ┆ 7    ┆ 0.0    ┆ null              ┆ Bulldogs       │
+    │ 155     ┆ 8    ┆ 0.0    ┆ null              ┆ Fighting Hawks │
+    │ 2043    ┆ 9    ┆ 0.0    ┆ null              ┆ Vikings        │
+    │ 2507    ┆ 10   ┆ 0.0    ┆ null              ┆ Friars         │
     └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
@@ -1416,13 +1416,13 @@ else:
     │ 194     ┆ 1    ┆ 0.0    ┆ null              ┆ Buckeyes       │
     │ 135     ┆ 2    ┆ 0.0    ┆ null              ┆ Golden Gophers │
     │ 275     ┆ 3    ┆ 0.0    ┆ null              ┆ Badgers        │
-    │ 111     ┆ 4    ┆ 0.0    ┆ null              ┆ Huskies        │
-    │ 163     ┆ 5    ┆ 0.0    ┆ null              ┆ Tigers         │
+    │ 163     ┆ 4    ┆ 0.0    ┆ null              ┆ Tigers         │
+    │ 111     ┆ 5    ┆ 0.0    ┆ null              ┆ Huskies        │
     │ 2514    ┆ 6    ┆ 0.0    ┆ null              ┆ Bobcats        │
     │ 213     ┆ 7    ┆ 0.0    ┆ null              ┆ Nittany Lions  │
     │ 2142    ┆ 8    ┆ 0.0    ┆ null              ┆ Raiders        │
-    │ 2137    ┆ 9    ┆ 0.0    ┆ null              ┆ Golden Knights │
-    │ 2594    ┆ 10   ┆ 0.0    ┆ null              ┆ Huskies        │
+    │ 2594    ┆ 9    ┆ 0.0    ┆ null              ┆ Huskies        │
+    │ 2137    ┆ 10   ┆ 0.0    ┆ null              ┆ Golden Knights │
     └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
@@ -1474,6 +1474,8 @@ else:
 ```
 
     ✅ ufl teams
+
+
     ✅ xfl teams
 
 
@@ -1481,10 +1483,14 @@ else:
 
 
     ✅ college_baseball teams
+
+
     ✅ college_softball teams
 
 
     ✅ mch teams
+
+
     ✅ wch teams
     Total teams across all 7 leagues: 1067
 
@@ -1530,7 +1536,7 @@ else:
     print('no CFL games today (or offseason)')
 ```
 
-    ✅ today's CFL slate (20261104)
+    ✅ today's CFL slate (20261109)
     no CFL games today (or offseason)
 
 

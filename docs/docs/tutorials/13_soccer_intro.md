@@ -893,7 +893,11 @@ pl.DataFrame(rows)
 ```
 
     ✅ Premier League standings
+
+
     ✅ La Liga standings
+
+
     ✅ Bundesliga standings
 
 
