@@ -109,6 +109,16 @@ def test_a_recapture_keeps_an_authored_description():
     assert not str(cols[1].get("description", "")).strip()
 
 
+def test_a_recapture_keeps_a_pinned_integer_width():
+    """A committed ``Int32`` (``ncaa_espn_team_crosswalk.espn_team_id``) must not fold back to ``integer``,
+    which renders as ``Int64``; a real family change (integer -> character) still wins."""
+    committed = [{"name": "espn_team_id", "type": "Int32"}, {"name": "x", "type": "Int32"}]
+    fresh = pl.DataFrame({"espn_team_id": [2000], "x": ["a"]}, schema={"espn_team_id": pl.Int32, "x": pl.Utf8})
+    cols, *_ = generate._merge_autodoc_columns(committed, fresh)
+    assert [c["type"] for c in cols] == ["Int32", "character"]
+    assert generate._doc_dtype(cols[0]["type"]) == "Int32"
+
+
 def test_a_call_reference_is_resolved_once_and_can_pick_a_key(monkeypatch):
     calls = []
 
