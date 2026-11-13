@@ -179,6 +179,8 @@ def load_nba_stats_leaguedash(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load one asset family of the ``nba_stats_leaguedash`` release.
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_leaguedash
+
     ``nba_stats_leaguedash`` is a parameter cube: one asset per
     (family, season) pair rather than one per season, so a family must be named.
     The valid families are exported as
@@ -360,6 +362,8 @@ def load_nba_stats_synergy(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load Synergy play-type stats (the ``nba_stats_synergy`` release).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_synergy
+
     ``nba_stats_synergy`` publishes 72 files per season, one per
     (season type, play type, offensive/defensive, per mode) combination, named
     ``{season_type}_{play_type}_{type_grouping}_{per_mode}_{END year}.parquet``.
@@ -469,6 +473,8 @@ def load_nba_stats_hustle_player(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load player hustle stats (the ``nba_stats_hustle`` release, player files).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_hustle
+
     ``nba_stats_hustle`` publishes eight files per season,
     ``leaguehustlestats{player|team}_{season_type}_{per_mode}_{END year}.parquet``.
     Player and team files have different columns, so each entity has its own
@@ -523,6 +529,8 @@ def load_nba_stats_hustle_team(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load team hustle stats (the ``nba_stats_hustle`` release, team files).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_hustle
+
     The team half of ``nba_stats_hustle``: unions the four
     ``leaguehustlestatsteam_{season_type}_{per_mode}_{END year}.parquet`` files
     (or the requested subset). See :func:`load_nba_stats_hustle_player` for the
@@ -575,6 +583,8 @@ def load_nba_stats_matchups(
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Load offensive-vs-defensive player matchups (``nba_stats_matchups``, season files).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_matchups
 
     Reads ``leagueseasonmatchups_regular-season_{per_mode}_{END year}.parquet``
     from ``nba_stats_matchups``: one row per (offensive player, defensive player)
@@ -635,6 +645,8 @@ def load_nba_stats_matchups_rollup(
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Load defensive matchup roll-ups by position (``nba_stats_matchups``, rollup files).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_matchups
 
     Reads ``matchupsrollup_{season_type}_{per_mode}_{END year}.parquet`` from
     ``nba_stats_matchups``: one row per defender per offensive position
@@ -709,6 +721,8 @@ def load_nba_stats_draft_combine_stats(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load the draft-combine summary table (``nba_stats_draft_combine``, ``draftcombinestats``).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
     One row per combine participant: measurements, athletic testing and the
     shooting drills summarised as ``"made-attempted"`` text.
 
@@ -753,6 +767,8 @@ def load_nba_stats_draft_combine_anthro(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load draft-combine anthropometric measurements (``draftcombineplayeranthro``).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
     One row per combine participant: height with and without shoes, weight,
     wingspan, standing reach, body fat and hand size.
 
@@ -795,6 +811,8 @@ def load_nba_stats_draft_combine_drills(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
     """Load draft-combine athletic drill results (``draftcombinedrillresults``).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
 
     One row per combine participant: vertical leaps, lane agility, the
     three-quarter-court sprint and the bench press.
@@ -839,6 +857,8 @@ def load_nba_stats_draft_combine_spot_shooting(
 ) -> pl.DataFrame | pd.DataFrame:
     """Load draft-combine spot-up shooting drills (``draftcombinespotshooting``).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
     One row per combine participant: made, attempted and percentage from five
     floor spots at 15 feet, the college three and the NBA three. Spots a year's
     combine did not run are null.
@@ -882,6 +902,8 @@ def load_nba_stats_draft_combine_nonstationary_shooting(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
     """Load draft-combine off-the-dribble and on-the-move shooting (``draftcombinenonstationaryshooting``).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
 
     One row per combine participant: made, attempted and percentage for the
     off-the-dribble (15 feet and college three, three spots) and on-the-move

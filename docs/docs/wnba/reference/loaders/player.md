@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_wnba_player_boxscore
 
-Release: [espn_wnba_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_boxscores/player_box_{season}.parquet`
+Release: [espn_wnba_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_boxscores/player_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_box.md)
 ### Returns {#load_wnba_player_boxscore-returns}
 
 | col_name | type | description |
@@ -78,7 +78,7 @@ load_wnba_player_boxscore(seasons=2024)
 
 ## load_wnba_player_season_stats
 
-Release: [espn_wnba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet`
+Release: [espn_wnba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_season_stats.md)
 ### Returns {#load_wnba_player_season_stats-returns}
 
 | col_name | type | description |
@@ -106,7 +106,7 @@ load_wnba_player_season_stats(seasons=2024)
 
 ## load_wnba_player_crosswalk
 
-Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_player_crosswalk_{season}.parquet`
+Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_player_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_crosswalk.md)
 
 :::caution[Coverage]
 wnba_player_id is Int64, as WNBA Stats ships player_id / person_id, so the bridge joins without a cast.
@@ -144,7 +144,7 @@ load_wnba_player_crosswalk(seasons=2026)
 
 ## load_wnba_player_core
 
-Release: [espn_wnba_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_core/player_core_{season}.parquet`
+Release: [espn_wnba_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_core/player_core_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_core.md)
 ### Returns {#load_wnba_player_core-returns}
 
 | col_name | type | description |
