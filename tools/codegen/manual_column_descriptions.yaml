@@ -41633,6 +41633,11 @@ load_mbb_player_value:
   box_dbpm: Box-score defensive plus/minus for the player, the defensive half of box BPM.
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
 load_mbb_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
   adj_em_z: Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation,
     so each season is centered at zero with unit spread.
   adj_tempo: Opponent-adjusted possessions per 40 minutes, solved by the same fixed point as the efficiency ratings under
@@ -49700,6 +49705,11 @@ load_wbb_player_value:
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
   adj_em_z: Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation
     over every team in the frame, so it is mean 0 and standard deviation 1 per season.
   adj_tempo: Opponent-adjusted tempo in possessions per 40 minutes, produced by the same fixed-point adjustment as the efficiencies
@@ -81068,3 +81078,55 @@ wp_variants:
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
   home_win_prob_naive: Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior.
   home_win_prob_market: Home win probability with the closing no-vig market WP as the prior; null without a line.
+mbb_pregame_projections:
+  season: 'Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year).'
+  game_id: 'ESPN game id (Int32).'
+  game_date: 'Game date (ESPN schedule).'
+  as_of_date: 'The ratings use the completed games dated strictly before this date: the game''s date, or the day after the last completed game for a game not yet reached.'
+  neutral_site: 'Neutral-site flag; a neutral game gets no home term.'
+  home_games: 'Home team''s games behind its rating (0 before its first game).'
+  away_games: 'Away team''s games behind its rating.'
+  exp_home_margin: 'Expected home margin in points, the producer''s closed form on the two ratings (positive favours the home team).'
+  rated_home_prob: 'Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league''s fitted margin_sd; null when a side has no rating.'
+  home_team_id: 'ESPN home team id (Utf8, the mbb_ratings / wbb_ratings team_id key).'
+  away_team_id: 'ESPN away team id (Utf8).'
+  home_rating: 'Home team''s adjusted efficiency margin before the game with the preseason prior blended in (AdjEM, points per 100 over an average opponent); its prior alone before its first game.'
+  away_rating: 'Away team''s adjusted efficiency margin before the game, on the same basis.'
+  home_rank: 'Dense rank of home_rating among the teams rated as of the date (1 = best).'
+  away_rank: 'Dense rank of away_rating among the teams rated as of the date.'
+  home_rating_raw: 'Home team''s AdjEM before the game without the prior: the season-to-date mbb_ratings number.'
+  away_rating_raw: 'Away team''s AdjEM before the game without the prior.'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women); 0 when the blend is off or the previous season is not released.'
+  hfa: 'Home-court term in points (the league''s fitted hfa), 0 at a neutral site.'
+nba_pregame_projections:
+  season: 'Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year).'
+  game_id: 'ESPN game id (Int32).'
+  game_date: 'Game date (ESPN schedule).'
+  as_of_date: 'The ratings use the completed games dated strictly before this date: the game''s date, or the day after the last completed game for a game not yet reached.'
+  neutral_site: 'Neutral-site flag; a neutral game gets no home term.'
+  home_games: 'Home team''s regular-season games behind its rating.'
+  away_games: 'Away team''s games behind its rating.'
+  exp_home_margin: 'Expected home margin in points, the producer''s closed form on the two ratings (positive favours the home team).'
+  rated_home_prob: 'Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league''s fitted margin_sd; null when a side has no rating.'
+  home_team_id: 'ESPN home team id (Int32).'
+  away_team_id: 'ESPN away team id (Int32).'
+  stats_game_id: 'The stats.nba.com / stats.wnba.com game id matched on date and team names; null for a game with no match (All-Star games, the WNBA Commissioner''s Cup final).'
+  home_rating: 'Home team''s team_strength adj_net_rtg before the game: the possession ridge over the regular-season possessions dated before as_of_date, points per 100 over an average opponent on a neutral court.'
+  away_rating: 'Away team''s adj_net_rtg before the game, on the same basis.'
+  home_rank: 'Home team''s adj_net_rtg_rank as of the date (team_strength''s rank: 1 = best, among teams with at least half the most games).'
+  away_rank: 'Away team''s adj_net_rtg_rank as of the date.'
+  home_pace: 'Home team''s team_strength pace (possessions per 48 minutes NBA, 40 WNBA) as of the date.'
+  away_pace: 'Away team''s pace as of the date.'
+  hfa: 'Home-court term in points (the league''s fitted hfa: 2.184 NBA, 1.184 WNBA), 0 at a neutral site.'
+mbb_team_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
+wbb_team_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'

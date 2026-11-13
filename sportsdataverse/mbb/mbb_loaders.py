@@ -528,19 +528,24 @@ def load_mbb_ratings(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name  |type    |
-        |:---------|:-------|
-        |season    |Int64   |
-        |team_id   |String  |
-        |adj_o     |Float64 |
-        |adj_d     |Float64 |
-        |adj_em    |Float64 |
-        |adj_tempo |Float64 |
-        |raw_o     |Float64 |
-        |raw_d     |Float64 |
-        |games     |Int64   |
-        |rank      |Int64   |
-        |adj_em_z  |Float64 |
+        |col_name     |type    |
+        |:------------|:-------|
+        |season       |Int64   |
+        |team_id      |String  |
+        |adj_o        |Float64 |
+        |adj_d        |Float64 |
+        |adj_em       |Float64 |
+        |adj_tempo    |Float64 |
+        |raw_o        |Float64 |
+        |raw_d        |Float64 |
+        |games        |Int64   |
+        |rank         |Int64   |
+        |adj_em_z     |Float64 |
+        |adj_o_blend  |Float64 |
+        |adj_d_blend  |Float64 |
+        |adj_em_blend |Float64 |
+        |rank_blend   |Int64   |
+        |prior_games  |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2006.

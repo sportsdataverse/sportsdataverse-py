@@ -229,6 +229,7 @@ nba:
   nba_situational_lineup: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
   nba_rated_priors: {season: 2026}
+  nba_pregame_projections: {season: 2026}
   nba_cup_standings: {season: 2026}  # 30 rows x 17 cols (stats.nba.com scheduleleaguev2)
   nba_cup_sim: {season: 2026, as_of_date: 2025-11-14}  # 30 rows x 23 cols
   nba_neutral_site_games: {seasons: [2026]}  # 6 rows x 12 cols
@@ -390,7 +391,8 @@ mbb:
   ncaa_mbb_join_pbp_shots: {pbp: {$call: mbb.ncaa_mbb_play_by_play, args: {game_ids: ["6470186"]}}, shots: {$call: mbb.ncaa_mbb_shot_locations, args: {game_ids: ["6470186"]}}}  # 529 rows x 40 cols
   in_game_features: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 7 cols
   mbb_in_game_win_prob: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 8 cols
-  mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
+  mbb_team_ratings: {seasons: 2024}  # 717 rows x 16 cols
+  mbb_pregame_projections: {season: 2026}
   mbb_team_season_rates: {seasons: 2025}
   mbb_team_game_possessions: {seasons: 2025}
   mbb_game_player_impact: {seasons: 2025}

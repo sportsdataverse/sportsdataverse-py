@@ -12644,6 +12644,16 @@ load_mbb_ratings:
   type: Int64
 - name: adj_em_z
   type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
+  type: Float64
 load_mbb_rosters:
 - name: season
   type: Int32
@@ -30442,6 +30452,16 @@ load_wbb_ratings:
 - name: rank
   type: Int64
 - name: adj_em_z
+  type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
   type: Float64
 load_wbb_rosters:
 - name: season

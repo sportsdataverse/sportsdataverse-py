@@ -537,7 +537,77 @@ _RATINGS_SCHEMA = {
     "games": pl.Int64,
     "rank": pl.Int64,
     "adj_em_z": pl.Float64,
+    "adj_o_blend": pl.Float64,
+    "adj_d_blend": pl.Float64,
+    "adj_em_blend": pl.Float64,
+    "rank_blend": pl.Int64,
+    "prior_games": pl.Float64,
 }
+
+
+def load_preseason_prior(season: int, schedule: pl.DataFrame, *, league: str = "mens") -> pl.DataFrame:
+    """The preseason prior for ``season`` from the previous season's released schedule and team box.
+
+    :func:`sportsdataverse.mbb.mbb_college_season.season_prior` over the previous season's
+    release, for this season's Division I teams: the prior the season sim blends in
+    (:data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`).
+
+    Args:
+        season: The season being rated.
+        schedule: That season's ESPN schedule (``load_mbb_schedule`` / ``load_wbb_schedule``
+            rows); its Division I teams get a prior.
+        league: ``"mens"`` / ``"womens"``.
+
+    Returns:
+        :data:`PRIOR_SCHEMA` rows, empty when the previous season is not released (no prior).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule
+            from sportsdataverse.mbb.mbb_team_ratings import load_preseason_prior
+            prior = load_preseason_prior(2026, load_mbb_schedule([2026]))
+    """
+    from sportsdataverse.errors import SeasonNotFoundError
+    from sportsdataverse.mbb.mbb_college_season import college_teams, normalize_college_schedule, season_prior
+
+    load_schedule, load_team_box = _league_loaders(league)
+    try:
+        prev_sched, prev_box = load_schedule([season - 1]), load_team_box([season - 1])
+    except SeasonNotFoundError:  # the season before the release floor: no prior
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
+    if not (schedule.height and prev_sched.height and prev_box.height):
+        return pl.DataFrame(schema=PRIOR_SCHEMA)
+    teams = college_teams(normalize_college_schedule(schedule))
+    return season_prior(normalize_college_schedule(prev_sched), prev_box, teams, league=league)
+
+
+def _blend_ratings(eff: pl.DataFrame, ratings: pl.DataFrame, prior: pl.DataFrame, *, league: str) -> pl.DataFrame:
+    """Per (season, team): the AdjO / AdjD / AdjEM with the preseason prior, and its weight in games.
+
+    A season with no prior rows keeps the raw ratings and ``prior_games`` 0.
+    """
+    from sportsdataverse.mbb.mbb_prediction_constants import PRESEASON_PRIOR
+
+    weight = PRESEASON_PRIOR[league].weight
+    frames = []
+    for s in ratings.get_column("season").unique().sort().to_list():
+        pri = prior.filter(pl.col("season") == s)
+        if pri.height:
+            rated = adjust_efficiency(eff.filter(pl.col("season") == s), league=league, prior=pri, prior_weight=weight)
+        else:
+            rated = ratings.filter(pl.col("season") == s)
+        frames.append(
+            rated.select(
+                "season",
+                "team_id",
+                pl.col("adj_o").alias("adj_o_blend"),
+                pl.col("adj_d").alias("adj_d_blend"),
+                pl.col("adj_em").alias("adj_em_blend"),
+                pl.lit(weight if pri.height else 0.0, dtype=pl.Float64).alias("prior_games"),
+            )
+        )
+    return pl.concat(frames)
 
 
 def _league_loaders(league: str):  # type: ignore[no-untyped-def]
@@ -578,6 +648,13 @@ def mbb_team_ratings(
     runs the opponent-adjustment fixed points, and adds a per-season dense
     ``rank`` (on ``adj_em`` descending) and ``adj_em_z`` (z-score of ``adj_em``).
 
+    The ``_blend`` columns are the same fixed point with the season sim's preseason prior
+    blended in (:func:`load_preseason_prior`): each Division I team is shrunk toward last
+    season's regressed rating as if it had played ``prior_games`` extra games at it
+    (:data:`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`: 4 men, 3 women),
+    so a team with ``g`` games is rated about ``g / (g + prior_games)`` on this season. The
+    raw columns are unchanged.
+
     Args:
         seasons: A season (e.g. ``2024``) or list of seasons.
         league: ``"mens"`` / ``"womens"`` -- selects the constants.
@@ -585,8 +662,11 @@ def mbb_team_ratings(
 
     Returns:
         One row per (season, team_id) with columns ``season, team_id, adj_o,
-        adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z``. Empty
-        input returns that schema with zero rows.
+        adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z``, then
+        ``adj_o_blend, adj_d_blend, adj_em_blend, rank_blend`` (dense, on
+        ``adj_em_blend``) and ``prior_games``. A season whose previous season is not
+        released has no prior: ``prior_games`` 0 and the blend equals the raw rating.
+        Empty input returns that schema with zero rows.
 
     Raises:
         InsufficientInputError: When more than 10% of a requested season's
@@ -603,7 +683,8 @@ def mbb_team_ratings(
     """
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     load_schedule, load_team_box = _league_loaders(league)
-    schedule = _normalize_schedule(load_schedule(seasons_list))
+    raw_schedule = load_schedule(seasons_list)
+    schedule = _normalize_schedule(raw_schedule)
     team_box = load_team_box(seasons_list)
     eff = raw_game_efficiency(schedule, team_box)
 
@@ -612,9 +693,20 @@ def mbb_team_ratings(
     else:
         ratings = adjust_efficiency(eff, league=league)
         tempo = adjust_tempo(eff, league=league)
+        priors = [
+            load_preseason_prior(int(s), raw_schedule.filter(pl.col("season") == s), league=league)
+            for s in eff.get_column("season").unique().sort().to_list()
+        ]
+        blend = _blend_ratings(eff, ratings, pl.concat(priors), league=league)
         out = (
             ratings.join(tempo, on=["season", "team_id"], how="left")
+            .join(blend, on=["season", "team_id"], how="left", validate="1:1")
             .with_columns(
+                pl.col("adj_em_blend")
+                .rank(method="dense", descending=True)
+                .over("season")
+                .cast(pl.Int64)
+                .alias("rank_blend"),
                 pl.col("adj_em").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank"),
                 (
                     (pl.col("adj_em") - pl.col("adj_em").mean().over("season")) / pl.col("adj_em").std().over("season")
@@ -633,5 +725,6 @@ __all__ = [
     "adjust_tempo",
     "mbb_team_ratings",
     "preseason_prior",
+    "load_preseason_prior",
     "PRIOR_SCHEMA",
 ]
