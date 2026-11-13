@@ -415,6 +415,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_stint_rows](additional/analytics-6.md#ncaa_stint_rows) | Map the stats.ncaa.org pbp and possessions onto the stint-row frame. |
 | [ncaa_team_box_count_rows](additional/analytics-6.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |
 | [ncaa_team_coaches](additional/analytics-6.md#ncaa_team_coaches) | Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages. |
+| [ncaa_team_game_counts](additional/analytics-6.md#ncaa_team_game_counts) | Each team's shots, free throws, rebounds and turnovers per game, whole and with garbage time split out. |
 | [order_lineup](additional/analytics-6.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
 | [pos_class_to_score](additional/analytics-6.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
 | [project_bracket](additional/analytics-6.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |

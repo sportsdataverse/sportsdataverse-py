@@ -3834,6 +3834,7 @@
   "ncaa_stint_rows": "analytics-6",
   "ncaa_team_box_count_rows": "analytics-6",
   "ncaa_team_coaches": "analytics-6",
+  "ncaa_team_game_counts": "analytics-6",
   "ncaafetcherfetch_game_box": "stats-ncaa-org",
   "ncaafetcherfetch_game_individual_stats": "stats-ncaa-org",
   "ncaafetcherfetch_game_pbp": "stats-ncaa-org",
