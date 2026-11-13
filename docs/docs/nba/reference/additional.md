@@ -315,6 +315,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_situational_team_games](additional/analytics-5.md#nba_situational_team_games) | Team splits by situation, one game at a time: `nba_situational_team` per game. |
 | [nba_stint_rows](additional/analytics-5.md#nba_stint_rows) | Map the stats.nba.com releases onto the stint-row frame. |
 | [nba_team_clutch](additional/analytics-5.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
+| [nba_team_game_four_factors](additional/analytics-5.md#nba_team_game_four_factors) | Per team and game: the four factors in points against the season's league-average offense. |
 | [nba_team_game_possessions](additional/analytics-5.md#nba_team_game_possessions) | Per team and game: the possession counts behind `nba_team_season_rates`. |
 | [nba_team_luck](additional/analytics-5.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [nba_team_play_styles](additional/analytics-5.md#nba_team_play_styles) | Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module). |

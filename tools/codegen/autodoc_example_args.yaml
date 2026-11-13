@@ -194,6 +194,7 @@ nba:
   nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
   nba_team_game_possessions: {seasons: 2026}
+  nba_team_game_four_factors: {seasons: 2026}
   nba_game_player_impact: {seasons: 2026}  # 30817 rows x 18 cols
   nba_epv_plays: {seasons: 2026}
   nba_epv_player_games: {seasons: 2026}
@@ -322,6 +323,7 @@ wnba:
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
   wnba_team_game_possessions: {seasons: 2025}
+  wnba_team_game_four_factors: {seasons: 2025}
   wnba_game_player_impact: {seasons: 2026}  # 7008 rows x 18 cols
   wnba_game_lineups_used: {seasons: 2026}  # 10481 rows x 23 cols
   wnba_game_stints: {seasons: 2026}
@@ -393,6 +395,7 @@ mbb:
   mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
   mbb_team_season_rates: {seasons: 2025}
   mbb_team_game_possessions: {seasons: 2025}
+  mbb_team_game_four_factors: {seasons: 2025}
   mbb_game_player_impact: {seasons: 2025}
   mbb_game_lineups_used: {seasons: 2025}
   mbb_game_stints: {seasons: 2025}
@@ -482,6 +485,7 @@ wbb:
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
   wbb_team_season_rates: {seasons: 2025}
   wbb_team_game_possessions: {seasons: 2025}
+  wbb_team_game_four_factors: {seasons: 2025}
   wbb_game_player_impact: {seasons: 2025}
   wbb_game_lineups_used: {seasons: 2025}
   wbb_game_stints: {seasons: 2025}

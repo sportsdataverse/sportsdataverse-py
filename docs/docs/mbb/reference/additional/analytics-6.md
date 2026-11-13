@@ -295,6 +295,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `ftm` | Float64 | Always null: the NCAA possessions carry no ftm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
@@ -397,6 +398,7 @@ One row per possession in `~sportsdataverse._common.situational_splits.situation
 | `fgm` | Float64 | Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `fg3m` | Float64 | Always null: the NCAA possessions carry no fg3m counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `fta` | Float64 | Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows). |
+| `ftm` | Float64 | Always null: the NCAA possessions carry no ftm counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `oreb` | Float64 | Always null: the NCAA possessions carry no oreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `dreb` | Float64 | Always null: the NCAA possessions carry no dreb counts; the four factors come from the team box (ncaa_team_box_count_rows). |
 | `tov` | Float64 | Always null: the NCAA possessions carry no tov counts; the four factors come from the team box (ncaa_team_box_count_rows). |
@@ -497,7 +499,7 @@ rows = ncaa_stint_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025))
 
 Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame.
 
-Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, offensive rebounds and
+Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, FTM, offensive rebounds and
 turnovers, the opponent's defensive rebounds (`d_drb`) and its own possessions (`o_poss`).
 `offense_is_home` is the box's own home designation (`team == home`).
 
@@ -522,6 +524,7 @@ One row per (game, team) in `~sportsdataverse._common.team_season_rates.COUNT_RO
 | `fgm` | Float64 | Field goals made in the game. |
 | `fg3m` | Float64 | Three-pointers made in the game. |
 | `fta` | Float64 | Free-throw attempts in the game. |
+| `ftm` | Float64 | Free throws made in the game. |
 | `oreb` | Float64 | Offensive rebounds in the game. |
 | `dreb` | Float64 | The opponent's defensive rebounds in the game (the other half of the offensive-rebound chances). |
 | `tov` | Float64 | Turnovers in the game. |

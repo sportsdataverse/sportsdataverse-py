@@ -83,6 +83,7 @@ One row per `(season, team_id, split)`. `team_id` is the stats.nba.com team id (
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the team's defensive possessions in the split. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the split. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the split. |
+| `lg_ft_pct` | Float64 | League free-throw percentage in the season and split: every team's FTM over every team's FTA, so free throws can be priced without a second read. |
 | `plus_minus` | Int64 | Point margin in the split: pts - opp_pts. |
 | `pts_pg` | Float64 | Per game: points scored divided by games (BB-G8's per-game basis). |
 | `opp_pts_pg` | Float64 | Per game: points allowed divided by games (BB-G8's per-game basis). |

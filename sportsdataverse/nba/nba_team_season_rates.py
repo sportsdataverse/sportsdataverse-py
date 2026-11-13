@@ -28,6 +28,7 @@ from sportsdataverse._common.rate_gates import NBA_LEVEL
 from sportsdataverse._common.team_season_rates import (
     RATE_ROWS_SCHEMA,
     TEAM_SEASON_RATES_SCHEMA,
+    team_game_four_factors,
     team_game_possessions,
     team_season_rates,
 )
@@ -37,7 +38,12 @@ from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["nba_possession_rate_rows", "nba_team_game_possessions", "nba_team_season_rates"]
+__all__ = [
+    "nba_possession_rate_rows",
+    "nba_team_game_four_factors",
+    "nba_team_game_possessions",
+    "nba_team_season_rates",
+]
 
 #: league_id -> (quarter seconds, regulation minutes).
 _LEAGUES = {"00": (720.0, 48), "10": (600.0, 40)}
@@ -154,6 +160,7 @@ def nba_possession_rate_rows(
             (pl.col("fg2m") + pl.col("fg3m")).alias("fgm"),
             "fg3m",
             "fta",
+            "ftm",
             "oreb",
             "dreb",
             "tov",
@@ -315,4 +322,52 @@ def nba_team_game_possessions(
             games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
     """
     out = team_game_possessions(_rate_rows(seasons, league_id, season_type))
+    return out.to_pandas() if return_as_pandas else out
+
+
+def nba_team_game_four_factors(
+    seasons: int | list[int],
+    *,
+    league_id: str = "00",
+    season_type: str = "regular-season",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Per team and game: the four factors in points against the season's league-average offense.
+
+    ``pts_vs_exp`` (points less a league-average offense on the same counted possessions) split
+    exactly into ``shooting_pts``, ``turnover_pts``, ``rebounding_pts``, ``free_throw_pts`` and
+    ``residual_pts``, the possession count's distance from the box estimate beyond the league's.
+    The prices and the residual's formula are in
+    :func:`sportsdataverse._common.team_season_rates.team_game_four_factors`; every league value is
+    the season's (the same possessions as :func:`nba_team_season_rates`) and is on each row.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+            The WNBA season is its calendar year.
+        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or ``"play-in"``, matched to
+            the schedule's ``season_type``. The league values are that season type's.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id)``. ``team_id`` is the stats.nba.com team id
+        (Int64), ``game_id`` the stats.nba.com game id. ``poss`` / ``pts`` are the team's counted
+        possessions and points, ``exp_pts`` is ``lg_ppp * poss`` and ``pts_vs_exp`` the
+        difference; the five ``*_pts`` columns add up to it. ``lg_ppp``, ``lg_efg_pct``,
+        ``lg_tov_pct``, ``lg_orb_pct``, ``lg_ft_rate``, ``lg_ft_pct`` and ``chance_pts`` are the
+        season's league values the factors are priced with. Empty input returns that schema with
+        zero rows.
+
+    Raises:
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
+            of the four above.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_team_season_rates import nba_team_game_four_factors
+            books = nba_team_game_four_factors(2026)
+            books.filter(team_id=1610612738).select("game_id", "pts_vs_exp", "shooting_pts")
+    """
+    out = team_game_four_factors(_rate_rows(seasons, league_id, season_type))
     return out.to_pandas() if return_as_pandas else out

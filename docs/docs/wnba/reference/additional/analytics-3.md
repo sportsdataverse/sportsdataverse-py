@@ -543,6 +543,47 @@ One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
+### wnba_team_game_four_factors {#wnba_team_game_four_factors}
+
+`wnba_team_game_four_factors(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA per team and game four factors in points against the league average (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_game_four_factors.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `season_type` | `str` | `'regular-season'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, team_id, game_id)`. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `pts` are the team's counted possessions and points, `exp_pts` is `lg_ppp * poss` and `pts_vs_exp` the difference; the five `*_pts` columns add up to it. `lg_ppp`, `lg_efg_pct`, `lg_tov_pct`, `lg_orb_pct`, `lg_ft_rate`, `lg_ft_pct` and `chance_pts` are the season's league values the factors are priced with. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season (the calendar year). |
+| `team_id` | Int64 | stats.wnba.com team id. |
+| `game_id` | String | stats.wnba.com game id. |
+| `poss` | Int64 | The team's offensive possessions in the game, counted from possession rows. |
+| `pts` | Int64 | Points scored on the team's offensive possessions in the game. |
+| `exp_pts` | Float64 | Points a league-average offense scores on the team's counted possessions, lg_ppp x poss. |
+| `pts_vs_exp` | Float64 | Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly. |
+| `shooting_pts` | Float64 | Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league's per FGA: the misses a league-average offense gets back. |
+| `turnover_pts` | Float64 | Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance. |
+| `rebounding_pts` | Float64 | Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team's own rebound chances, each a new chance. |
+| `free_throw_pts` | Float64 | Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%. |
+| `residual_pts` | Float64 | The remainder, exactly chance_pts x (box_poss - poss - FGA x the league's box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions' distance from the box estimate beyond the league's. Sums to zero over the league. |
+| `lg_ppp` | Float64 | League points per counted possession in the season. |
+| `lg_efg_pct` | Float64 | League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over every team-game. |
+| `lg_tov_pct` | Float64 | League turnovers per counted possession in the season. |
+| `lg_orb_pct` | Float64 | League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over every team-game. |
+| `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over every team-game. |
+| `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over every team-game. |
+| `chance_pts` | Float64 | Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound. |
+
 ### wnba_team_game_possessions {#wnba_team_game_possessions}
 
 `wnba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

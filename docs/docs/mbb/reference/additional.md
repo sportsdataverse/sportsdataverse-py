@@ -395,6 +395,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_situational_team](additional/analytics-4.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
 | [mbb_situational_team_games](additional/analytics-4.md#mbb_situational_team_games) | College team splits by situation, one game at a time: `mbb_situational_team` per game. |
 | [mbb_strength_of_schedule](additional/analytics-4.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_team_game_four_factors](additional/analytics-4.md#mbb_team_game_four_factors) | College per team and game: the four factors in points against the season's league-average offense. |
 | [mbb_team_game_possessions](additional/analytics-4.md#mbb_team_game_possessions) | Per team and game: the college possession counts behind `mbb_team_season_rates`. |
 | [mbb_team_luck](additional/analytics-4.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_flow](additional/analytics-4.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |

@@ -35,6 +35,12 @@ among teams that played at least half the most games any team played in that spl
 (the sample at which the rate is half signal; a clutch split's few hundred possessions rank nothing),
 with a floor of :data:`~sportsdataverse._common.league_context.MIN_COHORT_TEAMS` teams.
 :func:`team_season_rates_league_averages` produces the league-average rows, whose ``n`` is the cohort count.
+``lg_ft_pct`` is the league's free-throw percentage in the row's season and split, pooled over
+every team (all FTM over all FTA, the possession counts' own league), so free throws can be priced
+without a second read; null where no count carries free throws (college ``clutch``).
+
+**Four-factor accounting** (GOP Q20): :func:`team_game_four_factors` prices each team-game's four
+factors in points against that season's league-average offense; its docstring states the prices.
 
 **Bases** (BB-G8): the scoring numbers also come per game and per 75 possessions, so a board's
 basis select never converts. ``plus_minus`` is ``pts - opp_pts``; ``pts_pg`` / ``opp_pts_pg`` /
@@ -68,13 +74,16 @@ __all__ = [
     "CLUTCH_MARGIN",
     "CLUTCH_SECONDS",
     "COUNT_ROWS_SCHEMA",
+    "FT_POSSESSION_WEIGHT",
     "RATE_ROWS_SCHEMA",
     "SIDE_COUNTS",
     "SPLITS",
+    "TEAM_GAME_FOUR_FACTORS_SCHEMA",
     "TEAM_GAME_POSSESSIONS_SCHEMA",
     "TEAM_SEASON_RATES_SCHEMA",
     "rates_from_counts",
     "season_counts",
+    "team_game_four_factors",
     "team_game_possessions",
     "team_season_rates",
     "team_season_rates_league_averages",
@@ -89,7 +98,8 @@ CLUTCH_MARGIN = 5
 SPLITS: tuple[str, ...] = ("all", "home", "away", "close", "clutch")
 
 #: The four-factor counts a possession or box row carries; null when the source has none.
-_COUNTS = ("fga", "fgm", "fg3m", "fta", "oreb", "dreb", "tov", "ff_poss")
+#: ``ftm`` prices free throws (``lg_ft_pct`` and :func:`team_game_four_factors`); no rate uses it.
+_COUNTS = ("fga", "fgm", "fg3m", "fta", "ftm", "oreb", "dreb", "tov", "ff_poss")
 
 #: The canonical possession frame the league adapters build. One row per possession.
 #: ``late`` marks the last regulation period or an overtime. ``start_clock`` / ``end_clock`` are
@@ -176,12 +186,19 @@ TEAM_SEASON_RATES_SCHEMA: dict[str, pl.DataType] = {
     **{f"{m}_rank": pl.Float64() for m in _RATED},
     **{f"{m}_pct": pl.Float64() for m in _RATED},
     **{f"{m}_n": pl.Int64() for m in _RATED},
+    "lg_ft_pct": pl.Float64(),
     "plus_minus": pl.Int64(),
     **{m: pl.Float64() for m in _BASES},
     **{f"{m}_rank": pl.Float64() for m in _BASES},
     **{f"{m}_pct": pl.Float64() for m in _BASES},
     **{f"{m}_n": pl.Int64() for m in _BASES},
 }
+
+
+def _league_ft_pct() -> pl.Expr:
+    """The league's free-throw percentage: every team's FTM over every team's FTA (null with none)."""
+    fta = pl.col("o_fta").sum()
+    return pl.when(fta > 0).then(pl.col("o_ftm").sum() / fta)
 
 
 def _with_bases(rates: pl.DataFrame, gates: dict[str, float]) -> pl.DataFrame:
@@ -328,6 +345,7 @@ def team_season_rates(
     if rows.height == 0:
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     rates = rates_from_counts(season_counts(rows, counts=counts), minutes_per_game=minutes_per_game)
+    rates = rates.with_columns(_league_ft_pct().over(["season", "split"]).alias("lg_ft_pct"))
     order = pl.col("split").replace_strict({s: i for i, s in enumerate(SPLITS)}, return_dtype=pl.Int64)
     return (
         rates.pipe(attach_sample_sizes, _sizes(minutes_per_game))
@@ -347,8 +365,10 @@ def team_season_rates(
     )
 
 
-#: The counts :func:`season_counts` sums per side: ``o_<c>`` the team's, ``d_<c>`` its opponents'.
-SIDE_COUNTS: tuple[str, ...] = tuple(f"{s}_{c}" for c in _COUNTS for s in ("o", "d"))
+#: The counts behind the twelve rates, as :func:`season_counts` sums them per side: ``o_<c>`` the
+#: team's, ``d_<c>`` its opponents'. ``season_counts`` also sums ``o_ftm`` / ``d_ftm``, which no
+#: rate uses, so a table that carries these counts (``coach_seasons``) keeps its columns.
+SIDE_COUNTS: tuple[str, ...] = tuple(f"{s}_{c}" for c in _COUNTS if c != "ftm" for s in ("o", "d"))
 
 
 def season_counts(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None, by_game: bool = False) -> pl.DataFrame:
@@ -427,6 +447,149 @@ def team_game_possessions(rows: pl.DataFrame) -> pl.DataFrame:
         .sort([pl.col("season"), pl.col("team_id"), pl.col("game_id"), order])
         .select(list(TEAM_GAME_POSSESSIONS_SCHEMA))
         .cast(TEAM_GAME_POSSESSIONS_SCHEMA)
+    )
+
+
+#: The four-factor accounting (:func:`team_game_four_factors`), one row per team and game.
+TEAM_GAME_FOUR_FACTORS_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "team_id": pl.Int64(),
+    "game_id": pl.Utf8(),
+    "poss": pl.Int64(),
+    "pts": pl.Int64(),
+    "exp_pts": pl.Float64(),
+    "pts_vs_exp": pl.Float64(),
+    "shooting_pts": pl.Float64(),
+    "turnover_pts": pl.Float64(),
+    "rebounding_pts": pl.Float64(),
+    "free_throw_pts": pl.Float64(),
+    "residual_pts": pl.Float64(),
+    "lg_ppp": pl.Float64(),
+    "lg_efg_pct": pl.Float64(),
+    "lg_tov_pct": pl.Float64(),
+    "lg_orb_pct": pl.Float64(),
+    "lg_ft_rate": pl.Float64(),
+    "lg_ft_pct": pl.Float64(),
+    "chance_pts": pl.Float64(),
+}
+
+#: The share of a possession one free throw uses: the box possession estimate's weight.
+FT_POSSESSION_WEIGHT = 0.44
+
+
+def _accounting_counts(agg: pl.DataFrame) -> pl.DataFrame:
+    """The team's offensive counts under short names, plus rebound chances, box points and box possessions."""
+    c = {k: pl.col(f"o_{k}") for k in ("fga", "fgm", "fg3m", "fta", "ftm", "oreb", "dreb", "tov")}
+    return agg.with_columns(
+        **c,
+        rc=c["oreb"] + c["dreb"],
+        box_pts=2 * c["fgm"] + c["fg3m"] + c["ftm"],
+        box_poss=c["fga"] - c["oreb"] + c["tov"] + FT_POSSESSION_WEIGHT * c["fta"],
+    )
+
+
+def team_game_four_factors(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> pl.DataFrame:
+    """Each team-game's four factors in points against the season's league-average offense.
+
+    ``pts_vs_exp`` is the team's points less ``exp_pts``, a league-average offense on the same
+    counted possessions (``lg_ppp * poss``). It splits exactly into the four factors and a residual:
+    ``pts_vs_exp = shooting_pts + turnover_pts + rebounding_pts + free_throw_pts + residual_pts``.
+
+    The prices are linear, the Game on Paper game page's, with a league free-throw percentage. A
+    chance (a possession that does not end in a turnover) is worth ``chance_pts`` =
+    ``lg_ppp / (1 - lg_tov_pct)``. Every league value is the season's, pooled over every team-game
+    with all its counts: ``lg_tov_pct`` is turnovers per counted possession and ``lg_ft_pct`` all
+    FTM over all FTA.
+
+    * ``shooting_pts`` = ``2 * (eFG% - lg eFG%) * FGA``, the points the same shots were worth above
+      a league-average shooter's, plus ``chance_pts * lg ORB% * (RC - lg RC/FGA * FGA)``: the
+      extra rebound chances (``RC`` = own OREB + opponent DREB) the misses made, which a
+      league-average offense gets back at ``lg ORB%``. Without that term a miss is priced as a dead
+      possession, while ``rebounding_pts`` prices the rebounds on the same chances, and the four
+      do not add up.
+    * ``turnover_pts`` = ``(lg TOV% * poss - TOV) * chance_pts``: the turnovers saved, each a chance.
+    * ``rebounding_pts`` = ``(OREB - lg ORB% * RC) * chance_pts``: the extra offensive rebounds on
+      the team's own rebound chances, each a new chance.
+    * ``free_throw_pts`` = ``(FTA - lg FT rate * FGA) * (lg FT% - 0.44 * chance_pts)`` +
+      ``(FTM - lg FT% * FTA)``: the extra free throws, each worth a league-average free throw less
+      the 0.44 of a chance it uses (:data:`FT_POSSESSION_WEIGHT`), plus the makes above league
+      FT% on all of them. A team with no free throws is priced too (it got none of the expected).
+    * ``residual_pts`` is the remainder, exactly
+      ``(pts - box_pts - FGA * lg_gap_pts) + chance_pts * (box_poss - poss - FGA * lg_gap_poss)``,
+      where ``box_pts = 2 * FGM + 3PM + FTM``, ``box_poss = FGA - OREB + TOV + 0.44 * FTA`` and
+      ``lg_gap_pts`` / ``lg_gap_poss`` are the league's ``pts - box_pts`` / ``box_poss - poss``
+      per FGA. It is the possession count's distance from the box estimate (and, in college,
+      the play-by-play points' from the box's), beyond the league's typical gap, so it sums to
+      zero over the league. The pros' points are the box's, so only the possession gap is left.
+
+    Args:
+        rows: The possessions, in :data:`RATE_ROWS_SCHEMA` (extra columns are ignored).
+        counts: Game-level four-factor counts in :data:`COUNT_ROWS_SCHEMA` (college), as
+            :func:`team_season_rates`.
+
+    Returns:
+        One row per ``(season, team_id, game_id)`` (the ``all`` split) in
+        :data:`TEAM_GAME_FOUR_FACTORS_SCHEMA`, sorted by season, team and game. A game without
+        its counts (no box row) has ``exp_pts`` but null factors. An empty input returns that
+        schema with zero rows.
+
+    Raises:
+        KeyError: If ``rows`` or ``counts`` is missing a schema column.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_team_season_rates import nba_team_game_four_factors
+            books = nba_team_game_four_factors(2026)
+            books.sort("pts_vs_exp", descending=True).head()
+    """
+    for name, frame, schema in (("rows", rows, RATE_ROWS_SCHEMA), ("counts", counts, COUNT_ROWS_SCHEMA)):
+        missing = [] if frame is None else sorted(set(schema) - set(frame.columns))
+        if missing:
+            raise KeyError(f"{name} missing columns: {missing}")
+    if rows.height == 0:
+        return pl.DataFrame(schema=TEAM_GAME_FOUR_FACTORS_SCHEMA)
+    games = _accounting_counts(season_counts(rows, counts=counts, by_game=True).filter(pl.col("split") == "all"))
+    summed = ("pts", "poss", "fga", "fgm", "fg3m", "fta", "ftm", "oreb", "rc", "tov", "box_pts", "box_poss")
+    complete = pl.all_horizontal(pl.col(c).is_not_null() for c in summed) & (pl.col("poss") > 0)
+    lg = (
+        games.filter(complete)
+        .group_by("season")
+        .agg(pl.col(c).sum().alias(f"_lg_{c}") for c in summed)
+        .select(
+            "season",
+            (pl.col("_lg_pts") / pl.col("_lg_poss")).alias("lg_ppp"),
+            ((pl.col("_lg_fgm") + 0.5 * pl.col("_lg_fg3m")) / pl.col("_lg_fga")).alias("lg_efg_pct"),
+            (pl.col("_lg_tov") / pl.col("_lg_poss")).alias("lg_tov_pct"),
+            (pl.col("_lg_oreb") / pl.col("_lg_rc")).alias("lg_orb_pct"),
+            (pl.col("_lg_fta") / pl.col("_lg_fga")).alias("lg_ft_rate"),
+            (pl.col("_lg_ftm") / pl.col("_lg_fta")).alias("lg_ft_pct"),
+            (pl.col("_lg_rc") / pl.col("_lg_fga")).alias("_lg_rc_per_fga"),
+        )
+        .with_columns((pl.col("lg_ppp") / (1 - pl.col("lg_tov_pct"))).alias("chance_pts"))
+    )
+    assert games.schema["season"] == lg.schema["season"], "season dtype differs"
+    v, fga = pl.col("chance_pts"), pl.col("fga")
+    factors = {
+        "shooting_pts": 2 * pl.col("fgm")
+        + pl.col("fg3m")
+        - 2 * pl.col("lg_efg_pct") * fga
+        + v * pl.col("lg_orb_pct") * (pl.col("rc") - pl.col("_lg_rc_per_fga") * fga),
+        "turnover_pts": (pl.col("lg_tov_pct") * pl.col("poss") - pl.col("tov")) * v,
+        "rebounding_pts": (pl.col("oreb") - pl.col("lg_orb_pct") * pl.col("rc")) * v,
+        "free_throw_pts": (pl.col("fta") - pl.col("lg_ft_rate") * fga)
+        * (pl.col("lg_ft_pct") - FT_POSSESSION_WEIGHT * v)
+        + (pl.col("ftm") - pl.col("lg_ft_pct") * pl.col("fta")),
+    }
+    return (
+        games.join(lg, on="season", how="left", validate="m:1")
+        .with_columns((pl.col("lg_ppp") * pl.col("poss")).alias("exp_pts"))
+        .with_columns((pl.col("pts") - pl.col("exp_pts")).alias("pts_vs_exp"))
+        .with_columns(pl.when(complete).then(e).alias(k) for k, e in factors.items())
+        .with_columns((pl.col("pts_vs_exp") - pl.sum_horizontal(*factors, ignore_nulls=False)).alias("residual_pts"))
+        .sort(["season", "team_id", "game_id"])
+        .select(list(TEAM_GAME_FOUR_FACTORS_SCHEMA))
+        .cast(TEAM_GAME_FOUR_FACTORS_SCHEMA)
     )
 
 
