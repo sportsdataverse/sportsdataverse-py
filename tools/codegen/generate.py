@@ -5145,7 +5145,13 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
             out.append(c)
             retained += 1
             continue
-        keep = f["type"] in (c["type"], _pl_to_doc_type(c["type"])) or c["type"] == "list" or all_null(c["name"])
+        keep = (
+            # The committed type in its polars form (``double`` -> ``Float64``, ``Int32`` as is), then folded the way
+            # the fresh capture was: ``Int32`` matches ``integer``, but ``double`` never matches ``character``.
+            f["type"] in (c["type"], _pl_to_doc_type(_doc_dtype(c["type"])))
+            or c["type"] == "list"
+            or all_null(c["name"])
+        )
         if keep and f["type"] != c["type"]:
             types_kept += 1
         out.append(c if keep else {**c, "type": f["type"]})
