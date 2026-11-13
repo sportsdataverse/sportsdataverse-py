@@ -40,6 +40,38 @@ def _rows(lg: str) -> pl.DataFrame:
     return ncaa_impact_rows(_read(lg, "pbp"), _read(lg, "possessions"), league=LEAGUES[lg])
 
 
+def _on_off(lg: str, *, min_poss: int, level: str | None = None) -> pl.DataFrame:
+    dates = adapter._game_dates(_read(lg, "pbp"))
+    return player_on_off(_rows(lg), player_dtype=pl.Utf8(), min_poss=min_poss, level=level, game_dates=dates)
+
+
+@pytest.mark.parametrize("lg", list(LEAGUES))
+def test_span_off_is_the_team_over_his_span(lg: str) -> None:
+    """The span columns from the pbp's game dates: on + off_span is the team over the span's games."""
+    out = _on_off(lg, min_poss=20)
+    assert out["team_games_span"].null_count() == 0 and out.schema["span_first_date"] == pl.Date
+    dates = adapter._game_dates(_read(lg, "pbp"))
+    assert dates.height == _read(lg, "pbp")["contest_id"].n_unique()  # every contest has its date
+    poss = _read(lg, "possessions")
+    side = pl.when(pl.col("poss_team") == pl.col("home")).then(pl.col("home_espn_team_id"))
+    team_id = side.when(pl.col("poss_team") == pl.col("away")).then(pl.col("away_espn_team_id"))
+    per_game = (
+        poss.group_by(team_id.cast(pl.Int64).alias("team_id"), pl.col("contest_id").cast(pl.Utf8).alias("game_id"))
+        .agg(pl.len().cast(pl.Int64).alias("n"))
+        .join(dates, on="game_id", validate="m:1")
+    )
+    span = (
+        out.select("team_id", "player_id", "span_first_date", "span_last_date")
+        .join(per_game, on="team_id")
+        .filter(pl.col("game_date") >= pl.col("span_first_date"), pl.col("game_date") <= pl.col("span_last_date"))
+        .group_by("team_id", "player_id")
+        .agg(pl.col("n").sum().alias("span_poss"))
+    )
+    j = out.join(span, on=["team_id", "player_id"], validate="1:1")
+    assert j.height == out.height and (j["poss_on"] + j["poss_off_span"] == j["span_poss"]).all()
+    assert (out["poss_off_span"] <= out["poss_off"]).all()
+
+
 def _team_totals(lg: str) -> pl.DataFrame:
     """Each D1 team's fixture possessions (the possessions release) and points (the team box)."""
     poss = _read(lg, "possessions")
@@ -93,14 +125,12 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
         return real(*args, **kwargs)  # type: ignore[arg-type]
 
     monkeypatch.setattr(adapter, "player_on_off", spy)
-    gated = player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20, level="mbb")
+    gated = _on_off("mbb", min_poss=20, level="mbb")
     assert mbb_player_on_off(2025, min_poss=20).equals(gated)
-    assert not gated.equals(player_on_off(_rows("mbb"), player_dtype=pl.Utf8(), min_poss=20))  # the level gate bites
+    assert not gated.equals(_on_off("mbb", min_poss=20))  # the level gate bites
     # no WBB fixture player reaches the 200-possession floor both ways, so nothing ranks gated or
     # ungated here; the mbb comparison above is the one that bites
-    assert wbb_player_on_off(2025).equals(
-        player_on_off(_rows("wbb"), player_dtype=pl.Utf8(), min_poss=200, level="wbb")
-    )
+    assert wbb_player_on_off(2025).equals(_on_off("wbb", min_poss=200, level="wbb"))
     assert seen == ["mbb", "wbb"]  # the WBB fixture ranks nobody, so only the spy can see its level
     assert mbb_player_wowy(2025).equals(player_wowy(_rows("mbb"), player_dtype=pl.Utf8()))
     assert wbb_player_wowy(2025).equals(player_wowy(_rows("wbb"), player_dtype=pl.Utf8()))

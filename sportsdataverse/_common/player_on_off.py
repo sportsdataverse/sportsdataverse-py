@@ -11,7 +11,17 @@ team is on the floor for exactly one set of its players, and
   the team's whole season, the games he missed included, and so the games before he joined or after
   he left: for a player traded or signed mid-season (``games`` well short of ``team_games``) the
   on-off difference also carries how the team changed over the season. He has one row per team.
-  (stats.nba.com's on/off limits the off side to the games he was on the roster.)
+  The ``*_off_span`` columns limit the off side to his span with the team, an approximation of
+  his time on its roster (the window stats.nba.com's on/off uses) from the game dates: it opens
+  at his first game for the team, or the day after his last game for a team he played for
+  earlier that season (traded in), and closes the day before his first game for a later team
+  (traded out), else at the season's end. The games he missed inside it count, so a player
+  injured for the rest of the season keeps the whole season after his debut; a player signed
+  mid-season starts at his debut. ``<rating>_diff_span`` is on minus that off side,
+  ``team_games_span`` counts the span's team games and ``span_first_date`` /
+  ``span_last_date`` are its first and last. A game with no date is left out of the span (the
+  ``*_on`` totals keep it). A player with one team and a debut in its first game has a span of
+  the whole season (``*_off_span`` equals ``*_off``).
 * **WOWY** (:func:`player_wowy`): for two teammates A and B, the team's season split four ways:
   both on the floor (``_both``), A without B (``_a_only``), B without A (``_b_only``) and neither
   (``_neither``). The four splits' totals add up to the team's (the ratings are not additive). Every pair of the team's players is a row,
@@ -77,6 +87,13 @@ _RANKED = {
 }
 #: Rating -> its sample size, on one side.
 _N = {"off_rtg": ("poss",), "def_rtg": ("opp_poss",), "net_rtg": ("poss", "opp_poss")}
+#: :func:`_span_off`'s columns besides the keys.
+_SPAN_RAW: dict[str, pl.DataType] = {
+    "team_games_span": pl.Int64(),
+    "span_first_date": pl.Date(),
+    "span_last_date": pl.Date(),
+    **{f"{c}_off_span": pl.Float64() if c == "seconds" else pl.Int64() for c in _TOTALS},
+}
 
 
 def _n_expr(rating: str, side: str) -> pl.Expr:
@@ -97,6 +114,11 @@ def player_on_off_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
         **{f"{m}_rank": pl.Float64() for m in _RANKED},
         **{f"{m}_pct": pl.Float64() for m in _RANKED},
         **{f"{r}_{s}_n": pl.Int64() for s in ("on", "off", "diff") for r in _RATINGS},
+        "team_games_span": pl.Int64(),
+        "span_first_date": pl.Date(),
+        "span_last_date": pl.Date(),
+        **{f"{c}_off_span": t for c, t in _SIDE_COLS.items()},
+        **{f"{r}_diff_span": pl.Float64() for r in _RATINGS},
     }
 
 
@@ -142,8 +164,82 @@ def _season_totals(rows: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame, pl.D
     return team, on, sets
 
 
+def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
+    """Per player and team-season: the team's games in his span with it, minus his own stints.
+
+    The span opens at his first game for the team, or, when he played for another team earlier
+    that season, the day after his last game there (he was traded in); it closes the day before
+    his first game for a later team (traded out), else at the team's last game. Returns
+    ``season, team_id, player_id``, ``team_games_span``, ``span_first_date`` /
+    ``span_last_date`` (the span's first and last team game) and ``<total>_off_span``.
+    """
+    keys = ["season", "team_id"]
+    dates = game_dates.select(pl.col("game_id").cast(pl.Utf8), pl.col("game_date").cast(pl.Date))
+    dates = dates.drop_nulls().unique("game_id")
+    dated = _sides(games_with_possessions(rows)).join(dates, on="game_id", how="inner", validate="m:1")
+    sums = [pl.col(c).sum() for c in _TOTALS]
+    team_games = dated.group_by([*keys, "game_id", "game_date"]).agg(sums)
+    player_games = (
+        dated.explode("players")
+        .drop_nulls("players")
+        .group_by([*keys, "players", "game_date"])
+        .agg(sums)
+        .rename({"players": "player_id"})
+    )
+    stints = player_games.group_by([*keys, "player_id"]).agg(
+        pl.col("game_date").min().alias("_first"),
+        pl.col("game_date").max().alias("_last"),
+        *[pl.col(c).sum().alias(f"{c}_in") for c in _TOTALS],
+    )
+    # His games for other teams that season bound the span: the last one before his first game here,
+    # the first one after his last. Game by game, so a return to an earlier team still bounds both
+    # (A, then B, then A again: B's span closes before the return; A's keeps the B weeks inside it).
+    other = player_games.select("season", "player_id", pl.col("team_id").alias("_t"), pl.col("game_date").alias("_d"))
+    pairs = (
+        stints.select(*keys, "player_id", "_first", "_last")
+        .join(other, on=["season", "player_id"])
+        .filter(pl.col("_t") != pl.col("team_id"))
+    )
+    bounds = pairs.group_by([*keys, "player_id"]).agg(
+        pl.col("_d").filter(pl.col("_d") < pl.col("_first")).max().alias("_prev"),
+        pl.col("_d").filter(pl.col("_d") > pl.col("_last")).min().alias("_next"),
+    )
+    window = stints.join(bounds, on=[*keys, "player_id"], how="left", validate="1:1").select(
+        *keys,
+        "player_id",
+        pl.coalesce(pl.col("_prev") + pl.duration(days=1), pl.col("_first")).alias("_start"),
+        (pl.col("_next") - pl.duration(days=1)).alias("_end"),
+    )
+    # ponytail: every player x every team game, then the window filter: ~20 x 82 rows a team-season.
+    in_span = (
+        window.join(team_games, on=keys)
+        .filter(pl.col("game_date") >= pl.col("_start"), (pl.col("game_date") <= pl.col("_end")).fill_null(True))
+        .group_by([*keys, "player_id"])
+        .agg(
+            *[pl.col(c).sum().alias(f"{c}_span") for c in _TOTALS],
+            pl.len().cast(pl.Int64).alias("team_games_span"),
+            pl.col("game_date").min().alias("span_first_date"),
+            pl.col("game_date").max().alias("span_last_date"),
+        )
+    )
+    out = stints.join(in_span, on=[*keys, "player_id"], how="left", validate="1:1")
+    return out.select(
+        *keys,
+        "player_id",
+        "team_games_span",
+        "span_first_date",
+        "span_last_date",
+        *[(pl.col(f"{c}_span") - pl.col(f"{c}_in")).alias(f"{c}_off_span") for c in _TOTALS],
+    )
+
+
 def player_on_off(
-    rows: pl.DataFrame, *, player_dtype: pl.DataType, min_poss: int, level: str | None = None
+    rows: pl.DataFrame,
+    *,
+    player_dtype: pl.DataType,
+    min_poss: int,
+    level: str | None = None,
+    game_dates: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Per player and team-season: the team with him on the floor and without him.
 
@@ -155,13 +251,17 @@ def player_on_off(
         level: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``: rank a rating only when its ``<m>_n``
             also reaches that league's :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N`
             gate. ``None`` applies no sample gate (the league adapters always pass one).
+        game_dates: ``game_id`` (String) and ``game_date`` (Date) of the games, for the span
+            columns. ``None`` leaves them null (the league adapters always pass it).
 
     Returns:
         One row per ``(season, team_id, player_id)`` in :func:`player_on_off_schema`: ``games`` he
         was on the floor in and ``team_games`` the team played, the ``_on`` and ``_off`` totals and ratings, ``<rating>_diff`` (on
-        minus off), the ranks and the sample sizes. ``<total>_on + <total>_off`` is the team's
-        season total. Sorted by season, team and minutes on (most first). Empty input returns that
-        schema with zero rows.
+        minus off), the ranks and the sample sizes, then his span with the team
+        (``team_games_span``, ``span_first_date`` / ``span_last_date``) and the off side limited
+        to it (``<total>_off_span``, ``<rating>_off_span``, ``<rating>_diff_span``; not ranked).
+        ``<total>_on + <total>_off`` is the team's season total. Sorted by season, team and
+        minutes on (most first). Empty input returns that schema with zero rows.
 
     Raises:
         KeyError: If ``level`` is unknown.
@@ -186,8 +286,14 @@ def player_on_off(
         team.rename({c: f"{c}_team" for c in _TOTALS}), on=keys, how="left", validate="m:1"
     )
     out = out.with_columns((pl.col(f"{c}_team") - pl.col(f"{c}_on")).alias(f"{c}_off") for c in _TOTALS)
-    out = _side_rates(_side_rates(out, "on"), "off").with_columns(
-        (pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS
+    if game_dates is None:
+        span = pl.DataFrame(schema={**{k: out.schema[k] for k in [*keys, "player_id"]}, **_SPAN_RAW})
+    else:
+        span = _span_off(rows, game_dates)
+    out = out.join(span, on=[*keys, "player_id"], how="left", validate="1:1")
+    out = _side_rates(_side_rates(_side_rates(out, "on"), "off"), "off_span").with_columns(
+        *[(pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS],
+        *[(pl.col(f"{r}_on") - pl.col(f"{r}_off_span")).alias(f"{r}_diff_span") for r in _RATINGS],
     )
     # min_poss (BB-D4's lineup floor, 400 NBA, 200 elsewhere) keeps the cohort; the per-rating
     # reliability gates (ON_OFF_MIN_N, fitted) decide which ratings are ranked.
