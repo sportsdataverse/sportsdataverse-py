@@ -15,7 +15,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 357 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 359 | — |
 
 ## ESPN {#espn}
 
@@ -266,6 +266,8 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`display_name_to_roster_key`](reference/additional/ids-and-crosswalks#display_name_to_roster_key)
 - [`fuzzy_box_match`](reference/additional/ids-and-crosswalks#fuzzy_box_match)
 - [`ncaa_espn_player_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_player_crosswalk)
+- [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons)
+- [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools)
 - [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk)
 - [`ncaa_wbb_team_ids`](reference/additional/ids-and-crosswalks#ncaa_wbb_team_ids)
 - [`resolve_ncaa_team_id`](reference/additional/ids-and-crosswalks#resolve_ncaa_team_id)
@@ -399,8 +401,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_player_value`](reference/loaders/player#load_wbb_player_value) | [`load_wbb_player_value`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_value.html) |
 | [`load_wbb_ratings`](reference/loaders/other#load_wbb_ratings) | [`load_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/load_wbb_ratings.html) |
 | [`load_wbb_rosters`](reference/loaders/other#load_wbb_rosters) | [`load_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_rosters.html) |
-| [`load_wbb_schedule`](reference/loaders/other#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
-| [`load_wbb_schedule_crosswalk`](reference/loaders/other#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
+| [`load_wbb_schedule`](reference/loaders/schedule#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
+| [`load_wbb_schedule_crosswalk`](reference/loaders/schedule#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
 | [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |

@@ -2073,6 +2073,8 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines.append(f"Source: https://github.com/sportsdataverse/{ld.url.split('/', 1)[0]}")
     else:
         lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
+    if ld.dataset_page:
+        lines.append(f"Dataset page: {_dataset_page_url(ld.dataset_page)}")
     lines.append("")
     lines.append("Args:")
     rng = f" (>= {ld.min_season})" if ld.min_season else ""
@@ -2159,6 +2161,12 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines += [f"    .. _{s['name']}: {s['url']}" for s in ld.see_also]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _dataset_page_url(page: str) -> str:
+    """``<repo>/<dataset>`` -> the producer repo's ``docs/datasets/<dataset>.md`` page on GitHub."""
+    repo, dataset = page.split("/")
+    return f"https://github.com/sportsdataverse/{repo}/blob/main/docs/datasets/{dataset}.md"
 
 
 def _loader_is_single(ld: spec.Loader) -> bool:
@@ -3873,6 +3881,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
                 "notes": ld.notes or "",
                 "tag": ld.tag,
                 "tag_url": _release_page_url(rel.bases, ld.base, ld.url, ld.tag),
+                "dataset_page_url": _dataset_page_url(ld.dataset_page) if ld.dataset_page else "",
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
                 "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
                 "return_table": (
@@ -5124,8 +5133,10 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     and genuinely new ones append. A committed type survives when the fresh
     column is entirely null (a dtype inferred from no values is noise) or when
     committed says ``list`` -- :func:`_pl_to_doc_type` folds ``List(Int64)`` to
-    ``integer``, so that "change" is the mapper, not the data. Any other dtype
-    change is real and wins.
+    ``integer``, so that "change" is the mapper, not the data. A committed polars
+    dtype (``Int32``) survives a capture the mapper folds to the same family
+    (``integer``), so a pinned width is not widened back to ``Int64`` on render.
+    Any other dtype change is real and wins.
 
     Returns ``(columns, new, retained, types_preserved)``; the counts make a thin
     capture visible in the summary line."""
@@ -5143,7 +5154,13 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
             out.append(c)
             retained += 1
             continue
-        keep = f["type"] == c["type"] or c["type"] == "list" or all_null(c["name"])
+        keep = (
+            # The committed type in its polars form (``double`` -> ``Float64``, ``Int32`` as is), then folded the way
+            # the fresh capture was: ``Int32`` matches ``integer``, but ``double`` never matches ``character``.
+            f["type"] in (c["type"], _pl_to_doc_type(_doc_dtype(c["type"])))
+            or c["type"] == "list"
+            or all_null(c["name"])
+        )
         if keep and f["type"] != c["type"]:
             types_kept += 1
         out.append(c if keep else {**c, "type": f["type"]})

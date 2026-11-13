@@ -237,6 +237,10 @@ class Loader:
     # Companion links rendered as the docstring's ``See Also:`` block, each
     # ``{name, note, url}`` -- the same shape as an endpoint's ``docstring.see_also``.
     see_also: List[Dict[str, str]] = field(default_factory=list)
+    # ``<producer repo>/<dataset>``: the producer's dataset page, rendered as
+    # https://github.com/sportsdataverse/<repo>/blob/main/docs/datasets/<dataset>.md in the
+    # docstring and on the loaders page. Set only where the producer publishes that page.
+    dataset_page: str | None = None
     stub: bool = False
     stub_message: Optional[str] = None
     # Name of the loader that supersedes this one. When set, the generated body is
@@ -546,6 +550,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             automation=ld.get("automation", {}) or {},
             notes=ld.get("notes"),
             see_also=list(ld.get("see_also", []) or []),
+            dataset_page=ld.get("dataset_page"),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),
             deprecated_for=ld.get("deprecated_for"),

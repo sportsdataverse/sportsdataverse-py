@@ -180,9 +180,9 @@ def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = (), stackleve
 
 
 def _pandas_ids(df: pl.DataFrame, out: Any = None) -> Any:
-    """``df`` as pandas with every ``Int64`` ``id`` / ``*_id`` column as pandas' nullable ``Int64`` (R981-2).
+    """``df`` as pandas with every ``Int64`` / ``Int32`` ``id`` / ``*_id`` column as pandas' nullable integer (R981-2).
 
-    A plain ``to_pandas()`` turns an ``Int64`` column holding a null into ``float64`` (``5.0``), the float id
+    A plain ``to_pandas()`` turns an integer column holding a null into ``float64`` (``5.0``), the float id
     the polars side was cast to stop. The values cross as Python ints, so an 18-digit play id stays exact
     (a float64 hop would round it). ``out`` is a pandas frame of the same rows to write the ids into
     instead of ``df.to_pandas()``.
@@ -192,8 +192,8 @@ def _pandas_ids(df: pl.DataFrame, out: Any = None) -> Any:
     if out is None:
         out = df.to_pandas()
     for col, dtype in df.schema.items():
-        if dtype == pl.Int64 and (col == "id" or col.endswith("_id")):
-            out[col] = pd.array(df[col].to_list(), dtype="Int64")
+        if dtype in (pl.Int64, pl.Int32) and (col == "id" or col.endswith("_id")):
+            out[col] = pd.array(df[col].to_list(), dtype=str(dtype))
     return out
 
 

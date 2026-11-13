@@ -61,6 +61,7 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_pbp
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/pbp.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -176,6 +177,7 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -279,6 +281,7 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2001).
@@ -420,6 +423,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -638,6 +642,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -711,6 +716,7 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2014).
@@ -768,6 +774,7 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2010).
@@ -832,6 +839,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2026).
@@ -912,6 +920,7 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_shots
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -976,6 +985,7 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/standings.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2001).
@@ -1046,6 +1056,7 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2010).
@@ -1110,6 +1121,7 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2014).
@@ -1178,6 +1190,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2021).
@@ -1242,6 +1255,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1311,6 +1325,7 @@ def load_wbb_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -1502,13 +1517,13 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
         |sub_deviate             |Int64   |
         |contest_id              |String  |
         |home_ncaa_team_id       |String  |
-        |home_espn_team_id       |String  |
+        |home_espn_team_id       |Int32   |
         |away_ncaa_team_id       |String  |
-        |away_espn_team_id       |String  |
+        |away_espn_team_id       |Int32   |
         |event_team_ncaa_team_id |String  |
-        |event_team_espn_team_id |String  |
+        |event_team_espn_team_id |Int32   |
         |poss_team_ncaa_team_id  |String  |
-        |poss_team_espn_team_id  |String  |
+        |poss_team_espn_team_id  |Int32   |
         |player_1_id             |String  |
         |player_1_clean_name     |String  |
         |player_2_id             |String  |
@@ -1533,7 +1548,7 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
         |away_4_clean_name       |String  |
         |away_5_player_id        |String  |
         |away_5_clean_name       |String  |
-        |espn_game_id            |String  |
+        |espn_game_id            |Int32   |
         |is_fastbreak            |Boolean |
         |is_from_turnover        |Boolean |
         |is_paint                |Boolean |
@@ -1580,6 +1595,12 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = (
         pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_ncaa_wbb_pbp")
+    )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(
+        out,
+        ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "event_team_espn_team_id", "poss_team_espn_team_id"],
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -1770,14 +1791,14 @@ def load_ncaa_wbb_player_box(seasons, return_as_pandas: bool = False):
         |mid_pct_unast     |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
+        |team_espn_team_id |Int32   |
         |player_id         |String  |
         |clean_name        |String  |
-        |espn_game_id      |String  |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1809,6 +1830,9 @@ def load_ncaa_wbb_player_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_player_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1901,12 +1925,12 @@ def load_ncaa_wbb_team_box(seasons, return_as_pandas: bool = False):
         |d_time_per_poss   |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
-        |espn_game_id      |String  |
+        |team_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1938,6 +1962,9 @@ def load_ncaa_wbb_team_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_team_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2153,11 +2180,11 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         |last_event_type        |String |
         |contest_id             |String |
         |home_ncaa_team_id      |String |
-        |home_espn_team_id      |String |
+        |home_espn_team_id      |Int32  |
         |away_ncaa_team_id      |String |
-        |away_espn_team_id      |String |
+        |away_espn_team_id      |Int32  |
         |poss_team_ncaa_team_id |String |
-        |poss_team_espn_team_id |String |
+        |poss_team_espn_team_id |Int32  |
         |home_1_player_id       |String |
         |home_1_clean_name      |String |
         |home_2_player_id       |String |
@@ -2178,7 +2205,7 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         |away_4_clean_name      |String |
         |away_5_player_id       |String |
         |away_5_clean_name      |String |
-        |espn_game_id           |String |
+        |espn_game_id           |Int32  |
         |season                 |Int64  |
 
     Raises:
@@ -2210,6 +2237,9 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_possessions")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "poss_team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2449,10 +2479,10 @@ def load_ncaa_wbb_shots(seasons, return_as_pandas: bool = False):
         |source             |String  |
         |contest_id         |String  |
         |ncaa_team_id       |String  |
-        |espn_team_id       |String  |
+        |espn_team_id       |Int32   |
         |shooter_player_id  |String  |
         |shooter_clean_name |String  |
-        |espn_game_id       |String  |
+        |espn_game_id       |Int32   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2019.
@@ -2483,6 +2513,9 @@ def load_ncaa_wbb_shots(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_shots")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

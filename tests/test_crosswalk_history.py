@@ -244,7 +244,7 @@ def test_a_game_that_fails_on_two_runs_is_recorded_missing(tmp_path: Path, monke
     with pytest.raises(xh.HarvestBlocked):  # first run: three new failures in a row still stop it
         run(bad + [{"id": "good0", "final": True}])
     store = xh.Store(tmp_path, "yahoo", "cfb")
-    assert store.failed("playbook_boxscore", 2020) == {"bad0", "bad1", "bad2"}
+    assert store.failed("playbook_boxscore", 2020) == {"bad0": 1, "bad1": 1, "bad2": 1}
     assert store.missing("playbook_boxscore", 2020) == {}
 
     # The host is down too: repeat failures neither stop the run nor become missing.
@@ -282,3 +282,55 @@ def test_a_repeat_failure_after_the_last_answer_stays_retryable(
     tally = xh._fetch_games(store, xh.Pacer("yahoo"), "yahoo", "cfb", 2020, games, None)
     assert tally["written"] == 1 and tally["missing"] == 0
     assert xh.Store(tmp_path, "yahoo", "cfb").missing("playbook_boxscore", 2020) == {}
+
+
+def test_a_game_that_fails_on_three_runs_is_missing_without_a_later_answer(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # A finished season's re-run requests only its broken games (Yahoo CFB 2020-10-24), so no
+    # later game answers in that run; the third failed run records them missing anyway.
+    def getter(provider: str, league: str, endpoint: str, gid: str) -> Any:
+        def fetch() -> Any:
+            raise AssetFetchError("graphite-secure.sports.yahoo.com answered HTTP 500")
+
+        return fetch
+
+    monkeypatch.setattr(xh, "_getter", getter)
+    bad = [{"id": f"bad{i}", "final": True} for i in range(2)]
+
+    def run() -> Dict[str, Any]:
+        return xh._fetch_games(xh.Store(tmp_path, "yahoo", "cfb"), xh.Pacer("yahoo"), "yahoo", "cfb", 2020, bad, None)
+
+    assert run()["missing"] == 0 and run()["missing"] == 0
+    assert xh.Store(tmp_path, "yahoo", "cfb").failed("playbook_boxscore", 2020) == {"bad0": 2, "bad1": 2}
+    assert run()["missing"] == 2
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    assert set(store.missing("playbook_boxscore", 2020)) == {"bad0", "bad1"}
+    assert store.missing("playbook_boxscore", 2020)["bad0"] == "fetch failed on 3 runs"
+    assert run()["skipped"] == 2
+
+
+def test_a_repeat_failure_before_a_later_answer_is_missing_on_the_second_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def getter(provider: str, league: str, endpoint: str, gid: str) -> Any:
+        def fetch() -> Any:
+            if gid.startswith("bad"):
+                raise AssetFetchError("graphite-secure.sports.yahoo.com answered HTTP 500")
+            return {"ok": gid}
+
+        return fetch
+
+    monkeypatch.setattr(xh, "_getter", getter)
+    monkeypatch.setattr(xh, "_payload_problem", lambda *a: None)
+    monkeypatch.setattr(xh, "box_players", lambda *a: 1)
+    bad = [{"id": f"bad{i}", "final": True} for i in range(2)]
+
+    def run(games: List[Dict[str, Any]]) -> Dict[str, Any]:
+        return xh._fetch_games(xh.Store(tmp_path, "yahoo", "cfb"), xh.Pacer("yahoo"), "yahoo", "cfb", 2020, games, None)
+
+    assert run(bad)["missing"] == 0
+    tally = run(bad + [{"id": "good0", "final": True}])
+    assert tally["missing"] == 2 and tally["written"] == 1
+    missing = xh.Store(tmp_path, "yahoo", "cfb").missing("playbook_boxscore", 2020)
+    assert missing == {"bad0": "fetch failed twice", "bad1": "fetch failed twice"}

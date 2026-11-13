@@ -392,9 +392,49 @@ Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_nba_rosters(seasons=2025)
 ```
 
+## load_nba_depth_charts
+
+Release: [espn_nba_depthcharts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_depthcharts) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_depthcharts/depthcharts_{season}.parquet`
+
+:::caution[Coverage]
+ESPN team depth charts, snapshotted daily: one row per (as_of_date, team, position slot, depth rank), so filter to one as_of_date (the latest is the current chart) before counting players. The release starts with the 2026-27 season (season 2027), first snapshot 2026-09-08.
+:::
+
+### Returns {#load_nba_depth_charts-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `as_of_date` | Date | Date of the daily snapshot the row belongs to; one ESPN depth chart per team per as_of_date, so filter to one date (the latest is the current chart). |
+| `league` | String | League slug of the source ESPN depth chart, always 'nba'. |
+| `season` | Int64 | ESPN season, the ENDING year (2027 = 2026-27). |
+| `season_type` | Int64 | ESPN season type at the snapshot (1 preseason, 2 regular season). |
+| `team_id` | Int64 | ESPN NBA team id of the depth chart (Int64, e.g. 1 for the Atlanta Hawks), the id the ESPN NBA schedule and box releases carry. |
+| `team_display_name` | String | Full team name as ESPN displays it (e.g. 'Atlanta Hawks'). |
+| `team_abbreviation` | String | ESPN team abbreviation (e.g. 'ATL'). |
+| `group_id` | Int64 | ESPN depth-chart group id; NBA teams publish a single group, 1. |
+| `group_name` | String | Name of the ESPN depth-chart group, 'Depth Chart' for every NBA row. |
+| `position_slot` | String | Lower-case position key of the slot on the chart (pg, sg, sf, pf, c). |
+| `position_id` | Int64 | ESPN position id of the slot (1 PG, 2 SG, 5 SF, 6 PF, 9 C). |
+| `position_abbreviation` | String | Upper-case position abbreviation of the slot (PG, SG, SF, PF, C). |
+| `position_name` | String | Full position name of the slot (e.g. 'Point Guard'). |
+| `depth_rank` | Int64 | Order of the athlete within the slot, 1 = starter; the chart lists each team's whole roster. |
+| `athlete_id` | Int64 | ESPN athlete id of the listed player. |
+| `athlete_display_name` | String | Player's full name as ESPN displays it. |
+| `athlete_short_name` | String | Player's abbreviated name as ESPN displays it (e.g. 'O. Okongwu'). |
+| `espn_timestamp` | String | ESPN's last-updated time of the team's depth chart at the snapshot, ISO 8601 UTC text. |
+
+```python
+load_nba_depth_charts(seasons=2027)
+```
+
 ## load_nba_schedule_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet`
+
+:::caution[Coverage]
+nba_game_id stays String, the zero-padded NBA Stats game id (0022300001); the nba_*_team_id bridge ids are Int64, as NBA Stats ships team_id.
+:::
+
 ### Returns {#load_nba_schedule_crosswalk-returns}
 
 | col_name | type | description |
@@ -407,8 +447,8 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 | `nba_game_id` | String | NBA Stats 10-character game id matched to the ESPN game in the crosswalk. |
 | `nba_game_code` | String | NBA game code (date and matchup string) from the NBA Stats API. |
-| `nba_home_team_id` | String | NBA Stats team id of the home team. |
-| `nba_away_team_id` | String | NBA Stats team id of the away team. |
+| `nba_home_team_id` | Int64 | NBA Stats team id of the home team. |
+| `nba_away_team_id` | Int64 | NBA Stats team id of the away team. |
 | `fox_game_id` | String | Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game. |
 | `fox_home_team_id` | String | Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is. |
 | `fox_away_team_id` | String | Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is. |

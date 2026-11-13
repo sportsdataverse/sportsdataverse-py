@@ -12,6 +12,8 @@ description: "NBA — additional Python functions — sportsdataverse-data relea
 
 Load draft-combine anthropometric measurements (`draftcombineplayeranthro`).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
 One row per combine participant: height with and without shoes, weight,
 wingspan, standing reach, body fat and hand size.
 
@@ -73,6 +75,8 @@ anthro.sort("hand_length", descending=True).head()
 
 Load draft-combine athletic drill results (`draftcombinedrillresults`).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
 One row per combine participant: vertical leaps, lane agility, the
 three-quarter-court sprint and the bench press.
 
@@ -127,6 +131,8 @@ drills.sort("max_vertical_leap", descending=True).head()
 `load_nba_stats_draft_combine_nonstationary_shooting(seasons: 'int | Iterable[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load draft-combine off-the-dribble and on-the-move shooting (`draftcombinenonstationaryshooting`).
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
 
 One row per combine participant: made, attempted and percentage for the
 off-the-dribble (15 feet and college three, three spots) and on-the-move
@@ -201,6 +207,8 @@ moving.sort("on_move_college_pct", descending=True, nulls_last=True).head()
 `load_nba_stats_draft_combine_spot_shooting(seasons: 'int | Iterable[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load draft-combine spot-up shooting drills (`draftcombinespotshooting`).
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
 
 One row per combine participant: made, attempted and percentage from five
 floor spots at 15 feet, the college three and the NBA three. Spots a year's
@@ -297,6 +305,8 @@ spot.sort("college_corner_left_pct", descending=True, nulls_last=True).head()
 
 Load the draft-combine summary table (`nba_stats_draft_combine`, `draftcombinestats`).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft_combine
+
 One row per combine participant: measurements, athletic testing and the
 shooting drills summarised as `"made-attempted"` text.
 
@@ -386,6 +396,8 @@ combine.sort("wingspan", descending=True).head()
 
 Load player hustle stats (the `nba_stats_hustle` release, player files).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_hustle
+
 `nba_stats_hustle` publishes eight files per season,
 `leaguehustlestats{player|team}_{season_type}_{per_mode}_{END year}.parquet`.
 Player and team files have different columns, so each entity has its own
@@ -464,6 +476,8 @@ hustle.sort("deflections", descending=True).head()
 
 Load team hustle stats (the `nba_stats_hustle` release, team files).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_hustle
+
 The team half of `nba_stats_hustle`: unions the four
 `leaguehustlestatsteam_{season_type}_{per_mode}_{END year}.parquet` files
 (or the requested subset). See `load_nba_stats_hustle_player` for the
@@ -533,6 +547,8 @@ teams.sort("screen_assists", descending=True).head()
 `load_nba_stats_leaguedash(family: 'str', seasons: 'int | Iterable[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load one asset family of the `nba_stats_leaguedash` release.
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_leaguedash
 
 `nba_stats_leaguedash` is a parameter cube: one asset per
 (family, season) pair rather than one per season, so a family must be named.
@@ -683,6 +699,8 @@ usage.sort("usg_pct", descending=True).head()
 
 Load offensive-vs-defensive player matchups (`nba_stats_matchups`, season files).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_matchups
+
 Reads `leagueseasonmatchups_regular-season_{per_mode}_{END year}.parquet`
 from `nba_stats_matchups`: one row per (offensive player, defensive player)
 pair. The tag publishes this table for the regular season only; the
@@ -760,6 +778,8 @@ pairs.filter(pl.col("off_player_id") == 1628983).sort("partial_poss", descending
 
 Load defensive matchup roll-ups by position (`nba_stats_matchups`, rollup files).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_matchups
+
 Reads `matchupsrollup_{season_type}_{per_mode}_{END year}.parquet` from
 `nba_stats_matchups`: one row per defender per offensive position
 (`G`/`F`/`C`) plus a `TOTAL` row. Pair-level rows are in
@@ -832,6 +852,8 @@ rollup.filter(pl.col("position") == "G").sort("percent_of_time", descending=True
 `load_nba_stats_synergy(seasons: 'int | Iterable[int]', season_type: '_Choice' = None, per_mode: '_Choice' = None, type_grouping: '_Choice' = None, play_type: '_Choice' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load Synergy play-type stats (the `nba_stats_synergy` release).
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_synergy
 
 `nba_stats_synergy` publishes 72 files per season, one per
 (season type, play type, offensive/defensive, per mode) combination, named
