@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 278 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 279 | — |
 
 ## ESPN {#espn}
 
@@ -228,11 +228,12 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_wowy`](reference/additional/analytics-4#nba_player_wowy)
 - [`nba_playtype_ratings`](reference/additional/analytics-4#nba_playtype_ratings)
 - [`nba_possession_rate_rows`](reference/additional/analytics-4#nba_possession_rate_rows)
+- [`nba_pregame_projections`](reference/additional/analytics-4#nba_pregame_projections)
 - [`nba_rated_priors`](reference/additional/analytics-4#nba_rated_priors)
 - [`nba_ratings_panel`](reference/additional/analytics-4#nba_ratings_panel)
 - [`nba_raw_store_season_frame`](reference/additional/analytics-4#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-4#nba_referee_assignments)
-- [`nba_score_rows`](reference/additional/analytics-4#nba_score_rows)
+- [`nba_score_rows`](reference/additional/analytics-5#nba_score_rows)
 - [`nba_season_sim`](reference/additional/analytics-5#nba_season_sim)
 - [`nba_season_standings`](reference/additional/analytics-5#nba_season_standings)
 - [`nba_shot_value`](reference/additional/analytics-5#nba_shot_value)

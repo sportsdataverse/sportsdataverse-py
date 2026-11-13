@@ -215,6 +215,11 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
 | `adj_em_z` | Float64 | Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation over every team in the frame, so it is mean 0 and standard deviation 1 per season. |
+| `adj_o_blend` | Float64 | Adjusted offensive efficiency with the season sim's preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season's regressed rating as if it had played prior_games extra games at it. |
+| `adj_d_blend` | Float64 | Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better). |
+| `adj_em_blend` | Float64 | adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season. |
+| `rank_blend` | Int64 | Dense rank of adj_em_blend within the season (1 = best). |
+| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. |
 
 ```python
 load_wbb_ratings(seasons=2025)

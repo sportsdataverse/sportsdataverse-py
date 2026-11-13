@@ -8841,6 +8841,11 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "games": pl.Int64,
         "rank": pl.Int64,
         "adj_em_z": pl.Float64,
+        "adj_o_blend": pl.Float64,
+        "adj_d_blend": pl.Float64,
+        "adj_em_blend": pl.Float64,
+        "rank_blend": pl.Int64,
+        "prior_games": pl.Float64,
     },
     "loader_schemas:load_mbb_rosters": {
         "season": pl.Int32,
@@ -14924,6 +14929,11 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "games": pl.Int64,
         "rank": pl.Int64,
         "adj_em_z": pl.Float64,
+        "adj_o_blend": pl.Float64,
+        "adj_d_blend": pl.Float64,
+        "adj_em_blend": pl.Float64,
+        "rank_blend": pl.Int64,
+        "prior_games": pl.Float64,
     },
     "loader_schemas:load_wbb_rosters": {
         "season": pl.Int32,

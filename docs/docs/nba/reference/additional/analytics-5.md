@@ -1,10 +1,60 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_season–nba_team"
-sidebar_label: "Analytics: nba_season–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_score–nba_team"
+sidebar_label: "Analytics: nba_score–nba_team"
 sidebar_position: 19
-description: "NBA — additional Python functions — Analytics: nba_season–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_score–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_season–nba_team
+# NBA — additional Python functions — Analytics: nba_score–nba_team
+
+### nba_score_rows {#nba_score_rows}
+
+`nba_score_rows(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season') -> 'pl.DataFrame'`
+
+Map the stats.nba.com play-by-play onto the game-flow score rows.
+
+Keeps the completed games of `schedule` whose `season_type` matches.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `period`, `seconds_remaining`, `event_type`, `team_id`, `score_home`, `score_away`, `season`). |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `season_type`, `home_team_id`, `away_team_id`, `home_pts`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
+| `season_type` | `str` | `'regular-season'` | The schedule `season_type` to keep (see `~sportsdataverse.nba.nba_team_season_rates.nba_possession_rate_rows`). |
+
+**Returns**
+
+Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `order` | Int64 | The play's position in its game (the pbp order_index, or the release row order for college). |
+| `home_team_id` | Int64 | The home team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 host). |
+| `away_team_id` | Int64 | The away team's id (stats.nba.com, or the ESPN team id for college; null for a non-D1 visitor). |
+| `neutral_site` | Boolean | True for a neutral-site game (no home-court prior); always False in the NBA / WNBA stats schedule, which carries no venue. |
+| `elapsed` | Float64 | Game-clock seconds run when the play happens, counted from the tip. |
+| `sec_left` | Float64 | The win-probability clock: seconds left in regulation, or in the overtime period. |
+| `game_seconds` | Float64 | Game length in seconds: regulation plus the overtimes played. |
+| `event_team_id` | Int64 | The play's team (the model's ball side); 0 or null for a team-less play. |
+| `home_score` | Int64 | Home running score after the play. |
+| `away_score` | Int64 | Away running score after the play. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` or `season_type` is unknown. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp, load_nba_stats_schedules
+from sportsdataverse.nba.nba_game_flow import nba_score_rows
+rows = nba_score_rows(load_nba_stats_pbp(2025), load_nba_stats_schedules(2025))
+```
 
 ### nba_season_sim {#nba_season_sim}
 

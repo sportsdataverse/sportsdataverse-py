@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 388 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 390 | — |
 
 ## ESPN {#espn}
 
@@ -145,6 +145,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`inject_rapm_into_players`](reference/additional/models-and-calculators-2#inject_rapm_into_players)
 - [`kmeans_fit`](reference/additional/models-and-calculators-2#kmeans_fit)
 - [`load_artifact`](reference/additional/models-and-calculators-2#load_artifact)
+- [`load_preseason_prior`](reference/additional/models-and-calculators-2#load_preseason_prior)
 - [`log_loss_score`](reference/additional/models-and-calculators-2#log_loss_score)
 - [`logistic_fit`](reference/additional/models-and-calculators-2#logistic_fit)
 - [`mae`](reference/additional/models-and-calculators-2#mae)
@@ -153,6 +154,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_draft_projection`](reference/additional/models-and-calculators-2#mbb_draft_projection)
 - [`mbb_in_game_win_prob`](reference/additional/models-and-calculators-2#mbb_in_game_win_prob)
 - [`mbb_predict_games`](reference/additional/models-and-calculators-2#mbb_predict_games)
+- [`mbb_pregame_projections`](reference/additional/models-and-calculators-2#mbb_pregame_projections)
 - [`mbb_recruiting_projection`](reference/additional/models-and-calculators-2#mbb_recruiting_projection)
 - [`mbb_season_projections`](reference/additional/models-and-calculators-2#mbb_season_projections)
 - [`mbb_season_sim`](reference/additional/models-and-calculators-2#mbb_season_sim)
@@ -160,7 +162,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_shot_quality`](reference/additional/models-and-calculators-2#mbb_shot_quality)
 - [`mbb_shot_quality_model`](reference/additional/models-and-calculators-2#mbb_shot_quality_model)
 - [`mbb_team_ratings`](reference/additional/models-and-calculators-2#mbb_team_ratings)
-- [`mbb_transfer_projection`](reference/additional/models-and-calculators-2#mbb_transfer_projection)
+- [`mbb_transfer_projection`](reference/additional/models-and-calculators-3#mbb_transfer_projection)
 - [`pick_ridge_regression`](reference/additional/models-and-calculators-3#pick_ridge_regression)
 - [`player_per100_features`](reference/additional/models-and-calculators-3#player_per100_features)
 - [`poss_calc_fragment_sum`](reference/additional/models-and-calculators-3#poss_calc_fragment_sum)
