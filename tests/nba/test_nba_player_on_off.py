@@ -14,6 +14,7 @@ are the values observed on these teams; never lower one to make a change pass. T
 
 from __future__ import annotations
 
+import datetime as dt
 import importlib
 from functools import cache
 from pathlib import Path
@@ -58,7 +59,25 @@ def _rows(lg: str = "nba", season: int = 2025) -> pl.DataFrame:
 
 @cache
 def _on_off(level: str | None = None) -> pl.DataFrame:
-    return player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, level=level)
+    dates = adapter._game_dates(_read("schedule"))
+    return player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, level=level, game_dates=dates)
+
+
+@cache
+def _traded() -> pl.DataFrame:
+    """The fixture plus ``nba_*_2025_trades``: the three other-team games that bound three traded players' spans."""
+    names = ("pbp", "game_lineups", "possessions", "schedule")
+    frames = [pl.concat([_read(n), pl.read_parquet(FIX / f"nba_{n}_2025_trades.parquet")]) for n in names]
+    dates = adapter._game_dates(frames[3])
+    return player_on_off(nba_impact_rows(*frames), player_dtype=pl.Int64(), min_poss=400, level="nba", game_dates=dates)
+
+
+def _oracle() -> pl.DataFrame:
+    """stats.nba.com's on and off rows side by side (``<col>_off`` for the off side)."""
+    oracle = _read("on_off_summary")
+    on = oracle.filter(court_status="On").drop("court_status")
+    off = oracle.filter(court_status="Off").drop("court_status", "gp")
+    return on.join(off, on=["team_id", "player_id"], suffix="_off", validate="1:1")
 
 
 @cache
@@ -117,10 +136,7 @@ def test_on_plus_off_is_the_team_season() -> None:
 
 def test_matches_stats_nba_on_off_summary() -> None:
     """stats.nba.com's ``teamplayeronoffsummary`` on the players whose off side spans the team season."""
-    oracle = _read("on_off_summary")
-    on = oracle.filter(court_status="On").drop("court_status")
-    off = oracle.filter(court_status="Off").drop("court_status", "gp")
-    o = on.join(off, on=["team_id", "player_id"], suffix="_off", validate="1:1")
+    o = _oracle()
     ours = _on_off()
     assert o.schema["player_id"] == ours.schema["player_id"] and o.schema["team_id"] == ours.schema["team_id"]
     j = o.join(ours, on=["team_id", "player_id"], how="left", validate="1:1")
@@ -156,6 +172,79 @@ def test_matches_stats_nba_on_off_summary() -> None:
     assert d_diff.median() <= 0.69 and d_diff.max() <= 3.96  # observed 0.684 / 3.958
     on_off_gap = pl.col("net_rating") - pl.col("net_rating_off")
     assert full.select(pl.corr(pl.col("net_rtg_diff"), on_off_gap)).item() >= 0.961  # observed 0.9611
+
+
+def test_span_off_is_the_team_over_his_span() -> None:
+    """``*_off_span``: the team's games in his span less his stints, against the possessions release."""
+    out = _on_off().filter(pl.col("team_id").is_in(NBA_TEAMS))
+    assert out.height == 70 and out["team_games_span"].null_count() == 0
+    dates = adapter._game_dates(_read("schedule"))
+    poss = (
+        _read("possessions")
+        .with_columns(pl.col("game_id").cast(pl.Utf8))
+        .join(dates, on="game_id", validate="m:1")
+        .group_by(pl.col("offense_team_id").cast(pl.Int64).alias("team_id"), "game_date")
+        .agg(pl.len().cast(pl.Int64).alias("n"))
+    )
+    span = (
+        out.select("team_id", "player_id", "span_first_date", "span_last_date")
+        .join(poss, on="team_id")
+        .filter(pl.col("game_date") >= pl.col("span_first_date"), pl.col("game_date") <= pl.col("span_last_date"))
+        .group_by("team_id", "player_id")
+        .agg(pl.col("n").sum().alias("span_poss"), pl.len().alias("span_games"))
+    )
+    j = out.join(span, on=["team_id", "player_id"], validate="1:1")
+    assert j.height == 70 and (j["poss_on"] + j["poss_off_span"] == j["span_poss"]).all()
+    assert (j["span_games"] == j["team_games_span"]).all() and (j["games"] <= j["team_games_span"]).all()
+    for c in _TOTALS:
+        assert (out[f"{c}_off_span"] <= out[f"{c}_off"] + 1e-6).all() and (out[f"{c}_off_span"] >= 0).all(), c
+    # one team, on the floor in its first game: the span is the season (28 of the 70 here)
+    whole = out.filter(pl.col("team_games_span") == pl.col("team_games"))
+    assert whole.height == 28
+    assert all((whole[f"{c}_off_span"] == whole[f"{c}_off"]).all() for c in ("poss", "opp_poss", "pts", "opp_pts"))
+    assert (whole["net_rtg_diff_span"] == whole["net_rtg_diff"]).all()
+    # a signing starts at his debut: PHI's 1630600 played only the season finale
+    late = out.filter(player_id=1630600).row(0, named=True)
+    assert late["team_games_span"] == 1 and late["span_first_date"] == late["span_last_date"]
+
+
+def test_span_follows_traded_players_like_stats_nba() -> None:
+    """The gate: on three real 2024-25 trades the span's off side tracks stats.nba.com's roster-limited one."""
+    j = _oracle().join(_traded(), on=["team_id", "player_id"], how="left", validate="1:1")
+    row = {r["player_id"]: r for r in j.to_dicts()}
+    # Quentin Grimes, Dallas to Philadelphia: the span opens the day after his last Dallas game
+    # (2025-02-02), at PHI's next game; stats.nba.com's off-court minutes are 694.
+    g = row[1629656]
+    assert g["span_first_date"] == dt.date(2025, 2, 4) and g["team_games_span"] == 34 and g["games"] == 28
+    assert abs(g["minutes_off_span"] - g["min_off"]) <= 1  # observed 693.75 v 694
+    assert abs(g["net_rtg_off_span"] - g["net_rating_off"]) <= 0.13  # observed 0.123; the season's is 1.00
+    # Jusuf Nurkic and Josh Okogie, Phoenix to Charlotte: it closes the day before their first
+    # Charlotte game (2025-02-12, 2025-01-20).
+    n, o = row[203994], row[1629006]
+    assert n["span_last_date"] == dt.date(2025, 2, 11) and o["span_last_date"] == dt.date(2025, 1, 18)
+    for r in (g, n, o):
+        assert abs(r["net_rtg_off_span"] - r["net_rating_off"]) < abs(r["net_rtg_off"] - r["net_rating_off"])
+    # The bound reads every game of the season: without his last Dallas game the fixture's latest
+    # Dallas game of his is 2024-10-25 (against Minnesota), and the span opens the next day.
+    alone = _on_off().filter(player_id=1629656).row(0, named=True)
+    assert alone["span_first_date"] == dt.date(2024, 10, 26)
+    # Across the 70: on the 26 whose stats.nba.com off side is short of the team's season (traded,
+    # signed or waived), the span cuts the median off-court net rating miss from 2.96 to 1.27; on
+    # the 44 whose is the whole season it costs 0.26 to 0.40 (a late debut starts the span late).
+    gap = (pl.col("min") + pl.col("min_off") - pl.col("minutes_on") - pl.col("minutes_off")).abs() > 3
+    miss = {s or "season": (pl.col(f"net_rtg_off{s}") - pl.col("net_rating_off")).abs().median() for s in ("", "_span")}
+    short = j.filter(gap).select(**miss).row(0, named=True)
+    full = j.filter(~gap).select(**miss).row(0, named=True)
+    assert j.filter(gap).height == 26 and short["_span"] <= 1.27 and short["season"] >= 2.95  # observed 1.265 / 2.960
+    assert full["season"] <= 0.27 and full["_span"] <= 0.40  # observed 0.261 / 0.399
+
+
+def test_span_columns_are_null_without_dates() -> None:
+    out = player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400)
+    span = [c for c in player_on_off_schema(pl.Int64()) if "span" in c]
+    assert len(span) == 3 + 9 + 3
+    assert out.select(pl.col(span).null_count()).row(0) == (out.height,) * len(span)
+    assert out.drop(span).equals(_on_off().drop(span))  # the dates move nothing else
 
 
 def test_wowy_splits_add_up_to_the_team() -> None:

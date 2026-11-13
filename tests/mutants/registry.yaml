@@ -10065,6 +10065,26 @@
   expected: kill
   note: A pair that never shared the floor would publish NaN ratings together instead of nulls.
 
+- id: bb-oo-span-traded-in
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: 'pl.coalesce(pl.col("_prev") + pl.duration(days=1), pl.col("_first")).alias("_start"),'
+  mutant: 'pl.col("_first").alias("_start"),'
+  test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
+  expected: kill
+  note: A traded-in player's span would open at his debut, not the day after his last game for the earlier team.
+
+- id: bb-oo-span-traded-out
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '(pl.col("_next") - pl.duration(days=1)).alias("_end"),'
+  mutant: 'pl.lit(None, dtype=pl.Date).alias("_end"),'
+  test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
+  expected: kill
+  note: A traded-out player's span would run to the season's end, through his games for the later team.
+
 # --- BB-D21: situational splits (clutch, period, half, garbage, score, venue, opponent, play type, chance) -------
 # Killers: tests/nba/test_nba_situational.py and tests/mbb/test_mbb_situational.py, on the 2023-24 NBA season,
 # 30 WNBA 2002 two-halves games and two teams' 2024-25 college seasons (tests/fixtures/bb_situational/README.md).
