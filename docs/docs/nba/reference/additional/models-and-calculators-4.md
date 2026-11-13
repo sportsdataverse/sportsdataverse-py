@@ -75,7 +75,10 @@ Every game's excitement index, lead changes and biggest swing, ranked within its
 
 Scores each game with `score_win_prob` and `game_excitement`, then ranks the
 completed games of each season by GEI. A game whose pbp stops before the end (a truncated
-release) keeps its GEI so far but is not ranked.
+release) keeps its GEI so far but is not ranked. For NBA and WNBA, the exhibitions the
+`schedule` marks (All-Star games and Rising Stars: `type_abbreviation` `ALLSTAR` or a
+`notes_headline` naming one) are left out, so they neither appear nor take a rank; college
+schedules carry no such games.
 
 **Parameters**
 
@@ -84,7 +87,7 @@ release) keeps its GEI so far but is not ranked.
 | `pbp` | `DataFrame` |  | Plays of one league in the basketball pbp schema (a season's `load_<league>_pbp` release, or any set of games), the columns `score_win_prob` needs plus `game_id` and `season`. |
 | `league_id` | `str \| None` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `str \| None` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `schedule` | `DataFrame \| None` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral). |
+| `schedule` | `DataFrame \| None` | `None` | Optional `load_<league>_schedule` frame; its `game_id` / `neutral_site` give each game's neutral site for the prior (games it lacks are not neutral), and its `type_abbreviation` / `notes_headline` (when present) the NBA / WNBA exhibitions to drop. Without a schedule nothing is dropped. |
 
 **Returns**
 

@@ -592,6 +592,23 @@ _EXCITEMENT_SCHEMA: dict[str, pl.DataType] = {
     "gei_pct": pl.Float64,
     "gei_n": pl.Int64,
 }
+#: The pro exhibitions (All-Star games, the 2018-20 Rising Stars). ESPN types the All-Star games
+#: ``ALLSTAR`` except the NBA's 2013-17 and 2019 ones and the Rising Stars (``STD``); every one of
+#: them names itself in ``notes_headline`` (checked on the 2002-26 NBA and 2006-25 WNBA schedules).
+_EXHIBITION_HEADLINE = r"(?i)all[- ]?star|rising stars"
+
+
+def _exhibition_ids(schedule: pl.DataFrame | None) -> list[int]:
+    """The schedule's exhibition game ids (columns it lacks match nothing)."""
+    if schedule is None or not schedule.height:
+        return []
+    cols = schedule.columns
+    hit = pl.lit(False)
+    if "type_abbreviation" in cols:
+        hit = hit | (pl.col("type_abbreviation") == "ALLSTAR").fill_null(False)
+    if "notes_headline" in cols:
+        hit = hit | pl.col("notes_headline").str.contains(_EXHIBITION_HEADLINE).fill_null(False)
+    return schedule.filter(hit)["game_id"].cast(pl.Int64).to_list()
 
 
 def season_game_excitement(
@@ -605,7 +622,10 @@ def season_game_excitement(
 
     Scores each game with :func:`score_win_prob` and :func:`game_excitement`, then ranks the
     completed games of each season by GEI. A game whose pbp stops before the end (a truncated
-    release) keeps its GEI so far but is not ranked.
+    release) keeps its GEI so far but is not ranked. For NBA and WNBA, the exhibitions the
+    ``schedule`` marks (All-Star games and Rising Stars: ``type_abbreviation`` ``ALLSTAR`` or a
+    ``notes_headline`` naming one) are left out, so they neither appear nor take a rank; college
+    schedules carry no such games.
 
     Args:
         pbp: Plays of one league in the basketball pbp schema (a season's ``load_<league>_pbp``
@@ -614,7 +634,9 @@ def season_game_excitement(
         league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
         schedule: Optional ``load_<league>_schedule`` frame; its ``game_id`` / ``neutral_site``
-            give each game's neutral site for the prior (games it lacks are not neutral).
+            give each game's neutral site for the prior (games it lacks are not neutral), and its
+            ``type_abbreviation`` / ``notes_headline`` (when present) the NBA / WNBA exhibitions
+            to drop. Without a schedule nothing is dropped.
 
     Returns:
         One row per game, sorted by ``season`` then ``game_id``: ``game_id``, ``season``, ``gei``,
@@ -650,8 +672,10 @@ def season_game_excitement(
     for c in ("game_id", "season"):
         if c not in pbp.columns:
             raise pl.exceptions.ColumnNotFoundError(f"season_game_excitement needs column {c!r}")
+    if lg in ("nba", "wnba") and (drop := _exhibition_ids(schedule)):
+        pbp = pbp.filter(~pl.col("game_id").cast(pl.Int64).is_in(drop))
     neutral: dict[int, bool] = {}
-    if schedule is not None and schedule.height:
+    if schedule is not None and schedule.height and "neutral_site" in schedule.columns:
         sched = schedule.select(pl.col("game_id").cast(pl.Int64), pl.col("neutral_site").cast(pl.Boolean))
         neutral = dict(zip(sched["game_id"].to_list(), sched["neutral_site"].to_list(), strict=True))
     if "game_play_number" in pbp.columns:  # score_win_prob reads each game in play order
