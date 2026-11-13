@@ -493,7 +493,15 @@ def _main(default_league: str, default_root: str) -> None:
     master_path = Path(args.root) / args.league / "schedule_master.parquet"
     pending = _select_pending(master_path, args.season)
     my_ids = shard(pending, i, n)
-    print(f"pending={len(pending)} shard={i}/{n} assigned={len(my_ids)}")
+    # The master's `captured` flag is never refreshed, so `pending` also holds contests whose
+    # bundle is already on disk. Report the real backlog; keep the shard split on the unfiltered
+    # list, since workers start seconds apart and a list filtered at different moments would
+    # shift every later contest onto another shard.
+    on_disk = {c for c in pending if is_captured(args.root, args.league, str(args.season), c)}
+    print(
+        f"pending={len(pending) - len(on_disk)} (master uncaptured={len(pending)}) "
+        f"shard={i}/{n} assigned={len(my_ids)} to_fetch={sum(c not in on_disk for c in my_ids)}"
+    )
     if args.vendor:
         print(f"transport: canary vendor {args.vendor!r}")
 

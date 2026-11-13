@@ -241,6 +241,24 @@ def test_capture_main_binds_league_and_root(tmp_path, monkeypatch, capsys):
     assert "captured=2 skipped=0 failed=0" in capsys.readouterr().out
 
 
+def test_capture_main_pending_counts_bundles_on_disk(tmp_path, monkeypatch, capsys):
+    # The master never marks a contest captured, so its "uncaptured" list includes bundles
+    # already on disk; the reported backlog must not (2026-11-13: 691 shown, 196 real).
+    monkeypatch.setattr(capture, "_select_pending", lambda master, season: ["1", "2", "3", "4"])
+    monkeypatch.setattr(
+        capture, "capture_contests", _record({}, "capture", {"captured": 0, "skipped": 0, "failed": 0, "not_ready": 0})
+    )
+    # shard 0 runs the officials refresh over the bundles on disk: keep the test offline
+    monkeypatch.setattr(capture, "_refresh_officials_cli", lambda args: None)
+    for cid in ("1", "3", "4"):
+        write_bundle(tmp_path, "mbb", "2027", cid, {"play_by_play": "x"}, urls={}, captured_at="2026-11-13T00:00:00Z")
+    monkeypatch.setattr(sys, "argv", ["capture", "--season", "2027", "--shard", "0/2"])
+    capture._main("mbb", str(tmp_path))
+    out = capsys.readouterr().out
+    # shard 0/2 of sorted ["1","2","3","4"] is ["1","3"], both on disk: unchanged split, 0 to fetch
+    assert "pending=1 (master uncaptured=4) shard=0/2 assigned=2 to_fetch=0" in out
+
+
 def test_discover_main_binds_league_and_root(tmp_path, monkeypatch):
     import polars as pl
 
