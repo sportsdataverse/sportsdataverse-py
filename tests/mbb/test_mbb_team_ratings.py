@@ -177,6 +177,11 @@ _RATINGS_COLUMNS = [
     "games",
     "rank",
     "adj_em_z",
+    "adj_o_blend",
+    "adj_d_blend",
+    "adj_em_blend",
+    "rank_blend",
+    "prior_games",
 ]
 
 
@@ -215,8 +220,11 @@ def test_mbb_team_ratings_public_schema(monkeypatch):
     )
     full_sched = pl.concat([sched, sched2])
     full_box = pl.concat([box, box2])
-    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: full_sched)
-    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: full_box)
+    # 2023 is not released (the loaders' column-less frame): no preseason prior
+    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: full_sched if seasons == [2024] else pl.DataFrame())
+    monkeypatch.setattr(
+        mod, "load_mbb_team_boxscore", lambda seasons: full_box if seasons == [2024] else pl.DataFrame()
+    )
 
     out = mod.mbb_team_ratings(2024)
     assert out.columns == _RATINGS_COLUMNS
@@ -224,6 +232,7 @@ def test_mbb_team_ratings_public_schema(monkeypatch):
     assert out.schema["rank"] == pl.Int64
     assert out.schema["adj_em_z"] == pl.Float64
     assert set(out["rank"].to_list()) == {1, 2}
+    assert (out["prior_games"] == 0.0).all() and out["adj_em_blend"].to_list() == out["adj_em"].to_list()
 
     pdf = mod.mbb_team_ratings(2024, return_as_pandas=True)
     assert isinstance(pdf, pd.DataFrame)
@@ -437,8 +446,9 @@ def test_real_2011_shell_game_does_not_poison_the_season(monkeypatch):
     fix = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
     sched = pl.read_parquet(fix / "shell_game_schedule_2011.parquet")
     box = pl.read_parquet(fix / "shell_game_team_box_2011.parquet")
-    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: sched)
-    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: box)
+    # 2010 is not in the fixture (the loaders' column-less frame): no preseason prior
+    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: sched if seasons == [2011] else pl.DataFrame())
+    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: box if seasons == [2011] else pl.DataFrame())
 
     with pytest.warns(UserWarning, match="310573129"):
         out = mod.mbb_team_ratings(2011)

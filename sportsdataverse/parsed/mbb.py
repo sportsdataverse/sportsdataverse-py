@@ -482,6 +482,7 @@ from sportsdataverse.mbb import load_ncaa_mbb_shots as load_ncaa_mbb_shots  # no
 from sportsdataverse.mbb import load_ncaa_mbb_team_box as load_ncaa_mbb_team_box  # noqa: F401
 from sportsdataverse.mbb import load_ncaa_mbb_team_ids as load_ncaa_mbb_team_ids  # noqa: F401
 from sportsdataverse.mbb import load_ncaa_mbb_team_rosters as load_ncaa_mbb_team_rosters  # noqa: F401
+from sportsdataverse.mbb import load_preseason_prior as load_preseason_prior  # noqa: F401
 from sportsdataverse.mbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.mbb import log_loss_score as log_loss_score  # noqa: F401
 from sportsdataverse.mbb import logistic_fit as logistic_fit  # noqa: F401
@@ -515,6 +516,7 @@ from sportsdataverse.mbb import mbb_player_shot_zones as mbb_player_shot_zones  
 from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
 from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
+from sportsdataverse.mbb import mbb_pregame_projections as mbb_pregame_projections  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
 from sportsdataverse.mbb import mbb_schedule_crosswalk as mbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_season_projections as mbb_season_projections  # noqa: F401
@@ -1163,6 +1165,7 @@ __all__ = [
     "load_ncaa_mbb_team_box",
     "load_ncaa_mbb_team_ids",
     "load_ncaa_mbb_team_rosters",
+    "load_preseason_prior",
     "load_proxybonanza_pool",
     "log_loss_score",
     "logistic_fit",
@@ -1196,6 +1199,7 @@ __all__ = [
     "mbb_player_war",
     "mbb_player_wowy",
     "mbb_predict_games",
+    "mbb_pregame_projections",
     "mbb_recruiting_projection",
     "mbb_schedule_crosswalk",
     "mbb_season_projections",

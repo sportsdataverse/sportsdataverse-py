@@ -130,7 +130,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26), the year in the asset name. |
 | `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
@@ -144,6 +144,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
+| `ncaa_player_id` | String | stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_wbb_* releases), from the ncaa rows of load_wbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
