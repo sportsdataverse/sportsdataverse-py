@@ -46895,6 +46895,10 @@ load_nfl_model_pbp:
   qbr_epa: EPA input used by the QBR calculation for the play (clipped at -5).
   receive_2h_ko: Binary indicator (1/0) that the play is in the first half and the possession team is the team receiving the
     second-half kickoff (the game's opening defense); mirrors nflfastR helper_add_ep_wp.R.
+  receiver: Name of the targeted receiver as nflfastR clean_pbp derives it -- parsed from desc, then the name the id carries
+    most often; also set on 2003-2008 incompletions, whose NFL.com stats name no target. Null when no pass names one.
+  receiver_id: GSIS id of the targeted receiver as nflfastR clean_pbp derives it -- the most frequent receiver_player_id
+    of that name within the possession team and season, so it is filled where receiver_player_id is null.
   rush_epa: EPA credited to the play's rushing component (clipped at -5).
   rush_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   sack_epa: EPA credited to the play's sack component (clipped at -5).
