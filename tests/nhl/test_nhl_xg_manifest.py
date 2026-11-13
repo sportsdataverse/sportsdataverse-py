@@ -4,14 +4,18 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 import requests
 
-from sportsdataverse.errors import AssetFetchError
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nhl.nhl_xg import ensure_xg_models, load_xg_models
+
+# the module, not the package's re-exported nhl_xg() function of the same name
+nhl_xg = sys.modules["sportsdataverse.nhl.nhl_xg"]
 
 MODELS = Path(__file__).parent.parent / "fixtures" / "nhl_player_impact" / "xg_models"
 BOOSTERS = ("xg_model_5v5.json", "xg_model_st.json")
@@ -39,20 +43,24 @@ def release(monkeypatch, tmp_path):
     served = {**files, MANIFEST: json.dumps({"xg_model_ps": 0.31, "version": "test", "files": pins}).encode()}
     calls: list[str] = []
 
-    def fake_get(url, **kwargs):
+    def fake_download(url, **kwargs):
+        # ensure_xg_models goes through dl_utils.download (shared retries), never response-cached
+        assert kwargs.get("cache_ttl") == 0, kwargs
         fn = url.rsplit("/", 1)[-1]
         calls.append(fn)
+        if fn not in served:
+            raise NoDataError(f"404 {url}")
         return _Resp(served[fn])
 
-    monkeypatch.setattr(requests, "get", fake_get)
+    monkeypatch.setattr(nhl_xg, "download", fake_download)
     return SimpleNamespace(dir=tmp_path, files=files, served=served, calls=calls)
 
 
 def _offline(monkeypatch) -> None:
-    def fail(url, **kwargs):
+    def fail(url, **kwargs):  # what download re-raises once its retry budget is spent
         raise requests.ConnectionError("offline")
 
-    monkeypatch.setattr(requests, "get", fail)
+    monkeypatch.setattr(nhl_xg, "download", fail)
 
 
 def test_cache_hit_fetches_only_the_manifest(release):
@@ -77,7 +85,30 @@ def test_download_not_matching_the_manifest_is_refused(release):
     with pytest.raises(AssetFetchError, match="does not match"):
         ensure_xg_models()
     assert (release.dir / "xg_model_5v5.json").read_bytes() == b"2026-04 booster"
-    assert sorted(p.name for p in release.dir.iterdir()) == ["xg_model_5v5.json", MANIFEST]  # no temp file left
+    # nothing committed: neither the new manifest nor a temp file
+    assert sorted(p.name for p in release.dir.iterdir()) == ["xg_model_5v5.json"]
+
+
+def test_a_refresh_that_fails_part_way_keeps_the_previous_set_usable_offline(release, monkeypatch):
+    """Manifest A + boosters A cached; release B's second booster fails its hash. The cache must
+    still hold the complete A set (manifest written last), so the next offline load works."""
+    ensure_xg_models()  # set A
+    before = {p.name: p.read_bytes() for p in release.dir.iterdir()}
+    new = {fn: b"B " + fn.encode() for fn in BOOSTERS}
+    pins = {fn: _sha(b) for fn, b in new.items()} | {"feats_5v5.txt": "2" * 64, "feats_st.txt": "3" * 64}
+    release.served.update({"xg_model_5v5.json": new["xg_model_5v5.json"], "xg_model_st.json": b"truncated"})
+    release.served[MANIFEST] = json.dumps({"xg_model_ps": 0.32, "version": "B", "files": pins}).encode()
+    with pytest.raises(AssetFetchError, match="does not match"):
+        ensure_xg_models()
+    assert {p.name: p.read_bytes() for p in release.dir.iterdir()} == before
+    _offline(monkeypatch)
+    assert ensure_xg_models() == release.dir
+
+
+def test_a_release_without_a_manifest_falls_back_to_the_cache(release):
+    ensure_xg_models()
+    del release.served[MANIFEST]  # a 404 is NoDataError from download
+    assert ensure_xg_models() == release.dir
 
 
 def test_offline_falls_back_to_the_cached_manifest(release, monkeypatch):

@@ -455,8 +455,11 @@ Mirrors the fastRhockey/nflverse download-on-demand + cache pattern -- the docum
 exception to "no first-use download" (the boosters are a large, already-published,
 already-validated artifact; see Decision D1 in the design spec). Each call fetches
 the release's `xg_model_meta.json` manifest and re-downloads any cached booster
-whose sha256 differs from it, so a retrained release replaces an old cache. Offline,
-the cached manifest is used. An explicit `model_dir` that already holds both
+whose sha256 differs from it, so a retrained release replaces an old cache once the new
+manifest is fetched. A refresh is staged: every replacement booster is downloaded and
+verified before any file is written, and the manifest is written last, so a refresh
+that fails part-way leaves the previous manifest and boosters intact. Offline, the
+cached manifest is used. An explicit `model_dir` that already holds both
 boosters (e.g. the committed offline test fixtures) is used as-is and never touches
 the network.
 
@@ -476,7 +479,8 @@ The resolved directory containing `xg_model_5v5.json`, `xg_model_st.json` and (e
 |---|---|
 | `AssetFetchError` | The manifest could not be fetched and no copy is cached, or a downloaded booster does not match the manifest (the release may be mid-update; try again shortly). |
 | `ValueError` | Neither the fetched nor the cached manifest pins both boosters. |
-| `requests.RequestException` | A booster that is missing or stale in the cache could not be downloaded. |
+| `requests.RequestException` | A booster that is missing or stale in the cache could not be downloaded (after the retries of `download`). |
+| `NoDataError` | A missing or stale booster is not on the release (404). |
 
 **Example**
 

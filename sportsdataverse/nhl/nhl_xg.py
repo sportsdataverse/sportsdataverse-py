@@ -31,7 +31,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import polars as pl
 
-from sportsdataverse.errors import AssetFetchError
+from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nhl.nhl_player_impact_constants import booster_cache_dir, get_constants
 
 if TYPE_CHECKING:
@@ -137,8 +138,11 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
     exception to "no first-use download" (the boosters are a large, already-published,
     already-validated artifact; see Decision D1 in the design spec). Each call fetches
     the release's ``xg_model_meta.json`` manifest and re-downloads any cached booster
-    whose sha256 differs from it, so a retrained release replaces an old cache. Offline,
-    the cached manifest is used. An explicit ``model_dir`` that already holds both
+    whose sha256 differs from it, so a retrained release replaces an old cache once the new
+    manifest is fetched. A refresh is staged: every replacement booster is downloaded and
+    verified before any file is written, and the manifest is written last, so a refresh
+    that fails part-way leaves the previous manifest and boosters intact. Offline, the
+    cached manifest is used. An explicit ``model_dir`` that already holds both
     boosters (e.g. the committed offline test fixtures) is used as-is and never touches
     the network.
 
@@ -158,7 +162,8 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
             mid-update; try again shortly).
         ValueError: neither the fetched nor the cached manifest pins both boosters.
         requests.RequestException: a booster that is missing or stale in the cache
-            could not be downloaded.
+            could not be downloaded (after the retries of ``download``).
+        NoDataError: a missing or stale booster is not on the release (404).
 
     Example:
         Quick start::
@@ -176,23 +181,27 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
     d.mkdir(parents=True, exist_ok=True)
 
     def get(fn: str) -> bytes:
-        r = requests.get(
+        # cache_ttl=0: a cached manifest would hide a new release; boosters are cached here
+        r = download(
             f"{_XG_RELEASE}/{fn}",
             timeout=60,
             headers={"User-Agent": os.environ.get("SDV_PY_USER_AGENT", "sportsdataverse-py")},
+            cache_ttl=0,
         )
-        r.raise_for_status()
+        r.raise_for_status()  # download returns, rather than raises, a spent retryable status
         return r.content
 
     cached = d / _XG_MANIFEST
+    raw: bytes | None
     try:
         raw = get(_XG_MANIFEST)
         manifest = _read_manifest(raw)
-        _write_atomic(d, _XG_MANIFEST, raw)
-    except (requests.RequestException, ValueError) as exc:
+    except (requests.RequestException, NoDataError, ValueError) as exc:
         if not cached.is_file():
             raise AssetFetchError(f"could not fetch the nhl_xg_models release manifest: {exc}") from exc
+        raw = None
         manifest = _read_manifest(cached.read_bytes())  # offline: the last manifest seen
+    staged: dict[str, bytes] = {}
     for fn in _XG_BOOSTERS:
         pin = manifest["files"][fn]
         if _sha256(d / fn) == pin:
@@ -203,7 +212,12 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
                 f"the downloaded {fn} does not match the nhl_xg_models release manifest; "
                 "the release may be mid-update, try again shortly"
             )
+        staged[fn] = data
+    # Commit only a complete, verified set: boosters first, the manifest last.
+    for fn, data in staged.items():
         _write_atomic(d, fn, data)
+    if raw is not None:
+        _write_atomic(d, _XG_MANIFEST, raw)
     return d
 
 
