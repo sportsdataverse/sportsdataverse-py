@@ -1349,7 +1349,7 @@ loaders:
   tag: mbb_crosswalk
   dataset_page: hoopR-mbb-data/player_crosswalk
   id_int32: [espn_team_id, espn_athlete_id]
-  min_season: 2025
+  min_season: 2004
   example_args:
     seasons: 2026
 - fn: load_mbb_schedule_crosswalk
@@ -1379,7 +1379,7 @@ loaders:
   tag: wbb_crosswalk
   dataset_page: wehoop-wbb-data/player_crosswalk
   id_int32: [espn_team_id, espn_athlete_id]
-  min_season: 2014
+  min_season: 2007
   example_args:
     seasons: 2026
 - fn: load_wbb_schedule_crosswalk

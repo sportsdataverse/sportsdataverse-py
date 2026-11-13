@@ -41624,6 +41624,9 @@ load_mbb_player_crosswalk:
     name broken by jersey), then on last name plus jersey. Null for players KenPom does not list, which includes every ESPN
     roster row without minutes, and for every row when the build ran without the private KenPom capture. Added by the data
     repo, so the live player-crosswalk builder does not emit it.
+  ncaa_player_id: stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_mbb_* releases), from
+    the ncaa rows of load_mbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when
+    no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year).
 load_mbb_player_season_stats:
   stat_description: ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as
     a pass to a teammate that leads directly to a field goal.
@@ -41633,6 +41636,11 @@ load_mbb_player_value:
   box_dbpm: Box-score defensive plus/minus for the player, the defensive half of box BPM.
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
 load_mbb_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
   adj_em_z: Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation,
     so each season is centered at zero with unit spread.
   adj_tempo: Opponent-adjusted possessions per 40 minutes, solved by the same fixed point as the efficiency ratings under
@@ -41661,6 +41669,10 @@ load_mbb_schedule_crosswalk:
   yahoo_game_id: 'Yahoo Sports game id, ncaab.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
   kp_game_id: KenPom game id (string), matched by hoopR-mbb-data on the game date and the unordered pair of ESPN team ids.
     Null where KenPom lists no matching game, and for every row when the build ran without the private KenPom capture.
+  ncaa_contest_id: stats.ncaa.org contest id (string, the contest_id of the load_ncaa_mbb_* releases), matched on the
+    game date and the two teams' ESPN ids through the NCAA team crosswalk, then on one team's only game that day; null
+    when no stats.ncaa.org game matches uniquely (a non-Division-I opponent), and on every row of a season before 2010 (2009-10, the
+    first stats.ncaa.org season; season is the ending year).
 load_mbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
   athlete_name_2: Display name of the second athlete tied to the attempt (typically the assister), when present.
@@ -49688,7 +49700,10 @@ load_wbb_player_boxscore:
 load_wbb_player_core:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_player_crosswalk:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  ncaa_player_id: stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_wbb_* releases), from
+    the ncaa rows of load_wbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when
+    no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year).
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26), the year in the asset name.
 load_wbb_player_season_stats:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   stat_description: ESPN's prose definition of the statistic named in stat_name, for example The average assists per game
@@ -49700,6 +49715,11 @@ load_wbb_player_value:
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
   adj_em_z: Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation
     over every team in the frame, so it is mean 0 and standard deviation 1 per season.
   adj_tempo: Opponent-adjusted tempo in possessions per 40 minutes, produced by the same fixed-point adjustment as the efficiencies
@@ -49734,9 +49754,13 @@ load_wbb_schedule:
   status_type_short_detail: 'ESPN''s short status text for scoreboards, passed through unchanged.'
   status_type_state: 'ESPN''s coarse game state, passed through unchanged: pre, in or post. post covers every game that is over, whatever the reason.'
 load_wbb_schedule_crosswalk:
+  ncaa_contest_id: stats.ncaa.org contest id (string, the contest_id of the load_ncaa_wbb_* releases), matched on the
+    game date and the two teams' ESPN ids through the NCAA team crosswalk, then on one team's only game that day; null
+    when no stats.ncaa.org game matches uniquely (a non-Division-I opponent), and on every row of a season before 2010 (2009-10, the
+    first stats.ncaa.org season; season is the ending year).
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
   yahoo_game_id: 'Yahoo Sports game id, ncaaw.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26), the year in the asset name.
 load_wbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
   athlete_name_2: Display name of the second athlete tied to the attempt (typically the assister), when present.
@@ -81240,3 +81264,55 @@ wp_variants:
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
   home_win_prob_naive: Home win probability from the game state alone (score, clock and possession), the in-game model with a 0.5 prior.
   home_win_prob_market: Home win probability with the closing no-vig market WP as the prior; null without a line.
+mbb_pregame_projections:
+  season: 'Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year).'
+  game_id: 'ESPN game id (Int32).'
+  game_date: 'Game date (ESPN schedule).'
+  as_of_date: 'The ratings use the completed games dated strictly before this date: the game''s date, or the day after the last completed game for a game not yet reached.'
+  neutral_site: 'Neutral-site flag; a neutral game gets no home term.'
+  home_games: 'Home team''s games behind its rating (0 before its first game).'
+  away_games: 'Away team''s games behind its rating.'
+  exp_home_margin: 'Expected home margin in points, the producer''s closed form on the two ratings (positive favours the home team).'
+  rated_home_prob: 'Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league''s fitted margin_sd; null when a side has no rating.'
+  home_team_id: 'ESPN home team id (Utf8, the mbb_ratings / wbb_ratings team_id key).'
+  away_team_id: 'ESPN away team id (Utf8).'
+  home_rating: 'Home team''s adjusted efficiency margin before the game with the preseason prior blended in (AdjEM, points per 100 over an average opponent); its prior alone before its first game.'
+  away_rating: 'Away team''s adjusted efficiency margin before the game, on the same basis.'
+  home_rank: 'Dense rank of home_rating among the teams rated as of the date (1 = best).'
+  away_rank: 'Dense rank of away_rating among the teams rated as of the date.'
+  home_rating_raw: 'Home team''s AdjEM before the game without the prior: the season-to-date mbb_ratings number.'
+  away_rating_raw: 'Away team''s AdjEM before the game without the prior.'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women); 0 when the blend is off or the previous season is not released.'
+  hfa: 'Home-court term in points (the league''s fitted hfa), 0 at a neutral site.'
+nba_pregame_projections:
+  season: 'Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year).'
+  game_id: 'ESPN game id (Int32).'
+  game_date: 'Game date (ESPN schedule).'
+  as_of_date: 'The ratings use the completed games dated strictly before this date: the game''s date, or the day after the last completed game for a game not yet reached.'
+  neutral_site: 'Neutral-site flag; a neutral game gets no home term.'
+  home_games: 'Home team''s regular-season games behind its rating.'
+  away_games: 'Away team''s games behind its rating.'
+  exp_home_margin: 'Expected home margin in points, the producer''s closed form on the two ratings (positive favours the home team).'
+  rated_home_prob: 'Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league''s fitted margin_sd; null when a side has no rating.'
+  home_team_id: 'ESPN home team id (Int32).'
+  away_team_id: 'ESPN away team id (Int32).'
+  stats_game_id: 'The stats.nba.com / stats.wnba.com game id matched on date and team names; null for a game with no match (All-Star games, the WNBA Commissioner''s Cup final).'
+  home_rating: 'Home team''s team_strength adj_net_rtg before the game: the possession ridge over the regular-season possessions dated before as_of_date, points per 100 over an average opponent on a neutral court.'
+  away_rating: 'Away team''s adj_net_rtg before the game, on the same basis.'
+  home_rank: 'Home team''s adj_net_rtg_rank as of the date (team_strength''s rank: 1 = best, among teams with at least half the most games).'
+  away_rank: 'Away team''s adj_net_rtg_rank as of the date.'
+  home_pace: 'Home team''s team_strength pace (possessions per 48 minutes NBA, 40 WNBA) as of the date.'
+  away_pace: 'Away team''s pace as of the date.'
+  hfa: 'Home-court term in points (the league''s fitted hfa: 2.184 NBA, 1.184 WNBA), 0 at a neutral site.'
+mbb_team_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
+wbb_team_ratings:
+  adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
+  adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
+  adj_em_blend: 'adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season.'
+  rank_blend: 'Dense rank of adj_em_blend within the season (1 = best).'
+  prior_games: 'The preseason prior''s weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it.'
