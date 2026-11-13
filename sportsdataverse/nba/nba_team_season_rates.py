@@ -353,7 +353,8 @@ def nba_team_game_four_factors(
         One row per ``(season, team_id, game_id)``. ``team_id`` is the stats.nba.com team id
         (Int64), ``game_id`` the stats.nba.com game id. ``poss`` / ``pts`` are the team's counted
         possessions and points, ``exp_pts`` is ``lg_ppp * poss`` and ``pts_vs_exp`` the
-        difference; the five ``*_pts`` columns add up to it. ``lg_ppp``, ``lg_efg_pct``,
+        difference; the five ``*_pts`` columns add up to it (they are null when a league value they use has a
+        zero denominator). ``lg_ppp``, ``lg_efg_pct``,
         ``lg_tov_pct``, ``lg_orb_pct``, ``lg_ft_rate``, ``lg_ft_pct`` and ``chance_pts`` are the
         season's league values the factors are priced with. Empty input returns that schema with
         zero rows.

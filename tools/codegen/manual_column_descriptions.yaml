@@ -38552,7 +38552,7 @@ mbb_team_game_four_factors:
   lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
-  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
   rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
   residual_pts: 'The remainder, exactly (pts - box_pts - FGA x the league''s gap per FGA) + chance_pts x (box_poss - poss - FGA x the league''s gap per FGA), box_pts = 2 FGM + 3PM + FTM, box_poss = FGA - OREB + TOV + 0.44 FTA: the play-by-play points'' and possessions'' distance from the team box beyond the league''s. Sums to zero over the league.'
   season: Season, named by the year it ends (2025 is 2024-25).
@@ -38754,7 +38754,7 @@ nba_team_game_four_factors:
   lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game.
-  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
   rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
   residual_pts: 'The remainder, exactly chance_pts x (box_poss - poss - FGA x the league''s box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions'' distance from the box estimate beyond the league''s. Sums to zero over the league.'
   season: Season, named by the year it ends (2026 is 2025-26).
@@ -38976,7 +38976,7 @@ wbb_team_game_four_factors:
   lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
-  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
   rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
   residual_pts: 'The remainder, exactly (pts - box_pts - FGA x the league''s gap per FGA) + chance_pts x (box_poss - poss - FGA x the league''s gap per FGA), box_pts = 2 FGM + 3PM + FTM, box_poss = FGA - OREB + TOV + 0.44 FTA: the play-by-play points'' and possessions'' distance from the team box beyond the league''s. Sums to zero over the league.'
   season: Season, named by the year it ends (2025 is 2024-25).
@@ -39157,7 +39157,7 @@ wnba_team_game_four_factors:
   lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
   poss: The team's offensive possessions in the game, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the game.
-  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly.'
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
   rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
   residual_pts: 'The remainder, exactly chance_pts x (box_poss - poss - FGA x the league''s box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions'' distance from the box estimate beyond the league''s. Sums to zero over the league.'
   season: Season (the calendar year).
