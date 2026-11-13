@@ -119,16 +119,26 @@ def _read_manifest(raw: bytes) -> dict:
     return m
 
 
-def _write_atomic(d: Path, fn: str, data: bytes) -> None:
-    # Its own temp file per write, so two processes loading at once never read a partial file.
-    fd, tmp = tempfile.mkstemp(prefix=f"{fn}-", dir=d)
+def _commit_set(d: Path, files: dict[str, bytes]) -> None:
+    """Write ``files`` into ``d`` as one set, in order (put the manifest last).
+
+    Every file is first written in full to its own temp file -- where a full disk or a write
+    error surfaces -- and only then moved over the cached copies, so a failed write leaves
+    the previous set intact, and a process loading at the same time never reads a partial file.
+    """
+    staged: list[tuple[str, str]] = []
     try:
-        with os.fdopen(fd, "wb") as f:
-            f.write(data)
-        os.replace(tmp, d / fn)
+        for fn, data in files.items():
+            fd, tmp = tempfile.mkstemp(prefix=f"{fn}-", dir=d)
+            staged.append((fn, tmp))
+            with os.fdopen(fd, "wb") as f:
+                f.write(data)
+        for fn, tmp in staged:
+            os.replace(tmp, d / fn)
     finally:
-        if os.path.exists(tmp):
-            os.unlink(tmp)
+        for _, tmp in staged:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
 
 
 def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
@@ -213,11 +223,8 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
                 "the release may be mid-update, try again shortly"
             )
         staged[fn] = data
-    # Commit only a complete, verified set: boosters first, the manifest last.
-    for fn, data in staged.items():
-        _write_atomic(d, fn, data)
-    if raw is not None:
-        _write_atomic(d, _XG_MANIFEST, raw)
+    # Commit only a complete, verified set, the manifest last (see _commit_set).
+    _commit_set(d, staged | ({_XG_MANIFEST: raw} if raw is not None else {}))
     return d
 
 
@@ -414,6 +421,16 @@ def add_shot_geometry(df: pl.DataFrame, *, league: str = "nhl") -> pl.DataFrame:
     )
 
 
+def _feature_matrix(sub: pl.DataFrame, feats: list[str]) -> np.ndarray:
+    """The booster's feature matrix in ``feats`` order; a feature the frame lacks is zero."""
+    arr = np.zeros((sub.height, len(feats)), dtype=np.float32)
+    present = set(sub.columns)
+    for j, f in enumerate(feats):
+        if f in present:
+            arr[:, j] = sub[f].cast(pl.Float64).fill_null(0).to_numpy()
+    return arr
+
+
 def nhl_xg(
     pbp: pl.DataFrame,
     *,
@@ -507,14 +524,6 @@ def nhl_xg(
         out = add_shot_geometry(out, league=league)
         return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
-    def _matrix(sub: pl.DataFrame, feats: list[str]) -> np.ndarray:
-        arr = np.zeros((sub.height, len(feats)), dtype=np.float32)
-        present = set(sub.columns)
-        for j, f in enumerate(feats):
-            if f in present:
-                arr[:, j] = sub[f].cast(pl.Float64).fill_null(0).to_numpy()
-        return arr
-
     parts = []
     for sub, feats, booster in (
         (prep.filter(pl.col("strength_state") == "5v5"), models["feats_5v5"], models["m5v5"]),
@@ -522,7 +531,7 @@ def nhl_xg(
     ):
         if sub.height == 0:
             continue
-        dm = xgb.DMatrix(_matrix(sub, feats), feature_names=list(feats))
+        dm = xgb.DMatrix(_feature_matrix(sub, feats), feature_names=list(feats))
         preds = booster.predict(dm)
         parts.append(sub.select("game_id", "event_id").with_columns(xg=pl.Series(preds, dtype=pl.Float64)))
 

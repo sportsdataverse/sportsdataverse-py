@@ -137,3 +137,32 @@ def test_explicit_model_dir_is_network_free(monkeypatch):
     _offline(monkeypatch)
     assert ensure_xg_models(MODELS) == MODELS
     assert load_xg_models(MODELS)["ps"] == pytest.approx(0.3202197)
+
+
+def test_a_write_that_fails_mid_commit_keeps_the_previous_set(release, monkeypatch):
+    """Release B verifies, but writing its second file fails (a full disk): the cached set A
+    must be untouched and still load offline -- nothing is moved until every file is written."""
+    import os
+
+    ensure_xg_models()  # set A
+    before = {p.name: p.read_bytes() for p in release.dir.iterdir()}
+    new = {fn: b"B " + fn.encode() for fn in BOOSTERS}
+    pins = {fn: _sha(b) for fn, b in new.items()} | {"feats_5v5.txt": "4" * 64, "feats_st.txt": "5" * 64}
+    release.served.update(new)
+    release.served[MANIFEST] = json.dumps({"xg_model_ps": 0.33, "version": "B", "files": pins}).encode()
+    real_fdopen, calls = os.fdopen, []
+
+    def flaky_fdopen(fd, *a, **k):
+        calls.append(fd)
+        if len(calls) == 2:
+            os.close(fd)
+            raise OSError(28, "No space left on device")
+        return real_fdopen(fd, *a, **k)
+
+    monkeypatch.setattr(os, "fdopen", flaky_fdopen)
+    with pytest.raises(OSError, match="No space"):
+        ensure_xg_models()
+    monkeypatch.setattr(os, "fdopen", real_fdopen)
+    assert {p.name: p.read_bytes() for p in release.dir.iterdir()} == before
+    _offline(monkeypatch)
+    assert ensure_xg_models() == release.dir
