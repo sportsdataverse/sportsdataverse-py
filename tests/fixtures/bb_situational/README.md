@@ -30,6 +30,7 @@ ESPN schedules `../bb_team_season_rates/{mbb,wbb}_schedule_2025.parquet`.
 | `wnba_schedule_2002.parquet` | 30 | `wnba_stats_schedules/wnba_schedule_2002` | The same games. Cols: `game_id, season, season_type, home_team_id, away_team_id, home_pts, away_pts`. |
 | `ncaa_mbb_possessions_2025.parquet` | 9,777 | `ncaa_mbb_possessions/ncaa_mbb_possessions_2025` | Every 2024-25 contest of Michigan State (ESPN 127) and Purdue (2509): 72 contests. Cols: `season, contest_id, period, poss_num, poss_team, home, away, pts, last_event_time, is_transition, is_garbage_time, poss_team_espn_team_id, home_espn_team_id, away_espn_team_id, espn_game_id, {home,away}_{1..5}_player_id`. |
 | `ncaa_wbb_possessions_2025.parquet` | 10,116 | `ncaa_wbb_possessions/ncaa_wbb_possessions_2025` | Every 2024-25 contest of UCLA (26) and USC (30): 69 contests, 10-minute quarters, none to overtime. Same columns. |
+| `ncaa_mbb_pbp_2025.parquet` / `ncaa_wbb_pbp_2025.parquet` | 34,905 / 34,706 | `ncaa_{mbb,wbb}_pbp/ncaa_{mbb,wbb}_pbp_2025` | The same 72 / 69 contests as the possessions files, in release order, read 2026-11-13 (Q6's garbage-out counts). Cols: `contest_id, season, event_team_espn_team_id, is_garbage_time, event_type, event_result, shot_value, home_espn_team_id, home_score, away_score`. |
 | `ncaa_ratings_2025.parquet` | 1,318 | `mbb_ratings/mbb_ratings_2025`, `wbb_ratings/wbb_ratings_2025` | Both releases stacked with a `league` column (`mens` 700 rows, `womens` 618), non-D1 teams included (the qualifier drops them). Cols: `league, season, team_id` (Utf8, as released), `adj_o, adj_d, adj_em, games`. |
 
 Season naming: every file is named by the END year, the `season` column the releases stamp (the NBA
@@ -60,3 +61,8 @@ loaders take the start year: `load_nba_stats_possessions(2023)` reads `nba_posse
   Purdue 16; 364 of the 700 men's ratings rows have at least half the most games. College has no
   external oracle for the split values: they are checked for consistency only (BB-D3's possession
   counts, the add-up, the release's flag counts, the qualified top 25).
+- College box counts (Q6): `ncaa_team_game_counts` on the pbp files equals stats.ncaa.org's own team
+  box (`../bb_team_season_rates/ncaa_{mbb,wbb}_team_box_2025.parquet`) on every one of the 144 men's
+  and 138 women's team-games, for FGA, FGM, 3PM, FTA, offensive rebounds and turnovers; the
+  `garbage_time` and `not_garbage_time` rows add up to the game (no event lacks the flag). The
+  counts' points differ from the possession credit (`pts`) by at most 3 a team-game.

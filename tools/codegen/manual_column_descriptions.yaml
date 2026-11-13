@@ -50767,6 +50767,10 @@ score_win_prob:
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'
 season_game_excitement:
+  winner_team_id: 'ESPN team id of the eventual winner; null for a game that is not completed or ends tied.'
+  winner_low_wp: 'The comeback low: the lowest win probability (0-1) the eventual winner had after any play, from the same WP series gei sums (the pregame prior is not a play); null for a game that is not completed or ends tied.'
+  winner_low_period: 'Period of the play at the winner''s low (the earliest, on a tie); null with no winner.'
+  winner_low_clock: 'Game clock (ESPN clock_display_value) of the play at the winner''s low; null with no winner.'
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   season: Season year as the pbp release labels it (the year the season ends).
   gei: 'Game excitement index: the league''s mean plays per game (GEI_SCALE) / the game''s plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football''s Game on Paper formula with a per-league scale.'
@@ -77920,6 +77924,15 @@ mbb_situational_team:
     leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 mbb_situational_team_games:
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage.'
+  fgm: 'Made field goals in the split (event_result made); null on the families other than all and garbage.'
+  fg3a: 'Three-point attempts in the split (shot_value 3); null on the families other than all and garbage.'
+  fg3m: 'Made threes in the split; null on the families other than all and garbage.'
+  fta: 'Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage.'
+  ftm: 'Made free throws in the split; null on the families other than all and garbage.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage.'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
@@ -78013,6 +78026,15 @@ wbb_situational_team:
     leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 wbb_situational_team_games:
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage.'
+  fgm: 'Made field goals in the split (event_result made); null on the families other than all and garbage.'
+  fg3a: 'Three-point attempts in the split (shot_value 3); null on the families other than all and garbage.'
+  fg3m: 'Made threes in the split; null on the families other than all and garbage.'
+  fta: 'Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage.'
+  ftm: 'Made free throws in the split; null on the families other than all and garbage.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage.'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
@@ -78120,6 +78142,21 @@ nba_situation_rows:
   season: Season, named by the year it ends.
   start_clock: Seconds left in the period when the possession starts (when the previous possession ended).
   tov: Offense turnovers on the possession.
+ncaa_team_game_counts:
+  season: 'Season year (the year the season ends).'
+  game_id: 'The stats.ncaa.org contest id.'
+  team_id: 'ESPN team id of the team that made the events; events of a side with no ESPN id (non-D1) are dropped.'
+  family: 'all (the whole game) or garbage.'
+  split: 'all, or garbage_time / not_garbage_time by each event''s is_garbage_time.'
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp.'
+  fgm: 'Made field goals in the split (event_result made).'
+  fg3a: 'Three-point attempts in the split (shot_value 3).'
+  fg3m: 'Made threes in the split.'
+  fta: 'Free-throw attempts in the split (shot_value 1).'
+  ftm: 'Made free throws in the split.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included).'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included).'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included).'
 ncaa_situation_rows:
   def_1: Defense player 1 on the floor as the possession starts.
   def_2: Defense player 2 on the floor as the possession starts.
