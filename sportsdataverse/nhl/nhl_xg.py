@@ -168,9 +168,10 @@ def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
     """
     import requests
 
-    local = [Path(model_dir) / fn for fn in _XG_BOOSTERS] if model_dir is not None else []
-    if local and all(p.is_file() and p.stat().st_size > 0 for p in local):
-        return Path(model_dir)
+    if model_dir is not None:
+        local = Path(model_dir)
+        if all((local / fn).is_file() and (local / fn).stat().st_size > 0 for fn in _XG_BOOSTERS):
+            return local
     d = booster_cache_dir(model_dir)
     d.mkdir(parents=True, exist_ok=True)
 
