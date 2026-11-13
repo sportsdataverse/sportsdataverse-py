@@ -1,10 +1,59 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob"
-sidebar_label: "Models and calculators: pick_ridge–win_prob"
+title: "Men's college basketball — additional Python functions — Models and calculators: mbb_transfer–win_prob"
+sidebar_label: "Models and calculators: mbb_transfer–win_prob"
 sidebar_position: 12
-description: "Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: mbb_transfer–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: pick_ridge–win_prob
+# Men's college basketball — additional Python functions — Models and calculators: mbb_transfer–win_prob
+
+### mbb_transfer_projection {#mbb_transfer_projection}
+
+`mbb_transfer_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Projected post-transfer box-BPM for each transfer arriving in `seasons`.
+
+Detects the transfer cohort from BOXSCORE discontinuity -- a player who
+logged qualifying minutes for different teams in consecutive seasons
+(the roster release under-reports moves ~70x, so production is the
+cohort source of record; bench-riders pre-move are excluded, which is
+fine because they carry no pre production to project from). Joins each
+player's pre-transfer (from-season) `box_bpm` and scores the bundled
+ridge. `proj_delta = proj_box_bpm - pre_box_bpm` (the expected
+move-related change; typically shrinks stars toward the mean).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | Destination season(s), e.g. `2026` = arrived for 2025-26. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per transfer: `player_id:Utf8, player, from_team_id:Utf8, to_team_id:Utf8, to_season:Int64, pre_box_bpm, proj_box_bpm, proj_delta`. Transfers without a qualifying pre-season sample are dropped. Empty input returns the schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `from_team_id` | String | Unique identifier for from team. |
+| `to_team_id` | String | Unique identifier for to team. |
+| `to_season` | Int64 |  |
+| `pre_box_bpm` | Float64 |  |
+| `proj_box_bpm` | Float64 |  |
+| `proj_delta` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_transfer_projection
+proj = mbb_transfer_projection(2026)
+
+# Pipeline next step (one line)
+
+proj.sort("proj_box_bpm", descending=True).head(15)
+```
 
 ### pick_ridge_regression {#pick_ridge_regression}
 

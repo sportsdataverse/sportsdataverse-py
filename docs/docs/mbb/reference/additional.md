@@ -298,6 +298,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [inject_rapm_into_players](additional/models-and-calculators-2.md#inject_rapm_into_players) | Write `pick_ridge_regression`'s RAPM predictions back onto each player. |
 | [kmeans_fit](additional/models-and-calculators-2.md#kmeans_fit) | Seeded Lloyd's KMeans, best-of-`n_init` by inertia. |
 | [load_artifact](additional/models-and-calculators-2.md#load_artifact) | Read a bundled player-value artifact (`mbb/models/<name>.json`). |
+| [load_preseason_prior](additional/models-and-calculators-2.md#load_preseason_prior) | The preseason prior for `season` from the previous season's released schedule and team box. |
 | [log_loss_score](additional/models-and-calculators-2.md#log_loss_score) | Binary cross-entropy loss between predicted probabilities and outcomes. |
 | [logistic_fit](additional/models-and-calculators-2.md#logistic_fit) | L2-penalized logistic regression via L-BFGS (intercept unpenalized). |
 | [mae](additional/models-and-calculators-2.md#mae) | Mean absolute error between two arrays. |
@@ -306,6 +307,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_draft_projection](additional/models-and-calculators-2.md#mbb_draft_projection) | Draft probability, projected pick, and pro tier per player-season. |
 | [mbb_in_game_win_prob](additional/models-and-calculators-2.md#mbb_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [mbb_predict_games](additional/models-and-calculators-2.md#mbb_predict_games) | Vectorized pregame predictions for a schedule of games. |
+| [mbb_pregame_projections](additional/models-and-calculators-2.md#mbb_pregame_projections) | Rated pregame projection for every ESPN game of a college season, as of each game's date. |
 | [mbb_recruiting_projection](additional/models-and-calculators-2.md#mbb_recruiting_projection) | Expected freshman box-BPM per recruit + over/under-performance residual. |
 | [mbb_season_projections](additional/models-and-calculators-2.md#mbb_season_projections) | The daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
 | [mbb_season_sim](additional/models-and-calculators-2.md#mbb_season_sim) | Monte Carlo the remaining schedule: expected wins + title odds. |
@@ -313,7 +315,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_shot_quality](additional/models-and-calculators-2.md#mbb_shot_quality) | Score each shot with `xmake` / `xpoints` from the cell table. |
 | [mbb_shot_quality_model](additional/models-and-calculators-2.md#mbb_shot_quality_model) | Empirical-Bayes `zone x type` make-rate / xPoints table. |
 | [mbb_team_ratings](additional/models-and-calculators-2.md#mbb_team_ratings) | Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season. |
-| [mbb_transfer_projection](additional/models-and-calculators-2.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
+| [mbb_transfer_projection](additional/models-and-calculators-3.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
 | [pick_ridge_regression](additional/models-and-calculators-3.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
 | [player_per100_features](additional/models-and-calculators-3.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
 | [poss_calc_fragment_sum](additional/models-and-calculators-3.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |

@@ -2,13 +2,14 @@
 
 hoopR-mbb-data's ``kenpom.add_kp_player_id`` inserts ``kp_player_id`` (Utf8)
 after ``yahoo_player_name`` on ``mbb_player_crosswalk`` (17 -> 18 columns), and
-``add_kp_game_id`` fills ``kp_game_id`` on ``mbb_schedule_crosswalk``. Asserts
+``add_kp_game_id`` fills ``kp_game_id`` on ``mbb_schedule_crosswalk``. Its NCAA step
+then appends ``ncaa_player_id`` (Utf8) after ``kp_player_id`` (19 columns). Asserts
 against the committed ``loader_schemas.yaml`` and
 ``manual_column_descriptions.yaml``, not the generator.
 
 The live builder ``mbb_player_crosswalk()`` stays at 17 columns on purpose: the
 data repo inserts ``kp_player_id`` by name into its output, so emitting it here
-too would duplicate the column there.
+too would duplicate the column there (and the same holds for ``ncaa_player_id``).
 """
 
 from pathlib import Path
@@ -32,9 +33,10 @@ def manual() -> dict:
 def test_player_crosswalk_declares_kp_player_id_after_yahoo(schemas):
     cols = [(c["name"], c["type"]) for c in schemas["load_mbb_player_crosswalk"]]
     names = [n for n, _ in cols]
-    assert len(cols) == 18
+    assert len(cols) == 19
     assert names[names.index("yahoo_player_name") + 1] == "kp_player_id"
-    assert dict(cols)["kp_player_id"] == "String"
+    assert names[names.index("kp_player_id") + 1] == "ncaa_player_id"
+    assert dict(cols)["kp_player_id"] == dict(cols)["ncaa_player_id"] == "String"
 
 
 def test_schedule_crosswalk_declares_kp_game_id(schemas):
@@ -49,10 +51,11 @@ def test_kenpom_ids_are_described(manual, loader, col):
     assert "KenPom" in (manual.get(loader) or {}).get(col, "")
 
 
-def test_published_is_the_builder_plus_kp_player_id(schemas):
+def test_published_is_the_builder_plus_kp_and_ncaa_player_ids(schemas):
     from sportsdataverse._common_crosswalk_basketball import PLAYER_ESPN_FOX_COLUMNS
 
     expected = list(PLAYER_ESPN_FOX_COLUMNS)
     assert len(expected) == 17 and "kp_player_id" not in expected
     expected.insert(expected.index("yahoo_player_name") + 1, "kp_player_id")
+    expected.insert(expected.index("kp_player_id") + 1, "ncaa_player_id")
     assert [c["name"] for c in schemas["load_mbb_player_crosswalk"]] == expected
