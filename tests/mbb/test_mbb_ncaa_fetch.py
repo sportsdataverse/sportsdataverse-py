@@ -355,6 +355,34 @@ def test_only_the_bare_sentence_counts_as_not_available(body: str) -> None:
     assert not _is_not_available(body)
 
 
+#: The whole body stats.ncaa.org served on 2026-11-12 for every tab of deleted MBB contest 6646892.
+_NOT_FOUND = "Contest not found Couldn't find Contest with 'id'=6646892"
+
+
+def test_not_found_is_an_answer_not_a_challenge() -> None:
+    page = _FakePage([_NOT_FOUND])
+    t = _transport_with(page)
+
+    assert t("https://stats.ncaa.org/contests/6646892/play_by_play", {"http": _POOL[0]}, {}) == (200, _NOT_FOUND)
+    assert page.gotos == 1  # no re-solve on the answer
+
+
+def test_not_found_is_no_data_after_one_request(tmp_path: Path) -> None:
+    transport = FakeTransport([(200, _NOT_FOUND)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(NoDataError, match="no such contest") as exc:
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/6646892/play_by_play")
+    assert not isinstance(exc.value, NotAvailableYetError)  # deleted, not pending: capture moves on
+    assert len(transport.calls) == 1  # never rotated through the pool
+
+
+@pytest.mark.parametrize("body", ["Contest not found", "<p>Contest not found Couldn't find Contest with 'id'=1</p>"])
+def test_only_the_bare_not_found_sentence_counts(body: str) -> None:
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _is_not_found
+
+    assert not _is_not_found(body)
+
+
 def test_not_available_answers_count_toward_rotate_every(tmp_path: Path) -> None:
     """A run of not-ready contests is still traffic on one IP: it must rotate on the same budget."""
     transport = FakeTransport([(200, _NOT_AVAILABLE[0])] * 4)

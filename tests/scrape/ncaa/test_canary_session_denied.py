@@ -57,3 +57,29 @@ def test_canary_transport_stops_at_a_session_denial(cls: type, monkeypatch: pyte
     assert page.fetches == 1  # not solve_attempts
     assert closed == [True]  # the next call starts a fresh session
     assert classify_error(exc.value) == CHALLENGE
+
+
+class _AnswerPage(_DeniedPage):
+    def __init__(self, body: str) -> None:
+        super().__init__()
+        self.body = body
+
+    def evaluate(self, js: str, url: str) -> dict:
+        self.fetches += 1
+        return {"status": 200, "text": self.body}
+
+
+@pytest.mark.parametrize(
+    "body", ["Play by play not available", "Contest not found Couldn't find Contest with 'id'=6646892"]
+)
+@pytest.mark.parametrize("cls", [_PatchrightTransport, _ManagedCdpTransport])
+def test_canary_transport_returns_a_short_answer(cls: type, body: str, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A short stats.ncaa.org answer is not a stub: the cron's decodo_patchright transport spent the
+    whole proxy pool on deleted contest 6646892 and halted every MBB capture from 2026-11-01."""
+    t = cls.__new__(cls)
+    t.challenge_wait_ms, t.nav_timeout_ms, t.solve_attempts = 0, 1000, 3
+    t._page = page = _AnswerPage(body)
+    monkeypatch.setattr(t, "_ensure", lambda *a: None)
+
+    assert t(_URL, {}, {}) == (200, body)
+    assert page.fetches == 1
