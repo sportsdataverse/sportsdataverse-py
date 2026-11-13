@@ -281,7 +281,7 @@ load_nba_stats_possessions_v3(seasons=2025)
 Release: [nba_stats_rolling_windows](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rolling_windows) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rolling_windows/rolling_windows_{season + 1}.parquet`
 
 :::caution[Coverage]
-One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype.
+One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype: entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters.
 :::
 
 ### Returns {#load_nba_stats_rolling_windows-returns}

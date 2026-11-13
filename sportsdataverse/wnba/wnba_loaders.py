@@ -1750,7 +1750,7 @@ def load_wnba_stats_metric_curves(seasons, return_as_pandas: bool = False):
         |epa_per_att |Float64 |
 
     Note:
-        One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64 so they join the WNBA Stats loaders' team_id / player_id.
+        One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters, and team_id joins their team_id.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1997.
@@ -2274,7 +2274,7 @@ def load_wnba_stats_rolling_windows(seasons, return_as_pandas: bool = False):
         |id_source       |String  |
 
     Note:
-        One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype.
+        One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype: entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1997.

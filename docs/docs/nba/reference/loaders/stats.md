@@ -336,7 +336,7 @@ load_nba_stats_lineups_v3(seasons=2025)
 Release: [nba_stats_metric_curves](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_metric_curves) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_metric_curves/metric_curves_{season + 1}.parquet`
 
 :::caution[Coverage]
-One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64 so they join the NBA Stats loaders' team_id / player_id.
+One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters, and team_id joins their team_id.
 :::
 
 ### Returns {#load_nba_stats_metric_curves-returns}

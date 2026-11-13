@@ -392,7 +392,7 @@ df.filter(pl.col("match_confidence") >= 0.95).select("ncaa_player_id", "espn_ath
 
 ### ncaa_espn_school_seasons {#ncaa_espn_school_seasons}
 
-`ncaa_espn_school_seasons(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_espn_school_seasons(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team.
 
@@ -432,6 +432,7 @@ DataFrame with `ncaa_org_id` (Int64), `sport` (str, equal to *league*), `season`
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.mbb import ncaa_espn_school_seasons
 df = ncaa_espn_school_seasons()
 print(df.shape)
@@ -447,7 +448,7 @@ df.filter(pl.col("season") == "2024-25").select("ncaa_team_id", "espn_team_id")
 
 ### ncaa_espn_schools {#ncaa_espn_schools}
 
-`ncaa_espn_schools(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_espn_schools(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 stats.ncaa.org schools (org ids) and the ESPN team each one maps to.
 
@@ -486,6 +487,7 @@ DataFrame with `ncaa_org_id` (Int64 -- the stats.ncaa.org school id), `ncaa_team
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.mbb import ncaa_espn_schools
 df = ncaa_espn_schools()
 print(df.shape)
@@ -501,7 +503,7 @@ df.filter(pl.col("espn_team_id").is_null()).select("ncaa_org_id", "ncaa_team")
 
 ### ncaa_espn_team_crosswalk {#ncaa_espn_team_crosswalk}
 
-`ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
 

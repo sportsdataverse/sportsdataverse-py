@@ -22,7 +22,7 @@ time, and a school that cannot be resolved is emitted with a null
 from __future__ import annotations
 
 import io
-from typing import TYPE_CHECKING, Dict, Optional, Union
+from typing import TYPE_CHECKING
 
 import polars as pl
 import pyarrow as pa
@@ -35,13 +35,13 @@ from sportsdataverse.mbb.mbb_ncaa_team_ids import _LEAGUE_PKG, _league_data_byte
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
 
-_CROSSWALK_CACHE: Dict[str, pl.DataFrame] = {}
+_CROSSWALK_CACHE: dict[str, pl.DataFrame] = {}
 
 #: ``espn_team_id`` is Int32, the dtype of the ESPN team ids in the ``load_{mbb,wbb}_*_crosswalk`` and
 #: ``load_ncaa_{mbb,wbb}_*`` releases, so it joins those schema-equal (it joins the Int64 parser ids as it is).
 #: NCAA ids are Int64 to match ``ncaa_{mbb,wbb}_team_ids().id``. ``conference_id`` is the SDV group id
 #: (``"mbb:big-ten"``), text.
-_SCHEMA: Dict[str, pl.DataType] = {
+_SCHEMA: dict[str, pl.DataType] = {
     "season": pl.Utf8,
     "ncaa_team_id": pl.Int64,
     "ncaa_team": pl.Utf8,
@@ -66,7 +66,7 @@ def _packaged_crosswalk(league: str) -> pl.DataFrame:
     return pl.read_csv(io.BytesIO(raw), schema_overrides=_SCHEMA).select(list(_SCHEMA))
 
 
-def _release_crosswalk(league: str) -> Optional[pl.DataFrame]:
+def _release_crosswalk(league: str) -> pl.DataFrame | None:
     """The ``{league}_crosswalk`` release asset in the loader's schema; ``None`` (with a warning) when it is absent
     or cannot be read or conformed, so the caller falls back to the bundled copy."""
     url = _RELEASE_URL.format(league=league)
@@ -84,9 +84,7 @@ def _release_crosswalk(league: str) -> Optional[pl.DataFrame]:
     return None
 
 
-def ncaa_espn_team_crosswalk(
-    league: str = "mbb", *, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+def ncaa_espn_team_crosswalk(league: str = "mbb", *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
 
     One row per ``(season, ncaa_team_id)``. Reads the ``{league}_crosswalk``
@@ -155,13 +153,13 @@ def ncaa_espn_team_crosswalk(
 #: The two school tables sdv-reference-data publishes beside the crosswalk. ``ncaa_org_id`` is the stable
 #: stats.ncaa.org school (org) id, ``ncaa_team_id`` the per-season team id; ``espn_team_id`` is Int32, the dtype
 #: of the ESPN team ids in the ``load_{mbb,wbb}_*_crosswalk`` and ``load_ncaa_{mbb,wbb}_*`` releases.
-_SCHOOLS_SCHEMA: Dict[str, pl.DataType] = {
+_SCHOOLS_SCHEMA: dict[str, pl.DataType] = {
     "ncaa_org_id": pl.Int64,
     "ncaa_team": pl.Utf8,
     "espn_team_id": pl.Int32,
     "espn_display_name": pl.Utf8,
 }
-_SCHOOL_SEASONS_SCHEMA: Dict[str, pl.DataType] = {
+_SCHOOL_SEASONS_SCHEMA: dict[str, pl.DataType] = {
     "ncaa_org_id": pl.Int64,
     "sport": pl.Utf8,
     "season": pl.Utf8,
@@ -171,7 +169,7 @@ _SCHOOL_SEASONS_SCHEMA: Dict[str, pl.DataType] = {
 _SCHOOLS_URL = SDVRELEASES + "{league}_crosswalk/{name}.parquet"
 
 
-def _release_table(name: str, league: str, schema: Dict[str, pl.DataType]) -> pl.DataFrame:
+def _release_table(name: str, league: str, schema: dict[str, pl.DataType]) -> pl.DataFrame:
     """One static ``{league}_crosswalk`` table in ``schema``.
 
     sdv-py bundles no copy of these, so there is nothing to fall back to: an absent asset (``NoDataError``) is
@@ -188,7 +186,7 @@ def _release_table(name: str, league: str, schema: Dict[str, pl.DataType]) -> pl
     return df.select([pl.col(c).cast(t) for c, t in schema.items()])
 
 
-def ncaa_espn_schools(league: str = "mbb", *, return_as_pandas: bool = False) -> Union[pl.DataFrame, "pd.DataFrame"]:
+def ncaa_espn_schools(league: str = "mbb", *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """stats.ncaa.org schools (org ids) and the ESPN team each one maps to.
 
     One row per NCAA school, read from the static ``ncaa_espn_schools`` asset of
@@ -216,6 +214,7 @@ def ncaa_espn_schools(league: str = "mbb", *, return_as_pandas: bool = False) ->
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.mbb import ncaa_espn_schools
             df = ncaa_espn_schools()
             print(df.shape)
@@ -239,9 +238,7 @@ def ncaa_espn_schools(league: str = "mbb", *, return_as_pandas: bool = False) ->
     return _pandas_ids(df) if return_as_pandas else df
 
 
-def ncaa_espn_school_seasons(
-    league: str = "mbb", *, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+def ncaa_espn_school_seasons(league: str = "mbb", *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team.
 
     One row per ``(ncaa_org_id, season)`` for *league*, read from the static
@@ -269,6 +266,7 @@ def ncaa_espn_school_seasons(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.mbb import ncaa_espn_school_seasons
             df = ncaa_espn_school_seasons()
             print(df.shape)

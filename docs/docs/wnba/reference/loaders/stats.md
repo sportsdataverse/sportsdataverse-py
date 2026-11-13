@@ -88,7 +88,7 @@ load_wnba_stats_game_rosters(seasons=2026)
 Release: [wnba_stats_metric_curves](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_metric_curves) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_metric_curves/metric_curves_{season}.parquet`
 
 :::caution[Coverage]
-One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64 so they join the WNBA Stats loaders' team_id / player_id.
+One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters, and team_id joins their team_id.
 :::
 
 ### Returns {#load_wnba_stats_metric_curves-returns}
@@ -352,7 +352,7 @@ load_wnba_stats_player_game_logs(seasons=2025)
 Release: [wnba_stats_rolling_windows](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_rolling_windows) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_rolling_windows/rolling_windows_{season}.parquet`
 
 :::caution[Coverage]
-One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype.
+One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype: entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters.
 :::
 
 ### Returns {#load_wnba_stats_rolling_windows-returns}

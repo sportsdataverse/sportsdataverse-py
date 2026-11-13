@@ -1145,7 +1145,7 @@ loaders:
   tag: nba_stats_metric_curves
   id_int64: [entity_id, team_id]
   min_season: 1996
-  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64 so they join the NBA Stats loaders' team_id / player_id."
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters, and team_id joins their team_id."
   example_args:
     seasons: 2025
 - fn: load_nba_stats_officials
@@ -1253,7 +1253,7 @@ loaders:
   tag: nba_stats_rolling_windows
   id_int64: [entity_id, team_id]
   min_season: 1996
-  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype."
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype: entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters."
   example_args:
     seasons: 2025
 - fn: load_nba_stats_rosters
@@ -1918,7 +1918,7 @@ loaders:
   tag: wnba_stats_metric_curves
   id_int64: [entity_id, team_id]
   min_season: 1997
-  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64 so they join the WNBA Stats loaders' team_id / player_id."
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters, and team_id joins their team_id."
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_officials
@@ -1977,7 +1977,7 @@ loaders:
   tag: wnba_stats_rolling_windows
   id_int64: [entity_id, team_id]
   min_season: 1997
-  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype."
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype: entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters."
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_rosters
