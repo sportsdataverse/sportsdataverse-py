@@ -2,10 +2,10 @@ schema: mbb_pregame_projections
 kind: dataframe
 columns:
 - name: season
-  type: integer
+  type: Int32
   description: ''
 - name: game_id
-  type: integer
+  type: Int32
   description: ''
 - name: game_date
   type: date

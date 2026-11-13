@@ -43,7 +43,7 @@ One row per (season, team_id) -- see the mbb core for the schema.
 | `adj_d_blend` | Float64 | Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better). |
 | `adj_em_blend` | Float64 | adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season. |
 | `rank_blend` | Int64 | Dense rank of adj_em_blend within the season (1 = best). |
-| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. |
+| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it. |
 
 **Example**
 

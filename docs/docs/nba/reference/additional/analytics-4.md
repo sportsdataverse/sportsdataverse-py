@@ -632,12 +632,12 @@ One row per game of the ESPN schedule release (scheduled games included): `seaso
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year). |
-| `game_id` | Int64 | ESPN game id (Int32). |
+| `season` | Int32 | Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year). |
+| `game_id` | Int32 | ESPN game id (Int32). |
 | `game_date` | Date | Game date (ESPN schedule). |
 | `as_of_date` | Date | The ratings use the completed games dated strictly before this date: the game's date, or the day after the last completed game for a game not yet reached. |
-| `home_team_id` | Int64 | ESPN home team id (Int32). |
-| `away_team_id` | Int64 | ESPN away team id (Int32). |
+| `home_team_id` | Int32 | ESPN home team id (Int32). |
+| `away_team_id` | Int32 | ESPN away team id (Int32). |
 | `neutral_site` | Boolean | Neutral-site flag; a neutral game gets no home term. |
 | `stats_game_id` | String | The stats.nba.com / stats.wnba.com game id matched on date and team names; null for a game with no match (All-Star games, the WNBA Commissioner's Cup final). |
 | `home_rating` | Float64 | Home team's team_strength adj_net_rtg before the game: the possession ridge over the regular-season possessions dated before as_of_date, points per 100 over an average opponent on a neutral court. |
