@@ -308,3 +308,29 @@ def test_a_game_that_fails_on_three_runs_is_missing_without_a_later_answer(
     assert set(store.missing("playbook_boxscore", 2020)) == {"bad0", "bad1"}
     assert store.missing("playbook_boxscore", 2020)["bad0"] == "fetch failed on 3 runs"
     assert run()["skipped"] == 2
+
+
+def test_a_repeat_failure_before_a_later_answer_is_missing_on_the_second_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def getter(provider: str, league: str, endpoint: str, gid: str) -> Any:
+        def fetch() -> Any:
+            if gid.startswith("bad"):
+                raise AssetFetchError("graphite-secure.sports.yahoo.com answered HTTP 500")
+            return {"ok": gid}
+
+        return fetch
+
+    monkeypatch.setattr(xh, "_getter", getter)
+    monkeypatch.setattr(xh, "_payload_problem", lambda *a: None)
+    monkeypatch.setattr(xh, "box_players", lambda *a: 1)
+    bad = [{"id": f"bad{i}", "final": True} for i in range(2)]
+
+    def run(games: List[Dict[str, Any]]) -> Dict[str, Any]:
+        return xh._fetch_games(xh.Store(tmp_path, "yahoo", "cfb"), xh.Pacer("yahoo"), "yahoo", "cfb", 2020, games, None)
+
+    assert run(bad)["missing"] == 0
+    tally = run(bad + [{"id": "good0", "final": True}])
+    assert tally["missing"] == 2 and tally["written"] == 1
+    missing = xh.Store(tmp_path, "yahoo", "cfb").missing("playbook_boxscore", 2020)
+    assert missing == {"bad0": "fetch failed twice", "bad1": "fetch failed twice"}
