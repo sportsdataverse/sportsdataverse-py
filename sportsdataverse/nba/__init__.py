@@ -191,6 +191,7 @@ from sportsdataverse.nba.nba_game_stints import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
     nba_possession_rate_rows,
+    nba_team_game_possessions,
     nba_team_season_rates,
 )
 from sportsdataverse.nba.nba_team_strength import nba_team_strength  # noqa: F401
@@ -205,6 +206,7 @@ from sportsdataverse.nba.nba_situational import (  # noqa: F401
     nba_situational_lineup,
     nba_situational_player,
     nba_situational_team,
+    nba_situational_team_games,
 )
 from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_season_standings  # noqa: F401
 from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401

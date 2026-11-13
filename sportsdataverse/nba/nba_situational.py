@@ -32,6 +32,7 @@ from sportsdataverse._common.situational_splits import (
     situational_lineup,
     situational_player,
     situational_team,
+    situational_team_games,
 )
 from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings
 from sportsdataverse.nba.nba_possession_flags import POSSESSION_FLAGS_SCHEMA, add_possession_flags
@@ -45,6 +46,7 @@ __all__ = [
     "nba_situational_lineup",
     "nba_situational_player",
     "nba_situational_team",
+    "nba_situational_team_games",
 ]
 
 _PLAYER = pl.Int64()
@@ -200,6 +202,51 @@ def nba_situational_team(
     n = _top_n(top_n, league_id)
     rows, ratings = _load(seasons, league_id, season_type)
     out = situational_team(rows, ratings, top_n=n)
+    return out.to_pandas() if return_as_pandas else out
+
+
+def nba_situational_team_games(
+    seasons: int | list[int],
+    *,
+    league_id: str = "00",
+    season_type: str = "regular-season",
+    top_n: int | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Team splits by situation, one game at a time: :func:`nba_situational_team` per game.
+
+    The same possessions and labels, grouped by game too, so a team-season's rows of a split add
+    up to its :func:`nba_situational_team` row (``games``, ``seconds``, ``poss``, ``opp_poss``,
+    ``pts``, ``opp_pts``). The ``opponent`` family keeps the season's top ``top_n``.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+            The WNBA season is its calendar year.
+        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or ``"play-in"``.
+        top_n: As :func:`nba_situational_team`.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, family, split)``, the columns of
+        :func:`nba_situational_team` plus ``game_id`` (the stats.nba.com game id); ``games`` is 1.
+        A split the team did not play in the game has no row. Empty input returns that schema with
+        zero rows.
+
+    Raises:
+        ValueError: If ``league_id``, ``season_type`` or ``top_n`` is invalid.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_situational import nba_situational_team_games
+            game = nba_situational_team_games(2026).filter(game_id="0022500001")
+            game.filter(family="score").select("team_id", "split", "poss", "pts", "opp_pts")
+    """
+    _check_args(league_id, season_type)
+    n = _top_n(top_n, league_id)
+    rows, ratings = _load(seasons, league_id, season_type)
+    out = situational_team_games(rows, ratings, top_n=n)
     return out.to_pandas() if return_as_pandas else out
 
 

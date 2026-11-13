@@ -25,14 +25,19 @@ from typing import TYPE_CHECKING, Literal, overload
 import polars as pl
 
 from sportsdataverse._common.rate_gates import NBA_LEVEL
-from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA, team_season_rates
+from sportsdataverse._common.team_season_rates import (
+    RATE_ROWS_SCHEMA,
+    TEAM_SEASON_RATES_SCHEMA,
+    team_game_possessions,
+    team_season_rates,
+)
 from sportsdataverse.nba import nba_neutral_site
 from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
 
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["nba_possession_rate_rows", "nba_team_season_rates"]
+__all__ = ["nba_possession_rate_rows", "nba_team_game_possessions", "nba_team_season_rates"]
 
 #: league_id -> (quarter seconds, regulation minutes).
 _LEAGUES = {"00": (720.0, 48), "10": (600.0, 40)}
@@ -170,6 +175,17 @@ def _league_loaders(league_id: str):  # type: ignore[no-untyped-def]
     return load_nba_stats_possessions, load_nba_stats_schedules, 1
 
 
+def _rate_rows(seasons: int | list[int], league_id: str, season_type: str) -> pl.DataFrame:
+    """The possession frame for ``seasons`` (named by the year they end), through the league's loaders."""
+    _check_args(league_id, season_type)
+    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    load_possessions, load_schedule, offset = _league_loaders(league_id)
+    loader_seasons = [s - offset for s in seasons_list]
+    return nba_possession_rate_rows(
+        load_possessions(loader_seasons), load_schedule(loader_seasons), league_id=league_id, season_type=season_type
+    )
+
+
 @overload
 def nba_team_season_rates(
     seasons: int | list[int],
@@ -246,16 +262,56 @@ def nba_team_season_rates(
 
             wnba = nba_team_season_rates(2025, league_id="10")
     """
-    _check_args(league_id, season_type)
-    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
-    load_possessions, load_schedule, offset = _league_loaders(league_id)
-    loader_seasons = [s - offset for s in seasons_list]
-    rows = nba_possession_rate_rows(
-        load_possessions(loader_seasons), load_schedule(loader_seasons), league_id=league_id, season_type=season_type
-    )
+    rows = _rate_rows(seasons, league_id, season_type)
     out = (
         team_season_rates(rows, minutes_per_game=_LEAGUES[league_id][1], level=NBA_LEVEL[league_id])
         if rows.height
         else pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     )
+    return out.to_pandas() if return_as_pandas else out
+
+
+def nba_team_game_possessions(
+    seasons: int | list[int],
+    *,
+    league_id: str = "00",
+    season_type: str = "regular-season",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Per team and game: the possession counts behind :func:`nba_team_season_rates`.
+
+    The season table's ``poss`` / ``opp_poss`` / ``pts`` / ``opp_pts`` one game at a time, from the
+    same possessions, so a team-season's rows of a split add up to its season row exactly (their
+    count is ``games``). Rate any set of games the same way: sum the rows, then divide once
+    (``off_rtg = 100 * pts / poss``; pace ``48 * 60 * (poss + opp_poss) / 2 / seconds``, 40 in the
+    WNBA). The definitions are in :mod:`sportsdataverse._common.team_season_rates`.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+            The WNBA season is its calendar year.
+        league_id: ``"00"`` NBA or ``"10"`` WNBA.
+        season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or ``"play-in"``, matched to
+            the schedule's ``season_type``.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, split)``: a game has an ``all`` row, a ``home``
+        or ``away`` row (neither at a neutral site) and, when it has clutch possessions, ``close``
+        and ``clutch`` rows. ``team_id`` is the stats.nba.com team id (Int64), ``game_id`` the
+        stats.nba.com game id. ``poss`` / ``opp_poss`` are the team's offensive / defensive
+        possessions, ``pts`` / ``opp_pts`` their points and ``seconds`` the game clock they used.
+        Empty input returns that schema with zero rows.
+
+    Raises:
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
+            of the four above.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_team_season_rates import nba_team_game_possessions
+            games = nba_team_game_possessions(2026).filter(split="all")
+            games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
+    """
+    out = team_game_possessions(_rate_rows(seasons, league_id, season_type))
     return out.to_pandas() if return_as_pandas else out

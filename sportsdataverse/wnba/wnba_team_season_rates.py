@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import functools
 
+from sportsdataverse.nba.nba_team_season_rates import nba_team_game_possessions as _games_core
 from sportsdataverse.nba.nba_team_season_rates import nba_team_season_rates as _core
 from sportsdataverse.wnba._bind import wnba_doc, wnba_signature
 
@@ -21,4 +22,13 @@ wnba_team_season_rates.__doc__ = wnba_doc(
     _core,
 )
 
-__all__ = ["wnba_team_season_rates"]
+wnba_team_game_possessions = functools.partial(_games_core, league_id="10")
+functools.update_wrapper(wnba_team_game_possessions, _games_core)
+wnba_team_game_possessions.__signature__ = wnba_signature(_games_core)  # type: ignore[attr-defined]
+wnba_team_game_possessions.__doc__ = wnba_doc(
+    "WNBA per team and game possession counts (league_id='10'). "
+    "See sportsdataverse.nba.nba_team_season_rates.nba_team_game_possessions.",
+    _games_core,
+)
+
+__all__ = ["wnba_team_game_possessions", "wnba_team_season_rates"]

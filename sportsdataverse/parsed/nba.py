@@ -413,10 +413,12 @@ from sportsdataverse.nba import nba_situation_rows as nba_situation_rows  # noqa
 from sportsdataverse.nba import nba_situational_lineup as nba_situational_lineup  # noqa: F401
 from sportsdataverse.nba import nba_situational_player as nba_situational_player  # noqa: F401
 from sportsdataverse.nba import nba_situational_team as nba_situational_team  # noqa: F401
+from sportsdataverse.nba import nba_situational_team_games as nba_situational_team_games  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_stint_rows as nba_stint_rows  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_team_game_possessions as nba_team_game_possessions  # noqa: F401
 from sportsdataverse.nba import nba_team_luck as nba_team_luck  # noqa: F401
 from sportsdataverse.nba import nba_team_play_styles as nba_team_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
@@ -891,11 +893,13 @@ __all__ = [
     "nba_situational_lineup",
     "nba_situational_player",
     "nba_situational_team",
+    "nba_situational_team_games",
     "nba_spm",
     "nba_stats_leaguedashptstats",
     "nba_stint_rows",
     "nba_team_clutch",
     "nba_team_crosswalk",
+    "nba_team_game_possessions",
     "nba_team_luck",
     "nba_team_play_styles",
     "nba_team_ratings",

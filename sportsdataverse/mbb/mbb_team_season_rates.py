@@ -29,6 +29,7 @@ from sportsdataverse._common.team_season_rates import (
     COUNT_ROWS_SCHEMA,
     RATE_ROWS_SCHEMA,
     TEAM_SEASON_RATES_SCHEMA,
+    team_game_possessions,
     team_season_rates,
 )
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_possessions, load_ncaa_mbb_team_box
@@ -36,7 +37,12 @@ from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_ncaa_mbb_pos
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["mbb_team_season_rates", "ncaa_possession_rate_rows", "ncaa_team_box_count_rows"]
+__all__ = [
+    "mbb_team_game_possessions",
+    "mbb_team_season_rates",
+    "ncaa_possession_rate_rows",
+    "ncaa_team_box_count_rows",
+]
 
 _LEAGUES = ("mens", "womens")
 #: Women's college basketball has played 10-minute quarters since 2015-16 (ESPN season 2016).
@@ -231,4 +237,44 @@ def mbb_team_season_rates(
         if rows.height
         else pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     )
+    return out.to_pandas() if return_as_pandas else out
+
+
+def mbb_team_game_possessions(
+    seasons: int | list[int], *, league: str = "mens", return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """Per team and game: the college possession counts behind :func:`mbb_team_season_rates`.
+
+    The season table's ``poss`` / ``opp_poss`` / ``pts`` / ``opp_pts`` one game at a time, from the
+    same possessions, so a team-season's rows of a split add up to its season row exactly (their
+    count is ``games``). Rate any set of games the same way: sum the rows, then divide once
+    (``off_rtg = 100 * pts / poss``; tempo ``40 * 60 * (poss + opp_poss) / 2 / seconds``).
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        league: ``"mens"`` or ``"womens"``
+            (:func:`sportsdataverse.wbb.wbb_team_season_rates.wbb_team_game_possessions`).
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, split)``: a game has an ``all`` row, a ``home``
+        or ``away`` row (neither at a neutral site) and, when it has clutch possessions, ``close``
+        and ``clutch`` rows. ``team_id`` is the ESPN team id (Int64), ``game_id`` the
+        stats.ncaa.org contest id. ``poss`` / ``opp_poss`` are the team's offensive / defensive
+        possessions, ``pts`` / ``opp_pts`` their points and ``seconds`` the game clock they used.
+        A non-D1 opponent gets no row. Empty input returns that schema with zero rows.
+
+    Raises:
+        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_game_possessions
+            games = mbb_team_game_possessions(2025).filter(split="all")
+    """
+    _check_league(league)
+    load_possessions, _, load_schedule = _league_loaders(league)
+    rows = ncaa_possession_rate_rows(load_possessions(seasons), load_schedule(seasons), league=league)
+    out = team_game_possessions(rows)
     return out.to_pandas() if return_as_pandas else out
