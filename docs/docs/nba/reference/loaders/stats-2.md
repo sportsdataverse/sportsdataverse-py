@@ -276,6 +276,44 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 load_nba_stats_possessions_v3(seasons=2025)
 ```
 
+## load_nba_stats_rolling_windows
+
+Release: [nba_stats_rolling_windows](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rolling_windows) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rolling_windows/rolling_windows_{season + 1}.parquet`
+
+:::caution[Coverage]
+One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype: entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters.
+:::
+
+### Returns {#load_nba_stats_rolling_windows-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season the rows describe, the ENDING year as the nba_stats assets key it (2026 = 2025-26); WNBA rows carry the calendar year. |
+| `entity_type` | String | Aggregation level of the row; every published row is 'player'. |
+| `entity_id` | Int64 | The player's stats person_id (Int64). |
+| `entity_name` | String | The player's name on their latest shot through the season. |
+| `team_id` | Int64 | Stats team_id (Int64) of the player's latest shot through the season, so a player traded mid-season carries the new team. |
+| `metric` | String | Rate the window averages, 'fg_pct' (field-goal attempts) or 'fg3_pct' (three-point attempts). |
+| `window_unit` | String | Event the window counts, 'fga' or 'fg3a'. |
+| `window_n` | Int64 | Window size, in window_unit events. |
+| `cur` | Float64 | Mean of the player's last window_n events through the season. |
+| `prev` | Float64 | Mean of the window_n events immediately before cur's window; null unless a full window of earlier history exists. |
+| `season_start` | Float64 | Mean of the window_n events immediately before the season started (form entering the season). |
+| `career_baseline` | Float64 | Mean of every event before cur's window, earlier events in the same season included; null unless a full window of history precedes it. |
+| `delta_prev` | Float64 | cur minus prev. |
+| `delta_season` | Float64 | cur minus season_start. |
+| `delta_career` | Float64 | cur minus career_baseline. |
+| `delta_prev_rank` | Int64 | Rank of delta_prev among qualified rows of the same metric and window (1 = biggest riser, ties share the lowest rank); null unless qualified and prev exists. |
+| `n` | Int64 | Events in cur's window; below window_n for a short career. |
+| `qualified` | Boolean | True when n equals window_n (the window is full); filter on it before building a hottest-players list. |
+| `last_event_date` | Date | Date of the player's latest event in the window. |
+| `as_of_date` | Date | Date of the latest event in the season's shots, the cutoff every row is computed through. |
+| `id_source` | String | Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA). |
+
+```python
+load_nba_stats_rolling_windows(seasons=2025)
+```
+
 ## load_nba_stats_rosters
 
 Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season + 1}.parquet`
