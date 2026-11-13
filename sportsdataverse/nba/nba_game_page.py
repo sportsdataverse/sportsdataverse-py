@@ -523,13 +523,10 @@ def game_excitement(
         plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead
         counts once), the largest of the changes the index sums in percentage points (the last
         play's swing to the result included; ``None`` for no plays), whether the last play was
-        taken to the result, and the comeback low: the eventual winner's team id (``home_team_id``
-        or ``away_team_id`` of the first play; ``None`` without them), the lowest win probability
-        it had after any play (0-1, the minimum of ``home_win_prob`` for a home winner, of
-        ``1 - home_win_prob`` for an away winner; the pregame prior is not a play), and that play's
-        ``period_number`` and ``clock_display_value`` (the earliest play at the low; ``None``
-        without the columns). The four winner keys are ``None`` for a game that is not completed
-        or ends tied.
+        taken to the result, and the comeback low: the winner's ``home_team_id`` / ``away_team_id``,
+        its lowest WP after any play (0-1, the prior is not a play) and that play's (the earliest
+        at the low) ``period_number`` and ``clock_display_value``; ``None`` for a column the frame
+        lacks, and all four ``None`` for a game not completed or ending tied.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing.
@@ -570,9 +567,9 @@ def game_excitement(
         if {"type_text", "period_number"} <= set(scored.columns) and scored.height:
             reg = regulation_periods or game_regulation_periods(lg, season=_box_season(scored))
             completed = bool(filled.select(_game_end(reg).any()).item())
-    low: dict[str, Any] = dict.fromkeys(_WINNER_LOW)
     if scored.height == 0:
-        return {"gei": None, "lead_changes": 0, "max_swing_pts": None, "completed": completed, **low}
+        empty = {"gei": None, "lead_changes": 0, "max_swing_pts": None, "completed": completed}
+        return {**empty, **dict.fromkeys(_WINNER_LOW)}
     margin = (filled["home_score"] - filled["away_score"]).sign()
     final = None
     if completed:
@@ -582,28 +579,32 @@ def game_excitement(
     steps = _gei_steps(wp, float(scored["pregame_home_prob"][0]), final)
     total, biggest = steps.sum(), steps.max()
     leads = margin.filter(margin != 0)
-    home_won = final == 1.0
-    won = wp if home_won else 1.0 - wp
-    i = won.arg_min()  # the earliest play at the low; None when every WP is null
-    if final in (0.0, 1.0) and i is not None:
-
-        def at(c: str, row: int) -> Any:
-            return scored[c][row] if c in scored.columns else None
-
-        team = at("home_team_id" if home_won else "away_team_id", 0)
-        period = at("period_number", i)
-        low = {
-            "winner_team_id": None if team is None else int(team),
-            "winner_low_wp": float(won[i]),
-            "winner_low_period": None if period is None else int(period),
-            "winner_low_clock": at("clock_display_value", i),
-        }
     return {
         "gei": GEI_SCALE[lg] / scored.height * float(total),
         "lead_changes": int((leads != leads.shift(1)).sum()),
         "max_swing_pts": None if biggest is None else 100.0 * float(biggest),
         "completed": completed,
-        **low,
+        **_winner_low(scored, wp, final),
+    }
+
+
+def _winner_low(scored: pl.DataFrame, wp: pl.Series, final: float | None) -> dict[str, Any]:
+    """The comeback low of :func:`game_excitement`: all ``None`` unless ``final`` is a win (1.0) or a loss (0.0)."""
+    home_won = final == 1.0
+    won = wp if home_won else 1.0 - wp
+    i = won.arg_min()  # the earliest play at the low; None when every WP is null
+    if final not in (0.0, 1.0) or i is None:
+        return dict.fromkeys(_WINNER_LOW)
+
+    def at(c: str, row: int) -> Any:
+        return scored[c][row] if c in scored.columns else None
+
+    team, period = at("home_team_id" if home_won else "away_team_id", 0), at("period_number", i)
+    return {
+        "winner_team_id": None if team is None else int(team),
+        "winner_low_wp": float(won[i]),
+        "winner_low_period": None if period is None else int(period),
+        "winner_low_clock": at("clock_display_value", i),
     }
 
 

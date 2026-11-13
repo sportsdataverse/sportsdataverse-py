@@ -104,6 +104,10 @@ One row per game, sorted by `season` then `game_id`: `game_id`, `season`, `gei`,
 | `gei_rank` | Int64 | Rank of gei among the season's completed games, 1 = most exciting, ties share the best rank; null for a game that is not completed. |
 | `gei_pct` | Float64 | Share of the season's completed games with a gei at or below this one (the top game is 1.0); null for a game that is not completed. |
 | `gei_n` | Int64 | Number of completed games in the season the rank and percentile are taken over; null for a game that is not completed. |
+| `winner_team_id` | Int64 | ESPN team id of the eventual winner; null for a game that is not completed or ends tied. |
+| `winner_low_wp` | Float64 | The comeback low: the lowest win probability (0-1) the eventual winner had after any play, from the same WP series gei sums (the pregame prior is not a play); null for a game that is not completed or ends tied. |
+| `winner_low_period` | Int64 | Period of the play at the winner's low (the earliest, on a tie); null with no winner. |
+| `winner_low_clock` | String | Game clock (ESPN clock_display_value) of the play at the winner's low; null with no winner. |
 
 **Raises**
 

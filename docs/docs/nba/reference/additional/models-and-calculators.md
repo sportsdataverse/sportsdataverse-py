@@ -1246,7 +1246,7 @@ average length.
 
 **Returns**
 
-`{"gei", "lead_changes", "max_swing_pts", "completed", "winner_team_id", "winner_low_wp", "winner_low_period", "winner_low_clock"}`: the index (`None` for no plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead counts once), the largest of the changes the index sums in percentage points (the last play's swing to the result included; `None` for no plays), whether the last play was taken to the result, and the comeback low: the eventual winner's team id (`home_team_id` or `away_team_id` of the first play; `None` without them), the lowest win probability it had after any play (0-1, the minimum of `home_win_prob` for a home winner, of `1 - home_win_prob` for an away winner; the pregame prior is not a play), and that play's `period_number` and `clock_display_value` (the earliest play at the low; `None` without the columns). The four winner keys are `None` for a game that is not completed or ends tied.
+`{"gei", "lead_changes", "max_swing_pts", "completed", "winner_team_id", "winner_low_wp", "winner_low_period", "winner_low_clock"}`: the index (`None` for no plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead counts once), the largest of the changes the index sums in percentage points (the last play's swing to the result included; `None` for no plays), whether the last play was taken to the result, and the comeback low: the winner's `home_team_id` / `away_team_id`, its lowest WP after any play (0-1, the prior is not a play) and that play's (the earliest at the low) `period_number` and `clock_display_value`; `None` for a column the frame lacks, and all four `None` for a game not completed or ending tied.
 
 **Raises**
 

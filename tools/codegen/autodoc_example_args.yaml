@@ -424,6 +424,7 @@ mbb:
   mbb_tournament_ineligible: {seasons: [2024]}  # 22 rows x 8 cols
   mbb_season_projections: {season: 2025, n_sims: 500}  # 364 rows x 40 cols
   ncaa_possession_rate_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
+  ncaa_team_game_counts: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}}
   ncaa_situation_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
   ncaa_score_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2026}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2026}}}
   ncaa_impact_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}, possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}}

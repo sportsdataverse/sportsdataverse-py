@@ -228,6 +228,15 @@ One row per `(season, team_id, game_id, family, split)`, the columns of `mbb_sit
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `fga` | Int64 | Field-goal attempts in the split: the team's shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage. |
+| `fgm` | Int64 | Made field goals in the split (event_result made); null on the families other than all and garbage. |
+| `fg3a` | Int64 | Three-point attempts in the split (shot_value 3); null on the families other than all and garbage. |
+| `fg3m` | Int64 | Made threes in the split; null on the families other than all and garbage. |
+| `fta` | Int64 | Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage. |
+| `ftm` | Int64 | Made free throws in the split; null on the families other than all and garbage. |
+| `oreb` | Int64 | Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `dreb` | Int64 | Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `tov` | Int64 | Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage. |
 
 **Raises**
 
