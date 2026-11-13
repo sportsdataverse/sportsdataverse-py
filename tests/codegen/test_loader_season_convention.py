@@ -128,6 +128,7 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
         "load_nba_stats_shots",
         "load_nba_stats_standings",
         "load_nba_stats_team_boxscores",
+        "load_nba_stats_team_game_logs",
         "load_nba_stats_team_season_stats",
         # first published on END-year assets (2026-10-01)
         "load_nba_stats_game_matchups",
