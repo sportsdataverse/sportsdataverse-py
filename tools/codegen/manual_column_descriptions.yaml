@@ -38395,6 +38395,17 @@ mbb_team_season_rates:
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis).'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  opp_pts_pg: 'Per game: points allowed divided by games (BB-G8''s per-game basis).'
+  opp_pts_pg_n: 'Sample size of opp_pts_pg: def_rtg_n, the rating''s own sample.'
+  opp_pts_pg_pct: 'Percentile of opp_pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  opp_pts_pg_rank: 'Rank of opp_pts_pg within the season and split (the lowest value ranks 1; ties average), ranked where def_rtg
+    is: among the teams def_rtg_rank qualifies (half the split''s most games, and def_rtg_n at least def_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against def_rtg.'
   opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
     null in the clutch split.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the split, 0 when the rate is null.'
@@ -38422,8 +38433,31 @@ mbb_team_season_rates:
     among teams that played at least half the most games any team played in the split, whose pace_n is at least 4 games (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+  plus_minus: 'Point margin in the split: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis).'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  plus_minus_pg: 'Per game: point margin (pts - opp_pts) divided by games (BB-G8''s per-game basis).'
+  plus_minus_pg_n: 'Sample size of plus_minus_pg: net_rtg_n, the rating''s own sample.'
+  plus_minus_pg_pct: 'Percentile of plus_minus_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  plus_minus_pg_rank: 'Rank of plus_minus_pg within the season and split (the highest value ranks 1; ties average), ranked where
+    net_rtg is: among the teams net_rtg_rank qualifies (half the split''s most games, and net_rtg_n at least net_rtg''s rate_gates
+    gate); null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against net_rtg.'
   poss: Offensive possessions in the split, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the split.
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis).'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  pts_pg: 'Per game: points scored divided by games (BB-G8''s per-game basis).'
+  pts_pg_n: 'Sample size of pts_pg: off_rtg_n, the rating''s own sample.'
+  pts_pg_pct: 'Percentile of pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  pts_pg_rank: 'Rank of pts_pg within the season and split (the highest value ranks 1; ties average), ranked where off_rtg is:
+    among the teams off_rtg_rank qualifies (half the split''s most games, and off_rtg_n at least off_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against off_rtg.'
   season: Season, named by the year it ends (2025 is 2024-25).
   split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
     close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it)
@@ -38527,6 +38561,17 @@ nba_team_season_rates:
     under that gate, a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis).'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  opp_pts_pg: 'Per game: points allowed divided by games (BB-G8''s per-game basis).'
+  opp_pts_pg_n: 'Sample size of opp_pts_pg: def_rtg_n, the rating''s own sample.'
+  opp_pts_pg_pct: 'Percentile of opp_pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  opp_pts_pg_rank: 'Rank of opp_pts_pg within the season and split (the lowest value ranks 1; ties average), ranked where def_rtg
+    is: among the teams def_rtg_rank qualifies (half the split''s most games, and def_rtg_n at least def_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against def_rtg.'
   opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the team''s defensive possessions in the split.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
@@ -38554,9 +38599,32 @@ nba_team_season_rates:
     among teams that played at least half the most games any team played in the split, whose pace_n is at least 5 games (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+  plus_minus: 'Point margin in the split: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis).'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  plus_minus_pg: 'Per game: point margin (pts - opp_pts) divided by games (BB-G8''s per-game basis).'
+  plus_minus_pg_n: 'Sample size of plus_minus_pg: net_rtg_n, the rating''s own sample.'
+  plus_minus_pg_pct: 'Percentile of plus_minus_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  plus_minus_pg_rank: 'Rank of plus_minus_pg within the season and split (the highest value ranks 1; ties average), ranked where
+    net_rtg is: among the teams net_rtg_rank qualifies (half the split''s most games, and net_rtg_n at least net_rtg''s rate_gates
+    gate); null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against net_rtg.'
   poss: Offensive possessions in the split, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis).'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  pts_pg: 'Per game: points scored divided by games (BB-G8''s per-game basis).'
+  pts_pg_n: 'Sample size of pts_pg: off_rtg_n, the rating''s own sample.'
+  pts_pg_pct: 'Percentile of pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  pts_pg_rank: 'Rank of pts_pg within the season and split (the highest value ranks 1; ties average), ranked where off_rtg is:
+    among the teams off_rtg_rank qualifies (half the split''s most games, and off_rtg_n at least off_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against off_rtg.'
   season: Season, named by the year it ends (2026 is 2025-26).
   split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither: the
     curated nba_neutral_site_games list, plus every game dated inside the 2020 bubble (from the schedule''s game_date)); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it)
@@ -38681,6 +38749,17 @@ wbb_team_season_rates:
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis).'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  opp_pts_pg: 'Per game: points allowed divided by games (BB-G8''s per-game basis).'
+  opp_pts_pg_n: 'Sample size of opp_pts_pg: def_rtg_n, the rating''s own sample.'
+  opp_pts_pg_pct: 'Percentile of opp_pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  opp_pts_pg_rank: 'Rank of opp_pts_pg within the season and split (the lowest value ranks 1; ties average), ranked where def_rtg
+    is: among the teams def_rtg_rank qualifies (half the split''s most games, and def_rtg_n at least def_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against def_rtg.'
   opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction. Game-level, from the NCAA team box;
     null in the clutch split.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the opponents'' NCAA team-box possessions in the split, 0 when the rate is null.'
@@ -38708,8 +38787,31 @@ wbb_team_season_rates:
     among teams that played at least half the most games any team played in the split, whose pace_n is at least 3 games (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+  plus_minus: 'Point margin in the split: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis).'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  plus_minus_pg: 'Per game: point margin (pts - opp_pts) divided by games (BB-G8''s per-game basis).'
+  plus_minus_pg_n: 'Sample size of plus_minus_pg: net_rtg_n, the rating''s own sample.'
+  plus_minus_pg_pct: 'Percentile of plus_minus_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  plus_minus_pg_rank: 'Rank of plus_minus_pg within the season and split (the highest value ranks 1; ties average), ranked where
+    net_rtg is: among the teams net_rtg_rank qualifies (half the split''s most games, and net_rtg_n at least net_rtg''s rate_gates
+    gate); null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against net_rtg.'
   poss: Offensive possessions in the split, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the split.
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis).'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  pts_pg: 'Per game: points scored divided by games (BB-G8''s per-game basis).'
+  pts_pg_n: 'Sample size of pts_pg: off_rtg_n, the rating''s own sample.'
+  pts_pg_pct: 'Percentile of pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  pts_pg_rank: 'Rank of pts_pg within the season and split (the highest value ranks 1; ties average), ranked where off_rtg is:
+    among the teams off_rtg_rank qualifies (half the split''s most games, and off_rtg_n at least off_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against off_rtg.'
   season: Season, named by the year it ends (2025 is 2024-25).
   split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither);
     close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it)
@@ -38791,6 +38893,17 @@ wnba_team_season_rates:
     a null rate, or fewer than five qualifiers.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis).'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  opp_pts_pg: 'Per game: points allowed divided by games (BB-G8''s per-game basis).'
+  opp_pts_pg_n: 'Sample size of opp_pts_pg: def_rtg_n, the rating''s own sample.'
+  opp_pts_pg_pct: 'Percentile of opp_pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
+    null when the rank is null.'
+  opp_pts_pg_rank: 'Rank of opp_pts_pg within the season and split (the lowest value ranks 1; ties average), ranked where def_rtg
+    is: among the teams def_rtg_rank qualifies (half the split''s most games, and def_rtg_n at least def_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against def_rtg.'
   opp_tov_pct: Opponents' turnovers per possession (turnovers forced), as a fraction.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: the team''s defensive possessions in the split.'
   opp_tov_pct_pct: 'Percentile of opp_tov_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
@@ -38820,9 +38933,32 @@ wnba_team_season_rates:
     7-game gate is 0.33 signal, under a third, as measured by the gate's proxy (ESPN box possessions per game over whole
     regular seasons, not per split); this table's own pace scores 0.44 there. Pace stays ranked, as no data or source defect
     was found (rate_gates).
+  plus_minus: 'Point margin in the split: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis).'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  plus_minus_pg: 'Per game: point margin (pts - opp_pts) divided by games (BB-G8''s per-game basis).'
+  plus_minus_pg_n: 'Sample size of plus_minus_pg: net_rtg_n, the rating''s own sample.'
+  plus_minus_pg_pct: 'Percentile of plus_minus_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
+    ranked; null when the rank is null.'
+  plus_minus_pg_rank: 'Rank of plus_minus_pg within the season and split (the highest value ranks 1; ties average), ranked where
+    net_rtg is: among the teams net_rtg_rank qualifies (half the split''s most games, and net_rtg_n at least net_rtg''s rate_gates
+    gate); null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against net_rtg.'
   poss: Offensive possessions in the split, counted from possession rows.
   pts: Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free
     throws.
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis).'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
+  pts_pg: 'Per game: points scored divided by games (BB-G8''s per-game basis).'
+  pts_pg_n: 'Sample size of pts_pg: off_rtg_n, the rating''s own sample.'
+  pts_pg_pct: 'Percentile of pts_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null
+    when the rank is null.'
+  pts_pg_rank: 'Rank of pts_pg within the season and split (the highest value ranks 1; ties average), ranked where off_rtg is:
+    among the teams off_rtg_rank qualifies (half the split''s most games, and off_rtg_n at least off_rtg''s rate_gates gate);
+    null otherwise or with fewer than five qualifiers. Per game is not per possession, so pace reorders it against off_rtg.'
   season: WNBA season (its calendar year).
   split: 'Which possessions the row covers: all; home or away (the team''s home or road games; neutral-site games are in neither: the
     curated nba_neutral_site_games list, plus every game dated inside the 2020 bubble (from the schedule''s game_date)); close (every possession of a game that had a clutch possession); clutch (a possession in play with 5:00 or less left
@@ -39015,6 +39151,11 @@ nba_lineup_seasons:
     group when fewer than ten qualifying units have a finite value of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
     throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
@@ -39042,10 +39183,20 @@ nba_lineup_seasons:
   player_4: Player 4 of the unit, in lineup_id order; null past n_players.
   player_5: Player 5 of the unit, in lineup_id order; null past n_players.
   plus_minus: 'The unit''s +/- over the season: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   poss: Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches of
+    many games, never a game of its own.'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   team_id: stats.nba.com team id.
   tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free
@@ -39143,6 +39294,11 @@ wnba_lineup_seasons:
     group when fewer than ten qualifying units have a finite value of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   opp_tov_pct: The opponent's turnovers per defensive possession. Null with a zero denominator. Each possession's shots, free
     throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   opp_tov_pct_n: 'Sample size of opp_tov_pct: opp_poss.'
@@ -39170,10 +39326,20 @@ wnba_lineup_seasons:
   player_4: Player 4 of the unit, in lineup_id order; null past n_players.
   player_5: Player 5 of the unit, in lineup_id order; null past n_players.
   plus_minus: 'The unit''s +/- over the season: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   poss: Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches of
+    many games, never a game of its own.'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   season: Season, named by the year it ends (the WNBA season is its calendar year).
   team_id: stats.nba.com team id.
   tov_pct: Turnovers per offensive possession, as a fraction. Null with a zero denominator. Each possession's shots, free
@@ -39343,6 +39509,11 @@ mbb_lineup_seasons:
     of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   opp_rim_pct: 'The opponent''s field-goal percentage at the rim. Null with a zero denominator. Each event counts for the
     lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_pct_n: 'Sample size of opp_rim_pct: the opponent''s rim attempts.'
@@ -39387,10 +39558,20 @@ mbb_lineup_seasons:
   player_4: Player 4 of the unit, in lineup_id order; null past n_players.
   player_5: Player 5 of the unit, in lineup_id order; null past n_players.
   plus_minus: 'The unit''s +/- over the season: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   poss: Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches of
+    many games, never a game of its own.'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   rim_pct: 'Field-goal percentage at the rim, as a fraction. Null with a zero denominator. Each event counts for the lineup
     on the floor at it (a free throw: the lineup at the last foul).'
   rim_pct_n: 'Sample size of rim_pct: the unit''s rim attempts.'
@@ -39578,6 +39759,11 @@ wbb_lineup_seasons:
     of this rate or they all share one value.
   opp_poss: Defensive possessions with the unit on the floor, counted as poss is.
   opp_pts: The opponent's points with the unit on the floor, credited as pts is.
+  opp_pts_per75: 'Per 75 possessions: 0.75 * def_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  opp_pts_per75_n: 'Sample size of opp_pts_per75: def_rtg_n, copied.'
+  opp_pts_per75_pct: 'Percentile of opp_pts_per75: def_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  opp_pts_per75_rank: 'Rank of opp_pts_per75: def_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   opp_rim_pct: 'The opponent''s field-goal percentage at the rim. Null with a zero denominator. Each event counts for the
     lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_rim_pct_n: 'Sample size of opp_rim_pct: the opponent''s rim attempts.'
@@ -39622,10 +39808,20 @@ wbb_lineup_seasons:
   player_4: Player 4 of the unit, in lineup_id order; null past n_players.
   player_5: Player 5 of the unit, in lineup_id order; null past n_players.
   plus_minus: 'The unit''s +/- over the season: pts - opp_pts.'
+  plus_minus_per75: 'Per 75 possessions: 0.75 * net_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches
+    of many games, never a game of its own.'
+  plus_minus_per75_n: 'Sample size of plus_minus_per75: net_rtg_n, copied.'
+  plus_minus_per75_pct: 'Percentile of plus_minus_per75: net_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  plus_minus_per75_rank: 'Rank of plus_minus_per75: net_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   poss: Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts; a
     2- or 3-man unit sums the fives that contain it).
   pts: The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw
     to the lineup at the last foul).
+  pts_per75: 'Per 75 possessions: 0.75 * off_rtg (BB-G8''s per-75 basis). A unit has no per-game basis: it plays stretches of
+    many games, never a game of its own.'
+  pts_per75_n: 'Sample size of pts_per75: off_rtg_n, copied.'
+  pts_per75_pct: 'Percentile of pts_per75: off_rtg_pct, copied (scaling by 0.75 keeps the order).'
+  pts_per75_rank: 'Rank of pts_per75: off_rtg_rank, copied (scaling by 0.75 keeps the order: same gate, same ties).'
   rim_pct: 'Field-goal percentage at the rim, as a fraction. Null with a zero denominator. Each event counts for the lineup
     on the floor at it (a free throw: the lineup at the last foul).'
   rim_pct_n: 'Sample size of rim_pct: the unit''s rim attempts.'
@@ -76284,6 +76480,10 @@ nba_team_season_flow:
     least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   games: Games played (completed games of the season type).
   kills: Kills (three straight stops), summed.
+  kills_per75: 'Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8''s per-75 basis); null with no possessions.'
+  kills_per75_n: 'Sample size of kills_per75: kills_per_100_n, copied.'
+  kills_per75_pct: 'Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order).'
+  kills_per75_rank: 'Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order).'
   kills_per_100: Kills per 100 defensive possessions; null with no possessions.
   kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
   kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
@@ -76396,6 +76596,10 @@ wnba_team_season_flow:
     least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   games: Games played (completed games of the season type).
   kills: Kills (three straight stops), summed.
+  kills_per75: 'Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8''s per-75 basis); null with no possessions.'
+  kills_per75_n: 'Sample size of kills_per75: kills_per_100_n, copied.'
+  kills_per75_pct: 'Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order).'
+  kills_per75_rank: 'Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order).'
   kills_per_100: Kills per 100 defensive possessions; null with no possessions.
   kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
   kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
@@ -76508,6 +76712,10 @@ mbb_team_season_flow:
     least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   games: Games played (completed games of the season type).
   kills: Kills (three straight stops), summed.
+  kills_per75: 'Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8''s per-75 basis); null with no possessions.'
+  kills_per75_n: 'Sample size of kills_per75: kills_per_100_n, copied.'
+  kills_per75_pct: 'Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order).'
+  kills_per75_rank: 'Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order).'
   kills_per_100: Kills per 100 defensive possessions; null with no possessions.
   kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
   kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number
@@ -76620,6 +76828,10 @@ wbb_team_season_flow:
     least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers.
   games: Games played (completed games of the season type).
   kills: Kills (three straight stops), summed.
+  kills_per75: 'Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8''s per-75 basis); null with no possessions.'
+  kills_per75_n: 'Sample size of kills_per75: kills_per_100_n, copied.'
+  kills_per75_pct: 'Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order).'
+  kills_per75_rank: 'Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order).'
   kills_per_100: Kills per 100 defensive possessions; null with no possessions.
   kills_per_100_n: 'Sample size of kills_per_100: the teams defensive possessions.'
   kills_per_100_pct: 'Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number

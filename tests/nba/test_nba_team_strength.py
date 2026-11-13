@@ -110,7 +110,13 @@ def test_schema_and_carried_rates(nba_2026: pl.DataFrame) -> None:
         mp.setattr(tsr, "load_nba_stats_possessions", _fixture_loader("nba_possessions_2026.parquet", [2025]))
         mp.setattr(tsr, "load_nba_stats_schedules", _fixture_loader("nba_schedule_2026.parquet", [2025]))
         rates = tsr.nba_team_season_rates(2026).filter(split="all").drop("split")
-    shared = rates.columns
+    # every BB-D3 rate and its context is carried; BB-G8's scoring bases stay on the rates table
+    shared = [c for c in rates.columns if c in TEAM_STRENGTH_SCHEMA]
+    assert set(rates.columns) - set(shared) == {
+        f"{m}{s}"
+        for m in ("pts_pg", "opp_pts_pg", "plus_minus_pg", "pts_per75", "opp_pts_per75", "plus_minus_per75")
+        for s in ("", "_rank", "_pct", "_n")
+    } | {"plus_minus"}
     assert nba_2026.select(shared).equals(rates.sort("season", "team_id").select(shared))
 
 

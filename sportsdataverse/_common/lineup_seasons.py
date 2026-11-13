@@ -31,6 +31,11 @@ rates have no measured gate and rank on ``min_poss`` alone. The shot
 zone shares (``rim_rate``, ``mid_rate``, ``fg3_rate`` and their ``opp_`` twins) describe a style,
 not a quality: they rank high first on both sides.
 
+**Bases** (BB-G8): ``pts_per75`` / ``opp_pts_per75`` / ``plus_minus_per75`` are 0.75 times
+``off_rtg`` / ``def_rtg`` / ``net_rtg``, with the rating's ``_rank`` / ``_pct`` / ``_n`` copied, so a
+board's basis select never converts. There is no per-game basis: a unit plays stretches of many
+games, never a game of its own, so a per-game rate would only measure how often it was used.
+
 **Internal** -- not re-exported at the top-level ``sportsdataverse`` package.
 """
 
@@ -44,6 +49,7 @@ from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, game_lin
 from sportsdataverse._common.league_context import (
     LEAGUE_AVERAGES_SCHEMA,
     MIN_COHORT_PLAYERS,
+    attach_per75,
     attach_ranks,
     attach_sample_sizes,
     league_averages,
@@ -68,6 +74,8 @@ COUNTS: tuple[str, ...] = ("fga", "fgm", "fg3a", "fg3m", "fta", "oreb", "dreb", 
 #: College shot-zone counts: rim and mid-range attempts and makes.
 ZONE_COUNTS: tuple[str, ...] = ("rima", "rimm", "mida", "midm")
 _SLOTS = HOME_SLOTS + AWAY_SLOTS
+#: Per-75 scoring -> its per-100 rating (:func:`~sportsdataverse._common.league_context.attach_per75`).
+_PER_75: dict[str, str] = {"pts_per75": "off_rtg", "opp_pts_per75": "def_rtg", "plus_minus_per75": "net_rtg"}
 _TOTALS = ("seconds", "poss", "opp_poss", "pts", "opp_pts")
 
 
@@ -142,6 +150,10 @@ def lineup_seasons_schema(player_dtype: pl.DataType, *, zones: bool = False) -> 
         **{f"{m}_rank": pl.Float64() for m in rated},
         **{f"{m}_pct": pl.Float64() for m in rated},
         **{f"{m}_n": pl.Int64() for m in rated},
+        **{m: pl.Float64() for m in _PER_75},
+        **{f"{m}_rank": pl.Float64() for m in _PER_75},
+        **{f"{m}_pct": pl.Float64() for m in _PER_75},
+        **{f"{m}_n": pl.Int64() for m in _PER_75},
     }
 
 
@@ -310,6 +322,7 @@ def lineup_seasons(
             qualifier=_qualified(min_poss),
             min_n=gates,
         )
+        .pipe(attach_per75, _PER_75)
         .select(list(schema))
         .cast(schema)
         .sort(["season", "n_players", "team_id", "poss", "lineup_id"], descending=[False, False, False, True, False])

@@ -36,6 +36,13 @@ among teams that played at least half the most games any team played in that spl
 with a floor of :data:`~sportsdataverse._common.league_context.MIN_COHORT_TEAMS` teams.
 :func:`team_season_rates_league_averages` produces the league-average rows, whose ``n`` is the cohort count.
 
+**Bases** (BB-G8): the scoring numbers also come per game and per 75 possessions, so a board's
+basis select never converts. ``plus_minus`` is ``pts - opp_pts``; ``pts_pg`` / ``opp_pts_pg`` /
+``plus_minus_pg`` divide those totals by ``games``, and ``pts_per75`` / ``opp_pts_per75`` /
+``plus_minus_per75`` are 0.75 times ``off_rtg`` / ``def_rtg`` / ``net_rtg``. Each gets ``_rank``,
+``_pct`` and ``_n`` ranked where its rating is (the rating's sample size and gate, ``opp_pts_*``
+lower is better); a per-75 rank is its rating's, copied.
+
 The league adapters (``sportsdataverse.nba.nba_team_season_rates``,
 ``sportsdataverse.mbb.mbb_team_season_rates``) turn each source's possession frame into
 :data:`RATE_ROWS_SCHEMA` and call :func:`team_season_rates`.
@@ -50,6 +57,7 @@ import polars as pl
 from sportsdataverse._common.league_context import (
     LEAGUE_AVERAGES_SCHEMA,
     MIN_COHORT_TEAMS,
+    attach_per75,
     attach_ranks,
     attach_sample_sizes,
     league_averages,
@@ -129,6 +137,15 @@ _RATED: dict[str, tuple[pl.Expr, bool]] = {
     "opp_ft_rate": (pl.col("d_fga"), True),
 }
 _LOWER_IS_BETTER = tuple(m for m, (_, low) in _RATED.items() if low)
+#: Per-game scoring -> (its total, the rating whose sample size and gate rank it).
+_PER_GAME: dict[str, tuple[str, str]] = {
+    "pts_pg": ("pts", "off_rtg"),
+    "opp_pts_pg": ("opp_pts", "def_rtg"),
+    "plus_minus_pg": ("plus_minus", "net_rtg"),
+}
+#: Per-75 scoring -> its per-100 rating (:func:`~sportsdataverse._common.league_context.attach_per75`).
+_PER_75: dict[str, str] = {"pts_per75": "off_rtg", "opp_pts_per75": "def_rtg", "plus_minus_per75": "net_rtg"}
+_BASES = (*_PER_GAME, *_PER_75)
 
 
 def _sizes(minutes_per_game: int) -> dict[str, pl.Expr]:
@@ -157,7 +174,31 @@ TEAM_SEASON_RATES_SCHEMA: dict[str, pl.DataType] = {
     **{f"{m}_rank": pl.Float64() for m in _RATED},
     **{f"{m}_pct": pl.Float64() for m in _RATED},
     **{f"{m}_n": pl.Int64() for m in _RATED},
+    "plus_minus": pl.Int64(),
+    **{m: pl.Float64() for m in _BASES},
+    **{f"{m}_rank": pl.Float64() for m in _BASES},
+    **{f"{m}_pct": pl.Float64() for m in _BASES},
+    **{f"{m}_n": pl.Int64() for m in _BASES},
 }
+
+
+def _with_bases(rates: pl.DataFrame, gates: dict[str, float]) -> pl.DataFrame:
+    """Add ``plus_minus`` and the per-game and per-75 scoring with their ranks (the module's Bases)."""
+    totals = rates.with_columns((pl.col("pts") - pl.col("opp_pts")).alias("plus_minus"))
+    pg = totals.with_columns(
+        pl.when(pl.col("games") > 0).then(pl.col(total) / pl.col("games")).alias(m)
+        for m, (total, _) in _PER_GAME.items()
+    ).with_columns(pl.col(f"{rating}_n").alias(f"{m}_n") for m, (_, rating) in _PER_GAME.items())
+    ranked = pg.pipe(
+        attach_ranks,
+        list(_PER_GAME),
+        min_cohort=MIN_COHORT_TEAMS,
+        by=("season", "split"),
+        lower_is_better=["opp_pts_pg"],
+        qualifier=_QUALIFIER,
+        min_n={m: gates[rating] for m, (_, rating) in _PER_GAME.items() if rating in gates},
+    )
+    return attach_per75(ranked, _PER_75)
 
 
 def _with_clutch(rows: pl.DataFrame) -> pl.DataFrame:
@@ -283,6 +324,7 @@ def team_season_rates(
             qualifier=_QUALIFIER,
             min_n=gates,
         )
+        .pipe(_with_bases, gates)
         .sort([pl.col("season"), order, pl.col("team_id")])
         .select(list(TEAM_SEASON_RATES_SCHEMA))
         .cast(TEAM_SEASON_RATES_SCHEMA)

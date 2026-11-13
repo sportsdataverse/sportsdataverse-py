@@ -23,6 +23,9 @@ in any league follows one suffix grammar:
   finite qualifying values (not a rate's ``<m>_n`` sample size). Where ranks exist it is the ``n``
   of the ``_pct`` formula above, whose denominator is ``n + 1``; it ignores the floor, so a
   season below the floor still reports its ``n`` beside null ranks.
+* :func:`attach_per75` -- a per-75-possessions column is 0.75 times its per-100 twin and
+  carries the twin's ``_rank`` / ``_pct`` / ``_n``: the producer ships every basis a board shows,
+  so a consumer never converts one.
 
 There is one deliberate difference from football. Football floors only the cohort
 percentiles. Here the floor (owner decision D-F5, :data:`MIN_COHORT_TEAMS` and
@@ -45,6 +48,7 @@ __all__ = [
     "MIN_COHORT_PLAYERS",
     "MIN_COHORT_TEAMS",
     "attach_cohort_percentiles",
+    "attach_per75",
     "attach_ranks",
     "attach_sample_sizes",
     "league_averages",
@@ -237,6 +241,43 @@ def attach_sample_sizes(df: pl.DataFrame, denominators: dict[str, pl.Expr]) -> p
     present = {m: e for m, e in denominators.items() if m in df.columns}
     return df.with_columns(
         *[e.cast(pl.Float64).round(0).fill_null(0).cast(pl.Int64).alias(f"{m}_n") for m, e in present.items()]
+    )
+
+
+def attach_per75(df: pl.DataFrame, twins: Mapping[str, str]) -> pl.DataFrame:
+    """Add each per-75-possessions column as 0.75 times its per-100 twin, with the twin's context.
+
+    Scaling by a positive constant keeps the order, so ``<new>_rank``, ``<new>_pct`` and
+    ``<new>_n`` are the twin's, copied: the per-75 column is ranked exactly where, and as, the
+    per-100 one is (its gate, direction and ties included).
+
+    Args:
+        df: The season table, with every twin's ``<m>``, ``<m>_rank``, ``<m>_pct`` and ``<m>_n``
+            (run :func:`attach_ranks` and :func:`attach_sample_sizes` first).
+        twins: The new per-75 column -> its per-100 twin.
+
+    Returns:
+        ``df`` with ``<new>``, ``<new>_rank``, ``<new>_pct`` and ``<new>_n`` appended for every entry.
+
+    Raises:
+        KeyError: If a twin's value, rank, percentile or sample size is not a column of ``df``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse._common.league_context import attach_per75
+            t = pl.DataFrame({"off_rtg": [110.0], "off_rtg_rank": [1.0], "off_rtg_pct": [50.0], "off_rtg_n": [900]})
+            attach_per75(t, {"pts_per75": "off_rtg"})
+    """
+    _check_columns(df, [f"{t}{s}" for t in twins.values() for s in ("", "_rank", "_pct", "_n")], "per-100 twins")
+    return df.with_columns(
+        e
+        for new, twin in twins.items()
+        for e in (
+            (0.75 * pl.col(twin)).alias(new),
+            *(pl.col(f"{twin}_{s}").alias(f"{new}_{s}") for s in ("rank", "pct", "n")),
+        )
     )
 
 

@@ -756,6 +756,10 @@ One row per `(season, team_id)`: `games`, `wins`; `lead_pct`, `trail_pct`, `tied
 | `kills_pg_n` | Int64 | Sample size of kills_pg: the games with published possessions. |
 | `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: the games with published possessions. |
 | `kills_per_100_n` | Int64 | Sample size of kills_per_100: the teams defensive possessions. |
+| `kills_per75` | Float64 | Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8's per-75 basis); null with no possessions. |
+| `kills_per75_rank` | Float64 | Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order). |
+| `kills_per75_pct` | Float64 | Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order). |
+| `kills_per75_n` | Int64 | Sample size of kills_per75: kills_per_100_n, copied. |
 
 **Raises**
 

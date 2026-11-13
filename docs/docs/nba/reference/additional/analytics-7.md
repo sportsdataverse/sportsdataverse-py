@@ -6,6 +6,57 @@ description: "NBA — additional Python functions — Analytics: nba_tracking–
 ---
 # NBA — additional Python functions — Analytics: nba_tracking–zone_value
 
+### nba_tracking_rim_protect_value {#nba_tracking_rim_protect_value}
+
+`nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Rim-protection / shot-defend points-saved over expected, per player-season.
+
+Fetches the `Defense` `leaguedashptstats` measure -- which on the live
+`stats.nba.com` payload exposes only rim-band defended shooting
+(`def_rim_fgm`/`def_rim_fga`/`def_rim_fg_pct`, no separate overall
+figure -- see the fixtures README) -- and computes
+`rim_protect_pts_saved = (normal_fg_pct - d_fg_pct) * d_fga * 2` where
+`normal_fg_pct` is the bucket-mean defended rate (there is no
+shooters'-own-average column on this endpoint, so the bucket mean is the
+baseline; this is the same attempts-weighted construction as every other
+model, just sign-flipped so a defender who holds shooters BELOW the
+bucket mean gets a positive points-saved value).
+
+`source="shotdefend"` swaps in the `Less-Than-6-Ft` band from
+`nba_stats_playerdashptshotdefend` for the top-`max_players` defenders
+by attempt volume (capped, optional -- never a hard dependency);
+`max_players=0` (default) uses the leaguedash figures for everyone.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
+| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_rim_protect_value
+df = nba_tracking_rim_protect_value(2024)
+print(df.sort("rim_protect_pts_saved", descending=True).head())
+```
+
 ### nba_tracking_shot_diet_value {#nba_tracking_shot_diet_value}
 
 `nba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`

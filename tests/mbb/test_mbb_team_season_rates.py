@@ -138,6 +138,17 @@ def test_bad_league_raises() -> None:
         mod.mbb_team_season_rates(2025, league="coed")
 
 
+#: BB-G8's scoring bases -> the rating whose sample and gate rank them.
+_BASIS_RATING = {
+    "pts_pg": "off_rtg",
+    "opp_pts_pg": "def_rtg",
+    "plus_minus_pg": "net_rtg",
+    "pts_per75": "off_rtg",
+    "opp_pts_per75": "def_rtg",
+    "plus_minus_per75": "net_rtg",
+}
+
+
 def test_sample_gates_and_level_wiring(monkeypatch: pytest.MonkeyPatch) -> None:
     """Each adapter passes its own level, and a rate under that level's gate gets no rank."""
     seen: list[str] = []
@@ -151,11 +162,27 @@ def test_sample_gates_and_level_wiring(monkeypatch: pytest.MonkeyPatch) -> None:
     rated = [c.removesuffix("_rank") for c in TEAM_SEASON_RATES_SCHEMA if c.endswith("_rank")]
     for lg in ("mbb", "wbb"):
         rates = _rates(lg)
+        # a BB-G8 scoring basis is gated where its rating is
+        gates = {**TEAM_MIN_N[lg], **{m: TEAM_MIN_N[lg][r] for m, r in _BASIS_RATING.items()}}
         for m in rated:
-            under = rates.filter(pl.col(f"{m}_n") < TEAM_MIN_N[lg][m])
+            under = rates.filter(pl.col(f"{m}_n") < gates[m])
             assert under[f"{m}_rank"].null_count() == under.height, (lg, m)
         # the Big Ten's clutch possessions (dozens a team) clear no rating gate
         clutch = rates.filter(split="clutch")
         assert clutch["off_rtg_rank"].null_count() == clutch.height
         assert rates.filter(split="all")["off_rtg_rank"].is_not_null().sum() == 18
     assert seen == ["mbb", "wbb"]
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_scoring_bases_on_the_box_count_path(lg: str) -> None:
+    """BB-G8 on college (box four factors): per game over games played, per 75 = 0.75 x per 100."""
+    rates = _rates(lg)
+    assert (rates["plus_minus"] == rates["pts"] - rates["opp_pts"]).all()
+    assert ((rates["plus_minus_pg"] - rates["plus_minus"] / rates["games"]).abs() < 1e-9).all()
+    for m, r in (("pts_per75", "off_rtg"), ("opp_pts_per75", "def_rtg"), ("plus_minus_per75", "net_rtg")):
+        assert ((rates[m] - 0.75 * rates[r]).abs() < 1e-9).all(), m
+        assert rates[f"{m}_rank"].equals(rates[f"{r}_rank"]), m
+    ranked = rates.filter(pl.col("split") == "all", pl.col("opp_pts_pg_rank").is_not_null())
+    assert ranked.height == 18  # the fixture's Big Ten, every one past the def_rtg gate
+    assert ranked.filter(pl.col("opp_pts_pg_rank") == 1)["opp_pts_pg"].item() == ranked["opp_pts_pg"].min()

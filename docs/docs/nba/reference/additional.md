@@ -323,7 +323,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_drive_value](additional/analytics-6.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
 | [nba_tracking_pass_value](additional/analytics-6.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
 | [nba_tracking_reb_oe](additional/analytics-6.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
-| [nba_tracking_rim_protect_value](additional/analytics-6.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
+| [nba_tracking_rim_protect_value](additional/analytics-7.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-7.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-7.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-7.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |

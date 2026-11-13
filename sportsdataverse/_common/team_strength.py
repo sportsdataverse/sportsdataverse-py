@@ -43,7 +43,8 @@ import polars as pl
 
 from sportsdataverse._common.league_context import MIN_COHORT_TEAMS, attach_ranks, attach_sample_sizes
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
-from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA, TEAM_SEASON_RATES_SCHEMA
+from sportsdataverse._common.team_season_rates import _RATED as _RATES_RATED
+from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA
 
 __all__ = [
     "COLLEGE_RIDGE_FIT_SEASONS",
@@ -106,7 +107,8 @@ _NEW: dict[str, tuple[pl.Expr, bool]] = {
     "sov": (pl.col("_sov_wins"), False),
 }
 #: The BB-D3 rates carried over from the ``all`` split, ranks and all.
-_RATES = tuple(c.removesuffix("_rank") for c in TEAM_SEASON_RATES_SCHEMA if c.endswith("_rank"))
+# the twelve BB-D3 rates only, not the per-game / per-75 scoring bases the rates table also ranks
+_RATES = tuple(_RATES_RATED)
 _METRICS = (*_NEW, *_RATES)
 # The BB-D3 gate over the season (its `all` split is the whole season).
 _QUALIFIER = pl.col("games") >= 0.5 * pl.col("games").max().over("season")
@@ -302,7 +304,7 @@ def team_strength(
     """The team-strength table: BB-D3's ``all`` split plus adjusted ratings, SOS and SOV.
 
     Args:
-        rates: A ``*_team_season_rates`` frame (:data:`TEAM_SEASON_RATES_SCHEMA`); only the
+        rates: A ``*_team_season_rates`` frame (:data:`~sportsdataverse._common.team_season_rates.TEAM_SEASON_RATES_SCHEMA`); only the
             ``all`` split is used.
         ratings: Adjusted ratings in :data:`RATINGS_SCHEMA` (extra columns are ignored). SOS and
             SOV are averaged over these.

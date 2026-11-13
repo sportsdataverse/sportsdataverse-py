@@ -194,6 +194,13 @@ def test_ranks_follow_the_gate_and_direction() -> None:
             assert (best == (rated[m].min() if low else rated[m].max())).all(), f"{k}-man {m}"
         assert (ranked["net_rtg_n"] == ranked["poss"] + ranked["opp_poss"]).all()
         assert units.filter(gate & pl.col("net_rtg_rank").is_null()).height == 0
+        # BB-G8: per 75 possessions is 0.75 x the rating, its rank, percentile and sample copied
+        for m, r in (("pts_per75", "off_rtg"), ("opp_pts_per75", "def_rtg"), ("plus_minus_per75", "net_rtg")):
+            assert ((units[m] - 0.75 * units[r]).abs() < 1e-9).all(), (k, m)
+            for s in ("rank", "pct", "n"):
+                assert units[f"{m}_{s}"].equals(units[f"{r}_{s}"]), (k, m, s)
+        scored = units.filter(pl.col("poss") > 0)
+        assert ((scored["pts_per75"] - 75 * scored["pts"] / scored["poss"]).abs() < 1e-9).all()
 
 
 def test_league_averages_cover_each_unit_size() -> None:
