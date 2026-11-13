@@ -503,6 +503,19 @@ def _is_not_found(text: str) -> bool:
     return bool(text) and len(text) < 200 and _NOT_FOUND_RE.match(text) is not None
 
 
+def _answer_error(url: str, text: str) -> "NotAvailableYetError | NoDataError | None":
+    """The error a 200 *text* that is a definite "nothing here" answer means, else ``None``.
+
+    Not played / not posted is :class:`NotAvailableYetError` (retry another night); a deleted
+    contest is :class:`NoDataError` (never coming). Neither rotates: no proxy answers otherwise.
+    """
+    if _is_not_available(text):
+        return NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
+    if _is_not_found(text):
+        return NoDataError(f"stats.ncaa.org has no such contest at {url}: {text.strip()!r}")
+    return None
+
+
 def _browser_response_unsolved(text: str) -> bool:
     """Did an in-page browser fetch come back UNSOLVED?
 
@@ -1249,12 +1262,9 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
-            if status == 200 and _is_not_available(text):  # an answer (not played / not posted): no rotation
+            if status == 200 and (answer := _answer_error(url, text)) is not None:  # an answer: no rotation
                 self._count_fetch()
-                raise NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
-            if status == 200 and _is_not_found(text):  # a deleted contest: no proxy answers otherwise
-                self._count_fetch()
-                raise NoDataError(f"stats.ncaa.org has no such contest at {url}: {text.strip()!r}")
+                raise answer
             if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
                 # A real "no such page": the host answered, and no other proxy
                 # answers differently -- rotating the whole pool on it reads as a ban.
