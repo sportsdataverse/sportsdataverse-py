@@ -11,14 +11,14 @@ Layout under ``root`` (one ``*-alt-raw`` repo checkout)::
     {provider}/{league}/{endpoint}/{season}/{key}.json      listings (plain JSON)
     {provider}/{league}/{endpoint}/{season}/{id}.json.gz    per-game payloads (gzip)
     {provider}/{league}/{endpoint}/{season}/_missing.tsv    keys that answered nothing
-    {provider}/{league}/{endpoint}/{season}/_failed.tsv     per-game keys that failed once
+    {provider}/{league}/{endpoint}/{season}/_failed.tsv     per-game keys, one line per failed run
 
 * **Resumable.** A key with a file, or listed in ``_missing.tsv``, is never fetched again.
   Listings of a season that is still in progress are always re-fetched, so a re-run picks
   up newly completed games.
 * **A game that fails twice is missing.** A failed per-game fetch (a 5xx after retries,
   a 400) is noted in ``_failed.tsv``. When it fails again on a later run and a game after
-  it in that run answers, it is recorded in ``_missing.tsv``; that repeat failure does not
+  it in that run answers, or on a third separate run, it is recorded in ``_missing.tsv``; that repeat failure does not
   count toward the consecutive-failure stop, so a run of broken games (Yahoo CFB
   2020-10-24 answers HTTP 500 for every game) cannot stop every re-run at the same spot.
 * **Atomic, never empty.** Files are written to a temp name and renamed. An empty body,
@@ -82,6 +82,9 @@ _DEFAULT_RPS = {"fox": 1.0, "yahoo": 1.0, "cbs": 0.5}
 #: Retry only server errors; a 403/429 must surface at once and stop the run.
 _FETCH_KW: Dict[str, Any] = {"num_retries": 2, "retry_statuses": (500, 502, 503, 504), "timeout": 45}
 _MAX_CONSECUTIVE_FAILURES = 10
+#: A per-game key that failed on this many separate runs is recorded missing even when no later game
+#: in the run answers (a finished season's re-run requests only its broken games).
+_STRIKES_TO_MISSING = 3
 
 _FOX_SPORT = {"nfl": "nfl", "cfb": "cfb", "nba": "nba", "wnba": "wnba", "mbb": "cbk", "wbb": "wcbk"}
 #: Fox ``groupId``: FBS for CFB, Division I for college basketball.
@@ -169,7 +172,7 @@ class Store:
     def __init__(self, root: Path, provider: str, league: str):
         self.base = Path(root) / provider / league
         self._missing: Dict[Tuple[str, int], Dict[str, str]] = {}
-        self._failed: Dict[Tuple[str, int], set] = {}
+        self._failed: Dict[Tuple[str, int], Dict[str, int]] = {}
 
     def _dir(self, endpoint: str, season: int) -> Path:
         return self.base / endpoint / str(season)
@@ -191,21 +194,26 @@ class Store:
             self._missing[cache_key] = out
         return self._missing[cache_key]
 
-    def failed(self, endpoint: str, season: int) -> set:
-        """Keys whose per-game fetch failed on an earlier run."""
+    def failed(self, endpoint: str, season: int) -> Dict[str, int]:
+        """``key -> number of earlier runs`` its per-game fetch failed on."""
         cache_key = (endpoint, int(season))
         if cache_key not in self._failed:
             f = self._dir(endpoint, season) / "_failed.tsv"
-            lines = f.read_text().splitlines() if f.exists() else []
-            self._failed[cache_key] = {ln.partition("\t")[0] for ln in lines if ln}
+            counts: Dict[str, int] = {}
+            for ln in f.read_text().splitlines() if f.exists() else []:
+                k = ln.partition("\t")[0]
+                if k:
+                    counts[k] = counts.get(k, 0) + 1
+            self._failed[cache_key] = counts
         return self._failed[cache_key]
 
     def strike(self, endpoint: str, season: int, key: str, reason: str) -> None:
+        counts = self.failed(endpoint, season)  # load before appending, or the new line counts twice
         d = self._dir(endpoint, season)
         d.mkdir(parents=True, exist_ok=True)
         with open(d / "_failed.tsv", "a") as fh:
             fh.write(f"{key}\t{reason}\n")
-        self.failed(endpoint, season).add(key)
+        counts[key] = counts.get(key, 0) + 1
 
     def has(self, endpoint: str, season: int, key: str) -> bool:
         return (
@@ -593,13 +601,16 @@ def _fetch_one(
 ) -> Tuple[str, Any]:
     """One per-game fetch, with its failure strikes; ``run`` is this run's state, updated in place.
 
-    A first failure is a strike in ``_failed.tsv``. A failure of a key struck on an earlier
-    run waits in ``run["repeat"]`` and becomes missing only when a LATER game in this run
-    answers: an answer before the failure says nothing about the host after it, so an
-    outage that outlasts the run marks nothing missing. ``run["missing"]`` counts the writes.
+    Every failed run is a strike in ``_failed.tsv``. A failure of a key struck on an earlier
+    run waits in ``run["repeat"]`` and becomes missing when a LATER game in this run answers:
+    an answer before the failure says nothing about the host after it, so an outage that
+    outlasts the run marks nothing missing. A key with ``_STRIKES_TO_MISSING`` strikes (that
+    many separate failed runs) is missing at once, which ends a finished season whose re-runs
+    request nothing else. ``run["missing"]`` counts the writes.
     """
     endpoint, season, key = where
-    failed_before = key in store.failed(endpoint, season)
+    strikes = store.failed(endpoint, season).get(key, 0)
+    failed_before = strikes > 0
     try:
         status, payload = pacer.call(label, fn, counts=not failed_before)
     except HarvestBlocked:
@@ -607,9 +618,11 @@ def _fetch_one(
             store.strike(endpoint, season, key, "fetch failed")
         raise
     if status == "fail":
-        if not failed_before:
-            store.strike(endpoint, season, key, "fetch failed")
-        else:
+        store.strike(endpoint, season, key, "fetch failed")
+        if strikes + 1 >= _STRIKES_TO_MISSING:
+            store.miss(endpoint, season, key, f"fetch failed on {strikes + 1} runs")
+            run["missing"] += 1
+        elif failed_before:
             run["repeat"].append((endpoint, key))
     elif run["repeat"]:
         for ep, k in run["repeat"]:
