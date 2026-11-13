@@ -1,7 +1,1 @@
-- **NBA / WNBA:** `load_nba_stats_metric_curves` / `load_wnba_stats_metric_curves` and `load_nba_stats_rolling_windows`
-  / `load_wnba_stats_rolling_windows` read the published shot-distance curves and rolling-window shooting form (NBA
-  1996-97 onward, WNBA 1997 onward; `entity_id` / `team_id` as Int64). (#1188)
-- **NBA:** `load_nba_depth_charts` reads the daily ESPN NBA depth-chart snapshots (2026-27 onward). (#1188)
-- **MBB / WBB:** `ncaa_espn_schools(league=)` and `ncaa_espn_school_seasons(league=)`, exported from
-  `sportsdataverse.mbb` and `sportsdataverse.wbb`, read the static NCAA school and school-season tables of the
-  `{mbb,wbb}_crosswalk` releases. (#1188)
+- `load_nba_stats_metric_curves` / `load_wnba_stats_metric_curves` and `load_nba_stats_rolling_windows` / `load_wnba_stats_rolling_windows` read the published shot-distance curves and rolling-window shooting form (NBA 1996-97 onward, WNBA 1997 onward; `entity_id` / `team_id` as Int64), and `load_nba_depth_charts` reads the daily ESPN NBA depth-chart snapshots (2026-27 onward). `ncaa_espn_schools(league=)` and `ncaa_espn_school_seasons(league=)`, exported from `sportsdataverse.mbb` and `sportsdataverse.wbb`, read the static NCAA school and school-season tables of the `{mbb,wbb}_crosswalk` releases.
