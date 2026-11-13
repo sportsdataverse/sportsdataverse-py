@@ -303,7 +303,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_rated_priors](additional/analytics-4.md#nba_rated_priors) | Rated pregame home win probability for every ESPN game of a season, as of each game's date. |
 | [nba_ratings_panel](additional/analytics-4.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics-4.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
-| [nba_referee_assignments](additional/analytics-4.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
+| [nba_referee_assignments](additional/analytics-5.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
 | [nba_score_rows](additional/analytics-5.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
 | [nba_season_sim](additional/analytics-5.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-5.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
@@ -319,13 +319,13 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_team_game_possessions](additional/analytics-5.md#nba_team_game_possessions) | Per team and game: the possession counts behind `nba_team_season_rates`. |
 | [nba_team_luck](additional/analytics-5.md#nba_team_luck) | Luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [nba_team_play_styles](additional/analytics-5.md#nba_team_play_styles) | Defensive play-style archetypes per team-season (BB-D20); team offense has none (see the module). |
-| [nba_team_season_flow](additional/analytics-5.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
+| [nba_team_season_flow](additional/analytics-6.md#nba_team_season_flow) | Game flow per team and season, with ranks, percentiles and `_n`. |
 | [nba_team_season_rates](additional/analytics-6.md#nba_team_season_rates) | Season team rates from possessions: ORtg/DRtg/net, pace and the four factors, with splits. |
 | [nba_team_shot_zones](additional/analytics-6.md#nba_team_shot_zones) | Season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [nba_team_strength](additional/analytics-6.md#nba_team_strength) | Team strength from possessions: adjusted ratings, SOS, SOV, pace and the four factors. |
-| [nba_tracking_drive_value](additional/analytics-6.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
-| [nba_tracking_pass_value](additional/analytics-6.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
-| [nba_tracking_reb_oe](additional/analytics-6.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
+| [nba_tracking_drive_value](additional/analytics-7.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
+| [nba_tracking_pass_value](additional/analytics-7.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
+| [nba_tracking_reb_oe](additional/analytics-7.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
 | [nba_tracking_rim_protect_value](additional/analytics-7.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-7.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-7.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
