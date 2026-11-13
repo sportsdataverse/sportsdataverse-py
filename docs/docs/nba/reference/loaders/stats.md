@@ -1,11 +1,11 @@
 ---
-title: "NBA dataset loaders — Stats: schedules–player"
-sidebar_label: "Stats: schedules–player"
+title: "NBA dataset loaders — Stats: schedules–team"
+sidebar_label: "Stats: schedules–team"
 sidebar_position: 2
-description: "NBA dataset loaders — Stats: schedules–player — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA dataset loaders — Stats: schedules–team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA dataset loaders — Stats: schedules–player
+# NBA dataset loaders — Stats: schedules–team
 
 ## load_nba_stats_schedules
 
@@ -693,6 +693,52 @@ Release: [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsd
 | col_name | type | description |
 |---|---|---|
 | `season_id` | String | Unique season identifier. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `matchup` | String | Matchup. |
+| `wl` | String | Wl. |
+| `min` | Int64 | Minutes played. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Rebounds per game. |
+| `ast` | Int64 | Assists. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `tov` | Int64 | Turnovers. |
+| `pf` | Int64 | Personal fouls. |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Int64 | Plus/minus point differential while on court. |
+| `fantasy_pts` | Float64 |  |
+| `video_available` | Int64 | Video available. |
+| `season` | Int32 | Season year. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+
+```python
+load_nba_stats_player_game_logs(seasons=2025)
+```
+
+## load_nba_stats_team_game_logs
+
+Release: [nba_stats_team_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_game_logs) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_{season + 1}.parquet`
+### Returns {#load_nba_stats_team_game_logs-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | String | Unique season identifier. |
 | `team_id` | Int64 | Unique team identifier. |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -725,5 +771,5 @@ Release: [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsd
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python
-load_nba_stats_player_game_logs(seasons=2025)
+load_nba_stats_team_game_logs(seasons=2025)
 ```

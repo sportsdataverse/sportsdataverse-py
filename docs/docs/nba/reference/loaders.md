@@ -40,6 +40,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_stats_pbp_v3` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_player_boxscores` | [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) | — |
 | `load_nba_stats_player_game_logs` | [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) | — |
+| `load_nba_stats_team_game_logs` | [nba_stats_team_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_game_logs) | — |
 | `load_nba_stats_player_season_stats` | [nba_stats_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_season_stats) | — |
 | `load_nba_stats_possessions_v3` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
 | `load_nba_stats_rosters` | [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters) | — |
@@ -89,6 +90,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_stats_pbp_v3](loaders/stats.md#load_nba_stats_pbp_v3) | Release: nba_stats_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet` |
 | [load_nba_stats_player_boxscores](loaders/stats.md#load_nba_stats_player_boxscores) | Release: nba_stats_player_boxscores · asset … |
 | [load_nba_stats_player_game_logs](loaders/stats.md#load_nba_stats_player_game_logs) | Release: nba_stats_player_game_logs · asset … |
+| [load_nba_stats_team_game_logs](loaders/stats.md#load_nba_stats_team_game_logs) | Release: nba_stats_team_game_logs · asset … |
 | [load_nba_stats_player_season_stats](loaders/stats-2.md#load_nba_stats_player_season_stats) | Release: nba_stats_player_season_stats · asset … |
 | [load_nba_stats_possessions_v3](loaders/stats-2.md#load_nba_stats_possessions_v3) | Release: nba_stats_possessions · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season …` |
 | [load_nba_stats_rosters](loaders/stats-2.md#load_nba_stats_rosters) | Release: nba_stats_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season + 1}.parquet` |

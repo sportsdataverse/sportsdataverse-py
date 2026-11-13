@@ -1200,6 +1200,14 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_team_game_logs
+  league: nba
+  base: sdv_releases
+  url: nba_stats_team_game_logs/team_game_logs_{season + 1}.parquet
+  tag: nba_stats_team_game_logs
+  min_season: 1996
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_player_season_stats
   league: nba
   base: sdv_releases
