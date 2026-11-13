@@ -400,8 +400,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_player_value`](reference/loaders/player#load_wbb_player_value) | [`load_wbb_player_value`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_value.html) |
 | [`load_wbb_ratings`](reference/loaders/other#load_wbb_ratings) | [`load_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/load_wbb_ratings.html) |
 | [`load_wbb_rosters`](reference/loaders/other#load_wbb_rosters) | [`load_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_rosters.html) |
-| [`load_wbb_schedule`](reference/loaders/other#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
-| [`load_wbb_schedule_crosswalk`](reference/loaders/other#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
+| [`load_wbb_schedule`](reference/loaders/schedule#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
+| [`load_wbb_schedule_crosswalk`](reference/loaders/schedule#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
 | [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |

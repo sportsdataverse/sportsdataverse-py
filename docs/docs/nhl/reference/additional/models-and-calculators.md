@@ -449,29 +449,44 @@ calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 
 `ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'`
 
-Return a dir holding the 3 published booster files, downloading any missing ones.
+Return a dir holding the published boosters, checked against the release manifest.
 
 Mirrors the fastRhockey/nflverse download-on-demand + cache pattern -- the documented
 exception to "no first-use download" (the boosters are a large, already-published,
-already-validated artifact; see Decision D1 in the design spec). An explicit
-`model_dir` whose files already exist (e.g. the committed offline test fixtures)
-never touches the network.
+already-validated artifact; see Decision D1 in the design spec). Each call fetches
+the release's `xg_model_meta.json` manifest and re-downloads any cached booster
+whose sha256 differs from it, so a retrained release replaces an old cache once the new
+manifest is fetched. A refresh is staged: every replacement booster is downloaded and
+verified before any file is written, and the manifest is written last, so a refresh
+that fails part-way leaves the previous manifest and boosters intact. Offline, the
+cached manifest is used. An explicit `model_dir` that already holds both
+boosters (e.g. the committed offline test fixtures) is used as-is and never touches
+the network.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `model_dir` | `str \| Path \| None` | `None` | directory to check/populate; `None` resolves via `booster_cache_dir()` (env `NHL_XG_MODEL_DIR` override, else `~/.cache/nhl_xg_models`). |
+| `model_dir` | `str \| Path \| None` | `None` | directory of local models; `None` resolves the cache via `booster_cache_dir()` (env `NHL_XG_MODEL_DIR` override, else `~/.cache/nhl_xg_models`). An explicit dir missing a booster is filled from the release like the cache. |
 
 **Returns**
 
-The resolved directory containing all 3 booster files.
+The resolved directory containing `xg_model_5v5.json`, `xg_model_st.json` and (except for local models that ship without one) `xg_model_meta.json`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The manifest could not be fetched and no copy is cached, or a downloaded booster does not match the manifest (the release may be mid-update; try again shortly). |
+| `ValueError` | Neither the fetched nor the cached manifest pins both boosters. |
+| `requests.RequestException` | A booster that is missing or stale in the cache could not be downloaded (after the retries of `download`). |
+| `NoDataError` | A missing or stale booster is not on the release (404). |
 
 **Example**
 
 ```python
 from sportsdataverse.nhl.nhl_xg import ensure_xg_models
-d = ensure_xg_models()  # downloads on first use, cached after
+d = ensure_xg_models()  # downloads on first use, re-checked every load
 ```
 
 ### get_constants {#get_constants}
@@ -513,7 +528,7 @@ Load the two published boosters (+ embedded feature names) and the penalty-shot 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `model_dir` | `str \| Path \| None` | `None` | `None` downloads the canonical `nhl_xg_models` release on first use and caches under `booster_cache_dir()`; pass a dir to use local models (the offline test suite always passes the committed fixture dir). |
+| `model_dir` | `str \| Path \| None` | `None` | `None` uses the canonical `nhl_xg_models` release, cached under `booster_cache_dir()` and checked against the release manifest on every load (see `ensure_xg_models`); pass a dir to use local models (the offline test suite always passes the committed fixture dir). |
 
 **Returns**
 
