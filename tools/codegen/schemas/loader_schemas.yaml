@@ -12565,6 +12565,8 @@ load_mbb_player_crosswalk:
   type: String
 - name: kp_player_id
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -12926,6 +12928,8 @@ load_mbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String
@@ -30372,6 +30376,8 @@ load_wbb_player_crosswalk:
   type: String
 - name: yahoo_player_name
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -30749,6 +30755,8 @@ load_wbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String
