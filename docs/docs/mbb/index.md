@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 388 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 390 | — |
 
 ## ESPN {#espn}
 
@@ -230,11 +230,13 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_lineup_seasons`](reference/additional/analytics-3#mbb_lineup_seasons)
 - [`mbb_official_seasons`](reference/additional/analytics-3#mbb_official_seasons)
 - [`mbb_play_styles`](reference/additional/analytics-3#mbb_play_styles)
+- [`mbb_player_game_expected_box`](reference/additional/analytics-3#mbb_player_game_expected_box)
 - [`mbb_player_on_off`](reference/additional/analytics-3#mbb_player_on_off)
+- [`mbb_player_season_box_rates`](reference/additional/analytics-3#mbb_player_season_box_rates)
 - [`mbb_player_shot_zones`](reference/additional/analytics-3#mbb_player_shot_zones)
 - [`mbb_player_war`](reference/additional/analytics-3#mbb_player_war)
-- [`mbb_player_wowy`](reference/additional/analytics-3#mbb_player_wowy)
-- [`mbb_shot_selection`](reference/additional/analytics-3#mbb_shot_selection)
+- [`mbb_player_wowy`](reference/additional/analytics-4#mbb_player_wowy)
+- [`mbb_shot_selection`](reference/additional/analytics-4#mbb_shot_selection)
 - [`mbb_situational_lineup`](reference/additional/analytics-4#mbb_situational_lineup)
 - [`mbb_situational_player`](reference/additional/analytics-4#mbb_situational_player)
 - [`mbb_situational_team`](reference/additional/analytics-4#mbb_situational_team)
