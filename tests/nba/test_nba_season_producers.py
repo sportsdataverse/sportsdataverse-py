@@ -30,7 +30,7 @@ def test_helper_nba_standings_reproduces_the_r_release_2024():
 
 
 def test_identity_lookup_keeps_the_team_of_the_latest_game():
-    """player_box is written newest game first; a traded athlete must keep the team of his latest game,
+    """player_box is written newest game first; a traded athlete must keep the team of their latest game,
     not the first row's. A null game_date sorts first and loses to any dated row; equal dates keep frame order."""
     box = pl.DataFrame(
         {
