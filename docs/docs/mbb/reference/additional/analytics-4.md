@@ -1,10 +1,55 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_situational–mbb_team"
-sidebar_label: "Analytics: mbb_situational–mbb_team"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_shot–mbb_team"
+sidebar_label: "Analytics: mbb_shot–mbb_team"
 sidebar_position: 16
-description: "Men's college basketball — additional Python functions — Analytics: mbb_situational–mbb_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_shot–mbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_situational–mbb_team
+# Men's college basketball — additional Python functions — Analytics: mbb_shot–mbb_team
+
+### mbb_shot_selection {#mbb_shot_selection}
+
+`mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Per shooter/team expected points per attempt vs the league-average mix.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `xpoints, point_value, made` + the group column). |
+| `group` | `str` | `'shooter_id'` | `"shooter_id"` or `"team_id"`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (interface parity; the math is league-free). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_value, selection_value_total` (all value columns Float64). The attempt-weighted `selection_value` sums to zero across the league. Empty input returns the zero-row schema.
+
+| col_name | type | description |
+|---|---|---|
+| `shooter_id` | String | Unique identifier for shooter. |
+| `n_shots` | Int64 |  |
+| `xppp` | Float64 |  |
+| `actual_ppp` | Float64 |  |
+| `selection_value` | Float64 |  |
+| `selection_value_total` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown `group`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shot_selection
+sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
+
+# Pipeline next step (one line)
+
+sel.sort("selection_value", descending=True).head(10)
+```
 
 ### mbb_situational_lineup {#mbb_situational_lineup}
 

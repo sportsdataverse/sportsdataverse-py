@@ -234,7 +234,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_player_war`](reference/additional/analytics-3#wbb_player_war)
 - [`wbb_player_wowy`](reference/additional/analytics-3#wbb_player_wowy)
 - [`wbb_situational_lineup`](reference/additional/analytics-3#wbb_situational_lineup)
-- [`wbb_situational_player`](reference/additional/analytics-3#wbb_situational_player)
+- [`wbb_situational_player`](reference/additional/analytics-4#wbb_situational_player)
 - [`wbb_situational_team`](reference/additional/analytics-4#wbb_situational_team)
 - [`wbb_situational_team_games`](reference/additional/analytics-4#wbb_situational_team_games)
 - [`wbb_strength_of_schedule`](reference/additional/analytics-4#wbb_strength_of_schedule)
@@ -242,7 +242,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_team_luck`](reference/additional/analytics-4#wbb_team_luck)
 - [`wbb_team_season_flow`](reference/additional/analytics-4#wbb_team_season_flow)
 - [`wbb_team_season_rates`](reference/additional/analytics-4#wbb_team_season_rates)
-- [`wbb_team_shot_zones`](reference/additional/analytics-4#wbb_team_shot_zones)
+- [`wbb_team_shot_zones`](reference/additional/analytics-5#wbb_team_shot_zones)
 - [`wbb_team_strength`](reference/additional/analytics-5#wbb_team_strength)
 - [`weighted_avg`](reference/additional/analytics-5#weighted_avg)
 

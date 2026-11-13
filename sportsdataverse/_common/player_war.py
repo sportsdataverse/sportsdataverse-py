@@ -54,6 +54,18 @@ model uncertainty. College has one source, so box BPM's own sampling error is in
 0.09 (NBA), 0.18 (WNBA), 0.06 (MBB), 0.11 (WBB) per 100; a shift of ``dR`` moves a player's WAR
 by ``-dR * poss / 100 / pts_per_win`` (about 0.17 wins per 0.1 for an NBA starter with 5,300 on-court possessions).
 
+**Per game.** ``pts_pg`` / ``reb_pg`` / ``ast_pg`` are his box points, rebounds and assists over the
+games he played (minutes over 0: the stats.nba.com regular-season game logs in the pros, the same ESPN box
+rows the college ratings sum). Each carries ``_rank`` (1 = most), ``_pct`` and ``_n`` (games) among the
+season's players with at least the games gate of
+:data:`~sportsdataverse._common.rate_gates.PLAYER_BOX_MIN_N` (one game in the pros, one or two in college:
+the split-half reliability of a per-game line passes 0.5 within two games). A player with no box line has
+null values and ``_n`` 0.
+
+**Cohort counts.** :func:`player_war_league_averages` gives the league-average rows of a season, whose
+``n`` is the number of players each column is ranked among (the ``n`` of the ``_pct`` formula): the
+count a rank is out of.
+
 **Minutes basis.** ``poss`` is a player's on-court possessions, ``(offensive + defensive) / 2``.
 NBA and WNBA count them from the stats.nba.com possessions (every possession row, BB-D3's
 convention); college has no published on-court possessions for every game, so it is
@@ -70,14 +82,23 @@ import numpy as np
 import polars as pl
 from scipy import sparse
 
-from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
+from sportsdataverse._common.league_context import (
+    MIN_COHORT_PLAYERS,
+    attach_ranks,
+    attach_sample_sizes,
+    league_averages,
+)
+from sportsdataverse._common.rate_gates import player_box_gates
 
 __all__ = [
     "N_BOOT",
+    "PER_GAME",
     "PTS_PER_WIN",
     "REPLACEMENT_LEVEL",
     "REPLACEMENT_SHARE",
+    "box_seasons",
     "player_war",
+    "player_war_league_averages",
     "player_war_schema",
     "repair_bpm_team_constant",
     "replacement_level_by_season",
@@ -120,6 +141,9 @@ REPLACEMENT_SHARE = 0.15
 REPLACEMENT_LEVEL: dict[str, float] = {"nba": -1.98, "wnba": -3.18, "mbb": -1.66, "wbb": -1.99}
 PTS_PER_WIN: dict[str, float] = {"nba": 31.56, "wnba": 31.31, "mbb": 38.91, "wbb": 47.10}
 
+#: Per-game column -> the box count it averages over the games he played.
+PER_GAME: dict[str, str] = {"pts_pg": "pts", "reb_pg": "reb", "ast_pg": "ast"}
+
 #: Bootstrap replicates behind ``war_lo`` / ``war_hi``, and the interval's percentiles.
 N_BOOT = 1000
 _INTERVAL = (5.0, 95.0)
@@ -154,7 +178,45 @@ def player_war_schema(player_dtype: pl.DataType, team_dtype: pl.DataType, source
         "war_pct": pl.Float64(),
         "vorp_n": pl.Int64(),
         "war_n": pl.Int64(),
+        **{m: pl.Float64() for m in PER_GAME},
+        **{f"{m}_rank": pl.Float64() for m in PER_GAME},
+        **{f"{m}_pct": pl.Float64() for m in PER_GAME},
+        **{f"{m}_n": pl.Int64() for m in PER_GAME},
     }
+
+
+def box_seasons(rows: pl.DataFrame) -> pl.DataFrame:
+    """Sum per-game box lines to the player-season: ``games``, ``pts``, ``reb`` and ``ast``.
+
+    Args:
+        rows: One row per game he played: ``season``, ``player_id``, ``pts``, ``reb``, ``ast``.
+
+    Returns:
+        One row per ``(season, player_id)`` with ``games`` (Int64) and the three totals (Float64).
+    """
+    return rows.group_by("season", "player_id").agg(
+        pl.len().cast(pl.Int64).alias("games"), *[pl.col(c).cast(pl.Float64).sum() for c in PER_GAME.values()]
+    )
+
+
+def _attach_per_game(out: pl.DataFrame, box: pl.DataFrame | None, league: str) -> pl.DataFrame:
+    """``out`` with :data:`PER_GAME` columns, ranked among the season's players over the games gate."""
+    if box is None:
+        cols = {"season": pl.Int64(), "player_id": out.schema["player_id"], "games": pl.Int64()}
+        box = pl.DataFrame(schema={**cols, **{c: pl.Float64() for c in PER_GAME.values()}})
+    assert out.schema["player_id"] == box.schema["player_id"], "player_id dtype differs between WAR and box"
+    b = box.select(
+        pl.col("season").cast(pl.Int64),
+        "player_id",
+        pl.col("games").alias("_games"),
+        *[(pl.col(c) / pl.col("games")).alias(m) for m, c in PER_GAME.items()],
+    )
+    joined = out.join(b, on=["season", "player_id"], how="left", validate="1:1")
+    sized = attach_sample_sizes(joined, {m: pl.col("_games") for m in PER_GAME})
+    gates = player_box_gates(league, PER_GAME)
+    return attach_ranks(sized, list(PER_GAME), min_cohort=MIN_COHORT_PLAYERS, by=("season",), min_n=gates).drop(
+        "_games"
+    )
 
 
 def _wmean(col: str, weight: str, by: list[str]) -> pl.Expr:
@@ -357,6 +419,7 @@ def player_war(
     team_games: pl.DataFrame | None = None,
     player_games: pl.DataFrame | None = None,
     n_boot: int = N_BOOT,
+    box: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """WAR and VORP per player-season from rating stints.
 
@@ -373,13 +436,17 @@ def player_war(
             interval. Without both, ``war_lo`` / ``war_hi`` are null; the ``{lg}_player_war``
             functions always pass them.
         n_boot: Bootstrap replicates behind ``war_lo`` / ``war_hi`` (:func:`war_interval`).
+        box: :func:`box_seasons` rows for the per-game columns. Without it they are null (``_n`` 0);
+            the ``{lg}_player_war`` functions always pass it.
 
     Returns:
         :func:`player_war_schema` rows sorted by season and ``war`` (most first). ``team_id`` is
         the team he played most possessions for and ``teams`` how many he played for. ``war`` and
         ``vorp`` carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) among every
         player of the season, null under :data:`MIN_COHORT_PLAYERS`; ``war_lo`` / ``war_hi`` are
-        the 90% interval of :func:`war_interval`. Stints on a team without ``net`` are dropped.
+        the 90% interval of :func:`war_interval`. ``pts_pg`` / ``reb_pg`` / ``ast_pg`` (module
+        docstring) carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (games) among the players over the
+        games gate. Stints on a team without ``net`` are dropped.
         Empty input returns that schema with zero rows.
     """
     schema = player_war_schema(stints.schema["player_id"], stints.schema["team_id"], sources)
@@ -419,9 +486,44 @@ def player_war(
     return (
         out.pipe(attach_ranks, ["vorp", "war"], min_cohort=MIN_COHORT_PLAYERS, by=("season",))
         .pipe(attach_sample_sizes, {"vorp": pl.col("poss"), "war": pl.col("poss")})
+        .pipe(_attach_per_game, box, league)
         .select(list(schema))
         .cast(schema)
         .sort(["season", "war", "player_id"], descending=[False, True, False], nulls_last=True)
+    )
+
+
+def player_war_league_averages(war: pl.DataFrame, *, league: str) -> pl.DataFrame:
+    """The league-average rows of a ``player_war`` table: one per season and ranked column.
+
+    The football F1 rows of :func:`~sportsdataverse._common.league_context.league_averages` over the
+    players each column is ranked among: every player of the season for ``vorp`` / ``war``, the players
+    over the games gate for the per-game columns. ``n`` is that cohort, the number a ``_rank`` is out
+    of; it is reported even where the ranks are null (under ten players, or all equal).
+
+    Args:
+        war: :func:`player_war` rows (any seasons of one league).
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``: the ``level`` label and the games gates.
+
+    Returns:
+        :data:`~sportsdataverse._common.league_context.LEAGUE_AVERAGES_SCHEMA` rows, ``entity``
+        ``"player"``, ``category`` ``"player_war"``, ``qualifier_min`` null; an empty input returns
+        that schema with zero rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._common.player_war import player_war_league_averages
+            from sportsdataverse.nba.nba_player_war import nba_player_war
+            player_war_league_averages(nba_player_war(2026), league="nba")
+    """
+    return league_averages(
+        war,
+        ["vorp", "war", *PER_GAME],
+        level=league,
+        entity="player",
+        category="player_war",
+        min_n=player_box_gates(league, PER_GAME),
     )
 
 

@@ -389,7 +389,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_player_shot_zones](additional/analytics-3.md#mbb_player_shot_zones) | College season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_player_war](additional/analytics-3.md#mbb_player_war) | WAR and VORP per player-season, from our box BPM. |
 | [mbb_player_wowy](additional/analytics-3.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
-| [mbb_shot_selection](additional/analytics-3.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
+| [mbb_shot_selection](additional/analytics-4.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_situational_lineup](additional/analytics-4.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
 | [mbb_situational_player](additional/analytics-4.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
 | [mbb_situational_team](additional/analytics-4.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |

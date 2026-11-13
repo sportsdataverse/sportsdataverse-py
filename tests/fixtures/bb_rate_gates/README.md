@@ -16,10 +16,10 @@ odd-game and even-game rates.
 
 | File | Rows | Source | Kept |
 |---|---:|---|---|
-| `{nba,wnba,mbb,wbb}_fits.csv` | 40 each | `team`: ESPN team box scores (`load_{nba,wnba,mbb,wbb}_team_boxscore`, regular season, `season_type == 2`). `on_off`: the BB-D6 game impact box (`nba_game_player_impact`, `mbb_game_player_impact`) | One row per `(kind, rate, span)`. `kind` is `team` (the 14 team and lineup rates) or `on_off` (the 6 ranked on/off ratings). `span` is `train` or `holdout`, and `seasons` gives its END-year range (the `SPANS` of the tool). `m` is the fitted r = 0.5 sample (`inf` when it would sit past twice the curve's largest `n`: the curve never comes near 0.5, so a finite value would be an extrapolation). `curve` is `n:r:entities;...`, where `n` is the sample in the table's `_n` units, `r` the split-half correlation and `entities` the team-seasons (`team`) or player-team-seasons (`on_off`) at that point. |
+| `{nba,wnba,mbb,wbb}_fits.csv` | 46 each | `team`: ESPN team box scores (`load_{nba,wnba,mbb,wbb}_team_boxscore`, regular season, `season_type == 2`). `on_off`: the BB-D6 game impact box (`nba_game_player_impact`, `mbb_game_player_impact`). `player_box`: ESPN player box scores (`load_{nba,wnba,mbb,wbb}_player_boxscore`, regular season, minutes over 0), added 2026-11-13 with `--kind player_box --write` | One row per `(kind, rate, span)`. `kind` is `team` (the 14 team and lineup rates), `on_off` (the 6 ranked on/off ratings) or `player_box` (`pts_pg` / `reb_pg` / `ast_pg`, `n` in games). `span` is `train` or `holdout`, and `seasons` gives its END-year range (the `SPANS` of the tool). `m` is the fitted r = 0.5 sample (`inf` when it would sit past twice the curve's largest `n`: the curve never comes near 0.5, so a finite value would be an extrapolation). `curve` is `n:r:entities;...`, where `n` is the sample in the table's `_n` units, `r` the split-half correlation and `entities` the team-seasons (`team`), player-team-seasons (`on_off`) or player-seasons (`player_box`) at that point. |
 
 Seasons: team NBA 2015-2023 train / 2024-2026 holdout, WNBA 2015-2022 / 2023-2025, MBB and WBB
-2022-2024 / 2025-2026. On/off NBA 2019-2023 / 2024-2026, WNBA 2018-2022 / 2023-2025, MBB and WBB
+2022-2024 / 2025-2026 (the player box curves use the team spans). On/off NBA 2019-2023 / 2024-2026, WNBA 2018-2022 / 2023-2025, MBB and WBB
 2022-2024 / 2025-2026.
 
 Team possessions are the box estimate `FGA + 0.44 FTA - OREB + TOV`, averaged over both teams. The
