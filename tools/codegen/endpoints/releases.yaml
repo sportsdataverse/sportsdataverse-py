@@ -955,6 +955,7 @@ loaders:
   url: espn_wnba_draft/draft_{season}.parquet
   tag: espn_wnba_draft
   min_season: 2018
+  notes: "ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids."
   example_args:
     seasons: 2026
 - fn: load_wnba_game_rosters
@@ -980,7 +981,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_wnba_player_season_stats
-  min_season: 2002
+  min_season: 1997
   example_args:
     seasons: 2024
 - fn: load_wnba_rosters
@@ -990,6 +991,7 @@ loaders:
   tag: espn_wnba_rosters
   id_int32: [athlete_id]
   min_season: 2024
+  notes: "ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids."
   example_args:
     seasons: 2024
 - fn: load_wnba_shots

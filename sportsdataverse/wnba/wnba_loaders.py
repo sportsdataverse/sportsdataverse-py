@@ -555,6 +555,9 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
         |team_alternate_color          |String |
         |team_logo                     |String |
 
+    Note:
+        ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids.
+
     Raises:
         SeasonNotFoundError: if a requested season is below 2018.
 
@@ -724,7 +727,7 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -751,7 +754,7 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -760,8 +763,8 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -833,6 +836,9 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
         |status_id                |String |
         |status_name              |String |
         |status_type              |String |
+
+    Note:
+        ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.

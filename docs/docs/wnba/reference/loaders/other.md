@@ -179,6 +179,11 @@ load_wnba_schedule(seasons=2024)
 ## load_wnba_draft
 
 Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet`
+
+:::caution[Coverage]
+ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids.
+:::
+
 ### Returns {#load_wnba_draft-returns}
 
 | col_name | type | description |
@@ -283,6 +288,11 @@ load_wnba_officials(seasons=2024)
 ## load_wnba_rosters
 
 Release: [espn_wnba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_rosters/rosters_{season}.parquet`
+
+:::caution[Coverage]
+ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids.
+:::
+
 ### Returns {#load_wnba_rosters-returns}
 
 | col_name | type | description |
