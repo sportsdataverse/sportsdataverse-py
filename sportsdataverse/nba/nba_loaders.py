@@ -520,7 +520,7 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 1994).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -553,7 +553,7 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 1994.
 
     Example:
         Quick start::
@@ -562,8 +562,8 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 1994:
+            raise SeasonNotFoundError("season cannot be less than 1994")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_game_rosters/game_rosters_{season}.parquet"
         )
@@ -593,7 +593,7 @@ def load_nba_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 1994).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -611,7 +611,7 @@ def load_nba_officials(seasons, return_as_pandas: bool = False):
         |official_order        |Int32  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 1994.
 
     Example:
         Quick start::
@@ -620,8 +620,8 @@ def load_nba_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 1994:
+            raise SeasonNotFoundError("season cannot be less than 1994")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet"
         )
@@ -843,7 +843,7 @@ def load_nba_team_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 1994).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -870,7 +870,7 @@ def load_nba_team_season_stats(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 1994.
 
     Example:
         Quick start::
@@ -879,8 +879,8 @@ def load_nba_team_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 1994:
+            raise SeasonNotFoundError("season cannot be less than 1994")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_team_season_stats/team_season_stats_{season}.parquet"
         )
@@ -3812,7 +3812,7 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact
 
     Args:
-        seasons: an int or iterable of seasons (>= 1996).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -3905,7 +3905,7 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
         The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boban_projected_rating and boban_projected_sd were renamed from darko_*; the loader returns both names for one release, so move to boban_* now (darko_* is deprecated and will be removed).
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 1996.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -3914,8 +3914,8 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 1996:
-            raise SeasonNotFoundError("season cannot be less than 1996")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_player_impact/nba_player_impact_{season}.parquet"
         )

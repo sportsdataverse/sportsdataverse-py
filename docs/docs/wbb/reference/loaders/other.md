@@ -257,11 +257,6 @@ load_wbb_game_rosters(seasons=2026)
 ## load_wbb_officials
 
 Release: [espn_womens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_officials/officials_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wbb_officials-returns}
 
 | col_name | type | description |
@@ -365,11 +360,6 @@ load_wbb_shots(seasons=2026)
 ## load_wbb_standings
 
 Release: [espn_womens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wbb_standings-returns}
 
 | col_name | type | description |
