@@ -197,6 +197,7 @@ def test_ranks_follow_the_gate_and_direction() -> None:
         # BB-G8: per 75 possessions is 0.75 x the rating, its rank, percentile and sample copied
         for m, r in (("pts_per75", "off_rtg"), ("opp_pts_per75", "def_rtg"), ("plus_minus_per75", "net_rtg")):
             assert ((units[m] - 0.75 * units[r]).abs() < 1e-9).all(), (k, m)
+            assert units[m].null_count() == units[r].null_count(), (k, m)  # .all() skips nulls
             for s in ("rank", "pct", "n"):
                 assert units[f"{m}_{s}"].equals(units[f"{r}_{s}"]), (k, m, s)
         scored = units.filter(pl.col("poss") > 0)

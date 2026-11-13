@@ -288,6 +288,7 @@ def test_season_table(league: tuple[str, pl.DataFrame]) -> None:
     assert low["opp_runs_10_pg"].unique().to_list() == [ranked["opp_runs_10_pg"].min()]
     # BB-G8: per 75 defensive possessions is 0.75 x per 100, ranked exactly as it is
     assert ((season["kills_per75"] - 0.75 * 100 * season["kills"] / season["def_poss"]).abs() < 1e-9).all()
+    assert season["kills_per75"].null_count() == season["kills_per_100"].null_count()  # .all() skips nulls
     for s in ("rank", "pct", "n"):
         assert season[f"kills_per75_{s}"].equals(season[f"kills_per_100_{s}"]), s
     best = season.filter(pl.col("kills_per75_rank") == 1)["kills_per75"]

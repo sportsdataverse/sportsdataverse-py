@@ -182,6 +182,7 @@ def test_scoring_bases_on_the_box_count_path(lg: str) -> None:
     assert ((rates["plus_minus_pg"] - rates["plus_minus"] / rates["games"]).abs() < 1e-9).all()
     for m, r in (("pts_per75", "off_rtg"), ("opp_pts_per75", "def_rtg"), ("plus_minus_per75", "net_rtg")):
         assert ((rates[m] - 0.75 * rates[r]).abs() < 1e-9).all(), m
+        assert rates[m].null_count() == rates[r].null_count(), m  # .all() skips nulls
         assert rates[f"{m}_rank"].equals(rates[f"{r}_rank"]), m
     ranked = rates.filter(pl.col("split") == "all", pl.col("opp_pts_pg_rank").is_not_null())
     assert ranked.height == 18  # the fixture's Big Ten, every one past the def_rtg gate
