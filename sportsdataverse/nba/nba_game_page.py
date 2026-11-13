@@ -518,11 +518,18 @@ def game_excitement(
             tied), the rule :func:`score_win_prob` settles WP on. Without ``type_text`` it is live.
 
     Returns:
-        ``{"gei", "lead_changes", "max_swing_pts", "completed"}``: the index (``None`` for no
+        ``{"gei", "lead_changes", "max_swing_pts", "completed", "winner_team_id",
+        "winner_low_wp", "winner_low_period", "winner_low_clock"}``: the index (``None`` for no
         plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead
         counts once), the largest of the changes the index sums in percentage points (the last
-        play's swing to the result included; ``None`` for no plays), and whether the last play was
-        taken to the result.
+        play's swing to the result included; ``None`` for no plays), whether the last play was
+        taken to the result, and the comeback low: the eventual winner's team id (``home_team_id``
+        or ``away_team_id`` of the first play; ``None`` without them), the lowest win probability
+        it had after any play (0-1, the minimum of ``home_win_prob`` for a home winner, of
+        ``1 - home_win_prob`` for an away winner; the pregame prior is not a play), and that play's
+        ``period_number`` and ``clock_display_value`` (the earliest play at the low; ``None``
+        without the columns). The four winner keys are ``None`` for a game that is not completed
+        or ends tied.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing.
@@ -563,21 +570,40 @@ def game_excitement(
         if {"type_text", "period_number"} <= set(scored.columns) and scored.height:
             reg = regulation_periods or game_regulation_periods(lg, season=_box_season(scored))
             completed = bool(filled.select(_game_end(reg).any()).item())
+    low: dict[str, Any] = dict.fromkeys(_WINNER_LOW)
     if scored.height == 0:
-        return {"gei": None, "lead_changes": 0, "max_swing_pts": None, "completed": completed}
+        return {"gei": None, "lead_changes": 0, "max_swing_pts": None, "completed": completed, **low}
     margin = (filled["home_score"] - filled["away_score"]).sign()
     final = None
     if completed:
         m = margin[-1]
         final = 1.0 if m > 0 else 0.0 if m < 0 else 0.5
-    steps = _gei_steps(scored["home_win_prob"].cast(pl.Float64), float(scored["pregame_home_prob"][0]), final)
+    wp = scored["home_win_prob"].cast(pl.Float64)
+    steps = _gei_steps(wp, float(scored["pregame_home_prob"][0]), final)
     total, biggest = steps.sum(), steps.max()
     leads = margin.filter(margin != 0)
+    home_won = final == 1.0
+    won = wp if home_won else 1.0 - wp
+    i = won.arg_min()  # the earliest play at the low; None when every WP is null
+    if final in (0.0, 1.0) and i is not None:
+
+        def at(c: str, row: int) -> Any:
+            return scored[c][row] if c in scored.columns else None
+
+        team = at("home_team_id" if home_won else "away_team_id", 0)
+        period = at("period_number", i)
+        low = {
+            "winner_team_id": None if team is None else int(team),
+            "winner_low_wp": float(won[i]),
+            "winner_low_period": None if period is None else int(period),
+            "winner_low_clock": at("clock_display_value", i),
+        }
     return {
         "gei": GEI_SCALE[lg] / scored.height * float(total),
         "lead_changes": int((leads != leads.shift(1)).sum()),
         "max_swing_pts": None if biggest is None else 100.0 * float(biggest),
         "completed": completed,
+        **low,
     }
 
 
@@ -591,7 +617,13 @@ _EXCITEMENT_SCHEMA: dict[str, pl.DataType] = {
     "gei_rank": pl.Int64,
     "gei_pct": pl.Float64,
     "gei_n": pl.Int64,
+    "winner_team_id": pl.Int64,
+    "winner_low_wp": pl.Float64,
+    "winner_low_period": pl.Int64,
+    "winner_low_clock": pl.String,
 }
+#: The comeback-low keys :func:`game_excitement` returns (appended last, after the ranks).
+_WINNER_LOW = ("winner_team_id", "winner_low_wp", "winner_low_period", "winner_low_clock")
 #: The pro exhibitions (All-Star games, the 2018-20 Rising Stars). ESPN types the All-Star games
 #: ``ALLSTAR`` except the NBA's 2013-17 and 2019 ones and the Rising Stars (``STD``); every one of
 #: them names itself in ``notes_headline`` (checked on the 2002-26 NBA and 2006-25 WNBA schedules).
@@ -642,9 +674,12 @@ def season_game_excitement(
         One row per game, sorted by ``season`` then ``game_id``: ``game_id``, ``season``, ``gei``,
         ``lead_changes``, ``max_swing_pts``, ``completed``, ``gei_rank`` (1 = the season's most
         exciting completed game, ties share the best rank), ``gei_pct`` (the share of the season's
-        completed games with a GEI at or below this one, so the top game is 1.0) and ``gei_n`` (the
-        season's completed games). The three rank columns are null for a game that is not
-        completed. An empty input returns an empty frame with these columns.
+        completed games with a GEI at or below this one, so the top game is 1.0), ``gei_n`` (the
+        season's completed games), then :func:`game_excitement`'s comeback low:
+        ``winner_team_id``, ``winner_low_wp`` (0-1), ``winner_low_period`` and
+        ``winner_low_clock``. The three rank columns are null for a game that is not completed, the
+        four winner columns for one that is not completed or ends tied. An empty input returns an
+        empty frame with these columns.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing.
@@ -685,14 +720,19 @@ def season_game_excitement(
         game_id = int(gid)
         scored = score_win_prob(game, league=lg, neutral_site=neutral.get(game_id))
         rows.append({"game_id": game_id, "season": _box_season(game), **game_excitement(scored, league=lg)})
-    out = pl.DataFrame(rows, schema={k: _EXCITEMENT_SCHEMA[k] for k in list(_EXCITEMENT_SCHEMA)[:6]})
+    ranks = ("gei_rank", "gei_pct", "gei_n")
+    out = pl.DataFrame(rows, schema={k: v for k, v in _EXCITEMENT_SCHEMA.items() if k not in ranks})
     q = pl.col("completed") & pl.col("gei").is_not_null()
     gei = pl.when(q).then(pl.col("gei"))
-    return out.with_columns(
-        gei.rank(method="min", descending=True).over("season").cast(pl.Int64).alias("gei_rank"),
-        (gei.rank(method="max") / q.sum()).over("season").alias("gei_pct"),
-        pl.when(q).then(q.sum().over("season")).cast(pl.Int64).alias("gei_n"),
-    ).sort("season", "game_id")
+    return (
+        out.with_columns(
+            gei.rank(method="min", descending=True).over("season").cast(pl.Int64).alias("gei_rank"),
+            (gei.rank(method="max") / q.sum()).over("season").alias("gei_pct"),
+            pl.when(q).then(q.sum().over("season")).cast(pl.Int64).alias("gei_n"),
+        )
+        .select(list(_EXCITEMENT_SCHEMA))
+        .sort("season", "game_id")
+    )
 
 
 def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:

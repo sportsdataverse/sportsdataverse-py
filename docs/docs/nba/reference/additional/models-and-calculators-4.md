@@ -91,7 +91,7 @@ schedules carry no such games.
 
 **Returns**
 
-One row per game, sorted by `season` then `game_id`: `game_id`, `season`, `gei`, `lead_changes`, `max_swing_pts`, `completed`, `gei_rank` (1 = the season's most exciting completed game, ties share the best rank), `gei_pct` (the share of the season's completed games with a GEI at or below this one, so the top game is 1.0) and `gei_n` (the season's completed games). The three rank columns are null for a game that is not completed. An empty input returns an empty frame with these columns.
+One row per game, sorted by `season` then `game_id`: `game_id`, `season`, `gei`, `lead_changes`, `max_swing_pts`, `completed`, `gei_rank` (1 = the season's most exciting completed game, ties share the best rank), `gei_pct` (the share of the season's completed games with a GEI at or below this one, so the top game is 1.0), `gei_n` (the season's completed games), then `game_excitement`'s comeback low: `winner_team_id`, `winner_low_wp` (0-1), `winner_low_period` and `winner_low_clock`. The three rank columns are null for a game that is not completed, the four winner columns for one that is not completed or ends tied. An empty input returns an empty frame with these columns.
 
 | col_name | type | description |
 |---|---|---|
