@@ -146,11 +146,12 @@ punt_distribution = pl.read_parquet(_punt_distribution_file)
 
 # --- fourth-down yards model: bundled in the package (~16 MB era one-hot model) ---
 # The era one-hot model (9 features) ships with the package under cfb/models/fd_model.ubj.
-# _load_fd_model prefers the bundled copy, so it is version-pinned by the package and any
-# older cached download is never reached (no filename versioning needed). The release
-# download stays only as a fallback for trimmed installs.
+# _load_fd_model prefers the bundled copy, so it is version-pinned by the package. The release
+# download stays only as a fallback for trimmed installs; its default cache path is keyed by the
+# release tag, so a copy cached from the retired espn_cfb_model_artifacts tag is never read.
+_FD_MODEL_TAG = "cfb_model_artifacts"
 _FD_MODEL_URL = (
-    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_model_artifacts/fd_model.ubj"
+    f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/{_FD_MODEL_TAG}/fd_model.ubj"
 )
 
 
@@ -158,6 +159,17 @@ def _cfb_model_cache_dir() -> Path:
     """Cache dir for download-on-demand CFB models (override: ``SDV_PY_CFB_MODEL_DIR``)."""
     override = os.environ.get("SDV_PY_CFB_MODEL_DIR")
     return Path(override) if override else Path.home() / ".cache" / "sportsdataverse" / "cfb_models"
+
+
+def _fd_model_cache_path() -> Path:
+    """Where the fallback looks for, and writes, ``fd_model.ubj``.
+
+    An explicit ``SDV_PY_CFB_MODEL_DIR`` is a model the user supplied, read as
+    ``<dir>/fd_model.ubj``. The default cache adds the release tag to the path.
+    """
+    if os.environ.get("SDV_PY_CFB_MODEL_DIR"):
+        return _cfb_model_cache_dir() / "fd_model.ubj"
+    return _cfb_model_cache_dir() / _FD_MODEL_TAG / "fd_model.ubj"
 
 
 def _load_booster(path: Path | str) -> Booster:
@@ -180,7 +192,7 @@ def _load_fd_model() -> Booster:
     bundled = Path(_cfb_resource_filename("sportsdataverse", f"cfb/models/{name}"))
     if bundled.exists():
         return _load_booster(bundled)
-    cached = _cfb_model_cache_dir() / name
+    cached = _fd_model_cache_path()
     if cached.exists():
         return _load_booster(cached)
     try:
@@ -201,8 +213,8 @@ def _load_fd_model() -> Booster:
     except Exception as exc:  # pragma: no cover - network dependent
         raise FileNotFoundError(
             f"Could not obtain the fourth-down model '{name}' (not bundled, cache miss, "
-            f"download from {_FD_MODEL_URL} failed: {exc}). Pre-place it under "
-            f"{_cfb_model_cache_dir()} or set SDV_PY_CFB_MODEL_DIR=<dir>."
+            f"download from {_FD_MODEL_URL} failed: {exc}). Pre-place it at "
+            f"{cached} or set SDV_PY_CFB_MODEL_DIR=<dir> holding fd_model.ubj."
         ) from exc
 
 
