@@ -37,8 +37,9 @@ if TYPE_CHECKING:  # pragma: no cover
 
 _CROSSWALK_CACHE: Dict[str, pl.DataFrame] = {}
 
-#: ESPN ids are Int64, like every ESPN id sdv-py emits (task 5.2, B-M15); NCAA ids are
-#: Int64 to match ``ncaa_{mbb,wbb}_team_ids().id``. ``conference_id`` is the SDV group id
+#: ``espn_team_id`` is Int32, the dtype of the ESPN team ids in the ``load_{mbb,wbb}_*_crosswalk`` and
+#: ``load_ncaa_{mbb,wbb}_*`` releases, so it joins those schema-equal (it joins the Int64 parser ids as it is).
+#: NCAA ids are Int64 to match ``ncaa_{mbb,wbb}_team_ids().id``. ``conference_id`` is the SDV group id
 #: (``"mbb:big-ten"``), text.
 _SCHEMA: Dict[str, pl.DataType] = {
     "season": pl.Utf8,
@@ -46,7 +47,7 @@ _SCHEMA: Dict[str, pl.DataType] = {
     "ncaa_team": pl.Utf8,
     "ncaa_conference": pl.Utf8,
     "conference_id": pl.Utf8,
-    "espn_team_id": pl.Int64,
+    "espn_team_id": pl.Int32,
     "espn_display_name": pl.Utf8,
     "espn_location": pl.Utf8,
     "espn_mascot": pl.Utf8,
@@ -103,7 +104,7 @@ def ncaa_espn_team_crosswalk(
         ``ncaa_team_id`` (Int64 -- the season-specific stats.ncaa.org id),
         ``ncaa_team`` / ``ncaa_conference`` (str), ``conference_id`` (str,
         nullable -- the SDV group id, e.g. ``"mbb:big-ten"``), ``espn_team_id``
-        (Int64, nullable -- ESPN ids are Int64 throughout sdv-py),
+        (Int32, nullable -- the dtype of the ESPN team ids in the crosswalk and NCAA releases),
         ``espn_display_name`` / ``espn_location`` / ``espn_mascot`` /
         ``espn_abbreviation`` / ``espn_conference_name`` (str, nullable),
         ``espn_conference_id`` (Int64, nullable), and ``match_method`` (str --

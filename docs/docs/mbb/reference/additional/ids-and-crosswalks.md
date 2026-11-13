@@ -636,7 +636,7 @@ a null `espn_team_id` and `match_method="unmatched"` -- never dropped.
 
 **Returns**
 
-DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `conference_id` (str, nullable -- the SDV group id, e.g. `"mbb:big-ten"`), `espn_team_id` (Int64, nullable -- ESPN ids are Int64 throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` (str, nullable), `espn_conference_id` (Int64, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"`, `"org"` (the school's ESPN id from its other seasons) or `"unmatched"`). The three conference columns and `ncaa_conference` are per season: Maryland is ACC in 2013-14 and Big Ten in 2014-15.
+DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `conference_id` (str, nullable -- the SDV group id, e.g. `"mbb:big-ten"`), `espn_team_id` (Int32, nullable -- the dtype of the ESPN team ids in the crosswalk and NCAA releases), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` (str, nullable), `espn_conference_id` (Int64, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"`, `"org"` (the school's ESPN id from its other seasons) or `"unmatched"`). The three conference columns and `ncaa_conference` are per season: Maryland is ACC in 2013-14 and Big Ten in 2014-15.
 
 | col_name | type | description |
 |---|---|---|
@@ -644,7 +644,7 @@ DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the
 | `ncaa_team_id` | Int64 | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
 | `ncaa_team` | String | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi'). |
 | `ncaa_conference` | String | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
-| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_team_id` | Int64 | ESPN team id (Int32, the dtype of the ESPN team ids in the {mbb,wbb}_crosswalk and ncaa_{mbb,wbb}_* releases) the school resolves to that season; null when match_method is 'unmatched'. |
 | `espn_display_name` | String | ESPN display name (school + mascot). |
 | `espn_location` | String | ESPN school/location only. |
 | `espn_mascot` | String | ESPN mascot/nickname. |

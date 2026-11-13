@@ -3531,7 +3531,7 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
-        |nba_player_id      |String  |
+        |nba_player_id      |Int64   |
         |nba_player_name    |String  |
         |nba_jersey_num     |String  |
         |nba_position       |String  |
@@ -3544,6 +3544,9 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |
+
+    Note:
+        nba_player_id is Int64, as NBA Stats ships player_id / person_id, so the bridge joins without a cast.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -3574,6 +3577,9 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_player_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["nba_player_id"])
     # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
     # shots) ships them as, so a join on them is schema-equal; a String key raises.
     out = _cast_ids_int32(out, ["espn_team_id", "espn_athlete_id"])
@@ -3603,14 +3609,17 @@ def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |espn_game_id      |Int32   |
         |nba_game_id       |String  |
         |nba_game_code     |String  |
-        |nba_home_team_id  |String  |
-        |nba_away_team_id  |String  |
+        |nba_home_team_id  |Int64   |
+        |nba_away_team_id  |Int64   |
         |fox_game_id       |String  |
         |fox_home_team_id  |String  |
         |fox_away_team_id  |String  |
         |yahoo_game_id     |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
+
+    Note:
+        nba_game_id stays String, the zero-padded NBA Stats game id (0022300001); the nba_*_team_id bridge ids are Int64, as NBA Stats ships team_id.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -3641,6 +3650,9 @@ def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_schedule_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["nba_home_team_id", "nba_away_team_id"])
     # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
     # shots) ships them as, so a join on them is schema-equal; a String key raises.
     out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
@@ -3669,7 +3681,7 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |espn_short_name         |String  |
         |espn_location           |String  |
         |espn_mascot             |String  |
-        |nba_team_id             |String  |
+        |nba_team_id             |Int64   |
         |nba_team_abbreviation   |String  |
         |nba_team_name           |String  |
         |nba_team_city           |String  |
@@ -3683,6 +3695,9 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_team_name         |String  |
         |match_method            |String  |
         |match_confidence        |Float64 |
+
+    Note:
+        nba_team_id is Int64, as NBA Stats ships team_id, so the bridge joins without a cast.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -3713,6 +3728,9 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_nba_team_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["nba_team_id"])
     # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
     # shots) ships them as, so a join on them is schema-equal; a String key raises.
     out = _cast_ids_int32(out, ["espn_team_id"])
