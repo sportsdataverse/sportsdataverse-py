@@ -557,3 +557,11 @@ def test_two_point_states_kick_off_to_the_seasons_touchback(monkeypatch, season,
     seen = _spy_ep(monkeypatch, m)
     m.get_2pt_probs(pl.DataFrame([_row(sd=-2, tsr=120, adj=120, period=4, season=season)]))
     assert seen and all(s.tolist() == [spot] for s in seen)
+
+
+def test_fd_model_fallback_reads_the_shared_bundle() -> None:
+    # The trimmed-install fallback must fetch the model the package bundles: cfb_model_artifacts
+    # (byte-identical to cfb/models/fd_model.ubj), not the retired espn_cfb_model_artifacts copy.
+    from sportsdataverse.cfb import cfb_fourth_down
+
+    assert "/releases/download/cfb_model_artifacts/fd_model.ubj" in cfb_fourth_down._FD_MODEL_URL

@@ -150,7 +150,7 @@ punt_distribution = pl.read_parquet(_punt_distribution_file)
 # older cached download is never reached (no filename versioning needed). The release
 # download stays only as a fallback for trimmed installs.
 _FD_MODEL_URL = (
-    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model.ubj"
+    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_model_artifacts/fd_model.ubj"
 )
 
 
@@ -172,7 +172,7 @@ def _load_fd_model() -> Booster:
 
     Resolution order: the bundled copy (``cfb/models/fd_model.ubj``, shipped with the
     package — the normal path) -> the cache dir -> download from the
-    ``espn_cfb_model_artifacts`` release (written atomically) as a trimmed-install
+    ``cfb_model_artifacts`` release (written atomically) as a trimmed-install
     fallback. Raises :class:`FileNotFoundError` when unobtainable (offline + no cache),
     so callers / tests can skip or degrade gracefully.
     """
