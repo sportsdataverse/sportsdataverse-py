@@ -84,6 +84,37 @@ def _rated(eff: pl.DataFrame, league: str, prior: pl.DataFrame | None, prior_gam
     )
 
 
+def _rate_day(
+    games: pl.DataFrame, before: pl.DataFrame, league: str, prior: pl.DataFrame | None, pg: float
+) -> pl.DataFrame:
+    """``games`` (one as-of date) with each side's rating, rank, games and raw rating, and the prediction."""
+    raw = _rated(before, league, None, 0.0)
+    blend = raw if prior is None else _rated(before, league, prior, pg)
+    assert blend.schema["team_id"] == games.schema["home_team_id"], "team_id dtype differs"
+    pred = mbb_predict_games(
+        games.select("game_id", "home_team_id", "away_team_id", "neutral_site"),
+        blend.select("team_id", "adj_o", "adj_d", "adj_em", pl.lit(None, dtype=pl.Float64).alias("adj_tempo")),
+        league=league,
+    ).select("game_id", "exp_margin", "home_win_prob")
+    out = games
+    for side in ("home", "away"):
+        out = out.join(
+            blend.select(
+                pl.col("team_id").alias(f"{side}_team_id"),
+                pl.col("adj_em").alias(f"{side}_rating"),
+                pl.col("rank").alias(f"{side}_rank"),
+                pl.col("games").alias(f"{side}_games"),
+            ),
+            on=f"{side}_team_id",
+            how="left",
+        ).join(
+            raw.select(pl.col("team_id").alias(f"{side}_team_id"), pl.col("adj_em").alias(f"{side}_rating_raw")),
+            on=f"{side}_team_id",
+            how="left",
+        )
+    return out.join(pred, on="game_id", how="left", validate="1:1")
+
+
 def college_pregame_projections(
     schedule: pl.DataFrame,
     team_box: pl.DataFrame,
@@ -145,34 +176,10 @@ def college_pregame_projections(
         )
     )
     c = get_constants(league)
-    frames = []
-    for (cutoff,), sub in games.group_by("as_of_date", maintain_order=True):
-        before = eff.filter(pl.col("date") < cutoff)
-        raw = _rated(before, league, None, 0.0)
-        blend = raw if pri is None else _rated(before, league, pri, pg)
-        assert blend.schema["team_id"] == sub.schema["home_team_id"], "team_id dtype differs"
-        pred = mbb_predict_games(
-            sub.select("game_id", "home_team_id", "away_team_id", "neutral_site"),
-            blend.select("team_id", "adj_o", "adj_d", "adj_em", pl.lit(None, dtype=pl.Float64).alias("adj_tempo")),
-            league=league,
-        ).select("game_id", "exp_margin", "home_win_prob")
-        out = sub
-        for side in ("home", "away"):
-            out = out.join(
-                blend.select(
-                    pl.col("team_id").alias(f"{side}_team_id"),
-                    pl.col("adj_em").alias(f"{side}_rating"),
-                    pl.col("rank").alias(f"{side}_rank"),
-                    pl.col("games").alias(f"{side}_games"),
-                ),
-                on=f"{side}_team_id",
-                how="left",
-            ).join(
-                raw.select(pl.col("team_id").alias(f"{side}_team_id"), pl.col("adj_em").alias(f"{side}_rating_raw")),
-                on=f"{side}_team_id",
-                how="left",
-            )
-        frames.append(out.join(pred, on="game_id", how="left", validate="1:1"))
+    frames = [
+        _rate_day(sub, eff.filter(pl.col("date") < cutoff), league, pri, pg)
+        for (cutoff,), sub in games.group_by("as_of_date", maintain_order=True)
+    ]
     rated = pl.concat(frames, how="diagonal_relaxed")
     return (
         rated.with_columns(
