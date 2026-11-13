@@ -489,6 +489,33 @@ def _is_not_available(text: str) -> bool:
     return bool(text) and len(text) < 200 and _NOT_AVAILABLE_RE.match(text) is not None
 
 
+#: The whole body (HTTP 200, 57 bytes) of every tab of a contest stats.ncaa.org has deleted, seen
+#: live 2026-11-12 on MBB 6646892, an exhibition still listed on both teams' schedules.
+_NOT_FOUND_RE = re.compile(r"^\s*Contest not found\s+Couldn't find Contest with 'id'=\d+\s*$")
+
+
+def _is_not_found(text: str) -> bool:
+    """Is *text* stats.ncaa.org's "Contest not found" answer, the whole body and nothing else?
+
+    A deleted contest, so a definite answer like :func:`_is_not_available`: every proxy gets the
+    same body, and reading it as an unsolved stub halted every MBB capture from 2026-11-01 on.
+    """
+    return bool(text) and len(text) < 200 and _NOT_FOUND_RE.match(text) is not None
+
+
+def _answer_error(url: str, text: str) -> "NotAvailableYetError | NoDataError | None":
+    """The error a 200 *text* that is a definite "nothing here" answer means, else ``None``.
+
+    Not played / not posted is :class:`NotAvailableYetError` (retry another night); a deleted
+    contest is :class:`NoDataError` (never coming). Neither rotates: no proxy answers otherwise.
+    """
+    if _is_not_available(text):
+        return NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
+    if _is_not_found(text):
+        return NoDataError(f"stats.ncaa.org has no such contest at {url}: {text.strip()!r}")
+    return None
+
+
 def _browser_response_unsolved(text: str) -> bool:
     """Did an in-page browser fetch come back UNSOLVED?
 
@@ -499,6 +526,8 @@ def _browser_response_unsolved(text: str) -> bool:
     :func:`_is_challenge` deliberately does NOT apply a size floor -- it judges
     responses from every transport, where a small body may be legitimate.
     """
+    if _is_not_available(text) or _is_not_found(text):
+        return False  # an answer, not a stub: every transport hands it to the fetch layer
     return _is_challenge(text) or not text or len(text) < _MIN_CONTENT_BYTES
 
 
@@ -973,7 +1002,7 @@ class _PlaywrightTransport:
                 if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
                     time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
-            if not _browser_response_unsolved(text) or (status == 200 and _is_not_available(text)):
+            if not _browser_response_unsolved(text):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
             # re-challenged once _abck aged out. The old code set
@@ -1233,9 +1262,9 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
-            if status == 200 and _is_not_available(text):  # an answer (not played / not posted): no rotation
+            if status == 200 and (answer := _answer_error(url, text)) is not None:  # an answer: no rotation
                 self._count_fetch()
-                raise NotAvailableYetError(f"stats.ncaa.org has nothing at {url} yet: {text.strip()!r}")
+                raise answer
             if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
                 # A real "no such page": the host answered, and no other proxy
                 # answers differently -- rotating the whole pool on it reads as a ban.
