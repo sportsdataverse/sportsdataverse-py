@@ -20,14 +20,19 @@ from __future__ import annotations
 
 from sportsdataverse._xgb import xgb_threads as _xgb_threads
 
+import hashlib
 import json
 import os
+import re
+import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
 import polars as pl
 
+from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nhl.nhl_player_impact_constants import booster_cache_dir, get_constants
 
 if TYPE_CHECKING:
@@ -37,7 +42,12 @@ __all__ = ["load_xg_models", "ensure_xg_models", "prepare_xg_features", "add_sho
 
 _PS_DEFAULT = 0.3202197
 _XG_RELEASE = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_xg_models"
-_XG_FILES = ("xg_model_5v5.json", "xg_model_st.json", "xg_model_meta.json")
+# The release's xg_model_meta.json is its manifest: ``xg_model_ps``, a ``version`` and the
+# sha256 of each model file, written by fastRhockey-nhl-data's ``nhl_data_build.xg_publish``.
+# A cached booster that no longer matches it is replaced, so a retrain ships by publishing
+# (fastRhockey's ``.xg_manifest`` / ``.xg_file`` do the same in R).
+_XG_MANIFEST = "xg_model_meta.json"
+_XG_BOOSTERS = ("xg_model_5v5.json", "xg_model_st.json")
 
 # secondary_type normalization spanning the 2010-2022 (Title Case) and 2023+ (lowercase
 # abbreviated) NHL APIs -> the canonical values the xG models were trained on.
@@ -89,43 +99,132 @@ _VALID_LAST = list(_LAST_EVENT_COL.keys())
 _UNBLOCKED = ["SHOT", "MISSED_SHOT", "GOAL"]
 
 
+def _sha256(path: Path) -> str | None:
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+def _read_manifest(raw: bytes) -> dict:
+    """Parse a release manifest; raise ``ValueError`` unless it pins both boosters."""
+    m = json.loads(raw)
+    pins = m.get("files") if isinstance(m, dict) else None
+    if not (
+        isinstance(pins, dict)
+        and "xg_model_ps" in m
+        and all(re.fullmatch(r"[0-9a-f]{64}", str(pins.get(fn, ""))) for fn in _XG_BOOSTERS)
+    ):
+        raise ValueError(
+            f"the nhl_xg_models release manifest {_XG_MANIFEST} is not in the expected format: "
+            f"it must carry xg_model_ps and a sha256 for each of {', '.join(_XG_BOOSTERS)}"
+        )
+    return m
+
+
+def _commit_set(d: Path, files: dict[str, bytes]) -> None:
+    """Write ``files`` into ``d`` as one set, in order (put the manifest last).
+
+    Every file is first written in full to its own temp file -- where a full disk or a write
+    error surfaces -- and only then moved over the cached copies, so a failed write leaves
+    the previous set intact, and a process loading at the same time never reads a partial file.
+    """
+    staged: list[tuple[str, str]] = []
+    try:
+        for fn, data in files.items():
+            fd, tmp = tempfile.mkstemp(prefix=f"{fn}-", dir=d)
+            staged.append((fn, tmp))
+            with os.fdopen(fd, "wb") as f:
+                f.write(data)
+        for fn, tmp in staged:
+            os.replace(tmp, d / fn)
+    finally:
+        for _, tmp in staged:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
+
+
 def ensure_xg_models(model_dir: str | Path | None = None) -> Path:
-    """Return a dir holding the 3 published booster files, downloading any missing ones.
+    """Return a dir holding the published boosters, checked against the release manifest.
 
     Mirrors the fastRhockey/nflverse download-on-demand + cache pattern -- the documented
     exception to "no first-use download" (the boosters are a large, already-published,
-    already-validated artifact; see Decision D1 in the design spec). An explicit
-    ``model_dir`` whose files already exist (e.g. the committed offline test fixtures)
-    never touches the network.
+    already-validated artifact; see Decision D1 in the design spec). Each call fetches
+    the release's ``xg_model_meta.json`` manifest and re-downloads any cached booster
+    whose sha256 differs from it, so a retrained release replaces an old cache once the new
+    manifest is fetched. A refresh is staged: every replacement booster is downloaded and
+    verified before any file is written, and the manifest is written last, so a refresh
+    that fails part-way leaves the previous manifest and boosters intact. Offline, the
+    cached manifest is used. An explicit ``model_dir`` that already holds both
+    boosters (e.g. the committed offline test fixtures) is used as-is and never touches
+    the network.
 
     Args:
-        model_dir: directory to check/populate; ``None`` resolves via
+        model_dir: directory of local models; ``None`` resolves the cache via
             ``booster_cache_dir()`` (env ``NHL_XG_MODEL_DIR`` override, else
-            ``~/.cache/nhl_xg_models``).
+            ``~/.cache/nhl_xg_models``). An explicit dir missing a booster is filled
+            from the release like the cache.
 
     Returns:
-        The resolved directory containing all 3 booster files.
+        The resolved directory containing ``xg_model_5v5.json``, ``xg_model_st.json``
+        and (except for local models that ship without one) ``xg_model_meta.json``.
+
+    Raises:
+        AssetFetchError: the manifest could not be fetched and no copy is cached, or a
+            downloaded booster does not match the manifest (the release may be
+            mid-update; try again shortly).
+        ValueError: neither the fetched nor the cached manifest pins both boosters.
+        requests.RequestException: a booster that is missing or stale in the cache
+            could not be downloaded (after the retries of ``download``).
+        NoDataError: a missing or stale booster is not on the release (404).
 
     Example:
         Quick start::
 
             from sportsdataverse.nhl.nhl_xg import ensure_xg_models
-            d = ensure_xg_models()  # downloads on first use, cached after
+            d = ensure_xg_models()  # downloads on first use, re-checked every load
     """
-    d = booster_cache_dir(model_dir)
-    missing = [fn for fn in _XG_FILES if not (d / fn).exists() or (d / fn).stat().st_size == 0]
-    if missing:
-        import requests
+    import requests
 
-        d.mkdir(parents=True, exist_ok=True)
-        for fn in missing:
-            r = requests.get(
-                f"{_XG_RELEASE}/{fn}",
-                timeout=60,
-                headers={"User-Agent": os.environ.get("SDV_PY_USER_AGENT", "sportsdataverse-py")},
+    if model_dir is not None:
+        local = Path(model_dir)
+        if all((local / fn).is_file() and (local / fn).stat().st_size > 0 for fn in _XG_BOOSTERS):
+            return local
+    d = booster_cache_dir(model_dir)
+    d.mkdir(parents=True, exist_ok=True)
+
+    def get(fn: str) -> bytes:
+        # cache_ttl=0: a cached manifest would hide a new release; boosters are cached here
+        r = download(
+            f"{_XG_RELEASE}/{fn}",
+            timeout=60,
+            headers={"User-Agent": os.environ.get("SDV_PY_USER_AGENT", "sportsdataverse-py")},
+            cache_ttl=0,
+        )
+        r.raise_for_status()  # download returns, rather than raises, a spent retryable status
+        return r.content
+
+    cached = d / _XG_MANIFEST
+    raw: bytes | None
+    try:
+        raw = get(_XG_MANIFEST)
+        manifest = _read_manifest(raw)
+    except (requests.RequestException, NoDataError, ValueError) as exc:
+        if not cached.is_file():
+            raise AssetFetchError(f"could not fetch the nhl_xg_models release manifest: {exc}") from exc
+        raw = None
+        manifest = _read_manifest(cached.read_bytes())  # offline: the last manifest seen
+    staged: dict[str, bytes] = {}
+    for fn in _XG_BOOSTERS:
+        pin = manifest["files"][fn]
+        if _sha256(d / fn) == pin:
+            continue
+        data = get(fn)
+        if hashlib.sha256(data).hexdigest() != pin:
+            raise AssetFetchError(
+                f"the downloaded {fn} does not match the nhl_xg_models release manifest; "
+                "the release may be mid-update, try again shortly"
             )
-            r.raise_for_status()
-            (d / fn).write_bytes(r.content)
+        staged[fn] = data
+    # Commit only a complete, verified set, the manifest last (see _commit_set).
+    _commit_set(d, staged | ({_XG_MANIFEST: raw} if raw is not None else {}))
     return d
 
 
@@ -133,9 +232,10 @@ def load_xg_models(model_dir: str | Path | None = None) -> dict:
     """Load the two published boosters (+ embedded feature names) and the penalty-shot constant.
 
     Args:
-        model_dir: ``None`` downloads the canonical ``nhl_xg_models`` release on first
-            use and caches under ``booster_cache_dir()``; pass a dir to use local models
-            (the offline test suite always passes the committed fixture dir).
+        model_dir: ``None`` uses the canonical ``nhl_xg_models`` release, cached under
+            ``booster_cache_dir()`` and checked against the release manifest on every
+            load (see ``ensure_xg_models``); pass a dir to use local models (the offline
+            test suite always passes the committed fixture dir).
 
     Returns:
         dict with keys ``m5v5``/``mst`` (``xgboost.Booster``), ``feats_5v5``/``feats_st``
@@ -321,6 +421,16 @@ def add_shot_geometry(df: pl.DataFrame, *, league: str = "nhl") -> pl.DataFrame:
     )
 
 
+def _feature_matrix(sub: pl.DataFrame, feats: list[str]) -> np.ndarray:
+    """The booster's feature matrix in ``feats`` order; a feature the frame lacks is zero."""
+    arr = np.zeros((sub.height, len(feats)), dtype=np.float32)
+    present = set(sub.columns)
+    for j, f in enumerate(feats):
+        if f in present:
+            arr[:, j] = sub[f].cast(pl.Float64).fill_null(0).to_numpy()
+    return arr
+
+
 def nhl_xg(
     pbp: pl.DataFrame,
     *,
@@ -414,14 +524,6 @@ def nhl_xg(
         out = add_shot_geometry(out, league=league)
         return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
-    def _matrix(sub: pl.DataFrame, feats: list[str]) -> np.ndarray:
-        arr = np.zeros((sub.height, len(feats)), dtype=np.float32)
-        present = set(sub.columns)
-        for j, f in enumerate(feats):
-            if f in present:
-                arr[:, j] = sub[f].cast(pl.Float64).fill_null(0).to_numpy()
-        return arr
-
     parts = []
     for sub, feats, booster in (
         (prep.filter(pl.col("strength_state") == "5v5"), models["feats_5v5"], models["m5v5"]),
@@ -429,7 +531,7 @@ def nhl_xg(
     ):
         if sub.height == 0:
             continue
-        dm = xgb.DMatrix(_matrix(sub, feats), feature_names=list(feats))
+        dm = xgb.DMatrix(_feature_matrix(sub, feats), feature_names=list(feats))
         preds = booster.predict(dm)
         parts.append(sub.select("game_id", "event_id").with_columns(xg=pl.Series(preds, dtype=pl.Float64)))
 

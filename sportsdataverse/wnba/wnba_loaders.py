@@ -38,12 +38,14 @@ __all__ = [
     "load_wnba_stats_coaches",
     "load_wnba_stats_draft",
     "load_wnba_stats_game_rosters",
+    "load_wnba_stats_metric_curves",
     "load_wnba_stats_officials",
     "load_wnba_stats_pbp",
     "load_wnba_stats_possessions",
     "load_wnba_stats_game_lineups",
     "load_wnba_stats_player_boxscores",
     "load_wnba_stats_player_game_logs",
+    "load_wnba_stats_rolling_windows",
     "load_wnba_stats_rosters",
     "load_wnba_stats_schedules",
     "load_wnba_stats_shots",
@@ -61,6 +63,7 @@ def load_wnba_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_pbp
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/pbp.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -173,6 +176,7 @@ def load_wnba_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -278,6 +282,7 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_schedules
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1997).
@@ -401,6 +406,7 @@ def load_wnba_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -508,6 +514,7 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_draft (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/draft.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2018).
@@ -590,6 +597,7 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_game_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -663,6 +671,7 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -725,6 +734,7 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1997).
@@ -789,6 +799,7 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2024).
@@ -877,6 +888,7 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_shots
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -941,6 +953,7 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/standings.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1013,6 +1026,7 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1997).
@@ -1077,6 +1091,7 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wnba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1155,6 +1170,7 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wnba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1228,6 +1244,7 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wnba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1304,6 +1321,7 @@ def load_wnba_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_wnba_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_core
+    Dataset page: https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1714,6 +1732,74 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_stats_game_rosters")
     )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wnba_stats_metric_curves(seasons, return_as_pandas: bool = False):
+    """Load wnba_stats_metric_curves (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_metric_curves
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1997).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name    |type    |
+        |:-----------|:-------|
+        |season      |Int64   |
+        |entity_type |String  |
+        |entity_id   |Int64   |
+        |entity_name |String  |
+        |team_id     |Int64   |
+        |id_source   |String  |
+        |metric      |String  |
+        |down        |Int64   |
+        |x_lo        |Float64 |
+        |x_hi        |Float64 |
+        |attempts    |Int64   |
+        |successes   |Int64   |
+        |rate        |Float64 |
+        |epa_per_att |Float64 |
+
+    Note:
+        One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters, and team_id joins their team_id.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1997.
+
+    Example:
+        Quick start::
+
+            load_wnba_stats_metric_curves(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_metric_curves/metric_curves_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wnba_stats_metric_curves: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_wnba_stats_metric_curves")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["entity_id", "team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2163,6 +2249,81 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_wnba_stats_player_game_logs")
     )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wnba_stats_rolling_windows(seasons, return_as_pandas: bool = False):
+    """Load wnba_stats_rolling_windows (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_rolling_windows
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1997).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type    |
+        |:---------------|:-------|
+        |season          |Int64   |
+        |entity_type     |String  |
+        |entity_id       |Int64   |
+        |entity_name     |String  |
+        |team_id         |Int64   |
+        |metric          |String  |
+        |window_unit     |String  |
+        |window_n        |Int64   |
+        |cur             |Float64 |
+        |prev            |Float64 |
+        |season_start    |Float64 |
+        |career_baseline |Float64 |
+        |delta_prev      |Float64 |
+        |delta_season    |Float64 |
+        |delta_career    |Float64 |
+        |delta_prev_rank |Int64   |
+        |n               |Int64   |
+        |qualified       |Boolean |
+        |last_event_date |Date    |
+        |as_of_date      |Date    |
+        |id_source       |String  |
+
+    Note:
+        One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype: entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1997.
+
+    Example:
+        Quick start::
+
+            load_wnba_stats_rolling_windows(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_rolling_windows/rolling_windows_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wnba_stats_rolling_windows: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_wnba_stats_rolling_windows")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["entity_id", "team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

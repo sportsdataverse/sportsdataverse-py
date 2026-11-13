@@ -13926,6 +13926,43 @@ load_mlb_xera:
   type: Float64
 - name: x_era
   type: Float64
+load_nba_depth_charts:
+- name: as_of_date
+  type: Date
+- name: league
+  type: String
+- name: season
+  type: Int64
+- name: season_type
+  type: Int64
+- name: team_id
+  type: Int64
+- name: team_display_name
+  type: String
+- name: team_abbreviation
+  type: String
+- name: group_id
+  type: Int64
+- name: group_name
+  type: String
+- name: position_slot
+  type: String
+- name: position_id
+  type: Int64
+- name: position_abbreviation
+  type: String
+- name: position_name
+  type: String
+- name: depth_rank
+  type: Int64
+- name: athlete_id
+  type: Int64
+- name: athlete_display_name
+  type: String
+- name: athlete_short_name
+  type: String
+- name: espn_timestamp
+  type: String
 load_nba_draft:
 - name: season
   type: Int32
@@ -15674,6 +15711,35 @@ load_nba_stats_lineups_v3:
   type: Int64
 - name: season
   type: Int64
+load_nba_stats_metric_curves:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: id_source
+  type: String
+- name: metric
+  type: String
+- name: down
+  type: Int64
+- name: x_lo
+  type: Float64
+- name: x_hi
+  type: Float64
+- name: attempts
+  type: Int64
+- name: successes
+  type: Int64
+- name: rate
+  type: Float64
+- name: epa_per_att
+  type: Float64
 load_nba_stats_officials:
 - name: official_id
   type: Int64
@@ -16594,6 +16660,49 @@ load_nba_stats_possessions_v3:
   type: String
 - name: season
   type: Int64
+load_nba_stats_rolling_windows:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: metric
+  type: String
+- name: window_unit
+  type: String
+- name: window_n
+  type: Int64
+- name: cur
+  type: Float64
+- name: prev
+  type: Float64
+- name: season_start
+  type: Float64
+- name: career_baseline
+  type: Float64
+- name: delta_prev
+  type: Float64
+- name: delta_season
+  type: Float64
+- name: delta_career
+  type: Float64
+- name: delta_prev_rank
+  type: Int64
+- name: n
+  type: Int64
+- name: qualified
+  type: Boolean
+- name: last_event_date
+  type: Date
+- name: as_of_date
+  type: Date
+- name: id_source
+  type: String
 load_nba_stats_rosters:
 - name: team_id
   type: Int64
@@ -32176,6 +32285,35 @@ load_wnba_stats_game_rosters:
   type: Int32
 - name: game_id
   type: String
+load_wnba_stats_metric_curves:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: id_source
+  type: String
+- name: metric
+  type: String
+- name: down
+  type: Int64
+- name: x_lo
+  type: Float64
+- name: x_hi
+  type: Float64
+- name: attempts
+  type: Int64
+- name: successes
+  type: Int64
+- name: rate
+  type: Float64
+- name: epa_per_att
+  type: Float64
 load_wnba_stats_officials:
 - name: official_id
   type: Int64
@@ -32475,6 +32613,49 @@ load_wnba_stats_possessions:
   type: Int64
 - name: season
   type: Int64
+load_wnba_stats_rolling_windows:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: metric
+  type: String
+- name: window_unit
+  type: String
+- name: window_n
+  type: Int64
+- name: cur
+  type: Float64
+- name: prev
+  type: Float64
+- name: season_start
+  type: Float64
+- name: career_baseline
+  type: Float64
+- name: delta_prev
+  type: Float64
+- name: delta_season
+  type: Float64
+- name: delta_career
+  type: Float64
+- name: delta_prev_rank
+  type: Int64
+- name: n
+  type: Int64
+- name: qualified
+  type: Boolean
+- name: last_event_date
+  type: Date
+- name: as_of_date
+  type: Date
+- name: id_source
+  type: String
 load_wnba_stats_rosters:
 - name: team_id
   type: Int64

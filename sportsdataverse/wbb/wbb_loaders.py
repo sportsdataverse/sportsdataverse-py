@@ -61,6 +61,7 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_pbp
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/pbp.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -176,6 +177,7 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -279,6 +281,7 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2001).
@@ -420,6 +423,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -638,6 +642,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -711,6 +716,7 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2014).
@@ -768,6 +774,7 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2010).
@@ -832,6 +839,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2026).
@@ -912,6 +920,7 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_shots
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -976,6 +985,7 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/standings.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2001).
@@ -1046,6 +1056,7 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2010).
@@ -1110,6 +1121,7 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2014).
@@ -1178,6 +1190,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2021).
@@ -1242,6 +1255,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1311,6 +1325,7 @@ def load_wbb_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).

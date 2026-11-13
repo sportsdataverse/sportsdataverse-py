@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_wbb_player_boxscore
 
-Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet`
+Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_box.md)
 ### Returns {#load_wbb_player_boxscore-returns}
 
 | col_name | type | description |
@@ -97,7 +97,7 @@ load_wbb_player_value(seasons=2025)
 
 ## load_wbb_player_season_stats
 
-Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
+Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_season_stats.md)
 ### Returns {#load_wbb_player_season_stats-returns}
 
 | col_name | type | description |
@@ -125,7 +125,7 @@ load_wbb_player_season_stats(seasons=2026)
 
 ## load_wbb_player_crosswalk
 
-Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet`
+Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_crosswalk.md)
 ### Returns {#load_wbb_player_crosswalk-returns}
 
 | col_name | type | description |
@@ -154,7 +154,7 @@ load_wbb_player_crosswalk(seasons=2026)
 
 ## load_wbb_player_core
 
-Release: [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet`
+Release: [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_core.md)
 ### Returns {#load_wbb_player_core-returns}
 
 | col_name | type | description |

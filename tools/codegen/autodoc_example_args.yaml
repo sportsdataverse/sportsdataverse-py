@@ -476,6 +476,8 @@ wbb:
   # ncaa_espn_team_crosswalk is shared with mbb and defaults to league="mbb": without this the
   # wbb schema was captured from the MEN'S table (6006 rows vs the women's 5972).
   ncaa_espn_team_crosswalk: {league: wbb}
+  ncaa_espn_schools: {league: wbb}
+  ncaa_espn_school_seasons: {league: wbb}
   ncaa_espn_player_crosswalk: {season: 2024, league: wbb}  # 5055 rows x 12 cols
   espn_wbb_game_officials: {game_id: 401724075}
   espn_wbb_game_rosters: {game_id: 401724075}

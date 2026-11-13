@@ -294,6 +294,8 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_team_crosswalk`](reference/additional/ids-and-crosswalks#mbb_team_crosswalk)
 - [`name_is_initials`](reference/additional/ids-and-crosswalks#name_is_initials)
 - [`ncaa_espn_player_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_player_crosswalk)
+- [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons)
+- [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools)
 - [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk)
 - [`ncaa_mbb_team_ids`](reference/additional/ids-and-crosswalks#ncaa_mbb_team_ids)
 - [`refresh_ncaa_team_ids`](reference/additional/ids-and-crosswalks#refresh_ncaa_team_ids)

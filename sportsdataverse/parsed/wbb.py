@@ -451,6 +451,8 @@ from sportsdataverse.wbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.wbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
 from sportsdataverse.wbb import ncaa_espn_player_crosswalk as ncaa_espn_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import ncaa_espn_school_seasons as ncaa_espn_school_seasons  # noqa: F401
+from sportsdataverse.wbb import ncaa_espn_schools as ncaa_espn_schools  # noqa: F401
 from sportsdataverse.wbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_box_scores as ncaa_wbb_box_scores  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_date_games as ncaa_wbb_date_games  # noqa: F401
@@ -1047,6 +1049,8 @@ __all__ = [
     "misspellings",
     "most_recent_wbb_season",
     "ncaa_espn_player_crosswalk",
+    "ncaa_espn_school_seasons",
+    "ncaa_espn_schools",
     "ncaa_espn_team_crosswalk",
     "ncaa_wbb_box_scores",
     "ncaa_wbb_date_games",

@@ -41966,6 +41966,25 @@ load_mlb_xera:
   x_era: ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact
     linear function of x_woba that can go negative for extreme pitchers.
   x_woba: Expected weighted on-base average, derived from batted-ball quality rather than outcomes.
+load_nba_depth_charts:
+  as_of_date: Date of the daily snapshot the row belongs to; one ESPN depth chart per team per as_of_date, so filter to one date (the latest is the current chart).
+  league: League slug of the source ESPN depth chart, always 'nba'.
+  season: ESPN season, the ENDING year (2027 = 2026-27).
+  season_type: ESPN season type at the snapshot (1 preseason, 2 regular season).
+  team_id: ESPN NBA team id of the depth chart (Int64, e.g. 1 for the Atlanta Hawks), the id the ESPN NBA schedule and box releases carry.
+  team_display_name: Full team name as ESPN displays it (e.g. 'Atlanta Hawks').
+  team_abbreviation: ESPN team abbreviation (e.g. 'ATL').
+  group_id: ESPN depth-chart group id; NBA teams publish a single group, 1.
+  group_name: Name of the ESPN depth-chart group, 'Depth Chart' for every NBA row.
+  position_slot: Lower-case position key of the slot on the chart (pg, sg, sf, pf, c).
+  position_id: ESPN position id of the slot (1 PG, 2 SG, 5 SF, 6 PF, 9 C).
+  position_abbreviation: Upper-case position abbreviation of the slot (PG, SG, SF, PF, C).
+  position_name: Full position name of the slot (e.g. 'Point Guard').
+  depth_rank: Order of the athlete within the slot, 1 = starter; the chart lists each team's whole roster.
+  athlete_id: ESPN athlete id of the listed player.
+  athlete_display_name: Player's full name as ESPN displays it.
+  athlete_short_name: Player's abbreviated name as ESPN displays it (e.g. 'O. Okongwu').
+  espn_timestamp: ESPN's last-updated time of the team's depth chart at the snapshot, ISO 8601 UTC text.
 load_nba_draft:
   college_abbreviation: Abbreviation of the drafted player's college taken from the pick's nested college block; the ESPN
     NBA draft feed omits that block entirely, so this and the other college columns are null throughout.
@@ -42922,6 +42941,21 @@ load_nba_stats_matchups_rollup:
   season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
   sfl: Shooting fouls the defender committed against this position.
   team_pts: Points scored by the opposing team while the defender guarded this position.
+load_nba_stats_metric_curves:
+  season: Season the curve covers, the ENDING year as the nba_stats assets key it (1997 = 1996-97); WNBA rows carry the calendar year.
+  entity_type: 'Aggregation level of the row: "league" (every shot), "team" or "player".'
+  entity_id: Id of the entity the row describes, Int64 - the stats team_id on team rows and the person_id on player rows; null on league rows.
+  entity_name: Display name of the player or team as the stats shots carry it; null on league rows.
+  team_id: On player rows, the stats team_id of most of the player's shots that season (Int64); null on league and team rows.
+  id_source: Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA).
+  metric: Curve name; every row is 'fg_pct_by_shot_distance'.
+  down: Not used for shots (a football axis of the shared schema); always null.
+  x_lo: Inclusive lower edge of the shot-distance bucket, in feet (edges fixed in metric_curves.BUCKET_EDGES).
+  x_hi: Exclusive upper edge of the shot-distance bucket, in feet; a shot at exactly x_hi belongs to the next bucket up.
+  attempts: Field-goal attempts in the bucket; always positive, since an empty bucket has no row.
+  successes: Made field goals in the bucket.
+  rate: successes divided by attempts (field-goal percentage), computed exactly with no smoothing.
+  epa_per_att: Not used for shots; always null.
 load_nba_stats_officials:
   season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
     = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
@@ -43224,6 +43258,28 @@ load_nba_stats_possessions_v3:
   possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
   start_order_index: order_index of the play-by-play event that starts the possession.
   start_seconds_remaining: Seconds remaining in the period when the possession started.
+load_nba_stats_rolling_windows:
+  season: Season the rows describe, the ENDING year as the nba_stats assets key it (2026 = 2025-26); WNBA rows carry the calendar year.
+  entity_type: Aggregation level of the row; every published row is 'player'.
+  entity_id: The player's stats person_id (Int64).
+  entity_name: The player's name on their latest shot through the season.
+  team_id: Stats team_id (Int64) of the player's latest shot through the season, so a player traded mid-season carries the new team.
+  metric: Rate the window averages, 'fg_pct' (field-goal attempts) or 'fg3_pct' (three-point attempts).
+  window_unit: Event the window counts, 'fga' or 'fg3a'.
+  window_n: Window size, in window_unit events.
+  cur: Mean of the player's last window_n events through the season.
+  prev: Mean of the window_n events immediately before cur's window; null unless a full window of earlier history exists.
+  season_start: Mean of the window_n events immediately before the season started (form entering the season).
+  career_baseline: Mean of every event before cur's window, earlier events in the same season included; null unless a full window of history precedes it.
+  delta_prev: cur minus prev.
+  delta_season: cur minus season_start.
+  delta_career: cur minus career_baseline.
+  delta_prev_rank: Rank of delta_prev among qualified rows of the same metric and window (1 = biggest riser, ties share the lowest rank); null unless qualified and prev exists.
+  n: Events in cur's window; below window_n for a short career.
+  qualified: True when n equals window_n (the window is full); filter on it before building a hottest-players list.
+  last_event_date: Date of the player's latest event in the window.
+  as_of_date: Date of the latest event in the season's shots, the cutoff every row is computed through.
+  id_source: Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA).
 load_nba_stats_rosters:
   exp: Years of NBA playing experience entering the season ('R' = rookie).
   how_acquired: How the team acquired the player (e.g. draft, trade, free agency).
@@ -50001,6 +50057,21 @@ load_wnba_stats_game_lineups:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wnba_stats_game_rosters:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_wnba_stats_metric_curves:
+  season: Season the curve covers, the ENDING year as the nba_stats assets key it (1997 = 1996-97); WNBA rows carry the calendar year.
+  entity_type: 'Aggregation level of the row: "league" (every shot), "team" or "player".'
+  entity_id: Id of the entity the row describes, Int64 - the stats team_id on team rows and the person_id on player rows; null on league rows.
+  entity_name: Display name of the player or team as the stats shots carry it; null on league rows.
+  team_id: On player rows, the stats team_id of most of the player's shots that season (Int64); null on league and team rows.
+  id_source: Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA).
+  metric: Curve name; every row is 'fg_pct_by_shot_distance'.
+  down: Not used for shots (a football axis of the shared schema); always null.
+  x_lo: Inclusive lower edge of the shot-distance bucket, in feet (edges fixed in metric_curves.BUCKET_EDGES).
+  x_hi: Exclusive upper edge of the shot-distance bucket, in feet; a shot at exactly x_hi belongs to the next bucket up.
+  attempts: Field-goal attempts in the bucket; always positive, since an empty bucket has no row.
+  successes: Made field goals in the bucket.
+  rate: successes divided by attempts (field-goal percentage), computed exactly with no smoothing.
+  epa_per_att: Not used for shots; always null.
 load_wnba_stats_officials:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wnba_stats_pbp:
@@ -50067,6 +50138,28 @@ load_wnba_stats_possessions:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   start_order_index: order_index of the first event in the possession; joins to the wnba_stats_pbp table.
   start_seconds_remaining: Seconds remaining in the period when the possession began.
+load_wnba_stats_rolling_windows:
+  season: Season the rows describe, the ENDING year as the nba_stats assets key it (2026 = 2025-26); WNBA rows carry the calendar year.
+  entity_type: Aggregation level of the row; every published row is 'player'.
+  entity_id: The player's stats person_id (Int64).
+  entity_name: The player's name on their latest shot through the season.
+  team_id: Stats team_id (Int64) of the player's latest shot through the season, so a player traded mid-season carries the new team.
+  metric: Rate the window averages, 'fg_pct' (field-goal attempts) or 'fg3_pct' (three-point attempts).
+  window_unit: Event the window counts, 'fga' or 'fg3a'.
+  window_n: Window size, in window_unit events.
+  cur: Mean of the player's last window_n events through the season.
+  prev: Mean of the window_n events immediately before cur's window; null unless a full window of earlier history exists.
+  season_start: Mean of the window_n events immediately before the season started (form entering the season).
+  career_baseline: Mean of every event before cur's window, earlier events in the same season included; null unless a full window of history precedes it.
+  delta_prev: cur minus prev.
+  delta_season: cur minus season_start.
+  delta_career: cur minus career_baseline.
+  delta_prev_rank: Rank of delta_prev among qualified rows of the same metric and window (1 = biggest riser, ties share the lowest rank); null unless qualified and prev exists.
+  n: Events in cur's window; below window_n for a short career.
+  qualified: True when n equals window_n (the window is full); filter on it before building a hottest-players list.
+  last_event_date: Date of the player's latest event in the window.
+  as_of_date: Date of the latest event in the season's shots, the cutoff every row is computed through.
+  id_source: Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA).
 load_wnba_stats_rosters:
   exp: Years of WNBA playing experience entering the season ('R' = rookie).
   how_acquired: How the team acquired the player (draft, trade, free agency).
@@ -50981,6 +51074,17 @@ ncaa_espn_player_crosswalk:
     ESPN box-score rows for the team), "ambiguous" (two or more eligible candidates: a shared tier key, or more than one
     Jaro-Winkler score at or above 0.92 even when the scores differ; or one athlete claimed by two players), "no_candidate"
     (no ESPN athlete close enough). Null when matched.'
+ncaa_espn_school_seasons:
+  ncaa_org_id: stats.ncaa.org school (org) id (Int64), stable across seasons; joins ncaa_espn_schools.
+  sport: League of the row, 'mbb' or 'wbb'; the function keeps only the requested league's rows.
+  season: Season label as stats.ncaa.org writes it, 'YYYY-YY' (e.g. '2024-25').
+  ncaa_team_id: That season's stats.ncaa.org team id (Int64); stats.ncaa.org issues a new one every season.
+  espn_team_id: ESPN team id (Int32) of the school; null when the school has no ESPN team.
+ncaa_espn_schools:
+  ncaa_org_id: stats.ncaa.org school (org) id (Int64), one per school and stable across seasons.
+  ncaa_team: School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.').
+  espn_team_id: ESPN team id (Int32) the school maps to; null when the school has no ESPN team.
+  espn_display_name: The ESPN team's display name (e.g. 'Alabama Crimson Tide'); null when unmapped.
 ncaa_espn_team_crosswalk:
   conference_id: SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the
     {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and

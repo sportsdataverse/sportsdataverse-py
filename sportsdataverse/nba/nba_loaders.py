@@ -31,12 +31,14 @@ __all__ = [
     "load_nba_team_season_stats",
     "load_nba_draft",
     "load_nba_rosters",
+    "load_nba_depth_charts",
     "load_nba_stats_schedules",
     "load_nba_stats_coaches",
     "load_nba_stats_draft",
     "load_nba_stats_game_rosters",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",
+    "load_nba_stats_metric_curves",
     "load_nba_stats_officials",
     "load_nba_stats_pbp",
     "load_nba_stats_possessions",
@@ -49,6 +51,7 @@ __all__ = [
     "load_nba_stats_team_game_logs",
     "load_nba_stats_player_season_stats",
     "load_nba_stats_possessions_v3",
+    "load_nba_stats_rolling_windows",
     "load_nba_stats_rosters",
     "load_nba_stats_shots",
     "load_nba_stats_standings",
@@ -1064,6 +1067,75 @@ def load_nba_rosters(seasons, return_as_pandas: bool = False):
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+def load_nba_depth_charts(seasons, return_as_pandas: bool = False):
+    """Load espn_nba_depthcharts (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_depthcharts
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2027).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type   |
+        |:---------------------|:------|
+        |as_of_date            |Date   |
+        |league                |String |
+        |season                |Int64  |
+        |season_type           |Int64  |
+        |team_id               |Int64  |
+        |team_display_name     |String |
+        |team_abbreviation     |String |
+        |group_id              |Int64  |
+        |group_name            |String |
+        |position_slot         |String |
+        |position_id           |Int64  |
+        |position_abbreviation |String |
+        |position_name         |String |
+        |depth_rank            |Int64  |
+        |athlete_id            |Int64  |
+        |athlete_display_name  |String |
+        |athlete_short_name    |String |
+        |espn_timestamp        |String |
+
+    Note:
+        ESPN team depth charts, snapshotted daily: one row per (as_of_date, team, position slot, depth rank), so filter to one as_of_date (the latest is the current chart) before counting players. The release starts with the 2026-27 season (season 2027), first snapshot 2026-09-08.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2027.
+
+    Example:
+        Quick start::
+
+            load_nba_depth_charts(seasons=2027)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2027:
+            raise SeasonNotFoundError("season cannot be less than 2027")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_depthcharts/depthcharts_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_depth_charts: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_nba_depth_charts")
+    )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
 def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
     """Load nba_stats_schedules (sportsdataverse-data release).
 
@@ -1670,6 +1742,87 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
     # is applied here. The START -> END year translation lives in the target's
     # own asset-path template ({season + N}), not at this boundary.
     return load_nba_stats_game_lineups(seasons, return_as_pandas=return_as_pandas)
+
+
+def load_nba_stats_metric_curves(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_metric_curves (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_metric_curves
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_metric_curves(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
+
+        |col_name    |type    |
+        |:-----------|:-------|
+        |season      |Int64   |
+        |entity_type |String  |
+        |entity_id   |Int64   |
+        |entity_name |String  |
+        |team_id     |Int64   |
+        |id_source   |String  |
+        |metric      |String  |
+        |down        |Int64   |
+        |x_lo        |Float64 |
+        |x_hi        |Float64 |
+        |attempts    |Int64   |
+        |successes   |Int64   |
+        |rate        |Float64 |
+        |epa_per_att |Float64 |
+
+    Note:
+        One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters, and team_id joins their team_id.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1996.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_metric_curves(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_metric_curves/metric_curves_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_metric_curves: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_nba_stats_metric_curves")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["entity_id", "team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
 def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
@@ -2954,6 +3107,94 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
     # is applied here. The START -> END year translation lives in the target's
     # own asset-path template ({season + N}), not at this boundary.
     return load_nba_stats_possessions(seasons, return_as_pandas=return_as_pandas)
+
+
+def load_nba_stats_rolling_windows(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_rolling_windows (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rolling_windows
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_rolling_windows(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
+
+        |col_name        |type    |
+        |:---------------|:-------|
+        |season          |Int64   |
+        |entity_type     |String  |
+        |entity_id       |Int64   |
+        |entity_name     |String  |
+        |team_id         |Int64   |
+        |metric          |String  |
+        |window_unit     |String  |
+        |window_n        |Int64   |
+        |cur             |Float64 |
+        |prev            |Float64 |
+        |season_start    |Float64 |
+        |career_baseline |Float64 |
+        |delta_prev      |Float64 |
+        |delta_season    |Float64 |
+        |delta_career    |Float64 |
+        |delta_prev_rank |Int64   |
+        |n               |Int64   |
+        |qualified       |Boolean |
+        |last_event_date |Date    |
+        |as_of_date      |Date    |
+        |id_source       |String  |
+
+    Note:
+        One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype: entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1996.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_rolling_windows(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rolling_windows/rolling_windows_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_rolling_windows: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_nba_stats_rolling_windows")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["entity_id", "team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
 def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):

@@ -75,9 +75,16 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_wbb_player_boxscore](loaders/player.md#load_wbb_player_boxscore) | Release: espn_womens_college_basketball_player_boxscores · asset … |
 | [load_wbb_player_value](loaders/player.md#load_wbb_player_value) | Release: wbb_player_value · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_player_value/wbb_player_value_{season}.parquet` |
 | [load_wbb_player_season_stats](loaders/player.md#load_wbb_player_season_stats) | Release: espn_womens_college_basketball_player_season_stats · asset … |
-| [load_wbb_player_crosswalk](loaders/player.md#load_wbb_player_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet` |
+| [load_wbb_player_crosswalk](loaders/player.md#load_wbb_player_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet` … |
 | [load_wbb_player_core](loaders/player.md#load_wbb_player_core) | Release: espn_womens_college_basketball_player_core · asset … |
 | [load_wbb_player_aliases](loaders/player.md#load_wbb_player_aliases) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_player_aliases.parquet` |
+
+## Schedule
+
+| Function | Summary |
+|---|---|
+| [load_wbb_schedule](loaders/schedule.md#load_wbb_schedule) | Release: espn_womens_college_basketball_schedules · asset … |
+| [load_wbb_schedule_crosswalk](loaders/schedule.md#load_wbb_schedule_crosswalk) | Release: wbb_crosswalk · asset … |
 
 ## Team
 
@@ -85,7 +92,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 |---|---|
 | [load_wbb_team_boxscore](loaders/team.md#load_wbb_team_boxscore) | Release: espn_womens_college_basketball_team_boxscores · asset … |
 | [load_wbb_team_season_stats](loaders/team.md#load_wbb_team_season_stats) | Release: espn_womens_college_basketball_team_season_stats · asset … |
-| [load_wbb_team_crosswalk](loaders/team.md#load_wbb_team_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet` |
+| [load_wbb_team_crosswalk](loaders/team.md#load_wbb_team_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet` · … |
 | [load_wbb_team_group_seasons](loaders/team.md#load_wbb_team_group_seasons) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_group_seasons_{season}.parquet` |
 | [load_wbb_team_aliases](loaders/team.md#load_wbb_team_aliases) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_aliases.parquet` |
 
@@ -94,14 +101,12 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | Function | Summary |
 |---|---|
 | [load_wbb_pbp](loaders/other.md#load_wbb_pbp) | Release: espn_womens_college_basketball_pbp · asset … |
-| [load_wbb_schedule](loaders/other.md#load_wbb_schedule) | Release: espn_womens_college_basketball_schedules · asset … |
 | [load_wbb_ratings](loaders/other.md#load_wbb_ratings) | Release: wbb_ratings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet` |
 | [load_wbb_game_rosters](loaders/other.md#load_wbb_game_rosters) | Release: espn_womens_college_basketball_game_rosters · asset … |
 | [load_wbb_officials](loaders/other.md#load_wbb_officials) | Release: espn_womens_college_basketball_officials · asset … |
 | [load_wbb_rosters](loaders/other.md#load_wbb_rosters) | Release: espn_womens_college_basketball_rosters · asset … |
 | [load_wbb_shots](loaders/other.md#load_wbb_shots) | Release: espn_womens_college_basketball_shots · asset … |
 | [load_wbb_standings](loaders/other.md#load_wbb_standings) | Release: espn_womens_college_basketball_standings · asset … |
-| [load_wbb_schedule_crosswalk](loaders/other.md#load_wbb_schedule_crosswalk) | Release: wbb_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet` |
 | [load_wbb_groups](loaders/other.md#load_wbb_groups) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_groups.parquet` |
 | [load_wbb_group_seasons](loaders/other.md#load_wbb_group_seasons) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_group_seasons.parquet` |
 | [load_wbb_group_aliases](loaders/other.md#load_wbb_group_aliases) | Release: wbb_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_group_aliases.parquet` |

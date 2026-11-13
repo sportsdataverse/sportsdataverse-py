@@ -1,0 +1,15 @@
+schema: ncaa_espn_schools
+kind: dataframe
+columns:
+- name: ncaa_org_id
+  type: integer
+  description: ''
+- name: ncaa_team
+  type: character
+  description: ''
+- name: espn_team_id
+  type: Int32
+  description: ''
+- name: espn_display_name
+  type: character
+  description: ''

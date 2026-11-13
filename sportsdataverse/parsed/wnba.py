@@ -223,12 +223,14 @@ from sportsdataverse.wnba import load_wnba_stats_game_lineups as load_wnba_stats
 from sportsdataverse.wnba import load_wnba_stats_game_rosters as load_wnba_stats_game_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_leaguedash as load_wnba_stats_leaguedash  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_lineups as load_wnba_stats_lineups  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_metric_curves as load_wnba_stats_metric_curves  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_officials as load_wnba_stats_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_pbp as load_wnba_stats_pbp  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_boxscores as load_wnba_stats_player_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_game_logs as load_wnba_stats_player_game_logs  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_season_stats as load_wnba_stats_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_possessions as load_wnba_stats_possessions  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_rolling_windows as load_wnba_stats_rolling_windows  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_rosters as load_wnba_stats_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_schedules as load_wnba_stats_schedules  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_shots as load_wnba_stats_shots  # noqa: F401
@@ -523,12 +525,14 @@ __all__ = [
     "load_wnba_stats_game_rosters",
     "load_wnba_stats_leaguedash",
     "load_wnba_stats_lineups",
+    "load_wnba_stats_metric_curves",
     "load_wnba_stats_officials",
     "load_wnba_stats_pbp",
     "load_wnba_stats_player_boxscores",
     "load_wnba_stats_player_game_logs",
     "load_wnba_stats_player_season_stats",
     "load_wnba_stats_possessions",
+    "load_wnba_stats_rolling_windows",
     "load_wnba_stats_rosters",
     "load_wnba_stats_schedules",
     "load_wnba_stats_shots",
