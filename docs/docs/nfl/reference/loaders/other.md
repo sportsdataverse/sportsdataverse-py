@@ -248,6 +248,10 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `series` | Int32 | Starts at 1, each new first down increments, numbers shared across both teams NA: kickoffs, extra point/two point conversion attempts, non-plays, no posteam |
 | `series_result` | String | Possible values: First down, Touchdown, Opp touchdown, Field goal, Missed field goal, Safety, Turnover, Punt, Turnover on downs, QB kneel, End of half |
 | `series_success` | Int32 | 1: scored touchdown, gained enough yards for first down. |
+| `passer` | String | Name of the passer as nflfastR clean_pbp derives it (scrambles included) -- parsed from desc, then the name its id carries most often; on a 1999-2005 charted scramble the scrambling QB (nflfastR |
+| `passer_id` | String | GSIS id of the passer as nflfastR clean_pbp derives it -- the most frequent passer_player_id of that name within the possession team and season. |
+| `rusher` | String | Name of the rusher as nflfastR clean_pbp derives it (no scrambles) -- parsed from desc, null when the play has a passer. |
+| `rusher_id` | String | GSIS id of the rusher as nflfastR clean_pbp derives it -- the most frequent rusher_player_id of that name within the possession team and season; on an aborted snap, the player charged with the fumble. |
 | `receiver` | String | Name of the targeted receiver as nflfastR clean_pbp derives it -- parsed from desc, then the name the id carries most often; also set on 2003-2008 incompletions, whose NFL.com stats name no target. Null when no pass names one. |
 | `receiver_id` | String | GSIS id of the targeted receiver as nflfastR clean_pbp derives it -- the most frequent receiver_player_id of that name within the possession team and season, so it is filled where receiver_player_id is null. |
 | `ep` | Float64 | Using the scoring event probabilities, the estimated expected points with respect to the possession team for the given play. |
