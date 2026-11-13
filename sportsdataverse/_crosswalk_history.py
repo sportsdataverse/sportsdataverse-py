@@ -583,6 +583,42 @@ def _cbs_envelope(payload: Any, key: str) -> bool:
     return bool(value) and not (payload.get("errors") and not value)
 
 
+def _fetch_one(
+    store: Store,
+    pacer: Pacer,
+    label: str,
+    fn: Callable[[], Any],
+    where: Tuple[str, int, str],
+    run: Dict[str, Any],
+) -> Tuple[str, Any]:
+    """One per-game fetch, with its failure strikes; ``run`` is this run's state, updated in place.
+
+    A first failure is a strike in ``_failed.tsv``. A failure of a key struck on an earlier
+    run is missing once the host has answered a game in this run (``run["host_up"]``); until
+    then it waits in ``run["repeat"]``, so a host outage marks nothing missing.
+    """
+    endpoint, season, key = where
+    failed_before = key in store.failed(endpoint, season)
+    try:
+        status, payload = pacer.call(label, fn, counts=not failed_before)
+    except HarvestBlocked:
+        if pacer.tripped:  # the failure that hit the stop is this game's first strike too
+            store.strike(endpoint, season, key, "fetch failed")
+        raise
+    if status == "fail":
+        if not failed_before:
+            store.strike(endpoint, season, key, "fetch failed")
+        elif run["host_up"]:
+            store.miss(endpoint, season, key, "fetch failed twice")
+        else:
+            run["repeat"].append((endpoint, key))
+    elif not run["host_up"]:
+        run["host_up"] = True
+        for ep, k in run["repeat"]:
+            store.miss(ep, season, k, "fetch failed twice")
+    return status, payload
+
+
 def _fetch_games(
     store: Store,
     pacer: Pacer,
@@ -606,8 +642,7 @@ def _fetch_games(
         if season >= _CBS_PLAYS_FLOOR:
             jobs += [("game_scoring_plays", g) for g in games if g.get("enhanced")]
     fetched = 0
-    host_up = False  # set once the host answers a game in this run
-    repeat: List[Tuple[str, str]] = []  # failed again before host_up: missing once the host answers
+    run: Dict[str, Any] = {"host_up": False, "repeat": []}
     for endpoint, g in jobs:
         if not g.get("final"):
             continue
@@ -619,31 +654,17 @@ def _fetch_games(
         if limit is not None and fetched >= limit:
             break
         fetched += 1
-        failed_before = key in store.failed(endpoint, season)
-        try:
-            status, payload = pacer.call(
-                f"{provider} {league} {endpoint} {gid}",
-                _getter(provider, league, endpoint, gid),
-                counts=not failed_before,
-            )
-        except HarvestBlocked:
-            if pacer.tripped:  # the failure that hit the stop is this game's first strike too
-                store.strike(endpoint, season, key, "fetch failed")
-            raise
+        status, payload = _fetch_one(
+            store,
+            pacer,
+            f"{provider} {league} {endpoint} {gid}",
+            _getter(provider, league, endpoint, gid),
+            (endpoint, season, key),
+            run,
+        )
         if status == "fail":
             tally["failed"] += 1
-            if not failed_before:
-                store.strike(endpoint, season, key, "fetch failed")
-            elif host_up:
-                store.miss(endpoint, season, key, "fetch failed twice")
-            else:
-                repeat.append((endpoint, key))
             continue
-        if not host_up:
-            host_up = True
-            for ep, k in repeat:
-                store.miss(ep, season, k, "fetch failed twice")
-            repeat.clear()
         reason = None if status == "ok" else "404"
         if reason is None:
             reason = _payload_problem(provider, league, endpoint, payload, gid, season, window)
