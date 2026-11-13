@@ -63,7 +63,7 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_pbp
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -137,8 +137,11 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |pregame_home_prob              |Float64                                                |
         |home_win_prob                  |Float64                                                |
 
+    Note:
+        Published seasons: every season from the floor except 2004 and 2005, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -147,8 +150,8 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_pbp/play_by_play_{season}.parquet"
         )
@@ -171,7 +174,7 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -237,7 +240,7 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |active                            |Boolean                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -246,8 +249,8 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet"
         )
@@ -407,7 +410,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -477,7 +480,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |lead_percentage                   |String                                                 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -486,8 +489,8 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet"
         )
@@ -763,7 +766,7 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -789,7 +792,7 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -798,8 +801,8 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -925,6 +928,9 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         |official_position     |String |
         |official_position_id  |Int32  |
         |official_order        |Int32  |
+
+    Note:
+        Published seasons: every season from the floor except 2010, which the release has no asset for; a request for one is skipped with a warning.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2003.

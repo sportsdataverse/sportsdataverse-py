@@ -98,11 +98,6 @@ load_wbb_player_value(seasons=2025)
 ## load_wbb_player_season_stats
 
 Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wbb_player_season_stats-returns}
 
 | col_name | type | description |

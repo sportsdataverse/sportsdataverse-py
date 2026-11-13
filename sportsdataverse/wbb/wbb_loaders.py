@@ -63,7 +63,7 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_pbp
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -145,7 +145,7 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
         |home_win_prob                   |Float64                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -154,8 +154,8 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_pbp/play_by_play_{season}.parquet"
         )
@@ -178,7 +178,7 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -244,7 +244,7 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -253,8 +253,8 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet"
         )
@@ -422,7 +422,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -491,7 +491,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |lead_percentage                   |String                                                 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -500,8 +500,8 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet"
         )
@@ -528,7 +528,7 @@ def load_wbb_ratings(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings
 
     Args:
-        seasons: an int or iterable of seasons (>= 2008).
+        seasons: an int or iterable of seasons (>= 2009).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -550,7 +550,7 @@ def load_wbb_ratings(seasons, return_as_pandas: bool = False):
         |adj_em_z  |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2008.
+        SeasonNotFoundError: if a requested season is below 2009.
 
     Example:
         Quick start::
@@ -559,8 +559,8 @@ def load_wbb_ratings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2008:
-            raise SeasonNotFoundError("season cannot be less than 2008")
+        if int(season) < 2009:
+            raise SeasonNotFoundError("season cannot be less than 2009")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet"
         )
@@ -734,9 +734,6 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
         |position_name         |String |
         |position_display_name |String |
 
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-
     Raises:
         SeasonNotFoundError: if a requested season is below 2014.
 
@@ -773,7 +770,7 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats
 
     Args:
-        seasons: an int or iterable of seasons (>= 2006).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -799,11 +796,8 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |display_value                 |String  |
         |value                         |Float64 |
 
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-
     Raises:
-        SeasonNotFoundError: if a requested season is below 2006.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -812,8 +806,8 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2006:
-            raise SeasonNotFoundError("season cannot be less than 2006")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -984,7 +978,7 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings
 
     Args:
-        seasons: an int or iterable of seasons (>= 2003).
+        seasons: an int or iterable of seasons (>= 2001).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1018,11 +1012,8 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
-    Note:
-        Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-
     Raises:
-        SeasonNotFoundError: if a requested season is below 2003.
+        SeasonNotFoundError: if a requested season is below 2001.
 
     Example:
         Quick start::
@@ -1031,8 +1022,8 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2003:
-            raise SeasonNotFoundError("season cannot be less than 2003")
+        if int(season) < 2001:
+            raise SeasonNotFoundError("season cannot be less than 2001")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet"
         )
@@ -1082,9 +1073,6 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description        |String  |
         |display_value           |String  |
         |value                   |Float64 |
-
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2010.

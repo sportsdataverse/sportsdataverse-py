@@ -260,11 +260,6 @@ load_wnba_game_rosters(seasons=2024)
 ## load_wnba_officials
 
 Release: [espn_wnba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wnba_officials-returns}
 
 | col_name | type | description |
@@ -368,11 +363,6 @@ load_wnba_shots(seasons=2024)
 ## load_wnba_standings
 
 Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wnba_standings-returns}
 
 | col_name | type | description |
