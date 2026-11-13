@@ -144,7 +144,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
 | `kp_player_id` | String | KenPom player id (string), matched by hoopR-mbb-data on the normalized name within the ESPN team (a repeated name broken by jersey), then on last name plus jersey. Null for players KenPom does not list, which includes every ESPN roster row without minutes, and for every row when the build ran without the private KenPom capture. Added by the data repo, so the live player-crosswalk builder does not emit it. |
-| `ncaa_player_id` | String | stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_mbb_* releases), from the ncaa rows of load_mbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when no NCAA id matches or the match is ambiguous, and on every row before 2009-10 (season 2010). |
+| `ncaa_player_id` | String | stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_mbb_* releases), from the ncaa rows of load_mbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
