@@ -172,7 +172,7 @@ class Store:
     def __init__(self, root: Path, provider: str, league: str):
         self.base = Path(root) / provider / league
         self._missing: Dict[Tuple[str, int], Dict[str, str]] = {}
-        self._failed: Dict[Tuple[str, int], Dict[str, int]] = {}
+        self._failed: dict[tuple[str, int], dict[str, int]] = {}
 
     def _dir(self, endpoint: str, season: int) -> Path:
         return self.base / endpoint / str(season)
@@ -194,12 +194,12 @@ class Store:
             self._missing[cache_key] = out
         return self._missing[cache_key]
 
-    def failed(self, endpoint: str, season: int) -> Dict[str, int]:
+    def failed(self, endpoint: str, season: int) -> dict[str, int]:
         """``key -> number of earlier runs`` its per-game fetch failed on."""
         cache_key = (endpoint, int(season))
         if cache_key not in self._failed:
             f = self._dir(endpoint, season) / "_failed.tsv"
-            counts: Dict[str, int] = {}
+            counts: dict[str, int] = {}
             for ln in f.read_text().splitlines() if f.exists() else []:
                 k = ln.partition("\t")[0]
                 if k:
