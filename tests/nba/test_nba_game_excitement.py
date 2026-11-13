@@ -244,3 +244,41 @@ def test_empty_and_bad_input(monkeypatch: pytest.MonkeyPatch) -> None:
         gp.game_excitement(one, league="mbb")
     with pytest.raises(pl.exceptions.ColumnNotFoundError, match="season"):
         gp.season_game_excitement(one.drop("season"), league="mbb")
+
+
+#: Real ``load_<league>_schedule`` rows (pro_exhibitions_schedule.parquet): every NBA 2002-26 and WNBA
+#: 2006-25 All-Star / Rising Stars game, plus real games from the same calendar (finals, Cup finals,
+#: play-ins, the Mexico City game, the 2025 WNBA capture week).
+EXHIBITION_SCHEDULE = ESPN / "basketball_pbp" / "pro_exhibitions_schedule.parquet"
+WNBA_2025 = ["wnba_401781604.json.gz", "wnba_401736255.json.gz", "wnba_401736256.json.gz"]
+
+
+def test_exhibitions_on_the_real_pro_schedules() -> None:
+    sched = pl.read_parquet(EXHIBITION_SCHEDULE)
+    ids = set(gp._exhibition_ids(sched))
+    by_lg = {lg: set(sched.filter(pl.col("league") == lg)["game_id"]) & ids for lg in ("nba", "wnba")}
+    # 24 typed ALLSTAR, the 2013-17 and 2019 All-Star games typed STD, and the 2018-20 Rising Stars
+    assert len(by_lg["nba"]) == 33 and len(by_lg["wnba"]) == 16
+    # the STD-typed ones are caught by their headline
+    assert {400436572, 400517994, 400606285, 400829482, 400935635, 401098037} <= by_lg["nba"]
+    assert {401018033, 401098038, 401197814} <= by_lg["nba"]  # Rising Stars
+    assert 401781604 in by_lg["wnba"]  # 2025 TEAM CLARK vs TEAM COLLIER
+    # nothing real: every flagged game is played by non-franchise sides
+    names = sched.filter(pl.col("game_id").is_in(ids)).select("home_display_name", "away_display_name")
+    assert names.unpivot()["value"].str.contains(r"(?i)all-stars|^team |^east$|^west$|^usa$|^world$").all()
+    assert not sched.filter(pl.col("type_abbreviation").is_in(["CC", "FINAL"]))["game_id"].is_in(ids).any()
+
+
+def test_season_ranks_leave_out_the_all_star_game(monkeypatch: pytest.MonkeyPatch) -> None:
+    pbp = pl.concat([_frames(monkeypatch, "wnba", n)[1] for n in WNBA_2025], how="diagonal_relaxed")
+    sched = pl.read_parquet(EXHIBITION_SCHEDULE).filter(pl.col("league") == "wnba").drop("league")
+    out = gp.season_game_excitement(pbp, league="wnba", schedule=sched)
+    assert out["game_id"].sort().to_list() == [401736255, 401736256]
+    assert out["gei_rank"].sort().to_list() == [1, 2] and out["gei_n"].to_list() == [2, 2]
+    # without the schedule's markers the All-Star game is scored and ranked like any other
+    bare = gp.season_game_excitement(pbp, league="wnba", schedule=sched.select("game_id", "neutral_site"))
+    assert bare.height == 3 and bare["gei_n"].to_list() == [3, 3, 3]
+    # college ignores the markers (its schedules have no exhibitions)
+    _, one, _, _ = _frames(monkeypatch, "mbb", "mbb_401812161.json.gz")
+    marked = pl.DataFrame({"game_id": [401812161], "type_abbreviation": ["ALLSTAR"]})
+    assert gp.season_game_excitement(one, league="mbb", schedule=marked).height == 1
