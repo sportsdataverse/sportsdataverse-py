@@ -692,40 +692,40 @@ Release: [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsd
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | String | Unique season identifier. |
-| `player_id` | Int64 | Unique player identifier. |
-| `player_name` | String | Player name. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | String | Unique game identifier. |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `matchup` | String | Matchup. |
-| `wl` | String | Wl. |
+| `season_id` | String | stats.nba.com composite season id: season-type digit + start year ('22023' = 2023-24 regular season). |
+| `player_id` | Int64 | stats.nba.com person id of the player. |
+| `player_name` | String | Player display name, e.g. 'LeBron James'. |
+| `team_id` | Int64 | stats.nba.com id of the player's team. |
+| `team_abbreviation` | String | Three-letter team abbreviation. |
+| `team_name` | String | Team name as stats.nba.com ships it (nickname or full name, by season). |
+| `game_id` | String | stats.nba.com game id (10-digit string, leading zeros kept). |
+| `game_date` | String | Game date, 'YYYY-MM-DD'. |
+| `matchup` | String | Matchup from the team's side: 'BOS vs. NYK' at home, 'BOS @ NYK' away. |
+| `wl` | String | Game result for the player's team: 'W' or 'L'. |
 | `min` | Int64 | Minutes played. |
 | `fgm` | Int64 | Field goals made. |
-| `fga` | Int64 | Field goal attempts. |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fga` | Int64 | Field goals attempted. |
+| `fg_pct` | Float64 | Field-goal percentage (0-1). |
 | `fg3m` | Int64 | Three-point field goals made. |
-| `fg3a` | Int64 | Three-point field goal attempts. |
-| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `fg3a` | Int64 | Three-point field goals attempted. |
+| `fg3_pct` | Float64 | Three-point percentage (0-1). |
 | `ftm` | Int64 | Free throws made. |
-| `fta` | Int64 | Free throw attempts. |
-| `ft_pct` | Float64 | Free throw percentage (0-1). |
-| `oreb` | Int64 | Offensive rebounds. |
-| `dreb` | Int64 | Defensive rebounds. |
-| `reb` | Int64 | Rebounds per game. |
-| `ast` | Int64 | Assists. |
-| `stl` | Int64 | Steals. |
-| `blk` | Int64 | Blocks. |
-| `tov` | Int64 | Turnovers. |
-| `pf` | Int64 | Personal fouls. |
-| `pts` | Int64 | Points scored. |
-| `plus_minus` | Int64 | Plus/minus point differential while on court. |
-| `fantasy_pts` | Float64 |  |
-| `video_available` | Int64 | Video available. |
-| `season` | Int32 | Season year. |
-| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `fta` | Int64 | Free throws attempted. |
+| `ft_pct` | Float64 | Free-throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds collected. |
+| `dreb` | Int64 | Defensive rebounds collected. |
+| `reb` | Int64 | Total rebounds collected. |
+| `ast` | Int64 | Assists credited. |
+| `stl` | Int64 | Steals recorded. |
+| `blk` | Int64 | Total shots blocked. |
+| `tov` | Int64 | Turnovers committed. |
+| `pf` | Int64 | Personal fouls committed. |
+| `pts` | Int64 | Total points scored. |
+| `plus_minus` | Int64 | Team point differential while the player was on court. |
+| `fantasy_pts` | Float64 | Fantasy points (stats.nba.com scoring). |
+| `video_available` | Int64 | 1 when stats.nba.com has video for the game, else 0. |
+| `season` | Int32 | Season as its 4-digit END year (2025 = 2024-25), the published asset's stamp. |
+| `season_type` | String | Portion of the season: 'regular-season' or 'playoffs'. |
 
 ```python
 load_nba_stats_player_game_logs(seasons=2025)
@@ -738,37 +738,37 @@ Release: [nba_stats_team_game_logs](https://github.com/sportsdataverse/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | String | Unique season identifier. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | String | Unique game identifier. |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `matchup` | String | Matchup. |
-| `wl` | String | Wl. |
+| `season_id` | String | stats.nba.com composite season id: season-type digit + start year ('22023' = 2023-24 regular season). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `team_abbreviation` | String | Three-letter team abbreviation. |
+| `team_name` | String | Team name as stats.nba.com ships it (nickname or full name, by season). |
+| `game_id` | String | stats.nba.com game id (10-digit string, leading zeros kept). |
+| `game_date` | String | Game date, 'YYYY-MM-DD'. |
+| `matchup` | String | Matchup from the team's side: 'BOS vs. NYK' at home, 'BOS @ NYK' away. |
+| `wl` | String | Game result for the team: 'W' or 'L'. |
 | `min` | Int64 | Minutes played. |
 | `fgm` | Int64 | Field goals made. |
-| `fga` | Int64 | Field goal attempts. |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fga` | Int64 | Field goals attempted. |
+| `fg_pct` | Float64 | Field-goal percentage (0-1). |
 | `fg3m` | Int64 | Three-point field goals made. |
-| `fg3a` | Int64 | Three-point field goal attempts. |
-| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `fg3a` | Int64 | Three-point field goals attempted. |
+| `fg3_pct` | Float64 | Three-point percentage (0-1). |
 | `ftm` | Int64 | Free throws made. |
-| `fta` | Int64 | Free throw attempts. |
-| `ft_pct` | Float64 | Free throw percentage (0-1). |
-| `oreb` | Int64 | Offensive rebounds. |
-| `dreb` | Int64 | Defensive rebounds. |
-| `reb` | Int64 | Rebounds per game. |
-| `ast` | Int64 | Assists. |
-| `stl` | Int64 | Steals. |
-| `blk` | Int64 | Blocks. |
-| `tov` | Int64 | Turnovers. |
-| `pf` | Int64 | Personal fouls. |
-| `pts` | Int64 | Points scored. |
-| `plus_minus` | Int64 | Plus/minus point differential while on court. |
-| `video_available` | Int64 | Video available. |
-| `season` | Int32 | Season year. |
-| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `fta` | Int64 | Free throws attempted. |
+| `ft_pct` | Float64 | Free-throw percentage (0-1). |
+| `oreb` | Int64 | Offensive rebounds collected. |
+| `dreb` | Int64 | Defensive rebounds collected. |
+| `reb` | Int64 | Total rebounds collected. |
+| `ast` | Int64 | Assists credited. |
+| `stl` | Int64 | Steals recorded. |
+| `blk` | Int64 | Total shots blocked. |
+| `tov` | Int64 | Turnovers committed. |
+| `pf` | Int64 | Personal fouls committed. |
+| `pts` | Int64 | Total points scored. |
+| `plus_minus` | Int64 | Plus-minus point differential. |
+| `video_available` | Int64 | 1 when stats.nba.com has video for the game, else 0. |
+| `season` | Int32 | Season as its 4-digit END year (2025 = 2024-25), the published asset's stamp. |
+| `season_type` | String | Portion of the season: 'regular-season' or 'playoffs'. |
 
 ```python
 load_nba_stats_team_game_logs(seasons=2025)
