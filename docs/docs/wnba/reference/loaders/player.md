@@ -79,11 +79,6 @@ load_wnba_player_boxscore(seasons=2024)
 ## load_wnba_player_season_stats
 
 Release: [espn_wnba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_player_season_stats/player_season_stats_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wnba_player_season_stats-returns}
 
 | col_name | type | description |

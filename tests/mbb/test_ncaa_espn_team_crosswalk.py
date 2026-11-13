@@ -56,7 +56,7 @@ def test_rejects_unknown_league():
 def test_id_dtypes(crosswalks, league):
     df = crosswalks[league]
     assert df.schema["ncaa_team_id"] == pl.Int64
-    assert df.schema["espn_team_id"] == pl.Int64, "ESPN ids are Int64 everywhere in sdv-py (task 5.2)"
+    assert df.schema["espn_team_id"] == pl.Int32, "the ESPN team id dtype of the crosswalk and NCAA releases"
     assert df.schema["espn_conference_id"] == pl.Int64
     assert df.schema["conference_id"] == pl.Utf8  # the SDV group id, "mbb:big-ten"
     assert df.schema["season"] == pl.Utf8
@@ -267,6 +267,7 @@ def test_pandas_espn_ids_are_nullable_int64_not_float(league, offline, monkeypat
     df = ncaa_espn_team_crosswalk(league=league)
     pdf = ncaa_espn_team_crosswalk(league=league, return_as_pandas=True)
     assert df["espn_team_id"].null_count() > 0
-    for col in ("espn_team_id", "espn_conference_id", "ncaa_team_id"):
+    for col in ("espn_conference_id", "ncaa_team_id"):
         assert str(pdf[col].dtype) == "Int64", col
+    assert str(pdf["espn_team_id"].dtype) == "Int32"
     assert int(pdf["espn_team_id"].isna().sum()) == df["espn_team_id"].null_count()

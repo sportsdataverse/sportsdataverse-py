@@ -5568,6 +5568,7 @@
   "load_nba_stats_shots": "stats-2",
   "load_nba_stats_standings": "stats-2",
   "load_nba_stats_team_boxscores": "stats-2",
+  "load_nba_stats_team_game_logs": "stats",
   "load_nba_stats_team_season_stats": "stats-2",
   "load_nba_team_aliases": "team",
   "load_nba_team_boxscore": "team",

@@ -179,6 +179,11 @@ load_wnba_schedule(seasons=2024)
 ## load_wnba_draft
 
 Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet`
+
+:::caution[Coverage]
+ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids.
+:::
+
 ### Returns {#load_wnba_draft-returns}
 
 | col_name | type | description |
@@ -260,11 +265,6 @@ load_wnba_game_rosters(seasons=2024)
 ## load_wnba_officials
 
 Release: [espn_wnba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wnba_officials-returns}
 
 | col_name | type | description |
@@ -288,6 +288,11 @@ load_wnba_officials(seasons=2024)
 ## load_wnba_rosters
 
 Release: [espn_wnba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_rosters/rosters_{season}.parquet`
+
+:::caution[Coverage]
+ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids.
+:::
+
 ### Returns {#load_wnba_rosters-returns}
 
 | col_name | type | description |
@@ -368,11 +373,6 @@ load_wnba_shots(seasons=2024)
 ## load_wnba_standings
 
 Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
 ### Returns {#load_wnba_standings-returns}
 
 | col_name | type | description |

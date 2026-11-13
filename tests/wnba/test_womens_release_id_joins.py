@@ -33,6 +33,7 @@ ASSETS = {
     "espn_womens_college_basketball_player_boxscores/player_box_2005.parquet": "wbb_player_box_2005",
     "wbb_crosswalk/wbb_schedule_crosswalk_2026.parquet": "wbb_schedule_crosswalk_2026",
     "espn_womens_college_basketball_schedules/wbb_schedule_2026.parquet": "wbb_schedule_2026",
+    "ncaa_wbb_team_box/ncaa_wbb_team_box_2025.parquet": "ncaa_wbb_team_box_2025",
 }
 
 
@@ -110,3 +111,13 @@ def test_wbb_schedule_crosswalk_joins_the_schedule() -> None:
     for col in ("espn_game_id", "home_espn_team_id", "away_espn_team_id"):
         assert cw.schema[col] == pl.Int32, col
     assert _join(cw, sched.select("game_id"), "espn_game_id", "game_id").height == 1
+
+
+def test_ncaa_wbb_team_box_espn_ids_match_mbb() -> None:
+    """The NCAA WBB releases publish their ``espn_*`` ids as String, like MBB; both loaders cast them to Int32."""
+    assert pl.read_parquet_schema(FIX / "ncaa_wbb_team_box_2025.parquet")["espn_game_id"] == pl.String
+    box = wbb.load_ncaa_wbb_team_box(2025)
+    for col in ("espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"):
+        assert box.schema[col] == pl.Int32, col
+    assert box.schema["contest_id"] == pl.String  # NCAA's own id is opaque text, left alone
+    assert box["espn_game_id"].null_count() == 0

@@ -17321,6 +17321,73 @@ kijhl_season_id:
 load_mbb_team_crosswalk:
   yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
   yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
+load_nba_stats_player_game_logs:
+  ast: Assists credited.
+  blk: Total shots blocked.
+  dreb: Defensive rebounds collected.
+  fantasy_pts: Fantasy points (stats.nba.com scoring).
+  fg3_pct: Three-point percentage (0-1).
+  fg3a: Three-point field goals attempted.
+  fg3m: Three-point field goals made.
+  fg_pct: Field-goal percentage (0-1).
+  fga: Field goals attempted.
+  fgm: Field goals made.
+  ft_pct: Free-throw percentage (0-1).
+  fta: Free throws attempted.
+  ftm: Free throws made.
+  game_date: Game date, 'YYYY-MM-DD'.
+  game_id: stats.nba.com game id (10-digit string, leading zeros kept).
+  matchup: 'Matchup from the team''s side: ''BOS vs. NYK'' at home, ''BOS @ NYK'' away.'
+  min: Minutes played.
+  oreb: Offensive rebounds collected.
+  pf: Personal fouls committed.
+  player_id: stats.nba.com person id of the player.
+  player_name: Player display name, e.g. 'LeBron James'.
+  plus_minus: Team point differential while the player was on court.
+  pts: Total points scored.
+  reb: Total rebounds collected.
+  season: Season as its 4-digit END year (2025 = 2024-25), the published asset's stamp.
+  season_id: 'stats.nba.com composite season id: season-type digit + start year (''22023'' = 2023-24 regular season).'
+  season_type: 'Portion of the season: ''regular-season'' or ''playoffs''.'
+  stl: Steals recorded.
+  team_abbreviation: Three-letter team abbreviation.
+  team_id: stats.nba.com id of the player's team.
+  team_name: Team name as stats.nba.com ships it (nickname or full name, by season).
+  tov: Turnovers committed.
+  video_available: 1 when stats.nba.com has video for the game, else 0.
+  wl: 'Game result for the player''s team: ''W'' or ''L''.'
+load_nba_stats_team_game_logs:
+  ast: Assists credited.
+  blk: Total shots blocked.
+  dreb: Defensive rebounds collected.
+  fg3_pct: Three-point percentage (0-1).
+  fg3a: Three-point field goals attempted.
+  fg3m: Three-point field goals made.
+  fg_pct: Field-goal percentage (0-1).
+  fga: Field goals attempted.
+  fgm: Field goals made.
+  ft_pct: Free-throw percentage (0-1).
+  fta: Free throws attempted.
+  ftm: Free throws made.
+  game_date: Game date, 'YYYY-MM-DD'.
+  game_id: stats.nba.com game id (10-digit string, leading zeros kept).
+  matchup: 'Matchup from the team''s side: ''BOS vs. NYK'' at home, ''BOS @ NYK'' away.'
+  min: Minutes played.
+  oreb: Offensive rebounds collected.
+  pf: Personal fouls committed.
+  plus_minus: Plus-minus point differential.
+  pts: Total points scored.
+  reb: Total rebounds collected.
+  season: Season as its 4-digit END year (2025 = 2024-25), the published asset's stamp.
+  season_id: 'stats.nba.com composite season id: season-type digit + start year (''22023'' = 2023-24 regular season).'
+  season_type: 'Portion of the season: ''regular-season'' or ''playoffs''.'
+  stl: Steals recorded.
+  team_abbreviation: Three-letter team abbreviation.
+  team_id: stats.nba.com team id.
+  team_name: Team name as stats.nba.com ships it (nickname or full name, by season).
+  tov: Turnovers committed.
+  video_available: 1 when stats.nba.com has video for the game, else 0.
+  wl: 'Game result for the team: ''W'' or ''L''.'
 mbb_team_crosswalk:
   ncaa_team: NCAA (stats.ncaa.org) team name, from the bundled mbb_team_names table (hoopR's data-raw/dict_hoopR.csv, as that 2023 source recorded them, so some predate a rename); the same for every season, null where unknown.
   espn_pbp_name: Team name as ESPN play-by-play prints it, from the bundled mbb_team_names table; the same for every season, null where unknown.
@@ -50927,6 +50994,8 @@ ncaa_espn_team_crosswalk:
     NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West
     -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can
     differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23).
+  espn_team_id: ESPN team id (Int32, the dtype of the ESPN team ids in the {mbb,wbb}_crosswalk and ncaa_{mbb,wbb}_* releases)
+    the school resolves to that season; null when match_method is 'unmatched'.
   ncaa_team: School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi').
   ncaa_team_id: stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school
     has a different id on each season row.

@@ -323,6 +323,7 @@ from sportsdataverse.nba import load_nba_stats_shots as load_nba_stats_shots  # 
 from sportsdataverse.nba import load_nba_stats_standings as load_nba_stats_standings  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_synergy as load_nba_stats_synergy  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_boxscores as load_nba_stats_team_boxscores  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_team_game_logs as load_nba_stats_team_game_logs  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_season_stats as load_nba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_team_aliases as load_nba_team_aliases  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
@@ -803,6 +804,7 @@ __all__ = [
     "load_nba_stats_standings",
     "load_nba_stats_synergy",
     "load_nba_stats_team_boxscores",
+    "load_nba_stats_team_game_logs",
     "load_nba_stats_team_season_stats",
     "load_nba_team_aliases",
     "load_nba_team_boxscore",

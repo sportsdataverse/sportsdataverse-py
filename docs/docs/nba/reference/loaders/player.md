@@ -106,6 +106,11 @@ load_nba_player_season_stats(seasons=2025)
 ## load_nba_player_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet`
+
+:::caution[Coverage]
+nba_player_id is Int64, as NBA Stats ships player_id / person_id, so the bridge joins without a cast.
+:::
+
 ### Returns {#load_nba_player_crosswalk-returns}
 
 | col_name | type | description |
@@ -118,7 +123,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |
-| `nba_player_id` | String | NBA Stats player id side of the ESPN-to-NBA player crosswalk. |
+| `nba_player_id` | Int64 | NBA Stats player id side of the ESPN-to-NBA player crosswalk. |
 | `nba_player_name` | String | Player name as listed by the NBA Stats API. |
 | `nba_jersey_num` | String | Player's jersey number as listed by the NBA Stats API. |
 | `nba_position` | String | Player's position as listed by the NBA Stats API. |

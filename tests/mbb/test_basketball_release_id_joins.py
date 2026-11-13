@@ -30,6 +30,10 @@ ASSETS = {
     "espn_nba_schedules/nba_schedule_2026.parquet": "nba_schedule_2026",
     "espn_nba_player_boxscores/player_box_2026.parquet": "nba_player_box_2026",
     "espn_nba_rosters/rosters_2026.parquet": "nba_rosters_2026",
+    "nba_crosswalk/nba_schedule_crosswalk_2026.parquet": "nba_schedule_crosswalk_2026",
+    "nba_crosswalk/nba_team_crosswalk_2026.parquet": "nba_team_crosswalk_2026",
+    "nba_crosswalk/nba_player_crosswalk_2026.parquet": "nba_player_crosswalk_2026",
+    "nba_stats_rosters/rosters_2026.parquet": "nba_stats_rosters_2026",
 }
 
 
@@ -42,8 +46,8 @@ def _offline(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(nba, "_read_release_parquet", read)
 
 
-def _join(left: pl.DataFrame, right: pl.DataFrame, left_on: str, right_on: str) -> pl.DataFrame:
-    assert left.schema[left_on] == right.schema[right_on] == pl.Int32, (left.schema[left_on], right.schema[right_on])
+def _join(left: pl.DataFrame, right: pl.DataFrame, left_on: str, right_on: str, dtype=pl.Int32) -> pl.DataFrame:
+    assert left.schema[left_on] == right.schema[right_on] == dtype, (left.schema[left_on], right.schema[right_on])
     return left.join(right, left_on=left_on, right_on=right_on)
 
 
@@ -55,6 +59,9 @@ def test_the_fixtures_carry_the_published_string_ids() -> None:
     assert pl.read_parquet_schema(FIX / "ncaa_mbb_team_box_2026.parquet")["espn_game_id"] == pl.String
     assert pl.read_parquet_schema(FIX / "nba_game_rosters_2026.parquet")["game_id"] == pl.String
     assert pl.read_parquet_schema(FIX / "nba_rosters_2026.parquet")["athlete_id"] == pl.String
+    assert pl.read_parquet_schema(FIX / "nba_schedule_crosswalk_2026.parquet")["nba_home_team_id"] == pl.String
+    assert pl.read_parquet_schema(FIX / "nba_team_crosswalk_2026.parquet")["nba_team_id"] == pl.String
+    assert pl.read_parquet_schema(FIX / "nba_player_crosswalk_2026.parquet")["nba_player_id"] == pl.String
 
 
 def test_mbb_game_rosters_join_the_schedule_and_player_box() -> None:
@@ -107,3 +114,22 @@ def test_nba_game_rosters_and_rosters_join_the_box() -> None:
     season_rosters = nba.load_nba_rosters(2026)
     matched = _join(box.select("athlete_id").unique(), season_rosters.select("athlete_id"), "athlete_id", "athlete_id")
     assert matched.height > 0
+
+
+def test_nba_crosswalk_bridges_espn_to_nba_stats() -> None:
+    cw, sched = nba.load_nba_schedule_crosswalk(2026), nba.load_nba_schedule(2026)
+    for col in ("espn_game_id", "home_espn_team_id", "away_espn_team_id"):
+        assert cw.schema[col] == pl.Int32, col
+    assert cw.schema["nba_game_id"] == pl.String  # zero-padded NBA Stats game id ("0022500003"), left alone
+    assert cw["nba_game_id"][0].startswith("00")
+    joined = _join(cw, sched.select("game_id", "home_id"), "espn_game_id", "game_id")
+    assert joined.height == 1 and (joined["home_espn_team_id"] == joined["home_id"]).all()
+
+    teams = nba.load_nba_team_crosswalk(2026)
+    assert teams.schema["espn_team_id"] == pl.Int32
+    assert _join(cw, teams.select("nba_team_id"), "nba_home_team_id", "nba_team_id", pl.Int64).height == 1
+
+    players, stats = nba.load_nba_player_crosswalk(2026), nba.load_nba_stats_rosters(2025)
+    assert players.schema["espn_athlete_id"] == pl.Int32
+    matched = _join(players, stats.select("player_id"), "nba_player_id", "player_id", pl.Int64)
+    assert matched.height > 0.5 * players.height

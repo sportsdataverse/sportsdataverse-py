@@ -10,6 +10,11 @@ toc_max_heading_level: 2
 ## load_mbb_pbp
 
 Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_pbp/play_by_play_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2004 and 2005, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_mbb_pbp-returns}
 
 | col_name | type | description |
@@ -329,6 +334,11 @@ load_mbb_rosters(seasons=2025)
 ## load_mbb_officials
 
 Release: [espn_mens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet`
+
+:::caution[Coverage]
+Published seasons: every season from the floor except 2010, which the release has no asset for; a request for one is skipped with a warning.
+:::
+
 ### Returns {#load_mbb_officials-returns}
 
 | col_name | type | description |
