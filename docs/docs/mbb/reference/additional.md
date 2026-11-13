@@ -446,6 +446,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_crosswalk](additional/ids-and-crosswalks.md#mbb_team_crosswalk) | Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom / Yahoo). |
 | [name_is_initials](additional/ids-and-crosswalks.md#name_is_initials) | Detect a 2-initial name shorthand, e.g. `"A B"` or `"B, A"` |
 | [ncaa_espn_player_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_player_crosswalk) | Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id. |
+| [ncaa_espn_school_seasons](additional/ids-and-crosswalks.md#ncaa_espn_school_seasons) | Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team. |
+| [ncaa_espn_schools](additional/ids-and-crosswalks.md#ncaa_espn_schools) | stats.ncaa.org schools (org ids) and the ESPN team each one maps to. |
 | [ncaa_espn_team_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_team_crosswalk) | Season-keyed stats.ncaa.org -> ESPN team-id crosswalk. |
 | [ncaa_mbb_team_ids](additional/ids-and-crosswalks.md#ncaa_mbb_team_ids) | Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
 | [refresh_ncaa_team_ids](additional/ids-and-crosswalks.md#refresh_ncaa_team_ids) | Extend the bundled crosswalk with a new season (update_team_ids recipe). |

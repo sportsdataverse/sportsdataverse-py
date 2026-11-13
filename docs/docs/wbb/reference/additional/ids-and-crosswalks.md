@@ -390,9 +390,120 @@ wdf = ncaa_espn_player_crosswalk(2024, league="wbb", return_as_pandas=True)
 df.filter(pl.col("match_confidence") >= 0.95).select("ncaa_player_id", "espn_athlete_id")
 ```
 
+### ncaa_espn_school_seasons {#ncaa_espn_school_seasons}
+
+`ncaa_espn_school_seasons(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team.
+
+One row per `(ncaa_org_id, season)` for *league*, read from the static
+`ncaa_espn_school_seasons` asset of the `{league}_crosswalk`
+sportsdataverse-data release. The asset carries both sports in a `sport`
+column; only *league*'s rows are returned. Join it to
+`ncaa_espn_schools` on `ncaa_org_id`, or to a
+`load_ncaa_{mbb,wbb}_*` frame on that season's `ncaa_team_id`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` | `'mbb'` | `"mbb"` (men's) or `"wbb"` (women's). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with `ncaa_org_id` (Int64), `sport` (str, equal to *league*), `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- that season's stats.ncaa.org team id) and `espn_team_id` (Int32, nullable). An absent asset returns these columns with zero rows and a warning.
+
+| col_name | type | description |
+|---|---|---|
+| `ncaa_org_id` | Int64 | stats.ncaa.org school (org) id (Int64), stable across seasons; joins ncaa_espn_schools. |
+| `sport` | String | League of the row, 'mbb' or 'wbb'; the function keeps only the requested league's rows. |
+| `season` | String | Season label as stats.ncaa.org writes it, 'YYYY-YY' (e.g. '2024-25'). |
+| `ncaa_team_id` | Int64 | That season's stats.ncaa.org team id (Int64); stats.ncaa.org issues a new one every season. |
+| `espn_team_id` | Int32 | ESPN team id (Int32) of the school; null when the school has no ESPN team. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not `"mbb"` or `"wbb"`. |
+| `AssetFetchError` | If the release asset exists but cannot be fetched. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mbb import ncaa_espn_school_seasons
+df = ncaa_espn_school_seasons()
+print(df.shape)
+
+# Women's seasons as pandas
+
+wdf = ncaa_espn_school_seasons(league="wbb", return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("season") == "2024-25").select("ncaa_team_id", "espn_team_id")
+```
+
+### ncaa_espn_schools {#ncaa_espn_schools}
+
+`ncaa_espn_schools(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+stats.ncaa.org schools (org ids) and the ESPN team each one maps to.
+
+One row per NCAA school, read from the static `ncaa_espn_schools` asset of
+the `{league}_crosswalk` sportsdataverse-data release that sdv-reference-data
+builds. A school keeps one `ncaa_org_id` across seasons while its
+stats.ncaa.org team id changes every season; `ncaa_espn_school_seasons`
+holds that per-season mapping, and `ncaa_espn_team_crosswalk` the full
+season-keyed crosswalk built from both.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` | `'mbb'` | `"mbb"` (men's) or `"wbb"` (women's): which release tag to read. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with `ncaa_org_id` (Int64 -- the stats.ncaa.org school id), `ncaa_team` (str, the stats.ncaa.org school name), `espn_team_id` (Int32, nullable -- null for a school with no ESPN team) and `espn_display_name` (str, nullable). An absent asset returns these columns with zero rows and a warning.
+
+| col_name | type | description |
+|---|---|---|
+| `ncaa_org_id` | Int64 | stats.ncaa.org school (org) id (Int64), one per school and stable across seasons. |
+| `ncaa_team` | String | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.'). |
+| `espn_team_id` | Int32 | ESPN team id (Int32) the school maps to; null when the school has no ESPN team. |
+| `espn_display_name` | String | The ESPN team's display name (e.g. 'Alabama Crimson Tide'); null when unmapped. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not `"mbb"` or `"wbb"`. |
+| `AssetFetchError` | If the release asset exists but cannot be fetched. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mbb import ncaa_espn_schools
+df = ncaa_espn_schools()
+print(df.shape)
+
+# Women's tag as pandas
+
+wdf = ncaa_espn_schools(league="wbb", return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("espn_team_id").is_null()).select("ncaa_org_id", "ncaa_team")
+```
+
 ### ncaa_espn_team_crosswalk {#ncaa_espn_team_crosswalk}
 
-`ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
 

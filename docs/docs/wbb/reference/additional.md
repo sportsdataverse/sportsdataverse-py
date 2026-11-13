@@ -402,6 +402,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [display_name_to_roster_key](additional/ids-and-crosswalks.md#display_name_to_roster_key) | Box-score and shot-chart pages render a player as `"Surname, First"`, |
 | [fuzzy_box_match](additional/ids-and-crosswalks.md#fuzzy_box_match) | Pick the single unassigned box-score name a mis-spelled play-by-play |
 | [ncaa_espn_player_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_player_crosswalk) | Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id. |
+| [ncaa_espn_school_seasons](additional/ids-and-crosswalks.md#ncaa_espn_school_seasons) | Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team. |
+| [ncaa_espn_schools](additional/ids-and-crosswalks.md#ncaa_espn_schools) | stats.ncaa.org schools (org ids) and the ESPN team each one maps to. |
 | [ncaa_espn_team_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_team_crosswalk) | Season-keyed stats.ncaa.org -> ESPN team-id crosswalk. |
 | [ncaa_wbb_team_ids](additional/ids-and-crosswalks.md#ncaa_wbb_team_ids) | Women's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
 | [resolve_ncaa_team_id](additional/ids-and-crosswalks.md#resolve_ncaa_team_id) | Resolve a school name + season to its stats.ncaa.org team id. |

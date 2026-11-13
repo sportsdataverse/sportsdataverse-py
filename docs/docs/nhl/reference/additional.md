@@ -97,7 +97,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_design](additional/models-and-calculators.md#build_design) | Build the sparse RAPM design matrix -- two rows per stint (one per attacking team). |
 | [build_stints](additional/models-and-calculators.md#build_stints) | Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals. |
 | [calibration_table](additional/models-and-calculators.md#calibration_table) | Bucket predicted probabilities into bins and compare to actual outcome rates. |
-| [ensure_xg_models](additional/models-and-calculators.md#ensure_xg_models) | Return a dir holding the 3 published booster files, downloading any missing ones. |
+| [ensure_xg_models](additional/models-and-calculators.md#ensure_xg_models) | Return a dir holding the published boosters, checked against the release manifest. |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Resolve the fitted-constants row for a league. |
 | [load_xg_models](additional/models-and-calculators.md#load_xg_models) | Load the two published boosters (+ embedded feature names) and the penalty-shot constant. |
 | [log_loss_score](additional/models-and-calculators.md#log_loss_score) | Binary cross-entropy loss between predicted probabilities and outcomes. |

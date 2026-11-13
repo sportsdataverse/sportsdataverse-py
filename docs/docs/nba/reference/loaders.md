@@ -25,12 +25,14 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_team_season_stats` | [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_season_stats) | — |
 | `load_nba_draft` | [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) | — |
 | `load_nba_rosters` | [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) | — |
+| `load_nba_depth_charts` | [espn_nba_depthcharts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_depthcharts) | — |
 | `load_nba_stats_schedules` | [nba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules) | — |
 | `load_nba_stats_coaches` | [nba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_coaches) | — |
 | `load_nba_stats_draft` | [nba_stats_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft) | — |
 | `load_nba_stats_game_rosters` | [nba_stats_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_rosters) | — |
 | `load_nba_stats_lineups` | [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups) | — |
 | `load_nba_stats_lineups_v3` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
+| `load_nba_stats_metric_curves` | [nba_stats_metric_curves](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_metric_curves) | — |
 | `load_nba_stats_officials` | [nba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials) | — |
 | `load_nba_stats_pbp` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_possessions` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
@@ -43,6 +45,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_stats_team_game_logs` | [nba_stats_team_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_game_logs) | — |
 | `load_nba_stats_player_season_stats` | [nba_stats_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_season_stats) | — |
 | `load_nba_stats_possessions_v3` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
+| `load_nba_stats_rolling_windows` | [nba_stats_rolling_windows](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rolling_windows) | — |
 | `load_nba_stats_rosters` | [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters) | — |
 | `load_nba_stats_shots` | [nba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_shots) | — |
 | `load_nba_stats_standings` | [nba_stats_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_standings) | — |
@@ -81,6 +84,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_stats_game_rosters](loaders/stats.md#load_nba_stats_game_rosters) | Release: nba_stats_game_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_rosters/game_rosters_{season …` |
 | [load_nba_stats_lineups](loaders/stats.md#load_nba_stats_lineups) | Release: nba_stats_lineups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups/lineups_{season + 1}.parquet` |
 | [load_nba_stats_lineups_v3](loaders/stats.md#load_nba_stats_lineups_v3) | Release: nba_stats_game_lineups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + …` |
+| [load_nba_stats_metric_curves](loaders/stats.md#load_nba_stats_metric_curves) | Release: nba_stats_metric_curves · asset … |
 | [load_nba_stats_officials](loaders/stats.md#load_nba_stats_officials) | Release: nba_stats_officials · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season + …` |
 | [load_nba_stats_pbp](loaders/stats.md#load_nba_stats_pbp) | Release: nba_stats_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet` |
 | [load_nba_stats_possessions](loaders/stats.md#load_nba_stats_possessions) | Release: nba_stats_possessions · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season …` |
@@ -93,6 +97,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_stats_team_game_logs](loaders/stats.md#load_nba_stats_team_game_logs) | Release: nba_stats_team_game_logs · asset … |
 | [load_nba_stats_player_season_stats](loaders/stats-2.md#load_nba_stats_player_season_stats) | Release: nba_stats_player_season_stats · asset … |
 | [load_nba_stats_possessions_v3](loaders/stats-2.md#load_nba_stats_possessions_v3) | Release: nba_stats_possessions · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season …` |
+| [load_nba_stats_rolling_windows](loaders/stats-2.md#load_nba_stats_rolling_windows) | Release: nba_stats_rolling_windows · asset … |
 | [load_nba_stats_rosters](loaders/stats-2.md#load_nba_stats_rosters) | Release: nba_stats_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season + 1}.parquet` |
 | [load_nba_stats_shots](loaders/stats-2.md#load_nba_stats_shots) | Release: nba_stats_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_{season + 1}.parquet` |
 | [load_nba_stats_standings](loaders/stats-2.md#load_nba_stats_standings) | Release: nba_stats_standings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_standings/standings_{season + …` |
@@ -121,6 +126,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nba_standings](loaders/other.md#load_nba_standings) | Release: espn_nba_standings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet` |
 | [load_nba_draft](loaders/other.md#load_nba_draft) | Release: espn_nba_draft · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet` |
 | [load_nba_rosters](loaders/other.md#load_nba_rosters) | Release: espn_nba_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet` |
+| [load_nba_depth_charts](loaders/other.md#load_nba_depth_charts) | Release: espn_nba_depthcharts · asset … |
 | [load_nba_schedule_crosswalk](loaders/other.md#load_nba_schedule_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet` |
 | [load_nba_groups](loaders/other.md#load_nba_groups) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_groups.parquet` |
 | [load_nba_group_seasons](loaders/other.md#load_nba_group_seasons) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_group_seasons.parquet` |
