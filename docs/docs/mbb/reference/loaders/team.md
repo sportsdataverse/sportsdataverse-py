@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_mbb_team_boxscore
 
-Release: [espn_mens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet`
+Release: [espn_mens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_box.md)
 ### Returns {#load_mbb_team_boxscore-returns}
 
 | col_name | type | description |
@@ -80,7 +80,7 @@ load_mbb_team_boxscore(seasons=2024)
 
 ## load_mbb_team_season_stats
 
-Release: [espn_mens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
+Release: [espn_mens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_season_stats.md)
 ### Returns {#load_mbb_team_season_stats-returns}
 
 | col_name | type | description |
@@ -108,7 +108,7 @@ load_mbb_team_season_stats(seasons=2025)
 
 ## load_mbb_team_crosswalk
 
-Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_team_crosswalk_{season}.parquet`
+Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_team_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_crosswalk.md)
 ### Returns {#load_mbb_team_crosswalk-returns}
 
 | col_name | type | description |

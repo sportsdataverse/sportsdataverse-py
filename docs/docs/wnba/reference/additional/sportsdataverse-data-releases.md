@@ -12,6 +12,8 @@ description: "WNBA — additional Python functions — sportsdataverse-data rele
 
 Load one asset family of the `wnba_stats_leaguedash` release.
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
 `wnba_stats_leaguedash` is a parameter cube: one asset per
 (family, season) pair rather than one per season, so a family must be named.
 The valid families are exported as `WNBA_STATS_LEAGUEDASH_FAMILIES` --
@@ -163,6 +165,8 @@ load_wnba_stats_leaguedash("team_stats_advanced", seasons=2025).sort(
 
 Load season-level WNBA 5-man lineup statistics (deprecated).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -288,6 +292,8 @@ print(df.shape)
 `load_wnba_stats_player_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA player statistics (deprecated).
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
 
 **Parameters**
 
@@ -533,6 +539,8 @@ adv = df.filter(pl.col("measure_type") == "Advanced")
 
 Load season-level WNBA standings (deprecated).
 
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -654,6 +662,8 @@ print(df.shape)
 `load_wnba_stats_team_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA team statistics (deprecated).
+
+Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
 
 **Parameters**
 

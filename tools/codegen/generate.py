@@ -2073,6 +2073,8 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines.append(f"Source: https://github.com/sportsdataverse/{ld.url.split('/', 1)[0]}")
     else:
         lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
+    if ld.dataset_page:
+        lines.append(f"Dataset page: {_dataset_page_url(ld.dataset_page)}")
     lines.append("")
     lines.append("Args:")
     rng = f" (>= {ld.min_season})" if ld.min_season else ""
@@ -2159,6 +2161,12 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines += [f"    .. _{s['name']}: {s['url']}" for s in ld.see_also]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _dataset_page_url(page: str) -> str:
+    """``<repo>/<dataset>`` -> the producer repo's ``docs/datasets/<dataset>.md`` page on GitHub."""
+    repo, dataset = page.split("/")
+    return f"https://github.com/sportsdataverse/{repo}/blob/main/docs/datasets/{dataset}.md"
 
 
 def _loader_is_single(ld: spec.Loader) -> bool:
@@ -3873,6 +3881,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
                 "notes": ld.notes or "",
                 "tag": ld.tag,
                 "tag_url": _release_page_url(rel.bases, ld.base, ld.url, ld.tag),
+                "dataset_page_url": _dataset_page_url(ld.dataset_page) if ld.dataset_page else "",
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
                 "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
                 "return_table": (
