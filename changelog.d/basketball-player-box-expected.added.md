@@ -1,6 +1,5 @@
-- **NBA/WNBA/MBB/WBB:** `{nba,wnba,mbb,wbb}_player_season_box_rates` give each player-season's points, rebounds and
-  assists per 36 minutes with `_n` / `_rank` / `_pct` (minutes gates fitted on split halves), and
-  `{nba,wnba,mbb,wbb}_player_game_expected_box` give each player-game the season-without-this-game per-minute
-  expectation (`<s>_base`) and a usage-adjusted one (`<s>_exp`, a Poisson model fitted on earlier seasons by
-  `tools/fit_player_box_expected.py`), ESPN-keyed. On the held-out seasons the usage-adjusted points cut the per-minute
-  baseline's mean absolute error by 20-25% in every league; rebounds by about 1%, assists not at all.
+- **NBA/WNBA/MBB/WBB:** `{nba,wnba,mbb,wbb}_player_season_box_rates` give points, rebounds and assists per 36 minutes
+  ranked with `_n` / `_rank` / `_pct`; `{nba,wnba,mbb,wbb}_player_game_expected_box` give each player-game a per-minute
+  and a usage-adjusted expectation from his season without that game, ESPN-keyed. (#1191)
+- **NBA/WNBA/MBB/WBB:** the usage-adjusted points cut the per-minute MAE by 20-25% on held-out seasons in every league;
+  rebounds by about 1%, assists not at all. Fitted by `tools/fit_player_box_expected.py`. (#1191)
