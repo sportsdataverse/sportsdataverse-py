@@ -1,1 +1,3 @@
-- **Basketball:** every scoring basis a leaderboard shows now comes from the producer (BB-G8): `*_team_season_rates` adds `plus_minus`, per-game `pts_pg` / `opp_pts_pg` / `plus_minus_pg` and per-75 `pts_per75` / `opp_pts_per75` / `plus_minus_per75`; `*_lineup_seasons` adds the three per-75 columns (a unit has no games of its own, so no per-game basis); `*_team_season_flow` adds `kills_per75`. Each carries `_rank` / `_pct` / `_n`, ranked where its rating is (a per-75 rank is the per-100 one, copied).
+- **Basketball:** per-game and per-75 basis columns for the leaderboards (BB-G8): `*_team_season_rates` adds
+  `plus_minus`, `pts_pg` / `opp_pts_pg` / `plus_minus_pg` and `*_per75` twins, `*_lineup_seasons` the per-75 three,
+  `*_team_season_flow` `kills_per75`; each with `_rank` / `_pct` / `_n`, ranked where its rating is. (#1173)
