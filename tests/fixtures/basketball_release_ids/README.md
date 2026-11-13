@@ -46,3 +46,6 @@ MBB/NBA captured 2026-10-30; WNBA/WBB captured 2026-11-01.
 | `wbb_schedule_crosswalk_2026.parquet` | wehoop-wbb-data @ `19fe2a82` `wbb/crosswalk/parquet/wbb_schedule_crosswalk_2026.parquet` | first row |
 | `wbb_schedule_2026.parquet` | wehoop-wbb-data @ `19fe2a82` `wbb/schedules/parquet/wbb_schedule_2026.parquet` | that row's game |
 | `ncaa_wbb_team_box_2025.parquet` | sportsdataverse-data release `ncaa_wbb_team_box`, asset `ncaa_wbb_team_box_2025.parquet` (captured 2026-11-13) | first four rows with an `espn_game_id` |
+| `nba_stats_metric_curves_2026.parquet` | sportsdataverse-data release `nba_stats_metric_curves`, asset `metric_curves_2026.parquet` (captured 2026-11-13) | first three rows of each `entity_type` |
+| `wnba_stats_rolling_windows_2025.parquet` | sportsdataverse-data release `wnba_stats_rolling_windows`, asset `rolling_windows_2025.parquet` | first four rows |
+| `nba_depthcharts_2027.parquet` | sportsdataverse-data release `espn_nba_depthcharts`, asset `depthcharts_2027.parquet` | team 1 on the latest `as_of_date` |

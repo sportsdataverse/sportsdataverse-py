@@ -39,7 +39,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wbb_game_predictor`](../wbb/reference/core/game.md#espn_wbb_game_predictor) | ⭐ BPI matchup projection for a game | ESPN |
 | [`espn_wbb_game_probabilities`](../wbb/reference/core/game.md#espn_wbb_game_probabilities) | ⭐ Play-by-play win-probability curve | ESPN |
 | [`espn_wbb_calendar`](../wbb/reference/additional/espn.md#espn_wbb_calendar) | Valid game dates for a season | ESPN |
-| [`load_wbb_schedule`](../wbb/reference/loaders/other.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
+| [`load_wbb_schedule`](../wbb/reference/loaders/schedule.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
 | [`load_wbb_pbp`](../wbb/reference/loaders/other.md#load_wbb_pbp) | Season-long play-by-play (parquet, back to 2002) | release |
 | [`load_wbb_team_boxscore`](../wbb/reference/loaders/team.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
 | [`load_wbb_player_boxscore`](../wbb/reference/loaders/player.md#load_wbb_player_boxscore) | Season-long player boxscores (parquet) | release |

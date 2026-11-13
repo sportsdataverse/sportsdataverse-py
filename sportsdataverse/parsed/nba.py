@@ -271,6 +271,7 @@ from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_sta
 from sportsdataverse.nba import load_epm as load_epm  # noqa: F401
 from sportsdataverse.nba import load_lebron_daily as load_lebron_daily  # noqa: F401
 from sportsdataverse.nba import load_lebron_season as load_lebron_season  # noqa: F401
+from sportsdataverse.nba import load_nba_depth_charts as load_nba_depth_charts  # noqa: F401
 from sportsdataverse.nba import load_nba_draft as load_nba_draft  # noqa: F401
 from sportsdataverse.nba import load_nba_game_rosters as load_nba_game_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_group_aliases as load_nba_group_aliases  # noqa: F401
@@ -309,6 +310,7 @@ from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups
 from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_matchups as load_nba_stats_matchups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_matchups_rollup as load_nba_stats_matchups_rollup  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_metric_curves as load_nba_stats_metric_curves  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_officials as load_nba_stats_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_pbp as load_nba_stats_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_pbp_v3 as load_nba_stats_pbp_v3  # noqa: F401
@@ -317,6 +319,7 @@ from sportsdataverse.nba import load_nba_stats_player_game_logs as load_nba_stat
 from sportsdataverse.nba import load_nba_stats_player_season_stats as load_nba_stats_player_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_possessions as load_nba_stats_possessions  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_possessions_v3 as load_nba_stats_possessions_v3  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_rolling_windows as load_nba_stats_rolling_windows  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_rosters as load_nba_stats_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_shots as load_nba_stats_shots  # noqa: F401
@@ -755,6 +758,7 @@ __all__ = [
     "load_epm",
     "load_lebron_daily",
     "load_lebron_season",
+    "load_nba_depth_charts",
     "load_nba_draft",
     "load_nba_game_rosters",
     "load_nba_group_aliases",
@@ -791,6 +795,7 @@ __all__ = [
     "load_nba_stats_lineups_v3",
     "load_nba_stats_matchups",
     "load_nba_stats_matchups_rollup",
+    "load_nba_stats_metric_curves",
     "load_nba_stats_officials",
     "load_nba_stats_pbp",
     "load_nba_stats_pbp_v3",
@@ -799,6 +804,7 @@ __all__ = [
     "load_nba_stats_player_season_stats",
     "load_nba_stats_possessions",
     "load_nba_stats_possessions_v3",
+    "load_nba_stats_rolling_windows",
     "load_nba_stats_rosters",
     "load_nba_stats_schedules",
     "load_nba_stats_shots",

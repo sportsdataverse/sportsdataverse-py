@@ -1,7 +1,7 @@
 ---
 title: "WBB dataset loaders — Team"
 sidebar_label: "Team"
-sidebar_position: 3
+sidebar_position: 4
 description: "WBB dataset loaders — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_wbb_team_boxscore
 
-Release: [espn_womens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet`
+Release: [espn_womens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_box.md)
 ### Returns {#load_wbb_team_boxscore-returns}
 
 | col_name | type | description |
@@ -79,7 +79,7 @@ load_wbb_team_boxscore(seasons=2024)
 
 ## load_wbb_team_season_stats
 
-Release: [espn_womens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
+Release: [espn_womens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_season_stats.md)
 ### Returns {#load_wbb_team_season_stats-returns}
 
 | col_name | type | description |
@@ -107,7 +107,7 @@ load_wbb_team_season_stats(seasons=2026)
 
 ## load_wbb_team_crosswalk
 
-Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet`
+Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_crosswalk.md)
 ### Returns {#load_wbb_team_crosswalk-returns}
 
 | col_name | type | description |

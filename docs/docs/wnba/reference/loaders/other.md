@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_wnba_pbp
 
-Release: [espn_wnba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_pbp/play_by_play_{season}.parquet`
+Release: [espn_wnba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_pbp/play_by_play_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/pbp.md)
 ### Returns {#load_wnba_pbp-returns}
 
 | col_name | type | description |
@@ -89,7 +89,7 @@ load_wnba_pbp(seasons=2024)
 
 ## load_wnba_schedule
 
-Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_schedules/wnba_schedule_{season}.parquet`
+Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_schedules/wnba_schedule_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/schedules.md)
 ### Returns {#load_wnba_schedule-returns}
 
 | col_name | type | description |
@@ -178,7 +178,7 @@ load_wnba_schedule(seasons=2024)
 
 ## load_wnba_draft
 
-Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet`
+Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_draft/draft_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/draft.md)
 
 :::caution[Coverage]
 ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids.
@@ -230,7 +230,7 @@ load_wnba_draft(seasons=2026)
 
 ## load_wnba_game_rosters
 
-Release: [espn_wnba_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_game_rosters/game_rosters_{season}.parquet`
+Release: [espn_wnba_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_game_rosters/game_rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/game_rosters.md)
 ### Returns {#load_wnba_game_rosters-returns}
 
 | col_name | type | description |
@@ -264,7 +264,7 @@ load_wnba_game_rosters(seasons=2024)
 
 ## load_wnba_officials
 
-Release: [espn_wnba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet`
+Release: [espn_wnba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_officials/officials_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/officials.md)
 ### Returns {#load_wnba_officials-returns}
 
 | col_name | type | description |
@@ -287,7 +287,7 @@ load_wnba_officials(seasons=2024)
 
 ## load_wnba_rosters
 
-Release: [espn_wnba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_rosters/rosters_{season}.parquet`
+Release: [espn_wnba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_rosters/rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/rosters.md)
 
 :::caution[Coverage]
 ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids.
@@ -340,7 +340,7 @@ load_wnba_rosters(seasons=2024)
 
 ## load_wnba_shots
 
-Release: [espn_wnba_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_shots/shots_{season}.parquet`
+Release: [espn_wnba_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_shots/shots_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/shots.md)
 ### Returns {#load_wnba_shots-returns}
 
 | col_name | type | description |
@@ -372,7 +372,7 @@ load_wnba_shots(seasons=2024)
 
 ## load_wnba_standings
 
-Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet`
+Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_standings/standings_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/standings.md)
 ### Returns {#load_wnba_standings-returns}
 
 | col_name | type | description |
@@ -408,7 +408,7 @@ load_wnba_standings(seasons=2024)
 
 ## load_wnba_schedule_crosswalk
 
-Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_schedule_crosswalk_{season}.parquet`
+Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_schedule_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/schedule_crosswalk.md)
 
 :::caution[Coverage]
 wnba_game_id stays String, the WNBA Stats game id's dtype; the wnba_*_team_id bridge ids are Int64, as WNBA Stats ships team_id.

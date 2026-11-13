@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_mbb_pbp
 
-Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_pbp/play_by_play_{season}.parquet`
+Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_pbp/play_by_play_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/pbp.md)
 
 :::caution[Coverage]
 Published seasons: every season from the floor except 2004 and 2005, which the release has no asset for; a request for one is skipped with a warning.
@@ -90,7 +90,7 @@ load_mbb_pbp(seasons=2024)
 
 ## load_mbb_schedule
 
-Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet`
+Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/schedules.md)
 ### Returns {#load_mbb_schedule-returns}
 
 | col_name | type | description |
@@ -217,7 +217,7 @@ load_mbb_ratings(seasons=2025)
 
 ## load_mbb_shots
 
-Release: [espn_mens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_shots/shots_{season}.parquet`
+Release: [espn_mens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_shots/shots_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/shots.md)
 
 :::caution[Coverage]
 Published seasons: 2003 and 2006 onward; the release has no 2004 or 2005 asset (the MBB pbp release has the same gap). A request for either is skipped with a warning, and a request for only those returns the documented columns with zero rows.
@@ -254,7 +254,7 @@ load_mbb_shots(seasons=2025)
 
 ## load_mbb_standings
 
-Release: [espn_mens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_standings/standings_{season}.parquet`
+Release: [espn_mens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_standings/standings_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/standings.md)
 ### Returns {#load_mbb_standings-returns}
 
 | col_name | type | description |
@@ -290,7 +290,7 @@ load_mbb_standings(seasons=2025)
 
 ## load_mbb_rosters
 
-Release: [espn_mens_college_basketball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_rosters/rosters_{season}.parquet`
+Release: [espn_mens_college_basketball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_rosters/rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/rosters.md)
 ### Returns {#load_mbb_rosters-returns}
 
 | col_name | type | description |
@@ -338,7 +338,7 @@ load_mbb_rosters(seasons=2025)
 
 ## load_mbb_officials
 
-Release: [espn_mens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet`
+Release: [espn_mens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/officials.md)
 
 :::caution[Coverage]
 Published seasons: every season from the floor except 2010, which the release has no asset for; a request for one is skipped with a warning.
@@ -362,7 +362,7 @@ load_mbb_officials(seasons=2025)
 
 ## load_mbb_game_rosters
 
-Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet`
+Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/game_rosters.md)
 ### Returns {#load_mbb_game_rosters-returns}
 
 | col_name | type | description |
@@ -396,7 +396,7 @@ load_mbb_game_rosters(seasons=2025)
 
 ## load_mbb_schedule_crosswalk
 
-Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet`
+Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/schedule_crosswalk.md)
 ### Returns {#load_mbb_schedule_crosswalk-returns}
 
 | col_name | type | description |
