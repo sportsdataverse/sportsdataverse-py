@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 394 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 395 | — |
 
 ## ESPN {#espn}
 
@@ -264,6 +264,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`ncaa_stint_rows`](reference/additional/analytics-6#ncaa_stint_rows)
 - [`ncaa_team_box_count_rows`](reference/additional/analytics-6#ncaa_team_box_count_rows)
 - [`ncaa_team_coaches`](reference/additional/analytics-6#ncaa_team_coaches)
+- [`ncaa_team_game_counts`](reference/additional/analytics-6#ncaa_team_game_counts)
 - [`order_lineup`](reference/additional/analytics-6#order_lineup)
 - [`pos_class_to_score`](reference/additional/analytics-6#pos_class_to_score)
 - [`project_bracket`](reference/additional/analytics-6#project_bracket)

@@ -307,6 +307,15 @@ The same possessions and labels, grouped by game too, so a team-season's rows of
 up to its `mbb_situational_team` row (`games`, `seconds`, `poss`, `opp_poss`,
 `pts`, `opp_pts`). The `opponent` family keeps the season's top `top_n`.
 
+The `all` and `garbage` rows also carry the team's box counts in that split (the
+`COUNT_COLUMNS`: `fga`, `fgm`, `fg3a`, `fg3m`, `fta`, `ftm`, `oreb`,
+`dreb`, `tov`), from the season's `ncaa_{mbb,wbb}_pbp` events through
+`ncaa_team_game_counts`, so a page can show shooting and the four factors with garbage
+time out without summing the events itself. They count the events by the team that made them,
+so their points (`2 * fgm + fg3m + ftm`) can differ from `pts`, which the possessions
+release credits to the team with the ball, by a basket in some games. The other families' rows
+have null counts, as does a game the pbp release lacks.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -318,7 +327,7 @@ up to its `mbb_situational_team` row (`games`, `seconds`, `poss`, `opp_poss`,
 
 **Returns**
 
-One row per `(season, team_id, game_id, family, split)`, the columns of `mbb_situational_team` plus `game_id` (the stats.ncaa.org contest id); `games` is 1. A split the team did not play in the game has no row. Empty input returns that schema with zero rows.
+One row per `(season, team_id, game_id, family, split)`, the columns of `mbb_situational_team` plus `game_id` (the stats.ncaa.org contest id) and the nine `COUNT_COLUMNS` (Int64); `games` is 1. A split the team did not play in the game has no row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -341,6 +350,15 @@ One row per `(season, team_id, game_id, family, split)`, the columns of `mbb_sit
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `fga` | Int64 | Field-goal attempts in the split: the team's shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage. |
+| `fgm` | Int64 | Made field goals in the split (event_result made); null on the families other than all and garbage. |
+| `fg3a` | Int64 | Three-point attempts in the split (shot_value 3); null on the families other than all and garbage. |
+| `fg3m` | Int64 | Made threes in the split; null on the families other than all and garbage. |
+| `fta` | Int64 | Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage. |
+| `ftm` | Int64 | Made free throws in the split; null on the families other than all and garbage. |
+| `oreb` | Int64 | Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `dreb` | Int64 | Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `tov` | Int64 | Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage. |
 
 **Raises**
 

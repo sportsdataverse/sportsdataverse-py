@@ -576,6 +576,7 @@ from sportsdataverse.mbb import ncaa_situation_rows as ncaa_situation_rows  # no
 from sportsdataverse.mbb import ncaa_stint_rows as ncaa_stint_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_coaches as ncaa_team_coaches  # noqa: F401
+from sportsdataverse.mbb import ncaa_team_game_counts as ncaa_team_game_counts  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import observed_pairs as observed_pairs  # noqa: F401
@@ -1261,6 +1262,7 @@ __all__ = [
     "ncaa_stint_rows",
     "ncaa_team_box_count_rows",
     "ncaa_team_coaches",
+    "ncaa_team_game_counts",
     "normalize_player_key",
     "normalize_team_roster_columns",
     "observed_pairs",

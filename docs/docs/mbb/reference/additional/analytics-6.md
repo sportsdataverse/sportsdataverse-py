@@ -571,6 +571,61 @@ One row per page with a coach card, in `NCAA_COACHES_SCHEMA`; `team_id` is the E
 |---|---|
 | `ValueError` | If `league` is not `"mens"` or `"womens"`. |
 
+### ncaa_team_game_counts {#ncaa_team_game_counts}
+
+`ncaa_team_game_counts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Each team's shots, free throws, rebounds and turnovers per game, whole and with garbage time split out.
+
+Sums the stats.ncaa.org events by the team that made them (`event_team_espn_team_id`): a
+field goal is a `shot_value` 2 or 3 event, a free throw a `shot_value` 1 event, made when
+`event_result` is `made`; `oreb` / `dreb` / `tov` count the `Offensive Rebound` /
+`Defensive Rebound` / `Turnover` events (team rebounds and team turnovers included,
+`Deadball Rebound` not). The `garbage` split is each event's own `is_garbage_time`
+(bigballR's flag, the one the possessions release carries); an event with no flag is in
+`all` only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, family, split)`: family `all` (split `all`) and family `garbage` (`garbage_time`, `not_garbage_time`, a split with no event of the team has no row), with `game_id` the stats.ncaa.org contest id (Utf8), `team_id` the ESPN team id (Int64; an event of a team without one, a non-D1 side, is dropped) and the `COUNT_COLUMNS` (Int64). Within a game the two garbage rows add up to the `all` row when every event is flagged. An empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year (the year the season ends). |
+| `game_id` | String | The stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id of the team that made the events; events of a side with no ESPN id (non-D1) are dropped. |
+| `family` | String | all (the whole game) or garbage. |
+| `split` | String | all, or garbage_time / not_garbage_time by each event's is_garbage_time. |
+| `fga` | Int64 | Field-goal attempts in the split: the team's shot_value 2 and 3 events in the ncaa pbp. |
+| `fgm` | Int64 | Made field goals in the split (event_result made). |
+| `fg3a` | Int64 | Three-point attempts in the split (shot_value 3). |
+| `fg3m` | Int64 | Made threes in the split. |
+| `fta` | Int64 | Free-throw attempts in the split (shot_value 1). |
+| `ftm` | Int64 | Made free throws in the split. |
+| `oreb` | Int64 | Offensive rebounds in the split (Offensive Rebound events, team rebounds included). |
+| `dreb` | Int64 | Defensive rebounds in the split (Defensive Rebound events, team rebounds included). |
+| `tov` | Int64 | Turnovers in the split (Turnover events, team turnovers included). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp` is missing a column it reads. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+from sportsdataverse.mbb.mbb_situational import ncaa_team_game_counts
+ncaa_team_game_counts(load_ncaa_mbb_pbp(2026)).filter(split="not_garbage_time").head()
+```
+
 ### order_lineup {#order_lineup}
 
 `order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`

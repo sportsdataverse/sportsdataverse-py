@@ -4515,7 +4515,7 @@ espn_nhl_schedule:
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule
     endpoint.
 espn_wbb_game_officials:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 espn_wbb_game_rosters:
   athlete_href: ESPN API resource URL for the athlete's full profile endpoint.
   birth_country_alternate_id: Alternate identifier for the athlete's country of birth used in ESPN's country-flag system.
@@ -4533,7 +4533,7 @@ espn_wbb_game_rosters:
   team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Reference) system for the athlete's team.
 espn_wbb_player_stats:
   offensive_second_chance_points: Points scored by the player on offensive-rebound put-back opportunities during the season.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 espn_wbb_schedule:
   away_current_rank: Current AP/coaches poll ranking of the away team at the time of the game.
   away_linescores: Points scored by the away team in each period or half of the game.
@@ -4541,7 +4541,7 @@ espn_wbb_schedule:
   home_current_rank: Current AP/coaches poll ranking of the home team at the time of the game.
   home_linescores: Points scored by the home team in each period or half of the game.
   home_records: Win-loss record string for the home team at the time of the game.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 espn_wnba_game_officials:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 espn_wnba_game_rosters:
@@ -44075,7 +44075,7 @@ load_ncaa_mbb_rapm:
     9 players on the floor.'
   rapm_net: 'Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net
     == orapm + drapm exactly.'
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_ncaa_mbb_rapm_within_team:
   num_players: Number of players in the team's RAPM design matrix.
   player_code: Short unique-within-team player code generated from the player's name (hoop-explorer convention).
@@ -44317,7 +44317,7 @@ load_ncaa_wbb_lineups:
   rim_ast: Assisted rim makes by the lineup during the stint.
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted by the lineup during the stint.
   rimm: Rim shots made by the lineup during the stint.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   start_allowed: Points allowed at the moment the stint began.
   start_diff: Score margin (scored minus allowed) when the stint began.
   start_min: Game minute at which the stint began.
@@ -44352,7 +44352,7 @@ load_ncaa_wbb_matchup_stints:
   matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
   n_events: Number of play-by-play events falling within the stint.
   n_possessions: Number of possessions falling within the stint.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   start_away_score: Away team score when the stint began.
   start_home_score: Home team score when the stint began.
   start_seconds: Elapsed game seconds at which the stint began.
@@ -44422,7 +44422,7 @@ load_ncaa_wbb_pbp:
   poss_team: Name of the team in possession when the event occurred.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   sub_deviate: Per-game count of substitution-tracking deviations found while walking lineups forward; nonzero flags imperfect
     substitution data.
   timeout_type: Type of timeout called (e.g. full, 30-second, media).
@@ -44508,7 +44508,7 @@ load_ncaa_wbb_player_box:
   rimm_half: Rim shots made in halfcourt possessions.
   rimm_trans: Rim shots made in transition possessions.
   rimm_unast: Rim shots made in the unassisted split (makes for which no assist was credited).
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   stl_half: Steals in halfcourt possessions.
   stl_trans: Steals in transition possessions.
   team_espn_team_id: ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk.
@@ -44576,7 +44576,7 @@ load_ncaa_wbb_possessions:
   poss_team: Name of the team in possession.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   start_event_type: Event type of the play immediately before the possession's first event (what started it,
     e.g. a defensive rebound or a made basket), not the possession's own first event.
 load_ncaa_wbb_rapm:
@@ -44590,25 +44590,25 @@ load_ncaa_wbb_rapm:
     9 players on the floor.'
   rapm_net: 'Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net
     == orapm + drapm exactly.'
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_rapm_within_team:
   num_players: Number of players in the team's RAPM design matrix.
   player_code: Short unique-within-team player code generated from the player's name (hoop-explorer convention).
   rapm_def: Ridge-regressed defensive RAPM per 100 possessions relative to teammates; positive means good defense.
   rapm_net: Net RAPM — the sum of the offensive and defensive components, per 100 possessions.
   rapm_off: Ridge-regressed offensive RAPM per 100 possessions, estimated relative to the player's own teammates.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   team_off_poss: Team offensive possessions underlying the within-team fit.
 load_ncaa_wbb_rosters:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_schedule:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_shots:
   dist_ft: Shot distance from the basket in feet.
   made: Whether the shot was made.
   ncaa_team_id: stats.ncaa.org team identifier of the shooting team.
   point_value: Point value of the attempt (2 or 3).
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   sec_left: Seconds remaining in the period when the shot was taken (all-null in current captures).
   shooter_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the shooter.
   shooter_player_id: stats.ncaa.org player identifier of the shooter.
@@ -44668,7 +44668,7 @@ load_ncaa_wbb_team_box:
   rim_rate: Rim attempts as a share of field-goal attempts.
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted.
   rimm: Rim shots made.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   team_espn_team_id: ESPN team identifier of the team, via the NCAA-to-ESPN crosswalk.
   team_ncaa_team_id: stats.ncaa.org team identifier of the team the row belongs to.
   time_per_poss: Average seconds per offensive possession.
@@ -44677,11 +44677,11 @@ load_ncaa_wbb_team_box:
   tpm: Three-pointers made.
   tpp: Three-point percentage.
 load_ncaa_wbb_team_ids:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_team_rosters:
   clean_name: Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets.
   ht_inches: Player height converted to total inches from the stats.ncaa.org roster listing.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_nfl_coach_careers:
   coach: Head coach the plays were attributed to -- per game from the nflverse schedule (home_coach / away_coach) for the
     NFL, per team-season from the producer's CFBD coach roster for CFB.
@@ -49584,7 +49584,7 @@ load_teams:
 load_wbb_game_rosters:
   athlete_headshot: URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when
     ESPN publishes no headshot for that player.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_group_aliases:
   group_id: 'SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a
     new conference, or a merger the sources treat as new) gets a new one.'
@@ -49673,7 +49673,7 @@ load_wbb_officials:
     1 to 3 for the standard three-person crew.
   official_uid: ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that
     payload never ships it, so the column is null for every published row.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_pbp:
   athlete_name_1: Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt).
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
@@ -49691,21 +49691,21 @@ load_wbb_pbp:
   score_source: "Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it."
   score_value: Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play
     to identify points actually scored.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   short_description: Shortened version of ESPN's play description text, without score context.
   type_text: Play type text, passed through verbatim from ESPN. ESPN labels the free-throw play type "MadeFreeThrow" for made
     AND missed free throws; filter makes vs. misses with scoring_play, not type_text.
 load_wbb_player_boxscore:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_player_core:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_player_crosswalk:
   ncaa_player_id: stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_wbb_* releases), from
     the ncaa rows of load_wbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when
     no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year).
   season: Season as its 4-digit ending year (integer; 2026 = 2025-26), the year in the asset name.
 load_wbb_player_season_stats:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   stat_description: ESPN's prose definition of the statistic named in stat_name, for example The average assists per game
     for avgAssists; combined made-attempted stats carry both definitions joined by a hyphen.
 load_wbb_player_value:
@@ -49713,7 +49713,7 @@ load_wbb_player_value:
     row.
   box_dbpm: Box-score defensive plus/minus for the player, the defensive half of box BPM.
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_ratings:
   adj_o_blend: 'Adjusted offensive efficiency with the season sim''s preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season''s regressed rating as if it had played prior_games extra games at it.'
   adj_d_blend: 'Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better).'
@@ -49724,9 +49724,9 @@ load_wbb_ratings:
     over every team in the frame, so it is mean 0 and standard deviation 1 per season.
   adj_tempo: Opponent-adjusted tempo in possessions per 40 minutes, produced by the same fixed-point adjustment as the efficiencies
     applied to game possessions under the additive model poss = tempo_i + tempo_j minus the league baseline.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_rosters:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_schedule:
   away_current_rank: Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value).
   away_linescores: Period-by-period scores for the away team as a delimited string from ESPN's schedule feed.
@@ -49745,7 +49745,7 @@ load_wbb_schedule:
   in_officials: Whether the game is represented in the built officials dataset.
   in_shots: Whether the game is represented in the built shots dataset.
   officials_json_url: raw.githubusercontent.com URL of the game's officials JSON payload in wehoop-wbb-raw.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   status_type_completed: 'ESPN''s completed flag, passed through unchanged: true once ESPN considers the game over. It does not separate an ordinary final from a forfeited, protested, replayed or awarded result; ESPN documents no such distinction.'
   status_type_description: 'ESPN''s display text for the game status (for example "Final" or "Postponed"), passed through unchanged.'
   status_type_detail: 'ESPN''s longer status text, passed through unchanged; an overtime final reads like "Final/OT".'
@@ -49764,22 +49764,22 @@ load_wbb_schedule_crosswalk:
 load_wbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
   athlete_name_2: Display name of the second athlete tied to the attempt (typically the assister), when present.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   team_mascot: Mascot/nickname of the shooting team from ESPN's team record.
 load_wbb_standings:
   group_short_name: Short display name of the conference or division grouping the row belongs to.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   stat_abbreviation: ESPN's abbreviation for the standings stat, such as GB, OPP PPG or VS CONF; always populated and matching
     stat_short_display_name for about 90 percent of rows.
   stat_description: ESPN's longer wording for the standings stat, for example Overall Record for the Team Season Record entry
     and Current Streak for Streak; null for stats ESPN ships without one, such as vs AP Top 25.
 load_wbb_team_boxscore:
   lead_percentage: Share of game time the team held the lead, as reported in ESPN's team boxscore.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_team_crosswalk:
   yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
   yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
 load_wbb_team_group_seasons:
   conference_id: SDV group_id of the team's conference that season; null where the team had no conference (an independent,
     or a season played without conferences).
@@ -49796,7 +49796,7 @@ load_wbb_team_group_seasons:
   team_id_source: 'Id space of team_id (in this table: espn).'
   team_name: Team name as of that season, not today's.
 load_wbb_team_season_stats:
-  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  season: Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted.
   stat_description: ESPN's prose definition of the team statistic named in stat_name, for example The average blocks per game
     for avgBlocks or the full sentence defining a blocked shot for blocks.
 load_wnba_draft:
@@ -50767,6 +50767,10 @@ score_win_prob:
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'
 season_game_excitement:
+  winner_team_id: 'ESPN team id of the eventual winner; null for a game that is not completed or ends tied.'
+  winner_low_wp: 'The comeback low: the lowest win probability (0-1) the eventual winner had after any play, from the same WP series gei sums (the pregame prior is not a play); null for a game that is not completed or ends tied.'
+  winner_low_period: 'Period of the play at the winner''s low (the earliest, on a tie); null with no winner.'
+  winner_low_clock: 'Game clock (ESPN clock_display_value) of the play at the winner''s low; null with no winner.'
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   season: Season year as the pbp release labels it (the year the season ends).
   gei: 'Game excitement index: the league''s mean plays per game (GEI_SCALE) / the game''s plays x the sum of the absolute play-to-play home win-probability changes, the first from the pregame prior and, in a completed game, the last play to the result; football''s Game on Paper formula with a per-league scale.'
@@ -77920,6 +77924,15 @@ mbb_situational_team:
     leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 mbb_situational_team_games:
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage.'
+  fgm: 'Made field goals in the split (event_result made); null on the families other than all and garbage.'
+  fg3a: 'Three-point attempts in the split (shot_value 3); null on the families other than all and garbage.'
+  fg3m: 'Made threes in the split; null on the families other than all and garbage.'
+  fta: 'Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage.'
+  ftm: 'Made free throws in the split; null on the families other than all and garbage.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage.'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
@@ -78013,6 +78026,15 @@ wbb_situational_team:
     leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court.'
   team_id: ESPN team id of the team (Int64).
 wbb_situational_team_games:
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage.'
+  fgm: 'Made field goals in the split (event_result made); null on the families other than all and garbage.'
+  fg3a: 'Three-point attempts in the split (shot_value 3); null on the families other than all and garbage.'
+  fg3m: 'Made threes in the split; null on the families other than all and garbage.'
+  fta: 'Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage.'
+  ftm: 'Made free throws in the split; null on the families other than all and garbage.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage.'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage.'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   family: 'The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance
@@ -78120,6 +78142,21 @@ nba_situation_rows:
   season: Season, named by the year it ends.
   start_clock: Seconds left in the period when the possession starts (when the previous possession ended).
   tov: Offense turnovers on the possession.
+ncaa_team_game_counts:
+  season: 'Season year (the year the season ends).'
+  game_id: 'The stats.ncaa.org contest id.'
+  team_id: 'ESPN team id of the team that made the events; events of a side with no ESPN id (non-D1) are dropped.'
+  family: 'all (the whole game) or garbage.'
+  split: 'all, or garbage_time / not_garbage_time by each event''s is_garbage_time.'
+  fga: 'Field-goal attempts in the split: the team''s shot_value 2 and 3 events in the ncaa pbp.'
+  fgm: 'Made field goals in the split (event_result made).'
+  fg3a: 'Three-point attempts in the split (shot_value 3).'
+  fg3m: 'Made threes in the split.'
+  fta: 'Free-throw attempts in the split (shot_value 1).'
+  ftm: 'Made free throws in the split.'
+  oreb: 'Offensive rebounds in the split (Offensive Rebound events, team rebounds included).'
+  dreb: 'Defensive rebounds in the split (Defensive Rebound events, team rebounds included).'
+  tov: 'Turnovers in the split (Turnover events, team turnovers included).'
 ncaa_situation_rows:
   def_1: Defense player 1 on the floor as the possession starts.
   def_2: Defense player 2 on the floor as the possession starts.
