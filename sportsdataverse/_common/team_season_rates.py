@@ -488,6 +488,46 @@ def _accounting_counts(agg: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+#: The counts a team-game must carry to be priced, summed for the league values.
+_SUMMED = ("pts", "poss", "fga", "fgm", "fg3m", "fta", "ftm", "oreb", "rc", "tov", "box_pts", "box_poss")
+
+
+def _league_values(games: pl.DataFrame) -> pl.DataFrame:
+    """The season's league values, pooled over the priced team-games (one row per season)."""
+    lg = {c: pl.col(f"_lg_{c}") for c in _SUMMED}
+    return (
+        games.group_by("season")
+        .agg(pl.col(c).sum().alias(f"_lg_{c}") for c in _SUMMED)
+        .select(
+            "season",
+            (lg["pts"] / lg["poss"]).alias("lg_ppp"),
+            ((lg["fgm"] + 0.5 * lg["fg3m"]) / lg["fga"]).alias("lg_efg_pct"),
+            (lg["tov"] / lg["poss"]).alias("lg_tov_pct"),
+            (lg["oreb"] / lg["rc"]).alias("lg_orb_pct"),
+            (lg["fta"] / lg["fga"]).alias("lg_ft_rate"),
+            (lg["ftm"] / lg["fta"]).alias("lg_ft_pct"),
+            (lg["rc"] / lg["fga"]).alias("_lg_rc_per_fga"),
+        )
+        .with_columns((pl.col("lg_ppp") / (1 - pl.col("lg_tov_pct"))).alias("chance_pts"))
+    )
+
+
+def _factor_prices() -> dict[str, pl.Expr]:
+    """The four factors' linear prices (:func:`team_game_four_factors` states them)."""
+    v, fga, lg_orb = pl.col("chance_pts"), pl.col("fga"), pl.col("lg_orb_pct")
+    return {
+        "shooting_pts": 2 * pl.col("fgm")
+        + pl.col("fg3m")
+        - 2 * pl.col("lg_efg_pct") * fga
+        + v * lg_orb * (pl.col("rc") - pl.col("_lg_rc_per_fga") * fga),
+        "turnover_pts": (pl.col("lg_tov_pct") * pl.col("poss") - pl.col("tov")) * v,
+        "rebounding_pts": (pl.col("oreb") - lg_orb * pl.col("rc")) * v,
+        "free_throw_pts": (pl.col("fta") - pl.col("lg_ft_rate") * fga)
+        * (pl.col("lg_ft_pct") - FT_POSSESSION_WEIGHT * v)
+        + (pl.col("ftm") - pl.col("lg_ft_pct") * pl.col("fta")),
+    }
+
+
 def team_game_four_factors(rows: pl.DataFrame, *, counts: pl.DataFrame | None = None) -> pl.DataFrame:
     """Each team-game's four factors in points against the season's league-average offense.
 
@@ -550,37 +590,10 @@ def team_game_four_factors(rows: pl.DataFrame, *, counts: pl.DataFrame | None = 
     if rows.height == 0:
         return pl.DataFrame(schema=TEAM_GAME_FOUR_FACTORS_SCHEMA)
     games = _accounting_counts(season_counts(rows, counts=counts, by_game=True).filter(pl.col("split") == "all"))
-    summed = ("pts", "poss", "fga", "fgm", "fg3m", "fta", "ftm", "oreb", "rc", "tov", "box_pts", "box_poss")
-    complete = pl.all_horizontal(pl.col(c).is_not_null() for c in summed) & (pl.col("poss") > 0)
-    lg = (
-        games.filter(complete)
-        .group_by("season")
-        .agg(pl.col(c).sum().alias(f"_lg_{c}") for c in summed)
-        .select(
-            "season",
-            (pl.col("_lg_pts") / pl.col("_lg_poss")).alias("lg_ppp"),
-            ((pl.col("_lg_fgm") + 0.5 * pl.col("_lg_fg3m")) / pl.col("_lg_fga")).alias("lg_efg_pct"),
-            (pl.col("_lg_tov") / pl.col("_lg_poss")).alias("lg_tov_pct"),
-            (pl.col("_lg_oreb") / pl.col("_lg_rc")).alias("lg_orb_pct"),
-            (pl.col("_lg_fta") / pl.col("_lg_fga")).alias("lg_ft_rate"),
-            (pl.col("_lg_ftm") / pl.col("_lg_fta")).alias("lg_ft_pct"),
-            (pl.col("_lg_rc") / pl.col("_lg_fga")).alias("_lg_rc_per_fga"),
-        )
-        .with_columns((pl.col("lg_ppp") / (1 - pl.col("lg_tov_pct"))).alias("chance_pts"))
-    )
+    complete = pl.all_horizontal(pl.col(c).is_not_null() for c in _SUMMED) & (pl.col("poss") > 0)
+    lg = _league_values(games.filter(complete))
     assert games.schema["season"] == lg.schema["season"], "season dtype differs"
-    v, fga = pl.col("chance_pts"), pl.col("fga")
-    factors = {
-        "shooting_pts": 2 * pl.col("fgm")
-        + pl.col("fg3m")
-        - 2 * pl.col("lg_efg_pct") * fga
-        + v * pl.col("lg_orb_pct") * (pl.col("rc") - pl.col("_lg_rc_per_fga") * fga),
-        "turnover_pts": (pl.col("lg_tov_pct") * pl.col("poss") - pl.col("tov")) * v,
-        "rebounding_pts": (pl.col("oreb") - pl.col("lg_orb_pct") * pl.col("rc")) * v,
-        "free_throw_pts": (pl.col("fta") - pl.col("lg_ft_rate") * fga)
-        * (pl.col("lg_ft_pct") - FT_POSSESSION_WEIGHT * v)
-        + (pl.col("ftm") - pl.col("lg_ft_pct") * pl.col("fta")),
-    }
+    factors = _factor_prices()
     return (
         games.join(lg, on="season", how="left", validate="m:1")
         .with_columns((pl.col("lg_ppp") * pl.col("poss")).alias("exp_pts"))
