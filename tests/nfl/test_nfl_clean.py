@@ -487,3 +487,13 @@ def test_home_opening_kickoff_per_game() -> None:
     )
     out = clean_nfl_pbp(df)
     assert out["home_opening_kickoff"].to_list() == [1, 1, 0, 0]
+
+
+def test_all_null_team_column_does_not_raise() -> None:
+    # a season frame with no fumble recoveries has an all-null, Null-typed fumble_recovery_1_team
+    df = pl.DataFrame([_row(), _row(play_id=101)]).with_columns(fumble_recovery_1_team=pl.lit(None))
+    assert df.schema["fumble_recovery_1_team"] == pl.Null
+    out = clean_nfl_pbp(df)
+    assert out.schema["fumble_recovery_1_team"] == pl.String
+    assert out["fumble_recovery_1_team"].null_count() == 2
+    assert out["posteam"].to_list() == ["JAX", "JAX"]
