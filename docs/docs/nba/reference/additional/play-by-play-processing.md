@@ -40,7 +40,7 @@ cannot answer that for historical seasons).
 
 **Returns**
 
-athlete_id (str) -> identity fields for `helper_nba_player_season_stats`. When an athlete appears in multiple rows (multiple games), the LAST row (by frame order) wins -- mirroring R's `!duplicated(athlete_id, fromLast = TRUE)`, which keeps an athlete's most recent team within the season.
+athlete_id (str) -> identity fields for `helper_nba_player_season_stats`. When an athlete appears in multiple rows (multiple games), the row of the LATEST `game_date` wins (frame order breaks ties and decides when there is no `game_date`) -- R's `!duplicated(athlete_id, fromLast = TRUE)`, which keeps an athlete's most recent team within the season. The published player_box is written newest game first, so frame order alone kept a traded athlete's FIRST team.
 
 ### nba_pbp_disk {#nba_pbp_disk}
 

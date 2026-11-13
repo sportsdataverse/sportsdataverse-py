@@ -34,3 +34,18 @@ columns:
 - name: adj_em_z
   type: double
   description: ''
+- name: adj_o_blend
+  type: double
+  description: ''
+- name: adj_d_blend
+  type: double
+  description: ''
+- name: adj_em_blend
+  type: double
+  description: ''
+- name: rank_blend
+  type: integer
+  description: ''
+- name: prior_games
+  type: double
+  description: ''

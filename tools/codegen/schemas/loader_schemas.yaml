@@ -12565,6 +12565,8 @@ load_mbb_player_crosswalk:
   type: String
 - name: kp_player_id
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -12643,6 +12645,16 @@ load_mbb_ratings:
 - name: rank
   type: Int64
 - name: adj_em_z
+  type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
   type: Float64
 load_mbb_rosters:
 - name: season
@@ -12916,6 +12928,8 @@ load_mbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String
@@ -30362,6 +30376,8 @@ load_wbb_player_crosswalk:
   type: String
 - name: yahoo_player_name
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -30442,6 +30458,16 @@ load_wbb_ratings:
 - name: rank
   type: Int64
 - name: adj_em_z
+  type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
   type: Float64
 load_wbb_rosters:
 - name: season
@@ -30729,6 +30755,8 @@ load_wbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String

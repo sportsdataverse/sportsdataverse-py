@@ -299,11 +299,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_wowy](additional/analytics-4.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [nba_playtype_ratings](additional/analytics-4.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_possession_rate_rows](additional/analytics-4.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
+| [nba_pregame_projections](additional/analytics-4.md#nba_pregame_projections) | Rated pregame projection for every ESPN game of an NBA / WNBA season, as of each game's date. |
 | [nba_rated_priors](additional/analytics-4.md#nba_rated_priors) | Rated pregame home win probability for every ESPN game of a season, as of each game's date. |
 | [nba_ratings_panel](additional/analytics-4.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics-4.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics-4.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
-| [nba_score_rows](additional/analytics-4.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
+| [nba_score_rows](additional/analytics-5.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
 | [nba_season_sim](additional/analytics-5.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-5.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-5.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |

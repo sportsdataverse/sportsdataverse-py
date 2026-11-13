@@ -528,19 +528,24 @@ def load_mbb_ratings(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name  |type    |
-        |:---------|:-------|
-        |season    |Int64   |
-        |team_id   |String  |
-        |adj_o     |Float64 |
-        |adj_d     |Float64 |
-        |adj_em    |Float64 |
-        |adj_tempo |Float64 |
-        |raw_o     |Float64 |
-        |raw_d     |Float64 |
-        |games     |Int64   |
-        |rank      |Int64   |
-        |adj_em_z  |Float64 |
+        |col_name     |type    |
+        |:------------|:-------|
+        |season       |Int64   |
+        |team_id      |String  |
+        |adj_o        |Float64 |
+        |adj_d        |Float64 |
+        |adj_em       |Float64 |
+        |adj_tempo    |Float64 |
+        |raw_o        |Float64 |
+        |raw_d        |Float64 |
+        |games        |Int64   |
+        |rank         |Int64   |
+        |adj_em_z     |Float64 |
+        |adj_o_blend  |Float64 |
+        |adj_d_blend  |Float64 |
+        |adj_em_blend |Float64 |
+        |rank_blend   |Int64   |
+        |prior_games  |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2006.
@@ -1117,7 +1122,7 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1141,12 +1146,13 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_player_id    |String  |
         |yahoo_player_name  |String  |
         |kp_player_id       |String  |
+        |ncaa_player_id     |String  |
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1155,8 +1161,8 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet"
         )
@@ -1208,6 +1214,7 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |kp_game_id        |String  |
         |fox_game_id       |String  |
         |yahoo_game_id     |String  |
+        |ncaa_contest_id   |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
 
