@@ -1,0 +1,18 @@
+schema: ncaa_espn_school_seasons
+kind: dataframe
+columns:
+- name: ncaa_org_id
+  type: integer
+  description: ''
+- name: sport
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: ncaa_team_id
+  type: integer
+  description: ''
+- name: espn_team_id
+  type: Int32
+  description: ''

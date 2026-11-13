@@ -949,6 +949,15 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_nba_depth_charts
+  league: nba
+  base: sdv_releases
+  url: espn_nba_depthcharts/depthcharts_{season}.parquet
+  tag: espn_nba_depthcharts
+  min_season: 2027
+  notes: "ESPN team depth charts, snapshotted daily: one row per (as_of_date, team, position slot, depth rank), so filter to one as_of_date (the latest is the current chart) before counting players. The release starts with the 2026-27 season (season 2027), first snapshot 2026-09-08."
+  example_args:
+    seasons: 2027
 - fn: load_wnba_draft
   league: wnba
   base: sdv_releases
@@ -1129,6 +1138,16 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_metric_curves
+  league: nba
+  base: sdv_releases
+  url: nba_stats_metric_curves/metric_curves_{season + 1}.parquet
+  tag: nba_stats_metric_curves
+  id_int64: [entity_id, team_id]
+  min_season: 1996
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64 so they join the NBA Stats loaders' team_id / player_id."
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_officials
   league: nba
   base: sdv_releases
@@ -1225,6 +1244,16 @@ loaders:
   tag: nba_stats_possessions
   deprecated_for: load_nba_stats_possessions
   min_season: 1996
+  example_args:
+    seasons: 2025
+- fn: load_nba_stats_rolling_windows
+  league: nba
+  base: sdv_releases
+  url: nba_stats_rolling_windows/rolling_windows_{season + 1}.parquet
+  tag: nba_stats_rolling_windows
+  id_int64: [entity_id, team_id]
+  min_season: 1996
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype."
   example_args:
     seasons: 2025
 - fn: load_nba_stats_rosters
@@ -1882,6 +1911,16 @@ loaders:
   min_season: 1997
   example_args:
     seasons: 2026
+- fn: load_wnba_stats_metric_curves
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_metric_curves/metric_curves_{season}.parquet
+  tag: wnba_stats_metric_curves
+  id_int64: [entity_id, team_id]
+  min_season: 1997
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64 so they join the WNBA Stats loaders' team_id / player_id."
+  example_args:
+    seasons: 2025
 - fn: load_wnba_stats_officials
   league: wnba
   base: sdv_releases
@@ -1929,6 +1968,16 @@ loaders:
   url: wnba_stats_player_game_logs/player_game_logs_{season}.parquet
   tag: wnba_stats_player_game_logs
   min_season: 1997
+  example_args:
+    seasons: 2025
+- fn: load_wnba_stats_rolling_windows
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_rolling_windows/rolling_windows_{season}.parquet
+  tag: wnba_stats_rolling_windows
+  id_int64: [entity_id, team_id]
+  min_season: 1997
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype."
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_rosters

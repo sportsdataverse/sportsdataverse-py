@@ -331,6 +331,37 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 load_nba_stats_lineups_v3(seasons=2025)
 ```
 
+## load_nba_stats_metric_curves
+
+Release: [nba_stats_metric_curves](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_metric_curves) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_metric_curves/metric_curves_{season + 1}.parquet`
+
+:::caution[Coverage]
+One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64 so they join the NBA Stats loaders' team_id / player_id.
+:::
+
+### Returns {#load_nba_stats_metric_curves-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season the curve covers, the ENDING year as the nba_stats assets key it (1997 = 1996-97); WNBA rows carry the calendar year. |
+| `entity_type` | String | Aggregation level of the row: "league" (every shot), "team" or "player". |
+| `entity_id` | Int64 | Id of the entity the row describes, Int64 - the stats team_id on team rows and the person_id on player rows; null on league rows. |
+| `entity_name` | String | Display name of the player or team as the stats shots carry it; null on league rows. |
+| `team_id` | Int64 | On player rows, the stats team_id of most of the player's shots that season (Int64); null on league and team rows. |
+| `id_source` | String | Id system of entity_id / team_id, 'nba_stats' (NBA) or 'wnba_stats' (WNBA). |
+| `metric` | String | Curve name; every row is 'fg_pct_by_shot_distance'. |
+| `down` | Int64 | Not used for shots (a football axis of the shared schema); always null. |
+| `x_lo` | Float64 | Inclusive lower edge of the shot-distance bucket, in feet (edges fixed in metric_curves.BUCKET_EDGES). |
+| `x_hi` | Float64 | Exclusive upper edge of the shot-distance bucket, in feet; a shot at exactly x_hi belongs to the next bucket up. |
+| `attempts` | Int64 | Field-goal attempts in the bucket; always positive, since an empty bucket has no row. |
+| `successes` | Int64 | Made field goals in the bucket. |
+| `rate` | Float64 | successes divided by attempts (field-goal percentage), computed exactly with no smoothing. |
+| `epa_per_att` | Float64 | Not used for shots; always null. |
+
+```python
+load_nba_stats_metric_curves(seasons=2025)
+```
+
 ## load_nba_stats_officials
 
 Release: [nba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season + 1}.parquet`

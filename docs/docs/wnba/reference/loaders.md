@@ -33,12 +33,14 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_wnba_stats_coaches` | [wnba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_coaches) | — |
 | `load_wnba_stats_draft` | [wnba_stats_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_draft) | — |
 | `load_wnba_stats_game_rosters` | [wnba_stats_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_game_rosters) | — |
+| `load_wnba_stats_metric_curves` | [wnba_stats_metric_curves](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_metric_curves) | — |
 | `load_wnba_stats_officials` | [wnba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_officials) | — |
 | `load_wnba_stats_pbp` | [wnba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_pbp) | — |
 | `load_wnba_stats_possessions` | [wnba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_possessions) | — |
 | `load_wnba_stats_game_lineups` | [wnba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_game_lineups) | — |
 | `load_wnba_stats_player_boxscores` | [wnba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_player_boxscores) | — |
 | `load_wnba_stats_player_game_logs` | [wnba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_player_game_logs) | — |
+| `load_wnba_stats_rolling_windows` | [wnba_stats_rolling_windows](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_rolling_windows) | — |
 | `load_wnba_stats_rosters` | [wnba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_rosters) | — |
 | `load_wnba_stats_schedules` | [wnba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_schedules) | — |
 | `load_wnba_stats_shots` | [wnba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_shots) | — |
@@ -68,12 +70,14 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_wnba_stats_coaches](loaders/stats.md#load_wnba_stats_coaches) | Release: wnba_stats_coaches · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_coaches/coaches_{season}.parquet` |
 | [load_wnba_stats_draft](loaders/stats.md#load_wnba_stats_draft) | Release: wnba_stats_draft · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_draft/draft_{season}.parquet` |
 | [load_wnba_stats_game_rosters](loaders/stats.md#load_wnba_stats_game_rosters) | Release: wnba_stats_game_rosters · asset … |
+| [load_wnba_stats_metric_curves](loaders/stats.md#load_wnba_stats_metric_curves) | Release: wnba_stats_metric_curves · asset … |
 | [load_wnba_stats_officials](loaders/stats.md#load_wnba_stats_officials) | Release: wnba_stats_officials · asset … |
 | [load_wnba_stats_pbp](loaders/stats.md#load_wnba_stats_pbp) | Release: wnba_stats_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_pbp/wnba_play_by_play_{season}.parquet` |
 | [load_wnba_stats_possessions](loaders/stats.md#load_wnba_stats_possessions) | Release: wnba_stats_possessions · asset … |
 | [load_wnba_stats_game_lineups](loaders/stats.md#load_wnba_stats_game_lineups) | Release: wnba_stats_game_lineups · asset … |
 | [load_wnba_stats_player_boxscores](loaders/stats.md#load_wnba_stats_player_boxscores) | Release: wnba_stats_player_boxscores · asset … |
 | [load_wnba_stats_player_game_logs](loaders/stats.md#load_wnba_stats_player_game_logs) | Release: wnba_stats_player_game_logs · asset … |
+| [load_wnba_stats_rolling_windows](loaders/stats.md#load_wnba_stats_rolling_windows) | Release: wnba_stats_rolling_windows · asset … |
 | [load_wnba_stats_rosters](loaders/stats.md#load_wnba_stats_rosters) | Release: wnba_stats_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_rosters/rosters_{season}.parquet` |
 | [load_wnba_stats_schedules](loaders/stats.md#load_wnba_stats_schedules) | Release: wnba_stats_schedules · asset … |
 | [load_wnba_stats_shots](loaders/stats.md#load_wnba_stats_shots) | Release: wnba_stats_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_shots/shots_{season}.parquet` |

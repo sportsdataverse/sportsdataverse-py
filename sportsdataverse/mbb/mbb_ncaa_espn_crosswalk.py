@@ -152,6 +152,147 @@ def ncaa_espn_team_crosswalk(
     return _pandas_ids(df) if return_as_pandas else df
 
 
+#: The two school tables sdv-reference-data publishes beside the crosswalk. ``ncaa_org_id`` is the stable
+#: stats.ncaa.org school (org) id, ``ncaa_team_id`` the per-season team id; ``espn_team_id`` is Int32, the dtype
+#: of the ESPN team ids in the ``load_{mbb,wbb}_*_crosswalk`` and ``load_ncaa_{mbb,wbb}_*`` releases.
+_SCHOOLS_SCHEMA: Dict[str, pl.DataType] = {
+    "ncaa_org_id": pl.Int64,
+    "ncaa_team": pl.Utf8,
+    "espn_team_id": pl.Int32,
+    "espn_display_name": pl.Utf8,
+}
+_SCHOOL_SEASONS_SCHEMA: Dict[str, pl.DataType] = {
+    "ncaa_org_id": pl.Int64,
+    "sport": pl.Utf8,
+    "season": pl.Utf8,
+    "ncaa_team_id": pl.Int64,
+    "espn_team_id": pl.Int32,
+}
+_SCHOOLS_URL = SDVRELEASES + "{league}_crosswalk/{name}.parquet"
+
+
+def _release_table(name: str, league: str, schema: Dict[str, pl.DataType]) -> pl.DataFrame:
+    """One static ``{league}_crosswalk`` table in ``schema``.
+
+    sdv-py bundles no copy of these, so there is nothing to fall back to: an absent asset (``NoDataError``) is
+    the documented columns with zero rows and a warning, while a failed fetch (``AssetFetchError``) raises --
+    zero rows there would null every id joined through the table.
+    """
+    if league not in _LEAGUE_PKG:
+        raise ValueError(f"league must be one of {sorted(_LEAGUE_PKG)}, got {league!r}")
+    url = _SCHOOLS_URL.format(league=league, name=name)
+    df = _read_release_parquet(url)
+    if df is None:
+        cli_warn(f"{name}: no published asset at {url} (returning an empty frame)")
+        return pl.DataFrame(schema=schema)
+    return df.select([pl.col(c).cast(t) for c, t in schema.items()])
+
+
+def ncaa_espn_schools(league: str = "mbb", *, return_as_pandas: bool = False) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """stats.ncaa.org schools (org ids) and the ESPN team each one maps to.
+
+    One row per NCAA school, read from the static ``ncaa_espn_schools`` asset of
+    the ``{league}_crosswalk`` sportsdataverse-data release that sdv-reference-data
+    builds. A school keeps one ``ncaa_org_id`` across seasons while its
+    stats.ncaa.org team id changes every season; :func:`ncaa_espn_school_seasons`
+    holds that per-season mapping, and :func:`ncaa_espn_team_crosswalk` the full
+    season-keyed crosswalk built from both.
+
+    Args:
+        league: ``"mbb"`` (men's) or ``"wbb"`` (women's): which release tag to read.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        DataFrame with ``ncaa_org_id`` (Int64 -- the stats.ncaa.org school id),
+        ``ncaa_team`` (str, the stats.ncaa.org school name), ``espn_team_id``
+        (Int32, nullable -- null for a school with no ESPN team) and
+        ``espn_display_name`` (str, nullable). An absent asset returns these
+        columns with zero rows and a warning.
+
+    Raises:
+        ValueError: If *league* is not ``"mbb"`` or ``"wbb"``.
+        AssetFetchError: If the release asset exists but cannot be fetched.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import ncaa_espn_schools
+            df = ncaa_espn_schools()
+            print(df.shape)
+
+        Women's tag as pandas::
+
+            wdf = ncaa_espn_schools(league="wbb", return_as_pandas=True)
+
+        Pipeline next step (one line)::
+
+            df.filter(pl.col("espn_team_id").is_null()).select("ncaa_org_id", "ncaa_team")
+
+    See Also:
+        * `hoopR`_ -- men's college basketball in R
+        * `wehoop`_ -- women's college basketball in R
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    df = _release_table("ncaa_espn_schools", league, _SCHOOLS_SCHEMA)
+    return _pandas_ids(df) if return_as_pandas else df
+
+
+def ncaa_espn_school_seasons(
+    league: str = "mbb", *, return_as_pandas: bool = False
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team.
+
+    One row per ``(ncaa_org_id, season)`` for *league*, read from the static
+    ``ncaa_espn_school_seasons`` asset of the ``{league}_crosswalk``
+    sportsdataverse-data release. The asset carries both sports in a ``sport``
+    column; only *league*'s rows are returned. Join it to
+    :func:`ncaa_espn_schools` on ``ncaa_org_id``, or to a
+    ``load_ncaa_{mbb,wbb}_*`` frame on that season's ``ncaa_team_id``.
+
+    Args:
+        league: ``"mbb"`` (men's) or ``"wbb"`` (women's).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        DataFrame with ``ncaa_org_id`` (Int64), ``sport`` (str, equal to
+        *league*), ``season`` (str, ``"YYYY-YY"``), ``ncaa_team_id`` (Int64 --
+        that season's stats.ncaa.org team id) and ``espn_team_id`` (Int32,
+        nullable). An absent asset returns these columns with zero rows and a
+        warning.
+
+    Raises:
+        ValueError: If *league* is not ``"mbb"`` or ``"wbb"``.
+        AssetFetchError: If the release asset exists but cannot be fetched.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import ncaa_espn_school_seasons
+            df = ncaa_espn_school_seasons()
+            print(df.shape)
+
+        Women's seasons as pandas::
+
+            wdf = ncaa_espn_school_seasons(league="wbb", return_as_pandas=True)
+
+        Pipeline next step (one line)::
+
+            df.filter(pl.col("season") == "2024-25").select("ncaa_team_id", "espn_team_id")
+
+    See Also:
+        * `hoopR`_ -- men's college basketball in R
+        * `wehoop`_ -- women's college basketball in R
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    df = _release_table("ncaa_espn_school_seasons", league, _SCHOOL_SEASONS_SCHEMA)
+    df = df.filter(pl.col("sport") == league)
+    return _pandas_ids(df) if return_as_pandas else df
+
+
 #: One dtype per id: NCAA team ids Int64 (as in the team crosswalk), NCAA player ids Utf8 (as in
 #: every ``load_ncaa_{mbb,wbb}_*`` release), ESPN ids Int64 (as everywhere in sdv-py).
 _PLAYER_SCHEMA: dict[str, pl.DataType] = {
@@ -306,4 +447,4 @@ def _build_player_crosswalk(league: str, season: int) -> pl.DataFrame:
     ).select([pl.col(c).cast(t) for c, t in _PLAYER_SCHEMA.items()])
 
 
-__all__ = ["ncaa_espn_player_crosswalk", "ncaa_espn_team_crosswalk"]
+__all__ = ["ncaa_espn_player_crosswalk", "ncaa_espn_school_seasons", "ncaa_espn_schools", "ncaa_espn_team_crosswalk"]
