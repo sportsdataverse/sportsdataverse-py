@@ -15,7 +15,7 @@ Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sp
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
@@ -83,7 +83,7 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 |---|---|---|
 | `player_id` | String | Unique player identifier. |
 | `player` | String | Player name. |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `min` | Float64 | Minutes played. |
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
@@ -102,7 +102,7 @@ Release: [espn_womens_college_basketball_player_season_stats](https://github.com
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_first_name` | String |  |
@@ -160,7 +160,7 @@ Release: [espn_womens_college_basketball_player_core](https://github.com/sportsd
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |
