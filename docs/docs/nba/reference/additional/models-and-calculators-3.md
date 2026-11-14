@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_player–player_game"
-sidebar_label: "Models and calculators: nba_player–player_game"
+title: "NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted"
+sidebar_label: "Models and calculators: nba_player–ot_adjusted"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: nba_player–player_game — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_player–player_game
+# NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted
 
 ### nba_player_impact_context {#nba_player_impact_context}
 
@@ -221,78 +221,78 @@ frame.
 | `l` | Int64 | Losses. |
 | `w_pct` | Float64 | Wins percentage (0-1 decimal). |
 | `min` | Float64 | Minutes played. |
-| `e_off_rating` | Float64 |  |
-| `off_rating` | Float64 |  |
-| `sp_work_off_rating` | Float64 |  |
-| `e_def_rating` | Float64 |  |
-| `def_rating` | Float64 |  |
-| `sp_work_def_rating` | Float64 |  |
-| `e_net_rating` | Float64 |  |
+| `e_off_rating` | Float64 | Estimated offensive rating: points produced per 100 possessions on the stats API's estimated-possession formula. |
+| `off_rating` | Float64 | Offensive rating: points scored per 100 possessions while the player is on the floor. |
+| `sp_work_off_rating` | Float64 | The stats API's SP_WORK copy of off_rating (the same measure under its alternate column set). |
+| `e_def_rating` | Float64 | Estimated defensive rating: points allowed per 100 possessions on the estimated-possession formula. |
+| `def_rating` | Float64 | Defensive rating: points allowed per 100 possessions while the player is on the floor. |
+| `sp_work_def_rating` | Float64 | The stats API's SP_WORK copy of def_rating (the same measure under its alternate column set). |
+| `e_net_rating` | Float64 | Estimated net rating: e_off_rating minus e_def_rating. |
 | `net_rating` | Float64 | Net rating (off rating - def rating). |
-| `sp_work_net_rating` | Float64 |  |
+| `sp_work_net_rating` | Float64 | The stats API's SP_WORK copy of net_rating (the same measure under its alternate column set). |
 | `ast_pct` | Float64 | Assist percentage. |
-| `ast_to` | Float64 |  |
-| `ast_ratio` | Float64 |  |
-| `oreb_pct` | Float64 |  |
-| `dreb_pct` | Float64 |  |
-| `reb_pct` | Float64 |  |
-| `tm_tov_pct` | Float64 |  |
-| `e_tov_pct` | Float64 |  |
-| `efg_pct` | Float64 |  |
+| `ast_to` | Float64 | Assist-to-turnover ratio: assists divided by turnovers. |
+| `ast_ratio` | Float64 | Assist ratio: assists per 100 possessions the player used. |
+| `oreb_pct` | Float64 | Offensive rebound percentage: share of available offensive rebounds the player grabbed while on the floor. |
+| `dreb_pct` | Float64 | Defensive rebound percentage: share of available defensive rebounds the player grabbed while on the floor. |
+| `reb_pct` | Float64 | Rebound percentage: share of all available rebounds the player grabbed while on the floor. |
+| `tm_tov_pct` | Float64 | Turnover percentage: turnovers per 100 possessions the player used. |
+| `e_tov_pct` | Float64 | Estimated turnover percentage on the stats API's estimated-possession formula. |
+| `efg_pct` | Float64 | Effective field-goal percentage: (fgm + 0.5 * fg3m) / fga. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `usg_pct` | Float64 |  |
-| `e_usg_pct` | Float64 |  |
-| `e_pace` | Float64 |  |
+| `usg_pct` | Float64 | Usage percentage: share of the team's possessions the player used while on the floor. |
+| `e_usg_pct` | Float64 | Estimated usage percentage on the stats API's estimated-possession formula. |
+| `e_pace` | Float64 | Estimated pace: possessions per regulation game on the estimated-possession formula. |
 | `pace` | Float64 | Possessions per 48 minutes. |
 | `pace_per40` | Float64 | Pace per40. |
-| `sp_work_pace` | Float64 |  |
+| `sp_work_pace` | Float64 | The stats API's SP_WORK copy of pace (the same measure under its alternate column set). |
 | `pie` | Float64 | Player Impact Estimate (0-1). |
 | `poss` | Int64 | Poss. |
 | `fgm` | Int64 | Field goals made. |
 | `fga` | Int64 | Field goal attempts. |
-| `fgm_pg` | Float64 |  |
-| `fga_pg` | Float64 |  |
+| `fgm_pg` | Float64 | Field goals made per game. |
+| `fga_pg` | Float64 | Field goals attempted per game. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `gp_rank` | Int64 |  |
-| `w_rank` | Int64 |  |
-| `l_rank` | Int64 |  |
-| `w_pct_rank` | Int64 |  |
-| `min_rank` | Int64 |  |
-| `e_off_rating_rank` | Int64 |  |
+| `gp_rank` | Int64 | The stats API's own rank of gp among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `w_rank` | Int64 | The stats API's own rank of w among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `l_rank` | Int64 | The stats API's own rank of l among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `w_pct_rank` | Int64 | The stats API's own rank of w_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `min_rank` | Int64 | The stats API's own rank of min among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_off_rating_rank` | Int64 | The stats API's own rank of e_off_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `off_rating_rank` | Float64 | Producer rank of off_rating (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_off_rating_rank` | Int64 |  |
-| `e_def_rating_rank` | Int64 |  |
+| `sp_work_off_rating_rank` | Int64 | The stats API's own rank of sp_work_off_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_def_rating_rank` | Int64 | The stats API's own rank of e_def_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `def_rating_rank` | Float64 | Producer rank of def_rating (lowest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_def_rating_rank` | Int64 |  |
-| `e_net_rating_rank` | Int64 |  |
+| `sp_work_def_rating_rank` | Int64 | The stats API's own rank of sp_work_def_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_net_rating_rank` | Int64 | The stats API's own rank of e_net_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `net_rating_rank` | Float64 | Producer rank of net_rating (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_net_rating_rank` | Int64 |  |
+| `sp_work_net_rating_rank` | Int64 | The stats API's own rank of sp_work_net_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `ast_pct_rank` | Float64 | Producer rank of ast_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `ast_to_rank` | Float64 | Producer rank of ast_to (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `ast_ratio_rank` | Int64 |  |
+| `ast_ratio_rank` | Int64 | The stats API's own rank of ast_ratio among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `oreb_pct_rank` | Float64 | Producer rank of oreb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `dreb_pct_rank` | Float64 | Producer rank of dreb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `reb_pct_rank` | Float64 | Producer rank of reb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `tm_tov_pct_rank` | Float64 | Producer rank of tm_tov_pct (lowest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `e_tov_pct_rank` | Int64 |  |
+| `e_tov_pct_rank` | Int64 | The stats API's own rank of e_tov_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `efg_pct_rank` | Float64 | Producer rank of efg_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `ts_pct_rank` | Float64 | Producer rank of ts_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `usg_pct_rank` | Float64 | Producer rank of usg_pct (heaviest usage first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `e_usg_pct_rank` | Int64 |  |
-| `e_pace_rank` | Int64 |  |
-| `pace_rank` | Int64 |  |
-| `sp_work_pace_rank` | Int64 |  |
+| `e_usg_pct_rank` | Int64 | The stats API's own rank of e_usg_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_pace_rank` | Int64 | The stats API's own rank of e_pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `pace_rank` | Int64 | The stats API's own rank of pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `sp_work_pace_rank` | Int64 | The stats API's own rank of sp_work_pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
 | `pie_rank` | Float64 | Producer rank of pie (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `fgm_rank` | Int64 |  |
-| `fga_rank` | Int64 |  |
-| `fgm_pg_rank` | Int64 |  |
-| `fga_pg_rank` | Int64 |  |
-| `fg_pct_rank` | Int64 |  |
-| `team_count` | Int64 |  |
+| `fgm_rank` | Int64 | The stats API's own rank of fgm among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `fga_rank` | Int64 | The stats API's own rank of fga among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `fgm_pg_rank` | Int64 | The stats API's own rank of fgm_pg among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `fga_pg_rank` | Int64 | The stats API's own rank of fga_pg among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `fg_pct_rank` | Int64 | The stats API's own rank of fg_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `team_count` | Int64 | Number of teams the player's row covers (the stats API's TEAM_COUNT; more than 1 after a trade). |
 | `season` | Int64 | Season year. |
 | `league_id` | String | League identifier ('10' = WNBA). |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `per_mode` | String |  |
+| `per_mode` | String | The stats API PerMode the row was requested with; the producer ranks are computed within each mode. |
 | `off_rating_pct` | Float64 | Percentile of off_rating among the same ranked players: 100 * (n + 1 - rank) / (n + 1); null where the rank is. |
 | `def_rating_pct` | Float64 | Percentile of def_rating among the same ranked players: 100 * (n + 1 - rank) / (n + 1); null where the rank is. |
 | `net_rating_pct` | Float64 | Percentile of net_rating among the same ranked players: 100 * (n + 1 - rank) / (n + 1); null where the rank is. |
@@ -721,59 +721,4 @@ tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining"
 from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
 one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
 ot_adjusted_seconds(one, regulation_periods=2)
-```
-
-### player_game_rates {#player_game_rates}
-
-`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'Optional[int]' = None, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'pl.DataFrame'`
-
-True-shooting and usage for every boxed player of one game.
-
-TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
-(`total_turnovers`, repaired where ESPN doubled or omitted it) and team
-minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
-WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009 and in a
-WBB game whose two teams together show fewer than 5, so usage is null there). A player with no shots, no minutes,
-or `did_not_play` gets `null`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
-| `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
-| `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods). |
-| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
-| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league and the team box's `season`. |
-
-**Returns**
-
-One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
-| `athlete_id` | Int64 | ESPN athlete id, the join key to the player box score. |
-| `team_id` | Int64 | ESPN team id, the join key to the team box score. |
-| `ts_pct` | Float64 | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
-| `usg_pct` | Float64 | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `team_box` does not hold exactly two different teams of one `game_id` (a duplicated team row would double the player rows), or the league is unknown, or `league` contradicts `league_id`. |
-| `polars.exceptions.ColumnNotFoundError` | If a required box-score column is missing. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_game_page import player_game_rates
-from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_team_boxscore
-team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
 ```

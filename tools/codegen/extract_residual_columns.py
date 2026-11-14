@@ -213,7 +213,7 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "autodoc/gojhl": 1,
     "autodoc/mbb": 619,
     "autodoc/mlb": 107,
-    "autodoc/nba": 427,
+    "autodoc/nba": 423,
     "autodoc/nfl": 1097,
     "autodoc/nhl": 208,
     "autodoc/nojhl": 1,
