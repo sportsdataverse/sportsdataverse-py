@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
 from sportsdataverse.nhl.nhl_war import _faceoff_penalty_components, nhl_skater_war
@@ -118,14 +119,43 @@ def test_nhl_skater_war_assembles_components_into_gar_and_war(monkeypatch):
     assert war.height == 2
     row1 = war.filter(pl.col("player_id") == 1)
     cfg = get_constants("nhl")
-    ev_off1 = (1.0 - cfg.replacement_ev_off) * 600.0 / 60.0
-    ev_def1 = (0.2 - cfg.replacement_ev_def) * 600.0 / 60.0
+    rep_off, rep_def = cfg.replacement_rapm()
+    ev_off1 = (1.0 - rep_off) * 600.0 / 60.0
+    ev_def1 = (0.2 - rep_def) * 600.0 / 60.0
     gar1 = ev_off1 + ev_def1 + 1.5 + 0.1 + 0.2 + 0.3
     assert abs(row1["gar"][0] - gar1) < 1e-6
     assert abs(row1["war"][0] - gar1 / cfg.goals_per_win) < 1e-6
 
     war_pd = nhl_skater_war(pl.DataFrame({"a": [1]}), pl.DataFrame({"a": [1]}), return_as_pandas=True)
     assert hasattr(war_pd, "to_dict")
+
+
+@pytest.mark.parametrize(("league", "expected"), [("nhl", (-0.12, -0.02)), ("pwhl", (-0.10, -0.02))])
+def test_replacement_level_is_on_the_rapm_scale(monkeypatch, league, expected):
+    # RAPM coefficients are deviations from the league average: an average skater (0, 0) must
+    # earn positive EV GAR and a replacement-level skater none. The old team-rate subtraction
+    # charged the average skater about -45 EV goals over 600 minutes.
+    import sportsdataverse.nhl.nhl_war as nhl_war_mod
+
+    cfg = get_constants(league)
+    rep_off, rep_def = cfg.replacement_rapm()
+    assert (rep_off, rep_def) == pytest.approx(expected)
+    rapm = pl.DataFrame(
+        {"player_id": [1, 2], "xg_rapm_off": [0.0, rep_off], "xg_rapm_def": [0.0, rep_def], "toi_minutes": [600.0] * 2}
+    )
+    empty_st = pl.DataFrame(
+        {"player_id": [1], "pp_toi_minutes": [0.0], "pk_toi_minutes": [0.0], "pp_value": [0.0], "pk_value": [0.0]}
+    )
+    empty_fp = pl.DataFrame({"player_id": [1], "faceoffs_goals": [0.0], "pens_goals": [0.0]})
+    monkeypatch.setattr(nhl_war_mod, "nhl_skater_rapm", lambda *a, **k: rapm)
+    monkeypatch.setattr(nhl_war_mod, "nhl_special_teams_value", lambda *a, **k: empty_st)
+    monkeypatch.setattr(nhl_war_mod, "_faceoff_penalty_components", lambda *a, **k: empty_fp)
+
+    war = nhl_skater_war(pl.DataFrame({"a": [1]}), pl.DataFrame({"a": [1]}), league=league)
+    avg = war.filter(pl.col("player_id") == 1)
+    rep = war.filter(pl.col("player_id") == 2)
+    assert 0 < avg["ev_off"][0] < 5 and 0 <= avg["ev_def"][0] < 5
+    assert abs(rep["gar"][0]) < 1e-9
 
 
 def test_nhl_skater_war_empty_input_returns_documented_schema():

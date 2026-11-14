@@ -134,7 +134,9 @@ def nhl_skater_war(
         polars.DataFrame: ``player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64,
         pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64``.
         ``ev_off``/``ev_def`` are ``(5v5-only RAPM rate - replacement level) * EV
-        TOI/60``; ``gar`` sums every component; ``war = gar / goals_per_win``. Empty
+        TOI/60``, the replacement level on the RAPM scale
+        (``ImpactConfig.replacement_rapm``), so a league-average skater earns positive EV
+        GAR; ``gar`` sums every component; ``war = gar / goals_per_win``. Empty
         input returns a zero-row frame with this schema.
 
     Example:
@@ -182,9 +184,13 @@ def nhl_skater_war(
         pl.col("faceoffs_goals").fill_null(0.0),
         pl.col("pens_goals").fill_null(0.0),
     )
+    # The RAPM coefficients are deviations from the league average, so the replacement level
+    # must be on that scale too, never the raw team rate (which charged every average skater
+    # about -1.9 and -2.6 xG per 60 EV minutes).
+    rep_off, rep_def = cfg.replacement_rapm()
     out = out.with_columns(
-        ev_off=((pl.col("xg_rapm_off") - cfg.replacement_ev_off) * pl.col("toi_minutes") / 60.0),
-        ev_def=((pl.col("xg_rapm_def") - cfg.replacement_ev_def) * pl.col("toi_minutes") / 60.0),
+        ev_off=((pl.col("xg_rapm_off") - rep_off) * pl.col("toi_minutes") / 60.0),
+        ev_def=((pl.col("xg_rapm_def") - rep_def) * pl.col("toi_minutes") / 60.0),
         pp=pl.col("pp_value"),
         pk=pl.col("pk_value"),
         pens=pl.col("pens_goals"),

@@ -8146,6 +8146,7 @@
   "fox_nhl_team_stats": "fox-sports-api",
   "fox_nhl_teamnav": "fox-sports-api",
   "get_constants": "models-and-calculators",
+  "impactconfigreplacement_rapm": "models-and-calculators",
   "in_game_features": "analytics",
   "load_nhl_games": "sportsdataverse-data-releases",
   "load_nhl_goalie_box": "sportsdataverse-data-releases",
