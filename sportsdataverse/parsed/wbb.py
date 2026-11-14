@@ -585,6 +585,7 @@ from sportsdataverse.wbb import wbb_epv_team_games as wbb_epv_team_games  # noqa
 from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_on_off as wbb_game_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_game_player_box_splits as wbb_game_player_box_splits  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_game_stints as wbb_game_stints  # noqa: F401
 from sportsdataverse.wbb import wbb_game_units as wbb_game_units  # noqa: F401
@@ -1181,6 +1182,7 @@ __all__ = [
     "wbb_game_flow",
     "wbb_game_lineups_used",
     "wbb_game_on_off",
+    "wbb_game_player_box_splits",
     "wbb_game_player_impact",
     "wbb_game_stints",
     "wbb_game_units",

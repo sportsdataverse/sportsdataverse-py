@@ -450,7 +450,7 @@ at the first event of its `poss_num`; one whose `poss_team` is neither side is d
 
 **Returns**
 
-Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String player ids: `period`, `clock` (seconds left in the period after the event) and `order` (the event's row in the release).
+Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String player ids: `period`, `clock` (seconds left in the period after the event), `order` (the event's row in the release) and `is_garbage_time` (the event's own flag).
 
 | col_name | type | description |
 |---|---|---|
@@ -476,6 +476,7 @@ Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String playe
 | `period` | Int64 | Period of the action. |
 | `clock` | Float64 | Period clock (seconds left) after the event; 0 on the period's last event, which takes the period's tail. |
 | `order` | Int64 | The event's row in the pbp release (its place in the game). |
+| `is_garbage_time` | Boolean | Whether the event is in garbage time: the release's own is_garbage_time (bigballR's rule). |
 
 **Raises**
 

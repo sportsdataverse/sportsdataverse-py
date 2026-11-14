@@ -124,6 +124,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_game_flow](additional/analytics.md#wnba_game_flow) | WNBA game flow per team and game: runs, droughts, kills, lead changes, time leading, game control (league_id='10'). See … |
 | [wnba_game_lineups_used](additional/analytics.md#wnba_game_lineups_used) | WNBA lineups used per game (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_lineups_used. |
 | [wnba_game_on_off](additional/analytics.md#wnba_game_on_off) | WNBA in-game on/off (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_on_off. |
+| [wnba_game_player_box_splits](additional/analytics.md#wnba_game_player_box_splits) | WNBA player box by game, period and garbage time (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_player_box_splits. |
 | [wnba_game_player_impact](additional/analytics.md#wnba_game_player_impact) | WNBA game impact box (league_id='10'). See sportsdataverse.nba.nba_game_impact.nba_game_player_impact. |
 | [wnba_game_stints](additional/analytics.md#wnba_game_stints) | WNBA game stints (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_stints. |
 | [wnba_game_units](additional/analytics-2.md#wnba_game_units) | WNBA in-game units (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_units. |

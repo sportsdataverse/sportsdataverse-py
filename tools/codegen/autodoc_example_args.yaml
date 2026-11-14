@@ -201,6 +201,8 @@ nba:
   nba_epv_team_games: {seasons: 2026}
   nba_game_lineups_used: {seasons: 2026}  # 48528 rows x 23 cols
   nba_game_stints: {seasons: 2026}
+  nba_box_events: {pbp: {$call: nba.load_nba_stats_pbp, args: {seasons: 2025}}, schedule: {$call: nba.load_nba_stats_schedules, args: {seasons: 2025}}}
+  nba_game_player_box_splits: {seasons: 2026}
   nba_game_units: {seasons: 2026}
   nba_game_on_off: {seasons: 2026}
   nba_lineup_seasons: {seasons: 2025}
@@ -326,6 +328,7 @@ wnba:
   wnba_game_player_impact: {seasons: 2026}  # 7008 rows x 18 cols
   wnba_game_lineups_used: {seasons: 2026}  # 10481 rows x 23 cols
   wnba_game_stints: {seasons: 2026}
+  wnba_game_player_box_splits: {seasons: 2026}
   wnba_game_units: {seasons: 2026}
   wnba_game_on_off: {seasons: 2026}
   wnba_lineup_seasons: {seasons: 2025}
@@ -398,6 +401,8 @@ mbb:
   mbb_game_player_impact: {seasons: 2025}
   mbb_game_lineups_used: {seasons: 2025}
   mbb_game_stints: {seasons: 2025}
+  ncaa_box_events: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}}
+  mbb_game_player_box_splits: {seasons: 2025}
   mbb_game_units: {seasons: 2025}
   mbb_game_on_off: {seasons: 2025}
   mbb_lineup_seasons: {seasons: 2025}
@@ -490,6 +495,7 @@ wbb:
   wbb_game_player_impact: {seasons: 2025}
   wbb_game_lineups_used: {seasons: 2025}
   wbb_game_stints: {seasons: 2025}
+  wbb_game_player_box_splits: {seasons: 2025}
   wbb_game_units: {seasons: 2025}
   wbb_game_on_off: {seasons: 2025}
   wbb_lineup_seasons: {seasons: 2025}

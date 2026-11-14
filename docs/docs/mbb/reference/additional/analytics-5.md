@@ -361,6 +361,52 @@ barred = mbb_tournament_ineligible([2023], league="mens")
 barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
 ```
 
+### ncaa_box_events {#ncaa_box_events}
+
+`ncaa_box_events(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Each player's box counts per stats.ncaa.org event, the input of the stint and split box.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release order (`season`, `contest_id`, `event_team_espn_team_id`, `player_1_id`, `player_2_id`, `event_type`, `event_result`, `shot_value`). |
+
+**Returns**
+
+Rows in `sportsdataverse._common.game_stints.box_event_schema` (String player ids), `order` the event's row in the release (the stint rows' `order`): one per event with a count for its `player_1_id`, and one per assisted field goal for its `player_2_id`. An event with no player id or no ESPN team id (a non-D1 side) has no row.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id` | String | stats.ncaa.org player id. |
+| `order` | Int64 | The action's place in the game: the stint rows' order (stats.nba.com order_index; for college the event's row in the pbp release). |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goals attempted. |
+| `fg3m` | Int64 | Three-pointers made. |
+| `fg3a` | Int64 | Three-pointers attempted. |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throws attempted. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
+| `stl` | Int64 | Steals he is credited with. |
+| `blk` | Int64 | Shots he blocked. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's). |
+| `pf` | Int64 | Personal fouls (technicals are not counted). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+from sportsdataverse.mbb.mbb_game_stints import ncaa_box_events
+ncaa_box_events(load_ncaa_mbb_pbp(2025)).head()
+```
+
 ### ncaa_coach_stints {#ncaa_coach_stints}
 
 `ncaa_coach_stints(coaches: 'pl.DataFrame', records: 'pl.DataFrame') -> 'pl.DataFrame'`

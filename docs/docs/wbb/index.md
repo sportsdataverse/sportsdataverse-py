@@ -15,7 +15,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 358 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 359 | — |
 
 ## ESPN {#espn}
 
@@ -223,6 +223,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_game_flow`](reference/additional/analytics-2#wbb_game_flow)
 - [`wbb_game_lineups_used`](reference/additional/analytics-2#wbb_game_lineups_used)
 - [`wbb_game_on_off`](reference/additional/analytics-2#wbb_game_on_off)
+- [`wbb_game_player_box_splits`](reference/additional/analytics-2#wbb_game_player_box_splits)
 - [`wbb_game_player_impact`](reference/additional/analytics-2#wbb_game_player_impact)
 - [`wbb_game_stints`](reference/additional/analytics-2#wbb_game_stints)
 - [`wbb_game_units`](reference/additional/analytics-2#wbb_game_units)
