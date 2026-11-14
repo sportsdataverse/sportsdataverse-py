@@ -1,0 +1,241 @@
+# BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany) — Team
+
+> BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany) — Team — function reference in sdv-py, the SportsDataverse Python package.
+
+## scb_team_statistics
+
+Season team stat table: totals and per-game values, one row per team and stat block.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}/team-statistics`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2025/team-statistics?displayType=MAIN_ROUND](https://api.basketball-bundesliga.de/seasons/2025/team-statistics?displayType=MAIN_ROUND)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+| `displayType` | `display_type` |  |  | `Y` | Which games the table covers: MAIN_ROUND (regular season), PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP. |
+
+### Returns {#scb_team_statistics-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `display_type` | String | Which games the table covers, echoed from the request (MAIN_ROUND, PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP). |
+| `team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `team_tlc` | String | Three-letter club code. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `round_code` | Int64 | Provider round code; 1 for MAIN_ROUND in every sample (mapping unverified). |
+| `competition` | String | Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. |
+| `aggregation` | String | Aggregation label as sent: STAGE in player tables, MAIN_ROUND in team tables. |
+| `seconds_played` | Int64 | The team's season total playing time in SECONDS over displayType. |
+| `points` | Int64 | The team's season total points over displayType. |
+| `two_point_shots_made` | Int64 | The team's season total 2-point field goals made over displayType. |
+| `two_point_shots_attempted` | Int64 | The team's season total 2-point field goals attempted over displayType. |
+| `two_point_shot_success_percent` | Float64 | The team's season total 2-point field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `three_point_shots_made` | Int64 | The team's season total 3-point field goals made over displayType. |
+| `three_point_shots_attempted` | Int64 | The team's season total 3-point field goals attempted over displayType. |
+| `three_point_shot_success_percent` | Float64 | The team's season total 3-point field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `field_goals_made` | Int64 | The team's season total field goals made over displayType. |
+| `field_goals_attempted` | Int64 | The team's season total field goals attempted over displayType. |
+| `field_goals_success_percent` | Float64 | The team's season total field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `free_throws_made` | Int64 | The team's season total free throws made over displayType. |
+| `free_throws_attempted` | Int64 | The team's season total free throws attempted over displayType. |
+| `free_throws_success_percent` | Float64 | The team's season total free-throw percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `offensive_rebounds` | Int64 | The team's season total offensive rebounds over displayType. |
+| `defensive_rebounds` | Int64 | The team's season total defensive rebounds over displayType. |
+| `total_rebounds` | Int64 | The team's season total rebounds (offensive + defensive) over displayType. |
+| `assists` | Int64 | The team's season total assists over displayType. |
+| `steals` | Int64 | The team's season total steals over displayType. |
+| `turnovers` | Int64 | The team's season total turnovers over displayType. |
+| `blocks` | Int64 | The team's season total blocked shots over displayType. |
+| `fouls_committed` | Int64 | The team's season total fouls committed over displayType. |
+| `efficiency` | Int64 | The team's season total efficiency (EFF = PTS + REB + AST + STL + BLK - missed FG - missed FT - TO; checked on a 2026 box score) over displayType. |
+| `plus_minus` | Int64 | The team's season total plus-minus over displaytype. |
+| `games_played` | Int64 | The team's season total games played over displayType. |
+| `seconds_per_game` | Float64 | Per-game average of seconds, seconds. |
+| `points_per_game` | Float64 | Per-game average of points. |
+| `two_point_shots_made_per_game` | Float64 | Per-game average of 2-point field goals made. |
+| `two_point_shots_attempted_per_game` | Float64 | Per-game average of 2-point field goals attempted. |
+| `three_point_shots_made_per_game` | Float64 | Per-game average of 3-point field goals made. |
+| `three_point_shots_attempted_per_game` | Float64 | Per-game average of 3-point field goals attempted. |
+| `field_goals_made_per_game` | Float64 | Per-game average of field goals made. |
+| `field_goals_attempted_per_game` | Float64 | Per-game average of field goals attempted. |
+| `field_goals_success_percent_per_game` | Float64 | Per-game average of field-goal percentage (0 in every sample: unusable). |
+| `free_throws_made_per_game` | Float64 | Per-game average of free throws made. |
+| `free_throws_attempted_per_game` | Float64 | Per-game average of free throws attempted. |
+| `defensive_rebounds_per_game` | Float64 | Per-game average of defensive rebounds. |
+| `offensive_rebounds_per_game` | Float64 | Per-game average of offensive rebounds. |
+| `total_rebounds_per_game` | Float64 | Per-game average of rebounds (offensive + defensive). |
+| `assists_per_game` | Float64 | Per-game average of assists. |
+| `steals_per_game` | Float64 | Per-game average of steals. |
+| `turnovers_per_game` | Float64 | Per-game average of turnovers. |
+| `blocks_per_game` | Float64 | Per-game average of blocked shots. |
+| `fouls_committed_per_game` | Float64 | Per-game average of fouls committed. |
+| `efficiency_per_game` | Float64 | Per-game average of efficiency (EFF = PTS + REB + AST + STL + BLK - missed FG - missed FT - TO; checked on a 2026 box score). |
+| `plus_minus_per_game` | Float64 | Per-game average of plus-minus (point margin while on court). |
+| `double_double` | Int64 | The team's season total double-doubles over displayType. |
+| `double_double_per_game` | Float64 | Per-game average of double-doubles. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team_statistics-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_team_statistics-example}
+
+```python
+scb_team_statistics(display_type='MAIN_ROUND', season=2026)
+```
+
+## scb_team
+
+Club profile: names, code, home page, ticket shop, year joined and honours.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/teams/{team_id}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/teams/413](https://api.basketball-bundesliga.de/teams/413)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | Club id (`team_id` in `scb_season_teams`), e.g. 413 (ALBA BERLIN). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_team-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `team_id` | String | Club id, a string; equal to `season_team_id` in every sample. Joins to `scb_team` and `scb_season_teams`. |
+| `tlc` | String | Three-letter club code. |
+| `name_full` | String | Full club name as the API lists it today. |
+| `name_short` | String | Short name (often the city); null on DBBL. |
+| `mascot` | String | Club mascot name (null when none). |
+| `homepage_url` | String | Club website address as sent (it can lack the scheme). |
+| `ticket_url` | String | Ticket shop URL. |
+| `year_joined_bbl` | Int64 | Year the club joined the league. |
+| `order_id` | Int64 | Display order of the club on the site; null on some clubs. |
+| `best_achievements` | String | Honours, German free text (Deutscher Meister = German champion, Pokalsieger = cup winner, Vizepokalsieger = cup runner-up). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_team-example}
+
+```python
+scb_team(team_id='413')
+```
+
+## scb_team_seasons
+
+Every season a club played: its name that season and its championship and cup titles.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/teams/{team_id}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/teams/413](https://api.basketball-bundesliga.de/teams/413)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | Club id (`team_id` in `scb_season_teams`), e.g. 413 (ALBA BERLIN). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_team_seasons-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `team_id` | String | Club id, a string; equal to `season_team_id` in every sample. Joins to `scb_team` and `scb_season_teams`. |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `season_team_id` | String | Season-team id, a string; equal to the club `team_id` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `team_name` | String | Team name as listed that season (sponsor names included). |
+| `is_championship_winner` | Boolean | Won the championship that season. |
+| `is_cup_winner` | Boolean | Won the cup that season. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_team_seasons-example}
+
+```python
+scb_team_seasons(team_id='413')
+```
+
+## scb_team_rosters
+
+Per club, the current roster, one row per player (BBL only).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/transfers/teams`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/transfers/teams](https://api.basketball-bundesliga.de/transfers/teams)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#scb_team_rosters-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `team_id` | String | Club id, a string; equal to `season_team_id` in every sample. Joins to `scb_team` and `scb_season_teams`. |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move). Joins box-score lines, actions, records and `scb_season_player`. |
+| `real_player_id` | Int64 | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+| `birth_date` | String | Date of birth, YYYY-MM-DD. |
+| `position` | String | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
+| `shirt_number` | String | Jersey number as sent (a string: it can be `00`). |
+| `height` | Float64 | Height in metres (float32 noise: 1.77 arrives as 1.7699999809265137). |
+| `weight` | Int64 | Weight in kg; 0 when unknown. |
+| `nationalities` | String | Nationalities, ISO 3166-1 alpha-2 codes. |
+| `is_all_star` | Boolean | All-Star selection flag. |
+| `is_young` | Boolean | Young-player flag (German-trained youth rule; inferred). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team_rosters-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_team_rosters-example}
+
+```python
+scb_team_rosters()
+```
