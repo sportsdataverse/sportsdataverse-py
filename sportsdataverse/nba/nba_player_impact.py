@@ -221,6 +221,9 @@ def nba_current_impact_context(current: pl.DataFrame, *, return_as_pandas: bool 
             cur = nba_current_impact_context(nba_current_impact(possessions, priors, ["2025-01-15", "2025-03-01"]))
             cur.sort("as_of", "current_impact_rank").select("as_of", "player_id", "current_impact", "current_impact_rank")
     """
+    missing = [c for c in ("off_poss", "def_poss") if c not in current.columns]
+    if missing:
+        raise KeyError(f"{missing} missing from the frame: the ranks' sample sizes need them")
     out = attach_sample_sizes(current, {m: _N[s] for m, s in CURRENT_IMPACT_RANKED.items()})
     out = attach_ranks(
         out,

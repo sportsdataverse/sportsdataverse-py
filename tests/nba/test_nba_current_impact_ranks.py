@@ -69,3 +69,9 @@ def test_no_one_has_played_is_unranked(current) -> None:
         current.with_columns(pl.lit(0, pl.Int64).alias("off_poss"), pl.lit(0, pl.Int64).alias("def_poss"))
     )
     assert none["current_impact_rank"].null_count() == none.height
+
+
+@pytest.mark.parametrize("col", ["off_poss", "def_poss", "as_of", "current_impact"])
+def test_missing_column_raises_keyerror(current, col) -> None:
+    with pytest.raises(KeyError):
+        nba_current_impact_context(current.drop(col))
