@@ -645,6 +645,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `fgm` | Float64 | Offense field goals made on the possession. |
 | `fg3m` | Float64 | Offense three-pointers made on the possession. |
 | `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `ftm` | Float64 | Offense free throws made on the possession. |
 | `oreb` | Float64 | Offense offensive rebounds on the possession. |
 | `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
 | `tov` | Float64 | Offense turnovers on the possession. |

@@ -425,6 +425,7 @@ from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_stint_rows as nba_stint_rows  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
+from sportsdataverse.nba import nba_team_game_four_factors as nba_team_game_four_factors  # noqa: F401
 from sportsdataverse.nba import nba_team_game_possessions as nba_team_game_possessions  # noqa: F401
 from sportsdataverse.nba import nba_team_luck as nba_team_luck  # noqa: F401
 from sportsdataverse.nba import nba_team_play_styles as nba_team_play_styles  # noqa: F401
@@ -913,6 +914,7 @@ __all__ = [
     "nba_stint_rows",
     "nba_team_clutch",
     "nba_team_crosswalk",
+    "nba_team_game_four_factors",
     "nba_team_game_possessions",
     "nba_team_luck",
     "nba_team_play_styles",

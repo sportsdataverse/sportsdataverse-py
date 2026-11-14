@@ -610,6 +610,7 @@ from sportsdataverse.wbb import wbb_situational_team as wbb_situational_team  # 
 from sportsdataverse.wbb import wbb_situational_team_games as wbb_situational_team_games  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_team_game_four_factors as wbb_team_game_four_factors  # noqa: F401
 from sportsdataverse.wbb import wbb_team_game_possessions as wbb_team_game_possessions  # noqa: F401
 from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
@@ -1208,6 +1209,7 @@ __all__ = [
     "wbb_situational_team_games",
     "wbb_strength_of_schedule",
     "wbb_team_crosswalk",
+    "wbb_team_game_four_factors",
     "wbb_team_game_possessions",
     "wbb_team_luck",
     "wbb_team_ratings",

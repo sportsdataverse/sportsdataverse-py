@@ -169,6 +169,9 @@ columns:
 - name: opp_ft_rate_n
   type: integer
   description: ''
+- name: lg_ft_pct
+  type: double
+  description: ''
 - name: plus_minus
   type: integer
   description: ''
