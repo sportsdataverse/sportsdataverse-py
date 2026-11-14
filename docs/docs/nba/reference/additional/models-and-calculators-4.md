@@ -1,10 +1,117 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: player_props–wp_variants"
-sidebar_label: "Models and calculators: player_props–wp_variants"
+title: "NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants"
+sidebar_label: "Models and calculators: ot_adjusted–wp_variants"
 sidebar_position: 14
-description: "NBA — additional Python functions — Models and calculators: player_props–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: player_props–wp_variants
+# NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants
+
+### ot_adjusted_seconds {#ot_adjusted_seconds}
+
+`ot_adjusted_seconds(pbp: 'pl.DataFrame', *, regulation_periods: 'int' = 4) -> 'pl.DataFrame'`
+
+Tag overtime rows and give them the overtime period clock as their seconds remaining.
+
+The in-game models clip `start_game_seconds_remaining` at zero, so every overtime play
+(negative in the NBA frame) would score as "game over at the current margin". Each overtime is
+scored as its own five-minute endgame instead: on rows with `period_number > regulation_periods`
+`start_game_seconds_remaining` becomes the period clock, `start_quarter_seconds_remaining` or
+(men's college frames) `start_period_seconds_remaining`, whichever is present and not null.
+In a halves game (`regulation_periods=2`) period 3 is the first overtime.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema. |
+| `regulation_periods` | `int` | `4` | The game's regulation periods (4 quarters, 2 halves); see `game_regulation_periods`. |
+
+**Returns**
+
+The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
+
+| col_name | type | description |
+|---|---|---|
+| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | Float64 | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If `period_number` or `start_game_seconds_remaining` is missing, or neither period clock column is present. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+tagged = ot_adjusted_seconds(pbp)
+tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
+
+# A men's college game (two halves)
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+ot_adjusted_seconds(one, regulation_periods=2)
+```
+
+### player_game_rates {#player_game_rates}
+
+`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'Optional[int]' = None, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'pl.DataFrame'`
+
+True-shooting and usage for every boxed player of one game.
+
+TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
+(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
+(`total_turnovers`, repaired where ESPN doubled or omitted it) and team
+minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
+WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009 and in a
+WBB game whose two teams together show fewer than 5, so usage is null there). A player with no shots, no minutes,
+or `did_not_play` gets `null`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
+| `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
+| `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods). |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league and the team box's `season`. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `athlete_id` | Int64 | ESPN athlete id, the join key to the player box score. |
+| `team_id` | Int64 | ESPN team id, the join key to the team box score. |
+| `ts_pct` | Float64 | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
+| `usg_pct` | Float64 | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `team_box` does not hold exactly two different teams of one `game_id` (a duplicated team row would double the player rows), or the league is unknown, or `league` contradicts `league_id`. |
+| `polars.exceptions.ColumnNotFoundError` | If a required box-score column is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import player_game_rates
+from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_team_boxscore
+team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+```
 
 ### player_props {#player_props}
 
