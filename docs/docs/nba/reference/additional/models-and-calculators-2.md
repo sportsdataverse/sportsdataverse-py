@@ -665,6 +665,32 @@ the same frame.
 
 `current` with `<m>_n` (Int64), then `<m>_rank` and `<m>_pct` (Float64) appended for `o_current_impact`, `d_current_impact` and `current_impact`, in that order.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `as_of` | Date | The rating date: only games dated strictly before it are used. |
+| `season` | Int64 | Season (end year) of the last game before as_of. |
+| `o_current_impact` | Float64 | Expected offensive impact per 100 on as_of: o_prior plus the Kalman-filtered offensive deviation from it. |
+| `d_current_impact` | Float64 | Expected defensive impact per 100 on as_of (positive = good defense): d_prior plus the filtered defensive deviation. |
+| `current_impact` | Float64 | o_current_impact + d_current_impact. |
+| `o_prior` | Float64 | The offensive box prior in force on as_of (the latest prior_date on or before it), per 100. |
+| `d_prior` | Float64 | The defensive box prior in force on as_of, per 100 (positive = good defense). |
+| `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
+| `def_poss` | Int64 | Defensive possessions this season before as_of. |
+| `last_game_date` | Date | Date of the player's last game before as_of in the input. |
+| `o_prior_weight` | Float64 | Share of o_current_impact that is the box prior (0-1): the offensive deviation's posterior variance over its variance with no game updates. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate. |
+| `d_prior_weight` | Float64 | Share of d_current_impact that is the box prior (0-1), computed the same way for the defensive deviation. |
+| `prior_weight` | Float64 | Share of current_impact that is the box prior (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
+| `o_current_impact_n` | Int64 | Possessions o_current_impact is ranked on: this season's off_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `d_current_impact_n` | Int64 | Possessions d_current_impact is ranked on: this season's def_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `current_impact_n` | Int64 | Possessions current_impact is ranked on: this season's off_poss + def_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `o_current_impact_rank` | Float64 | Rank of o_current_impact among the as_of date's players with o_current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `d_current_impact_rank` | Float64 | Rank of d_current_impact among the as_of date's players with d_current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `current_impact_rank` | Float64 | Rank of current_impact among the as_of date's players with current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `o_current_impact_pct` | Float64 | Percentile of o_current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+| `d_current_impact_pct` | Float64 | Percentile of d_current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+| `current_impact_pct` | Float64 | Percentile of current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+
 **Raises**
 
 | Exception | Description |

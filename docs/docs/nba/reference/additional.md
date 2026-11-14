@@ -226,12 +226,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_war](additional/models-and-calculators-3.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-3.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-3.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
-| [player_props](additional/models-and-calculators-3.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
-| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
-| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted ratings and paces. |
-| [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
-| [render_report](additional/models-and-calculators-3.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
-| [run_current_impact](additional/models-and-calculators-3.md#run_current_impact) | One pass of the filter over `possessions`, snapshotting before each `as_of` date. |
+| [player_props](additional/models-and-calculators-4.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
+| [predict_margin](additional/models-and-calculators-4.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
+| [predict_total](additional/models-and-calculators-4.md#predict_total) | Expected total points from adjusted ratings and paces. |
+| [raw_game_efficiency](additional/models-and-calculators-4.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
+| [render_report](additional/models-and-calculators-4.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
+| [run_current_impact](additional/models-and-calculators-4.md#run_current_impact) | One pass of the filter over `possessions`, snapshotting before each `as_of` date. |
 | [score_win_prob](additional/models-and-calculators-4.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
 | [season_game_excitement](additional/models-and-calculators-4.md#season_game_excitement) | Every game's excitement index, lead changes and biggest swing, ranked within its season. |
 | [season_gram](additional/models-and-calculators-4.md#season_gram) | The `SeasonGram` of a possession frame (rows with a full lineup). |

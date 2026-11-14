@@ -207,6 +207,7 @@ nba:
   nba_lineup_seasons: {seasons: 2025}
   nba_player_on_off: {seasons: 2025}
   nba_player_impact_context: {impact: {$call: nba.load_nba_player_impact, args: {seasons: 2025}}}
+  nba_player_stats_advanced_context: {adv: {$call: nba.load_nba_stats_leaguedash, args: {family: player_stats_advanced, seasons: 2026}}}
   nba_player_impact_league_averages: {impact: {$call: nba.load_nba_player_impact, args: {seasons: 2025}}}
   nba_player_wowy: {seasons: 2025}
   nba_player_factor_rapm: {seasons: 2025}
