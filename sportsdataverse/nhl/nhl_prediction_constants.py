@@ -83,8 +83,8 @@ class LeagueConstants:
     """Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
     Attributes:
-        hfa: home-ice edge on ``exp_margin``'s own (shrunk-rating) scale, fitted jointly with
-            ``margin_sd``; smaller than the real-goal home edge.
+        hfa: home-ice edge on ``exp_margin``'s own (shrunk-rating) scale. NHL: fitted jointly with
+            ``margin_sd``, so smaller than the real-goal home edge. PWHL: a seeded placeholder.
         margin_sd: standard deviation of the final goal margin (deliberately WIDE for hockey).
         avg_xgf: league mean even-strength xG-for, per game.
         avg_total_goals: league mean total goals per game.
