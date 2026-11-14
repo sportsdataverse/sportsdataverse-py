@@ -379,7 +379,7 @@ print(preds.sort("home_win_prob", descending=True).head())
 
 `nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
-Per-skater power-play/penalty-kill value (goals) above/below league baseline.
+Per-skater share of power-play/penalty-kill value (goals) above/below the league rate.
 
 **Parameters**
 
@@ -395,7 +395,7 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
 **Returns**
 
-`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
+`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. `*_toi_minutes` is the skater's own time on the ice; `pp_value`/`pk_value` are goals above the league rate, each skater carrying an equal share of their unit's (a fifth on a 5v4 power play), so a unit's skaters sum to its value. Empty input returns a zero-row frame with this schema.
 
 | col_name | type | description |
 |---|---|---|
@@ -525,6 +525,29 @@ The variance-corrected expected combined goal total for the game.
 ```python
 from sportsdataverse.nhl.nhl_market import predict_total
 predict_total(2.8, 2.2, 2.5, 2.4, False)
+```
+
+### special_teams_split {#special_teams_split}
+
+`special_teams_split(rec: 'dict') -> 'tuple[str, str, float] | None'`
+
+Which side of a stint is on the power play, and that side's xG (shared with the fitter).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rec` | `dict` |  | one `build_stints` row as a dict. |
+
+**Returns**
+
+`(pp_ids_column, pk_ids_column, pp_xg)` for a special-teams stint: one with unequal skater counts in `strength_state` and a positive `duration`. That includes a pulled goalie (`6v5`), credited as a power play for the trailing team. `None` otherwise (even strength, unparseable or missing state). The power play's shots are the penalty kill's shots against, so `pp_xg` is both.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_special_teams import special_teams_split
+special_teams_split({"strength_state": "4v5", "duration": 60, "xgf_home": 0.0, "xgf_away": 0.2})
 ```
 
 ### win_prob_from_margin {#win_prob_from_margin}

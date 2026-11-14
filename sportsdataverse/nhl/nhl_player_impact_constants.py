@@ -133,8 +133,14 @@ LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
         replacement_ev_off=1.9,
         replacement_ev_def=2.6,
         league_xg_rate_ev=2.5,
-        league_xg_rate_pp=6.2,
-        league_xg_rate_pk=6.2,
+        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-14) on the retrained xG: pooled
+        # PP xGF/60 per season 5.824 / 6.129 / 5.693 / 6.007 (2022-23..2025-26), mean 5.91. One
+        # number for both: the PP's shots are the PK's shots against. Was a 6.2 seed. Refit after
+        # every xG retrain. A pooled mean, so one season's league PP value need not sum to zero
+        # (2024-25 runs about -0.22 xG per PP hour), and it is on the published boosters' scale:
+        # a caller passing its own xG (`xg_scored=True`) compares against a rate of another model.
+        league_xg_rate_pp=5.91,
+        league_xg_rate_pk=5.91,
         xg_booster_league="nhl",
     ),
     "pwhl": ImpactConfig(

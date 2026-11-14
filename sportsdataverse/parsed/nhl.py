@@ -421,6 +421,7 @@ from sportsdataverse.nhl import predict_total as predict_total  # noqa: F401
 from sportsdataverse.nhl import prepare_xg_features as prepare_xg_features  # noqa: F401
 from sportsdataverse.nhl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nhl import spearman_corr as spearman_corr  # noqa: F401
+from sportsdataverse.nhl import special_teams_split as special_teams_split  # noqa: F401
 from sportsdataverse.nhl import team_fullname_to_abbr as team_fullname_to_abbr  # noqa: F401
 from sportsdataverse.nhl import team_game_xg_rates as team_game_xg_rates  # noqa: F401
 from sportsdataverse.nhl import underscore as underscore  # noqa: F401
@@ -821,6 +822,7 @@ __all__ = [
     "prepare_xg_features",
     "scoreboard_event_parsing",
     "spearman_corr",
+    "special_teams_split",
     "team_fullname_to_abbr",
     "team_game_xg_rates",
     "underscore",

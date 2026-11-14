@@ -8186,6 +8186,7 @@
   "prepare_xg_features": "models-and-calculators",
   "scoreboard_event_parsing": "espn",
   "spearman_corr": "models-and-calculators",
+  "special_teams_split": "analytics",
   "team_fullname_to_abbr": "models-and-calculators",
   "team_game_xg_rates": "models-and-calculators",
   "weighted_ridge": "models-and-calculators",
