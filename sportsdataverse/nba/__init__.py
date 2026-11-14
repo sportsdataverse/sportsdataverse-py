@@ -191,6 +191,7 @@ from sportsdataverse.nba.nba_game_stints import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
     nba_possession_rate_rows,
+    nba_team_game_four_factors,
     nba_team_game_possessions,
     nba_team_season_rates,
 )
@@ -200,6 +201,7 @@ from sportsdataverse.nba.nba_shot_zone_profiles import nba_player_shot_zones, nb
 from sportsdataverse.nba.nba_player_war import nba_player_war  # noqa: F401
 from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers, nba_coach_seasons  # noqa: F401
 from sportsdataverse.nba.nba_official_seasons import nba_official_seasons  # noqa: F401
+from sportsdataverse.nba.nba_player_box_expected import nba_player_game_expected_box, nba_player_season_box_rates  # noqa: F401
 from sportsdataverse.nba.nba_game_flow import nba_game_flow, nba_score_rows, nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba.nba_situational import (  # noqa: F401
     nba_situation_rows,
