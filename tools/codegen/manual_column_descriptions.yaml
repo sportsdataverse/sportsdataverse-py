@@ -38418,6 +38418,7 @@ mbb_team_season_rates:
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
   games: Games with at least one possession in the split.
+  lg_ft_pct: 'League free-throw percentage in the season and split: every team''s FTM over every team''s FTA, so free throws can be priced without a second read. From the NCAA team box; null in the clutch split.'
   net_rtg: 'Net rating: off_rtg minus def_rtg.'
   net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
   net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38538,6 +38539,26 @@ mbb_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 450 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+mbb_team_game_four_factors:
+  chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
+  exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
+  free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
+  game_id: The stats.ncaa.org contest id.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
+  poss: The team's offensive possessions in the game, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
+  rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
+  residual_pts: 'The remainder, exactly (pts - box_pts - FGA x the league''s pooled (pts - box_pts) / FGA) + chance_pts x (box_poss - poss - FGA x the league''s pooled (box_poss - poss) / FGA), box_pts = 2 FGM + 3PM + FTM, box_poss = FGA - OREB + TOV + 0.44 FTA: the play-by-play points'' and possessions'' distance from the team box beyond the league''s. Sums to zero over the league.'
+  season: Season, named by the year it ends (2025 is 2024-25).
+  shooting_pts: 'Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league''s per FGA: the misses a league-average offense gets back.'
+  team_id: ESPN team id (a non-D1 opponent gets no row).
+  turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 mbb_team_game_possessions:
   game_id: stats.ncaa.org contest id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
@@ -38559,6 +38580,7 @@ nba_possession_rate_rows:
   fga: Offense field-goal attempts on the possession.
   fgm: Offense field goals made on the possession.
   fta: Offense free-throw attempts on the possession.
+  ftm: Offense free throws made on the possession.
   game_id: stats.nba.com game id.
   late: 'True in the last regulation period (the 4th quarter; the 2nd half of a two-halves game) or an overtime: the periods
     the clutch window can fall in.'
@@ -38598,6 +38620,7 @@ nba_team_season_rates:
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
   games: Games with at least one possession in the split.
+  lg_ft_pct: 'League free-throw percentage in the season and split: every team''s FTM over every team''s FTA, so free throws can be priced without a second read.'
   net_rtg: 'Net rating: off_rtg minus def_rtg.'
   net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
   net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38718,6 +38741,26 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,400 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+nba_team_game_four_factors:
+  chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
+  exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
+  free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
+  game_id: stats.nba.com game id.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
+  poss: The team's offensive possessions in the game, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the game.
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
+  rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
+  residual_pts: 'The remainder, exactly chance_pts x (box_poss - poss - FGA x the league''s box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions'' distance from the box estimate beyond the league''s. Sums to zero over the league.'
+  season: Season, named by the year it ends (2026 is 2025-26).
+  shooting_pts: 'Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league''s per FGA: the misses a league-average offense gets back.'
+  team_id: stats.nba.com team id (the 10-digit franchise id).
+  turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 nba_team_game_possessions:
   game_id: stats.nba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
@@ -38740,6 +38783,7 @@ ncaa_possession_rate_rows:
   fga: 'Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   fgm: 'Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   fta: 'Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  ftm: 'Always null: the NCAA possessions carry no ftm counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   game_id: The stats.ncaa.org contest id.
   late: 'True in the 2nd half (men; women before 2016), the 4th quarter (women from 2016) or an overtime: the periods the
     clutch window can fall in.'
@@ -38763,6 +38807,7 @@ ncaa_team_box_count_rows:
   fga: Field-goal attempts in the game.
   fgm: Field goals made in the game.
   fta: Free-throw attempts in the game.
+  ftm: Free throws made in the game.
   game_id: The stats.ncaa.org contest id.
   offense_is_home: True when the team is the game's (nominal) home team in the NCAA team box; a neutral-site game is in neither
     split.
@@ -38797,6 +38842,7 @@ wbb_team_season_rates:
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
   games: Games with at least one possession in the split.
+  lg_ft_pct: 'League free-throw percentage in the season and split: every team''s FTM over every team''s FTA, so free throws can be priced without a second read. From the NCAA team box; null in the clutch split.'
   net_rtg: 'Net rating: off_rtg minus def_rtg.'
   net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
   net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38917,6 +38963,26 @@ wbb_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 210 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+wbb_team_game_four_factors:
+  chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
+  exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
+  free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
+  game_id: The stats.ncaa.org contest id.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
+  poss: The team's offensive possessions in the game, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the game. From the play-by-play.
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
+  rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
+  residual_pts: 'The remainder, exactly (pts - box_pts - FGA x the league''s pooled (pts - box_pts) / FGA) + chance_pts x (box_poss - poss - FGA x the league''s pooled (box_poss - poss) / FGA), box_pts = 2 FGM + 3PM + FTM, box_poss = FGA - OREB + TOV + 0.44 FTA: the play-by-play points'' and possessions'' distance from the team box beyond the league''s. Sums to zero over the league.'
+  season: Season, named by the year it ends (2025 is 2024-25).
+  shooting_pts: 'Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league''s per FGA: the misses a league-average offense gets back.'
+  team_id: ESPN team id (a non-D1 opponent gets no row).
+  turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 wbb_team_game_possessions:
   game_id: stats.ncaa.org contest id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
@@ -38955,6 +39021,7 @@ wnba_team_season_rates:
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
   games: Games with at least one possession in the split.
+  lg_ft_pct: 'League free-throw percentage in the season and split: every team''s FTM over every team''s FTA, so free throws can be priced without a second read.'
   net_rtg: 'Net rating: off_rtg minus def_rtg.'
   net_rtg_n: 'Sample size of net_rtg: the team''s offensive plus defensive possessions in the split.'
   net_rtg_pct: 'Percentile of net_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -39077,6 +39144,26 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,100 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
+wnba_team_game_four_factors:
+  chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
+  exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
+  free_throw_pts: 'Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%.'
+  game_id: stats.wnba.com game id.
+  lg_efg_pct: League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts).
+  lg_ft_pct: League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts).
+  lg_ft_rate: League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts).
+  lg_orb_pct: League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts).
+  lg_ppp: League points per counted possession in the season, over the priced team-games (those with all their counts).
+  lg_tov_pct: League turnovers per counted possession in the season, over the priced team-games (those with all their counts).
+  poss: The team's offensive possessions in the game, counted from possession rows.
+  pts: Points scored on the team's offensive possessions in the game.
+  pts_vs_exp: 'Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts.'
+  rebounding_pts: 'Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team''s own rebound chances, each a new chance.'
+  residual_pts: 'The remainder, exactly chance_pts x (box_poss - poss - FGA x the league''s box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions'' distance from the box estimate beyond the league''s. Sums to zero over the league.'
+  season: Season (the calendar year).
+  shooting_pts: 'Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league''s per FGA: the misses a league-average offense gets back.'
+  team_id: stats.wnba.com team id.
+  turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 wnba_team_game_possessions:
   game_id: stats.wnba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
@@ -78120,6 +78207,7 @@ nba_situation_rows:
   fga: Offense field-goal attempts on the possession.
   fgm: Offense field goals made on the possession.
   fta: Offense free-throw attempts on the possession.
+  ftm: Offense free throws made on the possession.
   game_id: stats.nba.com game id.
   is_garbage_time: The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college).
   is_second_chance: The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts).
@@ -78171,6 +78259,7 @@ ncaa_situation_rows:
   fga: 'Always null: the NCAA possessions carry no fga counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   fgm: 'Always null: the NCAA possessions carry no fgm counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   fta: 'Always null: the NCAA possessions carry no fta counts; the four factors come from the team box (ncaa_team_box_count_rows).'
+  ftm: 'Always null: the NCAA possessions carry no ftm counts; the four factors come from the team box (ncaa_team_box_count_rows).'
   game_id: The stats.ncaa.org contest id.
   is_garbage_time: The possession is in garbage time (bigballR's rule; BB-D7 for the pros, the release's flag for college).
   is_second_chance: The possession had an offensive rebound; null in college (the NCAA possessions carry no rebound counts).
@@ -81246,6 +81335,9 @@ nba_current_impact:
   off_poss: 'Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one).'
   def_poss: 'Defensive possessions this season before as_of.'
   last_game_date: 'Date of the player''s last game before as_of in the input.'
+  o_prior_weight: 'Share of o_current_impact that is the box prior (0-1): the offensive deviation''s posterior variance over its variance with no game updates. 1 before his first game; falls as his games (this season''s and carried earlier ones) accumulate.'
+  d_prior_weight: 'Share of d_current_impact that is the box prior (0-1), computed the same way for the defensive deviation.'
+  prior_weight: 'Share of current_impact that is the box prior (0-1): the net (offense + defense) deviation''s posterior variance over its no-update variance.'
 apply_box_prior:
   player_id: 'NBA stats person id.'
   o_prior: 'Box prior v2 offense per 100, from the player''s out-of-fold rule.'

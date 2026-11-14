@@ -308,6 +308,7 @@ from sportsdataverse.wnba import wnba_situational_team as wnba_situational_team 
 from sportsdataverse.wnba import wnba_situational_team_games as wnba_situational_team_games  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_team_game_four_factors as wnba_team_game_four_factors  # noqa: F401
 from sportsdataverse.wnba import wnba_team_game_possessions as wnba_team_game_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
@@ -610,6 +611,7 @@ __all__ = [
     "wnba_situational_team_games",
     "wnba_team_clutch",
     "wnba_team_crosswalk",
+    "wnba_team_game_four_factors",
     "wnba_team_game_possessions",
     "wnba_team_luck",
     "wnba_team_ratings",

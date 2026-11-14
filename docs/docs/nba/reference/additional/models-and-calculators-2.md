@@ -608,7 +608,7 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 
 **Returns**
 
-`CURRENT_IMPACT_SCHEMA`, one row per date and player seen before it: `o_current_impact` / `d_current_impact` / `current_impact` (per 100, `d` positive = good defense, `current_impact = o + d`), the prior in force (`o_prior` / `d_prior`), the season-to-date possessions (`off_poss` / `def_poss`, 0 for a player who has not played this season) and the player's last game date. `season` is that of the last game before the date.
+`CURRENT_IMPACT_SCHEMA`, one row per date and player seen before it: `o_current_impact` / `d_current_impact` / `current_impact` (per 100, `d` positive = good defense, `current_impact = o + d`), the prior in force (`o_prior` / `d_prior`), the season-to-date possessions (`off_poss` / `def_poss`, 0 for a player who has not played this season) and the player's last game date, and the prior weights `o_prior_weight` / `d_prior_weight` / `prior_weight` (the share of each estimate that is the box prior, 0-1; module docstring). `season` is that of the last game before the date.
 
 | col_name | type | description |
 |---|---|---|
@@ -623,6 +623,9 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 | `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
 | `def_poss` | Int64 | Defensive possessions this season before as_of. |
 | `last_game_date` | Date | Date of the player's last game before as_of in the input. |
+| `o_prior_weight` | Float64 | Share of o_current_impact that is the box prior (0-1): the offensive deviation's posterior variance over its variance with no game updates. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate. |
+| `d_prior_weight` | Float64 | Share of d_current_impact that is the box prior (0-1), computed the same way for the defensive deviation. |
+| `prior_weight` | Float64 | Share of current_impact that is the box prior (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
 
 **Example**
 

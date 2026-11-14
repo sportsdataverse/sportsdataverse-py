@@ -399,18 +399,19 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_situational_team](additional/analytics-4.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
 | [mbb_situational_team_games](additional/analytics-4.md#mbb_situational_team_games) | College team splits by situation, one game at a time: `mbb_situational_team` per game. |
 | [mbb_strength_of_schedule](additional/analytics-4.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_team_game_four_factors](additional/analytics-4.md#mbb_team_game_four_factors) | College per team and game: the four factors in points against the season's league-average offense. |
 | [mbb_team_game_possessions](additional/analytics-4.md#mbb_team_game_possessions) | Per team and game: the college possession counts behind `mbb_team_season_rates`. |
 | [mbb_team_luck](additional/analytics-4.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_flow](additional/analytics-4.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
-| [mbb_team_season_rates](additional/analytics-4.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
+| [mbb_team_season_rates](additional/analytics-5.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_shot_zones](additional/analytics-5.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [mbb_tournament_ineligible](additional/analytics-5.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
 | [ncaa_coach_stints](additional/analytics-5.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
-| [ncaa_impact_rows](additional/analytics-5.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
-| [ncaa_lineup_count_rows](additional/analytics-5.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
-| [ncaa_mbb_lineups](additional/analytics-5.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
-| [ncaa_mbb_on_off](additional/analytics-5.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
+| [ncaa_impact_rows](additional/analytics-6.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
+| [ncaa_lineup_count_rows](additional/analytics-6.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
+| [ncaa_mbb_lineups](additional/analytics-6.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
+| [ncaa_mbb_on_off](additional/analytics-6.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-6.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-6.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
 | [ncaa_possession_rate_rows](additional/analytics-6.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |

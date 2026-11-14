@@ -15,9 +15,13 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_game_possessions, mbb_team_season_rates
+from sportsdataverse.mbb.mbb_team_season_rates import (
+    mbb_team_game_four_factors,
+    mbb_team_game_possessions,
+    mbb_team_season_rates,
+)
 
-__all__ = ["wbb_team_game_possessions", "wbb_team_season_rates"]
+__all__ = ["wbb_team_game_four_factors", "wbb_team_game_possessions", "wbb_team_season_rates"]
 
 
 def wbb_team_season_rates(
@@ -77,3 +81,32 @@ def wbb_team_game_possessions(
             wbb_team_game_possessions(2025).filter(split="all").head()
     """
     return mbb_team_game_possessions(seasons, league="womens", return_as_pandas=return_as_pandas)
+
+
+def wbb_team_game_four_factors(
+    seasons: int | list[int],
+    *,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Women's college per team and game: the four factors in points against the season's league average.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_team_season_rates.mbb_team_game_four_factors` with
+    ``league="womens"``. The five ``*_pts`` columns add up to ``pts_vs_exp`` exactly; a game with
+    no team-box row has ``exp_pts`` but null factors.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id)``: ``poss``, ``pts``, ``exp_pts``, ``pts_vs_exp``,
+        the five ``*_pts`` columns and the season's league values. See the mbb core for the
+        definitions.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import wbb_team_game_four_factors
+            wbb_team_game_four_factors(2025).sort("pts_vs_exp").head()
+    """
+    return mbb_team_game_four_factors(seasons, league="womens", return_as_pandas=return_as_pandas)
