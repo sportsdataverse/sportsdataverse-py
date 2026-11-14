@@ -166,6 +166,12 @@ from sportsdataverse.nba.nba_player_impact import (  # noqa: F401
     nba_player_impact_context,
     nba_player_impact_league_averages,
 )
+from sportsdataverse.nba.nba_player_stats_ranks import (  # noqa: F401
+    ADVANCED_LOWER_IS_BETTER,
+    ADVANCED_RANKED,
+    advanced_min_poss,
+    nba_player_stats_advanced_context,
+)
 from sportsdataverse.nba.nba_player_factor_rapm import nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba.nba_play_style import (  # noqa: F401
     nba_play_style_features,

@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 281 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 283 | — |
 
 ## ESPN {#espn}
 
@@ -105,6 +105,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`WalkForwardResult`](reference/additional/models-and-calculators#WalkForwardResult)
 - [`adjust_efficiency`](reference/additional/models-and-calculators#adjust_efficiency)
 - [`adjust_pace`](reference/additional/models-and-calculators#adjust_pace)
+- [`advanced_min_poss`](reference/additional/models-and-calculators#advanced_min_poss)
 - [`apply_box_prior`](reference/additional/models-and-calculators#apply_box_prior)
 - [`as_of_ratings_split`](reference/additional/models-and-calculators#as_of_ratings_split)
 - [`box_prior_features`](reference/additional/models-and-calculators#box_prior_features)
@@ -146,6 +147,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
 - [`nba_player_impact_context`](reference/additional/models-and-calculators-3#nba_player_impact_context)
 - [`nba_player_impact_league_averages`](reference/additional/models-and-calculators-3#nba_player_impact_league_averages)
+- [`nba_player_stats_advanced_context`](reference/additional/models-and-calculators-3#nba_player_stats_advanced_context)
 - [`nba_predict_games`](reference/additional/models-and-calculators-3#nba_predict_games)
 - [`nba_reml_rapm`](reference/additional/models-and-calculators-3#nba_reml_rapm)
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-3#nba_rookie_projection)

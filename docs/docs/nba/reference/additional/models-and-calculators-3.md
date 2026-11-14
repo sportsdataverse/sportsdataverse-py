@@ -182,6 +182,50 @@ from sportsdataverse.nba import load_nba_player_impact, nba_player_impact_league
 nba_player_impact_league_averages(load_nba_player_impact(2026))
 ```
 
+### nba_player_stats_advanced_context {#nba_player_stats_advanced_context}
+
+`nba_player_stats_advanced_context(adv: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Replace `player_stats_advanced`'s API ranks of the rated measures with gated producer ranks.
+
+For each measure of `ADVANCED_RANKED`, `<m>_rank` becomes the rank among the players of
+its `(season, season_type, per_mode)` whose `poss` reaches `advanced_min_poss`, and
+`<m>_pct` is appended (module docstring). A row's rank and percentile are null when it is
+under the gate, when its value is null or non-finite, when a group key is null, when fewer than
+`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` players qualify or every
+qualifying value is equal. Nothing is dropped, and running it on its own output gives the same
+frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `adv` | `DataFrame` |  | A `player_stats_advanced` table (`load_nba_stats_leaguedash("player_stats_advanced")` / `load_wnba_stats_leaguedash`): `season`, `season_type`, `per_mode`, `poss` and the measures of `ADVANCED_RANKED`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA, which picks the gate. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`adv` with each ranked measure's `<m>_rank` replaced in place (Float64; ties share the average rank) and its `<m>_pct` (Float64) appended, in `ADVANCED_RANKED` order.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+| `KeyError` | If a measure, `season`, `season_type`, `per_mode` or `poss` is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import load_nba_stats_leaguedash, nba_player_stats_advanced_context
+adv = nba_player_stats_advanced_context(load_nba_stats_leaguedash("player_stats_advanced", seasons=2026))
+adv.filter(pl.col("season_type") == "Regular Season").sort("ts_pct_rank").select(
+    "player_name", "poss", "ts_pct", "ts_pct_rank", "ts_pct_pct"
+).head()
+```
+
 ### nba_predict_games {#nba_predict_games}
 
 `nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -473,16 +517,24 @@ Points-above-replacement -> wins for each player.
 
 `war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
 
+`poss_i` counts each possession once, as a team's net rating per 100 does: a game is about
+100 possessions a side, not 200. A net rating per 100 (`rapm = o_rapm + d_rapm`) spends
+`o_rapm` over the offensive possessions and `d_rapm` over the defensive ones, so its
+points are about `rapm * (off_poss + def_poss) / 2 / 100`: pass `(off_poss + def_poss) / 2`,
+never the sum. The sum doubles every WAR. The 2025-26 NBA `player_impact` release was built
+with the sum: its league WAR totals 1,582 against the 791 the halved possessions give, and a
+team's summed WAR rose 1.55 per win (0.78 halved, under 1 as a shrunken rating's should).
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
-| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
+| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col`: the possessions the rating is per 100 of, each counted once (`(off_poss + def_poss) / 2` from `nba_rapm`; see above). |
 | `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
 | `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
 | `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
-| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` giving the possessions played, each counted once. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**

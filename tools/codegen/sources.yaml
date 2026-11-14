@@ -852,6 +852,7 @@ categories:
       - sportsdataverse.nba.nba_reml_rapm
       - sportsdataverse.nba.nba_current_impact
       - sportsdataverse.nba.nba_player_impact
+      - sportsdataverse.nba.nba_player_stats_ranks
       - sportsdataverse.nhl.nhl_rapm
       - sportsdataverse.nhl.nhl_xg
       - sportsdataverse.nba.nba_war

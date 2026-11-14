@@ -652,6 +652,35 @@ from sportsdataverse.nba.nba_team_ratings import adjust_pace, raw_game_efficienc
 pace = adjust_pace(raw_game_efficiency(sched, box))
 ```
 
+### advanced_min_poss {#advanced_min_poss}
+
+`advanced_min_poss(league_id: 'str' = '00') -> 'float'`
+
+The possessions (one side) a player needs to be ranked: half the on-court net gate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+
+**Returns**
+
+NBA 1,600.0, WNBA 800.0.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import advanced_min_poss
+advanced_min_poss("10")  # 800.0
+```
+
 ### apply_box_prior {#apply_box_prior}
 
 `apply_box_prior(features: 'pl.DataFrame', model: 'BoxPriorModel', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -859,7 +888,7 @@ this function does not assume or invent any such win-percentage convention.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ratings` | `DataFrame` |  | Frame with `player_id` and `rating_col`. |
-| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (total possessions played). |
+| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (possessions played, each counted once: see `nba_war`). |
 | `pts_per_win` | `float` |  | Points of season margin per marginal win (`calibrate_pts_per_win`'s output). |
 | `target_total_war` | `float` |  | The desired sum of every player's WAR. |
 | `rating_col` | `str` | `'rating'` | Column in `ratings` holding the per-100-possession rating. |

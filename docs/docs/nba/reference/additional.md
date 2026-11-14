@@ -174,6 +174,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [WalkForwardResult](additional/models-and-calculators.md#WalkForwardResult) | Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline. |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season. |
 | [adjust_pace](additional/models-and-calculators.md#adjust_pace) | Opponent-adjusted pace (possessions/game) per team-season. |
+| [advanced_min_poss](additional/models-and-calculators.md#advanced_min_poss) | The possessions (one side) a player needs to be ranked: half the on-court net gate. |
 | [apply_box_prior](additional/models-and-calculators.md#apply_box_prior) | Score box-prior features with each player's out-of-fold rule. |
 | [as_of_ratings_split](additional/models-and-calculators.md#as_of_ratings_split) | Filter a results frame to games strictly before a cutoff date (leakage boundary). |
 | [box_prior_features](additional/models-and-calculators.md#box_prior_features) | One season's box-prior features: league-relative, padded box rates plus player and lineup context. |
@@ -215,6 +216,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
 | [nba_player_impact_context](additional/models-and-calculators-3.md#nba_player_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `player_impact` table. |
 | [nba_player_impact_league_averages](additional/models-and-calculators-3.md#nba_player_impact_league_averages) | The league-average rows of a `player_impact` table, one block per season type. |
+| [nba_player_stats_advanced_context](additional/models-and-calculators-3.md#nba_player_stats_advanced_context) | Replace `player_stats_advanced`'s API ranks of the rated measures with gated producer ranks. |
 | [nba_predict_games](additional/models-and-calculators-3.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_reml_rapm](additional/models-and-calculators-3.md#nba_reml_rapm) | Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML. |
 | [nba_rookie_projection](additional/models-and-calculators-3.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
