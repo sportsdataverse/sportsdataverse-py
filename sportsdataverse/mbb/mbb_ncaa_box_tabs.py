@@ -73,10 +73,28 @@ def parse_ncaa_bb_officials(
                 continue
             role = r[0] if two_col and len(r) >= 2 else None
             name = r[1] if two_col and len(r) >= 2 else r[0]
-            if name:
-                rows.append({"contest_id": cid, "role": role or None, "official": name})
+            for one in _split_crew(name):
+                rows.append({"contest_id": cid, "role": role or None, "official": one})
         break
     return _finish(rows, OFFICIALS_SCHEMA, return_as_pandas)
+
+
+_NAME_SUFFIXES = frozenset({"jr", "jr.", "sr", "sr.", "ii", "iii", "iv"})
+
+
+def _split_crew(cell: str) -> "list[str]":
+    """One official per name. Pages before ~2017 list the whole crew in one cell,
+    comma-separated ("Doug Shows, John Hampton, James Barker", contest 820695); a
+    name suffix after a comma (", Jr.") stays with the name before it."""
+    out: "list[str]" = []
+    for part in (p.strip() for p in (cell or "").split(",")):
+        if not part:
+            continue
+        if out and part.lower() in _NAME_SUFFIXES:
+            out[-1] = f"{out[-1]}, {part}"
+        else:
+            out.append(part)
+    return out
 
 
 # --- team stats (by period) ----------------------------------------------
