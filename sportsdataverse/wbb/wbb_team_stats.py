@@ -35,8 +35,12 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
+from sportsdataverse import errors as _errors
 
 _LEAGUE_SLUG: str = "womens-college-basketball"
+#: Leagues whose team stats are ESPN's whole season (Core v2 season type 0), not the site
+#: endpoint's regular season: see :func:`_espn_basketball_team_stats`.
+_WHOLE_SEASON_LEAGUES: frozenset[str] = frozenset({"mens-college-basketball", "womens-college-basketball"})
 
 # Canonical category keys, in the order the docstring promises. ``Other`` is
 # appended dynamically only when ESPN ships a category that doesn't map onto
@@ -214,12 +218,35 @@ def _espn_basketball_team_stats(
     normalizes each category into a per-stat frame, and ensures all three
     canonical category keys (``"Averages"``, ``"Totals"``, ``"Misc"``)
     exist in the output.
+
+    College leagues (``_WHOLE_SEASON_LEAGUES``) take their categories from ESPN's Core v2 season
+    type 0 instead: the site endpoint carries the regular season only (conference tournaments
+    in, the NCAA tournament out) and ignores ``seasontype``, so Duke's 2025-26 read 973 field
+    goals over 34 games against the 1,079 over 38 every game-level table counts. Core v2's
+    type 0 is the whole season, a superset of the site endpoint's stat names; the payload keeps
+    the site's ``team`` block and is tagged ``"sdv_season_type": 0``. A team Core v2 has no
+    whole-season stats for (a 404, :class:`~sportsdataverse.errors.NoDataError`) keeps the site's
+    categories; any other failure raises, so a season is never half one scope and half the other.
     """
     url = (
         "https://site.web.api.espn.com/apis/site/v2/sports/basketball/"
         f"{league}/teams/{team_id}/statistics?season={season}"
     )
     payload: dict[str, Any] = _download_json(download, url, **kwargs)
+    stats = (payload.get("results") or {}).get("stats")
+    if league in _WHOLE_SEASON_LEAGUES and isinstance(stats, dict):
+        core = (
+            "https://sports.core.api.espn.com/v2/sports/basketball/leagues/"
+            f"{league}/seasons/{season}/types/0/teams/{team_id}/statistics"
+        )
+        try:
+            whole = _download_json(download, core, **kwargs)
+        except _errors.NoDataError:  # Core v2 answers 404 "No stats found": keep the regular season
+            whole = {}
+        cats = ((whole or {}).get("splits") or {}).get("categories")
+        if cats:
+            stats["categories"] = cats
+            payload["sdv_season_type"] = 0
 
     if raw:
         return payload

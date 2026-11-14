@@ -381,6 +381,7 @@ from sportsdataverse.wbb import helper_wbb_schedule as helper_wbb_schedule  # no
 from sportsdataverse.wbb import helper_wbb_standings as helper_wbb_standings  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_season_opponent_stats as helper_wbb_team_season_opponent_stats  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_season_stats as helper_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_login as herhoopstats_login  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_team_roster as herhoopstats_team_roster  # noqa: F401
@@ -981,6 +982,7 @@ __all__ = [
     "helper_wbb_standings",
     "helper_wbb_team_box",
     "helper_wbb_team_items",
+    "helper_wbb_team_season_opponent_stats",
     "helper_wbb_team_season_stats",
     "herhoopstats_login",
     "herhoopstats_team_roster",

@@ -39,7 +39,7 @@ def test_collier_2025_is_her_season_not_her_career():
 def test_collier_earlier_season_reads_that_season():
     df = helper_wbb_player_season_stats(_load(3917450), season=2019, athlete_id=3917450)
     assert _stat(df, "averages", "gamesPlayed") == "34"  # her rookie season
-    assert df.height == 43
+    assert df.height == 43 + 12  # 43 ESPN stats, plus FGM/FGA, 3PM/3PA, FTM/FTA in totals and averages
 
 
 def test_traded_player_takes_the_whole_season_totals_row():
