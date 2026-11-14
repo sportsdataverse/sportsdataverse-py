@@ -13,7 +13,8 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
-from scipy.optimize import minimize_scalar
+from scipy.optimize import minimize
+from scipy.stats import norm
 
 from sportsdataverse.nhl.nhl_loaders import load_nhl_pbp_full, load_nhl_schedules
 from sportsdataverse.nhl.nhl_market import expected_goals
@@ -98,41 +99,38 @@ def main() -> None:
             )
 
     df = pl.DataFrame(records)
-    print(f"Evaluated {df.height} games")
-    print(f"(NOTE: exp_margin/exp_total above already have the SEED hfa={const.hfa} baked in")
-    print(" via expected_goals()'s internal get_constants() call -- the residual below is")
-    print(" the *additional* correction on top of that seed, not the total fitted hfa.)")
+    print(f"Evaluated {df.height} games (seed hfa={const.hfa}, avg_xgf={const.avg_xgf})")
 
-    # residual hfa on top of the seed already baked into exp_margin by expected_goals().
+    # hfa and margin_sd are fitted JOINTLY by Brier of Phi((exp_margin_without_hfa + hfa) / margin_sd).
+    # Both live on exp_margin's own compressed, shrunk-rating scale. Until 2026-11-13 hfa was the
+    # mean real-goal margin residual (~0.16 goals) while margin_sd was fitted on the compressed
+    # scale, so their ratio overstated home ice: mean home win prob 0.571 against 0.519 actual.
+    y_win = df["home_win"].to_numpy()
+    margin_no_hfa = df["exp_margin"].to_numpy() - const.hfa  # expected_goals() bakes the seed hfa in
+
+    def brier_for(params: np.ndarray) -> float:
+        return brier_score(y_win, norm.cdf((margin_no_hfa + params[0]) / params[1]))
+
+    result = minimize(brier_for, x0=[const.hfa, const.margin_sd], bounds=[(-1.0, 1.0), (0.05, 6.0)])
+    fitted_hfa, margin_sd = float(result.x[0]), float(result.x[1])
+
+    # Diagnostic only: the real-goal-scale home margin residual and SD the old fit used.
     hfa_residual = float((df["actual_margin"] - df["exp_margin"]).mean())
-    fitted_hfa = const.hfa + hfa_residual
-
-    # Diagnostic only: real-world-scale residual SD of (actual - fully-hfa-corrected margin).
     resid_sd = float((df["actual_margin"] - (df["exp_margin"] + hfa_residual)).std())
-
-    # margin_sd used by win_prob_from_margin operates on exp_margin's OWN (compressed,
-    # shrunk-rating) scale, not the real goal-margin scale -- fit it directly against
-    # Brier so Phi(exp_margin_corrected / margin_sd) is calibrated on that scale.
-    def brier_for_sd(sd: float) -> float:
-        from scipy.stats import norm
-
-        p = norm.cdf((df["exp_margin"].to_numpy() + hfa_residual) / sd)
-        return brier_score(df["home_win"].to_numpy(), p)
-
-    result = minimize_scalar(brier_for_sd, bounds=(0.05, 6.0), method="bounded")
-    margin_sd = float(result.x)
 
     # total_scale: OLS slope of realized total on exp_total (through a free intercept, slope only reported).
     x = df["exp_total"].to_numpy()
     y = df["actual_total"].to_numpy()
     slope = float(np.cov(x, y, bias=True)[0, 1] / np.var(x))
 
-    print(f"hfa residual (on top of seed)   = {hfa_residual:.4f}")
-    print(f"fitted hfa (seed + residual)    = {fitted_hfa:.4f}  <- write this into LEAGUE_CONSTANTS")
-    print(f"margin_sd diagnostic (real-goal-scale residual std) = {resid_sd:.4f}")
+    print(f"hfa (joint Brier fit)           = {fitted_hfa:.4f}  <- write this into LEAGUE_CONSTANTS")
+    print(f"margin_sd (joint Brier fit)     = {margin_sd:.4f}  <- write this into LEAGUE_CONSTANTS")
     print(
-        f"margin_sd (Brier-minimizing, exp_margin's own scale) = {margin_sd:.4f}  <- write this into LEAGUE_CONSTANTS"
+        f"mean home win prob / actual     = {float(norm.cdf((margin_no_hfa + fitted_hfa) / margin_sd).mean()):.4f}"
+        f" / {float(y_win.mean()):.4f}"
     )
+    print(f"diagnostic: real-goal home margin residual = {hfa_residual:.4f}, residual std = {resid_sd:.4f}")
+    print(f"avg_xgf (mean EV xG-for per team-game) = {float(rates['xgf'].mean()):.4f}")
     print(f"total_scale (OLS slope)         = {slope:.4f}  <- write this into LEAGUE_CONSTANTS")
     # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
     # avg_total_goals, so that pair is the OLS intercept: the mean realized total belongs in
@@ -142,7 +140,7 @@ def main() -> None:
         f"mean raw total                  = {float(x.mean()):.4f}  (should be ~2 * avg_xgf = {2 * const.avg_xgf:.2f})"
     )
     print(f"naive baseline Brier (p=0.5)    = {brier_score(df['home_win'].to_numpy(), np.full(df.height, 0.5)):.4f}")
-    print(f"fitted-model Brier              = {brier_for_sd(margin_sd):.4f}")
+    print(f"fitted-model Brier              = {brier_for(result.x):.4f}")
 
 
 if __name__ == "__main__":

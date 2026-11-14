@@ -88,6 +88,9 @@ def test_documented_empty_oracles_have_expected_schema(oracle_corpus):
 #   favorite-side agreement vs ESPN puck line, n=12         = 10/12 (0.833)
 #   MAE(exp_total, closing total), n=12 matched games       = 0.4873
 #       (1.3591 before the 2026-11-11 total-centring fix; see TOTAL_BIAS_FLOOR)
+# Re-observed 2026-11-13 on the retrained xG (team_xg_2023 rebuilt) with the refitted constants:
+#   model Brier 0.2321, calibration 0.0878, favorite agreement 11/12 (0.917),
+#   total MAE 0.5208, total bias -0.4237. Floors unchanged.
 # Floors below are these values rounded to the safe side; never loosen without
 # a fresh observed run + a comment explaining why (binding gate rule).
 #
@@ -229,6 +232,9 @@ def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest,
 # n=43101 -- not sampling noise: sqrt(p(1-p)/n) ~ 0.0024) -- rounded up to 0.075.
 # The pulled-goalie subset (n=10086) DOES clear the illustrative 0.03 floor
 # (observed 0.0256), so that tighter bar is kept for that targeted assert.
+# Retrained 2026-11-13 on the refitted pregame constants (the old fit's anchor overstated
+# home ice, which the old intercept of -0.24 was cancelling; now +0.01): overall 0.0660,
+# pulled-goalie 0.0248. Floors unchanged.
 OVERALL_CALIBRATION_FLOOR = 0.075
 PULLED_GOALIE_CALIBRATION_FLOOR = 0.03
 
