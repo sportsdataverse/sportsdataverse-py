@@ -82,6 +82,7 @@ from sportsdataverse.wbb.wbb_shot_zone_profiles import *
 from sportsdataverse.wbb.wbb_player_war import *
 from sportsdataverse.wbb.wbb_coach_seasons import *
 from sportsdataverse.wbb.wbb_official_seasons import wbb_official_seasons  # noqa: F401
+from sportsdataverse.wbb.wbb_player_box_expected import wbb_player_game_expected_box, wbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.wbb.wbb_team_roster import *
 from sportsdataverse.wbb.wbb_team_stats import *
 from sportsdataverse.wbb.wbb_teams import *

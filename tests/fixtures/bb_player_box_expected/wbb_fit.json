@@ -1,0 +1,67 @@
+{
+  "league": "wbb",
+  "train": "2022-2024",
+  "holdout": "2025-2026",
+  "coefs": {
+    "pts": [
+      -0.0197,
+      1.0686,
+      0.2597
+    ],
+    "reb": [
+      0.0104,
+      0.1874,
+      0.0037
+    ],
+    "ast": [
+      -0.0077,
+      -0.0649,
+      0.033
+    ]
+  },
+  "holdout_scores": {
+    "pts": {
+      "rows": 225218,
+      "mean": 6.6153,
+      "base_mae": 2.955,
+      "exp_mae": 2.3718,
+      "base_rmse": 4.0435,
+      "exp_rmse": 3.287,
+      "base_bias": -0.0065,
+      "exp_bias": -0.0029
+    },
+    "reb": {
+      "rows": 225218,
+      "mean": 3.2426,
+      "base_mae": 1.4379,
+      "exp_mae": 1.4232,
+      "base_rmse": 1.9561,
+      "exp_rmse": 1.9386,
+      "base_bias": -0.0006,
+      "exp_bias": -0.001
+    },
+    "ast": {
+      "rows": 225218,
+      "mean": 1.3286,
+      "base_mae": 0.8807,
+      "exp_mae": 0.8799,
+      "base_rmse": 1.2501,
+      "exp_rmse": 1.2485,
+      "base_bias": -0.0004,
+      "exp_bias": -0.0023
+    }
+  },
+  "per36_gates": {
+    "pts_per36": 64,
+    "reb_per36": 35,
+    "ast_per36": 67
+  },
+  "gate_m": {
+    "pts_per36:train": 63.63238484568169,
+    "reb_per36:train": 34.921215134561415,
+    "ast_per36:train": 66.79673576712312,
+    "pts_per36:holdout": 72.57201283509234,
+    "reb_per36:holdout": 32.444008471488544,
+    "ast_per36:holdout": 77.70772014491519
+  }
+}

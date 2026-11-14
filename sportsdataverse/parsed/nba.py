@@ -388,6 +388,7 @@ from sportsdataverse.nba import nba_play_style_features as nba_play_style_featur
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_player_factor_rapm as nba_player_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_player_game_expected_box as nba_player_game_expected_box  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_impact_context as nba_player_impact_context  # noqa: F401
 from sportsdataverse.nba import nba_player_impact_league_averages as nba_player_impact_league_averages  # noqa: F401
@@ -395,6 +396,7 @@ from sportsdataverse.nba import nba_player_on_off as nba_player_on_off  # noqa: 
 from sportsdataverse.nba import nba_player_play_styles as nba_player_play_styles  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_player_season_box_rates as nba_player_season_box_rates  # noqa: F401
 from sportsdataverse.nba import nba_player_shot_zones as nba_player_shot_zones  # noqa: F401
 from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
@@ -873,6 +875,7 @@ __all__ = [
     "nba_player_ages",
     "nba_player_crosswalk",
     "nba_player_factor_rapm",
+    "nba_player_game_expected_box",
     "nba_player_identity",
     "nba_player_impact_context",
     "nba_player_impact_league_averages",
@@ -880,6 +883,7 @@ __all__ = [
     "nba_player_play_styles",
     "nba_player_positions",
     "nba_player_props",
+    "nba_player_season_box_rates",
     "nba_player_shot_zones",
     "nba_player_war",
     "nba_player_wowy",

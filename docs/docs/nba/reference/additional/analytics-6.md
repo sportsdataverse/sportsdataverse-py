@@ -1,10 +1,106 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_team–nba_tracking"
-sidebar_label: "Analytics: nba_team–nba_tracking"
+title: "NBA — additional Python functions — Analytics: nba_team"
+sidebar_label: "Analytics: nba_team"
 sidebar_position: 20
-description: "NBA — additional Python functions — Analytics: nba_team–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_team–nba_tracking
+# NBA — additional Python functions — Analytics: nba_team
+
+### nba_team_season_flow {#nba_team_season_flow}
+
+`nba_team_season_flow(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Game flow per team and season, with ranks, percentiles and `_n`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id)`: `games`, `wins`; `lead_pct`, `trail_pct`, `tied_pct`, `avg_margin` and `avg_wp` (weighted by game clock); `lead_changes_pg` and `times_tied_pg`; `largest_lead`, `largest_comeback` and `max_run` (season bests); `runs_10` / `opp_runs_10` and their per-game rates; `avg_longest_drought_sec`; `def_poss`, `stops`, `stop_pct`; `kills`, `double_kills`, `kills_pg`, `double_kills_pg` and `kills_per_100`. The ten rated metrics carry `<m>_rank` (1 = best; `opp_runs_10_pg` and `avg_longest_drought_sec` rank low first), `<m>_pct` and `<m>_n` (games; the games with possessions for `kills_pg` / `double_kills_pg` and with a win probability for `avg_wp`; defensive possessions for `stop_pct` and `kills_per_100`), among teams with at least half the season's most games, null under five teams. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `games` | Int64 | Games played (completed games of the season type). |
+| `wins` | Int64 | Games the team won among its completed games of the season type (pts > opp_pts). |
+| `trail_pct` | Float64 | Share of the team's game clock spent behind (sum trail_sec / sum game_seconds). |
+| `tied_pct` | Float64 | Share of the team's game clock spent tied. |
+| `lead_changes_pg` | Float64 | Lead changes per game. |
+| `times_tied_pg` | Float64 | Times tied per game. |
+| `largest_lead` | Int64 | The team's biggest lead of the season. |
+| `largest_comeback` | Int64 | The biggest deficit the team overcame in a win this season (0 if none). |
+| `max_run` | Int64 | The team's biggest n-0 run of the season. |
+| `runs_10` | Int64 | The team's runs of 10 or more unanswered points, summed over the season. |
+| `opp_runs_10` | Int64 | The opponents' runs of 10 or more unanswered points against the team, summed. |
+| `def_poss` | Int64 | Defensive possessions, summed. |
+| `stops` | Int64 | Stops (scoreless defensive possessions), summed. |
+| `kills` | Int64 | Kills (three straight stops), summed. |
+| `double_kills` | Int64 | Double kills (six straight stops), summed. |
+| `avg_margin` | Float64 | Game control: the score margin averaged over the season's game clock. |
+| `avg_wp` | Float64 | Game control: the in-game win probability averaged over the season's game clock. |
+| `lead_pct` | Float64 | Share of the team's game clock spent ahead (sum lead_sec / sum game_seconds). |
+| `runs_10_pg` | Float64 | The team's 10-0 (or better) runs per game. |
+| `opp_runs_10_pg` | Float64 | The opponents' 10-0 (or better) runs against the team per game. |
+| `avg_longest_drought_sec` | Float64 | The team's longest scoring drought, in seconds, averaged over its games. |
+| `stop_pct` | Float64 | stops / def_poss; null with no possessions. |
+| `kills_pg` | Float64 | Kills per game. |
+| `double_kills_pg` | Float64 | Double kills per game. |
+| `kills_per_100` | Float64 | Kills per 100 defensive possessions; null with no possessions. |
+| `avg_margin_rank` | Float64 | Rank of avg_margin within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `avg_wp_rank` | Float64 | Rank of avg_wp within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `lead_pct_rank` | Float64 | Rank of lead_pct within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `runs_10_pg_rank` | Float64 | Rank of runs_10_pg within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `opp_runs_10_pg_rank` | Float64 | Rank of opp_runs_10_pg within the season (the lowest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `avg_longest_drought_sec_rank` | Float64 | Rank of avg_longest_drought_sec within the season (the lowest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `stop_pct_rank` | Float64 | Rank of stop_pct within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `kills_pg_rank` | Float64 | Rank of kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `double_kills_pg_rank` | Float64 | Rank of double_kills_pg within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `kills_per_100_rank` | Float64 | Rank of kills_per_100 within the season (the highest value ranks 1; ties average), among teams with at least half the season's most games; null for a non-qualifier, a null value, or fewer than five qualifiers. |
+| `avg_margin_pct` | Float64 | Percentile of avg_margin among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `avg_wp_pct` | Float64 | Percentile of avg_wp among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `lead_pct_pct` | Float64 | Percentile of lead_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `runs_10_pg_pct` | Float64 | Percentile of runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `opp_runs_10_pg_pct` | Float64 | Percentile of opp_runs_10_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `avg_longest_drought_sec_pct` | Float64 | Percentile of avg_longest_drought_sec among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `stop_pct_pct` | Float64 | Percentile of stop_pct among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `kills_pg_pct` | Float64 | Percentile of kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `double_kills_pg_pct` | Float64 | Percentile of double_kills_pg among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `kills_per_100_pct` | Float64 | Percentile of kills_per_100 among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked; null when the rank is null. |
+| `avg_margin_n` | Int64 | Sample size of avg_margin: games. |
+| `avg_wp_n` | Int64 | Sample size of avg_wp: the games with a win probability. |
+| `lead_pct_n` | Int64 | Sample size of lead_pct: games. |
+| `runs_10_pg_n` | Int64 | Sample size of runs_10_pg: games. |
+| `opp_runs_10_pg_n` | Int64 | Sample size of opp_runs_10_pg: games. |
+| `avg_longest_drought_sec_n` | Int64 | Sample size of avg_longest_drought_sec: games. |
+| `stop_pct_n` | Int64 | Sample size of stop_pct: the teams defensive possessions. |
+| `kills_pg_n` | Int64 | Sample size of kills_pg: the games with published possessions. |
+| `double_kills_pg_n` | Int64 | Sample size of double_kills_pg: the games with published possessions. |
+| `kills_per_100_n` | Int64 | Sample size of kills_per_100: the teams defensive possessions. |
+| `kills_per75` | Float64 | Kills per 75 defensive possessions: 0.75 * kills_per_100 (BB-G8's per-75 basis); null with no possessions. |
+| `kills_per75_rank` | Float64 | Rank of kills_per75: kills_per_100_rank, copied (scaling by 0.75 keeps the order). |
+| `kills_per75_pct` | Float64 | Percentile of kills_per75: kills_per_100_pct, copied (scaling by 0.75 keeps the order). |
+| `kills_per75_n` | Int64 | Sample size of kills_per75: kills_per_100_n, copied. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_flow import nba_team_season_flow
+nba_team_season_flow(2026).sort("kills_pg_rank").select("team_id", "kills_pg", "avg_wp").head()
+```
 
 ### nba_team_season_rates {#nba_team_season_rates}
 
@@ -427,141 +523,4 @@ strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov")
 # WNBA via ``league_id``
 
 wnba = nba_team_strength(2025, league_id="10")
-```
-
-### nba_tracking_drive_value {#nba_tracking_drive_value}
-
-`nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Drive value over expected + rim-pressure, per player-season.
-
-Fetches the `Drives` `leaguedashptstats` measure and computes
-`drive_pts_oe = drive_pts - drives * bucket_pts_per_drive`. `rim_pressure`
-is the z-score of `drive_fta / drives` within the player's role bucket
-(a proxy for foul-drawing pressure independent of scoring efficiency).
-`drive_ast`/`drive_tov` are passed through unchanged.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_drive_value
-df = nba_tracking_drive_value(2024)
-print(df.sort("drive_pts_oe", descending=True).head())
-```
-
-### nba_tracking_pass_value {#nba_tracking_pass_value}
-
-`nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Expected-assists / passer value: `ast_oe` per player-season.
-
-Fetches the `Passing` `leaguedashptstats` measure (one call) and computes
-`ast_oe = ast - passes * bucket_assist_rate`. When
-`fetch_potential_assists=True`, also fetches `nba_stats_playerdashptpass`
-for the top-`max_players` passers (capped, optional -- never a hard
-dependency) and recomputes the residual against the richer
-`potential_assists` denominator for that subset; `max_players=0`
-(default) makes exactly one request total. `ast_pts_created` is passed
-through directly from the Passing measure (it is already computed there;
-not re-derived).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
-| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_pass_value
-df = nba_tracking_pass_value(2024)
-print(df.sort("ast_oe", descending=True).head())
-
-# With potential-assist enrichment for the top 50 passers
-
-df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
-```
-
-### nba_tracking_reb_oe {#nba_tracking_reb_oe}
-
-`nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season.
-
-Fetches the `Rebounding` `leaguedashptstats` measure, attaches a
-`guard`/`wing`/`big` role bucket, and computes
-`reb_oe = reb - reb_chances * bucket_rate` (contest-difficulty-adjusted
-when the endpoint carries separate contested/uncontested CHANCE columns;
-the live `stats.nba.com` payload currently does not, so this degrades
-gracefully to the plain rate -- see the fixtures README for the finding).
-OREB/DREB residuals are computed identically against their own chance
-columns. Baselines are recomputed from the same season slice on every
-call -- there is no fitted constant or bundled artifact.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season (`int` ending-year or `"YYYY-YY"` string) or a list of seasons to concatenate. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within `guard`/`wing`/`big` buckets (default). `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame (see `_attach_role_bucket`); mostly for injecting a fixture in tests. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats` returning the raw payload dict directly -- offline testing hook. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_reb_oe
-df = nba_tracking_reb_oe(2024)
-print(df.sort("reb_oe", descending=True).head())
-
-# League-wide baseline (no position split)
-
-df_all = nba_tracking_reb_oe(2024, by_position=False)
-
-# Pandas output
-
-df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
 ```

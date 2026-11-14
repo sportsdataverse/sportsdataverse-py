@@ -594,7 +594,9 @@ from sportsdataverse.wbb import wbb_official_seasons as wbb_official_seasons  # 
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import wbb_play_styles as wbb_play_styles  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_player_game_expected_box as wbb_player_game_expected_box  # noqa: F401
 from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_season_box_rates as wbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.wbb import wbb_player_shot_zones as wbb_player_shot_zones  # noqa: F401
 from sportsdataverse.wbb import wbb_player_war as wbb_player_war  # noqa: F401
 from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
@@ -1190,7 +1192,9 @@ __all__ = [
     "wbb_pbp_disk",
     "wbb_play_styles",
     "wbb_player_crosswalk",
+    "wbb_player_game_expected_box",
     "wbb_player_on_off",
+    "wbb_player_season_box_rates",
     "wbb_player_shot_zones",
     "wbb_player_war",
     "wbb_player_wowy",

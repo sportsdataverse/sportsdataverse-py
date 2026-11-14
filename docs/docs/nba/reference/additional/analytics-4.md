@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_player–nba_referee"
-sidebar_label: "Analytics: nba_player–nba_referee"
+title: "NBA — additional Python functions — Analytics: nba_player–nba_raw"
+sidebar_label: "Analytics: nba_player–nba_raw"
 sidebar_position: 18
-description: "NBA — additional Python functions — Analytics: nba_player–nba_referee — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_player–nba_raw — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_player–nba_referee
+# NBA — additional Python functions — Analytics: nba_player–nba_raw
 
 ### nba_player_on_off {#nba_player_on_off}
 
@@ -233,6 +233,62 @@ props = nba_player_props(2024, "401585828", "2", "6")
 
 import datetime as dt
 props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
+```
+
+### nba_player_season_box_rates {#nba_player_season_box_rates}
+
+`nba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+NBA per-36 points, rebounds and assists per player-season, ranked, with the season usage.
+
+Over the regular season (a playoff or play-in game is measured against it), from ESPN's player box. `pts_per36` / `reb_per36` /
+`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
+`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
+minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
+(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
+| `games` | Int64 | Games played (the pros' regular season, every college game). |
+| `minutes` | Float64 | Minutes played in those games. |
+| `pts` | Int64 | Points in those games. |
+| `reb` | Int64 | Rebounds in those games. |
+| `ast` | Int64 | Assists in those games. |
+| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
+| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
+| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
+| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
+| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
+| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
+| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
+| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
+| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_box_expected import nba_player_season_box_rates
+rates = nba_player_season_box_rates(2026)
+rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
 ```
 
 ### nba_player_shot_zones {#nba_player_shot_zones}
@@ -855,74 +911,4 @@ logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_s
 
 frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
 positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
-```
-
-### nba_referee_assignments {#nba_referee_assignments}
-
-`nba_referee_assignments(date: 'str | _dt.date', *, league: 'str' = 'nba', raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
-
-Fetch and parse NBA referee assignments for a given date from official.nba.com.
-
-Retrieves one league's referee crew assignments and replay-center officials for a
-date: NBA, G-League or WNBA, picked by `league` (`raw=True` returns all three
-leagues' blocks). The `crew_position` column (1–4) represents the feed's slot
-order; slot 1 is inferred to be the crew chief. The `season` column converts
-from the feed's format to an END year: START+1 for NBA/G-League
-(two-calendar-year seasons) and START unchanged for WNBA.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `date` | `str \| date` |  | The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date). |
-| `league` | `str` | `'nba'` | The league to extract ("nba", "gl", or "wnba"). Defaults to "nba". |
-| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames. |
-| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
-| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
-
-**Returns**
-
-If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dict with keys `"officials"` and `"replay_center"` mapping to DataFrames as documented in `parse_nba_referee_assignments`.
-
-| col_name | type | description |
-|---|---|---|
-| `officials.league` | String | League the assignment belongs to: nba, gl (G League), or wnba. |
-| `officials.game_id` | String | 10-digit game id (zero-padded) for the assigned game. |
-| `officials.game_date` | Date | Game date parsed from the feed's MM/DD/YYYY format. |
-| `officials.season` | Int64 | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
-| `officials.season_type` | String | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `officials.game_code` | String | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
-| `officials.home_team_id` | Int64 | 10-digit team id of the home team. |
-| `officials.home_team_abbr` | String | Three-letter abbreviation of the home team. |
-| `officials.away_team_id` | Int64 | 10-digit team id of the away team. |
-| `officials.away_team_abbr` | String | Three-letter abbreviation of the away team. |
-| `officials.crew_position` | Int64 | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
-| `officials.official_id` | Int64 | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
-| `officials.official_name` | String | Official's display name for this crew slot. |
-| `officials.jersey_num` | String | Official's jersey number as a string, from the feed's official{n}_JNum field. |
-| `replay_center.league` | String | League the replay-center staffing belongs to: nba, gl, or wnba. |
-| `replay_center.game_date` | Date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
-| `replay_center.official_id` | Int64 | Numeric replay-center official id from the feed. |
-| `replay_center.official_name` | String | Replay-center official's display name for that date. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If league is not "nba", "gl", or "wnba", or date is not a valid "YYYY-MM-DD" date (checked before any request). |
-| `NoDataError` | Official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without games is not this: it comes back as a 200 with empty `rows` (see the Note). |
-| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), the 200 body is not a JSON object, or the league's `Table`/`Table1` rows are missing or malformed (a `Table` row without a 10-digit `game_id`, or a `Table1` row without a `replaycenter_official` name, included). With `raw=True` all three leagues are checked, since the whole payload is returned. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_officiating import nba_referee_assignments
-result = nba_referee_assignments("2026-06-13")
-officials = result["officials"]
-print(f"Found {officials.height} official slots")
-
-# Fetch WNBA assignments for the same date
-
-result = nba_referee_assignments("2026-06-13", league="wnba")
-wnba_officials = result["officials"]
 ```
