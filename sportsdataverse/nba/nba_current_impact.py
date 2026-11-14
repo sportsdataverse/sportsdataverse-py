@@ -14,14 +14,19 @@ season". The current rating answers "what do we expect from him on this date", f
   ``drift_sd^2``, so older games weigh less (time decay). The four SDs are fitted by
   ``tools/fit_current_impact.py`` on 28-day forward error, NBA 2007-2013 (entry 0.98, season 0.42 per 100;
   the team-change SD and the drift come out near zero).
-* **Prior weight.** ``o_prior_weight`` / ``d_prior_weight`` / ``prior_weight`` are the share of the estimate
-  that is the box prior: a side's posterior deviation variance over the variance it would have with every
-  game's update skipped (the same entry, season, team-change and drift shocks, no data). For one Gaussian
-  rating that ratio is exactly the prior's weight in the posterior mean (``mean = w * prior + (1 - w) *
-  games``); in the joint filter it is the marginal version. It is 1 before a player's first game and falls
-  toward 0 as games accumulate, this season's and the earlier seasons' he carries (so a veteran sits well
-  under 1 on opening night: his estimate leans on last season's games, not on the box prior alone).
-  ``prior_weight`` is the net rating's (``o + d``), with the offense-defense covariance.
+* **Prior weight.** ``o_prior_weight`` / ``d_prior_weight`` / ``prior_weight`` are variance ratios: a side's
+  posterior deviation variance over the variance it would have with every game's update skipped (the same
+  entry, season, team-change and drift shocks, no data). With a fixed prior and no shock between a player's
+  games (one Gaussian rating, one season, no drift) the ratio equals the prior's weight in the posterior mean
+  (``mean = w * prior + (1 - w) * games``). A new box prior moves the mean by the whole change and leaves the
+  ratio as it was, so after one the ratio is not the current prior's coefficient. A shock between games makes
+  the two differ: it raises both variances, and the ratio stays above the prior's coefficient in the mean
+  (prior variance 1, two games of variance 1, a shock of 1 between them: ratio 0.3, coefficient 0.2). The
+  fitted drift and team-change SDs are near zero, so within a season the gap is small; the new-season shock
+  widens it for a carried player. It is 1 before a player's first game and falls toward 0 as games accumulate,
+  this season's and the earlier seasons' he carries; a shock adds the same variance to both terms, so it
+  raises a ratio below 1. ``prior_weight`` is the net rating's (``o + d``), with the offense-defense
+  covariance.
 
 With no drift and no shocks, one season and a fixed prior, the filter's mean is the prior-informed ridge
 of :func:`~sportsdataverse.nba.nba_reml_rapm.fit_reml_prior_ridge` at the penalty ``noise_var / entry_sd^2``.
@@ -483,7 +488,7 @@ def nba_current_impact(
         ``current_impact = o + d``), the prior in force (``o_prior`` / ``d_prior``), the season-to-date
         possessions (``off_poss`` / ``def_poss``, 0 for a player who has not played this season) and the
         player's last game date, and the prior weights ``o_prior_weight`` / ``d_prior_weight`` /
-        ``prior_weight`` (the share of each estimate that is the box prior, 0-1; module docstring).
+        ``prior_weight`` (0-1: posterior over no-update variance, the module docstring's prior weight).
         ``season`` is that of the last game before the date.
 
     Example:
