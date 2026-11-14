@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -30,7 +30,7 @@ def _repo(tmp_path: Path, schedule_rows: list) -> Path:
     return tmp_path
 
 
-def _parsed(home: str, away: str) -> Dict[str, Any]:
+def _parsed(home: str, away: str) -> dict[str, Any]:
     return {
         "contest_id": "5725861",
         "pbp": [{"home": home, "away": away, "event_team": away}],

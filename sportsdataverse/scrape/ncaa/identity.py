@@ -227,7 +227,7 @@ def load_team_index(root: str, league: str, season: int) -> Dict[str, Dict[str, 
 
 
 @lru_cache(maxsize=8)
-def load_contest_sides(root: str, league: str, season: int) -> Dict[str, Tuple[Optional[str], Optional[str]]]:
+def load_contest_sides(root: str, league: str, season: int) -> dict[str, tuple[str | None, str | None]]:
     """``contest_id -> (home, away)`` as the season's team list names them.
 
     Read from the per-team schedule files (``{root}/{lg}/schedules/json/{season}/{team_id}.json``).
@@ -239,7 +239,7 @@ def load_contest_sides(root: str, league: str, season: int) -> Dict[str, Tuple[O
     Empty when the season's schedules were never built.
     """
     sched_dir = Path(root) / league / "schedules" / "json" / str(season)
-    sides: Dict[str, Dict[str, str]] = {}
+    sides: dict[str, dict[str, str]] = {}
     if not sched_dir.is_dir():
         return {}
     for path in sorted(sched_dir.glob("*.json")):
@@ -260,10 +260,10 @@ def load_contest_sides(root: str, league: str, season: int) -> Dict[str, Tuple[O
 
 
 def _schedule_aliases(
-    teams: Dict[str, Dict[str, Optional[str]]],
-    sides: List[Tuple[str, Optional[str]]],
-    scheduled: Optional[Tuple[Optional[str], Optional[str]]],
-) -> Dict[str, Dict[str, Optional[str]]]:
+    teams: dict[str, dict[str, str | None]],
+    sides: list[tuple[str, str | None]],
+    scheduled: tuple[str | None, str | None] | None,
+) -> dict[str, dict[str, str | None]]:
     """``page name -> team-index row`` for the sides whose page name the index lacks.
 
     A side is aliased to the schedule's team for the same side only when that team is in the
@@ -273,7 +273,7 @@ def _schedule_aliases(
     """
     if not scheduled:
         return {}
-    aliases: Dict[str, Dict[str, Optional[str]]] = {}
+    aliases: dict[str, dict[str, str | None]] = {}
     for i, (_side, name) in enumerate(sides):
         sched_name = scheduled[i]
         if not name or name in teams or not sched_name or sched_name not in teams:
@@ -288,6 +288,22 @@ def _schedule_aliases(
             continue
         aliases[name] = target
     return aliases
+
+
+def _with_renamed_sides(
+    teams: dict[str, dict[str, str | None]],
+    sides: list[tuple[str, str | None]],
+    root: str | Path | None,
+    league: str,
+    season: int | None,
+    contest_id: Any,
+) -> dict[str, dict[str, str | None]]:
+    """The team index plus this game's renamed sides (see :func:`_schedule_aliases`)."""
+    if season is None or not teams:
+        return teams
+    scheduled = load_contest_sides(str(root), league, season).get(_utf8_id(contest_id) or "")
+    aliases = _schedule_aliases(teams, sides, scheduled)
+    return {**teams, **aliases} if aliases else teams
 
 
 @lru_cache(maxsize=8)
@@ -473,14 +489,9 @@ def enrich_parsed(
         )
 
     pbp = parsed.get("pbp") or []
-    home = pbp[0].get("home") if pbp else None
-    away = pbp[0].get("away") if pbp else None
+    home, away = (pbp[0].get("home"), pbp[0].get("away")) if pbp else (None, None)
     sides = [("home", home), ("away", away)]
-    if season is not None and teams:
-        cid = _utf8_id(parsed.get("contest_id"))
-        aliases = _schedule_aliases(teams, sides, load_contest_sides(str(root), league, season).get(cid or ""))
-        if aliases:
-            teams = {**teams, **aliases}
+    teams = _with_renamed_sides(teams, sides, root, league, season, parsed.get("contest_id"))
     team_ids = [teams[n]["ncaa_team_id"] for _, n in sides if n and n in teams and teams[n]["ncaa_team_id"]]
     names, codes = _game_player_index(rosters, [t for t in team_ids if t])
 
