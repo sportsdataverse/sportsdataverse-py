@@ -830,7 +830,7 @@ with open("validation_card.md", "w") as f:
 
 ### run_current_impact {#run_current_impact}
 
-`run_current_impact(possessions: 'pl.DataFrame', priors: 'pl.DataFrame', as_of: 'Sequence[dt.date]', *, params: 'CurrentImpactParams | None' = None) -> 'dict[dt.date, tuple[int, dict[int, tuple[float, float, float, float, int, int, dt.date | None]]]]'`
+`run_current_impact(possessions: 'pl.DataFrame', priors: 'pl.DataFrame', as_of: 'Sequence[dt.date]', *, params: 'CurrentImpactParams | None' = None) -> 'dict[dt.date, tuple[int, dict[int, Rating]]]'`
 
 One pass of the filter over `possessions`, snapshotting before each `as_of` date.
 
