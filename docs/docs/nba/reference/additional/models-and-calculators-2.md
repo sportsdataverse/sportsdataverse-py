@@ -623,7 +623,7 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 | `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
 | `def_poss` | Int64 | Defensive possessions this season before as_of. |
 | `last_game_date` | Date | Date of the player's last game before as_of in the input. |
-| `o_prior_weight` | Float64 | Prior weight of o_current_impact (0-1): the offensive deviation's posterior variance over its variance with no game updates. Equals the box prior's weight in the estimate when no shock falls between his games, and sits above it otherwise. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate. |
+| `o_prior_weight` | Float64 | Prior weight of o_current_impact (0-1): the offensive deviation's posterior variance over its variance with no game updates. Equals the box prior's weight in the estimate while the prior is fixed and no shock falls between his games, and sits above it with shocks. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate, and a season, team-change or drift shock raises it. |
 | `d_prior_weight` | Float64 | Prior weight of d_current_impact (0-1): the same variance ratio for the defensive deviation. |
 | `prior_weight` | Float64 | Prior weight of current_impact (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
 

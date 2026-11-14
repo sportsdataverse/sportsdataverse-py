@@ -16,14 +16,16 @@ season". The current rating answers "what do we expect from him on this date", f
   the team-change SD and the drift come out near zero).
 * **Prior weight.** ``o_prior_weight`` / ``d_prior_weight`` / ``prior_weight`` are variance ratios: a side's
   posterior deviation variance over the variance it would have with every game's update skipped (the same
-  entry, season, team-change and drift shocks, no data). With no shock between a player's games (one
-  Gaussian rating, one season, no drift) the ratio equals the prior's weight in the posterior mean
-  (``mean = w * prior + (1 - w) * games``). A shock between games makes the two differ: it raises both
-  variances, and the ratio stays above the prior's coefficient in the mean (prior variance 1, two games of
-  variance 1, a shock of 1 between them: ratio 0.3, coefficient 0.2). The fitted drift and team-change SDs
-  are near zero, so within a season the gap is small; the new-season shock widens it for a carried player.
-  It is 1 before a player's first game and falls toward 0 as games accumulate, this season's and the
-  earlier seasons' he carries. ``prior_weight`` is the net rating's (``o + d``), with the offense-defense
+  entry, season, team-change and drift shocks, no data). With a fixed prior and no shock between a player's
+  games (one Gaussian rating, one season, no drift) the ratio equals the prior's weight in the posterior mean
+  (``mean = w * prior + (1 - w) * games``). A new box prior moves the mean by the whole change and leaves the
+  ratio as it was, so after one the ratio is not the current prior's coefficient. A shock between games makes
+  the two differ: it raises both variances, and the ratio stays above the prior's coefficient in the mean
+  (prior variance 1, two games of variance 1, a shock of 1 between them: ratio 0.3, coefficient 0.2). The
+  fitted drift and team-change SDs are near zero, so within a season the gap is small; the new-season shock
+  widens it for a carried player. It is 1 before a player's first game and falls toward 0 as games accumulate,
+  this season's and the earlier seasons' he carries; a shock adds the same variance to both terms, so it
+  raises a ratio below 1. ``prior_weight`` is the net rating's (``o + d``), with the offense-defense
   covariance.
 
 With no drift and no shocks, one season and a fixed prior, the filter's mean is the prior-informed ridge
