@@ -156,9 +156,9 @@ One row per `(game_id, athlete_id)`: `season`, `season_type`, `team_id`, `minute
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
 | `season_type` | Int64 | ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in). |
-| `game_id` | Int64 | ESPN game id. |
+| `game_id` | Int64 | ESPN game id, the join key to the schedule and the player box score. |
 | `team_id` | Int64 | ESPN team id of the player's team in the game. |
-| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
 | `minutes` | Float64 | Minutes played in the game (above 0: a player who did not play has no row). |
 | `usg_pct` | Float64 | Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count. |
 | `pts` | Int64 | Points in the game. |
@@ -494,7 +494,7 @@ One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's tea
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
 | `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
 | `games` | Int64 | Games played (the pros' regular season, every college game). |
 | `minutes` | Float64 | Minutes played in those games. |
