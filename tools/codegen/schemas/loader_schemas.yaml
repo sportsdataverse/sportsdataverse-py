@@ -23909,6 +23909,18 @@ load_nfl_model_pbp:
   type: String
 - name: series_success
   type: Int32
+- name: passer
+  type: String
+- name: passer_id
+  type: String
+- name: rusher
+  type: String
+- name: rusher_id
+  type: String
+- name: receiver
+  type: String
+- name: receiver_id
+  type: String
 - name: ep
   type: Float64
 - name: td_prob

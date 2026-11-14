@@ -47155,6 +47155,10 @@ load_nfl_model_pbp:
   non_fumble_sack: Whether the play was a sack that did not involve a fumble.
   pass_epa: EPA credited to the play's passing component (clipped at -5).
   pass_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
+  passer: Name of the passer as nflfastR clean_pbp derives it (scrambles included) -- parsed from desc, then the name its id
+    carries most often; on a 1999-2005 charted scramble the scrambling QB (nflfastR PR 536).
+  passer_id: GSIS id of the passer as nflfastR clean_pbp derives it -- the most frequent passer_player_id of that name within
+    the possession team and season.
   pen_epa: EPA credited to the play's penalty component (clipped at -5).
   pen_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   play_seq: Game-global sequential play order from the NFL.com Shield feed; ordering key within a game (game_id + play_seq
@@ -47167,8 +47171,18 @@ load_nfl_model_pbp:
   qbr_epa: EPA input used by the QBR calculation for the play (clipped at -5).
   receive_2h_ko: Binary indicator (1/0) that the play is in the first half and the possession team is the team receiving the
     second-half kickoff (the game's opening defense); mirrors nflfastR helper_add_ep_wp.R.
+  receiver: Name of the targeted receiver as nflfastR clean_pbp derives it -- parsed from desc, then the name the id carries
+    most often; also set on 2003-2008 incompletions, whose NFL.com stats name no target. Null when no pass names one, or
+    when no play of that name in the possession team's season carries a receiver_player_id.
+  receiver_id: GSIS id of the targeted receiver as nflfastR clean_pbp derives it -- the most frequent receiver_player_id
+    of that name within the possession team and season, so it is filled where receiver_player_id is null as long as
+    another play of that name carries one (otherwise null, and receiver with it).
   rush_epa: EPA credited to the play's rushing component (clipped at -5).
   rush_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
+  rusher: Name of the rusher as nflfastR clean_pbp derives it (no scrambles) -- parsed from desc, null when the play has a
+    passer.
+  rusher_id: GSIS id of the rusher as nflfastR clean_pbp derives it -- the most frequent rusher_player_id of that name within
+    the possession team and season; on an aborted snap, the player charged with the fumble.
   sack_epa: EPA credited to the play's sack component (clipped at -5).
   sack_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   shield_play_type: Raw NFL.com Shield play-type enum for the play (e.g. RUSH, PASS, FIELD_GOAL, KICK_OFF, PENALTY, END_QUARTER,
