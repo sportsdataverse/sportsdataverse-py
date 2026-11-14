@@ -17,9 +17,9 @@ League-specific constants consumed by every player-impact engine function.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `goals_per_win` | `float` |  | goals-per-win denominator for GAR->WAR (a seeded value until it is fitted from NHL team wins vs goal differential). |
-| `replacement_ev_off` | `float` |  | EV offense replacement-level rate (xG/60), subtracted before summing GAR. |
-| `replacement_ev_def` | `float` |  | EV defense replacement-level rate (xGA/60 suppressed). |
-| `league_xg_rate_ev` | `float` |  | league-average even-strength xG rate (per 60), used as the RAPM intercept sanity check. |
+| `replacement_ev_off` | `float` |  | EV xGF/60 of a unit of five replacement-level skaters (a TEAM on-ice rate, not a RAPM coefficient; see `replacement_rapm`). |
+| `replacement_ev_def` | `float` |  | EV xGA/60 allowed by a unit of five replacement-level skaters. |
+| `league_xg_rate_ev` | `float` |  | league-average even-strength xG rate (per 60), the level the two replacement rates are measured against. |
 | `league_xg_rate_pp` | `float` |  | league-average power-play xGF rate (per 60). |
 | `league_xg_rate_pk` | `float` |  | league-average penalty-kill xGA rate (per 60). |
 | `rapm_lambda_grid` | `list[float]` | `<factory>` | candidate ridge penalties for the skater RAPM CV. |
@@ -29,6 +29,31 @@ League-specific constants consumed by every player-impact engine function.
 | `danger_high` | `dict` | `<factory>` | `{"max_distance": float, "max_angle": float}` band for "high" danger. |
 | `danger_medium` | `dict` | `<factory>` | same shape, wider band for "medium" danger; outside both -> "low". |
 | `xg_booster_league` | `str` | `'nhl'` | which league's published boosters back this league's `nhl_xg` scoring (the PWHL borrows the NHL boosters -- a documented approximation). |
+
+**Methods**
+
+#### ImpactConfig.replacement_rapm
+
+`ImpactConfig.replacement_rapm() -> 'tuple[float, float]'`
+
+Replacement level on the skater-RAPM scale: `(offense, defense)` in xG/60.
+
+`nhl_skater_rapm` coefficients are per-skater deviations from the league average
+(the design matrix carries an intercept), additive over the five skaters on ice,
+with defense signed so that positive means suppression. The replacement rates are
+team on-ice levels, so each skater's share of the unit's gap to the league average
+is a fifth of it.
+
+**Returns**
+
+`((replacement_ev_off - league_xg_rate_ev) / 5, (league_xg_rate_ev - replacement_ev_def) / 5)`; both negative for a below-average replacement unit.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+```
 
 ### LeagueConstants {#LeagueConstants}
 
@@ -761,7 +786,7 @@ Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
 **Returns**
 
-`player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
+`player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`, the replacement level on the RAPM scale (`ImpactConfig.replacement_rapm`), so a league-average skater earns positive EV GAR; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
 
 No returns table is published for this function: no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per shift change).
 

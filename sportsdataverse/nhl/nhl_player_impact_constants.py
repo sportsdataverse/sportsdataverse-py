@@ -55,11 +55,11 @@ class ImpactConfig:
     Attributes:
         goals_per_win: goals-per-win denominator for GAR->WAR (a seeded value until it is
             fitted from NHL team wins vs goal differential).
-        replacement_ev_off: EV offense replacement-level rate (xG/60), subtracted before
-            summing GAR.
-        replacement_ev_def: EV defense replacement-level rate (xGA/60 suppressed).
-        league_xg_rate_ev: league-average even-strength xG rate (per 60), used as the
-            RAPM intercept sanity check.
+        replacement_ev_off: EV xGF/60 of a unit of five replacement-level skaters (a TEAM
+            on-ice rate, not a RAPM coefficient; see ``replacement_rapm``).
+        replacement_ev_def: EV xGA/60 allowed by a unit of five replacement-level skaters.
+        league_xg_rate_ev: league-average even-strength xG rate (per 60), the level the two
+            replacement rates are measured against.
         league_xg_rate_pp: league-average power-play xGF rate (per 60).
         league_xg_rate_pk: league-average penalty-kill xGA rate (per 60).
         rapm_lambda_grid: candidate ridge penalties for the skater RAPM CV.
@@ -86,6 +86,31 @@ class ImpactConfig:
     danger_high: dict = field(default_factory=lambda: {"max_distance": 20.0, "max_angle": 30.0})
     danger_medium: dict = field(default_factory=lambda: {"max_distance": 40.0, "max_angle": 55.0})
     xg_booster_league: str = "nhl"
+
+    def replacement_rapm(self) -> tuple[float, float]:
+        """Replacement level on the skater-RAPM scale: ``(offense, defense)`` in xG/60.
+
+        ``nhl_skater_rapm`` coefficients are per-skater deviations from the league average
+        (the design matrix carries an intercept), additive over the five skaters on ice,
+        with defense signed so that positive means suppression. The replacement rates are
+        team on-ice levels, so each skater's share of the unit's gap to the league average
+        is a fifth of it.
+
+        Returns:
+            ``((replacement_ev_off - league_xg_rate_ev) / 5,
+            (league_xg_rate_ev - replacement_ev_def) / 5)``; both negative for a
+            below-average replacement unit.
+
+        Example:
+            Quick start::
+
+                from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+        """
+        return (
+            (self.replacement_ev_off - self.league_xg_rate_ev) / 5.0,
+            (self.league_xg_rate_ev - self.replacement_ev_def) / 5.0,
+        )
 
 
 # `goals_per_win` for the NHL is the fitted output of
