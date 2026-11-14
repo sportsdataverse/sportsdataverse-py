@@ -83,7 +83,8 @@ class LeagueConstants:
     """Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
     Attributes:
-        hfa: home-ice edge, expected-goals units.
+        hfa: home-ice edge on ``exp_margin``'s own (shrunk-rating) scale, fitted jointly with
+            ``margin_sd``; smaller than the real-goal home edge.
         margin_sd: standard deviation of the final goal margin (deliberately WIDE for hockey).
         avg_xgf: league mean even-strength xG-for, per game.
         avg_total_goals: league mean total goals per game.
@@ -115,25 +116,32 @@ class LeagueConstants:
 
 
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
-    # hfa/margin_sd/total_scale fitted 2026-07-08 by tools/models/nhl_prediction/fit_pregame.py
-    # against the 2023 as-of-date backtest (1174 evaluated games, dates[20:] onward),
-    # confirmed converged on a second pass (residual on top of the fitted seed shrank
-    # to ~0.0003):
-    #   hfa = 0.1630 (0.20 seed + -0.0373 residual on pass 1, ~0 residual on pass 2).
-    #   margin_sd = 0.9085, fit by minimising Brier of Phi(exp_margin/margin_sd)
-    #     directly -- NOTE this is NOT the real-world NHL goal-margin SD (that
-    #     diagnostic residual comes out ~2.58 goals); margin_sd here operates on
-    #     exp_margin's own compressed, shrunk-rating scale, which is much smaller
-    #     than a real goal margin. Using the real-world ~2.2 seed value here would
-    #     have been a scale mismatch, not a faithful sigma for this closed form.
-    #   total_scale = 1.9105, the OLS slope of realized total goals on exp_total
-    #     (shrinkage compresses exp_total's spread well below the real variance);
+    # Refitted 2026-11-13 on the retrained xG (nhl_xg_models 2026-11-13: 5v5 model fitted on 5v5
+    # shots, rink coordinates fixed; published goals/sum-xG per season now 0.98-1.03, was ~0.77).
+    # avg_xgf = 2.00: mean even-strength xG-for per team-game over 2022-23 .. 2025-26
+    #   (2.099 / 1.962 / 1.923 / 2.012; `team_game_xg_rates`, even_strength_only=True). It was
+    #   2.55, from the old xG, which ran ~2.84 on 2022-23.
+    # hfa/margin_sd/total_scale fitted by tools/models/nhl_prediction/fit_pregame.py against the
+    # 2023 as-of-date backtest (1174 games, dates[20:] onward), converged on a second pass:
+    #   hfa = 0.0298, margin_sd = 0.5109, fitted JOINTLY by Brier of
+    #     Phi((exp_margin_without_hfa + hfa) / margin_sd). Both live on exp_margin's own
+    #     compressed, shrunk-rating scale, so hfa is NOT the real-goal home edge (~0.13-0.16).
+    #     The 2026-07-08 fit took hfa = 0.1630 from that real-goal residual but margin_sd = 0.9085
+    #     from the compressed scale, which overstated home ice: mean home win prob 0.571 against
+    #     0.519 actual. Now 0.520 against 0.520 on 2023; Brier 0.2376 -> 0.2321.
+    #   total_scale = 2.3189, the OLS slope of realized total goals on the raw total
+    #     (shrinkage compresses the raw total's spread well below the real variance);
     #     applied in nhl_market.predict_total as
     #     avg_total_goals + total_scale * (raw_total - 2 * avg_xgf).
-    #     The raw total is even-strength xG, so its mean is 2 * avg_xgf (5.099 observed);
-    #     centring on avg_total_goals until 2026-11-11 put every total ~2 goals low
-    #     (holdout bias -2.07 / -1.88 / -2.13 for 2024-2026, now -0.25 / -0.07 / -0.31).
-    # avg_xgf/avg_total_goals remain published-reference seeds (not walked/fit).
+    #     The raw total is even-strength xG, so its mean is 2 * avg_xgf (3.999 observed);
+    #     centring on avg_total_goals until 2026-11-11 put every total ~2 goals low.
+    # Walk-forward holdout (fitted on 2022-23 only), 2023-24 / 2024-25 / 2025-26, before -> after:
+    #   Brier 0.2390 / 0.2383 / 0.2451 -> 0.2362 / 0.2399 / 0.2417;
+    #   mean home win prob 0.571 / 0.570 / 0.571 -> 0.522 / 0.521 / 0.522
+    #     (actual 0.541 / 0.569 / 0.521);
+    #   total bias -0.25 / -0.07 / -0.31 and MAE 1.87 / 1.89 / 1.87 unchanged (avg_xgf is both the
+    #     rating shrinkage target and the total's centre, so its level cancels).
+    # avg_total_goals remains a published-reference seed (not walked/fit).
     #
     # prop_kappa/pos_priors fitted 2026-07-08 by tools/models/nhl_prediction/fit_props.py
     # against season 2024 skater boxscores (load_nhl_skater_boxscores only
@@ -145,11 +153,11 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     # carries: shots F kappa=2.10/D kappa=3.40 -> 2.75; points F kappa=3.91/D
     # kappa=5.86 -> 4.88. pos_priors are the raw per-position mean rates.
     "nhl": LeagueConstants(
-        hfa=0.1630,
-        margin_sd=0.9085,
-        avg_xgf=2.55,
+        hfa=0.0298,
+        margin_sd=0.5109,
+        avg_xgf=2.00,
         avg_total_goals=6.05,
-        total_scale=1.9105,
+        total_scale=2.3189,
         shrink_k=15.0,
         prop_kappa={"shots": 2.7498, "points": 4.8837},
         pos_priors={"shots": {"F": 1.5746, "D": 1.1910}, "points": {"F": 0.4125, "D": 0.2858}},
