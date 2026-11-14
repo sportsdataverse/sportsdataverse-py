@@ -224,7 +224,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_spm](additional/models-and-calculators-3.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
 | [nba_team_ratings](additional/models-and-calculators-3.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
 | [nba_war](additional/models-and-calculators-3.md#nba_war) | Points-above-replacement -> wins for each player. |
-| [ot_adjusted_seconds](additional/models-and-calculators-3.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
+| [ot_adjusted_seconds](additional/models-and-calculators-4.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-4.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
 | [player_props](additional/models-and-calculators-4.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
 | [predict_margin](additional/models-and-calculators-4.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |

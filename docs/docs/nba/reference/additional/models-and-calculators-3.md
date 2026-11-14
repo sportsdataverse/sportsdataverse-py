@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted"
-sidebar_label: "Models and calculators: nba_player–ot_adjusted"
+title: "NBA — additional Python functions — Models and calculators: nba_player–nba_war"
+sidebar_label: "Models and calculators: nba_player–nba_war"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_player–nba_war — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_player–ot_adjusted
+# NBA — additional Python functions — Models and calculators: nba_player–nba_war
 
 ### nba_player_impact_context {#nba_player_impact_context}
 
@@ -232,16 +232,16 @@ frame.
 | `sp_work_net_rating` | Float64 | The stats API's SP_WORK copy of net_rating (the same measure under its alternate column set). |
 | `ast_pct` | Float64 | Assist percentage. |
 | `ast_to` | Float64 | Assist-to-turnover ratio: assists divided by turnovers. |
-| `ast_ratio` | Float64 | Assist ratio: assists per 100 possessions the player used. |
-| `oreb_pct` | Float64 | Offensive rebound percentage: share of available offensive rebounds the player grabbed while on the floor. |
-| `dreb_pct` | Float64 | Defensive rebound percentage: share of available defensive rebounds the player grabbed while on the floor. |
-| `reb_pct` | Float64 | Rebound percentage: share of all available rebounds the player grabbed while on the floor. |
-| `tm_tov_pct` | Float64 | Turnover percentage: turnovers per 100 possessions the player used. |
-| `e_tov_pct` | Float64 | Estimated turnover percentage on the stats API's estimated-possession formula. |
-| `efg_pct` | Float64 | Effective field-goal percentage: (fgm + 0.5 * fg3m) / fga. |
+| `ast_ratio` | Float64 | Assist ratio: assists per 100 possessions the player used, on the per-100 scale. |
+| `oreb_pct` | Float64 | Offensive rebound percentage: share of available offensive rebounds the player grabbed while on the floor, as a decimal. |
+| `dreb_pct` | Float64 | Defensive rebound percentage: share of available defensive rebounds the player grabbed while on the floor, as a decimal. |
+| `reb_pct` | Float64 | Rebound percentage: share of all available rebounds the player grabbed while on the floor, as a decimal. |
+| `tm_tov_pct` | Float64 | Turnover percentage: turnovers per 100 possessions the player used, on the per-100 scale (9.7 means 9.7 per 100, not 0.097). |
+| `e_tov_pct` | Float64 | Estimated turnover percentage on the stats API's estimated-possession formula, on the per-100 scale like tm_tov_pct. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (fgm + 0.5 * fg3m) / fga, as a decimal. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `usg_pct` | Float64 | Usage percentage: share of the team's possessions the player used while on the floor. |
-| `e_usg_pct` | Float64 | Estimated usage percentage on the stats API's estimated-possession formula. |
+| `usg_pct` | Float64 | Usage percentage: share of the team's possessions the player used while on the floor, as a decimal (0.169 is 16.9%). |
+| `e_usg_pct` | Float64 | Estimated usage percentage on the stats API's estimated-possession formula, as a decimal like usg_pct. |
 | `e_pace` | Float64 | Estimated pace: possessions per regulation game on the estimated-possession formula. |
 | `pace` | Float64 | Possessions per 48 minutes. |
 | `pace_per40` | Float64 | Pace per40. |
@@ -253,41 +253,41 @@ frame.
 | `fgm_pg` | Float64 | Field goals made per game. |
 | `fga_pg` | Float64 | Field goals attempted per game. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `gp_rank` | Int64 | The stats API's own rank of gp among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `w_rank` | Int64 | The stats API's own rank of w among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `l_rank` | Int64 | The stats API's own rank of l among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `w_pct_rank` | Int64 | The stats API's own rank of w_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `min_rank` | Int64 | The stats API's own rank of min among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `e_off_rating_rank` | Int64 | The stats API's own rank of e_off_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `gp_rank` | Int64 | The stats API's own rank of gp in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `w_rank` | Int64 | The stats API's own rank of w in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `l_rank` | Int64 | The stats API's own rank of l in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `w_pct_rank` | Int64 | The stats API's own rank of w_pct in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `min_rank` | Int64 | The stats API's own rank of min in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `e_off_rating_rank` | Int64 | The stats API's own rank of e_off_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `off_rating_rank` | Float64 | Producer rank of off_rating (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_off_rating_rank` | Int64 | The stats API's own rank of sp_work_off_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `e_def_rating_rank` | Int64 | The stats API's own rank of e_def_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `sp_work_off_rating_rank` | Int64 | The stats API's own rank of sp_work_off_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `e_def_rating_rank` | Int64 | The stats API's own rank of e_def_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `def_rating_rank` | Float64 | Producer rank of def_rating (lowest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_def_rating_rank` | Int64 | The stats API's own rank of sp_work_def_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `e_net_rating_rank` | Int64 | The stats API's own rank of e_net_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `sp_work_def_rating_rank` | Int64 | The stats API's own rank of sp_work_def_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `e_net_rating_rank` | Int64 | The stats API's own rank of e_net_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `net_rating_rank` | Float64 | Producer rank of net_rating (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `sp_work_net_rating_rank` | Int64 | The stats API's own rank of sp_work_net_rating among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `sp_work_net_rating_rank` | Int64 | The stats API's own rank of sp_work_net_rating in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `ast_pct_rank` | Float64 | Producer rank of ast_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `ast_to_rank` | Float64 | Producer rank of ast_to (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `ast_ratio_rank` | Int64 | The stats API's own rank of ast_ratio among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `ast_ratio_rank` | Int64 | The stats API's own rank of ast_ratio in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `oreb_pct_rank` | Float64 | Producer rank of oreb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `dreb_pct_rank` | Float64 | Producer rank of dreb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `reb_pct_rank` | Float64 | Producer rank of reb_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `tm_tov_pct_rank` | Float64 | Producer rank of tm_tov_pct (lowest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `e_tov_pct_rank` | Int64 | The stats API's own rank of e_tov_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_tov_pct_rank` | Int64 | The stats API's own rank of e_tov_pct in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `efg_pct_rank` | Float64 | Producer rank of efg_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `ts_pct_rank` | Float64 | Producer rank of ts_pct (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
 | `usg_pct_rank` | Float64 | Producer rank of usg_pct (heaviest usage first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `e_usg_pct_rank` | Int64 | The stats API's own rank of e_usg_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `e_pace_rank` | Int64 | The stats API's own rank of e_pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `pace_rank` | Int64 | The stats API's own rank of pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `sp_work_pace_rank` | Int64 | The stats API's own rank of sp_work_pace among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `e_usg_pct_rank` | Int64 | The stats API's own rank of e_usg_pct in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `e_pace_rank` | Int64 | The stats API's own rank of e_pace in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `pace_rank` | Int64 | The stats API's own rank of pace in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `sp_work_pace_rank` | Int64 | The stats API's own rank of sp_work_pace in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `pie_rank` | Float64 | Producer rank of pie (highest first) within season, season_type and per_mode, among players with poss of at least 1,600 (WNBA 800); null under the gate. Replaces the API's rank, which ranked every player. |
-| `fgm_rank` | Int64 | The stats API's own rank of fgm among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `fga_rank` | Int64 | The stats API's own rank of fga among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `fgm_pg_rank` | Int64 | The stats API's own rank of fgm_pg among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `fga_pg_rank` | Int64 | The stats API's own rank of fga_pg among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
-| `fg_pct_rank` | Int64 | The stats API's own rank of fg_pct among every player in the table (1 is the leader); not gated, unlike the producer ranks of the rated measures. |
+| `fgm_rank` | Int64 | The stats API's own rank of fgm in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `fga_rank` | Int64 | The stats API's own rank of fga in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `fgm_pg_rank` | Int64 | The stats API's own rank of fgm_pg in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `fga_pg_rank` | Int64 | The stats API's own rank of fga_pg in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
+| `fg_pct_rank` | Int64 | The stats API's own rank of fg_pct in the original stats API response (1 is the leader), kept as delivered: the function neither reranks it against the frame it is given nor gates it, unlike the producer ranks of the rated measures. |
 | `team_count` | Int64 | Number of teams the player's row covers (the stats API's TEAM_COUNT; more than 1 after a trade). |
 | `season` | Int64 | Season year. |
 | `league_id` | String | League identifier ('10' = WNBA). |
@@ -669,56 +669,4 @@ repl = calibrate_replacement_level(
     ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
 )
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
-```
-
-### ot_adjusted_seconds {#ot_adjusted_seconds}
-
-`ot_adjusted_seconds(pbp: 'pl.DataFrame', *, regulation_periods: 'int' = 4) -> 'pl.DataFrame'`
-
-Tag overtime rows and give them the overtime period clock as their seconds remaining.
-
-The in-game models clip `start_game_seconds_remaining` at zero, so every overtime play
-(negative in the NBA frame) would score as "game over at the current margin". Each overtime is
-scored as its own five-minute endgame instead: on rows with `period_number > regulation_periods`
-`start_game_seconds_remaining` becomes the period clock, `start_quarter_seconds_remaining` or
-(men's college frames) `start_period_seconds_remaining`, whichever is present and not null.
-In a halves game (`regulation_periods=2`) period 3 is the first overtime.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | One game in the basketball pbp schema. |
-| `regulation_periods` | `int` | `4` | The game's regulation periods (4 quarters, 2 halves); see `game_regulation_periods`. |
-
-**Returns**
-
-The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
-
-| col_name | type | description |
-|---|---|---|
-| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
-| `start_game_seconds_remaining` | Float64 | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `polars.exceptions.ColumnNotFoundError` | If `period_number` or `start_game_seconds_remaining` is missing, or neither period clock column is present. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
-from sportsdataverse.nba.nba_loaders import load_nba_pbp
-pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
-tagged = ot_adjusted_seconds(pbp)
-tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
-
-# A men's college game (two halves)
-
-from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
-one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
-ot_adjusted_seconds(one, regulation_periods=2)
 ```
